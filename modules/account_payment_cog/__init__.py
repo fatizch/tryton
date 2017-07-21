@@ -34,6 +34,8 @@ def register():
         batch.PaymentUpdateBatch,
         batch.PaymentGroupProcessBatch,
         payment.Configuration,
+        payment.ConfigurationDirectDebitJournal,
+        payment.ConfigurationRejectFeeJournal,
         payment.Group,
         party.Party,
         move.PaymentCreationStart,

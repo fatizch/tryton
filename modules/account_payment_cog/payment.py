@@ -19,6 +19,9 @@ from trytond.modules.coog_core import export, fields, model
 from trytond.modules.coog_core import coog_date, utils, coog_string
 from trytond.modules.report_engine import Printable
 from trytond.modules.currency_cog import ModelCurrency
+from trytond.tools.multivalue import migrate_property
+from trytond.modules.company.model import (CompanyValueMixin,
+    CompanyMultiValueMixin)
 
 __metaclass__ = PoolMeta
 
@@ -28,6 +31,8 @@ __all__ = [
     'MergedPayments',
     'FilterPaymentsPerMergedId',
     'Configuration',
+    'ConfigurationDirectDebitJournal',
+    'ConfigurationRejectFeeJournal',
     'Journal',
     'JournalFailureAction',
     'RejectReason',
@@ -803,13 +808,14 @@ class Payment(export.ExportImportMixin, Printable,
         pass
 
 
-class Configuration:
+class Configuration(CompanyMultiValueMixin):
+    __metaclass__ = PoolMeta
     __name__ = 'account.configuration'
 
-    direct_debit_journal = fields.Property(
+    direct_debit_journal = fields.MultiValue(
         fields.Many2One('account.payment.journal', 'Direct Debit Journal',
             domain=[('process_method', '!=', 'manual')]))
-    reject_fee_journal = fields.Property(
+    reject_fee_journal = fields.MultiValue(
         fields.Many2One('account.journal', 'Reject Fee Journal',
             domain=[('type', '=', 'write-off')]))
 
@@ -827,6 +833,60 @@ class Configuration:
 
     def get_payment_journal(self, line):
         return self.direct_debit_journal
+
+
+class ConfigurationDirectDebitJournal(model.CoogSQL, CompanyValueMixin):
+    'Account Configuration Direct Debit Journal'
+    __name__ = 'account.configuration.direct_debit_journal'
+
+    configuration = fields.Many2One('account.configuration', 'Configuration',
+        ondelete='CASCADE', select=True)
+    direct_debit_journal = fields.Many2One('account.payment.journal',
+        'Direct Debit Journal', domain=[('process_method', '!=', 'manual')])
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        exist = TableHandler.table_exist(cls._table)
+        super(ConfigurationDirectDebitJournal, cls).__register__(module_name)
+        if not exist:
+            cls._migrate_property([], [], [])
+
+    @classmethod
+    def _migrate_property(cls, field_names, value_names, fields):
+        field_names.append('direct_debit_journal')
+        value_names.append('direct_debit_journal')
+        fields.append('company')
+        migrate_property(
+            'account.configuration', field_names, cls, value_names,
+            parent='configuration', fields=fields)
+
+
+class ConfigurationRejectFeeJournal(model.CoogSQL, CompanyValueMixin):
+    'Account Configuration Reject Fee Journal'
+    __name__ = 'account.configuration.reject_fee_journal'
+
+    configuration = fields.Many2One('account.configuration', 'Configuration',
+        ondelete='CASCADE', select=True)
+    reject_fee_journal = fields.Many2One('account.journal',
+        'Reject Fee Journal', domain=[('type', '=', 'write-off')])
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        exist = TableHandler.table_exist(cls._table)
+        super(ConfigurationRejectFeeJournal, cls).__register__(module_name)
+        if not exist:
+            cls._migrate_property([], [], [])
+
+    @classmethod
+    def _migrate_property(cls, field_names, value_names, fields):
+        field_names.append('reject_fee_journal')
+        value_names.append('reject_fee_journal')
+        fields.append('company')
+        migrate_property(
+            'account.configuration', field_names, cls, value_names,
+            parent='configuration', fields=fields)
 
 
 class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,

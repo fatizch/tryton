@@ -15,7 +15,6 @@ import address
 import test_case
 import relationship
 import res
-import configuration
 import attachment
 
 from trytond.modules.coog_core import expand_tree
@@ -27,7 +26,6 @@ def register():
     Pool.register(
         res.User,
         party.Party,
-        configuration.Configuration,
         party.PartyIdentifier,
         party.PartyIdentifierType,
         category.PartyCategory,

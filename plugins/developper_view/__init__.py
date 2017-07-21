@@ -6,7 +6,8 @@ from tryton.gui.window import Window
 old_populate = popup_menu.populate
 
 
-def new_populate(menu, model, record, title='', field=None):
+def new_populate(menu, model, record, title='', field=None,
+        context=None):
     if record is None:
         return
     elif isinstance(record, (int, long)):
@@ -22,14 +23,14 @@ def new_populate(menu, model, record, title='', field=None):
 
     def dev_edit(menuitem):
         with Window(hide_current=True, allow_similar=True):
-            Window.create([], model, id_(record),
+            Window.create(model, view_ids=[], res_id=id_(record),
                 mode=['form'], context={
                     'developper_read_view': True,
                     'disable_main_toolbar': True,
                     'disable_main_menu': True,
                     })
 
-    old_populate(menu, model, record, title, field)
+    old_populate(menu, model, record, title, field, context)
 
     if title:
         # Look for the last created submenu, it should match the current title

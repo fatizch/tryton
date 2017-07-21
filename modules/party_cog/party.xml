@@ -47,16 +47,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">party.party,-1</field>
             <field name="action" ref="act_contact_mechanisms_relate_form"/>
         </record>
-        <record model="ir.action.act_window" id="act_related_parties_relate_form">
-            <field name="name">Related parties</field>
-            <field name="res_model">contract.contact</field>
-            <field name="domain" eval="[('party.related_contracts.contacts.party', '=', Eval('active_id'))]" pyson="1"/>
-        </record>
-        <record model="ir.action.keyword" id="act_related_parties_relate_keyword">
-            <field name="keyword">form_relate</field>
-            <field name="model">party.party,-1</field>
-            <field name="action" ref="act_related_parties_relate_form"/>
-        </record>
         <!-- *******************************************
             ******** Person **********
             ******************************************* -->

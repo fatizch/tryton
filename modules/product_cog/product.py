@@ -7,6 +7,7 @@ from trytond.modules.coog_core import export, fields
 __metaclass__ = PoolMeta
 __all__ = [
     'Template',
+    'TemplateAccount',
     'Product',
     'Uom',
     'Category',
@@ -51,6 +52,25 @@ class Template(export.ExportImportMixin):
         UOM = Pool().get('product.uom')
         uom, = UOM.search([('symbol', '=', 'u')])
         return uom.id
+
+
+class TemplateAccount:
+    __metaclass__ = PoolMeta
+    __name__ = 'product.template.account'
+
+    @classmethod
+    def __setup__(cls):
+        super(TemplateAccount, cls).__setup__()
+        cls.account_expense.domain = cls.account_expense.domain[1:] + [[
+                'OR',
+                [('kind', '=', 'expense')],
+                [('kind', '=', 'other')],
+                ]]
+        cls.account_revenue.domain = cls.account_revenue.domain[1:] + [[
+                'OR',
+                [('kind', '=', 'revenue')],
+                [('kind', '=', 'other')],
+                ]]
 
 
 class Product(export.ExportImportMixin):

@@ -6,7 +6,6 @@ import company
 import res
 import ir
 import test_case
-import party
 
 
 def register():
@@ -17,5 +16,4 @@ def register():
         ir.Sequence,
         ir.SequenceStrict,
         test_case.TestCaseModel,
-        party.PartyConfiguration,
         module='company_cog', type_='model')

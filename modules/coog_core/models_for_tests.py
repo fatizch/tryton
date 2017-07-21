@@ -3,6 +3,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 from trytond.model import DictSchemaMixin
+from trytond.modules.company.model import (CompanyValueMixin,
+    CompanyMultiValueMixin)
 
 import model
 import export
@@ -13,6 +15,10 @@ __metaclass__ = PoolMeta
 __all__ = [
     'TestMethodDefinitions',
     'TestDictSchema',
+    'ExportTestM2O',
+    'ExportTestNumeric',
+    'ExportTestChar',
+    'ExportTestSelection',
     'ExportTestTarget',
     'ExportTestTarget2',
     'ExportTestTargetSlave',
@@ -76,7 +82,8 @@ class ExportTestTargetSlave(model.CoogSQL, export.ExportImportMixin):
     integer = fields.Integer('Integer')
 
 
-class ExportTest(model.CoogSQL, export.ExportImportMixin):
+class ExportTest(model.CoogSQL, export.ExportImportMixin,
+        CompanyMultiValueMixin):
     'Export Test'
     __name__ = 'coog_core.export_test'
     _func_key = 'char'
@@ -105,12 +112,12 @@ class ExportTest(model.CoogSQL, export.ExportImportMixin):
             (None, ''),
             ('coog_core.export_test_target', 'Target'),
             ])
-    property_m2o = fields.Property(
+    multivalue_m2o = fields.MultiValue(
         fields.Many2One('coog_core.export_test_target', 'Property Many2One',
             domain=[('char', '=', 'key')]))
-    property_numeric = fields.Property(fields.Numeric('Property Numeric'))
-    property_char = fields.Property(fields.Char('Property Char'))
-    property_selection = fields.Property(fields.Selection([
+    multivalue_numeric = fields.MultiValue(fields.Numeric('Multivalue Numeric'))
+    multivalue_char = fields.MultiValue(fields.Char('Multivalue Char'))
+    multivalue_selection = fields.MultiValue(fields.Selection([
             (None, ''),
             ('select1', 'Select 1'),
             ('select2', 'Select 2'),
@@ -120,6 +127,43 @@ class ExportTest(model.CoogSQL, export.ExportImportMixin):
     @classmethod
     def _export_light(cls):
         return set(['reference'])
+
+
+class ExportTestM2O(model.CoogSQL, CompanyValueMixin):
+    'Export Test M2O'
+    __name__ = 'coog_core.export_test.multivalue_m2o'
+
+    export_test = fields.Many2One('coog_core.export_test', 'Configuration',
+        ondelete='CASCADE', select=True)
+    multivalue_m2o = fields.Many2One('coog_core.export_test_target',
+        'Property Many2One', domain=[('char', '=', 'key')])
+
+
+class ExportTestNumeric(model.CoogSQL, CompanyValueMixin):
+    'Export Test Numeric'
+    __name__ = 'coog_core.export_test.multivalue_numeric'
+
+    export_test = fields.Many2One('coog_core.export_test', 'Configuration',
+        ondelete='CASCADE', select=True)
+    multivalue_numeric = fields.Numeric('Multivalue Numeric')
+
+
+class ExportTestChar(model.CoogSQL, CompanyValueMixin):
+    'Export Test Char'
+    __name__ = 'coog_core.export_test.multivalue_char'
+
+    export_test = fields.Many2One('coog_core.export_test', 'Configuration',
+        ondelete='CASCADE', select=True)
+    multivalue_char = fields.Char('Multivalue Char')
+
+
+class ExportTestSelection(model.CoogSQL, CompanyValueMixin):
+    'Export Test Selection'
+    __name__ = 'coog_core.export_test.multivalue_selection'
+
+    export_test = fields.Many2One('coog_core.export_test', 'Configuration',
+        ondelete='CASCADE', select=True)
+    multivalue_selection = fields.Char('Multivalue Selection')
 
 
 class ExportTestTarget2:

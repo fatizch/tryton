@@ -1445,7 +1445,7 @@ class Contract:
                 date=contract_invoice.start)
             premium = line.details[0].premium
             amount = invoice.currency.round(line.unit_price)
-            if config._tax_rounding == 'line':
+            if config.tax_rounding == 'line':
                 # Manually handle taxes_included_in_premium, it's easier since
                 # we only need to manage a single total tax amount.
                 if premium.rated_entity and getattr(premium.rated_entity,

@@ -46,6 +46,7 @@ EndorsementDefinitionPartRelation = Model.get(
 EndorsementLoanField = Model.get('endorsement.loan.field')
 Field = Model.get('ir.model.field')
 FiscalYear = Model.get('account.fiscalyear')
+InvoiceSequence = Model.get('account.fiscalyear.invoice_sequence')
 Insurer = Model.get('insurer')
 ItemDescription = Model.get('offered.item.description')
 Loan = Model.get('loan')
@@ -88,22 +89,31 @@ config._context = User.get_preferences(True, config.context)
 config._context['company'] = company.id
 
 # #Comment# #Create Fiscal Year
-fiscalyear = FiscalYear(name=str(today.year))
-fiscalyear.start_date = today + relativedelta(month=1, day=1)
-fiscalyear.end_date = today + relativedelta(month=12, day=31)
+fiscalyear = FiscalYear(name='2014')
+fiscalyear.start_date = datetime.date(datetime.date.today().year, 1, 1)
+fiscalyear.end_date = datetime.date(datetime.date.today().year, 12, 31)
 fiscalyear.company = company
-post_move_seq = Sequence(name=str(today.year), code='account.move',
+post_move_seq = Sequence(name='2014', code='account.move',
     company=company)
 post_move_seq.save()
 fiscalyear.post_move_sequence = post_move_seq
-invoice_seq = SequenceStrict(name=str(today.year),
+seq = SequenceStrict(name='2014',
     code='account.invoice', company=company)
-invoice_seq.save()
-fiscalyear.out_invoice_sequence = invoice_seq
-fiscalyear.in_invoice_sequence = invoice_seq
-fiscalyear.out_credit_note_sequence = invoice_seq
-fiscalyear.in_credit_note_sequence = invoice_seq
+seq.save()
+bool(fiscalyear.invoice_sequences.pop())
+# #Res# #True
+
 fiscalyear.save()
+invoice_sequence = InvoiceSequence()
+invoice_sequence.out_invoice_sequence = seq
+invoice_sequence.in_invoice_sequence = seq
+invoice_sequence.out_credit_note_sequence = seq
+invoice_sequence.in_credit_note_sequence = seq
+invoice_sequence.fiscalyear = fiscalyear
+invoice_sequence.company = company
+invoice_sequence.save()
+
+fiscalyear.reload()
 FiscalYear.create_period([fiscalyear.id], config.context)
 
 # #Comment# #Create Account Kind

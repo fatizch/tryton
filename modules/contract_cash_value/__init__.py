@@ -11,6 +11,7 @@ import test_case
 def register():
     Pool.register(
         account.Configuration,
+        account.ConfigurationCashValueJournal,
         account.MoveLine,
         contract.CashValueCollection,
         contract.Contract,

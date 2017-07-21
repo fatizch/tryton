@@ -3,11 +3,15 @@
 from sql.aggregate import Max
 
 from trytond.pool import PoolMeta, Pool
+from trytond import backend
+from trytond.tools.multivalue import migrate_property
 from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool, Equal
 
 from trytond.modules.coog_core import model, fields
+from trytond.modules.company.model import (CompanyValueMixin,
+    CompanyMultiValueMixin)
 from trytond.modules.contract import _STATES, _DEPENDS
 from trytond.modules.contract.contract import CONTRACTSTATUSES
 from trytond.wizard import StateTransition, StateView, Button
@@ -21,15 +25,47 @@ __all__ = [
     'ContractSetSelectDeclineReason',
     'ReportTemplate',
     'Configuration',
+    'ConfigurationContractSetNumberSequence',
     ]
 
 
-class Configuration:
+class Configuration(CompanyMultiValueMixin):
+    __metaclass__ = PoolMeta
     __name__ = 'offered.configuration'
 
-    contract_set_number_sequence = fields.Property(
+    contract_set_number_sequence = fields.MultiValue(
         fields.Many2One('ir.sequence', 'Contract Set Number Sequence',
             domain=[('code', '=', 'contract_set_number')]))
+
+
+class ConfigurationContractSetNumberSequence(model.CoogSQL, CompanyValueMixin):
+    'Configuration Contract Set Number Sequence'
+    __name__ = 'offered.configuration.contract_set_number_sequence'
+
+    configuration = fields.Many2One('offered.configuration', 'Configuration',
+        ondelete='CASCADE', select=True)
+    contract_set_number_sequence = fields.Many2One('ir.sequence',
+        'Contract Set Number Sequence',
+        domain=[('code', '=', 'contract_set_number')])
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        exist = TableHandler.table_exist(cls._table)
+
+        super(ConfigurationContractSetNumberSequence, cls).__register__(
+            module_name)
+
+        if not exist:
+            cls._migrate_property([], [], [])
+
+    @classmethod
+    def _migrate_property(cls, field_names, value_names, fields):
+        field_names.append('contract_set_number_sequence')
+        value_names.append('contract_set_number_sequence')
+        migrate_property(
+            'offered.configuration', field_names, cls, value_names,
+            parent='configuration', fields=fields)
 
 
 class ContractSet(model.CoogSQL, model.CoogView, Printable):

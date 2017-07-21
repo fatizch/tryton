@@ -30,8 +30,10 @@ __all__ = [
 def register():
     Pool.register(
         offered.Product,
+        offered.ProductQuoteNumberSequence,
         contract.ContractSubStatus,
         configuration.Configuration,
+        configuration.ConfigurationDefaultQuoteNumberSequence,
         contract.Contract,
         contract.ActivationHistory,
         contract.ContractOption,

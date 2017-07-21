@@ -6,7 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_contract_form">
             <field name="name">Health Contracts</field>
             <field name="res_model">contract</field>
-            <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', False)), ('is_health', '=', True)]" pyson="1"/>
+            <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', None)), ('is_health', '=', True)]" pyson="1"/>
         </record>
         <menuitem name="Contracts" sequence="20" parent="menu_health" action="act_contract_form" id="menu_contract_form"/>
         <record model="ir.action.act_window.view" id="act_contract_form_view1">

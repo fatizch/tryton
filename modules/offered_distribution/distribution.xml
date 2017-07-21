@@ -69,7 +69,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_commercial_product_form">
             <field name="name">Commercial Products</field>
             <field name="res_model">distribution.commercial_product</field>
-            <field name="domain" eval="[('product.company', '=', Eval('context', {}).get('company', False))]" pyson="1"/>
+            <field name="domain" eval="[('product.company', '=', Eval('context', {}).get('company', None))]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_commercial_product_tree_view">
             <field name="sequence" eval="10"/>

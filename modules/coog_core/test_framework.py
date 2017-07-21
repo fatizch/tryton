@@ -6,6 +6,7 @@ import imp
 
 from trytond.transaction import Transaction
 from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT, ModuleTestCase
+from trytond.pool import Pool
 
 
 __all__ = [
@@ -95,7 +96,9 @@ class CoogTestCase(ModuleTestCase):
                 'test_view', 'test_depends', 'test_menu_action',
                 'test_model_access', 'test9999_launch_test_cases',
                 'test_rec_name', 'test_workflow_transitions',
-                'test_field_methods', 'test_rpc_callable'):
+                'test_field_methods', 'test_rpc_callable',
+                'test_ir_action_window', 'test_selection_fields',
+                'test_wizards'):
             good_function = functools.partial(
                 prepare_test()(test_function, True), self)
             setattr(self, self._testMethodName, good_function)
@@ -119,7 +122,6 @@ class CoogTestCase(ModuleTestCase):
             the_module.ModuleTestCase.get_modules_for_models(modules)
 
     def setUp(self):
-        import trytond.tests.test_tryton
         modules = {}
         self.get_modules_for_models(modules)
 
@@ -131,13 +133,15 @@ class CoogTestCase(ModuleTestCase):
             models.update(module.ModuleTestCase.get_models())
 
         self._models = {}
-        for k, v in models.iteritems():
-            try:
-                good_model = trytond.tests.test_tryton.POOL.get(v)
-            except KeyError:
-                good_model = trytond.tests.test_tryton.POOL.get(
-                    v, type='wizard')
-            self._models.update({k: good_model})
+        with Transaction().start(DB_NAME, 1):
+            pool = Pool()
+            for k, v in models.iteritems():
+                try:
+                    good_model = pool.get(v)
+                except KeyError:
+                    good_model = pool.get(
+                        v, type='wizard')
+                self._models.update({k: good_model})
 
     def test9989_check_documentation(self):
         module_path = os.path.abspath(os.path.join(os.path.normpath(__file__),

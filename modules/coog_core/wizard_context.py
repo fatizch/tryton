@@ -3,7 +3,7 @@
 
 import json
 
-from trytond.wizard import Wizard, StateView
+from trytond.wizard import Wizard, StateView, StateTransition
 
 from trytond.modules.coog_core import model, fields, jsonrpc
 
@@ -26,6 +26,10 @@ class PersistentContextWizard(Wizard):
     'Persistent Context Wizard'
 
     context_data = StateView('wizard.persistent_data.view', '', [])
+    start = StateTransition()
+
+    def transition_start(self):
+        return 'end'
 
     @property
     def wizard_context(self):

@@ -201,7 +201,7 @@ class ExportImportMixin(Historizable):
             if field_name in ('__name__', '_func_key'):
                 continue
             field = cls._fields[field_name]
-            if isinstance(field, tryton_fields.Property):
+            if isinstance(field, tryton_fields.MultiValue):
                 field = field._field
             if isinstance(field, (tryton_fields.Many2One,
                         tryton_fields.One2One, tryton_fields.Reference)):
@@ -428,7 +428,7 @@ class ExportImportMixin(Historizable):
             model_configuration = None
 
         for field_name, field in self._fields.iteritems():
-            if isinstance(field, tryton_fields.Property):
+            if isinstance(field, tryton_fields.MultiValue):
                 field = field._field
             if field_name in skip_fields:
                 continue
@@ -437,7 +437,7 @@ class ExportImportMixin(Historizable):
                     field_name not in model_configuration['complete']):
                 continue
             if (isinstance(field, tryton_fields.Function) and not
-                    isinstance(field, tryton_fields.Property) and
+                    isinstance(field, tryton_fields.MultiValue) and
                     not configuration):
                 continue
             if ((field_name in light_exports and not model_configuration) or

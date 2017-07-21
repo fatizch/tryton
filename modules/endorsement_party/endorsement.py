@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from sql.functions import CurrentTimestamp
+import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -369,7 +369,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
                 p_endorsement.set_applied_on(
                     p_endorsement.endorsement.rollback_date)
             else:
-                p_endorsement.set_applied_on(CurrentTimestamp())
+                p_endorsement.set_applied_on(datetime.datetime.now())
             values = p_endorsement.apply_values()
             Party.write([party], values)
             p_endorsement.save()

@@ -43,14 +43,16 @@ class Configuration:
     def validate(cls, configurations):
         pool = Pool()
         Company = pool.get('company.company')
+        ConfigurationTaxRounding = pool.get(
+            'account.configuration.tax_rounding')
         super(Configuration, cls).validate(configurations)
         for company in Company.search([]):
             found_match = False
-            for line in configurations[0].tax_roundings:
-                if line.match({'company': company.id}):
-                    found_match = True
-                    if line.method == 'document':
-                        configurations[0].check_taxes_included_option(company)
+            for line in ConfigurationTaxRounding.search(
+                    [('company', '=', company)]):
+                found_match = True
+                if line.tax_rounding == 'document':
+                    configurations[0].check_taxes_included_option(company)
             if not found_match:
                 # By default configuration is per document
                 configurations[0].check_taxes_included_option(company)

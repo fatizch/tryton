@@ -731,10 +731,6 @@ msgctxt "model:ir.action,name:act_invoice_insurer_invoice_form"
 msgid "Insurer Invoices"
 msgstr "Bordereaux assureurs"
 
-msgctxt "model:ir.action,name:act_received_premiums_relate"
-msgid "Received Premiums"
-msgstr "Primes reçues"
-
 msgctxt "model:ir.action.act_window.domain,name:act_commission_domain_broker"
 msgid "Broker"
 msgstr "Courtier"

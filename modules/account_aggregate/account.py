@@ -15,6 +15,9 @@ from trytond.wizard import Wizard, StateView, StateTransition, StateAction, \
     Button
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
+from trytond.tools.multivalue import migrate_property
+from trytond.modules.company.model import (CompanyValueMixin,
+    CompanyMultiValueMixin)
 
 from trytond.modules.coog_core import fields, model, utils
 
@@ -25,6 +28,7 @@ __all__ = [
     'Move',
     'Line',
     'Configuration',
+    'ConfigurationSnapshotSequence',
     'Snapshot',
     'TakeSnapshot',
     'SnapshotStart',
@@ -133,13 +137,41 @@ class Line:
             'Snapshot'), 'get_move_field', searcher='search_move_field')
 
 
-class Configuration:
+class Configuration(CompanyMultiValueMixin):
+    __metaclass__ = PoolMeta
     __name__ = 'account.configuration'
 
-    snapshot_sequence = fields.Property(fields.Many2One('ir.sequence',
+    snapshot_sequence = fields.MultiValue(fields.Many2One('ir.sequence',
             'Snapshot Sequence', required=True, domain=[
                 ('code', '=', 'account.move'),
                 ]))
+
+
+class ConfigurationSnapshotSequence(model.CoogSQL, CompanyValueMixin):
+    'Account Configuration Snapshot Sequence'
+    __name__ = 'account.configuration.snapshot_sequence'
+
+    configuration = fields.Many2One('account.configuration', 'Configuration',
+        ondelete='CASCADE', select=True)
+    snapshot_sequence = fields.Many2One('ir.sequence',
+        'Snapshot Sequence', domain=[('code', '=', 'account.move')])
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        exist = TableHandler.table_exist(cls._table)
+        super(ConfigurationSnapshotSequence, cls).__register__(module_name)
+        if not exist:
+            cls._migrate_property([], [], [])
+
+    @classmethod
+    def _migrate_property(cls, field_names, value_names, fields):
+        field_names.append('snapshot_sequence')
+        value_names.append('snapshot_sequence')
+        fields.append('company')
+        migrate_property(
+            'account.configuration', field_names, cls, value_names,
+            parent='configuration', fields=fields)
 
 
 class TakeSnapshot(Wizard):

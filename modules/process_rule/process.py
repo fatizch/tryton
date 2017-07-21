@@ -80,7 +80,7 @@ class ProcessAction(
                             'model_name': cur_model.__name__,
                             'field_name': path})
                 if isinstance(cur_field, (tryton_fields.Function,
-                            tryton_fields.Property)):
+                            tryton_fields.MultiValue)):
                     cur_field = cur_field._field
                 if isinstance(cur_field, (tryton_fields.One2Many,
                             tryton_fields.Many2One)):

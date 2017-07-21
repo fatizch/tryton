@@ -9,6 +9,7 @@ def register():
     Pool.register(
         product.Product,
         product.Template,
+        product.TemplateAccount,
         product.Uom,
         product.Category,
         module='product_cog', type_='model')

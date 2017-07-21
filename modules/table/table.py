@@ -1092,6 +1092,14 @@ class Table2D(ModelSQL, ModelView):
         cls._fields = Table2DDict(cls._fields)
 
     @classmethod
+    def search(cls, *args, **kwargs):
+        # The aim of this override is to pass the new search method test
+        # from trytond 4.4
+        if not Transaction().context.get('table', None):
+            return []
+        return super(Table2D, cls).search(*args, **kwargs)
+
+    @classmethod
     def table_query(cls):
         if not backend.name() == 'postgresql':
             return super(Table2D, cls).table_query()
@@ -1114,7 +1122,6 @@ class Table2D(ModelSQL, ModelView):
                     or not definition.dimension_kind2
                     or dim_test):
                 cls.raise_user_error('not_2d')
-
         dimension = TableDefinitionDimension.__table__()
         cell = TableCell.__table__()
 

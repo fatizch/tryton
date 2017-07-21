@@ -3,17 +3,22 @@
 from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
+from trytond import backend
+from trytond.tools.multivalue import migrate_property
 from trytond.wizard import StateTransition, StateView, Button
 from trytond.transaction import Transaction
 from trytond.model import Workflow, Unique
 from trytond.pyson import Eval, Bool, Equal
 
+from trytond.modules.company.model import (CompanyValueMixin,
+    CompanyMultiValueMixin)
 from trytond.modules.coog_core import model, fields
 from trytond.modules.report_engine import Printable
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Configuration',
+    'ConfigurationEndorsementSetSequence',
     'EndorsementSet',
     'Endorsement',
     'EndorsementSetDecline',
@@ -21,11 +26,41 @@ __all__ = [
     ]
 
 
-class Configuration:
+class Configuration(CompanyMultiValueMixin):
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.configuration'
 
-    endorsement_set_number_sequence = fields.Property(
+    endorsement_set_number_sequence = fields.MultiValue(
         fields.Many2One('ir.sequence', 'Endorsement Set Number Sequence'))
+
+
+class ConfigurationEndorsementSetSequence(model.CoogSQL, CompanyValueMixin):
+    'Endorsement Configuration Endorsement Set Sequence'
+    __name__ = 'endorsement.configuration.endorsement_set_number_sequence'
+
+    configuration = fields.Many2One('account.configuration', 'Configuration',
+        ondelete='CASCADE', select=True)
+    endorsement_set_number_sequence = fields.Many2One('ir.sequence',
+        'Endorsement Set Number Sequence')
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        exist = TableHandler.table_exist(cls._table)
+
+        super(ConfigurationEndorsementSetSequence, cls).__register__(
+            module_name)
+
+        if not exist:
+            cls._migrate_property([], [], [])
+
+    @classmethod
+    def _migrate_property(cls, field_names, value_names, fields):
+        field_names.append('endorsement_set_number_sequence')
+        value_names.append('endorsement_set_number_sequence')
+        migrate_property(
+            'endorsement.configuration', field_names, cls, value_names,
+            parent='configuration', fields=fields)
 
 
 class EndorsementSet(model.CoogSQL, model.CoogView, Printable):

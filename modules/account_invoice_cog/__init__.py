@@ -18,6 +18,7 @@ def register():
         invoice.Invoice,
         test_case.TestCaseModel,
         party.Party,
+        party.PartyAccount,
         report_engine.ReportTemplate,
         move.Move,
         move.MoveLine,

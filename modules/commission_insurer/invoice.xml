@@ -8,6 +8,31 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="account_invoice.invoice_view_form"/>
             <field name="name">invoice_form</field>
         </record>
+        <!-- ################################### -->
+        <!-- ######## Received premiums ######## -->
+        <!-- ################################### -->
+        <record model="ir.action.act_window" id="act_received_premiums_relate">
+            <field name="name">Received Premiums</field>
+            <field name="res_model">account.move.line</field>
+            <field name="domain"
+                eval="[('principal_invoice_line.invoice', 'in', Eval('active_ids'))]"
+                pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_received_premiums_relate_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="account_cog.move_line_party_balance_view_list"/>
+            <field name="act_window" ref="act_received_premiums_relate"/>
+        </record>
+            <record model="ir.action.act_window.view" id="act_received_premiums_relate_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="account_cog.move_line_party_balance_view_form"/>
+            <field name="act_window" ref="act_received_premiums_relate"/>
+        </record>
+        <record model="ir.action.keyword" id="act_received_premiums_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">account.invoice,-1</field>
+            <field name="action" ref="act_received_premiums_relate"/>
+        </record>
     </data>
 </tryton>
 

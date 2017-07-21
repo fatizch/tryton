@@ -2,8 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 import contract
-from .rule_engine import *
-from .event import *
+import rule_engine
+import event
 
 
 def register():
@@ -14,6 +14,7 @@ def register():
         contract.ContractSetSelectDeclineReason,
         contract.ReportTemplate,
         contract.Configuration,
+        contract.ConfigurationContractSetNumberSequence,
         event.EventTypeAction,
         event.EventLog,
         module='contract_set', type_='model')

@@ -46,7 +46,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_contract_group_form"/>
         </record>
         <record model="ir.action.act_window" id="contract.act_contract_form">
-            <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', False)), ('is_group', '=', False)]" pyson="1"/>
+            <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', None)), ('is_group', '=', False)]" pyson="1"/>
         </record>
         <record model="ir.action.act_window" id="act_contract_quote_form">
             <field name="name">Quotes</field>

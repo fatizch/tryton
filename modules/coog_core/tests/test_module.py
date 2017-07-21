@@ -490,10 +490,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 '__name__': 'coog_core.export_test',
                 'reference': None,
                 'one2many': [],
-                'property_m2o': None,
-                'property_numeric': None,
-                'property_char': None,
-                'property_selection': None,
+                'multivalue_m2o': None,
+                'multivalue_numeric': None,
+                'multivalue_char': None,
+                'multivalue_selection': None,
                 'valid_one2many': [],
                 'many2many': [],
                 'many2one': None,
@@ -642,58 +642,58 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual([], self.ExportTestTarget.search(
                 [('id', '!=', 0)]))
 
-    def test_0058_export_import_property_m2o(self):
+    def test_0058_export_import_multivalue_m2o(self):
         target = self.ExportTestTarget(char='key')
         target.save()
-        to_export = self.ExportTest(char='otherkey', property_m2o=target)
+        to_export = self.ExportTest(char='otherkey', multivalue_m2o=target)
         to_export.save()
         output = []
         to_export.export_json(output=output)
-
         self.assertEqual(output[0]['_func_key'], 'key')
         self.assertEqual(output[1]['_func_key'], 'otherkey')
 
         output[0]['integer'] = 12
 
         self.ExportTest.import_json(output)
-        self.assertEqual(12, to_export.property_m2o.integer)
+        self.assertEqual(12, to_export.multivalue_m2o.integer)
 
-    def test_0059_export_import_property_numeric(self):
-        to_export = self.ExportTest(char='otherkey', property_numeric='1.5')
-        to_export.save()
-        output = []
-        to_export.export_json(output=output)
-
-        self.assertEqual(output[0]['property_numeric'], Decimal('1.5'))
-        output[0]['property_numeric'] = Decimal('3.2')
-
-        self.ExportTest.import_json(output)
-        self.assertEqual(Decimal('3.2'), to_export.property_numeric)
-
-    def test_0060_export_import_property_char(self):
-        to_export = self.ExportTest(char='otherkey', property_char='Hello')
-        to_export.save()
-        output = []
-        to_export.export_json(output=output)
-
-        self.assertEqual(output[0]['property_char'], 'Hello')
-
-        output[0]['property_char'] = 'hi'
-        self.ExportTest.import_json(output)
-        self.assertEqual('hi', to_export.property_char)
-
-    def test_0062_export_import_property_selection(self):
+    def test_0059_export_import_multivalue_numeric(self):
         to_export = self.ExportTest(char='otherkey',
-            property_selection='select1')
+            multivalue_numeric=Decimal('1.5'))
         to_export.save()
         output = []
         to_export.export_json(output=output)
 
-        self.assertEqual(output[0]['property_selection'], 'select1')
-        output[0]['property_selection'] = 'select2'
+        self.assertEqual(output[0]['multivalue_numeric'], Decimal('1.5'))
+        output[0]['multivalue_numeric'] = Decimal('3.2')
 
         self.ExportTest.import_json(output)
-        self.assertEqual('select2', to_export.property_selection)
+        self.assertEqual(Decimal('3.2'), to_export.multivalue_numeric)
+
+    def test_0060_export_import_multivalue_char(self):
+        to_export = self.ExportTest(char='otherkey', multivalue_char='Hello')
+        to_export.save()
+        output = []
+        to_export.export_json(output=output)
+
+        self.assertEqual(output[0]['multivalue_char'], 'Hello')
+
+        output[0]['multivalue_char'] = 'hi'
+        self.ExportTest.import_json(output)
+        self.assertEqual('hi', to_export.multivalue_char)
+
+    def test_0062_export_import_multivalue_selection(self):
+        to_export = self.ExportTest(char='otherkey',
+            multivalue_selection='select1')
+        to_export.save()
+        output = []
+        to_export.export_json(output=output)
+
+        self.assertEqual(output[0]['multivalue_selection'], 'select1')
+        output[0]['multivalue_selection'] = 'select2'
+
+        self.ExportTest.import_json(output)
+        self.assertEqual('select2', to_export.multivalue_selection)
 
     def test_0063_export_import_configuration(self):
         model = self.Model.search([('model', '=', 'coog_core.export_test')])[0]

@@ -79,12 +79,17 @@ Create Broker Fee Account::
 
 Create Broker Fee::
 
+    >>> Uom = Model.get('product.uom')
+    >>> unit, = Uom.find([('name', '=', 'Unit')])
     >>> Product = Model.get('product.product')
     >>> Template = Model.get('product.template')
     >>> template = Template()
     >>> template.name = 'Broker Fee Template'
     >>> template.account_expense = broker_fee_account
     >>> template.account_revenue = broker_fee_account
+    >>> template.list_price = Decimal(0)
+    >>> template.cost_price = Decimal(0)
+    >>> template.default_uom = unit
     >>> template.save()
     >>> product = Product()
     >>> product.name = 'Broker Fee Product'
@@ -113,8 +118,6 @@ Create Product::
 
 Create commission product::
 
-    >>> Uom = Model.get('product.uom')
-    >>> unit, = Uom.find([('name', '=', 'Unit')])
     >>> commission_product = Product()
     >>> template = Template()
     >>> template.name = 'Commission'

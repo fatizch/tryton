@@ -204,7 +204,7 @@ def get_dictionarize_fields(model):
     res = {model.__name__: []}
     for fname, field in model._fields.iteritems():
         if (isinstance(field, tryton_fields.Function) and not
-                isinstance(field, tryton_fields.Property)):
+                isinstance(field, tryton_fields.MultiValue)):
             continue
         res[model.__name__].append(fname)
         if isinstance(field, tryton_fields.One2Many):
@@ -331,7 +331,7 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
                         'should be selected since it is used as a reverse ' +
                         'field for field %s of %s' % (
                             field_name, cls.__name__))
-            elif isinstance(field, tryton_fields.Property):
+            elif isinstance(field, tryton_fields.MultiValue):
                 if getattr(cls, 'default_' + field_name, None) is not None:
                     logging.getLogger('fields').warning(
                         'Field %s of %s ' % (field_name, field.model_name) +

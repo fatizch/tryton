@@ -316,17 +316,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'company': company.id,
                     'type': account_kind.id,
                     }])
-        product, = self.Product.create([{'company': company.id,
-                    'name': 'Test Product',
-                    'code': 'test_product',
-                    'start_date': date(2014, 1, 1),
-                    'billing_modes': [
-                        ('add', [freq_month.id, freq_quart.id,
-                                freq_once.id])],
-                    'contract_generator': sequence.id,
-                    'quote_number_sequence': quote_sequence.id,
-                    'currency': currency.id,
-                    }])
+        with Transaction().set_context(company=company.id):
+            product, = self.Product.create([{'company': company.id,
+                        'name': 'Test Product',
+                        'code': 'test_product',
+                        'start_date': date(2014, 1, 1),
+                        'billing_modes': [
+                            ('add', [freq_month.id, freq_quart.id,
+                                    freq_once.id])],
+                        'contract_generator': sequence.id,
+                        'quote_number_sequence': quote_sequence.id,
+                        'currency': currency.id,
+                        }])
         contract = self.Contract(company=company,
             start_date=date(2014, 4, 15),
             product=product,
@@ -465,9 +466,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         tax_account.type = tax_account_kind
         tax_account.save()
         configuration = self.Configuration(1)
-        configuration.tax_roundings = [self.ConfigurationTaxRounding(
-                company=company, method='line'
-                )]
+        configuration.tax_rounding = 'line'
         configuration.save()
         tax_1 = self.Tax()
         tax_1.name = 'Tax1'

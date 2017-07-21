@@ -10,9 +10,9 @@ except ImportError:
     import json
 
 from sql import Literal, Column
-from sql.functions import CurrentTimestamp
 from sql.conditionals import Coalesce
 from sql.aggregate import Max
+from sql.functions import CurrentTimestamp
 
 from trytond.cache import Cache
 from trytond import backend
@@ -33,6 +33,9 @@ from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog.process import CoogProcessFramework
 from trytond.modules.report_engine import Printable
 from trytond.modules.coog_core import history_tools
+from trytond.tools.multivalue import migrate_property
+from trytond.modules.company.model import (CompanyMultiValueMixin,
+    CompanyValueMixin)
 
 
 _STATES_WITH_SUBSTATES = ['declined']
@@ -56,6 +59,7 @@ __all__ = [
     'EndorsementExtraData',
     'EndorsementContact',
     'EndorsementConfiguration',
+    'EndorsementConfigurationNumberSequence',
     'OfferedConfiguration',
     'ReportTemplate',
     'OpenGeneratedEndorsements',
@@ -591,7 +595,7 @@ def values_mixin(value_model):
                 if not hasattr(record, k):
                     return False
                 field = record._fields[k]
-                if isinstance(field, tryton_fields.Property):
+                if isinstance(field, tryton_fields.MultiValue):
                     field = field._field
                 if isinstance(field, (tryton_fields.Many2One,
                         tryton_fields.Reference, tryton_fields.One2One)):
@@ -1428,9 +1432,14 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
     def in_progress(cls, endorsements):
         pool = Pool()
         groups = cls.group_per_model(endorsements)
+        cursor = Transaction().connection.cursor()
+        table_ = cls.__table__()
         for model_name, values in groups.iteritems():
             pool.get(model_name).check_in_progress_unicity(values)
-        cls.write(endorsements, {'rollback_date': CurrentTimestamp()})
+        cursor.execute(*table_.update(
+                columns=[table_.rollback_date],
+                values=[CurrentTimestamp()],
+                where=table_.id.in_([x.id for x in endorsements])))
 
     @classmethod
     def pre_apply_hook(cls, endorsements_per_model):
@@ -1472,11 +1481,18 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
             else:
                 set_rollback.append(endorsement)
         if set_rollback:
+            endorsement_t = cls.__table__()
+            cursor = Transaction().connection.cursor()
             cls.write(set_rollback, {
                     'applied_by': Transaction().user,
-                    'rollback_date': CurrentTimestamp(),
+                    'rollback_date': None,
                     'application_date': datetime.datetime.now(),
                     })
+            cursor.execute(*endorsement_t.update(
+                    columns=[endorsement_t.rollback_date],
+                    values=[CurrentTimestamp()],
+                    where=endorsement_t.id.in_([x.id for x in set_rollback])
+                    ))
         if do_not_set_rollback:
             cls.write(do_not_set_rollback, {
                     'applied_by': Transaction().user,
@@ -1897,7 +1913,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 contract_endorsement.set_applied_on(
                     contract_endorsement.endorsement.rollback_date)
             else:
-                contract_endorsement.set_applied_on(CurrentTimestamp())
+                contract_endorsement.set_applied_on(datetime.datetime.now())
             contract_endorsement.clean_up_before_write()
             values = contract_endorsement.apply_values()
             Contract.write([contract], values)
@@ -2037,6 +2053,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
     def new_rollback_point(cls, contracts, at_date, definition,
             init_dict=None):
         pool = Pool()
+        cursor = Transaction().connection.cursor()
         Endorsement = pool.get('endorsement')
         Configuration = pool.get('offered.configuration')
         ContractEndorsement = pool.get('endorsement.contract')
@@ -2051,11 +2068,13 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             contract_endorsements.append(ContractEndorsement(
                     contract=contract, applied_on=datetime.datetime.now(),
                     **init_dict))
+        table_ = endorsement.__table__()
+        current_timestamp, = cursor.execute(*table_.select(CurrentTimestamp()))
         endorsement.contract_endorsements = contract_endorsements
         endorsement.effective_date = at_date
         endorsement.state = 'applied'
         endorsement.applied_by = Transaction().user
-        endorsement.rollback_date = CurrentTimestamp()
+        endorsement.rollback_date = current_timestamp
         endorsement.application_date = datetime.datetime.now()
         endorsement.definition = definition
         return endorsement
@@ -2366,12 +2385,44 @@ class EndorsementExtraData(relation_mixin(
             self.new_extra_data_values
 
 
-class EndorsementConfiguration(ModelSingleton, model.CoogSQL, model.CoogView):
+class EndorsementConfiguration(ModelSingleton, model.CoogSQL, model.CoogView,
+        CompanyMultiValueMixin):
     'Endorsement Configuration'
     __name__ = 'endorsement.configuration'
+    __metaclass__ = PoolMeta
 
-    endorsement_number_sequence = fields.Property(
+    endorsement_number_sequence = fields.MultiValue(
         fields.Many2One('ir.sequence', 'Endorsement Number Sequence'))
+
+
+class EndorsementConfigurationNumberSequence(model.CoogSQL, CompanyValueMixin):
+    'Endorsement Configuration Number Sequence'
+    __name__ = 'endorsement.configuration.endorsement_number_sequence'
+
+    configuration = fields.Many2One('endorsement.configuration',
+        'Endorsement Configuration', ondelete='CASCADE', select=True)
+    endorsement_number_sequence = fields.Many2One('ir.sequence',
+        'Endorsement Number Sequence')
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        exist = TableHandler.table_exist(cls._table)
+
+        super(EndorsementConfigurationNumberSequence,
+            cls).__register__(module_name)
+
+        if not exist:
+            cls._migrate_property([], [], [])
+
+    @classmethod
+    def _migrate_property(cls, field_names, value_names, fields):
+        field_names.append('endorsement_number_sequence')
+        value_names.append('endorsement_number_sequence')
+        fields.append('company')
+        migrate_property(
+            'endorsement.configuration', field_names, cls, value_names,
+            parent='configuration', fields=fields)
 
 
 class OfferedConfiguration:

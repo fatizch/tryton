@@ -197,7 +197,7 @@ class Function(tryton_fields.Function):
             loader=self.loader, updater=self.updater)
 
 
-class Property(tryton_fields.Property):
+class MultiValue(tryton_fields.MultiValue):
     pass
 
 
@@ -221,9 +221,8 @@ class Unaccent(functions.Function):
 
 class UnaccentChar(tryton_fields.Char):
 
-    @classmethod
-    def sql_format(cls, value):
-        value = super(UnaccentChar, cls).sql_format(value)
+    def sql_format(self, value):
+        value = super(UnaccentChar, self).sql_format(value)
         if isinstance(value, basestring) and backend.name() == 'postgresql':
             return Unaccent(value)
         return value
@@ -308,8 +307,8 @@ class EmptyNullChar(tryton_fields.Char):
     For example used to add a unicity constraint on field that can be
     presented and store with empty value
     '''
-    @staticmethod
-    def sql_format(value):
+
+    def sql_format(self, value):
         if value == '':
             return None
-        return tryton_fields.Char.sql_format(value)
+        return super(EmptyNullChar, self).sql_format(value)

@@ -908,10 +908,6 @@ msgctxt "field:ir.note,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:ir.property,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
 msgctxt "field:ir.rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"

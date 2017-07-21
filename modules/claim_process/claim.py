@@ -280,6 +280,13 @@ class ClaimDeclare(ProcessFinder):
     @classmethod
     def __setup__(cls):
         super(ClaimDeclare, cls).__setup__()
+        buttons = list(cls.process_parameters.buttons)
+        buttons_confirm_idx = [x for x, b
+            in enumerate(buttons) if b.state == 'confirm_declaration']
+        for idx in buttons_confirm_idx:
+            buttons.pop(idx)
+        # We ensured that we will have only one button_confirm
+        # after modifying the buttons
         cls.process_parameters.buttons[1].state = 'confirm_declaration'
         if 'Close claims' not in [b.string for b in
                 cls.process_parameters.buttons]:

@@ -8,6 +8,7 @@ import event
 def register():
     Pool.register(
         endorsement.Configuration,
+        endorsement.ConfigurationEndorsementSetSequence,
         endorsement.EndorsementSet,
         endorsement.Endorsement,
         endorsement.EndorsementSetSelectDeclineReason,

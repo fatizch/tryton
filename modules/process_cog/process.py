@@ -5,7 +5,6 @@ import datetime
 import lxml
 
 from sql import Null, Literal
-from sql.functions import CurrentTimestamp
 from sql.aggregate import Avg, Sum, Min, Max
 from sql.conditionals import Coalesce
 
@@ -388,25 +387,25 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
         if init_log is None:
             if self.current_state:
                 return [Log(user=Transaction().user, task=str(self),
-                        start_time=CurrentTimestamp(),
-                        process_start=CurrentTimestamp(),
+                        start_time=datetime.datetime.now(),
+                        process_start=datetime.datetime.now(),
                         from_state=self.current_state.id,
                         )]
             return []
         if self.current_state == init_log.from_state:
             return []
-        init_log.end_time = CurrentTimestamp()
+        init_log.end_time = datetime.datetime.now()
         init_log.to_state = self.current_state
 
         if init_log.start_time > datetime.datetime.now():
             # Handle future tasks started early
-            init_log.start_time = CurrentTimestamp()
+            init_log.start_time = datetime.datetime.now()
         if not self.current_state:
             return [init_log]
 
         self.current_log = Log(user=User(Transaction().user), task=self,
             process_start=init_log.process_start,
-            start_time=CurrentTimestamp(), from_state=self.current_state)
+            start_time=datetime.datetime.now(), from_state=self.current_state)
         return [init_log, self.current_log]
 
     def get_next_execution(self):
@@ -1238,6 +1237,7 @@ class ProcessStart(model.CoogView):
 
 class ProcessFinder(Wizard):
     'Process Finder'
+    __name__ = 'process.finder'
 
     class VoidStateAction(StateAction):
         def __init__(self):
@@ -1387,16 +1387,16 @@ class ProcessResume(Wizard):
             active_log, = active_logs
 
         if active_log:
-            active_log.end_time = CurrentTimestamp()
+            active_log.end_time = datetime.datetime.now()
             active_log.to_state = active_log.from_state
             active_log.save()
         new_log = Log()
         new_log.user = Transaction().user
         new_log.task = instance
         new_log.from_state = instance.current_state
-        new_log.start_time = CurrentTimestamp()
+        new_log.start_time = datetime.datetime.now()
         new_log.process_start = active_log.process_start if active_log \
-            else CurrentTimestamp()
+            else datetime.datetime.now()
         new_log.save()
 
         process = instance.current_state.process
@@ -1494,7 +1494,7 @@ class PostponeTask(Wizard):
     def transition_postpone(self):
         params = self.postpone_parameters
         task = params.task
-        task.end_time = CurrentTimestamp()
+        task.end_time = datetime.datetime.now()
         task.to_state = task.from_state
         task.save()
         defaults = {'start_time': params.new_date, 'end_time': None}

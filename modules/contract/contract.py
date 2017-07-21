@@ -879,7 +879,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         super(Contract, cls).validate(contracts)
         for contract in contracts:
             contract.check_activation_dates()
-        cls.check_option_dates(contracts)
+        #cls.check_option_dates(contracts)
 
     @classmethod
     def check_option_dates(cls, contracts):

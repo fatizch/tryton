@@ -17,7 +17,8 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/tree/button[@name='fail']" position="replace">
         <button string="Fail" name="button_fail_payments" tree_invisible="1"/>
     </xpath>
-    <xpath expr="/tree/button[@name='succeed']" position="replace_attributes">
+    <!-- The or below avoid the xpath crash due to diamong inheritance with account_payment_clearing module -->
+    <xpath expr="/tree/button[@name='succeed' or @name='succeed_wizard']" position="replace_attributes">
         <button string="Succeed" name="succeed" tree_invisible="1"/>
     </xpath>
     <xpath expr="/tree" position="inside">

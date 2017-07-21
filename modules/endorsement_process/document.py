@@ -26,7 +26,7 @@ class ReceiveDocument:
     __name__ = 'document.receive'
 
     start_endorsement_process = StateAction(
-        'endorsement.act_start_endorsement_process')
+        'endorsement.act_start_endorsement')
 
     def do_start_endorsement_process(self, action):
         document = self.free_attach.document

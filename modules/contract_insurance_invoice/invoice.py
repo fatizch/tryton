@@ -225,9 +225,14 @@ class Invoice:
         query_table = invoice.join(contract_invoice, type_='LEFT',
             condition=(contract_invoice.invoice == invoice.id))
 
-        query = query_table.select(invoice.id,
+        if not isinstance(value, list):
+            value = getattr(cls, name).sql_format(value)
+        if value != []:
+            query = query_table.select(invoice.id,
                 where=Operator(getattr(contract_invoice, name),
-                    getattr(cls, name).sql_format(value)))
+                    value))
+        else:
+            query = []
 
         return [('id', 'in', query)]
 

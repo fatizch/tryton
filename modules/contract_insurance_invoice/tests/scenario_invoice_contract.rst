@@ -35,6 +35,7 @@ Get Models::
     >>> ContractPremium = Model.get('contract.premium')
     >>> Country = Model.get('country.country')
     >>> FiscalYear = Model.get('account.fiscalyear')
+    >>> InvoiceSequence = Model.get('account.fiscalyear.invoice_sequence')
     >>> Option = Model.get('contract.option')
     >>> OptionDescription = Model.get('offered.option.description')
     >>> Party = Model.get('party.party')
@@ -84,14 +85,21 @@ Create Fiscal Year::
     ...     company=company)
     >>> post_move_seq.save()
     >>> fiscalyear.post_move_sequence = post_move_seq
-    >>> invoice_seq = SequenceStrict(name='2014',
+    >>> seq = SequenceStrict(name='2014',
     ...     code='account.invoice', company=company)
-    >>> invoice_seq.save()
-    >>> fiscalyear.out_invoice_sequence = invoice_seq
-    >>> fiscalyear.in_invoice_sequence = invoice_seq
-    >>> fiscalyear.out_credit_note_sequence = invoice_seq
-    >>> fiscalyear.in_credit_note_sequence = invoice_seq
+    >>> seq.save()
+    >>> bool(fiscalyear.invoice_sequences.pop())
+    True
     >>> fiscalyear.save()
+    >>> invoice_sequence = InvoiceSequence()
+    >>> invoice_sequence.out_invoice_sequence = seq
+    >>> invoice_sequence.in_invoice_sequence = seq
+    >>> invoice_sequence.out_credit_note_sequence = seq
+    >>> invoice_sequence.in_credit_note_sequence = seq
+    >>> invoice_sequence.fiscalyear = fiscalyear
+    >>> invoice_sequence.company = company
+    >>> invoice_sequence.save()
+    >>> fiscalyear.reload()
     >>> FiscalYear.create_period([fiscalyear.id], config.context)
 
 Create Account Kind::

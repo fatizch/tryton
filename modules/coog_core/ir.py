@@ -37,7 +37,6 @@ __all__ = [
     'IrModelField',
     'IrModelFieldAccess',
     'ModelAccess',
-    'Property',
     'Lang',
     'Icon',
     'Translation',
@@ -631,33 +630,6 @@ class ModelAccess(ExportImportMixin):
         result = super(ModelAccess, cls)._export_light()
         result.add('model')
         return result
-
-
-class Property(ExportImportMixin):
-    __name__ = 'ir.property'
-
-    @classmethod
-    def _export_light(cls):
-        return set(['field'])
-
-    @classmethod
-    def _export_skips(cls):
-        result = super(Property, cls)._export_skips()
-        result.add('res')
-        return result
-
-    @classmethod
-    def models_get(cls):
-        # Override original version to use translated names
-        pool = Pool()
-        Model = pool.get('ir.model')
-        models = cls._models_get_cache.get(None)
-        if models:
-            return models
-        models = sorted([(x.model, x.name) for x in Model.search([])],
-            key=lambda x: x[1]) + [('', '')]
-        cls._models_get_cache.set(None, models)
-        return models
 
 
 class Lang(ExportImportMixin):

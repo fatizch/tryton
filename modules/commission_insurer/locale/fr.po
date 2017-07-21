@@ -38,6 +38,10 @@ msgctxt "error:received_premiums:"
 msgid "Received Premium"
 msgstr "Primes reçues"
 
+msgctxt "model:ir.action,name:act_received_premiums_relate"
+msgid "Received Premiums"
+msgstr "Primes reçues"
+
 msgctxt "field:account.invoice,insurer_role:"
 msgid "Insurer"
 msgstr "Assureur"

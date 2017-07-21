@@ -82,6 +82,8 @@ Create Broker Fee::
     >>> template = Template()
     >>> template.name = 'Broker Fee Template'
     >>> template.account_expense = broker_fee_account
+    >>> template.list_price = Decimal(0)
+    >>> template.cost_price = Decimal(0)
     >>> template.save()
     >>> product = Product()
     >>> product.name = 'Broker Fee Product'

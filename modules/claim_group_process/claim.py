@@ -32,6 +32,11 @@ class ClaimDeclare:
     __metaclass__ = PoolMeta
     __name__ = 'claim.declare'
 
+    @classmethod
+    def __setup__(cls):
+        super(ClaimDeclare, cls).__setup__()
+
+
     def init_main_object_from_process(self, obj, process_param):
         res, errs = super(ClaimDeclare,
             self).init_main_object_from_process(obj, process_param)

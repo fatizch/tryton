@@ -15,6 +15,7 @@ def register():
     Pool.register(
         distribution.DistributionNetwork,
         configuration.Configuration,
+        configuration.ConfigurationDefaultPortfolio,
         party.Party,
         res.User,
         contract.Contract,

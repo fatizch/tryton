@@ -371,7 +371,7 @@ class CleanDatabaseBatch(BatchRoot):
     @classmethod
     def check_field(cls, field):
         return not isinstance(field, (fields.Function, fields.Many2Many,
-                fields.One2Many, fields.Property))
+                fields.One2Many, fields.MultiValue))
 
     @classmethod
     def check_model(cls, buf, model, fields, table):

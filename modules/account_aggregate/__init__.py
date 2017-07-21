@@ -13,6 +13,7 @@ def register():
         account.Move,
         account.Line,
         account.Configuration,
+        account.ConfigurationSnapshotSequence,
         account.SnapshotStart,
         account.SnapshotDone,
         batch.SnapshotTakeBatch,

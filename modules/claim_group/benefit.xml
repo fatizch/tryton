@@ -13,13 +13,13 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <!-- Override non collective entry point -->
         <record model="ir.action.act_window" id="claim.act_benefit_form">
-            <field name="domain" eval="[('is_group', '=', False), ('company', '=', Eval('context', {}).get('company', False))]" pyson="1"/>
+            <field name="domain" eval="[('is_group', '=', False), ('company', '=', Eval('context', {}).get('company', None))]" pyson="1"/>
         </record>
         <!-- Entry Point -->
         <record model="ir.action.act_window" id="act_benefit_collective">
             <field name="name">Collective Benefits</field>
             <field name="res_model">benefit</field>
-            <field name="domain" eval="[('is_group', '=', True), ('company', '=', Eval('context', {}).get('company', False))]" pyson="1"/>
+            <field name="domain" eval="[('is_group', '=', True), ('company', '=', Eval('context', {}).get('company', None))]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_benefit_collective_view1">
             <field name="sequence" eval="10"/>

@@ -16,6 +16,7 @@ def register():
         offered.EndorsementSubState,
         offered.EndorsementDefinition,
         endorsement.OfferedConfiguration,
+        endorsement.EndorsementConfigurationNumberSequence,
         offered.EndorsementPart,
         offered.EndorsementDefinitionPartRelation,
         offered.Product,
