@@ -130,15 +130,16 @@ class Payment:
     __metaclass__ = PoolMeta
 
     @classmethod
-    def fail_suspend_manual(cls, payments):
+    def fail_suspend_manual(cls, *args):
         with ServerContext().set_context(use_force=True):
-            cls.fail_suspend(payments)
+            cls.fail_suspend(*args)
 
     @classmethod
-    def fail_suspend(cls, payments):
+    def fail_suspend(cls, *args):
         payments_billing = defaultdict(list)
-        for payment in payments:
-            payments_billing[payment.line.contract.billing_information.id
-                ].append(payment)
+        for payments, _ in args:
+            for payment in payments:
+                payments_billing[payment.line.contract.billing_information.id
+                    ].append(payment)
         Pool().get('contract.billing_information').suspend_payments([],
             payments_billing)

@@ -3,6 +3,11 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <record model="account.payment.journal.reject_reason" id="coog_sepa_generic_reject">
+            <field name="code">ALL</field>
+            <field name="description">Coog Generic Reject Reason</field>
+            <field name="process_method">sepa</field>
+        </record>
         <record model="account.payment.journal.reject_reason" id="sepa_AC01">
             <field name="code">AC01</field>
             <field name="description">Account identifier incorrect</field>

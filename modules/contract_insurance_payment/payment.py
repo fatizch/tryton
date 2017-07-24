@@ -90,7 +90,7 @@ class Payment:
         return (payment.line.move.origin.contract,)
 
     @classmethod
-    def fail_move_to_manual_payment(cls, payments):
+    def fail_move_to_manual_payment(cls, *args):
         pool = Pool()
         Contract = pool.get('contract')
         Invoice = pool.get('account.invoice')
@@ -98,28 +98,29 @@ class Payment:
         contracts_to_save = []
         invoices = []
         lines_to_update = []
-        payments = sorted(payments, key=cls._group_per_contract_key)
-        for contracts, _grouped_payments in groupby(payments,
-                key=cls._group_per_contract_key):
-            if not contracts:
-                continue
-            for contract in contracts:
-                to_save = cls.move_contract_to_manual_payment(contract,
-                    _grouped_payments)
-                if to_save:
-                    contracts_to_save.append(to_save)
+        for payments, _ in args:
+            payments = sorted(payments, key=cls._group_per_contract_key)
+            for contracts, _grouped_payments in groupby(payments,
+                    key=cls._group_per_contract_key):
+                if not contracts:
+                    continue
+                for contract in contracts:
+                    to_save = cls.move_contract_to_manual_payment(contract,
+                        _grouped_payments)
+                    if to_save:
+                        contracts_to_save.append(to_save)
 
-        if contracts_to_save:
-            Contract.save([x[0] for x in contracts_to_save])
-        for contract, billing_info_date, next_invoice_date \
-                in contracts_to_save:
-            Contract.calculate_prices([contract], start=billing_info_date)
-            invoices.extend(Contract.invoice([contract],
-                up_to_date=next_invoice_date))
-            for invoice in contract.invoices:
-                if (invoice.invoice_state == 'posted' and invoice.start
-                        and invoice.start >= next_invoice_date):
-                    lines_to_update += invoice.invoice.lines_to_pay
+            if contracts_to_save:
+                Contract.save([x[0] for x in contracts_to_save])
+            for contract, billing_info_date, next_invoice_date \
+                    in contracts_to_save:
+                Contract.calculate_prices([contract], start=billing_info_date)
+                invoices.extend(Contract.invoice([contract],
+                    up_to_date=next_invoice_date))
+                for invoice in contract.invoices:
+                    if (invoice.invoice_state == 'posted' and invoice.start
+                            and invoice.start >= next_invoice_date):
+                        lines_to_update += invoice.invoice.lines_to_pay
 
         if lines_to_update:
             MoveLine.write(lines_to_update, {'payment_date': None})
@@ -179,26 +180,28 @@ class Payment:
         return contract, date, billing_change_date
 
     @classmethod
-    def fail_retry(cls, payments):
-        super(Payment, cls).fail_retry(payments)
+    def fail_retry(cls, *args):
+        super(Payment, cls).fail_retry(*args)
         pool = Pool()
         Invoice = pool.get('account.invoice')
         MoveLine = pool.get('account.move.line')
 
         to_save = []
-        for payment in payments:
-            if not isinstance(payment.line.move.origin, Invoice):
-                continue
-            contract_invoice = payment.line.move.origin.contract_invoice
-            invoice = payment.line.move.origin
+        for payments, _ in args:
+            for payment in payments:
+                if not isinstance(payment.line.move.origin, Invoice):
+                    continue
+                contract_invoice = payment.line.move.origin.contract_invoice
+                invoice = payment.line.move.origin
 
-            if not contract_invoice:
-                continue
-            with Transaction().set_context(
-                    contract_revision_date=contract_invoice.start):
-                invoice.update_move_line_from_billing_information(payment.line,
-                    contract_invoice.contract.billing_information)
-                to_save.append(payment.line)
+                if not contract_invoice:
+                    continue
+                with Transaction().set_context(
+                        contract_revision_date=contract_invoice.start):
+                    invoice.update_move_line_from_billing_information(
+                        payment.line,
+                        contract_invoice.contract.billing_information)
+                    to_save.append(payment.line)
 
         if to_save:
             MoveLine.save(to_save)

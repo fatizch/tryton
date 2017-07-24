@@ -138,6 +138,10 @@ msgctxt "model:account.payment.fail,name:"
 msgid "Payment Fail Batch"
 msgstr "Batch de rejets de paiements"
 
+msgctxt "model:account.payment.journal.reject_reason,description:coog_sepa_generic_reject"
+msgid "Coog Generic Reject Reason"
+msgstr "Motif de rejet générique pour Coog"
+
 msgctxt "model:account.payment.journal.reject_reason,description:sepa_AC01"
 msgid "Account identifier incorrect"
 msgstr "Identifiant du compte incorrect"

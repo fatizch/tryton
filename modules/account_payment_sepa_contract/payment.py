@@ -60,7 +60,7 @@ class Payment:
             self.bank_account = self.payer.get_bank_account(self.date)
 
     @classmethod
-    def fail_create_reject_fee(cls, payments):
+    def fail_create_reject_fee(cls, *args):
         pool = Pool()
         Invoice = pool.get('account.invoice')
         ContractInvoice = pool.get('contract.invoice')
@@ -71,37 +71,40 @@ class Payment:
         invoices_to_create = []
         contract_invoices_to_create = []
         payment_date_to_update = []
-        payments_keys = [(x._get_transaction_key(), x) for x in payments]
-        payments_keys = sorted(payments_keys, key=lambda x: x[0])
-        for key, payments_by_key in groupby(payments_keys, key=lambda x: x[0]):
-            payments_list = [payment[1] for payment in payments_by_key]
-            payment = payments_list[0]
-            sepa_mandate = None
-            payment_date = None
-            journal = key[1]
-            reject_fee = cls.get_reject_fee(payments_list)
-            if (not reject_fee or not reject_fee.amount or
-                    not journal.process_actions_when_payments_failed(
-                        payments_list)):
-                continue
-            if 'retry' in [action[0] for action in
-                    journal.get_fail_actions(payments_list)]:
-                sepa_mandate = payment.sepa_mandate
-                payment_date = payment.journal.get_next_possible_payment_date(
-                        payment.line, payment.date.day)
-            journal = config.reject_fee_journal
-            account = reject_fee.product.template.account_revenue_used
-            name_for_billing = reject_fee.name
-            invoice = payment.create_fee_invoice(
-                reject_fee.amount, journal, account, name_for_billing,
-                sepa_mandate)
-            contract = cls.get_contract_for_reject_invoice(payments_list)
-            if contract is not None:
-                contract_invoice = ContractInvoice(
-                    contract=contract, invoice=invoice, non_periodic=True)
-                contract_invoices_to_create.append(contract_invoice)
-            invoices_to_create.append(invoice)
-            payment_date_to_update.append({'payment_date': payment_date})
+        for payments, reject_fee in args:
+            payments_keys = [(x._get_transaction_key(), x) for x in payments]
+            payments_keys = sorted(payments_keys, key=lambda x: x[0])
+            for key, payments_by_key in groupby(payments_keys,
+                    key=lambda x: x[0]):
+                payments_list = [payment[1] for payment in payments_by_key]
+                payment = payments_list[0]
+                sepa_mandate = None
+                payment_date = None
+                journal = key[1]
+                # reject_fee = cls.get_reject_fee(payments_list)
+                if (not reject_fee or not reject_fee.amount or
+                        not journal.process_actions_when_payments_failed(
+                            payments_list)):
+                    continue
+                if 'retry' in [action[0] for action in
+                        journal.get_fail_actions(payments_list)]:
+                    sepa_mandate = payment.sepa_mandate
+                    payment_date = \
+                        payment.journal.get_next_possible_payment_date(
+                            payment.line, payment.date.day)
+                journal = config.reject_fee_journal
+                account = reject_fee.product.template.account_revenue_used
+                name_for_billing = reject_fee.name
+                invoice = payment.create_fee_invoice(
+                    reject_fee.amount, journal, account, name_for_billing,
+                    sepa_mandate)
+                contract = cls.get_contract_for_reject_invoice(payments_list)
+                if contract is not None:
+                    contract_invoice = ContractInvoice(
+                        contract=contract, invoice=invoice, non_periodic=True)
+                    contract_invoices_to_create.append(contract_invoice)
+                invoices_to_create.append(invoice)
+                payment_date_to_update.append({'payment_date': payment_date})
 
         Invoice.save(invoices_to_create)
         ContractInvoice.save(contract_invoices_to_create)
@@ -159,10 +162,11 @@ class JournalFailureAction:
         cls._fail_actions_order.insert(
             cls._fail_actions_order.index('retry') + 1, 'create_reject_fee')
 
-    def get_actions(self, **kwargs):
-        actions = super(JournalFailureAction, self).get_actions(**kwargs)
+    def get_actions_for_matching_reject_number(self, **kwargs):
+        actions = super(JournalFailureAction,
+            self).get_actions_for_matching_reject_number(**kwargs)
         if self.rejected_payment_fee:
-            actions.append(('create_reject_fee', None))
+            actions.append(('create_reject_fee', self.rejected_payment_fee))
         return actions
 
 

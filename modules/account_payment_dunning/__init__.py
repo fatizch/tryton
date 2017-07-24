@@ -7,7 +7,6 @@ import payment
 
 def register():
     Pool.register(
-        payment.PaymentJournal,
         payment.JournalFailureAction,
         payment.JournalFailureDunning,
         payment.Payment,

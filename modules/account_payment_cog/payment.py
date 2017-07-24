@@ -87,10 +87,15 @@ class Journal(export.ExportImportMixin):
         possible_actions = [action for action in self.failure_actions
             if action.reject_reason.code == reject_code
             and action.payment_kind == kind]
+        if not possible_actions:
+            possible_actions = [action for action in self.failure_actions
+                if action.reject_reason.code == 'ALL'
+                and action.payment_kind == kind]
         possible_actions.sort(key=lambda x: x.reject_number, reverse=True)
         actions = []
         for action in possible_actions:
-            actions += action.get_actions(reject_number=payment_reject_number)
+            actions += action.get_actions(reject_number=payment_reject_number,
+                payments=payments)
         return actions or [('manual',)]
 
     @classmethod
@@ -163,35 +168,23 @@ class JournalFailureAction(model.CoogSQL, model.CoogView):
         return super(JournalFailureAction, cls)._export_light() | {
             'reject_reason', 'rejected_payment_fee', 'report_template'}
 
+    def get_actions_for_matching_reject_number(self, **kwargs):
+        actions = []
+        actions.append((self.action,))
+        if self.report_template:
+            actions.append(('print', self.report_template))
+        return actions
+
     def get_actions(self, **kwargs):
         reject_number = kwargs.get('reject_number', 0)
         actions = []
         if not self.reject_number or self.reject_number == reject_number:
-            actions.append((self.action,))
-            if self.report_template:
-                actions.append(('print', self.report_template))
+            actions += self.get_actions_for_matching_reject_number(**kwargs)
         elif (self.report_template_if_exceeded and self.reject_number and
                 reject_number > self.reject_number):
             actions += [('manual',),
                 ('print', self.report_template_if_exceeded)]
         return actions
-
-    @classmethod
-    def get_rejected_payment_fee(cls, code, payment_kind='receivable'):
-        if not code:
-            return
-        # TODO : Add cache on this method
-        JournalFailureAction = Pool().get(
-            'account.payment.journal.failure_action')
-        failure_actions = JournalFailureAction.search([
-                ('reject_reason.code', '=', code),
-                ('payment_kind', '=', payment_kind),
-                ])
-        if len(failure_actions) == 0:
-            cls.raise_user_error('unknown_reject_reason_code', (code))
-        for failure_action in failure_actions:
-            if failure_action.rejected_payment_fee:
-                return failure_action.rejected_payment_fee
 
     @fields.depends('rejected_payment_fee')
     def on_change_with_is_fee_required(self, name=None):
@@ -669,23 +662,23 @@ class Payment(export.ExportImportMixin, Printable,
             payments_list = [payment[1] for payment in payments]
             reject_actions = key[1].get_fail_actions(payments_list)
             for action in reject_actions:
-                if action[0] == 'print':
-                    actions['fail_print'].extend([(action[1],
-                        payments_list)])
-                else:
-                    actions['fail_%s' % action[0]].extend(payments_list)
-
+                actions['fail_%s' % action[0]].extend([
+                        (payments_list,
+                            action[1] if len(action) > 1 else None)])
         for action in FailureAction._fail_actions_order:
-            getattr(cls, 'fail_%s' % action)(actions['fail_%s' % action])
+            getattr(cls, 'fail_%s' % action)(*actions['fail_%s' % action])
 
     @classmethod
-    def fail_manual(cls, payments):
+    def fail_manual(cls, *args):
+        payments = []
+        for p, _ in args:
+            payments.extend(p)
         cls.write(payments, {
                 'manual_fail_status': 'pending',
                 })
 
     @classmethod
-    def fail_retry(cls, payments):
+    def fail_retry(cls, *args):
         pass
 
     @classmethod
@@ -698,8 +691,8 @@ class Payment(export.ExportImportMixin, Printable,
         return payments
 
     @classmethod
-    def fail_print(cls, to_prints):
-        for report, payments in to_prints:
+    def fail_print(cls, *args):
+        for payments, report in args:
             to_print = cls.get_objects_for_fail_prints(report, payments)
             report.produce_reports(to_print)
 

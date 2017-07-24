@@ -13,6 +13,6 @@ class Payment:
     __name__ = 'account.payment'
 
     @classmethod
-    def fail_create_reject_fee(cls, payments):
+    def fail_create_reject_fee(cls, *args):
         with ServerContext().set_context(default_maturity_date=True):
-            super(Payment, cls).fail_create_reject_fee(payments)
+            super(Payment, cls).fail_create_reject_fee(*args)

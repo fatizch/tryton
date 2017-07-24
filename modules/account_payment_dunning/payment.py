@@ -2,43 +2,15 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
-from trytond.model import Unique, ModelView, Workflow
-from trytond.cache import Cache
+from trytond.model import Unique
 
 from trytond.modules.coog_core import fields, model
 
 __all__ = [
-    'PaymentJournal',
     'JournalFailureAction',
     'JournalFailureDunning',
     'Payment',
     ]
-
-
-class PaymentJournal:
-    __metaclass__ = PoolMeta
-    __name__ = 'account.payment.journal'
-
-    _dunning_actions_cache = Cache('dunning_actions')
-
-    @classmethod
-    def dunning_action(cls, journal, procedure, reject_code):
-        Level = Pool().get('account.dunning.level')
-        journal = journal if isinstance(journal, int) else journal.id
-        procedure = procedure if isinstance(procedure, int) else procedure.id
-        val = cls._dunning_actions_cache.get(
-            (journal, procedure, reject_code), -1)
-        if val != -1:
-            return Level(val) if val else None
-        cls._dunning_actions_cache.set((journal, procedure, reject_code), None)
-        for cur_journal in cls.search([]):
-            for failure_action in cur_journal.failure_actions:
-                for failure_dunning in failure_action.dunning_configurations:
-                    cls._dunning_actions_cache.set((cur_journal.id,
-                            failure_dunning.procedure.id,
-                            failure_action.reject_reason.code),
-                        failure_dunning.level.id)
-        return cls.dunning_action(journal, procedure, reject_code)
 
 
 class JournalFailureAction:
@@ -48,6 +20,24 @@ class JournalFailureAction:
     dunning_configurations = fields.One2Many(
         'account.payment.journal.failure_action.dunning', 'failure_action',
         'Dunning Configurations', delete_missing=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(JournalFailureAction, cls).__setup__()
+        cls._fail_actions_order += ['generate_dunnings']
+
+    def get_actions_for_matching_reject_number(self, **kwargs):
+        actions = super(JournalFailureAction,
+            self).get_actions_for_matching_reject_number(**kwargs)
+        payments = kwargs.get('payments', [])
+        procedures = set([p.line.dunning_procedure for p in payments if p.line])
+        if len(procedures) == 1:
+            for dunning_configuration in self.dunning_configurations:
+                if dunning_configuration.procedure != list(procedures)[0]:
+                    continue
+                actions.append(('generate_dunnings',
+                        dunning_configuration.level))
+        return actions
 
 
 class JournalFailureDunning(model.CoogSQL, model.CoogView):
@@ -73,55 +63,21 @@ class JournalFailureDunning(model.CoogSQL, model.CoogView):
                 'Only one configuration per dunning procedure'),
             ]
 
-    @classmethod
-    def create(cls, *args, **kwargs):
-        Pool().get('account.payment.journal')._dunning_actions_cache.clear()
-        return super(JournalFailureDunning, cls).create(*args, **kwargs)
-
-    @classmethod
-    def write(cls, *args, **kwargs):
-        Pool().get('account.payment.journal')._dunning_actions_cache.clear()
-        return super(JournalFailureDunning, cls).write(*args, **kwargs)
-
-    @classmethod
-    def delete(cls, *args, **kwargs):
-        Pool().get('account.payment.journal')._dunning_actions_cache.clear()
-        return super(JournalFailureDunning, cls).delete(*args, **kwargs)
-
 
 class Payment:
     __metaclass__ = PoolMeta
     __name__ = 'account.payment'
 
     @classmethod
-    @ModelView.button
-    @Workflow.transition('failed')
-    def fail(cls, payments):
-        super(Payment, cls).fail(payments)
-        cls.fail_generate_dunnings(payments)
-
-    @classmethod
-    def fail_generate_dunnings(cls, payments):
+    def fail_generate_dunnings(cls, *args):
         pool = Pool()
-        Journal = pool.get('account.payment.journal')
         Dunning = pool.get('account.dunning')
         dunnings = []
-        for payment in payments:
-            if not payment.fail_code:
-                continue
-            line = payment.line
-            if line is None:
-                continue
-            dunning_procedure = line.dunning_procedure
-            if dunning_procedure is None:
-                continue
-            level = Journal.dunning_action(payment.journal.id,
-                dunning_procedure.id, payment.fail_code)
-            if not level:
-                continue
-            dunning = payment._set_dunning(level)
-            if dunning:
-                dunnings.append(dunning)
+        for payments, level in args:
+            for payment in payments:
+                dunning = payment._set_dunning(level)
+                if dunning:
+                    dunnings.append(dunning)
         if not dunnings:
             return
         Dunning.save(dunnings)
