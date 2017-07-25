@@ -192,18 +192,10 @@ class Commission:
 
     @classmethod
     def _get_invoice(cls, key):
-        pool = Pool()
-        Invoice = pool.get('account.invoice')
-        AccountConfiguration = pool.get('account.configuration')
+        Invoice = Pool().get('account.invoice')
 
         party = key['party']
-        if key['type'].startswith('out'):
-            payment_term = party.customer_payment_term
-        else:
-            payment_term = party.supplier_payment_term
-        if not payment_term:
-            conf = AccountConfiguration(1)
-            payment_term = conf.commission_invoice_payment_term
+        payment_term = key['payment_term']
         return Invoice(
             company=key['company'],
             type=key['type'],
@@ -226,6 +218,8 @@ class Commission:
             ('company', self.agent.company),
             ('currency', self.agent.currency),
             ('account', self.agent.account),
+            ('payment_term', self.agent.get_payment_term_from_party(
+                    self.type_)),
             )
 
     def _group_to_invoice_line_key(self):
@@ -764,6 +758,10 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
+    agent_payment_term = fields.Many2One(
+        'account.invoice.payment_term', 'Commission Agent Payment Term',
+        ondelete='RESTRICT', help='If defined, this payment term has priority '
+        'over the party\'s one and the global configuration')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
 
@@ -799,6 +797,19 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
     def _export_light(cls):
         return (super(Agent, cls)._export_light() |
             set(['company', 'currency', 'plan']))
+
+    def get_payment_term_from_party(self, type_):
+        AccountConfiguration = Pool().get('account.configuration')
+        if self.agent_payment_term:
+            return self.agent_payment_term
+        if type_.startswith('out'):
+            payment_term = self.party.customer_payment_term
+        else:
+            payment_term = self.party.supplier_payment_term
+        if not payment_term:
+            conf = AccountConfiguration(1)
+            payment_term = conf.commission_invoice_payment_term
+        return payment_term
 
     def get_func_key(self, name):
         return '%s|%s' % ((self.party.code, self.plan.code))

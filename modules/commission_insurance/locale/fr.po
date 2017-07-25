@@ -6,6 +6,12 @@ msgctxt "error:account.fee:"
 msgid "Broker Fee"
 msgstr "Frais d'apporteur"
 
+msgctxt "help:commission.agent,agent_payment_term:"
+msgid "If defined, this payment has priority over the party's one and "
+"the global configuration"
+msgstr "Si défini, cette condition de paiement sera prioritaire face à celle"
+" sur le tiers ainsi que sur la configuration globale"
+
 msgctxt "error:account.invoice.line:"
 msgid "No broker define on contract %s for broker fee %s"
 msgstr ""
@@ -117,6 +123,10 @@ msgstr "Tiers"
 msgctxt "field:commission,start:"
 msgid "Start"
 msgstr "Date de début"
+
+msgctxt "field:commission.agent,agent_payment_term:"
+msgid "Commission Agent Payment Term"
+msgstr "Condition de paiement du protocole de commissionnement"
 
 msgctxt "field:commission.agent,end_date:"
 msgid "End Date"
@@ -670,13 +680,13 @@ msgctxt "model:commission_plan-commission_plan,name:"
 msgid "Commission Plan - Commission Plan"
 msgstr "Lien entre plans de commissionnement"
 
-msgctxt "model:event.type,name:event_invoice_commission_generated"
-msgid "Commission Invoice Generated"
-msgstr "Bordereau de commission généré"
-
 msgctxt "model:event.type,name:event_contract_broker_changed"
 msgid "Broker Changed"
 msgstr "Transfert de portefeuille"
+
+msgctxt "model:event.type,name:event_invoice_commission_generated"
+msgid "Commission Invoice Generated"
+msgstr "Bordereau de commission généré"
 
 msgctxt "model:ir.action,name:"
 msgid "Aggregated commissions"
@@ -1189,13 +1199,13 @@ msgctxt "model:commission.create_invoice.ask,name:commission."
 msgid "Create Commission Invoice"
 msgstr "Générer les bordereaux de commission"
 
-msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
-msgid "Create Commission Invoices"
-msgstr "Générer les bordereaux de commission"
-
 msgctxt "model:ir.action,name:commission.act_agent_form"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
+msgid "Create Commission Invoices"
+msgstr "Générer les bordereaux de commission"
 
 msgctxt "model:ir.ui.menu,name:commission.menu_commission_create_invoice"
 msgid "Create Commission Invoices"
@@ -1210,20 +1220,20 @@ msgid "Product Template - Commission Agent"
 msgstr "Modèle produit - Protocole de commissionnement"
 
 msgctxt "selection:commission.agent,type_:commission."
-msgid "Principal Of"
-msgstr "Commissionne"
-
-msgctxt "selection:commission.agent,type_:commission."
 msgid "Agent Of"
 msgstr "Est commissionné par"
 
-msgctxt "view:commission.agent:commission."
-msgid "Agents"
-msgstr "Protocoles de commissionnement"
+msgctxt "selection:commission.agent,type_:commission."
+msgid "Principal Of"
+msgstr "Commissionne"
 
 msgctxt "view:commission.agent:commission."
 msgid "Agent"
 msgstr "Protocole de commissionnement"
+
+msgctxt "view:commission.agent:commission."
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "view:commission.create_invoice.ask:commission."
 msgid "Create Commission Invoice"

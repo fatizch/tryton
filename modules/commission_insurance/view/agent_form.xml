@@ -4,6 +4,8 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form" position="inside">
         <newline/>
+        <label name="agent_payment_term"/>
+        <field name="agent_payment_term" colspan="3"/>
         <label name="start_date"/>
         <field name="start_date"/>
         <label name="end_date"/>
