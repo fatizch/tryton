@@ -187,8 +187,9 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
             cursor.execute(*process_menu.select(process_menu.menu))
             menu_ids = [r[0] for r in cursor.fetchall()]
             TableHandler.drop_table('process-menu', 'process-menu')
-            cursor.execute(*menu.delete(
-                    where=(menu.id.in_(menu_ids))))
+            if menu_ids:
+                cursor.execute(*menu.delete(
+                        where=(menu.id.in_(menu_ids))))
 
             action_table = Table('process_process-act_window')
             view = Table('ir_ui_view')
@@ -202,7 +203,9 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
                     act_window_view.act_window, act_window_view.view))
 
             ids = [r[0] for r in cursor.fetchall()]
-            cursor.execute(*act_window.delete(where=(act_window.id.in_(ids))))
+            if ids:
+                cursor.execute(*act_window.delete(
+                        where=(act_window.id.in_(ids))))
             cursor.execute(*view.delete(where=(view.module == 'process_views')))
 
     @classmethod
