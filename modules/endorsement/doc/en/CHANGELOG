@@ -1,3 +1,4 @@
+* BUG#6636 Fix a crash when managing options of a contract with existing void options
 * Allow to void an already renewed contract
 
 Version 1.12 - 2017-04-28

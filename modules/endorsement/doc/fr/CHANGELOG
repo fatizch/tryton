@@ -1,3 +1,4 @@
+* BUG#6636 Correction d'un crash en cas de gestion des garanties sur un contrat ayant des garanties sans effet
 * Ajout de la possibilité de passer sans effet un contrat qui a déjà été renouvellé
 
 Version 1.12 - 2017-04-28
