@@ -407,12 +407,12 @@ Test Average Premium Rate Wizard, fee => prorata::
 
     >>> loan_average = Wizard('loan.average_premium_rate.display', models=[contract])
     >>> loans = loan_average.form.loan_displayers
-    >>> abs(loans[0].average_premium_rate - Decimal('0.00913746')) <= Decimal('1e-8')
+    >>> abs(loans[0].average_premium_rate - Decimal('0.00878255')) <= Decimal('1e-8')
     True
-    >>> abs(loans[1].average_premium_rate - Decimal('0.14865129')) <= Decimal('1e-8')
+    >>> abs(loans[1].average_premium_rate - Decimal('0.14611595')) <= Decimal('1e-8')
     True
     >>> abs(loans[0].current_loan_shares[0].average_premium_rate -
-    ...     Decimal('0.00913746')) <= Decimal('1e-8')
+    ...     Decimal('0.00878255')) <= Decimal('1e-8')
     True
     >>> abs(loans[0].base_premium_amount - Decimal('255.85')) <= Decimal('1e-2')
     True
@@ -426,9 +426,9 @@ Test Average Premium Rate Wizard, fee => biggest::
     >>> loan_average_rule.save()
     >>> loan_average = Wizard('loan.average_premium_rate.display', models=[contract])
     >>> loans = loan_average.form.loan_displayers
-    >>> abs(loans[0].average_premium_rate - Decimal('0.00942857')) <= Decimal('1e-8')
+    >>> abs(loans[0].average_premium_rate - Decimal('0.00906235')) <= Decimal('1e-8')
     True
-    >>> abs(loans[1].average_premium_rate - Decimal('0.14814814')) <= Decimal('1e-8')
+    >>> abs(loans[1].average_premium_rate - Decimal('0.14562138')) <= Decimal('1e-8')
     True
     >>> abs(loans[0].base_premium_amount - Decimal('264.00')) <= Decimal('1e-2')
     True
@@ -442,9 +442,9 @@ Test Average Premium Rate Wizard, fee => longest::
     >>> loan_average_rule.save()
     >>> loan_average = Wizard('loan.average_premium_rate.display', models=[contract])
     >>> loans = loan_average.form.loan_displayers
-    >>> abs(loans[0].average_premium_rate - Decimal('0.00857142')) <= Decimal('1e-8')
+    >>> abs(loans[0].average_premium_rate - Decimal('0.00823850')) <= Decimal('1e-8')
     True
-    >>> abs(loans[1].average_premium_rate - Decimal('0.14962962')) <= Decimal('1e-8')
+    >>> abs(loans[1].average_premium_rate - Decimal('0.14707760')) <= Decimal('1e-8')
     True
     >>> abs(loans[0].base_premium_amount - Decimal('240.00')) <= Decimal('1e-2')
     True

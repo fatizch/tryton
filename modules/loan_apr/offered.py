@@ -170,7 +170,8 @@ class LoanAveragePremiumRule(model.CoogSQL, model.CoogView):
                 continue
             fee_amount += sum(v.values()) * ratios[action]
         den = insured_amount * coog_date.number_of_years_between(
-            loan.funds_release_date, loan.end_date)
+            loan.funds_release_date, loan.end_date,
+            prorata_method=coog_date.prorata_exact)
         base_amount = loan_amount + fee_amount
         loan_average = base_amount * 100 / den if den else None
         return base_amount, loan_average
@@ -249,10 +250,13 @@ class LoanAveragePremiumRule(model.CoogSQL, model.CoogView):
                 continue
             fee_amount += sum(v.values()) * ratios[action]
         base_value = share_amount + fee_amount
-        loan_average = base_value * 100 / (loan.amount *
+        den = (loan.amount *
             coog_date.number_of_years_between(loan.funds_release_date,
-                loan.end_date) * share.share)
-        return base_value, loan_average
+                loan.end_date, prorata_method=coog_date.prorata_exact) *
+            share.share)
+        if den:
+            return base_value, base_value * 100 / den
+        return base_value, None
 
 
 class FeeRule(model.CoogSQL, model.CoogView):

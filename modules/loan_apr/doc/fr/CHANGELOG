@@ -1,6 +1,8 @@
+* BUG#6646 Calcul du nombre d'année en décimal et non en valeur entière
+
 Version 1.12 - 2017-04-28
 
 Version 1.10 - 2016-11-02
 
 Version 1.8 - 2016-07-06
-* FEA#0000 Module creation
+* FEA#0000 Création du module
