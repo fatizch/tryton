@@ -1,3 +1,4 @@
+* FEA#6591 Add coog's version in the user status bar
 * OTH#0000 Do not register non model batch classes in the pool
 * OTH#0000 Add 'delete_missing' flag on actives contract suspensions
 * FEA#6575 Add an Interval operator for SQL operations

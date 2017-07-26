@@ -4,6 +4,8 @@ from trytond.pool import PoolMeta
 from trytond.config import config
 from trytond.transaction import Transaction
 from trytond.modules.coog_core import fields
+from trytond.modules import get_module_info
+from trytond.cache import Cache
 
 from export import ExportImportMixin
 
@@ -36,6 +38,8 @@ class User(ExportImportMixin):
     __name__ = 'res.user'
     _func_key = 'login'
 
+    version_module = config.get('version', 'module', default='coog_core')
+    version_cache = Cache('version_cache')
     color_bg = fields.Function(fields.Char('Background Color'), 'get_color_bg')
 
     @classmethod
@@ -55,6 +59,11 @@ class User(ExportImportMixin):
         if env:
             env = env.replace('%{DB}', Transaction().database.name)
             status += ' - %s' % env
+        version = self.version_cache.get(self.version_module, -1)
+        if version == -1:
+            version = get_module_info(self.version_module).get('version')
+            self.version_cache.set(self.version_module, version)
+        status += (' - Version %s' % version)
         return status
 
     def get_color_bg(self, name):

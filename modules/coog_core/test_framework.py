@@ -143,6 +143,12 @@ class CoogTestCase(ModuleTestCase):
                         v, type='wizard')
                 self._models.update({k: good_model})
 
+    def test9979_check_version_cfg(self):
+        from trytond.modules import get_module_info
+        self.assertNotEqual(
+            get_module_info(self.__class__.module).get('version'), None,
+            'Version in tryton.cfg is required')
+
     def test9989_check_documentation(self):
         module_path = os.path.abspath(os.path.join(os.path.normpath(__file__),
                 '..', '..', self.__class__.module))
