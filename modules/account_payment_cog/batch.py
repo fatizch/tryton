@@ -452,15 +452,15 @@ class PaymentValidationBatchBase(batch.BatchRoot):
     @classmethod
     def base_domain_select_ids(cls, payment_kind, **kwargs):
         domain = [
-            ('group.payment_date_min', '<=', kwargs.get('treatment_date')),
+            ('payment_date_min', '<=', kwargs.get('treatment_date')),
             ]
         if kwargs.get('auto_acknowledge', None):
-            domain.append(('group.state', 'in',
+            domain.append(('state', 'in',
                     ['to_acknowledge', 'processing']))
         else:
-            domain.append(('group.state', '=', 'to_acknowledge'))
+            domain.append(('state', '=', 'to_acknowledge'))
         if payment_kind:
-            domain.append(('kind', '=', payment_kind))
+            domain.append(('payments.kind', '=', payment_kind))
         return domain
 
     @classmethod
@@ -468,7 +468,7 @@ class PaymentValidationBatchBase(batch.BatchRoot):
             payment_kind=None, journal_methods=None, auto_acknowledge=None):
         pool = Pool()
         Group = pool.get('account.payment.group')
-        Payment = pool.get('account.payment')
+        domain = []
         if group_reference:
             groups = Group.search([
                     ('number', '=', group_reference)])
@@ -476,7 +476,7 @@ class PaymentValidationBatchBase(batch.BatchRoot):
                 msg = "Payment Group Reference %s invalid" % group_reference
                 cls.logger.error('%s. Aborting' % msg)
                 raise Exception(msg)
-            return [(payment.id,) for payment in groups[0].processing_payments]
+            return [(groups[0].id,)]
         if payment_kind and payment_kind not in PAYMENT_KINDS:
             msg = "ignoring payment_kind: '%s' not in %s" % (payment_kind,
                 PAYMENT_KINDS)
@@ -486,8 +486,9 @@ class PaymentValidationBatchBase(batch.BatchRoot):
             treatment_date=treatment_date, auto_acknowledge=auto_acknowledge)
         if journal_methods:
             journal_methods = [x.strip() for x in journal_methods.split(',')]
-            domain.append(('journal.process_method', 'in', journal_methods))
-        return [(payment.id,) for payment in Payment.search(domain)]
+            domain.append(
+                ('journal.process_method', 'in', journal_methods))
+        return [(group.id,) for group in Group.search(domain)]
 
 
 class PaymentSucceedBatch(PaymentValidationBatchBase):
@@ -521,9 +522,26 @@ class PaymentSucceedBatch(PaymentValidationBatchBase):
         return 'account.payment'
 
     @classmethod
-    def base_domain_select_ids(cls, payment_kind, **kwargs):
-        return super(PaymentSucceedBatch, cls).base_domain_select_ids(
-            payment_kind, **kwargs) + [('state', '=', 'processing')]
+    def select_ids(cls, **kwargs):
+        pool = Pool()
+        Payment = pool.get('account.payment')
+        cursor = Transaction().connection.cursor()
+        payment = Payment.__table__()
+        payments_per_group = defaultdict(list)
+
+        group_ids = [x[0] for x in
+            super(PaymentSucceedBatch, cls).select_ids(**kwargs)]
+
+        if group_ids:
+            cursor.execute(*payment.select(payment.group, payment.id,
+                    where=payment.group.in_(group_ids) &
+                    (payment.state == 'processing')))
+            for group, payment in cursor.fetchall():
+                payments_per_group[group].append(payment)
+            for group, payments in payments_per_group.iteritems():
+                yield [(x,) for x in payments]
+        if not group_ids:
+            yield []
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, group_reference=None,
@@ -555,17 +573,25 @@ class PaymentAcknowledgeBatch(PaymentValidationBatchBase):
     def select_ids(cls, treatment_date, group_reference=None,
             payment_kind=None, journal_methods=None, auto_acknowledge=None):
         pool = Pool()
+        Group = pool.get('account.payment.group')
         Payment = pool.get('account.payment')
-        ids = [x[0] for x in
+        group_ids = [x[0] for x in
             super(PaymentAcknowledgeBatch, cls).select_ids(treatment_date,
                 group_reference, payment_kind, journal_methods,
                 auto_acknowledge)]
-        for ids_slice in grouped_slice(ids):
-            payments = Payment.browse(list(ids_slice))
-            for group in {x.group.id for x in payments
-                    if not any(cls.payment_invalid(p)
-                    for p in x.group.payments)}:
-                yield (group,)
+
+        to_process_groups = []
+        groups = Group.browse(group_ids)
+        for group in groups:
+            for sliced_payments in grouped_slice(Payment.search([
+                    ('group', '=', group.id)])):
+                if any(cls.payment_invalid(p) for p in sliced_payments):
+                    break
+            else:
+                to_process_groups.append(group)
+
+        for group in to_process_groups:
+            yield (group.id,)
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, group_reference=None,
