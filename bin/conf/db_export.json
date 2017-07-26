@@ -34,6 +34,7 @@
     "contract_fee",
     "contract_invoice",
     "contract-loan",
+    "contract_notification",
     "contract_option",
     "contract_option_beneficiary",
     "contract_option_benefit",
