@@ -44,9 +44,9 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
         contract_invoice = pool.get('contract.invoice').__table__()
         invoice = pool.get('account.invoice').__table__()
 
-        query_table = contract.join(contract_invoice, condition=(
+        query_table = contract.join(contract_invoice, 'LEFT OUTER', condition=(
                 contract.id == contract_invoice.contract)
-            ).join(invoice, condition=(
+            ).join(invoice, 'LEFT OUTER', condition=(
                 contract_invoice.invoice == invoice.id) &
             (invoice.state != 'cancel'))
 
