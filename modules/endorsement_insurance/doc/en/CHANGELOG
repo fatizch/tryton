@@ -1,3 +1,4 @@
+* BUG#6644 Add a default motive on new extra_premium endorsement
 * BUG#6510 Handle contract status in extra_premium endorsement
 
 Version 1.12 - 2017-04-28

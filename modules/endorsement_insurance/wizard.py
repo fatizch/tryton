@@ -1551,8 +1551,15 @@ class NewExtraPremium(model.CoogView):
 
     @fields.depends('new_extra_premium')
     def on_change_new_extra_premium(self):
+        default_motive = Pool().get('extra_premium.kind').search([], limit=1)
+        if not default_motive:
+            return
+        default_motive, = default_motive
         for elem in self.new_extra_premium:
             elem.contract_status = 'quote'
+            # Force a value to allow to cancel without being blocked
+            if not elem.motive:
+                elem.motive = default_motive
         self.new_extra_premium = list(self.new_extra_premium)
 
     @classmethod
