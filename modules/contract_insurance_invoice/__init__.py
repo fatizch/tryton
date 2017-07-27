@@ -65,6 +65,7 @@ def register():
         payment.JournalFailureAction,
         payment.Payment,
         payment.PaymentSuspension,
+        payment.Journal,
         rule_engine.RuleEngineRuntime,
         module='contract_insurance_invoice', type_='model')
     Pool.register(

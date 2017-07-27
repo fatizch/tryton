@@ -28,6 +28,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="account_payment.payment_view_list"/>
             <field name="name">payment_list</field>
         </record>
+        <record model="ir.action.act_window" id="act_payment_form_other_payments">
+            <field name="name">All Payments Of The Line</field>
+            <field name="res_model">account.payment</field>
+            <field name="domain" eval="[('line.payments', '=', Eval('active_ids'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_payment_form_relate_other_payments_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">account.payment,-1</field>
+            <field name="action" ref="act_payment_form_other_payments"/>
+        </record>
         <record model="ir.ui.view" id="configuration_view_form">
             <field name="model">account.configuration</field>
             <field name="inherit" ref="account.configuration_view_form"/>

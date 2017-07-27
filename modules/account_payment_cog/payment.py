@@ -107,6 +107,10 @@ class Journal(export.ExportImportMixin):
         return coog_date.get_next_date_in_sync_with(
             max(line.maturity_date, utils.today()), day)
 
+    def on_change_process_method(self):
+        # This method is overrided by other modules
+        pass
+
 
 class JournalFailureAction(model.CoogSQL, model.CoogView):
     'Journal Failure Action'

@@ -143,3 +143,13 @@ class Payment:
                     ].append(payment)
         Pool().get('contract.billing_information').suspend_payments([],
             payments_billing)
+
+
+class Journal:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.payment.journal'
+
+    apply_payment_suspension = fields.Boolean('Apply Payment Suspension',
+        help='If set, the creation of payment using this journal '
+        'will not create new payments if there is a suspension on the current '
+        'billing information')

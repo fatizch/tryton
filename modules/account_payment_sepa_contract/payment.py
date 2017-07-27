@@ -151,6 +151,12 @@ class Journal:
                     p.line.contract.action_required_when_payments_failed())
                 for p in payments if p.line])
 
+    @fields.depends('process_method')
+    def on_change_process_method(self):
+        super(Journal, self).on_change_process_method()
+        if self.process_method == 'sepa':
+            self.apply_payment_suspension = True
+
 
 class JournalFailureAction:
     __metaclass__ = PoolMeta

@@ -1,3 +1,4 @@
+* BUG#6732 Ajout d'un paramètre sur le journal de paiement pour définir si la suspension de paiement s'applique
 * BUG#5290 Génération des quittances pour les contrats jamais quittancés
 * BUG#6473 Utilisation de la date du jour pour générer les courriers liés aux quittances
 * FEA#6493 Nouveau batch de numérotation des quittances avec des performances améliorées

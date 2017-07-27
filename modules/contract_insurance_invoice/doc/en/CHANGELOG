@@ -1,6 +1,8 @@
+* BUG#6372 Add checkbox on payment journal to define whether the payment suspension applies
 * BUG#5290 Generate invoices for never invoiced contracts
 * BUG#6473 Use today's date to generate invoice reports* FEA#6493 New invoice set number batch with improved speed
-* BUG#6491 Take draft and approved payable payments into account before invoicing in invoice against balance batch* BUG#6454 Do not set a payment date on non-direct-debit invoices
+* BUG#6491 Take draft and approved payable payments into account before invoicing in invoice against balance batch
+* BUG#6454 Do not set a payment date on non-direct-debit invoices
 * OTH#0000 Fix tests
 * BUG#6436 Restore fee availability in future invoices
 

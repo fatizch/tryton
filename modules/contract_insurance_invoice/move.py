@@ -158,11 +158,22 @@ WHERE
 
     @classmethod
     def init_payments(cls, lines, journal):
-        lines = [x for x in lines if not x.contract or (
-                x.contract.billing_information and not
-                x.contract.billing_information.suspended) or not
-            x.contract.billing_information]
-        return super(MoveLine, cls).init_payments(lines, journal)
+        valid_lines = []
+        for line in lines:
+            contract = line.contract
+            if not contract:
+                valid_lines.append(line)
+                continue
+            billing_information = contract.billing_information
+            if not billing_information:
+                valid_lines.append(line)
+                continue
+            if (not billing_information.suspended or (
+                        billing_information.suspended and
+                        not journal.apply_payment_suspension)):
+                valid_lines.append(line)
+
+        return super(MoveLine, cls).init_payments(valid_lines, journal)
 
     def split(self, amount_to_split, journal=None):
         split_move = super(MoveLine, self).split(amount_to_split, journal)

@@ -1052,6 +1052,18 @@ msgctxt "field:party.synthesis.menu.invoice,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.payment.journal,apply_payment_suspension:"
+msgid "Apply Payment Suspension'"
+msgstr "Appliquer la suspension de paiement"
+
+msgctxt "help:account.payment.journal,apply_payment_suspension:"
+msgid "If set, the creation of payment using this journal "
+"will not create new payments if there is a suspension on the current "
+"billing information"
+msgstr "Si coché, la création des paiements utilisant ce journal "
+"ne créera aucun nouveaux paiements si il existe une suspension sur les"
+"informations de quittancement actuelles"
+
 msgctxt "help:contract.payment_suspension,force_active:"
 msgid "Force the suspension status to active or inactive"
 msgstr "Forcer le statut de la suspension à active ou inactive"

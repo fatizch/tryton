@@ -4,6 +4,14 @@ this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
         <!-- ###################### -->
+        <!-- ##  Payment Journal ## -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="payment_journal_view_form">
+            <field name="model">account.payment.journal</field>
+            <field name="inherit" ref="account_payment.payment_journal_view_form"/>
+            <field name="name">payment_journal_form</field>
+        </record>
+        <!-- ###################### -->
         <!-- # Payment Suspension # -->
         <!-- ###################### -->
         <record model="ir.ui.view" id="contract_payment_suspension_view_list">

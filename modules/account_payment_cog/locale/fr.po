@@ -808,6 +808,11 @@ msgid "Process Manual Fail Payment"
 msgstr "Traiter manuellement les paiements rejetés"
 
 msgctxt ""
+"model:ir.action,name:act_payment_form_other_payments"
+msgid "All Payments Of The Line"
+msgstr "Tous les paiements associés à la ligne comptable"
+
+msgctxt ""
 "model:ir.action.act_window.domain,name:act_payment_form_domain_failed"
 msgid "Pending Failed"
 msgstr "Rejet en cours"
