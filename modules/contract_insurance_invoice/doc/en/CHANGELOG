@@ -1,3 +1,4 @@
+* BUG#6709 Fix of the bulk invoice set number batch according to the merge 4.4
 * BUG#6372 Add checkbox on payment journal to define whether the payment suspension applies
 * BUG#5290 Generate invoices for never invoiced contracts
 * BUG#6473 Use today's date to generate invoice reports* FEA#6493 New invoice set number batch with improved speed

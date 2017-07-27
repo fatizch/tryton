@@ -1,3 +1,4 @@
+* BUG#6709 Restore the get_invoice_sequence on the periods
 * FEA#6453 Add filters handlers on invoices for the reporting
 * New quarter option on payment term to synchronise a due date at the end of the quarter for example
 * Invoice relate on a party only shows contract invoices instead of invoices of all business kinds

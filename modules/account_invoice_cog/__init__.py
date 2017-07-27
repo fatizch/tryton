@@ -10,6 +10,7 @@ import configuration
 import payment_term
 import wizard
 import event
+import period
 
 
 def register():
@@ -28,6 +29,7 @@ def register():
         payment_term.PaymentTermLineRelativeDelta,
         wizard.SelectTerm,
         event.EventTypeAction,
+        period.Period,
         module='account_invoice_cog', type_='model')
 
     Pool.register(

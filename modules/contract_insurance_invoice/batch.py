@@ -298,7 +298,7 @@ class BulkSetNumberInvoiceContractBatch(batch.BatchRoot):
     @classmethod
     def select_ids(cls, treatment_date):
         job_size = ServerContext().get('job_size')
-        assert job_size == '1', 'job_size must be set to 1, current value: %s' \
+        assert job_size == 1, 'job_size must be set to 1, current value: %s' \
             % (job_size)
 
         cursor = Transaction().connection.cursor()
@@ -325,11 +325,9 @@ class BulkSetNumberInvoiceContractBatch(batch.BatchRoot):
                     account_invoice.invoice_date,
                     contract_invoice.start.asc)))
         results = cursor.fetchall()
-        invoice_ids = []
         for company_date, grouped_results in groupby(results,
                 lambda x: (x[0], x[1])):
-            invoice_ids.append([(x[2],) for x in grouped_results])
-        return invoice_ids
+            yield [(x[2],) for x in grouped_results]
 
     @classmethod
     def bulk_set_number(cls, ids):
@@ -338,10 +336,9 @@ class BulkSetNumberInvoiceContractBatch(batch.BatchRoot):
         AccountInvoice = pool.get('account.invoice')
         if not ids:
             return
-        ids_list = [x[0] for x in ids]
 
         # all the invoices have the same company and the same invoice date
-        invoice = AccountInvoice(ids_list[0])
+        invoice = AccountInvoice(ids[0])
         tax_identifier = invoice.get_tax_identifier()
         if not tax_identifier:
             tax_identifier = Null
@@ -373,7 +370,7 @@ class BulkSetNumberInvoiceContractBatch(batch.BatchRoot):
             account_invoice = AccountInvoice.__table__()
             to_update = account_invoice.select(account_invoice.id.as_('inv_id'),
                 number_query,
-                where=account_invoice.id.in_(ids_list))
+                where=account_invoice.id.in_(ids))
             query = account_invoice.update(columns=[account_invoice.number,
                 account_invoice.tax_identifier, account_invoice.write_date],
                 from_=[to_update],
@@ -381,7 +378,7 @@ class BulkSetNumberInvoiceContractBatch(batch.BatchRoot):
                 where=account_invoice.id == to_update.inv_id)
             cursor = transaction.connection.cursor()
             cursor.execute(*query)
-            sequence.number_next_internal = nbr_next + len(ids_list) * increment
+            sequence.number_next_internal = nbr_next + len(ids) * increment
             sequence.save()
             return ids
 
