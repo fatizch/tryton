@@ -862,8 +862,12 @@ class ReportGenerate(CoogReport):
         template = Pool().get('report.template')(data['doc_template'][0])
         action_report.template_extension = template.input_kind[-3:]
         action_report.extension = template.get_extension()
-        oext, content = cls.convert(action_report, cls.render(action_report,
-            ServerContext().get('genshi_context', {})))
+        rendered = cls.render(action_report,
+            ServerContext().get('genshi_context', {}))
+        if ServerContext().get('disable_report_conversion', False):
+            oext, content = template.get_extension('input_kind'), rendered
+        else:
+            oext, content = cls.convert(action_report, rendered)
         name_giver = data.get('resource', None) or pool.get(data['model'])(
             data['id'])
         filename, ext = cls.get_filename(template, name_giver,
@@ -1330,11 +1334,14 @@ class ReportCreate(wizard_context.PersistentContextWizard):
         ReportModel = Pool().get('report.generate', type='report')
         records = ReportModel._get_records(ids, report_context['model'],
             report_context)
+        template = self.select_template.template
         self.wizard_context['records'].append((tuple(ids), records))
         self.wizard_context['report_context'].append(
             (tuple(ids), report_context))
-        ext, filedata, prnt, file_basename = ReportModel.execute(ids,
-            report_context)
+        with ServerContext().set_context(
+                disable_report_conversion=template.modifiable_before_printing):
+            ext, filedata, prnt, file_basename = ReportModel.execute(ids,
+                report_context)
         os_extsep = os.extsep if ext else ''
         client_filepath, server_filepath = ReportModel.edm_write_tmp_report(
             filedata, '%s%s%s' % (file_basename, os_extsep, ext))
@@ -1524,3 +1531,4 @@ class ReportCreatePreviewLine(model.CoogView):
         states={'invisible': True})
     file_basename = fields.Char('Filename')
     extension = fields.Char('Extension')
+    output_report_filepath = fields.Char('Output report filepath')

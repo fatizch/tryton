@@ -1,3 +1,4 @@
+* BUG#9730 Convert generated documents after the optional edition phase
 * BUG#6648 Unify the 'Lang' data type when generating reports
 * FEA#6536 Manage light function fields for reports
 * BUG#6569 Restore multi-entity printing capabilities

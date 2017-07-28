@@ -1,3 +1,4 @@
+* BUG#9730 Conversion des documents générés après la phase d'édition si applicable
 * BUG#6648 Dans les modèles de courriers, 'Lang' représente l'objet et pas le code
 * FEA#6536 Gestions de champs fonction allégés pour les rapports
 * BUG#6569 Remise en place de la possibilité d'imprimer plusieurs entités simultanément
