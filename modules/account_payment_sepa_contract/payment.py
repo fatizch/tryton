@@ -310,10 +310,14 @@ class PaymentInformationModification:
                     PaymentInformationModification, self).transition_check()
             payers = list({p for _, p, _ in invalid_records})
             billing_infos = [i.contract.billing_information
-                    for i, _, _ in invalid_records]
+                    for i, _, _ in invalid_records
+                    if i.contract.billing_information.direct_debit]
             billing_debit_accounts = list({x.direct_debit_account
                     for x in billing_infos})
             kinds = list({l.account.kind for _, _, l in invalid_records})
+            if not billing_debit_accounts:
+                return super(
+                    PaymentInformationModification, self).transition_check()
         if (len(payers) != 1 or len(list(set(billing_debit_accounts))) != 1 or
                 len(kinds) != 1):
             self.raise_user_error('mix_invoice_without_sepa_mandate')
