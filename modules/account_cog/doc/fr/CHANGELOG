@@ -1,3 +1,4 @@
+* BUG#6712 Affichage de la vue formulaire d'une ligne de mouvement comptable depuis le point d'entrée principal
 * OTH#0000 Ajout d'un index sur l'origine des mouvements comptables
 * FEA#6549 Amélioration des performances du calcul du mouvement d'annulation
 * FEA#6439 Possibilité de sommer des lignes intermédiaires dans la balance agée

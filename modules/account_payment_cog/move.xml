@@ -28,6 +28,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="account.move_line_view_form"/>
             <field name="name">move_line_form</field>
         </record>
+        <record model="ir.action.act_window.view" id="act_move_line_payable_receivable_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="account.move_line_view_form"/>
+            <field name="act_window" ref="account_payment.act_move_line_form"/>
+        </record>
         <!-- ############################################################ -->
         <!-- ########### Wizard for bank transfer date modification ##### -->
         <!-- ############################################################ -->
