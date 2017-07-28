@@ -13,7 +13,7 @@ msgstr ""
 "peuvent pas être modifiés en même temps. Vous devez traiter "
 "ces enregistrements séparément (tous les enregistrements doivent avoir le "
 "même payeur, le même compte dans les informations de quittancement et le "
-"même type)"œ
+"même type)"
 
 msgctxt "error:contract:"
 msgid "A payer must be specified"
