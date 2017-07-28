@@ -17,15 +17,18 @@ msgstr ""
 
 msgctxt "error:account.payment.fail_information:"
 msgid "Trying to fail different payment kinds at the same time"
+msgstr "Impossible d'échouer en même temps des paiements de différents types"
+
+msgctxt "error:account.payment.fail_information:"
+msgid "Trying to fail payments from different journals at the same time"
 msgstr ""
-"Ne pas essayer de faire échouer en même temps des paiements de différents "
-"types"
+"Impossible d'échouer en même temps des paiements de différents journaux"
 
 msgctxt "error:account.payment.fail_information:"
 msgid "Trying to fail different payment methods at the same time"
 msgstr ""
-"Ne pas essayer de faire échouer en même temps des paiements de différentes "
-"méthodes"
+"Impossible d'échouer en même temps des paiements de différentes méthodes "
+"de traitement"
 
 msgctxt "error:account.payment.group:"
 msgid ""

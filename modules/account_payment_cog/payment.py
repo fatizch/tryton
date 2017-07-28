@@ -63,6 +63,8 @@ class Journal(export.ExportImportMixin):
         cls._error_messages.update({
                 'fail_payment_kind': 'Trying to fail different kind of'
                 ' payments at the same time',
+                'fail_journal': 'Trying to fail payments from different'
+                ' journals at the same time',
                 })
 
     def process_actions_when_payments_failed(self, payments):
@@ -78,9 +80,13 @@ class Journal(export.ExportImportMixin):
         """
         if not self.process_actions_when_payments_failed(payments):
             return []
+        journals = list(set([p.journal for p in payments]))
+        if len(journals) != 1:
+            self.raise_user_error('fail_journal')
+        journal = journals[0]
         reject_code = payments[0].fail_code
-        payment_reject_number = max(len(payment.line.payments) for payment in
-            payments)
+        payment_reject_number = max(len([p for p in payment.line.payments
+                    if p.journal == journal]) for payment in payments)
         if len(set([p.kind for p in payments])) != 1:
             self.raise_user_error('fail_payment_kind')
         kind = payments[0].kind

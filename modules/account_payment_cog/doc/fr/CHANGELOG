@@ -1,3 +1,4 @@
+* BUG#6707 Correction du calcul du nombre de rejet d'un paiement quand il y a des paiements utilisant des journaux différents
 * FEA#6739 Visualisation depuis un paiement de tous les paiements portant sur la même ligne
 * FEA#6663 Ajout d'un motif de rejet générique dans la configuration qui est retourné par défaut quand le motif de rejet du paiement n'est pas trouvé
 * BUG#6657 Retrait du champs "Paiements en attente" de la vue des groupes de payments

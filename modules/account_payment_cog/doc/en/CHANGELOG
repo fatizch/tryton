@@ -1,3 +1,4 @@
+* BUG#6707 Fix payment reject number calculation when mixing payments from different journals
 * FEA#6739 Show from a payment all related payments which are on the same line
 * FEA#6663 Allow to have a generic default failure code in the configuration for rejected paiement which is returned by default if the payment reject code is not found.
 * BUG#6657 Remove the "Processing payments" field from payment group views
