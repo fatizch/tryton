@@ -246,8 +246,9 @@ class PaymentInformationModification(model.CoogWizard):
         'payment_information_modification_view_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Next', 'finalize', 'tryton-go-next', default=True),
-        ])
+            Button('Next', 'check', 'tryton-go-next', default=True),
+            ])
+    check = StateTransition()
     finalize = StateTransition()
 
     def default_payment_information_selection(self, values):
@@ -264,6 +265,9 @@ class PaymentInformationModification(model.CoogWizard):
             'new_date': date,
             'move_lines': Transaction().context.get('active_ids'),
             }
+
+    def transition_check(self):
+        return 'finalize'
 
     def transition_finalize(self):
         lines = []

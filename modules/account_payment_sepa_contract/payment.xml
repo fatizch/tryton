@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- ########### Wizard for bank transfer date modification ##### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="payment_information_modification_sepa_mandate_view_form">
+            <field name="model">account.payment.payment_information_update_sepa_mandate</field>
+            <field name="type">form</field>
+            <field name="name">payment_information_update_mandate_form</field>
+        </record>
+    </data>
+</tryton>

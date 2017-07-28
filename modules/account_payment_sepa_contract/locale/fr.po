@@ -2,6 +2,19 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.payment.payment_information_modification:"
+msgid ""
+"Some of the selected records are on invoices without sepa mandates and "
+"cannot be modified at the same time. You must process theses records "
+"separately (all records must have the same payer, the same account in the "
+"billing information and the same kind)"
+msgstr ""
+"Des enregistrements selectionnés ont des quittances sans mandat sépa et ne "
+"peuvent pas être modifiés en même temps. Vous devez traiter "
+"ces enregistrements séparément (tous les enregistrements doivent avoir le "
+"même payeur, le même compte dans les informations de quittancement et le "
+"même type)"œ
+
 msgctxt "error:contract:"
 msgid "A payer must be specified"
 msgstr "Un payeur doit être spécifié"
@@ -11,6 +24,29 @@ msgid "Bank Account"
 msgstr "Compte bancaire"
 
 msgctxt "field:account.invoice,sepa_mandate:"
+msgid "Sepa Mandate"
+msgstr "Mandat SEPA"
+
+msgctxt ""
+"field:account.payment.payment_information_update_sepa_mandate,allowed_sepa_mandates:"
+msgid "Allowed Sepa Mandates"
+msgstr "Mandats SEPA autorisés"
+
+msgctxt "field:account.payment.payment_information_update_sepa_mandate,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt ""
+"field:account.payment.payment_information_update_sepa_mandate,invoices_to_update:"
+msgid "Invoices To Update"
+msgstr "Quittances à mettre à jour"
+
+msgctxt "field:account.payment.payment_information_update_sepa_mandate,payer:"
+msgid "Payer"
+msgstr "Payeur"
+
+msgctxt ""
+"field:account.payment.payment_information_update_sepa_mandate,sepa_mandate:"
 msgid "Sepa Mandate"
 msgstr "Mandat SEPA"
 
@@ -25,3 +61,17 @@ msgstr "Payeur"
 msgctxt "field:contract.billing_information,sepa_mandate:"
 msgid "Sepa Mandate"
 msgstr "Mandat SEPA"
+
+msgctxt "model:account.payment.payment_information_update_sepa_mandate,name:"
+msgid "Payment Information Update Sepa Mandate"
+msgstr ""
+
+msgctxt ""
+"wizard_button:account.payment.payment_information_modification,update_sepa_mandate,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:account.payment.payment_information_modification,update_sepa_mandate,process_update_mandate:"
+msgid "Next"
+msgstr "Suivant"

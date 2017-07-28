@@ -112,6 +112,95 @@ msgctxt "field:account.configuration,reject_fee_journal:"
 msgid "Reject Fee Journal"
 msgstr "Journal des frais de rejet"
 
+msgctxt "field:account.configuration.direct_debit_journal,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:account.configuration.direct_debit_journal,configuration:"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "field:account.configuration.direct_debit_journal,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.configuration.direct_debit_journal,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.configuration.direct_debit_journal,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:account.configuration.direct_debit_journal,direct_debit_journal:"
+msgid "Direct Debit Journal"
+msgstr "Journal de paiement automatique"
+
+msgctxt "field:account.configuration.direct_debit_journal,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account.configuration.direct_debit_journal,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:account.configuration.direct_debit_journal,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:account.configuration.direct_debit_journal,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:account.configuration.direct_debit_journal,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.configuration.reject_fee_journal,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:account.configuration.reject_fee_journal,configuration:"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "field:account.configuration.reject_fee_journal,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.configuration.reject_fee_journal,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.configuration.reject_fee_journal,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.configuration.reject_fee_journal,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account.configuration.reject_fee_journal,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:account.configuration.reject_fee_journal,reject_fee_journal:"
+msgid "Reject Fee Journal"
+msgstr "Journal des frais de rejet"
+
+msgctxt "field:account.configuration.reject_fee_journal,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:account.configuration.reject_fee_journal,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:account.configuration.reject_fee_journal,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:account.invoice,credit_reconciliation_lines:"
 msgid "Payment Lines"
 msgstr "Lignes de paiement"
@@ -679,6 +768,14 @@ msgstr ""
 "Répertoire serveur dans lequel sauvegarder une copie de chaque document "
 "généré."
 
+msgctxt "model:account.configuration.direct_debit_journal,name:"
+msgid "Account Configuration Direct Debit Journal"
+msgstr ""
+
+msgctxt "model:account.configuration.reject_fee_journal,name:"
+msgid "Account Configuration Reject Fee Journal"
+msgstr ""
+
 msgctxt "model:account.payment.acknowledge,name:"
 msgid "Payment Acknowledge Batch"
 msgstr "Batch de validation des paiements"
@@ -767,6 +864,10 @@ msgctxt "model:ir.action,name:act_payment_fail_status_form"
 msgid "Payments Rejected"
 msgstr "Paiements rejetés"
 
+msgctxt "model:ir.action,name:act_payment_form_other_payments"
+msgid "All Payments Of The Line"
+msgstr "Tous les paiements associés à la ligne comptable"
+
 msgctxt "model:ir.action,name:act_payment_group_merged_form"
 msgid "Merged payments"
 msgstr "Paiements regroupés"
@@ -807,13 +908,7 @@ msgctxt "model:ir.action,name:process_manual_payment_fail_wizard"
 msgid "Process Manual Fail Payment"
 msgstr "Traiter manuellement les paiements rejetés"
 
-msgctxt ""
-"model:ir.action,name:act_payment_form_other_payments"
-msgid "All Payments Of The Line"
-msgstr "Tous les paiements associés à la ligne comptable"
-
-msgctxt ""
-"model:ir.action.act_window.domain,name:act_payment_form_domain_failed"
+msgctxt "model:ir.action.act_window.domain,name:"
 msgid "Pending Failed"
 msgstr "Rejet en cours"
 
@@ -1061,14 +1156,14 @@ msgid "Fail Payments"
 msgstr "Rejeter les paiements"
 
 msgctxt ""
+"wizard_button:account.payment.payment_information_modification,payment_information_selection,check:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
 "wizard_button:account.payment.payment_information_modification,payment_information_selection,end:"
 msgid "Cancel"
 msgstr "Annuler"
-
-msgctxt ""
-"wizard_button:account.payment.payment_information_modification,payment_information_selection,finalize:"
-msgid "Next"
-msgstr "Suivant"
 
 msgctxt "wizard_button:account.payment.process,start,pre_process:"
 msgid "Process"
@@ -1076,13 +1171,18 @@ msgstr "Traiter"
 
 # Custom translations below
 
-msgctxt "selection:account.move.line,payment_kind:account_payment."
-msgid "Receivable"
-msgstr "À recevoir"
+msgctxt ""
+"model:ir.action.act_window.domain,name:account_payment.act_payment_form_domain_failed"
+msgid "Rejeté"
+msgstr "Échoué"
 
 msgctxt "selection:account.move.line,payment_kind:account_payment."
 msgid "Payable"
 msgstr "À payer"
+
+msgctxt "selection:account.move.line,payment_kind:account_payment."
+msgid "Receivable"
+msgstr "À recevoir"
 
 msgctxt "selection:account.payment.group,kind:account_payment."
 msgid "Payable"

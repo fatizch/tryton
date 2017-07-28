@@ -1,3 +1,4 @@
+* BUG#6505 Il est possible de mettre à jour le mandat SEPA d'une quittance à partir de l'assistant de modification des informations de prélèvement
 * BUG#6607 Pas de mise à jour du mandat sur les quittances en chèque
 * OTH#0000 Correctif du test de suspension des paiements
 * OTH#0000 Mise à jour des depends de on_change_product

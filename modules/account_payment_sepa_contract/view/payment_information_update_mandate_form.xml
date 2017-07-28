@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="payer"/>
+    <field name="payer"/>
+    <label name="sepa_mandate"/>
+    <field name="sepa_mandate"/>
+    <field name="allowed_sepa_mandates" invisible="1"/>
+    <field name="invoices_to_update" invisible="1"/>
+</form>

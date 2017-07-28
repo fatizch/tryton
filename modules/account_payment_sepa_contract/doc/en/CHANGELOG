@@ -1,3 +1,4 @@
+* BUG#6505 It is now possible to update the SEPA mandate on the invoice from the payment informations modification wizard
 * BUG#6607 No mandate update on non-direct debit invoices
 * OTH#0000 Fix tests of payment suspensions
 * OTH#0000 Update on_change_product depends

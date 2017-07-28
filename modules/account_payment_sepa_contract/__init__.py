@@ -23,11 +23,15 @@ def register():
         payment.Journal,
         payment.JournalFailureAction,
         payment.PaymentCreationStart,
+        payment.PaymentInformationUpdateSepaMandate,
         event.EventLog,
         payment.MergedPaymentsByContracts,
         module='account_payment_sepa_contract', type_='model')
-
-    Pool.register_post_init_hooks(migrate_1_8_add_payer_from_mandate,
+    Pool.register(
+        payment.PaymentInformationModification,
+        module='account_payment_sepa_contract', type_='wizard')
+    Pool.register_post_init_hooks(
+        migrate_1_8_add_payer_from_mandate,
         module='contract_insurance_invoice')
 
 
