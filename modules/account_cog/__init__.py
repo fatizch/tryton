@@ -36,6 +36,10 @@ def register():
         party.SynthesisMenuMoveLine,
         party.SynthesisMenu,
         account.OpenThirdPartyBalanceStart,
+        account.MoveTemplate,
+        account.MoveTemplateKeyword,
+        account.MoveLineTemplate,
+        account.TaxLineTemplate,
         module='account_cog', type_='model')
     Pool.register(
         move.Reconcile,

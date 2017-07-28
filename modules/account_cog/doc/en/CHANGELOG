@@ -1,3 +1,4 @@
+* BUG#6691 Fix export/import on move template
 * BUG#6712 Display move line view form from main entry point
 * OTH#0000 Add an index on move->origin
 * FEA#6549 Improve performances for the cancel move field calculation

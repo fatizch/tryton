@@ -23,6 +23,10 @@ __all__ = [
     'ThirdPartyBalance',
     'OpenThirdPartyBalance',
     'OpenThirdPartyBalanceStart',
+    'MoveTemplate',
+    'MoveTemplateKeyword',
+    'MoveLineTemplate',
+    'TaxLineTemplate',
     ]
 
 
@@ -265,3 +269,48 @@ class ThirdPartyBalance:
         if report_context['third_party_balance_option'] == 'only_unbalanced':
             where &= (tables['account.move.line'].reconciliation == Null)
         return where
+
+
+class MoveTemplate(export.ExportImportMixin):
+    __name__ = 'account.move.template'
+    _func_key = 'name'
+
+    @classmethod
+    def _export_light(cls):
+        return super(MoveTemplate, cls)._export_light() | {
+            'company', 'journal'}
+
+
+class MoveTemplateKeyword(export.ExportImportMixin):
+    __name__ = 'account.move.template.keyword'
+
+    @classmethod
+    def __setup__(cls):
+        super(MoveTemplateKeyword, cls).__setup__()
+        cls.move.ondelete = 'CASCADE'
+
+
+class MoveLineTemplate(export.ExportImportMixin):
+    __name__ = 'account.move.line.template'
+
+    @classmethod
+    def __setup__(cls):
+        super(MoveLineTemplate, cls).__setup__()
+        cls.move.ondelete = 'CASCADE'
+
+    @classmethod
+    def _export_light(cls):
+        return super(MoveLineTemplate, cls)._export_light() | {'account'}
+
+
+class TaxLineTemplate(export.ExportImportMixin):
+    __name__ = 'account.tax.line.template'
+
+    @classmethod
+    def __setup__(cls):
+        super(TaxLineTemplate, cls).__setup__()
+        cls.line.ondelete = 'CASCADE'
+
+    @classmethod
+    def _export_light(cls):
+        return super(TaxLineTemplate, cls)._export_light() | {'code', 'tax'}
