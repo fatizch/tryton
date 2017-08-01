@@ -2,6 +2,6 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tree>
-    <field name="loan_rec_name"/>
+    <field name="loan_rec_name" expand="1"/>
     <field name="loan_id" tree_invisible="1"/>
 </tree>

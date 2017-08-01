@@ -940,7 +940,7 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
         fields.Date('End Date', states={'invisible': ~Eval('end_date')}),
         'on_change_with_end_date')
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE', required=True,
-        select=True)
+        select=True, readonly=True)
     number_of_payments = fields.Integer('Number of Payments', required=True)
     rate = fields.Numeric('Annual Rate', digits=(16, 4), required=True)
     payment_amount = fields.Numeric('Payment Amount',

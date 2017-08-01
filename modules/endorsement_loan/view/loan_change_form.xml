@@ -6,7 +6,8 @@ this repository contains the full copyright notices and license terms. -->
         <field name="loan_changes" colspan="4" mode="form" expand_toolbar="0"/>
     </group>
     <group id="multiple_loan" colspan="4" yexpand="1" yfill="1">
-        <field name="loan_changes" colspan="4" mode="tree,form" expand_toolbar="0"/>
+        <field name="loan_changes" group="multiple" colspan="4" mode="tree" expand_toolbar="0" yexpand="0"/>
+        <field name="loan_changes" group="multiple" colspan="4" mode="form" expand_toolbar="0"/>
     </group>
     <newline/>
     <field name="endorsement_part"/>
