@@ -1360,7 +1360,7 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         dates = []
         date = None
         options = [o.start_date for o in self.options
-            if o.status not in ['void', 'declined']]
+            if o.status not in ['void', 'declined'] and o.start_date]
         if options:
             dates.append(min(options))
         if getattr(self, 'manual_start_date', None):

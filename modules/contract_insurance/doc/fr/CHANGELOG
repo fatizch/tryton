@@ -1,3 +1,4 @@
+* BUG#6757 Correction du calcul de la date d'effet d'un élément couvert
 * OTH#0000 Ajout des [] manquant dans la clause Or (iteration sur 6468)
 * BUG#6468 Calcul de la date de début de l'option en intégrant la date manuelle de début d'un élément couvert si définie
 

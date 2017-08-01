@@ -1,3 +1,4 @@
+* BUG#6757 Fix covered element start date calculation
 * OTH#0000 Fix missing [] in Or clause (iteration on 6468)
 * BUG#6468 Compute option start date using the manual_start_date on covered element if it is defined
 
