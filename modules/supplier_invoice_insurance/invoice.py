@@ -57,7 +57,7 @@ class Invoice:
         cls.lines.domain = ['AND',
             cls.lines.domain,
             If(Eval('business_kind') == 'in_invoice_insurance',
-                [('product.template.category.code', '=',
+                [('product.template.categories.code', '=',
                     'in_invoice_insurance'),
                     ('type', '=', 'line')],
                 [()],
