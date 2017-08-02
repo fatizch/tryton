@@ -1,3 +1,4 @@
+* BUG#6748 Display fix after contract reactivation
 * BUG#6616 Allow termination in previous activation period
 
 Version 1.12 - 2017-04-28

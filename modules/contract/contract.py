@@ -305,10 +305,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                 'button_change_start_date': {
                     'invisible': Eval('status') != 'quote'},
                 'button_activate': {
-                    'invisible': And(
-                        Eval('status') != 'quote',
-                        Eval('status') != 'hold'
-                        )},
+                    'invisible': Eval('status') != 'quote'},
                 'button_calculate': {
                     'invisible': True,
                     },
@@ -879,7 +876,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         super(Contract, cls).validate(contracts)
         for contract in contracts:
             contract.check_activation_dates()
-        #cls.check_option_dates(contracts)
+        # cls.check_option_dates(contracts)
 
     @classmethod
     def check_option_dates(cls, contracts):
