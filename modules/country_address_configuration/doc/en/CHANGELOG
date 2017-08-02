@@ -1,2 +1,4 @@
+* BUG#6774 Fix address lines fields initialization
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Module Creation

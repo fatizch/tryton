@@ -1,2 +1,4 @@
+* BUG#6774 Correction de l'initialisation des lignes d'adresse
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Creation du module

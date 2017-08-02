@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 
 from trytond.modules.coog_core import fields
@@ -35,6 +35,27 @@ class Address:
     def setter_void(cls, *args, **kwargs):
         pass
 
+    @classmethod
+    def default_address_lines(cls):
+        default_country = cls.default_country()
+        if not default_country:
+            return {}
+        country = Pool().get('country.country')(default_country)
+        return {x: '' for x in country.get_address_lines()}
+
+    @classmethod
+    def default_country(cls):
+        # Must be defined here for other defaults to behave properly
+        return None
+
+    @classmethod
+    def default_has_address_lines(cls):
+        default_country = cls.default_country()
+        if not default_country:
+            return False
+        country = Pool().get('country.country')(default_country)
+        return bool(country.get_address_lines())
+
     @fields.depends('country', 'street')
     def on_change_with_address_lines(self, name=None):
         self._update_address_lines()
@@ -56,7 +77,7 @@ class Address:
 
     @fields.depends('country')
     def on_change_with_has_address_lines(self, name=None):
-        return bool(self.country) and self.country.get_address_lines()
+        return bool(self.country and self.country.get_address_lines())
 
     @fields.depends('address_lines', 'country', 'street')
     def on_change_address_lines(self):
