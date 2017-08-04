@@ -39,15 +39,19 @@ class RuleEngineRuntime:
         pool = Pool()
         cursor = Transaction().connection.cursor()
         contract_invoice = pool.get('contract.invoice').__table__()
+        account_invoice = pool.get('account.invoice').__table__()
         invoice_line = pool.get('account.invoice.line').__table__()
         details = pool.get('account.invoice.line.detail').__table__()
 
         query_table = contract_invoice.join(invoice_line, condition=(
                 contract_invoice.invoice == invoice_line.invoice)
             ).join(details, condition=(
-                invoice_line.id == details.invoice_line))
+                invoice_line.id == details.invoice_line)
+            ).join(account_invoice, condition=(
+                contract_invoice.invoice == account_invoice.id))
         cursor.execute(*query_table.select(Max(contract_invoice.end),
-            where=((details.option == args['option'].id))))
+                where=((details.option == args['option'].id) &
+                    (account_invoice.state == 'paid'))))
         res = cursor.fetchall()
         return res[0][0]
 

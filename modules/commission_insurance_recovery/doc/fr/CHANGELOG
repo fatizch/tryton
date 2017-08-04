@@ -1,3 +1,5 @@
+* BUG#6782 Correction du filtrage des quittances impayées lors de la reprise
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout d'outils dans le moteur de règle pour le calcul des reprises sur précompte
 

@@ -1,3 +1,5 @@
+* BUG#6782 Fix non paid invoices filtering out in recovery
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Add tools in rule_engine to compute prepayment recovery
 
