@@ -15,7 +15,7 @@ from sql.conditionals import Coalesce
 from contextlib import contextmanager
 
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
-from trytond.model import UnionMixin as TrytonUnionMixin, Unique
+from trytond.model import UnionMixin as TrytonUnionMixin, Unique, ModelStorage
 from trytond.exceptions import UserError
 from trytond.pool import Pool, PoolMeta
 from trytond.cache import Cache
@@ -522,14 +522,6 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
 
         return [single_copy(obj) for obj in objects]
 
-    def get_icon(self, name=None):
-        return None
-
-    @classmethod
-    def search_global(cls, text):
-        for record, rec_name, icon in super(CoogSQL, cls).search_global(text):
-            yield record, rec_name, record.get_icon()
-
     @classmethod
     def setter_void(cls, objects, name, values):
         pass
@@ -912,3 +904,16 @@ class MethodDefinition(CoogSQL, CoogView):
                 return [method(x, caller=caller, **kwargs) for x in callees]
             else:
                 return method(callees, caller=caller, **kwargs)
+
+
+class GlobalSearchLimitedMixin(ModelStorage):
+    def get_icon(self, name=None):
+        return getattr(self, 'icon', None)
+
+    @classmethod
+    def search_global(cls, text):
+        # Bypass modelstorage to set the limit
+        for record in cls.search([
+                    ('rec_name', 'ilike', '%%%s%%' % text),
+                    ], limit=ServerContext().get('global_search_limit', 100)):
+            yield record, record.rec_name, record.get_icon()

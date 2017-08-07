@@ -134,17 +134,7 @@ def get_trytond_modules():
 
 
 def models_get():
-    pool = Pool()
-    Model = pool.get('ir.model')
-    # JMO : MERGENOTE : cache
-    #models = cls._models_get_cache.get(None)
-    #if models:
-    #    return models
-    models = sorted([(x.model, x.name) for x in Model.search([])],
-        key=lambda x: x[1]) + [('', '')]
-    # JMO : MERGENOTE : cache
-    #cls._models_get_cache.set(None, models)
-    return models
+    return Pool().get('ir.model').models_get()
 
 
 def is_module_installed(module_name):

@@ -8,6 +8,7 @@ from sql.operators import Concat
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
+from trytond.server_context import ServerContext
 from trytond.cache import Cache
 from trytond.pyson import Eval, PYSONEncoder, Not, In
 from trytond.transaction import Transaction
@@ -473,6 +474,8 @@ class IrModel(ExportImportMixin):
                 ], 'History Status'),
         'get_history_status')
 
+    _models_get_cache = Cache('models_get')
+
     @classmethod
     def __setup__(cls):
         super(IrModel, cls).__setup__()
@@ -504,6 +507,17 @@ class IrModel(ExportImportMixin):
         result = super(IrModel, cls)._export_skips()
         result.add('fields')
         return result
+
+    @classmethod
+    def models_get(cls):
+        models = cls._models_get_cache.get(None)
+        if models:
+            return models
+
+        models = sorted([(x.model, x.name) for x in cls.search([])],
+            key=lambda x: x[1]) + [('', '')]
+        cls._models_get_cache.set(None, models)
+        return models
 
     @classmethod
     def get_history_status(cls, models, name):
@@ -581,6 +595,11 @@ class IrModel(ExportImportMixin):
         for cur_model in models:
             cls._models_per_name.set(cur_model.model, cur_model.id)
         return cls._models_per_name.get(model_name)
+
+    @classmethod
+    def global_search(cls, text, limit, menu='ir.ui.menu'):
+        with ServerContext().set_context(global_search_limit=limit):
+            return super(IrModel, cls).global_search(text, limit, menu)
 
 
 class IrModelField(ExportImportMixin):

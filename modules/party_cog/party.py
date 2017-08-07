@@ -440,11 +440,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             return 'coopengo-company'
         return 'coopengo-party'
 
-    @classmethod
-    def search_global(cls, text):
-        for record, rec_name, icon in super(Party, cls).search_global(text):
-            yield record, rec_name, record.get_icon()
-
     def get_relation_with(self, target, at_date=None):
         if not at_date:
             at_date = utils.today()

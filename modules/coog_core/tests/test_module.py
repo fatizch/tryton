@@ -45,6 +45,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'TestLoaderUpdater': 'coog_core.test_loader_updater',
             }
 
+    def test0010class_injection(self):
+        assert issubclass(self.TestLoaderUpdater,
+            model.GlobalSearchLimitedMixin)
+        assert issubclass(self.View, model.GlobalSearchLimitedMixin)
+        assert issubclass(self.Model, model.GlobalSearchLimitedMixin)
+        assert issubclass(self.EventTypeAction, model.GlobalSearchLimitedMixin)
+
     def test0020get_module_path(self):
         self.assert_(utils.get_module_path('coog_core'))
         self.assert_(utils.get_module_path('dfsfsfsdf') is None)

@@ -127,6 +127,7 @@ def register():
 
     Pool.register_post_init_hooks(cache_fields_get, module='ir')
     Pool.register_post_init_hooks(event_process_buttons, module='process')
+    Pool.register_post_init_hooks(add_global_search_limit, module='coog_core')
 
 
 def cache_fields_get(pool, update):
@@ -191,3 +192,51 @@ def event_process_buttons(pool, update):
     ProcessFramework._default_button_method = patched_method
     ProcessFramework.calculate_button_states = patched_states
     ProcessFramework.__event_button_patched = True
+
+
+def inject_class(pool, kind, source, target, model_list=None):
+    '''
+        Inject the "target" dependency in place of the "source" in models
+        matching "kind".
+
+        Typical use case would be to add a TestMixin to all ModelSQL
+        objects (assuming TestMixin inherits from ModelSQL) :
+
+            inject_class(pool, 'model', ModelSQL, TestMixin)
+
+        'kind' may be one of 'model', 'report', 'wizard', or 'manual'. If
+        'manual' is set, the optional 'model_list' arguments is used to define
+        which models should be updated.
+    '''
+    def patch_model(klass):
+        if issubclass(klass, target) or not issubclass(klass, source):
+            return
+        for mro_class in reversed(klass.__mro__):
+            if mro_class == source:
+                continue
+            if source not in mro_class.__bases__:
+                continue
+            mro_class.__bases__ = tuple(
+                x if x != source else target
+                for x in mro_class.__bases__)
+
+    assert kind in ('model', 'report', 'wizard', 'manual')
+    if kind == 'manual':
+        assert model_list is not None
+        for elem in model_list:
+            model = pool._pool[pool.database_name].get('model').get(elem)
+            patch_model(model)
+    else:
+        for model in pool._pool[pool.database_name].get(
+                kind, {}).values():
+            patch_model(model)
+
+
+def add_global_search_limit(pool, update):
+    if update:
+        return
+    from trytond.model import ModelStorage
+    from trytond.modules.coog_core.model import GlobalSearchLimitedMixin
+
+    logging.getLogger('modules').info('Limiting global search on all models')
+    inject_class(pool, 'model', ModelStorage, GlobalSearchLimitedMixin)
