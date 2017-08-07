@@ -1,3 +1,4 @@
+* OTH#0000 Complement #6792
 * BUG#6792 Manage non-SEPA payments in merged payments entry point
 * BUG#6624 Use a mono-line address in sepa messages
 * FEA#6541 Support payments groups deletion and update the last sepa date on journal

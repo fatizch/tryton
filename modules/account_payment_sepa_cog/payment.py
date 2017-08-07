@@ -10,7 +10,7 @@ from dateutil.relativedelta import relativedelta
 from collections import defaultdict
 from sql.aggregate import Sum, Max
 from sql import Null
-from sql.conditionals import Case
+from sql.conditionals import Case, Coalesce
 from sql.operators import Not
 
 import genshi
@@ -842,8 +842,10 @@ class MergedBySepaPartyMixin(object):
     def get_select_fields(cls, tables):
         select_fields = super(MergedBySepaPartyMixin, cls).get_select_fields(
             tables)
-        select_fields['party'] = tables['account.payment.sepa.mandate'
-            ].party.as_('party')
+        select_fields['party'] = Coalesce(
+            tables['account.payment.sepa.mandate'].party,
+            # Use 'expression' to get the actual data of the 'As' object
+            select_fields['party'].expression).as_('party')
         select_fields['sepa_mandate'] = \
             tables['account.payment'].sepa_mandate.as_('sepa_mandate')
         return select_fields
@@ -855,7 +857,7 @@ class MergedBySepaPartyMixin(object):
         clause = super(MergedBySepaPartyMixin, cls).get_group_by_clause(
             tables)
         clause['sepa_mandate'] = payment.sepa_mandate
-        clause['party'] = sepa_mandate.party
+        clause['party'] = Coalesce(sepa_mandate.party, clause['party'])
         return clause
 
 

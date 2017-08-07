@@ -1,3 +1,4 @@
+* OTH#0000 Suite de #6792
 * BUG#6792 Gestion des paiements non SEPA dans le point d'entrée "Paiements regroupés"
 * BUG#6624 Utilisation d'une adresse mono-ligne dans les messages sepa
 * FEA#6541 Support de la suppression des groupes de paiements et mise à jour de la dernière date des prélèvements SEPA
