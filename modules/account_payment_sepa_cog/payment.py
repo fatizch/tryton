@@ -835,7 +835,7 @@ class MergedBySepaPartyMixin(object):
         payment = tables['account.payment']
         base_table = super(MergedBySepaPartyMixin, cls).get_query_table(
             tables)
-        return base_table.join(sepa_mandate,
+        return base_table.join(sepa_mandate, 'LEFT OUTER',
             condition=sepa_mandate.id == payment.sepa_mandate)
 
     @classmethod
