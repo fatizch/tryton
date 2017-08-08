@@ -908,7 +908,7 @@ class MethodDefinition(CoogSQL, CoogView):
 
 class GlobalSearchLimitedMixin(ModelStorage):
     def get_icon(self, name=None):
-        return getattr(self, 'icon', None)
+        return ''
 
     @classmethod
     def search_global(cls, text):
