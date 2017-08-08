@@ -6,7 +6,4 @@ this repository contains the full copyright notices and license terms. -->
         <field name="is_reconciled" tree_invisible="1"/>
         <field name="color" tree_invisible="1"/>
     </xpath>
-    <xpath expr="/tree/field[@name='date']" position="after">
-        <field name="maturity_date"/>
-    </xpath>
 </data>
