@@ -31,7 +31,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_payment_form_other_payments">
             <field name="name">All Payments Of The Line</field>
             <field name="res_model">account.payment</field>
-            <field name="domain" eval="[('line.payments', '=', Eval('active_ids'))]" pyson="1"/>
+            <field name="domain" eval="[If(Bool(Eval('active_ids', False)), [('line.payments', '=', Eval('active_ids'))], [])]" pyson="1"/>
         </record>
         <record model="ir.action.keyword" id="act_payment_form_relate_other_payments_keyword">
             <field name="keyword">form_relate</field>
@@ -92,12 +92,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="payment_journal_reject_reason_view_form"/>
             <field name="act_window" ref="act_reject_reason_form"/>
         </record>
-    <record model="ir.ui.view" id="payment_group_merged_view_list">
-        <field name="model">account.payment.merged</field>
-        <field name="type">tree</field>
-        <field name="name">payment_group_merged_view_list</field>
-    </record>
-    <record model="ir.action.act_window" id="act_payment_group_merged_form">
+        <record model="ir.ui.view" id="payment_group_merged_view_list">
+            <field name="model">account.payment.merged</field>
+            <field name="type">tree</field>
+            <field name="name">payment_group_merged_view_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_payment_group_merged_form">
             <field name="name">Merged payments</field>
             <field name="res_model">account.payment.merged</field>
         </record>
@@ -106,17 +106,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="payment_group_merged_view_list"/>
             <field name="act_window" ref="act_payment_group_merged_form"/>
         </record>
-    <menuitem parent="account_payment.menu_payments" action="act_payment_group_merged_form"
-          sequence="30" id="menu_merged_payment_form"/>
-    <record model="ir.action.wizard" id="act_merged_form_relate_details">
-        <field name="name">Related payments</field>
-        <field name="wiz_name">account.payment.merged.open_detail</field>
-    </record>
-    <record model="ir.action.keyword" id="act_merged_form_relate_details_keyword">
-        <field name="keyword">form_relate</field>
-        <field name="model">account.payment.merged,-1</field>
-        <field name="action" ref="act_merged_form_relate_details"/>
-    </record>
+        <menuitem parent="account_payment.menu_payments" action="act_payment_group_merged_form" sequence="30" id="menu_merged_payment_form"/>
+        <record model="ir.action.wizard" id="act_merged_form_relate_details">
+            <field name="name">Related payments</field>
+            <field name="wiz_name">account.payment.merged.open_detail</field>
+        </record>
+        <record model="ir.action.keyword" id="act_merged_form_relate_details_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">account.payment.merged,-1</field>
+            <field name="action" ref="act_merged_form_relate_details"/>
+        </record>
         <menuitem parent="account_payment.menu_payment_configuration" sequence="20" action="act_reject_reason_form" id="menu_reject_reason_form"/>
         <!-- ######################################## -->
         <!-- ########### Rejected Payment ########### -->
@@ -195,7 +194,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="wiz_name">account.payment.process</field>
             <field name="model">account.payment</field>
         </record>
-       <record model="ir.model.button" id="button_action_process_payment">
+        <record model="ir.model.button" id="button_action_process_payment">
             <field name="name">process_payments</field>
             <field name="model" search="[('model', '=', 'account.payment')]"/>
         </record>
@@ -236,8 +235,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="payment_motive_view_form"/>
             <field name="act_window" ref="act_payment_motive_form"/>
         </record>
-        <menuitem parent="account_payment.menu_payment_configuration" id="menu_payment_motive_form"
-            icon="tryton-list" action="act_payment_motive_form"/>
+        <menuitem parent="account_payment.menu_payment_configuration" id="menu_payment_motive_form" icon="tryton-list" action="act_payment_motive_form"/>
         <menuitem id="account_payment.menu_payment_form" action="account_payment.act_payment_form" icon="payment"/>
         <menuitem id="account_payment.menu_payments" name="Payments" icon="payment"/>
     </data>
