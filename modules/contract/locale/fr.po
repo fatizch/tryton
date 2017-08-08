@@ -3,9 +3,9 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.activate:"
-msgid "You cannot activate a contract that is not in quote status !"
+msgid "You cannot activate a contract that is not in quote or hold status !"
 msgstr ""
-"Vous ne pouvez pas activer un contrat qui n'est pas à l'état devis"
+"Vous ne pouvez pas activer un contrat qui est à l'état devis ou suspendu"
 
 msgctxt "error:contract.option:"
 msgid "Coverage %s is inactive at date %s"

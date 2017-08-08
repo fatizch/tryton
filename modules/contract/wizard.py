@@ -276,8 +276,8 @@ class ContractActivate(model.CoogWizard):
     def __setup__(cls):
         super(ContractActivate, cls).__setup__()
         cls._error_messages.update({
-                'not_quote': 'You cannot activate a contract '
-                'that is not in quote status !',
+                'not_quote_hold': 'You cannot activate a contract '
+                'that is not in quote or hold status !',
                 })
 
     def default_confirm(self, name):
@@ -294,8 +294,9 @@ class ContractActivate(model.CoogWizard):
         Contract = pool.get('contract')
         active_id = Transaction().context.get('active_id')
         selected_contract = Contract(active_id)
-        if selected_contract.status != 'quote':
-            self.raise_user_error('not_quote')
+        if (selected_contract.status != 'quote' and
+                selected_contract.status != 'hold'):
+            self.raise_user_error('not_quote_hold')
             return 'end'
         else:
             return 'confirm'
