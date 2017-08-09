@@ -307,6 +307,10 @@ msgctxt "field:party.party,has_active_address:"
 msgid "Has Active Address"
 msgstr "A une adresse active"
 
+msgctxt "field:party.party,has_multiple_addresses:"
+msgid "Has multiple addresses"
+msgstr "A plusieurs adresses"
+
 msgctxt "field:party.party,identifiers:"
 msgid "Identifiers"
 msgstr "Identifiants"

@@ -1,3 +1,4 @@
+* BUG#6811 Eviter le passage en vue liste à la création d'une nouvelle adresse
 * OTH#0000 La duplication ou l'import de tiers ne créé plus d'adresse en trop
 * FIX#0000 Correction du champs 'all_addresses' dans la vue form des tiers
 * FEA#6130 Amélioration du sigle "REFLEX" en utilisant le champ actif/inactif sur les adresses
