@@ -3,5 +3,9 @@
 this repository contains the full copyright notices and license terms. -->
 <form>
     <label name="contract"/>
-    <field name="contract"/>
+    <field name="contract" colspan="3"/>
+    <label name="termination_reason"/>
+    <field name="termination_reason"/>
+    <label name="clear_termination_reason"/>
+    <field name="clear_termination_reason"/>
 </form>

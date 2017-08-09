@@ -256,6 +256,13 @@ class ContractActivateConfirm(model.CoogView):
     __name__ = 'contract.activate.confirm'
 
     contract = fields.Many2One('contract', 'Contract', readonly=True)
+    termination_reason = fields.Many2One('contract.sub_status',
+        'Current termination reason', readonly=True,
+        states={'invisible': ~Eval('termination_reason')})
+    clear_termination_reason = fields.Boolean('Clear termination reason',
+        states={'invisible': ~Eval('termination_reason')},
+        help='If true, the current termination reason will be erased after '
+        'reactivation', depends=['termination_reason'])
 
 
 class ContractActivate(model.CoogWizard):
@@ -285,8 +292,11 @@ class ContractActivate(model.CoogWizard):
         Contract = pool.get('contract')
         active_id = Transaction().context.get('active_id')
         selected_contract = Contract(active_id)
+        termination_reason = selected_contract.termination_reason
         return {
             'contract': selected_contract.id,
+            'termination_reason': termination_reason.id
+            if termination_reason else None,
             }
 
     def transition_check_status(self):
@@ -307,6 +317,10 @@ class ContractActivate(model.CoogWizard):
         active_id = Transaction().context.get('active_id')
         selected_contract = Contract(active_id)
         selected_contract.activate_contract()
+        if (self.confirm.termination_reason and
+                self.confirm.clear_termination_reason):
+            selected_contract.activation_history[-1].termination_reason = None
+            selected_contract.activation_history[-1].save()
         return 'end'
 
 

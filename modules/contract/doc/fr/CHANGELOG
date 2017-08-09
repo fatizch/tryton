@@ -1,3 +1,4 @@
+* BUG#6748 Possibilité de nettoyer le motif de résiliation lors d'une réactivation
 * BUG#6616 Résiliation possible sur un terme antérieur
 
 Version 1.12 - 2017-04-28
