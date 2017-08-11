@@ -182,8 +182,9 @@ class PaymentGroupCreationBatch:
 
     @classmethod
     def _group_payment_key(cls, payment):
-        return super(PaymentGroupCreationBatch, cls)._group_payment_key(
-            payment) + (payment.sepa_mandate,
+        return tuple((x for x in
+            super(PaymentGroupCreationBatch, cls)._group_payment_key(payment)
+            if x != payment.party)) + (payment.sepa_mandate,
                 payment.sepa_mandate_sequence_type)
 
     @classmethod
@@ -195,9 +196,9 @@ class PaymentGroupCreationBatch:
         Mandate = Pool().get('account.payment.sepa.mandate')
         if (journal.process_method == 'sepa' and payment_row[2] == 'receivable'
                 and journal.split_sepa_messages_by_sequence_type):
-            # index 5 is the sequence_type and index 4 is the mandate
-            return res + tuple([payment_row[5] or
-                Mandate(payment_row[4]).sequence_type])
+            # index 4 is the sequence_type and index 3 is the mandate
+            return res + tuple([payment_row[4] or
+                Mandate(payment_row[3]).sequence_type])
         return res
 
     @classmethod

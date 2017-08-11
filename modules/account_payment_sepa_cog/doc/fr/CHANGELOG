@@ -1,3 +1,4 @@
+* BUG#6817 Retirer le tiers des clés de regroupement pour les groupes de paiement sepa
 * OTH#0000 Suite de #6792
 * BUG#6792 Gestion des paiements non SEPA dans le point d'entrée "Paiements regroupés"
 * BUG#6624 Utilisation d'une adresse mono-ligne dans les messages sepa
