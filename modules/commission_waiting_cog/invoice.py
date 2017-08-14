@@ -5,13 +5,23 @@ from collections import defaultdict
 
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
 __all__ = [
+    'Invoice',
     'InvoiceLine'
     ]
 
 
+class Invoice:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.invoice'
+
+    @classmethod
+    def post_commission_waiting_moves(cls, invoices):
+        return
+
+
 class InvoiceLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice.line'
 
     def get_move_line(self):

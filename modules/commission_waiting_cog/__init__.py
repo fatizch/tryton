@@ -10,6 +10,7 @@ def register():
         commission.Commission,
         commission.Agent,
         commission.CreateAgentsAsk,
+        invoice.Invoice,
         invoice.InvoiceLine,
         module='commission_waiting_cog', type_='model')
     Pool.register(
