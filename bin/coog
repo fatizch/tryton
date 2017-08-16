@@ -56,14 +56,14 @@ _main() { # parse params and call fn
         fn="coog_"$com"_"$sub
         if [ $com = init ] || [ $com = help ]
         then
-                _source && coog_env_bootstrap && $fn $*
+                _source && coog_env_bootstrap && $fn "$@"
         else
-                _source && coog_env_init && $fn $*
+                _source && coog_env_init && $fn "$@"
         fi
 }
 
 _enter
-_main $*
+_main "$@"
 _r=$?
 _leave
 exit $_r
