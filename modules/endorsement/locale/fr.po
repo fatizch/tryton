@@ -721,11 +721,11 @@ msgstr "Date d'effet des nouvelles données complémentaires"
 
 msgctxt "field:endorsement.contract.change_start_date,current_start_date:"
 msgid "Current Start Date"
-msgstr "Date de fin actuelle"
+msgstr "Date d'effet actuelle"
 
 msgctxt "field:endorsement.contract.change_start_date,effective_date:"
 msgid "Effective Date"
-msgstr "Date d'effet"
+msgstr "Date d'effet de l'avenant"
 
 msgctxt "field:endorsement.contract.change_start_date,endorsement_definition:"
 msgid "Endorsement Definition"
@@ -741,7 +741,7 @@ msgstr "ID"
 
 msgctxt "field:endorsement.contract.change_start_date,new_start_date:"
 msgid "New Start Date"
-msgstr "Nouvelle date de début"
+msgstr "Nouvelle date d'effet"
 
 msgctxt "field:endorsement.contract.contact,action:"
 msgid "Action"
