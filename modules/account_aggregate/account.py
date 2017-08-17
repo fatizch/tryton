@@ -396,6 +396,22 @@ class LineAggregated(model.CoogSQL, model.CoogView):
         return group_by
 
     @classmethod
+    def get_domain(cls, line):
+        # Should return same filters as get_group_by
+        if line.journal.aggregate:
+            domain_ = [
+                ('account', '=', line.account.id),
+                ('move.journal', '=', line.journal.id),
+                ('move.post_date', '=', line.post_date),
+                ('move.date', '=', line.date),
+                ]
+            if line.snapshot:
+                domain_.append(('move.snapshot', '=', line.snapshot.id))
+        else:
+            domain_ = [('id', '=', line.id)]
+        return domain_
+
+    @classmethod
     def having_clause(cls, tables):
         line = tables['account.move.line']
         return (Sum(Coalesce(line.debit, 0)) -
@@ -485,23 +501,8 @@ class OpenLine(Wizard):
     def do_open_(self, action):
         pool = Pool()
         LineAggregated = pool.get('account.move.line.aggregated')
-
         lines = LineAggregated.browse(Transaction().context['active_ids'])
-
-        def domain(line):
-            if line.journal.aggregate:
-                domain_ = [
-                    ('account', '=', line.account.id),
-                    ('move.journal', '=', line.journal.id),
-                    ('move.post_date', '=', line.post_date),
-                    ('move.date', '=', line.date),
-                    ]
-                if line.snapshot:
-                    domain_.append(('move.snapshot', '=', line.snapshot.id))
-            else:
-                domain_ = [('id', '=', line.id)]
-            return domain_
-
-        action['pyson_domain'] = ['OR'] + [domain(l) for l in lines]
+        action['pyson_domain'] = ['OR'] + [
+            LineAggregated.get_domain(l) for l in lines]
         action['pyson_domain'] = PYSONEncoder().encode(action['pyson_domain'])
         return action, {}

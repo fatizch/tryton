@@ -1,3 +1,5 @@
+* BUG#6848 Set method to find lines from an aggregate overridable
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Account aggregate are sorted in a balanced way
 * FEA#0000 Add "output_folder" batch parameter
