@@ -39,7 +39,7 @@ from trytond.modules.company.model import (CompanyMultiValueMixin,
 
 
 _STATES_WITH_SUBSTATES = ['declined']
-STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS = ['quote', 'declined']
+STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS = ['quote', 'declined', 'void']
 
 __all__ = [
     'field_mixin',
@@ -2078,6 +2078,14 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         endorsement.application_date = datetime.datetime.now()
         endorsement.definition = definition
         return endorsement
+
+    @classmethod
+    def check_contracts_status(cls, contracts):
+        with model.error_manager():
+            for contract in contracts:
+                if contract.status in STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS:
+                    cls.append_functional_error('status_incompatible',
+                        (contract.status, contract.rec_name))
 
 
 class EndorsementOption(relation_mixin(
