@@ -90,7 +90,7 @@ class Loan:
             cur_payment['payment_amount'] += payment.amount
 
         payments = [payment_dict[x] for x in sorted(payment_dict.keys())]
-        payments[0]['payment_amount'] += self.bank_fees
+        payments[0]['payment_amount'] += self.bank_fees or Decimal('0.0')
 
         return self.calculate_taea(capitals, payments)
 
