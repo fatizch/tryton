@@ -1,4 +1,3 @@
-* BUG#6828 Get option end date even if the loan does not have an end date
 * BUG#6748 Possibility to clear the termination reason when reactivating a contract
 * BUG#6616 Allow termination in previous activation period
 

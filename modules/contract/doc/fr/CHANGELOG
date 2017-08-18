@@ -1,4 +1,3 @@
-* BUG#6828 Récuperer la date de fin d'option même si le prêt n'a pas de date de fin
 * BUG#6748 Possibilité de nettoyer le motif de résiliation lors d'une réactivation
 * BUG#6616 Résiliation possible sur un terme antérieur
 
