@@ -11,39 +11,11 @@ clone:
       bin/vendor/tryton-perf-analyzer: https://github.com/coopengo/tryton-perf-analyzer.git
 
 pipeline:
-  check-title:
+  check-meta: 
     image: coog-test/base-tests
-    group: checks
     secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
     commands:
-      - node /workspace/drone/coog/drone/check-meta.js title
-    when:
-      status: [ success, failure ]
-
-  check-body:
-    image: coog-test/base-tests
-    group: checks
-    secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
-    commands:
-      - node /workspace/drone/coog/drone/check-meta.js body
-    when:
-      status: [ success, failure ]
-
-  check-labels:
-    image: coog-test/base-tests
-    group: checks
-    secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
-    commands:
-      - node /workspace/drone/coog/drone/check-meta.js label
-    when:
-      status: [ success, failure ]
-
-  check-content:
-    image: coog-test/base-tests
-    group: checks
-    secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
-    commands:
-      - node /workspace/drone/coog/drone/check-meta.js content
+      - node /workspace/drone/coog/drone/check-meta.js
     when:
       status: [ success, failure ]
 
