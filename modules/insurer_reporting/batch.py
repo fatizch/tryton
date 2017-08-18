@@ -1,7 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from sql import Literal
 
 from trytond.pool import Pool
+from trytond.transaction import Transaction
 from trytond.modules.coog_core import batch
 
 
@@ -39,21 +41,32 @@ class InsurerReportContractBatch(batch.BatchRoot):
         if possible_days and not str(treatment_date.day) in possible_days:
             return []
         pool = Pool()
-        Insurer = pool.get('insurer')
-        domain = []
-        template, = pool.get('report.template').search(
-            [('code', '=', template)])
+        cursor = Transaction().connection.cursor()
+        product_table = pool.get('offered.product').__table__()
+        coverage_table = pool.get('offered.option.description').__table__()
+        product_coverage_table = pool.get(
+            'offered.product-option.description').__table__()
+        insurer_table = pool.get('insurer').__table__()
+        party_table = pool.get('party.party').__table__()
+        where_clause = Literal(True)
+
         if insurers:
-            Party = pool.get('party.party')
-            party_dom = [x.id for x in Party.search(
-                    [('code', 'in', insurers.split(','))])]
-            domain.append(('party', 'in', party_dom))
+            where_clause &= party_table.name.in_(insurers.split(','))
         if products:
-            Product = pool.get('offered.product')
-            product_dom = [x.id for x in Product.search(
-                    [('code', 'in', products.split(','))])]
-            domain.append(('product', 'in', product_dom))
-        return [(x.id,) for x in Insurer.search(domain)]
+            where_clause &= product_table.code.in_(products.split(','))
+
+        query = insurer_table.join(coverage_table,
+            condition=(coverage_table.insurer == insurer_table.id)
+            ).join(product_coverage_table,
+            condition=(product_coverage_table.coverage == coverage_table.id)
+            ).join(product_table,
+            condition=(product_coverage_table.product == product_table.id)
+            ).join(party_table,
+            condition=(insurer_table.party == party_table.id)
+            ).select(insurer_table.id,
+               where=where_clause)
+        cursor.execute(*query)
+        return cursor.fetchall()
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, template, insurers=None,
