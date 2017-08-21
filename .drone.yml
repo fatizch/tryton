@@ -27,17 +27,17 @@ pipeline:
 
   check-flake8:
     image: coog-test/base-tests
-    group: checks
     commands:
       - /workspace/drone/tests/checks/check-flake8
-    status: [ success, failure ]
-    event: [pull_request]
+    when:
+      status: [ success, failure ]
+      event: [pull_request]
 
   test-modules:
     image: coog-test/base-tests
     secrets: [ GITHUB_TOKEN ]
     environment:
-      - PYTHONPATH=/workspace/drone/coog/bin/lib:/workspace/trytond:/workspace/proteus
+      - PYTHONPATH=/workspace/drone/coog/bin/lib:/workspace/drone/trytond:/workspace/drone/proteus
       - DB_CACHE="/workspace/drone/coog-test-manual-db-cache"
       - TRYTOND_ASYNC_RQ="redis://127.0.0.1:6379/1"
     commands:
