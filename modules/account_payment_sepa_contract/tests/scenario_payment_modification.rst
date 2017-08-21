@@ -203,7 +203,7 @@ Create Contract::
 
     >>> BillingMode = Model.get('offered.billing_mode')
     >>> monthly, = BillingMode.find([
-    ...         ('code', '=', 'monthly')])
+    ...         ('code', '=', 'monthly_direct_debit'), ('direct_debit', '=', True)])
     >>> contract_start_date = datetime.date.today()
     >>> Contract = Model.get('contract')
     >>> ContractPremium = Model.get('contract.premium')
@@ -255,21 +255,21 @@ Create invoice::
     >>> len(contract_invoices) == 2
     True
     >>> invoice_no_mandate, invoice = contract_invoices
-    >>> invoice_no_mandate.invoice.sepa_mandate = None
-    >>> invoice_no_mandate.invoice.save()
     >>> generate_invoice2 = Wizard('contract.do_invoice', models=[contract2])
     >>> generate_invoice2.form.up_to_date = until_date
     >>> generate_invoice2.execute('invoice')
     >>> contract_invoices2 = contract2.invoices
     >>> invoice2_no_mandate, invoice2 = contract_invoices2
-    >>> invoice2_no_mandate.invoice.sepa_mandate = None
-    >>> invoice2_no_mandate.invoice.save()
     >>> invoice.invoice.sepa_mandate = mandate
     >>> invoice2.invoice.sepa_mandate = mandate2
     >>> invoice.invoice.click('post')
     >>> invoice_no_mandate.invoice.click('post')
+    >>> invoice_no_mandate.invoice.sepa_mandate = None
+    >>> invoice_no_mandate.invoice.save()
     >>> invoice2.invoice.click('post')
     >>> invoice2_no_mandate.invoice.click('post')
+    >>> invoice2_no_mandate.invoice.sepa_mandate = None
+    >>> invoice2_no_mandate.invoice.save()
     >>> invoice.invoice.sepa_mandate == mandate
     True
     >>> invoice2.invoice.sepa_mandate == mandate2

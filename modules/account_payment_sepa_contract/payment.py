@@ -310,8 +310,8 @@ class PaymentInformationModification:
                     PaymentInformationModification, self).transition_check()
             payers = list({p for _, p, _ in invalid_records})
             billing_infos = [i.contract.billing_information
-                    for i, _, _ in invalid_records
-                    if i.contract.billing_information.direct_debit]
+                for i, _, _ in invalid_records
+                if i.contract.billing_information.direct_debit]
             billing_debit_accounts = list({x.direct_debit_account
                     for x in billing_infos})
             kinds = list({l.account.kind for _, _, l in invalid_records})
