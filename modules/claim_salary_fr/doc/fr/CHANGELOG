@@ -1,3 +1,4 @@
+* OTH#0000 Renommer le référence service au delivered_service dans get_currency
 * BUG#6499 L'initialisation des périodes de salaire doit se baser sur la date de sortie de l'entreprise
 * FEA#6465 Permettre d'accéder aux tranches TA, TB, TC depuis coog-api
 

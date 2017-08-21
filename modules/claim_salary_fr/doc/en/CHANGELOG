@@ -1,3 +1,4 @@
+* OTH#0000 Change reference from service to delivered_service in get_currency
 * BUG#6499 Salary range must be initialize based on the contract exit date
 * FEA#6465 Allow to access TA, TB, TC salary range from coog-api 
 

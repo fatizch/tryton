@@ -143,8 +143,8 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
         return True
 
     def get_currency(self):
-        if self.service:
-            return self.service.currency
+        if self.delivered_service:
+            return self.delivered_service.currency
 
     @classmethod
     def update_contributions_table(cls, contributions, tables, key):
