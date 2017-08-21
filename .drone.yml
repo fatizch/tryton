@@ -11,11 +11,17 @@ clone:
       bin/vendor/tryton-perf-analyzer: https://github.com/coopengo/tryton-perf-analyzer.git
 
 pipeline:
+  before-check:
+    image: coog-test/base-tests
+    commands:		
+      - git clone --recursive --depth=1 https://github.com/coopengo/coog-drone /workspace/drone/tests
+      - /workspace/drone/tests/checks/before-check
+
   check-meta: 
     image: coog-test/base-tests
     secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
     commands:
-      - node /workspace/drone/coog/drone/check-meta.js
+      - node /workspace/drone/tests/checks/check-meta.js
     when:
       status: [ success, failure ]
 
@@ -23,7 +29,7 @@ pipeline:
     image: coog-test/base-tests
     group: checks
     commands:
-      - /workspace/drone/coog/drone/check-flake8
+      - /workspace/drone/tests/checks/check-flake8
     status: [ success, failure ]
     event: [pull_request]
 
@@ -35,7 +41,7 @@ pipeline:
       - DB_CACHE="/workspace/drone/coog-test-manual-db-cache"
       - TRYTOND_ASYNC_RQ="redis://127.0.0.1:6379/1"
     commands:
-      - node /workspace/drone/coog/drone/check-meta.js tests || /workspace/drone/coog/drone/check-tests
+      - node /workspace/drone/tests/checks/check-meta.js tests || /workspace/drone/tests/checks/check-tests
     when:
       status: [ success, failure ]
       event: [pull_request]
