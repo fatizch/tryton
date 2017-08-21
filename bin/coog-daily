@@ -105,7 +105,6 @@ coog_daily_main() {
         (
         _coog_daily_check_modules "account_payment_sepa_cog" &&               \
             coog_chain_main account_payment_sepa_cog payment_working_days \
-                --connexion_date="$TODAY_DATE"                    \
                 --working_days="$WORKING_DAYS"                    \
                 --conf_code="$WORKING_DAYS_CONF"                  \
                 --payment_kind=receivable                         \
