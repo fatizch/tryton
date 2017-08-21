@@ -84,6 +84,10 @@ class StartFullContractRevision(EndorsementWizardStepMixin):
                 ['start_date']):
             endorsement.save()
 
+    @classmethod
+    def allow_effective_date_before_contract(cls, select_screen):
+        return True
+
 
 class StartEndorsement:
     __name__ = 'endorsement.start'
