@@ -47,6 +47,12 @@ class ChangeBillingInformation:
     def default_amend_previous_mandate(cls):
         return False
 
+    def get_other_contracts_party_clause(self):
+        return ['OR', super(ChangeBillingInformation,
+                self).get_other_contracts_party_clause(),
+            ('billing_informations.sepa_mandate.party',
+                '=', self.contract.payer.id)]
+
     @fields.depends('mandate_needed', 'new_billing_information',
         'sepa_signature_date', 'payer')
     def on_change_new_billing_information(self):
@@ -91,8 +97,9 @@ class ChangeBillingInformation:
                     ('account_number.account', '=', prev_account),
                     ('OR', ('start_date', '=', None),
                         ('start_date', '<', self.effective_date))])
-            amendments = Mandate.search([('amendment_of', 'in',
-                        [x.id for x in possible_mandates])])
+            amendments = Mandate.search([
+                    ('amendment_of', 'in', [x.id for x in possible_mandates]),
+                    ('state', '=', 'validated')])
             amended = [m.amendment_of for m in amendments]
             possible_mandates = [x for x in possible_mandates if x
                     not in amended]

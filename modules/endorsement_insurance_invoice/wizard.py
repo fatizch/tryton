@@ -135,6 +135,9 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
                 'account, do you want it to change ?',
                 })
 
+    def get_other_contracts_party_clause(self):
+        return ('subscriber', '=', self.subscriber.id)
+
     @fields.depends('contract', 'effective_date', 'new_billing_information',
         'other_contracts', 'previous_billing_information', 'subscriber')
     def on_change_new_billing_information(self):
@@ -158,7 +161,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
             return
         possible_contracts = {}
         for contract in Contract.search([
-                    ('subscriber', '=', self.subscriber.id),
+                    self.get_other_contracts_party_clause(),
                     ('id', '!=', self.contract.id),
                     ('status', '!=', 'quote'),
                     ['OR', ('end_date', '=', None),

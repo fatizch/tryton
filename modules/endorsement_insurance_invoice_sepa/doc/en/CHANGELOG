@@ -1,3 +1,5 @@
+* BUG#6862 Fix search for contracts and mandates when amending SEPA mandate
+
 Version 1.12 - 2017-04-28
 
 Version 1.10 - 2016-11-02
