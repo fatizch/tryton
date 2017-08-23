@@ -504,6 +504,7 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
         self.calculate()
         return [{
                 'date': payment.start_date,
+                'amount': getattr(payment, 'amount', 0),
                 'outstanding': payment.outstanding_balance,
                 'principal': getattr(payment, 'principal', 0),
                 'interest': getattr(payment, 'interest', 0),
