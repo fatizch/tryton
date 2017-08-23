@@ -1,3 +1,4 @@
+* BUG#6107 Le compte bancaire ne s'affiche plus dans l'assistant de création de paiement lorsque la méthode de traitement est autre que SEPA
 * BUG#6817 Retirer le tiers des clés de regroupement pour les groupes de paiement sepa
 * OTH#0000 Suite de #6792
 * BUG#6792 Gestion des paiements non SEPA dans le point d'entrée "Paiements regroupés"

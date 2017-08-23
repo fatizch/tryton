@@ -874,8 +874,8 @@ class PaymentCreationStart:
             ],
         states={
             'invisible': ((~Bool(Eval('process_method')) |
-                (Eval('process_method') != 'sepa')) & Bool(
-                Eval('payer')) | Eval('multiple_parties')),
+                (Eval('process_method') != 'sepa')) | ~Eval('payer')
+                | Eval('multiple_parties')),
             'required': ((Eval('process_method') == 'sepa') &
                 ~Eval('multiple_parties'))
             },

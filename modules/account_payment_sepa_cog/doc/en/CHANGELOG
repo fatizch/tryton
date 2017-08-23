@@ -1,3 +1,4 @@
+* BUG#6107 The bank account is now invisible in the payment creation wizard when the process method is not SEPA
 * BUG#6817 Remove party from payment group key
 * OTH#0000 Complement #6792
 * BUG#6792 Manage non-SEPA payments in merged payments entry point
