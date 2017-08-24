@@ -1,3 +1,4 @@
+* OTH#0000 Remonter de la méthode group-by dans report_engine
 * Ajout des en têtes dans les modèles de courrier de flux
 * Ajout de la gestion des en têtes dans le batch d'extraction de masse des flux
 Version 1.12 - 2017-04-28

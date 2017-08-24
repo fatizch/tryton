@@ -247,12 +247,6 @@ class ReportGenerate:
         report_context = super(ReportGenerate, cls).get_context(records, data)
         report_context.update({x[0]: getattr(func_library, 'eval_%s' % x[0])
                 for x in func_library.EVAL_METHODS})
-        from itertools import groupby
-
-        def copy_groupby(*args, **kwargs):
-            for key, values in groupby(*args, **kwargs):
-                yield key, list(values)
-        report_context['groupby'] = copy_groupby
         return report_context
 
     @classmethod

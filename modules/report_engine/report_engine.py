@@ -20,6 +20,7 @@ try:
 except ImportError:
     Manifest, MANIFEST = None, None
 
+from itertools import groupby
 from sql import Cast, Null, Literal
 from sql.functions import Substring, Position
 from datetime import datetime
@@ -973,6 +974,12 @@ class ReportGenerate(CoogReport):
 
         report_context.update({k: v for k, v in data.iteritems() if k not in
                 ['party', 'address', 'sender', 'sender_address']})
+
+        def copy_groupby(*args, **kwargs):
+            for key, values in groupby(*args, **kwargs):
+                yield key, list(values)
+
+        report_context['groupby'] = copy_groupby
 
         report_context['Date'] = pool.get('ir.date').today()
         report_context['FDate'] = format_date
