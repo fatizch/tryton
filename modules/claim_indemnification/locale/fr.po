@@ -126,7 +126,7 @@ msgid ""
 "Total share amount for service %(service)s should be 100: %(total_share).2f"
 msgstr ""
 "La somme des répartition pour la prestation %(service)s devrait être 100%% :"
-" %(total_share).2f %%"
+" %(total_share)s %%"
 
 msgctxt "error:claim.service:"
 msgid "Are you sure you want to cancel the periods between %s and %s?"

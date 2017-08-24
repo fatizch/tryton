@@ -151,7 +151,7 @@ class Loss:
                 'indemnized_losses': 'Some draft losses have active '
                 'indemnifications, they may have to be reevaluated:\n\n%s',
                 'bad_indemnification_shares': 'Total share amount for service '
-                '%(service)s should be 100: %(total_share).2f',
+                '%(service)s should be 100: %(total_share)s %%',
                 'missing_end_date': 'The end date is missing on the loss',
                 'missing_closing_reason': 'The closing reason is missing on the'
                 ' loss',
@@ -189,11 +189,17 @@ class Loss:
 
     def close(self, sub_status, date=None):
         super(Loss, self).close(sub_status, date)
-        if self.with_end_date and not self.end_date:
+        all_service_refused = all([x.eligibility_status == 'refused'
+            for x in self.services])
+        if (not all_service_refused and self.with_end_date
+                and not self.end_date):
             self.__class__.raise_user_error('missing_end_date')
-        if self.with_end_date and not self.closing_reason:
+        if (not all_service_refused and self.with_end_date
+                and not self.closing_reason):
             self.__class__.raise_user_error('missing_closing_reason')
         for service in self.services:
+            if service.eligibility_status == 'refused':
+                continue
             if not service.indemnifications:
                 self.__class__.raise_user_warning(
                     'no_indemnifications_%s' % service.id,
@@ -208,7 +214,8 @@ class Loss:
                 return
             self.check_indemnification_gaps(service)
         for service in self.services:
-            if service.benefit.indemnification_kind != 'capital':
+            if (service.benefit.indemnification_kind != 'capital' or
+                    service.eligibility_status == 'refused'):
                 continue
             total_share = sum(x.share for x in service.indemnifications)
             service_delegation = service.option.coverage.insurer. \
