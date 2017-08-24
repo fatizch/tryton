@@ -21,6 +21,7 @@ User guide
    :maxdepth: 2
 
    user/configuration
+   user/utiliser_champ_genshi_tuto.rst
 
 .. toctree::
     :hidden:
