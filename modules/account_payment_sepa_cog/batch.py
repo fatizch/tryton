@@ -65,16 +65,6 @@ class PaymentTreatmentBatch:
         return params
 
     @classmethod
-    def _group_payment_key(cls, payment):
-        res = super(PaymentTreatmentBatch, cls)._group_payment_key(payment)
-        journal = payment.journal
-        if (journal.process_method == 'sepa' and
-                journal.split_sepa_messages_by_sequence_type):
-            res = res + (('sequence_type', payment.sepa_mandate_sequence_type
-                    or payment.sepa_mandate.sequence_type),)
-        return res
-
-    @classmethod
     def select_ids_regroup_key(cls, payment, payment_kind):
         if payment.journal.process_method == 'sepa':
             return payment.sepa_mandate if payment_kind == 'receivable' \
@@ -186,20 +176,6 @@ class PaymentGroupCreationBatch:
             super(PaymentGroupCreationBatch, cls)._group_payment_key(payment)
             if x != payment.party)) + (payment.sepa_mandate,
                 payment.sepa_mandate_sequence_type)
-
-    @classmethod
-    def group_by_key_func(cls, payment_row):
-        res = super(PaymentGroupCreationBatch, cls).group_by_key_func(
-            payment_row)
-        Journal = Pool().get('account.payment.journal')
-        journal = Journal(payment_row[1])
-        Mandate = Pool().get('account.payment.sepa.mandate')
-        if (journal.process_method == 'sepa' and payment_row[2] == 'receivable'
-                and journal.split_sepa_messages_by_sequence_type):
-            # index 4 is the sequence_type and index 3 is the mandate
-            return res + tuple([payment_row[4] or
-                Mandate(payment_row[3]).sequence_type])
-        return res
 
     @classmethod
     def get_payment_where_clause(cls, payment, payment_kind, treatment_date,

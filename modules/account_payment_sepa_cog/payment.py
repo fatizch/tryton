@@ -8,10 +8,9 @@ from itertools import groupby
 from collections import namedtuple
 from dateutil.relativedelta import relativedelta
 from collections import defaultdict
-from sql.aggregate import Sum, Max
+from sql.aggregate import Max
 from sql import Null
 from sql.conditionals import Case, Coalesce
-from sql.operators import Not
 
 import genshi
 import genshi.template
@@ -144,82 +143,34 @@ class Mandate(model.CoogSQL, model.CoogView):
             set(['company', 'account_number']))
 
     @classmethod
-    def get_clause_for_frst(cls, payment_table):
-        return (Not(payment_table.state.in_(('draft', 'approved'))))
-
-    @classmethod
     def get_initial_sequence_type_per_mandates(cls, mandates):
         Payment = Pool().get('account.payment')
         payment = Payment.__table__()
         mandate = cls.__table__()
         cursor = Transaction().connection.cursor()
-        ignore_clause = cls.get_clause_for_frst(payment)
-        rejected_clause = ((payment.state == 'failed') &
-        (payment.sepa_mandate_sequence_type != Null) &
-            (payment.sepa_return_reason_information == '/RTYP/RJCT'))
-
-        # The logic here is identical to that of the sequence_type method
-        # For each mandates, we count all (not draft or approved) payments,
-        # all rejected (not draft or approved) payments, and all
-        # (not draft or approved) payments without sepa_mandate_sequence_type.
-        # If there are no payments, or all payments are rejected or
-        # they have no sepa_mandate_sequence_type,
-        # then the mandate is FRST. Else it is RCUR
-        # Except if it is OOFF.
         sub_query = payment.join(mandate,
             condition=((mandate.id == payment.sepa_mandate) &
                 (payment.sepa_mandate.in_([x.id for x in mandates])))
             ).select(payment.sepa_mandate, mandate.type,
-                Sum(
-                    Case((ignore_clause, 1),
-                        else_=0)).as_('count_all'),
-                Sum(
-                    Case((rejected_clause & ignore_clause, 1),
-                        else_=0)).as_('count_rejected'),
-                Sum(
-                    Case((((payment.sepa_mandate_sequence_type == Null) &
-                        ignore_clause), 1),
-                        else_=0)).as_('count_no_seq'),
                 mandate.type.as_('mandate_type'),
                 group_by=[payment.sepa_mandate, mandate.type]
                 )
 
         type_ = Case(
             (sub_query.mandate_type == 'one-off', 'OOFF'),
-            else_=Case((
-                        (sub_query.count_all == 0) |
-                        (sub_query.count_all == sub_query.count_rejected) |
-                        (sub_query.count_all == sub_query.count_no_seq),
-                        'FRST'),
-                else_='RCUR'))
+            else_='RCUR')
 
         cursor.execute(*sub_query.select(sub_query.sepa_mandate, type_))
         res = dict(cursor.fetchall())
-        amendments_frsts = [x for x in mandates if x.amendment_of
-            and res[x.id] == 'FRST']
-        if amendments_frsts:
-            amended_res = cls.get_initial_sequence_type_per_mandates(
-                [x.amendment_of for x in amendments_frsts])
-            amended_rcurs = {k for k, v in amended_res.iteritems()
-                if v == 'RCUR'}
-            if amended_rcurs:
-                res.update({x: 'RCUR' for x in amendments_frsts
-                        if x.amendment_of in amended_rcurs})
         return res
 
+    # Overload sequence_type to prevent using 'FRST' type which is handled by
+    # tryton
     @property
     def sequence_type(self):
         if self.type == 'one-off':
             return 'OOFF'
-        payments = [p for p in self.payments if p.state not in
-            ['draft', 'approved']]
-        if (not payments
-                or all(not p.sepa_mandate_sequence_type for p in payments)
-                or all(p.rejected for p in payments)):
-            return self.amendment_of.sequence_type if self.amendment_of \
-                else 'FRST'
-        else:
-            return 'RCUR'
+        return 'RCUR'
 
     def objects_using_me_for_party(self, party=None):
         Payment = Pool().get('account.payment')
@@ -732,10 +683,6 @@ class Journal:
 
     last_sepa_receivable_payment_creation_date = fields.Date(
         'Last Receivable Payment SEPA Creation',
-        states={'invisible': Eval('process_method') != 'sepa'},
-        depends=['process_method'])
-    split_sepa_messages_by_sequence_type = fields.Boolean(
-        'Split Sepa Messages By Sequence Type (FRST-RCUR)',
         states={'invisible': Eval('process_method') != 'sepa'},
         depends=['process_method'])
 

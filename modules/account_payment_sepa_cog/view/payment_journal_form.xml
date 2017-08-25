@@ -3,8 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='sepa_receivable_flavor']" position="after">
-        <label name="split_sepa_messages_by_sequence_type"/>
-        <field name="split_sepa_messages_by_sequence_type"/>
         <newline/>
         <label name="last_sepa_receivable_payment_creation_date"/>
         <field name="last_sepa_receivable_payment_creation_date"/>

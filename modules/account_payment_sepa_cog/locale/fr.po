@@ -60,6 +60,10 @@ msgctxt "field:account.payment.fail,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:account.payment.fail.message.create,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:account.payment.group,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -89,9 +93,9 @@ msgctxt ""
 msgid "Last Receivable Payment SEPA Creation"
 msgstr "Date de la dernière génération des prélèvements SEPA"
 
-msgctxt "field:account.payment.journal,split_sepa_messages_by_sequence_type:"
-msgid "Split Sepa Messages By Sequence Type (FRST-RCUR)"
-msgstr "Découper les messages SEPA par type de sequence (FRST-RCUR)"
+msgctxt "field:account.payment.journal.update.sepa,id:"
+msgid "ID"
+msgstr "Identifiant"
 
 msgctxt ""
 "field:account.payment.payment_creation.start,available_bank_accounts:"
@@ -138,7 +142,12 @@ msgctxt "model:account.payment.fail,name:"
 msgid "Payment Fail Batch"
 msgstr "Batch de rejets de paiements"
 
-msgctxt "model:account.payment.journal.reject_reason,description:coog_sepa_generic_reject"
+msgctxt "model:account.payment.fail.message.create,name:"
+msgid "Payment Fail Message Creation Batch"
+msgstr "Batch de création du message d'échec de paiement"
+
+msgctxt ""
+"model:account.payment.journal.reject_reason,description:coog_sepa_generic_reject"
 msgid "Coog Generic Reject Reason"
 msgstr "Motif de rejet générique pour Coog"
 
@@ -285,6 +294,10 @@ msgstr "SCT non conforme dû à un problème technique"
 msgctxt "model:account.payment.journal.reject_reason,description:sepa_TM01"
 msgid "File receive after Cut-off time"
 msgstr "Heure limite dépassée"
+
+msgctxt "model:account.payment.journal.update.sepa,name:"
+msgid "Sepa Payment Journal Update Batch"
+msgstr "Batch de mise à jour du journal de paiement sepa"
 
 msgctxt "model:event.type,name:event_parse_sepa_message"
 msgid "Process Incoming Sepa Message"

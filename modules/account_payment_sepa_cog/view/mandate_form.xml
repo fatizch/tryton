@@ -11,4 +11,8 @@ this repository contains the full copyright notices and license terms. -->
         <field name="amendment_of"/>
         <newline/>
     </xpath>
+    <xpath expr="/form/field[@name='sequence_type_rcur']" position="replace">
+    </xpath>
+    <xpath expr="/form/label[@name='sequence_type_rcur']" position="replace">
+    </xpath>
 </data>
