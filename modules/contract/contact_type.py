@@ -98,5 +98,4 @@ class ContractContact(model._RevisionMixin, model.CoogSQL, model.CoogView):
         if not date:
             date = self.start
         if self.party and not getattr(self, 'address', None):
-            self.address = utils.get_good_version_at_date(self.party,
-                'addresses', date)
+            self.address = self.party.address_get(at_date=date)

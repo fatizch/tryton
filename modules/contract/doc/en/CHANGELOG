@@ -1,3 +1,4 @@
+* BUG#6870 Use party's main address instead of searching for to date active address in contract's contact
 * BUG#6748 Possibility to clear the termination reason when reactivating a contract
 * BUG#6616 Allow termination in previous activation period
 
