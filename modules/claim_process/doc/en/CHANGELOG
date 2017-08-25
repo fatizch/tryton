@@ -1,3 +1,4 @@
+* BUG#6891 Don't export loss description when exporting process
 * BUG#6659 Fix an inconsistency in the claim documents calculation
 
 Version 1.12 - 2017-04-28

@@ -133,6 +133,10 @@ class Process:
         cls.kind.selection.append(('claim_reopening', 'Claim Reopening'))
         cls.kind.selection[:] = list(set(cls.kind.selection))
 
+    @classmethod
+    def _export_light(cls):
+        return super(Process, cls)._export_light() | set(['for_loss_descs'])
+
 
 class ProcessLossDescRelation(model.CoogSQL):
     'Process Loss Desc Relation'
