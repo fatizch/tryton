@@ -105,8 +105,10 @@ class Move:
         Snapshot = pool.get('account.move.snapshot')
 
         super(Move, cls).post(moves)
-
-        move_groups = cls.group_moves_for_snapshots(moves)
+        # Do not take snapshots for moves not in an exportable fiscal year
+        moves_to_snapshot = [m for m in moves
+            if m.period.fiscalyear.export_moves]
+        move_groups = cls.group_moves_for_snapshots(moves_to_snapshot)
         if not move_groups:
             return
 

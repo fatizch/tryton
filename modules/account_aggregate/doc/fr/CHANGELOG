@@ -1,3 +1,4 @@
+* BUG#6887 L'instantané n'est créé que si l'export est activé pour l'année fiscale concernée
 * BUG#6848 Passage en surchargeable de la méthode pour retrouver les lignes depuis un aggrégat
 
 Version 1.12 - 2017-04-28

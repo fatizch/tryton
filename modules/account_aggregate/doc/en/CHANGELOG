@@ -1,3 +1,4 @@
+* BUG#6887 Only creates snapshot if export is activated on fiscal year
 * BUG#6848 Set method to find lines from an aggregate overridable
 
 Version 1.12 - 2017-04-28
