@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<graph type="vbar" >
+    <x>
+        <field name="date" empty="0"/>
+    </x>
+    <y>
+        <field name="activity_hours"/>
+        <field name="inactivity_hours"/>
+    </y>
+</graph>

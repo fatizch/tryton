@@ -1,0 +1,419 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:res.user.connection.date_display:"
+msgid "Date range specified have no connections"
+msgstr "La plage de date spécifiée ne possède pas de connexions"
+
+msgctxt "field:res.user.analytics.configuration,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:res.user.analytics.configuration,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:res.user.analytics.configuration,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:res.user.analytics.configuration,inactivity_limit:"
+msgid "Inactivity Limit Before Logging"
+msgstr "Limit d'inactivité"
+
+msgctxt "field:res.user.analytics.configuration,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:res.user.analytics.configuration,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:res.user.analytics.configuration,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:res.user.connection,activity:"
+msgid "Activity"
+msgstr "Activité"
+
+msgctxt "field:res.user.connection,activity_str:"
+msgid "Activity"
+msgstr "Activité"
+
+msgctxt "field:res.user.connection,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:res.user.connection,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:res.user.connection,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:res.user.connection,date:"
+msgid "Connection Date"
+msgstr "Date De Connexion"
+
+msgctxt "field:res.user.connection,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:res.user.connection,inactivity:"
+msgid "Inactivity"
+msgstr "Inactivité"
+
+msgctxt "field:res.user.connection,inactivity_str:"
+msgid "Inactivity"
+msgstr "Inactivité"
+
+msgctxt "field:res.user.connection,key:"
+msgid "Key"
+msgstr "Clef"
+
+msgctxt "field:res.user.connection,last_activity:"
+msgid "Last Action Date"
+msgstr "Date de dernière action"
+
+msgctxt "field:res.user.connection,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:res.user.connection,terminated_reason:"
+msgid "End Session Reason"
+msgstr "Fin de session"
+
+msgctxt "field:res.user.connection,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:res.user.connection,user_id:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:res.user.connection,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:res.user.connection,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:res.user.connection,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:res.user.connection.daily,activity:"
+msgid "Activity"
+msgstr "Activité"
+
+msgctxt "field:res.user.connection.daily,activity_str:"
+msgid "Average Activity"
+msgstr "Moyenne des temps d'activité"
+
+msgctxt "field:res.user.connection.daily,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:res.user.connection.daily,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:res.user.connection.daily,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:res.user.connection.daily,date:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "field:res.user.connection.daily,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:res.user.connection.daily,inactivity:"
+msgid "Inactivity"
+msgstr "Inactivité"
+
+msgctxt "field:res.user.connection.daily,inactivity_str:"
+msgid "Average Inactivity"
+msgstr "Moyenne des temps d'inactivité"
+
+msgctxt "field:res.user.connection.daily,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:res.user.connection.daily,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:res.user.connection.daily,user_res:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:res.user.connection.daily,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:res.user.connection.daily,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:res.user.connection.daily,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:res.user.connection.date_range,end_date:"
+msgid "End date"
+msgstr "Date de fin"
+
+msgctxt "field:res.user.connection.date_range,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:res.user.connection.date_range,preset_selector:"
+msgid "Set"
+msgstr "Ensemble"
+
+msgctxt "field:res.user.connection.date_range,start_date:"
+msgid "Start date"
+msgstr "Date de début"
+
+msgctxt "field:res.user.connection.global.daily,activity:"
+msgid "Activity"
+msgstr "Activité"
+
+msgctxt "field:res.user.connection.global.daily,activity_hours:"
+msgid "Activity (h)"
+msgstr "Activité (h)"
+
+msgctxt "field:res.user.connection.global.daily,activity_str:"
+msgid "Average Activity"
+msgstr "Moyenne des temps d'activité"
+
+msgctxt "field:res.user.connection.global.daily,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:res.user.connection.global.daily,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:res.user.connection.global.daily,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:res.user.connection.global.daily,date:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "field:res.user.connection.global.daily,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:res.user.connection.global.daily,inactivity:"
+msgid "Inactivity"
+msgstr "Inactivité"
+
+msgctxt "field:res.user.connection.global.daily,inactivity_hours:"
+msgid "Inactivity (h)"
+msgstr "Inactivité (h)"
+
+msgctxt "field:res.user.connection.global.daily,inactivity_str:"
+msgid "Average Inactivity"
+msgstr "Moyenne d'inactivité"
+
+msgctxt "field:res.user.connection.global.daily,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:res.user.connection.global.daily,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:res.user.connection.global.daily,user_res:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:res.user.connection.global.daily,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:res.user.connection.global.daily,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:res.user.connection.global.daily,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:res.user.connection.global.monthly,activity:"
+msgid "Activity"
+msgstr "Activité"
+
+msgctxt "field:res.user.connection.global.monthly,activity_hours:"
+msgid "Activity (h)"
+msgstr "Activité (h)"
+
+msgctxt "field:res.user.connection.global.monthly,activity_str:"
+msgid "Average Activity"
+msgstr "Moyenne des temps d'activité"
+
+msgctxt "field:res.user.connection.global.monthly,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:res.user.connection.global.monthly,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:res.user.connection.global.monthly,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:res.user.connection.global.monthly,date:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "field:res.user.connection.global.monthly,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:res.user.connection.global.monthly,inactivity:"
+msgid "Inactivity"
+msgstr "Inactivité"
+
+msgctxt "field:res.user.connection.global.monthly,inactivity_hours:"
+msgid "Inactivity (h)"
+msgstr "Inactivité (h)"
+
+msgctxt "field:res.user.connection.global.monthly,inactivity_str:"
+msgid "Average Inactivity"
+msgstr "Moyenne des temps d'inactivité"
+
+msgctxt "field:res.user.connection.global.monthly,month:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "field:res.user.connection.global.monthly,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:res.user.connection.global.monthly,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:res.user.connection.global.monthly,user_res:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:res.user.connection.global.monthly,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:res.user.connection.global.monthly,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:res.user.connection.global.monthly,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:res.user.connection.global.monthly,year:"
+msgid "Year"
+msgstr "Année"
+
+msgctxt "help:res.user.analytics.configuration,inactivity_limit:"
+msgid ""
+"If the user inactivity reaches this limit (in seconds), then the         "
+"user is considered as inactive"
+msgstr ""
+"Si le temps d'inactivité de l'utilisateur atteint cette limite (en secondes),"
+" alors l'utilisateur est considéré comme inactif"
+
+msgctxt "model:res.user.analytics.configuration,name:"
+msgid "Connection Configuration"
+msgstr "Configuration connexion"
+
+msgctxt "model:ir.action,name:act_connection"
+msgid "Connection"
+msgstr "Connexion"
+
+msgctxt "model:ir.action,name:act_connection_daily"
+msgid "Daily Connection"
+msgstr "Connexion journalière"
+
+msgctxt "model:ir.action,name:act_connection_global_daily"
+msgid "Connection Global Daily"
+msgstr "Connexion journalière globale"
+
+msgctxt "model:ir.action,name:act_connection_global_monthly"
+msgid "Connection Global Monthly"
+msgstr "Connexion mensuelle globale"
+
+msgctxt "model:ir.action,name:act_user_connection_configuration"
+msgid "Connection Configuration"
+msgstr "Configuration de connexion"
+
+msgctxt "model:ir.action,name:user_connection_date_wizard"
+msgid "User Connection Date"
+msgstr "Date de connexion utilisateur"
+
+msgctxt "model:ir.ui.menu,name:menu_connection"
+msgid "Connection"
+msgstr "Connexion"
+
+msgctxt "model:ir.ui.menu,name:menu_connection_daily"
+msgid "Connection Daily User"
+msgstr "Connexion jounalière utilisateur"
+
+msgctxt "model:ir.ui.menu,name:menu_connection_global_daily"
+msgid "Connection Daily Global"
+msgstr "Connexion journalière globale"
+
+msgctxt "model:ir.ui.menu,name:menu_connection_global_monthly"
+msgid "Connection Monthly Global"
+msgstr "Connexion mensuelle globale"
+
+msgctxt "model:ir.ui.menu,name:menu_connection_reporting"
+msgid "Connection Reporting"
+msgstr "Rapports de connexion"
+
+msgctxt "model:ir.ui.menu,name:menu_user_activity"
+msgid "User Activity"
+msgstr "Activité utilisateur"
+
+msgctxt "model:ir.ui.menu,name:menu_user_connection_configuration_conf"
+msgid "Connection Configuration"
+msgstr "Configuration de connexion"
+
+msgctxt "model:res.user.connection,name:"
+msgid "User Connection"
+msgstr "Connexion utilisateur"
+
+msgctxt "model:res.user.connection.daily,name:"
+msgid "Daily Connection"
+msgstr "Connexion journalière"
+
+msgctxt "model:res.user.connection.date_range,name:"
+msgid "Connection Date Range"
+msgstr "Plage de date de connexions"
+
+msgctxt "model:res.user.connection.global.daily,name:"
+msgid "Daily Global Connection"
+msgstr "Connexion journalière globale"
+
+msgctxt "model:res.user.connection.global.monthly,name:"
+msgid "Monthly Global Connection"
+msgstr "Connexion mensuelle globale"
+
+msgctxt "wizard_button:res.user.connection.date_display,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:res.user.connection.date_display,start,generate:"
+msgid "Generate"
+msgstr "Générer"

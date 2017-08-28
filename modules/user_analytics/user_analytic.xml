@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ######## -->
+        <!-- # Menu # -->
+        <!-- ######## -->
+        <menuitem name="User Activity" id="menu_user_activity" sequence="100" parent="ir.menu_administration"/>
+        <!-- ################### -->
+        <!-- # User Connection # -->
+        <!-- ################### -->
+        <record model="ir.action.act_window" id="act_connection">
+            <field name="name">Connection</field>
+            <field name="res_model">res.user.connection</field>
+        </record>
+        <record model="ir.ui.view" id="connection_tree">
+            <field name="model">res.user.connection</field>
+            <field name="type">tree</field>
+            <field name="name">connection_tree</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_connection_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="connection_tree"/>
+            <field name="act_window" ref="act_connection"/>
+        </record>
+        <menuitem name="Connection" parent="menu_user_activity" sequence="0" id="menu_connection" action="act_connection"/>
+        <!-- #################### -->
+        <!-- # Daily Connection # -->
+        <!-- #################### -->
+        <record model="ir.action.act_window" id="act_connection_daily">
+            <field name="name">Daily Connection</field>
+            <field name="res_model">res.user.connection.daily</field>
+        </record>
+        <record model="ir.ui.view" id="connection_daily_tree">
+            <field name="model">res.user.connection.daily</field>
+            <field name="type">tree</field>
+            <field name="name">connection_daily_tree</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_connection_daily_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="connection_daily_tree"/>
+            <field name="act_window" ref="act_connection_daily"/>
+        </record>
+        <!-- ########################### -->
+        <!-- # Daily Global Connection # -->
+        <!-- ########################### -->
+        <record model="ir.action.act_window" id="act_connection_global_daily">
+            <field name="name">Connection Global Daily</field>
+            <field name="res_model">res.user.connection.global.daily</field>
+        </record>
+        <record model="ir.ui.view" id="connection_global_daily_tree">
+            <field name="model">res.user.connection.global.daily</field>
+            <field name="inherit" ref="user_analytics.connection_daily_tree"/>
+            <field name="name">connection_global_daily_tree</field>
+        </record>
+        <record model="ir.ui.view" id="connection_daily_line">
+            <field name="model">res.user.connection.global.daily</field>
+            <field name="type">graph</field>
+            <field name="name">connection_daily_line</field>
+        </record>
+        <record model="ir.ui.view" id="connection_daily_bar">
+            <field name="model">res.user.connection.global.daily</field>
+            <field name="type">graph</field>
+            <field name="name">connection_daily_bar</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_connection_global_daily_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="connection_global_daily_tree"/>
+            <field name="act_window" ref="act_connection_global_daily"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_connection_global_daily_line">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="connection_daily_line"/>
+            <field name="act_window" ref="act_connection_global_daily"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_connection_global_daily_bar">
+            <field name="sequence" eval="30"/>
+            <field name="view" ref="connection_daily_bar"/>
+            <field name="act_window" ref="act_connection_global_daily"/>
+        </record>
+        <!-- #################### -->
+        <!-- # Monthly Connection # -->
+        <!-- #################### -->
+        <record model="ir.action.act_window" id="act_connection_global_monthly">
+            <field name="name">Connection Global Monthly</field>
+            <field name="res_model">res.user.connection.global.monthly</field>
+        </record>
+        <record model="ir.ui.view" id="connection_global_monthly_tree">
+            <field name="model">res.user.connection.global.monthly</field>
+            <field name="inherit" ref="user_analytics.connection_global_daily_tree"/>
+            <field name="name">connection_global_monthly_tree</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_connection_global_monthly_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="connection_global_monthly_tree"/>
+            <field name="act_window" ref="act_connection_global_monthly"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_connection_global_monthly_line">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="connection_daily_line"/>
+            <field name="act_window" ref="act_connection_global_monthly"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_connection_global_monthly_bar">
+            <field name="sequence" eval="30"/>
+            <field name="view" ref="connection_daily_bar"/>
+            <field name="act_window" ref="act_connection_global_monthly"/>
+        </record>
+        <menuitem name="Connection Daily User" parent="menu_user_activity" sequence="10" id="menu_connection_daily" action="act_connection_daily"/>
+        <menuitem name="Connection Daily Global" parent="menu_user_activity" sequence="20" id="menu_connection_global_daily" action="act_connection_global_daily"/>
+        <menuitem name="Connection Monthly Global" parent="menu_user_activity" sequence="30" id="menu_connection_global_monthly" action="act_connection_global_monthly"/>
+    </data>
+</tryton>

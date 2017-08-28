@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################ -->
+        <!-- # Connection Configuration # -->
+        <!-- ############################ -->
+        <record model="ir.ui.view" id="user_connection_configuration_form">
+            <field name="model">res.user.analytics.configuration</field>
+            <field name="type">form</field>
+            <field name="name">user_connection_configuration_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_user_connection_configuration">
+            <field name="name">Connection Configuration</field>
+            <field name="res_model">res.user.analytics.configuration</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_user_connection_configuration_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="user_connection_configuration_form"/>
+            <field name="act_window" ref="act_user_connection_configuration"/>
+        </record>
+        <menuitem id="menu_user_connection_configuration_conf" sequence="100" name="Connection Configuration" parent="menu_user_activity" icon="tryton-preferences" action="act_user_connection_configuration"/>
+    </data>
+</tryton>

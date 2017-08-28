@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.action.wizard" id="user_connection_date_wizard">
+            <field name="name">User Connection Date</field>
+            <field name="wiz_name">res.user.connection.date_display</field>
+        </record>
+        <record model="ir.ui.view" id="user_connection_date_range">
+            <field name="model">res.user.connection.date_range</field>
+            <field name="type">form</field>
+            <field name="name">connection_date_range_form</field>
+        </record>
+        <record model="ir.action.keyword" id="act_user_date_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">res.user.connection,-1</field>
+            <field name="action" ref="user_connection_date_wizard"/>
+        </record>
+        <menuitem name="Connection Reporting" id="menu_connection_reporting" sequence="90" parent="menu_user_activity" action="user_connection_date_wizard"/>
+    </data>
+</tryton>
