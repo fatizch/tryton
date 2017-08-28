@@ -30,6 +30,10 @@ msgctxt "field:report.create.select_template,recipient_email:"
 msgid "Recipient Email"
 msgstr "Email du destinataire"
 
+msgctxt "field:report.create.select_template,manual_send_email:"
+msgid "Manual Send Email"
+msgstr "Envoi manuel de l'email"
+
 msgctxt "field:report.template,allow_manual_sending:"
 msgid "Allow Manual Sending"
 msgstr "Autoriser l'édition manuelle"

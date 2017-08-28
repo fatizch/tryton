@@ -1202,7 +1202,8 @@ class ReportCreate(wizard_context.PersistentContextWizard):
     select_template = StateView('report.create.select_template',
         'report_engine.create_report_select_template_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Generate', 'generate', 'tryton-go-next', default=True)])
+            Button('Generate', 'generate', 'tryton-go-next', default=True,
+                states={'invisible': False})])
     generate = StateTransition()
     preview_document = StateView('report.create.preview',
         'report_engine.document_create_preview_form', [

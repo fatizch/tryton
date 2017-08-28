@@ -329,6 +329,13 @@ class ReportCreateSelectTemplate:
         domain=[('party', '=', Eval('recipient')),
             ('type', '=', 'email')],
         depends=['recipient'])
+    manual_send_email = fields.Boolean('Manual Send Email')
+
+    @fields.depends('template')
+    def on_change_with_manual_send_email(self):
+        if self.template and self.template.process_method == 'email':
+            return self.template.allow_manual_sending
+        return False
 
     @fields.depends('recipient', 'recipient_address', 'recipient_email')
     def on_change_recipient(self):
@@ -347,8 +354,8 @@ class ReportCreate:
         super(ReportCreate, cls).__setup__()
         cls.select_template.buttons.extend([
                 Button('Manual eMail sending', 'open_email',
-                    'tryton-print-email'),
-                ])
+                    'tryton-print-email', states={
+                        'invisible': ~Eval('manual_send_email')})])
 
     def report_execute(self, ids, doc_template, report_context):
         if doc_template.input_kind != 'email':

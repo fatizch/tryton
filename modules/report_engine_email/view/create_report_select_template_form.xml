@@ -5,5 +5,6 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/field[@name='possible_recipients']" position="after">
         <label name="recipient_email"/>
         <field name="recipient_email" widget="selection"/>
+        <field name='manual_send_email' invisible="1"/>
     </xpath>
 </data>

@@ -1,3 +1,4 @@
+* FEA#6410 Cache le bouton "Envoi manuel eMail" lorsque ce n'est pas autorisé sur le modèle de courrier.
 * FIX#0000 La variable attachments est déplacé en haut de la fonction afin d'éviter un crash
 * FEA#6356 Filter email attachments objects with the same behavior as event type action
 
