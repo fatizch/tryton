@@ -6,7 +6,7 @@ coog_module_main() {
 }
 
 coog_module_update() { # install / update modules - [modules] - default: all
-        [ -z $DB_NAME ] && echo no database defined && return
+        [ -z "$DB_NAME" ] && echo no database defined && return
         local modules
         if [ $# -eq 0 ]
         then
@@ -28,16 +28,6 @@ coog_module_status() {
     python "$COOG_BIN/tryton-modules.py" "status" "$@"
 }
 
-coog_module_translate() { # generate module translations
-        local args
-        if [ -z $1 ]
-        then
-                args="-m "`coog_module_list coog`
-        else
-                args=$*
-        fi
-        python $COOG_BIN/translate.py -c $COOG_CONF_SRV -p $COOG_TRYTOND/trytond/modules $args
-}
 
 coog_module_create() { # creates a new module in the modules folder - <module_name> <file_1> [file_2] etc.
         [ -z "$1" ] && echo No module name && return 1
