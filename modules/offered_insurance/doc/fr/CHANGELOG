@@ -1,3 +1,5 @@
+* BUG#6788 La création des relances n'est plus permise sur des tiers de type assureur
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Nouvelle fonction permettant de savoir si une garantie est déjà souscrite
 * FEA#0000 Configuration des délégations assureur

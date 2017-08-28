@@ -1,3 +1,5 @@
+* BUG#6871 Removing 1.4 migration code
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Add batch chain
 

@@ -1,3 +1,5 @@
+* BUG#6788 Dunning generation on insurers parties are not allowed
+
 Version 1.12 - 2017-04-28
 * FEA#0000 New rule engine function to detect if an option is already subscribed
 * FEA#0000 Add insurer delegation flags

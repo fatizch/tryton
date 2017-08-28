@@ -57,6 +57,11 @@ class Dunning(export.ExportImportMixin):
                     level.event_log_type.code)
 
     @classmethod
+    def _overdue_line_domain(cls, date):
+        return super(Dunning, cls)._overdue_line_domain(date) + [
+            ('party.dunning_allowed', '=', True)]
+
+    @classmethod
     def process(cls, dunnings):
         cls.process_dunning_per_level(dunnings)
         update_dates = defaultdict(list)

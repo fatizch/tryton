@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:party.party,dunning_allowed:"
+msgid "Dunning Allowed"
+msgstr "Relance autorisée"
+
 msgctxt "error:account.dunning.procedure:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"

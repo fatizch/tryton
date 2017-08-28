@@ -6,7 +6,7 @@ from sql import Literal, Null
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import batch
+from trytond.modules.coog_core import batch, utils
 
 __all__ = [
     'DunningUpdateBatch',
@@ -100,8 +100,10 @@ class DunningCreationBatch(batch.BatchRoot):
             group_by=[tables['account.move.line'].id],
             having=having_clause)
         cursor.execute(*query)
-        res = cursor.fetchall()
-        return res
+        for sliced_ids in utils.iterator_slice((x for x, in cursor.fetchall()),
+                Transaction().database.IN_MAX):
+            lines = Pool().get('account.move.line').browse(list(sliced_ids))
+            yield [(x.id,) for x in lines if x.party.dunning_allowed]
 
     @classmethod
     def execute(cls, objects, ids, treatment_date):

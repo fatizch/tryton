@@ -39,6 +39,34 @@ class Party:
                 'states', {'invisible': Bool(~Eval('is_insurer'))}),
             ]
 
+    def _dunning_allowed(self):
+        if self.is_insurer:
+            return False
+        return super(Party, self)._dunning_allowed()
+
+    @classmethod
+    def non_customer_clause(cls, clause):
+        domain = super(Party, cls).non_customer_clause(clause)
+        additional_clause = []
+        reverse = {
+            '=': '!=',
+            '!=': '=',
+            }
+        if clause[2]:
+            if clause[1] == '!=' and domain:
+                additional_clause += ['OR']
+            additional_clause += [('is_insurer', clause[1], False)]
+        else:
+            if reverse[clause[1]] == '!=' and domain:
+                additional_clause += ['OR']
+            additional_clause += [('is_insurer', reverse[clause[1]], False)]
+        return additional_clause + domain
+
+    @classmethod
+    def search_dunning_allowed(cls, name, clause):
+        return super(Party, cls).search_dunning_allowed(name, clause) + \
+            cls.non_customer_clause(clause)
+
     @fields.depends('is_insurer')
     def on_change_is_insurer(self):
         self._on_change_is_actor('is_insurer')

@@ -38,6 +38,29 @@ class Party:
         'Use Broker Bank Transfer Journal',
         depends=['is_broker'], states={'invisible': ~Eval('is_broker')})
 
+    def _dunning_allowed(self):
+        if self.is_broker:
+            return False
+        return super(Party, self)._dunning_allowed()
+
+    @classmethod
+    def non_customer_clause(cls, clause):
+        domain = super(Party, cls).non_customer_clause(clause)
+        additional_clause = []
+        reverse = {
+            '=': '!=',
+            '!=': '=',
+            }
+        if clause[2]:
+            if clause[1] == '!=' and domain:
+                additional_clause += ['OR']
+            additional_clause += [('is_broker', clause[1], False)]
+        else:
+            if reverse[clause[1]] == '!=' and domain:
+                additional_clause += ['OR']
+            additional_clause += [('is_broker', reverse[clause[1]], False)]
+        return additional_clause + domain
+
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
