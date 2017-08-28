@@ -1,3 +1,5 @@
+* BUG#6816 Nettoyage des process logs après restauration depuis l'historique
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Choix de l'état de départ dans le cas de processus déclenchés par des événements
 

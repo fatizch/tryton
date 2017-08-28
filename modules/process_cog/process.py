@@ -365,6 +365,16 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
             Log.save(logs)
 
     @classmethod
+    def _restore_history(cls, ids, datetime, _before=False):
+        super(CoogProcessFramework, cls)._restore_history(ids, datetime,
+            _before)
+
+        Log = Pool().get('process.log')
+        logs = sum([x.update_logs() for x in cls.browse(ids)], [])
+        if logs:
+            Log.save(logs)
+
+    @classmethod
     def create(cls, values):
         instances = super(CoogProcessFramework, cls).create(values)
         Log = Pool().get('process.log')
