@@ -111,7 +111,6 @@ coog_daily_main() {
                 --journal_methods=sepa
         )
 
-        (
 
         (
         _coog_daily_check_modules "account_payment_sepa_cog" &&               \
@@ -128,6 +127,7 @@ coog_daily_main() {
                 --journal_methods=sepa
         )
 
+        (
         _coog_daily_check_modules "account_cog" &&                            \
             coog_chain_main account_cog report_aged_balance                 \
                 --working_days="$WORKING_DAYS"                    \
