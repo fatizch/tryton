@@ -8,10 +8,12 @@ import tax
 import test_case
 import party
 import move
+import batch
 
 
 def register():
     Pool.register(
+        batch.GenerateAgedBalance,
         move.MoveTemplate,
         move.Move,
         move.Line,
