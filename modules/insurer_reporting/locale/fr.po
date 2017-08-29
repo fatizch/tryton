@@ -3,20 +3,20 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:report.template:"
-msgid "Insurer Report Contract"
-msgstr "Rapport assureur contrat"
-
-msgctxt "error:report.template:"
-msgid "Insurer Report Covered"
-msgstr "Rapport assureur bénéficiaire"
+msgid "Broker Invoice Report"
+msgstr "Bordereau apporteur"
 
 msgctxt "error:report.template:"
 msgid "Insurer Invoice Report"
 msgstr "Bordereau assureur"
 
 msgctxt "error:report.template:"
-msgid "Broker Invoice Report"
-msgstr "Bordereau apporteur"
+msgid "Insurer Report Contract"
+msgstr "Rapport assureur contrat"
+
+msgctxt "error:report.template:"
+msgid "Insurer Report Covered"
+msgstr "Rapport assureur bénéficiaire"
 
 msgctxt "field:account.invoice,report_commissions:"
 msgid "Commissions To Report"
@@ -86,6 +86,50 @@ msgctxt "field:contract.option,monthly_taxes:"
 msgid "Monthly Taxes"
 msgstr "Taxes mensuelles"
 
+msgctxt "field:insurer,stock_reports:"
+msgid "Stock Reports"
+msgstr "Rapports de stock"
+
+msgctxt "field:insurer-report.template,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:insurer-report.template,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:insurer-report.template,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:insurer-report.template,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:insurer-report.template,insurer:"
+msgid "Insurer"
+msgstr "Assureur"
+
+msgctxt "field:insurer-report.template,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:insurer-report.template,report_template:"
+msgid "Report Template"
+msgstr "Modèle de courrier"
+
+msgctxt "field:insurer-report.template,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:insurer-report.template,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:insurer-report.template,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:insurer_reporting.contract.configure,at_date:"
 msgid "Date"
 msgstr "Date"
@@ -102,6 +146,10 @@ msgctxt "field:insurer_reporting.contract.configure,template:"
 msgid "Template"
 msgstr "Modèle"
 
+msgctxt "field:insurer_reporting.contract.generate,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:insurer_reporting.result,id:"
 msgid "ID"
 msgstr "ID"
@@ -110,9 +158,17 @@ msgctxt "field:insurer_reporting.result,reports:"
 msgid "Reports"
 msgstr "Rapports"
 
+msgctxt "model:insurer-report.template,name:"
+msgid "Insurer Report Template"
+msgstr "Modèle de rapport assureur"
+
 msgctxt "model:insurer_reporting.contract.configure,name:"
 msgid "Configure Insurer Contract Reporting"
 msgstr "Configurer le rapport assureur de contrat"
+
+msgctxt "model:insurer_reporting.contract.generate,name:"
+msgid "Insurer Report Contract Batch"
+msgstr "Batch de rapport assureur"
 
 msgctxt "model:insurer_reporting.result,name:"
 msgid "Insurer Reporting Result"

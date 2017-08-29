@@ -134,11 +134,24 @@ coog_daily_main() {
                 --conf_code="$WORKING_DAYS_CONF"
         )
 
+        (
+        _coog_daily_check_modules "insurer_reporting" &&                      \
+            coog_chain_main insurer_reporting insurer_stock       \
+                --working_days="$WORKING_DAYS"                    \
+                --conf_code="$WORKING_DAYS_CONF"
+        )
+
         # Executed the last day of the month
         if [ "$TODAY_DATE" == "$LAST_DAY_OF_THE_MONTH" ]; then
             (
             _coog_daily_check_modules "account_cog" &&                        \
                 coog_chain_main account_cog report_aged_balance    \
+                --treatment_date="$TODAY_DATE" --possible_days=
+            )
+
+            (
+            _coog_daily_check_modules "insurer_reporting" &&                  \
+                coog_chain_main insurer_reporting insurer_stock   \
                 --treatment_date="$TODAY_DATE" --possible_days=
             )
         fi

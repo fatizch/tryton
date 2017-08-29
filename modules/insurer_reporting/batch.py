@@ -35,23 +35,25 @@ class InsurerReportContractBatch(batch.BatchRoot):
         return params
 
     @classmethod
-    def select_ids(cls, treatment_date, template, insurers=None,
-            products=None, possible_days=None):
+    def select_ids(cls, treatment_date, products=None, possible_days=None):
         possible_days = possible_days.split(',') if possible_days else []
         if possible_days and not str(treatment_date.day) in possible_days:
             return []
         pool = Pool()
+        Insurer = pool.get('insurer')
         cursor = Transaction().connection.cursor()
         product_table = pool.get('offered.product').__table__()
         coverage_table = pool.get('offered.option.description').__table__()
         product_coverage_table = pool.get(
             'offered.product-option.description').__table__()
-        insurer_table = pool.get('insurer').__table__()
+        insurer_table = Insurer.__table__()
         party_table = pool.get('party.party').__table__()
         where_clause = Literal(True)
+        insurers = Insurer.search([('stock_reports', '!=', None)])
+        if not insurers:
+            return []
 
-        if insurers:
-            where_clause &= party_table.name.in_(insurers.split(','))
+        where_clause &= insurer_table.id.in_([x.id for x in insurers])
         if products:
             where_clause &= product_table.code.in_(products.split(','))
 
@@ -69,17 +71,18 @@ class InsurerReportContractBatch(batch.BatchRoot):
         return cursor.fetchall()
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, template, insurers=None,
-            products=None, possible_days=None):
+    def execute(cls, objects, ids, treatment_date, products=None,
+             possible_days=None):
         pool = Pool()
         InsurerReportWizard = pool.get('insurer_reporting.contract',
             type='wizard')
-        template, = pool.get('report.template').search(
-            [('code', '=', template)])
         wizard_id, _, _ = InsurerReportWizard.create()
         create_reports = InsurerReportWizard(wizard_id)
-        create_reports.configure_report.insurer = objects[0]
-        create_reports.configure_report.template = template
-        create_reports.configure_report.at_date = treatment_date
-        create_reports.default_result(None)
+
+        for template in [tmpl for insurer in objects for tmpl in
+                insurer.stock_reports]:
+            create_reports.configure_report.insurer = objects[0]
+            create_reports.configure_report.template = template
+            create_reports.configure_report.at_date = treatment_date
+            create_reports.default_result(None)
         return ids

@@ -6,6 +6,7 @@ import wizard
 import report_engine
 import account
 import contract
+import party
 import batch
 
 
@@ -18,6 +19,8 @@ def register():
         account.InvoiceLine,
         contract.Contract,
         contract.CoveredElement,
+        party.InsurerReportTemplate,
+        party.Insurer,
         batch.InsurerReportContractBatch,
         module='insurer_reporting', type_='model')
     Pool.register(
