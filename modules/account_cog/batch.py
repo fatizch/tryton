@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import logging
+import os
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -53,11 +54,20 @@ class GenerateAgedBalance(batch.BatchRootNoSelect):
             '(%s not in %s)' % (context_.get('type'), str(available_types)))
 
     @classmethod
+    def get_filename(cls, treatment_date, **kwargs):
+        return 'aged_balance-%s.ods' % treatment_date.strftime('%Y-%m-%d')
+
+    @classmethod
+    def get_output_dir(cls, treatment_date, **kwargs):
+        return kwargs.get('output_dir')
+
+    @classmethod
     def execute(cls, objects, ids, treatment_date, **kwargs):
         pool = Pool()
         AgedBalanceReport = pool.get('account.aged_balance', type='report')
         AgedBalance = pool.get('account.aged_balance')
-        output_filename = kwargs.get('output_filename')
+        output_dir = cls.get_output_dir(treatment_date, **kwargs)
+        filename = cls.get_filename(treatment_date, **kwargs)
         possible_days = kwargs.get('possible_days', None)
 
         possible_days = possible_days.split(',') if possible_days else []
@@ -69,5 +79,7 @@ class GenerateAgedBalance(batch.BatchRootNoSelect):
         with Transaction().set_context(**context_):
             type_, report, print_, name = AgedBalanceReport.execute(
                 [x.id for x in AgedBalance.search([])], context_)
-        with open(output_filename, 'wb') as f_:
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        with open(os.path.join(output_dir, filename), 'wb') as f_:
             f_.write(report)
