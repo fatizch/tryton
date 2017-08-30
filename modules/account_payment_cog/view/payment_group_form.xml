@@ -7,6 +7,7 @@ this repository contains the full copyright notices and license terms. -->
             <label name="state"/>
             <field name="state"/>
             <field name="color" invisible="1"/>
+            <field name="process_method" invisible="1"/>
             <group id="payment_group_buttons" col="4">
                 <button string="Processing" name="processing"/>
                 <button string="To Acknowledge" name="to_acknowledge"/>
