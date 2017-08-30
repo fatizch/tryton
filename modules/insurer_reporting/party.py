@@ -16,9 +16,9 @@ class InsurerReportTemplate(model.CoogSQL):
     __name__ = 'insurer-report.template'
 
     insurer = fields.Many2One('insurer', 'Insurer',
-        select=True, ondelete='CASCADE')
+        select=True, required=True, ondelete='CASCADE')
     report_template = fields.Many2One('report.template', 'Report Template',
-        select=True, ondelete='CASCADE')
+        select=True, required=True, ondelete='CASCADE')
 
 
 class Insurer:
