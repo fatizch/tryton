@@ -31,4 +31,7 @@ this repository contains the full copyright notices and license terms. -->
     <group id="contracts">
         <field name="possible_contracts"/>
     </group>
+    <group id="invisible">
+        <button name="button_close" string="Close claims" />
+    </group>
 </form>

@@ -7,4 +7,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="status"/>
     <field name="sub_status"/>
     <field name="losses_description"/>
+    <button name="button_close" string="Close claims" tree_invisible="1" />
 </tree>

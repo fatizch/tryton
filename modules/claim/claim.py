@@ -97,7 +97,9 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
             ('code_uniq', Unique(t, t.name), 'The number must be unique!'),
             ]
         cls._buttons.update({
-                'deliver': {}
+                'deliver': {},
+                'button_close': {
+                    'invisible': Eval('status') == 'closed'},
                 })
         cls.__rpc__.update({
                 'ws_add_new_loss': RPC(instantiate=0, readonly=False),
@@ -119,8 +121,12 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
         return super(Claim, cls).view_attributes() + [(
                 '/form/group[@id="contracts"]',
                 'states',
+                {'invisible': True}),
+            (
+                '/form/group[@id="invisible"]',
+                'states',
                 {'invisible': True}
-                )]
+            )]
 
     def get_rec_name(self, name):
         res = super(Claim, self).get_rec_name(name)
@@ -236,6 +242,11 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
     @staticmethod
     def default_status():
         return 'open'
+
+    @classmethod
+    @model.CoogView.button_action('claim.act_close_claim_wizard')
+    def button_close(cls, claims):
+        pass
 
     @classmethod
     def close(cls, claims, sub_status, date=None):

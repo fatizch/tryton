@@ -1434,6 +1434,10 @@ msgctxt "view:claim.benefit_to_deliver:"
 msgid "Benefit"
 msgstr "Prestation"
 
+msgctxt "view:claim:"
+msgid "Close claims"
+msgstr "Clôre les sinistres"
+
 msgctxt "view:claim.close_reason_view:"
 msgid "Close Claim"
 msgstr "Clôre les sinistres"

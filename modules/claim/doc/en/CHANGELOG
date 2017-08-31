@@ -1,3 +1,4 @@
+* BUG#6924 Allow to close a claim by the action menu
 * BUG#6573 Fix crash related to the attempt to display losses from party synthesis
 
 Version 1.12 - 2017-04-28
