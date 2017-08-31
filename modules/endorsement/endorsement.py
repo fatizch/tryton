@@ -2085,7 +2085,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             for contract in contracts:
                 if contract.status in STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS:
                     cls.append_functional_error('status_incompatible',
-                        (contract.status, contract.rec_name))
+                        (contract.status_string, contract.rec_name))
 
 
 class EndorsementOption(relation_mixin(

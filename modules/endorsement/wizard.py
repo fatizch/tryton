@@ -193,7 +193,6 @@ class EndorsementWizardStepMixin(model.CoogView):
         error_manager = ServerContext().context.get('error_manager', None)
         pool = Pool()
         Endorsement = pool.get('endorsement')
-        Endorsement_contract = pool.get('endorsement.contract')
         endorsement = select_screen.endorsement
         if endorsement:
             contracts = [x.contract
@@ -214,7 +213,6 @@ class EndorsementWizardStepMixin(model.CoogView):
             if (not cls.allow_inactive_contracts() and
                     any([x.status != 'active' for x in contracts])):
                 Endorsement.append_functional_error('active_contract_required')
-        Endorsement_contract.check_contracts_status(contracts)
 
     @classmethod
     def must_skip_step(cls, data_dict):
@@ -2169,9 +2167,11 @@ class StartEndorsement(Wizard):
             return self.select_endorsement._default_values
         pool = Pool()
         Date = pool.get('ir.date')
+        EndorsementContract = pool.get('endorsement.contract')
         if Transaction().context.get('active_model') == 'contract':
             contract = pool.get('contract')(
                 Transaction().context.get('active_id'))
+            EndorsementContract.check_contracts_status([contract, ])
             return {
                 'effective_date': max(contract.start_date
                     or contract.initial_start_date, Date.today()),
