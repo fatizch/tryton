@@ -37,6 +37,7 @@ coog_daily_main() {
     MONDAY_DATE="$(date -d "+3 days" +%d)"
     TODAY_WEEK_DAY="$(date +%u)"
     LAST_DAY_OF_THE_MONTH="$(date -d "$(date +%Y-%m-01) +1 month -1 day" +%Y-%m-%d)"
+    LAST_DAY="$(date -d "$(date +%Y-%m-01) +1 month -1 day" +%d)"
 
     if _coog_daily_is_weekday; then
 
@@ -146,13 +147,15 @@ coog_daily_main() {
             (
             _coog_daily_check_modules "account_cog" &&                        \
                 coog_chain_main account_cog report_aged_balance    \
-                --treatment_date="$TODAY_DATE" --possible_days=
+                --treatment_date="$TODAY_DATE"                     \
+                --possible_days="$LAST_DAY"
             )
 
             (
             _coog_daily_check_modules "insurer_reporting" &&                  \
-                coog_chain_main insurer_reporting insurer_stock   \
-                --treatment_date="$TODAY_DATE" --possible_days=
+                coog_chain_main insurer_reporting insurer_stock     \
+                --treatment_date="$TODAY_DATE"                      \
+                --possible_days="$LAST_DAY"
             )
         fi
 

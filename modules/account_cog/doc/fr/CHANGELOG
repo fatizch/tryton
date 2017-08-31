@@ -1,3 +1,4 @@
+* OTH#0000 Désormais, le paramètre de batch 'possible_days' empêche l'execution du batch si vide ou non renseigné
 * FEA#6865 Ajout d'un rapport de type ODS pour la balance agée
 * FEA#6865 Ajout d'un batch d'impression de la balance agée
 * BUG#6691 Correction de l'export/import sur les modèles de mouvements comptables

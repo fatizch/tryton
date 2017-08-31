@@ -78,7 +78,8 @@ class GenerateAgedBalance(batch.BatchRootNoSelect):
         possible_days = kwargs.get('possible_days', None)
 
         possible_days = possible_days.split(',') if possible_days else []
-        if possible_days and not str(treatment_date.day) in possible_days:
+        if not possible_days or (possible_days
+                    and not str(treatment_date.day) in possible_days):
             return []
 
         context_ = cls.build_context(treatment_date, kwargs)

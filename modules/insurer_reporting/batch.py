@@ -37,7 +37,8 @@ class InsurerReportContractBatch(batch.BatchRoot):
     @classmethod
     def select_ids(cls, treatment_date, products=None, possible_days=None):
         possible_days = possible_days.split(',') if possible_days else []
-        if possible_days and not str(treatment_date.day) in possible_days:
+        if not possible_days or (possible_days
+                    and not str(treatment_date.day) in possible_days):
             return []
         pool = Pool()
         Insurer = pool.get('insurer')
