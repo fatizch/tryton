@@ -15,6 +15,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="account.aged_balance_view_list"/>
             <field name="name">aged_balance_list</field>
         </record>
+        <record model="ir.action.report" id="report_aged_balance_ods">
+            <field name="name">Aged Balance ODS</field>
+            <field name="model">account.aged_balance</field>
+            <field name="report_name">account.aged_balance</field>
+            <field name="report">account_cog/aged_balance.ods</field>
+            <field name="template_extension">ods</field>
+        </record>
+        <record model="ir.action.keyword" id="report_aged_balance_ods_keyword">
+            <field name="keyword">form_print</field>
+            <field name="model">account.aged_balance,-1</field>
+            <field name="action" ref="report_aged_balance_ods"/>
+        </record>
     </data>
     <data noupdate="1">
         <!-- ########### -->

@@ -45,7 +45,14 @@ class GenerateAgedBalance(batch.BatchRootNoSelect):
 
     @classmethod
     def check_context(cls, context_):
-        AgedBalanceContext = Pool().get('account.aged_balance.context')
+        pool = Pool()
+        AgedBalanceContext = pool.get('account.aged_balance.context')
+        ActionReport = pool.get('ir.action.report')
+        report_, = ActionReport.search([
+                ('report', '=', 'account_cog/aged_balance.ods'),
+                ('report_name', '=', 'account.aged_balance'),
+                ])
+        context_['action_id'] = report_.action.id
         available_units = [x[0] for x in AgedBalanceContext.unit.selection]
         available_types = [x[0] for x in AgedBalanceContext.type.selection]
         assert context_.get('unit') in available_units, ('Invalid unit '

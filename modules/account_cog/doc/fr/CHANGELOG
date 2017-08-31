@@ -1,3 +1,4 @@
+* FEA#6865 Ajout d'un rapport de type ODS pour la balance agée
 * FEA#6865 Ajout d'un batch d'impression de la balance agée
 * BUG#6691 Correction de l'export/import sur les modèles de mouvements comptables
 * BUG#6712 Affichage de la vue formulaire d'une ligne de mouvement comptable depuis le point d'entrée principal

@@ -1,3 +1,4 @@
+* FEA#6865 Add ODS report on aged balance
 * FEA#6865 Add batch to report aged balance
 * BUG#6691 Fix export/import on move template
 * BUG#6712 Display move line view form from main entry point

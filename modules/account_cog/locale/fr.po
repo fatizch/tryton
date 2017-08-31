@@ -122,6 +122,10 @@ msgctxt "field:account.move.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.move.line.template,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:account.move.reconcile_lines.writeoff,post_writeoff:"
 msgid "Post Writeoff Move"
 msgstr "Emettre le mouvement d'ajustement"
@@ -131,6 +135,10 @@ msgid "Auto Post Generated Moves"
 msgstr "Emettre automatiquement les mouvements générés"
 
 msgctxt "field:account.move.template,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.move.template.keyword,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -155,6 +163,10 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "field:account.tax.group,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.tax.line.template,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -274,6 +286,10 @@ msgctxt "model:ir.action,name:act_move_reconciliation_form"
 msgid "Reconciliation"
 msgstr "Lettrage"
 
+msgctxt "model:ir.action,name:report_aged_balance_ods"
+msgid "Aged Balance ODS"
+msgstr "Balance agée ODS"
+
 msgctxt "model:ir.test_case.instance,name:account_kind_test_case"
 msgid "Account Kind Test Case"
 msgstr "Jeux d'essai : type de compte"
@@ -306,9 +322,29 @@ msgctxt "model:party.synthesis.menu.move.line,name:"
 msgid "Party Synthesis Menu Move line"
 msgstr "Menu Paiement Synthèse Tiers "
 
-msgctxt "selection:account.move,kind:"
-msgid ""
-msgstr " "
+msgctxt "report:account.aged_balance:"
+msgid "Aged Balance For"
+msgstr "Balance âgée pour"
+
+msgctxt "report:account.aged_balance:"
+msgid "Balance"
+msgstr "Balance"
+
+msgctxt "report:account.aged_balance:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "report:account.aged_balance:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "report:account.aged_balance:"
+msgid "Report date"
+msgstr "Date du rapport"
+
+msgctxt "report:account.aged_balance:"
+msgid "Total"
+msgstr "Total"
 
 msgctxt "selection:ir.test_case,fiscal_year_periods_frequency:"
 msgid "Half yearly"
