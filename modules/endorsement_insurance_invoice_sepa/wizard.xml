@@ -32,5 +32,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="endorsement_insurance_invoice.endorsement_direct_debit_account_view_form"/>
             <field name="name">endorsement_billing_information_form</field>
         </record>
+        <!-- ###################### -->
+        <!-- # Contract Displayer # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="contract_displayer_view_list">
+            <field name="model">contract.billing_information.change.contract_displayer</field>
+            <field name="inherit" ref="endorsement_insurance_invoice.contract_displayer_view_list"/>
+            <field name="name">contract_displayer_list</field>
+        </record>
     </data>
 </tryton>

@@ -2,14 +2,24 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Not, Bool, If
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'ContractDisplayer',
     'ChangeBillingInformation',
     'ChangeDirectDebitAccount',
     ]
+
+
+class ContractDisplayer:
+
+    __name__ = 'contract.billing_information.change.contract_displayer'
+
+    sepa_mandate = fields.Many2One('account.payment.sepa.mandate',
+        'Sepa Mandate', readonly=True)
 
 
 class ChangeBillingInformation:
@@ -48,10 +58,15 @@ class ChangeBillingInformation:
         return False
 
     def get_other_contracts_party_clause(self):
-        return ['OR', super(ChangeBillingInformation,
-                self).get_other_contracts_party_clause(),
-            ('billing_informations.sepa_mandate.party',
-                '=', self.contract.payer.id)]
+        clause = super(ChangeBillingInformation,
+                self).get_other_contracts_party_clause()
+        with Transaction().set_context(
+                contract_revision_date=self.effective_date):
+            payer = self.contract.payer
+        if not payer:
+            return clause
+        return ['OR', clause, ('billing_informations.sepa_mandate.party',
+                '=', payer.id)]
 
     @fields.depends('mandate_needed', 'new_billing_information',
         'sepa_signature_date', 'payer')
@@ -108,6 +123,12 @@ class ChangeBillingInformation:
                 self.previous_mandate = possible_mandates[0]
                 for contract in self.other_contracts:
                     contract.to_propagate = 'bank_account'
+
+    def _update_displayers(self, displayers):
+        super(ChangeBillingInformation, self)._update_displayers(displayers)
+        for d in displayers:
+            d.sepa_mandate = d.contract.billing_information.sepa_mandate \
+                if d.contract.billing_information else None
 
     @classmethod
     def billing_information_fields(cls):

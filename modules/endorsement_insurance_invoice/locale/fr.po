@@ -127,9 +127,23 @@ msgctxt ""
 msgid "Contract Status"
 msgstr "Statut du contrat"
 
+msgctxt ""
+"field:contract.billing_information.change.contract_displayer,direct_debit_account:"
+msgid "Direct Debit Account"
+msgstr "Compte bancaire"
+
 msgctxt "field:contract.billing_information.change.contract_displayer,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract.billing_information.change.contract_displayer,payer:"
+msgid "Payer"
+msgstr "Payeur"
+
+msgctxt ""
+"field:contract.billing_information.change.contract_displayer,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
 
 msgctxt ""
 "field:contract.billing_information.change.contract_displayer,to_propagate:"

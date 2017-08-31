@@ -5,4 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="to_propagate"/>
     <field name="contract"/>
     <field name="contract_status"/>
+    <field name="subscriber"/>
+    <field name="payer"/>
+    <field name="direct_debit_account"/>
 </tree>

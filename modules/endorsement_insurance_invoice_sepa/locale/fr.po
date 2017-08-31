@@ -36,6 +36,11 @@ msgctxt "field:contract.billing_information.change,sepa_signature_date:"
 msgid "Sepa Mandate Signature Date"
 msgstr "Date de signature du mandat SEPA"
 
+msgctxt ""
+"field:contract.billing_information.change.contract_displayer,sepa_mandate:"
+msgid "Sepa Mandate"
+msgstr "Mandat SEPA"
+
 msgctxt "field:contract.direct_debit_account.change,amend_previous_mandate:"
 msgid "Amend Previous Mandate"
 msgstr "Amender le précédent"

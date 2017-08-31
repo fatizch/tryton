@@ -3,6 +3,7 @@
 import datetime
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Len, If
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import model, fields, utils
 from trytond.modules.endorsement.wizard import EndorsementWizardStepMixin
@@ -180,16 +181,26 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
             self.other_contracts = []
             return
         new_contracts = [Displayer(contract=x.contract,
-                to_propagate=x.to_propagate,
-                contract_status=x.contract.status_string)
+                to_propagate=x.to_propagate)
             for x in self.other_contracts
             if x.contract.id in possible_contracts]
         new_contracts_id = [x.contract.id for x in new_contracts]
-        new_contracts += [Displayer(contract=x, to_propagate='nothing',
-                contract_status=x.status_string)
+        new_contracts += [Displayer(contract=x, to_propagate='nothing')
             for x in possible_contracts.itervalues()
             if x.id not in new_contracts_id]
+        with Transaction().set_context(
+                contract_revision_date=self.effective_date):
+            self._update_displayers(new_contracts)
         self.other_contracts = new_contracts
+
+    def _update_displayers(self, displayers):
+        for d in displayers:
+            d.contract_status = d.contract.status_string
+            d.subscriber = d.contract.subscriber
+            d.payer = d.contract.payer
+            d.direct_debit_account = \
+                d.contract.billing_information.direct_debit_account \
+                if d.contract.billing_information else None
 
     @classmethod
     def state_view_name(cls):
@@ -224,7 +235,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
     @classmethod
     def direct_debit_account_only_fields(cls):
         return ['direct_debit_account', 'direct_debit_day',
-            'direct_debit_day_selector']
+            'direct_debit_day_selector', 'payer']
 
     def step_default(self, name):
         defaults = super(ChangeBillingInformation, self).step_default()
@@ -501,6 +512,10 @@ class ContractDisplayer(model.CoogView):
     to_propagate = fields.Selection([('nothing', 'Nothing'),
             ('bank_account', 'Bank Account'), ('everything', 'Everything')],
         'Propagate')
+    payer = fields.Many2One('party.party', 'Payer', readonly=True)
+    subscriber = fields.Many2One('party.party', 'Subscriber', readonly=True)
+    direct_debit_account = fields.Many2One('bank.account',
+        'Direct Debit Account', readonly=True)
 
     @classmethod
     def view_attributes(cls):

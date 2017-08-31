@@ -9,6 +9,7 @@ def register():
     Pool.register(
         endorsement.Contract,
         endorsement.Endorsement,
+        wizard.ContractDisplayer,
         wizard.ChangeBillingInformation,
         wizard.ChangeDirectDebitAccount,
         module='endorsement_insurance_invoice_sepa', type_='model')
