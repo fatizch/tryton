@@ -45,3 +45,7 @@ class CoveredElement:
         account = self.contract.subscriber.get_bank_account(utils.today())
         if account:
             return account.id
+        if utils.is_module_installed('contract_insurance_invoice'):
+            billing_info = self.contract.billing_information
+            if billing_info and billing_info.direct_debit_account:
+                return billing_info.direct_debit_account
