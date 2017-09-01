@@ -1,3 +1,4 @@
+* BUG#6930 Remplacer le contexte de transaction par un contexte de serveur lors de l'initialisation de _payment_term_change
 * BUG#6709 Restoration de la méthode get_invoice_sequence sur les périodes
 * FEA#6453 Ajout de la gestion des filtres sur les quittances pour les rapports
 * Nouvelle option sur les conditions de paiement pour synchroniser une date d'échéance à la fin du trimstre par exemple

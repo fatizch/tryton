@@ -129,7 +129,7 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
 
     @classmethod
     def check_modify(cls, invoices):
-        if not Transaction().context.get('_payment_term_change', False):
+        if not ServerContext().get('_payment_term_change', False):
             super(Invoice, cls).check_modify(invoices)
 
     def get_taxes_included(self, name=None):
@@ -145,7 +145,7 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
 
     @classmethod
     def update_taxes(cls, invoices, exception=False):
-        if not Transaction().context.get('_payment_term_change', False):
+        if not ServerContext().get('_payment_term_change', False):
             super(Invoice, cls).update_taxes(invoices, exception)
 
     @classmethod
@@ -209,7 +209,7 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
         Event = pool.get('event')
         to_post, to_reconcile = [], []
         to_reconcile = []
-        with Transaction().set_context(_payment_term_change=True):
+        with ServerContext().set_context(_payment_term_change=True):
             previous_moves = [x.move for x in invoices]
             cls.write(invoices, {
                     'payment_term': new_term.id,
