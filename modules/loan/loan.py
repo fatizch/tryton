@@ -972,6 +972,9 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
                 'incoherent_balances': 'Incoherent begin balance (%(begin)s) '
                 'and end balance (%(end)s) regarding payment amount '
                 '(%(payment)s).',
+                'nb_payments_over_limit' : 'The number of payments '
+                '(%(number_of_payments)s) on the increment number '
+                '%(increment)s of the loan %(loan)s exceeds the limit.',
                 })
 
     @classmethod
@@ -1086,13 +1089,21 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
     def on_change_rate(self):
         self.update_payment_data()
 
-    @fields.depends('number_of_payments', 'payment_frequency', 'start_date')
+    @fields.depends('number_of_payments', 'payment_frequency', 'start_date',
+    'loan', 'number')
     def on_change_with_end_date(self, name=None):
         if (self.start_date and self.payment_frequency
                 and self.number_of_payments):
-            return coog_date.add_duration(self.start_date,
-                self.payment_frequency, self.number_of_payments - 1,
-                stick_to_end_of_month=True)
+            try:
+                return coog_date.add_duration(self.start_date,
+                    self.payment_frequency, self.number_of_payments - 1,
+                    stick_to_end_of_month=True)
+            except ValueError:
+                self.raise_user_error('nb_payments_over_limit', {
+                            'number_of_payments': int(self.number_of_payments),
+                            'increment': self.number,
+                            'loan': self.loan.id
+                            })
 
     def get_first_payment_end_balance(self, name=None):
         if not self.begin_balance:
