@@ -1535,6 +1535,24 @@ class ContractOption:
         if option_dict:
             super(ContractOption, cls).delete(option_dict.values())
 
+    def get_paid_amount_at_date(self, date):
+        pool = Pool()
+        contract_invoice = pool.get('contract.invoice').__table__()
+        invoice = pool.get('account.invoice').__table__()
+        invoice_line = pool.get('account.invoice.line').__table__()
+        detail = pool.get('account.invoice.line.detail').__table__()
+        query_table = detail.join(invoice_line,
+            condition=invoice_line.id == detail.invoice_line,
+            ).join(invoice, condition=invoice.id == invoice_line.invoice
+            ).join(contract_invoice,
+            condition=contract_invoice.invoice == invoice.id)
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*query_table.select(Sum(invoice_line.unit_price),
+                where=(invoice.state == 'paid')
+                & (contract_invoice.start <= date)
+                & (detail.option == self.id)))
+        return cursor.fetchone()[0]
+
 
 class ExtraPremium:
     __name__ = 'contract.option.extra_premium'

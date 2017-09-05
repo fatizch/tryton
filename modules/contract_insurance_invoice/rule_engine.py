@@ -55,3 +55,14 @@ class RuleEngineRuntime:
         billing_info = cls.get_billing_information(args)
         if billing_info and billing_info.billing_mode:
             return billing_info.is_once_per_contract
+
+    @classmethod
+    @check_args('option')
+    def _re_get_option_paid_amount_at_date(cls, args, date):
+        option = args['option']
+        return option.get_paid_amount_at_date(date)
+
+    @classmethod
+    @check_args('contract')
+    def _re_last_paid_invoice_end(cls, args):
+        return args['contract'].last_paid_invoice_end

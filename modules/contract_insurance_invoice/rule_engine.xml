@@ -109,5 +109,24 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_get_contract_billing_is_once_per_contract</field>
             <field name="parent" ref="billing_folder"/>
         </record>
+        <record model="rule_engine.function" id="option_paid_amount">
+            <field name="translated_technical_name">montant_payee_pour_garantie</field>
+            <field name="description">Montant payé pour la garantie à la date</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="fct_args">date</field>
+            <field name="name">_re_get_option_paid_amount_at_date</field>
+            <field name="parent" ref="offered_insurance.dossier_garantie"/>
+        </record>
+        <record model="rule_engine.function" id="last_paid_invoice_end">
+            <field name="translated_technical_name">date_fin_derniere_quittance_payee</field>
+            <field name="description">Date de fin de la dernière quittance payée sur le contrat</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_last_paid_invoice_end</field>
+            <field name="parent" ref="dossier_quittancement"/>
+        </record>
     </data>
 </tryton>
