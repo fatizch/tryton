@@ -23,21 +23,22 @@ class Insurer:
     def get_func_key(self, name):
         key = super(Insurer, self).get_func_key(name)
         if self.waiting_account:
-            key += '|' + self.waiting_account.func_key
+            key += '|' + getattr(self.waiting_account,
+                self.waiting_account._func_key)
 
     @classmethod
     def search_func_key(cls, name, clause):
         assert clause[1] == '='
-        if '|' in clause[2]:
+        if clause[2] is not None and '|' in clause[2]:
             operands = clause[2].split('|')
             if len(operands) == 2:
                 party_code, account_code = clause[2].split('|')
                 return [('party.code', clause[1], party_code),
-                    ('account.code', clause[1], account_code)]
+                    ('waiting_account.code', clause[1], account_code)]
             else:
                 return [('id', '=', None)]
         else:
             return ['OR',
                 [('party.code',) + tuple(clause[1:])],
-                [('account.code',) + tuple(clause[1:])],
+                [('waiting_account.code',) + tuple(clause[1:])],
                 ]

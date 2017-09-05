@@ -1,3 +1,4 @@
+* BUG#6965 Use _func_key in insurer export / import of waiting account
 * BUG#6425 Update link batch select_ids API
 
 Version 1.12 - 2017-04-28

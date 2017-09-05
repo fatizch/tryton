@@ -1,3 +1,4 @@
+* BUG#6965 Utilisation de _func_key dans l'export / import des assureurs
 * BUG#6425 Mise à jour de l'API de la requête du batch de bordereaux assureurs
 
 Version 1.12 - 2017-04-28
