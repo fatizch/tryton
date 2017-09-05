@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:contract.option.version,coverage_amount_revaluation:"
+msgid "Coverage Amount Revaluation"
+msgstr "Revalorisation du montant de couverture"
+
 msgctxt "field:offered.coverage_amount.rule,revaluation_rule:"
 msgid "Revaluation Rule"
 msgstr "Règle de revalorisation"
@@ -13,6 +17,14 @@ msgstr "Données complémentaires de la règle de revalorisation"
 msgctxt "field:offered.option.description,has_revaluated_coverage_amount:"
 msgid "Has Revaluated Coverage Amount"
 msgstr "A un montant de couverture revalorisé"
+
+msgctxt "help:contract.option.version,coverage_amount_revaluation:"
+msgid ""
+"If True, this coverage amount is a revaluation of the initially selected "
+"coverage amount"
+msgstr ""
+"Si vrai, le montant de couverture est une revalorisation du montant "
+"originalement choisit"
 
 msgctxt "help:offered.coverage_amount.rule,revaluation_rule:"
 msgid "Must return the reevaluated amount that will be stored"

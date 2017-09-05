@@ -3,14 +3,17 @@
 from dateutil.relativedelta import relativedelta
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
+from trytond.modules.coog_core import fields
+
 __all__ = [
     'Contract',
     'ContractOption',
+    'ContractOptionVersion',
     ]
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     @classmethod
@@ -37,6 +40,7 @@ class Contract:
 
 
 class ContractOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     def calculate_revaluated_coverage_amount(self, at_date):
@@ -49,3 +53,17 @@ class ContractOption:
             args)
         version = self.new_version_at_date(at_date)
         version.coverage_amount = new_cov_amount
+        version.coverage_amount_revaluation = True
+
+
+class ContractOptionVersion:
+    __metaclass__ = PoolMeta
+    __name__ = 'contract.option.version'
+
+    coverage_amount_revaluation = fields.Boolean('Coverage Amount Revaluation',
+        readonly=True, help='If True, this coverage amount is a revaluation '
+        'of the initially selected coverage amount')
+
+    @classmethod
+    def default_coverage_amount_revaluation(cls):
+        return False

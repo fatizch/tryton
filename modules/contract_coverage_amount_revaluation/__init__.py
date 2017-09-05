@@ -9,8 +9,10 @@ import contract
 def register():
     Pool.register(
         rule_engine.RuleEngine,
+        rule_engine.RuleEngineRuntime,
         offered.OptionDescription,
         offered.CoverageAmountRule,
         contract.Contract,
         contract.ContractOption,
+        contract.ContractOptionVersion,
         module='contract_coverage_amount_revaluation', type_='model')
