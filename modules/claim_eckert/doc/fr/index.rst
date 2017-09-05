@@ -1,7 +1,7 @@
 .. claim
 
-Sinistre
-========
+Sinistre - Loi Eckert
+=====================
 
 Résumé
 ------

@@ -1,7 +1,7 @@
 .. contract
 
-Contract - Oustandings
-=====================
+Contract - Payment suspension
+=============================
 
 Summary
 -------

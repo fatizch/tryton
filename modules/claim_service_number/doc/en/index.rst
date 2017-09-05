@@ -1,7 +1,7 @@
 .. claim
 
-Claim
-=====
+Claim - Service numbering
+=========================
 
 Summary
 -------

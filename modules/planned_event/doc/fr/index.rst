@@ -1,14 +1,14 @@
-.. transverse
+.. transversal
 
-Evènements planifiés
-=============
+Transverrse - Evènements planifiés
+==================================
 
 Résumé
 ------
 
 .. include:: summary.rst
 
-Fonctionnalitiées
+Fonctionnalités
 ---------------
 
 .. include:: features.rst

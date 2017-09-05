@@ -1,7 +1,7 @@
 .. contract
 
-Contract - Oustandings
-=====================
+Contract - Oustandings triggered suspensions
+============================================
 
 Summary
 -------

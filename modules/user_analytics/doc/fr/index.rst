@@ -1,4 +1,4 @@
-.. transverse
+.. transversal
 
 Analytique Utilisateur
 ======================

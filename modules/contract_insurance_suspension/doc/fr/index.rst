@@ -1,7 +1,7 @@
 .. contract
 
-Contrat - Impayés
-=================
+Contrat - Suspension des prélèvements
+=====================================
 
 Résumé
 ------

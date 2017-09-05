@@ -1,7 +1,7 @@
 .. contract
 
-Contrat - Impayés
-=================
+Contrat - Suspension suite à impayés
+====================================
 
 Résumé
 ------

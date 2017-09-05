@@ -1,7 +1,7 @@
 .. transversal
 
-Planned Event
-=============
+Transversal - Planned Event
+===========================
 
 Summary
 -------

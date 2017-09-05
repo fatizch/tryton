@@ -1,7 +1,7 @@
 .. claim
 
-Sinistre
-========
+Sinistre - Numérotation des prestations
+=======================================
 
 Résumé
 ------

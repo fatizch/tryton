@@ -1,4 +1,4 @@
-.. transverse
+.. transversal
 
 Transverse - Processus de demande de décision
 =============================================

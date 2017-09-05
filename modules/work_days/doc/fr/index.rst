@@ -1,4 +1,4 @@
-.. transverse
+.. transversal
 
 Transverse - Gestion des jours ouvrés
 =====================================

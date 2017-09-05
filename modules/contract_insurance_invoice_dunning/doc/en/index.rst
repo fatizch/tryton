@@ -1,7 +1,7 @@
 .. contract
 
-Contrat - Oustandings
-=====================
+Contract - Dunnings
+===================
 
 Summary
 -------
