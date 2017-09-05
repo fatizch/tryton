@@ -29,6 +29,7 @@ import fields
 import export
 import summary
 import types
+import exception
 
 try:
     import async.broker as async_broker
@@ -917,3 +918,26 @@ class GlobalSearchLimitedMixin(ModelStorage):
                     ('rec_name', 'ilike', '%%%s%%' % text),
                     ], limit=ServerContext().get('global_search_limit', 100)):
             yield record, record.rec_name, record.get_icon()
+
+
+class DynamicReadonlyTransactionMixin(ModelStorage):
+    'Use ServerContext to temporary set the transaction readonly'
+
+    @classmethod
+    def delete(cls, records):
+        if ServerContext().get('readonly_transaction', False):
+            raise exception.ReadOnlyException('Readonly Transaction')
+        return super(DynamicReadonlyTransactionMixin, cls).delete(records)
+
+    @classmethod
+    def write(cls, *args, **kwargs):
+        if ServerContext().get('readonly_transaction', False):
+            raise exception.ReadOnlyException('Readonly Transaction')
+        return super(DynamicReadonlyTransactionMixin, cls).write(
+            *args, **kwargs)
+
+    @classmethod
+    def create(cls, vlist):
+        if ServerContext().get('readonly_transaction', False):
+            raise exception.ReadOnlyException('Readonly Transaction')
+        return super(DynamicReadonlyTransactionMixin, cls).create(vlist)

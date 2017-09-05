@@ -1,3 +1,4 @@
+* OTH#0000 Add inheritance to dynamically support readonly transaction using ServerContext
 * BUG#6786 Limit global search query result size
 * FEA#6591 Add coog's version in the user status bar
 * OTH#0000 Do not register non model batch classes in the pool

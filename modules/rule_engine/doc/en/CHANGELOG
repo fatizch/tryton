@@ -1,3 +1,5 @@
+* FEA#6956 Rules are now executed in a read only transaction
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Add the "Tool" rule engine type
 * FEA#0000 Add randomization functions in rule engine

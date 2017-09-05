@@ -1,3 +1,4 @@
+* OTH#0000 Ajout d'héritage pour définir une section en lecture seule dynamiquement via le ServerContext
 * BUG#6786 Limitation du nombre d'éléments retournés par la recherche globale
 * FEA#6591 Ajout de la version de coog dans la barre de statut utilisateur
 * OTH#0000 Retrait des classes de batch des register

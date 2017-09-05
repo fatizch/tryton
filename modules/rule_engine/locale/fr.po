@@ -66,6 +66,12 @@ msgstr ""
 " ce message"
 
 msgctxt "error:rule_engine:"
+msgid "Data modification is not allowed during rule execution"
+msgstr ""
+"La modification de donnée n'est pas autorisée lors de l'exécution "
+"d'une règle"
+
+msgctxt "error:rule_engine:"
 msgid "Your algorithm has errors!"
 msgstr "Votre algorithme a des erreurs"
 

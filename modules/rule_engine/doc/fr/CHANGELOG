@@ -1,3 +1,5 @@
+* FEA#6956 Les règles s'exécutent désormais en lecture seule
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout du type de règle "Outillage"
 * FEA#0000 Ajout de fonctions de génération aléatoires dans le moteur de règles

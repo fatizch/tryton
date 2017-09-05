@@ -1,6 +1,7 @@
 # encoding: utf-8
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from contextlib import nested
 import random
 import sys
 import pprint
@@ -39,6 +40,7 @@ from trytond.modules.coog_core import (coog_date, coog_string, fields,
     model, utils)
 from trytond.modules.coog_core.model import CoogSQL as ModelSQL
 from trytond.modules.coog_core.model import CoogView as ModelView
+from trytond.modules.coog_core.exception import ReadOnlyException
 from trytond.modules.table import table
 
 __all__ = [
@@ -810,6 +812,8 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 'execute_draft_rule': 'The rule %s is a draft.'
                 'Update the rule status to "Validated"',
                 'kwarg_expected': 'Expected %s as a parameter',
+                'readonly_rule': 'Data modification is not allowed during rule '
+                'execution'
                 })
         t = cls.__table__()
         cls._sql_constraints += [
@@ -1240,9 +1244,47 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             'zip': zip,                         # Aggregate iterators
             }
 
+    def rule_error(self, exc, the_result, evaluation_context, err_msg=None):
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        tmp = traceback.extract_tb(exc_traceback)
+        last_frame = tmp[-1]
+        if last_frame[2].startswith('fct_'):
+            lineno = last_frame[1] - 3
+            stack_info = '\n\n'
+            stack_info += 'Error detected '
+            'in rule definition line %d:\n' % lineno
+            stack_info += '\n'
+            for line_number, line in enumerate(
+                    self.algorithm.split('\n'), 1):
+                if (line_number >= lineno - 2 and
+                        line_number <= lineno + 2):
+                    if line_number == lineno:
+                        stack_info += \
+                            '>>\t' + repr(line) + '\n'
+                    else:
+                        stack_info += \
+                            '  \t' + repr(line) + '\n'
+            stack_info += '\n'
+            stack_info += str(exc)
+            the_result.low_level_debug.append(stack_info)
+
+        # Override context just in case it changed
+        the_result.context = self.format_context(evaluation_context)
+        self.add_debug_log(the_result,
+            evaluation_context.get('date', None), exc)
+        if self.debug_mode:
+            the_result.result = str(exc)
+            if not err_msg:
+                raise
+            else:
+                raise Exception(err_msg)
+        self.raise_user_error('bad_rule_computation', (self.name,
+                err_msg or str(exc.args)))
+
     def compute(self, evaluation_context, execution_kwargs):
-        with ServerContext().set_context(rule_debug=ServerContext().get(
-                    'rule_debug', self.debug_mode)):
+        debug_mode = ServerContext().get('rule_debug', self.debug_mode)
+        with ServerContext().set_context(rule_debug=debug_mode,
+                readonly_transaction=True):
             context = self.prepare_context(evaluation_context,
                 execution_kwargs)
             the_result = context['evaluation_context']['__result__']
@@ -1262,39 +1304,15 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             except CatchedRuleEngineError:
                 pass
                 the_result.result = None
-            except Exception, exc:
-                exc_type, exc_value, exc_traceback = sys.exc_info()
-                tmp = traceback.extract_tb(exc_traceback)
-                last_frame = tmp[-1]
-                if last_frame[2].startswith('fct_'):
-                    lineno = last_frame[1] - 3
-                    stack_info = '\n\n'
-                    stack_info += 'Error detected '
-                    'in rule definition line %d:\n' % lineno
-                    stack_info += '\n'
-                    for line_number, line in enumerate(
-                            self.algorithm.split('\n'), 1):
-                        if (line_number >= lineno - 2 and
-                                line_number <= lineno + 2):
-                            if line_number == lineno:
-                                stack_info += \
-                                    '>>\t' + repr(line) + '\n'
-                            else:
-                                stack_info += \
-                                    '  \t' + repr(line) + '\n'
-                    stack_info += '\n'
-                    stack_info += str(exc)
-                    the_result.low_level_debug.append(stack_info)
-
-                # Override context just in case it changed
-                the_result.context = self.format_context(evaluation_context)
-                self.add_debug_log(the_result,
-                    evaluation_context.get('date', None), exc)
+            except ReadOnlyException, exc:
+                err_msg = self.raise_user_error('readonly_rule',
+                    raise_exception=False)
                 if self.debug_mode:
-                    the_result.result = str(exc)
-                    raise
-                self.raise_user_error('bad_rule_computation', (self.name,
-                        str(exc.args)))
+                    raise ReadOnlyException(err_msg.encode('utf-8'))
+                self.rule_error(exc, the_result, evaluation_context,
+                    err_msg=err_msg)
+            except Exception, exc:
+                   self.rule_error(exc, the_result, evaluation_context)
         return the_result
 
     @staticmethod
@@ -1404,7 +1422,9 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         if not self.id or not getattr(self, 'debug_mode', None):
             return result
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
-        with Transaction().new_transaction() as transaction:
+        with nested(Transaction().new_transaction(),
+                    ServerContext().set_context(readonly_transaction=False)
+                    ) as (transaction, _):
             RuleExecution = Pool().get('rule_engine.log')
             rule_execution = RuleExecution()
             rule_execution.rule = self.id
