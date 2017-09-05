@@ -2,6 +2,24 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:event.type.action,filter_rule:"
+msgid "Filter Rule"
+msgstr "Règle de filtre"
+
+msgctxt "field:event.type.action,filter_rule_extra_data:"
+msgid "Filter Rule Extra Data"
+msgstr "Données complémentaires de la règle de filtre"
+
+msgctxt "help:event.type.action,filter_rule:"
+msgid ""
+"The rule will returns the list of the elements to be processed. "
+"The event objects are retrievable using the 'Event Objects' function "
+"from the 'Tools' Menu in Rules"
+msgstr ""
+"La règle retourne la liste des éléments à traiter. "
+"Les objets de l'événement sont récupérables avec la fonction "
+"'Objets de l'événement' depuis le menu 'Outils' dans les règles"
+
 msgctxt "error:functional_error:"
 msgid "Number of arguments does not match string content"
 msgstr "Le nombre d'arguments ne correspond pas au contenu"
@@ -1078,6 +1096,10 @@ msgstr "Validé"
 msgctxt "selection:rule_engine,type_:"
 msgid ""
 msgstr " "
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Event Type Action Filter"
+msgstr "Filtre pour action par type d'événement"
 
 msgctxt "selection:rule_engine,type_:"
 msgid "Tool"

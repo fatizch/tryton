@@ -175,7 +175,8 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
     code = fields.Char('Code', required=True)
     action = fields.Selection('get_action_types', 'Action', select=True)
     priority = fields.Integer('Priority', required=True)
-    pyson_condition = fields.Char('Pyson Condition', help="A Pyson expression "
+    pyson_condition = fields.Char('Pyson Condition',
+        states={'invisible': False}, help="A Pyson expression "
         "to filter the objects of the event. If not set, no filter will be "
         "applied. If the expression evaluates to True for an object, "
         "the action will be taken on it. Otherwise, it "

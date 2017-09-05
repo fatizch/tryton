@@ -15,6 +15,17 @@ this repository contains the full copyright notices and license terms. -->
         </record>
     </data>
     <data>
+        <record model="rule_engine.function" id="event_objects">
+            <field name="translated_technical_name">objets_evenement</field>
+            <field name="description">Objets de l'événement</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_event_objects</field>
+            <field name="fct_args"></field>
+            <field name="long_description">Retourne les objets d'un événement</field>
+            <field name="parent" ref="dossier_outils"/>
+        </record>
         <record model="rule_engine.function" id="annees_entre">
             <field name="translated_technical_name">annees_entre</field>
             <field name="description">Nombre d'années entre...</field>

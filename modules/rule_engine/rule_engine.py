@@ -367,6 +367,11 @@ class RuleTools(ModelView):
         args['__result__'].debug.append(debug)
 
     @classmethod
+    @check_args('event_objects')
+    def _re_get_event_objects(cls, args):
+        return args['event_objects']
+
+    @classmethod
     def _re_generic_value_get(cls, args, input_string):
         '''
             Input string is a '.' separated list of fields. For lists, it is
@@ -742,7 +747,11 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             ('validated', 'Validated')],
         'Status')
     status_string = status.translated('status')
-    type_ = fields.Selection([('', ''), ('tool', 'Tool')], 'Type')
+    type_ = fields.Selection([
+            ('', ''),
+            ('tool', 'Tool'),
+            ('event_filter', 'Event Type Action Filter'),
+            ], 'Type')
     result_type = fields.Function(
         fields.Selection([
             ('', ''),
@@ -955,6 +964,8 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
     @fields.depends('type_')
     def on_change_with_result_type(self, name=None):
+        if self.type_ == 'event_filter':
+            return 'list'
         return ''
 
     @classmethod

@@ -1,3 +1,4 @@
+* FEA#6696 Add a filtering rule on event type actions
 * OTH#0000 Add inheritance to dynamically support readonly transaction using ServerContext
 * BUG#6786 Limit global search query result size
 * FEA#6591 Add coog's version in the user status bar
