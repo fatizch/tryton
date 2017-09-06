@@ -1,3 +1,4 @@
+* BUG#6983 Maintien de l'information "Paiement en attente" sur une quittance annulée
 * BUG#6939 Ajout du champs en invisible de la méthode de traitement sur les groupes de paiement
 * BUG#6707 Correction du calcul du nombre de rejet d'un paiement quand il y a des paiements utilisant des journaux différents
 * FEA#6739 Visualisation depuis un paiement de tous les paiements portant sur la même ligne

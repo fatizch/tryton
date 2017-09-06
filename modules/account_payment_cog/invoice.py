@@ -56,7 +56,7 @@ class Invoice:
         return result
 
     def get_pending_payment(self, name):
-        return self.state == 'posted' and bool([x for x in self.payments
+        return bool([x for x in self.payments
                 if x.state in ['approved', 'processing']])
 
     def get_credit_reconciliation_lines(self, name):
