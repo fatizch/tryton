@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import os
 import logging
 import datetime
 from decimal import Decimal
@@ -91,9 +92,10 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
 
     @classmethod
     def check_mandatory_parameters(cls, *args, **kwargs):
+        assert kwargs.get('treatment_date'), 'treatment_date is required'
+        assert kwargs.get('output_dir'), 'output_dir is required'
         super(ExtractAggregatedMove, cls).check_mandatory_parameters(*args,
             **kwargs)
-        assert kwargs.get('treatment_date'), 'treatment_date is required'
 
     @classmethod
     def object_fields_mapper(cls, *args, **kwargs):
@@ -138,6 +140,16 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
                 int(cls.get_flush_size(*args, **kwargs))):
             for single_values in zip(*cls.transform_values(values)):
                 yield single_values
+
+    @classmethod
+    def get_filename(cls, *args, **kwargs):
+        output_dir = kwargs.get('output_dir')
+        filename = kwargs.get('output_filename')
+        if not filename:
+            treatment_date = kwargs.get('treatment_date')
+            current_time = treatment_date.strftime('%Y-%m-%d')
+            filename = 'snapshots_%s.txt' % current_time
+        return os.path.join(output_dir, filename)
 
     @classmethod
     def execute(cls, objects, ids, *args, **kwargs):

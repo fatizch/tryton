@@ -1,0 +1,7 @@
+* BUG#6587 Add new batch configuration options, output_dir and output_filename, to account.move.aggregated.extract batch which allows a specific filename to be defined for a snapshot. 
+           The function get_filename can also be overriden programmatically. The default filename is 'extraction-[DATE].out'.
+
+           Example (batch.py):
+           [account.move.aggregated.extract]
+           output_dir = /snapshots/
+           output_filename = extraction.out

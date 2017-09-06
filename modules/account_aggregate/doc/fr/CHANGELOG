@@ -1,3 +1,4 @@
+* BUG#6578 Ajouter output_dir et générer pour le batch d'extraction des agrégats comptables
 * BUG#6887 L'instantané n'est créé que si l'export est activé pour l'année fiscale concernée
 * BUG#6848 Passage en surchargeable de la méthode pour retrouver les lignes depuis un aggrégat
 

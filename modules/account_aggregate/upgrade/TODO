@@ -1,0 +1,1 @@
+* BUG #6578 The argument `output_dir` must added to batch.conf under `account.move.aggregated.extract` section. If a custom filename is required `get_filename` can be overriden.
