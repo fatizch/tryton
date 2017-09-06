@@ -25,7 +25,7 @@ chain_params() {
                         else
                                 printf -v $PARAM_NAME $PARAM_VALUE
                         fi
-                        GIVEN_PARAMETERS+=($i)
+                        GIVEN_PARAMETERS+=("$i")
                 else
                         echo "Unknown batch chain parameter:" `echo $PARAM_NAME | awk '{ print tolower($1) }' `>&2
                 fi
