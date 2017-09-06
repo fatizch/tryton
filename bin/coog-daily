@@ -22,139 +22,145 @@ _coog_daily_check_modules() {
 
 coog_daily_main() {
 
-    if [[ "$#" -ne 3 ]]; then
-        echo 'Usage: daily_chains WORKING_DAYS WORKING_DAYS_CONF SNAPSHOT_OUTPUT' 2>&1
+    if [[ "$#" -lt 2 ]]; then
+        echo 'Usage: daily_chains WORKING_DAYS WORKING_DAYS_CONF [ DATE ]' 2>&1
         exit 1
     fi
 
     WORKING_DAYS="$1"
     WORKING_DAYS_CONF="$2"
-    SNAPSHOT_OUTPUT="$3"
-
-
     TODAY_DATE="$(date --iso)"
-    TOMORROW_DATE="$(date --date=tomorrow +%d)"
-    MONDAY_DATE="$(date -d "+3 days" +%d)"
-    TODAY_WEEK_DAY="$(date +%u)"
-    LAST_DAY_OF_THE_MONTH="$(date -d "$(date +%Y-%m-01) +1 month -1 day" +%Y-%m-%d)"
-    LAST_DAY="$(date -d "$(date +%Y-%m-01) +1 month -1 day" +%d)"
+
+    if [ ! -z "$3" ]; then
+        date --date "$3" 1>/dev/null
+        if [ "$?" -ne 0 ]; then
+            exit 1
+        fi
+        TODAY_DATE="$3"
+    fi
+
+    TOMORROW_DATE="$(date --date="$TODAY_DATE tomorrow" +%d)"
+    MONDAY_DATE="$(date --date="$TODAY_DATE +3 days" +%d)"
+    TODAY_WEEK_DAY="$(date --date="$TODAY_DATE" +%u)"
+    LAST_DAY_OF_THE_MONTH="$(date -d "$(date --date="$TODAY_DATE" +%Y-%m-01) +1 month -1 day" +%Y-%m-%d)"
+    LAST_DAY="$(date -d "$(date --date="$TODAY_DATE" +%Y-%m-01) +1 month -1 day" +%d)"
 
     if _coog_daily_is_weekday; then
 
         (
-        _coog_daily_check_modules "account_payment_sepa_cog" &&               \
+        _coog_daily_check_modules "account_payment_sepa_cog" &&                 \
             coog_chain_main account_payment_sepa_cog payment_fail
         )
 
         (
-        _coog_daily_check_modules "account_dunning_cog" &&                    \
-            coog_chain_main account_dunning_cog dunning           \
+        _coog_daily_check_modules "account_dunning_cog" &&                      \
+            coog_chain_main account_dunning_cog dunning                         \
                 --treatment_date="$TODAY_DATE"
         )
 
         (
-        _coog_daily_check_modules "contract_inactive_quote_declination" &&    \
-            coog_chain_main contract_inactive_quote_declination decline_inactive \
+        _coog_daily_check_modules "contract_inactive_quote_declination" &&      \
+            coog_chain_main contract_inactive_quote_declination decline_inactive\
                 --treatment_date="$TODAY_DATE"
         )
 
         (
-        _coog_daily_check_modules "contract_term_renewal" &&                  \
-            coog_chain_main contract_term_renewal renew           \
-                --working_days="$WORKING_DAYS"                    \
+        _coog_daily_check_modules "contract_term_renewal" &&                    \
+            coog_chain_main contract_term_renewal renew                         \
+                --working_days="$WORKING_DAYS"                                  \
                 --conf_code="$WORKING_DAYS_CONF"
         )
 
         (
-        _coog_daily_check_modules "contract" &&                               \
-            coog_chain_main contract terminate_contract           \
+        _coog_daily_check_modules "contract" &&                                 \
+            coog_chain_main contract terminate_contract                         \
                 --treatment_date="$TODAY_DATE"
         )
 
         (
-        _coog_daily_check_modules "underwriting" &&                           \
-            coog_chain_main underwriting underwriting             \
+        _coog_daily_check_modules "underwriting" &&                             \
+            coog_chain_main underwriting underwriting                           \
                 --treatment_date="$TODAY_DATE"
         )
 
         # Executed for each new month
-        if [ "$TODAY_WEEK_DAY" == "5" ] && [ "$MONDAY_DATE" -lt  "04" ] \
+        if [ "$TODAY_WEEK_DAY" == "5" ] && [ "$MONDAY_DATE" -lt  "04" ]         \
             || [ "$TOMORROW_DATE" == "01" ]; then
 
             (
-            _coog_daily_check_modules "commission_insurance" &&               \
-                coog_chain_main commission_insurance commission   \
-                    --treatment_date="$LAST_DAY_OF_THE_MONTH"     \
-                    --with_draft=0                                \
+            _coog_daily_check_modules "commission_insurance" &&                 \
+                coog_chain_main commission_insurance commission                 \
+                    --treatment_date="$LAST_DAY_OF_THE_MONTH"                   \
+                    --with_draft=0                                              \
                     --agent_type=agent
             )
 
             (
-            _coog_daily_check_modules "commission_insurer" &&                 \
-                coog_chain_main commission_insurer commission     \
+            _coog_daily_check_modules "commission_insurer" &&                   \
+                coog_chain_main commission_insurer commission                   \
                 --treatment_date="$LAST_DAY_OF_THE_MONTH"
             )
         fi
 
         (
-        _coog_daily_check_modules "contract_insurance_invoice" &&             \
-            coog_chain_main contract_insurance_invoice invoice    \
-                --working_days="$WORKING_DAYS"                    \
+        _coog_daily_check_modules "contract_insurance_invoice" &&               \
+            coog_chain_main contract_insurance_invoice invoice                  \
+                --working_days="$WORKING_DAYS"                                  \
                 --conf_code="$WORKING_DAYS_CONF"
         )
 
         (
-        _coog_daily_check_modules "account_payment_sepa_cog" &&               \
-            coog_chain_main account_payment_sepa_cog payment_working_days \
-                --working_days="$WORKING_DAYS"                    \
-                --conf_code="$WORKING_DAYS_CONF"                  \
-                --payment_kind=receivable                         \
+        _coog_daily_check_modules "account_payment_sepa_cog" &&                 \
+            coog_chain_main account_payment_sepa_cog payment_working_days       \
+                --working_days="$WORKING_DAYS"                                  \
+                --conf_code="$WORKING_DAYS_CONF"                                \
+                --payment_kind=receivable                                       \
                 --journal_methods=sepa
         )
 
 
         (
-        _coog_daily_check_modules "account_payment_sepa_cog" &&               \
-            coog_chain_main account_payment_sepa_cog payment      \
-                --treatment_date="$TODAY_DATE"                    \
-                --payment_kind=payable                            \
+        _coog_daily_check_modules "account_payment_sepa_cog" &&                 \
+            coog_chain_main account_payment_sepa_cog payment                    \
+                --treatment_date="$TODAY_DATE"                                  \
+                --payment_kind=payable                                          \
                 --journal_methods=sepa
         )
 
         (
-        _coog_daily_check_modules "account_payment_cog" &&                    \
-            coog_chain_main account_payment_cog payment_ack       \
-                --treatment_date="$TODAY_DATE"                    \
+        _coog_daily_check_modules "account_payment_cog" &&                      \
+            coog_chain_main account_payment_cog payment_ack                     \
+                --treatment_date="$TODAY_DATE"                                  \
                 --journal_methods=sepa
         )
 
         (
-        _coog_daily_check_modules "account_cog" &&                            \
-            coog_chain_main account_cog report_aged_balance                 \
-                --working_days="$WORKING_DAYS"                    \
+        _coog_daily_check_modules "account_cog" &&                              \
+            coog_chain_main account_cog report_aged_balance                     \
+                --working_days="$WORKING_DAYS"                                  \
                 --conf_code="$WORKING_DAYS_CONF"
         )
 
         (
-        _coog_daily_check_modules "insurer_reporting" &&                      \
-            coog_chain_main insurer_reporting insurer_stock       \
-                --working_days="$WORKING_DAYS"                    \
+        _coog_daily_check_modules "insurer_reporting" &&                        \
+            coog_chain_main insurer_reporting insurer_stock                     \
+                --working_days="$WORKING_DAYS"                                  \
                 --conf_code="$WORKING_DAYS_CONF"
         )
 
         # Executed the last day of the month
         if [ "$TODAY_DATE" == "$LAST_DAY_OF_THE_MONTH" ]; then
             (
-            _coog_daily_check_modules "account_cog" &&                        \
-                coog_chain_main account_cog report_aged_balance    \
-                --treatment_date="$TODAY_DATE"                     \
+            _coog_daily_check_modules "account_cog" &&                          \
+                coog_chain_main account_cog report_aged_balance                 \
+                --treatment_date="$TODAY_DATE"                                  \
                 --possible_days="$LAST_DAY"
             )
 
             (
-            _coog_daily_check_modules "insurer_reporting" &&                  \
-                coog_chain_main insurer_reporting insurer_stock     \
-                --treatment_date="$TODAY_DATE"                      \
+            _coog_daily_check_modules "insurer_reporting" &&                    \
+                coog_chain_main insurer_reporting insurer_stock                 \
+                --treatment_date="$TODAY_DATE"                                  \
                 --possible_days="$LAST_DAY"
             )
         fi
@@ -165,33 +171,32 @@ coog_daily_main() {
         )
 
         (
-        _coog_daily_check_modules "account_aggregate" &&                      \
-            coog_chain_main account_aggregate extract_snapshot    \
-                --treatment_date="$TODAY_DATE"                    \
-                --output_filename="$SNAPSHOT_OUTPUT"
-        )
-
-        (
-        _coog_daily_check_modules "claim_indemnification" &&                  \
-            coog_chain_main claim_indemnification create_indemnifications \
+        _coog_daily_check_modules "account_aggregate" &&                        \
+            coog_chain_main account_aggregate extract_snapshot                  \
                 --treatment_date="$TODAY_DATE"
         )
 
         (
-        _coog_daily_check_modules "planned_event" &&                          \
-            coog_chain_main planned_event process                 \
+        _coog_daily_check_modules "claim_indemnification" &&                    \
+            coog_chain_main claim_indemnification create_indemnifications       \
                 --treatment_date="$TODAY_DATE"
         )
 
         (
-        _coog_daily_check_modules "document_request" &&                       \
-            coog_chain_main document_request document_process     \
-            --treatment_date="$TODAY_DATE"                        \
+        _coog_daily_check_modules "planned_event" &&                            \
+            coog_chain_main planned_event process                               \
+                --treatment_date="$TODAY_DATE"
+        )
+
+        (
+        _coog_daily_check_modules "document_request" &&                         \
+            coog_chain_main document_request document_process                   \
+            --treatment_date="$TODAY_DATE"                                      \
             --on_model="contract"
         )
 
         (
-        _coog_daily_check_modules "report_engine" &&                          \
+        _coog_daily_check_modules "report_engine" &&                            \
             coog_chain_main report_engine produce_request
         )
     fi

@@ -1,3 +1,4 @@
+* BUG#6475 Le troisiéme paramètre de coog-daily est maintenante un argument facultatif qui représente TODAY_DATE
 * FEA#6936 Ajout d'un nouveau paramètre d'exécution de batch pour interdire le split
 * FEA#6236 Ajout d'une nouvelle commande pour reexec un batch (rejeux sans split)
 * FEA#6696 Ajout d'une règle de filtre sur les actions par type d'événement

@@ -1,0 +1,1 @@
+* BUG#6475 Remove the third parameter coog daily in crontab if it is a file
