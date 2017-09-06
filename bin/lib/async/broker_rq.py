@@ -54,9 +54,21 @@ def split(job_key):
     job = json.loads(job)
     args = job['args']
     kwargs = job['kwargs']
+    if not args[2].get('split', True):
+        exit(code=1)
     ids = args[1]
     if len(ids) <= 1:
         exit(code=1)
     args_list = [[args[0], [id], args[2]] for id in ids]
     for args in args_list:
         enqueue(job['queue'], job['func'], args, **kwargs)
+
+
+def replay(job_key):
+    job = connection.hget('rq:job:%s' % job_key, 'coog')
+    if not job:
+        exit(code=1)
+    job = json.loads(job)
+    args = job['args']
+    kwargs = job['kwargs']
+    enqueue(job['queue'], job['func'], args, **kwargs)

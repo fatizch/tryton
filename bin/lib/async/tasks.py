@@ -51,16 +51,18 @@ def batch_generate(name, params):
         batch_params = BatchModel.parse_params(batch_params)
 
         # Remove non business params (batch_params to be passed to select_ids)
-        job_size = int(batch_params.pop('job_size'))
-        transaction_size = int(batch_params.pop('transaction_size', 0))
         connection_date = batch_params.pop('connection_date',
            datetime.datetime.now().date())
+        job_size = int(batch_params.pop('job_size'))
+        transaction_size = int(batch_params.pop('transaction_size', 0))
+        split = batch_params.pop('split', True)
 
         # Prepare serialized params (to be saved on redis)
         job_params = batch_params.copy()
+        job_params['connection_date'] = connection_date
         job_params['job_size'] = job_size
         job_params['transaction_size'] = transaction_size
-        job_params['connection_date'] = connection_date
+        job_params['split'] = split
         job_params = BatchModel.serializable_params(job_params)
 
         with Transaction().set_context(
@@ -123,9 +125,10 @@ def batch_exec(name, ids, params, **kwargs):
         batch_params = BatchModel.parse_params(batch_params)
 
         # Remove non business params (batch_params to be passed to select_ids)
+        connection_date = batch_params.pop('connection_date')
         job_size = batch_params.pop('job_size')
         transaction_size = batch_params.pop('transaction_size')
-        connection_date = batch_params.pop('connection_date')
+        split = batch_params.pop('split')
 
     res = []
     with Transaction().start(database, admin.id):

@@ -41,6 +41,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
         super(PaymentTreatmentBatch, cls).__setup__()
         cls._default_config_items.update({
                 'job_size': 0,
+                'split': False,
                 'payment_kind': '',
                 'cache_size': config.getint('cache', 'record'),
                 })
@@ -147,6 +148,7 @@ class PaymentGroupCreationBatch(batch.BatchRoot):
         super(PaymentGroupCreationBatch, cls).__setup__()
         cls._default_config_items.update({
                 'job_size': 0,
+                'split': False,
                 'payment_kind': '',
                 })
 
@@ -245,6 +247,7 @@ class PaymentUpdateBatch(batch.BatchRoot):
         super(PaymentUpdateBatch, cls).__setup__()
         cls._default_config_items.update({
                 'job_size': 1000,
+                'split': False,
                 })
 
     @classmethod
@@ -293,6 +296,7 @@ class PaymentGroupProcessBatch(batch.BatchRoot):
         super(PaymentGroupProcessBatch, cls).__setup__()
         cls._default_config_items.update({
                 'job_size': 1,
+                'split': False,
                 })
 
     @classmethod

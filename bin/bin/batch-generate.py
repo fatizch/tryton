@@ -18,9 +18,19 @@ def generate_async(name, params):
 
 
 def parse_extra_args(params):
-    params = sum([x.split('=', 1) for x in params], [])
-    params_dict = dict(zip([x.lstrip('-') for x in params[0::2]],
-            params[1::2]))
+    params = [x.split('=', 1) for x in params]
+    params = [len(x) == 2 and x or x + [None] for x in params]
+    params = [[x[0].strip('-'), x[1]] for x in params]
+    def convert_flag(x):
+        if x[1] is None:
+            if x[0].startswith('no-'):
+                return [x[0][3:], False]
+            else:
+                return [x[0], True]
+        else:
+            return x
+    params = [convert_flag(x) for x in params]
+    params_dict = dict(params)
     logging.basicConfig()
     logger = logging.getLogger()
     for deprecated, valid in (

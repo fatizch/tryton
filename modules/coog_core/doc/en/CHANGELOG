@@ -1,3 +1,5 @@
+* FEA#6936 Add a batch parameter to avoid systematic split
+* FEA#6236 Add a new command to reexec a batch (replay failed jobs without split)
 * FEA#6696 Add a filtering rule on event type actions
 * OTH#0000 Add inheritance to dynamically support readonly transaction using ServerContext
 * BUG#6786 Limit global search query result size

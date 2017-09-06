@@ -85,6 +85,7 @@ class BatchRoot(ModelView):
         super(BatchRoot, cls).__setup__()
         cls._default_config_items = {
             'job_size': '1000',
+            'split': True,
             'transaction_size': '0',
         }
 

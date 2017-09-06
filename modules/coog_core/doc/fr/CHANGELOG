@@ -1,3 +1,5 @@
+* FEA#6936 Ajout d'un nouveau paramètre d'exécution de batch pour interdire le split
+* FEA#6236 Ajout d'une nouvelle commande pour reexec un batch (rejeux sans split)
 * FEA#6696 Ajout d'une règle de filtre sur les actions par type d'événement
 * OTH#0000 Ajout d'héritage pour définir une section en lecture seule dynamiquement via le ServerContext
 * BUG#6786 Limitation du nombre d'éléments retournés par la recherche globale
