@@ -1,3 +1,5 @@
+* BUG#6993 Removing simple json import
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Allow to have multiple matching dimensions in cell search
 

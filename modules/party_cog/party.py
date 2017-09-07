@@ -4,10 +4,7 @@
 import copy
 import StringIO
 
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 
 from sql.aggregate import Max
 from sql import Literal, Cast

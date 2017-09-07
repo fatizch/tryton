@@ -1,3 +1,4 @@
+* BUG#6993 Removing simple json import
 * BUG#6475 The third parameter of coog-daily is now an optional argument which represents TODAY_DATE.
 * FEA#6936 Add a batch parameter to avoid systematic split
 * FEA#6236 Add a new command to reexec a batch (replay failed jobs without split)

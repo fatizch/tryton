@@ -1,3 +1,5 @@
+* BUG#6993 Suppression de l'import simplejson
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Possibilité d'avoir plusieurs dimensions dans le domaine de recherche de cellules
 

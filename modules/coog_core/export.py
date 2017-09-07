@@ -4,10 +4,7 @@
 import base64
 import datetime
 import collections
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 import logging
 
 from sql.operators import Concat

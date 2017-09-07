@@ -1,10 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 from sql import Null, Window, Literal
 from sql.conditionals import NullIf, Coalesce
 from sql.aggregate import Max, Min

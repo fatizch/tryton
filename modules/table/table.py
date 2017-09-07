@@ -4,10 +4,7 @@ import copy
 import datetime
 from decimal import Decimal
 from functools import partial
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 
 from lxml import etree
 from sql import Column, Literal, Null

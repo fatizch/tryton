@@ -1,3 +1,4 @@
+* BUG#6993 Suppression de l'import de simplejson
 * BUG#6870 Utiliser l'adresse principale du tiers au lieu de calculer l'adresse active à date dans les contacts du contrat
 * BUG#6748 Possibilité de nettoyer le motif de résiliation lors d'une réactivation
 * BUG#6616 Résiliation possible sur un terme antérieur

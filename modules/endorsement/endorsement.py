@@ -4,10 +4,7 @@
 import copy
 import datetime
 from itertools import groupby
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 
 from sql import Literal, Column
 from sql.conditionals import Coalesce
