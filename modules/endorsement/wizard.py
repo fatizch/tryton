@@ -2125,7 +2125,9 @@ class StartEndorsement(Wizard):
                 'cannot_resume_applied': 'It is not possible to resume an '
                 'already applied endorsement',
                 'erase_endorsement': 'Going on will erase all data on the '
-                'endorsement.'
+                'endorsement.',
+                'no_preview_defined': 'No preview state is defined on the '
+                'endorsement definition',
                 })
 
     @property
@@ -2220,6 +2222,8 @@ class StartEndorsement(Wizard):
         return self.get_state_before('')
 
     def transition_preview_changes(self):
+        if not self.endorsement.definition.preview_state:
+            self.raise_user_error('no_preview_defined')
         return self.endorsement.definition.preview_state
 
     def default_basic_preview(self, name):

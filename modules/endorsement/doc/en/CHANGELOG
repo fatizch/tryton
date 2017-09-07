@@ -1,3 +1,4 @@
+* BUG#6998 Add an error message on the endorsement preview if no preview state is defined on the definition
 * BUG#6996 The effective date of reactivate endorsement is no more set by defaut to the contract end date if the contract is hold
 * BUG#6867 Add an error message on endorsement when the contract status is incompatible with endorsements.
 * BUG#6837 Add a method that checks the contract status.

@@ -170,6 +170,10 @@ msgid "Going on will erase all data on the endorsement."
 msgstr "Toutes les données saisies sur l'avenant seront perdues."
 
 msgctxt "error:endorsement.start:"
+msgid "No preview state is defined on the endorsement definition"
+msgstr "Aucun aperçu à utiliser n'est défini sur la définition d'avenant"
+
+msgctxt "error:endorsement.start:"
 msgid "It is not possible to resume an already applied endorsement"
 msgstr "Il est impossible de reprendre un avenant déjà appliqué"
 
