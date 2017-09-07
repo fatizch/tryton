@@ -575,9 +575,10 @@ class ReactivateContract(EndorsementWizardStepMixin):
         assert contracts
         for contract_id, endorsement in contracts.iteritems():
             contract = Contract(contract_id)
-            self.wizard.endorsement.effective_date = contract.end_date
-            self.wizard.endorsement.save()
-            break
+            if contract.status != 'hold':
+                self.wizard.endorsement.effective_date = contract.end_date
+                self.wizard.endorsement.save()
+                break
         defaults = super(ReactivateContract, self).step_default()
         defaults['current_end_date'] = contract.end_date
         defaults['end_motive'] = (contract.sub_status.id if contract.sub_status

@@ -1,3 +1,4 @@
+* BUG#6996 La date d'effet d'avenant de réactivation n'est plus mise par défaut sur la date de fin du contrat si ce dernier est suspendu
 * BUG#6867 Ajouter message d'erreur sur nouvel avenant quand le statut du contract est incompatible avec les avenants.
 * BUG#6837 Ajouter une methode qui verifie les statuts des contracts.
 * BUG#6822 Correction de la traduction de start date dans l'avenant de changement de date d'effet
