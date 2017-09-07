@@ -1,3 +1,4 @@
+* BUG#6999 Remove party from payment group key
 * BUG#6939 Fix the domain of the SEPA message generation button
 * FEA#5500 New sepa standard: Rulebooks SDD Core V9.0 and SDD B2B V7.0: only generate 'RCUR' sepa payment sequence type and remove 'FRST' type
 * BUG#6107 The bank account is now invisible in the payment creation wizard when the process method is not SEPA

@@ -172,10 +172,13 @@ class PaymentGroupCreationBatch:
 
     @classmethod
     def _group_payment_key(cls, payment):
+        # payment.party return a new instance of Column
+        # -> equality is tested using table and name fields
         return tuple((x for x in
-            super(PaymentGroupCreationBatch, cls)._group_payment_key(payment)
-            if x != payment.party)) + (payment.sepa_mandate,
-                payment.sepa_mandate_sequence_type)
+                    super(PaymentGroupCreationBatch, cls
+                        )._group_payment_key(payment) if x.name !=
+                    payment.party.name or x.table != payment.party.table)) + \
+            (payment.sepa_mandate, payment.sepa_mandate_sequence_type)
 
     @classmethod
     def get_payment_where_clause(cls, payment, payment_kind, treatment_date,
