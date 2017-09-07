@@ -56,7 +56,8 @@ class Contract:
     def right_suspension_allowed(self):
         return True
 
-    def disable_right_suspensions(self, type_=None, to_date=None, days_delta=1):
+    def disable_right_suspensions(self, type_=None, to_date=None,
+            days_delta=1):
         pool = Pool()
         ContractRightSuspension = pool.get('contract.right_suspension')
         Event = pool.get('event')
@@ -95,6 +96,23 @@ class Contract:
                 Event.notify_events(definitive_suspensions,
                     'contract_disable_right_suspension')
             ContractRightSuspension.write(*to_write)
+
+    @classmethod
+    def reactivate(cls, contracts):
+        for contract in contracts:
+            if (contract.status == 'hold'
+                    and contract.right_suspension_allowed()):
+                contract.disable_right_suspensions()
+        super(Contract, cls).reactivate(contracts)
+
+    def reactivate_through_endorsement(self, caller=None):
+        ContractEndorsement = Pool().get('endorsement.contract')
+        if isinstance(caller, ContractEndorsement):
+            with ServerContext().set_context(
+                    suspension_end_date=caller.endorsement.effective_date):
+                return super(Contract, self
+                    ).reactivate_through_endorsement(caller)
+        super(Contract, self).reactivate_through_endorsement(caller)
 
     def activate_contract(self):
         if self.status == 'hold' and self.right_suspension_allowed():
