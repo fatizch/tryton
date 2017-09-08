@@ -89,7 +89,7 @@ class ClassAttr(PoolMeta):
             name = name[len(self.__allowed_buttons__):]
             # We return the methods computed with the generic method.
             return self._default_button_method(name)
-        return super(ClassAttr, self).__getattr__(name)
+        return super(ClassAttr, self).__getattribute__(name)
 
 
 class ProcessFramework(ModelSQL, ModelView):
