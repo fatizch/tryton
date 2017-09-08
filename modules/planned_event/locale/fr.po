@@ -4,7 +4,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:event.type.action:"
 msgid "Generate Planned Event"
-msgstr "Générer un événement plannifié"
+msgstr "Générer un événement planifié"
 
 msgctxt "field:event.type.action,delay:"
 msgid "Planned In"
@@ -12,7 +12,7 @@ msgstr "Planifié dans"
 
 msgctxt "field:event.type.action,planned_event_types:"
 msgid "Planned Event Types"
-msgstr "Types des événements plannifiés"
+msgstr "Types des événements planifiés"
 
 msgctxt "field:event.type.action,unit:"
 msgid "Unit"
@@ -88,7 +88,7 @@ msgstr "Objet"
 
 msgctxt "field:planned.event,planned_date:"
 msgid "Planned Date"
-msgstr "Date plannifiée"
+msgstr "Date planifiée"
 
 msgctxt "field:planned.event,processed:"
 msgid "Processed"
@@ -116,7 +116,7 @@ msgstr "Identifiant"
 
 msgctxt "help:event.type.action,delay:"
 msgid "Planned gap after the event date"
-msgstr "Délai entre l’événement déclencheur et l’événement plannifié"
+msgstr "Délai entre l’événement déclencheur et l’événement planifié"
 
 msgctxt "model:event.type.action-planned_event.type,name:"
 msgid "Event Type Action Planned Event Type Relation"
