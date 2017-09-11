@@ -1,3 +1,5 @@
+* BUG#7021 Do not allow to renew a contract when it has a final renewal defined
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout de la chaîne de batch
 Version 1.10 - 2016-11-02

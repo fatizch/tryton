@@ -60,6 +60,8 @@ class Contract:
                 'already_renewed': 'Contract %(contract_number)s has already'
                 ' been renewed, with new start date at %(start_date)s . Are '
                 'you sure you want to prevent renewal after %(end_date)s ?',
+                'renew_impossible': "Contract %(contract_number)s has already "
+                "a planned termination. It can't be renewed",
                 })
 
     def get_is_renewable(self, name):
@@ -144,7 +146,17 @@ class Contract:
         return set([])
 
     @classmethod
+    def check_contracts_renewable(cls, contracts, new_start_date):
+        for contract in contracts:
+            if contract.activation_history[-1].final_renewal:
+                cls.append_functional_error('renew_impossible', {
+                        'contract_number': contract.contract_number,
+                        })
+
+    @classmethod
     def before_renew(cls, contracts, new_start_date):
+        with model.error_manager():
+            cls.check_contracts_renewable(contracts, new_start_date)
         cls.execute_renewal_methods(contracts, new_start_date=new_start_date,
             kind='before')
 
