@@ -3,7 +3,7 @@
 import datetime
 
 from trytond.rpc import RPC
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Or
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.model import Unique
@@ -43,7 +43,7 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
     status_string = status.translated('status')
     sub_status = fields.Many2One('claim.sub_status', 'Details on status',
         states={
-            'required': Bool(Eval('is_sub_status_required'))
+            'required': Bool(Eval('is_sub_status_required')),
             },
         domain=[('status', '=', Eval('status'))], ondelete='RESTRICT',
         depends=['status', 'is_sub_status_required'])
@@ -56,8 +56,7 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
         depends=['status'])
     claimant = fields.Many2One('party.party', 'Claimant', ondelete='RESTRICT',
         required=True, select=True)
-    losses = fields.One2Many('claim.loss', 'claim',
-        'Losses', states={'readonly': Eval('status') == 'closed'},
+    losses = fields.One2Many('claim.loss', 'claim', 'Losses',
         delete_missing=True)
     company = fields.Many2One('company.company', 'Company',
         ondelete='RESTRICT')
@@ -108,6 +107,12 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
                 })
 
     @classmethod
+    def __post_setup__(cls):
+        super(Claim, cls).__post_setup__()
+        cls.set_fields_readonly_condition(Eval('status') == 'closed',
+            ['status'], cls._get_skip_set_readonly_fields())
+
+    @classmethod
     def _export_light(cls):
         return super(Claim, cls)._export_light() | {'company', 'main_contract',
             'claimant', 'sub_status'}
@@ -115,6 +120,10 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
     @classmethod
     def _export_skips(cls):
         return super(Claim, cls)._export_skips() | {'attachments'}
+
+    @classmethod
+    def _get_skip_set_readonly_fields(cls):
+        return []
 
     @classmethod
     def view_attributes(cls):
@@ -368,45 +377,44 @@ class Loss(model.CoogSQL, model.CoogView):
     __name__ = 'claim.loss'
     _func_key = 'func_key'
 
+    claim_status = fields.Function(fields.Char('Claim Status'),
+        'get_claim_status')
     claim = fields.Many2One('claim', 'Claim', ondelete='CASCADE',
         required=True, select=True)
     state = fields.Selection([('draft', 'Draft'), ('active', 'Active')],
         'State', required=True, readonly=True)
     loss_desc = fields.Many2One('benefit.loss.description', 'Loss Descriptor',
         ondelete='RESTRICT', required=True,
-        states={'readonly': Eval('state') != 'draft'},
         domain=[('id', 'in', Eval('possible_loss_descs'))],
-        depends=['possible_loss_descs', 'state'])
+        depends=['possible_loss_descs'])
     possible_loss_descs = fields.Function(
         fields.Many2Many('benefit.loss.description', None, None,
             'Possible Loss Descs', ),
         'on_change_with_possible_loss_descs')
     event_desc = fields.Many2One('benefit.event.description', 'Event',
-        states={'readonly': Eval('state') != 'draft'},
         domain=[('loss_descs', '=', Eval('loss_desc'))],
-        depends=['loss_desc', 'state'], ondelete='RESTRICT', required=True)
+        depends=['loss_desc'], ondelete='RESTRICT', required=True)
     services = fields.One2Many(
         'claim.service', 'loss', 'Claim Services', delete_missing=True,
         target_not_required=True, domain=[
             ('benefit.loss_descs', '=', Eval('loss_desc')),
             ['OR', ('option', '=', None),
                 ('option.coverage.benefits.loss_descs', '=',
-                    Eval('loss_desc'))]],
-        depends=['loss_desc'])
+                    Eval('loss_desc'))]], depends=['loss_desc'])
     multi_level_view = fields.One2Many('claim.service',
-        'loss', 'Claim Services', target_not_required=True, delete_missing=True)
+        'loss', 'Claim Services', target_not_required=True,
+        delete_missing=True)
     extra_data = fields.Dict('extra_data', 'Extra Data', states={
             'invisible': ~Eval('extra_data'),
-            'readonly': Eval('state') != 'draft'},
-        depends=['state'])
-    start_date = fields.Date('Loss Date', states={
-            'readonly': Eval('state') != 'draft'},
-        depends=['state'])
+            }, depends=['extra_data'])
+    start_date = fields.Date('Loss Date')
     with_end_date = fields.Function(
         fields.Boolean('With End Date'), 'get_with_end_date')
     end_date = fields.Date('End Date',
-        states={'invisible': Bool(~Eval('with_end_date'))},
-        depends=['with_end_date'])
+        states={
+            'invisible': Bool(~Eval('with_end_date')),
+            'readonly': Eval('claim_status') == 'closed',
+            }, depends=['with_end_date', 'claim_status'])
     loss_desc_code = fields.Function(
         fields.Char('Loss Desc Code', depends=['loss_desc']),
         'get_loss_desc_code')
@@ -421,7 +429,10 @@ class Loss(model.CoogSQL, model.CoogView):
         'get_available_closing_reasons')
     closing_reason = fields.Many2One('claim.closing_reason', 'Closing Reason',
         domain=[('id', 'in', Eval('available_closing_reasons'))],
-        depends=['available_closing_reasons'], ondelete='RESTRICT')
+        states={
+            'readonly': Eval('claim_status') == 'closed',
+            }, depends=['available_closing_reasons', 'claim_status'],
+        ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
@@ -435,9 +446,22 @@ class Loss(model.CoogSQL, model.CoogView):
                 '%(declaration_date)s is prior to start date %(start_date)s',
                 })
         cls._buttons.update({
-                'draft': {'readonly': Eval('state') == 'draft'},
+                'draft': {
+                    'readonly': Or(Eval('state') == 'draft',
+                        Eval('claim_status') == 'closed'),
+                    },
                 'activate': {'readonly': Eval('state') == 'active'},
                 })
+
+    @classmethod
+    def __post_setup__(cls):
+        super(Loss, cls).__post_setup__()
+        cls.set_fields_readonly_condition(Eval('state') != 'draft',
+            ['state'], cls._get_skip_set_readonly_fields())
+
+    @classmethod
+    def _get_skip_set_readonly_fields(cls):
+        return ['end_date', 'closing_reason']
 
     @classmethod
     def default_state(cls):
@@ -445,6 +469,10 @@ class Loss(model.CoogSQL, model.CoogView):
 
     def on_change_with_closing_reason(self, name=None):
         pass
+
+    def get_claim_status(self, name=None):
+        if self.claim:
+            return self.claim.status
 
     def get_available_closing_reasons(self, name=None):
         return [x.id for x in self.loss_desc.closing_reasons]
@@ -696,10 +724,10 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
     'Claim Service'
     __name__ = 'claim.service'
 
-    contract = fields.Many2One('contract', 'Contract', ondelete='RESTRICT')
+    contract = fields.Many2One('contract', 'Contract', ondelete='RESTRICT',
+        readonly=True)
     option = fields.Many2One(
-        'contract.option', 'Coverage', ondelete='RESTRICT',
-        depends=['contract'])
+        'contract.option', 'Coverage', ondelete='RESTRICT', readonly=True)
     theoretical_covered_element = fields.Function(
         fields.Many2One('contract.covered_element',
             'Theoretical Covered Element'),
@@ -707,11 +735,12 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
     loss = fields.Many2One('claim.loss', 'Loss',
         ondelete='CASCADE', select=True, required=True)
     benefit = fields.Many2One('benefit', 'Benefit', ondelete='RESTRICT',
-        required=True)
+        required=True, readonly=True)
     extra_datas = fields.One2Many('claim.service.extra_data', 'claim_service',
         'Extra Data', delete_missing=True,
-        states={'invisible': ~Eval('extra_datas')},
-        depends=['extra_datas'])
+        states={
+            'invisible': ~Eval('extra_datas'),
+            }, depends=['extra_datas'])
     claim = fields.Function(
         fields.Many2One('claim', 'Claim'),
         'get_claim', searcher='search_claim')
@@ -732,14 +761,30 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
     icon = fields.Function(
         fields.Char('Icon'),
         'get_icon')
+    claim_status = fields.Function(fields.Char('Claim Status'),
+        'get_claim_status')
+
+    @classmethod
+    def __post_setup__(cls):
+        super(ClaimService, cls).__post_setup__()
+        cls.set_fields_readonly_condition(Eval('claim_status') == 'closed',
+            ['claim_status'], cls._get_skip_set_readonly_fields())
 
     def get_theoretical_covered_element(self, name):
         return None
 
     @classmethod
+    def _get_skip_set_readonly_fields(cls):
+        return []
+
+    @classmethod
     def _export_light(cls):
         return super(ClaimService, cls)._export_light() | {'contract',
             'option', 'benefit'}
+
+    def get_claim_status(self, name):
+        if self.claim:
+            return self.claim.status
 
     def get_claim(self, name):
         if self.loss:
@@ -965,10 +1010,22 @@ class ClaimServiceExtraDataRevision(model._RevisionMixin, model.CoogSQL,
     extra_data_summary = fields.Function(
         fields.Text('Extra Data Summary', depends=['extra_data_values']),
         'get_extra_data_summary')
+    claim_status = fields.Function(fields.Char('Claim Status'),
+        'get_claim_status')
+
+    @classmethod
+    def __post_setup__(cls):
+        super(ClaimServiceExtraDataRevision, cls).__post_setup__()
+        cls.set_fields_readonly_condition(Eval('claim_status') == 'closed',
+            ['claim_status'], cls._get_skip_set_readonly_fields())
 
     @staticmethod
     def revision_columns():
         return ['extra_data_values']
+
+    @classmethod
+    def _get_skip_set_readonly_fields(cls):
+        return []
 
     @classmethod
     def get_reverse_field_name(cls):
@@ -985,3 +1042,7 @@ class ClaimServiceExtraDataRevision(model._RevisionMixin, model.CoogSQL,
             values['_func_key'] = values['date']
         else:
             values['_func_key'] = None
+
+    def get_claim_status(self, name):
+        if self.claim_service and self.claim_service.claim:
+            return self.claim_service.claim.status

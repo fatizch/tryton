@@ -1,3 +1,4 @@
+* BUG#7017 Les données des sinistres sont désormais en lecture seule si le dossier est clôt
 * BUG#6924 Ajout de la possibilité de clôturer un sinistre par le menu action
 * BUG#6573 Correction d'un blocage lié à la tentative d'afficher les sinistres par la synthèse d'un tiers
 

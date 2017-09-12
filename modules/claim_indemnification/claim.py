@@ -577,21 +577,19 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     __name__ = 'claim.indemnification'
 
     beneficiary = fields.Many2One('party.party', 'Beneficiary',
-        states={'readonly': Eval('status') != 'calculated'},
-        ondelete='RESTRICT', required=True, depends=['status'])
+        ondelete='RESTRICT', required=True)
     service = fields.Many2One('claim.service', 'Claim Service',
-        ondelete='CASCADE', select=True, required=True,
-        states={'readonly': Eval('status') == 'paid'}, depends=['status'])
+        ondelete='CASCADE', select=True, required=True)
     kind = fields.Function(
         fields.Selection(INDEMNIFICATION_KIND, 'Kind', sort=False),
         'get_kind')
     kind_string = kind.translated('kind')
     start_date = fields.Date('Start Date', states={
-            'readonly': Or(~Eval('manual'), Eval('status') == 'paid'),
+            'readonly': Or(~Eval('manual'), Eval('status') != 'calculated'),
             'invisible': ~Eval('service.loss.with_end_date')
             }, depends=['manual', 'status', 'kind'], required=True)
     end_date = fields.Date('End Date', states={
-            'readonly': Or(~Eval('manual'), Eval('status') == 'paid'),
+            'readonly': Or(~Eval('manual'), Eval('status') != 'calculated'),
             'invisible': ~Eval('service.loss.with_end_date')
             }, depends=['manual', 'status', 'kind'])
     product = fields.Many2One('product.product', 'Product', states={
@@ -618,20 +616,23 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             ('cancel_scheduled', 'Schedule Cancelled'),
             ('cancel_validated', 'Validate Cancelled'),
             ('cancel_controlled', 'Control Cancelled'),
-            ], 'Status', sort=False,
-        states={'readonly': Eval('status') == 'paid'}, depends=['status'])
+            ], 'Status', sort=False)
     status_string = status.translated('status')
     amount = fields.Function(
         fields.Numeric('Amount',
             digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
-            states={'readonly': ~Eval('manual') | (Eval('status') == 'paid')
-                | Eval('taxes_included')},
+            states={
+                'readonly': ~Eval('manual') | (Eval('status') != 'calculated')
+                | Eval('taxes_included')
+                },
             depends=['currency_digits', 'status', 'manual', 'taxes_included']),
         'get_amount', 'setter_void')
     total_amount = fields.Numeric('Total Amount',
             digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
-            states={'readonly': ~Eval('manual') | (Eval('status') == 'paid')
-                | ~Eval('taxes_included')},
+            states={
+                'readonly': ~Eval('manual') | (Eval('status') != 'calculated')
+                | ~Eval('taxes_included')
+                },
             depends=['currency_digits', 'status', 'manual', 'taxes_included'])
     tax_amount = fields.Function(
         fields.Numeric('Tax Amount',
@@ -642,22 +643,23 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         digits=(16, Eval('local_currency_digits', DEF_CUR_DIG)),
         states={
             'invisible': ~Eval('local_currency'),
-            'readonly': Or(~Eval('manual'), Eval('status') == 'paid')},
+            'readonly': Or(~Eval('manual'), Eval('status') != 'calculated')},
         depends=['local_currency_digits', 'status', 'manual'])
     local_currency = fields.Many2One('currency.currency', 'Local Currency',
         ondelete='RESTRICT', states={
             'invisible': ~Eval('local_currency'),
-            'readonly': Or(~Eval('manual'), Eval('status') == 'paid')},
+            'readonly': Or(~Eval('manual'), Eval('status') != 'calculated')},
         depends=['status', 'manual'])
     local_currency_digits = fields.Function(
         fields.Integer('Local Currency Digits', states={'invisible': True}),
         'on_change_with_local_currency_digits')
     details = fields.One2Many('claim.indemnification.detail',
         'indemnification', 'Details',
-        states={'readonly': Or(~Eval('manual'), Eval('status') == 'paid')},
+        states={
+            'readonly': Or(~Eval('manual'), Eval('status') != 'calculated')
+            },
         depends=['status', 'manual'], delete_missing=True)
-    manual = fields.Boolean('Manual Calculation',
-        states={'readonly': Eval('status') == 'paid'}, depends=['status'])
+    manual = fields.Boolean('Manual Calculation')
     benefit_description = fields.Function(
         fields.Char('Benefit Description'),
         'get_benefit_description')
@@ -724,6 +726,12 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         cls._order = [('start_date', 'ASC')]
 
     @classmethod
+    def __post_setup__(cls):
+        super(Indemnification, cls).__post_setup__()
+        cls.set_fields_readonly_condition(Eval('status') != 'calculated',
+            ['status'], cls._get_skip_set_readonly_fields()),
+
+    @classmethod
     def __register__(cls, module):
         TableHandler = backend.get('TableHandler')
         handler = TableHandler(cls, module)
@@ -733,6 +741,12 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             handler.column_rename('amount', 'total_amount')
 
         super(Indemnification, cls).__register__(module)
+
+    @classmethod
+    def _get_skip_set_readonly_fields(cls):
+        return ['payment_term', 'start_date', 'end_date', 'amount',
+            'total_amount', 'local_currency', 'local_currency_amount',
+            'details', 'payback_method']
 
     @classmethod
     def validate(cls, indemnifications):
@@ -1260,12 +1274,17 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
 
     indemnification = fields.Many2One('claim.indemnification',
         'Indemnification', ondelete='CASCADE', required=True, select=True)
+    indemnification_status = fields.Function(
+        fields.Char('Indemnification Status'),
+        'get_indemnification_status')
     start_date = fields.Date('Start Date',
-        states={'invisible': Eval('indemnification_kind') == 'capital'},
-        depends=['indemnification_kind'])
+        states={
+            'invisible': Eval('indemnification_kind') == 'capital',
+            }, depends=['indemnification_kind'])
     end_date = fields.Date('End Date',
-        states={'invisible': Eval('indemnification_kind') == 'capital'},
-        depends=['indemnification_kind'])
+        states={
+            'invisible': Eval('indemnification_kind') == 'capital',
+            }, depends=['indemnification_kind'])
     indemnification_kind = fields.Function(
         fields.Selection(INDEMNIFICATION_KIND, 'Indemnification Kind',
             sort=False),
@@ -1307,6 +1326,21 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
                 'capital_string': 'Capital',
                 })
         cls._order = [('start_date', 'ASC')]
+
+    @classmethod
+    def __post_setup__(cls):
+        super(IndemnificationDetail, cls).__post_setup__()
+        cls.set_fields_readonly_condition(
+            Eval('indemnification_status') != 'calculated',
+            ['indemnification_status'], cls._get_skip_set_readonly_fields()),
+
+    @classmethod
+    def _get_skip_set_readonly_fields(cls):
+        return []
+
+    def get_indemnification_status(self, name):
+        if self.indemnification:
+            return self.indemnification.status
 
     def get_indemnification_note(self, name):
         return self.indemnification.note

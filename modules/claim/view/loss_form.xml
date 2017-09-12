@@ -16,4 +16,5 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <field name="extra_data" colspan="2" no_command="1"/>
     <field name="services" colspan="4"/>
+    <field name="claim_status" insible="1"/>
 </form>

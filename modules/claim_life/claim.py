@@ -87,15 +87,16 @@ class Loss:
                 ('id', 'in', Eval('possible_covered_persons')),
                 ()
                 )
-            ], ondelete='RESTRICT', depends=['possible_covered_persons'])
+            ], depends=['possible_covered_persons'], ondelete='RESTRICT')
     std_start_date = fields.Function(fields.Date('STD Start Date',
-            states={'invisible': Eval('loss_desc_kind') != 'std',
-                'readonly': Eval('state') != 'draft'},
-            depends=['loss_desc_kind', 'loss_desc', 'state']),
+            states={'invisible': Eval('loss_desc_kind') != 'std'},
+            depends=['loss_desc_kind', 'loss_desc']),
         'get_start_end_dates', setter='set_start_end_dates')
     std_end_date = fields.Function(fields.Date('STD End Date',
-            states={'invisible': Eval('loss_desc_kind') != ('std')},
-            depends=['loss_desc_kind', 'loss_desc']),
+            states={
+                'invisible': Eval('loss_desc_kind') != ('std'),
+                'readonly': Eval('claim_status') == 'closed',
+                 }, depends=['loss_desc_kind', 'loss_desc', 'claim_status']),
         'get_start_end_dates', setter='set_start_end_dates')
     initial_std_start_date = fields.Date('Initial STD Start Date',
         states={'invisible': Eval('loss_desc_kind') != 'ltd',
@@ -108,7 +109,10 @@ class Loss:
             depends=['loss_desc_kind', 'loss_desc']),
         'get_start_end_dates', setter='set_start_end_dates')
     ltd_end_date = fields.Function(fields.Date('LTD End Date',
-            states={'invisible': Eval('loss_desc_kind') != 'ltd'},
+            states={
+                'invisible': Eval('loss_desc_kind') != 'ltd',
+                'readonly': Eval('claim_status') == 'closed',
+                },
             depends=['loss_desc_kind', 'loss_desc']),
         'get_start_end_dates', setter='set_start_end_dates')
     return_to_work_date = fields.Date('Return to Work',
@@ -153,6 +157,11 @@ class Loss:
                 })
         cls.closing_reason.depends.extend(['std_end_date', 'ltd_end_date',
                 'loss_kind'])
+
+    @classmethod
+    def _get_skip_set_readonly_fields(cls):
+        return super(Loss, cls)._get_skip_set_readonly_fields() + [
+            'ltd_end_date', 'std_end_date']
 
     def get_loss_kind(self, name):
         return self.loss_desc.loss_kind

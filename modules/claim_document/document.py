@@ -24,6 +24,8 @@ class DocumentRequestLine:
     __name__ = 'document.request.line'
 
     claim = fields.Many2One('claim', 'Claim', ondelete='CASCADE', select=True)
+    claim_status = fields.Function(fields.Char('Claim Status'),
+        'get_claim_status')
 
     @classmethod
     def __register__(cls, module_name):
@@ -44,6 +46,20 @@ class DocumentRequestLine:
                             cls.claim.sql_type().base)],
                     where=(table.for_object.like('claim,%'))
                     ))
+
+    @classmethod
+    def __post_setup__(cls):
+        super(DocumentRequestLine, cls).__post_setup__()
+        cls.set_fields_readonly_condition(Eval('claim_status') == 'closed',
+            ['claim_status'], cls._get_skip_set_readonly_fields())
+
+    @classmethod
+    def _get_skip_set_readonly_fields(cls):
+        return []
+
+    def get_claim_status(self, name):
+        if self.claim:
+            return self.claim.status
 
     @classmethod
     def update_values_from_target(cls, data_dict):

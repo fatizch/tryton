@@ -21,8 +21,8 @@ class Loss:
     hospitalisation_periods = fields.One2Many(
         'claim.loss.hospitalisation.period', 'loss',
         'Hospitalisation Periods', delete_missing=True, states={
-            'invisible': Not(Equal(Eval('loss_desc_kind'), 'std'))},
-        depends=['loss_desc_kind'])
+            'invisible': Not(Equal(Eval('loss_desc_kind'), 'std')),
+            }, depends=['loss_desc_kind'])
 
     @classmethod
     def __setup__(cls):

@@ -1,10 +1,12 @@
+* BUG#7017 Les lignes de documents sont désormais en lecture seule si le dossier des prestation est clôt
+
 Version 1.12 - 2017-04-28
-* FEA#0000 Ajouter un bouton pour relancer le wizard de demande des documents dans le processus des sinistres  
+* FEA#0000 Ajouter un bouton pour relancer le wizard de demande des documents dans le processus des sinistres
 
 Version 1.10 - 2016-11-02
-* FEA#0000 Requesting a document is now available as a process step
+* FEA#0000 La demande de document est désormais disponible comme un étape de processus
 
 Version 1.8 - 2016-07-06
-* FEA#0000 Module Creation
-* FEA#0000 Make document request a process step which calls a report wizard
-* FEA#0000 Allow Claim's Documents to be automatically reminded
+* FEA#0000 Création du module
+* FEA#0000 Ajout d'une demande de document dans l'étape du processus afin de lancer l'assistant de rapport
+* FEA#0000 Les documents des dossiers de prestations peuvent être automatiquement relancés

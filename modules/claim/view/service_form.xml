@@ -14,4 +14,5 @@ this repository contains the full copyright notices and license terms. -->
     <label name="benefit"/>
     <field name="benefit" widget="selection"/>
     <field name="extra_datas" colspan="4"/>
+    <field name="claim_status" invisible="1"/>
 </form>

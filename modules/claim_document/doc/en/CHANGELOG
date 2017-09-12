@@ -1,3 +1,5 @@
+* BUG#7017 Document request lines are now read only if the claim is closed
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Add button to relaunch the document request wizard in claim process
 

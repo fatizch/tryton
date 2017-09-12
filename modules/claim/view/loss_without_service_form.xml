@@ -19,4 +19,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="available_closing_reasons" invisible="1"/>
     <newline/>
     <field name="extra_data" colspan="2" no_command="1"/>
+    <field name="claim_status" invisible="1"/>
 </form>
