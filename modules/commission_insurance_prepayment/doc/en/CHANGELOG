@@ -1,3 +1,5 @@
+* BUG#6059 Aggegated prepayment commissions are now grouped by date
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Add extra details on commissions
 * FEA#0000 Set start and end dates of prepayment commissions

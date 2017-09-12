@@ -19,6 +19,7 @@ def register():
         commission.Commission,
         commission.Plan,
         commission.Agent,
+        commission.AggregatedCommission,
         invoice.Invoice,
         event.Event,
         rule_engine.RuleEngineRuntime,

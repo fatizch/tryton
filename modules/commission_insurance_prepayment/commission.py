@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
 from simpleeval import simple_eval
-from sql import Column, Null
+from sql import Column, Null, Literal
 from sql.operators import Or
 from sql.aggregate import Sum
 from sql.conditionals import Case, Coalesce
@@ -27,6 +27,7 @@ __all__ = [
     'Agent',
     'FilterCommissions',
     'FilterAggregatedCommissions',
+    'AggregatedCommission',
     ]
 
 
@@ -297,5 +298,21 @@ class FilterAggregatedCommissions:
                 self).do_filter_commission(action)
         clause = [('origin', '=', str(commission.origin))]
         clause += [('agent', '=', commission.agent.id)]
+        if commission.is_prepayment:
+            clause += [('date', '=', commission.date)]
         action.update({'pyson_domain': PYSONEncoder().encode(clause)})
         return action, {}
+
+
+class AggregatedCommission:
+
+    __name__ = 'commission.aggregated'
+
+    @classmethod
+    def get_group_by(cls, tables):
+        commission = tables['commission']
+        group_by = super(AggregatedCommission, cls).get_group_by(tables)
+        return group_by + [
+            Case((commission.is_prepayment == Literal(False), Null),
+                else_=commission.date), commission.is_prepayment
+            ]

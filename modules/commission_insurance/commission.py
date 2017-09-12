@@ -395,29 +395,47 @@ class AggregatedCommission(model.CoogSQL, model.CoogView):
     def get_invoice_state(self, name=None):
         return self.invoice.state if self.invoice else None
 
-    @staticmethod
-    def table_query():
+    @classmethod
+    def get_tables(cls):
         pool = Pool()
-        Agent = pool.get('commission.agent')
-        InvoiceLine = pool.get('account.invoice.line')
         commission = pool.get('commission').__table__()
-        agent = Agent.__table__()
-        invoice_line = InvoiceLine.__table__()
+        agent = pool.get('commission.agent').__table__()
+        invoice_line = pool.get('account.invoice.line').__table__()
+        return {
+            'commission': commission,
+            'account.invoice.line': invoice_line,
+            'commission.agent': agent,
+            }
 
-        where_clause = None
-        origins = Transaction().context.get('origins', None)
-        if origins:
-            where_clause = commission.origin.in_(origins)
+    @classmethod
+    def get_query_table(cls, tables):
+        commission = tables['commission']
+        agent = tables['commission.agent']
+        invoice_line = tables['account.invoice.line']
 
         commission_agent = commission.join(agent,
             condition=commission.agent == agent.id)
 
-        per_agent = commission_agent.join(invoice_line, type_='LEFT OUTER',
+        return commission_agent.join(invoice_line, type_='LEFT OUTER',
                 condition=(commission.origin == coog_sql.TextCat(
                     'account.invoice.line,', Cast(invoice_line.id, 'VARCHAR')))
                 )
 
-        return per_agent.select(
+    @classmethod
+    def get_where_clause(cls, tables):
+        origins = Transaction().context.get('origins', None)
+        commission = tables['commission']
+        if origins:
+            return commission.origin.in_(origins)
+        return None
+
+    @classmethod
+    def get_fields_to_select(cls, tables):
+        commission = tables['commission']
+        agent = tables['commission.agent']
+        invoice_line = tables['account.invoice.line']
+
+        return (
             Max(commission.id).as_('id'),
             agent.party.as_('party'),
             invoice_line.invoice.as_('invoice'),
@@ -430,8 +448,24 @@ class AggregatedCommission(model.CoogSQL, model.CoogView):
             Min(commission.start).as_('start'),
             Max(commission.end).as_('end'),
             Max(commission.date).as_('date'),
-            Sum(commission.amount).as_('total_commission'), where=where_clause,
-            group_by=[commission.agent, invoice_line.invoice, agent.party])
+            Sum(commission.amount).as_('total_commission'))
+
+    @classmethod
+    def get_group_by(cls, tables):
+        commission = tables['commission']
+        agent = tables['commission.agent']
+        invoice_line = tables['account.invoice.line']
+        return [commission.agent, invoice_line.invoice, agent.party]
+
+    @staticmethod
+    def table_query():
+        klass = Pool().get('commission.aggregated')
+        tables = klass.get_tables()
+        query_table = klass.get_query_table(tables)
+
+        return query_table.select(*klass.get_fields_to_select(tables),
+            where=klass.get_where_clause(tables),
+            group_by=klass.get_group_by(tables))
 
 
 class Plan(export.ExportImportMixin, model.TaggedMixin):

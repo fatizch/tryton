@@ -1,3 +1,5 @@
+* BUG#6059 Les commissions agrégées de précomptes sont désormais groupées par date
+
 Version 1.12 - 2017-04-28
 * FEA#0000  Ajout de détails complémentaires sur les commissions
 * FEA#0000 Alimentation des dates de début et fin de commissions de type précompte
