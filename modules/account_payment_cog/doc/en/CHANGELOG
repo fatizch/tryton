@@ -1,3 +1,4 @@
+* BUG#7019 Check the creation of a payment group before notifying the event
 * BUG#6983 Keep "Pending Payment" information is the invoice is cancelled
 * BUG#6939 Add the process method on payment groups as invisible field
 * BUG#6707 Fix payment reject number calculation when mixing payments from different journals

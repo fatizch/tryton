@@ -751,12 +751,14 @@ class Payment(export.ExportImportMixin, Printable,
     @classmethod
     @Workflow.transition('processing')
     def process(cls, payments, group):
-        pool = Pool()
-        Event = pool.get('event')
         group = super(Payment, cls).process(payments, group)
-        cls.set_description(payments)
-        Event.notify_events([group], 'payment_group_created')
-        Event.notify_events(payments, 'process_payment')
+        if payments:
+            pool = Pool()
+            Event = pool.get('event')
+            cls.set_description(payments)
+            if group:
+                Event.notify_events([group], 'payment_group_created')
+            Event.notify_events(payments, 'process_payment')
         return group
 
     @classmethod

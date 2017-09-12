@@ -227,7 +227,8 @@ class PaymentGroupCreationBatch(batch.BatchRoot):
             all_groups.append(group)
             for payment_ids in grouped_slice([x[0] for x in grouped_results]):
                 Payment._set_group(payment_ids, group)
-        Event.notify_events(all_groups, 'payment_group_created')
+        if all_groups:
+            Event.notify_events(all_groups, 'payment_group_created')
         return [x.id for x in all_groups]
 
     @classmethod
