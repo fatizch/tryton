@@ -24,6 +24,7 @@ from trytond.server_context import ServerContext
 from trytond.wizard import Wizard, StateAction
 from trytond.tools import reduce_ids, cursor_dict, memoize
 from trytond.config import config
+from trytond.pyson import Or
 
 import fields
 import export
@@ -600,6 +601,20 @@ class CoogView(ModelView, FunctionalErrorMixIn):
                 return 'toggle_view:%s' % str(view_id)
             return wrapper
         return decorator
+
+    @classmethod
+    def set_fields_readonly_condition(cls, pyson_condition, depends,
+            to_skip=None):
+        to_skip = to_skip or []
+        for field_ in cls._fields.values():
+            if field_.name in to_skip:
+                continue
+            readonly_state = field_.states.get('readonly', False)
+            if isinstance(field_, fields.Function):
+                field_ = field_._field
+            field_.states['readonly'] = Or(readonly_state,
+                pyson_condition)
+            field_.depends += depends
 
 
 class ExpandTreeMixin(object):
