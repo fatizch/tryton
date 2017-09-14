@@ -1236,9 +1236,13 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         for elem in available_coverages:
             if elem.subscription_behaviour == 'optional':
                 continue
-            new_options.append(Option.new_option_from_coverage(elem,
-                    self.product, self.main_contract.start_date,
-                    item_desc=self.item_desc))
+            new_opt = Option.new_option_from_coverage(elem,
+                self.product, self.main_contract.start_date,
+                item_desc=self.item_desc)
+            new_opt.parent_contract = self.contract
+            new_opt.covered_element = self
+            new_options.append(new_opt)
+
         self.options = new_options
 
     def update_extra_data(self, version):
@@ -1282,6 +1286,8 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
                 good_opt = OptionModel.new_option_from_coverage(coverage,
                     product, start_date)
             if good_opt:
+                good_opt.parent_contract = self.contract
+                good_opt.covered_element = self
                 good_options.append(good_opt)
         self.options = good_options
 

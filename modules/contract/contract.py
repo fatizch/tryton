@@ -1961,8 +1961,10 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
     def init_dict_for_rule_engine(self, args):
         args['option'] = self
         self.coverage.init_dict_for_rule_engine(args)
-        if self.contract:
-            self.contract.init_dict_for_rule_engine(args)
+        contract = getattr(self, 'contract', None) or getattr(
+            self, 'parent_contract', None)
+        if contract:
+            contract.init_dict_for_rule_engine(args)
 
     def get_version_at_date(self, at_date):
         for version in sorted(self.versions,
