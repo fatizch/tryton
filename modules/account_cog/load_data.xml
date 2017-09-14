@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="fiscal_year_set_view">
+            <field name="model">fiscal_year.set</field>
+            <field name="type">form</field>
+            <field name="name">fiscal_year_set_form</field>
+        </record>
+        <record model="ir.action.wizard" id="fiscal_year_set_wizard">
+            <field name="name">Set Fiscal Years</field>
+            <field name="wiz_name">fiscal_year.set.wizard</field>
+        </record>
+        <menuitem name="Set Fiscal Years" sequence="120" id="fiscal_year_set_menu" parent="coog_core.initialise_data_menu" action="fiscal_year_set_wizard"/>
+    </data>
+</tryton>

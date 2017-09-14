@@ -6,6 +6,14 @@ msgctxt "error:account.move.line:"
 msgid "Automatic Split Move"
 msgstr "Découpage automatique"
 
+msgctxt "error:fiscal_year.set.wizard:"
+msgid "Fiscal Year"
+msgstr "Année fiscale"
+
+msgctxt "error:fiscal_year.set.wizard:"
+msgid "Post Move Sequence"
+msgstr "Séquence d'émission de mouvement"
+
 msgctxt "field:account.account,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -25,6 +33,10 @@ msgstr "Identifiant XML"
 msgctxt "field:account.account.type.template,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:account.aged_balance.generate,id:"
+msgid "ID"
+msgstr "Identifiant"
 
 msgctxt "field:account.configuration,xml_id:"
 msgid "XML Id"
@@ -178,21 +190,25 @@ msgctxt "field:company.company,fiscal_years:"
 msgid "Fiscal Years"
 msgstr "Années fiscales"
 
-msgctxt "field:ir.test_case,account_template:"
-msgid "Account Template"
-msgstr "Modèles de compte"
-
-msgctxt "field:ir.test_case,fiscal_year_number:"
+msgctxt "field:fiscal_year.set,fiscal_year_number:"
 msgid "Number of Fiscal Years to create"
 msgstr "Nombre d'années fiscales à créer"
 
-msgctxt "field:ir.test_case,fiscal_year_periods_frequency:"
+msgctxt "field:fiscal_year.set,fiscal_year_periods_frequency:"
 msgid "Fiscal Year periods frequency"
-msgstr "Périodes de l'Année Fiscale"
+msgstr "Fréquence des périodes des années fiscales"
 
-msgctxt "field:ir.test_case,fiscal_year_sync_date:"
+msgctxt "field:fiscal_year.set,fiscal_year_sync_date:"
 msgid "Fiscal Year Sync Date"
-msgstr "Date de Synchro Année Fiscale"
+msgstr "Date de synchronisation des années fiscales"
+
+msgctxt "field:fiscal_year.set,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:ir.test_case,account_template:"
+msgid "Account Template"
+msgstr "Modèle de compte"
 
 msgctxt "field:party.party,currency:"
 msgid "Currency"
@@ -270,6 +286,10 @@ msgctxt "field:party.synthesis.menu.move.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "model:account.aged_balance.generate,name:"
+msgid "Generate Aged Balace"
+msgstr "Génération de balance agée"
+
 msgctxt "model:account.journal,name:journal_split"
 msgid "Move Line Reconciliation Split Journal"
 msgstr "Journal de mouvements de découpage"
@@ -278,6 +298,10 @@ msgctxt "model:account.journal.type,name:journal_type_split"
 msgid "Split"
 msgstr "Découpage"
 
+msgctxt "model:fiscal_year.set,name:"
+msgid "Fiscal Year Set"
+msgstr "Mise à jour des années fiscales"
+
 msgctxt "model:ir.action,name:act_move_line_party_balance"
 msgid "Party Balance"
 msgstr "Balance de tiers"
@@ -285,6 +309,10 @@ msgstr "Balance de tiers"
 msgctxt "model:ir.action,name:act_move_reconciliation_form"
 msgid "Reconciliation"
 msgstr "Lettrage"
+
+msgctxt "model:ir.action,name:fiscal_year_set_wizard"
+msgid "Set Fiscal Years"
+msgstr "Mise à jour des années fiscales"
 
 msgctxt "model:ir.action,name:report_aged_balance_ods"
 msgid "Aged Balance ODS"
@@ -302,13 +330,13 @@ msgctxt "model:ir.test_case.instance,name:configure_accounting_test_case"
 msgid "Configure Accounting Test Case"
 msgstr "Jeux d'essai : configuration de la comptabilité"
 
-msgctxt "model:ir.test_case.instance,name:fiscal_year_test_case"
-msgid "Fiscal Year Test Case"
-msgstr "Jeux d'essai : années fiscales"
-
 msgctxt "model:ir.test_case.instance,name:journal_test_case"
 msgid "Journal Creation"
 msgstr "Jeux d'essai: Création des journaux"
+
+msgctxt "model:ir.ui.menu,name:fiscal_year_set_menu"
+msgid "Set Fiscal Years"
+msgstr "Mise à jour des années fiscales"
 
 msgctxt "model:ir.ui.menu,name:menu_account"
 msgid "Accounting"
@@ -335,6 +363,10 @@ msgid "Company"
 msgstr "Société"
 
 msgctxt "report:account.aged_balance:"
+msgid "Page"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
 msgid "Party"
 msgstr "Tiers"
 
@@ -346,19 +378,19 @@ msgctxt "report:account.aged_balance:"
 msgid "Total"
 msgstr "Total"
 
-msgctxt "selection:ir.test_case,fiscal_year_periods_frequency:"
-msgid "Half yearly"
-msgstr "Semestriel"
+msgctxt "selection:fiscal_year.set,fiscal_year_periods_frequency:"
+msgid "Half Yearly"
+msgstr "Par semestre"
 
-msgctxt "selection:ir.test_case,fiscal_year_periods_frequency:"
+msgctxt "selection:fiscal_year.set,fiscal_year_periods_frequency:"
 msgid "Monthly"
 msgstr "Mensuel"
 
-msgctxt "selection:ir.test_case,fiscal_year_periods_frequency:"
+msgctxt "selection:fiscal_year.set,fiscal_year_periods_frequency:"
 msgid "Quarterly"
 msgstr "Trimestriel"
 
-msgctxt "selection:ir.test_case,fiscal_year_periods_frequency:"
+msgctxt "selection:fiscal_year.set,fiscal_year_periods_frequency:"
 msgid "Yearly"
 msgstr "Annuel"
 
@@ -405,6 +437,14 @@ msgstr "Candidats"
 msgctxt "view:party.party:"
 msgid "Account"
 msgstr "Compte"
+
+msgctxt "wizard_button:fiscal_year.set.wizard,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:fiscal_year.set.wizard,start,set_:"
+msgid "Set"
+msgstr "Mise à jour"
 
 # Custom translations below
 
@@ -476,14 +516,14 @@ msgstr ""
 "%(credit)s » diffèrent."
 
 msgctxt "error:account.move.reconciliation:account."
+msgid "You can not modify a reconciliation."
+msgstr "Vous ne pouvez modifier un lettrage."
+
+msgctxt "error:account.move.reconciliation:account."
 msgid "You can not reconcile line \"%s\" because it is not in valid state."
 msgstr ""
 "Vous ne pouvez lettrer la ligne « %s » car elle n'est pas dans un état "
 "valide."
-
-msgctxt "error:account.move.reconciliation:account."
-msgid "You can not modify a reconciliation."
-msgstr "Vous ne pouvez modifier un lettrage."
 
 msgctxt "error:account.period:account."
 msgid ""
@@ -505,21 +545,21 @@ msgctxt "model:account.reconcile.show,name:account."
 msgid "Reconcile"
 msgstr "Lettrer"
 
-msgctxt "model:ir.action,name:account.act_reconcile_lines"
-msgid "Reconcile Lines"
-msgstr "Lettrer les lignes"
+msgctxt "model:ir.action,name:account.act_unreconcile_lines"
+msgid "Unreconcile Lines"
+msgstr "Dé-lettrer les lignes"
 
 msgctxt "model:ir.action,name:account.act_move_reconciliation_lines"
 msgid "Reconciliation Lines"
 msgstr "Lignes de lettrage"
 
+msgctxt "model:ir.action,name:account.act_reconcile_lines"
+msgid "Reconcile Lines"
+msgstr "Lettrer les lignes"
+
 msgctxt "model:ir.action,name:account.act_reconcile"
 msgid "Reconcile Accounts"
 msgstr "Lettrer les comptes"
-
-msgctxt "model:ir.action,name:account.act_unreconcile_lines"
-msgid "Unreconcile Lines"
-msgstr "Dé-lettrer les lignes"
 
 msgctxt "model:ir.sequence,name:account.sequence_account_move_reconciliation"
 msgid "Default Account Move Reconciliation"

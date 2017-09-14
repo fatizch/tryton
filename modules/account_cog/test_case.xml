@@ -11,12 +11,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="coog_core.test_case_form"/>
             <field name="name">test_case_form</field>
         </record>
-        <!-- Data -->
-        <record model="ir.test_case" id="coog_core.test_case_configuration">
-            <field name="fiscal_year_sync_date">2000-1-1</field>
-            <field name="fiscal_year_periods_frequency">12</field>
-            <field name="fiscal_year_number">30</field>
-        </record>
         <!-- ###################### -->
         <!-- # Test Case Instance # -->
         <!-- ###################### -->
@@ -27,11 +21,6 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.test_case.instance" id="account_test_case">
             <field name="name">Account Test Case</field>
             <field name="method_name">account_test_case</field>
-        </record>
-        <record model="ir.test_case.instance" id="fiscal_year_test_case">
-            <field name="name">Fiscal Year Test Case</field>
-            <field name="method_name">fiscal_year_test_case</field>
-            <field name="test_method_name">fiscal_year_test_case_test_method</field>
         </record>
         <record model="ir.test_case.instance" id="journal_test_case">
             <field name="name">Journal Creation</field>
@@ -55,10 +44,6 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.test_case.instance-ir.test_case.instance" id="configuration_account_requirement">
             <field name="child" ref="account_test_case"/>
             <field name="parent" ref="configure_accounting_test_case"/>
-        </record>
-        <record model="ir.test_case.instance-ir.test_case.instance" id="fiscal_year_main_company_requirement">
-            <field name="child" ref="company_cog.main_company_test_case"/>
-            <field name="parent" ref="fiscal_year_test_case"/>
         </record>
         <record model="ir.test_case.instance-ir.test_case.instance" id="journal_requirement">
             <field name="child" ref="account_test_case"/>

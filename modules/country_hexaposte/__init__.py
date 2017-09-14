@@ -2,13 +2,17 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 import zipcode
-import test_case
 import batch
+import load_data
 
 
 def register():
     Pool.register(
         zipcode.Zip,
-        test_case.TestCaseModel,
         batch.UpdateZipCodesFromHexaPost,
+        load_data.HexaPostSet,
         module='country_hexaposte', type_='model')
+
+    Pool.register(
+        load_data.HexaPostSetWizard,
+        module='country_hexaposte', type_='wizard')

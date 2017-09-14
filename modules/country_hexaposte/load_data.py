@@ -1,11 +1,72 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import os
+from io import BytesIO
 from trytond.pool import Pool
+from trytond.pyson import Eval, Bool
+from trytond.wizard import Wizard, StateTransition, StateView, Button
+from trytond.transaction import Transaction
+from trytond.modules.coog_core import model, fields
 
 
 __all__ = [
+    'HexaPostSet',
     'HexaPostLoader',
+    'HexaPostSetWizard',
     ]
+
+
+class HexaPostSet(model.CoogView):
+    'HexaPost Loader '
+
+    __name__ = 'country.hexapost.set'
+
+    use_default = fields.Boolean('Use default file')
+    resource = fields.Binary('Resource', states={
+            'invisible': Bool(Eval('use_default'))
+            })
+    data_file = fields.Char('Default data file', states={
+            'readonly': True,
+            'invisible': True,
+            })
+
+    @staticmethod
+    def default_data_file():
+        filename = 'HEXAPOSTNV2011_2016.tri'
+        top_path = os.path.abspath(os.path.dirname(__file__))
+        data_path = os.path.join(
+            top_path, 'test_case_data',
+            Transaction().language, filename)
+        return data_path
+
+
+class HexaPostSetWizard(Wizard):
+    'HexaPost Loader Set Wizard'
+
+    __name__ = 'country.hexapost.set.wizard'
+
+    start_state = 'configuration'
+    configuration = StateView('country.hexapost.set',
+        'country_hexaposte.hexapost_set_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Set', 'set_', 'tryton-ok', default=True),
+            ])
+    set_ = StateTransition()
+
+    def transition_set_(self):
+        Zip = Pool().get('country.zip')
+        if self.configuration.use_default:
+            with open(self.configuration.data_file, 'rb') as _file:
+                data = HexaPostLoader.get_hexa_post_data_from_file(_file)
+        else:
+            data = HexaPostLoader.get_hexa_post_data_from_file(
+                BytesIO(self.configuration.resource))
+        to_create, to_write = HexaPostLoader.get_hexa_post_updates(data)
+        if to_create:
+            Zip.create(to_create)
+        if to_write:
+            Zip.write(*to_write)
+        return 'end'
 
 
 class HexaPostLoader(object):

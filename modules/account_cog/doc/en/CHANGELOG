@@ -1,3 +1,4 @@
+* FEA#6377 Move initialisation of fiscal years from test case to a wizard
 * OTH#0000 Now, the batch parameter 'possible_days' stop the batch execution if empty or not given
 * FEA#6865 Add ODS report on aged balance
 * FEA#6865 Add batch to report aged balance

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <menuitem name="Set Data" sequence="100" id="initialise_data_menu" parent="ir.menu_administration"/>
+        <!-- Global Search Wizard -->
+        <record model="ir.ui.view" id="global_search_set_view">
+            <field name="model">global_search.set</field>
+            <field name="type">form</field>
+            <field name="name">global_search_set_form</field>
+        </record>
+        <record model="ir.action.wizard" id="global_search_list_apply_wizard">
+            <field name="name">Apply Global Search Models</field>
+            <field name="wiz_name">global_search.set.wizard</field>
+        </record>
+        <menuitem name="Set global search" sequence="110" id="global_search_apply_menu" 
+            parent="initialise_data_menu" action="global_search_list_apply_wizard"/>
+        <!-- Apply translatable languages wizard -->
+        <record model="ir.ui.view" id="language_translatable_set_view">
+            <field name="model">language_translatable.set</field>
+            <field name="type">form</field>
+            <field name="name">language_translatable_set_form</field>
+        </record>
+        <record model="ir.action.wizard" id="translatable_language_apply_wizard">
+            <field name="name">Set Translatable Languages</field>
+            <field name="wiz_name">language_translatable.set.wizard</field>
+        </record>
+        <menuitem name="Update translatable languages" sequence="110" id="language_translatable_menu"
+            parent="initialise_data_menu" action="translatable_language_apply_wizard"/>
+    </data>
+</tryton>

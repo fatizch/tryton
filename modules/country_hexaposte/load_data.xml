@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="hexapost_set_view_form">
+            <field name="model">country.hexapost.set</field>
+            <field name="type">form</field>
+            <field name="name">hexapost_set_form</field>
+        </record>
+        <record model="ir.action.wizard" id="country_hexapost_set_wizard">
+            <field name="name">Hexapost Loader</field>
+            <field name="wiz_name">country.hexapost.set.wizard</field>
+        </record>
+        <menuitem name="Initialise Zipcodes" sequence="30" id="zip_initialise"
+            parent="coog_core.initialise_data_menu" action="country_hexapost_set_wizard"/>
+    </data>
+</tryton>

@@ -19,22 +19,9 @@ this repository contains the full copyright notices and license terms. -->
         <!-- # Test Case Instance # -->
         <!-- ###################### -->
         <!-- Data -->
-        <record model="ir.test_case.instance" id="bank_test_case">
-            <field name="name">Bank Test Case</field>
-            <field name="method_name">bank_test_case</field>
-            <field name="test_method_name">bank_test_case_test_method</field>
-        </record>
         <record model="ir.test_case.instance" id="bank_account_test_case">
             <field name="name">Bank Account Test Case</field>
             <field name="method_name">bank_account_test_case</field>
-        </record>
-        <!-- ######################### -->
-        <!-- # Test Case Requirement # -->
-        <!-- ######################### -->
-        <!-- Data -->
-        <record model="ir.test_case.instance-ir.test_case.instance" id="bank_account_bank_requirement">
-            <field name="child" ref="bank_test_case"/>
-            <field name="parent" ref="bank_account_test_case"/>
         </record>
     </data>
 </tryton>

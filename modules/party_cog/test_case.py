@@ -10,13 +10,25 @@ from trytond.modules.coog_core import coog_string
 
 MODULE_NAME = 'party_cog'
 
-__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
+    'GlobalSearchSet',
     ]
 
 
+class GlobalSearchSet:
+    __metaclass__ = PoolMeta
+    __name__ = 'global_search.set'
+
+    @classmethod
+    def global_search_list(cls):
+        res = super(GlobalSearchSet, cls).global_search_list()
+        res.add('party.party')
+        return res
+
+
 class TestCaseModel:
+    __metaclass__ = PoolMeta
     __name__ = 'ir.test_case'
 
     number_of_parties = fields.Integer('Number of Parties')

@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:country.hexapost.set,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:country.hexapost.set,resource:"
+msgid "Resource"
+msgstr "Ressource"
+
 msgctxt "field:country.zip,hexa_post_id:"
 msgid "Hexa Post Id"
 msgstr "Identifiant hexaposte"
@@ -10,10 +18,30 @@ msgctxt "field:country.zipcode.update_from_hexapost,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "model:country.hexapost.set,name:"
+msgid "HexaPost Loader"
+msgstr "Mise à jour des codes postaux"
+
 msgctxt "model:country.zipcode.update_from_hexapost,name:"
 msgid "Update Zip Codes From Hexa Post Files"
 msgstr "Mettre à jour les codes postaux depuis des fichiers hexaposte"
 
-msgctxt "model:ir.test_case.instance,name:hexa_post_test_case"
-msgid "Hexa Post Test Case"
-msgstr "Jeux d'essai Hexaposte"
+msgctxt "model:ir.action,name:"
+msgid "Hexapost Loader"
+msgstr "Mise à jour des codes postaux"
+
+msgctxt "model:ir.action,name:country_hexapost_set_wizard"
+msgid "Hexapost Loader"
+msgstr "Mise à jour des codes postaux"
+
+msgctxt "model:ir.ui.menu,name:zip_initialise"
+msgid "Initialise Zipcodes"
+msgstr "Mise à jour des codes postaux"
+
+msgctxt "wizard_button:country.hexapost.set.wizard,configuration,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:country.hexapost.set.wizard,configuration,set_:"
+msgid "Set"
+msgstr "Mise à jour"

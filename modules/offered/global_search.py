@@ -2,17 +2,17 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
 __all__ = [
-    'TestCaseModel',
+    'GlobalSearchSet',
     ]
 
 
-class TestCaseModel:
-    __name__ = 'ir.test_case'
+class GlobalSearchSet:
+    __name__ = 'global_search.set'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def global_search_list(cls):
-        result = super(TestCaseModel, cls).global_search_list()
-        result.add('contract')
-        return result
+        res = super(GlobalSearchSet, cls).global_search_list()
+        res.add('offered.product')
+        return res

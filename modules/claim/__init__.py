@@ -7,6 +7,7 @@ import contract
 import rule_engine
 import party
 import test_case
+import global_search
 import report_engine
 import benefit
 import wizard
@@ -46,6 +47,7 @@ def register():
         event.EventLog,
         configuration.Configuration,
         wizard.ClaimCloseReasonView,
+        global_search.GlobalSearchSet,
         module='claim', type_='model')
     Pool.register(
         wizard.CloseClaim,

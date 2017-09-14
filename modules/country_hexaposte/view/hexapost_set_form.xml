@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form>
+    <label name="use_default"/>
+    <field name="use_default"/>
+    <newline/>
+    <label name="data_file"/>
+    <field name="data_file"/>
+    <newline/>
+    <label name="resource"/>
+    <field name="resource"/>
+</form>

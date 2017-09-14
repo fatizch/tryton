@@ -8,7 +8,7 @@ import offered
 import package
 import report_engine
 import rule_engine
-import test_case
+import global_search
 
 
 def register():
@@ -28,7 +28,7 @@ def register():
         offered.OptionDescriptionExtraDataRelation,
         rule_engine.RuleEngine,
         rule_engine.OptionDescriptionEndingRule,
-        test_case.TestCaseModel,
         report_engine.ReportProductRelation,
         report_engine.ReportTemplate,
+        global_search.GlobalSearchSet,
         module='offered', type_='model')

@@ -6,23 +6,17 @@ from trytond.cache import Cache
 
 MODULE_NAME = 'claim'
 
-__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]
 
 
 class TestCaseModel:
+    __metaclass__ = PoolMeta
     __name__ = 'ir.test_case'
 
     _get_event_desc_cache = Cache('get_event_desc')
     _get_document_desc_cache = Cache('get_document_desc')
-
-    @classmethod
-    def global_search_list(cls):
-        result = super(TestCaseModel, cls).global_search_list()
-        result.add('claim')
-        return result
 
     @classmethod
     def create_document(cls, **kwargs):

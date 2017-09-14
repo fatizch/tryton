@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="bank_data_set_view">
+            <field name="model">bank_cog.data.set</field>
+            <field name="type">form</field>
+            <field name="name">bank_data_set_form</field>
+        </record>
+        <record model="ir.action.wizard" id="bank_cog_data_set_wizard">
+            <field name="name">Set Bank Data</field>
+            <field name="wiz_name">bank_cog.data.set.wizard</field>
+        </record>
+        <menuitem name="Set Bank Data" sequence="110" id="bank_data_set" 
+            parent="coog_core.initialise_data_menu" action="bank_cog_data_set_wizard"/>
+    </data>
+</tryton>

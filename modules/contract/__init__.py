@@ -5,7 +5,7 @@ from trytond.pool import Pool
 import contract
 import rule_engine
 import party
-import test_case
+import global_search
 import wizard
 import service
 import contact_type
@@ -44,7 +44,7 @@ def register():
         service.ContractService,
         rule_engine.RuleEngineRuntime,
         party.Party,
-        test_case.TestCaseModel,
+        global_search.GlobalSearchSet,
         wizard.PackageSelection,
         wizard.OptionsDisplayer,
         wizard.WizardOption,

@@ -4,12 +4,6 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form" position="inside">
         <newline/>
-        <label name="fiscal_year_sync_date"/>
-        <field name="fiscal_year_sync_date"/>
-        <label name="fiscal_year_periods_frequency"/>
-        <field name="fiscal_year_periods_frequency"/>
-        <label name="fiscal_year_number"/>
-        <field name="fiscal_year_number"/>
         <label name="account_template"/>
         <field name="account_template"/>
         <newline/>

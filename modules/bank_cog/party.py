@@ -9,7 +9,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, PYSONEncoder, Not, Bool
 
 from trytond.modules.coog_core import coog_string, fields, utils, model
-from trytond.modules.coog_core import UnionMixin
 from trytond.modules.party_cog.party import STATES_COMPANY
 from trytond.wizard import Wizard
 

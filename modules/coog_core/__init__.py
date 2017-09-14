@@ -21,6 +21,7 @@ import note
 import access
 import extra_details
 import wizard_context
+import load_data
 
 from model import UnionMixin, expand_tree
 
@@ -91,6 +92,8 @@ def register():
         extra_details.ExtraDetailsConfiguration,
         extra_details.ExtraDetailsConfigurationLine,
         wizard_context.PersistentDataView,
+        load_data.GlobalSearchSet,
+        load_data.LanguageTranslatableSet,
         module='coog_core', type_='model')
 
     if config.get('env', 'testing') == 'True':
@@ -123,6 +126,8 @@ def register():
         ir.TranslationOverride,
         diff_blame.RevisionBlameWizard,
         wizard_context.PersistentContextWizard,
+        load_data.GlobalSearchSetWizard,
+        load_data.LanguageTranslatableWizard,
         module='coog_core', type_='wizard')
 
     Pool.register_post_init_hooks(cache_fields_get, module='ir')

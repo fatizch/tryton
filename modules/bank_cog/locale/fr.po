@@ -66,6 +66,14 @@ msgctxt "field:bank.account.number,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:bank_cog.data.set,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:bank_cog.data.set,resource:"
+msgid "Resource"
+msgstr "Ressource"
+
 msgctxt "field:ir.test_case,currency:"
 msgid "Main Currency"
 msgstr "Monnaie principale"
@@ -126,13 +134,21 @@ msgctxt "field:party.synthesis.menu.bank_account,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "model:bank_cog.data.set,name:"
+msgid "Bank Data Set"
+msgstr "Mise à jour des banques"
+
+msgctxt "model:ir.action,name:bank_cog_data_set_wizard"
+msgid "Set Bank Data"
+msgstr "Mise à jour des banques"
+
 msgctxt "model:ir.test_case.instance,name:bank_account_test_case"
 msgid "Bank Account Test Case"
 msgstr "Jeux d'essai : compte Bancaire"
 
-msgctxt "model:ir.test_case.instance,name:bank_test_case"
-msgid "Bank Test Case"
-msgstr "Jeux d'essai : banques"
+msgctxt "model:ir.ui.menu,name:bank_data_set"
+msgid "Set Bank Data"
+msgstr "Mise à jour des banques"
 
 msgctxt "model:party.synthesis.menu.bank_account,name:"
 msgid "Party Synthesis Menu Bank Account"
@@ -141,3 +157,11 @@ msgstr "Menu Compte Bancaire Synthèse Tiers "
 msgctxt "view:party.party:"
 msgid "Bank"
 msgstr "Banque"
+
+msgctxt "wizard_button:bank_cog.data.set.wizard,configuration,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:bank_cog.data.set.wizard,configuration,set_:"
+msgid "Set"
+msgstr "Mise à jour"

@@ -5,7 +5,7 @@ import logging
 from trytond.pool import Pool
 from trytond.modules.coog_core import batch
 
-from .hexa_post import HexaPostLoader
+from .load_data import HexaPostLoader
 
 
 class UpdateZipCodesFromHexaPost(batch.BatchRootNoSelect):

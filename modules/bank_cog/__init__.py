@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 import party
 import bank
+import load_data
 import test_case
 
 
@@ -17,7 +18,9 @@ def register():
         bank.BankAccountNumber,
         bank.BankAccountParty,
         test_case.TestCaseModel,
+        load_data.BankDataSet,
         module='bank_cog', type_='model')
     Pool.register(
         party.SynthesisMenuOpen,
+        load_data.BankDataSetWizard,
         module='bank_cog', type_='wizard')

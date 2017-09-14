@@ -33,6 +33,7 @@ def register():
         contact_mechanism.ContactMechanism,
         contact_mechanism.PartyInteraction,
         test_case.TestCaseModel,
+        test_case.GlobalSearchSet,
         relationship.RelationType,
         relationship.PartyRelation,
         relationship.PartyRelationAll,

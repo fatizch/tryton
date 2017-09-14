@@ -9,6 +9,7 @@ import test_case
 import party
 import move
 import batch
+import load_data
 
 
 def register():
@@ -42,6 +43,7 @@ def register():
         account.MoveTemplateKeyword,
         account.MoveLineTemplate,
         account.TaxLineTemplate,
+        load_data.FiscalYearSet,
         module='account_cog', type_='model')
     Pool.register(
         move.Reconcile,
@@ -49,6 +51,7 @@ def register():
         party.SynthesisMenuOpen,
         account.OpenThirdPartyBalance,
         move.CreateMove,
+        load_data.FiscalYearSetWizard,
         module='account_cog', type_='wizard')
     Pool.register(
         account.ThirdPartyBalance,
