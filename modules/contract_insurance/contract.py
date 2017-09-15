@@ -1236,12 +1236,9 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         for elem in available_coverages:
             if elem.subscription_behaviour == 'optional':
                 continue
-            new_opt = Option.new_option_from_coverage(elem,
-                self.product, self.main_contract.start_date,
-                item_desc=self.item_desc)
-            new_opt.parent_contract = self.contract
-            new_opt.covered_element = self
-            new_options.append(new_opt)
+            new_options.append(Option.new_option_from_coverage(elem,
+                    self.product, self.main_contract.start_date,
+                    item_desc=self.item_desc))
 
         self.options = new_options
 
