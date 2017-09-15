@@ -126,7 +126,9 @@ class ProcessTransition(model.CoogSQL):
     def get_func_key(self, name=None):
         return '|'.join((self.on_process.technical_name if
                 self.on_process else 'None',
-                self.from_step.technical_name, self.to_step.technical_name if
+                self.from_step.technical_name if
+                self.from_step else 'None',
+                self.to_step.technical_name if
                 self.to_step else 'None'))
 
     def search_func_key(self, name, clause):
@@ -137,6 +139,8 @@ class ProcessTransition(model.CoogSQL):
             on_process = None
         if to_step == 'None':
             to_step = None
+        if from_step == 'None':
+            from_step = None
         return [
             ('on_process.technical_name', clause[1], on_process),
             ('from_step', clause[1], from_step),

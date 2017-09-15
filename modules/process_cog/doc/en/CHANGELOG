@@ -1,3 +1,4 @@
+* BUG#6400 Fix process JSON export
 * BUG#6816 Clean up process logs after history restoration
 
 Version 1.12 - 2017-04-28

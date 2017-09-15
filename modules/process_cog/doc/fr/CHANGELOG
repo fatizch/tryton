@@ -1,3 +1,4 @@
+* BUG#6400 Correction de l'export JSON des processus
 * BUG#6816 Nettoyage des process logs après restauration depuis l'historique
 
 Version 1.12 - 2017-04-28
