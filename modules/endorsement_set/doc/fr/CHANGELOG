@@ -1,3 +1,5 @@
+* BUG#7065 Ajout explicite de la méthode de selection du contact sur les avenants de contrat liés
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Possibilité d'imprimer des ensembles d'avenants
 

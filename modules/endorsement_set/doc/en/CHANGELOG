@@ -1,3 +1,5 @@
+* BUG#7065 Adding explicity the selection method of the contact on endorsement set
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Make endorsement sets Printable
 

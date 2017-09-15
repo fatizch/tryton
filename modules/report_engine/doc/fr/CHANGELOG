@@ -1,3 +1,4 @@
+* BUG#7065 La variable 'Adresse' dans les rapports contient désormais l'adresse principale du contact
 * BUG#6993 Suppression de l'import simplejson
 * OTH#0000 Ajout d'un état invisible à 'faux' par défaut sur le bouton de génération pour faciliter la surcharge.
 * OTH#0000 Déplacement de la méthode group by provenant de report_engine_flow

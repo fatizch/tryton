@@ -683,8 +683,7 @@ class Printable(Model):
         contact = self.get_contact()
         if not contact:
             return ''
-        address = contact.addresses[0] if contact.addresses else None
-        return address
+        return contact.main_address
 
     def get_available_doc_templates(self, kind=None):
         DocumentTemplate = Pool().get('report.template')

@@ -339,6 +339,10 @@ class Endorsement:
         cls.save(endorsements)
         return endorsements
 
+    def get_contact(self):
+        if self.contract_set:
+            return self.contract_set.get_contact()
+
 
 class EndorsementSetSelectDeclineReason(model.CoogView):
     'Reason selector to decline endorsement set'
