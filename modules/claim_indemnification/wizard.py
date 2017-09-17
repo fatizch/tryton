@@ -57,7 +57,10 @@ class IndemnificationElement(model.CoogView):
     indemnification = fields.Many2One(
         'claim.indemnification', 'Indemnification',
         states={'invisible': True, 'readonly': True})
+    recipient = fields.Many2One(
+        'party.party', 'Payment Recipient', readonly=True)
     loss_date = fields.Date('Loss Date', readonly=True)
+    status = fields.Char('Status', readonly=True)
     benefit = fields.Many2One('benefit', 'Benefit', readonly=True)
     contract = fields.Many2One('contract', 'Contract', readonly=True)
     indemnification_details = fields.Many2Many(
@@ -80,8 +83,10 @@ class IndemnificationElement(model.CoogView):
             'currency_symbol': indemnification.currency_symbol,
             'start_date': indemnification.start_date,
             'end_date': indemnification.end_date,
+            'status': indemnification.status_string,
             'claim': service.loss.claim.id,
             'claim.rec_name': service.loss.claim.rec_name,
+            'recipient': indemnification.beneficiary,
             'loss_date': service.loss.start_date,
             'indemnification_details': [indemnification.id]
             }

@@ -576,9 +576,19 @@ msgctxt ""
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
+msgctxt ""
+"field:claim.indemnification.assistant.control.element,recipient:"
+msgid "Payment recipient"
+msgstr "Destinataire du paiement"
+
 msgctxt "field:claim.indemnification.assistant.control.element,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
+
+msgctxt ""
+"field:claim.indemnification.assistant.control.element,status:"
+msgid "Status"
+msgstr "Statut"
 
 msgctxt "field:claim.indemnification.assistant.control.element,id:"
 msgid "ID"
@@ -640,9 +650,19 @@ msgctxt ""
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
+msgctxt ""
+"field:claim.indemnification.assistant.validate.element,recipient:"
+msgid "Payment recipient"
+msgstr "Destinataire du paiement"
+
 msgctxt "field:claim.indemnification.assistant.validate.element,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
+
+msgctxt ""
+"field:claim.indemnification.assistant.validate.element,status:"
+msgid "Status"
+msgstr "Statut"
 
 msgctxt "field:claim.indemnification.assistant.validate.element,id:"
 msgid "ID"

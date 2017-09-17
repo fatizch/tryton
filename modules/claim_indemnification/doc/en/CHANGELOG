@@ -1,3 +1,4 @@
+* FEA#7046 Improve indemnification validation and control view
 * BUG#6882 Some warnings or errors are no more raised when closing a claim with refused services
 * FEA#5907 Manage multiple indemnifications on a given period
 * BUG#6632 Fix crash in calculating indemnification gaps when closing a claim

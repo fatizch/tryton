@@ -3,8 +3,10 @@
 this repository contains the full copyright notices and license terms. -->
 <tree editable="bottom">
     <field name="action"/>
+    <field name="recipient"/>
     <field name="start_date"/>
     <field name="end_date"/>
+    <field name="status"/>
     <field name="amount">
         <suffix name="currency_symbol"/>
     </field>
