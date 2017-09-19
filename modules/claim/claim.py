@@ -358,10 +358,11 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
         loss.init_loss(loss_desc_code, **kwargs)
         self.losses = self.losses + (loss, )
 
-    def ws_add_new_loss(self, loss_desc_code, parameters=None):
+    def ws_add_new_loss(self, loss_desc_code, parameters=None, activate=True):
         self.add_new_loss(loss_desc_code, **parameters)
         self.save()
-        self.activate_losses([self])
+        if activate is True:
+            self.activate_losses([self])
 
     @classmethod
     def ws_deliver_automatic_benefit(cls, claims):
@@ -687,35 +688,39 @@ class Loss(model.CoogSQL, model.CoogView):
             cls.write(to_write, {'state': 'draft'})
             Pool().get('event').notify_events(to_write, 'draft_loss')
 
+    def check_activation(self):
+        claim = self.claim
+        if claim.losses:
+            start_dates = [x.start_date for x in claim.losses
+                if x.start_date]
+            start_dates.sort()
+            if start_dates and start_dates[0] > claim.declaration_date:
+                lang = Transaction().context.get('language')
+                Lang = Pool().get('ir.lang')
+                lang, = Lang.search([('code', '=', lang)], limit=1)
+                self.raise_user_warning('prior_declaration_date_%s' %
+                    str(self.id), 'prior_declaration_date', {
+                        'declaration_date': Lang.strftime(
+                            claim.declaration_date, lang.code,
+                            lang.date),
+                        'start_date': Lang.strftime(start_dates[0],
+                            lang.code, lang.date),
+                        })
+        duplicates = self.get_possible_duplicates()
+        if not duplicates:
+            return
+        self.raise_user_warning('possible_duplicates_%s' % str(self.id),
+            'duplicate_loss', {'loss': self.rec_name,
+                'losses': '\n'.join(x.rec_name for x in duplicates)})
+
     @classmethod
     @model.CoogView.button
     def activate(cls, losses):
         to_write = [x for x in losses if x.state != 'active']
         if to_write:
-            for loss in to_write:
-                claim = loss.claim
-                if claim.losses:
-                    start_dates = [x.start_date for x in claim.losses
-                        if x.start_date]
-                    start_dates.sort()
-                    if start_dates and start_dates[0] > claim.declaration_date:
-                        lang = Transaction().context.get('language')
-                        Lang = Pool().get('ir.lang')
-                        lang, = Lang.search([('code', '=', lang)], limit=1)
-                        cls.raise_user_warning('prior_declaration_date_%s' %
-                            str(loss.id), 'prior_declaration_date', {
-                                'declaration_date': Lang.strftime(
-                                    claim.declaration_date, lang.code,
-                                    lang.date),
-                                'start_date': Lang.strftime(start_dates[0],
-                                    lang.code, lang.date),
-                                })
-                duplicates = loss.get_possible_duplicates()
-                if not duplicates:
-                    continue
-                cls.raise_user_warning('possible_duplicates_%s' % str(loss.id),
-                    'duplicate_loss', {'loss': loss.rec_name,
-                        'losses': '\n'.join(x.rec_name for x in duplicates)})
+            with model.error_manager():
+                for loss in to_write:
+                    loss.check_activation()
             cls.write(to_write, {'state': 'active'})
             Pool().get('event').notify_events(to_write, 'activate_loss')
 

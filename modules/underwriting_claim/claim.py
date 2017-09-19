@@ -166,8 +166,8 @@ class Claim:
         super(Claim, cls).deliver_automatic_benefit(claims)
         cls.update_underwritings(claims)
 
-    def ws_add_new_loss(self, loss_desc_code, parameters=None):
-        super(Claim, self).ws_add_new_loss(loss_desc_code, parameters)
+    def ws_add_new_loss(self, loss_desc_code, parameters=None, activate=True):
+        super(Claim, self).ws_add_new_loss(loss_desc_code, parameters, activate)
         self.update_underwritings([self])
 
     @classmethod

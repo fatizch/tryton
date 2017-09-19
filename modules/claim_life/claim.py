@@ -273,21 +273,21 @@ class Loss:
                 self.get_date() or self.claim.declaration_date)
         return super(Loss, self).covered_options()
 
-    def pre_validate(self):
-        super(Loss, self).pre_validate()
+    def check_activation(self):
+        super(Loss, self).check_activation()
         if not self.is_a_relapse:
             return
         if self.claim.losses.index(self) == 0:
-            self.raise_user_error('missing_previous_loss')
+            self.append_functional_error('missing_previous_loss')
         if not self.start_date:
             return
         previous_loss = self.claim.losses[
             self.claim.losses.index(self) - 1]
         if not previous_loss.end_date:
-            self.raise_user_error('previous_loss_end_date_missing')
+            self.append_functional_error('previous_loss_end_date_missing')
         if (self.start_date - previous_loss.end_date).days <= 1:
-            # As it's a relapse there must be one day of work betwwen two std
-            self.raise_user_error(
+            # As it's a relapse there must be one day of work between two std
+            self.append_functional_error(
                 'one_day_between_relapse_and_previous_loss')
 
     @classmethod
