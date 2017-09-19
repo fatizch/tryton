@@ -1,3 +1,4 @@
+* FEA#7076 Ajout d'un point d'entrée de configuration generale
 * FEA#6377 Séparation de l'initialisation des recherches globales et des langues traduisibles du cas de test au profit d'un assistant d'initialisation
 * FEA#7015 Ajout d'une fonction technique pour ajouter une condition de lecture seule sur tous les champs d'un modèle
 * BUG#6993 Suppression de l'import simplejson

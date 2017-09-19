@@ -12,6 +12,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Set Fiscal Years</field>
             <field name="wiz_name">fiscal_year.set.wizard</field>
         </record>
-        <menuitem name="Set Fiscal Years" sequence="120" id="fiscal_year_set_menu" parent="coog_core.initialise_data_menu" action="fiscal_year_set_wizard"/>
+        <menuitem name="Set Fiscal Years" sequence="120" id="fiscal_year_set_menu" parent="coog_core.general_configuration_initialise_data_menu" action="fiscal_year_set_wizard"/>
     </data>
 </tryton>

@@ -10,7 +10,7 @@
             <field name="name">Hexapost Loader</field>
             <field name="wiz_name">country.hexapost.set.wizard</field>
         </record>
-        <menuitem name="Initialise Zipcodes" sequence="30" id="zip_initialise"
-            parent="coog_core.initialise_data_menu" action="country_hexapost_set_wizard"/>
+        <menuitem name="Initialise Zipcodes" sequence="130" id="zip_initialise"
+            parent="coog_core.general_configuration_initialise_data_menu" action="country_hexapost_set_wizard"/>
     </data>
 </tryton>

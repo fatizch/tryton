@@ -12,7 +12,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Set Bank Data</field>
             <field name="wiz_name">bank_cog.data.set.wizard</field>
         </record>
-        <menuitem name="Set Bank Data" sequence="110" id="bank_data_set" 
-            parent="coog_core.initialise_data_menu" action="bank_cog_data_set_wizard"/>
+        <menuitem name="Set Bank Data" sequence="110" id="bank_data_set"
+            parent="coog_core.general_configuration_initialise_data_menu" action="bank_cog_data_set_wizard"/>
     </data>
 </tryton>

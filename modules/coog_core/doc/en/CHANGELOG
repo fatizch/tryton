@@ -1,3 +1,4 @@
+* FEA#7076 Add general configuration entrypoint
 * FEA#6377 Move initialisation of global search and translatable languages from test case to a wizard
 * FEA#7015 Add a technical function to set a readonly condition on all fields of a model
 * BUG#6993 Removing simple json import

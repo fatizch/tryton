@@ -1589,13 +1589,17 @@ msgctxt "model:ir.ui.menu,name:global_search_apply_menu"
 msgid "Set global search"
 msgstr "Mise à jour de la recherche globale"
 
-msgctxt "model:ir.ui.menu,name:initialise_data_menu"
-msgid "Initialise Data"
-msgstr "Mise à jour des données"
+msgctxt "model:ir.ui.menu,name:general_configuration_menu"
+msgid "General Configuration"
+msgstr "Configuration générale"
 
 msgctxt "model:ir.ui.menu,name:language_translatable_menu"
 msgid "Update translatable languages"
 msgstr "Mise à jour des langues traduisibles"
+
+msgctxt "model:ir.ui.menu,name:general_configuration_initialise_data_menu"
+msgid "Initialise Data"
+msgstr "Initialisation de donnée"
 
 msgctxt "model:ir.ui.menu,name:menu_event"
 msgid "Event"
