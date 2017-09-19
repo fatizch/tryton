@@ -30,6 +30,7 @@ coog_daily_main() {
     WORKING_DAYS="$1"
     WORKING_DAYS_CONF="$2"
     TODAY_DATE="$(date --iso)"
+    GLOBAL_SUCCESS=0
 
     if [ ! -z "$3" ]; then
         date --date "$3" 1>/dev/null
@@ -51,18 +52,21 @@ coog_daily_main() {
         _coog_daily_check_modules "account_payment_sepa_cog" &&                 \
             coog_chain_main account_payment_sepa_cog payment_fail
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "account_dunning_cog" &&                      \
             coog_chain_main account_dunning_cog dunning                         \
                 --treatment_date="$TODAY_DATE"
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "contract_inactive_quote_declination" &&      \
             coog_chain_main contract_inactive_quote_declination decline_inactive\
                 --treatment_date="$TODAY_DATE"
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "contract_term_renewal" &&                    \
@@ -70,18 +74,21 @@ coog_daily_main() {
                 --working_days="$WORKING_DAYS"                                  \
                 --conf_code="$WORKING_DAYS_CONF"
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "contract" &&                                 \
             coog_chain_main contract terminate_contract                         \
                 --treatment_date="$TODAY_DATE"
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "underwriting" &&                             \
             coog_chain_main underwriting underwriting                           \
                 --treatment_date="$TODAY_DATE"
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         # Executed for each new month
         if [ "$TODAY_WEEK_DAY" == "5" ] && [ "$MONDAY_DATE" -lt  "04" ]         \
@@ -94,12 +101,14 @@ coog_daily_main() {
                     --with_draft=0                                              \
                     --agent_type=agent
             )
+            [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
             (
             _coog_daily_check_modules "commission_insurer" &&                   \
                 coog_chain_main commission_insurer commission                   \
                 --treatment_date="$LAST_DAY_OF_THE_MONTH"
             )
+            [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
         fi
 
         (
@@ -108,6 +117,7 @@ coog_daily_main() {
                 --working_days="$WORKING_DAYS"                                  \
                 --conf_code="$WORKING_DAYS_CONF"
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "account_payment_sepa_cog" &&                 \
@@ -117,6 +127,7 @@ coog_daily_main() {
                 --payment_kind=receivable                                       \
                 --journal_methods=sepa
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
 
         (
@@ -126,6 +137,7 @@ coog_daily_main() {
                 --payment_kind=payable                                          \
                 --journal_methods=sepa
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "account_payment_cog" &&                      \
@@ -133,6 +145,7 @@ coog_daily_main() {
                 --treatment_date="$TODAY_DATE"                                  \
                 --journal_methods=sepa
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "account_cog" &&                              \
@@ -140,6 +153,7 @@ coog_daily_main() {
                 --working_days="$WORKING_DAYS"                                  \
                 --conf_code="$WORKING_DAYS_CONF"
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "insurer_reporting" &&                        \
@@ -147,6 +161,7 @@ coog_daily_main() {
                 --working_days="$WORKING_DAYS"                                  \
                 --conf_code="$WORKING_DAYS_CONF"
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         # Executed the last day of the month
         if [ "$TODAY_DATE" == "$LAST_DAY_OF_THE_MONTH" ]; then
@@ -156,6 +171,7 @@ coog_daily_main() {
                 --treatment_date="$TODAY_DATE"                                  \
                 --possible_days="$LAST_DAY"
             )
+            [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
             (
             _coog_daily_check_modules "insurer_reporting" &&                    \
@@ -163,30 +179,35 @@ coog_daily_main() {
                 --treatment_date="$TODAY_DATE"                                  \
                 --possible_days="$LAST_DAY"
             )
+            [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
         fi
 
         (
         _coog_daily_check_modules "account_aggregate" &&                      \
             coog_chain_main account_aggregate snapshot
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "account_aggregate" &&                        \
             coog_chain_main account_aggregate extract_snapshot                  \
                 --treatment_date="$TODAY_DATE"
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "claim_indemnification" &&                    \
             coog_chain_main claim_indemnification create_indemnifications       \
                 --treatment_date="$TODAY_DATE"
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "planned_event" &&                            \
             coog_chain_main planned_event process                               \
                 --treatment_date="$TODAY_DATE"
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "document_request" &&                         \
@@ -194,10 +215,13 @@ coog_daily_main() {
             --treatment_date="$TODAY_DATE"                                      \
             --on_model="contract"
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
         _coog_daily_check_modules "report_engine" &&                            \
             coog_chain_main report_engine produce_request
         )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
     fi
+    return $GLOBAL_SUCCESS
 }
