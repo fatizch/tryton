@@ -1,3 +1,4 @@
+* BUG#6931 La dé-réconciliation se fait désormais récursivement sur toutes les réconciliations liées aux lignes de découpage (dé-réconciliation en cascade)
 * FEA#6377 Séparation de l'initialisation des années fiscale du cas de test au profit d'un assistant d'initialisation
 * OTH#0000 Désormais, le paramètre de batch 'possible_days' empêche l'execution du batch si vide ou non renseigné
 * FEA#6865 Ajout d'un rapport de type ODS pour la balance agée

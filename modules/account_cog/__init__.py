@@ -18,6 +18,7 @@ def register():
         move.MoveTemplate,
         move.Move,
         move.Line,
+        move.Reconciliation,
         move.ReconcileShow,
         move.ReconcileLinesWriteOff,
         account.Account,

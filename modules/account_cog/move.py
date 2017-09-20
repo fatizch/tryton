@@ -20,6 +20,7 @@ __all__ = [
     'Line',
     'CreateMove',
     'Reconcile',
+    'Reconciliation',
     'ReconcileShow',
     'ReconcileLines',
     'ReconcileLinesWriteOff',
@@ -249,6 +250,55 @@ class Line(export.ExportImportMixin):
     def get_kind_string(self, name):
         return coog_string.translate(self.move, 'kind')
 
+    def line_match_waterfall_condition(self, line, additionnal_reconciliations,
+            journal_code):
+        if (line != self and line.reconciliation and
+                line.reconciliation != self.reconciliation and
+                line.reconciliation not in additionnal_reconciliations and
+                line.journal.code == journal_code and
+                line.reconciliation.create_date >
+                self.reconciliation.create_date):
+            return True
+        return False
+
+    def waterfall_reconciliations(self, additionnal_reconciliations=None,
+            journal_code='SPLIT'):
+        '''
+        This method returns a list of set of all the reconciliations associated
+        to the move line except its own reconciliation.
+        The look up is done recursively for each reconciled lines of the
+        move of each lines of the current line reconciliation.
+        The picked lines are SPLIT lines by default (journal_code
+        parameter).
+        additionnal_reconciliations parameters is filled during the recursive
+        processing and is finally returned.
+        '''
+        additionnal_reconciliations = additionnal_reconciliations or []
+        # We need to get all the move lines of each move for each line of
+        # self.reconciliation
+        # The line must be reconciled and match the journal_code.
+        # The line is not picked if the reconciliation is already in
+        # additionnal_reconciliations
+        # The create date of the reconcilation must be higher than the
+        # self.reconciliation.create_date
+        reconciled_lines = [l
+            for x in self.reconciliation.lines
+            for l in x.move.lines if self.line_match_waterfall_condition(
+                l, additionnal_reconciliations, journal_code)]
+        if not reconciled_lines:
+            return []
+
+        # We want to return all the reconciliation created after
+        # self.reconciliation. So we are crawling using a deep recursive
+        # algorithm based on the reconciliations creation date.
+        # All reconcialiations which depends on the initial reconciliation
+        # should be retrieved.
+        additionnal_reconciliations.extend(
+            [x.reconciliation for x in reconciled_lines])
+        for line in reconciled_lines:
+            line.waterfall_reconciliations(additionnal_reconciliations)
+        return list(set(additionnal_reconciliations))
+
     @classmethod
     def search_is_reconciled(cls, name, clause):
         if (clause[1] == '=' and clause[2]
@@ -365,6 +415,34 @@ class CreateMove:
     def end(self):
         if Transaction().context.get('active_model') == 'account.move':
             return 'reload'
+
+
+class Reconciliation:
+    __name__ = 'account.move.reconciliation'
+
+    @classmethod
+    def delete(cls, reconciliations):
+        all_reconciliations = []
+        for line in sum([[l for l in x.lines if l.journal.code == 'SPLIT']
+                    for x in reconciliations], []):
+            all_reconciliations.extend(line.waterfall_reconciliations(
+                reconciliations + all_reconciliations))
+        # Prepare list of split moves which lines will be automatically
+        # reconciliated together because each lines are de-reconciled
+        split_moves = []
+        for line in sum([[l for l in x.lines if l.journal.code == 'SPLIT']
+                    for x in all_reconciliations], []):
+            if line.move not in split_moves:
+                if not any((l.reconciliation for l in line.move.lines)):
+                    split_moves.append(line.move)
+        super(Reconciliation, cls).delete(
+            all_reconciliations or reconciliations)
+        if split_moves:
+            Line = Pool().get('account.move.line')
+            today = utils.today()
+            # Reconcile each lines of the split move together
+            for move in split_moves:
+                Line.reconcile(move.lines, journal=None, date=today)
 
 
 class Reconcile:
