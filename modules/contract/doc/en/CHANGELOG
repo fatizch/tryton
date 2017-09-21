@@ -1,3 +1,4 @@
+* FEA#7002 Display the contract's icon in its form view
 * BUG#6993 Removing simple json import
 * BUG#6870 Use party's main address instead of searching for to date active address in contract's contact
 * BUG#6748 Possibility to clear the termination reason when reactivating a contract
