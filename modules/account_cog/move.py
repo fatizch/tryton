@@ -433,10 +433,11 @@ class Reconciliation:
         for line in sum([[l for l in x.lines if l.journal.code == 'SPLIT']
                     for x in all_reconciliations], []):
             if line.move not in split_moves:
-                if not any((l.reconciliation for l in line.move.lines)):
-                    split_moves.append(line.move)
+                split_moves.append(line.move)
         super(Reconciliation, cls).delete(
             all_reconciliations or reconciliations)
+        split_moves = [x for x in split_moves
+            if not any((l.reconciliation for l in x.lines))]
         if split_moves:
             Line = Pool().get('account.move.line')
             today = utils.today()

@@ -281,5 +281,5 @@ invoices[1].state == 'posted'
 # #Comment# # be deleted
 Move = Model.get('account.move')
 move, = Move.find([('journal.code', '=', 'SPLIT')])
-len(list(set([x.reconciliation for x in move.lines]))) == 1
+len(list(set([x.reconciliation for x in move.lines if x.reconciliation]))) == 1
 # #Res# #True
