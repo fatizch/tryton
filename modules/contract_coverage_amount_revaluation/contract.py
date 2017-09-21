@@ -3,7 +3,7 @@
 from dateutil.relativedelta import relativedelta
 from trytond.pool import PoolMeta
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, utils
 
 __all__ = [
     'Contract',
@@ -43,6 +43,25 @@ class ContractOption:
     __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
+    @fields.depends('versions')
+    def on_change_with_free_coverage_amount(self, name=None):
+        result = super(ContractOption,
+            self).on_change_with_free_coverage_amount(name)
+        if result or not self.versions:
+            return result
+        current_version = self.get_version_at_date(utils.today())
+        return current_version and current_version.coverage_amount_revaluation
+
+    @fields.depends('versions')
+    def on_change_with_current_coverage_amount_selection(self, name=None):
+        if not self.versions:
+            return None
+        current_version = self.get_version_at_date(utils.today())
+        if current_version and current_version.coverage_amount_revaluation:
+            return None
+        return super(ContractOption,
+            self).on_change_with_current_coverage_amount_selection(name)
+
     def calculate_revaluated_coverage_amount(self, at_date):
         if (not self.coverage
                 or not self.coverage.has_revaluated_coverage_amount):
@@ -63,6 +82,12 @@ class ContractOptionVersion:
     coverage_amount_revaluation = fields.Boolean('Coverage Amount Revaluation',
         readonly=True, help='If True, this coverage amount is a revaluation '
         'of the initially selected coverage amount')
+
+    @classmethod
+    def __setup__(cls):
+        super(ContractOptionVersion, cls).__setup__()
+        # Required to make contract.option on_changes ok
+        cls.coverage_amount.depends.append('coverage_amount_revaluation')
 
     @classmethod
     def default_coverage_amount_revaluation(cls):
