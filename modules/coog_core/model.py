@@ -253,6 +253,14 @@ class ErrorManager(object):
         if self._do_raise:
             raise UserError(self.format_errors())
 
+    def clear_errors(self):
+        self._errors = []
+        self._error_messages = []
+
+    @property
+    def has_errors(self):
+        return bool(self._errors)
+
 
 @contextmanager
 def error_manager():
