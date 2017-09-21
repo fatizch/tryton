@@ -740,6 +740,16 @@ class ContractOption(Printable):
                         Date.date_as_string(
                             option.covered_element.manual_start_date))
 
+    def get_sister_option(self, coverage_code):
+        options = []
+        if self.covered_element:
+            options = self.covered_element.options
+        elif self.contract:
+            options = self.contract.options
+        for option in options:
+            if option.coverage.code == coverage_code:
+                return option
+
 
 class ContractOptionVersion:
     __name__ = 'contract.option.version'

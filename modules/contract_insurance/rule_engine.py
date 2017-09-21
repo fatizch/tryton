@@ -15,6 +15,21 @@ class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
 
     @classmethod
+    def get_other_option_data(cls, coverage_code, meth_name, base_args, *args,
+            **kwargs):
+        '''
+            This method calls the rule function "meth_name" for the closest
+            option with a coverage matching "coverage_code" relatively to the
+            current "base_args" option
+        '''
+        cur_option = base_args['option']
+        new_option = cur_option.get_sister_option(coverage_code)
+        base_args['option'] = new_option
+        res = getattr(cls, meth_name)(base_args, *args, **kwargs)
+        base_args['option'] = cur_option
+        return res
+
+    @classmethod
     @check_args('contract', 'date')
     def _re_number_of_covered_elements(cls, args):
         contract = args['contract']

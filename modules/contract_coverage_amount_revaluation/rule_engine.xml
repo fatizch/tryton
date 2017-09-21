@@ -13,5 +13,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="long_description">Le montant de couverture à la date de calcul hors réévaluations</field>
             <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
         </record>
+        <record model="rule_engine.function" id="montant_de_couverture_base_pour_garantie">
+            <field name="translated_technical_name">montant_de_couverture_de_base_pour_garantie</field>
+            <field name="description">Montant de couverture de base pour autre garantie</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_other_base_coverage_amount</field>
+            <field name="fct_args">coverage_code</field>
+            <field name="long_description">Montant de couverture de base pour la garantie
+la plus proche de la garantie initiale correspondant. Permet de faire dépendre
+le tarif d'une garantie du montant de couverture d'une autre</field>
+            <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
+        </record>
     </data>
 </tryton>

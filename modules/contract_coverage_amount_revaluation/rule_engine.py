@@ -3,6 +3,7 @@
 from trytond.pool import PoolMeta
 
 from trytond.modules.coog_core import fields
+from trytond.modules.rule_engine import check_args
 
 __all__ = [
     'RuleEngine',
@@ -32,6 +33,7 @@ class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
 
     @classmethod
+    @check_args('option', 'date')
     def _re_get_base_coverage_amount(cls, args):
         option = cls.get_option(args)
         date = args['date']
@@ -44,3 +46,9 @@ class RuleEngineRuntime:
                 return version.coverage_amount
             cls.append_error(args, 'Coverage amount undefined')
             break
+
+    @classmethod
+    @check_args('option', 'date')
+    def _re_get_other_base_coverage_amount(cls, args, coverage_code):
+        return cls.get_other_option_data(coverage_code,
+            '_re_get_base_coverage_amount', args)
