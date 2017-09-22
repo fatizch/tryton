@@ -246,6 +246,18 @@ def values_mixin(value_model):
         def default_values(cls):
             return {}
 
+        def clean_up(self, instance=None):
+            '''
+                Remove field values which did not change if instance is set.
+            '''
+            if instance and self.values:
+                Target = instance.__class__
+                values = Target.read([instance.id],
+                    list(self.values.keys()))[0]
+                self.values = {k: v for k, v in self.values.items()
+                    if v != values[k]}
+            return super(Mixin, self).clean_up()
+
         @classmethod
         def _view_look_dom_arch(cls, tree, type, field_children=None):
             pool = Pool()
@@ -834,6 +846,14 @@ def relation_mixin(value_model, field, model, name):
             if self.relation == getattr(record, 'id', None):
                 return True
             return super(Mixin, self).endorsement_matches_record(record)
+
+        def clean_up(self, instance=None):
+            '''
+                For write action, clean values of non modified fields
+            '''
+            if self.action == 'update':
+                instance = Pool().get(self._model_name)(self.relation)
+            return super(Mixin, self).clean_up(instance)
 
     setattr(Mixin, field, fields.Function(fields.Many2One(model, name,
                 datetime_field='applied_on',
@@ -2083,6 +2103,11 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 if contract.status in STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS:
                     cls.append_functional_error('status_incompatible',
                         (contract.status_string, contract.rec_name))
+
+    def clean_up(self, instance=None):
+        if instance is None:
+            instance = self.contract
+        return super(EndorsementContract, self).clean_up(instance)
 
 
 class EndorsementOption(relation_mixin(

@@ -565,6 +565,11 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     def get_endorsed_record(self):
         return self.loan
 
+    def clean_up(self, instance=None):
+        if instance is None:
+            instance = self.loan
+        return super(EndorsementLoan, self).clean_up(instance)
+
 
 class EndorsementCoveredElementOption:
     __metaclass__ = PoolMeta

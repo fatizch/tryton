@@ -1,3 +1,4 @@
+* BUG#7114 Nettoyage du contenu des avenants
 * BUG#6993 Suppression de l'import simplejson
 * BUG#6998 Ajout d'un message d'erreur sur la prévisualisation d'un avenant lors qu'aucun aperçu n'est défini sur la définition
 * BUG#6996 La date d'effet d'avenant de réactivation n'est plus mise par défaut sur la date de fin du contrat si ce dernier est suspendu

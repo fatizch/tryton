@@ -442,3 +442,8 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
         if relations:
             values['relations'] = relations
         return values
+
+    def clean_up(self, instance=None):
+        if instance is None:
+            instance = self.party
+        return super(EndorsementParty, self).clean_up(instance)
