@@ -75,10 +75,11 @@ def load_batch_config():
     return config
 
 
+_config = load_batch_config()
+
+
 class BatchRoot(ModelView):
     'Root class for batches'
-
-    _config = load_batch_config()
 
     @classmethod
     def __setup__(cls):
@@ -87,13 +88,13 @@ class BatchRoot(ModelView):
             'job_size': '1000',
             'split': True,
             'transaction_size': '0',
-        }
+            }
 
     @classmethod
     def get_batch_configuration(cls):
         config = {}
-        if cls._config.has_section(cls.__name__):
-            for key, value in cls._config.items(cls.__name__):
+        if _config.has_section(cls.__name__):
+            for key, value in _config.items(cls.__name__):
                 config[key] = value
         return config
 
@@ -265,7 +266,7 @@ class BatchRoot(ModelView):
         enqueue a new job
         ex: ViewValidationBatch.enqueue([(100,), (101,)], {'crash': 100})
         '''
-        cls._enqueue(records, params, **kwargs)
+        cls._enqueue(records, params or cls._default_config_items, **kwargs)
 
 
 class BatchRootNoSelect(BatchRoot):

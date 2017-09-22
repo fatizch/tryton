@@ -1,3 +1,4 @@
+* FEA#7026 Gel des dépendances et suppression de l'attribut "_config" du modèle de base des batchs
 * OTH#0000 Ajout des méthode clear / has errors sur le gestionnaire d'erreur
 * FEA#7076 Ajout d'un point d'entrée de configuration generale
 * FEA#6377 Séparation de l'initialisation des recherches globales et des langues traduisibles du cas de test au profit d'un assistant d'initialisation
