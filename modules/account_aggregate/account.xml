@@ -136,4 +136,14 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <menuitem name="Account Move Line Aggregates" parent="account.menu_entries" action="act_move_line_aggregated_form" id="menu_account_move_line_aggregates_form"/>
     </data>
+    <data noupdate="1">
+        <record model="ir.sequence.type" id="default_sequence_account_move_snapshot_type">
+            <field name="name">Account Move Snapshot</field>
+            <field name="code">account.move.snapshot</field>
+        </record>
+        <record model="ir.sequence" id="default_snapshot_sequence">
+            <field name="name">Default Snapshot Sequence</field>
+            <field name="code">account.move.snapshot</field>
+        </record>
+    </data>
 </tryton>

@@ -145,8 +145,13 @@ class Configuration(CompanyMultiValueMixin):
 
     snapshot_sequence = fields.MultiValue(fields.Many2One('ir.sequence',
             'Snapshot Sequence', required=True, domain=[
-                ('code', '=', 'account.move'),
+                ('code', '=', 'account.move.snapshot'),
                 ]))
+
+    @classmethod
+    def default_snapshot_sequence(cls):
+        return cls.multivalue_model(
+            'snapshot_sequence').default_snapshot_sequence()
 
 
 class ConfigurationSnapshotSequence(model.CoogSQL, CompanyValueMixin):
@@ -156,7 +161,7 @@ class ConfigurationSnapshotSequence(model.CoogSQL, CompanyValueMixin):
     configuration = fields.Many2One('account.configuration', 'Configuration',
         ondelete='CASCADE', select=True)
     snapshot_sequence = fields.Many2One('ir.sequence',
-        'Snapshot Sequence', domain=[('code', '=', 'account.move')])
+        'Snapshot Sequence', domain=[('code', '=', 'account.move.snapshot')])
 
     @classmethod
     def __register__(cls, module_name):
@@ -165,6 +170,20 @@ class ConfigurationSnapshotSequence(model.CoogSQL, CompanyValueMixin):
         super(ConfigurationSnapshotSequence, cls).__register__(module_name)
         if not exist:
             cls._migrate_property([], [], [])
+        cls.update_snapshot_sequence_type()
+
+    @classmethod
+    def update_snapshot_sequence_type(cls):
+        cursor = Transaction().connection.cursor()
+        table = cls.__table__()
+        sequence = Pool().get('ir.sequence').__table__()
+        data_update = sequence.join(table, condition=(
+                (sequence.id == table.snapshot_sequence) &
+                (sequence.code == 'account.move'))).select(sequence.id)
+        cursor.execute(*sequence.update(columns=[sequence.code],
+                values=[Literal('account.move.snapshot')],
+                from_=[data_update],
+                where=data_update.id == sequence.id))
 
     @classmethod
     def _migrate_property(cls, field_names, value_names, fields):
@@ -175,6 +194,12 @@ class ConfigurationSnapshotSequence(model.CoogSQL, CompanyValueMixin):
             'account.configuration', field_names, cls, value_names,
             parent='configuration', fields=fields)
 
+    @classmethod
+    def default_snapshot_sequence(cls):
+        sequences = Pool().get('ir.sequence').search(
+            [('code', '=', 'account.move.snapshot')])
+        if len(sequences) == 1:
+            return sequences[0].id
 
 class TakeSnapshot(Wizard):
     'Snapshot Moves'
