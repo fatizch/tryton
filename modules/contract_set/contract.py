@@ -37,6 +37,12 @@ class Configuration(CompanyMultiValueMixin):
         fields.Many2One('ir.sequence', 'Contract Set Number Sequence',
             domain=[('code', '=', 'contract_set_number')]))
 
+    @classmethod
+    def default_contract_set_number_sequence(cls):
+        return cls.multivalue_model(
+            'contract_set_number_sequence'
+            ).default_contract_set_number_sequence()
+
 
 class ConfigurationContractSetNumberSequence(model.CoogSQL, CompanyValueMixin):
     'Configuration Contract Set Number Sequence'
@@ -66,6 +72,13 @@ class ConfigurationContractSetNumberSequence(model.CoogSQL, CompanyValueMixin):
         migrate_property(
             'offered.configuration', field_names, cls, value_names,
             parent='configuration', fields=fields)
+
+    @classmethod
+    def default_contract_set_number_sequence(cls):
+        sequences = Pool().get('ir.sequence').search(
+            [('code', '=', 'contract_set_number')])
+        if len(sequences) == 1:
+            return sequences[0].id
 
 
 class ContractSet(model.CoogSQL, model.CoogView, Printable):

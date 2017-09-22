@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond import backend
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.tools.multivalue import migrate_property
 from trytond.modules.company.model import (CompanyValueMixin,
@@ -27,6 +27,12 @@ class Configuration(CompanyMultiValueMixin):
                 ('code', '=', 'quote'),
                 ('company', '=', Eval('context', {}).get('company', -1)),
                 ]))
+
+    @classmethod
+    def default_default_quote_number_sequence(cls):
+        return cls.multivalue_model(
+            'default_quote_number_sequence'
+            ).default_default_quote_number_sequence()
 
 
 class ConfigurationDefaultQuoteNumberSequence(model.CoogSQL,
@@ -62,3 +68,10 @@ class ConfigurationDefaultQuoteNumberSequence(model.CoogSQL,
         migrate_property(
             'offered.product', field_names, cls, value_names,
             fields=fields)
+
+    @classmethod
+    def default_default_quote_number_sequence(cls):
+        sequences = Pool().get('ir.sequence').search(
+            [('code', '=', 'quote')])
+        if len(sequences) == 1:
+            return sequences[0].id

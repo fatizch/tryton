@@ -1,3 +1,4 @@
+* FEA#7122 Ajout d'une séquence de numéro de devis par défaut sur la configuration produit
 * FEA#7002 Affichage de l'icône du contrat en vue formulaire
 * BUG#6993 Suppression de l'import de simplejson
 * BUG#6870 Utiliser l'adresse principale du tiers au lieu de calculer l'adresse active à date dans les contacts du contrat

@@ -9,4 +9,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">configuration_form</field>
         </record>
     </data>
+    <data noupdate="1">
+        <record model="ir.sequence" id="default_quote_contract_sequence">
+            <field name="name">Default Quote Contract Sequence</field>
+            <field name="code">quote</field>
+        </record>
+    </data>
 </tryton>
