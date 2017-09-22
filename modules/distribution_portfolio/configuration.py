@@ -27,7 +27,7 @@ class Configuration(CompanyMultiValueMixin):
 
 class ConfigurationDefaultPortfolio(model.CoogSQL, CompanyValueMixin):
     'Configuration Default Portfolio'
-    __name__ = 'party.configuration.default_portfoliio'
+    __name__ = 'party.configuration.default_portfolio'
 
     configuration = fields.Many2One('party.configuration', 'Configuration',
         ondelete='CASCADE', select=True)
