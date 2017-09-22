@@ -2,9 +2,8 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page/notebook" position="inside">
-        <page string="Cash Value" id="cash_value">
-            <field name="cash_value_rules" colspan="4"/>
-        </page>
+    <xpath expr="/tree" position="inside">
+        <field name="is_cash_value" tree_invisible="1"/>
+        <button name="open_deposits" string="Deposits" tree_invisible="1"/>
     </xpath>
 </data>

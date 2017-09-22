@@ -1,103 +1,91 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If
 
-from trytond.modules.coog_core import model, fields
-
-
-__metaclass__ = PoolMeta
+from trytond.modules.coog_core import fields, model
+from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
-    'CashValueCollection',
     'Contract',
+    'ContractDeposit',
     ]
 
 
-class CashValueCollection(model.CoogView, model.CoogSQL):
-    'Cash Value Collection'
-
-    __name__ = 'contract.cash_value.collection'
-
-    reception_date = fields.Date('Reception Date', states={'required': True})
-    amount = fields.Numeric('Amount')
-    last_update = fields.Date('Last update')
-    updated_amount = fields.Numeric('Updated Amount')
-    kind = fields.Selection([('payment', 'Payment')], 'Kind')
-    contract = fields.Many2One('contract', 'Contract',
-        ondelete='CASCADE', required=True, select=True)
-    # collection = fields.Many2One('collection', 'Collection',
-    #     ondelete='CASCADE', states={'required': True})
-
-    def init_dict_for_rule_engine(self, the_dict):
-        the_dict['cash_value_collection'] = self
-
-    @classmethod
-    def update_values(cls, values, date, force=False, save=True):
-        if not values:
-            return 0
-        good_coverage = None
-        for elem in values[0].contract.offered.coverages:
-            if elem.family == 'cash_value':
-                good_coverage = elem
-                break
-        if not good_coverage:
-            raise Exception('Cash Value component not detected on product %s' %
-                values[0].contract.offered.rec_name)
-        # No direct link to the covered_data, got to find it manually
-        good_data = None
-        for elem in values[0].contract.options:
-            if not elem.offered == good_coverage:
-                continue
-            for data in elem.covered_data:
-                if data.is_active_at_date(date):
-                    good_data = data
-                    break
-            break
-        if not good_data:
-            raise Exception('Contract %s has no active cash value coverage' %
-                values[0].contract.rec_name)
-        result = 0
-        for elem in values:
-            if not force and elem.last_update >= date:
-                continue
-            the_dict = {}
-            elem.init_dict_for_rule_engine(the_dict)
-            good_data.init_dict_for_rule_engine(the_dict)
-            the_dict['date'] = date
-            # elem.updated_amount = good_coverage.get_result(
-            #     'actualized_cash_value', the_dict).result
-            elem.last_update = date
-            result += elem.updated_amount
-            if save:
-                elem.save()
-        return result
-
-
-_STATES = {
-    'readonly': Eval('status') != 'quote',
-    }
-_DEPENDS = ['status']
-
-
 class Contract:
-    'Contract'
-
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
-    cash_value_collections = fields.One2Many('contract.cash_value.collection',
-        'contract', 'Collections', states=_STATES, depends=_DEPENDS,
-        delete_missing=True)
-    is_cash_value = fields.Function(fields.Boolean('Is Cash Value'),
-        'get_is_cash_value')
+    is_cash_value = fields.Function(
+        fields.Boolean('Is Cash Value'),
+        'getter_is_cash_value')
 
     @classmethod
-    def view_attributes(cls):
-        return super(Contract, cls).view_attributes() + [(
-                '/form/notebook/page[@id="cash_value_collections"]',
-                'states',
-                {'invisible': ~Eval('is_cash_value')}
-                )]
+    def __setup__(cls):
+        super(Contract, cls).__setup__()
+        cls._buttons.update({
+                'open_deposits': {'readonly': ~Eval('is_cash_value', False)},
+                },
+            )
 
-    def get_is_cash_value(self, name):
-        return self.offered.is_cash_value
+    def getter_is_cash_value(self, name):
+        return self.product and self.product.is_cash_value
+
+    @classmethod
+    @model.CoogView.button_action('contract_cash_value.act_open_deposits')
+    def open_deposits(cls, contracts):
+        pass
+
+
+class ContractDeposit(model.CoogSQL, model.CoogView, ModelCurrency):
+    'Contract Deposit'
+
+    __name__ = 'contract.deposit'
+
+    contract = fields.Many2One('contract', 'Contract', required=True,
+        ondelete='CASCADE', select=True, readonly=True)
+    state = fields.Selection([('draft', 'Draft'), ('received', 'Received')],
+        'State', readonly=True, required=True, help='The current state of the '
+        'deposit')
+    date = fields.Date('Date', states={
+            'required': Eval('state', '') == 'received',
+            'readonly': Eval('state', '') != 'draft'}, depends=['state'],
+        help='The date at which the deposit amount was effectively received')
+    coverage = fields.Many2One('offered.option.description', 'Coverage',
+        states={'readonly': Eval('state', '') != 'draft'}, depends=['state'],
+        required=True, ondelete='RESTRICT')
+    invoice = fields.Many2One('account.invoice', 'Invoice', required=True,
+        ondelete='RESTRICT', domain=[
+            If(Eval('state', '') == 'draft', [], [('state', '=', 'paid')])],
+        states={'readonly': Eval('state', '') != 'draft'}, depends=['state'])
+    amount = fields.Numeric('Amount', required=True,
+        digits=(16, Eval('currency_digits', 2)),
+        states={'readonly': Eval('state', '') != 'draft'},
+        depends=['currency_digits', 'state'])
+
+    @classmethod
+    def __setup__(cls):
+        super(ContractDeposit, cls).__setup__()
+        cls._order = [('date', 'ASC'), ('coverage', 'ASC')]
+
+    @classmethod
+    def default_state(cls):
+        return 'draft'
+
+    @fields.depends('contract')
+    def on_change_contract(self):
+        self.currency = self.contract.currency if self.contract else None
+        if self.currency:
+            self.currency_digits = self.currency.digits
+            self.currency_symbol = self.currency.symbol
+
+    def get_currency(self):
+        return self.contract.currency
+
+    def init_dict_for_rule_engine(self, data_dict=None):
+        if data_dict is None:
+            data_dict = {}
+        self.contract.init_dict_for_rule_engine(data_dict)
+        self.coverage.init_dict_for_rule_engine(data_dict)
+        data_dict['deposit'] = self
+        return data_dict

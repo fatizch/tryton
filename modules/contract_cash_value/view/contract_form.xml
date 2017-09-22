@@ -2,10 +2,8 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page[@id='cov_elements']" position="after">
-        <page string="Cash Value Collections" id="cash_value_collections">
-            <field name="cash_value_collections" colspan="4"/>
-            <field name="is_cash_value" invisible="1"/>
-        </page>
+    <xpath expr="/form/group[@id='button_change_start_date']" position="inside">
+        <field name="is_cash_value"/>
+        <button string="Deposits" name="open_deposits"/>
     </xpath>
 </data>

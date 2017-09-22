@@ -1,12 +1,13 @@
-.. capital
+.. MAIN_TOPIC
 
-Capitalisation - Contrat
-========================
+MAIN TOPIC - Module Topic
+=========================
 
 Résumé
 ------
 
 .. include:: summary.rst
+
 
 Fonctionnalités
 ---------------

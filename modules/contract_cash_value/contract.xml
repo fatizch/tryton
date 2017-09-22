@@ -1,37 +1,55 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <!-- ############################################################ -->
-        <!-- Cash Value Collection -->
-        <!-- ############################################################ -->
-        <record model="ir.ui.view" id="collection_form">
-            <field name="model">contract.cash_value.collection</field>
-            <field name="type">form</field>
-            <field name="name">collection_form</field>
-        </record>
-        <record model="ir.ui.view" id="collection_tree">
-            <field name="model">contract.cash_value.collection</field>
-            <field name="type">tree</field>
-            <field name="name">collection_tree</field>
-        </record>
-        <!-- ############################################################ -->
-        <!-- Covered Data -->
-        <!-- ############################################################ -->
-        <!-- <record model="ir.ui.view" id="covered_data_form"> -->
-        <!-- <field name="model">contract.covered_data</field> -->
-        <!-- <field name="type">form</field> -->
-        <!-- <field name="inherit" ref="contract_insurance.covered_data_view_form"/> -->
-        <!-- <field name="name">covered_data_form</field> -->
-        <!-- </record> -->
-        <!-- ############################################################ -->
-        <!-- Contract -->
-        <!-- ############################################################ -->
+        <!-- ############ -->
+        <!-- # Contract # -->
+        <!-- ############ -->
         <record model="ir.ui.view" id="contract_view_form">
             <field name="model">contract</field>
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_view_list">
+            <field name="model">contract</field>
+            <field name="inherit" ref="contract.contract_view_tree"/>
+            <field name="name">contract_list</field>
+        </record>
+        <!-- ########### -->
+        <!-- # Deposit # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="deposit_view_form">
+            <field name="model">contract.deposit</field>
+            <field name="type">form</field>
+            <field name="name">deposit_form</field>
+        </record>
+        <record model="ir.ui.view" id="deposit_view_list">
+            <field name="model">contract.deposit</field>
+            <field name="type">tree</field>
+            <field name="name">deposit_list</field>
+        </record>
+        <!-- Entry point from contract -->
+        <record model="ir.action.act_window" id="act_open_deposits">
+            <field name="name">Deposits</field>
+            <field name="res_model">contract.deposit</field>
+            <field name="domain" eval="[('contract', '=', Eval('active_id'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_open_deposits_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="deposit_view_list"/>
+            <field name="act_window" ref="act_open_deposits"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_open_deposits_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="deposit_view_form"/>
+            <field name="act_window" ref="act_open_deposits"/>
+        </record>
+        <!-- Keyword from contract -->
+        <record model="ir.action.keyword" id="act_open_deposits_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_open_deposits"/>
         </record>
     </data>
 </tryton>
