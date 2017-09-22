@@ -1149,8 +1149,6 @@ class OptionDisplayer(model.CoogView):
 
         if self.action == 'terminated':
             self.end_date = coog_date.add_day(self.effective_date, -1)
-            self.sub_status = pool.get('contract.sub_status').get_sub_status(
-                'terminated')
         else:
             if self.end_date == coog_date.add_day(self.effective_date, -1):
                 if self.cur_option_id:
