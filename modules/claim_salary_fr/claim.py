@@ -448,7 +448,7 @@ class ClaimService:
                         sum_prorata += prorata
                         salary_to_use += salary_to_add
             if self.salary_mode == 'last_year':
-                for i in range(0, 11):
+                for i in range(0, 12):
                     pmss += TableCell.get(pmss_table, cur_salary.from_date +
                         relativedelta(months=i)) * prorata
 
