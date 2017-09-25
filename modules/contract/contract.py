@@ -876,13 +876,11 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         super(Contract, cls).validate(contracts)
         for contract in contracts:
             contract.check_activation_dates()
-        # cls.check_option_dates(contracts)
+            contract.check_options_dates()
 
-    @classmethod
-    def check_option_dates(cls, contracts):
+    def check_options_dates(self):
         Pool().get('contract.option').check_dates([option
-                for contract in contracts
-                for option in contract.options])
+                for option in self.options])
 
     @fields.depends('status')
     def on_change_with_is_sub_status_required(self, name=None):
@@ -1691,14 +1689,18 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
                 'Coverage %s is inactive at date %s',
                 'end_date_none': 'No end date defined',
                 'end_date_anterior_to_start_date': 'End date should be '
-                'posterior to start date: %s',
+                'posterior to start date: %(start_date)s for option '
+                '%(option)s in contract %(contract)s',
                 'end_date_posterior_to_contract': 'End date should be '
-                'anterior to end date of contract: %s',
+                'anterior to end date of contract: %(end_date)s for option '
+                '%(option)s in contract %(contract)s',
                 'end_date_posterior_to_automatic_end_date': 'End date should '
-                'be anterior to option automatic end date : %s',
+                'be anterior to option automatic end date : %(end_date)s for '
+                'option %(option)s in contract %(contract)s',
                 'manual_start_date_anterior_to_contract_initial_start_date':
-                'Option manual start date %s is anterior to contract initial '
-                'start date %s'
+                'Option %(option)s manual start date %(manual_start_date)s is '
+                'anterior to contract initial start date %(start_date)s in '
+                'contract %(contract)s'
                 })
 
     @classmethod
@@ -1996,9 +1998,13 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
                     option.parent_contract.initial_start_date):
                 cls.raise_user_error(
                     'manual_start_date_anterior_to_contract_initial_start_date',
-                    (Date.date_as_string(option.manual_start_date),
-                        Date.date_as_string(
-                            option.parent_contract.initial_start_date)))
+                    ({
+                        'option': option.rec_name,
+                        'manual_start_date': Date.date_as_string(
+                            option.manual_start_date),
+                        'start_date': Date.date_as_string(
+                            option.parent_contract.initial_start_date),
+                        'contract': option.parent_contract.rec_name}))
             if end_date >= option.start_date:
                 if not option.parent_contract:
                     continue
@@ -2007,16 +2013,23 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
                     if (end_date and option.automatic_end_date and
                             option.automatic_end_date < end_date):
                         cls.raise_user_error(
-                            'end_date_posterior_to_automatic_end_date',
-                            Date.date_as_string(option.automatic_end_date),
-                            )
+                            'end_date_posterior_to_automatic_end_date', {
+                                'end_date': Date.date_as_string(
+                                    option.automatic_end_date),
+                                'option': option.rec_name,
+                                'contract': option.parent_contract.rec_name})
                 else:
                     cls.raise_user_error('end_date_posterior_to_contract',
-                        Date.date_as_string(
-                            option.parent_contract.end_date))
+                        {'end_date': Date.date_as_string(
+                            option.parent_contract.end_date),
+                        'option': option.rec_name,
+                        'contract': option.parent_contract.rec_name})
+
             else:
                 cls.raise_user_error('end_date_anterior_to_start_date',
-                    Date.date_as_string(option.start_date))
+                    {'start_date': Date.date_as_string(option.start_date),
+                    'option': option.rec_name,
+                    'contract': option.parent_contract.rec_name})
 
     def clean_up_versions(self, contract):
         pass

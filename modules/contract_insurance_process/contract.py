@@ -32,7 +32,6 @@ class Contract(CoogProcessFramework):
         super(Contract, cls).__setup__()
         cls._error_messages.update({
                 'no_option': 'At least an option must be selected',
-                'bad_start_date': 'Option %s must be subscribed after %s',
                 'need_option': 'At least one option must be selected for %s',
                 'need_covered': 'There must be at least one covered element',
                 'no_subscriber_address': 'The selected subscriber does not '
@@ -98,19 +97,6 @@ class Contract(CoogProcessFramework):
             if option.status == 'active':
                 return True, ()
         return False, (('no_option', ()),)
-
-    def check_option_dates(self):
-        result = True
-        for option in self.options:
-            if option.start_date < self.start_date:
-                result = False
-                self.append_functional_error('bad_start_date', (
-                        option.coverage.code, self.start_date))
-            elif option.start_date < option.coverage.start_date:
-                result = False
-                self.append_functional_error('bad_start_date', (
-                        option.coverage.code, option.coverage.start_date))
-        return result
 
     @classmethod
     def subscribe_contract(cls, *args, **kwargs):

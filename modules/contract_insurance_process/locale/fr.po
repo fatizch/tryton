@@ -39,10 +39,6 @@ msgid "Everything is good !"
 msgstr "Tout est bon!"
 
 msgctxt "error:contract:"
-msgid "Option %s must be subscribed after %s"
-msgstr "La Garantie %s doit être souscrite après le %s"
-
-msgctxt "error:contract:"
 msgid "Select a date that is not in the future for field(s): %s"
 msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
 

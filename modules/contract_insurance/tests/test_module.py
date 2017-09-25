@@ -411,10 +411,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             # test check
             if should_raise:
                 self.assertRaises(UserError,
-                    self.Contract.check_option_dates,
-                    [option.parent_contract])
+                    option.parent_contract.check_options_dates)
             else:
-                self.Contract.check_option_dates([option.parent_contract])
+                option.parent_contract.check_options_dates()
 
         # option with auto end date
         test_option(automatic_end_date=date2, expected=date2,

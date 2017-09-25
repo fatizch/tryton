@@ -1,3 +1,4 @@
+* BUG#6468 Use manual_start_date if defined on a covered element to calculate option start_date
 * FEA#7122 Add default quote number sequence on offered configuration
 * FEA#7002 Display the contract's icon in its form view
 * BUG#6993 Removing simple json import

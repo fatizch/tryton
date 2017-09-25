@@ -227,12 +227,10 @@ class Contract(Printable):
             element.options = element.options
         self.covered_elements = self.covered_elements
 
-    @classmethod
-    def check_option_dates(cls, contracts):
-        super(Contract, cls).check_option_dates(contracts)
+    def check_options_dates(self):
+        super(Contract, self).check_options_dates()
         Pool().get('contract.option').check_dates([option
-                for contract in contracts
-                for option in contract.covered_element_options])
+                for option in self.covered_element_options])
 
     @classmethod
     def get_coverages(cls, product):
@@ -463,7 +461,9 @@ class ContractOption(Printable):
                 })
         cls._error_messages.update({
                 'option_start_anterior_to_covered_start': 'Manual option start '
-                'date %s is anterior to covered element manual start date %s'
+                'date %(manual_start_date)s is anterior to covered element '
+                'manual start date %(covered_start_date)s for option '
+                '%(option)s in contract %(contract)s'
                 })
 
     @classmethod
@@ -736,9 +736,13 @@ class ContractOption(Printable):
                     option.covered_element.manual_start_date >
                     option.manual_start_date):
                 cls.raise_user_error('option_start_anterior_to_covered_start',
-                        Date.date_as_string(option.manual_start_date),
-                        Date.date_as_string(
-                            option.covered_element.manual_start_date))
+                        {
+                            'manual_start_date': Date.date_as_string(
+                                option.manual_start_date),
+                            'covered_start_date': Date.date_as_string(
+                                option.covered_element.manual_start_date),
+                            'option': option.rec_name,
+                            'contract': option.parent_contract.rec_name})
 
     def get_sister_option(self, coverage_code):
         options = []
