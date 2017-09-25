@@ -26,11 +26,11 @@ coog_batch_join() { # wait for execution - <name>
         local generated
         while true
         do
+                sleep 10
                 local queued; queued=$(coog_"$broker"_queued "$1") || return $?
                 [ -z $generated ] && generated=$queued
                 [ "$queued" -eq 0 ] && break
                 echo "$1: wait @ $(date +'%H:%M:%S') - $queued"
-                sleep 10
         done
         local failed; failed=$(coog_batch_query "fail" "$1" | grep -Pc "\w+")
         local succeeded; succeeded=$((generated - failed))
