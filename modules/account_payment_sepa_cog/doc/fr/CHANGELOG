@@ -1,3 +1,4 @@
+* BUG#7058 Les amendements doivent renvoyer un IBAN compact
 * BUG#6999 Retirer le tiers des clés de regroupement pour les groupes de paiement sepa
 * BUG#6939 Correction du domain du bouton de génération du message SEPA
 * FEA#5500 Nouveau standard sepa: Rulebooks SDD Core V9.0 et SDD B2B V7.0: générer uniquement des séquences de types 'RCUR' pour les paiements sepa et retirer le type'FRST'

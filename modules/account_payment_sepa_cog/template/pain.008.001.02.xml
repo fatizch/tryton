@@ -96,7 +96,7 @@ this repository contains the full copyright notices and license terms. -->
                                 <Id>
                                     <py:choose test="mandate.amendment_of.account_number.account.bank.bic == mandate.account_number.account.bank.bic">
                                     <py:when test="True">
-                                    <IBAN>${mandate.amendment_of.account_number.number}</IBAN>
+                                    <IBAN>${mandate.amendment_of.account_number.compact_iban}</IBAN>
                                     </py:when>
                                     <py:when test="False">
                                     <Othr>
