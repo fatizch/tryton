@@ -1,3 +1,4 @@
+* BUG#7132 Migration de la fonction d'attribution du souscripteur du contrat en tant qu'élément couvert depuis le module "contract_life_process"
 * BUG#7029 Correction de l'initialisation des options par défaut
 * BUG#6757 Correction du calcul de la date d'effet d'un élément couvert
 * OTH#0000 Ajout des [] manquant dans la clause Or (iteration sur 6468)
