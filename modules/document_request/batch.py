@@ -4,7 +4,6 @@ import logging
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.config import config
 
 from trytond.modules.coog_core import batch, coog_date
 

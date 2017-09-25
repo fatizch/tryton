@@ -5,7 +5,6 @@
 # working days, conf code and connection date
 
 CHAIN_NAME="payment_working_days"
-CHAIN_FILE=/tmp/"$HOSTNAME"-"$CHAIN_NAME"-"$(date +'%y-%m-%d@%H:%M:%S')"
 
 CHAIN_PARAMETERS=('TREATMENT_DATE' 'WORKING_DAYS' 'CONF_CODE' \
                     'PAYMENT_KIND' 'JOURNAL_METHODS')

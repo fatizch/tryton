@@ -2,7 +2,6 @@
 # vim: set ft=sh:
 
 CHAIN_NAME=check
-CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
 
 CHAIN_PARAMETERS=('CRASH')
 CHAIN_REQUIRED=()

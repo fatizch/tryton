@@ -6,7 +6,6 @@
 # month days like in the monthly_chain, but this features can be added easily.
 
 CHAIN_NAME=daily
-CHAIN_FILE="/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')"
 
 CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'IN' 'OUT' 'AGENT_TYPE'
 'WITH_DRAFT' 'PAYMENT_KIND' 'JOURNAL_METHODS')

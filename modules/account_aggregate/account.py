@@ -201,6 +201,7 @@ class ConfigurationSnapshotSequence(model.CoogSQL, CompanyValueMixin):
         if len(sequences) == 1:
             return sequences[0].id
 
+
 class TakeSnapshot(Wizard):
     'Snapshot Moves'
     __name__ = 'account.move.snapshot'

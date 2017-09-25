@@ -2,7 +2,6 @@
 # vim: set ft=sh:
 
 CHAIN_NAME=insurer_stock
-CHAIN_FILE=/tmp/$HOSTNAME-$CHAIN_NAME-$(date +'%y-%m-%d@%H:%M:%S')
 
 CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'POSSIBLE_DAYS'    \
                     'PRODUCTS' 'WORKING_DAYS' 'CONF_CODE')

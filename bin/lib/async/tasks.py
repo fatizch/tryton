@@ -79,8 +79,8 @@ def batch_generate(name, params):
                         broker.enqueue(name, 'batch_exec',
                             (name, l, job_params), database=database)
                         res.append(len(l))
-            except Exception:
-                logger.exception('generate crashed')
+            except:
+                logger.critical('Job generation crashed')
                 raise
             finally:
                 Cache.resets(database)
@@ -145,8 +145,8 @@ def batch_exec(name, ids, params, **kwargs):
                             **batch_params)
                         res.append(r or len(l))
                         Transaction().commit()
-            except Exception:
-                logger.exception('exec crashed')
+            except:
+                logger.critical('Job execution crashed')
                 Transaction().rollback()
                 raise
             finally:

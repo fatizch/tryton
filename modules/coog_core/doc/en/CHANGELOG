@@ -1,3 +1,4 @@
+* FEA#6232 Clean up batch and chain log output
 * FEA#7026 Freeze dependencies and remove attribute "_config" from base batches model
 * OTH#0000 Add clear / has error methods on error manager
 * FEA#7076 Add general configuration entrypoint
