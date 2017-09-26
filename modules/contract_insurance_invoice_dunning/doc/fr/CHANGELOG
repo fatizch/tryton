@@ -1,4 +1,5 @@
-* BUG#6617 Passage en sans-effeet des contrats jamais payés
+* FEA#7097 Ajout d'une procédure de relance par défaut
+* BUG#6617 Passage en sans-effet des contrats jamais payés
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout du mode de résiliation à date d'effet de la relance

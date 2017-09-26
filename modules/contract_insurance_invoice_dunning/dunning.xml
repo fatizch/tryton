@@ -34,4 +34,45 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">dunning_list</field>
         </record>
     </data>
+    <data noupdate="1">
+        <record model="account.dunning.procedure" id="french_default_dunning_procedure">
+            <field name="name">French Default Dunning Procedure</field>
+            <field name="code">french_default_dunning_procedure</field>
+            <field name="from_payment_date" eval="True"/>
+        </record>
+        <record model="account.dunning.level" id="legal_dunning_level">
+            <field name="name">Legal Dunning</field>
+            <field name="sequence" eval="1"/>
+            <field name="procedure" ref="french_default_dunning_procedure"/>
+            <field name="days" eval="20"/>
+            <field name="days_from_previous_step" eval="True"/>
+            <field name="not_mandatory">1</field>
+            <field name="apply_for">manual</field>
+        </record>
+        <record model="account.dunning.level" id="formal_notice_level">
+            <field name="name">Formal Notice</field>
+            <field name="sequence" eval="2"/>
+            <field name="procedure" ref="french_default_dunning_procedure"/>
+            <field name="days" eval="40"/>
+            <field name="apply_for">all</field>
+        </record>
+        <record model="account.dunning.level" id="contract_suspension_level">
+            <field name="name">Contract Suspension</field>
+            <field name="sequence" eval="3"/>
+            <field name="procedure" ref="french_default_dunning_procedure"/>
+            <field name="days" eval="30"/>
+            <field name="days_from_previous_step" eval="True"/>
+            <field name="contract_action">hold</field>
+            <field name="apply_for">all</field>
+        </record>
+        <record model="account.dunning.level" id="void_contract_level">
+            <field name="name">Void Contract</field>
+            <field name="sequence" eval="4"/>
+            <field name="procedure" ref="french_default_dunning_procedure"/>
+            <field name="days" eval="10"/>
+            <field name="days_from_previous_step">1</field>
+            <field name="contract_action">terminate</field>
+            <field name="apply_for">all</field>
+        </record>
+    </data>
 </tryton>

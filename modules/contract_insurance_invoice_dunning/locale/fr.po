@@ -82,6 +82,26 @@ msgctxt "model:account.dunning.create,name:"
 msgid "Dunning Creation Batch"
 msgstr "Batch de création des relances "
 
+msgctxt "model:account.dunning.level,name:contract_suspension_level"
+msgid "Contract Suspension"
+msgstr "Suspension du contrat"
+
+msgctxt "model:account.dunning.level,name:formal_notice_level"
+msgid "Formal Notice"
+msgstr "Mise en demeure"
+
+msgctxt "model:account.dunning.level,name:legal_dunning_level"
+msgid "Legal Dunning"
+msgstr "Relance juridique"
+
+msgctxt "model:account.dunning.level,name:void_contract_level"
+msgid "Void Contract"
+msgstr "Résiliation contentieuse"
+
+msgctxt "model:account.dunning.procedure,name:french_default_dunning_procedure"
+msgid "French Default Dunning Procedure"
+msgstr "Procédure de relance française par défaut"
+
 msgctxt "model:account.dunning.treat,name:"
 msgid "Process Dunning Batch"
 msgstr "Batch de traitement des relances"
