@@ -213,7 +213,7 @@ class ReconcileShow:
     def __setup__(cls):
         super(ReconcileShow, cls).__setup__()
         cls.journal.domain = [If(
-                Eval('remaining_repartition_method', '') == 'write-off',
+                Eval('remaining_repartition_method', '') == 'write_off',
                 cls.journal.domain,
                 [('type', '=', 'split')])]
         cls.journal.depends.append('remaining_repartition_method')

@@ -1,3 +1,4 @@
+* BUG#7145 Can't select write-off journal in reconciliation wizard when processing a write-off
 * FEA#6950 Add invoice related functions in rule engine
 * BUG#6709 Fix of the bulk invoice set number batch according to the merge 4.4
 * BUG#6372 Add checkbox on payment journal to define whether the payment suspension applies
