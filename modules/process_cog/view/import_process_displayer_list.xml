@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tree editable="bottom">
+    <field name="to_install" width="100"/>
+    <field name="name" width="250"/>
+    <field name="description" expand="1"/>
+</tree>

@@ -69,6 +69,34 @@ msgctxt "field:event.type.action,step_to_start:"
 msgid "Step to start"
 msgstr "État de départ"
 
+msgctxt "field:import.process.displayer,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:import.process.displayer,to_install:"
+msgid "To Install"
+msgstr "Installer"
+
+msgctxt "field:import.process.displayer,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:import.process.displayer,name:"
+msgid "Process"
+msgstr "Nom du processus"
+
+msgctxt "field:import.process.displayer,name:"
+msgid "Path"
+msgstr "Chemin"
+
+msgctxt "field:import.process.select,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:import.process.select,processes:"
+msgid "Processes"
+msgstr "Processus"
+
 msgctxt "field:ir.ui.view.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -506,6 +534,14 @@ msgctxt "model:event.type,name:event_process_not_initiated"
 msgid "Process Not Initiated"
 msgstr "Processus non initié"
 
+msgctxt "model:import.process.displayer,name:"
+msgid "Import Process Displayer"
+msgstr "Afficheur import de processus"
+
+msgctxt "model:import.process.select,name:"
+msgid "Import Process Select"
+msgstr "Sélection de l'import de processus"
+
 msgctxt "model:ir.action,name:act_end_process"
 msgid "End Process"
 msgstr "Fin du processus"
@@ -513,6 +549,10 @@ msgstr "Fin du processus"
 msgctxt "model:ir.action,name:act_get_dates_for_timings"
 msgid "Process Timings"
 msgstr "Temps d'exécution"
+
+msgctxt "model:ir.action,name:act_import_process"
+msgid "Import Processes"
+msgstr "Importer des processus"
 
 msgctxt "model:ir.action,name:act_postpone"
 msgid "Postpone"
@@ -525,6 +565,10 @@ msgstr "Relancer le processus courant"
 msgctxt "model:ir.action,name:act_view_timings"
 msgid "View Process Timings"
 msgstr "Temps  d'exécution des processus"
+
+msgctxt "model:ir.ui.menu,name:menu_import_process"
+msgid "Import Processes"
+msgstr "Importer des processus"
 
 msgctxt "model:ir.ui.view.description,name:"
 msgid "View Description"
@@ -622,17 +666,25 @@ msgctxt "view:task.postpone.parameters:"
 msgid "Postpone Parameters"
 msgstr "Paramètres du report"
 
-msgctxt "wizard_button:ProcessFinder,process_parameters,action:"
-msgid "Start Process"
-msgstr "Démarrer le processus"
-
-msgctxt "wizard_button:ProcessFinder,process_parameters,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
 msgctxt "wizard_button:document.receive,free_attach,attach_and_resume:"
 msgid "Attach and Resume Process"
 msgstr "Rattacher et reprendre le processus"
+
+msgctxt "wizard_button:import.process,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:import.process,start,import_process:"
+msgid "Import Process"
+msgstr "Import de processus"
+
+msgctxt "wizard_button:process.finder,process_parameters,action:"
+msgid "Start Process"
+msgstr "Démarrer le processus"
+
+msgctxt "wizard_button:process.finder,process_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt "wizard_button:process.get_dates_for_timings,select_dates,end:"
 msgid "Cancel"

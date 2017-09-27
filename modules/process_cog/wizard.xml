@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="import_process_displayer_view_list">
+            <field name="model">import.process.displayer</field>
+            <field name="type">tree</field>
+            <field name="name">import_process_displayer_list</field>
+        </record>
+        <record model="ir.ui.view" id="import_process_select_view_form">
+            <field name="model">import.process.select</field>
+            <field name="type">form</field>
+            <field name="name">import_process_select_form</field>
+        </record>
+        <record model="ir.action.wizard" id="act_import_process">
+            <field name="name">Import Processes</field>
+            <field name="wiz_name">import.process</field>
+        </record>
+        <menuitem parent="coog_core.general_configuration_menu" action="act_import_process" id="menu_import_process" sequence="666"/>
+    </data>
+</tryton>

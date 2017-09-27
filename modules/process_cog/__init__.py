@@ -7,6 +7,7 @@ import process_timings
 import models_for_test
 import event
 import document
+import wizard
 
 
 def register():
@@ -25,6 +26,8 @@ def register():
         process_timings.ProcessTimingSelectDates,
         event.EventTypeAction,
         document.ReattachDocument,
+        wizard.ImportProcessDisplayer,
+        wizard.ImportProcessSelect,
         module='process_cog', type_='model')
 
     Pool.register(
@@ -39,6 +42,7 @@ def register():
         process_timings.GetDatesForProcessTimings,
         process_timings.ProcessTimings,
         document.ReceiveDocument,
+        wizard.ImportProcess,
         module='process_cog', type_='wizard')
 
     if config.get('env', 'testing') == 'True':

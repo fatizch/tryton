@@ -1,3 +1,4 @@
+* FEA#7126 Ajout d'un assistant pour importer des processus en JSON
 * BUG#6400 Correction de l'export JSON des processus
 * BUG#6816 Nettoyage des process logs après restauration depuis l'historique
 
