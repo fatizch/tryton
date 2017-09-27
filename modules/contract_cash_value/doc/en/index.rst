@@ -1,7 +1,7 @@
-.. MAIN_TOPIC
+.. contract
 
-MAIN TOPIC - Module Topic
-=========================
+Contract - Cash value management
+================================
 
 Summary
 -------

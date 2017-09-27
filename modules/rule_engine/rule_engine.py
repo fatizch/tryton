@@ -230,6 +230,8 @@ def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
     def on_change_with_rule_extra_data(self):
         if not getattr(self, field_name):
                 return {}
+        if getattr(self, extra_name) is None:
+            setattr(self, extra_name, {})
         return getattr(self, field_name).get_extra_data_for_on_change(
             getattr(self, extra_name))
 

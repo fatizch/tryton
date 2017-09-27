@@ -4,7 +4,6 @@
 # #Comment# #Imports
 from decimal import Decimal
 import datetime
-from dateutil.relativedelta import relativedelta
 
 from proteus import Model, Wizard
 
@@ -12,6 +11,9 @@ from trytond.tests.tools import activate_modules
 from trytond.modules.currency.tests.tools import get_currency
 from trytond.modules.company.tests.tools import get_company
 from trytond.modules.company_cog.tests.tools import create_company
+from trytond.modules.account.tests.tools import create_fiscalyear
+from trytond.modules.account_invoice.tests.tools import (
+    set_fiscalyear_invoice_sequences)
 
 # #Comment# #Install Modules
 config = activate_modules('contract_cash_value')
@@ -75,23 +77,9 @@ config._context = User.get_preferences(True, config.context)
 config._context['company'] = company.id
 
 # #Comment# #Create Fiscal Year
-fiscalyear = FiscalYear(name=str(today.year))
-fiscalyear.start_date = today + relativedelta(month=1, day=1)
-fiscalyear.end_date = today + relativedelta(month=12, day=31)
-fiscalyear.company = company
-post_move_seq = Sequence(name=str(today.year), code='account.move',
-    company=company)
-post_move_seq.save()
-fiscalyear.post_move_sequence = post_move_seq
-invoice_seq = SequenceStrict(name=str(today.year),
-    code='account.invoice', company=company)
-invoice_seq.save()
-fiscalyear.out_invoice_sequence = invoice_seq
-fiscalyear.in_invoice_sequence = invoice_seq
-fiscalyear.out_credit_note_sequence = invoice_seq
-fiscalyear.in_credit_note_sequence = invoice_seq
-fiscalyear.save()
-FiscalYear.create_period([fiscalyear.id], config.context)
+fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(
+    company, today=datetime.date(datetime.date.today().year, 1, 1)))
+fiscalyear.click('create_period')
 
 # #Comment# #Create Account Kind
 product_account_kind = AccountKind()
@@ -300,8 +288,8 @@ contract_fee = contract.fees.new()
 contract_fee.fee = fee
 contract.save()
 
-Contract.calculate([contract.id], {})
-_ = Contract.activate_contract([contract.id], {})
+Contract.calculate([contract.id], config._context)
+_ = Contract.activate_contract([contract.id], config._context)
 
 # #Comment# #Test deposit creation
 invoice_wizard = Wizard('contract.do_invoice', [contract])
