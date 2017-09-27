@@ -1,3 +1,4 @@
+* BUG#7152 fix party relation endorsement
 * Set default country on new addresses
 
 Version 1.12 - 2017-04-28* FEA#0000 Launch party endorsement from contract and propose all parties linked to the contract

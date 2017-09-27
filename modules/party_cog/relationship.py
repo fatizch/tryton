@@ -84,6 +84,11 @@ class PartyRelationAll(PartyRelation):
         return '%s: %s' % (self.type.rec_name, self.to.rec_name)
 
     @classmethod
+    def restore_history_before(cls, ids, datetime):
+        Relation = Pool().get('party.relation')
+        Relation._restore_history([x // 2 for x in ids], datetime, _before=True)
+
+    @classmethod
     def _export_light(cls):
         return set(['type'])
 

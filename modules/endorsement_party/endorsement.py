@@ -69,7 +69,7 @@ class EndorsementPartyAddress(relation_mixin(
 
 class EndorsementPartyRelation(relation_mixin(
             'endorsement.party.relation.field', 'relationship',
-            'party.relation', 'Relation'),
+            'party.relation.all', 'Relation'),
         model.CoogSQL, model.CoogView):
     'Endorsement Relations'
     __metaclass__ = PoolMeta
@@ -287,7 +287,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
             if relation.action == 'remove':
                 relation_summary.append(
                     (relation.raise_user_error('mes_remove_version',
-                        raise_exception=False), relation.relation.rec_name),)
+                            raise_exception=False), ''))
             else:
                 relation_summary.append(relation.get_diff('party.relation',
                     relation.relationship))
@@ -311,7 +311,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
 
     @classmethod
     def _get_restore_history_order(cls):
-        return ['party.party', 'party.address', 'party.relation']
+        return ['party.party', 'party.address', 'party.relation.all']
 
     def do_restore_history(self):
         pool = Pool()
@@ -333,7 +333,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
     def _prepare_restore_history(cls, instances, at_date):
         for party in instances['party.party']:
             instances['party.address'] += party.addresses
-            instances['party.relation'] += party.relations
+            instances['party.relation.all'] += party.relations
 
     @classmethod
     def draft(cls, party_endorsements):
