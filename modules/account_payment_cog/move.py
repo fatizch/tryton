@@ -43,7 +43,7 @@ class Move:
             ('rejected_payment_out', 'Rejected Payment Out'))
 
     def get_kind(self, name):
-        if self.origin:
+        if self.origin and self.origin.id >= 0:
             if (self.origin.__name__ == 'account.payment'):
                 return ('automatic_payment_in' if self.origin.kind ==
                     'receivable' else 'automatic_payment_out')
@@ -65,7 +65,7 @@ class Move:
 
     def get_synthesis_rec_name(self, name):
         name = super(Move, self).get_synthesis_rec_name(name)
-        if (not self.origin_item
+        if (not self.origin_item or self.origin.id <= 0
                 or self.origin_item.__name__ != 'account.payment'):
             return name
         if self.origin_item.state == 'succeeded' and self.description:

@@ -97,7 +97,7 @@ class Move(export.ExportImportMixin):
             or self.origin and self.origin.__name__ == 'account.move')
 
     def get_synthesis_rec_name(self, name):
-        if self.origin:
+        if self.origin and self.origin.id >= 0:
             if (getattr(self.origin, 'get_synthesis_rec_name', None)
                     is not None):
                 return self.origin.get_synthesis_rec_name(name)
