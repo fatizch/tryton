@@ -14,6 +14,7 @@ from sql.aggregate import Max
 
 from trytond import backend
 from trytond.pool import Pool
+from trytond.server_context import ServerContext
 from trytond.model import fields as tryton_fields, Check
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.transaction import Transaction
@@ -236,6 +237,7 @@ def pyson_result(pyson_expr, target):
     env['time'] = time
     env['context'] = Transaction().context
     env['active_id'] = target.id
+    env['_batch'] = ServerContext().get('from_batch', False)
     result = PYSONDecoder(env).decode(the_pyson)
 
     return result
