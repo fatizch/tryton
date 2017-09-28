@@ -5,6 +5,8 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <menuitem name="General Configuration" sequence="9998" id="general_configuration_menu" icon="tryton-preferences"/>
         <menuitem name="Initialise Data" sequence="1" id="general_configuration_initialise_data_menu" parent="general_configuration_menu" icon="tryton-list"/>
+        <menuitem name="Users" sequence="20" id="users_general_configuration_menu" parent="general_configuration_menu" action="res.act_user_form"/>
+        <menuitem name="Event Type Action" sequence="230" id="event_type_action_general_configuration_menu" parent="general_configuration_menu" action="act_event_type_action_form"/>
         <!-- Global Search Wizard -->
         <record model="ir.ui.view" id="global_search_set_view">
             <field name="model">global_search.set</field>
@@ -27,7 +29,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Set Translatable Languages</field>
             <field name="wiz_name">language_translatable.set.wizard</field>
         </record>
-        <menuitem name="Update translatable languages" sequence="210" id="language_translatable_menu"
-            parent="general_configuration_initialise_data_menu" action="translatable_language_apply_wizard"/>
+        <menuitem name="Update translatable languages" sequence="210" id="language_translatable_menu" parent="general_configuration_initialise_data_menu" action="translatable_language_apply_wizard"/>
     </data>
 </tryton>

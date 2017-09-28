@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_offered_billing_modes_general_configuration"
+msgid "Billing Modes"
+msgstr "Modes de quittancement"
+
 msgctxt "error:account.configuration:"
 msgid ""
 "Following products or coverages : %s have tax included option which is not "

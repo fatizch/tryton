@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_party_general_configuration"
+msgid "Party Configuration"
+msgstr "Configuration des tiers"
+
+msgctxt "model:ir.ui.menu,name:menu_party_relation_type_general_configuration"
+msgid "Party Relation Types"
+msgstr "Types de relation des tiers"
+
 msgctxt "error:ir.attachment:"
 msgid ""
 "Some attachments are used on interactions with the following parties:\n"

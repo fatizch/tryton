@@ -1593,6 +1593,14 @@ msgctxt "model:ir.ui.menu,name:general_configuration_menu"
 msgid "General Configuration"
 msgstr "Configuration générale"
 
+msgctxt "model:ir.ui.menu,name:users_general_configuration_menu"
+msgid "Users"
+msgstr "Utilisateurs"
+
+msgctxt "model:ir.ui.menu,name:event_type_action_general_configuration_menu"
+msgid "Event Type Action"
+msgstr "Action par type d'événement"
+
 msgctxt "model:ir.ui.menu,name:language_translatable_menu"
 msgid "Update translatable languages"
 msgstr "Mise à jour des langues traduisibles"

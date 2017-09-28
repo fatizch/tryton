@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_offered_configuration_general_configuration"
+msgid "Offered Configuration"
+msgstr "Administration produit"
+
 msgctxt "error:extra_data:"
 msgid "Expected key %s to be set in field %s of %s"
 msgstr "%s doit être renseigné dans le champ %s de %s"

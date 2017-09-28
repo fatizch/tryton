@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_work_days_general_configuration"
+msgid "Work Days Configuration"
+msgstr "Configuration des jours ouvrés"
+
 msgctxt "error:batch.params_config:"
 msgid "No configuration given"
 msgstr "Configuration absente"

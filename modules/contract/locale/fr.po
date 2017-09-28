@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_contract_substatus_general_configuration"
+msgid "Contract Sub-status"
+msgstr "Sous statut de contrat"
+
 msgctxt "error:contract.activate:"
 msgid "You cannot activate a contract that is not in quote or hold status !"
 msgstr ""

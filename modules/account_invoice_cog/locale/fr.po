@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_payment_terms_general_configuration"
+msgid "Payment Terms"
+msgstr "Conditions de paiement"
+
 msgctxt "error:report.template:"
 msgid "Contract Invoice"
 msgstr "Quittance de contrat"

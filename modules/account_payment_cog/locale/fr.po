@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_payment_journals_general_configuration"
+msgid "Payment Journals"
+msgstr "Journaux de paiement"
+
 msgctxt "error:account.payment.creation:"
 msgid "Selected lines are incompatible with selected kind"
 msgstr ""

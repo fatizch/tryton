@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_claim_configuration_general_configuration"
+msgid "Claim Configuration"
+msgstr "Configuration sinistre"
+
+msgctxt "model:ir.ui.menu,name:menu_claim_substatus_general_configuration"
+msgid "Claim Sub-status"
+msgstr "Sous statut de sinistre"
+
 msgctxt "error:benefit.event.description:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"

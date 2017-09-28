@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <menuitem name="Account Journals" parent="coog_core.general_configuration_menu" action="account.act_journal_form" id="menu_account_journal_general_configuration" sequence="70" icon="tryton-list"/>
+        <menuitem name="Create Chart Of Accounts From Template" parent="coog_core.general_configuration_menu" action="account.wizard_create_chart" id="menu_wizard_create_chart_general_configuration" sequence="30"/>
+        <menuitem name="Update Chart Of Accounts From Template" parent="coog_core.general_configuration_menu" action="account.wizard_update_chart" id="menu_wizard_update_chart_general_configuration" sequence="35"/>
+        <menuitem name="Fiscal Years" parent="coog_core.general_configuration_menu" action="account.act_fiscalyear_form" id="menu_fiscalyear_general_configuration" sequence="75"/>
+        <menuitem name="Fiscal Periods" parent="coog_core.general_configuration_menu" action="account.act_period_form" id="menu_period_general_configuration" sequence="80"/>
+        <menuitem name="Taxes" parent="coog_core.general_configuration_menu" action="account.act_tax_list" id="menu_tax_general_configuration" sequence="85"/>
+        <menuitem name="Account Configuration" parent="coog_core.general_configuration_menu" action="account.act_configuration_form" id="menu_account_configuration_general_configuration" sequence="120" icon="tryton-preferences"/>
+    </data>
+</tryton>

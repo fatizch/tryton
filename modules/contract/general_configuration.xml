@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <menuitem name="Contract Sub-status" parent="coog_core.general_configuration_menu" action="act_sub_status_form" id="menu_contract_substatus_general_configuration" sequence="180"/>
+    </data>
+</tryton>

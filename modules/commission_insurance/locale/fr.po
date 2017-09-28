@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_brokers_general_configuration"
+msgid "Brokers"
+msgstr "Courtiers"
+
+msgctxt "model:ir.ui.menu,name:menu_commission_plans_general_configuration"
+msgid "Commission Plans"
+msgstr "Plans de commission"
+
 msgctxt "error:account.fee:"
 msgid "Broker Fee"
 msgstr "Frais d'apporteur"

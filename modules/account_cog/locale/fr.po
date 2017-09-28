@@ -2,6 +2,34 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_account_journal_general_configuration"
+msgid "Account Journals"
+msgstr "Journaux comptable"
+
+msgctxt "model:ir.ui.menu,name:menu_wizard_create_chart_general_configuration"
+msgid "Create Chart Of Accounts From Template"
+msgstr "Créer un plan comptable depuis un modèle"
+
+msgctxt "model:ir.ui.menu,name:menu_wizard_update_chart_general_configuration"
+msgid "Update Chart Of Accounts From Template"
+msgstr "Mise à jour d'un plan comptable depuis un modèle"
+
+msgctxt "model:ir.ui.menu,name:menu_fiscalyear_general_configuration"
+msgid "Fiscal Years"
+msgstr "Années fiscales"
+
+msgctxt "model:ir.ui.menu,name:menu_period_general_configuration"
+msgid "Fiscal Periods"
+msgstr "Périodes fiscales"
+
+msgctxt "model:ir.ui.menu,name:menu_tax_general_configuration"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "model:ir.ui.menu,name:menu_account_configuration_general_configuration"
+msgid "Account Configuration"
+msgstr "Configuration comptable"
+
 msgctxt "error:account.move.line:"
 msgid "Automatic Split Move"
 msgstr "Découpage automatique"

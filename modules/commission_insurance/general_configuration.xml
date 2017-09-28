@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <menuitem name="Brokers" parent="coog_core.general_configuration_menu" action="act_broker_form" id="menu_brokers_general_configuration" sequence="145" icon="coog-broker"/>
+        <menuitem name="Commission Plans" parent="coog_core.general_configuration_menu" action="commission.act_plan_form" id="menu_commission_plans_general_configuration" sequence="150" icon="coog-broker"/>
+    </data>
+</tryton>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <menuitem name="Offered Configuration" parent="coog_core.general_configuration_menu" action="act_configuration_form" id="menu_offered_configuration_general_configuration" sequence="170" icon="tryton-preferences"/>
+    </data>
+</tryton>

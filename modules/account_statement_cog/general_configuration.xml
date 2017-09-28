@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <menuitem name="Statement Journals" parent="coog_core.general_configuration_menu" action="account_statement.act_statement_journal_form" id="menu_statement_journals_general_configuration" sequence="105"/>
+        <menuitem name="Statement Cancel Motives" parent="coog_core.general_configuration_menu" action="act_statement_journal_cancel_motive_form" id="menu_statement_cancel_motives_general_configuration" sequence="110"/>
+    </data>
+</tryton>

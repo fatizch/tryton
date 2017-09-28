@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_process_configuration_general_configuration"
+msgid "Process Configuration"
+msgstr "Configuration de processus"
+
 msgctxt "error:process.action:"
 msgid "Method %s does not exist on model %s"
 msgstr "La méthode %s n'existe pas sur le modèle %s"

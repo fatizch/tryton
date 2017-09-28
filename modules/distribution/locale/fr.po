@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_dist_network_general_configuration"
+msgid "Distribution Networks"
+msgstr "Réseaux de distribution"
+
 msgctxt "field:distribution.network,address:"
 msgid "Address"
 msgstr "Adresse"

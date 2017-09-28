@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_fees_general_configuration"
+msgid "Fees"
+msgstr "Frais"
+
 msgctxt "error:account.fee:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"

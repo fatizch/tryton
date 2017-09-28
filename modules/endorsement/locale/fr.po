@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "model:ir.ui.menu,name:menu_endorsement_configuration_general_configuration"
+msgid "Endorsement Configuration"
+msgstr "Configuration d'avenant"
+
 msgctxt "error:contract.manage_options.option_displayer:"
 msgid "New Option (%s)"
 msgstr "Nouvelle garantie (%s)"

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <menuitem name="Claim Configuration" parent="coog_core.general_configuration_menu" action="act_claim_configuration" id="menu_claim_configuration_general_configuration" sequence="185"/>
+        <menuitem name="Claim Sub-status" parent="coog_core.general_configuration_menu" action="act_sub_status_form" id="menu_claim_substatus_general_configuration" sequence="190"/>
+    </data>
+</tryton>
