@@ -6,6 +6,7 @@ import process
 import contract
 import event
 import document
+import wizard
 
 
 def register():
@@ -17,6 +18,7 @@ def register():
         process.ContractSubscribeFindProcess,
         event.EventTypeAction,
         document.DocumentDescription,
+        wizard.ImportProcessSelect,
         module='contract_insurance_process', type_='model')
 
     Pool.register(
