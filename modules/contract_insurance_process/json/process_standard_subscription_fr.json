@@ -1,0 +1,307 @@
+[
+    {
+        "__name__": "process.step",
+        "_func_key": "adherent",
+        "authorizations": [],
+        "button_domain": "[('subscriber', '!=', None)]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Adh\u00e9rent",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<button name=\"button_change_start_date\" string=\"Change start date\"/>\r\n<field name=\"subscriber_desc\" widget=\"richtext\" colspan=\"4\"/>\r\n\r\n\r\n",
+        "tags": [],
+        "technical_name": "adherent"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "assures",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [
+            {
+                "__name__": "process.action",
+                "_func_key": "95",
+                "content": "method",
+                "method_name": "check_contract_extra_data",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 1,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "96",
+                "content": "method",
+                "method_name": "check_covered_element_extra_data",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 2,
+                "technical_kind": "step_after"
+            }
+        ],
+        "code_before": [
+            {
+                "__name__": "process.action",
+                "_func_key": "94",
+                "content": "method",
+                "method_name": "set_subscriber_as_covered_element",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": null,
+                "technical_kind": "step_before"
+            }
+        ],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Assur\u00e9s",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<field name=\"covered_elements\" colspan=\"4\" mode=\"tree,form\" view_ids=\"contract_insurance.covered_element_view_tree,contract_insurance.covered_element_simple_view_form\" yfill=\"1\" yexpand=\"1\"/>\r\n<newline/>\r\n<field name=\"extra_datas\" mode=\"form\" view_ids=\"_extra_views.step_recapitulatif_contrat_extra_data_form\" expand_toolbar=\"1\" colspan=\"4\"  yfill=\"1\" yexpand=\"1\"/>",
+        "tags": [],
+        "technical_name": "assures"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "garanties",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [
+            {
+                "__name__": "process.action",
+                "_func_key": "97",
+                "content": "method",
+                "method_name": "check_covered_element_option_extra_data",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 1,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "98",
+                "content": "method",
+                "method_name": "check_at_least_one_covered",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 4,
+                "technical_kind": "step_after"
+            }
+        ],
+        "code_before": [
+            {
+                "__name__": "process.action",
+                "_func_key": "99",
+                "content": "method",
+                "method_name": "calculate",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": null,
+                "technical_kind": "step_before"
+            }
+        ],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Garanties",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<group id=\"covered_elements\" yfill=\"1\" yexpand=\"1\" colspan=\"4\">\r\n    <hpaned id=\"covered_element\" position=\"200\">\r\n        <child id=\"tree\">\r\n            <button name=\"option_subscription\" string=\"G\u00e9rer les options\"/>\r\n            <newline/>\r\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"tree\" view_ids=\"contract_insurance.covered_elements_clean_tree\" expand_toolbar=\"0\" colspan=\"2\"/>\r\n        </child>\r\n        <child id=\"form\">\r\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"contract.covered_element\" relation_field=\"contract\" view_ids=\"contract_insurance.covered_element_simple_view_form\" expand_toolbar=\"0\"/>\r\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"contract.option\" relation_field=\"covered_element\" view_ids=\"contract.option_view_form\" expand_toolbar=\"0\"/>\r\n        </child>\r\n    </hpaned>\r\n</group>\n<field name=\"options\" colspan=\"4\"/>",
+        "tags": [],
+        "technical_name": "garanties"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "paiement",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [
+            {
+                "__name__": "process.action",
+                "_func_key": "100",
+                "content": "method",
+                "method_name": "check_billing_information",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": null,
+                "technical_kind": "step_after"
+            }
+        ],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [
+            {
+                "__name__": "ir.ui.view.description",
+                "_func_key": "paiement|billing_information",
+                "field_childs": null,
+                "header_line": "col=\"4\" ",
+                "input_mode": "expert",
+                "nb_col": 4,
+                "view_content": "    <label name=\"billing_mode\"/>\r\n    <field name=\"billing_mode\" widget=\"selection\" xexpand=\"0\"/>\r\n    <newline/>\r\n    <label name=\"direct_debit_day_selector\"/>\r\n    <field name=\"direct_debit_day_selector\"/>\r\n    <label name=\"direct_debit_account\"/>\r\n    <field name=\"direct_debit_account\"/>",
+                "view_kind": "form",
+                "view_model": {
+                    "_func_key": "contract.billing_information"
+                },
+                "view_name": "billing_information",
+                "view_string": "Quittancement"
+            }
+        ],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Paiement",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<group id=\"paiement\" string=\"Paiement\" colspan=\"6\" yfill=\"1\" yexpand=\"1\">\n<field name=\"billing_informations\" mode=\"form\" view_ids=\"_extra_views.step_paiement_billing_information_form\" colspan=\"6\" expand_toolbar=\"0\" yfill=\"1\"/>\n</group>\n",
+        "tags": [],
+        "technical_name": "paiement"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "recapitulatif_contrat",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [
+            {
+                "__name__": "process.action",
+                "_func_key": "101",
+                "content": "method",
+                "method_name": "activate_contract",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 7,
+                "technical_kind": "step_after"
+            }
+        ],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [
+            {
+                "__name__": "ir.ui.view.description",
+                "_func_key": "recapitulatif_contrat|extra_data",
+                "field_childs": null,
+                "header_line": "col=\"4\" ",
+                "input_mode": "expert",
+                "nb_col": 4,
+                "view_content": "<field name=\"extra_data_values\" no_command=\"0\"/> ",
+                "view_kind": "form",
+                "view_model": {
+                    "_func_key": "contract.extra_data"
+                },
+                "view_name": "extra_data",
+                "view_string": "Donn\u00e9es Compl\u00e9mentaires"
+            }
+        ],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "R\u00e9capitulatif contrat",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<notebook colspan=\"7\">\r\n    <page string=\"Covered Elements\" id=\"cov_elements\">\r\n<group id=\"covered_elements\" yfill=\"1\" yexpand=\"1\">\r\n    <hpaned id=\"covered_element\" position=\"200\">\r\n        <child id=\"tree\">\r\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"tree\" view_ids=\"contract_insurance.covered_elements_clean_tree\" expand_toolbar=\"0\"/>\r\n        </child>\r\n        <child id=\"form\">\r\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"contract.covered_element\" relation_field=\"contract\" view_ids=\"contract_insurance.covered_element_simple_view_form\" expand_toolbar=\"0\"/>\r\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"contract.option\" relation_field=\"covered_element\" view_ids=\"contract.option_view_form\" expand_toolbar=\"0\"/>\r\n        </child>\r\n    </hpaned>\n<field name=\"options\" colspan=\"4\"/>\r\n</group>\r\n        </page> \r\n        <page string=\"Invoicing\" id=\"invoicing\">\r\n              <field name=\"billing_informations\" mode=\"form,tree\" colspan=\"6\"/>\n              <field name=\"all_premiums\" mode=\"tree,form\" colspan=\"6\"/>\r\n        </page> \r\n        <page string=\"Donn\u00e9es compl\u00e9mentaires\" id=\"extra_data\">\r\n              <field name=\"extra_datas\" mode=\"form\" view_ids=\"_extra_views.step_recapitulatif_contrat_extra_data_form\" expand_toolbar=\"0\" colspan=\"4\"  yexpand=\"0\" yfill=\"1\"/>\r\n        </page>\r\n</notebook>",
+        "tags": [],
+        "technical_name": "recapitulatif_contrat"
+    },
+    {
+        "__name__": "process",
+        "_func_key": "souscription_prevoyance",
+        "all_steps": [
+            {
+                "__name__": "process-process.step",
+                "_func_key": "adherent|souscription_prevoyance",
+                "order": null,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "adherent"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "assures|souscription_prevoyance",
+                "order": null,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "assures"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "garanties|souscription_prevoyance",
+                "order": null,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "garanties"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "paiement|souscription_prevoyance",
+                "order": null,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "paiement"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "recapitulatif_contrat|souscription_prevoyance",
+                "order": null,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "recapitulatif_contrat"
+                }
+            }
+        ],
+        "close_tab_on_completion": false,
+        "complete_message": "Le contrat sera actif apr\u00e8s cette \u00e9tape, \u00eates-vous s\u00fbr de vouloir continuer ?",
+        "custom_transitions": false,
+        "delete_button": "Supprimer le devis",
+        "end_step_name": "Terminer",
+        "fancy_name": "Souscription Pr\u00e9voyance",
+        "hide_main_menu": false,
+        "hide_main_toolbar": false,
+        "hold_button": "Mettre en attente",
+        "kind": "subscription",
+        "menu_icon": "tryton-open",
+        "menu_name": "Souscription Pr\u00e9voyance",
+        "on_model": {
+            "_func_key": "contract"
+        },
+        "postpone_button": "",
+        "sequence": null,
+        "step_button_group_position": "right",
+        "steps_implicitly_available": true,
+        "tags": [],
+        "technical_name": "souscription_prevoyance",
+        "transitions": [],
+        "with_prev_next": false,
+        "xml_footer": "",
+        "xml_header": "<label name=\"product\"/>\r\n<field name=\"product\" readonly=\"1\"/>\r\n<label name=\"rec_name\"/>\r\n<field name=\"rec_name\"/>\r\n<label name=\"start_date\"/>\r\n<field name=\"start_date\" readonly=\"1\"/> \r\n<label name=\"subscriber\"/>\r\n     <group id=\"subscriber\" col=\"99\">\r\n         <field name=\"subscriber_kind\"/>\r\n         <group id=\"person\" states=\"{&quot;invisible&quot;: {&quot;__class__&quot;: &quot;Not&quot;, &quot;v&quot;: {&quot;s2&quot;: &quot;person&quot;, &quot;s1&quot;: {&quot;d&quot;: &quot;&quot;, &quot;__class__&quot;: &quot;Eval&quot;, &quot;v&quot;: &quot;subscriber_kind&quot;}, &quot;__class__&quot;: &quot;Equal&quot;}}}\" colspan=\"40\">\r\n             <field name=\"subscriber\" view_ids=\"party_cog.person_view_tree\"/>\r\n         </group>\r\n         <group id=\"company\" states=\"{&quot;invisible&quot;: {&quot;s2&quot;: &quot;person&quot;, &quot;s1&quot;: {&quot;d&quot;: &quot;&quot;, &quot;__class__&quot;: &quot;Eval&quot;, &quot;v&quot;: &quot;subscriber_kind&quot;}, &quot;__class__&quot;: &quot;Equal&quot;}}\" colspan=\"40\">\r\n             <field name=\"subscriber\"/>\r\n         </group>\r\n     </group>",
+        "xml_tree": "\r\n<field name=\"current_state\"/>\r\n<field name=\"contract_number\"/>\r\n<field name=\"subscriber\"/>\r\n<field name=\"status\"/>\r\n<field name=\"start_date\"/>\r\n<field name=\"product\"/>\r\n"
+    }
+]
