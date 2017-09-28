@@ -11,8 +11,8 @@ msgstr ""
 "souscription d'assurance en fonction d'un produit"
 
 msgctxt "error:import.process.select:"
-msgid "Standard Insurance Subscription Process"
-msgstr "Processus standard de souscription d'assurance"
+msgid "Standard Insurance Subscription Process (FR)"
+msgstr "Processus standard de souscription d'assurance (FR)"
 
 msgctxt "error:contract.notification:"
 msgid "Enter a value for field '%s' of '%s'"
