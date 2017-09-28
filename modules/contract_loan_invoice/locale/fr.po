@@ -2,6 +2,18 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:import.process.select:"
+msgid ""
+"This process allows managers to launch a loan insurance subscription process "
+"depending on a product"
+msgstr ""
+"Ce processus permet aux gestionnaires de lancer un processus de souscription "
+"assurance emprunteur en fonction d'un produit"
+
+msgctxt "error:import.process.select:"
+msgid "Loan Process (FR)"
+msgstr "Processus emprunteur (FR)"
+
 msgctxt "field:account.invoice.line,loan:"
 msgid "Loan"
 msgstr "Prêt"

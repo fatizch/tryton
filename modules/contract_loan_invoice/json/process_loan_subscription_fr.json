@@ -1,0 +1,440 @@
+[
+    {
+        "__name__": "process.step",
+        "_func_key": "subscriber_selection",
+        "authorizations": [],
+        "button_domain": "[('subscriber', '!=', None), ('signature_date', '!=', None), ('signature_date', '<=', Eval('start_date'))]",
+        "code_after": [
+            {
+                "__name__": "process.action",
+                "_func_key": "49",
+                "content": "method",
+                "method_name": "check_not_null",
+                "parameters": "'signature_date', 'subscriber'",
+                "parent_transition": null,
+                "sequence": 4,
+                "technical_kind": "step_after"
+            }
+        ],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Souscripteur",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<button name=\"button_change_start_date\" string=\"Change start date\" colspan=\"2\"/>\n<newline/>\n<label name=\"signature_date\"/>\n<field name=\"signature_date\"/>\n<field name=\"subscriber_desc\" widget=\"richtext\" colspan=\"4\"/>\n\n\n",
+        "tags": [],
+        "technical_name": "subscriber_selection"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "covered_person_selection",
+        "authorizations": [],
+        "button_domain": "[('loans', '!=', [])]",
+        "code_after": [
+            {
+                "__name__": "process.action",
+                "_func_key": "52",
+                "content": "method",
+                "method_name": "check_contract_extra_data",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 1,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "53",
+                "content": "method",
+                "method_name": "check_contract_loans",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 2,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "54",
+                "content": "method",
+                "method_name": "calculate",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 3,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "55",
+                "content": "method",
+                "method_name": "check_covered_element_extra_data",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 4,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "56",
+                "content": "method",
+                "method_name": "check_loan_dates",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 5,
+                "technical_kind": "step_after"
+            }
+        ],
+        "code_before": [
+            {
+                "__name__": "process.action",
+                "_func_key": "51",
+                "content": "method",
+                "method_name": "set_subscriber_as_covered_element",
+                "parameters": null,
+                "parent_transition": null,
+                "sequence": 1,
+                "technical_kind": "step_before"
+            }
+        ],
+        "colspan": 4,
+        "custom_views": [
+            {
+                "__name__": "ir.ui.view.description",
+                "_func_key": "covered_person_selection|extra_data",
+                "field_childs": null,
+                "header_line": "col=\"4\" ",
+                "input_mode": "classic",
+                "nb_col": 4,
+                "view_content": "<field name=\"extra_data_values\" no_command=\"0\"/>",
+                "view_kind": "form",
+                "view_model": {
+                    "_func_key": "contract.extra_data"
+                },
+                "view_name": "extra_data",
+                "view_string": "Donn\u00e9es Compl\u00e9mentaires"
+            }
+        ],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Assur\u00e9 / Pr\u00eats",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": null,
+        "static_view": null,
+        "step_xml": "<field name=\"covered_elements\" colspan=\"4\" mode=\"form,tree\" view_ids=\"contract_insurance.covered_element_simple_view_form,contract_insurance.covered_element_view_tree\"/>\n<field name=\"extra_datas\" mode=\"form\" expand_toolbar=\"0\" colspan=\"4\" view_ids=\"_extra_views.step_covered_person_selection_extra_data_form\" yfill=\"1\"/>\n<label name=\"loans\"/>\n<field name=\"loans\" view_ids=\"loan.ordered_loan_view_list,loan.loan_view_form\" colspan=\"4\" invisible=\"0\"/>\n\n  ",
+        "tags": [],
+        "technical_name": "covered_person_selection"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "loan_option_selection",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [
+            {
+                "__name__": "process.action",
+                "_func_key": "57",
+                "content": "method",
+                "method_name": "check_covered_element_option_extra_data",
+                "parameters": null,
+                "parent_transition": null,
+                "sequence": 17,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "58",
+                "content": "method",
+                "method_name": "check_at_least_one_covered",
+                "parameters": null,
+                "parent_transition": null,
+                "sequence": 19,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "59",
+                "content": "method",
+                "method_name": "check_option_dates",
+                "parameters": null,
+                "parent_transition": null,
+                "sequence": 21,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "60",
+                "content": "method",
+                "method_name": "check_no_option_without_loan",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 24,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "61",
+                "content": "method",
+                "method_name": "check_no_loan_without_option",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 26,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "62",
+                "content": "method",
+                "method_name": "calculate",
+                "parameters": null,
+                "parent_transition": null,
+                "sequence": 27,
+                "technical_kind": "step_after"
+            }
+        ],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Garanties",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": null,
+        "static_view": null,
+        "step_xml": "<group id=\"warning\" colspan=\"4\">\n    <image name=\"tryton-dialog-warning\" xexpand=\"0\" xfill=\"0\"/>\n    <label string=\"!!!!!!!!!!!!!!!!!!!!    PENSER A SAISIR UN BENEFICIAIRE ET VERIFIER LA FRANCHISE    !!!!!!!!!!!!!!!!!!!!\" id=\"beneficiary_required\" yalign=\"0.0\" xalign=\"0.0\" xexpand=\"1\" colspan=\"3\"/>\n</group>\n<group id=\"covered_elements\" yfill=\"1\" yexpand=\"1\" colspan=\"4\">\n    <hpaned id=\"covered_element\" position=\"200\">\n        <child id=\"tree\">\n            <button name=\"option_subscription\" string=\"G\u00e9rer les options\"/><button name=\"create_extra_premium\" string=\"Majo/Mino\"/>\n            <newline/>\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"tree\" view_ids=\"contract_insurance.covered_elements_clean_tree\" expand_toolbar=\"0\" colspan=\"2\"/>\n        </child>\n        <child id=\"form\">\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"contract.covered_element\" relation_field=\"contract\" view_ids=\"contract_insurance.covered_element_simple_view_form\" expand_toolbar=\"0\"/>\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"contract.option\" relation_field=\"covered_element\" view_ids=\"contract.option_view_form\" expand_toolbar=\"0\"/>\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"loan.share\" relation_field=\"option\" view_ids=\"loan.loan_share_view_form\" expand_toolbar=\"0\"/>\n        </child>\n    </hpaned>\n</group>",
+        "tags": [],
+        "technical_name": "loan_option_selection"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "pricing",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [
+            {
+                "__name__": "process.action",
+                "_func_key": "65",
+                "content": "method",
+                "method_name": "check_billing_information",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 1,
+                "technical_kind": "step_after"
+            }
+        ],
+        "code_before": [
+            {
+                "__name__": "process.action",
+                "_func_key": "64",
+                "content": "method",
+                "method_name": "pre_calculate_fees",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 1,
+                "technical_kind": "step_before"
+            }
+        ],
+        "colspan": 4,
+        "custom_views": [
+            {
+                "__name__": "ir.ui.view.description",
+                "_func_key": "pricing|billing_information",
+                "field_childs": null,
+                "header_line": "string=\"\" col=\"4\" ",
+                "input_mode": "classic",
+                "nb_col": 4,
+                "view_content": "    <label name=\"billing_mode\"/>\n    <field name=\"billing_mode\" widget=\"selection\" xexpand=\"0\"/>\n    <label name=\"payer\"/>\n    <field name=\"payer\"/>\n    <newline/>\n    <label name=\"direct_debit_day_selector\"/>\n    <field name=\"direct_debit_day_selector\"/>\n    <label name=\"direct_debit_account\"/>\n    <field name=\"direct_debit_account\"/>\n<!--group id=\"warning\" states=\"{'invisible': ~Eval('is_once_per_contract')}\" colspan=\"4\">\n    <image name=\"tryton-dialog-warning\" xexpand=\"0\" xfill=\"0\"/>\n    <label string=\"Le montant de quittancement choisi est en prime unique, cela peut conduire \u00e0 une prime importante!\" id=\"once_per_contract\" yalign=\"0.0\" xalign=\"0.0\" xexpand=\"1\" colspan=\"3\"/>\n</group>\n<group id=\"once_per_contract\" states=\"{'invisible': True}\">\n    <field name=\"is_once_per_contract\"/>\n</group-->",
+                "view_kind": "form",
+                "view_model": {
+                    "_func_key": "contract.billing_information"
+                },
+                "view_name": "billing_information",
+                "view_string": "Quittancement"
+            }
+        ],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Pr\u00e9l\u00e8vement",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": null,
+        "static_view": null,
+        "step_xml": "<field name=\"billing_informations\" mode=\"form\" view_ids=\"_extra_views.step_pricing_billing_information_form\" colspan=\"6\" expand_toolbar=\"0\"/>\n<newline/>\n<field name=\"fees\"  colspan=\"4\" />",
+        "tags": [],
+        "technical_name": "pricing"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "quittance",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [
+            {
+                "__name__": "process.action",
+                "_func_key": "66",
+                "content": "method",
+                "method_name": "force_calculate_prices",
+                "parameters": null,
+                "parent_transition": null,
+                "sequence": 2,
+                "technical_kind": "step_before"
+            }
+        ],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Quittance",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<button name=\"button_show_all_invoices\" string=\"Afficher l'\u00e9ch\u00e9ancier\" icon=\"bank\" colspan=\"4\"/>\n<button name=\"generic_send_letter\" string=\"Impression\" colspan=\"4\"/>",
+        "tags": [],
+        "technical_name": "quittance"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "ctr_validation",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [
+            {
+                "__name__": "process.action",
+                "_func_key": "67",
+                "content": "method",
+                "method_name": "activate_contract",
+                "parameters": null,
+                "parent_transition": null,
+                "sequence": 6,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "68",
+                "content": "method",
+                "method_name": "_first_invoice",
+                "parameters": "True",
+                "parent_transition": null,
+                "sequence": 11,
+                "technical_kind": "step_after"
+            }
+        ],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Validation du contrat",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": null,
+        "static_view": null,
+        "step_xml": "<notebook colspan=\"6\">\n    <page string=\"Covered Elements\" id=\"cov_elements\">\n<group id=\"covered_elements\" yfill=\"1\" yexpand=\"1\">\n    <hpaned id=\"covered_element\" position=\"200\">\n        <child id=\"tree\">\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"tree\" view_ids=\"contract_insurance.covered_elements_clean_tree\" expand_toolbar=\"0\"/>\n        </child>\n        <child id=\"form\">\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"contract.covered_element\" relation_field=\"contract\" view_ids=\"contract_insurance.covered_element_simple_view_form\" expand_toolbar=\"0\"/>\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"contract.option\" relation_field=\"covered_element\" view_ids=\"contract.option_view_form\" expand_toolbar=\"0\"/>\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"loan.share\" relation_field=\"option\" view_ids=\"loan.loan_share_view_form\" expand_toolbar=\"0\"/>\n        </child>\n    </hpaned>\n</group>\n        </page> \n        <page string=\"Invoicing\" id=\"invoicing\">\n              <field name=\"billing_informations\" mode=\"form,tree\" colspan=\"6\"/>\n        </page> \n  <page string=\"Donn\u00e9es compl\u00e9mentaires\" id=\"extra_data\">\n    <field name=\"extra_datas\" mode=\"form\" expand_toolbar=\"0\" colspan=\"4\" view_ids=\"_extra_views.step_covered_person_selection_extra_data_form\" yexpand=\"0\" yfill=\"1\"/>\n  </page>\n</notebook>",
+        "tags": [],
+        "technical_name": "ctr_validation"
+    },
+    {
+        "__name__": "process",
+        "_func_key": "souscription_emprunteur",
+        "all_steps": [
+            {
+                "__name__": "process-process.step",
+                "_func_key": "subscriber_selection|souscription_emprunteur",
+                "order": 1,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "subscriber_selection"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "covered_person_selection|souscription_emprunteur",
+                "order": 4,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "covered_person_selection"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "loan_option_selection|souscription_emprunteur",
+                "order": 6,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "loan_option_selection"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "pricing|souscription_emprunteur",
+                "order": 16,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "pricing"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "quittance|souscription_emprunteur",
+                "order": 17,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "quittance"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "ctr_validation|souscription_emprunteur",
+                "order": 20,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "ctr_validation"
+                }
+            }
+        ],
+        "close_tab_on_completion": null,
+        "complete_message": "Le contrat sera actif apr\u00e8s cette \u00e9tape, \u00eates-vous s\u00fbr de vouloir continuer ?",
+        "custom_transitions": false,
+        "delete_button": "Supprimer le devis",
+        "end_step_name": "Terminer",
+        "fancy_name": "Souscription Emprunteur",
+        "hide_main_menu": null,
+        "hide_main_toolbar": null,
+        "hold_button": "Mettre en attente",
+        "kind": "subscription",
+        "menu_icon": "tryton-open",
+        "menu_name": "Loan Subscription",
+        "on_model": {
+            "_func_key": "contract"
+        },
+        "postpone_button": null,
+        "sequence": null,
+        "step_button_group_position": "right",
+        "steps_implicitly_available": true,
+        "tags": [],
+        "technical_name": "souscription_emprunteur",
+        "transitions": [],
+        "with_prev_next": true,
+        "xml_footer": "",
+        "xml_header": "<label name=\"product\"/>\n<field name=\"product\" readonly=\"1\"/>\n<label name=\"rec_name\"/>\n<field name=\"rec_name\"/>\n<label name=\"start_date\"/>\n<field name=\"start_date\" readonly=\"1\"/> \n<label name=\"subscriber\"/>\n     <group id=\"subscriber\" col=\"99\">\n         <field name=\"subscriber_kind\"/>\n         <group id=\"person\" states=\"{&quot;invisible&quot;: {&quot;__class__&quot;: &quot;Not&quot;, &quot;v&quot;: {&quot;s2&quot;: &quot;person&quot;, &quot;s1&quot;: {&quot;d&quot;: &quot;&quot;, &quot;__class__&quot;: &quot;Eval&quot;, &quot;v&quot;: &quot;subscriber_kind&quot;}, &quot;__class__&quot;: &quot;Equal&quot;}}}\" colspan=\"40\">\n             <field name=\"subscriber\" view_ids=\"party_cog.person_view_tree\"/>\n         </group>\n         <group id=\"company\" states=\"{&quot;invisible&quot;: {&quot;s2&quot;: &quot;person&quot;, &quot;s1&quot;: {&quot;d&quot;: &quot;&quot;, &quot;__class__&quot;: &quot;Eval&quot;, &quot;v&quot;: &quot;subscriber_kind&quot;}, &quot;__class__&quot;: &quot;Equal&quot;}}\" colspan=\"40\">\n             <field name=\"subscriber\"/>\n         </group>\n     </group>",
+        "xml_tree": "\n<field name=\"current_state\"/>\n<field name=\"contract_number\"/>\n<field name=\"subscriber\"/>\n<field name=\"status\"/>\n<field name=\"start_date\"/>\n<field name=\"product\"/>\n"
+    }
+]

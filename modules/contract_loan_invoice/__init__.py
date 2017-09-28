@@ -5,6 +5,7 @@ import contract
 import offered
 import invoice
 import future_payments
+import wizard
 
 
 def register():
@@ -20,6 +21,7 @@ def register():
         invoice.InvoiceLine,
         future_payments.ShowAllInvoicesMain,
         future_payments.ShowAllInvoicesLine,
+        wizard.ImportProcessSelect,
         module='contract_loan_invoice', type_='model')
 
     Pool.register(
