@@ -63,7 +63,7 @@ class ImportProcess(model.CoogWizard):
 
     def transition_import_process(self):
         for to_import in self.start.processes:
-            filepath = os.path.normalize(to_import.path)
+            filepath = os.path.normpath(to_import.path)
             if not filepath or not to_import.to_install:
                 continue
             with file_open(filepath, 'r') as f_:

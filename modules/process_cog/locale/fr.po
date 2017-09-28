@@ -85,7 +85,7 @@ msgctxt "field:import.process.displayer,name:"
 msgid "Process"
 msgstr "Nom du processus"
 
-msgctxt "field:import.process.displayer,name:"
+msgctxt "field:import.process.displayer,path:"
 msgid "Path"
 msgstr "Chemin"
 
