@@ -1,0 +1,131 @@
+[
+    {
+        "__name__": "process.step",
+        "_func_key": "underwriting_in_progress",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "En attente",
+        "main_model": {
+            "_func_key": "underwriting"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<field name=\"results\" colspan=\"4\" expand_toolbar=\"0\" mode=\"tree\"/>\n<button name=\"generic_send_letter\" string=\"Demande de documents\"/>\n<field name=\"requested_documents\" colspan=\"4\"/>",
+        "tags": [],
+        "technical_name": "underwriting_in_progress"
+    },
+    {
+        "__name__": "process",
+        "_func_key": "analyse_standard",
+        "all_steps": [
+            {
+                "__name__": "process-process.step",
+                "_func_key": "underwriting_in_progress|analyse_standard",
+                "order": 1,
+                "status": {
+                    "__name__": "process.status",
+                    "_func_key": "En attente de documents",
+                    "code": "en_attente_de_documents",
+                    "name": "En attente de documents"
+                },
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "underwriting_in_progress"
+                }
+            }
+        ],
+        "close_tab_on_completion": false,
+        "complete_message": "",
+        "custom_transitions": true,
+        "delete_button": "",
+        "end_step_name": "",
+        "fancy_name": "Analyse standard",
+        "hide_main_menu": false,
+        "hide_main_toolbar": true,
+        "hold_button": "Suspendre",
+        "kind": "underwriting",
+        "menu_icon": "tryton-open",
+        "menu_name": "Analyse standard",
+        "on_model": {
+            "_func_key": "underwriting"
+        },
+        "postpone_button": "Reporter",
+        "sequence": null,
+        "step_button_group_position": "right",
+        "steps_implicitly_available": true,
+        "tags": [],
+        "technical_name": "analyse_standard",
+        "transitions": [
+            {
+                "__name__": "process.transition",
+                "_func_key": "analyse_standard|underwriting_in_progress|None",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "underwriting_in_progress"
+                },
+                "kind": "complete",
+                "method_kind": "add",
+                "methods": [
+                    {
+                        "__name__": "process.action",
+                        "_func_key": "11",
+                        "content": "method",
+                        "method_name": "complete",
+                        "parameters": "'finalize'",
+                        "parent_step": null,
+                        "sequence": 1,
+                        "technical_kind": "transition"
+                    }
+                ],
+                "name": "Finaliser",
+                "priority": 1,
+                "pyson": "~Eval('finalizable')",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": null
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "analyse_standard|underwriting_in_progress|None",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "underwriting_in_progress"
+                },
+                "kind": "complete",
+                "method_kind": "add",
+                "methods": [
+                    {
+                        "__name__": "process.action",
+                        "_func_key": "12",
+                        "content": "method",
+                        "method_name": "complete",
+                        "parameters": "True",
+                        "parent_step": null,
+                        "sequence": 1,
+                        "technical_kind": "transition"
+                    }
+                ],
+                "name": "Abandonner",
+                "priority": 2,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": null
+            }
+        ],
+        "with_prev_next": false,
+        "xml_footer": "",
+        "xml_header": "",
+        "xml_tree": "<field name=\"current_state\"/>"
+    }
+]

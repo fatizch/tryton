@@ -5,6 +5,7 @@ from trytond.pool import Pool
 import underwriting
 import process
 import event
+import wizard
 
 
 def register():
@@ -14,6 +15,7 @@ def register():
         process.ProcessUnderwritingType,
         process.UnderwritingStartFindProcess,
         event.EventTypeAction,
+        wizard.ImportProcessSelect,
         module='underwriting_process', type_='model')
 
     Pool.register(

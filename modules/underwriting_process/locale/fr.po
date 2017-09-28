@@ -2,6 +2,15 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:import.process.select:"
+msgid "This process allows managers to request an underwriting"
+msgstr ""
+"Ce processus permet aux gestionnaires d'effectuer des analyses médicales"
+
+msgctxt "error:import.process.select:"
+msgid "Underwriting Process (FR)"
+msgstr "Processus d'analyse médicale (FR)"
+
 msgctxt "error:underwriting:"
 msgid "Cannot draft completed results"
 msgstr "Impossible de passer des décisions validées en brouillon"
