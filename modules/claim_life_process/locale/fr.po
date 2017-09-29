@@ -2,6 +2,15 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:import.process.select:"
+msgid "This process allows managers to make a STD declaration"
+msgstr ""
+"Ce processus permet aux gestionnaires de déclarer un arrêt de travail"
+
+msgctxt "error:import.process.select:"
+msgid "STD Declaration Process (FR)"
+msgstr "Processus de déclaration d'arrêt de travail (FR)"
+
 msgctxt "field:claim,has_calculated_indemnification:"
 msgid "Has Calculated Indemnification"
 msgstr "Contient des indemnisations calculées"

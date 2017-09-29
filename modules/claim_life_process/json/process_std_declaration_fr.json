@@ -1,0 +1,203 @@
+[
+    {
+        "__name__": "process.step",
+        "_func_key": "claim_std_etape_1",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Assure",
+        "main_model": {
+            "_func_key": "claim"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "",
+        "tags": [],
+        "technical_name": "claim_std_etape_1"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "claim_std_etape_2",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Saisie arr\u00eat",
+        "main_model": {
+            "_func_key": "claim"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<field name=\"losses\" colspan=\"4\" mode=\"form,tree\" view_ids=\"claim.loss_without_service_view_form\"/>\n",
+        "tags": [],
+        "technical_name": "claim_std_etape_2"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "claim_std_etape_3",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Salaires",
+        "main_model": {
+            "_func_key": "claim"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<label name=\"losses_description\"/>\n<field name=\"losses_description\" colspan=\"3\"/>\n<!--\n<field name=\"delivered_services\"  colspan=\"4\" mode=\"form,tree\" view_ids=\"claim_salary_fr.claim_service_with_salary_view_form\" expand_toolbar=\"0\"/>\n-->\n<field name=\"delivered_services\"  colspan=\"4\" mode=\"form,tree\" expand_toolbar=\"0\"/>",
+        "tags": [],
+        "technical_name": "claim_std_etape_3"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "claim_std_etape_4",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": {
+            "__name__": "ir.action",
+            "_func_key": "claim_document.document_request_report_wizard",
+            "active": true,
+            "groups": [],
+            "icon": null,
+            "name": "Report de demande de document",
+            "type": "ir.action.wizard",
+            "usage": null
+        },
+        "exiting_wizard": null,
+        "fancy_name": "Documents",
+        "main_model": {
+            "_func_key": "claim"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<label name=\"losses_description\"/>\n<field name=\"losses_description\" colspan=\"3\"/>\n<field name=\"attachments\" colspan=\"4\"/>\n<field name=\"document_request_lines\" colspan=\"4\"/>\n",
+        "tags": [],
+        "technical_name": "claim_std_etape_4"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "claim_std_etape_5",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": {
+            "__name__": "ir.action",
+            "_func_key": "claim_document.document_request_report_wizard"
+        },
+        "exiting_wizard": null,
+        "fancy_name": "Recapitulatif",
+        "main_model": {
+            "_func_key": "claim"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<field name=\"losses\" group=\"multi_losses\" mode=\"tree\" view_ids=\"claim.loss_simple_list\" xexpand=\"0\" xfill=\"0\"/>\n<field name=\"losses\" group=\"multi_losses\" mode=\"form\" relation=\"claim.loss\" relation_field=\"claim\" view_ids=\"claim.loss_view_form\"/>\n<field name=\"losses\" group=\"multi_losses\" mode=\"form\" relation=\"claim.service\" relation_field=\"loss\" view_ids=\"claim.claim_service_view_form\"/>\n",
+        "tags": [],
+        "technical_name": "claim_std_etape_5"
+    },
+    {
+        "__name__": "process",
+        "_func_key": "declaration_d_arret_de_travail_process",
+        "all_steps": [
+            {
+                "__name__": "process-process.step",
+                "_func_key": "claim_std_etape_1|declaration_d_arret_de_travail_process",
+                "order": 1,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "claim_std_etape_1"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "claim_std_etape_2|declaration_d_arret_de_travail_process",
+                "order": 2,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "claim_std_etape_2"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "claim_std_etape_3|declaration_d_arret_de_travail_process",
+                "order": 3,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "claim_std_etape_3"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "claim_std_etape_4|declaration_d_arret_de_travail_process",
+                "order": 7,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "claim_std_etape_4"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "claim_std_etape_5|declaration_d_arret_de_travail_process",
+                "order": 8,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "claim_std_etape_5"
+                }
+            }
+        ],
+        "close_tab_on_completion": false,
+        "complete_message": "",
+        "custom_transitions": false,
+        "delete_button": "",
+        "end_step_name": "Terminer",
+        "fancy_name": "D\u00e9claration d'arr\u00eat de travail",
+        "for_loss_descs": [
+        ],
+        "hide_main_menu": false,
+        "hide_main_toolbar": true,
+        "hold_button": "Suspendre",
+        "kind": "claim_declaration",
+        "menu_icon": "tryton-open",
+        "menu_name": "D\u00e9claration d'arr\u00eat de travail",
+        "on_model": {
+            "_func_key": "claim"
+        },
+        "postpone_button": null,
+        "sequence": null,
+        "step_button_group_position": "right",
+        "steps_implicitly_available": false,
+        "tags": [],
+        "technical_name": "declaration_d_arret_de_travail_process",
+        "transitions": [],
+        "with_prev_next": false,
+        "xml_footer": "",
+        "xml_header": "<label name=\"name\"/>\n<field name=\"name\"/>\n<label name=\"status\"/>\n<group id=\"status\">\n<field name=\"status\"/>\n<label name=\"sub_status\"/>\n<field name=\"sub_status\"/>\n</group>\n<label name=\"claimant\"/>\n<field name=\"claimant\"/>\n<label name=\"declaration_date\"/>\n<field name=\"declaration_date\"/>",
+        "xml_tree": "\n<field name=\"current_state\"/>\n<field name=\"name\"/>\n<field name=\"claimant\"/>\n<field name=\"status\"/>\n"
+    }
+]
