@@ -957,7 +957,9 @@ class ManageOptions(EndorsementWizardStepMixin):
                 if not v.start or v.start <= new_option.effective_date],
             key=lambda x: x.start or datetime.date.min)
         current_version = new_versions[-1]
-        if not current_version.start or (current_version.start !=
+        if current_version.start_date == new_option.effective_date:
+            current_version.extra_data = new_option.extra_data
+        elif not current_version.start or (current_version.start !=
                 new_option.effective_date):
             current_version = new_option.to_version(
                 previous_version=new_versions[-1])

@@ -1,3 +1,4 @@
+* BUG#6003 Override contract option version if its effective date is the same as the previous contract option version
 * FEA#7077 Add preconfigured endorsement definitions
 * BUG#7120 Remove sub status initialization in coverage modification endorsement
 * BUG#7114 Clean up endorsement contents
