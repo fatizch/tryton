@@ -437,7 +437,7 @@ class ClaimService:
         ClaimIndemnification = Pool().get('claim.indemnification')
         for service in services:
             for indemn in service.indemnifications:
-                if indemn.status in ('cancelled', 'cancel_paid'):
+                if 'cancel' in indemn.status:
                     continue
                 if (service.benefit.indemnification_kind != 'capital' and
                         ((not to_date or indemn.start_date <= to_date) and
@@ -617,7 +617,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             ('cancel_scheduled', 'Schedule Cancelled'),
             ('cancel_validated', 'Validate Cancelled'),
             ('cancel_controlled', 'Control Cancelled'),
-            ], 'Status', sort=False)
+            ], 'Status', sort=False, readonly=True)
     status_string = status.translated('status')
     amount = fields.Function(
         fields.Numeric('Amount',
@@ -709,7 +709,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'modify_indemnification': {
                     'invisible': Eval('status') != 'calculated'},
                 'schedule': {
-                    'invisible': Eval('status') != 'calculated'},
+                    'invisible': Not(In(Eval('status'),
+                            ['calculated', 'cancelled']))},
                 })
         cls._error_messages.update({
                 'cannot_create_indemnifications': 'The insurer %(insurer)s '
@@ -718,6 +719,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'did not allow to pay indemnifications.',
                 'cannot_schedule_draft_loss': 'Cannot schedule '
                 'indemnifications for draft loss %(loss)s',
+                'schedule_cancel_period_first': 'Cannot schedule '
+                'indemnifications as there is cancelled indemnification '
+                'not scheduled for service %(service)s',
                 'no_bank_account': 'No bank account found for the beneficiary '
                 '%s on loss %s',
                 'not_enough_money': 'The invoices for %(party_names)s '
@@ -933,23 +937,35 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
 
     @classmethod
     def check_schedulability(cls, indemnifications):
-        with model.error_manager():
-            for indemnification in indemnifications:
-                if indemnification.service.loss.state == 'draft':
-                    cls.append_functional_error('cannot_schedule_draft_loss',
-                        {'loss': indemnification.service.loss.rec_name})
-                journal = indemnification.journal
-                if (journal and journal.needs_bank_account() and
-                        not indemnification.beneficiary.get_bank_account(
-                            utils.today())):
-                    cls.append_functional_error('no_bank_account', (
-                            indemnification.beneficiary.rec_name,
-                            indemnification.service.claim.name))
+        cancel_indemnifications = cls.search([
+                ('service', 'in', [i.service.id for i in indemnifications]),
+                ('status', '=', 'cancelled'),
+                ('id', 'not in', [i.id for i in indemnifications])
+                ])
+        service_to_not_schedule = [i.service
+            for i in cancel_indemnifications]
+        for indemnification in indemnifications:
+            if ('cancel' not in indemnification.status and
+                    indemnification.service in service_to_not_schedule):
+                # Cancel indemnification must be schedule first
+                cls.append_functional_error('schedule_cancel_period_first',
+                    {'service': indemnification.service.rec_name})
+            if indemnification.service.loss.state == 'draft':
+                cls.append_functional_error('cannot_schedule_draft_loss',
+                    {'loss': indemnification.service.loss.rec_name})
+            journal = indemnification.journal
+            if (journal and journal.needs_bank_account() and
+                    not indemnification.beneficiary.get_bank_account(
+                        utils.today())):
+                cls.append_functional_error('no_bank_account', (
+                        indemnification.beneficiary.rec_name,
+                        indemnification.service.claim.name))
 
     @classmethod
     @ModelView.button
     def schedule(cls, indemnifications):
-        cls.check_schedulability(indemnifications)
+        with model.error_manager():
+            cls.check_schedulability(indemnifications)
         cls.do_schedule(indemnifications)
 
     @classmethod
@@ -965,12 +981,12 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             if do_control is True:
                 if indemnification.status == 'cancelled':
                     schedule_cancel.append(indemnification)
-                else:
+                elif indemnification.status == 'calculated':
                     schedule.append(indemnification)
             else:
                 if indemnification.status == 'cancelled':
                     control_cancel.append(indemnification)
-                else:
+                elif indemnification.status == 'calculated':
                     control.append(indemnification)
         cls.write(
             schedule, {
@@ -1052,7 +1068,10 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         validate = []
         cancelled = []
         for indemn in indemnifications:
-            if indemn.status == 'cancelled':
+            if 'cancel' in indemn.status:
+                if indemn.status == 'cancel_validated':
+                    # already cancelled
+                    continue
                 cancelled.append(indemn)
             else:
                 validate.append(indemn)
@@ -1094,7 +1113,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         control = []
         cancelled = []
         for indemn in indemnifications:
-            if indemn.status == 'cancelled':
+            if 'cancel' in indemn.status:
                 cancelled.append(indemn)
             else:
                 control.append(indemn)
@@ -1203,7 +1222,6 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         def group_key(x):
             return x._group_to_claim_invoice_key()
 
-        warning_invoices = []
         indemnifications.sort(key=group_key)
         for key, group_indemnification in groupby(indemnifications,
                 key=group_key):
@@ -1214,38 +1232,14 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 if indemnification.status == 'cancel_validated':
                     cancelled.append(indemnification)
                     if indemnification.payback_method == 'planned':
-                        key.update({'payment_term':
-                                indemnification.payment_term})
+                        invoice.payment_term = indemnification.payment_term
                 else:
                     paid.append(indemnification)
                 lines.extend([cls._get_invoice_line(key, invoice,
                         indemnification)])
             invoice.lines = lines
+            invoices.append(invoice)
 
-            if sum([line.unit_price * line.quantity for line in lines], 0) < 0:
-                to_remove = False
-                for indemnification in indemns:
-                    if (indemnification.payback_method == 'continuous'):
-                        to_remove = True
-                        break
-                if to_remove is True:
-                    for indemnification in indemns:
-                        if indemnification in paid:
-                            paid.remove(indemnification)
-                        elif indemnification in cancelled:
-                            cancelled.remove(indemnification)
-                    warning_invoices.append(invoice)
-                    invoice = None
-
-            if invoice is not None:
-                invoices.append(invoice)
-        if warning_invoices:
-            parties = {(i.party.id, i.party.rec_name)
-                 for i in warning_invoices[:10]}
-            warn_id = 'not_enough_money_%s' % '_'.join(
-                [str(p[0]) for p in list(parties)])
-            cls.raise_user_warning(warn_id, 'not_enough_money', {
-                    'party_names': ', '.join([p[1] for p in list(parties)])})
         Invoice.save(invoices)
         Invoice.post(invoices)
         cls.write(paid, {'status': 'paid'},

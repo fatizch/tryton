@@ -1,5 +1,6 @@
 * BUG#7095 Fix crash in indemnification creation batch because of missing currency
 * FEA#7046 Improve indemnification validation and control view
+* BUG#7044 Don't try to cancel an already cancel indemnification
 * BUG#6882 Some warnings or errors are no more raised when closing a claim with refused services
 * FEA#5907 Manage multiple indemnifications on a given period
 * BUG#6632 Fix crash in calculating indemnification gaps when closing a claim

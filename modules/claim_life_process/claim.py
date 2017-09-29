@@ -51,4 +51,5 @@ class Claim:
 
     def get_indemnifications_to_schedule(self, name):
         return [indemnification.id for indemnification in self.indemnifications
-            if indemnification.status in ('calculated', 'scheduled')]
+            if indemnification.status in ('calculated', 'scheduled',
+                'cancelled', 'cancelled_scheduled')]

@@ -1,5 +1,6 @@
 * BUG#7095 Corrigez le crash dans le batch de création d'indemnisations en raison de devices manquantes
 * FEA#7046 Amélioration des la vue de validation et contrôle des indémnisations
+* BUG#7044 Ne pas tenter d'annuler une indemnisation déjà annulée
 * BUG#6882 Des avertissements ou errors ne sont plus levés en cas de refus de service lors de la fermeture d'une prestation
 * FEA#5907 Gestion des indemnisations multiples sur une période
 * BUG#6632 Correction du crash sur le calcul des périodes manquantes survenant lors de la fermeture du sinistre 

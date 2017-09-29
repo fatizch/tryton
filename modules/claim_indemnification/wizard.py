@@ -166,10 +166,11 @@ class IndemnificationAssistantView(model.CoogView):
 
     def apply_filters(self):
         if self.mode == 'validate':
-            domain = [('status', 'in', ['controlled', 'cancelled'])]
+            domain = [('status', 'in', ['controlled', 'cancel_controlled',
+                'validated', 'cancel_validated'])]
             model_name = 'claim.indemnification.assistant.validate.element'
         elif self.mode == 'control':
-            domain = [('status', '=', 'scheduled')]
+            domain = [('status', 'in', ['scheduled', 'cancel_scheduled'])]
             model_name = 'claim.indemnification.assistant.control.element'
         else:
             return
@@ -199,7 +200,7 @@ class IndemnificationAssistantView(model.CoogView):
             element.action = self.global_setter
 
 
-class IndemnificationAssistant(Wizard):
+class IndemnificationAssistant(Wizard, model.FunctionalErrorMixIn):
     'Indemnification Assistant'
 
     __name__ = 'claim.indemnification.assistant'
@@ -220,6 +221,13 @@ class IndemnificationAssistant(Wizard):
             Button('Done', 'control_state', 'tryton-ok')])
     validation_state = StateTransition()
     control_state = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(IndemnificationAssistant, cls).__setup__()
+        cls._error_messages.update({
+            'cannot_refuse_cancel_indemnifications': "Cancelled "
+            "indemnification %(indemnification)s can't be refused"})
 
     def transition_init_state(self):
         pool = Pool()
@@ -244,10 +252,30 @@ class IndemnificationAssistant(Wizard):
             'global_setter': 'nothing', 'field_sort': 'total_amount',
             'order_sort': 'DESC'}
 
+    def check_validation_state(self):
+        # can't refuse cancel indemnification
+        for element in self.validate_view_state.validate:
+            if (element.action == 'refuse' and
+                    'cancel' in element.indemnification.status):
+                self.append_functional_error(
+                    'cannot_refuse_cancel_indemnifications',
+                    {'indemnification': element.indemnification.rec_name})
+
+    def check_control_state(self):
+        # can't refuse cancel indemnification
+        for element in self.control_view_state.control:
+            if (element.action == 'refuse' and
+                    'cancel' in element.indemnification.status):
+                self.append_functional_error(
+                    'cannot_refuse_cancel_indemnifications',
+                    {'indemnification': element.indemnification.rec_name})
+
     def transition_validation_state(self):
         Indemnification = Pool().get('claim.indemnification')
         validate = []
         reject = {}
+        with model.error_manager():
+            self.check_validation_state()
         for element in self.validate_view_state.validate:
             if element.action != 'nothing':
                 if element.action == 'validate':
@@ -266,6 +294,8 @@ class IndemnificationAssistant(Wizard):
         notes = []
         validate = []
         reject = {}
+        with model.error_manager():
+            self.check_control_state()
         for element in self.control_view_state.control:
             if element.note:
                 notes.append({
@@ -500,7 +530,7 @@ class IndemnificationRegularisation(model.CoogView):
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
         readonly=True)
     indemnification = fields.One2Many('claim.indemnification', None,
-        'Indemnification')
+        'Indemnification', readonly=True)
     cancelled = fields.Many2Many(
         'claim.indemnification', None, None, 'Cancelled', readonly=True)
     payback_required = fields.Boolean('Payback Required',
@@ -511,12 +541,16 @@ class IndemnificationRegularisation(model.CoogView):
             ('planned', 'Planned'),
             ('', ''),
             ], 'Payback Method',
-            states={'invisible': ~Eval('payback_required')})
+        states={'invisible': ~Eval('payback_required'),
+            'required': Bool(Eval('payback_required'))},
+        depends=['payback_required'])
     payment_term_required = fields.Boolean('Payment Term Required',
         states={'invisible': True})
     payment_term = fields.Many2One(
         'account.invoice.payment_term', 'Payment Term',
-        states={'invisible': ~Eval('payment_term_required')})
+        states={'invisible': ~Eval('payment_term_required'),
+                'required': Bool(Eval('payment_term_required'))},
+        depends=['payment_term_required'])
     currency_digits = fields.Integer(
         'Currency Digits', states={'invisible': True})
 
@@ -680,7 +714,7 @@ class CreateIndemnification(Wizard):
                 return {}
             non_cancelled = []
             for indemnification in service.indemnifications:
-                if indemnification.status != 'cancelled':
+                if 'cancel' not in indemnification.status:
                     non_cancelled.append(indemnification)
             if non_cancelled and non_cancelled[-1].end_date:
                 start_date = non_cancelled[-1].end_date + \
