@@ -1069,6 +1069,10 @@ msgctxt "field:ir.sequence,name:default_quote_contract_sequence"
 msgid "Default Quote Contract Sequence"
 msgstr "Séquence par défaut des numéros de devis"
 
+msgctxt "model:ir.sequence,name:default_quote_contract_sequence"
+msgid "Default Quote Contract Sequence"
+msgstr "Sé quence par dé faut des numé ros de devis"
+
 msgctxt "field:offered.product,quote_number_sequence:"
 msgid "Quote number sequence"
 msgstr "Séquence de numéro de devis"

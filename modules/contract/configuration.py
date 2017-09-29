@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond import backend
+from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.tools.multivalue import migrate_property
@@ -71,7 +72,11 @@ class ConfigurationDefaultQuoteNumberSequence(model.CoogSQL,
 
     @classmethod
     def default_default_quote_number_sequence(cls):
+        company_id = Transaction().context.get('company', None)
         sequences = Pool().get('ir.sequence').search(
-            [('code', '=', 'quote')])
+            [
+                ('code', '=', 'quote'),
+                ('company', '=', company_id),
+            ])
         if len(sequences) == 1:
             return sequences[0].id
