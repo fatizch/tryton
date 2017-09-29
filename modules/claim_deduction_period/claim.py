@@ -52,7 +52,7 @@ class DeductionPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
         required=True, ondelete='RESTRICT')
     amount_kind = fields.Selection([
             ('total', 'Total'), ('per_day', 'Per Day')], 'Amount Kind')
-    amount_received = fields.Numeric('Amount Received', required=True,
+    amount_received = fields.Numeric('Amount Received',
         domain=[('amount_received', '>', 0)],
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     daily_amount = fields.Function(

@@ -1,3 +1,5 @@
+* OTH#0000 Amount received is no longer required on a deduction period
+
 Version 1.12 - 2017-04-28
 * FEA#0000 Display deduction in loss view
 * FEA#0000 Improve deduction period input durnig indemnification wizard creation
