@@ -160,7 +160,7 @@
                 "__name__": "process.action",
                 "_func_key": "59",
                 "content": "method",
-                "method_name": "check_option_dates",
+                "method_name": "check_options_dates",
                 "parameters": null,
                 "parent_transition": null,
                 "sequence": 21,
