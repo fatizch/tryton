@@ -2,6 +2,20 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tryton>
+    <data noupdate="1">
+        <record model="endorsement.definition" id="modify_party_address_definition">
+            <field name="code">change_party_address</field>
+            <field name="name">Change Party Address</field>
+        </record>
+        <record model="endorsement.definition" id="modify_name_party_definition">
+            <field name="code">change_party_name</field>
+            <field name="name">Change Party Name</field>
+        </record>
+        <record model="endorsement.definition" id="modify_birth_date_party_definition">
+            <field name="code">change_birth_date_party</field>
+            <field name="name">Change Party Birth Date</field>
+        </record>
+    </data>
     <data>
         <!-- #################### -->
         <!-- # Endorsement Party # -->
@@ -44,6 +58,39 @@ this repository contains the full copyright notices and license terms. -->
             <field name="keyword">form_relate</field>
             <field name="model">party.party,-1</field>
             <field name="action" ref="act_endorsement"/>
+        </record>
+        <record model="endorsement.part" id="endorsement_part_party_modify_birth_date">
+            <field name="code">change_party_birth_date</field>
+            <field name="name">Change Party Birth Date</field>
+            <field name="kind">party</field>
+            <field name="view">change_party_birth_date</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="modify_birth_date_party_relation">
+            <field name="definition" ref="modify_birth_date_party_definition"/>
+            <field name="endorsement_part" ref="endorsement_part_party_modify_birth_date"/>
+            <field name="order">1</field>
+        </record>
+        <record model="endorsement.part" id="endorsement_part_party_modify_name">
+            <field name="code">change_party_name</field>
+            <field name="name">Change Party Name</field>
+            <field name="kind">party</field>
+            <field name="view">change_party_name</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="modify_name_party_relation">
+            <field name="definition" ref="modify_name_party_definition"/>
+            <field name="endorsement_part" ref="endorsement_part_party_modify_name"/>
+            <field name="order">1</field>
+        </record>
+        <record model="endorsement.part" id="endorsement_part_party_change_address">
+            <field name="code">change_address</field>
+            <field name="name">Change Party Address</field>
+            <field name="kind">party</field>
+            <field name="view">change_party_address</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="modify_party_address_relation">
+            <field name="definition" ref="modify_party_address_definition"/>
+            <field name="endorsement_part" ref="endorsement_part_party_change_address"/>
+            <field name="order">1</field>
         </record>
     </data>
 </tryton>

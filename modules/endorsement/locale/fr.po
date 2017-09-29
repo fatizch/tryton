@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_endorsement_configuration_general_configuration"
-msgid "Endorsement Configuration"
-msgstr "Configuration d'avenant"
-
 msgctxt "error:contract.manage_options.option_displayer:"
 msgid "New Option (%s)"
 msgstr "Nouvelle garantie (%s)"
@@ -129,10 +125,8 @@ msgid "You are trying to terminate the contract before its active start date"
 msgstr "Vous essayez de résiliser le contrat avant sa date d'effet courante"
 
 msgctxt "error:endorsement.contract.void:"
-msgid ""
-"You are trying to void a renewed contract"
-msgstr ""
-"Vous essayez d'annuler un contrat qui a été renouvelé"
+msgid "You are trying to void a renewed contract"
+msgstr "Vous essayez d'annuler un contrat qui a été renouvelé"
 
 msgctxt "error:endorsement.contract:"
 msgid "Activation History Modifications"
@@ -174,12 +168,12 @@ msgid "Going on will erase all data on the endorsement."
 msgstr "Toutes les données saisies sur l'avenant seront perdues."
 
 msgctxt "error:endorsement.start:"
-msgid "No preview state is defined on the endorsement definition"
-msgstr "Aucun aperçu à utiliser n'est défini sur la définition d'avenant"
-
-msgctxt "error:endorsement.start:"
 msgid "It is not possible to resume an already applied endorsement"
 msgstr "Il est impossible de reprendre un avenant déjà appliqué"
+
+msgctxt "error:endorsement.start:"
+msgid "No preview state is defined on the endorsement definition"
+msgstr "Aucun aperçu à utiliser n'est défini sur la définition d'avenant"
 
 msgctxt "error:endorsement.sub_state:"
 msgid "The code must be unique!"
@@ -490,6 +484,58 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:endorsement.configuration,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.configuration.endorsement_number_sequence,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_number_sequence,configuration:"
+msgid "Endorsement Configuration"
+msgstr "Configuration d'avenant"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_number_sequence,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_number_sequence,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_number_sequence,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_number_sequence,endorsement_number_sequence:"
+msgid "Endorsement Number Sequence"
+msgstr "Séquence de numéro d'avenant"
+
+msgctxt "field:endorsement.configuration.endorsement_number_sequence,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_number_sequence,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_number_sequence,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_number_sequence,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:endorsement.configuration.endorsement_number_sequence,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -1990,6 +2036,10 @@ msgctxt "model:endorsement.configuration,name:"
 msgid "Endorsement Configuration"
 msgstr "Configuration d'avenant"
 
+msgctxt "model:endorsement.configuration.endorsement_number_sequence,name:"
+msgid "Endorsement Configuration Number Sequence"
+msgstr "Séquence des numéros d'avenant"
+
 msgctxt "model:endorsement.contract,name:"
 msgid "Endorsement Contract"
 msgstr "Avenant au contrat"
@@ -2074,6 +2124,19 @@ msgctxt "model:endorsement.definition,name:"
 msgid "Endorsement Definition"
 msgstr "Définition d'avenant"
 
+msgctxt ""
+"model:endorsement.definition,name:definition_change_contract_extra_data"
+msgid "Change Contract Extra Data"
+msgstr "Modifier les données complémentaires"
+
+msgctxt "model:endorsement.definition,name:definition_manage_insured"
+msgid "Manage Insured"
+msgstr "Gestion des assures"
+
+msgctxt "model:endorsement.definition,name:definition_manage_options"
+msgid "Manage Options"
+msgstr "Gestion des options"
+
 msgctxt "model:endorsement.definition,name:reactivate_contract_definition"
 msgid "reactivate Contract"
 msgstr "Réactiver le contrat"
@@ -2125,6 +2188,10 @@ msgstr "Modifier la date d'effet du contrat"
 msgctxt "model:endorsement.part,name:change_contract_subscriber_revision_part"
 msgid "Change Contract Subscriber"
 msgstr "Changement de souscripteur"
+
+msgctxt "model:endorsement.part,name:endorsement_party_change_extra_data"
+msgid "Change Extra Data"
+msgstr "Modifier les données complémentaires"
 
 msgctxt "model:endorsement.part,name:manage_contacts_endorsement_part"
 msgid "Manage Contacts"
@@ -2269,6 +2336,11 @@ msgid "Endorsements"
 msgstr "Avenants"
 
 msgctxt "model:ir.ui.menu,name:menu_configuration"
+msgid "Endorsement Configuration"
+msgstr "Configuration d'avenant"
+
+msgctxt ""
+"model:ir.ui.menu,name:menu_endorsement_configuration_general_configuration"
 msgid "Endorsement Configuration"
 msgstr "Configuration d'avenant"
 
@@ -2626,6 +2698,14 @@ msgctxt "view:offered.product:"
 msgid "Endorsements"
 msgstr "Avenants"
 
+msgctxt "wizard_button:endorsement.decline,select_reason,decline:"
+msgid "Decline"
+msgstr "Décliner"
+
+msgctxt "wizard_button:endorsement.decline,select_reason,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
 msgctxt "wizard_button:endorsement.start,basic_preview,apply_endorsement:"
 msgid "Apply"
 msgstr "Appliquer"
@@ -2637,14 +2717,6 @@ msgstr "Annuler"
 msgctxt "wizard_button:endorsement.start,basic_preview,summary:"
 msgid "Summary"
 msgstr "Synthèse"
-
-msgctxt "wizard_button:endorsement.decline,select_reason,decline:"
-msgid "Decline"
-msgstr "Décliner"
-
-msgctxt "wizard_button:endorsement.decline,select_reason,end:"
-msgid "Cancel"
-msgstr "Annuler"
 
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
@@ -2782,14 +2854,14 @@ msgctxt "wizard_button:endorsement.start,select_endorsement,cancel:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
-
 msgctxt ""
 "wizard_button:endorsement.start,select_endorsement,start_endorsement:"
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
+
+msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
 
 msgctxt "wizard_button:endorsement.start,summary,cancel:"
 msgid "Cancel"

@@ -697,6 +697,30 @@ msgctxt "field:endorsement.start.select_endorsement,possible_parties:"
 msgid "Parties"
 msgstr "Tiers"
 
+msgctxt "model:endorsement.definition,name:modify_birth_date_party_definition"
+msgid "Change Party Birth Date"
+msgstr "Changement de date de naissance"
+
+msgctxt "model:endorsement.definition,name:modify_name_party_definition"
+msgid "Change Party Name"
+msgstr "Changement de nom d'un tiers"
+
+msgctxt "model:endorsement.definition,name:modify_party_address_definition"
+msgid "Change Party Address"
+msgstr "Changement d'adresse"
+
+msgctxt "model:endorsement.part,name:endorsement_part_party_change_address"
+msgid "Change Party Address"
+msgstr "Changement d'adresse"
+
+msgctxt "model:endorsement.part,name:endorsement_part_party_modify_birth_date"
+msgid "Change Party Birth Date"
+msgstr "Changement de date de naissance"
+
+msgctxt "model:endorsement.part,name:endorsement_part_party_modify_name"
+msgid "Change Party Name"
+msgstr "Changement de nom d'un tiers"
+
 msgctxt "model:endorsement.party,name:"
 msgid "Endorsement Party"
 msgstr "Avenant sur tiers"

@@ -77,5 +77,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="kind">option</field>
             <field name="view">manage_exclusions</field>
         </record>
+        <record model="endorsement.definition-endorsement.part" id="manage_insured_relation_change_covered">
+            <field name="definition" ref="endorsement.definition_manage_insured"/>
+            <field name="endorsement_part" ref="modify_covered_elements_revision_part"/>
+            <field name="order">1</field>
+        </record>
     </data>
 </tryton>

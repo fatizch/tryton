@@ -2,6 +2,16 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tryton>
+    <data noupdate="1">
+        <record model="endorsement.definition" id="definition_manage_insured">
+            <field name="code">manage_insured</field>
+            <field name="name">Manage Insured</field>
+        </record>
+        <record model="endorsement.definition" id="definition_manage_options">
+            <field name="code">manage_options</field>
+            <field name="name">Manage Options</field>
+        </record>
+    </data>
     <data>
         <!-- ########################## -->
         <!-- # Endorsement Definition # -->
@@ -280,6 +290,22 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Manage Contacts</field>
             <field name="kind">contract</field>
             <field name="view">manage_contacts</field>
+        </record>
+        <!-- ################### -->
+        <!-- # Manage Insured  # -->
+        <!-- ################### -->
+        <record model="endorsement.definition-endorsement.part" id="manage_insured_relation_options">
+            <field name="definition" ref="definition_manage_insured"/>
+            <field name="endorsement_part" ref="manage_options_revision_part"/>
+            <field name="order">1</field>
+        </record>
+        <!-- ################### -->
+        <!-- # Manage options  # -->
+        <!-- ################### -->
+        <record model="endorsement.definition-endorsement.part" id="manage_options_relation">
+            <field name="definition" ref="definition_manage_options"/>
+            <field name="endorsement_part" ref="manage_options_revision_part"/>
+            <field name="order">1</field>
         </record>
     </data>
 </tryton>

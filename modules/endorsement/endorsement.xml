@@ -2,6 +2,12 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tryton>
+    <data noupdate="1">
+        <record model="endorsement.definition" id="definition_change_contract_extra_data">
+            <field name="code">modify_extra_data</field>
+            <field name="name">Change Contract Extra Data</field>
+        </record>
+    </data>
     <data>
         <!-- ######### -->
         <!-- # Menus # -->
@@ -296,5 +302,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_configuration_form"/>
         </record>
         <menuitem parent="offered.menu_contract_configuration" action="act_configuration_form" id="menuitem_endorsement_configuration" sequence="0" icon="tryton-preferences"/>
+
+        <record model="endorsement.part" id="endorsement_party_change_extra_data">
+            <field name="code">modify_extra_data</field>
+            <field name="name">Change Extra Data</field>
+            <field name="kind">contract</field>
+            <field name="view">change_contract_extra_data</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="change_contract_extra_data_relation">
+            <field name="definition" ref="definition_change_contract_extra_data"/>
+            <field name="endorsement_part" ref="endorsement_party_change_extra_data"/>
+            <field name="order">1</field>
+        </record>
     </data>
 </tryton>
