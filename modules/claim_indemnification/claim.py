@@ -501,7 +501,7 @@ class ClaimService:
             return []
         periods = []
         for period in self.get_new_indemnification_periods(until):
-            periods.append(self.clone_last_indemnifications(*period))
+            periods += self.clone_last_indemnifications(*period)
         return periods
 
     def get_full_period(self, from_date):
@@ -533,6 +533,7 @@ class ClaimService:
         indemnification.service = self
         indemnification.product = self.indemnifications[-1].product
         indemnification.share = self.indemnifications[-1].share
+        indemnification.currency = self.indemnifications[-1].currency
         return [indemnification]
 
     def calculate_annuity_periods(self, from_date, to_date):

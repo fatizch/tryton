@@ -1,3 +1,4 @@
+* BUG#7095 Corrigez le crash dans le batch de création d'indemnisations en raison de devices manquantes
 * FEA#7046 Amélioration des la vue de validation et contrôle des indémnisations
 * BUG#6882 Des avertissements ou errors ne sont plus levés en cas de refus de service lors de la fermeture d'une prestation
 * FEA#5907 Gestion des indemnisations multiples sur une période
