@@ -1,0 +1,135 @@
+# vim: set ft=sh:
+# detect dead code
+
+_coog_clean_counter=0;
+
+_coog_clean_increment_counter() {
+    ((_coog_clean_counter++))
+}
+
+_coog_clean_list_views() {   # <directory>
+    [ ! -d "$1/view" ] && return
+
+    for view in $(ls "$1/view" | grep ".xml")
+    do
+        echo "${view%.*}"
+    done
+}
+
+_coog_clean_search_file() {  # <directory>
+    for file in $(_coog_clean_list_views "$1")
+    do
+        local search; search=$(grep "$file" -R "$1");
+
+        if [ -z "$search" ]
+        then
+            echo "$file"
+        fi
+    done
+}
+
+_coog_clean_get_files_from_cfg() {  # <directory>
+    local extension
+    local filename
+
+    for file in $(sed -e '1,/xml:/d' "$1/tryton.cfg"); do
+        echo "$file" | sed 's/\s//g'
+    done
+}
+
+_coog_clean_get_unused_cfg_xml() {  # <directory>
+    local files; files=$(_coog_clean_get_files_from_cfg "$1")
+    for file in $(ls "$1" 2> /dev/null | grep .xml)
+    do
+        echo "$files" | grep -q "$file"
+
+        if [ ! "$?" -eq 0 ]
+        then
+            echo "$file"
+        fi
+    done
+}
+
+_coog_clean_get_py_files() { # <module_dir>
+    find "$1" -name "*.pyc" -delete
+    ls "$1" | grep -v "__init__.py" | grep -P "\.py$|\.pyc"
+}
+
+_coog_clean_search_py_file_in_init() { # <module_dir> <filename>
+    cat "$1/__init__.py" | grep "import" | grep "$2"
+}
+
+_coog_clean_delete_file() { # <file_path>
+    rm "$1" \
+        && echo "Deleted -------> $1" \
+        && _coog_clean_increment_counter
+}
+
+coog_clean_xml() { # clean xml dead code
+    echo \
+        && echo "    -----------------------------------------" \
+        && echo "    |                                       |" \
+        && echo "    |  Now searching for unused xml files   |" \
+        && echo "    |                                       |" \
+        && echo "    -----------------------------------------" \
+        && echo
+
+    local MODULE_DIR; MODULE_DIR="$COOG_COOG/modules"
+
+    for dir in $(ls "$MODULE_DIR")
+    do
+        for file in $(_coog_clean_get_unused_cfg_xml "$MODULE_DIR/$dir")
+        do
+            _coog_clean_delete_file "$MODULE_DIR/$dir/$file"
+        done
+
+        for file in $(_coog_clean_search_file "$MODULE_DIR/$dir")
+        do
+            _coog_clean_delete_file "$MODULE_DIR/$dir/view/$file.xml"
+        done
+    done
+
+    echo "$_coog_clean_counter files deleted." \
+        && _coog_clean_counter=0
+}
+
+coog_clean_python() { # clean python dead code
+
+    echo \
+        && echo "    -----------------------------------------" \
+        && echo "    |                                       |" \
+        && echo "    | Now searching for unused python files |" \
+        && echo "    |                                       |" \
+        && echo "    -----------------------------------------" \
+        && echo
+
+    local MODULE_DIR; MODULE_DIR="$COOG_COOG/modules"
+    local py_files
+    local tmp
+    for module in $(ls "$MODULE_DIR")
+    do
+        py_files=$(_coog_clean_get_py_files "$MODULE_DIR/$module")
+
+        [ -z "$py_files" ] && break
+
+        local filename
+
+        for file in $py_files
+        do
+            filename=$(basename "$file")
+            filename="${filename%.*}"
+
+            tmp=$(_coog_clean_search_py_file_in_init "$MODULE_DIR/$module" "$filename")
+
+            [ -z "$tmp" ] && _coog_clean_delete_file "$MODULE_DIR/$module/$file"
+        done
+    done
+
+    echo "$_coog_clean_counter files deleted." \
+        && _coog_clean_counter=0
+}
+
+coog_clean_main() { # clean dead code
+    coog_clean_xml \
+        && coog_clean_python
+}
