@@ -1,6 +1,9 @@
 # vim: set ft=sh:
 # batch management
 
+_coog_batch_gen=0
+_coog_batch_ko=0
+
 _coog_batch_broker() {
         [ ! -z "$TRYTOND_ASYNC_CELERY" ] && echo celery && return
         [ ! -z "$TRYTOND_ASYNC_RQ" ] && echo rq && return
@@ -17,25 +20,24 @@ coog_batch_generate() { # generate jobs - <name> [args*]
         local broker; broker=$(_coog_batch_broker) || return $?
         local name; name=$1; shift
         local msg; msg=$(python -W ignore "$COOG_BIN/batch-generate.py" -b "$broker" -n "$name" "$@") || return $?
+        _coog_batch_gen=$(echo $msg | cut -d " " -f 1)
         echo "$name: generated $msg"
 }
 
 coog_batch_join() { # wait for execution - <name>
         [ $# -lt 1 ] && >&2 echo missing batch name && return 1
         local broker; broker=$(_coog_batch_broker) || return $?
-        local generated
         while true
         do
                 sleep 10
                 local queued; queued=$(coog_"$broker"_queued "$1") || return $?
-                [ -z $generated ] && generated=$queued
                 [ "$queued" -eq 0 ] && break
                 echo "$1: wait @ $(date +'%H:%M:%S') - $queued"
         done
         local failed; failed=$(coog_batch_query "fail" "$1" | grep -Pc "\w+")
-        local succeeded; succeeded=$((generated - failed))
-        [ "$failed" -eq 0 ] && echo "$1: succeeded with $succeeded treated job(s)" && return 0
-        echo "$1: failed - $failed errors - $succeeded succeeded job(s)" && return 1
+        _coog_batch_ko="$failed"
+        [ "$failed" -eq 0 ] && echo "$1: succeeded" && return 0
+        echo "$1: failed" && return 1
 }
 
 coog_batch_split() { # split failed jobs - <name>
@@ -57,9 +59,12 @@ coog_batch_split() { # split failed jobs - <name>
 
 coog_batch_exec() { # execute batch (workers should be running) - name [args*]
         coog_batch_generate "$@" || return $?
-        coog_batch_join "$1" && return $?
+        coog_batch_join "$1"
+        local ok=$?
+        [ $ok -eq 0 ] && echo "$((_coog_batch_gen - _coog_batch_ko)) succeeded job(s) and $_coog_batch_ko failed job(s)" && return 0
         coog_batch_split "$1" || return $?
         coog_batch_join "$1"
+        echo "$((_coog_batch_gen-_coog_batch_ko)) succeeded job(s) and $_coog_batch_ko failed job(s)"
 }
 
 coog_batch_replay() { # replay failed jobs - <name>
