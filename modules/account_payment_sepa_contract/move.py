@@ -16,21 +16,21 @@ class MoveLine:
         pool = Pool()
         Invoice = pool.get('account.invoice')
         mandate = None
-        if kind == 'receivable':
-            if (self.origin and isinstance(self.origin, Invoice) and
-                    self.origin.sepa_mandate):
-                mandate = self.origin.sepa_mandate
-            billing_info = self.contract.billing_information \
-                if self.contract else None
-            if billing_info and journal.process_method == 'sepa':
-                payment['date'] = \
-                    billing_info.get_direct_debit_planned_date(self) \
-                    or payment['date']
-        if kind == 'payable' and self.contract:
+        if self.contract:
             with Transaction().set_context(
                     contract_revision_date=payment['date']):
-                mandate = self.contract.billing_information.sepa_mandate \
-                    if self.contract.billing_information else None
+                billing_info = self.contract.billing_information \
+                    if self.contract else None
+                if (kind == 'receivable' and billing_info and
+                        journal.process_method == 'sepa'):
+                    payment['date'] = \
+                        billing_info.get_direct_debit_planned_date(self) \
+                        or payment['date']
+                mandate = billing_info.sepa_mandate if billing_info else None
+        if (not mandate and self.origin and
+                isinstance(self.origin, Invoice) and
+                self.origin.sepa_mandate):
+            mandate = self.origin.sepa_mandate
         if mandate:
             payment['sepa_mandate'] = mandate.id
             payment['bank_account'] = mandate.account_number.account.id

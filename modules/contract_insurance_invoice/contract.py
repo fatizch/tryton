@@ -165,7 +165,8 @@ class Contract:
         'get_billing_information')
     billing_information = fields.Function(
         fields.Many2One('contract.billing_information',
-            'Current Billing Information'), 'get_billing_information')
+            'Current Billing Information'),
+        'get_billing_information', loader='load_billing_information')
     payer = fields.Function(
         fields.Many2One('party.party', 'Payer'),
         'get_billing_information')
@@ -632,6 +633,12 @@ class Contract:
         ContractBillingInformation = pool.get('contract.billing_information')
         return cls.get_revision_value(contracts, names,
             ContractBillingInformation)
+
+    def load_billing_information(self):
+        date = Transaction().context.get('contract_revision_date',
+            ServerContext().get('contract_revision_date', utils.today()))
+        return utils.get_good_version_at_date(self, 'billing_informations',
+            at_date=date, start_var_name='date')
 
     @classmethod
     def get_last_invoice(cls, contracts, name):

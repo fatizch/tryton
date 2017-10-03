@@ -1,3 +1,4 @@
+* BUG#7188 Ajout d'un loader sur contract.billing_information
 * BUG#7145 Impossibilité de sélectionner un journal de pertes et profits dans l'assistant de lettrage
 * FEA#6950 Ajout de données relatives au quittances payées dans le moteur de règles
 * BUG#6709 Correctif du batch de définition des numéro de quittance en accord avec la fusion 4.4

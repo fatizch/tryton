@@ -34,11 +34,12 @@ class Invoice:
         contract_revision_date = max(self.invoice_date, utils.today())
         with Transaction().set_context(
                 contract_revision_date=contract_revision_date):
-            if (not self.sepa_mandate and
-                    self.contract.billing_information.direct_debit and
+            if (self.contract.billing_information.direct_debit and
                     self.contract.billing_information.sepa_mandate):
                 invoice['sepa_mandate'] = \
                     self.contract.billing_information.sepa_mandate
+            else:
+                invoice['sepa_mandate'] = None
             return invoice
 
     def get_bank_account(self, name):
