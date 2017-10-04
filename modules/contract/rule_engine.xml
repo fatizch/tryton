@@ -32,6 +32,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_initial_start_date</field>
+            <field name="long_description">Retourne la date d'effet initiale du contrat</field>
             <field name="parent" ref="te_contract"/>
         </record>
         <record model="rule_engine.function" id="code_produit">
@@ -41,7 +42,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_product_code</field>
-            <field name="long_description">Code du produit</field>
+            <field name="long_description">Retourne le code du produit</field>
             <field name="parent" ref="te_contract"/>
         </record>
         <record model="rule_engine.function" id="date_debut_terme_courant_contrat">
@@ -51,6 +52,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_start_date</field>
+            <field name="long_description">Retourne la date de début du terme 
+courant du contrat</field>
             <field name="parent" ref="te_contract"/>
         </record>
         <record model="rule_engine.function" id="date_fin_terme_courant_contrat">
@@ -60,6 +63,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_end_date</field>
+            <field name="long_description">Retourne la date de fin du terme 
+courant du contrat</field>
             <field name="parent" ref="te_contract"/>
         </record>
         <record model="rule_engine.function" id="te_contract_extra_data">
@@ -78,6 +83,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">function</field>
             <field name="parent" ref="te_contract"/>
             <field name="translated_technical_name">date_de_conditions</field>
+            <field name="long_description">Retourne la date de condition 
+d'exécution des règles</field>
             <field name="language" ref="ir.lang_fr"/>
         </record>
         <record model="rule_engine.function" id="te_contract_signature_date">
@@ -87,6 +94,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">function</field>
             <field name="parent" ref="te_contract"/>
             <field name="translated_technical_name">date_de_signature</field>
+            <field name="long_description">Retourne la date de signature du contrat</field>
             <field name="language" ref="ir.lang_fr"/>
         </record>
         <record model="rule_engine.function" id="code_postal_du_contrat">
@@ -96,7 +104,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_contract_address_zip</field>
-            <field name="long_description">Code postal de l'adresse associée au contrat</field>
+            <field name="long_description">Retourne le code postal de l'adresse 
+associée au contrat</field>
             <field name="parent" ref="te_contract"/>
         </record>
         <record model="rule_engine.function" id="pays_du_contrat">
@@ -106,7 +115,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_contract_address_country</field>
-            <field name="long_description">Pays de l'adresse associée au contrat</field>
+            <field name="long_description">Retourne le pays de l'adresse 
+associée au contrat</field>
             <field name="parent" ref="te_contract"/>
         </record>
         <record model="rule_engine.function" id="number_of_activation_periods">
@@ -116,7 +126,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_number_of_activation_periods</field>
-            <field name="long_description">Nombre de périodes d'activation</field>
+            <field name="long_description">Retourne le nombre de périodes 
+d'activation sur le contrat</field>
             <field name="parent" ref="te_contract"/>
         </record>
     </data>

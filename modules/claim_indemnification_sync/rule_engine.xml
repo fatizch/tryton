@@ -10,6 +10,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_master_indemnification_details</field>
+            <field name="long_description">Retourne la liste des détails pour 
+la prestation principale</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
     </data>

@@ -35,6 +35,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_invoice_line_amount</field>
+            <field name="long_description">Retourne le montant de la ligne de 
+quittance pour lequel on calcule la commission</field>
             <field name="parent" ref="dossier_commission"/>
         </record>
         <record model="rule_engine.function" id="date_debut_ligne_quittance">
@@ -44,6 +46,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_invoice_line_start_date</field>
+            <field name="long_description">Retourne la date de début de la 
+ligne de quittance pour lequel on calcule la commission</field>
             <field name="parent" ref="dossier_commission"/>
         </record>
         <record model="rule_engine.function" id="date_fin_ligne_quittance">
@@ -52,7 +56,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_invoice_line_start_date</field>
+            <field name="name">_re_invoice_line_end_date</field>
+            <field name="long_description">Retourne la date de fin de la ligne 
+de quittance pour lequel on calcule la commission</field>
             <field name="parent" ref="dossier_commission"/>
         </record>
         <record model="rule_engine.context-function" id="cte_commission_data">
@@ -68,6 +74,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_commission_plan</field>
+            <field name="long_description">Retourne la valeur de la clé du 
+moteur de règle renseignée au niveau du plan de commissionnement</field>
             <field name="parent" ref="contract.te_contract"/>
         </record>
     </data>

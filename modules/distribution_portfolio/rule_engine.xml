@@ -10,7 +10,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_portfolio_code</field>
-            <field name="long_description">Code du portefeuille</field>
+            <field name="long_description">Retourne le code du portefeuille de 
+distribution</field>
             <field name="parent" ref="contract.te_contract"/>
         </record>
     </data>

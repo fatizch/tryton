@@ -15,7 +15,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="rule_engine.function" id="montant_de_couverture_pour_garantie">
             <field name="translated_technical_name">montant_de_couverture_pour_garantie</field>
             <field name="description">Montant de couverture pour garantie</field>
-            <field name="long_description">Montant de couverture pour la garantie
+            <field name="long_description">Retourne le montant de couverture pour la garantie
 la plus proche de la garantie initiale correspondant. Permet de faire dépendre
 le tarif d'une garantie du montant de couverture d'une autre</field>
             <field name="fct_args">coverage_code</field>

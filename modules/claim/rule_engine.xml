@@ -22,6 +22,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_claim_declaration_date</field>
+            <field name="long_description">Retourne la date de déclaration du sinistre</field>
             <field name="parent" ref="dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="date_de_debut_du_prejudice">
@@ -31,6 +32,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_loss_start_date</field>
+            <field name="long_description">Retourne la date de début de l'événement</field>
             <field name="parent" ref="dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="date_fin_dernier_prejudice">
@@ -40,6 +42,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_last_loss_end_date</field>
+            <field name="long_description">Retourne la date de fin du dernier 
+événement du sinistre</field>
             <field name="parent" ref="dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="code_descripteur_prejudice">
@@ -49,15 +53,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_loss_desc_code</field>
+            <field name="long_description">Retourne le code du descripteur de l'événement</field>
             <field name="parent" ref="dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="code_evenement_prejudice">
             <field name="translated_technical_name">code_de_l_evenement_du_prejudice</field>
-            <field name="description">Code de l'événement du préjudice</field>
+            <field name="description">Code de la nature de l'événement</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_event_desc_code</field>
+            <field name="long_description">Retourne le code de la nature de l'événement</field>
             <field name="parent" ref="dossier_sinistre"/>
         </record>
     </data>

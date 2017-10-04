@@ -10,6 +10,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_total_hospitalisation_period</field>
+            <field name="long_description">Retourne le nombre de jours total 
+d'hospitalisation d'un événement</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="ijss_before_part_time">
@@ -19,6 +21,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_ijss_before_part_time</field>
+            <field name="long_description">Retourne le montant de l'IJSS avant 
+le début de la période de temps partiel</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
     </data>

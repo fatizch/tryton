@@ -10,6 +10,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_underwriting_non_received_documents</field>
+            <field name="long_description">Retourne la liste des documents non 
+reçus sur les analyses médicales en cours. La liste est composée de couple 
+(code du document manquant, description du document demandé)</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
     </data>

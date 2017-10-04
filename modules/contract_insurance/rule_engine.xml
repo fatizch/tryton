@@ -10,6 +10,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_number_of_covered_elements</field>
+            <field name="long_description">Retourne le nombre d'élément couvert 
+actif sur le contrat à la date du calcul de la règle</field>
             <field name="parent" ref="contract.te_contract"/>
         </record>
         <record model="rule_engine.function" id="initial_number_of_sub_covered_elements">
@@ -19,6 +21,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_initial_number_of_sub_covered_elements</field>
+            <field name="long_description">Retourne le nombre de sous élément couvert
+à la date initiale d'effet du contrat</field>
             <field name="parent" ref="contract.te_contract"/>
         </record>
         <record model="rule_engine.function" id="_re_covered_element_rank">
@@ -28,7 +32,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_covered_element_rank</field>
-            <field name="long_description">Retourne le rang de l'élement couvert courant pour la garantie courante à partir de 1.</field>
+            <field name="long_description">Retourne le rang de l'élement couvert 
+courant pour la garantie courante à partir de 1.</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
         <record model="rule_engine.function" id="number_of_covered_elements_for_coverage">
@@ -38,6 +43,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_number_of_covered_elements_for_coverage</field>
+            <field name="long_description">Retourne le nombre d'élément couvert 
+ayant souscrit à la garantie indépendamment d'une date</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
     </data>

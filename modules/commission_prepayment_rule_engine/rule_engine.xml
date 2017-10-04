@@ -10,15 +10,19 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_option_first_year_premium</field>
+            <field name="long_description">Retourne la somme des primes de la 
+première année pour l'option commissionnée</field>
             <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
         </record>
         <record model="rule_engine.function" id="will_delete_unredeemed_prepayment">
             <field name="translated_technical_name">suppression_precomptes_non_amortis</field>
-            <field name="description">Informe si les précomptes non amortis seront supprimés</field>
+            <field name="description">Suppression des précomptes non amortis</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">re_will_delete_unredeemed_prepayment</field>
+            <field name="long_description">Retourne vrai si les précomptes non 
+amortis seront supprimés</field>
             <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
         </record>
     </data>

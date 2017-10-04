@@ -45,6 +45,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_person_birthdate</field>
+            <field name="long_description">Retourne la date de naissance de 
+l'assuré</field>
             <field name="parent" ref="dossier_personne_couverte"/>
         </record>
         <record model="rule_engine.function" id="relation_avec_souscripteur">
@@ -64,6 +66,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_person_living_country</field>
+            <field name="long_description">Retourne le pays de résidence de 
+l'assuré défini sur son adresse</field>
             <field name="parent" ref="dossier_personne_couverte"/>
         </record>
         <record model="rule_engine.function" id="dossier_souscripteur">
@@ -79,6 +83,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_subscriber_birthdate</field>
+            <field name="long_description">Retourne la date de naissance du 
+souscripteur du contrat</field>
             <field name="parent" ref="dossier_souscripteur"/>
         </record>
         <record model="rule_engine.function" id="pays_de_residence_souscripteur">
@@ -88,6 +94,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_subscriber_living_country</field>
+            <field name="long_description">Retourne le pays de résidence du 
+souscripteur du contrat défini sur l'adresse du souscripteur</field>
             <field name="parent" ref="dossier_souscripteur"/>
         </record>
         <record model="rule_engine.function" id="souscripteur_a_souscrit_produit">
@@ -97,6 +105,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_subscriber_subscribed</field>
+            <field name="long_description">Retourne vrai si le souscripteur du 
+contrat a souscrit un produit avec le code passé en paramètre</field>
             <field name="parent" ref="dossier_souscripteur"/>
         </record>
         <record model="rule_engine.function" id="dossier_garantie">
@@ -112,6 +122,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_option_code</field>
+            <field name="long_description">Retourne le code de la garantie</field>
             <field name="parent" ref="dossier_garantie"/>
         </record>
         <record model="rule_engine.function" id="dossier_donnees_couverture">
@@ -127,6 +138,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_option_initial_start_date</field>
+            <field name="long_description">Retourne la date d'effet initiale de 
+la garantie</field>
             <field name="parent" ref="dossier_donnees_couverture"/>
         </record>
         <record model="rule_engine.function" id="date_debut_terme_courant_option">
@@ -136,6 +149,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_option_start_date</field>
+            <field name="long_description">Retourne la date du terme courant de 
+la garantie</field>
             <field name="parent" ref="dossier_donnees_couverture"/>
         </record>
         <record model="rule_engine.function" id="date_fin_garantie">
@@ -145,6 +160,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_option_end_date</field>
+            <field name="long_description">Retourne la date de fin de la garantie</field>
             <field name="parent" ref="dossier_donnees_couverture"/>
         </record>
         <record model="rule_engine.function" id="donnee_compl_element_couvert">
@@ -155,53 +171,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_option_extra_data</field>
             <field name="fct_args">Code donnee complementaire</field>
+            <field name="long_description">Cette donnée est obsolète: les 
+données complémentaires sont accessibles directement dans le noeud 
+"Données complémentaires"</field>
             <field name="parent" ref="dossier_donnees_couverture"/>
-        </record>
-        <record model="rule_engine.function" id="dossier_rule_combination">
-            <field name="translated_technical_name">dossier_rule_combination</field>
-            <field name="description">Combinaison de règles</field>
-            <field name="type">folder</field>
-            <field name="language" ref="ir.lang_fr"/>
-        </record>
-        <record model="rule_engine.function" id="ajouter_detail">
-            <field name="translated_technical_name">ajouter_detail</field>
-            <field name="description">Ajouter un détail</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_append_detail</field>
-            <field name="fct_args">Code detail, Montant</field>
-            <field name="parent" ref="dossier_rule_combination"/>
-        </record>
-        <record model="rule_engine.function" id="appliquer_frais">
-            <field name="translated_technical_name">appliquer_frais</field>
-            <field name="description">Appliquer le frais</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_apply_fee</field>
-            <field name="fct_args">Code Frais, Assiette</field>
-            <field name="parent" ref="dossier_rule_combination"/>
-        </record>
-        <record model="rule_engine.function" id="valeur_de_composante">
-            <field name="translated_technical_name">valeur_de_composante</field>
-            <field name="description">Valeur de la composante</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_get_sub_component</field>
-            <field name="fct_args">Code composante</field>
-            <field name="parent" ref="dossier_rule_combination"/>
-        </record>
-        <record model="rule_engine.function" id="appliquer_taxe">
-            <field name="translated_technical_name">appliquer_taxe</field>
-            <field name="description">Appliquer la taxe</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_apply_tax</field>
-            <field name="fct_args">Code Taxe, Assiette</field>
-            <field name="parent" ref="dossier_rule_combination"/>
         </record>
         <record model="rule_engine.function" id="option_deja_souscrite">
             <field name="translated_technical_name">option_deja_souscrite</field>
@@ -210,6 +183,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_coverage_already_subscribed</field>
+            <field name="long_description">Retourne vrai si l'option est 
+souscrite sur un autre contrat et faux si l'option n'a jamais été souscrite ou 
+si ce contrat est le premier à l'avoir souscrit</field>
             <field name="parent" ref="dossier_garantie"/>
         </record>
     </data>
@@ -229,10 +205,6 @@ this repository contains the full copyright notices and license terms. -->
         <record model="rule_engine.context-function" id="cte_default_dossier_donnees_couverture">
             <field name="context" ref="rule_engine.default_context"/>
             <field name="tree_element" ref="dossier_donnees_couverture"/>
-        </record>
-        <record model="rule_engine.context-function" id="cte_default_dossier_rule_combination">
-            <field name="context" ref="rule_engine.default_context"/>
-            <field name="tree_element" ref="dossier_rule_combination"/>
         </record>
     </data>
 </tryton>

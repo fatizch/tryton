@@ -22,6 +22,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">function</field>
             <field name="parent" ref="te_health"/>
             <field name="translated_technical_name">code_hc_system</field>
+            <field name="long_description">retourne le code régime de l'assuré</field>
             <field name="language" ref="ir.lang_fr"/>
         </record>
         <record model="rule_engine.function" id="te_health_subscriber_hc_system">
@@ -31,6 +32,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">function</field>
             <field name="parent" ref="te_health"/>
             <field name="translated_technical_name">code_regime_souscripteur</field>
+            <field name="long_description">Retourne le code régime du souscripteur</field>
             <field name="language" ref="ir.lang_fr"/>
         </record>
         <record model="rule_engine.function" id="te_health_department">
@@ -40,6 +42,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">function</field>
             <field name="parent" ref="te_health"/>
             <field name="translated_technical_name">code_departement</field>
+            <field name="long_description">Retourne le code du département. 
+Pour la corse, le code sera '2A' ou '2B'. Pour les départements 97 et 98 le 
+code est les trois premiers chiffres du code postal</field>
             <field name="language" ref="ir.lang_fr"/>
         </record>
         <record model="rule_engine.function" id="te_health_subscriber_department">
@@ -49,6 +54,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">function</field>
             <field name="parent" ref="te_health"/>
             <field name="translated_technical_name">code_departement_souscripteur</field>
+            <field name="long_description">Retourne le code du département du souscripteur.
+Pour la corse, le code sera '2A' ou '2B'. Pour les départements 97 et 98 le 
+code est les trois premiers chiffres du code posta</field>
             <field name="language" ref="ir.lang_fr"/>
         </record>
     </data>

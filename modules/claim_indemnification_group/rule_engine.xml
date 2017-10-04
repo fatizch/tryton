@@ -10,6 +10,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_revaluation_max_revaluation_date</field>
+            <field name="long_description">Retourne la date maximale de 
+régularisation. Cette donnée est basée sur la date de résiliation du contrat 
+lorsque celui ci est résilié avec blocage des prestations au niveau atteint</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
     </data>

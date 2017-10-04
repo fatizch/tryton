@@ -11,6 +11,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_basic_salary</field>
             <field name="fct_args">liste_des_type_de_salaire</field>
+            <field name="long_description">Retourne un dictionnaire avec les 
+clés 'TA', TB', 'TC' pour les différentes tranches de salaire. Cette donnée 
+prend en paramètre une liste de définition des salaires parmi 
+'gross_salary' (salaire brut), 'net_salary' (salaire net), 'salary_bonus' 
+(prime brutte), 'net_salary_bonus' (prime nette)</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="salary_range_rate">
@@ -20,7 +25,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_range_by_name</field>
-            <field name="fct_args">nom_de_tranche</field>
+            <field name="fct_args">nom_de_tranche, contribution_fixe, listes_des_code_des_contributions</field>
+            <field name="long_description">Retourne la somme des taux des 
+contributions pour le calcul du salaire net. Cette donnée prend en paramètre 
+le nom de la tranche de salaire ('A', 'B', 'C'), un boolean pour indiquer si 
+il s'agit de taux en pourcentage ou une somme de montant (par défaut à faux), 
+une liste des codes des contributions à additionner (par défaut à vide: 
+dans ce cas l'ensemble des contributions est sommée)</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="salary_gross_salary">
@@ -30,6 +41,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_gross_salary</field>
+            <field name="long_description">Retourne le montant du salaire brut</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="salary_net_salary">
@@ -39,6 +51,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_net_salary</field>
+            <field name="long_description">Retourne le montant du salaire net</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="salary_net_limit">
@@ -48,6 +61,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_is_net_limite</field>
+            <field name="long_description">Retourne vrai si la garantie 
+prévoit une limitation au salaire net</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
     </data>

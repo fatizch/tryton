@@ -23,7 +23,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_loan</field>
             <field name="parent" ref="pret"/>
-            <field name="long_description">Retourne l'instance du prêt. Pour utilisateurs avancés seulement.</field>
+            <field name="long_description">Retourne l'instance du prêt. Pour 
+utilisateurs avancés seulement.</field>
         </record>
         <record model="rule_engine.function" id="type_de_pret">
             <field name="translated_technical_name">type_de_pret</field>
@@ -32,6 +33,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_loan_kind</field>
+            <field name="long_description">Retourne le type de prêt parmi les 
+valeurs suivantes: 'fixed_rate', 'interest_free', 'graduated', 'intermediate',
+'balloon'</field>
             <field name="parent" ref="pret"/>
         </record>
         <record model="rule_engine.function" id="duree_pret_en_mois">
@@ -41,6 +45,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_loan_duration</field>
+            <field name="long_description">Retourne la durée du prêt en mois</field>
             <field name="parent" ref="pret"/>
         </record>
         <record model="rule_engine.function" id="frequence_mensualite">
@@ -51,7 +56,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_loan_payment_frequency</field>
             <field name="parent" ref="pret"/>
-            <field name="long_description">Retourne la fréquence du remboursement des mensualités du prêt</field>
+            <field name="long_description">Retourne la fréquence du remboursement 
+des mensualités du prêt</field>
         </record>
         <record model="rule_engine.function" id="montant_de_la_mensualite">
             <field name="translated_technical_name">montant_de_la_mensualite</field>
@@ -60,6 +66,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_loan_payment_amount</field>
+            <field name="long_description">Retourne le montant de la mensualité 
+à la date passée en paramètre. Si aucune date n'est passée en paramètre, la date 
+d'exécution de la règle est utilisée</field>
             <field name="fct_args">date</field>
             <field name="parent" ref="pret"/>
         </record>
@@ -70,6 +79,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_loan_amount</field>
+            <field name="long_description">Retourne le montant du prêt</field>
             <field name="parent" ref="pret"/>
         </record>
         <record model="rule_engine.function" id="date_de_deblocage_des_fonds">
@@ -79,6 +89,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_loan_funds_release_date</field>
+            <field name="long_description">Retourne la date de blocage des 
+fonds</field>
             <field name="parent" ref="pret"/>
         </record>
         <record model="rule_engine.function" id="date_du_premier_paiement">
@@ -88,6 +100,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_loan_first_payment_date</field>
+            <field name="long_description">Retourne la date de premier 
+paiement du prêt</field>
             <field name="parent" ref="pret"/>
         </record>
         <record model="rule_engine.function" id="capital_restant_du">
@@ -98,6 +112,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_outstanding_loan_balance</field>
             <field name="fct_args">date</field>
+            <field name="long_description">Retourne le montant du capital restant 
+dû à la date passée en paramètre. Si aucune date n'est passée en paramètre, la date 
+d'exécution de la règle est utilisée</field>
             <field name="parent" ref="pret"/>
         </record>
         <record model="rule_engine.function" id="quotite">
@@ -107,6 +124,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_loan_share</field>
+            <field name="long_description">Retourne la quotité du prêt</field>
             <field name="parent" ref="pret"/>
         </record>
         <record model="rule_engine.function" id="taux_periode_depuis_taux_annuel">
@@ -116,6 +134,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_periodic_rate_from_annual_rate</field>
+            <field name="long_description">Retourne le taux du prêt par échéance 
+à partir du taux annuel</field>
             <field name="fct_args">taux_annuel</field>
             <field name="parent" ref="pret"/>
         </record>
@@ -126,6 +146,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_early_repayments_amount</field>
+            <field name="long_description">Retourne la somme des remboursements 
+anticipés sur le prêt jsuqu'à la date passée en paramètre. Si aucune date 
+n'est passée en paramètre, la date d'exécution de la règle est utilisée</field>
             <field name="fct_args">date</field>
             <field name="parent" ref="pret"/>
         </record>
@@ -136,7 +159,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_insured_outstanding_loan_balance</field>
-            <field name="long_description">Montant total assuré pour ce type de garantie et chez cet assureur</field>
+            <field name="long_description">Montant total assuré pour ce type 
+de garantie et chez cet assureur</field>
             <field name="fct_args">date</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
@@ -147,7 +171,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_option_loan_balance</field>
-            <field name="long_description">Montant de l'encours des prêts rattachés à cette garantie</field>
+            <field name="long_description">Montant de l'encours des prêts 
+rattachés à cette garantie</field>
             <field name="fct_args">date</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
@@ -158,7 +183,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_total_loan_balance</field>
-            <field name="long_description">Montant total de l'encours de l'ensemble des prêts définis dans le système ainsi que ceux définis sur cette garantie</field>
+            <field name="long_description">Montant total de l'encours de 
+l'ensemble des prêts définis dans le système ainsi que ceux définis sur cette 
+garantie</field>
             <field name="fct_args">date</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>

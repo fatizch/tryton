@@ -10,15 +10,19 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_is_a_relapse</field>
+            <field name="long_description">Retourne un boolean vrai si 
+l'événement est une rechute</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="date_debut_periode_indemnisation">
             <field name="translated_technical_name">element_couvert_est_beneficiaire</field>
-            <field name="description">Renvoie vrai si l'élément couvert est le bénéficiaire.</field>
+            <field name="description">L'élément couvert est le bénéficiaire</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_is_covered_element_beneficiary</field>
+            <field name="long_description">Renvoie vrai si l'élément couvert 
+est le bénéficiaire</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
     </data>

@@ -11,6 +11,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_option_automatic_end_date</field>
             <field name="fct_args"></field>
+            <field name="long_description">Retourne la date de fin de la garantie 
+calculée par la règle de résiliation automatique</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
     </data>

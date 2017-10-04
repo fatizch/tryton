@@ -10,6 +10,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">re_commission_sum_for_option</field>
+            <field name="long_description">Retourne la somme des commissions 
+générée pour une option qui ne sont pas des reprises</field>
             <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
         </record>
         <record model="rule_engine.function" id="paid_invoice_end_date">
@@ -19,17 +21,21 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">re_last_paid_invoice_end_date</field>
+            <field name="long_description">Retourne la date de la dernière quittance payée pour le contrat</field>
             <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
         </record>
         <record model="rule_engine.function" id="recovery_for_yearly_prepayment">
             <field name="translated_technical_name">montant_reprise_sur_n_mois</field>
-            <field name="description">Montant de reprise à une date calculé sur la base d'un nombre de mois ramené
-à une année de précompte</field>
+            <field name="description">Montant de la reprise sur n mois</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="fct_args">date_de_fin, nb_mois</field>
             <field name="name">re_prorated_recovery_for_yearly_prepayments</field>
+            <field name="long_description">Retourne le montant de la reprise 
+d'un précompte annuel proratisé à une date selon un nombre de mois. Cette 
+donnée prend la date à laquelle calculer la reprise et le nombre de mois de 
+reprise (ex: 24 dans le cas d'une reprise de précompte sur 24 mois)</field>
             <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
         </record>
     </data>

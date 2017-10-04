@@ -5,20 +5,24 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <record model="rule_engine.function" id="date_debut_periode_indemnisation">
             <field name="translated_technical_name">date_debut_periode_indemnisation</field>
-            <field name="description">Date de début de la période d'indémnisation</field>
+            <field name="description">Date de début de la période d'indemnisation</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_indemnification_period_start_date</field>
+            <field name="long_description">Retourne la date de début de la 
+période d'indemnisation en cours de calcul</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="date_fin_periode_indemnisation">
             <field name="translated_technical_name">date_fin_periode_indemnisation</field>
-            <field name="description">Date de fin de la période d'indémnisation</field>
+            <field name="description">Date de fin de la période d'indemnisation</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_indemnification_period_end_date</field>
+            <field name="long_description">Retourne la date de fin de la période 
+d'indemnisation en cours de calcul</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="nb_jour_franchise">
@@ -29,6 +33,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_number_of_deductible_days</field>
             <field name="fct_args">Date debut periode, Date fin periode</field>
+            <field name="long_description">Retourne le nombre de jours de 
+franchise entre une date de début et une date de fin pour une même personne 
+couverte et une même garantie</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="somme_montants_journaliers">
@@ -39,6 +46,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_sum_of_unit_amount</field>
             <field name="fct_args">Date</field>
+            <field name="long_description">Retourne la somme des montants 
+journaliers à une date pour toutes les prestations indemnisées</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="period_frequency">
@@ -48,15 +57,19 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_service_period_frequency</field>
+            <field name="long_description">Retourne la fréquence de générations 
+automatique des périodes d'indemnisation (rente)</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="indemnification_amount">
             <field name="translated_technical_name">indemnisation_somme</field>
-            <field name="description">Somme d'un indemnisation</field>
+            <field name="description">Somme d'une indemnisation</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_amount</field>
+            <field name="long_description">Retourne le montant de 
+l'emnisation en cours de calcul</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="is_service_deductible">
@@ -66,6 +79,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_is_service_deductible</field>
+            <field name="long_description">Retourne vrai si la prestation 
+exercée est entièrement dans la période de franchise</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="deductible_end_date">
@@ -75,6 +90,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_deductible_end_date</field>
+            <field name="long_description">Retourne la date de fin de la période 
+de franchise</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="count_valid_indemnifications">
@@ -84,6 +101,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_count_valid_indemnifications</field>
+            <field name="long_description">Retourne le nombre de périodes 
+d'indemnisation validées ou payées pour une garantie souscrite</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="pivot_dates">
@@ -93,7 +112,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_revaluation_pivot_dates</field>
-            <field name="fct_args">Date debut periode, Date fin periode, Frequence, Mois de synchronisation, Jours de synchronisation</field>
+            <field name="fct_args">Date debut periode, Date fin periode, 
+Frequence, Mois de synchronisation, Jours de synchronisation</field>
+            <field name="long_description">Retourne la liste des dates sur une 
+période à partir d'une fréquence, d'un mois et d'un jour de synchronisation</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="sub_periods">
@@ -104,6 +126,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_revaluation_sub_periods</field>
             <field name="fct_args">Dates pivot, Date debut periode, Date fin periode</field>
+            <field name="long_description">Retourne la liste des périodes sur 
+une période découpée à chaque date incluse dans la liste des dates pivots</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="salary_calculation_description">
@@ -113,6 +137,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_base_salary_calculation_description</field>
+            <field name="long_description">Retourne la description du calcul de 
+la période d'indemnisation</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="daily_base_salary">
@@ -122,6 +148,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_daily_base_salary</field>
+            <field name="long_description">Retourne le montant de 
+l'indemnisation de base</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="indemnification_periods">
@@ -131,6 +159,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_indemnification_periods</field>
+            <field name="long_description">Retourne la liste des sous périodes 
+d'une indemnisation</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="annuity_period">
@@ -141,6 +171,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_annuity_periods</field>
             <field name="fct_args">Date debut periode, Date fin periode</field>
+            <field name="long_description">Retourne la liste des sous périodes 
+d'une période en fonction de la fréquence d'indemnisation dans le cas d'une rente</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="max_daily_amount_for_indemnification">
@@ -149,13 +181,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
+            <field name="long_description">Retourne le montant journalier maximal
+des sous périodes d'indemnisation</field>
             <field name="name">_re_maximum_daily_amount_for_indemnification</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="indemnification_share">
             <field name="translated_technical_name">part_d_indemnisation</field>
             <field name="description">Part d'indemnisation</field>
-            <field name="long_description">Part d'indemnisation pour le bénéficiaire (entre 0 et 1)</field>
+            <field name="long_description">Retourne la part d'indemnisation 
+pour le bénéficiaire (entre 0 et 1)</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
@@ -165,7 +200,8 @@ this repository contains the full copyright notices and license terms. -->
         <record model="rule_engine.function" id="beneficiary_documents_reception_date">
             <field name="translated_technical_name">reception_des_documents_beneficiaire</field>
             <field name="description">Réception des documents bénéficiaire</field>
-            <field name="long_description">Date de réception du dernier document requis pour le bénéficiaire</field>
+            <field name="long_description">Retourne la date de réception du 
+dernier document requis pour le bénéficiaire</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
