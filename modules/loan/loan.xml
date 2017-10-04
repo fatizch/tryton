@@ -191,4 +191,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="action" ref="act_loan_payment_relate_form"/>
         </record>
     </data>
+    <data noupdate="1">
+        <record model="ir.sequence" id="default_loan_sequence">
+            <field name="name">Default Loan Sequence</field>
+            <field name="code">loan</field>
+        </record>
+    </data>
 </tryton>

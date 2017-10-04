@@ -1,4 +1,5 @@
-* BUG#6890 Ajouter un message d'error quand le nombre de paiement dépasse la limite.
+* FEA#7194 Ajout d'une séquence de prêt par défaut à l'installation
+* BUG#6890 Ajout d'un message d'erreur quand le nombre de paiement dépasse la limite.
 * BUG#6828 Récuperer la date de fin d'option même si le prêt n'a pas de date de fin
 * BUG#6563 Correction du calcul du prorata du TAEA selon le nombre de jours dans l'année
 * FEA#6457 Possibilité de customiser le mode de tri du champs 'latest_loan_shares'
