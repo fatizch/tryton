@@ -20,7 +20,7 @@ class OptionDescription:
         'get_has_revaluated_coverage_amount')
 
     def get_has_revaluated_coverage_amount(self, name):
-        return (self.coverage_amount_rules and
+        return bool(self.coverage_amount_rules and
             self.coverage_amount_rules[0].revaluation_rule)
 
     def calculate_revaluated_coverage_amount(self, args):
