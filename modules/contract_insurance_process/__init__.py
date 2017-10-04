@@ -15,6 +15,7 @@ def register():
         contract.ContractOption,
         contract.ContractNotification,
         process.Process,
+        process.ProcessAction,
         process.ContractSubscribeFindProcess,
         event.EventTypeAction,
         document.DocumentDescription,

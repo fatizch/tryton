@@ -11,6 +11,7 @@ from trytond.modules.process_cog.process import ProcessFinder, ProcessStart
 __metaclass__ = PoolMeta
 __all__ = [
     'Process',
+    'ProcessAction',
     'ContractSubscribeFindProcess',
     'ContractSubscribe',
     'ProcessResume',
@@ -24,6 +25,22 @@ class Process:
     def __setup__(cls):
         super(Process, cls).__setup__()
         cls.kind.selection.append(('subscription', 'Contract Subscription'))
+
+
+class ProcessAction:
+    __name__ = 'process.action'
+
+    @classmethod
+    def __register__(cls, module_name):
+        # Migration from 1.12: migrate check_option_dates method
+        super(ProcessAction, cls).__register__(module_name)
+        process_action = cls.__table__()
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*process_action.update(
+                columns=[process_action.method_name],
+                values=['check_options_dates'],
+                where=(process_action.method_name == 'check_option_dates')
+                ))
 
 
 class ContractSubscribeFindProcess(ProcessStart):
