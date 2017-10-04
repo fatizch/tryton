@@ -1,3 +1,4 @@
+* BUG#7191 Add default sequence on party configuration
 * BUG#6993 Removing simple json import
 * BUG#6811 Do not switch to list view when creating a new address
 * OTH#0000 Avoid adresse duplication when duplicate or import a party

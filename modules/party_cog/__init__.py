@@ -16,6 +16,8 @@ import test_case
 import relationship
 import res
 import attachment
+import configuration
+
 
 from trytond.modules.coog_core import expand_tree
 
@@ -48,6 +50,8 @@ def register():
         party.SynthesisMenuOpenState,
         PartyMenuTreeExpansion,
         party.PartyReplaceAsk,
+        configuration.ConfigurationSequence,
+        configuration.Configuration,
         module='party_cog', type_='model')
     Pool.register(
         party.SynthesisMenuSet,
