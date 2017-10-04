@@ -1,3 +1,4 @@
+* OTH#0000 Correction du scenario de test
 * BUG#7095 Corrigez le crash dans le batch de création d'indemnisations en raison de devices manquantes
 * FEA#7046 Amélioration des la vue de validation et contrôle des indémnisations
 * BUG#7044 Ne pas tenter d'annuler une indemnisation déjà annulée
