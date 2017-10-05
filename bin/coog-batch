@@ -80,14 +80,14 @@ coog_batch_replay() { # replay failed jobs - <name>
     local ret; ret=1
     for jid in $(coog_batch_query "fail" "$1")
     do
-        echo "$1: split $jid"
+        echo "$1: replay $jid"
         python "$COOG_BIN/batch-replay.py" "$broker" "$jid"
         [ $? -eq 0 ] &&
             coog_batch_query jarchive "$jid" > /dev/null &&
             ret=0 &&
             echo "$1: archive $jid"
     done
-    [ $ret -ne 0 ] && echo "$1: split - nothing to do" && return 1
+    [ $ret -ne 0 ] && echo "$1: replay - nothing to do" && return 1
     return 0
 }
 
