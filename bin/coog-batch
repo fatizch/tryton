@@ -5,104 +5,111 @@ _coog_batch_gen=0
 _coog_batch_ko=0
 
 _coog_batch_broker() {
-        [ ! -z "$TRYTOND_ASYNC_CELERY" ] && echo celery && return
-        [ ! -z "$TRYTOND_ASYNC_RQ" ] && echo rq && return
-        >&2 echo no async broker configured && return 1
+    [ ! -z "$TRYTOND_ASYNC_CELERY" ] && echo celery && return
+    [ ! -z "$TRYTOND_ASYNC_RQ" ] && echo rq && return
+    >&2 echo no async broker configured && return 1
 }
 
 coog_batch_query() { # query redis batch script - [args*]
-        local broker; broker=$(_coog_batch_broker) || return $?
-        coog_redis_eval "$broker" "$@"
+    local broker; broker=$(_coog_batch_broker) || return $?
+    coog_redis_eval "$broker" "$@"
 }
 
 coog_batch_generate() { # generate jobs - <name> [args*]
-        [ $# -lt 1 ] && >&2 echo missing at least batch name && return 1
-        local broker; broker=$(_coog_batch_broker) || return $?
-        local name; name=$1; shift
-        local msg; msg=$(python -W ignore "$COOG_BIN/batch-generate.py" -b "$broker" -n "$name" "$@") || return $?
-        _coog_batch_gen=$(echo $msg | cut -d " " -f 1)
-        echo "$name: generated $msg"
+    [ $# -lt 1 ] && >&2 echo missing at least batch name && return 1
+    local broker; broker=$(_coog_batch_broker) || return $?
+    local name; name=$1; shift
+    local msg; msg=$(python -W ignore "$COOG_BIN/batch-generate.py" -b "$broker" -n "$name" "$@") || return $?
+    _coog_batch_gen=$(echo $msg | cut -d " " -f 1)
+    echo "$name: generated $msg"
 }
 
 coog_batch_join() { # wait for execution - <name>
-        [ $# -lt 1 ] && >&2 echo missing batch name && return 1
-        local broker; broker=$(_coog_batch_broker) || return $?
-        while true
-        do
-                sleep 10
-                local queued; queued=$(coog_"$broker"_queued "$1") || return $?
-                [ "$queued" -eq 0 ] && break
-                echo "$1: wait @ $(date +'%H:%M:%S') - $queued"
-        done
-        local failed; failed=$(coog_batch_query "fail" "$1" | grep -Pc "\w+")
-        _coog_batch_ko="$failed"
-        [ "$failed" -eq 0 ] && echo "$1: succeeded" && return 0
-        echo "$1: failed" && return 1
+    [ $# -lt 1 ] && >&2 echo missing batch name && return 1
+    local broker; broker=$(_coog_batch_broker) || return $?
+    while true
+    do
+        sleep 10
+        local queued; queued=$(coog_"$broker"_queued "$1") || return $?
+        [ "$queued" -eq 0 ] && break
+        echo "$1: wait @ $(date +'%H:%M:%S') - $queued"
+    done
+    local failed; failed=$(coog_batch_query "fail" "$1" | grep -Pc "\w+")
+    _coog_batch_ko="$failed"
+    [ "$failed" -eq 0 ] && echo "$1: succeeded" && return 0
+    echo "$1: failed" && return 1
 }
 
 coog_batch_split() { # split failed jobs - <name>
-        [ $# -lt 1 ] && >&2 echo missing batch name && return 1
-        local broker; broker=$(_coog_batch_broker) || return $?
-        local ret; ret=1
-        for jid in $(coog_batch_query "fail" "$1")
-        do
-                echo "$1: split $jid"
-                python "$COOG_BIN/batch-split.py" "$broker" "$jid"
-                [ $? -eq 0 ] &&
-                        coog_batch_query jarchive "$jid" > /dev/null &&
-                        ret=0 &&
-                        echo "$1: archive $jid"
-        done
-        [ $ret -ne 0 ] && echo "$1: split - nothing to do" && return 1
-        return 0
+    [ $# -lt 1 ] && >&2 echo missing batch name && return 1
+    local broker; broker=$(_coog_batch_broker) || return $?
+    local ret; ret=1
+    for jid in $(coog_batch_query "fail" "$1")
+    do
+        echo "$1: split $jid"
+        python "$COOG_BIN/batch-split.py" "$broker" "$jid"
+        [ $? -eq 0 ] &&
+            coog_batch_query jarchive "$jid" > /dev/null &&
+            ret=0 &&
+            echo "$1: archive $jid"
+    done
+    [ $ret -ne 0 ] && echo "$1: split - nothing to do" && return 1
+    return 0
 }
 
-coog_batch_exec() { # execute batch (workers should be running) - name [args*]
-        coog_batch_generate "$@" || return $?
-        coog_batch_join "$1"
-        local ok=$?
-        [ $ok -eq 0 ] && echo "$((_coog_batch_gen - _coog_batch_ko)) succeeded job(s) and $_coog_batch_ko failed job(s)" && return 0
-        coog_batch_split "$1" || return $?
-        coog_batch_join "$1"
-        echo "$((_coog_batch_gen-_coog_batch_ko)) succeeded job(s) and $_coog_batch_ko failed job(s)"
+coog_batch_exec() { # execute batch - [--check] <name> [args*]
+    if [ "$1" = "--check" ]
+    then
+        shift
+        local broker; broker=$(_coog_batch_broker) || return $?
+        local running; running=$(coog_"$broker"_running "$1") || return $?
+        [ "$running" -eq 0 ] && >&2 echo no workers running && return 1
+    fi
+    coog_batch_generate "$@" || return $?
+    coog_batch_join "$1"
+    local ok=$?
+    [ $ok -eq 0 ] && echo "$((_coog_batch_gen - _coog_batch_ko)) succeeded job(s) and $_coog_batch_ko failed job(s)" && return 0
+    coog_batch_split "$1" || return $?
+    coog_batch_join "$1"
+    echo "$((_coog_batch_gen-_coog_batch_ko)) succeeded job(s) and $_coog_batch_ko failed job(s)"
 }
 
 coog_batch_replay() { # replay failed jobs - <name>
-        [ $# -lt 1 ] && >&2 echo missing batch name && return 1
-        local broker; broker=$(_coog_batch_broker) || return $?
-        local ret; ret=1
-        for jid in $(coog_batch_query "fail" "$1")
-        do
-                echo "$1: split $jid"
-                python "$COOG_BIN/batch-replay.py" "$broker" "$jid"
-                [ $? -eq 0 ] &&
-                        coog_batch_query jarchive "$jid" > /dev/null &&
-                        ret=0 &&
-                        echo "$1: archive $jid"
-        done
-        [ $ret -ne 0 ] && echo "$1: split - nothing to do" && return 1
-        return 0
+    [ $# -lt 1 ] && >&2 echo missing batch name && return 1
+    local broker; broker=$(_coog_batch_broker) || return $?
+    local ret; ret=1
+    for jid in $(coog_batch_query "fail" "$1")
+    do
+        echo "$1: split $jid"
+        python "$COOG_BIN/batch-replay.py" "$broker" "$jid"
+        [ $? -eq 0 ] &&
+            coog_batch_query jarchive "$jid" > /dev/null &&
+            ret=0 &&
+            echo "$1: archive $jid"
+    done
+    [ $ret -ne 0 ] && echo "$1: split - nothing to do" && return 1
+    return 0
 }
 
 coog_batch_reexec() { # execute batch (workers should be running) - name
-        coog_batch_replay "$1" || return $?
-        coog_batch_join "$1"
+    coog_batch_replay "$1" || return $?
+    coog_batch_join "$1"
 }
 
 coog_batch_report() { # report batch execution - name
-        local broker; broker=$(_coog_batch_broker) || return $?
-        local failed; failed=$(coog_batch_query "fail" "$1" | grep -Pc "\w+")
-        if [ "$failed" -eq 0 ]
-        then
-                echo "$1 succeeded"
-                echo
-                return 0
-        else
-                echo "$1 failed ($failed)"
-                echo
-                for jid in $(coog_batch_query "fail" "$1")
-                do
-                        coog_batch_query j "$jid"
-                done
-        fi
+    local broker; broker=$(_coog_batch_broker) || return $?
+    local failed; failed=$(coog_batch_query "fail" "$1" | grep -Pc "\w+")
+    if [ "$failed" -eq 0 ]
+    then
+        echo "$1 succeeded"
+        echo
+        return 0
+    else
+        echo "$1 failed ($failed)"
+        echo
+        for jid in $(coog_batch_query "fail" "$1")
+        do
+            coog_batch_query j "$jid"
+        done
+    fi
 }

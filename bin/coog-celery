@@ -2,76 +2,80 @@
 # celery - workers management
 
 _coog_celery_file() {
-        echo "$COOG_TMP/$COOG_FILE_CEL.$1"
+    echo "$COOG_TMP/$COOG_FILE_CEL.$1"
 }
 
 coog_celery_start() { # start workers - <concurrency> [queue,+]
-        local pid_file; pid_file=$(_coog_celery_file pid)
-        local out_file; out_file=$(_coog_celery_file out)
-        local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
-                >&2 echo already running && return 1
+    local pid_file; pid_file=$(_coog_celery_file pid)
+    local out_file; out_file=$(_coog_celery_file out)
+    local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
+        >&2 echo already running && return 1
 
-        [ "$1" -eq "$1" ] 2> /dev/null || { echo "argument must be an integer"; return 1; }
-        if [ -z "$2" ]; then
-            queue="$(python -W ignore $COOG_BIN/load_batches.py | tr '\n' ',' 2> /dev/null)"
-        else
-            queue="$2"
-        fi
-        coog_env_bak "$out_file" "$pid" || return $?
-        celery worker \
-                --app=async.broker_celery \
-                --queues="$queue" \
-                --concurrency="$1" \
-                --pidfile="$pid_file" \
-                --loglevel="$LOG_LEVEL" \
-                --logfile="$out_file" &> "$out_file" &
-        echo celery started
+    [ "$1" -eq "$1" ] 2> /dev/null || { echo "argument must be an integer"; return 1; }
+    if [ -z "$2" ]; then
+        queue="$(python -W ignore $COOG_BIN/load_batches.py | tr '\n' ',' 2> /dev/null)"
+    else
+        queue="$2"
+    fi
+    coog_env_bak "$out_file" "$pid" || return $?
+    celery worker \
+        --app=async.broker_celery \
+        --queues="$queue" \
+        --concurrency="$1" \
+        --pidfile="$pid_file" \
+        --loglevel="$LOG_LEVEL" \
+        --logfile="$out_file" &> "$out_file" &
+    echo celery started
 }
 
 coog_celery_stop() { # stop workers
-        local pid_file; pid_file=$(_coog_celery_file pid)
-        local out_file; out_file=$(_coog_celery_file out)
-        local pid; pid=$(coog_env_term "$pid_file") || return $?
-        coog_env_bak "$out_file" "$pid"
-        echo celery stopped
+    local pid_file; pid_file=$(_coog_celery_file pid)
+    local out_file; out_file=$(_coog_celery_file out)
+    local pid; pid=$(coog_env_term "$pid_file") || return $?
+    coog_env_bak "$out_file" "$pid"
+    echo celery stopped
 }
 
 coog_celery_kill() { # kill workers
-        coog_celery_pid "$*" | xargs kill -9 &> /dev/null
-        echo celery stopped
+    coog_celery_pid "$*" | xargs kill -9 &> /dev/null
+    echo celery stopped
 }
 
 coog_celery_pid() { # get pid
-        local pid_file; pid_file=$(_coog_celery_file pid)
-        coog_env_pid "$pid_file"
+    local pid_file; pid_file=$(_coog_celery_file pid)
+    coog_env_pid "$pid_file"
 }
 
 coog_celery_cli() { # celery cli wrapper - [celery args]
-        celery --app=async.broker_celery "$@"
+    celery --app=async.broker_celery "$@"
 }
 
 coog_celery_info() { # print workers infos
-        coog_celery_cli inspect stats
+    coog_celery_cli inspect stats
+}
+
+coog_celery_running() { # count workers - <queue>
+    coog_celery_cli inspect -C ping &> /dev/null && echo 1 || echo 0
 }
 
 coog_celery_queued() { # count queued jobs - <name>
-        [ -z "$1" ] >&2 && echo missing queue name && return 1
-        local q; q=$(coog_redis_exec celery LLEN "$1")
-        local wk; wk=$(coog_celery_cli inspect -C active 2> /dev/null | grep -c "$1")
-        echo $((q+wk))
+    [ -z "$1" ] >&2 && echo missing queue name && return 1
+    local q; q=$(coog_redis_exec celery LLEN "$1")
+    local wk; wk=$(coog_celery_cli inspect -C active 2> /dev/null | grep -c "$1")
+    echo $((q+wk))
 }
 
 coog_celery_log() { # less logs - [less args]
-        local out_file; out_file=$(_coog_celery_file out)
-        less "$@" "$out_file"
+    local out_file; out_file=$(_coog_celery_file out)
+    less "$@" "$out_file"
 }
 
 coog_celery_head() { # head logs [head args]
-        local out_file; out_file=$(_coog_celery_file out)
-        head "$@" "$out_file"
+    local out_file; out_file=$(_coog_celery_file out)
+    head "$@" "$out_file"
 }
 
 coog_celery_tail() { # tail logs [tail args]
-        local out_file; out_file=$(_coog_celery_file out)
-        tail "$@" "$out_file"
+    local out_file; out_file=$(_coog_celery_file out)
+    tail "$@" "$out_file"
 }
