@@ -231,11 +231,13 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
     @classmethod
     def create(cls, vlist):
         Sequence = Pool().get('ir.sequence')
+        default_company = cls.default_company()
         with Transaction().set_user(0):
             loan_sequences = Sequence.search([('code', '=', 'loan')])
-        sequences_dict = dict([(x.company.id, x) for x in loan_sequences])
+        sequences_dict = dict(
+            [(x.company.id if x.company else default_company, x)
+                for x in loan_sequences])
         vlist = [x.copy() for x in vlist]
-        default_company = cls.default_company()
         for vals in vlist:
             if not vals.get('number'):
                 sequence = sequences_dict.get(vals.get('company',

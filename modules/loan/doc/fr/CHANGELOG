@@ -1,3 +1,4 @@
+* OTH#0000 Correctif des tests suite à l'ajout de la séquence de prêt par défaut
 * FEA#7194 Ajout d'une séquence de prêt par défaut à l'installation
 * BUG#6890 Ajout d'un message d'erreur quand le nombre de paiement dépasse la limite.
 * BUG#6828 Récuperer la date de fin d'option même si le prêt n'a pas de date de fin

@@ -1,3 +1,4 @@
+* OTH#0000 Fix crashing tests after adding default loan sequence
 * FEA#7194 Add default loan sequence at module installation
 * BUG#6890 Raise an error message if the number of payment exceed the limit.
 * BUG#6828 Get option end date even if the loan does not have an end date
