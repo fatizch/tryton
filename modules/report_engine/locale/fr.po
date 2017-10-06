@@ -214,6 +214,10 @@ msgctxt "field:report.create.preview.line,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:report.create.preview.line,output_report_filepath:"
+msgid "Output report filepath"
+msgstr ""
+
 msgctxt "field:report.create.preview.line,server_filepath:"
 msgid "Server Filename"
 msgstr "Nom du fichier serveur"
@@ -245,6 +249,10 @@ msgstr "Destinataire"
 msgctxt "field:report.create.select_template,recipient_address:"
 msgid "Recipient Address"
 msgstr "Adresse du destinataire"
+
+msgctxt "field:report.create.select_template,recipient_needed:"
+msgid "Recipient Needed"
+msgstr "Destinataires requis"
 
 msgctxt "field:report.create.select_template,template:"
 msgid "Template"
@@ -501,6 +509,10 @@ msgstr "Langues"
 msgctxt "field:report.template.version,name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:report.template.version,path:"
+msgid "Path"
+msgstr "Chemin"
 
 msgctxt "field:report.template.version,rec_name:"
 msgid "Name"

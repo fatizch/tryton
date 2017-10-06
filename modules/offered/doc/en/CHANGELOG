@@ -1,3 +1,4 @@
+* FEA#7024 Configure default report template style to be added as default letter style in coog
 * Allow to store extra data on package to be used on rule engine (to apply a reduction for example when subscribing a package)
 
 Version 1.12 - 2017-04-28

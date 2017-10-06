@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data dêpends="contract">
+        <record model="event.type.action-report.template" id="event_type_request_mandat_sepa_template">       
+            <field name="event_type_action" ref="contract.event_action_generate_documents_activation_contract"/>       
+            <field name="report_template" ref="account_payment_sepa_contract.default_mandat_sepa_template"/>     
+        </record>
+    </data>
+</tryton>

@@ -242,7 +242,13 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
     def get_report_style_content(self, at_date, template, contract=None):
         if template.input_kind == 'libre_office_odt':
-            return self.report_style_template
+            if self.report_style_template is not None:
+                return self.report_style_template
+        configuration = Pool().get('offered.configuration').get_singleton()
+        if configuration is not None:
+            if configuration.style_template:
+                self.report_style_template = configuration.style_template
+                return self.report_style_template
 
     @fields.depends('currency')
     def on_change_with_currency_digits(self, name=None):

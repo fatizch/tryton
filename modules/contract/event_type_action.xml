@@ -16,4 +16,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="action" ref="event_action_notification"/>
         </record>
     </data>
+    <data noupdate="1">
+        <record model="event.type.action" id="event_action_generate_documents_activation_contract">
+            <field name="name">Generate letters at contract activation</field>
+            <field name="code">Generate_letters_at_contract_activation</field>
+            <field name="priority">10000</field>
+            <field name="action">generate_documents</field>
+            <field name="active">False</field>
+            <field name="treatment_kind">asynchronous_queue</field>
+        </record>
+        <record model="event.type.action-event.type" id="event_generate_letters_at_contract_activation">
+            <field name="event_type" ref="event_activate_contract"/>
+            <field name="action" ref="event_action_generate_documents_activation_contract"/>
+        </record>
+    </data>
 </tryton>

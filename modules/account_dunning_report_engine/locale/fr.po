@@ -21,3 +21,12 @@ msgstr "Modèle de courrier"
 msgctxt "help:account.dunning.level,not_mandatory:"
 msgid "If higher level can be processed, this step will be skipped"
 msgstr "Si un niveau supérieur peut être traité, ce niveau sera ignoré"
+
+msgctxt ""
+"model:report.template,name:default_dunning_invoice_report_template_fr"
+msgid "Letter of dunning"
+msgstr "Courrier de mise en demeure par défaut"
+
+msgctxt "model:report.template,name:default_dunning_report_template_fr"
+msgid "Letter of formal notice"
+msgstr "Courrier de relance par défaut"

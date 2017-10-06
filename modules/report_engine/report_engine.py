@@ -39,6 +39,7 @@ from trytond.pyson import Eval, Equal, Bool
 from trytond.model import DictSchemaMixin
 from trytond.server_context import ServerContext
 from trytond.filestore import filestore
+from trytond.tools import file_open
 
 from trytond.modules.coog_core import fields, model, utils, coog_string
 from trytond.modules.coog_core import wizard_context
@@ -601,6 +602,8 @@ class ReportTemplateVersion(model.CoogSQL, model.CoogView):
        ondelete='RESTRICT')
     data = fields.Binary('Data', filename='name')
     name = fields.Char('Name', required=True)
+    path = fields.Function(fields.Char('Path'),
+        'get_path', setter='setter_data')
 
     @classmethod
     def __register__(cls, module_name):
@@ -643,10 +646,25 @@ class ReportTemplateVersion(model.CoogSQL, model.CoogView):
         super(ReportTemplateVersion, cls).__setup__()
         cls._export_binary_fields.add('data')
 
+    def get_path(self, name):
+        return ''
+
+    @classmethod
+    def setter_data(cls, instances, name, value):
+        if value:
+            with file_open(value, 'rb') as template_file:
+                cls.write(instances, {'data': template_file.read()})
+        else:
+            cls.write(instances, {'data': None})
+
     @classmethod
     def _export_light(cls):
         return (super(ReportTemplateVersion, cls)._export_light() |
             set(['template', 'language']))
+
+    @staticmethod
+    def default_start_date():
+        return utils.today()
 
 
 class Printable(Model):

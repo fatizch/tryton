@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data noupdate="1">
+        <record model="report.template" id="default_dunning_report_template_fr">
+            <field name="name">Letter of formal notice</field>
+            <field name="code">letter_of_formal_notice</field>
+            <field name="on_model" search="[('model', '=', 'account.dunning')]"/>
+            <field name="kind">dunning_letter</field>
+            <field name="input_kind">libre_office_odt</field>
+            <field name="process_method">libre_office</field>
+            <field name="format_for_internal_edm">pdf</field>
+            <field name="output_format">pdf</field>
+            <field name="modifiable_before_printing">false</field>
+            <field name="split_reports">True</field>
+            <field name="recipient_needed">True</field>
+        </record>
+        <record model="report.template.version" id="default_dunning_report_template_version_fr">
+            <field name="template" ref="account_dunning_report_engine.default_dunning_report_template_fr"/>
+            <field name="name">template_mise_en_demeure.odt</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="path">account_dunning_report_engine/reports/template_mise_en_demeure.odt</field>
+        </record>
+    </data>
+        <data noupdate="1">
+        <record model="report.template" id="default_dunning_invoice_report_template_fr">
+            <field name="name">Letter of dunning</field>
+            <field name="code">letter_dunning</field>
+            <field name="on_model" search="[('model', '=', 'account.dunning')]"/>
+            <field name="kind">dunning_letter</field>
+            <field name="input_kind">libre_office_odt</field>
+            <field name="process_method">libre_office</field>
+            <field name="format_for_internal_edm">pdf</field>
+            <field name="output_format">pdf</field>
+            <field name="modifiable_before_printing">false</field>
+            <field name="split_reports">True</field>
+            <field name="recipient_needed">True</field>
+        </record>
+        <record model="report.template.version" id="default_dunning_invoice_report_template_version_fr">
+            <field name="template" ref="account_dunning_report_engine.default_dunning_invoice_report_template_fr"/>
+            <field name="name">template_relance.odt</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="path">account_dunning_report_engine/reports/template_relance.odt</field>
+        </record>
+    </data>
+</tryton>

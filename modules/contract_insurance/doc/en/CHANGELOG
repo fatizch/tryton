@@ -1,3 +1,4 @@
+* FEA#7024 Configure default reports templates to be added as default letters in coog
 * BUG#7132 Migrate function which set the contract subscriber covered as covered element from contract_life_process
 * BUG#7029 Fix default initialization of contract options
 * BUG#6757 Fix covered element start date calculation

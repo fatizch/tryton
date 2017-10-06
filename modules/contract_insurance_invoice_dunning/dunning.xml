@@ -75,4 +75,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="apply_for">all</field>
         </record>
     </data>
+    <data depends="account_dunning_report_engine">
+        <record model="account.dunning.level" id="contract_insurance_invoice_dunning.legal_dunning_level">
+            <field name="name">Legal Dunning</field>
+            <field name="report_template" ref="account_dunning_report_engine.default_dunning_invoice_report_template_fr"/>
+        </record>
+        <record model="account.dunning.level" id="contract_insurance_invoice_dunning.formal_notice_level">
+            <field name="name">Formal Notice</field>
+            <field name="report_template" ref="account_dunning_report_engine.default_dunning_report_template_fr"/>
+        </record>       
+    </data>
 </tryton>

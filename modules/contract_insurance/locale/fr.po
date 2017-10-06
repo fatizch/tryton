@@ -59,6 +59,10 @@ msgctxt "error:contract:"
 msgid "Invalid file format"
 msgstr "Format de fichier non valide"
 
+msgctxt "error:contract:"
+msgid "Select at least one option for %s"
+msgstr ""
+
 msgctxt "error:party.party:"
 msgid "Missing extra data for : %s"
 msgstr "Il manque des données complémentaires pour %s"
@@ -927,6 +931,18 @@ msgstr "Gérer les surprimes / réductions"
 msgctxt "model:ir.action,name:manage_options"
 msgid "Manage Options"
 msgstr "Gérer les Options"
+
+msgctxt "model:report.template,name:default_brouillard_template"
+msgid "Brouillard letter"
+msgstr "Courrier brouillard par défaut"
+
+msgctxt "model:report.template,name:default_contract_schedule_template"
+msgid "Letter of contract schedule"
+msgstr "Courrier échéancier par défaut"
+
+msgctxt "model:report.template,name:default_synthesis_subscription_template"
+msgid "Letter of synthesis subscription"
+msgstr "Courrier certificat d'adhésion par défaut"
 
 msgctxt "selection:contract,status:"
 msgid "Active"

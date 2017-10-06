@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_contract_substatus_general_configuration"
-msgid "Contract Sub-status"
-msgstr "Sous statut de contrat"
-
 msgctxt "error:contract.activate:"
 msgid "You cannot activate a contract that is not in quote or hold status !"
 msgstr ""
@@ -36,8 +32,8 @@ msgid ""
 "End date should be posterior to start date: %(start_date)s for option "
 "%(option)s in contract %(contract)s"
 msgstr ""
-"La date de fin doit être postérieure à la date de début: %(start_date)s "
-"pour l'option %(option)s du contrat %(contract)s"
+"La date de fin doit être postérieure à la date de début: %(start_date)s pour"
+" l'option %(option)s du contrat %(contract)s"
 
 msgctxt "error:contract.option:"
 msgid "No end date defined"
@@ -130,6 +126,10 @@ msgstr "Pas de séqunce de dévis définie"
 msgctxt "error:contract:"
 msgid "Product %s is inactive at date %s"
 msgstr "Le produit %s est inactif le %s"
+
+msgctxt "error:contract:"
+msgid "The contract number must be unique."
+msgstr ""
 
 msgctxt "error:contract:"
 msgid "There are dates for which no %s address is defined"
@@ -494,10 +494,6 @@ msgstr "Mis à jour par"
 msgctxt "field:contract.contact.type,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
-
-msgctxt "field:contract.decline.inactive_quotes,id:"
-msgid "ID"
-msgstr "ID"
 
 msgctxt "field:contract.decline.select_reason,contract:"
 msgid "Contract"
@@ -1057,25 +1053,115 @@ msgctxt ""
 msgid "Possible Packages"
 msgstr "Formules possibles"
 
-msgctxt "field:event.log,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:offered.configuration,default_quote_number_sequence:"
-msgid "Default quote number sequence"
-msgstr "Séquence de numéro de devis par défaut"
+msgctxt "field:event.type.action,notification_delay:"
+msgid "Notification Delay (in days)"
+msgstr ""
 
 msgctxt "field:ir.sequence,name:default_quote_contract_sequence"
 msgid "Default Quote Contract Sequence"
 msgstr "Séquence par défaut des numéros de devis"
 
-msgctxt "model:ir.sequence,name:default_quote_contract_sequence"
-msgid "Default Quote Contract Sequence"
-msgstr "Séquence par défaut des numé ros de devis"
+msgctxt "field:offered.configuration,default_quote_number_sequence:"
+msgid "Default Quote Number Sequence"
+msgstr "Séquence de numéro de devis par défaut"
+
+msgctxt "field:offered.configuration.default_quote_number_sequence,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt ""
+"field:offered.configuration.default_quote_number_sequence,configuration:"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt ""
+"field:offered.configuration.default_quote_number_sequence,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:offered.configuration.default_quote_number_sequence,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:offered.configuration.default_quote_number_sequence,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:offered.configuration.default_quote_number_sequence,default_quote_number_sequence:"
+msgid "Default Quote Number Sequence"
+msgstr "Séquence de numéro de devis par défaut"
+
+msgctxt "field:offered.configuration.default_quote_number_sequence,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:offered.configuration.default_quote_number_sequence,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt ""
+"field:offered.configuration.default_quote_number_sequence,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:offered.configuration.default_quote_number_sequence,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:offered.configuration.default_quote_number_sequence,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.product,quote_number_sequence:"
 msgid "Quote number sequence"
 msgstr "Séquence de numéro de devis"
+
+msgctxt "field:offered.product.quote_number_sequence,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:offered.product.quote_number_sequence,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.product.quote_number_sequence,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.product.quote_number_sequence,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.product.quote_number_sequence,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:offered.product.quote_number_sequence,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:offered.product.quote_number_sequence,quote_number_sequence:"
+msgid "Quote Number Sequence"
+msgstr ""
+
+msgctxt "field:offered.product.quote_number_sequence,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.product.quote_number_sequence,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:offered.product.quote_number_sequence,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:offered.product.quote_number_sequence,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:party.party,contracts:"
 msgid "Contracts"
@@ -1143,14 +1229,6 @@ msgid ""
 msgstr ""
 "Si coché, le motif de résiliation planifié sera effacé après réactivation"
 
-msgctxt "help:offered.configuration,inactivity_delay:"
-msgid ""
-"All quotes inactive since stricly more than this period (in days) will be "
-"declined."
-msgstr ""
-"Tous les devis qui sont inactifs depuis strictement plus que cette période "
-"(en jours) seront declinés automatiquement"
-
 msgctxt "model:contract,name:"
 msgid "Contract"
 msgstr "Contrat"
@@ -1174,10 +1252,6 @@ msgstr "Type de contact"
 msgctxt "model:contract.contact.type,name:subscriber"
 msgid "Subscriber"
 msgstr "Souscripteur"
-
-msgctxt "model:contract.decline.inactive_quotes,name:"
-msgid "Decline Inactive Quotes Contracts"
-msgstr "Declinaison devis inactifs"
 
 msgctxt "model:contract.decline.select_reason,name:"
 msgid "Reason selector to decline contract"
@@ -1260,7 +1334,6 @@ msgctxt "model:event.type,name:event_activate_contract"
 msgid "Activate Contract"
 msgstr "Activation du contrat"
 
-
 msgctxt "model:event.type,name:event_create_quote"
 msgid "Create Quote"
 msgstr "Création d'un devis"
@@ -1292,6 +1365,11 @@ msgstr "Remise en vigueur après suspension"
 msgctxt "model:event.type,name:event_void_contract"
 msgid "Void Contract"
 msgstr "Contrat sans effet"
+
+msgctxt ""
+"model:event.type.action,name:event_action_generate_documents_activation_contract"
+msgid "Generate letters at contract activation"
+msgstr "Génération des documents à l'activation du contrat"
 
 msgctxt "model:event.type.action,name:event_action_notification"
 msgid "Notification After Void"
@@ -1333,10 +1411,6 @@ msgctxt "model:ir.action,name:act_decline"
 msgid "Decline"
 msgstr "Décliner"
 
-msgctxt "model:ir.action,name:act_event_log_relate_form"
-msgid "Event Logs"
-msgstr "Logs d'événements"
-
 msgctxt "model:ir.action,name:act_hold_contract"
 msgid "Hold Contract"
 msgstr "Suspendre le contrat"
@@ -1352,6 +1426,10 @@ msgstr "Réactiver le contrat"
 msgctxt "model:ir.action,name:act_related_attachments"
 msgid "Related Attachments"
 msgstr "Pièces jointes liées"
+
+msgctxt "model:ir.action,name:act_related_parties_relate_form"
+msgid "Related parties"
+msgstr ""
 
 msgctxt "model:ir.action,name:act_stop"
 msgid "Stop Contract"
@@ -1412,6 +1490,10 @@ msgctxt "model:ir.action.act_window.domain,name:act_quote_domain_recent"
 msgid "Recent"
 msgstr "Mon historique"
 
+msgctxt "model:ir.sequence,name:default_quote_contract_sequence"
+msgid "Default Quote Contract Sequence"
+msgstr "Séquence par défaut des numéros de devis"
+
 msgctxt "model:ir.sequence.type,name:sequence_type_quote"
 msgid "Quote"
 msgstr "Devis"
@@ -1440,6 +1522,10 @@ msgctxt "model:ir.ui.menu,name:menu_contract_notification"
 msgid "Notifications"
 msgstr "Notifications"
 
+msgctxt "model:ir.ui.menu,name:menu_contract_substatus_general_configuration"
+msgid "Contract Sub-status"
+msgstr ""
+
 msgctxt "model:ir.ui.menu,name:menu_quote_form"
 msgid "Quotes"
 msgstr "Devis"
@@ -1447,6 +1533,14 @@ msgstr "Devis"
 msgctxt "model:ir.ui.menu,name:sub_status_form"
 msgid "Sub-status"
 msgstr "Sous statut"
+
+msgctxt "model:offered.configuration.default_quote_number_sequence,name:"
+msgid "Configuration Default Quote Number Sequence"
+msgstr ""
+
+msgctxt "model:offered.product.quote_number_sequence,name:"
+msgid "Product Quote Number Sequence"
+msgstr ""
 
 msgctxt "model:party.synthesis.menu.contract,name:"
 msgid "Party Synthesis Menu Contract"
@@ -1609,14 +1703,6 @@ msgctxt ""
 "selection:contract.wizard.option_subscription.options_displayer.option,selection:"
 msgid "Manual"
 msgstr "Manuelle"
-
-msgctxt "selection:offered.configuration,delay_unit:"
-msgid "Days"
-msgstr "Jours"
-
-msgctxt "selection:offered.configuration,delay_unit:"
-msgid "Months"
-msgstr "Mois"
 
 msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Contract"

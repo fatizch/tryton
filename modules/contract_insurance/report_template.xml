@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data noupdate="1">
+        <record model="report.template" id="default_brouillard_template">
+            <field name="name">Brouillard letter</field>
+            <field name="code">brouillard_letter</field>
+            <field name="on_model" search="[('model', '=', 'contract')]"/>
+            <field name="kind">contract</field>
+            <field name="input_kind">libre_office_odt</field>
+            <field name="process_method">libre_office</field>
+            <field name="format_for_internal_edm">pdf</field>
+            <field name="output_format">pdf</field>
+            <field name="modifiable_before_printing">false</field>
+            <field name="split_reports">True</field>
+            <field name="recipient_needed">True</field>
+        </record>
+        <record model="report.template.version" id="default_brouillard_fr_version">
+            <field name="template" ref="contract_insurance.default_brouillard_template"/>
+            <field name="name">template_brouillard_fr.odt</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="path">contract_insurance/reports/template_brouillard_fr.odt</field>
+        </record>
+        <record model="report.template.version" id="default_brouillard_en_version">
+            <field name="template" ref="contract_insurance.default_brouillard_template"/>
+            <field name="name">template_brouillard_english.odt</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="path">contract_insurance/reports/template_brouillard_english.odt</field>
+        </record>
+    </data>
+    <data noupdate="1">
+        <record model="report.template" id="default_synthesis_subscription_template">
+            <field name="name">Letter of synthesis subscription</field>
+            <field name="code">letter_of_synthesis_subscription</field>
+            <field name="on_model" search="[('model', '=', 'contract')]"/>
+            <field name="kind">contract</field>
+            <field name="input_kind">libre_office_odt</field>
+            <field name="process_method">libre_office</field>
+            <field name="format_for_internal_edm">pdf</field>
+            <field name="output_format">pdf</field>
+            <field name="modifiable_before_printing">false</field>
+            <field name="split_reports">True</field>
+            <field name="recipient_needed">True</field>
+        </record>
+        <record model="report.template.version" id="default_synthesis_subscription_version">
+            <field name="template" ref="contract_insurance.default_synthesis_subscription_template"/>
+            <field name="name">template_certificat_adhesion.odt</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="path">contract_insurance/reports/template_certificat_adhesion.odt</field>
+        </record>
+    </data>
+    <data noupdate="1">
+        <record model="report.template" id="default_contract_schedule_template">
+            <field name="name">Letter of contract schedule</field>
+            <field name="code">letter_of_contract_schedule</field>
+            <field name="on_model" search="[('model', '=', 'contract')]"/>
+            <field name="kind">contract</field>
+            <field name="input_kind">libre_office_odt</field>
+            <field name="process_method">libre_office</field>
+            <field name="format_for_internal_edm">pdf</field>
+            <field name="output_format">pdf</field>
+            <field name="modifiable_before_printing">false</field>
+            <field name="split_reports">True</field>
+            <field name="recipient_needed">True</field>
+        </record>
+        <record model="report.template.version" id="default_contract_schedule_version">
+            <field name="template" ref="contract_insurance.default_contract_schedule_template"/>
+            <field name="name">template_echeancier.odt</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="path">contract_insurance/reports/template_echeancier.odt</field>
+        </record>
+    </data>
+</tryton>

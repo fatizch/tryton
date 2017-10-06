@@ -1,3 +1,4 @@
+* FEA#7024 Configure default reports templates
 * BUG#7065 Address variable in reports is now the main contact address
 * BUG#6993 Removing simple json import
 * OTH#0000 Add default state "invisible" on generate button to easily override it later

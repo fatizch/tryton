@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_offered_configuration_general_configuration"
-msgid "Offered Configuration"
-msgstr "Administration produit"
-
 msgctxt "error:extra_data:"
 msgid "Expected key %s to be set in field %s of %s"
 msgstr "%s doit être renseigné dans le champ %s de %s"
@@ -192,9 +188,17 @@ msgctxt "field:offered.configuration,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:offered.configuration,path:"
+msgid "Path"
+msgstr "Chemin"
+
 msgctxt "field:offered.configuration,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:offered.configuration,style_template:"
+msgid "Default report style"
+msgstr "Style par défaut"
 
 msgctxt "field:offered.configuration,write_date:"
 msgid "Write Date"
@@ -907,6 +911,11 @@ msgstr "Garanties"
 msgctxt "model:ir.ui.menu,name:menu_model_extra_data"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
+
+msgctxt ""
+"model:ir.ui.menu,name:menu_offered_configuration_general_configuration"
+msgid "Offered Configuration"
+msgstr "Administration produit"
 
 msgctxt "model:ir.ui.menu,name:menu_package_form"
 msgid "Package"

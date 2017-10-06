@@ -18,5 +18,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_configuration_form"/>
         </record>
         <menuitem parent="menu_contract_configuration" sequence="1" id="menu_configuration_form" icon="tryton-preferences" action="act_configuration_form"/>
+        <record model="offered.configuration" id="default_style_configuration_template">
+            <field name="path">offered/style/default_style_template.odt</field>
+        </record>
     </data>
 </tryton>

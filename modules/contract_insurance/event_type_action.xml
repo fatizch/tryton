@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="contract" >
+        <record model="event.type.action-report.template" id="event_type_contract_schedule_template">       
+            <field name="event_type_action" ref="contract.event_action_generate_documents_activation_contract"/>       
+            <field name="report_template" ref="contract_insurance.default_contract_schedule_template"/>       
+        </record>    
+        <record model="event.type.action-report.template" id="event_type_brouillard_template">        
+            <field name="event_type_action" ref="contract.event_action_generate_documents_activation_contract"/>     
+            <field name="report_template" ref="contract_insurance.default_brouillard_template"/>      
+        </record>     
+        <record model="event.type.action-report.template" id="event_type_activate_contract_template">        
+            <field name="event_type_action" ref="contract.event_action_generate_documents_activation_contract"/>      
+            <field name="report_template" ref="contract_insurance.default_synthesis_subscription_template"/>
+        </record> 
+    </data>
+</tryton>
