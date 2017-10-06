@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 from decimal import Decimal
+from threading import Lock
 
 from trytond.rpc import RPC
 from trytond.pool import PoolMeta, Pool
@@ -15,6 +16,8 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Loan',
     ]
+
+_scipy_lock = Lock()
 
 
 class Loan:
@@ -128,4 +131,5 @@ class Loan:
             return result
 
         # Solve fx(x) = 0, tolerance value = 1e-7, approximate_value = 0.003
-        return Decimal(fsolve(fx, 0.003, xtol=1e-7)[0])
+        with _scipy_lock:
+            return Decimal(fsolve(fx, 0.003, xtol=1e-7)[0])

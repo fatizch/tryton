@@ -1,4 +1,5 @@
-* BUG6845 set bank_fees default value to 0
+* BUG#6845 set bank_fees default value to 0
+* BUG#7264 avoid, not supported, concurrent calls to scipy
 
 Version 1.12 - 2017-04-28
 

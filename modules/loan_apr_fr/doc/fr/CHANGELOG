@@ -1,4 +1,6 @@
-* BUG6845 definir la valeur par defaut de bank_fees à 0
+* BUG#6845 definir la valeur par defaut de bank_fees à 0
+* BUG#7264 éviter les appels concurrents à scipy (pas supporté)
+
 Version 1.12 - 2017-04-28
 
 Version 1.10 - 2016-11-02
