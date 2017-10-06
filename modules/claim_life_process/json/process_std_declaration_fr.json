@@ -58,7 +58,7 @@
         },
         "pyson": "",
         "static_view": null,
-        "step_xml": "<label name=\"losses_description\"/>\n<field name=\"losses_description\" colspan=\"3\"/>\n<!--\n<field name=\"delivered_services\"  colspan=\"4\" mode=\"form,tree\" view_ids=\"claim_salary_fr.claim_service_with_salary_view_form\" expand_toolbar=\"0\"/>\n-->\n<field name=\"delivered_services\"  colspan=\"4\" mode=\"form,tree\" expand_toolbar=\"0\"/>",
+        "step_xml": "<label name=\"losses_description\"/>\n<field name=\"losses_description\" colspan=\"3\"/>\n<field name=\"delivered_services\"  colspan=\"4\" mode=\"form,tree\" view_ids=\"claim_salary_fr.claim_service_with_salary_view_form\" expand_toolbar=\"0\"/>\n",
         "tags": [],
         "technical_name": "claim_std_etape_3"
     },

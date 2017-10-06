@@ -30,6 +30,7 @@ class ImportProcessDisplayer(model.CoogView):
             })
     description = fields.Text('Description', readonly=True)
     to_install = fields.Boolean('To Install')
+    is_visible = fields.Boolean('Is Visible')
 
 
 class ImportProcessSelect(model.CoogView):
@@ -58,7 +59,8 @@ class ImportProcess(model.CoogWizard):
 
     def default_start(self, name):
         return {
-            'processes': self.start.available_processes(),
+            'processes': [x for x in self.start.available_processes()
+                if x['is_visible']]
             }
 
     def transition_import_process(self):

@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 
 from trytond.pool import PoolMeta
+from trytond.modules.coog_core import utils
 
 
 __all__ = [
@@ -22,6 +23,10 @@ class ImportProcessSelect:
                 'standard_process_description': 'This process allows managers '
                 'to launch a standard insurance subscription process '
                 'depending on a product',
+                'loan_process': 'Loan Process (FR)',
+                'loan_process_description': 'This process allows managers to '
+                'launch a loan insurance subscription process '
+                'depending on a product',
                 })
 
     def available_processes(self):
@@ -34,5 +39,18 @@ class ImportProcessSelect:
                 '_fr.json',
                 'description': self.raise_user_error(
                     'standard_process_description', raise_exception=False),
+                'is_visible':
+                utils.is_module_installed('contract_insurance_invoice')
+                },
+            {
+                'name': self.raise_user_error(
+                    'loan_process', raise_exception=False),
+                'path':
+                'contract_insurance_process/json/process_loan_subscription_fr'
+                '.json',
+                'description': self.raise_user_error(
+                    'loan_process_description', raise_exception=False),
+                'is_visible':
+                utils.is_module_installed('contract_loan_invoice')
                 },
             ]

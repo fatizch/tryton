@@ -3,6 +3,7 @@
 
 from trytond.pool import PoolMeta
 
+from trytond.modules.coog_core import utils
 
 __all__ = [
     'ImportProcessSelect',
@@ -32,5 +33,6 @@ class ImportProcessSelect:
                 'description': self.raise_user_error(
                     'std_declaration_process_description',
                     raise_exception=False),
+                'is_visible': utils.is_module_installed('claim_salary_fr'),
                 },
             ]

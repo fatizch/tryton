@@ -33,5 +33,6 @@ class ImportProcessSelect:
                 'description': self.raise_user_error(
                     'underwriting_std_process_description',
                     raise_exception=False),
+                'is_visible': True,
                 },
             ]
