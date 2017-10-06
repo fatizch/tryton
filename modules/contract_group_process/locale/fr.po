@@ -2,6 +2,18 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:import.process.select:"
+msgid ""
+"This process allows managers to launch a group insurance subscription "
+"process"
+msgstr ""
+"Ce processus permet aux gestionnaires de lancer un processus de souscription "
+"d'assurance collective"
+
+msgctxt "error:import.process.select:"
+msgid "Subscription Group Process (FR)"
+msgstr "Processus Souscription collectif (FR)"
+
 msgctxt "field:contract_group.subscribe.find_process,effective_date:"
 msgid "Effective Date"
 msgstr "Date effective"

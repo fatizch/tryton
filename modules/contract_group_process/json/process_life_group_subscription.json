@@ -1,0 +1,201 @@
+[
+    {
+        "__name__": "process.step",
+        "_func_key": "souscripteur",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Souscripteur",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<field name=\"subscriber_desc\" widget=\"richtext\" colspan=\"4\"/>",
+        "tags": [],
+        "technical_name": "souscripteur"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "elements_couverts",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [
+            {
+                "__name__": "process.action",
+                "_func_key": "5",
+                "content": "method",
+                "method_name": "init_first_covered_elements",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 1,
+                "technical_kind": "step_before"
+            }
+        ],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Elements couverts",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<field name=\"covered_elements\" colspan=\"4\" mode=\"form,tree\" view_ids=\"contract_insurance.covered_element_view_form,contract_insurance.covered_element_view_tree\"/>",
+        "tags": [],
+        "technical_name": "elements_couverts"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "garanties",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Garanties",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<newline/>\n<group id=\"covered_elements\" yfill=\"1\" yexpand=\"1\" colspan=\"4\">\n    <hpaned id=\"covered_element\" position=\"200\">\n        <child id=\"tree\">\n            <button name=\"option_subscription\" string=\"G\u00e9rer les options\"/>\n            <newline/>\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"tree\" view_ids=\"contract_insurance.covered_elements_clean_tree\" expand_toolbar=\"0\" colspan=\"2\"/>\n        </child>\n        <child id=\"form\">\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"contract.covered_element\" relation_field=\"contract\" view_ids=\"contract_insurance.covered_element_simple_view_form\" expand_toolbar=\"0\"/>\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"contract.option\" relation_field=\"covered_element\" view_ids=\"contract.option_view_form\" expand_toolbar=\"0\"/>\n        </child>\n    </hpaned>\n</group>",
+        "tags": [],
+        "technical_name": "garanties"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "validation_du_contrat",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [
+            {
+                "__name__": "process.action",
+                "_func_key": "6",
+                "content": "method",
+                "method_name": "before_activate",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 1,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "7",
+                "content": "method",
+                "method_name": "activate_contract",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 2,
+                "technical_kind": "step_after"
+            },
+            {
+                "__name__": "process.action",
+                "_func_key": "8",
+                "content": "method",
+                "method_name": "after_activate",
+                "parameters": "",
+                "parent_transition": null,
+                "sequence": 4,
+                "technical_kind": "step_after"
+            }
+        ],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Validation du contrat",
+        "main_model": {
+            "_func_key": "contract"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<notebook colspan=\"6\">\n    <page string=\"Covered Elements\" id=\"cov_elements\">\n<group id=\"covered_elements\" yfill=\"1\" yexpand=\"1\">\n    <hpaned id=\"covered_element\" position=\"200\">\n        <child id=\"tree\">\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"tree\" view_ids=\"contract_insurance.covered_elements_clean_tree\" expand_toolbar=\"0\"/>\n        </child>\n        <child id=\"form\">\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"contract.covered_element\" relation_field=\"contract\" view_ids=\"contract_insurance.covered_element_simple_view_form\" expand_toolbar=\"0\"/>\n            <field name=\"multi_mixed_view\" group=\"multi_mixed_view\" mode=\"form\" relation=\"contract.option\" relation_field=\"covered_element\" view_ids=\"contract.option_view_form\" expand_toolbar=\"0\"/>\n        </child>\n    </hpaned>\n</group>\n        </page> \n</notebook>",
+        "tags": [],
+        "technical_name": "validation_du_contrat"
+    },
+    {
+        "__name__": "process",
+        "_func_key": "souscription_de_contrat_groupe",
+        "all_steps": [
+            {
+                "__name__": "process-process.step",
+                "_func_key": "souscripteur|souscription_de_contrat_groupe",
+                "order": 1,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "souscripteur"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "elements_couverts|souscription_de_contrat_groupe",
+                "order": 2,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "elements_couverts"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "garanties|souscription_de_contrat_groupe",
+                "order": 3,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "garanties"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "validation_du_contrat|souscription_de_contrat_groupe",
+                "order": 4,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "validation_du_contrat"
+                }
+            }
+        ],
+        "close_tab_on_completion": false,
+        "complete_message": "",
+        "custom_transitions": false,
+        "delete_button": "",
+        "end_step_name": "Terminer",
+        "fancy_name": "Souscription d'un contrat groupe",
+        "for_loss_descs": [],
+        "hide_main_menu": false,
+        "hide_main_toolbar": true,
+        "hold_button": "Suspendre",
+        "kind": "subscription",
+        "menu_icon": "tryton-open",
+        "menu_name": "Souscription d'un contrat groupe",
+        "on_model": {
+            "_func_key": "contract"
+        },
+        "postpone_button": null,
+        "sequence": null,
+        "step_button_group_position": "right",
+        "steps_implicitly_available": true,
+        "tags": [],
+        "technical_name": "souscription_de_contrat_groupe",
+        "transitions": [],
+        "with_prev_next": false,
+        "xml_footer": "",
+        "xml_header": "<label name=\"product\"/>\n<field name=\"product\"/>\n<label name=\"rec_name\"/>\n<field name=\"rec_name\"/>\n<label name=\"start_date\"/>\n<group id=\"start_date_group\">\n<field name=\"start_date\"/> \n<button name=\"button_change_start_date\" string=\"Change start date\"/>\n</group>\n<label name=\"subscriber\"/>\n<field name=\"subscriber\" view_ids=\"party_cog.person_view_tree\"/>\n",
+        "xml_tree": "<field name=\"current_state\"/>"
+    }
+]

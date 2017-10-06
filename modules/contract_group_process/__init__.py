@@ -11,6 +11,7 @@ def register():
         process.ContractSubscribeFindProcess,
         wizard.ContractGroupSubscribeFindProcess,
         document.DocumentDescription,
+        wizard.ImportProcessSelect,
         module='contract_group_process', type_='model')
     Pool.register(
         process.ContractSubscribe,
