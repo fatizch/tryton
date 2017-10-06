@@ -30,10 +30,10 @@ class Configuration(CompanyMultiValueMixin):
                 ]))
 
     @classmethod
-    def default_default_quote_number_sequence(cls):
+    def default_default_quote_number_sequence(cls, **kwargs):
         return cls.multivalue_model(
             'default_quote_number_sequence'
-            ).default_default_quote_number_sequence()
+            ).default_default_quote_number_sequence(**kwargs)
 
 
 class ConfigurationDefaultQuoteNumberSequence(model.CoogSQL,
@@ -71,8 +71,9 @@ class ConfigurationDefaultQuoteNumberSequence(model.CoogSQL,
             fields=fields)
 
     @classmethod
-    def default_default_quote_number_sequence(cls):
-        company_id = Transaction().context.get('company', None)
+    def default_default_quote_number_sequence(cls, **kwargs):
+        company_id = kwargs.get('company', None) or Transaction().context.get(
+            'company', None)
         sequences = Pool().get('ir.sequence').search(
             [
                 ('code', '=', 'quote'),
