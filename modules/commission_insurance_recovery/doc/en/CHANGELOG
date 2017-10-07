@@ -1,3 +1,4 @@
+* BUG#7278 Fix wrong computation of sum_of_commission
 * BUG#6782 Fix non paid invoices filtering out in recovery
 
 Version 1.12 - 2017-04-28

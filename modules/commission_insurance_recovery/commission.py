@@ -137,7 +137,7 @@ class Agent:
         cursor.execute(*commission.select(commission.agent,
                 commission.commissioned_option,
                 Sum(commission.amount), Sum(commission.redeemed_prepayment),
-                where=Or(*constraints),
+                where=Or(constraints),
                 group_by=[commission.agent, commission.commissioned_option]))
         for agent, option, com_amount, com_redeemed in cursor.fetchall():
             result[(agent, option)] = {
@@ -170,7 +170,7 @@ class Agent:
 
         cursor.execute(*commission.select(commission.agent,
                 commission.commissioned_option, Sum(commission.amount),
-                where=Or(*constraints),
+                where=Or(constraints),
                 group_by=[commission.agent, commission.commissioned_option]))
         for agent, option, com_amount in cursor.fetchall():
             result[(agent, option)] = com_amount
