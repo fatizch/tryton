@@ -68,6 +68,8 @@ class IndemnificationDefinition:
         if not self.beneficiary:
             self.beneficiary_extra_data = {}
             self.beneficiary_def = None
+        if not self.service:
+            return
         beneficiary_def = self.service.get_beneficiary_definition_from_party(
                 self.beneficiary)
         if beneficiary_def and (not hasattr(self, 'beneficiary_def') or

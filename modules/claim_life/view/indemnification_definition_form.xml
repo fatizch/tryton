@@ -6,6 +6,5 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <field name="beneficiary_extra_data" colspan="4" no_command="1"/>
         <field name="beneficiary_def" invisible="1"/>
-        <field name="deduction_period_kinds" invisible="1"/>
     </xpath>
 </data>

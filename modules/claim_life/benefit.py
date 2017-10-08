@@ -30,7 +30,7 @@ class Benefit:
         'claim treatment',
         states={'invisible': Eval('beneficiary_kind') != 'manual_list'},
         domain=[('kind', '=', 'beneficiary')],
-        depends=['beneficiary_kind', 'kind'])
+        depends=['beneficiary_kind'])
     manual_share_management = fields.Boolean('Manual Share Management',
         help='If set, the beneficiary share treatment has to be '
         'handle manually in the capital computation rule',
