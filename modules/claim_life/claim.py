@@ -305,6 +305,13 @@ class Loss:
     def do_check_duplicates(cls):
         return True
 
+    def get_date(self):
+        if self.loss_kind == ('std', 'ltd', 'death'):
+            # The initial event must be used to know if the person is covered
+            if hasattr(self, 'claim') and self.claim.losses:
+                return self.claim.losses[0].start_date
+        return super(Loss, self).get_date()
+
 
 class ClaimService:
     __metaclass__ = PoolMeta
@@ -358,12 +365,34 @@ class ClaimService:
 
     def get_beneficiaries_data(self, at_date):
         if self.benefit.beneficiary_kind == 'manual_list':
-            return [(x.party, x.share) for x in self.beneficiaries
-                if x.identified]
+            if self.benefit.manual_share_management:
+                return [(x.party, 1) for x in self.beneficiaries
+                    if x.identified]
+            else:
+                return [(x.party, x.share) for x in self.beneficiaries
+                    if x.identified]
         elif (self.benefit.beneficiary_kind == 'covered_party' and
                 self.loss.covered_person):
             return [(self.loss.covered_person, 1)]
         return super(ClaimService, self).get_beneficiaries_data(at_date)
+
+    def get_all_extra_data(self, at_date):
+        res = super(ClaimService, self).get_all_extra_data(at_date)
+        res.update(self.get_service_extra_data(at_date))
+        res.update(self.loss.get_all_extra_data(at_date))
+        if self.option:
+            res.update(self.option.get_all_extra_data(at_date))
+        elif self.contract:
+            res.update(self.contract.get_all_extra_data(at_date))
+        res.update(self.benefit.get_all_extra_data(at_date))
+        return res
+
+    def get_beneficiary_definition_from_party(self, party):
+        if not self.manual_beneficiaries:
+            return None
+        for beneficiary in self.beneficiaries:
+            if beneficiary.party == party:
+                return beneficiary
 
 
 class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
@@ -406,6 +435,7 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
             'are not received yet',
             states={'invisible': ~Eval('identified')}, depends=['identified']),
         'getter_documents_reception_date')
+    extra_data_values = fields.Dict('extra_data', 'Extra Data')
 
     @classmethod
     def __setup__(cls):
@@ -447,11 +477,30 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
         self.documents_reception_date = \
             self.on_change_with_documents_reception_date()
 
+    @fields.depends('service', 'extra_data_values')
+    def on_change_with_extra_data_values(self):
+        if not self.service:
+            return []
+        if not self.extra_data_values:
+            return self.service.benefit.get_beneficiary_extra_data_def(self)
+        return self.extra_data_values
+
     @classmethod
     def getter_documents_reception_date(cls, beneficiaries, name):
+        # TODO: can be improve by using only one database query
         cursor = Transaction().connection.cursor()
         dates = {x.id: None for x in beneficiaries}
         request_line = Pool().get('document.request.line').__table__()
+        claims = [b.service.claim for b in beneficiaries]
+        cursor.execute(*request_line.select(request_line.for_object,
+                Max(Coalesce(request_line.reception_date, datetime.date.max)),
+                where=(request_line.blocking == Literal(True))
+                & request_line.for_object.in_(
+                    [str(x) for x in claims]),
+                group_by=[request_line.for_object]))
+        claim_documents = {}
+        for claim, date in cursor.fetchall():
+            claim_documents[int(claim.split(',')[1])] = date
         cursor.execute(*request_line.select(request_line.for_object,
                 Max(Coalesce(request_line.reception_date, datetime.date.max)),
                 where=(request_line.blocking == Literal(True))
@@ -459,9 +508,15 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
                     [str(x) for x in beneficiaries]),
                 group_by=[request_line.for_object]))
         for beneficiary, date in cursor.fetchall():
-            if date == datetime.date.max:
+            beneficiary_id = int(beneficiary.split(',')[1])
+            claim_document_date = datetime.date.max
+            claim_document_date = claim_documents[
+                cls(beneficiary_id).service.claim.id]
+            if (date == datetime.date.max or
+                    claim_document_date == datetime.date.max):
                 date = None
-            dates[int(beneficiary.split(',')[1])] = date
+            dates[beneficiary_id] = max(date, claim_document_date)\
+                if date else None
         return dates
 
     @model.CoogView.button_change('document_request_lines', 'identified',
@@ -508,6 +563,14 @@ class Indemnification:
     __metaclass__ = PoolMeta
     __name__ = 'claim.indemnification'
 
+    beneficiary_definition = fields.Function(
+        fields.Many2One('claim.beneficiary', 'Beneficiary Definition'),
+        'get_beneficiary_definition')
+
+    def get_beneficiary_definition(self, name):
+        return self.service.get_beneficiary_definition_from_party(
+            self.beneficiary) if self.service else None
+
     def invoice_line_description(self):
         return u'%s - %s- %s - %s' % (
             self.service.loss.covered_person.rec_name
@@ -518,6 +581,19 @@ class Indemnification:
             if self.start_date else '',
             coog_string.translate_value(self, 'end_date')
             if self.end_date else '')
+
+    def init_dict_for_rule_engine(self, cur_dict):
+        super(Indemnification, self).init_dict_for_rule_engine(cur_dict)
+        beneficiary = self.get_beneficiary_definition(None)
+        if beneficiary:
+            cur_dict['beneficiary_definition'] = beneficiary
+
+    def get_all_extra_data(self, at_date):
+        res = super(Indemnification, self).get_all_extra_data(at_date)
+        beneficiary = self.get_beneficiary_definition(None)
+        if beneficiary:
+            res.update(beneficiary.extra_data_values)
+        return res
 
 
 class ClaimServiceExtraDataRevision:

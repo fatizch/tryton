@@ -6,6 +6,7 @@ import offered
 import contract
 import party
 import wizard
+import rule_engine
 
 
 def register():
@@ -19,6 +20,7 @@ def register():
         wizard.TransferCoveredElementsContracts,
         wizard.TransferCoveredElementsItemDescs,
         wizard.TransferCoveredElementsItemDescLine,
+        rule_engine.RuleEngineRuntime,
         module='contract_group', type_='model')
 
     Pool.register(

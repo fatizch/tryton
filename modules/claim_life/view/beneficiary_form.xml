@@ -15,6 +15,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="share" xexpand="0" factor="100"/>
         <label string="%" name="share" xexpand="0" xalign="0"/>
     </group>
+    <field name="extra_data_values" no_command="1" colspan="2"/>
     <label name="documents_reception_date"/>
     <field name="documents_reception_date"/>
     <separator name="description" colspan="2"/>

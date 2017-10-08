@@ -34,6 +34,12 @@ class RuleEngineRuntime:
 
     @classmethod
     @check_args('claim')
+    def _re_first_loss_start_date(cls, args):
+        if args['claim'].losses:
+            return args['claim'].losses[0].start_date
+
+    @classmethod
+    @check_args('claim')
     def _re_last_loss_end_date(cls, args):
         res = datetime.date.min
         for loss in args['claim'].losses:

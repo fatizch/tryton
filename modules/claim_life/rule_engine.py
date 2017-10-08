@@ -23,3 +23,8 @@ class RuleEngineRuntime:
     def _re_is_covered_element_beneficiary(cls, args):
         return (args['indemnification'].service.loss.covered_person
                 == args['indemnification'].beneficiary)
+
+    @classmethod
+    @check_args('beneficiary_definition')
+    def _re_beneficiary_share(cls, args):
+        return args['beneficiary_definition'].share

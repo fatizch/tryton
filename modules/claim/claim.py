@@ -432,7 +432,8 @@ class Loss(model.CoogSQL, model.CoogView):
         domain=[('id', 'in', Eval('available_closing_reasons'))],
         states={
             'readonly': Eval('claim_status') == 'closed',
-            }, depends=['available_closing_reasons', 'claim_status'],
+            'invisible': Bool(~Eval('with_end_date'))},
+        depends=['available_closing_reasons', 'claim_status', 'with_end_date'],
         ondelete='RESTRICT')
 
     @classmethod
@@ -876,6 +877,8 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
     def init_from_loss(self, loss, benefit):
         self.loss = loss
         self.benefit = benefit
+        self.theoretical_covered_element = \
+            self.get_theoretical_covered_element(None)
         self.on_change_extra_datas()
 
     def init_from_option(self, option):
@@ -890,6 +893,8 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
             self.option.init_dict_for_rule_engine(cur_dict)
         elif self.contract:
             self.contract.init_dict_for_rule_engine(cur_dict)
+        if self.theoretical_covered_element:
+            cur_dict['covered_element'] = self.theoretical_covered_element
 
     def get_currency(self):
         if self.option:

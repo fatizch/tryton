@@ -25,5 +25,15 @@ l'événement est une rechute</field>
 est le bénéficiaire</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+        <record model="rule_engine.function" id="part_beneficiaire">
+            <field name="translated_technical_name">part_beneficiaire</field>
+            <field name="description">Part du bénéficiaire</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_beneficiary_share</field>
+            <field name="long_description">Part du bénéficiaire</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
     </data>
 </tryton>

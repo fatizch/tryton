@@ -35,6 +35,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="long_description">Retourne la date de début de l'événement</field>
             <field name="parent" ref="dossier_sinistre"/>
         </record>
+        <record model="rule_engine.function" id="date_de_debut_du_premier_prejudice">
+            <field name="translated_technical_name">date_de_debut_du_permier_prejudice</field>
+            <field name="description">Date de début du premier préjudice</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_first_loss_start_date</field>
+            <field name="long_description">Date de l'événement initial du sinistre</field>
+            <field name="parent" ref="dossier_sinistre"/>
+        </record>
         <record model="rule_engine.function" id="date_fin_dernier_prejudice">
             <field name="translated_technical_name">date_fin_dernier_prejudice</field>
             <field name="description">Date de fin du dernier prejudice</field>

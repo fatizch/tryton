@@ -1022,6 +1022,10 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         else:
             return 'instruction'
 
+    def get_all_extra_data(self, at_date):
+        if self.service:
+            return self.service.get_all_extra_data(at_date)
+
     @classmethod
     @ModelView.button
     def calculate(cls, indemnifications):
@@ -1037,8 +1041,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         to_save = []
         for indemnification in indemnifications:
             cur_dict = {}
-            indemnification.service.init_dict_for_rule_engine(cur_dict)
-            cur_dict['indemnification'] = indemnification
+            indemnification.init_dict_for_rule_engine(cur_dict)
             cur_dict['date'] = cur_dict['loss'].start_date
             cur_dict['start_date'] = indemnification.start_date
             cur_dict['end_date'] = indemnification.end_date

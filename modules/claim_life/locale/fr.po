@@ -33,9 +33,57 @@ msgid "The previous std doesn't have an end date defined"
 msgstr ""
 "La date de fin d'arrêt de travail du précédent arrêt n'est pas définie"
 
+msgctxt "field:beneficiary-extra_data,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:beneficiary-extra_data,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:beneficiary-extra_data,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:beneficiary-extra_data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:beneficiary-extra_data,extra_data_def:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:beneficiary-extra_data,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:beneficiary-extra_data,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:beneficiary-extra_data,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:beneficiary-extra_data,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:beneficiary-extra_data,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:benefit,beneficiary_documents:"
 msgid "Beneficiary Documents"
 msgstr "Documents requis pour les bénéficiaires"
+
+msgctxt "field:benefit,beneficiary_extra_data_def:"
+msgid "Beneficiary Extra Data"
+msgstr "Données complémentaires du bénéficiaire"
+
+msgctxt "field:benefit,manual_share_management:"
+msgid "Manual Share Management"
+msgstr "Gestion manuelle des parts bénéficiaire"
 
 msgctxt "field:benefit-beneficiary_document,benefit:"
 msgid "Benefit"
@@ -113,6 +161,10 @@ msgctxt "field:claim.beneficiary,documents_reception_date:"
 msgid "Documents Reception Date"
 msgstr "Date de réception des documents"
 
+msgctxt "field:claim.beneficiary,extra_data_values:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:claim.beneficiary,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -149,8 +201,12 @@ msgctxt "field:claim.beneficiary,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:claim.indemnification,beneficiary_definition:"
+msgid "Beneficiary Definition"
+msgstr "Definition du bénéficiaire"
+
 msgctxt ""
-"field:claim.indemnification.assistant.control.element,covered_person:"
+"field:claim.indemnification.assista nt.control.element,covered_person:"
 msgid "Covered Person"
 msgstr "Personne Couverte"
 
@@ -158,6 +214,14 @@ msgctxt ""
 "field:claim.indemnification.assistant.validate.element,covered_person:"
 msgid "Covered Person"
 msgstr "Personne Couverte"
+
+msgctxt "field:claim.indemnification_definition,beneficiary_def:"
+msgid "Beneficiary Definition"
+msgstr "Définition du bénéficiaire"
+
+msgctxt "field:claim.indemnification_definition,beneficiary_extra_data:"
+msgid "Beneficiary Extra Data"
+msgstr "Données complémentaires du bénéficiaire"
 
 msgctxt "field:claim.loss,covered_person:"
 msgid "Covered Person"
@@ -222,6 +286,21 @@ msgid ""
 msgstr ""
 "Documents requis pour pouvoir déclencher le paiement des indemnisations"
 
+msgctxt "help:benefit,beneficiary_extra_data_def:"
+msgid ""
+"List of extra data displayed when defining a beneficiary in claim treatment"
+msgstr ""
+"Liste des données complémentaires à saisir lors du traitement d'un sinistre "
+"pour un bénéficiaire"
+
+msgctxt "help:benefit,manual_share_management:"
+msgid ""
+"If set, the beneficiary share treatment has to be handle manually in"
+" the capital computation rule"
+msgstr ""
+"Si cochée, l'affectation de la part du bénéficiaire doit être gérée "
+"manuellement dans la règle de calcul"
+
 msgctxt "help:claim,beneficiaries:"
 msgid ""
 "The beneficiaries for the different services for which they must be set "
@@ -268,6 +347,10 @@ msgid ""
 "beneficiary"
 msgstr "Le pourcentage du montant calculé qui reviendra à ce bénéficiaire"
 
+msgctxt "model:beneficiary-extra_data,name:"
+msgid "Beneficiary to Extra Datas Relation"
+msgstr "Relation bénéficiaire données complémentaire"
+
 msgctxt "model:benefit-beneficiary_document,name:"
 msgid "Benefit - Beneficiary Document"
 msgstr "Relation prestation - Documents bénéficiaires"
@@ -296,13 +379,21 @@ msgctxt "selection:benefit.loss.description,loss_kind:"
 msgid "Short Term"
 msgstr "Incapacité de travail"
 
+msgctxt "selection:extra_data,kind:"
+msgid "Beneficiary"
+msgstr "Bénéficiaire"
+
+msgctxt "view:benefit:"
+msgid "Beneficiary"
+msgstr "Bénéficiaire"
+
 msgctxt "view:claim.beneficiary:"
 msgid "%"
 msgstr "%"
 
 msgctxt "view:claim.beneficiary:"
 msgid "Identify"
-msgstr "Identifier"
+msgstr "Valider l'identification"
 
 msgctxt "view:claim.beneficiary:"
 msgid "Send Letter"

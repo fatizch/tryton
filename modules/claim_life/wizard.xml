@@ -13,5 +13,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="claim_indemnification.indemnification_control_tree_view"/>
             <field name="name">indemnification_control_tree</field>
         </record>
+        <record model="ir.ui.view" id="indemnification_definition_view_form">
+            <field name="model">claim.indemnification_definition</field>
+            <field name="inherit" ref="claim_indemnification.indemnification_definition_view_form"/>
+            <field name="name">indemnification_definition_form</field>
+        </record>
     </data>
 </tryton>

@@ -16,17 +16,22 @@ def register():
         benefit.Benefit,
         benefit.BenefitBeneficiaryDocument,
         benefit.LossDescription,
+        benefit.ExtraData,
+        benefit.BeneficiaryExtraDataRelation,
         contract.ContractOption,
         claim.Claim,
         claim.Loss,
         claim.ClaimService,
         claim.ClaimBeneficiary,
         claim.ClaimServiceExtraDataRevision,
+        claim.Indemnification,
         rule_engine.RuleEngineRuntime,
         test_case.TestCaseModel,
         wizard.IndemnificationValidateElement,
         wizard.IndemnificationControlElement,
+        wizard.IndemnificationDefinition,
         module='claim_life', type_='model')
     Pool.register(
         party.PartyReplace,
+        wizard.CreateIndemnification,
         module='claim_life', type_='wizard')

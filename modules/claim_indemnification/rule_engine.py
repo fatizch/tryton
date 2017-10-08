@@ -43,6 +43,12 @@ class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
 
     @classmethod
+    def get_lowest_level_object(cls, args):
+        if 'indemnification' in args:
+            return args['indemnification']
+        return super(RuleEngineRuntime, cls).get_lowest_level_object(args)
+
+    @classmethod
     def _re_indemnification_period_start_date(cls, args):
         if 'indemnification_detail_start_date' in args:
             return args['indemnification_detail_start_date']
