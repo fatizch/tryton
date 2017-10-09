@@ -446,6 +446,11 @@ class Loss(model.CoogSQL, model.CoogView):
                 'of:\n\n%(losses)s',
                 'prior_declaration_date': 'Declaration date '
                 '%(declaration_date)s is prior to start date %(start_date)s',
+                'no_loss_desc_found': 'No loss description found with the '
+                'code "%(loss_desc_code)s" in the configuration',
+                'no_event_description_on_loss_desc': 'There is no event '
+                'description for the loss description "%(loss_desc)s" '
+                'in the configuration'
                 })
         cls._buttons.update({
                 'draft': {
@@ -612,7 +617,14 @@ class Loss(model.CoogSQL, model.CoogView):
     def init_loss(self, loss_desc_code, **kwargs):
         pool = Pool()
         LossDesc = pool.get('benefit.loss.description')
-        self.loss_desc, = LossDesc.search([('code', '=', loss_desc_code)])
+        loss_descs = LossDesc.search([('code', '=', loss_desc_code)])
+        if not loss_descs:
+            self.raise_user_error('no_loss_desc_found',
+                {'loss_desc_code': loss_desc_code})
+        self.loss_desc = loss_descs[0]
+        if not self.loss_desc.event_descs:
+            self.raise_user_error('no_event_description_on_loss_desc',
+                {'loss_desc': self.loss_desc.rec_name})
         self.event_desc = self.loss_desc.event_descs[0]
         self.extra_data = utils.init_extra_data(self.loss_desc.extra_data_def)
         if not kwargs:
