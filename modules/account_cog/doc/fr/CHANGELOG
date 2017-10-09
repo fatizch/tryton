@@ -1,3 +1,4 @@
+* OTH#0000 Correctif traductions
 * BUG#7181 Ignorer les mouvements comptables dont l'origine est incomplète
 * BUG#6931 La dé-réconciliation se fait désormais récursivement sur toutes les réconciliations liées aux lignes de découpage (dé-réconciliation en cascade)
 * FEA#6377 Séparation de l'initialisation des années fiscale du cas de test au profit d'un assistant d'initialisation

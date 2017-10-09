@@ -328,7 +328,7 @@ msgstr "Découpage"
 
 msgctxt "model:fiscal_year.set,name:"
 msgid "Fiscal Year Set"
-msgstr "Mise à jour des années fiscales"
+msgstr "Création des années fiscales"
 
 msgctxt "model:ir.action,name:act_move_line_party_balance"
 msgid "Party Balance"
@@ -340,7 +340,7 @@ msgstr "Lettrage"
 
 msgctxt "model:ir.action,name:fiscal_year_set_wizard"
 msgid "Set Fiscal Years"
-msgstr "Mise à jour des années fiscales"
+msgstr "Création des années fiscales"
 
 msgctxt "model:ir.action,name:report_aged_balance_ods"
 msgid "Aged Balance ODS"
@@ -364,7 +364,7 @@ msgstr "Jeux d'essai: Création des journaux"
 
 msgctxt "model:ir.ui.menu,name:fiscal_year_set_menu"
 msgid "Set Fiscal Years"
-msgstr "Mise à jour des années fiscales"
+msgstr "Création des années fiscales"
 
 msgctxt "model:ir.ui.menu,name:menu_account"
 msgid "Accounting"
