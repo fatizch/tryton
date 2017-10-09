@@ -1,6 +1,6 @@
-=========================
+==========================
 Import Processes Scenario
-=========================
+==========================
 
 Imports::
 
@@ -10,7 +10,9 @@ Imports::
 
 Install Modules::
 
-    >>> config = activate_modules(['claim_life_process', 'claim_salary_fr'])
+    >>> config = activate_modules(['claim_life_process', 'claim_salary_fr',
+    ...         'claim_group_process', 'underwriting_claim', 'process_rule',
+    ...         'claim_eligibility'])
     >>> User = Model.get('res.user')
     >>> config._context = User.get_preferences(True, config.context)
     >>> test_import_processes()

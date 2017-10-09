@@ -37,13 +37,13 @@
     },
     {
         "__name__": "process.step",
-        "_func_key": "infos_dossier",
+        "_func_key": "infos_dossier_invalidite",
         "authorizations": [],
         "button_domain": "[]",
         "code_after": [
             {
                 "__name__": "process.action",
-                "_func_key": "8",
+                "_func_key": "15",
                 "content": "rule",
                 "method_name": "",
                 "parameters": "",
@@ -59,7 +59,7 @@
             },
             {
                 "__name__": "process.action",
-                "_func_key": "17",
+                "_func_key": "28",
                 "content": "method",
                 "method_name": "activate_losses",
                 "parameters": "",
@@ -72,7 +72,7 @@
             },
             {
                 "__name__": "process.action",
-                "_func_key": "9",
+                "_func_key": "16",
                 "content": "method",
                 "method_name": "deliver_automatic_benefit",
                 "parameters": "",
@@ -89,18 +89,18 @@
         "custom_views": [
             {
                 "__name__": "ir.ui.view.description",
-                "_func_key": "infos_dossier|loss",
+                "_func_key": "infos_dossier_invalidite|loss",
                 "field_childs": null,
-                "header_line": "string=\"\" col=\"4\" ",
+                "header_line": "string=\"Ev\u00e9nement\" ",
                 "input_mode": "classic",
                 "nb_col": 4,
-                "view_content": "<group id=\"group_conf\" col=\"2\" colspan=\"2\">\n<label name=\"claim\"/>\n<field name=\"claim\"/>\n<label name=\"start_date\"/>\n<field name=\"start_date\"/>\n<label name=\"covered_person\"/>\n<field name=\"covered_person\"/>\n<label name=\"end_date\"/>\n<field name=\"end_date\"/>\n<label name=\"loss_desc\"/>\n<field name=\"loss_desc\" widget=\"selection\"/>\n<field name=\"possible_loss_descs\" invisible=\"1\"/>\n<label name=\"event_desc\"/>\n<field name=\"event_desc\" widget=\"selection\"/>\n<label name=\"benefit_to_deliver\"/>\n<field name=\"benefit_to_deliver\" widget=\"selection\"/>\n\n\n</group>\n<newline/>\n<field name=\"benefits\" colspan=\"2\"/>\n<field name=\"services\" colspan=\"2\"/>\n\n",
-                "view_kind": "form",
+                "view_content": "<field name=\"rec_name\" expand=\"1\"/>",
+                "view_kind": "tree",
                 "view_model": {
                     "_func_key": "claim.loss"
                 },
                 "view_name": "loss",
-                "view_string": "Pr\u00e9judice"
+                "view_string": "Ev\u00e9nement"
             }
         ],
         "entering_wizard": null,
@@ -111,9 +111,9 @@
         },
         "pyson": "",
         "static_view": null,
-        "step_xml": "<field name=\"losses\" colspan=\"4\" mode=\"form,tree\" view_ids=\"claim.loss_without_service_view_form\"/>\n\n\n",
+        "step_xml": "<label string=\"S'il y a lieu modifier l'arr\u00eat initial pour d\u00e9finir une date de fin. D\u00e9finissez la date de passage en invalidit\u00e9 en modifiant l'\u00e9venement invalidit\u00e9\" id=\"explication_invalidite\" colspan=\"4\" xalign=\"0\"/>\n<field name=\"losses\" colspan=\"4\"  view_ids=\"_extra_views.step_infos_dossier_invalidite_loss_tree,claim.loss_without_service_view_form\"/>\n",
         "tags": [],
-        "technical_name": "infos_dossier"
+        "technical_name": "infos_dossier_invalidite"
     },
     {
         "__name__": "process.step",
@@ -287,27 +287,6 @@
     },
     {
         "__name__": "process.step",
-        "_func_key": "laisser_en_attente",
-        "authorizations": [],
-        "button_domain": "[]",
-        "code_after": [],
-        "code_before": [],
-        "colspan": 4,
-        "custom_views": [],
-        "entering_wizard": null,
-        "exiting_wizard": null,
-        "fancy_name": "Laisser le dossier ouvert...",
-        "main_model": {
-            "_func_key": "claim"
-        },
-        "pyson": "",
-        "static_view": null,
-        "step_xml": "\n<label string=\"Le sinistre reste ouvert\" id=\"snapshot\" yalign=\"0.0\" xalign=\"0.0\" xexpand=\"1\"/>",
-        "tags": [],
-        "technical_name": "laisser_en_attente"
-    },
-    {
-        "__name__": "process.step",
         "_func_key": "cloture",
         "authorizations": [],
         "button_domain": "[]",
@@ -337,23 +316,44 @@
         "technical_name": "cloture"
     },
     {
+        "__name__": "process.step",
+        "_func_key": "laisser_en_attente",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Laisser le dossier ouvert...",
+        "main_model": {
+            "_func_key": "claim"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "\n<label string=\"Le sinistre reste ouvert\" id=\"snapshot\" yalign=\"0.0\" xalign=\"0.0\" xexpand=\"1\"/>",
+        "tags": [],
+        "technical_name": "laisser_en_attente"
+    },
+    {
         "__name__": "process",
-        "_func_key": "declaration_d_arret_de_travail",
+        "_func_key": "declaration_d_invalidite",
         "all_steps": [
             {
                 "__name__": "process-process.step",
-                "_func_key": "infos_dossier|declaration_d_arret_de_travail",
-                "order": 2,
+                "_func_key": "infos_dossier_invalidite|declaration_d_invalidite",
+                "order": 27,
                 "status": null,
                 "step": {
                     "__name__": "process.step",
-                    "_func_key": "infos_dossier"
+                    "_func_key": "infos_dossier_invalidite"
                 }
             },
             {
                 "__name__": "process-process.step",
-                "_func_key": "verification_des_droits|declaration_d_arret_de_travail",
-                "order": 16,
+                "_func_key": "verification_des_droits|declaration_d_invalidite",
+                "order": 28,
                 "status": null,
                 "step": {
                     "__name__": "process.step",
@@ -362,8 +362,8 @@
             },
             {
                 "__name__": "process-process.step",
-                "_func_key": "en_attente_de_pieces|declaration_d_arret_de_travail",
-                "order": 22,
+                "_func_key": "en_attente_de_pieces|declaration_d_invalidite",
+                "order": 30,
                 "status": null,
                 "step": {
                     "__name__": "process.step",
@@ -372,8 +372,8 @@
             },
             {
                 "__name__": "process-process.step",
-                "_func_key": "salaires|declaration_d_arret_de_travail",
-                "order": 23,
+                "_func_key": "salaires|declaration_d_invalidite",
+                "order": 31,
                 "status": null,
                 "step": {
                     "__name__": "process.step",
@@ -382,8 +382,8 @@
             },
             {
                 "__name__": "process-process.step",
-                "_func_key": "prestations|declaration_d_arret_de_travail",
-                "order": 24,
+                "_func_key": "prestations|declaration_d_invalidite",
+                "order": 32,
                 "status": null,
                 "step": {
                     "__name__": "process.step",
@@ -392,8 +392,8 @@
             },
             {
                 "__name__": "process-process.step",
-                "_func_key": "ordonnancement|declaration_d_arret_de_travail",
-                "order": 25,
+                "_func_key": "ordonnancement|declaration_d_invalidite",
+                "order": 33,
                 "status": null,
                 "step": {
                     "__name__": "process.step",
@@ -402,22 +402,22 @@
             },
             {
                 "__name__": "process-process.step",
-                "_func_key": "laisser_en_attente|declaration_d_arret_de_travail",
-                "order": 27,
-                "status": null,
-                "step": {
-                    "__name__": "process.step",
-                    "_func_key": "laisser_en_attente"
-                }
-            },
-            {
-                "__name__": "process-process.step",
-                "_func_key": "cloture|declaration_d_arret_de_travail",
-                "order": 28,
+                "_func_key": "cloture|declaration_d_invalidite",
+                "order": 34,
                 "status": null,
                 "step": {
                     "__name__": "process.step",
                     "_func_key": "cloture"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "laisser_en_attente|declaration_d_invalidite",
+                "order": 35,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "laisser_en_attente"
                 }
             }
         ],
@@ -426,15 +426,22 @@
         "custom_transitions": true,
         "delete_button": "",
         "end_step_name": "Terminer",
-        "fancy_name": "D\u00e9claration d'arr\u00eat de travail",
+        "fancy_name": "Declaration d'invalidit\u00e9",
         "for_loss_descs": [
+            {
+                "_func_key": "invalidite",
+                "code": "invalidite",
+                "name": "Invalidité",
+                "loss_kind": "ltd",
+                "item_kind": "person"
+            }
         ],
         "hide_main_menu": false,
         "hide_main_toolbar": true,
         "hold_button": "Suspendre",
         "kind": "claim_declaration",
         "menu_icon": "tryton-open",
-        "menu_name": "D\u00e9claration d'arr\u00eat de travail",
+        "menu_name": "Declaration d'invalidit\u00e9",
         "on_model": {
             "_func_key": "claim"
         },
@@ -443,11 +450,11 @@
         "step_button_group_position": "right",
         "steps_implicitly_available": false,
         "tags": [],
-        "technical_name": "declaration_d_arret_de_travail",
+        "technical_name": "declaration_d_invalidite",
         "transitions": [
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|salaires|infos_dossier",
+                "_func_key": "declaration_d_invalidite|salaires|infos_dossier_invalidite",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -458,17 +465,17 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 54,
+                "priority": 29,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
                 "to_step": {
-                    "_func_key": "infos_dossier"
+                    "_func_key": "infos_dossier_invalidite"
                 }
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|salaires|prestations",
+                "_func_key": "declaration_d_invalidite|salaires|prestations",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -479,8 +486,8 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 55,
-                "pyson": "~Bool(Eval('delivered_services'))",
+                "priority": 30,
+                "pyson": "~Bool(Eval('delivered_services')) and ~Bool(Eval('doc_received'))",
                 "pyson_choice": "",
                 "pyson_description": "",
                 "to_step": {
@@ -489,7 +496,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|prestations|ordonnancement",
+                "_func_key": "declaration_d_invalidite|prestations|ordonnancement",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -500,7 +507,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 56,
+                "priority": 31,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -510,7 +517,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|ordonnancement|prestations",
+                "_func_key": "declaration_d_invalidite|ordonnancement|prestations",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -521,7 +528,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 57,
+                "priority": 32,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -531,7 +538,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|ordonnancement|cloture",
+                "_func_key": "declaration_d_invalidite|ordonnancement|cloture",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -542,7 +549,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 58,
+                "priority": 33,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -552,7 +559,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|cloture|None",
+                "_func_key": "declaration_d_invalidite|cloture|None",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -563,7 +570,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": "Terminer",
-                "priority": 59,
+                "priority": 34,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -571,7 +578,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|ordonnancement|laisser_en_attente",
+                "_func_key": "declaration_d_invalidite|ordonnancement|laisser_en_attente",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -583,7 +590,7 @@
                 "methods": [
                     {
                         "__name__": "process.action",
-                        "_func_key": "45",
+                        "_func_key": "46",
                         "content": "rule",
                         "method_name": "",
                         "parameters": "",
@@ -599,7 +606,7 @@
                     }
                 ],
                 "name": null,
-                "priority": 60,
+                "priority": 35,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -609,7 +616,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|laisser_en_attente|None",
+                "_func_key": "declaration_d_invalidite|laisser_en_attente|None",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -620,7 +627,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": "Terminer",
-                "priority": 61,
+                "priority": 36,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -628,7 +635,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|prestations|salaires",
+                "_func_key": "declaration_d_invalidite|prestations|salaires",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -639,7 +646,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 62,
+                "priority": 37,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -649,7 +656,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|prestations|infos_dossier",
+                "_func_key": "declaration_d_invalidite|prestations|infos_dossier_invalidite",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -660,17 +667,17 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 63,
+                "priority": 38,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
                 "to_step": {
-                    "_func_key": "infos_dossier"
+                    "_func_key": "infos_dossier_invalidite"
                 }
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|cloture|ordonnancement",
+                "_func_key": "declaration_d_invalidite|cloture|ordonnancement",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -681,7 +688,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 64,
+                "priority": 40,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -691,19 +698,19 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|infos_dossier|verification_des_droits",
+                "_func_key": "declaration_d_invalidite|infos_dossier_invalidite|verification_des_droits",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
                 "from_step": {
-                    "_func_key": "infos_dossier"
+                    "_func_key": "infos_dossier_invalidite"
                 },
                 "kind": "standard",
                 "method_kind": "add",
                 "methods": [
                     {
                         "__name__": "process.action",
-                        "_func_key": "48",
+                        "_func_key": "50",
                         "content": "method",
                         "method_name": "activate_underwritings_if_needed",
                         "parameters": "",
@@ -716,7 +723,7 @@
                     }
                 ],
                 "name": null,
-                "priority": 65,
+                "priority": 41,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -726,7 +733,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|verification_des_droits|salaires",
+                "_func_key": "declaration_d_invalidite|verification_des_droits|salaires",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -737,7 +744,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 66,
+                "priority": 42,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -747,7 +754,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|verification_des_droits|infos_dossier",
+                "_func_key": "declaration_d_invalidite|verification_des_droits|infos_dossier_invalidite",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -758,17 +765,17 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 67,
+                "priority": 43,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
                 "to_step": {
-                    "_func_key": "infos_dossier"
+                    "_func_key": "infos_dossier_invalidite"
                 }
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|salaires|verification_des_droits",
+                "_func_key": "declaration_d_invalidite|salaires|verification_des_droits",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -779,7 +786,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 68,
+                "priority": 44,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -789,7 +796,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|prestations|verification_des_droits",
+                "_func_key": "declaration_d_invalidite|prestations|verification_des_droits",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -800,7 +807,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 69,
+                "priority": 45,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -810,7 +817,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|salaires|en_attente_de_pieces",
+                "_func_key": "declaration_d_invalidite|salaires|en_attente_de_pieces",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -821,7 +828,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 70,
+                "priority": 46,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -831,7 +838,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|en_attente_de_pieces|prestations",
+                "_func_key": "declaration_d_invalidite|en_attente_de_pieces|prestations",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -842,7 +849,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 71,
+                "priority": 47,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -852,7 +859,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|en_attente_de_pieces|salaires",
+                "_func_key": "declaration_d_invalidite|en_attente_de_pieces|salaires",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -863,7 +870,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 72,
+                "priority": 48,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -873,7 +880,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|en_attente_de_pieces|infos_dossier",
+                "_func_key": "declaration_d_invalidite|en_attente_de_pieces|infos_dossier_invalidite",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -884,17 +891,17 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 73,
+                "priority": 49,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
                 "to_step": {
-                    "_func_key": "infos_dossier"
+                    "_func_key": "infos_dossier_invalidite"
                 }
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|en_attente_de_pieces|verification_des_droits",
+                "_func_key": "declaration_d_invalidite|en_attente_de_pieces|verification_des_droits",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -905,7 +912,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 74,
+                "priority": 54,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -915,7 +922,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|verification_des_droits|cloture",
+                "_func_key": "declaration_d_invalidite|verification_des_droits|cloture",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -926,8 +933,8 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 75,
-                "pyson": "",
+                "priority": 56,
+                "pyson": "Bool(Eval('delivered_services')) and ~Bool(Eval('is_services_deductible'))",
                 "pyson_choice": "",
                 "pyson_description": "",
                 "to_step": {
@@ -936,7 +943,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|verification_des_droits|prestations",
+                "_func_key": "declaration_d_invalidite|verification_des_droits|prestations",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -947,7 +954,7 @@
                 "method_kind": "add",
                 "methods": [],
                 "name": null,
-                "priority": 76,
+                "priority": 57,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
@@ -957,280 +964,7 @@
             },
             {
                 "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|verification_des_droits|en_attente_de_pieces",
-                "authorizations": [],
-                "choice_if_false": null,
-                "choice_if_true": null,
-                "from_step": {
-                    "_func_key": "verification_des_droits"
-                },
-                "kind": "standard",
-                "method_kind": "add",
-                "methods": [],
-                "name": null,
-                "priority": 77,
-                "pyson": "",
-                "pyson_choice": "",
-                "pyson_description": "",
-                "to_step": {
-                    "_func_key": "en_attente_de_pieces"
-                }
-            },
-            {
-                "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|en_attente_de_pieces|ordonnancement",
-                "authorizations": [],
-                "choice_if_false": null,
-                "choice_if_true": null,
-                "from_step": {
-                    "_func_key": "en_attente_de_pieces"
-                },
-                "kind": "standard",
-                "method_kind": "add",
-                "methods": [],
-                "name": null,
-                "priority": 78,
-                "pyson": "",
-                "pyson_choice": "",
-                "pyson_description": "",
-                "to_step": {
-                    "_func_key": "ordonnancement"
-                }
-            },
-            {
-                "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|en_attente_de_pieces|cloture",
-                "authorizations": [],
-                "choice_if_false": null,
-                "choice_if_true": null,
-                "from_step": {
-                    "_func_key": "en_attente_de_pieces"
-                },
-                "kind": "standard",
-                "method_kind": "add",
-                "methods": [],
-                "name": null,
-                "priority": 79,
-                "pyson": "",
-                "pyson_choice": "",
-                "pyson_description": "",
-                "to_step": {
-                    "_func_key": "cloture"
-                }
-            },
-            {
-                "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|salaires|ordonnancement",
-                "authorizations": [],
-                "choice_if_false": null,
-                "choice_if_true": null,
-                "from_step": {
-                    "_func_key": "salaires"
-                },
-                "kind": "standard",
-                "method_kind": "add",
-                "methods": [],
-                "name": null,
-                "priority": 80,
-                "pyson": "",
-                "pyson_choice": "",
-                "pyson_description": "",
-                "to_step": {
-                    "_func_key": "ordonnancement"
-                }
-            },
-            {
-                "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|salaires|laisser_en_attente",
-                "authorizations": [],
-                "choice_if_false": null,
-                "choice_if_true": null,
-                "from_step": {
-                    "_func_key": "salaires"
-                },
-                "kind": "standard",
-                "method_kind": "add",
-                "methods": [],
-                "name": null,
-                "priority": 81,
-                "pyson": "",
-                "pyson_choice": "",
-                "pyson_description": "",
-                "to_step": {
-                    "_func_key": "laisser_en_attente"
-                }
-            },
-            {
-                "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|salaires|cloture",
-                "authorizations": [],
-                "choice_if_false": null,
-                "choice_if_true": null,
-                "from_step": {
-                    "_func_key": "salaires"
-                },
-                "kind": "standard",
-                "method_kind": "add",
-                "methods": [],
-                "name": null,
-                "priority": 82,
-                "pyson": "",
-                "pyson_choice": "",
-                "pyson_description": "",
-                "to_step": {
-                    "_func_key": "cloture"
-                }
-            },
-            {
-                "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|prestations|en_attente_de_pieces",
-                "authorizations": [],
-                "choice_if_false": null,
-                "choice_if_true": null,
-                "from_step": {
-                    "_func_key": "prestations"
-                },
-                "kind": "standard",
-                "method_kind": "add",
-                "methods": [],
-                "name": null,
-                "priority": 83,
-                "pyson": "",
-                "pyson_choice": "",
-                "pyson_description": "",
-                "to_step": {
-                    "_func_key": "en_attente_de_pieces"
-                }
-            },
-            {
-                "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|prestations|cloture",
-                "authorizations": [],
-                "choice_if_false": null,
-                "choice_if_true": null,
-                "from_step": {
-                    "_func_key": "prestations"
-                },
-                "kind": "standard",
-                "method_kind": "add",
-                "methods": [],
-                "name": null,
-                "priority": 84,
-                "pyson": "",
-                "pyson_choice": "",
-                "pyson_description": "",
-                "to_step": {
-                    "_func_key": "cloture"
-                }
-            },
-            {
-                "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|prestations|laisser_en_attente",
-                "authorizations": [],
-                "choice_if_false": null,
-                "choice_if_true": null,
-                "from_step": {
-                    "_func_key": "prestations"
-                },
-                "kind": "standard",
-                "method_kind": "add",
-                "methods": [],
-                "name": null,
-                "priority": 85,
-                "pyson": "",
-                "pyson_choice": "",
-                "pyson_description": "",
-                "to_step": {
-                    "_func_key": "laisser_en_attente"
-                }
-            },
-            {
-                "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|ordonnancement|infos_dossier",
-                "authorizations": [],
-                "choice_if_false": null,
-                "choice_if_true": null,
-                "from_step": {
-                    "_func_key": "ordonnancement"
-                },
-                "kind": "standard",
-                "method_kind": "add",
-                "methods": [],
-                "name": null,
-                "priority": 86,
-                "pyson": "",
-                "pyson_choice": "",
-                "pyson_description": "",
-                "to_step": {
-                    "_func_key": "infos_dossier"
-                }
-            },
-            {
-                "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|ordonnancement|verification_des_droits",
-                "authorizations": [],
-                "choice_if_false": null,
-                "choice_if_true": null,
-                "from_step": {
-                    "_func_key": "ordonnancement"
-                },
-                "kind": "standard",
-                "method_kind": "add",
-                "methods": [],
-                "name": null,
-                "priority": 87,
-                "pyson": "",
-                "pyson_choice": "",
-                "pyson_description": "",
-                "to_step": {
-                    "_func_key": "verification_des_droits"
-                }
-            },
-            {
-                "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|ordonnancement|en_attente_de_pieces",
-                "authorizations": [],
-                "choice_if_false": null,
-                "choice_if_true": null,
-                "from_step": {
-                    "_func_key": "ordonnancement"
-                },
-                "kind": "standard",
-                "method_kind": "add",
-                "methods": [],
-                "name": null,
-                "priority": 88,
-                "pyson": "",
-                "pyson_choice": "",
-                "pyson_description": "",
-                "to_step": {
-                    "_func_key": "en_attente_de_pieces"
-                }
-            },
-            {
-                "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|ordonnancement|salaires",
-                "authorizations": [],
-                "choice_if_false": null,
-                "choice_if_true": null,
-                "from_step": {
-                    "_func_key": "ordonnancement"
-                },
-                "kind": "standard",
-                "method_kind": "add",
-                "methods": [],
-                "name": null,
-                "priority": 89,
-                "pyson": "",
-                "pyson_choice": "",
-                "pyson_description": "",
-                "to_step": {
-                    "_func_key": "salaires"
-                }
-            },
-            {
-                "__name__": "process.transition",
-                "_func_key": "declaration_d_arret_de_travail|None|infos_dossier",
+                "_func_key": "declaration_d_invalidite|None|infos_dossier_invalidite",
                 "authorizations": [],
                 "choice_if_false": null,
                 "choice_if_true": null,
@@ -1240,10 +974,10 @@
                 "methods": [
                     {
                         "__name__": "process.action",
-                        "_func_key": "24",
+                        "_func_key": "26",
                         "content": "method",
-                        "method_name": "add_new_loss",
-                        "parameters": "'arret_de_travail'",
+                        "method_name": "add_new_long_term_disability",
+                        "parameters": "'invalidite'",
                         "parent_step": null,
                         "rule": null,
                         "rule_extra_data": {},
@@ -1253,12 +987,12 @@
                     }
                 ],
                 "name": "",
-                "priority": 90,
+                "priority": 58,
                 "pyson": "",
                 "pyson_choice": "",
                 "pyson_description": "",
                 "to_step": {
-                    "_func_key": "infos_dossier"
+                    "_func_key": "infos_dossier_invalidite"
                 }
             }
         ],
