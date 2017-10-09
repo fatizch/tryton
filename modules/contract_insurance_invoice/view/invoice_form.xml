@@ -22,8 +22,4 @@ this repository contains the full copyright notices and license terms. -->
         <label name="fees" xalign="1.0" xexpand="1"/>
         <field name="fees" xalign="1.0" xexpand="0"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='invoice']/group[@id='taxes_amount_state_buttons']/group[@id='amount_state_buttons']/group[@id='reconciled_state']/field[@name='state']" position="after">
-        <label name="reconciliation_date"/>
-        <field name="reconciliation_date"/>
-    </xpath>
 </data>

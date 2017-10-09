@@ -36,7 +36,7 @@ class Contract:
         Option._compute_commission_recovery(
             self.options + self.covered_element_options)
 
-    def rebill(self, start=None, end=None, post_end=None):
+    def rebill(self, start, end=None, post_end=None):
         super(Contract, self).rebill(start, end, post_end)
         if self.status in ['void', 'terminated']:
             self.calculate_commission_recovery()

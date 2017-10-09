@@ -3,8 +3,8 @@
 from collections import defaultdict
 import datetime
 
-from sql import Null, Literal, Cast
-from sql.aggregate import Sum, Max
+from sql import Null, Literal
+from sql.aggregate import Sum
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 from trytond.tools import grouped_slice
@@ -14,7 +14,7 @@ from trytond.pyson import Eval, Bool, Not
 from trytond.wizard import Wizard, StateView, Button
 from trytond.model import ModelView, Workflow
 
-from trytond.modules.coog_core import utils, model, fields, coog_sql
+from trytond.modules.coog_core import utils, model, fields
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
 
 __metaclass__ = PoolMeta
@@ -62,10 +62,6 @@ class Invoice:
             digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits', 'contract_invoice']),
         'get_fees')
-    reconciliation_date = fields.Function(
-        fields.Date('Reconciliation Date',
-            states={'invisible': ~Eval('reconciliation_date')}),
-        'get_reconciliation_date')
 
     @classmethod
     def __setup__(cls):
@@ -413,36 +409,6 @@ class Invoice:
     def print_invoice(self):
         # Use Coog report_engine module instead
         return
-
-    @classmethod
-    def get_reconciliation_date(cls, invoices, name):
-        pool = Pool()
-        cursor = Transaction().connection.cursor()
-        reconciliation = pool.get('account.move.reconciliation').__table__()
-        line = pool.get('account.move.line').__table__()
-        move = pool.get('account.move').__table__()
-        invoice_table = cls.__table__()
-
-        result = {x.id: None for x in invoices}
-
-        for invoices_slice in grouped_slice(invoices):
-            query_table = reconciliation.join(line, condition=(
-                    line.reconciliation == reconciliation.id)
-                ).join(move, condition=(
-                    line.move == move.id)
-                ).join(invoice_table, condition=(
-                    move.origin == coog_sql.TextCat(cls.__name__ + ',',
-                        Cast(invoice_table.id, 'VARCHAR'))))
-
-            cursor.execute(*query_table.select(invoice_table.id,
-                Max(reconciliation.create_date),
-                where=((invoice_table.id.in_([x.id for x in invoices_slice])) &
-                    (invoice_table.state == 'paid')),
-                group_by=[invoice_table.id]))
-
-            for k, v in cursor.fetchall():
-                result[k] = v.date()
-        return result
 
 
 class InvoiceLine:

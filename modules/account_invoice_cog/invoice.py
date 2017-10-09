@@ -2,13 +2,16 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 
+from sql import Cast
+from sql.aggregate import Max
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If
+from trytond.tools import grouped_slice
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 
-from trytond.modules.coog_core import export, fields, model, utils
+from trytond.modules.coog_core import export, fields, model, utils, coog_sql
 from trytond.modules.report_engine import Printable
 
 __metaclass__ = PoolMeta
@@ -64,7 +67,9 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
         states={'readonly': Eval('state') != 'draft'}, depends=['state'])
     business_kind_string = business_kind.translated('business_kind')
     reconciliation_date = fields.Function(
-        fields.Date('Reconciliation Date'), 'get_reconciliation_date')
+        fields.Date('Reconciliation Date',
+            states={'invisible': ~Eval('reconciliation_date')}),
+        'get_reconciliation_date')
     taxes_included = fields.Function(
         fields.Boolean('Taxes Included'),
         loader='get_taxes_included')
@@ -109,14 +114,35 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
                 ),
             ]
 
-    def get_reconciliation_date(self, name):
-        dates = []
-        for line in self.lines_to_pay:
-            if line.reconciliation:
-                dates.append(line.reconciliation.create_date)
-        if not dates:
-            return None
-        return max(dates)
+    @classmethod
+    def get_reconciliation_date(cls, invoices, name):
+        pool = Pool()
+        cursor = Transaction().connection.cursor()
+        reconciliation = pool.get('account.move.reconciliation').__table__()
+        line = pool.get('account.move.line').__table__()
+        move = pool.get('account.move').__table__()
+        invoice_table = cls.__table__()
+
+        result = {x.id: None for x in invoices}
+
+        for invoices_slice in grouped_slice(invoices):
+            query_table = reconciliation.join(line, condition=(
+                    line.reconciliation == reconciliation.id)
+                ).join(move, condition=(
+                    line.move == move.id)
+                ).join(invoice_table, condition=(
+                    move.origin == coog_sql.TextCat(cls.__name__ + ',',
+                        Cast(invoice_table.id, 'VARCHAR'))))
+
+            cursor.execute(*query_table.select(invoice_table.id,
+                Max(reconciliation.create_date),
+                where=((invoice_table.id.in_([x.id for x in invoices_slice])) &
+                    (invoice_table.state == 'paid')),
+                group_by=[invoice_table.id]))
+
+            for k, v in cursor.fetchall():
+                result[k] = v.date()
+        return result
 
     @classmethod
     def validate(cls, invoices):

@@ -44,7 +44,7 @@ class ProductQuoteNumberSequence(model.CoogSQL, CompanyValueMixin):
         select=True)
     quote_number_sequence = fields.Many2One('ir.sequence',
         'Quote Number Sequence', domain=[('code', '=', 'quote'),
-            ('company', '=', Eval('company', -1))],
+            ('company', '=', Eval('company', -1))], ondelete='RESTRICT',
         depends=['company'])
 
     @classmethod

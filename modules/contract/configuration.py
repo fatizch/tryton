@@ -44,7 +44,7 @@ class ConfigurationDefaultQuoteNumberSequence(model.CoogSQL,
     configuration = fields.Many2One('offered.configuration', 'Configuration',
         ondelete='CASCADE', select=True)
     default_quote_number_sequence = fields.Many2One('ir.sequence',
-        'Default Quote Number Sequence',
+        'Default Quote Number Sequence', ondelete='RESTRICT',
         domain=[
             ('code', '=', 'quote'),
             ('company', '=', Eval('context', {}).get('company', -1)),

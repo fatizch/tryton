@@ -161,7 +161,8 @@ class ConfigurationSnapshotSequence(model.CoogSQL, CompanyValueMixin):
     configuration = fields.Many2One('account.configuration', 'Configuration',
         ondelete='CASCADE', select=True)
     snapshot_sequence = fields.Many2One('ir.sequence',
-        'Snapshot Sequence', domain=[('code', '=', 'account.move.snapshot')])
+        'Snapshot Sequence', domain=[('code', '=', 'account.move.snapshot')],
+        ondelete='RESTRICT')
 
     @classmethod
     def __register__(cls, module_name):

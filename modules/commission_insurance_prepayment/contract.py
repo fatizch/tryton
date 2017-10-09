@@ -92,7 +92,7 @@ class Contract:
         Commission.delete(to_delete)
         Commission.save(to_save)
 
-    def rebill(self, start=None, end=None, post_end=None):
+    def rebill(self, start, end=None, post_end=None):
         start_date = start if start and start != datetime.date.min else \
             self.initial_start_date
         end_date = end or min(

@@ -847,7 +847,8 @@ class ConfigurationDirectDebitJournal(model.CoogSQL, CompanyValueMixin):
     configuration = fields.Many2One('account.configuration', 'Configuration',
         ondelete='CASCADE', select=True)
     direct_debit_journal = fields.Many2One('account.payment.journal',
-        'Direct Debit Journal', domain=[('process_method', '!=', 'manual')])
+        'Direct Debit Journal', domain=[('process_method', '!=', 'manual')],
+        ondelete='RESTRICT')
 
     @classmethod
     def __register__(cls, module_name):
@@ -874,7 +875,8 @@ class ConfigurationRejectFeeJournal(model.CoogSQL, CompanyValueMixin):
     configuration = fields.Many2One('account.configuration', 'Configuration',
         ondelete='CASCADE', select=True)
     reject_fee_journal = fields.Many2One('account.journal',
-        'Reject Fee Journal', domain=[('type', '=', 'write-off')])
+        'Reject Fee Journal', domain=[('type', '=', 'write-off')],
+        ondelete='RESTRICT')
 
     @classmethod
     def __register__(cls, module_name):

@@ -32,4 +32,8 @@ this repository contains the full copyright notices and license terms. -->
         <field name="form_color"/>
         </group>
     </xpath>
+    <xpath expr="//group[@id='reconciled_state']/field[@name='state']" position="after">
+        <label name="reconciliation_date"/>
+        <field name="reconciliation_date"/>
+    </xpath>
 </data>

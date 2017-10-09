@@ -2432,7 +2432,7 @@ class EndorsementConfigurationNumberSequence(model.CoogSQL, CompanyValueMixin):
     configuration = fields.Many2One('endorsement.configuration',
         'Endorsement Configuration', ondelete='CASCADE', select=True)
     endorsement_number_sequence = fields.Many2One('ir.sequence',
-        'Endorsement Number Sequence')
+        'Endorsement Number Sequence', ondelete='RESTRICT')
 
     @classmethod
     def __register__(cls, module_name):
