@@ -68,7 +68,7 @@ class ImportProcess(model.CoogWizard):
             filepath = os.path.normpath(to_import.path)
             if not filepath or not to_import.to_install:
                 continue
-            with file_open(filepath, 'r') as f_:
+            with file_open(filepath, 'rb') as f_:
                 values = f_.read()
                 ExportImportMixin.import_json(str(values))
         return 'end'
