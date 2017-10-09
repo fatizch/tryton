@@ -14,6 +14,7 @@ def register():
         process.Process,
         process.ProcessUnderwritingType,
         process.UnderwritingStartFindProcess,
+        process.UnderwritingStartFindProcessResult,
         event.EventTypeAction,
         wizard.ImportProcessSelect,
         module='underwriting_process', type_='model')

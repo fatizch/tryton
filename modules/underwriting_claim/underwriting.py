@@ -33,17 +33,23 @@ class Underwriting:
         fields.Char('Insurers'),
         'get_insurers_names')
 
+    @classmethod
+    def __setup__(cls):
+        super(Underwriting, cls).__setup__()
+        cls.on_object.selection.append(('claim', 'Claim'))
+
+    def get_possible_result_targets(self):
+        if (not self.on_object or self.on_object.__name__ != 'claim'
+                or self.on_object.id < 0):
+            return super(Underwriting, self).get_possible_result_targets()
+        return [x for l in self.on_object.losses for x in l.services]
+
     def get_insurers(self, name):
         return list(set([x.service.option.coverage.insurer.id
                     for x in self.results if x.service and x.service.option]))
 
     def get_insurers_names(self, name):
         return ', '.join(x.rec_name for x in self.insurers)
-
-    @classmethod
-    def __setup__(cls):
-        super(Underwriting, cls).__setup__()
-        cls.on_object.selection.append(('claim', 'Claim'))
 
     def add_document(self, document_desc, data):
         line = super(Underwriting, self).add_document(document_desc, data)
@@ -61,7 +67,7 @@ class UnderwritingResult:
                 'invisible': ~Eval('is_claim'),
                 'readonly': Len(Eval('possible_claims', [])) <= 1,
                 },
-            domain=[If(Bool(Eval('is_claim')),
+            domain=[If(Eval('claim') & Bool(Eval('is_claim')),
                     ['id', 'in', Eval('possible_claims')], [])],
             depends=['is_claim', 'possible_claims']),
         'get_claim', 'setter_void')

@@ -19,6 +19,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="process_cog.process_parameters_form"/>
             <field name="name">underwriting_start_find_process_form</field>
         </record>
+        <!-- ########################################## -->
+        <!-- # Underwriting Start Find Process Result # -->
+        <!-- ########################################## -->
+        <record model="ir.ui.view" id="underwriting_start_find_process_result_view_list">
+            <field name="model">underwriting.start.find_process.result</field>
+            <field name="type">tree</field>
+            <field name="name">underwriting_start_find_process_result_list</field>
+        </record>
         <!-- ###################### -->
         <!-- # Underwriting Start # -->
         <!-- ###################### -->

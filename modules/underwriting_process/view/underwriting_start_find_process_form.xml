@@ -5,10 +5,13 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/label[@name='good_process']" position="before">
         <newline/>
         <label name="underwriting_type"/>
-        <field name="underwriting_type" colspan="3" widget="selection"/>
+        <field name="underwriting_type" widget="selection"/>
+        <label name="effective_date"/>
+        <field name="effective_date"/>
         <label name="party"/>
         <field name="party" colspan="3"/>
         <label name="parent"/>
         <field name="parent" colspan="3"/>
+        <field name="results" colspan="4" expand_toolbar="0"/>
     </xpath>
 </data>

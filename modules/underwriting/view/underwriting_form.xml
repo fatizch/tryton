@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <form>
     <label name="type_"/>
-    <field name="type_"/>
+    <field name="type_" widget="selection"/>
     <label name="party"/>
     <field name="party"/>
     <label name="on_object"/>
@@ -12,6 +12,9 @@ this repository contains the full copyright notices and license terms. -->
     <field name="state"/>
     <group id="results_draft" string="" colspan="4" yexpand="1" yfill="1">
         <field name="results" colspan="4"/>
+        <label name="new_result"/>
+        <field name="new_result" colspan="2"/>
+        <button string="Add" name="add_new_result" icon="tryton-new"/>
     </group>
     <group id="results_other" string="" colspan="4" yexpand="1" yfill="1">
         <separator name="results" colspan="4"/>

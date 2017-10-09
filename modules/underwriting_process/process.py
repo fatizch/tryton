@@ -13,6 +13,7 @@ __all__ = [
     'UnderwritingStart',
     'ProcessUnderwritingType',
     'UnderwritingStartFindProcess',
+    'UnderwritingStartFindProcessResult',
     ]
 
 
@@ -52,10 +53,9 @@ class UnderwritingStart(ProcessFinder):
 
     __name__ = 'underwriting.start'
 
-    @classmethod
-    def default_model(cls):
-        Start = Pool().get(cls.get_parameters_model())
-        defaults = super(UnderwritingStart, cls).default_model()
+    def default_process_parameters(self, name):
+        Start = Pool().get(self.get_parameters_model())
+        defaults = {}
         models = {x[0] for x in Start.selection_parent()}
         active_model = Transaction().context.get('active_model', None)
         active_id = Transaction().context.get('active_id', None)
@@ -84,16 +84,33 @@ class UnderwritingStart(ProcessFinder):
                 obj.on_object = process_param.parent
         return res, errs
 
+    def finalize_main_object(self, underwriting):
+        if not self.process_parameters.results:
+            return
+        results = []
+        for result in self.process_parameters.results:
+            if not result.selected:
+                continue
+            results.append(result.new_result(underwriting, self))
+        if results:
+            underwriting.results = results
+            underwriting.save()
+        underwriting.create_documents([underwriting])
+
 
 class UnderwritingStartFindProcess(ProcessStart):
     'Underwriting Process - Find Process'
 
     __name__ = 'underwriting.start.find_process'
 
+    effective_date = fields.Date('Effective Date')
     party = fields.Many2One('party.party', 'Party')
     underwriting_type = fields.Many2One('underwriting.type', 'Type',
         required=True)
     parent = fields.Reference('For Object', 'selection_parent')
+    results = fields.One2Many('underwriting.start.find_process.result', None,
+        'Results', readonly=True, states={
+            'invisible': ~Eval('parent') | ~Eval('party')})
 
     @classmethod
     def default_model(cls):
@@ -104,6 +121,22 @@ class UnderwritingStartFindProcess(ProcessStart):
     def on_change_with_good_process(self):
         return super(UnderwritingStartFindProcess,
             self).on_change_with_good_process()
+
+    @fields.depends('parent', 'party')
+    def on_change_parent(self):
+        pool = Pool()
+        Underwriting = pool.get('underwriting')
+        Result = pool.get('underwriting.start.find_process.result')
+        if not self.party or not self.parent or not self.parent.id >= 0:
+            self.results = []
+            return
+
+        fake_underwriting = Underwriting(on_object=self.parent,
+            party=self.party)
+        results = []
+        for elem in fake_underwriting.get_possible_result_targets():
+            results.append(Result.new_target(elem))
+        self.results = results
 
     @classmethod
     def selection_parent(cls):
@@ -128,4 +161,26 @@ class UnderwritingStartFindProcess(ProcessStart):
         result = super(
             UnderwritingStartFindProcess, cls).build_process_depends()
         result.append('underwriting_type')
+        return result
+
+
+class UnderwritingStartFindProcessResult(model.CoogView):
+    'Underwriting Process Possible Result'
+    __name__ = 'underwriting.start.find_process.result'
+
+    selected = fields.Boolean('Selected')
+    name = fields.Char('Name', readonly=True)
+    target = fields.Char('Target', readonly=True)
+
+    @classmethod
+    def new_target(cls, target):
+        return cls(selected=False, name=target.rec_name, target=str(target))
+
+    def new_result(self, underwriting, wizard):
+        result = Pool().get('underwriting.result')()
+        result.target = self.target
+        result.effective_decision_date = \
+            wizard.process_parameters.effective_date
+        result.underwriting = underwriting
+        result.on_change_underwriting()
         return result

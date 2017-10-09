@@ -56,6 +56,10 @@ msgctxt "field:underwriting,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt "field:underwriting,new_result:"
+msgid "New result"
+msgstr "Nouvelle entrée"
+
 msgctxt "field:underwriting,on_object:"
 msgid "For Object"
 msgstr "Pour l'Objet"
@@ -637,6 +641,10 @@ msgstr "Finaliser"
 msgctxt "view:underwriting:"
 msgid "Complete"
 msgstr "Terminer"
+
+msgctxt "view:underwriting:"
+msgid "Add"
+msgstr "Ajouter"
 
 msgctxt "view:underwriting:"
 msgid "Draft"

@@ -258,6 +258,12 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
     effective_date = fields.Function(
         fields.Date('Effetive Date'),
         'getter_effective_date', searcher='search_effective_date')
+    new_result = fields.Function(
+        fields.Selection('select_possible_results', 'New result',
+            states={'readonly': Eval('state') != 'draft',
+                'invisible': Eval('state') != 'draft'},
+            depends=['state']),
+        'getter_new_result', 'setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -275,6 +281,10 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
                     },
                 'plan_button': {},
                 'generic_send_letter': {},
+                'add_new_result': {
+                    'readonly': ~Eval('new_result'),
+                    'invisible': Eval('state') != 'draft',
+                    },
                 })
         cls._error_messages.update({
                 'cannot_draft': 'Cannot draft completed underwritings',
@@ -376,6 +386,41 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
         for underwriting_id, sub_status in cursor.fetchall():
             status[underwriting_id] = sub_status
         return status
+
+    def getter_new_result(self, name):
+        return ''
+
+    @fields.depends('on_object', 'party', 'results')
+    def select_possible_results(self):
+        possible = {'': ''}
+        existing = set()
+        for result in self.results or []:
+            existing.add(str(result))
+        for elem in self.get_possible_result_targets():
+            if not elem or str(elem) in existing:
+                continue
+            possible[str(elem)] = elem.rec_name
+        return [(k, v) for k, v in possible.items()]
+
+    def get_possible_result_targets(self):
+        result = [self.party] if self.party else []
+        if self.on_object and self.on_object.id >= 0:
+            result.append(self.on_object)
+        return result
+
+    @model.CoogView.button_change('new_result', 'on_object', 'results',
+        'state', 'type_')
+    def add_new_result(self):
+        assert self.new_result
+        self.results = list(self.results or []) + [self._new_result()]
+        self.new_result = ''
+
+    def _new_result(self):
+        Result = Pool().get('underwriting.result')
+        result = Result(target=self.new_result, underwriting=self,
+            state='waiting')
+        result.on_change_underwriting()
+        return result
 
     @classmethod
     def search_sub_status(cls, name, clause):

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="underwriting_process">
+        <!-- ################################# -->
+        <!-- # Start Underwriting from Claim # -->
+        <!-- ################################# -->
+        <record model="ir.action.keyword" id="act_underwriting_start_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">claim,-1</field>
+            <field name="action" ref="underwriting_process.act_underwriting_start"/>
+        </record>
+    </data>
+</tryton>
