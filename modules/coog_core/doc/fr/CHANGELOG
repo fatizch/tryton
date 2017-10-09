@@ -1,3 +1,4 @@
+* BUG#7283 Corrige la duplication d'un objet ayant une contrainte d'unicité
 * BUG#7168 Ajout d'un élément dans le pyson pour détecter un batch
 * FEA#6232 Nettoyage de la sortie du log pour les batches et chaînes
 * FEA#7026 Gel des dépendances et suppression de l'attribut "_config" du modèle de base des batchs

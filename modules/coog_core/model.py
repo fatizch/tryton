@@ -521,7 +521,8 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
             new_defaults = default.copy() if default is not None else {}
             for constraint in constraints:
                 value = new_defaults.get(constraint, getattr(obj, constraint))
-                default[constraint] = None if value is None else 'temp_for_copy'
+                new_defaults[constraint] = (None if value is None
+                    else 'temp_for_copy')
             copy = super(CoogSQL, cls).copy([obj], new_defaults)[0]
             for constraint in constraints:
                 value = getattr(copy, constraint)
