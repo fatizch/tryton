@@ -21,6 +21,10 @@ class ImportProcessSelect:
                 'std_declaration_process': 'STD Declaration Process (FR)',
                 'std_declaration_process_description': 'This process allows '
                 'managers to make a STD declaration',
+                'relapse_declaration_process': 'Relapse Declaration Process '
+                '(FR)',
+                'relapse_declaration_process_description': 'This process '
+                'allows managers to make a relapse declaration',
                 'death_declaration_process': 'Death Declaration Process '
                 '(FR)',
                 'death_declaration_process_description': 'This process '
@@ -28,6 +32,11 @@ class ImportProcessSelect:
                 'ltd_declaration_process': 'LTD Declaration Process (FR)',
                 'ltd_declaration_process_description': 'This process allows '
                 'managers to make a LTD declaration',
+                'death_std_declaration_process': 'STD/Death Declaration '
+                'Process (FR)',
+                'death_std_declaration_process_description': 'This process '
+                'allows managers to reopen a std claim to make a death '
+                'declaration'
                 })
 
     def available_processes(self):
@@ -62,6 +71,20 @@ class ImportProcessSelect:
                 },
             {
                 'name': self.raise_user_error(
+                    'relapse_declaration_process', raise_exception=False),
+                'path':
+                'claim_life_process/json/process_relapse_declaration_fr.json',
+                'description': self.raise_user_error(
+                    'relapse_declaration_process_description',
+                    raise_exception=False),
+                'is_visible': utils.is_module_installed('claim_salary_fr') and
+                utils.is_module_installed('claim_group_process') and
+                utils.is_module_installed('underwriting_claim') and
+                utils.is_module_installed('process_rule') and
+                utils.is_module_installed('claim_eligibility')
+            },
+            {
+                'name': self.raise_user_error(
                     'death_declaration_process', raise_exception=False),
                 'path':
                 'claim_life_process/json/process_deces_declaration_fr.json',
@@ -71,6 +94,23 @@ class ImportProcessSelect:
                 'is_visible': utils.is_module_installed('claim_eckert') and
                 utils.is_module_installed('claim_salary_fr') and
                 utils.is_module_installed('claim_group_process') and
+                utils.is_module_installed('underwriting_claim') and
+                utils.is_module_installed('process_rule') and
+                utils.is_module_installed('claim_eligibility')
+                },
+            {
+                'name': self.raise_user_error(
+                    'death_std_declaration_process', raise_exception=False),
+                'path':
+                'claim_life_process/json/process_deces_suite_std_declaration_'
+                'fr.json',
+                'description': self.raise_user_error(
+                    'death_std_declaration_process_description',
+                    raise_exception=False),
+                'is_visible': utils.is_module_installed('claim_eckert') and
+                utils.is_module_installed('claim_salary_fr') and
+                utils.is_module_installed('claim_group_process') and
+                utils.is_module_installed('underwriting_claim') and
                 utils.is_module_installed('process_rule') and
                 utils.is_module_installed('claim_eligibility')
                 },
