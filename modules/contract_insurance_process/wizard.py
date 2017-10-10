@@ -40,7 +40,8 @@ class ImportProcessSelect:
                 'description': self.raise_user_error(
                     'standard_process_description', raise_exception=False),
                 'is_visible':
-                utils.is_module_installed('contract_insurance_invoice')
+                utils.is_module_installed('contract_insurance_invoice') and
+                utils.is_module_installed('contract_insurance_process')
                 },
             {
                 'name': self.raise_user_error(
@@ -51,6 +52,7 @@ class ImportProcessSelect:
                 'description': self.raise_user_error(
                     'loan_process_description', raise_exception=False),
                 'is_visible':
-                utils.is_module_installed('contract_loan_invoice')
+                utils.is_module_installed('contract_loan_invoice') and
+                utils.is_module_installed('contract_insurance_process')
                 },
             ]
