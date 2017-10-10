@@ -1,0 +1,727 @@
+[
+    {
+        "__name__": "rule_engine",
+        "_func_key": "message_alerte_analyses_medicales",
+        "algorithm": "if analyses_medicales_non_recues():\n    ajouter_avertissement(u'Avez-vous demand\u00e9 l\\'attestation m\u00e9dicale?')\nreturn",
+        "context": {
+            "_func_key": "Context par d\u00e9faut"
+        },
+        "extra_data_used": [],
+        "name": "Message alerte analyses medicales",
+        "parameters": [],
+        "rules_used": [],
+        "short_name": "message_alerte_analyses_medicales",
+        "status": "validated",
+        "tables_used": [],
+        "tags": [],
+        "test_cases": [],
+        "type_": "process_check"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "prestations",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Prestations",
+        "main_model": {
+            "_func_key": "claim"
+        },
+        "pyson": "Eval('all_services_refused')",
+        "static_view": null,
+        "step_xml": "<label name=\"losses_description\"/>\n<field name=\"losses_description\" colspan=\"3\"/>\n<separator  colspan=\"4\" id=\"delivered_service_separator\"/>\n<button string=\"Nouvelle p\u00e9riode\" name=\"create_indemnification\"/>\n<field name=\"indemnifications_details\" colspan=\"4\"/>\n<field name=\"doc_received\" invisible=\"1\"/>\n<field name=\"delivered_services\" invisible=\"1\"/>",
+        "tags": [],
+        "technical_name": "prestations"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "ordonnancement",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Ordonnancement",
+        "main_model": {
+            "_func_key": "claim"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<field name=\"indemnifications\" invisible=\"1\"/>\n<field name=\"has_calculated_indemnification\" invisible=\"1\"/>\n<field name=\"delivered_services\" invisible=\"1\"/>\n<newline/>\n<label name=\"losses_description\"/>\n<field name=\"losses_description\" colspan=\"3\"/>\n  <notebook>\n    <page string=\"Losses\" id=\"losses\">\n      <field name=\"indemnifications_to_schedule\" colspan=\"4\"/>\n    </page>\n    <page string=\"Documents\" id=\"documents\">\n      <field name=\"attachments\" colspan=\"4\"/>\n    </page>\n  </notebook>\n<!--\n<field name=\"indemnifications\" colspan=\"4\" mode=\"form,tree\" expand_toolbar=\"0\" />-->\n<field name=\"is_pending_indemnification\"/>\n<field name=\"all_services_refused\" invisible=\"1\"/>",
+        "tags": [],
+        "technical_name": "ordonnancement"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "en_attente_de_pieces",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": {
+            "__name__": "ir.action",
+            "_func_key": "claim_document.document_request_report_wizard",
+            "active": true,
+            "groups": [],
+            "icon": null,
+            "name": "Report de demande de document",
+            "type": "ir.action.wizard",
+            "usage": null
+        },
+        "exiting_wizard": null,
+        "fancy_name": "Demande de pi\u00e8ces",
+        "main_model": {
+            "_func_key": "claim"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<label name=\"losses_description\"/>\n<field name=\"losses_description\" colspan=\"3\"/>\n<button string=\"Demandes de documents\" name=\"launch_report_wizard\"/>\n<field name=\"document_request_lines\" colspan=\"4\"/>\n<field name=\"doc_received\" invisible=\"1\"/>\n<field name=\"all_services_refused\" invisible=\"1\"/>",
+        "tags": [],
+        "technical_name": "en_attente_de_pieces"
+    },
+    {
+        "__name__": "rule_engine",
+        "_func_key": "verification_de_la_declaration_d_arret_de_travail",
+        "algorithm": "if not date_de_debut_du_prejudice():\n    ajouter_erreur(\"La date de debut d'arret n'est pas definie\")",
+        "context": {
+            "_func_key": "Context par d\u00e9faut"
+        },
+        "extra_data_used": [],
+        "name": "V\u00e9rification de la d\u00e9claration d'arr\u00eat de travail",
+        "parameters": [],
+        "rules_used": [],
+        "short_name": "verification_de_la_declaration_d_arret_de_travail",
+        "status": "validated",
+        "tables_used": [],
+        "tags": [],
+        "test_cases": [],
+        "type_": "process_check"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "maj_dossier",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [
+            {
+                "__name__": "process.action",
+                "_func_key": "29",
+                "content": "rule",
+                "method_name": "",
+                "parameters": "",
+                "parent_transition": null,
+                "rule": {
+                    "__name__": "rule_engine",
+                    "_func_key": "verification_de_la_declaration_d_arret_de_travail"
+                },
+                "rule_extra_data": {},
+                "sequence": 2,
+                "target_path": "object.losses",
+                "technical_kind": "step_after"
+            }
+        ],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [
+            {
+                "__name__": "ir.ui.view.description",
+                "_func_key": "maj_dossier|loss_7",
+                "field_childs": null,
+                "header_line": "string=\"\" col=\"4\" ",
+                "input_mode": "classic",
+                "nb_col": 4,
+                "view_content": "<group id=\"group_conf\" col=\"2\" colspan=\"2\">\n<label name=\"claim\"/>\n<field name=\"claim\"/>\n<label name=\"start_date\"/>\n<field name=\"start_date\"/>\n<label name=\"covered_person\"/>\n<field name=\"covered_person\"/>\n<label name=\"end_date\"/>\n<field name=\"end_date\"/>\n<label name=\"loss_desc\"/>\n<field name=\"loss_desc\" widget=\"selection\"/>\n<field name=\"possible_loss_descs\" invisible=\"1\"/>\n<label name=\"event_desc\"/>\n<field name=\"event_desc\" widget=\"selection\"/>\n<label name=\"benefit_to_deliver\"/>\n<field name=\"benefit_to_deliver\" widget=\"selection\"/>\n\n\n</group>\n<newline/>\n<field name=\"benefits\" colspan=\"2\"/>\n<field name=\"services\" colspan=\"2\"/>\n\n",
+                "view_kind": "form",
+                "view_model": {
+                    "_func_key": "claim.loss"
+                },
+                "view_name": "loss_7",
+                "view_string": "Pr\u00e9judice"
+            }
+        ],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Mise \u00e0 jour dossier",
+        "main_model": {
+            "_func_key": "claim"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "<separator  colspan=\"4\" id=\"mise_a_jour_dossier_separator\"/>\n<button string=\"Modification des salaires\" name=\"launch_salaries_wizard\" colspan=\"2\"/>\n<newline/>\n<field name=\"delivered_services\" view_ids=\"claim_eligibility.claim_service_decision_view_list\" yexpand=\"0\"/>\n<field name=\"losses\" colspan=\"4\" mode=\"form,tree\" view_ids=\"claim.loss_without_service_view_form\"/>\n\n\n",
+        "tags": [],
+        "technical_name": "maj_dossier"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "laisser_en_attente",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": null,
+        "exiting_wizard": null,
+        "fancy_name": "Laisser le dossier ouvert...",
+        "main_model": {
+            "_func_key": "claim"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "\n<label string=\"Le sinistre reste ouvert\" id=\"snapshot\" yalign=\"0.0\" xalign=\"0.0\" xexpand=\"1\"/>",
+        "tags": [],
+        "technical_name": "laisser_en_attente"
+    },
+    {
+        "__name__": "process.step",
+        "_func_key": "cloture",
+        "authorizations": [],
+        "button_domain": "[]",
+        "code_after": [],
+        "code_before": [],
+        "colspan": 4,
+        "custom_views": [],
+        "entering_wizard": {
+            "__name__": "ir.action",
+            "_func_key": "claim.act_close_claim_wizard",
+            "active": true,
+            "groups": [],
+            "icon": null,
+            "name": "Clore les Dossiers de prestations",
+            "type": "ir.action.wizard",
+            "usage": null
+        },
+        "exiting_wizard": null,
+        "fancy_name": "Cl\u00f4ture du dossier",
+        "main_model": {
+            "_func_key": "claim"
+        },
+        "pyson": "",
+        "static_view": null,
+        "step_xml": "\n ",
+        "tags": [],
+        "technical_name": "cloture"
+    },
+    {
+        "__name__": "process",
+        "_func_key": "suite_nouvelle_periode",
+        "all_steps": [
+            {
+                "__name__": "process-process.step",
+                "_func_key": "prestations|suite_nouvelle_periode",
+                "order": 24,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "prestations"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "ordonnancement|suite_nouvelle_periode",
+                "order": 25,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "ordonnancement"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "en_attente_de_pieces|suite_nouvelle_periode",
+                "order": 26,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "en_attente_de_pieces"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "maj_dossier|suite_nouvelle_periode",
+                "order": 27,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "maj_dossier"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "laisser_en_attente|suite_nouvelle_periode",
+                "order": 28,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "laisser_en_attente"
+                }
+            },
+            {
+                "__name__": "process-process.step",
+                "_func_key": "cloture|suite_nouvelle_periode",
+                "order": 29,
+                "status": null,
+                "step": {
+                    "__name__": "process.step",
+                    "_func_key": "cloture"
+                }
+            }
+        ],
+        "close_tab_on_completion": false,
+        "complete_message": "",
+        "custom_transitions": true,
+        "delete_button": "",
+        "end_step_name": "Terminer",
+        "fancy_name": "Suite/Nouvelle Periode",
+        "for_loss_descs": [
+            {
+                "_func_key": "suite_nouvelle_periode",
+                "code": "suite_nouvelle_periode",
+                "name": "Suite / Nouvelle période",
+                "loss_kind": "std",
+                "item_kind": "person"
+            }
+        ],
+        "hide_main_menu": false,
+        "hide_main_toolbar": true,
+        "hold_button": "Suspendre",
+        "kind": "claim_reopening",
+        "menu_icon": "tryton-open",
+        "menu_name": "Suite/Nouvelle Periode",
+        "on_model": {
+            "_func_key": "claim"
+        },
+        "postpone_button": null,
+        "sequence": 1,
+        "step_button_group_position": "right",
+        "steps_implicitly_available": true,
+        "tags": [],
+        "technical_name": "suite_nouvelle_periode",
+        "transitions": [
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|prestations|ordonnancement",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "prestations"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": null,
+                "priority": 1,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "ordonnancement"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|ordonnancement|prestations",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "ordonnancement"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": null,
+                "priority": 2,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "prestations"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|cloture|None",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "cloture"
+                },
+                "kind": "complete",
+                "method_kind": "add",
+                "methods": [],
+                "name": "Terminer",
+                "priority": 5,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": null
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|laisser_en_attente|None",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "laisser_en_attente"
+                },
+                "kind": "complete",
+                "method_kind": "add",
+                "methods": [],
+                "name": "Terminer",
+                "priority": 7,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": null
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|prestations|cloture",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "prestations"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": null,
+                "priority": 11,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "cloture"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|prestations|laisser_en_attente",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "prestations"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": null,
+                "priority": 12,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "laisser_en_attente"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|ordonnancement|cloture",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "ordonnancement"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": null,
+                "priority": 13,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "cloture"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|ordonnancement|laisser_en_attente",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "ordonnancement"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [
+                    {
+                        "__name__": "process.action",
+                        "_func_key": "43",
+                        "content": "rule",
+                        "method_name": "",
+                        "parameters": "",
+                        "parent_step": null,
+                        "rule": {
+                            "__name__": "rule_engine",
+                            "_func_key": "message_alerte_analyses_medicales"
+                        },
+                        "rule_extra_data": {},
+                        "sequence": null,
+                        "target_path": "",
+                        "technical_kind": "transition"
+                    }
+                ],
+                "name": null,
+                "priority": 14,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "laisser_en_attente"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|None|prestations",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": null,
+                "kind": "start",
+                "method_kind": "add",
+                "methods": [],
+                "name": "",
+                "priority": 15,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "prestations"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|maj_dossier|cloture",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "maj_dossier"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": "",
+                "priority": 16,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "cloture"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|maj_dossier|laisser_en_attente",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "maj_dossier"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": "",
+                "priority": 17,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "laisser_en_attente"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|en_attente_de_pieces|cloture",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "en_attente_de_pieces"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": "",
+                "priority": 18,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "cloture"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|en_attente_de_pieces|laisser_en_attente",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "en_attente_de_pieces"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": "",
+                "priority": 19,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "laisser_en_attente"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|maj_dossier|prestations",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "maj_dossier"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": "",
+                "priority": 20,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "prestations"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|maj_dossier|prestations",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "maj_dossier"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": "",
+                "priority": 21,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "prestations"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|ordonnancement|en_attente_de_pieces",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "ordonnancement"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": "",
+                "priority": 22,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "en_attente_de_pieces"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|ordonnancement|maj_dossier",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "ordonnancement"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": "",
+                "priority": 23,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "maj_dossier"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|prestations|maj_dossier",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "prestations"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": "",
+                "priority": 24,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "maj_dossier"
+                }
+            },
+            {
+                "__name__": "process.transition",
+                "_func_key": "suite_nouvelle_periode|prestations|en_attente_de_pieces",
+                "authorizations": [],
+                "choice_if_false": null,
+                "choice_if_true": null,
+                "from_step": {
+                    "_func_key": "prestations"
+                },
+                "kind": "standard",
+                "method_kind": "add",
+                "methods": [],
+                "name": "",
+                "priority": 25,
+                "pyson": "",
+                "pyson_choice": "",
+                "pyson_description": "",
+                "to_step": {
+                    "_func_key": "en_attente_de_pieces"
+                }
+            }
+        ],
+        "with_prev_next": false,
+        "xml_footer": "",
+        "xml_header": "<label name=\"name\"/>\n<field name=\"name\"/>\n<label name=\"status\"/>\n<group id=\"status\">\n<field name=\"status\"/>\n<label name=\"sub_status\"/>\n<field name=\"sub_status\"/>\n</group>\n<label name=\"claimant\"/>\n<field name=\"claimant\" readonly=\"1\"/>\n<label name=\"legal_entity\"/>\n<field name=\"legal_entity\" readonly=\"1\"/>\n<label name=\"declaration_date\"/>\n<field name=\"declaration_date\"/>\n<label name=\"interlocutor\"/>\n<field name=\"interlocutor\"/>",
+        "xml_tree": "\n<field name=\"current_state\"/>\n<field name=\"name\"/>\n<field name=\"claimant\"/>\n<field name=\"status\"/>\n"
+    }
+]
