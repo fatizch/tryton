@@ -6,4 +6,9 @@ this repository contains the full copyright notices and license terms. -->
         <label name="payment_date"/>
         <field name="payment_date"/>
     </xpath>
+    <xpath expr="/form/field[@name='state']" position="after">
+        <newline/>
+        <button name="payment_block" string="Block" icon="tryton-cancel" colspan="4"/>
+        <button name="payment_unblock" string="Unblock" icon="tryton-go-next" colspan="4"/>
+    </xpath>
 </data>

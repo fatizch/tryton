@@ -186,6 +186,8 @@ class MoveLine:
         else:
             outstanding = abs(outstanding)
         for line in lines:
+            if line.payment_blocked:
+                continue
             if (line.debit > 0) or (line.credit < 0):
                 kind = 'receivable'
             else:

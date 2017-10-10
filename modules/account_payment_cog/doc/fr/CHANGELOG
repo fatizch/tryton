@@ -1,3 +1,4 @@
+* BUG#7275 Ne pas créer de paiements pour les lignes bloquées
 * BUG#6067 Suppression de l'action "Payer" sur la vue liste des lignes à payer
 * BUG#7019 Vérification de la création effective d'un groupe de paiement avant de notifier l'événement
 * BUG#6983 Maintien de l'information "Paiement en attente" sur une quittance annulée
