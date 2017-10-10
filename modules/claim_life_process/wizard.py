@@ -42,6 +42,10 @@ class ImportProcessSelect:
                 'std_continue_new_period_process_description': 'This process '
                 'allows managers to continue a terminated STD declaration and '
                 'add new scheduling periods',
+                'ltd_after_std_process': 'LTD After STD Declaration Process '
+                '(FR)',
+                'ltd_after_std_process_description': 'This process allows '
+                'managers to make an LTD declaration after an STD declaration',
                 })
 
     def available_processes(self):
@@ -133,5 +137,20 @@ class ImportProcessSelect:
                 utils.is_module_installed('underwriting_claim') and
                 utils.is_module_installed('process_rule') and
                 utils.is_module_installed('claim_eligibility'),
-                }
+                },
+            {
+                'name': self.raise_user_error(
+                    'ltd_after_std_process', raise_exception=False),
+                'path':
+                'claim_life_process/json/process_ltd_after_std_declaration_fr.'
+                'json',
+                'description': self.raise_user_error(
+                    'ltd_after_std_process_description',
+                    raise_exception=False),
+                'is_visible': utils.is_module_installed('claim_salary_fr') and
+                utils.is_module_installed('claim_group_process') and
+                utils.is_module_installed('underwriting_claim') and
+                utils.is_module_installed('process_rule') and
+                utils.is_module_installed('claim_eligibility'),
+                },
             ]
