@@ -19,6 +19,17 @@ class HealthCareSystem(model.CoogSQL, model.CoogView):
     name = fields.Char('Name')
     short_name = fields.Char('Short Name')
 
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return [
+            'OR',
+            ('name',) + tuple(clause[1:]),
+            ('code',) + tuple(clause[1:]),
+        ]
+
+    def get_rec_name(self, name):
+        return '%s (%s)' % (self.name, self.code)
+
 
 class InsuranceFund(model.CoogSQL, model.CoogView):
     'Insurance Fund'

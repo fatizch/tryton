@@ -5,7 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form" position="inside">
         <newline/>
         <label name="hc_system"/>
-        <field name="hc_system"/>
+        <field name="hc_system" widget="selection"/>
         <label name="department"/>
         <field name="department" xexpand="0"/>
         <label name="insurance_fund_number"/>
