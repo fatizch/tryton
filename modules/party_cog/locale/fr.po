@@ -771,6 +771,10 @@ msgctxt "model:ir.action,name:act_party_identifier_type_form"
 msgid "Party Identifier Type"
 msgstr "Type d'identifiant de tiers"
 
+msgctxt "model:ir.action,name:act_payments_relate_form"
+msgid "Payments"
+msgstr "Paiements"
+
 msgctxt "model:ir.action,name:act_person_form"
 msgid "Persons"
 msgstr "Personnes physiques"
@@ -1014,3 +1018,17 @@ msgstr "Synthèse acteur"
 msgctxt "view:party.synthesis.menu:"
 msgid "Synthesis"
 msgstr "Synthèse"
+
+# Custom translations below
+
+msgctxt "field:party.address,name:party."
+msgid "Name"
+msgstr "Ligne 2"
+
+msgctxt "field:party.address,street:party."
+msgid "Street"
+msgstr "Rue (Ligne 4)"
+
+msgctxt "field:party.address,streetbis:party."
+msgid "Street (bis)"
+msgstr "Boîte Postale (Ligne 5)"
