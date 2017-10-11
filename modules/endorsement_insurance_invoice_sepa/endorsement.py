@@ -64,7 +64,12 @@ class Contract:
 
     def before_activate(self):
         super(Contract, self).before_activate()
-        self.check_no_amended_mandates()
+        # Checking that there are no amended mandates should only be done when
+        # it is a contract's first activation. If the contract is reactivated
+        # after it has been suspended or terminated, its behaviour should not
+        # change.
+        if self.status not in ['hold', 'terminated']:
+            self.check_no_amended_mandates()
 
     def check_no_amended_mandates(self):
         Mandate = Pool().get('account.payment.sepa.mandate')
