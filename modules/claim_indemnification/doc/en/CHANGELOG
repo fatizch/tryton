@@ -1,3 +1,4 @@
+* BUG#7179 Claim invoices payment lines are now properly reconciled when beneficiaries had overdue
 * OTH#0000 fix test scenario
 * BUG#7095 Fix crash in indemnification creation batch because of missing currency
 * FEA#7046 Improve indemnification validation and control view

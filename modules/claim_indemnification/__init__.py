@@ -13,6 +13,7 @@ import move
 import party
 import wizard
 from benefit import BenefitRule
+import payment
 
 __all__ = [
     'BenefitRule'
@@ -50,6 +51,7 @@ def register():
         event.EventTypeAction,
         batch.CreateClaimIndemnificationBatch,
         move.MoveLine,
+        payment.Payment,
         module='claim_indemnification', type_='model')
     Pool.register(
         wizard.FillExtraData,

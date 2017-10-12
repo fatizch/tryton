@@ -1,10 +1,13 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import copy
+from collections import defaultdict
 from sql.aggregate import Max
 from sql import Literal
 
 from trytond.pool import Pool, PoolMeta
+from trytond.transaction import Transaction
+from trytond.model import dualmethod
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
 from trytond.modules.coog_core import model, fields, coog_string, utils
@@ -23,6 +26,58 @@ class Party:
     __name__ = 'party.party'
 
     block_payable_payments = fields.Boolean('Block Payments')
+
+    @classmethod
+    def get_line_reconciliation_per_parties(cls, parties, limit_date,
+            account_kind='payable'):
+        """
+        Returns a list of lines per parties which can be reconciled
+        """
+        assert account_kind in ['receivable', 'payable']
+        MoveLine = Pool().get('account.move.line')
+        date = Transaction().context.get('reconcile_to_date',
+            utils.today())
+        clause = [
+            ('reconciliation', '=', None),
+            ('move_state', 'not in', ('draft', 'validated'))]
+        if limit_date:
+            clause.append(('date', '<=', date))
+
+        sub_clause = ['OR']
+        for party in parties:
+            sub_clause.append([
+                    ('party', '=', party.id),
+                    ('account', '=', getattr(
+                        party, 'account_%s' % account_kind).id),
+                    ])
+        clause.append(sub_clause)
+        may_be_reconciled = MoveLine.search(clause,
+            order=[('party', 'ASC')])
+
+        per_party = defaultdict(list)
+        for line in may_be_reconciled:
+            per_party[line.party].append(line)
+
+        return per_party
+
+    @classmethod
+    def get_lines_to_reconcile(cls, parties, limit_date=True):
+        """
+        Returns list of line reconciliations packets to be reconciled
+        together.
+        """
+        MoveLine = Pool().get('account.move.line')
+
+        # Get non-reconciled lines per parties
+        lines_per_party = cls.get_line_reconciliation_per_parties(
+            parties, limit_date)
+        return MoveLine.get_reconciliation_lines(lines_per_party)
+
+    @dualmethod
+    def reconcile(cls, parties, limit_date=True):
+        Reconciliation = Pool().get('account.move.reconciliation')
+        return Reconciliation.create_reconciliations_from_lines(
+            cls.get_lines_to_reconcile(parties, limit_date))
 
     @staticmethod
     def default_block_payable_payments():
