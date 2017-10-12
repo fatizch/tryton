@@ -261,7 +261,7 @@ coog_test_fullcheck() { # check and report a full test - <branch>
         fi
         echo '</pre>' >> "$out"
         _coog_test_email dev@coopengo.com "$out" "$subject"
-        coog_test_query qarchive "test"
+        coog_test_query qarchive "test" success fail
         coog_test_stop
         rm -rf "$COOG_TMP/$1"
 }
