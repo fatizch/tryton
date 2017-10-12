@@ -12,6 +12,7 @@ def register():
         benefit.Benefit,
         benefit.DocumentRule,
         wizard.IndemnificationCalculationResult,
+        claim.DocumentRequestLine,
         claim.Claim,
         claim.ClaimIndemnification,
         report_engine.ReportTemplate,

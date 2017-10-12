@@ -13,9 +13,20 @@ from trytond.model import ModelView
 from trytond.modules.coog_core import fields
 
 __all__ = [
+    'DocumentRequestLine',
     'Claim',
     'ClaimIndemnification',
     ]
+
+
+class DocumentRequestLine:
+    __metaclass__ = PoolMeta
+    __name__ = 'document.request.line'
+
+    @classmethod
+    def for_object_models(cls):
+        return super(DocumentRequestLine, cls).for_object_models() + \
+            ['claim.indemnification']
 
 
 class Claim:

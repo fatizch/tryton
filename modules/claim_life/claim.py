@@ -23,6 +23,7 @@ __all__ = [
     'ClaimService',
     'ClaimServiceExtraDataRevision',
     'Indemnification',
+    'DocumentRequestLine',
     ]
 
 
@@ -621,3 +622,13 @@ class ClaimServiceExtraDataRevision:
             res[instance] = '\n'.join(('%s : %s' % (k, v) for k, v in
                     new_data.iteritems()))
         return res
+
+
+class DocumentRequestLine:
+    __metaclass__ = PoolMeta
+    __name__ = 'document.request.line'
+
+    @classmethod
+    def for_object_models(cls):
+        return super(DocumentRequestLine, cls).for_object_models() + \
+            ['claim.beneficiary']

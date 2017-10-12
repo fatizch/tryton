@@ -28,3 +28,8 @@ class DocumentRequestLine:
         else:
             super(DocumentRequestLine, cls).update_values_from_target(
                 data_dict)
+
+    @classmethod
+    def for_object_models(cls):
+        return super(DocumentRequestLine, cls).for_object_models() + \
+            ['underwriting']

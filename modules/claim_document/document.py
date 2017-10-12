@@ -78,6 +78,11 @@ class DocumentRequestLine:
         if self.for_object is None:
             self.for_object = self.claim
 
+    @classmethod
+    def for_object_models(cls):
+        return super(DocumentRequestLine, cls).for_object_models() + \
+            ['claim']
+
 
 class DocumentRequest:
     __metaclass__ = PoolMeta

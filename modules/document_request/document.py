@@ -11,6 +11,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool
 from trytond import backend
 from trytond.transaction import Transaction
+from trytond.cache import Cache
 
 from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.report_engine import Printable
@@ -65,6 +66,8 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
         states={'invisible': True})
     reminders_sent = fields.Integer('Reminders Sent')
     details = fields.Text('Details')
+
+    _models_get_request_line_cache = Cache('models_get_request_line')
 
     @classmethod
     def __register__(cls, module_name):
@@ -141,9 +144,23 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
                 doc.reminders_sent += 1
         cls.save(document_lines)
 
-    @staticmethod
-    def models_get():
-        return utils.models_get()
+    @classmethod
+    def for_object_models(cls):
+        return []
+
+    @classmethod
+    def models_get(cls):
+        models = cls._models_get_request_line_cache.get(None)
+        if models:
+            return models
+
+        Model = Pool().get('ir.model')
+        allowed = cls.for_object_models()
+        models = sorted([(x.model, x.name) for x in Model.search(
+            [('model', 'in', allowed)])],
+            key=lambda x: x[1]) + [('', '')]
+        cls._models_get_request_line_cache.set(None, models)
+        return models
 
     @classmethod
     def get_default_remind_fields(cls):

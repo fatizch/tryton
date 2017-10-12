@@ -58,6 +58,11 @@ class DocumentRequestLine:
                     continue
                 value['contract'] = contract_id
 
+    @classmethod
+    def for_object_models(cls):
+        return super(DocumentRequestLine, cls).for_object_models() + \
+            ['contract']
+
 
 class DocumentRequest:
     __metaclass__ = PoolMeta

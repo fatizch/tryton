@@ -1,3 +1,4 @@
+* BUG#7314 Filtrer les modèles disponibles sur l'objet de la demande de document 
 * FEA#6408 Nouveau point d'entrée global montrant les demandes de document en cours
 
 Version 1.12 - 2017-04-28

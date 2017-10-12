@@ -25,6 +25,7 @@ def register():
         claim.ClaimBeneficiary,
         claim.ClaimServiceExtraDataRevision,
         claim.Indemnification,
+        claim.DocumentRequestLine,
         rule_engine.RuleEngineRuntime,
         test_case.TestCaseModel,
         wizard.IndemnificationValidateElement,
