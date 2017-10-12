@@ -1,0 +1,7 @@
+# vim: set ft=sh:
+# coog documentation
+
+coog_doc_generate() { # Generates coog documentation
+    python $COOG_BIN/generate_doc.py "$@"
+}
+

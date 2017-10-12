@@ -9,6 +9,12 @@ import unicodedata
 import logging
 from collections import OrderedDict
 from itertools import groupby
+import argparse
+
+parser = argparse.ArgumentParser(description='Document generation script')
+parser.add_argument('--output_doc_directory', help='Absolute path where the '
+    'documentation will be generated', default=None, nargs='?')
+args = parser.parse_args()
 
 logging.basicConfig()
 logger = logging.getLogger()
@@ -32,8 +38,14 @@ SECTIONS = OrderedDict([
         ('none', None),
         ])
 
+doc_path = '/tmp/'
+if args.output_doc_directory:
+    final_html_path = os.path.join(args.output_doc_directory, 'html')
+else:
+    final_html_path = os.path.join(doc_path, 'html')
+
 coog_root = os.path.abspath(os.path.join(__file__, '..', '..', '..'))
-doc_files = os.path.join('/', 'tmp', 'coog_doc')
+doc_files = os.path.join(doc_path, 'coog_doc')
 documentation_dir = os.path.join(coog_root, 'documentation', 'user_manual')
 modules = os.path.join(coog_root, 'modules')
 language = 'fr'
@@ -44,6 +56,8 @@ features_file = os.path.join(doc_files, 'trytond_doc', 'doc', language,
 # Clean up previous build
 if os.path.exists(doc_files):
     shutil.rmtree(doc_files)
+if os.path.exists(final_html_path):
+    shutil.rmtree(final_html_path)
 
 
 def filter_ignore_files(_dir, filenames):
@@ -130,4 +144,7 @@ with codecs.open(features_file, 'a', encoding='utf-8') as output:
 process = subprocess.Popen(['make', doc_format], cwd=doc_files)
 process.communicate()
 
+shutil.copytree(os.path.join(doc_files, '_build', 'html'), final_html_path)
+
 logger.info('Doc generated in ' + doc_files)
+logger.info('HTML folder copied to ' + final_html_path)
