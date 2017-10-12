@@ -26,7 +26,8 @@ class FiscalYearSetWizard:
 
         in_credit_note_sequence = Sequence(**{
                 'company': company,
-                'name': '%s - %s %s' % (cls.translate('in_credit_note_sequence'),
+                'name': '%s - %s %s' % (
+                    cls.translate('in_credit_note_sequence'),
                     cls.translate('fiscal_year'), start_date.year),
                 'code': 'account.invoice',
                 'prefix': str(start_date.year),
@@ -42,7 +43,8 @@ class FiscalYearSetWizard:
                 })
         out_credit_note_sequence = Sequence(**{
                 'company': company,
-                'name': '%s - %s %s' % (cls.translate('out_credit_note_sequence'),
+                'name': '%s - %s %s' % (
+                    cls.translate('out_credit_note_sequence'),
                     cls.translate('fiscal_year'), start_date.year),
                 'code': 'account.invoice',
                 'prefix': str(start_date.year),

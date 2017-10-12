@@ -1,3 +1,4 @@
+* FEA#7170 Nettoyage du code de réconciliation: plus de modularité et de possibilitées de surcharges
 * BUG#7188 Ajout d'un loader sur contract.billing_information
 * BUG#7145 Impossibilité de sélectionner un journal de pertes et profits dans l'assistant de lettrage
 * FEA#6950 Ajout de données relatives au quittances payées dans le moteur de règles

@@ -707,6 +707,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'contract': 4})
 
     def test0060_test_reconciliation(self):
+        MoveLine = self.MoveLine
         contract = self.Contract(123)
         subscriber = self.Party(456)
         account = self.Account(789)
@@ -775,17 +776,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 line_invoice_1, line_invoice_2, line_to_pay, line_pay_1,
                 line_pay_2, line_pay_3])
         patched_split = mock.MagicMock()
+        reconcile_perfect_lines = MoveLine.reconcile_perfect_lines
 
         with mock.patch.object(self.MoveLine, 'search', patched_search), \
                 mock.patch.object(self.MoveLine, 'split_lines', patched_split):
             # Basic check : nothing to reconcile, check perfect reconciliation
             # is properly handled. ([1, 2], 0) is an arbitrary result, which is
             # expected to be returned "as is" by get_lines_to_reconcile
-            contract.reconcile_perfect_lines = mock.MagicMock(
+            MoveLine.reconcile_perfect_lines = mock.MagicMock(
                 return_value=([([1, 2], 0)], [line_invoice_1]))
             self.assertEqual([[1, 2]], self.Contract.get_lines_to_reconcile(
                     [contract]))
-            contract.reconcile_perfect_lines.assert_called_with(
+            MoveLine.reconcile_perfect_lines.assert_called_with(
                 [line_invoice_1, line_invoice_2, line_to_pay, line_pay_1,
                     line_pay_2, line_pay_3])
             patched_search.assert_called_with([
@@ -799,7 +801,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 order=[('contract', 'ASC')])
 
             def test_reco(lines, reconciliations):
-                contract.reconcile_perfect_lines = mock.MagicMock(
+                MoveLine.reconcile_perfect_lines = mock.MagicMock(
                     return_value=([], lines))
                 self.assertEqual(reconciliations,
                     self.Contract.get_lines_to_reconcile([contract]))
@@ -842,9 +844,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
             # Check no splits on debit lines
             test_reco([line_invoice_1, line_pay_3], [])
+            MoveLine.reconcile_perfect_lines = reconcile_perfect_lines
 
     def test0070_test_perfect_reconciliation(self):
-        contract = self.Contract()
+        MoveLine = self.MoveLine
 
         invoice_1 = mock.Mock()
         invoice_1.__name__ = 'account.invoice'
@@ -915,7 +918,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         def test_perfect(original_lines, expected):
             for expected_item, result_item in zip(expected,
-                    contract.reconcile_perfect_lines(original_lines)):
+                    MoveLine.reconcile_perfect_lines(original_lines)):
                 self.assertEqual(sorted(expected_item), sorted(result_item))
 
         # Test non affected lines are not used, base is reconciled with

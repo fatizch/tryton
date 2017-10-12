@@ -1,3 +1,4 @@
+* FEA#7170 Cleaning reconciliation code: More modularity and possibilities for overriding
 * BUG#7188 Add a loader on contract.billing_information
 * BUG#7145 Can't select write-off journal in reconciliation wizard when processing a write-off
 * FEA#6950 Add invoice related functions in rule engine

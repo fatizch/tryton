@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
 from collections import defaultdict
+from decimal import Decimal
 
 from sql import Null
 from sql.aggregate import Sum, Max
@@ -214,6 +216,99 @@ class Line(export.ExportImportMixin):
         with Transaction().set_context(posted=True):
             return super(Line, cls).query_get(table)
 
+    @classmethod
+    def _key_func_for_reconciliation_order(cls, obj):
+        return (obj.maturity_date or datetime.date.min, obj.date,
+            obj.create_date)
+
+    @classmethod
+    def get_reconciliation_lines(cls, lines_per_object):
+        """
+        Returns a list of reconciliation lines packet.
+        Firstly, this try to reconcile perfect lines.
+        In a second time, some non-perfect lines will be reconciled
+        together.
+        Finally, this method will generate split lines if necessary
+        """
+        reconciliations = {}
+        for object_, possible_lines in lines_per_object.iteritems():
+            reconciliations[object_], possible_lines = \
+                cls.reconcile_perfect_lines(possible_lines)
+
+            to_reconcile, total_to_reconcile = \
+                cls._get_lines_to_reconcile(possible_lines)
+            if not to_reconcile:
+                continue
+            reconciliations[object_].append((to_reconcile,
+                    max(0, -total_to_reconcile)))
+
+        # Split lines if necessary
+        splits = cls.split_lines([(lines[-1], split_amount)
+                for (lines, split_amount) in sum(reconciliations.values(), [])
+                if split_amount != 0])
+
+        reconciliation_lines = []
+        for object_, groups in reconciliations.iteritems():
+            for lines, split_amount in groups:
+                reconciliation_lines.append(lines)
+                if split_amount == 0:
+                    continue
+
+                # If a line was split, add the matching line to the
+                # reconciliation
+                _, remaining, compensation = splits[lines[-1]]
+                lines += [remaining, compensation]
+        return reconciliation_lines
+
+    @classmethod
+    def reconcile_perfect_lines(cls, lines):
+        """
+        This method should be overriden.
+        Perfect lines are not handled in this module
+        returns a tuple of lines : (perfect_matches, unmatched_lines)
+        """
+        return ([], lines)
+
+    @classmethod
+    def _get_lines_to_reconcile(cls, lines):
+        """
+        Returns a list of lines to reconcile according to the given
+        possible_lines and the total amount to reconcile.
+        """
+        to_reconcile, total_to_reconcile = [], Decimal(0)
+        if not lines:
+            return to_reconcile, total_to_reconcile
+        lines.sort(key=cls._key_func_for_reconciliation_order)
+
+        # Split lines in available amount / amount to pay
+        available, to_pay, total_available = [], [], Decimal(0)
+        for line in lines:
+            if line.credit > 0 or line.debit < 0:
+                available.append(line)
+                total_available += line.credit - line.debit
+            else:
+                to_pay.append(line)
+        if not to_pay or not available:
+            return to_reconcile, total_to_reconcile
+
+        # Do reconciliation. Lines are ordered by date
+        for line in to_pay:
+            if line.debit - line.credit > total_available:
+                break
+            to_reconcile.append(line)
+            total_available -= line.debit - line.credit
+            total_to_reconcile += line.debit - line.credit
+        if not to_reconcile:
+            return to_reconcile, total_to_reconcile
+
+        # Select lines in date order
+        for line in available:
+            if total_to_reconcile <= 0:
+                break
+            total_to_reconcile -= line.credit - line.debit
+            to_reconcile.append(line)
+        return to_reconcile, total_to_reconcile
+
     def get_reconciled_with(self, name):
         if self.reconciliation is None:
             return
@@ -419,6 +514,19 @@ class CreateMove:
 
 class Reconciliation:
     __name__ = 'account.move.reconciliation'
+
+    @classmethod
+    def create_reconciliations_from_lines(cls, packet_lines):
+        Reconciliation = Pool().get('account.move.reconciliation')
+        reconciliations = []
+        for reconciliation_lines in packet_lines:
+            if not reconciliation_lines:
+                continue
+            reconciliations.append(Reconciliation(lines=reconciliation_lines,
+                date=max(x.date for x in reconciliation_lines)))
+        if reconciliations:
+            cls.save(reconciliations)
+        return reconciliations
 
     @classmethod
     def delete(cls, reconciliations):
