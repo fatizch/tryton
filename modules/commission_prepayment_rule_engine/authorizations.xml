@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Commission Management Group -->
+        <!-- Commission -->
+        <record model="ir.ui.menu-res.group" id="menu_prepayment_payment_rule_form_commission_manage">
+            <field name="menu" ref="commission_prepayment_rule_engine.menu_prepayment_payment_rule_form"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+        </record>
+        <!-- Laboratory -->
+        <record model="ir.ui.menu-res.group" id="menu_rule_engine_commission_manage">
+            <field name="menu" ref="rule_engine.menu_rule_engine"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_commission_plan_prepayment_payment_rule_commission_manage_group">
+            <field name="model" search="[('model', '=', 'commission.plan.prepayment.payment_rule')]"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Commission Prepayment Rule Engine Access Rights -->
+        <record model="ir.model.access" id="access_commission_plan_prepayment_payment_rule">
+            <field name="model" search="[('model', '=', 'commission.plan.prepayment.payment_rule')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

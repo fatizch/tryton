@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Financial Management Group -->
+        <!-- Financial / Reporting -->
+        <record model="ir.ui.menu-res.group" id="menu_print_invoice_report_financial_manage">
+            <field name="menu" ref="account_reporting.menu_print_invoice_report"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+    </data>
+</tryton>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ###################### -->
+        <!-- # Test Case Instance # -->
+        <!-- ###################### -->
+        <!-- Data -->
+        <record model="ir.test_case.instance" id="authorizations_test_case">
+            <field name="name">Authorizations Test Case</field>
+            <field name="method_name">authorizations_test_case</field>
+            <field name="test_method_name">authorizations_test_case_test_method</field>
+        </record>
+    </data>
+</tryton>

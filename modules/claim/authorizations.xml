@@ -1,0 +1,324 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Claim Consultation Group -->
+        <record model="res.group" id="group_claim_read">
+            <field name="name">Coog Claim consultation</field>
+        </record>
+        <!-- Claim -->
+        <record model="ir.ui.menu-res.group" id="menu_claim_claim_read">
+            <field name="menu" ref="claim.menu_claim"/>
+            <field name="group" ref="group_claim_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_claim_form_claim_read">
+            <field name="menu" ref="claim.menu_claim_form"/>
+            <field name="group" ref="group_claim_read"/>
+        </record>
+        <!-- Product Consultation Group  -->
+        <!-- Claim / Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_claim_product_read">
+            <field name="menu" ref="claim.menu_claim"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_claim_configuration_product_read">
+            <field name="menu" ref="claim.menu_claim_configuration"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="sub_status_form_product_read">
+            <field name="menu" ref="claim.sub_status_form"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_claim_conf_product_read">
+            <field name="menu" ref="claim.menu_claim_conf"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <!-- Laboratory -->
+        <record model="ir.ui.menu-res.group" id="menu_benefit_form_product_read">
+            <field name="menu" ref="claim.menu_benefit_form"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_event_desc_form_product_read">
+            <field name="menu" ref="claim.menu_event_desc_form"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_loss_desc_form_product_read">
+            <field name="menu" ref="claim.menu_loss_desc_form"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_closing_reason_product_read">
+            <field name="menu" ref="claim.menu_closing_reason"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <!-- Claim Management Group -->
+        <record model="res.group" id="group_claim_manage">
+            <field name="name">Coog Claim management</field>
+        </record>
+        <!-- Claim -->
+        <record model="ir.ui.menu-res.group" id="menu_claim_claim_manage">
+            <field name="menu" ref="claim.menu_claim"/>
+            <field name="group" ref="group_claim_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_claim_form_claim_manage">
+            <field name="menu" ref="claim.menu_claim_form"/>
+            <field name="group" ref="group_claim_manage"/>
+        </record>
+        <!-- Product Management Group  -->
+        <!-- Claim / Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_claim_product_manage">
+            <field name="menu" ref="claim.menu_claim"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_claim_configuration_product_manage">
+            <field name="menu" ref="claim.menu_claim_configuration"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="sub_status_form_product_manage">
+            <field name="menu" ref="claim.sub_status_form"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_claim_conf_product_manage">
+            <field name="menu" ref="claim.menu_claim_conf"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <!-- Laboratory -->
+        <record model="ir.ui.menu-res.group" id="menu_benefit_form_product_manage">
+            <field name="menu" ref="claim.menu_benefit_form"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_event_desc_form_product_manage">
+            <field name="menu" ref="claim.menu_event_desc_form"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_loss_desc_form_product_manage">
+            <field name="menu" ref="claim.menu_loss_desc_form"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_closing_reason_product_manage">
+            <field name="menu" ref="claim.menu_closing_reason"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <!-- Users -->
+        <record model="res.user-res.group" id="user_admin_group_claim_read">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_claim_read"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_claim_manage">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_claim_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_data_group_claim_read">
+            <field name="model" search="[('model', '=', 'extra_data')]"/>
+            <field name="group" ref="group_claim_read"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_data_group_claim_manage">
+            <field name="model" search="[('model', '=', 'extra_data')]"/>
+            <field name="group" ref="group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_group_claim_read">
+            <field name="model" search="[('model', '=', 'extra_details.configuration')]"/>
+            <field name="group" ref="group_claim_read"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_group_claim_manage">
+            <field name="model" search="[('model', '=', 'extra_details.configuration')]"/>
+            <field name="group" ref="group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_benefit_event_description_group_product_manage">
+            <field name="model" search="[('model', '=', 'benefit.event.description')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_benefit_loss_description_group_product_manage">
+            <field name="model" search="[('model', '=', 'benefit.loss.description')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_benefit_group_product_manage">
+            <field name="model" search="[('model', '=', 'benefit')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_group_claim_manage">
+            <field name="model" search="[('model', '=', 'claim')]"/>
+            <field name="group" ref="group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_loss_group_claim_manage">
+            <field name="model" search="[('model', '=', 'claim.loss')]"/>
+            <field name="group" ref="group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_service_group_claim_manage">
+            <field name="model" search="[('model', '=', 'claim.service')]"/>
+            <field name="group" ref="group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_closing_reason_group_product_manage">
+            <field name="model" search="[('model', '=', 'claim.closing_reason')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_configuration_group_product_manage">
+            <field name="model" search="[('model', '=', 'claim.configuration')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_service_extra_data_group_claim_manage">
+            <field name="model" search="[('model', '=', 'claim.service.extra_data')]"/>
+            <field name="group" ref="group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_sub_status_group_product_manage">
+            <field name="model" search="[('model', '=', 'claim.sub_status')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_report_production_request_group_claim_manage">
+            <field name="model" search="[('model', '=', 'report_production.request')]"/>
+            <field name="group" ref="group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Claim Access Rights -->
+        <record model="ir.model.access" id="access_benefit_event_description">
+            <field name="model" search="[('model', '=', 'benefit.event.description')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_benefit_loss_description">
+            <field name="model" search="[('model', '=', 'benefit.loss.description')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_benefit">
+            <field name="model" search="[('model', '=', 'benefit')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_claim">
+            <field name="model" search="[('model', '=', 'claim')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_service">
+            <field name="model" search="[('model', '=', 'claim.service')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_closing_reason">
+            <field name="model" search="[('model', '=', 'claim.closing_reason')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_configuration">
+            <field name="model" search="[('model', '=', 'claim.configuration')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_loss">
+            <field name="model" search="[('model', '=', 'claim.loss')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_service_extra_data">
+            <field name="model" search="[('model', '=', 'claim.service.extra_data')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_sub_status">
+            <field name="model" search="[('model', '=', 'claim.sub_status')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+    <data depends="account_aggregate">
+        <!-- Claim Manage Group -->
+        <record model="ir.model.access" id="access_account_move_line_aggregated_claim_manage_group">
+            <field name="model" search="[('model', '=', 'account.move.line.aggregated')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+    <data depends="event_log">
+        <record model="ir.model.access" id="access_event_log_group_claim_manage">
+            <field name="model" search="[('model', '=', 'event.log')]"/>
+            <field name="group" ref="group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

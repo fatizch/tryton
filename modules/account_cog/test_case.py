@@ -139,3 +139,9 @@ class TestCaseModel:
     def fiscal_year_test_case_test_method(cls):
         FY = Pool().get('account.fiscalyear')
         return FY.search_count([]) < cls.get_instance().fiscal_year_number
+
+    @classmethod
+    def get_user_group_dict(cls):
+        user_group_dict = super(TestCaseModel, cls).get_user_group_dict()
+        user_group_dict['financial'].append('account_cog.group_financial_manage')
+        return user_group_dict

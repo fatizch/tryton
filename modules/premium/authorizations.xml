@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Financial Consultation Group -->
+        <!-- Financial -->
+        <!-- Financial / Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_fee_financial_read">
+            <field name="menu" ref="premium.menu_fee"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <!-- Financial Management Group -->
+        <!-- Financial -->
+        <!-- Financial / Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_fee_financial_manage">
+            <field name="menu" ref="premium.menu_fee"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_account_fee_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.fee')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Contract Management Group  -->
+        <record model="ir.model.access" id="access_contract_fee_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract.fee')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_premium_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract.premium')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Product Management Group -->
+        <record model="ir.model.access" id="access_offered_option_description_premium_rule_group_product_manage">
+            <field name="model" search="[('model', '=', 'offered.option.description.premium_rule')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_product_premium_date_group_product_manage">
+            <field name="model" search="[('model', '=', 'offered.product.premium_date')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Premium Access Rights -->
+        <record model="ir.model.access" id="access_account_fee">
+            <field name="model" search="[('model', '=', 'account.fee')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_fee">
+            <field name="model" search="[('model', '=', 'contract.fee')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_premium">
+            <field name="model" search="[('model', '=', 'contract.premium')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_option_description_premium_rule">
+            <field name="model" search="[('model', '=', 'offered.option.description.premium_rule')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_product_premium_date">
+            <field name="model" search="[('model', '=', 'offered.product.premium_date')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

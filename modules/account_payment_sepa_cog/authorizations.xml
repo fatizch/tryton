@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Financial Consultation Group -->
+        <!-- Financial -->
+        <!-- Financial / Payments -->
+        <record model="ir.ui.menu-res.group" id="menu_message_form_financial_read">
+            <field name="menu" ref="account_payment_sepa.menu_message_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_reject_message_form_financial_read">
+            <field name="menu" ref="account_payment_sepa_cog.menu_reject_message_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <!-- Bank -->
+        <record model="ir.ui.menu-res.group" id="menu_banking_financial_read">
+            <field name="menu" ref="bank.menu_banking"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_bank_form_financial_read">
+            <field name="menu" ref="bank.menu_bank_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_bank_account_form_financial_read">
+            <field name="menu" ref="bank.menu_bank_account_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_mandate_form_financial_read">
+            <field name="menu" ref="account_payment_sepa.menu_mandate_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <!-- Financial Management Group -->
+        <!-- Financial -->
+        <!-- Financial / Payments -->
+        <record model="ir.ui.menu-res.group" id="menu_message_form_financial_manage">
+            <field name="menu" ref="account_payment_sepa.menu_message_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_reject_message_form_financial_manage">
+            <field name="menu" ref="account_payment_sepa_cog.menu_reject_message_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <!-- Bank -->
+        <record model="ir.ui.menu-res.group" id="menu_banking_financial_manage">
+            <field name="menu" ref="bank.menu_banking"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_bank_form_financial_manage">
+            <field name="menu" ref="bank.menu_bank_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_bank_account_form_financial_manage">
+            <field name="menu" ref="bank.menu_bank_account_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_mandate_form_financial_manage">
+            <field name="menu" ref="account_payment_sepa.menu_mandate_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+    <!-- Financial Management Group -->
+        <record model="ir.model.access" id="access_sepa_mandate_financial_management_group">
+                <field name="model" search="[('model', '=', 'account.payment.sepa.mandate')]"/>
+                <field name="group" ref="account_cog.group_financial_manage"/>
+                <field name="perm_read" eval="True"/>
+                <field name="perm_write" eval="True"/>
+                <field name="perm_create" eval="True"/>
+                <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_sepa_message_financial_management_group">
+                <field name="model" search="[('model', '=', 'account.payment.sepa.message')]"/>
+                <field name="group" ref="account_cog.group_financial_manage"/>
+                <field name="perm_read" eval="True"/>
+                <field name="perm_write" eval="True"/>
+                <field name="perm_create" eval="True"/>
+                <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_sepa_mandate_sequence_financial_management_group">
+                <field name="model" search="[('model', '=', 'account.configuration.sepa_mandate_sequence')]"/>
+                <field name="group" ref="account_cog.group_financial_manage"/>
+                <field name="perm_read" eval="True"/>
+                <field name="perm_write" eval="True"/>
+                <field name="perm_create" eval="True"/>
+                <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_bank_group_financial_manage">
+            <field name="model" search="[('model', '=', 'bank')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_bank_account_group_financial_manage">
+            <field name="model" search="[('model', '=', 'bank.account')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.field.access"
+            id="access_party_bank_accounts_group_financial_manage">
+            <field name="field" search="[('model.model', '=', 'party.party'), ('name', '=', 'bank_accounts')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_bank_account_number_group_financial_manage">
+            <field name="model" search="[('model', '=', 'bank.account.number')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Contract Management Group -->
+        <record model="ir.model.access" id="access_sepa_mandate_contract_management_group">
+                <field name="model" search="[('model', '=', 'account.payment.sepa.mandate')]"/>
+                <field name="group" ref="contract.group_contract_manage"/>
+                <field name="perm_read" eval="True"/>
+                <field name="perm_write" eval="True"/>
+                <field name="perm_create" eval="True"/>
+                <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Sepa Access Rights -->
+        <record model="ir.model.access" id="access_sepa_mandate">
+                <field name="model" search="[('model', '=', 'account.payment.sepa.mandate')]"/>
+                <field name="perm_read" eval="True"/>
+                <field name="perm_write" eval="False"/>
+                <field name="perm_create" eval="False"/>
+                <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_sepa_message">
+                <field name="model" search="[('model', '=', 'account.payment.sepa.message')]"/>
+                <field name="perm_read" eval="True"/>
+                <field name="perm_write" eval="False"/>
+                <field name="perm_create" eval="False"/>
+                <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+    <data depends="bank_fr">
+        <!-- Financial Management Group -->
+        <record model="ir.model.access" id="access_bank_financial_management_group">
+            <field name="model" search="[('model', '=', 'bank.agency')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

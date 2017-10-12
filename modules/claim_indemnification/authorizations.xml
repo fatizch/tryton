@@ -1,0 +1,369 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Access Rights for Claim Consultation Group -->
+        <!-- Financial -->
+        <record model="ir.ui.menu-res.group" id="menu_account_claim_read">
+            <field name="menu" ref="account.menu_account"/>
+            <field name="group" ref="claim.group_claim_read"/>
+        </record>
+        <!-- Financial / Invoices -->
+        <record model="ir.ui.menu-res.group" id="menu_invoices_claim_read">
+            <field name="menu" ref="account_invoice.menu_invoices"/>
+            <field name="group" ref="claim.group_claim_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_invoice_out_form_claim_read">
+            <field name="menu" ref="account_invoice.menu_invoice_out_form"/>
+            <field name="group" ref="claim.group_claim_read"/>
+        </record>
+        <!-- Financial / Payments  -->
+        <record model="ir.ui.menu-res.group" id="menu_payments_form_claim_read">
+            <field name="menu" ref="account_payment.menu_payments"/>
+            <field name="group" ref="claim.group_claim_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_move_line_form_claim_read">
+            <field name="menu" ref="account_payment.menu_move_line_form"/>
+            <field name="group" ref="claim.group_claim_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_form_claim_read">
+            <field name="menu" ref="account_payment.menu_payment_form"/>
+            <field name="group" ref="claim.group_claim_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_fail_payment_status_form_claim_read">
+            <field name="menu" ref="account_payment_cog.menu_fail_payment_status_form"/>
+            <field name="group" ref="claim.group_claim_read"/>
+        </record>
+        <!-- Product Consultation Group  -->
+        <!-- Claim / Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_indemnification_control_rule_product_read">
+            <field name="menu" ref="claim_indemnification.menu_indemnification_control_rule"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <!-- Claim -->
+        <record model="ir.ui.menu-res.group" id="menu_control_indemnification_claim_manage">
+            <field name="menu" ref="claim_indemnification.menu_control_indemnification"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_validate_indemnification_claim_manage">
+            <field name="menu" ref="claim_indemnification.menu_validate_indemnification"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <!-- Product Management Group  -->
+        <!-- Claim / Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_indemnification_control_rule_product_manage">
+            <field name="menu" ref="claim_indemnification.menu_indemnification_control_rule"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_group_claim_manage">
+            <field name="model" search="[('model', '=', 'account.payment')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_group_group_claim_manage">
+            <field name="model" search="[('model', '=', 'account.payment.group')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_payment_direct_debit_group_claim_manage">
+            <field name="model" search="[('model', '=', 'party.party.payment_direct_debit')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_group_claim_manage">
+            <field name="model" search="[('model', '=', 'account.invoice')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_line_group_claim_manage">
+            <field name="model" search="[('model', '=', 'account.invoice.line')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_move_group_claim_manage">
+            <field name="model" search="[('model', '=', 'account.move')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_move_line_group_claim_manage">
+            <field name="model" search="[('model', '=', 'account.move.line')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_move_reconciliation_group_claim_manage">
+            <field name="model" search="[('model', '=', 'account.move.reconciliation')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_tax_line_group_claim_manage">
+            <field name="model" search="[('model', '=', 'account.tax.line')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- benefit rule -->
+        <!-- Default Benefit Rule Access -->
+        <record model="ir.model.access" id="access_benefit_rule">
+            <field name="model" search="[('model', '=', 'benefit.rule')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Admin Group -->
+        <record model="ir.model.access" id="access_benefit_rule_admin_group">
+            <field name="model" search="[('model', '=', 'benefit.rule')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Global Configuration Group -->
+       <record model="ir.model.access" id="access_benefit_rule_group_global_config">
+            <field name="model" search="[('model', '=', 'benefit.rule')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Product Management Group -->
+        <record model="ir.model.access" id="access_benefit_rule_group_product_manage">
+            <field name="model" search="[('model', '=', 'benefit.rule')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- claim indemnification -->
+        <!-- Default Claim Indemnification Access -->
+        <record model="ir.model.access" id="access_claim_indemnification">
+            <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Admin Group -->
+        <record model="ir.model.access" id="access_claim_indemnification_admin_group">
+            <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Global Configuration Group -->
+       <record model="ir.model.access" id="access_claim_indemnification_group_global_config">
+            <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Claim Management Group -->
+        <record model="ir.model.access" id="access_claim_indemnification_group_product_manage">
+            <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!--control rule -->
+        <!-- Default Control Rule Access -->
+        <record model="ir.model.access" id="access_control_rule">
+            <field name="model" search="[('model', '=', 'claim.indemnification.control.rule')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Admin Group -->
+        <record model="ir.model.access" id="access_control_rule_admin_group">
+            <field name="model" search="[('model', '=', 'claim.indemnification.control.rule')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Global Configuration Group -->
+       <record model="ir.model.access" id="access_control_rule_group_global_config">
+            <field name="model" search="[('model', '=', 'claim.indemnification.control.rule')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Claim Management Group -->
+        <record model="ir.model.access" id="access_control_rule_group_claim_manage">
+            <field name="model" search="[('model', '=', 'claim.indemnification.control.rule')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- claim indemnification Detail -->
+        <!-- Default Claim Indemnification Access -->
+        <record model="ir.model.access" id="access_claim_indemnification_detail">
+            <field name="model" search="[('model', '=', 'claim.indemnification.detail')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Admin Group -->
+        <record model="ir.model.access" id="access_claim_indemnification_detail_admin_group">
+            <field name="model" search="[('model', '=', 'claim.indemnification.detail')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Global Configuration Group -->
+       <record model="ir.model.access" id="access_claim_indemnification_detail_group_global_config">
+            <field name="model" search="[('model', '=', 'claim.indemnification.detail')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Claim Management Group -->
+        <record model="ir.model.access" id="access_claim_indemnification_detail_group_product_manage">
+            <field name="model" search="[('model', '=', 'claim.indemnification.detail')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="invoice_cancel_button_group_claim_manage">
+            <field name="button" ref="account_invoice.invoice_cancel_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="invoice_draft_button_group_claim_manage">
+            <field name="button" ref="account_invoice.invoice_draft_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="invoice_validate_button_group_claim_manage">
+            <field name="button" ref="account_invoice.invoice_validate_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="invoice_post_button_group_claim_manage">
+            <field name="button" ref="account_invoice.invoice_post_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="invoice_pay_button_group_claim_manage">
+            <field name="button" ref="account_invoice.invoice_pay_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="create_service_indemnification_group_claim_manage">
+            <field name="button" ref="claim_indemnification.claim_create_indemnification_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="create_claim_indemnification_group_claim_manage">
+            <field name="button" ref="claim_indemnification.claim_create_claim_indemnification_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="fill_extra_data_group_claim_manage">
+            <field name="button" ref="claim_indemnification.claim_fill_extra_datas_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_payment_term_group_product_manage">
+            <field name="model" search="[('model', '=', 'account.invoice.payment_term')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_payment_term_line_group_product_manage">
+            <field name="model" search="[('model', '=', 'account.invoice.payment_term.line')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_payment_term_line_delta_group_product_manage">
+            <field name="model" search="[('model', '=', 'account.invoice.payment_term.line.delta')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+    <data depends="underwriting">
+        <!-- Claim Indemnification -->
+        <!-- Claim Underwriting Group -->
+        <record model="ir.model.access" id="access_claim_indemnification_group_claim_underwriting">
+            <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Claim Indemnification Detail-->
+        <!-- Claim Underwriting Group -->
+        <record model="ir.model.access" id="access_claim_indemnification_detail_group_claim_underwriting">
+            <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+    <data depends="account_invoice_logging">
+        <record model="ir.model.access" id="access_account_invoice_logging_group_claim_manage">
+            <field name="model" search="[('model', '=', 'account.invoice.logging')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

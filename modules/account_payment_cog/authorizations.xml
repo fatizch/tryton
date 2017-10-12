@@ -1,0 +1,274 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Financial Consultation Group -->
+        <!-- Financial -->
+        <!-- Financial Configuration/ Payments -->
+        <record model="ir.ui.menu-res.group" id="menu_payment_configuration_financial_read">
+            <field name="menu" ref="account_payment.menu_payment_configuration"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_journal_form_financial_read">
+            <field name="menu" ref="account_payment.menu_payment_journal_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_motive_form_financial_read">
+            <field name="menu" ref="account_payment_cog.menu_payment_motive_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_reject_reason_form_financial_read">
+            <field name="menu" ref="account_payment_cog.menu_reject_reason_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <!-- Financial / Payments -->
+        <record model="ir.ui.menu-res.group" id="menu_payments_financial_read">
+            <field name="menu" ref="account_payment.menu_payments"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_move_line_form_financial_read">
+            <field name="menu" ref="account_payment.menu_move_line_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_form_financial_read">
+            <field name="menu" ref="account_payment.menu_payment_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_fail_payment_status_form_financial_read">
+            <field name="menu" ref="account_payment_cog.menu_fail_payment_status_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_group_form_financial_read">
+            <field name="menu" ref="account_payment.menu_payment_group_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_merged_payment_form_financial_read">
+            <field name="menu" ref="account_payment_cog.menu_merged_payment_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_create_payments_financial_read">
+            <field name="menu" ref="account_payment_cog.menu_create_payments"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <!-- Financial Management Group -->
+        <!-- Financial -->
+        <!-- Financial Configuration / Payments -->
+        <record model="ir.ui.menu-res.group" id="menu_payment_configuration_financial_manage">
+            <field name="menu" ref="account_payment.menu_payment_configuration"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_journal_form_financial_manage">
+            <field name="menu" ref="account_payment.menu_payment_journal_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_motive_form_financial_manage">
+            <field name="menu" ref="account_payment_cog.menu_payment_motive_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_reject_reason_form_financial_manage">
+            <field name="menu" ref="account_payment_cog.menu_reject_reason_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <!-- Financial / Payments -->
+        <record model="ir.ui.menu-res.group" id="menu_payments_financial_manage">
+            <field name="menu" ref="account_payment.menu_payments"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_move_line_form_financial_manage">
+            <field name="menu" ref="account_payment.menu_move_line_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_form_financial_manage">
+            <field name="menu" ref="account_payment.menu_payment_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_fail_payment_status_form_financial_manage">
+            <field name="menu" ref="account_payment_cog.menu_fail_payment_status_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_group_form_financial_manage">
+            <field name="menu" ref="account_payment.menu_payment_group_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_merged_payment_form_financial_manage">
+            <field name="menu" ref="account_payment_cog.menu_merged_payment_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_create_payments_financial_manage">
+            <field name="menu" ref="account_payment_cog.menu_create_payments"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_account_configuration_direct_debit_journal_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.configuration.direct_debit_journal')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_configuration_reject_fee_journal_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.configuration.reject_fee_journal')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_journal_failure_action_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.payment.journal.failure_action')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_journal_reject_reason_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.payment.journal.reject_reason')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_merged_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.payment.merged')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_motive_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.payment.motive')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_configuration_payment_group_sequence_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.configuration.payment_group_sequence')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.payment')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_group_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.payment.group')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_journal_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.payment.journal')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_payment_direct_debit_group_financial_manage">
+            <field name="model" search="[('model', '=', 'party.party.payment_direct_debit')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="payment_succeed_button_group_contract_manage">
+            <field name="button" ref="account_payment.payment_succeed_button"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <!-- Default Account Payment Cog Access Rights -->
+        <record model="ir.model.access" id="access_account_configuration_direct_debit_journal">
+            <field name="model" search="[('model', '=', 'account.configuration.direct_debit_journal')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_configuration_reject_fee_journal">
+            <field name="model" search="[('model', '=', 'account.configuration.reject_fee_journal')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_journal_failure_action">
+            <field name="model" search="[('model', '=', 'account.payment.journal.failure_action')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_journal_reject_reason">
+            <field name="model" search="[('model', '=', 'account.payment.journal.reject_reason')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_merged">
+            <field name="model" search="[('model', '=', 'account.payment.merged')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_motive">
+            <field name="model" search="[('model', '=', 'account.payment.motive')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_configuration_payment_group_sequence">
+            <field name="model" search="[('model', '=', 'account.configuration.payment_group_sequence')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment">
+            <field name="model" search="[('model', '=', 'account.payment')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_group">
+            <field name="model" search="[('model', '=', 'account.payment.group')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_journal">
+            <field name="model" search="[('model', '=', 'account.payment.journal')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_payment_direct_debit">
+            <field name="model" search="[('model', '=', 'party.party.payment_direct_debit')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

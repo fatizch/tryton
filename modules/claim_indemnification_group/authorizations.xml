@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Access Rights for Claim Management Group -->
+        <record model="ir.ui.menu-res.group" id="menu_transfer_services_claim_manage">
+            <field name="menu" ref="claim_indemnification_group.menu_transfer_services"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <!-- Default Contract Option Benefit Access -->
+        <record model="ir.model.access" id="access_contract_option_benefit">
+            <field name="model" search="[('model', '=', 'contract.option.benefit')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Admin Group -->
+        <record model="ir.model.access" id="access_contract_option_benefit_group">
+            <field name="model" search="[('model', '=', 'contract.option.benefit')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Contract Management Group -->
+        <record model="ir.model.access" id="access_contract_option_benefit_contract_manage_group">
+            <field name="model" search="[('model', '=', 'contract.option.benefit')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Claim Management Group -->
+        <record model="ir.model.access" id="access_contract_option_benefit_claim_manage_group">
+            <field name="model" search="[('model', '=', 'contract.option.benefit')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

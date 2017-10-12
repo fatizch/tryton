@@ -1,0 +1,222 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Financial Consultation Group -->
+        <!-- Financial -->
+        <!-- Financial / Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_payment_terms_configuration_financial_read">
+            <field name="menu" ref="account_invoice.menu_payment_terms_configuration"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_term_form_financial_read">
+            <field name="menu" ref="account_invoice.menu_payment_term_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_term_test_financial_read">
+            <field name="menu" ref="account_invoice.menu_payment_term_test"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <!-- Financial / Invoices -->
+        <record model="ir.ui.menu-res.group" id="menu_invoices_financial_read">
+            <field name="menu" ref="account_invoice.menu_invoices"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_invoice_out_form_financial_read">
+            <field name="menu" ref="account_invoice.menu_invoice_out_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_invoice_in_form_financial_read">
+            <field name="menu" ref="account_invoice.menu_invoice_in_form"/>
+            <field name="group" ref="account_cog.group_financial_read"/>
+        </record>
+        <!-- Financial Management Group -->
+        <!-- Financial -->
+        <!-- Financial / Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_payment_terms_configuration_financial_manage">
+            <field name="menu" ref="account_invoice.menu_payment_terms_configuration"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_term_form_financial_manage">
+            <field name="menu" ref="account_invoice.menu_payment_term_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_term_test_financial_manage">
+            <field name="menu" ref="account_invoice.menu_payment_term_test"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <!-- Financial / Invoices -->
+        <record model="ir.ui.menu-res.group" id="menu_invoices_financial_manage">
+            <field name="menu" ref="account_invoice.menu_invoices"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_invoice_out_form_financial_manage">
+            <field name="menu" ref="account_invoice.menu_invoice_out_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_invoice_in_form_financial_manage">
+            <field name="menu" ref="account_invoice.menu_invoice_in_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_account_fiscalyear_invoice_sequence_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.fiscalyear.invoice_sequence')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.invoice')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_line_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.invoice.line')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_payment_term_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.invoice.payment_term')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_payment_term_line_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.invoice.payment_term.line')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_payment_term_line_delta_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.invoice.payment_term.line.delta')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_tax_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.invoice.tax')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_party_payment_term_group_financial_manage">
+            <field name="model" search="[('model', '=', 'party.party.payment_term')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_report_production_request_group_financial_manage">
+            <field name="model" search="[('model', '=', 'report_production.request')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Account Invoice Access Rights -->
+        <record model="ir.model.access" id="access_account_fiscalyear_invoice_sequence">
+            <field name="model" search="[('model', '=', 'account.fiscalyear.invoice_sequence')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice">
+            <field name="model" search="[('model', '=', 'account.invoice')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_line">
+            <field name="model" search="[('model', '=', 'account.invoice.line')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_payment_term">
+            <field name="model" search="[('model', '=', 'account.invoice.payment_term')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_payment_term_line">
+            <field name="model" search="[('model', '=', 'account.invoice.payment_term.line')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_payment_term_line_delta">
+            <field name="model" search="[('model', '=', 'account.invoice.payment_term.line.delta')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_tax">
+            <field name="model" search="[('model', '=', 'account.invoice.tax')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_party_payment_term">
+            <field name="model" search="[('model', '=', 'party.party.payment_term')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.sequence.type-res.group"
+            id="sequence_type_account_invoice_group_financial_manager">
+            <field name="sequence_type" ref="account_invoice.sequence_type_account_invoice"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="invoice_cancel_button_group_financial_manage">
+            <field name="button" ref="account_invoice.invoice_cancel_button"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="invoice_draft_button_group_financial_manage">
+            <field name="button" ref="account_invoice.invoice_draft_button"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="invoice_validate_button_group_financial_manage">
+            <field name="button" ref="account_invoice.invoice_validate_button"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="invoice_post_button_group_financial_manage">
+            <field name="button" ref="account_invoice.invoice_post_button"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="invoice_pay_button_group_financial_manage">
+            <field name="button" ref="account_invoice.invoice_pay_button"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+    </data>
+</tryton>

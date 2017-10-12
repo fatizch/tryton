@@ -196,14 +196,6 @@ this repository contains the full copyright notices and license terms. -->
         <record model="res.group" id="group_contract">
             <field name="name">Contract</field>
         </record>
-        <record model="ir.model.access" id="access_party_synthesis">
-            <field name="model" search="[('model', '=', 'res.user')]"/>
-            <field name="group" ref="contract.group_contract"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
         <record model="res.group" id="group_contract_admin">
             <field name="name">Contract Administration</field>
         </record>
@@ -234,6 +226,10 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.sequence.type-res.group" id="sequence_type_quote_group_offered_admin">
             <field name="sequence_type" ref="sequence_type_quote"/>
             <field name="group" ref="offered.group_offered_admin"/>
+        </record>
+        <record model="ir.sequence.type-res.group" id="sequence_type_quote_group_product_manage">
+            <field name="sequence_type" ref="sequence_type_quote"/>
+            <field name="group" ref="offered.group_product_manage"/>
         </record>
         <!-- ############################################################ -->
         <!-- Substatus -->

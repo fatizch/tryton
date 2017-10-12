@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Commission Management Group -->
+        <!-- Commission -->
+        <record model="ir.ui.menu-res.group" id="menu_commission_create_invoice_principal_commission_manage">
+            <field name="menu" ref="commission_insurer.menu_commission_create_invoice_principal"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_group_commission_manage">
+            <field name="model" search="[('model', '=', 'account.invoice')]"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_line_group_commission_manage">
+            <field name="model" search="[('model', '=', 'account.invoice.line')]"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

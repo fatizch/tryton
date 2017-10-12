@@ -1,0 +1,480 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Product Consultation Group  -->
+        <record model="res.group" id="group_product_read">
+            <field name="name">Coog Product consultation</field>
+        </record>
+        <!-- Contract Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_contract_configuration_product_read">
+            <field name="menu" ref="offered.menu_contract_configuration"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_configuration_form_product_read">
+            <field name="menu" ref="offered.menu_configuration_form"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <!-- Report Engine -->
+        <record model="ir.ui.menu-res.group" id="menu_report_product_read">
+            <field name="menu" ref="report_engine.menu_report"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="report_templates_product_read">
+            <field name="menu" ref="report_engine.menu_doc_template"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_template_parameter_product_read">
+            <field name="menu" ref="report_engine.menu_template_parameter"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <!-- Laboratory -->
+        <record model="ir.ui.menu-res.group" id="menu_product_product_read">
+            <field name="menu" ref="offered.menu_product"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_coverage_form_product_read">
+            <field name="menu" ref="offered.menu_coverage_form"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_product_form_product_read">
+            <field name="menu" ref="offered.menu_product_form"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_package_form_product_read">
+            <field name="menu" ref="offered.menu_package_form"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_product_configuration_product_read">
+            <field name="menu" ref="offered.menu_product_configuration"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_model_extra_data_product_read">
+            <field name="menu" ref="offered.menu_model_extra_data"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_rule_engine_product_read">
+            <field name="menu" ref="rule_engine.menu_rule_engine"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_rule_product_read">
+            <field name="menu" ref="rule_engine.menu_rule"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_context_product_read">
+            <field name="menu" ref="rule_engine.menu_context"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_tree_element_product_read">
+            <field name="menu" ref="rule_engine.menu_tree_element"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_error_product_read">
+            <field name="menu" ref="rule_engine.menu_error"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_table_defintion_form_product_read">
+            <field name="menu" ref="table.menu_table_defintion_form"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <!-- Product Management Group -->
+        <record model="res.group" id="group_product_manage">
+            <field name="name">Coog Product management</field>
+        </record>
+        <!-- Contract Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_contract_configuration_product_manage">
+            <field name="menu" ref="offered.menu_contract_configuration"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_configuration_form_product_manage">
+            <field name="menu" ref="offered.menu_configuration_form"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <!-- Report Engine -->
+        <record model="ir.ui.menu-res.group" id="menu_report_product_manage">
+            <field name="menu" ref="report_engine.menu_report"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="report_templates_product_manage">
+            <field name="menu" ref="report_engine.menu_doc_template"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_template_parameter_product_manage">
+            <field name="menu" ref="report_engine.menu_template_parameter"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <!-- Laboratory -->
+        <record model="ir.ui.menu-res.group" id="menu_product_product_manage">
+            <field name="menu" ref="offered.menu_product"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_coverage_form_product_manage">
+            <field name="menu" ref="offered.menu_coverage_form"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_product_form_product_manage">
+            <field name="menu" ref="offered.menu_product_form"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_package_form_product_manage">
+            <field name="menu" ref="offered.menu_package_form"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_product_configuration_product_manage">
+            <field name="menu" ref="offered.menu_product_configuration"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_model_extra_data_product_manage">
+            <field name="menu" ref="offered.menu_model_extra_data"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_rule_engine_product_manage">
+            <field name="menu" ref="rule_engine.menu_rule_engine"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_rule_product_manage">
+            <field name="menu" ref="rule_engine.menu_rule"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_context_product_manage">
+            <field name="menu" ref="rule_engine.menu_context"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_tree_element_product_manage">
+            <field name="menu" ref="rule_engine.menu_tree_element"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_error_product_manage">
+            <field name="menu" ref="rule_engine.menu_error"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_table_defintion_form_product_manage">
+            <field name="menu" ref="table.menu_table_defintion_form"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <!-- Users  -->
+        <record model="res.user-res.group" id="user_admin_group_product_read">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_product_read"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_product_manage">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_data">
+            <field name="model" search="[('model', '=', 'extra_data')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_data_group_product_read">
+            <field name="model" search="[('model', '=', 'extra_data')]"/>
+            <field name="group" ref="group_product_read"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_data_group_product_manage">
+            <field name="model" search="[('model', '=', 'extra_data')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_group_product_read">
+            <field name="model" search="[('model', '=', 'extra_details.configuration')]"/>
+            <field name="group" ref="group_product_read"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_configuration_group_product_manage">
+            <field name="model" search="[('model', '=', 'offered.configuration')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_option_description_group_product_manage">
+            <field name="model" search="[('model', '=', 'offered.option.description')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_option_description_ending_rule_group_product_manage">
+            <field name="model" search="[('model', '=', 'offered.option.description.ending_rule')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_product_group_product_manage">
+            <field name="model" search="[('model', '=', 'offered.product')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_table_group_product_manage">
+            <field name="model" search="[('model', '=', 'table')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_table_2d_group_product_manage">
+            <field name="model" search="[('model', '=', 'table.2d')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_table_cell_group_product_manage">
+            <field name="model" search="[('model', '=', 'table.cell')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_table_dimension_value_group_product_manage">
+            <field name="model" search="[('model', '=', 'table.dimension.value')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_rule_engine_group_product_manage">
+            <field name="model" search="[('model', '=', 'rule_engine')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_rule_engine_context_group_product_manage">
+            <field name="model" search="[('model', '=', 'rule_engine.context')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_rule_engine_function_group_product_manage">
+            <field name="model" search="[('model', '=', 'rule_engine.function')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_rule_engine_log_group_product_manage">
+            <field name="model" search="[('model', '=', 'rule_engine.log')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_rule_engine_rule_parameter_group_product_manage">
+            <field name="model" search="[('model', '=', 'rule_engine.rule_parameter')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_rule_engine_test_case_group_product_manage">
+            <field name="model" search="[('model', '=', 'rule_engine.test_case')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_rule_engine_test_case_value_group_product_manage">
+            <field name="model" search="[('model', '=', 'rule_engine.test_case.value')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_report_template_group_product_manage">
+            <field name="model" search="[('model', '=', 'report.template')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_report_template_parameter_group_product_manage">
+            <field name="model" search="[('model', '=', 'report.template.parameter')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_report_template_version_group_product_manage">
+            <field name="model" search="[('model', '=', 'report.template.version')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_functional_error_group_product_manage">
+            <field name="model" search="[('model', '=', 'functional_error')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Offered Access Rights -->
+        <record model="ir.model.access" id="access_offered_configuration">
+            <field name="model" search="[('model', '=', 'offered.configuration')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_option_description">
+            <field name="model" search="[('model', '=', 'offered.option.description')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_option_description_ending_rule">
+            <field name="model" search="[('model', '=', 'offered.option.description.ending_rule')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_product">
+            <field name="model" search="[('model', '=', 'offered.product')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_table">
+            <field name="model" search="[('model', '=', 'table')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_table_2d">
+            <field name="model" search="[('model', '=', 'table.2d')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_table_cell">
+            <field name="model" search="[('model', '=', 'table.cell')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_table_dimension_value">
+            <field name="model" search="[('model', '=', 'table.dimension.value')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_event_type_action_group_product_manage">
+            <field name="model" search="[('model', '=', 'event.type.action')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_group_product_manage">
+            <field name="model" search="[('model', '=', 'extra_details.configuration')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_line_group_product_manage">
+            <field name="model" search="[('model', '=', 'extra_details.configuration.line')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_tag_group_product_manage">
+            <field name="model" search="[('model', '=', 'tag')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_sequence_group_product_manage">
+            <field name="model" search="[('model', '=', 'ir.sequence')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_sequence_type_group_product_manage">
+            <field name="model" search="[('model', '=', 'ir.sequence.type')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.sequence.type-res.group" id="sequence_type_contract_number_group_product_manage">
+            <field name="sequence_type" ref="sequence_type_contract_number"/>
+            <field name="group" ref="group_product_manage"/>
+        </record>
+    </data>
+    <data depends="report_engine_flow">
+        <!-- Product Management Group -->
+        <record model="ir.model.access" id="access_report_template_variable_group_product_manage">
+            <field name="model" search="[('model', '=', 'report.flow.variable')]"/>
+            <field name="group" ref="group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+    <data depends="report_engine_email">
+        <!-- Product Management Group -->
+        <record model="ir.model.access" id="access_report_template_image_attachment_group_product_manage">
+            <field name="model" search="[('model', '=', 'report.template.image_attachment')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

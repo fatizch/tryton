@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="account_aggregate">
+        <!-- Contract Manage Group -->
+        <record model="ir.model.access" id="access_account_move_line_aggregated_contract_manage_group">
+            <field name="model" search="[('model', '=', 'account.move.line.aggregated')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+    <data>
+        <!-- Contract Manage Group -->
+        <record model="ir.model.access" id="access_contract_covered_element_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract.covered_element')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_covered_element_version_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract.covered_element.version')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_option_extra_premium_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract.option.extra_premium')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_process_log_contract_manage_group">
+            <field name="model" search="[('model', '=', 'process.log')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_process_status_contract_manage_group">
+            <field name="model" search="[('model', '=', 'process.status')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_action_contract_manage_group">
+            <field name="model" search="[('model', '=', 'process.action')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_contract_manage_group">
+            <field name="model" search="[('model', '=', 'process')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_step_contract_manage_group">
+            <field name="model" search="[('model', '=', 'process.step')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_transition_contract_manage_group">
+            <field name="model" search="[('model', '=', 'process.transition')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Default Contract Insurance Access Rights -->
+        <record model="ir.model.access" id="access_contract_covered_element">
+            <field name="model" search="[('model', '=', 'contract.covered_element')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_covered_element_version">
+            <field name="model" search="[('model', '=', 'contract.covered_element.version')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_option_extra_premium">
+            <field name="model" search="[('model', '=', 'contract.option.extra_premium')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

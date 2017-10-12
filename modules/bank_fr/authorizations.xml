@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Default Agency Access -->
+        <record model="ir.model.access" id="access_bank_agency">
+            <field name="model" search="[('model', '=', 'bank.agency')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Global Configuration Group -->
+        <record model="ir.model.access" id="access_bank_agency_party_manage_group">
+            <field name="model" search="[('model', '=', 'bank.agency')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Bank Admin Group -->
+        <record model="ir.model.access" id="access_bank_agency_bank_admin_group">
+            <field name="model" search="[('model', '=', 'bank.agency')]"/>
+            <field name="group" ref="bank.group_bank_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Admin Group -->
+        <record model="ir.model.access" id="access_bank_agency_admin_group">
+            <field name="model" search="[('model', '=', 'bank.agency')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>
+

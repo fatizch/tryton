@@ -522,6 +522,10 @@ msgctxt "model:ir.ui.menu,name:menu_underwritings"
 msgid "Underwritings"
 msgstr "Demandes de décisions"
 
+msgctxt "model:res.group,name:group_claim_underwriting"
+msgid "Claim Underwriting"
+msgstr "Analyse de risques - Sinistre"
+
 msgctxt "model:underwriting,name:"
 msgid "Underwriting"
 msgstr "Analyse de risques"

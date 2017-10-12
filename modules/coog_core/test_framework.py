@@ -7,6 +7,7 @@ import imp
 from trytond.transaction import Transaction
 from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT, ModuleTestCase
 from trytond.pool import Pool
+from proteus import config, Model, Wizard
 
 
 __all__ = [
@@ -191,3 +192,24 @@ class CoogTestCase(ModuleTestCase):
         if self._models and name in self._models:
             return self._models[name]
         raise AttributeError
+
+
+def execute_test_case(method_name):
+    Instance = Model.get('ir.test_case.instance')
+    instance, = Instance.find([('method_name', '=', method_name)])
+    test_case = Wizard('ir.test_case.run')
+    index = None
+    for i, case in enumerate(test_case.form.test_cases):
+        if case.test == instance.name:
+            index = i
+            break
+    assert index is not None, method_name + ' is not in ' + \
+        str([x.test for x in test_case.form.test_cases])
+    test_case.form.test_cases[index].selected = True
+    test_case.execute('execute_test_cases')
+
+
+def switch_user(user_code):
+    cfg = config.set_trytond(user=user_code)
+    cfg.pool.test = True
+    return cfg

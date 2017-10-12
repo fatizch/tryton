@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_claim_configuration_general_configuration"
-msgid "Claim Configuration"
-msgstr "Configuration sinistre"
-
-msgctxt "model:ir.ui.menu,name:menu_claim_substatus_general_configuration"
-msgid "Claim Sub-status"
-msgstr "Sous statut de sinistre"
-
 msgctxt "error:benefit.event.description:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
@@ -19,16 +11,16 @@ msgid "The code must be unique"
 msgstr "Le code doit être unique"
 
 msgctxt "error:benefit:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
-
-msgctxt "error:benefit:"
 msgid "Other"
 msgstr "Autre"
 
 msgctxt "error:benefit:"
 msgid "Subscriber"
 msgstr "Souscripteur"
+
+msgctxt "error:benefit:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
 
 msgctxt "error:claim.closing_reason:"
 msgid "The code must be unique"
@@ -679,6 +671,10 @@ msgctxt "field:claim.loss,claim:"
 msgid "Claim"
 msgstr "Sinistre"
 
+msgctxt "field:claim.loss,claim_status:"
+msgid "Claim Status"
+msgstr "Statut du sinistre"
+
 msgctxt "field:claim.loss,closing_reason:"
 msgid "Closing Reason"
 msgstr "Motif de fin"
@@ -791,6 +787,10 @@ msgctxt "field:claim.service,claim:"
 msgid "Claim"
 msgstr "Sinistre"
 
+msgctxt "field:claim.service,claim_status:"
+msgid "Claim Status"
+msgstr "Statut du sinistre"
+
 msgctxt "field:claim.service,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -874,6 +874,10 @@ msgstr "Identifiant XML"
 msgctxt "field:claim.service.extra_data,claim_service:"
 msgid "Claim Service"
 msgstr "Prestation fournie"
+
+msgctxt "field:claim.service.extra_data,claim_status:"
+msgid "Claim Status"
+msgstr "Statut du sinistre"
 
 msgctxt "field:claim.service.extra_data,create_date:"
 msgid "Create Date"
@@ -1306,9 +1310,17 @@ msgctxt "model:ir.ui.menu,name:menu_claim_configuration"
 msgid "Configuration"
 msgstr "Configuration"
 
+msgctxt "model:ir.ui.menu,name:menu_claim_configuration_general_configuration"
+msgid "Claim Configuration"
+msgstr "Configuration sinistre"
+
 msgctxt "model:ir.ui.menu,name:menu_claim_form"
 msgid "Claims"
 msgstr "Sinistres"
+
+msgctxt "model:ir.ui.menu,name:menu_claim_substatus_general_configuration"
+msgid "Claim Sub-status"
+msgstr "Sous statut de sinistre"
 
 msgctxt "model:ir.ui.menu,name:menu_closing_reason"
 msgid "Closing Reasons"
@@ -1344,7 +1356,15 @@ msgstr "sinistre"
 
 msgctxt "model:res.group,name:group_claim_admin"
 msgid "Claim Administration"
-msgstr "Administration"
+msgstr "Administration Sinistres"
+
+msgctxt "model:res.group,name:group_claim_manage"
+msgid "Claim management"
+msgstr "Gestion de sinistres"
+
+msgctxt "model:res.group,name:group_claim_read"
+msgid "Claim consultation"
+msgstr "Consultation de sinistres"
 
 msgctxt "model:tag,name:tag_claim"
 msgid "Claim"
@@ -1493,6 +1513,10 @@ msgstr "Prestation fournie"
 msgctxt "view:claim.sub_status:"
 msgid "Substatus"
 msgstr "Sous statut"
+
+msgctxt "view:claim:"
+msgid "Close claims"
+msgstr "Clôre les sinistres"
 
 msgctxt "view:claim:"
 msgid "Losses"

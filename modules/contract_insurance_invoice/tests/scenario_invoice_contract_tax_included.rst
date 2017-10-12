@@ -11,38 +11,12 @@ Imports::
     >>> from trytond.modules.company.tests.tools import get_company
     >>> from trytond.modules.company_cog.tests.tools import create_company
     >>> from trytond.modules.currency.tests.tools import get_currency
+    >>> from trytond.modules.coog_core.test_framework import execute_test_case, \
+    ...     switch_user
 
 Install Modules::
 
     >>> config = activate_modules('contract_insurance_invoice')
-
-Get Models::
-
-    >>> Account = Model.get('account.account')
-    >>> AccountInvoice = Model.get('account.invoice')
-    >>> AccountKind = Model.get('account.account.type')
-    >>> BillingInformation = Model.get('contract.billing_information')
-    >>> BillingMode = Model.get('offered.billing_mode')
-    >>> Company = Model.get('company.company')
-    >>> Configuration = Model.get('account.configuration')
-    >>> ConfigurationTaxRounding = Model.get('account.configuration.tax_rounding')
-    >>> Contract = Model.get('contract')
-    >>> ContractInvoice = Model.get('contract.invoice')
-    >>> ContractPremium = Model.get('contract.premium')
-    >>> Country = Model.get('country.country')
-    >>> FiscalYear = Model.get('account.fiscalyear')
-    >>> InvoiceSequence = Model.get('account.fiscalyear.invoice_sequence')
-    >>> Option = Model.get('contract.option')
-    >>> OptionDescription = Model.get('offered.option.description')
-    >>> Party = Model.get('party.party')
-    >>> PaymentTerm = Model.get('account.invoice.payment_term')
-    >>> PaymentTermLine = Model.get('account.invoice.payment_term.line')
-    >>> Product = Model.get('offered.product')
-    >>> Sequence = Model.get('ir.sequence')
-    >>> SequenceStrict = Model.get('ir.sequence.strict')
-    >>> SequenceType = Model.get('ir.sequence.type')
-    >>> User = Model.get('res.user')
-    >>> Tax = Model.get('account.tax')
 
 Constants::
 
@@ -56,6 +30,7 @@ Create or fetch Currency::
 
 Create or fetch Country::
 
+    >>> Country = Model.get('country.country')
     >>> countries = Country.find([('code', '=', 'FR')])
     >>> if not countries:
     ...     country = Country(name='France', code='FR')
@@ -66,12 +41,23 @@ Create or fetch Country::
 Create Company::
 
     >>> _ = create_company(currency=currency)
+
+Switch user::
+
+    >>> execute_test_case('authorizations_test_case')
+    >>> config = switch_user('financial_user')
     >>> company = get_company()
 
-Reload the context::
+Get Models::
 
-    >>> config._context = User.get_preferences(True, config.context)
-    >>> config._context['company'] = company.id
+    >>> FiscalYear = Model.get('account.fiscalyear')
+    >>> InvoiceSequence = Model.get('account.fiscalyear.invoice_sequence')
+    >>> Sequence = Model.get('ir.sequence')
+    >>> SequenceStrict = Model.get('ir.sequence.strict')
+    >>> AccountKind = Model.get('account.account.type')
+    >>> Account = Model.get('account.account')
+    >>> Configuration = Model.get('account.configuration')
+    >>> Tax = Model.get('account.tax')
 
 Create Fiscal Year::
 
@@ -186,6 +172,18 @@ Create taxes::
     >>> tax3.invoice_account = tax_account
     >>> tax3.credit_note_account = tax_account
     >>> tax3.save()
+    >>> config = switch_user('product_user')
+    >>> company = get_company()
+    >>> currency = get_currency(code='EUR')
+    >>> Account = Model.get('account.account')
+    >>> PaymentTerm = Model.get('account.invoice.payment_term')
+    >>> PaymentTermLine = Model.get('account.invoice.payment_term.line')
+    >>> BillingMode = Model.get('offered.billing_mode')
+    >>> Product = Model.get('offered.product')
+    >>> SequenceType = Model.get('ir.sequence.type')
+    >>> Sequence = Model.get('ir.sequence')
+    >>> OptionDescription = Model.get('offered.option.description')
+    >>> Tax = Model.get('account.tax')
 
 Create billing modes::
 
@@ -205,6 +203,7 @@ Create billing modes::
     >>> freq_yearly.frequency = 'yearly'
     >>> freq_yearly.allowed_payment_terms.append(PaymentTerm.find([])[0])
     >>> freq_yearly.save()
+    >>> product_account, = Account.find([('code', '=', 'product_account')])
 
 Create Product::
 
@@ -228,6 +227,7 @@ Create Product::
     >>> quote_sequence.code = quote_sequence_code.code
     >>> quote_sequence.company = company
     >>> quote_sequence.save()
+    >>> tax1, tax2, tax3 = Tax(tax1.id), Tax(tax2.id), Tax(tax3.id)
     >>> coverage = OptionDescription()
     >>> coverage.company = company
     >>> coverage.currency = currency
@@ -240,6 +240,7 @@ Create Product::
     >>> coverage.taxes.append(tax2)
     >>> coverage.taxes.append(tax3)
     >>> coverage.save()
+    >>> tax1, tax2, tax3 = Tax(tax1.id), Tax(tax2.id), Tax(tax3.id)
     >>> coverage_1 = OptionDescription()
     >>> coverage_1.company = company
     >>> coverage_1.currency = currency
@@ -248,11 +249,11 @@ Create Product::
     >>> coverage_1.start_date = product_start_date
     >>> coverage_1.account_for_billing = product_account
     >>> coverage_1.taxes_included_in_premium = True
-    >>> tax1, tax2, tax3 = Tax(tax1.id), Tax(tax2.id), Tax(tax3.id)
     >>> coverage_1.taxes.append(tax1)
     >>> coverage_1.taxes.append(tax2)
     >>> coverage_1.taxes.append(tax3)
     >>> coverage_1.save()
+    >>> tax1, tax2, tax3 = Tax(tax1.id), Tax(tax2.id), Tax(tax3.id)
     >>> coverage_2 = OptionDescription()
     >>> coverage_2.company = company
     >>> coverage_2.currency = currency
@@ -261,7 +262,6 @@ Create Product::
     >>> coverage_2.start_date = product_start_date
     >>> coverage_2.account_for_billing = product_account
     >>> coverage_2.taxes_included_in_premium = True
-    >>> tax1, tax2, tax3 = Tax(tax1.id), Tax(tax2.id), Tax(tax3.id)
     >>> coverage_2.taxes.append(tax1)
     >>> coverage_2.taxes.append(tax2)
     >>> coverage_2.taxes.append(tax3)
@@ -282,6 +282,19 @@ Create Product::
     >>> product.coverages.append(coverage_2)
     >>> product.taxes_included_in_premium = True
     >>> product.save()
+    >>> config = switch_user('contract_user')
+    >>> Account = Model.get('account.account')
+    >>> BillingInformation = Model.get('contract.billing_information')
+    >>> BillingMode = Model.get('offered.billing_mode')
+    >>> Contract = Model.get('contract')
+    >>> ContractInvoice = Model.get('contract.invoice')
+    >>> ContractPremium = Model.get('contract.premium')
+    >>> Option = Model.get('contract.option')
+    >>> OptionDescription = Model.get('offered.option.description')
+    >>> Party = Model.get('party.party')
+    >>> PaymentTerm = Model.get('account.invoice.payment_term')
+    >>> product = Model.get('offered.product')(product.id)
+    >>> company = get_company()
 
 Create Subscriber::
 
@@ -290,13 +303,20 @@ Create Subscriber::
     >>> subscriber.first_name = 'John'
     >>> subscriber.is_person = True
     >>> subscriber.gender = 'male'
-    >>> subscriber.account_receivable = receivable_account
-    >>> subscriber.account_payable = payable_account
+    >>> subscriber.account_receivable = Account(receivable_account.id)
+    >>> subscriber.account_payable = Account(payable_account.id)
     >>> subscriber.birth_date = datetime.date(1980, 10, 14)
     >>> subscriber.save()
 
 Create Test Contract::
 
+    >>> freq_yearly = BillingMode(freq_yearly.id)
+    >>> freq_monthly = BillingMode(freq_monthly.id)
+    >>> payment_term = PaymentTerm(payment_term.id)
+    >>> product_account, = Account.find([('code', '=', 'product_account')])
+    >>> coverage = OptionDescription(coverage.id)
+    >>> coverage_1 = OptionDescription(coverage_1.id)
+    >>> coverage_2 = OptionDescription(coverage_2.id)
     >>> contract = Contract()
     >>> contract.company = company
     >>> contract.subscriber = subscriber

@@ -1,0 +1,313 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Contract Consultation Group -->
+        <record model="res.group" id="group_contract_read">
+            <field name="name">Coog Contract consultation</field>
+        </record>
+        <!-- Contract -->
+        <record model="ir.ui.menu-res.group" id="menu_contract_contract_read">
+            <field name="menu" ref="contract.menu_contract"/>
+            <field name="group" ref="group_contract_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_quote_form_contract_read">
+            <field name="menu" ref="contract.menu_quote_form"/>
+            <field name="group" ref="group_contract_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_contract_form_contract_read">
+            <field name="menu" ref="contract.menu_contract_form"/>
+            <field name="group" ref="group_contract_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_contract_notification_contract_read">
+            <field name="menu" ref="contract.menu_contract_notification"/>
+            <field name="group" ref="group_contract_read"/>
+        </record>
+        <!-- Product Consultation Group  -->
+        <!-- Contract Configuration -->
+        <record model="ir.ui.menu-res.group" id="sub_status_form_product_read">
+            <field name="menu" ref="contract.sub_status_form"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_contact_type_form_product_read">
+            <field name="menu" ref="contract.menu_contact_type_form"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <!-- Contract Management Group -->
+        <record model="res.group" id="group_contract_manage">
+            <field name="name">Coog Contract management</field>
+        </record>
+        <!-- Contract -->
+        <record model="ir.ui.menu-res.group" id="menu_contract_contract_manage">
+            <field name="menu" ref="contract.menu_contract"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_quote_form_contract_manage">
+            <field name="menu" ref="contract.menu_quote_form"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_contract_form_contract_manage">
+            <field name="menu" ref="contract.menu_contract_form"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_contract_batch_contract_manage">
+            <field name="menu" ref="contract.menu_contract_batch"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_contract_notification_contract_manage">
+            <field name="menu" ref="contract.menu_contract_notification"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <!-- Product Consultation Group  -->
+        <!-- Contract Configuration -->
+        <record model="ir.ui.menu-res.group" id="sub_status_form_product_manage">
+            <field name="menu" ref="contract.sub_status_form"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_contact_type_form_product_manage">
+            <field name="menu" ref="contract.menu_contact_type_form"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <!-- Users -->
+        <record model="res.user-res.group" id="user_admin_group_contract_read">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_contract_read"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_contract_manage">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_data_group_contract_read">
+            <field name="model" search="[('model', '=', 'extra_data')]"/>
+            <field name="group" ref="group_contract_read"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_data_group_contract_manage">
+            <field name="model" search="[('model', '=', 'extra_data')]"/>
+            <field name="group" ref="group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_group_contract_read">
+            <field name="model" search="[('model', '=', 'extra_details.configuration')]"/>
+            <field name="group" ref="group_contract_read"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_group_contract_manage">
+            <field name="model" search="[('model', '=', 'extra_details.configuration')]"/>
+            <field name="group" ref="group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="group" ref="group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_activation_history_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract.activation_history')]"/>
+            <field name="group" ref="group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_contact_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract.contact')]"/>
+            <field name="group" ref="group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_contact_type_group_product_manage">
+            <field name="model" search="[('model', '=', 'contract.contact.type')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_extra_data_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract.extra_data')]"/>
+            <field name="group" ref="group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_notification_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract.notification')]"/>
+            <field name="group" ref="group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_option_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract.option')]"/>
+            <field name="group" ref="group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_option_version_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract.option.version')]"/>
+            <field name="group" ref="group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_service_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract.service')]"/>
+            <field name="group" ref="group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_sub_status_group_product_manage">
+            <field name="model" search="[('model', '=', 'contract.sub_status')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_configuration_default_quote_number_sequence_group_product_manage">
+            <field name="model" search="[('model', '=', 'offered.configuration.default_quote_number_sequence')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_product_quote_number_sequence_group_product_manage">
+            <field name="model" search="[('model', '=', 'offered.product.quote_number_sequence')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_report_production_request_group_contract_manage">
+            <field name="model" search="[('model', '=', 'report_production.request')]"/>
+            <field name="group" ref="group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Contract Access Rights -->
+        <record model="ir.model.access" id="access_contract">
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_activation_history">
+            <field name="model" search="[('model', '=', 'contract.activation_history')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_contact">
+            <field name="model" search="[('model', '=', 'contract.contact')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_contact_type">
+            <field name="model" search="[('model', '=', 'contract.contact.type')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_extra_data">
+            <field name="model" search="[('model', '=', 'contract.extra_data')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_notification">
+            <field name="model" search="[('model', '=', 'contract.notification')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_option">
+            <field name="model" search="[('model', '=', 'contract.option')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_version_option">
+            <field name="model" search="[('model', '=', 'contract.option.version')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_service">
+            <field name="model" search="[('model', '=', 'contract.service')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_sub_status">
+            <field name="model" search="[('model', '=', 'contract.sub_status')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_configuratin_default_quote_number_sequence">
+            <field name="model" search="[('model', '=', 'offered.configuration.default_quote_number_sequence')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_offered_product_quote_number_sequence">
+            <field name="model" search="[('model', '=', 'offered.product.quote_number_sequence')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+    <data depends="event_log">
+        <record model="ir.model.access" id="access_event_log_group_contract_manage">
+            <field name="model" search="[('model', '=', 'event.log')]"/>
+            <field name="group" ref="group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

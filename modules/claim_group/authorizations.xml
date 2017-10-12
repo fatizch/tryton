@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Product Consultation Group  -->
+        <!-- Laboratory -->
+        <record model="ir.ui.menu-res.group" id="menu_package_form_product_read">
+            <field name="menu" ref="claim_group.menu_benefit_collective"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <!-- Product Management Group  -->
+        <!-- Laboratory -->
+        <record model="ir.ui.menu-res.group" id="menu_package_form_product_manage">
+            <field name="menu" ref="claim_group.menu_benefit_collective"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <!-- Interlocutor for claim management  -->
+        <record model="ir.model.access" id="access_party_interlocutor_group_claim_manage">
+            <field name="model" search="[('model', '=', 'party.interlocutor')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

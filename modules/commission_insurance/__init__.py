@@ -9,6 +9,7 @@ import party
 import payment
 import account
 import batch
+import test_case
 
 
 def register():
@@ -38,6 +39,7 @@ def register():
         commission.OpenCommissionSynthesisYearLine,
         batch.CreateCommissionInvoiceBatch,
         batch.PostCommissionInvoiceBatch,
+        test_case.TestCaseModel,
         module='commission_insurance', type_='model')
     Pool.register(
         commission.CreateInvoice,

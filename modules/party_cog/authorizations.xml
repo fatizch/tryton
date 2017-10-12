@@ -1,0 +1,338 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Party Consultation Group -->
+        <record model="res.group" id="group_party_read">
+            <field name="name">Coog Party consultation</field>
+        </record>
+        <!-- Party -->
+        <record model="ir.ui.menu-res.group" id="menu_party_party_read">
+            <field name="menu" ref="party.menu_party"/>
+            <field name="group" ref="group_party_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_person_form_party_read">
+            <field name="menu" ref="party_cog.menu_person_form"/>
+            <field name="group" ref="group_party_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_company_form_party_read">
+            <field name="menu" ref="party_cog.menu_company_form"/>
+            <field name="group" ref="group_party_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_party_form_party_read">
+            <field name="menu" ref="party.menu_party_form"/>
+            <field name="group" ref="group_party_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="enu_contact_mechanism_form_party_read">
+            <field name="menu" ref="party.menu_contact_mechanism_form"/>
+            <field name="group" ref="group_party_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_relation_all_party_read">
+            <field name="menu" ref="party_relationship.menu_relation_all"/>
+            <field name="group" ref="group_party_read"/>
+        </record>
+        <!-- Party Management Group -->
+        <record model="res.group" id="group_party_manage">
+            <field name="name">Coog Party management</field>
+        </record>
+        <!-- Party -->
+        <record model="ir.ui.menu-res.group" id="menu_party_party_manage">
+            <field name="menu" ref="party.menu_party"/>
+            <field name="group" ref="group_party_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_person_form_party_manage">
+            <field name="menu" ref="party_cog.menu_person_form"/>
+            <field name="group" ref="group_party_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_company_form_party_manage">
+            <field name="menu" ref="party_cog.menu_company_form"/>
+            <field name="group" ref="group_party_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_party_form_party_manage">
+            <field name="menu" ref="party.menu_party_form"/>
+            <field name="group" ref="group_party_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="enu_contact_mechanism_form_party_manage">
+            <field name="menu" ref="party.menu_contact_mechanism_form"/>
+            <field name="group" ref="group_party_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_relation_all_party_manage">
+            <field name="menu" ref="party_relationship.menu_relation_all"/>
+            <field name="group" ref="group_party_manage"/>
+        </record>
+        <!-- Global Configuration Group -->
+        <!-- Party / Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_party_global_config">
+            <field name="menu" ref="party.menu_party"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_configuration_global_config">
+            <field name="menu" ref="party.menu_configuration"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_party_configuration_global_config">
+            <field name="menu" ref="party.menu_party_configuration"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_address_format_form_global_config">
+            <field name="menu" ref="party.menu_address_format_form"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_company_tree_global_config">
+            <field name="menu" ref="company.menu_company_tree"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_company_list_global_config">
+            <field name="menu" ref="company.menu_company_list"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_employee_form_global_config">
+            <field name="menu" ref="company.menu_employee_form"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_party_identifier_type_form_global_config">
+            <field name="menu" ref="party_cog.menu_party_identifier_type_form"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_relation_typeproduct_read">
+            <field name="menu" ref="party_relationship.menu_relation_type"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <!-- Users -->
+        <record model="res.user-res.group" id="user_admin_group_party_read">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_party_read"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_party_manage">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_party_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_party_relation_group_party_manage">
+            <field name="model" search="[('model', '=', 'party.relation')]"/>
+            <field name="group" ref="group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_relation_all_group_party_manage">
+            <field name="model" search="[('model', '=', 'party.relation.all')]"/>
+            <field name="group" ref="group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_relation_type_group_party_manage">
+            <field name="model" search="[('model', '=', 'party.relation.type')]"/>
+            <field name="group" ref="group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_identifier_type_group_party_manage">
+            <field name="model" search="[('model', '=', 'party.identifier.type')]"/>
+            <field name="group" ref="group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_interaction_group_party_manage">
+            <field name="model" search="[('model', '=', 'party.interaction')]"/>
+            <field name="group" ref="group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_address_group_party_manage">
+            <field name="model" search="[('model', '=', 'party.address')]"/>
+            <field name="group" ref="group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_address_format_group_global_config">
+            <field name="model" search="[('model', '=', 'party.address.format')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_category_group_global_config">
+            <field name="model" search="[('model', '=', 'party.category')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_configuration_group_global_config">
+            <field name="model" search="[('model', '=', 'party.configuration')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_configuration_party_lang_group_global_config">
+            <field name="model" search="[('model', '=', 'party.configuration.party_lang')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_configuration_party_sequence_group_global_config">
+            <field name="model" search="[('model', '=', 'party.configuration.party_sequence')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_contact_mechanism_group_party_manage">
+            <field name="model" search="[('model', '=', 'party.contact_mechanism')]"/>
+            <field name="group" ref="group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_identifier_group_party_manage">
+            <field name="model" search="[('model', '=', 'party.identifier')]"/>
+            <field name="group" ref="group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_party_group_party_manage">
+            <field name="model" search="[('model', '=', 'party.party')]"/>
+            <field name="group" ref="group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_party_lang_group_party_manage">
+            <field name="model" search="[('model', '=', 'party.party.lang')]"/>
+            <field name="group" ref="group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Party Cog Access Rights -->
+        <record model="ir.model.access" id="access_party_relation">
+            <field name="model" search="[('model', '=', 'party.relation')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_relation_all">
+            <field name="model" search="[('model', '=', 'party.relation.all')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_relation_type">
+            <field name="model" search="[('model', '=', 'party.relation.type')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_identifier_type">
+            <field name="model" search="[('model', '=', 'party.identifier.type')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_interaction">
+            <field name="model" search="[('model', '=', 'party.interaction')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_address">
+            <field name="model" search="[('model', '=', 'party.address')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_address_format">
+            <field name="model" search="[('model', '=', 'party.address.format')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_category">
+            <field name="model" search="[('model', '=', 'party.category')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_configuration">
+            <field name="model" search="[('model', '=', 'party.configuration')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_configuration_party_lang">
+            <field name="model" search="[('model', '=', 'party.configuration.party_lang')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_configuration_party_sequence">
+            <field name="model" search="[('model', '=', 'party.configuration.party_sequence')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_contact_mechanism">
+            <field name="model" search="[('model', '=', 'party.contact_mechanism')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_identifier">
+            <field name="model" search="[('model', '=', 'party.identifier')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_party">
+            <field name="model" search="[('model', '=', 'party.party')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_party_lang">
+            <field name="model" search="[('model', '=', 'party.party.lang')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

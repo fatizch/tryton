@@ -6,6 +6,8 @@ import datetime
 from decimal import Decimal
 from proteus import Model, Wizard
 from trytond.tests.tools import activate_modules
+from trytond.modules.coog_core.test_framework import execute_test_case, \
+    switch_user
 from trytond.modules.company.tests.tools import get_company
 from trytond.modules.company_cog.tests.tools import create_company
 from trytond.modules.account.tests.tools import create_fiscalyear, \
@@ -29,6 +31,11 @@ tax_identifier = company.party.identifiers.new()
 tax_identifier.type = 'eu_vat'
 tax_identifier.code = 'BE0897290877'
 company.party.save()
+
+execute_test_case('authorizations_test_case')
+config = switch_user('financial_user')
+company = get_company()
+
 
 # #Comment# #Create fiscal year
 

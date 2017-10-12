@@ -22,6 +22,9 @@ from trytond.modules.party_cog.tests.tools import create_party_person
 from trytond.modules.contract.tests.tools import add_quote_number_generator
 from trytond.modules.country_cog.tests.tools import create_country
 from trytond.modules.premium.tests.tools import add_premium_rules
+from trytond.modules.coog_core.test_framework import execute_test_case, \
+    switch_user
+
 
 # #Comment# #Create Database
 # config = config.set_trytond()
@@ -41,12 +44,17 @@ currency = get_currency(code='EUR')
 
 # #Comment# #Create Company
 _ = create_company(currency=currency)
+
 company = get_company()
 
 # #Comment# #Reload the context
 User = Model.get('res.user')
 config._context = User.get_preferences(True, config.context)
 
+execute_test_case('authorizations_test_case')
+config = switch_user('financial_user')
+
+company = get_company()
 # #Comment# #Create Fiscal Year
 fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company))
 fiscalyear.click('create_period')
@@ -70,6 +78,15 @@ broker_fee_account.party_required = True
 broker_fee_account.type = broker_fee_kind
 broker_fee_account.company = company
 broker_fee_account.save()
+Journal = Model.get('account.journal')
+cash_journal, = Journal.find([('type', '=', 'cash')])
+cash_journal.debit_account, = Account.find(['name', '=', 'Main Cash'])
+cash_journal.save()
+
+config = switch_user('product_user')
+
+Account = Model.get('account.account')
+accounts = get_accounts(company)
 
 # #Comment# #Create Broker Fee
 Uom = Model.get('product.uom')
@@ -78,8 +95,8 @@ Product = Model.get('product.product')
 Template = Model.get('product.template')
 template = Template()
 template.name = 'Broker Fee Template'
-template.account_expense = broker_fee_account
-template.account_revenue = broker_fee_account
+template.account_expense = Account(broker_fee_account.id)
+template.account_revenue = Account(broker_fee_account.id)
 template.list_price = Decimal(0)
 template.cost_price = Decimal(0)
 template.default_uom = unit
@@ -100,26 +117,35 @@ broker_fee.broker_fee = True
 broker_fee.save()
 
 # #Comment# #Create Product
-product = init_product()
-product = add_quote_number_generator(product)
-product = add_premium_rules(product)
-product = add_invoice_configuration(product, accounts)
-product = add_insurer_to_product(product)
-product.fees.append(broker_fee)
-product.save()
+offered_product = init_product()
+offered_product = add_quote_number_generator(offered_product)
+offered_product = add_premium_rules(offered_product)
+offered_product = add_invoice_configuration(offered_product, accounts)
+offered_product = add_insurer_to_product(offered_product)
+offered_product.fees.append(broker_fee)
+offered_product.save()
 
+config = switch_user('commission_user')
+
+company = get_company()
+Plan = Model.get('commission.plan')
+Product = Model.get('product.product')
+Template = Model.get('product.template')
+Uom = Model.get('product.uom')
+unit, = Uom.find([('name', '=', 'Unit')])
+accounts = get_accounts(company)
 # #Comment# #Create commission product
-commission_product = Product()
-template = Template()
-template.name = 'Commission'
-template.default_uom = unit
-template.type = 'service'
-template.list_price = Decimal(0)
-template.cost_price = Decimal(0)
-template.account_expense = accounts['expense']
-template.account_revenue = accounts['revenue']
-template.save()
-commission_product.template = template
+commission_product = Product(offered_product.id)
+templateComission = Template()
+templateComission.name = 'Commission'
+templateComission.default_uom = unit
+templateComission.type = 'service'
+templateComission.list_price = Decimal(0)
+templateComission.cost_price = Decimal(0)
+templateComission.account_expense = accounts['expense']
+templateComission.account_revenue = accounts['revenue']
+templateComission.save()
+commission_product.template = templateComission
 commission_product.save()
 
 # #Comment# #Create broker commission plan
@@ -130,7 +156,7 @@ broker_plan.commission_product = commission_product
 broker_plan.commission_method = 'payment'
 broker_plan.type_ = 'agent'
 line = broker_plan.lines.new()
-coverage = product.coverages[0].id
+coverage = offered_product.coverages[0].id
 line.options.append(Coverage(coverage))
 line.formula = 'amount * 0.1'
 broker_plan.save()
@@ -141,7 +167,7 @@ insurer_plan = Plan(name='Insurer Plan')
 insurer_plan.commission_product = commission_product
 insurer_plan.commission_method = 'payment'
 insurer_plan.type_ = 'principal'
-coverage = product.coverages[0].id
+coverage = offered_product.coverages[0].id
 line = insurer_plan.lines.new()
 line.options.append(Coverage(coverage))
 line.formula = 'amount * 0.6'
@@ -159,37 +185,45 @@ broker = DistributionNetwork(name='Broker', code='broker', party=broker_party)
 broker.save()
 agent_broker = Agent(party=broker_party)
 agent_broker.type_ = 'agent'
-agent_broker.plan = broker_plan
+agent_broker.plan = Plan(broker_plan.id)
 agent_broker.currency = company.currency
 agent_broker.save()
 
+company = get_company()
+Plan = Model.get('commission.plan')
+Agent = Model.get('commission.agent')
 # #Comment# #Create insurer agent
 Insurer = Model.get('insurer')
 insurer, = Insurer.find([])
 agent = Agent(party=insurer.party)
 agent.type_ = 'principal'
-agent.plan = insurer_plan
+agent.plan = Plan(insurer_plan.id)
 agent.currency = company.currency
 agent.save()
 
+config = switch_user('contract_user')
+
+Agent = Model.get('commission.agent')
+OfferedProduct = Model.get('offered.product')
+company = get_company()
+accounts = get_accounts(company)
 # #Comment# #Create Subscriber
 subscriber = create_party_person()
-
+offered_product = OfferedProduct(offered_product.id)
 # #Comment# #Create Test Contract
 contract_start_date = datetime.date.today()
 Contract = Model.get('contract')
-ContractPremium = Model.get('contract.premium')
 BillingInformation = Model.get('contract.billing_information')
 contract = Contract()
-contract.company = company
+contract.company = get_company()
 contract.subscriber = subscriber
 contract.start_date = contract_start_date
-contract.product = product
+contract.product = offered_product
 contract.billing_informations.append(BillingInformation(date=None,
-        billing_mode=product.billing_modes[0],
-        payment_term=product.billing_modes[0].allowed_payment_terms[0]))
+        billing_mode=offered_product.billing_modes[0],
+        payment_term=offered_product.billing_modes[0].allowed_payment_terms[0]))
 contract.contract_number = '123456789'
-contract.agent = agent_broker
+contract.agent = Agent(agent_broker.id)
 contract.save()
 Wizard('contract.activate', models=[contract]).execute('apply')
 
@@ -217,13 +251,9 @@ set([(x.amount, x.commission_rate, x.agent.party.name, x.line_amount)
 # #Res# #True
 
 # #Comment# #Pay invoice
-Account = Model.get('account.account')
 Journal = Model.get('account.journal')
-cash_journal, = Journal.find([('type', '=', 'cash')])
-cash_journal.debit_account, = Account.find(['name', '=', 'Main Cash'])
-cash_journal.save()
 pay = Wizard('account.invoice.pay', [first_invoice.invoice])
-pay.form.journal = cash_journal
+pay.form.journal = Journal(cash_journal.id)
 pay.execute('choice')
 
 # #Comment# #Create commission invoice

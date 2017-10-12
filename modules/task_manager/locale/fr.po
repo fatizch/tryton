@@ -327,6 +327,14 @@ msgctxt "model:ir.ui.menu,name:menu_team"
 msgid "Team"
 msgstr "Equipe"
 
+msgctxt "model:res.group,name:group_task_manage"
+msgid "Task Management"
+msgstr "Gestion de tâches"
+
+msgctxt "model:res.group,name:group_task_read"
+msgid "Task consultation"
+msgstr "Consultation de tâches"
+
 msgctxt "model:res.group,name:team_management_admin"
 msgid "Team Management"
 msgstr "Gestion des équipes"

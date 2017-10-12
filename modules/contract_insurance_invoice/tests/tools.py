@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from proteus import Model
+from trytond.modules.coog_core.test_framework import switch_user
 from trytond.modules.account_invoice.tests.tools import create_payment_term
 
 
@@ -10,6 +11,7 @@ __all__ = ['create_billing_mode']
 def create_billing_mode(frequency=None, payment_term_id=None,
         direct_debit=False):
     "Create billing mode"
+    switch_user('product_user')
     PaymentTerm = Model.get('account.invoice.payment_term')
     BillingMode = Model.get('offered.billing_mode')
     if not payment_term_id:
@@ -35,6 +37,7 @@ def create_billing_mode(frequency=None, payment_term_id=None,
 
 
 def add_invoice_configuration(product, accounts):
+    switch_user('financial_user')
     payment_term = create_payment_term()
     payment_term.save()
 
@@ -50,5 +53,6 @@ def add_invoice_configuration(product, accounts):
     product.billing_modes.append(freq_monthly_direct_debit)
 
     for coverage in product.coverages:
-        coverage.account_for_billing = accounts['revenue']
+        coverage.account_for_billing = Model.get('account.account')(
+            accounts['revenue'].id)
     return product

@@ -14,38 +14,12 @@ Imports::
     >>> from trytond.modules.company_cog.tests.tools import create_company
     >>> from trytond.modules.account.tests.tools import get_accounts, create_chart
     >>> from trytond.modules.currency.tests.tools import get_currency
-
-Init Database::
-
+    >>> from trytond.modules.coog_core.test_framework import execute_test_case, \
+    ...     switch_user
 
 Install Modules::
 
     >>> config = activate_modules('contract_insurance_invoice')
-
-Get Models::
-
-    >>> Account = Model.get('account.account')
-    >>> AccountInvoice = Model.get('account.invoice')
-    >>> AccountKind = Model.get('account.account.type')
-    >>> BillingInformation = Model.get('contract.billing_information')
-    >>> BillingMode = Model.get('offered.billing_mode')
-    >>> Company = Model.get('company.company')
-    >>> Contract = Model.get('contract')
-    >>> ContractInvoice = Model.get('contract.invoice')
-    >>> ContractPremium = Model.get('contract.premium')
-    >>> Country = Model.get('country.country')
-    >>> FiscalYear = Model.get('account.fiscalyear')
-    >>> InvoiceSequence = Model.get('account.fiscalyear.invoice_sequence')
-    >>> Option = Model.get('contract.option')
-    >>> OptionDescription = Model.get('offered.option.description')
-    >>> Party = Model.get('party.party')
-    >>> PaymentTerm = Model.get('account.invoice.payment_term')
-    >>> PaymentTermLine = Model.get('account.invoice.payment_term.line')
-    >>> Product = Model.get('offered.product')
-    >>> Sequence = Model.get('ir.sequence')
-    >>> SequenceStrict = Model.get('ir.sequence.strict')
-    >>> SequenceType = Model.get('ir.sequence.type')
-    >>> User = Model.get('res.user')
 
 Constants::
 
@@ -58,22 +32,28 @@ Create or fetch Currency::
 
 Create or fetch Country::
 
+    >>> Country = Model.get('country.country')
     >>> countries = Country.find([('code', '=', 'FR')])
     >>> if not countries:
     ...     country = Country(name='France', code='FR')
     ...     country.save()
-    ... else:
-    ...     country, = countries
 
 Create Company::
 
     >>> _ = create_company(currency=currency)
+
+Switch user::
+
+    >>> execute_test_case('authorizations_test_case')
+    >>> config = switch_user('financial_user')
     >>> company = get_company()
-
-Reload the context::
-
-    >>> config._context = User.get_preferences(True, config.context)
-    >>> config._context['company'] = company.id
+    >>> Account = Model.get('account.account')
+    >>> AccountInvoice = Model.get('account.invoice')
+    >>> AccountKind = Model.get('account.account.type')
+    >>> FiscalYear = Model.get('account.fiscalyear')
+    >>> InvoiceSequence = Model.get('account.fiscalyear.invoice_sequence')
+    >>> Sequence = Model.get('ir.sequence')
+    >>> SequenceStrict = Model.get('ir.sequence.strict')
 
 Create Fiscal Year::
 
@@ -141,6 +121,18 @@ Create Account::
     >>> payable_account.type = payable_account_kind
     >>> payable_account.company = company
     >>> payable_account.save()
+    >>> _ = create_chart(company)
+    >>> config = switch_user('product_user')
+    >>> company = get_company()
+    >>> currency = get_currency(code='EUR')
+    >>> Account = Model.get('account.account')
+    >>> PaymentTerm = Model.get('account.invoice.payment_term')
+    >>> PaymentTermLine = Model.get('account.invoice.payment_term.line')
+    >>> BillingMode = Model.get('offered.billing_mode')
+    >>> Product = Model.get('offered.product')
+    >>> SequenceType = Model.get('ir.sequence.type')
+    >>> Sequence = Model.get('ir.sequence')
+    >>> OptionDescription = Model.get('offered.option.description')
 
 Create billing modes::
 
@@ -189,9 +181,9 @@ Create Product::
     >>> coverage.name = u'Test Coverage'
     >>> coverage.code = u'test_coverage'
     >>> coverage.start_date = product_start_date
+    >>> product_account, = Account.find([('code', '=', 'product_account')])
     >>> coverage.account_for_billing = product_account
     >>> coverage.save()
-    >>> _ = create_chart(company)
     >>> accounts = get_accounts(company)
 
 Create Contract Fee::
@@ -235,6 +227,19 @@ Create Contract Fee::
     >>> product.coverages.append(coverage)
     >>> product.fees.append(contract_fee)
     >>> product.save()
+    >>> config = switch_user('contract_user')
+    >>> Account = Model.get('account.account')
+    >>> BillingInformation = Model.get('contract.billing_information')
+    >>> BillingMode = Model.get('offered.billing_mode')
+    >>> Contract = Model.get('contract')
+    >>> ContractInvoice = Model.get('contract.invoice')
+    >>> ContractPremium = Model.get('contract.premium')
+    >>> Option = Model.get('contract.option')
+    >>> OptionDescription = Model.get('offered.option.description')
+    >>> Party = Model.get('party.party')
+    >>> PaymentTerm = Model.get('account.invoice.payment_term')
+    >>> product = Model.get('offered.product')(product.id)
+    >>> company = get_company()
 
 Create Subscriber::
 
@@ -243,13 +248,15 @@ Create Subscriber::
     >>> subscriber.first_name = 'John'
     >>> subscriber.is_person = True
     >>> subscriber.gender = 'male'
-    >>> subscriber.account_receivable = receivable_account
-    >>> subscriber.account_payable = payable_account
+    >>> subscriber.account_receivable = Account(receivable_account.id)
+    >>> subscriber.account_payable = Account(payable_account.id)
     >>> subscriber.birth_date = datetime.date(1980, 10, 14)
     >>> subscriber.save()
 
 Create Test Contract::
 
+    >>> freq_yearly = BillingMode(freq_yearly.id)
+    >>> payment_term = PaymentTerm(payment_term.id)
     >>> contract = Contract()
     >>> contract.company = company
     >>> contract.subscriber = subscriber
@@ -259,6 +266,8 @@ Create Test Contract::
     >>> contract.billing_informations.append(BillingInformation(date=None,
     ...         billing_mode=freq_yearly, payment_term=payment_term))
     >>> contract.save()
+    >>> product_account, = Account.find([('code', '=', 'product_account')])
+    >>> coverage = OptionDescription(coverage.id)
     >>> Wizard('contract.activate', models=[contract]).execute('apply')
     >>> contract.options[0].premiums.append(ContractPremium(start=contract_start_date,
     ...         amount=Decimal('100'), frequency='once_per_contract',

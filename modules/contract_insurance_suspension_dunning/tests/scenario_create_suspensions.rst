@@ -25,10 +25,12 @@ Imports::
     >>> from trytond.modules.contract.tests.tools import add_quote_number_generator
     >>> from trytond.modules.country_cog.tests.tools import create_country
     >>> from trytond.modules.premium.tests.tools import add_premium_rules
+    >>> from trytond.modules.coog_core.test_framework import execute_test_case, \
+    ...     switch_user
 
 Install Modules::
 
-    >>> config = activate_modules('contract_insurance_suspension_dunning')
+    >>> config = activate_modules(['contract_insurance_suspension_dunning'])
 
 Create country::
 
@@ -41,12 +43,12 @@ Create currenct::
 Create Company::
 
     >>> _ = create_company(currency=currency)
+
+Switch user::
+
+    >>> execute_test_case('authorizations_test_case')
+    >>> config = switch_user('financial_user')
     >>> company = get_company()
-
-Reload the context::
-
-    >>> User = Model.get('res.user')
-    >>> config._context = User.get_preferences(True, config.context)
 
 Create Fiscal Year::
 
@@ -121,8 +123,12 @@ Create Product::
     >>> product = add_premium_rules(product)
     >>> product = add_invoice_configuration(product, accounts)
     >>> product = add_insurer_to_product(product)
+    >>> config = switch_user('product_user')
+    >>> Procedure = Model.get('account.dunning.procedure')
+    >>> procedure = Procedure(procedure.id)
     >>> product.dunning_procedure = procedure
     >>> product.save()
+    >>> config = switch_user('contract_user')
 
 Create Subscriber::
 
@@ -135,9 +141,11 @@ Create Contract::
     >>> ContractPremium = Model.get('contract.premium')
     >>> BillingInformation = Model.get('contract.billing_information')
     >>> contract = Contract()
+    >>> company = Model.get('company.company')(company.id)
     >>> contract.company = company
     >>> contract.subscriber = subscriber
     >>> contract.start_date = contract_start_date
+    >>> product = Model.get('offered.product')(product.id)
     >>> contract.product = product
     >>> contract.billing_informations.append(BillingInformation(date=None,
     ...         billing_mode=product.billing_modes[0],
@@ -154,6 +162,7 @@ Create first invoice::
     >>> Contract.first_invoice([contract.id], config.context)
     >>> first_invoice, = ContractInvoice.find([('contract', '=', contract.id)])
     >>> first_invoice.invoice.click('post')
+    >>> config = switch_user('financial_user')
 
 Create dunnings at 90 days::
 
@@ -170,6 +179,7 @@ Process dunning::
     >>> contract.status == 'hold'
     True
     >>> dunning.reload()
+    >>> config = switch_user('contract_user')
     >>> Suspension = Model.get('contract.right_suspension')
     >>> suspension, = Suspension.find([])
     >>> suspension.start_date == dunning.last_process_date

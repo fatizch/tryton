@@ -25,6 +25,8 @@ Imports::
     >>> from trytond.modules.contract.tests.tools import add_quote_number_generator
     >>> from trytond.modules.country_cog.tests.tools import create_country
     >>> from trytond.modules.premium.tests.tools import add_premium_rules
+    >>> from trytond.modules.coog_core.test_framework import execute_test_case, \
+    ...     switch_user
 
 Init Database::
 
@@ -46,11 +48,9 @@ Create Company::
 
     >>> _ = create_company(currency=currency)
     >>> company = get_company()
-
-Reload the context::
-
-    >>> User = Model.get('res.user')
-    >>> config._context = User.get_preferences(True, config.context)
+    >>> execute_test_case('authorizations_test_case')
+    >>> config = switch_user('financial_user')
+    >>> company = get_company()
 
 Create Fiscal Year::
 
@@ -109,56 +109,7 @@ Create Fee::
     >>> fee.frequency = 'once_per_invoice'
     >>> fee.product = product_product
     >>> fee.save()
-
-Create Product::
-
-    >>> product = init_product()
-    >>> product = add_quote_number_generator(product)
-    >>> product = add_premium_rules(product)
-    >>> product = add_invoice_configuration(product, accounts)
-    >>> product = add_insurer_to_product(product)
-    >>> product.save()
-
-Create Subscriber::
-
-    >>> subscriber = create_party_person()
-
-Create Contract::
-
-    >>> contract_start_date = datetime.date.today() - relativedelta(months=3)
-    >>> Contract = Model.get('contract')
-    >>> ContractPremium = Model.get('contract.premium')
-    >>> BillingInformation = Model.get('contract.billing_information')
-    >>> contract = Contract()
-    >>> contract.company = company
-    >>> contract.subscriber = subscriber
-    >>> contract.start_date = contract_start_date
-    >>> contract.product = product
-    >>> contract.billing_informations.append(BillingInformation(date=None,
-    ...         billing_mode=product.billing_modes[0],
-    ...         payment_term=product.billing_modes[0].allowed_payment_terms[0]))
-    >>> contract.contract_number = '123456789'
-    >>> contract.save()
-    >>> Wizard('contract.activate', models=[contract]).execute('apply')
-    >>> contract.billing_information.direct_debit is False
-    True
-
-Create two invoices of 100.00::
-
-    >>> invoice_wizard = Wizard('contract.do_invoice', models=[contract])
-    >>> invoice_wizard.form.up_to_date = contract_start_date + relativedelta(months=1)
-    >>> invoice_wizard.execute('invoice')
-    >>> ContractInvoice = Model.get('contract.invoice')
-    >>> AccountInvoice = Model.get('account.invoice')
-
-Post the invoices of 100.00::
-
-    >>> invoices = ContractInvoice.find([('contract', '=', contract.id)])
-    >>> AccountInvoice.post([x.id for x in invoices], config.context)
-    >>> invoices = list(reversed([x.invoice for x in invoices]))
     >>> StatementJournal = Model.get('account.statement.journal')
-    >>> Statement = Model.get('account.statement')
-    >>> StatementLine = Model.get('account.statement.line')
     >>> Sequence = Model.get('ir.sequence')
     >>> AccountJournal = Model.get('account.journal')
     >>> sequence = Sequence(name='sequence',
@@ -192,9 +143,69 @@ Create the statement journal::
     ...     process_method='cheque'
     ...     )
     >>> statement_journal.save()
+    >>> config = switch_user('product_user')
+
+Create Product::
+
+    >>> company = get_company()
+    >>> accounts = get_accounts(company)
+    >>> product = init_product()
+    >>> product = add_quote_number_generator(product)
+    >>> product = add_premium_rules(product)
+    >>> product = add_invoice_configuration(product, accounts)
+    >>> product = add_insurer_to_product(product)
+    >>> product.save()
+    >>> config = switch_user('contract_user')
+
+Create Subscriber::
+
+    >>> subscriber = create_party_person()
+    >>> Product = Model.get('offered.product')
+
+Create Contract::
+
+    >>> contract_start_date = datetime.date.today() - relativedelta(months=3)
+    >>> Contract = Model.get('contract')
+    >>> ContractPremium = Model.get('contract.premium')
+    >>> BillingInformation = Model.get('contract.billing_information')
+    >>> contract = Contract()
+    >>> company = get_company()
+    >>> contract.company = company
+    >>> contract.subscriber = subscriber
+    >>> contract.start_date = contract_start_date
+    >>> product = Product(product.id)
+    >>> contract.product = product
+    >>> contract.billing_informations.append(BillingInformation(date=None,
+    ...         billing_mode=product.billing_modes[0],
+    ...         payment_term=product.billing_modes[0].allowed_payment_terms[0]))
+    >>> contract.contract_number = '123456789'
+    >>> contract.save()
+    >>> Wizard('contract.activate', models=[contract]).execute('apply')
+    >>> contract.billing_information.direct_debit is False
+    True
+
+Create two invoices of 100.00::
+
+    >>> invoice_wizard = Wizard('contract.do_invoice', models=[contract])
+    >>> invoice_wizard.form.up_to_date = contract_start_date + relativedelta(months=1)
+    >>> invoice_wizard.execute('invoice')
+    >>> ContractInvoice = Model.get('contract.invoice')
+    >>> AccountInvoice = Model.get('account.invoice')
+
+Post the invoices of 100.00::
+
+    >>> invoices = ContractInvoice.find([('contract', '=', contract.id)])
+    >>> AccountInvoice.post([x.id for x in invoices], config.context)
+    >>> invoices = list(reversed([x.invoice for x in invoices]))
+    >>> config = switch_user('financial_user')
+    >>> company = get_company()
 
 Create a statement of 180.00 for an invoice of 100.00::
 
+    >>> Statement = Model.get('account.statement')
+    >>> StatementLine = Model.get('account.statement.line')
+    >>> StatementJournal = Model.get('account.statement.journal')
+    >>> statement_journal = StatementJournal(statement_journal.id)
     >>> statement = Statement(name='test',
     ...     journal=statement_journal,
     ...     start_balance=Decimal('0'),
@@ -206,7 +217,11 @@ Create a statement of 180.00 for an invoice of 100.00::
     >>> statement.lines[0].description = 'description'
     >>> statement.lines[0].date = datetime.date.today()
     >>> statement.lines[0].amount = Decimal('180')
+    >>> Party = Model.get('party.party')
+    >>> subscriber = Party(subscriber.id)
     >>> statement.lines[0].party = subscriber
+    >>> Contract = Model.get('contract')
+    >>> contract = Contract(contract.id)
     >>> statement.lines[0].contract = contract
     >>> statement.lines[0].party_payer = subscriber
     >>> statement.lines[0].invoice = None
@@ -254,6 +269,8 @@ Create payment which pay the rest of the second invoice::
     >>> line, = invoices[1].lines_to_pay
     >>> pay_line = Wizard('account.payment.creation', [line])
     >>> pay_line.form.description = 'Payment'
+    >>> PaymentJournal = Model.get('account.payment.journal')
+    >>> payment_journal = PaymentJournal(payment_journal.id)
     >>> pay_line.form.journal = payment_journal
     >>> pay_line.execute('create_payments')
     >>> payment, = Payment.find()
@@ -274,6 +291,7 @@ Unreconcile the statement line of 180. All reconciliations should::
 
  be deleted::
 
+    >>> ContractInvoice = Model.get('contract.invoice')
     >>> unreconcile = Wizard('account.move.unreconcile_lines', [overdue_line])
     >>> invoices = [x.invoice for x in
     ...     ContractInvoice.find([('contract', '=', contract.id)])]

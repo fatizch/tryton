@@ -3,11 +3,16 @@
 # #Title# #Loan Contract Creation
 # #Comment# #Imports
 import datetime
-from proteus import Model, Wizard
+from proteus import Model
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 from trytond.tests.tools import activate_modules
 from trytond.modules.currency.tests.tools import get_currency
+from trytond.modules.company.tests.tools import get_company
+from trytond.modules.company_cog.tests.tools import create_company
+
+from trytond.modules.coog_core.test_framework import execute_test_case, \
+    switch_user
 
 # Useful for updating the tests without having to recreate a db from scratch
 # import os
@@ -22,26 +27,6 @@ from trytond.modules.currency.tests.tools import get_currency
 # #Comment# #Install Modules
 config = activate_modules('loan')
 
-# #Comment# #Get Models
-Account = Model.get('account.account')
-AccountKind = Model.get('account.account.type')
-Address = Model.get('party.address')
-Company = Model.get('company.company')
-Contract = Model.get('contract')
-Country = Model.get('country.country')
-FiscalYear = Model.get('account.fiscalyear')
-Insurer = Model.get('insurer')
-ItemDescription = Model.get('offered.item.description')
-Loan = Model.get('loan')
-LoanShare = Model.get('loan.share')
-OptionDescription = Model.get('offered.option.description')
-Party = Model.get('party.party')
-Product = Model.get('offered.product')
-Sequence = Model.get('ir.sequence')
-SequenceType = Model.get('ir.sequence.type')
-User = Model.get('res.user')
-ZipCode = Model.get('country.zip')
-
 # #Comment# #Constants
 today = datetime.date.today()
 product_start_date = datetime.date(2014, 1, 1)
@@ -51,6 +36,7 @@ contract_start_date = datetime.date(2014, 4, 10)
 currency = get_currency(code='EUR')
 
 # #Comment# #Create or fetch Country
+Country = Model.get('country.country')
 countries = Country.find([('code', '=', 'FR')])
 if not countries:
     country = Country(name='France', code='FR')
@@ -59,23 +45,28 @@ else:
     country, = countries
 
 # #Comment# #Create Company
-company_config = Wizard('company.company.config')
-company_config.execute('company')
-company = company_config.form
-party = Party(name='World Company')
-party.save()
-company.party = party
-company.currency = currency
-company_config.execute('add')
-company, = Company.find([])
-user = User(1)
-user.main_company = company
-user.company = company
-user.save()
+_ = create_company(currency=currency)
 
-# #Comment# #Reload the context
-config._context = User.get_preferences(True, config.context)
-config._context['company'] = company.id
+# #Comment# #Create zip
+country = Country(country.id)
+ZipCode = Model.get('country.zip')
+zip_ = ZipCode(zip="1", city="Mount Doom", country=country)
+zip_.save()
+
+execute_test_case('authorizations_test_case')
+
+config = switch_user('financial_user')
+company = get_company()
+
+# #Comment# #Get Models
+Account = Model.get('account.account')
+AccountKind = Model.get('account.account.type')
+FiscalYear = Model.get('account.fiscalyear')
+Sequence = Model.get('ir.sequence')
+Party = Model.get('party.party')
+ZipCode = Model.get('country.zip')
+Address = Model.get('party.address')
+Country = Model.get('country.country')
 
 # #Comment# #Create Fiscal Year
 fiscalyear = FiscalYear(name=str(today.year))
@@ -116,6 +107,43 @@ payable_account.type = payable_account_kind
 payable_account.company = company
 payable_account.save()
 
+receivable_account2 = Account()
+receivable_account2.name = 'Account Receivable 2'
+receivable_account2.code = 'account_receivable 2'
+receivable_account2.kind = 'receivable'
+receivable_account2.reconcile = True
+receivable_account2.type = receivable_account_kind
+receivable_account2.company = company
+receivable_account2.save()
+payable_account2 = Account()
+payable_account2.name = 'Account Payable 2'
+payable_account2.code = 'account_payable 2'
+payable_account2.kind = 'payable'
+payable_account2.type = payable_account_kind
+payable_account2.company = company
+payable_account2.save()
+
+bank_party = Party(name='Bank Of Mordor')
+receivable_account2 = Account(receivable_account2.id)
+bank_party.account_receivable = receivable_account2
+payable_account2 = Account(payable_account2.id)
+bank_party.account_payable = payable_account2
+lender = bank_party.lender_role.new()
+bank_party.save()
+
+country = Country(country.id)
+zip_ = ZipCode(zip_.id)
+bank_address = Address(party=bank_party.id, zip="1", country=country,
+    city="Mount Doom")
+bank_address.save()
+
+config = switch_user('product_user')
+company = get_company()
+currency = get_currency(code='EUR')
+
+Party = Model.get('party.party')
+
+ItemDescription = Model.get('offered.item.description')
 # #Comment# #Create Item Description
 item_description = ItemDescription()
 item_description.name = 'Test Item Description'
@@ -123,16 +151,22 @@ item_description.code = 'test_item_description'
 item_description.kind = 'person'
 item_description.save()
 
+Insurer = Model.get('insurer')
+Account = Model.get('account.account')
+
 # #Comment# #Create Insurer
 insurer = Insurer()
 insurer.party = Party()
 insurer.party.name = 'Insurer'
+receivable_account = Account(receivable_account.id)
 insurer.party.account_receivable = receivable_account
+payable_account = Account(payable_account.id)
 insurer.party.account_payable = payable_account
 insurer.party.save()
 insurer.save()
 
 # #Comment# #Create Coverage
+OptionDescription = Model.get('offered.option.description')
 coverage = OptionDescription()
 coverage.company = company
 coverage.currency = currency
@@ -144,12 +178,16 @@ coverage.item_desc = item_description
 coverage.insurer = insurer
 coverage.save()
 
+
 # #Comment# #Create Product
+SequenceType = Model.get('ir.sequence.type')
+Product = Model.get('offered.product')
 sequence_code = SequenceType()
 sequence_code.name = 'Product sequence'
 sequence_code.code = 'contract'
 sequence_code.company = company
 sequence_code.save()
+Sequence = Model.get('ir.sequence')
 contract_sequence = Sequence()
 contract_sequence.name = 'Contract Sequence'
 contract_sequence.code = sequence_code.code
@@ -176,51 +214,45 @@ product.start_date = product_start_date
 product.coverages.append(coverage)
 product.save()
 
+loan_sequence = Sequence()
+loan_sequence.name = 'Loan'
+loan_sequence.code = 'loan'
+loan_sequence.save()
+
+
+config = switch_user('contract_user')
+company = get_company()
+currency = get_currency(code='EUR')
+
+Address = Model.get('party.address')
+Contract = Model.get('contract')
+Loan = Model.get('loan')
+LoanShare = Model.get('loan.share')
+Party = Model.get('party.party')
+Account = Model.get('account.account')
+Product = Model.get('offered.product')
+OptionDescription = Model.get('offered.option.description')
+Country = Model.get('country.country')
+
+
 # #Comment# #Create Subscriber
 subscriber = Party()
 subscriber.name = 'Doe'
 subscriber.first_name = 'John'
 subscriber.is_person = True
 subscriber.gender = 'male'
+receivable_account = Account(receivable_account.id)
 subscriber.account_receivable = receivable_account
+payable_account = Account(payable_account.id)
 subscriber.account_payable = payable_account
 subscriber.birth_date = datetime.date(1980, 10, 14)
 subscriber.save()
 
-receivable_account2 = Account()
-receivable_account2.name = 'Account Receivable 2'
-receivable_account2.code = 'account_receivable 2'
-receivable_account2.kind = 'receivable'
-receivable_account2.reconcile = True
-receivable_account2.type = receivable_account_kind
-receivable_account2.company = company
-receivable_account2.save()
-payable_account2 = Account()
-payable_account2.name = 'Account Payable 2'
-payable_account2.code = 'account_payable 2'
-payable_account2.kind = 'payable'
-payable_account2.type = payable_account_kind
-payable_account2.company = company
-payable_account2.save()
-
-bank_party = Party(name='Bank Of Mordor')
-bank_party.account_receivable = receivable_account2
-bank_party.account_payable = payable_account2
-lender = bank_party.lender_role.new()
-bank_party.save()
-
-zip_ = ZipCode(zip="1", city="Mount Doom", country=country)
-zip_.save()
-bank_address = Address(party=bank_party.id, zip="1", country=country,
-    city="Mount Doom")
-bank_address.save()
 
 # #Comment# #Create Loans
+bank_address = Address(bank_address.id)
+Sequence = Model.get('ir.sequence')
 loan_payment_date = datetime.date(2014, 5, 1)
-loan_sequence = Sequence()
-loan_sequence.name = 'Loan'
-loan_sequence.code = 'loan'
-loan_sequence.save()
 loan_1 = Loan()
 loan_1.lender_address = bank_address
 loan_1.company = company
@@ -255,10 +287,12 @@ contract = Contract()
 contract.company = company
 contract.subscriber = subscriber
 contract.start_date = contract_start_date
+product = Product(product.id)
 contract.product = product
 covered_element = contract.covered_elements.new()
 covered_element.party = subscriber
 option = covered_element.options[0]
+coverage = OptionDescription(coverage.id)
 option.coverage = coverage
 loan_share_1 = option.loan_shares.new()
 loan_share_1.loan = loan_1

@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data> 
+        <!-- Contract Management Group -->
+        <record model="ir.model.access" id="access_endorsement_contract_covered_element_group_contract_manage">
+            <field name="model" search="[('model', '=', 'endorsement.contract.covered_element')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_covered_element_field_group_contract_manage">
+            <field name="model" search="[('model', '=', 'endorsement.contract.covered_element.field')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_covered_element_option_group_contract_manage">
+            <field name="model" search="[('model', '=', 'endorsement.contract.covered_element.option')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_covered_element_option_version_group_contract_manage">
+            <field name="model" search="[('model', '=', 'endorsement.contract.covered_element.option.version')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_covered_element_version_group_contract_manage">
+            <field name="model" search="[('model', '=', 'endorsement.contract.covered_element.version')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_covered_element_version_field_group_contract_manage">
+            <field name="model" search="[('model', '=', 'endorsement.contract.covered_element.version.field')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_extra_premium_group_contract_manage">
+            <field name="model" search="[('model', '=', 'endorsement.contract.extra_premium')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_extra_premium_field_group_contract_manage">
+            <field name="model" search="[('model', '=', 'endorsement.contract.extra_premium.field')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_option_exclusion_group_contract_manage">
+            <field name="model" search="[('model', '=', 'endorsement.contract.option.exclusion')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_option_exclusion_field_group_contract_manage">
+            <field name="model" search="[('model', '=', 'endorsement.contract.option.exclusion.field')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Endorsement Insurance Access Rights -->
+        <record model="ir.model.access" id="access_endorsement_contract_covered_element">
+            <field name="model" search="[('model', '=', 'endorsement.contract.covered_element')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_covered_element_field">
+            <field name="model" search="[('model', '=', 'endorsement.contract.covered_element.field')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_covered_element_option">
+            <field name="model" search="[('model', '=', 'endorsement.contract.covered_element.option')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_covered_element_option_version">
+            <field name="model" search="[('model', '=', 'endorsement.contract.covered_element.option.version')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_covered_element_version">
+            <field name="model" search="[('model', '=', 'endorsement.contract.covered_element.version')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_covered_element_version_field">
+            <field name="model" search="[('model', '=', 'endorsement.contract.covered_element.version.field')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_extra_premium">
+            <field name="model" search="[('model', '=', 'endorsement.contract.extra_premium')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_extra_premium_field">
+            <field name="model" search="[('model', '=', 'endorsement.contract.extra_premium.field')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_option_exclusion">
+            <field name="model" search="[('model', '=', 'endorsement.contract.option.exclusion')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_option_exclusion_field">
+            <field name="model" search="[('model', '=', 'endorsement.contract.option.exclusion.field')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

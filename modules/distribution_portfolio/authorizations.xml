@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Global Configuration Group -->
+        <record model="ir.model.access" id="access_party_configuration_default_configuration_group_global_config">
+            <field name="model" search="[('model', '=', 'party.configuration.default_portfolio')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Distribution Portfolio Access Rights -->
+        <record model="ir.model.access" id="access_party_configuration_default_configuration">
+            <field name="model" search="[('model', '=', 'party.configuration.default_portfolio')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

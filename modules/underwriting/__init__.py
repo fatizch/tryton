@@ -6,6 +6,7 @@ import underwriting
 import document
 import batch
 import party
+import test_case
 
 
 def register():
@@ -19,6 +20,7 @@ def register():
         underwriting.UnderwritingResult,
         underwriting.PlanUnderwritingDate,
         batch.UnderwritingActivationBatch,
+        test_case.TestCaseModel,
         module='underwriting', type_='model')
 
     Pool.register(

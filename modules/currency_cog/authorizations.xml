@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ########### -->
+        <!-- # Currency # -->
+        <!-- ########### -->
+        <record model="ir.model.access" id="access_currency_group_global_config">
+            <field name="model" search="[('model', '=', 'currency.currency')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- ############ -->
+        <!-- # currency rate # -->
+        <!-- ############ -->
+        <record model="ir.model.access" id="access_currency_rate_group_global_config">
+            <field name="model" search="[('model', '=', 'currency.currency.rate')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

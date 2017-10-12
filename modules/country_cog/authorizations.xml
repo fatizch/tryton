@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Global Configuration Group -->
+        <!-- Administration -->
+        <record model="ir.ui.menu-res.group" id="menu_country_form_global_config">
+            <field name="menu" ref="country.menu_country_form"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_zipcode_form_global_config">
+            <field name="menu" ref="country_cog.menu_zipcode_form"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.model.access" id="access_country_country_global_config_group">
+            <field name="model" search="[('model', '=', 'country.country')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_country_subdivision_global_config_group">
+            <field name="model" search="[('model', '=', 'country.subdivision')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_country_zip_global_config_group">
+            <field name="model" search="[('model', '=', 'country.zip')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Country Access Rights -->
+        <record model="ir.model.access" id="access_country_country">
+            <field name="model" search="[('model', '=', 'country.country')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_country_subdivision">
+            <field name="model" search="[('model', '=', 'country.subdivision')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_country_zip">
+            <field name="model" search="[('model', '=', 'country.zip')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

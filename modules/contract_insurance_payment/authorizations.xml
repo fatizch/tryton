@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Contract Management Group -->
+        <!-- Financial / Payments  -->
+        <record model="ir.ui.menu-res.group" id="menu_payments_form_contract_manage">
+            <field name="menu" ref="account_payment.menu_payments"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_move_line_form_contract_manage">
+            <field name="menu" ref="account_payment.menu_move_line_form"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_payment_form_contract_manage">
+            <field name="menu" ref="account_payment.menu_payment_form"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_fail_payment_status_form_contract_manage">
+            <field name="menu" ref="account_payment_cog.menu_fail_payment_status_form"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+         <record model="ir.ui.menu-res.group" id="menu_payment_group_form_contract_manage">
+            <field name="menu" ref="account_payment.menu_payment_group_form"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_merged_payment_form_contract_manage">
+            <field name="menu" ref="account_payment_cog.menu_merged_payment_form"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_message_form_contract_manage">
+            <field name="menu" ref="account_payment_sepa.menu_message_form"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_create_payments_contract_manage">
+            <field name="menu" ref="account_payment_cog.menu_create_payments"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <!-- Contract Management Group -->
+        <record model="ir.model.access" id="access_account_payment_merged_by_contract_group_contract_manage">
+            <field name="model" search="[('model', '=', 'account.payment.merged.by_contract')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_group_contract_manage">
+            <field name="model" search="[('model', '=', 'account.payment')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_payment_group_group_contract_manage">
+            <field name="model" search="[('model', '=', 'account.payment.group')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_payment_direct_debit_group_contract_manage">
+            <field name="model" search="[('model', '=', 'party.party.payment_direct_debit')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Default Contract Insurance Payment Access Rights -->
+        <record model="ir.model.access" id="access_account_payment_merged_by_contract">
+            <field name="model" search="[('model', '=', 'account.payment.merged.by_contract')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

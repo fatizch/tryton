@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Contract Consultation Group -->
+        <!-- Contract -->
+        <record model="ir.ui.menu-res.group" id="menu_endorsement_set_contract_read">
+            <field name="menu" ref="endorsement_set.menu_endorsement_set"/>
+            <field name="group" ref="contract.group_contract_read"/>
+        </record>
+        <!-- Contract Management Group -->
+        <!-- Contract -->
+        <record model="ir.ui.menu-res.group" id="menu_endorsement_set_contract_manage">
+            <field name="menu" ref="endorsement_set.menu_endorsement_set"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_configuration_number_sequence_group_product_manage">
+            <field name="model" search="[('model', '=', 'endorsement.configuration.endorsement_set_number_sequence')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_set_group_product_manage">
+            <field name="model" search="[('model', '=', 'endorsement.set')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Endorsement Set Access Rights -->
+        <record model="ir.model.access" id="access_endorsement_configuration_number_sequence">
+            <field name="model" search="[('model', '=', 'endorsement.configuration.endorsement_set_number_sequence')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_set">
+            <field name="model" search="[('model', '=', 'endorsement.set')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

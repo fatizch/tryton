@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Default Offered Eligibility Rule Access -->
+        <record model="ir.model.access" id="access_offered_eligibility_rule">
+            <field name="model" search="[('model', '=', 'offered.option.description.eligibility_rule')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Admin Group -->
+        <record model="ir.model.access" id="access_offered_eligibility_rule_admin_group">
+            <field name="model" search="[('model', '=', 'offered.option.description.eligibility_rule')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Product Management Group -->
+        <record model="ir.model.access" id="access_offered_eligibility_rule_product_manage_group">
+            <field name="model" search="[('model', '=', 'offered.option.description.eligibility_rule')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

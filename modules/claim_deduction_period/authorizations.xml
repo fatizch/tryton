@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Product Consultation Group  -->
+        <!-- Claim / Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_deduction_period_kind_product_read">
+            <field name="menu" ref="claim_deduction_period.menu_deduction_period_kind"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <!-- Product Management Group  -->
+        <!-- Claim / Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_deduction_period_kind_product_manage">
+            <field name="menu" ref="claim_deduction_period.menu_deduction_period_kind"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_benefit_loss_description_deduction_period_kind_product_manage_group">
+            <field name="model" search="[('model', '=', 'benefit.loss.description.deduction_period_kind')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Claim Management Group -->
+        <record model="ir.model.access" id="access_claim_loss_deduction_period_claim_manage_group">
+            <field name="model" search="[('model', '=', 'claim.loss.deduction.period')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Claim Deduction Period Default Access Rights -->
+        <record model="ir.model.access" id="access_benefit_loss_description_deduction_period_kind">
+            <field name="model" search="[('model', '=', 'benefit.loss.description.deduction_period_kind')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_loss_deduction_period">
+            <field name="model" search="[('model', '=', 'claim.loss.deduction.period')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Contract Consultation Group -->
+        <!-- Loan -->
+        <record model="ir.ui.menu-res.group" id="menu_loan_form_contract_read">
+            <field name="menu" ref="loan.menu_loan_form"/>
+            <field name="group" ref="contract.group_contract_read"/>
+        </record>
+        <!-- Contract Management Group -->
+        <!-- Loan  -->
+        <record model="ir.ui.menu-res.group" id="menu_loan_form_contract_manage">
+            <field name="menu" ref="loan.menu_loan_form"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+    </data>
+</tryton>

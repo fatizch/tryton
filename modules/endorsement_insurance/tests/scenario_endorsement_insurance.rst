@@ -8,39 +8,14 @@ Imports::
     >>> from proteus import Model, Wizard
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.currency.tests.tools import get_currency
+    >>> from trytond.modules.company.tests.tools import get_company
+    >>> from trytond.modules.company_cog.tests.tools import create_company
+    >>> from trytond.modules.coog_core.test_framework import execute_test_case, \
+    ...     switch_user
 
 Install Modules::
 
     >>> config = activate_modules('endorsement_insurance')
-
-Get Models::
-
-    >>> Account = Model.get('account.account')
-    >>> AccountKind = Model.get('account.account.type')
-    >>> Company = Model.get('company.company')
-    >>> Contract = Model.get('contract')
-    >>> Country = Model.get('country.country')
-    >>> Endorsement = Model.get('endorsement')
-    >>> EndorsementContract = Model.get('endorsement.contract')
-    >>> EndorsementContractField = Model.get('endorsement.contract.field')
-    >>> EndorsementDefinition = Model.get('endorsement.definition')
-    >>> EndorsementDefinitionPartRelation = Model.get(
-    ...     'endorsement.definition-endorsement.part')
-    >>> EndorsementPart = Model.get('endorsement.part')
-    >>> ExclusionKind = Model.get('offered.exclusion')
-    >>> Field = Model.get('ir.model.field')
-    >>> Insurer = Model.get('insurer')
-    >>> ItemDescription = Model.get('offered.item.description')
-    >>> ManageExclusionDisplayer = Model.get('contract.manage_exclusions.exclusion')
-    >>> MethodDefinition = Model.get('ir.model.method')
-    >>> Option = Model.get('contract.option')
-    >>> OptionDescription = Model.get('offered.option.description')
-    >>> Party = Model.get('party.party')
-    >>> Product = Model.get('offered.product')
-    >>> Sequence = Model.get('ir.sequence')
-    >>> SequenceType = Model.get('ir.sequence.type')
-    >>> SubStatus = Model.get('contract.sub_status')
-    >>> User = Model.get('res.user')
 
 Constants::
 
@@ -55,6 +30,7 @@ Create or fetch Currency::
 
 Create or fetch Country::
 
+    >>> Country = Model.get('country.country')
     >>> countries = Country.find([('code', '=', 'FR')])
     >>> if not countries:
     ...     country = Country(name='France', code='FR')
@@ -64,27 +40,15 @@ Create or fetch Country::
 
 Create Company::
 
-    >>> company_config = Wizard('company.company.config')
-    >>> company_config.execute('company')
-    >>> company = company_config.form
-    >>> party = Party(name='World Company')
-    >>> party.save()
-    >>> company.party = party
-    >>> company.currency = currency
-    >>> company_config.execute('add')
-    >>> company, = Company.find([])
-    >>> user = User(1)
-    >>> user.main_company = company
-    >>> user.company = company
-    >>> user.save()
-
-Reload the context::
-
-    >>> config._context = User.get_preferences(True, config.context)
-    >>> config._context['company'] = company.id
+    >>> currency = get_currency(code='EUR')
+    >>> _ = create_company(currency=currency)
+    >>> execute_test_case('authorizations_test_case')
+    >>> config = switch_user('financial_user')
+    >>> company = get_company()
 
 Create Account Kind::
 
+    >>> AccountKind = Model.get('account.account.type')
     >>> product_account_kind = AccountKind()
     >>> product_account_kind.name = 'Product Account Kind'
     >>> product_account_kind.company = company
@@ -100,6 +64,7 @@ Create Account Kind::
 
 Create Account::
 
+    >>> Account = Model.get('account.account')
     >>> product_account = Account()
     >>> product_account.name = 'Product Account'
     >>> product_account.code = 'product_account'
@@ -122,27 +87,39 @@ Create Account::
     >>> payable_account.type = payable_account_kind
     >>> payable_account.company = company
     >>> payable_account.save()
+    >>> config = switch_user('product_user')
+    >>> company = get_company()
+    >>> currency = get_currency(code='EUR')
+
+Create Insurer::
+
+    >>> Insurer = Model.get('insurer')
+    >>> Party = Model.get('party.party')
+    >>> Account = Model.get('account.account')
+    >>> insurer = Insurer()
+    >>> insurer.party = Party()
+    >>> insurer.party.name = 'Insurer'
+    >>> insurer.party.account_receivable = Account(receivable_account.id)
+    >>> insurer.party.account_payable = Account(payable_account.id)
+    >>> insurer.party.save()
+    >>> insurer.save()
 
 Create Item Description::
 
+    >>> ItemDescription = Model.get('offered.item.description')
     >>> item_description = ItemDescription()
     >>> item_description.name = 'Test Item Description'
     >>> item_description.code = 'test_item_description'
     >>> item_description.kind = 'person'
     >>> item_description.save()
 
-Create Insurer::
-
-    >>> insurer = Insurer()
-    >>> insurer.party = Party()
-    >>> insurer.party.name = 'Insurer'
-    >>> insurer.party.account_receivable = receivable_account
-    >>> insurer.party.account_payable = payable_account
-    >>> insurer.party.save()
-    >>> insurer.save()
-
 Create Product::
 
+    >>> SequenceType = Model.get('ir.sequence.type')
+    >>> Sequence = Model.get('ir.sequence')
+    >>> OptionDescription = Model.get('offered.option.description')
+    >>> Product = Model.get('offered.product')
+    >>> SubStatus = Model.get('contract.sub_status')
     >>> sequence_code = SequenceType()
     >>> sequence_code.name = 'Product sequence'
     >>> sequence_code.code = 'contract'
@@ -190,6 +167,10 @@ Create SubStatus::
 
 Create Remove Option Endorsement::
 
+    >>> EndorsementPart = Model.get('endorsement.part')
+    >>> EndorsementDefinition = Model.get('endorsement.definition')
+    >>> EndorsementDefinitionPartRelation = Model.get(
+    ...     'endorsement.definition-endorsement.part')
     >>> remove_option_part = EndorsementPart()
     >>> remove_option_part.name = 'Remove Option'
     >>> remove_option_part.code = 'remove_option'
@@ -215,22 +196,30 @@ Create Manage Exclusions Endorsement::
 
 Create exclusion kinds::
 
+    >>> ExclusionKind = Model.get('offered.exclusion')
     >>> exclusion_1 = ExclusionKind(name='Exclusion 1', code='exclusion_1',
     ...     text='Exclusion 1')
     >>> exclusion_1.save()
     >>> exclusion_2 = ExclusionKind(name='Exclusion 2', code='exclusion_2',
     ...     text='Exclusion 2')
     >>> exclusion_2.save()
+    >>> config = switch_user('contract_user')
+    >>> company = get_company()
+    >>> ManageExclusionDisplayer = Model.get('contract.manage_exclusions.exclusion')
+    >>> Endorsement = Model.get('endorsement')
+    >>> Option = Model.get('contract.option')
 
 Create Subscriber::
 
+    >>> Account = Model.get('account.account')
+    >>> Party = Model.get('party.party')
     >>> subscriber = Party()
     >>> subscriber.name = 'Doe'
     >>> subscriber.first_name = 'John'
     >>> subscriber.is_person = True
     >>> subscriber.gender = 'male'
-    >>> subscriber.account_receivable = receivable_account
-    >>> subscriber.account_payable = payable_account
+    >>> subscriber.account_receivable = Account(receivable_account.id)
+    >>> subscriber.account_payable = Account(payable_account.id)
     >>> subscriber.birth_date = datetime.date(1980, 10, 14)
     >>> subscriber.save()
 
@@ -241,13 +230,22 @@ Create Other Insured::
     >>> luigi.first_name = 'Luigi'
     >>> luigi.is_person = True
     >>> luigi.gender = 'male'
-    >>> luigi.account_receivable = receivable_account
-    >>> luigi.account_payable = payable_account
+    >>> luigi.account_receivable = Account(receivable_account.id)
+    >>> luigi.account_payable = Account(payable_account.id)
     >>> luigi.birth_date = datetime.date(1965, 10, 14)
     >>> luigi.save()
 
 Create Test Contract::
 
+    >>> Contract = Model.get('contract')
+    >>> OptionDescription = Model.get('offered.option.description')
+    >>> ExclusionKind = Model.get('offered.exclusion')
+    >>> ItemDescription = Model.get('offered.item.description')
+    >>> Product = Model.get('offered.product')
+    >>> coverage = OptionDescription(coverage.id)
+    >>> item_description = ItemDescription(item_description.id)
+    >>> exclusion_1 = ExclusionKind(exclusion_1.id)
+    >>> product = Product(product.id)
     >>> contract = Contract()
     >>> contract.company = company
     >>> contract.start_date = contract_start_date
@@ -274,6 +272,8 @@ Create Test Contract::
 
 New Manage Exclusions Endorsement::
 
+    >>> EndorsementDefinition = Model.get('endorsement.definition')
+    >>> manage_exclusions = EndorsementDefinition(manage_exclusions.id)
     >>> new_endorsement = Wizard('endorsement.start')
     >>> new_endorsement.form.contract = contract
     >>> new_endorsement.form.endorsement_definition = manage_exclusions
@@ -318,8 +318,7 @@ New Manage Exclusions Endorsement::
     True
     >>> len(contract.covered_elements[1].options[0].exclusions) == 0
     True
-    >>> endorsement_last, = Endorsement.find([], order=[('create_date', 'DESC')],
-    ...     limit=1)
+    >>> endorsement_last, = Endorsement.find([], order=[('create_date', 'DESC')])
     >>> endorsement_last.click('cancel')
     >>> contract = Contract(contract.id)
     >>> len(contract.covered_elements[0].options[0].exclusions) == 0
@@ -330,6 +329,10 @@ New Manage Exclusions Endorsement::
 
 New Remove Option Endorsement::
 
+    >>> SubStatus = Model.get('contract.sub_status')
+    >>> EndorsementDefinition = Model.get('endorsement.definition')
+    >>> termination_status = SubStatus(termination_status.id)
+    >>> remove_option = EndorsementDefinition(remove_option.id)
     >>> new_endorsement = Wizard('endorsement.start')
     >>> new_endorsement.form.contract = contract
     >>> new_endorsement.form.endorsement_definition = remove_option
@@ -347,6 +350,7 @@ New Remove Option Endorsement::
     >>> new_endorsement.execute('remove_option_next')
     >>> new_endorsement.execute('apply_endorsement')
     >>> contract.save()
+    >>> Option = Model.get('contract.option')
     >>> option, = Option.find([('covered_element.party.name', '=', 'Doe')])
     >>> option2, = Option.find([('covered_element.party.name', '=', 'Vercotti')])
     >>> option2.end_date == endorsement_effective_date
@@ -357,6 +361,7 @@ New Remove Option Endorsement::
     True
     >>> option.sub_status is None
     True
+    >>> Endorsement = Model.get('endorsement')
     >>> endorsement_last, = Endorsement.find([], order=[('create_date', 'DESC')],
     ...     limit=1)
     >>> endorsement_last.click('cancel')
@@ -371,3 +376,29 @@ New Remove Option Endorsement::
     True
     >>> option.sub_status is None
     True
+    >>> Account = Model.get('account.account')
+    >>> AccountKind = Model.get('account.account.type')
+    >>> Company = Model.get('company.company')
+    >>> Contract = Model.get('contract')
+    >>> Country = Model.get('country.country')
+    >>> Endorsement = Model.get('endorsement')
+    >>> EndorsementContract = Model.get('endorsement.contract')
+    >>> EndorsementContractField = Model.get('endorsement.contract.field')
+    >>> EndorsementDefinition = Model.get('endorsement.definition')
+    >>> EndorsementDefinitionPartRelation = Model.get(
+    ...     'endorsement.definition-endorsement.part')
+    >>> EndorsementPart = Model.get('endorsement.part')
+    >>> ExclusionKind = Model.get('offered.exclusion')
+    >>> Field = Model.get('ir.model.field')
+    >>> Insurer = Model.get('insurer')
+    >>> ItemDescription = Model.get('offered.item.description')
+    >>> ManageExclusionDisplayer = Model.get('contract.manage_exclusions.exclusion')
+    >>> MethodDefinition = Model.get('ir.model.method')
+    >>> Option = Model.get('contract.option')
+    >>> OptionDescription = Model.get('offered.option.description')
+    >>> Party = Model.get('party.party')
+    >>> Product = Model.get('offered.product')
+    >>> Sequence = Model.get('ir.sequence')
+    >>> SequenceType = Model.get('ir.sequence.type')
+    >>> SubStatus = Model.get('contract.sub_status')
+    >>> User = Model.get('res.user')

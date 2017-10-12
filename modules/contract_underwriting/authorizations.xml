@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Product Consultation Group  -->
+        <!-- Laboratory -->
+        <record model="ir.ui.menu-res.group" id="menu_underwriting_decision_form_product_read">
+            <field name="menu" ref="contract_underwriting.menu_underwriting_decision_form"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <!-- Product Management Group  -->
+        <!-- Laboratory -->
+        <record model="ir.ui.menu-res.group" id="menu_underwriting_decision_form_product_manage">
+            <field name="menu" ref="contract_underwriting.menu_underwriting_decision_form"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <!-- Contract Underwriting Group -->
+        <record model="res.group" id="group_contract_underwriting">
+            <field name="name">Coog Contract Underwriting</field>
+        </record>
+        <!-- Laboratory -->
+        <record model="ir.ui.menu-res.group" id="menu_product_contract_underwriting">
+            <field name="menu" ref="offered.menu_product"/>
+            <field name="group" ref="group_contract_underwriting"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_product_configuration_contract_underwriting">
+            <field name="menu" ref="offered.menu_product_configuration"/>
+            <field name="group" ref="group_contract_underwriting"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_item_desc_form_contract_underwriting">
+            <field name="menu" ref="offered_insurance.menu_item_desc_form"/>
+            <field name="group" ref="group_contract_underwriting"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_underwriting_decision_form_contract_underwriting">
+            <field name="menu" ref="contract_underwriting.menu_underwriting_decision_form"/>
+            <field name="group" ref="group_contract_underwriting"/>
+        </record>
+        <!-- Users -->
+        <record model="res.user-res.group" id="user_admin_group_claim_underwriting">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_contract_underwriting"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_data_group_contract_underwriting">
+            <field name="model" search="[('model', '=', 'extra_data')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_group_contract_underwriting">
+            <field name="model" search="[('model', '=', 'extra_details.configuration')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_document_reception_group_contract_underwriting">
+            <field name="model" search="[('model', '=', 'document.reception')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_underwriting_group_contract_underwriting">
+            <field name="model" search="[('model', '=', 'contract.underwriting')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_underwriting_decision_group_contract_underwriting">
+            <field name="model" search="[('model', '=', 'underwriting.decision')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_underwriting_rule_group_contract_underwriting">
+            <field name="model" search="[('model', '=', 'underwriting.rule')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_process_log_contract_underwriting_group">
+            <field name="model" search="[('model', '=', 'process.log')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_process_status_contract_underwriting_group">
+            <field name="model" search="[('model', '=', 'process.status')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_action_contract_underwriting_group">
+            <field name="model" search="[('model', '=', 'process.action')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_contract_underwriting_group">
+            <field name="model" search="[('model', '=', 'process')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_step_contract_underwriting_group">
+            <field name="model" search="[('model', '=', 'process.step')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_transition_contract_underwriting_group">
+            <field name="model" search="[('model', '=', 'process.transition')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_contract_underwriting_group">
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_activation_history_contract_underwriting_group">
+            <field name="model" search="[('model', '=', 'contract.activation_history')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_notification_group_contract_underwriting">
+            <field name="model" search="[('model', '=', 'contract.notification')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_report_production_request_group_contract_underwriting">
+            <field name="model" search="[('model', '=', 'report_production.request')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Contract Underwriting Access Rights -->
+        <record model="ir.model.access" id="access_contract_underwriting">
+            <field name="model" search="[('model', '=', 'contract.underwriting')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_underwriting_option">
+            <field name="model" search="[('model', '=', 'contract.underwriting.option')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

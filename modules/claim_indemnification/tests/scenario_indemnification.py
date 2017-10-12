@@ -17,23 +17,19 @@ from trytond.modules.account.tests.tools import (
     create_fiscalyear, create_chart, get_accounts)
 from trytond.modules.account_invoice.tests.tools import (
     set_fiscalyear_invoice_sequences)
+from trytond.modules.coog_core.test_framework import execute_test_case, \
+    switch_user
 
 config = activate_modules('claim_indemnification')
 
 _ = create_country()
-
 currency = get_currency(code='EUR')
-
 _ = create_company(currency=currency)
 company = get_company()
 
-User = Model.get('res.user')
-user = User(1)
-user.company = company
-user.save()
-
-config._context = User.get_preferences(True, config.context)
-config._context['company'] = company.id
+execute_test_case('authorizations_test_case')
+config = switch_user('financial_user')
+company = get_company()
 
 # #Comment# #Create Fiscal Year
 fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(
@@ -65,14 +61,10 @@ template.save()
 account_product.template = template
 account_product.save()
 
-# #Comment# #Create Product
-product = init_product(start_date=datetime.date(2009, 3, 15))
-product = add_quote_number_generator(product)
-product.save()
-
 # #Comment# #Create Payment Journal
 
 Journal = Model.get('account.payment.journal')
+currency = get_currency(code='EUR')
 journal = Journal()
 journal.name = 'Manual Journal'
 journal.company = company
@@ -80,6 +72,13 @@ journal.currency = currency
 journal.process_method = 'manual'
 journal.save()
 
+config = switch_user('product_user')
+company = get_company()
+
+# #Comment# #Create Product
+product = init_product(start_date=datetime.date(2009, 3, 15))
+product = add_quote_number_generator(product)
+product.save()
 
 # #Comment# #Create Claim Configuration
 EventDescriptionLossDescriptionRelation = Model.get(
@@ -108,69 +107,6 @@ benefit_rule.indemnification_rule, = Rule.find([
 benefit_rule.indemnification_rule_extra_data = {'claim_amount': Decimal('42')}
 benefit_rule.offered = product
 
-contract_start_date = datetime.date(2012, 1, 1)
-
-Benefit = Model.get('benefit')
-benefit = Benefit()
-benefit.name = 'Refund'
-benefit.code = 'refund'
-benefit.start_date = datetime.date(2010, 1, 1)
-benefit.indemnification_kind = 'capital'
-benefit.beneficiary_kind = 'subscriber'
-benefit.products.append(account_product)
-benefit.loss_descs.append(loss_desc)
-benefit.benefit_rules.append(benefit_rule)
-benefit.save()
-
-product.coverages[0].benefits.append(benefit)
-product.save()
-
-subscriber = create_party_person(company=company)
-
-Contract = Model.get('contract')
-contract = Contract()
-contract.company = company
-contract.subscriber = subscriber
-contract.start_date = contract_start_date
-contract.product = product
-contract.contract_number = '123456789'
-contract.save()
-Wizard('contract.activate', models=[contract]).execute('apply')
-
-Claim = Model.get('claim')
-claim = Claim()
-claim.company = company
-claim.declaration_date = datetime.date.today()
-claim.claimant = subscriber
-claim.main_contract = contract
-claim.save()
-
-loss = claim.losses.new()
-loss.start_date = datetime.date(2016, 01, 01)
-loss.end_date = datetime.date(2017, 01, 01)
-loss.loss_desc = loss_desc
-loss.event_desc = event_desc
-loss.save()
-loss.click('activate')
-
-len(claim.losses) == 1
-# #Res# #True
-
-ClaimService = Model.get('claim.service')
-service = ClaimService()
-service.contract = contract
-service.option = contract.options[0]
-service.benefit = benefit
-service.loss = claim.losses[0]
-service.get_covered_person = subscriber
-service.save()
-
-ExtraData = Model.get('claim.service.extra_data')
-data = ExtraData()
-data.claim_service = service
-data.extra_data_values = {}
-data.save()
-
 RuleContext = Model.get('rule_engine.context')
 ControlRule = Model.get('claim.indemnification.control.rule')
 control_rule = ControlRule()
@@ -194,11 +130,112 @@ payment_term.lines.append(PaymentTermLine())
 payment_term.save()
 
 Config = Model.get('claim.configuration')
+Journal = Model.get('account.payment.journal')
+journal = Journal(journal.id)
 claim_config = Config()
 claim_config.control_rule = control_rule
 claim_config.payment_journal = journal
 claim_config.claim_default_payment_term = payment_term
 claim_config.save()
+
+Benefit = Model.get('benefit')
+Product = Model.get('product.product')
+benefit = Benefit()
+account_product = Product(account_product.id)
+benefit.name = 'Refund'
+benefit.code = 'refund'
+benefit.start_date = datetime.date(2010, 1, 1)
+benefit.indemnification_kind = 'capital'
+benefit.beneficiary_kind = 'subscriber'
+benefit.products.append(account_product)
+benefit.loss_descs.append(LossDesc(loss_desc.id))
+benefit.benefit_rules.append(benefit_rule)
+benefit.save()
+
+product.coverages[0].benefits.append(benefit)
+product.save()
+
+
+config = switch_user('contract_user')
+company = get_company()
+accounts = get_accounts(company)
+Party = Model.get('party.party')
+Account = Model.get('account.account')
+
+subscriber = Party()
+subscriber.name = 'Doe'
+subscriber.first_name = 'John'
+subscriber.is_person = True
+subscriber.gender = 'male'
+subscriber.account_receivable = Account(accounts['receivable'].id)
+subscriber.account_payable = Account(accounts['payable'].id)
+subscriber.birth_date = datetime.date(1980, 10, 14)
+subscriber.save()
+
+Contract = Model.get('contract')
+product = Model.get('offered.product')(product.id)
+
+contract_start_date = datetime.date(2012, 1, 1)
+contract = Contract()
+contract.company = company
+contract.subscriber = subscriber
+contract.start_date = contract_start_date
+contract.product = product
+contract.contract_number = '123456789'
+contract.save()
+Wizard('contract.activate', models=[contract]).execute('apply')
+
+config = switch_user('claim_user')
+company = get_company()
+
+Claim = Model.get('claim')
+Contract = Model.get('contract')
+Party = Model.get('party.party')
+claim = Claim()
+claim.company = company
+claim.declaration_date = datetime.date.today()
+claim.claimant = Party(subscriber.id)
+claim.main_contract = Contract(contract.id)
+claim.save()
+
+EventDesc = Model.get('benefit.event.description')
+LossDesc = Model.get('benefit.loss.description')
+event_desc = EventDesc(event_desc.id)
+loss_desc = LossDesc(loss_desc.id)
+
+loss = claim.losses.new()
+loss.start_date = datetime.date(2016, 01, 01)
+loss.end_date = datetime.date(2017, 01, 01)
+loss.loss_desc = loss_desc
+loss.event_desc = event_desc
+loss.save()
+loss.click('activate')
+
+len(claim.losses) == 1
+# #Res# #True
+
+ClaimService = Model.get('claim.service')
+Benefit = Model.get('benefit')
+Party = Model.get('party.party')
+
+subscriber = Party(subscriber.id)
+benefit = Benefit(benefit.id)
+
+Contract = Model.get('contract')
+service = ClaimService()
+service.contract = Contract(contract.id)
+service.option = Contract(contract.id).options[0]
+service.benefit = benefit
+service.loss = claim.losses[0]
+service.get_covered_person = subscriber
+service.save()
+
+ExtraData = Model.get('claim.service.extra_data')
+data = ExtraData()
+data.claim_service = service
+data.extra_data_values = {}
+data.save()
+
 
 Action = Model.get('ir.action')
 action, = Action.find(['name', '=', 'Indemnification Validation Wizard'])
@@ -208,6 +245,11 @@ action, = Action.find(['name', '=', 'Indemnification Control Wizard'])
 control_action = Action.read([action.id], config.context)[0]
 
 # #Comment# #Create indemnifications
+ClaimService = Model.get('claim.service')
+Party = Model.get('party.party')
+service = ClaimService(service.id)
+subscriber = Party(subscriber.id)
+
 create = Wizard('claim.create_indemnification', models=[service])
 create.form.start_date = datetime.date(2016, 1, 1)
 create.form.indemnification_date = datetime.date(2016, 1, 1)
@@ -253,6 +295,8 @@ validator.form.validate[0].action = 'validate'
 validator.execute('validation_state')
 
 # #Comment# #Create warning to simulate clicking yes
+User = Model.get('res.user')
+user, = User.find(['login', '=', 'claim_user'])
 Warning = Model.get('res.user.warning')
 warning = Warning()
 warning.always = False

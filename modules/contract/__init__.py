@@ -14,6 +14,7 @@ import offered
 import batch
 import event
 import notification
+import test_case
 
 from contract import _STATES, _DEPENDS
 from contract import _CONTRACT_STATUS_STATES, _CONTRACT_STATUS_DEPENDS
@@ -60,6 +61,7 @@ def register():
         notification.ContractNotification,
         event.EventTypeAction,
         event.EventLog,
+        test_case.TestCaseModel,
         module='contract', type_='model')
     Pool.register(
         wizard.OptionSubscription,

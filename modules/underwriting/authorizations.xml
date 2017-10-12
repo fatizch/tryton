@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Claim Underwriting Group -->
+        <record model="res.group" id="group_claim_underwriting">
+            <field name="name">Coog Claim Underwriting</field>
+        </record>
+        <!-- Users -->
+        <record model="res.user-res.group" id="user_admin_group_claim_underwriting">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_claim_underwriting"/>
+        </record>
+        <!-- Underwriting Default Access Rights -->
+        <record model="ir.model.access" id="access_underwriting_decision_type">
+            <field name="model" search="[('model', '=', 'underwriting.decision.type')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_underwriting_result">
+            <field name="model" search="[('model', '=', 'underwriting.result')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_underwriting_type">
+            <field name="model" search="[('model', '=', 'underwriting.type')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_underwriting_document_rule">
+            <field name="model" search="[('model', '=', 'underwriting.document_rule')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_underwriting">
+            <field name="model" search="[('model', '=', 'underwriting')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

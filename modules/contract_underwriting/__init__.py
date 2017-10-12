@@ -5,6 +5,7 @@ import offered
 import extra_data
 import report_engine
 import rule_engine
+import test_case
 from trytond.pool import Pool
 
 
@@ -22,4 +23,5 @@ def register():
         offered.UnderwritingRule,
         offered.UnderwritingRuleUnderwritingDecision,
         rule_engine.RuleEngine,
+        test_case.TestCaseModel,
         module='contract_underwriting', type_='model')

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Global Configuration Group -->
+        <!-- Administration -->
+        <record model="ir.ui.menu-res.group" id="menu_batches_global_config">
+            <field name="menu" ref="batch_launcher.menu_batches"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+    </data>
+</tryton>

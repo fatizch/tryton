@@ -1,0 +1,233 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Document -->
+        <record model="ir.ui.menu-res.group" id="menu_document_claim_underwriting">
+            <field name="menu" ref="document.menu_document"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_document_request_line_form_claim_underwriting">
+            <field name="menu" ref="document_request.menu_document_request_line_form"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_document_reception_claim_underwriting">
+            <field name="menu" ref="document.menu_document_reception"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <!-- Claim -->
+        <record model="ir.ui.menu-res.group" id="menu_claim_claim_underwriting">
+            <field name="menu" ref="claim.menu_claim"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_start_declaration_claim_underwriting">
+            <field name="menu" ref="claim_process.menu_start_declaration"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_claim_form_claim_underwriting">
+            <field name="menu" ref="claim.menu_claim_form"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <!-- Underwriting -->
+        <record model="ir.ui.menu-res.group" id="menu_underwriting_claim_underwriting">
+            <field name="menu" ref="underwriting.menu_underwriting"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_start_underwriting_claim_underwriting">
+            <field name="menu" ref="underwriting_process.menu_start_underwriting"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_underwritings_claim_underwriting">
+            <field name="menu" ref="underwriting.menu_underwritings"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_planned_underwritings_claim_underwriting">
+            <field name="menu" ref="underwriting.menu_planned_underwritings"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_underwriting_configuration_claim_underwriting">
+            <field name="menu" ref="underwriting.menu_underwriting_configuration"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_underwriting_type_claim_underwriting">
+            <field name="menu" ref="underwriting.menu_underwriting_type"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_underwriting_decision_type_claim_underwriting">
+            <field name="menu" ref="underwriting.menu_underwriting_decision_type"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_data_group_claim_underwriting">
+            <field name="model" search="[('model', '=', 'extra_data')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_group_claim_underwriting">
+            <field name="model" search="[('model', '=', 'extra_details.configuration')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_document_receive_line_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'document.receive.line')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_document_request_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'document.request')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_document_request_line_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'document.request.line')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_document_description_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'document.description')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_document_reception_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'document.reception')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_underwriting_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'underwriting')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_underwriting_decision_type_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'underwriting.decision.type')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_underwriting_document_rule_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'underwriting.document_rule')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_underwriting_result_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'underwriting.result')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_underwriting_type_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'underwriting.type')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_report_production_request_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'report_production.request')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Right to  claim management -->
+        <record model="ir.model.access" id="access_underwriting_result_claim_manage_group">
+            <field name="model" search="[('model', '=', 'underwriting.result')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_underwriting_claim_manage_group">
+            <field name="model" search="[('model', '=', 'underwriting')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+    <data depends="underwriting_process">
+        <record model="ir.model.access" id="access_process_log_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'process.log')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_process_status_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'process.status')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'process')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_action_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'process.action')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_step_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'process.step')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_transition_claim_underwriting_group">
+            <field name="model" search="[('model', '=', 'process.transition')]"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

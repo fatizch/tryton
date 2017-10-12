@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ################ -->
+        <!-- # Entry Points # -->
+        <!-- ################ -->
+        <record model="ir.ui.menu-res.group" id="menu_lender_form_global_config">
+            <field name="menu" ref="loan.menu_lender_form"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <!-- ########## -->
+        <!-- # Models # -->
+        <!-- ########## -->
+        <!-- Loan -->
+        <record model="ir.model.access" id="access_loan_group_contract_manage">
+            <field name="model" search="[('model', '=', 'loan')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_loan_group_read">
+            <field name="model" search="[('model', '=', 'loan')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Increment -->
+        <record model="ir.model.access" id="access_loan_increment_group_contract_manage">
+            <field name="model" search="[('model', '=', 'loan.increment')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_loan_increment_default">
+            <field name="model" search="[('model', '=', 'loan.increment')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Payment -->
+        <record model="ir.model.access" id="access_loan_payment_group_contract_manage">
+            <field name="model" search="[('model', '=', 'loan.payment')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_loan_payment_read_only">
+            <field name="model" search="[('model', '=', 'loan.payment')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Loan - Contract -->
+        <record model="ir.model.access" id="access_contract_loan_group_contract_manage">
+            <field name="model" search="[('model', '=', 'contract-loan')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>}
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_loan_read_only">
+            <field name="model" search="[('model', '=', 'contract-loan')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Loan Share -->
+        <record model="ir.model.access" id="access_loan_share_group_contract_manage">
+            <field name="model" search="[('model', '=', 'loan.share')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_loan_share_read_only">
+            <field name="model" search="[('model', '=', 'loan.share')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Lender -->
+        <record model="ir.model.access" id="access_lender_group_financial_manage">
+            <field name="model" search="[('model', '=', 'lender')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>}
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_lender_read_only">
+            <field name="model" search="[('model', '=', 'lender')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.sequence.type-res.group" id="sequence_type_loan_group_product_manage">
+            <field name="sequence_type" ref="sequence_type_loan"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+    </data>
+</tryton>

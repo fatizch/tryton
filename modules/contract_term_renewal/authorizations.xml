@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Product Management Group -->
+        <record model="ir.model.access" id="offered_product_term_renewal_rule_product_management_group">
+            <field name="model" search="[('model', '=', 'offered.product.term_renewal_rule')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Contract Term Renewal Default Access -->
+        <record model="ir.model.access" id="access_offered_product_term_renewal_rule">
+            <field name="model" search="[('model', '=', 'offered.product.term_renewal_rule')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

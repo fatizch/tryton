@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Global Configuration Group -->
+        <record model="ir.model.access" id="access_bank_global_config_group">
+            <field name="model" search="[('model', '=', 'bank')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_bank_account_global_config_group">
+            <field name="model" search="[('model', '=', 'bank.account')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_bank_account_number_global_config_group">
+            <field name="model" search="[('model', '=', 'bank.account.number')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.field.access"
+            id="access_party_bank_accounts_group_global_config">
+            <field name="field" search="[('model.model', '=', 'party.party'), ('name', '=', 'bank_accounts')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Party Management Group -->
+        <record model="ir.model.access" id="access_bank_group_party_manage">
+            <field name="model" search="[('model', '=', 'bank')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_bank_account_group_party_manage">
+            <field name="model" search="[('model', '=', 'bank.account')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_bank_account_number_group_party_manage">
+            <field name="model" search="[('model', '=', 'bank.account.number')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.field.access"
+            id="access_party_bank_accounts_group_party_manage">
+            <field name="field" search="[('model.model', '=', 'party.party'), ('name', '=', 'bank_accounts')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Default Bank Access -->
+        <record model="ir.model.access" id="access_bank_account">
+            <field name="model" search="[('model', '=', 'bank.account')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_bank_account_number">
+            <field name="model" search="[('model', '=', 'bank.account.number')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

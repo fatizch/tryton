@@ -5,6 +5,7 @@ from trytond.pool import Pool
 import res
 import configuration
 import task_dispatcher
+import test_case
 
 
 def register():
@@ -17,6 +18,7 @@ def register():
         res.UserTeamRelation,
         res.ProcessStepRelation,
         configuration.ProcessConfiguration,
+        test_case.TestCaseModel,
         module='task_manager', type_='model')
     Pool.register(
         task_dispatcher.TaskDispatcher,

@@ -7,6 +7,9 @@ from proteus import Model, Wizard
 from dateutil.relativedelta import relativedelta
 from trytond.tests.tools import activate_modules
 from trytond.modules.currency.tests.tools import get_currency
+from trytond.modules.company.tests.tools import get_company
+from trytond.modules.coog_core.test_framework import execute_test_case, \
+    switch_user
 
 # Useful for updating the tests without having to recreate a db from scratch
 # import os
@@ -20,38 +23,13 @@ from trytond.modules.currency.tests.tools import get_currency
 # #Comment# #Install Modules
 config = activate_modules(['contract_term_renewal', 'endorsement'])
 
-# #Comment# #Get Models
-Account = Model.get('account.account')
-AccountKind = Model.get('account.account.type')
-Company = Model.get('company.company')
-Contract = Model.get('contract')
-Country = Model.get('country.country')
-Endorsement = Model.get('endorsement')
-EndorsementContract = Model.get('endorsement.contract')
-EndorsementContractField = Model.get('endorsement.contract.field')
-EndorsementDefinition = Model.get('endorsement.definition')
-EndorsementDefinitionPartRelation = Model.get(
-    'endorsement.definition-endorsement.part')
-EndorsementPart = Model.get('endorsement.part')
-Field = Model.get('ir.model.field')
-Insurer = Model.get('insurer')
-ItemDescription = Model.get('offered.item.description')
-MethodDefinition = Model.get('ir.model.method')
-Option = Model.get('contract.option')
-OptionDescription = Model.get('offered.option.description')
-Party = Model.get('party.party')
-Product = Model.get('offered.product')
-Rule = Model.get('rule_engine')
-Sequence = Model.get('ir.sequence')
-SequenceType = Model.get('ir.sequence.type')
-User = Model.get('res.user')
-
-
 # #Comment# #Constants
 today = datetime.date.today()
 contract_start_date = datetime.date(2013, 4, 10)
 product_start_date = datetime.date(2013, 1, 1)
 
+# #Comment# #Get Models
+Country = Model.get('country.country')
 # #Comment# #Create or fetch Currency
 currency = get_currency(code='EUR')
 
@@ -63,6 +41,14 @@ if not countries:
 else:
     country, = countries
 
+
+# #Comment# #Get Models
+Company = Model.get('company.company')
+Party = Model.get('party.party')
+User = Model.get('res.user')
+AccountKind = Model.get('account.account.type')
+Account = Model.get('account.account')
+
 # #Comment# #Create Company
 company_config = Wizard('company.company.config')
 company_config.execute('company')
@@ -70,7 +56,7 @@ company = company_config.form
 party = Party(name='World Company')
 party.save()
 company.party = party
-company.currency = currency
+company.currency = get_currency(code='EUR')
 company_config.execute('add')
 company, = Company.find([])
 user = User(1)
@@ -81,6 +67,9 @@ user.save()
 # #Comment# #Reload the context
 config._context = User.get_preferences(True, config.context)
 config._context['company'] = company.id
+
+execute_test_case('authorizations_test_case')
+config = switch_user('financial_user')
 
 # #Comment# #Create Account Kind
 product_account_kind = AccountKind()
@@ -120,6 +109,25 @@ payable_account.type = payable_account_kind
 payable_account.company = company
 payable_account.save()
 
+config = switch_user('product_user')
+
+Sequence = Model.get('ir.sequence')
+SequenceType = Model.get('ir.sequence.type')
+OptionDescription = Model.get('offered.option.description')
+Product = Model.get('offered.product')
+Rule = Model.get('rule_engine')
+Company = get_company()
+ItemDescription = Model.get('offered.item.description')
+Insurer = Model.get('insurer')
+Account = Model.get('account.account')
+Party = Model.get('party.party')
+EndorsementPart = Model.get('endorsement.part')
+Field = Model.get('ir.model.field')
+EndorsementContractField = Model.get('endorsement.contract.field')
+EndorsementDefinition = Model.get('endorsement.definition')
+EndorsementDefinitionPartRelation = Model.get(
+    'endorsement.definition-endorsement.part')
+
 # #Comment# #Create Item Description
 item_description = ItemDescription()
 item_description.name = 'Test Item Description'
@@ -131,46 +139,45 @@ item_description.save()
 insurer = Insurer()
 insurer.party = Party()
 insurer.party.name = 'Insurer'
-insurer.party.account_receivable = receivable_account
-insurer.party.account_payable = payable_account
+insurer.party.account_receivable = Account(receivable_account.id)
+insurer.party.account_payable = Account(payable_account.id)
 insurer.party.save()
 insurer.save()
-
 
 # #Comment# #Create Product
 sequence_code = SequenceType()
 sequence_code.name = 'Product sequence'
 sequence_code.code = 'contract'
-sequence_code.company = company
+sequence_code.company = get_company()
 sequence_code.save()
 contract_sequence = Sequence()
 contract_sequence.name = 'Contract Sequence'
 contract_sequence.code = sequence_code.code
-contract_sequence.company = company
+contract_sequence.company = get_company()
 contract_sequence.save()
 quote_sequence_code = SequenceType()
 quote_sequence_code.name = 'Product sequence'
 quote_sequence_code.code = 'quote'
-quote_sequence_code.company = company
+quote_sequence_code.company = get_company()
 quote_sequence_code.save()
 quote_sequence = Sequence()
 quote_sequence.name = 'Quote Sequence'
 quote_sequence.code = quote_sequence_code.code
-quote_sequence.company = company
+quote_sequence.company = get_company()
 quote_sequence.save()
 coverage = OptionDescription()
-coverage.company = company
-coverage.currency = currency
+coverage.company = get_company()
+coverage.currency = get_currency(code='EUR')
 coverage.name = 'Test Coverage'
 coverage.code = 'test_coverage'
 coverage.start_date = product_start_date
 coverage.item_desc = item_description
-coverage.insurer = insurer
+coverage.insurer = Insurer(insurer.id)
 coverage.subscription_behaviour = 'optional'
 coverage.save()
 product = Product()
-product.company = company
-product.currency = currency
+product.company = get_company()
+product.currency = get_currency(code='EUR')
 product.name = 'Test Product'
 product.code = 'test_product'
 product.contract_generator = contract_sequence
@@ -186,17 +193,6 @@ renewal_rule.rule = subscription_date_sync_rule
 renewal_rule.product = product
 renewal_rule.save()
 product.save()
-
-# #Comment# #Create Subscriber
-subscriber = Party()
-subscriber.name = 'Doe'
-subscriber.first_name = 'John'
-subscriber.is_person = True
-subscriber.gender = 'male'
-subscriber.account_receivable = receivable_account
-subscriber.account_payable = payable_account
-subscriber.birth_date = datetime.date(1980, 10, 14)
-subscriber.save()
 
 # #Comment# #Create Change Start Date Endorsement
 change_start_date_part = EndorsementPart()
@@ -216,12 +212,38 @@ change_start_date.ordered_endorsement_parts.append(
     EndorsementDefinitionPartRelation(endorsement_part=change_start_date_part))
 change_start_date.save()
 
+config = switch_user('contract_user')
+
+Party = Model.get('party.party')
+Account = Model.get('account.account')
+EndorsementPart = Model.get('endorsement.part')
+Field = Model.get('ir.model.field')
+EndorsementContractField = Model.get('endorsement.contract.field')
+EndorsementDefinition = Model.get('endorsement.definition')
+EndorsementDefinitionPartRelation = Model.get(
+    'endorsement.definition-endorsement.part')
+Contract = Model.get('contract')
+Company = get_company()
+Product = Model.get('offered.product')
+EndorsementDefinition = Model.get('endorsement.definition')
+Endorsement = Model.get('endorsement')
+
+# #Comment# #Create Subscriber
+subscriber = Party()
+subscriber.name = 'Doe'
+subscriber.first_name = 'John'
+subscriber.is_person = True
+subscriber.gender = 'male'
+subscriber.account_receivable = Account(receivable_account.id)
+subscriber.account_payable = Account(payable_account.id)
+subscriber.birth_date = datetime.date(1980, 10, 14)
+subscriber.save()
 
 # #Comment# #Create Test Contract
 contract = Contract()
-contract.company = company
+contract.company = get_company()
 contract.start_date = contract_start_date
-contract.product = product
+contract.product = Product(product.id)
 contract.subscriber = subscriber
 contract.status = 'quote'
 contract.save()
@@ -240,7 +262,8 @@ new_contract_start_date = contract_start_date + relativedelta(years=1)
 # #Comment# #New Endorsement
 new_endorsement = Wizard('endorsement.start')
 new_endorsement.form.contract = contract
-new_endorsement.form.endorsement_definition = change_start_date
+new_endorsement.form.endorsement_definition = EndorsementDefinition(
+    change_start_date.id)
 new_endorsement.form.endorsement = None
 new_endorsement.form.applicant = None
 new_endorsement.form.effective_date = new_contract_start_date

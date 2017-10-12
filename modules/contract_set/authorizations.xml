@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Contract Consultation Group -->
+        <!-- Contract -->
+        <record model="ir.ui.menu-res.group" id="menu_contract_set_contract_read">
+            <field name="menu" ref="contract_set.menu_contract_set"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <!-- Contract Management Group -->
+        <!-- Contract -->
+        <record model="ir.ui.menu-res.group" id="menu_contract_set_contract_manage">
+            <field name="menu" ref="contract_set.menu_contract_set"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <!-- Contract Management Group -->
+        <record model="ir.model.access" id="contract_set_contract_management_group">
+            <field name="model" search="[('model', '=', 'contract.set')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Default Contract Set Access Rights -->
+        <record model="ir.model.access" id="access_contract_set_mandate">
+                <field name="model" search="[('model', '=', 'contract.set')]"/>
+                <field name="perm_read" eval="True"/>
+                <field name="perm_write" eval="False"/>
+                <field name="perm_create" eval="False"/>
+                <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

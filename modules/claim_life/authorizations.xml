@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Claim Management Group -->
+        <record model="ir.model.access" id="access_claim_beneficiary_group_claim_manage">
+            <field name="model" search="[('model', '=', 'claim.beneficiary')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Claim Life Access Rights -->
+        <record model="ir.model.access" id="access_claim_beneficiary">
+            <field name="model" search="[('model', '=', 'claim.beneficiary')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

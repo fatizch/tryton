@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Task Consultation Group -->
+        <record model="res.group" id="group_task_read">
+            <field name="name">Coog Task consultation</field>
+        </record>
+        <!-- Task Manager -->
+        <record model="ir.ui.menu-res.group" id="menu_task_group_task_read">
+            <field name="menu" ref="task_manager.menu_task"/>
+            <field name="group" ref="group_task_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_launch_existing_tasks_task_read">
+            <field name="menu" ref="task_manager.menu_launch_existing_tasks"/>
+            <field name="group" ref="group_task_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_task_dispatcher_task_read">
+            <field name="menu" ref="task_manager.menu_task_dispatcher"/>
+            <field name="group" ref="group_task_read"/>
+        </record>
+        <!-- Task Management Group -->
+        <record model="res.group" id="group_task_manage">
+            <field name="name">Coog Task Management</field>
+        </record>
+        <!-- Task Manager -->
+        <record model="ir.ui.menu-res.group" id="menu_task_group_task_manage">
+            <field name="menu" ref="task_manager.menu_task"/>
+            <field name="group" ref="group_task_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_launch_existing_tasks_task_manage">
+            <field name="menu" ref="task_manager.menu_launch_existing_tasks"/>
+            <field name="group" ref="group_task_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_team_task_manage">
+            <field name="menu" ref="task_manager.menu_team"/>
+            <field name="group" ref="group_task_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_management_team_task_manage">
+            <field name="menu" ref="task_manager.menu_management_team"/>
+            <field name="group" ref="group_task_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_task_dispatcher_task_manage">
+            <field name="menu" ref="task_manager.menu_task_dispatcher"/>
+            <field name="group" ref="group_task_manage"/>
+        </record>
+        <!-- Users -->
+        <record model="res.user-res.group" id="user_admin_group_task_read">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_task_read"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_task_manage">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_task_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_res_team_task_manage_group">
+            <field name="model" search="[('model', '=', 'res.team')]"/>
+            <field name="group" ref="group_task_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_res_team_priority_task_manage_group">
+            <field name="model" search="[('model', '=', 'res.team.priority')]"/>
+            <field name="group" ref="group_task_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Task Manager Access Rights -->
+        <record model="ir.model.access" id="access_res_team">
+            <field name="model" search="[('model', '=', 'res.team')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_res_team_priority">
+            <field name="model" search="[('model', '=', 'res.team.priority')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

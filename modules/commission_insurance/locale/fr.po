@@ -2,23 +2,9 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_brokers_general_configuration"
-msgid "Brokers"
-msgstr "Courtiers"
-
-msgctxt "model:ir.ui.menu,name:menu_commission_plans_general_configuration"
-msgid "Commission Plans"
-msgstr "Plans de commission"
-
 msgctxt "error:account.fee:"
 msgid "Broker Fee"
 msgstr "Frais d'apporteur"
-
-msgctxt "help:commission.agent,agent_payment_term:"
-msgid "If defined, this payment has priority over the party's one and "
-"the global configuration"
-msgstr "Si défini, cette condition de paiement sera prioritaire face à celle"
-" sur le tiers ainsi que sur la configuration globale"
 
 msgctxt "error:account.invoice.line:"
 msgid "No broker define on contract %s for broker fee %s"
@@ -604,6 +590,36 @@ msgctxt "field:contract,show_premium:"
 msgid "Show Premium"
 msgstr "Visualiser les primes"
 
+#, fuzzy
+msgctxt "field:contract.option,annual_premium_excl_tax:"
+msgid "Annual Premium Excluding Taxes"
+msgstr "Prime annuelle hors taxe"
+
+#, fuzzy
+msgctxt "field:contract.option,annual_premium_incl_tax:"
+msgid "Annual Premium Including Taxes"
+msgstr "Prime annuelle TTC"
+
+#, fuzzy
+msgctxt "field:contract.option,annual_taxes:"
+msgid "Annual Taxes"
+msgstr "Taxes annuelles"
+
+#, fuzzy
+msgctxt "field:contract.option,monthly_premium_excl_tax:"
+msgid "Monthly Premium Excluding Taxes"
+msgstr "Prime mensuelle HT"
+
+#, fuzzy
+msgctxt "field:contract.option,monthly_premium_incl_tax:"
+msgid "Monthly Premium Including Taxes"
+msgstr "Prime mensuelle TTC"
+
+#, fuzzy
+msgctxt "field:contract.option,monthly_taxes:"
+msgid "Monthly Taxes"
+msgstr "Taxes mensuelles"
+
 msgctxt "field:party.party,agents:"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
@@ -635,6 +651,14 @@ msgstr "Identifiant XML"
 msgctxt "field:product.uom,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "help:commission.agent,agent_payment_term:"
+msgid ""
+"If defined, this payment term has priority over the party's one and the "
+"global configuration"
+msgstr ""
+"Si défini, cette condition de paiement sera prioritaire face à celle sur le "
+"tiers ainsi que sur la configuration globale"
 
 msgctxt "help:commission.plan.date,first_match_only:"
 msgid "If True, only the first matching date will be considered."
@@ -765,6 +789,10 @@ msgctxt "model:ir.ui.menu,name:menu_broker"
 msgid "Brokers"
 msgstr "Courtiers"
 
+msgctxt "model:ir.ui.menu,name:menu_brokers_general_configuration"
+msgid "Brokers"
+msgstr "Courtiers"
+
 msgctxt "model:ir.ui.menu,name:menu_commission_aggregated_commissions"
 msgid "Aggregated commissions"
 msgstr "Commissions agrégées"
@@ -785,6 +813,10 @@ msgctxt "model:ir.ui.menu,name:menu_commission_invoice"
 msgid "Commission Invoices"
 msgstr "Bordereaux de commissions"
 
+msgctxt "model:ir.ui.menu,name:menu_commission_plans_general_configuration"
+msgid "Commission Plans"
+msgstr "Plans de commission"
+
 msgctxt "model:ir.ui.menu,name:menu_invoice_broker_invoice"
 msgid "Broker Invoices"
 msgstr "Bordereaux courtiers"
@@ -792,6 +824,14 @@ msgstr "Bordereaux courtiers"
 msgctxt "model:ir.ui.menu,name:menu_invoice_insurer_invoice"
 msgid "Insurer Invoices"
 msgstr "Bordereaux assureurs"
+
+msgctxt "model:res.group,name:group_commission_manage"
+msgid "Commission management"
+msgstr "Gestion de commissions"
+
+msgctxt "model:res.group,name:group_commission_read"
+msgid "Commission consultation"
+msgstr "Consultation de commissions"
 
 msgctxt "selection:account.invoice,business_kind:"
 msgid "Broker Invoice"
@@ -1228,20 +1268,20 @@ msgid "Product Template - Commission Agent"
 msgstr "Modèle produit - Protocole de commissionnement"
 
 msgctxt "selection:commission.agent,type_:commission."
-msgid "Agent Of"
-msgstr "Est commissionné par"
-
-msgctxt "selection:commission.agent,type_:commission."
 msgid "Principal Of"
 msgstr "Commissionne"
 
-msgctxt "view:commission.agent:commission."
-msgid "Agent"
-msgstr "Protocole de commissionnement"
+msgctxt "selection:commission.agent,type_:commission."
+msgid "Agent Of"
+msgstr "Est commissionné par"
 
 msgctxt "view:commission.agent:commission."
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "view:commission.agent:commission."
+msgid "Agent"
+msgstr "Protocole de commissionnement"
 
 msgctxt "view:commission.create_invoice.ask:commission."
 msgid "Create Commission Invoice"

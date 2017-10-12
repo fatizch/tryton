@@ -6,50 +6,17 @@ Imports::
 
     >>> from decimal import Decimal
     >>> import datetime
-    >>> from dateutil.relativedelta import relativedelta
     >>> from proteus import Model
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.currency.tests.tools import get_currency
     >>> from trytond.modules.company.tests.tools import get_company
     >>> from trytond.modules.company_cog.tests.tools import create_company
+    >>> from trytond.modules.coog_core.test_framework import execute_test_case, \
+    ...     switch_user
 
 Install Modules::
 
     >>> config = activate_modules('contract_loan_invoice')
-
-Get Models::
-
-    >>> Account = Model.get('account.account')
-    >>> AccountInvoice = Model.get('account.invoice')
-    >>> AccountProduct = Model.get('product.product')
-    >>> AccountKind = Model.get('account.account.type')
-    >>> Address = Model.get('party.address')
-    >>> BillingInformation = Model.get('contract.billing_information')
-    >>> BillingMode = Model.get('offered.billing_mode')
-    >>> Company = Model.get('company.company')
-    >>> Contract = Model.get('contract')
-    >>> ContractInvoice = Model.get('contract.invoice')
-    >>> ContractPremium = Model.get('contract.premium')
-    >>> Country = Model.get('country.country')
-    >>> Fee = Model.get('account.fee')
-    >>> FiscalYear = Model.get('account.fiscalyear')
-    >>> InvoiceSequence = Model.get('account.fiscalyear.invoice_sequence')
-    >>> ItemDescription = Model.get('offered.item.description')
-    >>> Loan = Model.get('loan')
-    >>> LoanShare = Model.get('loan.share')
-    >>> OptionDescription = Model.get('offered.option.description')
-    >>> Party = Model.get('party.party')
-    >>> PaymentTerm = Model.get('account.invoice.payment_term')
-    >>> PaymentTermLine = Model.get('account.invoice.payment_term.line')
-    >>> Product = Model.get('offered.product')
-    >>> ProductTemplate = Model.get('product.template')
-    >>> Sequence = Model.get('ir.sequence')
-    >>> SequenceStrict = Model.get('ir.sequence.strict')
-    >>> SequenceType = Model.get('ir.sequence.type')
-    >>> Uom = Model.get('product.uom')
-    >>> User = Model.get('res.user')
-    >>> Insurer = Model.get('insurer')
-    >>> ZipCode = Model.get('country.zip')
 
 Constants::
 
@@ -63,6 +30,7 @@ Create or fetch Currency::
 
 Create or fetch Country::
 
+    >>> Country = Model.get('country.country')
     >>> countries = Country.find([('code', '=', 'FR')])
     >>> if not countries:
     ...     country = Country(name='France', code='FR')
@@ -73,15 +41,22 @@ Create or fetch Country::
 Create Company::
 
     >>> _ = create_company(currency=currency)
+    >>> ZipCode = Model.get('country.zip')
+    >>> zip_ = ZipCode(zip="1", city="Mount Doom", country=country)
+    >>> zip_.save()
     >>> company = get_company()
 
-Reload the context::
+Switch user::
 
-    >>> config._context = User.get_preferences(True, config.context)
-    >>> config._context['company'] = company.id
+    >>> execute_test_case('authorizations_test_case')
+    >>> config = switch_user('financial_user')
+    >>> company = get_company()
 
 Create Fiscal Year::
 
+    >>> FiscalYear = Model.get('account.fiscalyear')
+    >>> Sequence = Model.get('ir.sequence')
+    >>> SequenceStrict = Model.get('ir.sequence.strict')
     >>> fiscalyear = FiscalYear(name='2014')
     >>> fiscalyear.start_date = datetime.date(datetime.date.today().year, 1, 1)
     >>> fiscalyear.end_date = datetime.date(datetime.date.today().year, 12, 31)
@@ -96,6 +71,7 @@ Create Fiscal Year::
     >>> bool(fiscalyear.invoice_sequences.pop())
     True
     >>> fiscalyear.save()
+    >>> InvoiceSequence = Model.get('account.fiscalyear.invoice_sequence')
     >>> invoice_sequence = InvoiceSequence()
     >>> invoice_sequence.out_invoice_sequence = seq
     >>> invoice_sequence.in_invoice_sequence = seq
@@ -109,6 +85,7 @@ Create Fiscal Year::
 
 Create Account Kind::
 
+    >>> AccountKind = Model.get('account.account.type')
     >>> product_account_kind = AccountKind()
     >>> product_account_kind.name = 'Product Account Kind'
     >>> product_account_kind.company = company
@@ -124,6 +101,7 @@ Create Account Kind::
 
 Create Account::
 
+    >>> Account = Model.get('account.account')
     >>> product_account = Account()
     >>> product_account.name = 'Product Account'
     >>> product_account.code = 'product_account'
@@ -161,9 +139,26 @@ Create Account::
     >>> payable_account2.type = payable_account_kind
     >>> payable_account2.company = company
     >>> payable_account2.save()
+    >>> Party = Model.get('party.party')
+    >>> Address = Model.get('party.address')
+    >>> bank_party = Party()
+    >>> bank_party.name = 'Bank of Mordor'
+    >>> bank_party.account_receivable = receivable_account2
+    >>> bank_party.account_payable = payable_account2
+    >>> lender = bank_party.lender_role.new()
+    >>> bank_party.save()
+    >>> bank_address = Address(party=bank_party.id, zip="1", country=country.id,
+    ...     city="Mount Doom")
+    >>> bank_address.save()
+    >>> config = switch_user('product_user')
+    >>> company = get_company()
+    >>> currency = get_currency(code='EUR')
 
 Create billing modes::
 
+    >>> PaymentTerm = Model.get('account.invoice.payment_term')
+    >>> PaymentTermLine = Model.get('account.invoice.payment_term.line')
+    >>> BillingMode = Model.get('offered.billing_mode')
     >>> payment_term = PaymentTerm()
     >>> payment_term.name = 'direct'
     >>> payment_term.lines.append(PaymentTermLine())
@@ -183,6 +178,10 @@ Create billing modes::
 
 Create Fee::
 
+    >>> Uom = Model.get('product.uom')
+    >>> AccountProduct = Model.get('product.product')
+    >>> ProductTemplate = Model.get('product.template')
+    >>> Fee = Model.get('account.fee')
     >>> product_template = ProductTemplate()
     >>> product_template.name = 'Fee'
     >>> product_template.type = 'service'
@@ -206,6 +205,7 @@ Create Fee::
 
 Create Item Description::
 
+    >>> ItemDescription = Model.get('offered.item.description')
     >>> item_description = ItemDescription()
     >>> item_description.name = 'Test Item Description'
     >>> item_description.code = 'test_item_description'
@@ -214,30 +214,38 @@ Create Item Description::
 
 Create Insurer::
 
+    >>> Insurer = Model.get('insurer')
+    >>> Party = Model.get('party.party')
+    >>> Account = Model.get('account.account')
     >>> insurer = Insurer()
     >>> insurer.party = Party()
     >>> insurer.party.name = 'Insurer'
-    >>> insurer.party.account_receivable = receivable_account
-    >>> insurer.party.account_payable = payable_account
+    >>> insurer.party.account_receivable = Account(receivable_account.id)
+    >>> insurer.party.account_payable = Account(payable_account.id)
     >>> insurer.party.save()
     >>> insurer.save()
 
 Create Coverage::
 
+    >>> OptionDescription = Model.get('offered.option.description')
+    >>> Account = Model.get('account.account')
     >>> coverage = OptionDescription()
     >>> coverage.company = company
     >>> coverage.name = 'Test Coverage'
     >>> coverage.code = 'test_coverage'
     >>> coverage.family = 'loan'
     >>> coverage.start_date = product_start_date
-    >>> coverage.account_for_billing = product_account
-    >>> coverage.item_desc = item_description
+    >>> coverage.account_for_billing = Account(product_account.id)
+    >>> coverage.item_desc = Account(item_description.id)
     >>> coverage.currency = currency
     >>> coverage.insurer = insurer
     >>> coverage.save()
 
 Create Product::
 
+    >>> SequenceType = Model.get('ir.sequence.type')
+    >>> Sequence = Model.get('ir.sequence')
+    >>> Product = Model.get('offered.product')
     >>> sequence_code = SequenceType()
     >>> sequence_code.name = 'Product sequence'
     >>> sequence_code.code = 'contract'
@@ -270,40 +278,36 @@ Create Product::
     >>> product.billing_modes.append(freq_yearly)
     >>> product.coverages.append(coverage)
     >>> product.save()
+    >>> loan_sequence = Sequence()
+    >>> loan_sequence.name = 'Loan'
+    >>> loan_sequence.code = 'loan'
+    >>> loan_sequence.save()
+    >>> config = switch_user('contract_user')
+    >>> company = get_company()
+    >>> currency = get_currency(code='EUR')
 
 Create Subscriber::
 
+    >>> Account = Model.get('account.account')
+    >>> Party = Model.get('party.party')
     >>> subscriber = Party()
     >>> subscriber.name = 'Doe'
     >>> subscriber.first_name = 'John'
     >>> subscriber.is_person = True
     >>> subscriber.gender = 'male'
-    >>> subscriber.account_receivable = receivable_account
-    >>> subscriber.account_payable = payable_account
+    >>> subscriber.account_receivable = Account(receivable_account.id)
+    >>> subscriber.account_payable = Account(payable_account.id)
     >>> subscriber.birth_date = datetime.date(1980, 10, 14)
     >>> subscriber.save()
-    >>> bank_party = Party()
-    >>> bank_party.name = 'Bank of Mordor'
-    >>> bank_party.account_receivable = receivable_account2
-    >>> bank_party.account_payable = payable_account2
-    >>> lender = bank_party.lender_role.new()
-    >>> bank_party.save()
-    >>> zip_ = ZipCode(zip="1", city="Mount Doom", country=country)
-    >>> zip_.save()
-    >>> bank_address = Address(party=bank_party.id, zip="1", country=country,
-    ...     city="Mount Doom")
-    >>> bank_address.save()
 
 Create Loans::
 
+    >>> Loan = Model.get('loan')
+    >>> Address = Model.get('party.address')
     >>> loan_payment_date = datetime.date(2014, 5, 1)
-    >>> loan_sequence = Sequence()
-    >>> loan_sequence.name = 'Loan'
-    >>> loan_sequence.code = 'loan'
-    >>> loan_sequence.save()
     >>> loan_1 = Loan()
-    >>> loan_1.lender = bank_party
-    >>> loan_1.lender_address = bank_address
+    >>> loan_1.lender = Party(bank_party.id)
+    >>> loan_1.lender_address = Address(bank_address.id)
     >>> loan_1.company = company
     >>> loan_1.kind = 'fixed_rate'
     >>> loan_1.funds_release_date = contract_start_date
@@ -315,8 +319,8 @@ Create Loans::
     >>> loan_1.save()
     >>> loan_2 = Loan()
     >>> loan_2.company = company
-    >>> loan_2.lender = bank_party
-    >>> loan_2.lender_address = bank_address
+    >>> loan_2.lender = Party(bank_party.id)
+    >>> loan_2.lender_address = Address(bank_address.id)
     >>> loan_2.kind = 'fixed_rate'
     >>> loan_2.funds_release_date = contract_start_date
     >>> loan_2.currency = currency
@@ -329,15 +333,20 @@ Create Loans::
 
 Create Test Contract::
 
+    >>> Product = Model.get('offered.product')
+    >>> Contract = Model.get('contract')
+    >>> OptionDescription = Model.get('offered.option.description')
+    >>> Account = Model.get('account.account')
+    >>> Fee = Model.get('account.fee')
     >>> contract = Contract()
     >>> contract.company = company
     >>> contract.subscriber = subscriber
     >>> contract.start_date = contract_start_date
-    >>> contract.product = product
+    >>> contract.product = Product(product.id)
     >>> covered_element = contract.covered_elements.new()
     >>> covered_element.party = subscriber
     >>> option = covered_element.options[0]
-    >>> option.coverage = coverage
+    >>> option.coverage = OptionDescription(coverage.id)
     >>> ordered_loan = contract.ordered_loans.new()
     >>> ordered_loan.loan = loan_1
     >>> ordered_loan.number = 1
@@ -354,30 +363,34 @@ Create Test Contract::
     >>> contract_premium.start = contract_start_date
     >>> contract_premium.amount = Decimal('2')
     >>> contract_premium.frequency = 'monthly'
-    >>> contract_premium.account = product_account
-    >>> contract_premium.rated_entity = fee
+    >>> contract_premium.account = Account(product_account.id)
+    >>> contract_premium.rated_entity = Fee(fee.id)
     >>> option_premium_1 = option.premiums.new()
     >>> option_premium_1.start = contract_start_date
     >>> option_premium_1.amount = Decimal('20')
     >>> option_premium_1.frequency = 'monthly'
-    >>> option_premium_1.account = product_account
-    >>> option_premium_1.rated_entity = coverage
+    >>> option_premium_1.account = Account(product_account.id)
+    >>> option_premium_1.rated_entity = OptionDescription(coverage.id)
     >>> option_premium_1.loan = loan_1
     >>> option_premium_2 = option.premiums.new()
     >>> option_premium_2.start = contract_start_date
     >>> option_premium_2.amount = Decimal('200')
     >>> option_premium_2.frequency = 'monthly'
-    >>> option_premium_2.account = product_account
-    >>> option_premium_2.rated_entity = coverage
+    >>> option_premium_2.account = Account(product_account.id)
+    >>> option_premium_2.rated_entity = OptionDescription(coverage.id)
     >>> option_premium_2.loan = loan_2
+    >>> BillingInformation = Model.get('contract.billing_information')
+    >>> BillingMode = Model.get('offered.billing_mode')
+    >>> PaymentTerm = Model.get('account.invoice.payment_term')
     >>> contract.billing_informations.append(BillingInformation(date=None,
-    ...         billing_mode=freq_yearly, payment_term=payment_term))
+    ...         billing_mode=BillingMode(freq_yearly.id), payment_term=PaymentTerm(payment_term.id)))
     >>> contract.contract_number = '123456789'
     >>> contract.status = 'active'
     >>> contract.save()
 
 Test loan_share end_date calculation::
 
+    >>> LoanShare = Model.get('loan.share')
     >>> new_share_date = datetime.date(2014, 9, 12)
     >>> option = contract.covered_elements[0].options[0]
     >>> loan_share_3 = LoanShare()

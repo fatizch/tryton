@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Claim Management Group -->
+        <record model="ir.model.access" id="access_claim_loss_hospitalisation_period_claim_manage_group">
+            <field name="model" search="[('model', '=', 'claim.loss.hospitalisation.period')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Claim Group Life Fr Default Access Rights -->
+        <record model="ir.model.access" id="access_claim_loss_hospitalisation_period">
+            <field name="model" search="[('model', '=', 'claim.loss.hospitalisation.period')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

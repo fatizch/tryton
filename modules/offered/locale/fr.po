@@ -993,6 +993,14 @@ msgctxt "model:res.group,name:group_offered_admin"
 msgid "Offered Administration"
 msgstr "Administration produit"
 
+msgctxt "model:res.group,name:group_product_manage"
+msgid "Product management"
+msgstr "Gestion de produit"
+
+msgctxt "model:res.group,name:group_product_read"
+msgid "Product consultation"
+msgstr "Consultation de produit"
+
 msgctxt "selection:extra_data,kind:"
 msgid ""
 msgstr " "

@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Access Rights for Claim Consultation Group -->
+        <!-- Health -->
+        <record model="ir.ui.menu-res.group" id="menu_health_claim_read">
+            <field name="menu" ref="health.menu_health"/>
+            <field name="group" ref="claim.group_claim_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_health_party_claim_read">
+            <field name="menu" ref="health.menu_health_party"/>
+            <field name="group" ref="claim.group_claim_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_person_form_claim_read">
+            <field name="menu" ref="health.menu_person_form"/>
+            <field name="group" ref="claim.group_claim_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="health_menu_contract_form_claim_read">
+            <field name="menu" ref="health.menu_contract_form"/>
+            <field name="group" ref="claim.group_claim_read"/>
+        </record>
+        <!-- Access Rights for Claim Management Group -->
+        <!-- Health -->
+        <record model="ir.ui.menu-res.group" id="menu_health_claim_manage">
+            <field name="menu" ref="health.menu_health"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_health_party_claim_manage">
+            <field name="menu" ref="health.menu_health_party"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_person_form_claim_manage">
+            <field name="menu" ref="health.menu_person_form"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="health_menu_contract_form_claim_manage">
+            <field name="menu" ref="health.menu_contract_form"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_medical_act_product_manage">
+            <field name="menu" ref="claim_health.menu_medical_act"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_medical_act_family_product_manage">
+            <field name="menu" ref="claim_health.menu_medical_act_family"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <!-- Contract Management Group -->
+        <!-- Health -->
+        <record model="ir.model.access" id="access_claim_loss_health_group_claim_manage">
+            <field name="model" search="[('model', '=', 'claim.loss.health')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_benefit_act_description_group_product_manage">
+            <field name="model" search="[('model', '=', 'benefit.act.description')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_benefit_act_family_group_product_manage">
+            <field name="model" search="[('model', '=', 'benefit.act.family')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Claim Health Access Rights -->
+        <record model="ir.model.access" id="access_benefit_act_description">
+            <field name="model" search="[('model', '=', 'benefit.act.description')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_benefit_act_family">
+            <field name="model" search="[('model', '=', 'benefit.act.family')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_claim_loss_health">
+            <field name="model" search="[('model', '=', 'claim.loss.health')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

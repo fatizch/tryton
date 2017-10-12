@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Commission Management Group -->
+        <record model="ir.model.access" id="access_rule_engine_group_commission_manage">
+            <field name="model" search="[('model', '=', 'rule_engine')]"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_rule_engine_context_group_commission_manage">
+            <field name="model" search="[('model', '=', 'rule_engine.context')]"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_rule_engine_function_group_commission_manage">
+            <field name="model" search="[('model', '=', 'rule_engine.function')]"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_rule_engine_log_group_commission_manage">
+            <field name="model" search="[('model', '=', 'rule_engine.log')]"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_rule_engine_rule_parameter_group_commission_manage">
+            <field name="model" search="[('model', '=', 'rule_engine.rule_parameter')]"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_rule_engine_test_case_group_commission_manage">
+            <field name="model" search="[('model', '=', 'rule_engine.test_case')]"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_rule_engine_test_case_value_group_commission_manage">
+            <field name="model" search="[('model', '=', 'rule_engine.test_case.value')]"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_functional_error_group_commission_manage">
+            <field name="model" search="[('model', '=', 'functional_error')]"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

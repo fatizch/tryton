@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Product Consultation Group  -->
+        <!-- Contract Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_root_clause_product_read">
+            <field name="menu" ref="clause.menu_root_clause"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_model_clause_product_read">
+            <field name="menu" ref="clause.menu_model_clause"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <!-- Product Management Group -->
+        <!-- Contract Configuration -->
+        <record model="ir.ui.menu-res.group" id="menu_root_clause_product_manage">
+            <field name="menu" ref="clause.menu_root_clause"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_model_clause_product_manage">
+            <field name="menu" ref="clause.menu_model_clause"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_clause_group_product_manage">
+            <field name="model" search="[('model', '=', 'clause')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

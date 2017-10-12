@@ -18,7 +18,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="group" ref="group_claim_admin"/>
         </record>
         <record model="res.group" id="group_claim">
-            <field name="name">claim</field>
+            <field name="name">Claim</field>
         </record>
         <record model="res.user-res.group" id="user_admin_group_claim">
             <field name="user" ref="res.user_admin"/>

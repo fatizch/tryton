@@ -2,34 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_account_journal_general_configuration"
-msgid "Account Journals"
-msgstr "Journaux comptable"
-
-msgctxt "model:ir.ui.menu,name:menu_wizard_create_chart_general_configuration"
-msgid "Create Chart Of Accounts From Template"
-msgstr "Créer un plan comptable depuis un modèle"
-
-msgctxt "model:ir.ui.menu,name:menu_wizard_update_chart_general_configuration"
-msgid "Update Chart Of Accounts From Template"
-msgstr "Mise à jour d'un plan comptable depuis un modèle"
-
-msgctxt "model:ir.ui.menu,name:menu_fiscalyear_general_configuration"
-msgid "Fiscal Years"
-msgstr "Années fiscales"
-
-msgctxt "model:ir.ui.menu,name:menu_period_general_configuration"
-msgid "Fiscal Periods"
-msgstr "Périodes fiscales"
-
-msgctxt "model:ir.ui.menu,name:menu_tax_general_configuration"
-msgid "Taxes"
-msgstr "Taxes"
-
-msgctxt "model:ir.ui.menu,name:menu_account_configuration_general_configuration"
-msgid "Account Configuration"
-msgstr "Configuration comptable"
-
 msgctxt "error:account.move.line:"
 msgid "Automatic Split Move"
 msgstr "Découpage automatique"
@@ -370,13 +342,90 @@ msgctxt "model:ir.ui.menu,name:menu_account"
 msgid "Accounting"
 msgstr "Comptabilité"
 
+msgctxt ""
+"model:ir.ui.menu,name:menu_account_configuration_general_configuration"
+msgid "Account Configuration"
+msgstr "Configuration comptable"
+
+msgctxt "model:ir.ui.menu,name:menu_account_journal_general_configuration"
+msgid "Account Journals"
+msgstr "Journaux comptable"
+
+msgctxt "model:ir.ui.menu,name:menu_fiscalyear_general_configuration"
+msgid "Fiscal Years"
+msgstr "Années fiscales"
+
 msgctxt "model:ir.ui.menu,name:menu_move_reconciliation_form"
 msgid "Reconciliation"
 msgstr "Lettrage"
 
+msgctxt "model:ir.ui.menu,name:menu_period_general_configuration"
+msgid "Fiscal Periods"
+msgstr "Périodes fiscales"
+
+msgctxt "model:ir.ui.menu,name:menu_tax_general_configuration"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "model:ir.ui.menu,name:menu_wizard_create_chart_general_configuration"
+msgid "Create Chart Of Accounts From Template"
+msgstr "Créer un plan comptable depuis un modèle"
+
+msgctxt "model:ir.ui.menu,name:menu_wizard_update_chart_general_configuration"
+msgid "Update Chart Of Accounts From Template"
+msgstr "Mise à jour d'un plan comptable depuis un modèle"
+
 msgctxt "model:party.synthesis.menu.move.line,name:"
 msgid "Party Synthesis Menu Move line"
 msgstr "Menu Paiement Synthèse Tiers "
+
+msgctxt "model:res.group,name:group_financial_manage"
+msgid "Financial management"
+msgstr "Gestion financière"
+
+msgctxt "model:res.group,name:group_financial_read"
+msgid "Financial consultation"
+msgstr "Consultation financière"
+
+msgctxt "report:account.aged_balance:"
+msgid "$"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid "("
+msgstr "("
+
+msgctxt "report:account.aged_balance:"
+msgid ")"
+msgstr ")"
+
+msgctxt "report:account.aged_balance:"
+msgid ","
+msgstr ","
+
+msgctxt "report:account.aged_balance:"
+msgid "-"
+msgstr "_"
+
+msgctxt "report:account.aged_balance:"
+msgid "/"
+msgstr "/"
+
+msgctxt "report:account.aged_balance:"
+msgid "/for"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid "00/00/0000"
+msgstr "00/00/0000"
+
+msgctxt "report:account.aged_balance:"
+msgid "00:00:00"
+msgstr "00:00:00"
+
+msgctxt "report:account.aged_balance:"
+msgid "???"
+msgstr "???"
 
 msgctxt "report:account.aged_balance:"
 msgid "Aged Balance For"
@@ -392,7 +441,7 @@ msgstr "Société"
 
 msgctxt "report:account.aged_balance:"
 msgid "Page"
-msgstr ""
+msgstr "Page"
 
 msgctxt "report:account.aged_balance:"
 msgid "Party"
@@ -405,6 +454,114 @@ msgstr "Date du rapport"
 msgctxt "report:account.aged_balance:"
 msgid "Total"
 msgstr "Total"
+
+msgctxt "report:account.aged_balance:"
+msgid "company.rec_name"
+msgstr "company.rec_name"
+
+msgctxt "report:account.aged_balance:"
+msgid "datetime.datetime.today().strftime('%H:%M:%S')"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid "for each=\"record in records\""
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid ""
+"format_currency(record.balance, user.language, currency=company.currency, "
+"symbol=False) or ''"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid ""
+"format_currency(record.term0, user.language, currency=company.currency, "
+"symbol=False)or ''"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid ""
+"format_currency(record.term1, user.language, currency=company.currency, "
+"symbol=False) or ''"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid ""
+"format_currency(record.term2, user.language, currency=company.currency, "
+"symbol=False) or ''"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid ""
+"format_currency(record.term3, user.language, currency=company.currency, "
+"symbol=False) or ''"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid ""
+"format_currency(sum(records, 'balance'), user.language, "
+"currency=company.currency, symbol=False)"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid ""
+"format_currency(sum(records, 'term0'), user.language, "
+"currency=company.currency, symbol=False)"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid ""
+"format_currency(sum(records, 'term1'), user.language, "
+"currency=company.currency, symbol=False)"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid ""
+"format_currency(sum(records, 'term2'), user.language, "
+"currency=company.currency, symbol=False)"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid ""
+"format_currency(sum(records, 'term3'), user.language, "
+"currency=company.currency, symbol=False)"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid "format_date(datetime.date.today(), user.language)"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid "record.party.rec_name"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid "str(term0)"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid "str(term1)"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid "str(term2)"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid "str(term3)"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid "type"
+msgstr ""
+
+msgctxt "report:account.aged_balance:"
+msgid "unit"
+msgstr ""
+
+msgctxt "selection:account.move,kind:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:fiscal_year.set,fiscal_year_periods_frequency:"
 msgid "Half Yearly"
@@ -536,6 +693,12 @@ msgid "Line \"%s\" (%d) already reconciled."
 msgstr "La ligne \"%s\" (%d) est déjà  lettrée."
 
 msgctxt "error:account.move.reconciliation:account."
+msgid "You can not reconcile line \"%s\" because it is not in valid state."
+msgstr ""
+"Vous ne pouvez lettrer la ligne « %s » car elle n'est pas dans un état "
+"valide."
+
+msgctxt "error:account.move.reconciliation:account."
 msgid ""
 "You can not create a reconciliation where debit \"%(debit)s\" and credit "
 "\"%(credit)s\" differ."
@@ -546,12 +709,6 @@ msgstr ""
 msgctxt "error:account.move.reconciliation:account."
 msgid "You can not modify a reconciliation."
 msgstr "Vous ne pouvez modifier un lettrage."
-
-msgctxt "error:account.move.reconciliation:account."
-msgid "You can not reconcile line \"%s\" because it is not in valid state."
-msgstr ""
-"Vous ne pouvez lettrer la ligne « %s » car elle n'est pas dans un état "
-"valide."
 
 msgctxt "error:account.period:account."
 msgid ""
@@ -573,21 +730,21 @@ msgctxt "model:account.reconcile.show,name:account."
 msgid "Reconcile"
 msgstr "Lettrer"
 
-msgctxt "model:ir.action,name:account.act_unreconcile_lines"
-msgid "Unreconcile Lines"
-msgstr "Dé-lettrer les lignes"
-
 msgctxt "model:ir.action,name:account.act_move_reconciliation_lines"
 msgid "Reconciliation Lines"
 msgstr "Lignes de lettrage"
 
-msgctxt "model:ir.action,name:account.act_reconcile_lines"
-msgid "Reconcile Lines"
-msgstr "Lettrer les lignes"
+msgctxt "model:ir.action,name:account.act_unreconcile_lines"
+msgid "Unreconcile Lines"
+msgstr "Dé-lettrer les lignes"
 
 msgctxt "model:ir.action,name:account.act_reconcile"
 msgid "Reconcile Accounts"
 msgstr "Lettrer les comptes"
+
+msgctxt "model:ir.action,name:account.act_reconcile_lines"
+msgid "Reconcile Lines"
+msgstr "Lettrer les lignes"
 
 msgctxt "model:ir.sequence,name:account.sequence_account_move_reconciliation"
 msgid "Default Account Move Reconciliation"
@@ -607,12 +764,12 @@ msgid "Posted"
 msgstr "Emis"
 
 msgctxt "selection:account.account,kind:account."
-msgid "Payable"
-msgstr "À payer"
-
-msgctxt "selection:account.account,kind:account."
 msgid "Receivable"
 msgstr "À recevoir"
+
+msgctxt "selection:account.account,kind:account."
+msgid "Payable"
+msgstr "À payer"
 
 msgctxt "selection:account.account.template,kind:account."
 msgid "Payable"

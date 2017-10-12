@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.menu-res.group" id="menu_health_product_manage">
+            <field name="menu" ref="health.menu_health"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_health_configuration_form_contract_manage">
+            <field name="menu" ref="health.menu_health_configuration"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_health_care_system_group_product_manage">
+            <field name="model" search="[('model', '=', 'health.care_system')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_health_insurance_fund_group_product_manage">
+            <field name="model" search="[('model', '=', 'health.insurance_fund')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Contract Insurance Health Fr Rights -->
+        <record model="ir.model.access" id="access_health_care_system">
+            <field name="model" search="[('model', '=', 'health.care_system')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_health_insurance_fund">
+            <field name="model" search="[('model', '=', 'health.insurance_fund')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

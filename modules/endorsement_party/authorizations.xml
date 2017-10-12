@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Contract Management Group -->
+        <record model="ir.model.access" id="endorsement_party_contract_management_group">
+            <field name="model" search="[('model', '=', 'endorsement.party')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="endorsement_party_address_contract_management_group">
+            <field name="model" search="[('model', '=', 'endorsement.party.address')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="endorsement_party_field_contract_management_group">
+            <field name="model" search="[('model', '=', 'endorsement.party.field')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="endorsement_party_address_field_contract_management_group">
+            <field name="model" search="[('model', '=', 'endorsement.party.address.field')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="endorsement_party_relation_contract_management_group">
+            <field name="model" search="[('model', '=', 'endorsement.party.relation')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="endorsement_party_relation_field_contract_management_group">
+            <field name="model" search="[('model', '=', 'endorsement.party.relation.field')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Party Management Group  -->
+        <record model="ir.model.access" id="endorsement_party_party_management_group">
+            <field name="model" search="[('model', '=', 'endorsement.party')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="endorsement_party_address_party_management_group">
+            <field name="model" search="[('model', '=', 'endorsement.party.address')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="endorsement_party_field_management_group">
+            <field name="model" search="[('model', '=', 'endorsement.party.field')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="endorsement_party_address_field_management_group">
+            <field name="model" search="[('model', '=', 'endorsement.party.address.field')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="endorsement_party_relation_management_group">
+            <field name="model" search="[('model', '=', 'endorsement.party.relation')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="endorsement_party_relation_field_management_group">
+            <field name="model" search="[('model', '=', 'endorsement.party.relation.field')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Contract Set Access Rights -->
+        <record model="ir.model.access" id="access_endorsement_party">
+            <field name="model" search="[('model', '=', 'endorsement.party')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_party_address">
+            <field name="model" search="[('model', '=', 'endorsement.party.address')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_party_field_address">
+            <field name="model" search="[('model', '=', 'endorsement.party.field')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_party_address_field_address">
+            <field name="model" search="[('model', '=', 'endorsement.party.address.field')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_party_relation">
+            <field name="model" search="[('model', '=', 'endorsement.party.relation')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_party_relation_field">
+            <field name="model" search="[('model', '=', 'endorsement.party.relation.field')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

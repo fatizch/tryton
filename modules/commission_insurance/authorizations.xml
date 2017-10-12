@@ -1,0 +1,380 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Commission Consultation Group -->
+        <record model="res.group" id="group_commission_read">
+            <field name="name">Coog Commission consultation</field>
+        </record>
+        <!-- Commission -->
+        <record model="ir.ui.menu-res.group" id="menu_commission_commission_read">
+            <field name="menu" ref="commission.menu_commission"/>
+            <field name="group" ref="group_commission_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_broker_commission_read">
+            <field name="menu" ref="commission_insurance.menu_broker"/>
+            <field name="group" ref="group_commission_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_agent_form_commission_read">
+            <field name="menu" ref="commission.menu_agent_form"/>
+            <field name="group" ref="group_commission_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_commission_insurer_form_commission_read">
+            <field name="menu" ref="commission_insurance.menu_commission_insurer_form"/>
+            <field name="group" ref="group_commission_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_commission_invoice_form_commission_read">
+            <field name="menu" ref="commission_insurance.menu_commission_invoice"/>
+            <field name="group" ref="group_commission_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_invoice_broker_invoice_commission_read">
+            <field name="menu" ref="commission_insurance.menu_invoice_broker_invoice"/>
+            <field name="group" ref="group_commission_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_invoice_insurer_invoice_commission_read">
+            <field name="menu" ref="commission_insurance.menu_invoice_insurer_invoice"/>
+            <field name="group" ref="group_commission_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_commission_form_commission_read">
+            <field name="menu" ref="commission.menu_commission_form"/>
+            <field name="group" ref="group_commission_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_commission_aggregated_commissions_commission_read">
+            <field name="menu" ref="commission_insurance.menu_commission_aggregated_commissions"/>
+            <field name="group" ref="group_commission_read"/>
+        </record>
+        <!-- Distribution -->
+        <record model="ir.ui.menu-res.group" id="menu_distribution_commission_read">
+            <field name="menu" ref="distribution.menu_distribution"/>
+            <field name="group" ref="group_commission_read"/>
+        </record>
+        <!-- Commission Management Group -->
+        <record model="res.group" id="group_commission_manage">
+            <field name="name">Coog Commission management</field>
+        </record>
+        <!-- Commission -->
+        <record model="ir.ui.menu-res.group" id="menu_commission_commission_manage">
+            <field name="menu" ref="commission.menu_commission"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_configuration_commission_manage">
+            <field name="menu" ref="commission.menu_configuration"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_plan_form_commission_manage">
+            <field name="menu" ref="commission.menu_plan_form"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_broker_commission_manage">
+            <field name="menu" ref="commission_insurance.menu_broker"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_agent_form_commission_manage">
+            <field name="menu" ref="commission.menu_agent_form"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_commission_insurer_form_commission_manage">
+            <field name="menu" ref="commission_insurance.menu_commission_insurer_form"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_commission_invoice_form_commission_manage">
+            <field name="menu" ref="commission_insurance.menu_commission_invoice"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_invoice_broker_invoice_commission_manage">
+            <field name="menu" ref="commission_insurance.menu_invoice_broker_invoice"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_invoice_insurer_invoice_commission_manage">
+            <field name="menu" ref="commission_insurance.menu_invoice_insurer_invoice"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_commission_form_commission_manage">
+            <field name="menu" ref="commission.menu_commission_form"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_commission_aggregated_commissions_commission_manage">
+            <field name="menu" ref="commission_insurance.menu_commission_aggregated_commissions"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_commission_create_agents_commission_manage">
+            <field name="menu" ref="commission_insurance.menu_commission_create_agents"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_commission_change_broker_commission_manage">
+            <field name="menu" ref="commission_insurance.menu_commission_change_broker"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_commission_create_invoice_commission_manage">
+            <field name="menu" ref="commission.menu_commission_create_invoice"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <!-- Distribution -->
+        <record model="ir.ui.menu-res.group" id="menu_distribution_commission_manage">
+            <field name="menu" ref="distribution.menu_distribution"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_dist_network_form_commission_manage">
+            <field name="menu" ref="distribution.menu_dist_network_form"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <!-- Laboratory -->
+        <record model="ir.ui.menu-res.group" id="menu_product_commission_manage">
+            <field name="menu" ref="offered.menu_product"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_product_configuration_commission_manage">
+            <field name="menu" ref="offered.menu_product_configuration"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <!-- Users -->
+        <record model="res.user-res.group" id="user_admin_group_commission_read">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_commission_read"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_commission_manage">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_data_group_commission_read">
+            <field name="model" search="[('model', '=', 'extra_data')]"/>
+            <field name="group" ref="group_commission_read"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_data_group_commission_manage">
+            <field name="model" search="[('model', '=', 'extra_data')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_group_commission_manage">
+            <field name="model" search="[('model', '=', 'extra_details.configuration')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_group_commission_read">
+            <field name="model" search="[('model', '=', 'extra_details.configuration')]"/>
+            <field name="group" ref="group_commission_read"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_distribution_network_commission_manage_group">
+            <field name="model" search="[('model', '=', 'distribution.network')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_commission_aggregated_commission_manage_group">
+            <field name="model" search="[('model', '=', 'commission.aggregated')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_commission_plan_date_commission_manage_group">
+            <field name="model" search="[('model', '=', 'commission.plan.date')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_commission_agent_commission_manage_group">
+            <field name="model" search="[('model', '=', 'commission.agent')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_commission_contract_manage_group">
+            <field name="model" search="[('model', '=', 'commission')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_commission_plan_contract_manage_group">
+            <field name="model" search="[('model', '=', 'commission.plan')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_commission_plan_line_contract_manage_group">
+            <field name="model" search="[('model', '=', 'commission.plan.line')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_report_production_request_commission_manage_group">
+            <field name="model" search="[('model', '=', 'report_production.request')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_report_template_commission_manage_group">
+            <field name="model" search="[('model', '=', 'report.template')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_report_template_parameter_commission_manage_group">
+            <field name="model" search="[('model', '=', 'report.template.parameter')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+         <record model="ir.model.access" id="access_product_template_manage_group">
+            <field name="model" search="[('model', '=', 'product.template')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_product_product_manage_group">
+            <field name="model" search="[('model', '=', 'product.product')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_report_template_version_commission_manage_group">
+            <field name="model" search="[('model', '=', 'report.template.version')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Commission Insurance Access Rights -->
+        <record model="ir.model.access" id="access_distribution_network">
+            <field name="model" search="[('model', '=', 'distribution.network')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_commission_aggregated">
+            <field name="model" search="[('model', '=', 'commission.aggregated')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_commission_plan_date">
+            <field name="model" search="[('model', '=', 'commission.plan.date')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_commission">
+            <field name="model" search="[('model', '=', 'commission')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_commission_agent">
+            <field name="model" search="[('model', '=', 'commission.agent')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_commission_plan">
+            <field name="model" search="[('model', '=', 'commission.plan')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_commission_plan_line">
+            <field name="model" search="[('model', '=', 'commission.plan.line')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+    <data depends="account_aggregate">
+        <!-- Commission Manage Group -->
+        <record model="ir.model.access" id="access_account_move_line_aggregated_commission_manage_group">
+            <field name="model" search="[('model', '=', 'account.move.line.aggregated')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+    <data depends="event_log">
+        <record model="ir.model.access" id="access_event_log_group_commission_manage">
+            <field name="model" search="[('model', '=', 'event.log')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+    <data depends="account_invoice_logging">
+        <record model="ir.model.access" id="access_account_invoice_logging_group_commission_manage">
+            <field name="model" search="[('model', '=', 'account.invoice.logging')]"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+    <data depends="report_engine_flow">
+        <!-- Product Management Group -->
+        <record model="ir.model.access" id="access_report_template_group_commission_manage">
+            <field name="model" search="[('model', '=', 'report.flow.variable')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+    <data depends="report_engine_email">
+        <!-- Product Management Group -->
+        <record model="ir.model.access" id="access_report_template_image_attachment_group_commission_manage">
+            <field name="model" search="[('model', '=', 'report.template.image_attachment')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+
+</tryton>

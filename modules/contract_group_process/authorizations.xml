@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Contract Consultation Group -->
+        <!-- Contract Group -->
+        <record model="ir.ui.menu-res.group" id="group_menu_start_subscription_contract_manage">
+            <field name="menu" ref="contract_group_process.menu_start_subscription"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+    </data>
+</tryton>

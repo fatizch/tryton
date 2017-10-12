@@ -313,3 +313,13 @@ class TestCaseModel:
     def hierarchy_test_case(cls):
         company = cls.new_company('Coog', 'Coog', 1, 4)
         company.save()
+
+    @classmethod
+    def get_user_group_dict(cls):
+        user_group_dict = super(TestCaseModel, cls).get_user_group_dict()
+        for user_read in ['consultation', 'claim']:
+            user_group_dict[user_read].append('party_cog.group_party_read')
+        for user_manage in ['financial', 'product', 'underwriting',
+                'commission', 'contract']:
+            user_group_dict[user_manage].append('party_cog.group_party_manage')
+        return user_group_dict

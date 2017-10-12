@@ -14,7 +14,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
     '''
     module = 'account_invoice_waiting'
 
-
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(

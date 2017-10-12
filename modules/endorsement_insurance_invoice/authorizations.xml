@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Contract Management Group -->
+        <record model="ir.model.access" id="access_endorsement_contract_billing_information_contract_manage_group">
+            <field name="model" search="[('model', '=', 'endorsement.contract.billing_information')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Product Management Group -->
+        <record model="ir.model.access" id="access_endorsement_contract_billing_information_field_contract_manage_group">
+            <field name="model" search="[('model', '=', 'endorsement.contract.billing_information.field')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Endorsement Insurance Invoice Access Rights -->
+        <record model="ir.model.access" id="access_endorsement_contract_billing_information">
+            <field name="model" search="[('model', '=', 'endorsement.contract.billing_information')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_endorsement_contract_billing_information_field">
+            <field name="model" search="[('model', '=', 'endorsement.contract.billing_information.field')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

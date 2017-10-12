@@ -9,6 +9,7 @@ import package
 import report_engine
 import rule_engine
 import global_search
+import test_case
 
 
 def register():
@@ -31,4 +32,5 @@ def register():
         report_engine.ReportProductRelation,
         report_engine.ReportTemplate,
         global_search.GlobalSearchSet,
+        test_case.TestCaseModel,
         module='offered', type_='model')

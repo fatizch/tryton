@@ -69,3 +69,12 @@ class TestCaseModel:
     @classmethod
     def loss_desc_test_case(cls):
         pass
+
+    @classmethod
+    def get_user_group_dict(cls):
+        user_group_dict = super(TestCaseModel, cls).get_user_group_dict()
+        for user_read in ['consultation', 'financial', 'contract']:
+            user_group_dict[user_read].append('claim.group_claim_read')
+        for user_manage in ['claim', 'underwriting']:
+            user_group_dict[user_manage].append('claim.group_claim_manage')
+        return user_group_dict

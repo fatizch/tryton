@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_party_general_configuration"
-msgid "Party Configuration"
-msgstr "Configuration des tiers"
-
-msgctxt "model:ir.ui.menu,name:menu_party_relation_type_general_configuration"
-msgid "Party Relation Types"
-msgstr "Types de relation des tiers"
-
 msgctxt "error:ir.attachment:"
 msgid ""
 "Some attachments are used on interactions with the following parties:\n"
@@ -33,16 +25,20 @@ msgid "Identifier type is used. Deletion impossible"
 msgstr "Le type d'identifiant est utilisé. Impossible de le supprimer"
 
 msgctxt "error:party.party:"
+msgid ""
+"Birth date can't be in the future :\n"
+"%(name)s - %(birthdate)s"
+msgstr ""
+"La date de naissance ne peut être future :\n"
+"%(name)s - %(birthdate)s"
+
+msgctxt "error:party.party:"
 msgid "Duplicate(s) already exist(s) : %s"
 msgstr "Des doublon(s) existe(nt) déjà : %s"
 
 msgctxt "error:party.party:"
 msgid "The SSN of the party must be unique."
 msgstr "Le NIR du tiers doit être unique"
-
-msgctxt "error:party.party:"
-msgid "Birth date can't be in the future :\n%(name)s - %(birthdate)s"
-msgstr "La date de naissance ne peut être future :\n%(name)s - %(birthdate)s"
 
 msgctxt "error:party.replace:"
 msgid ""
@@ -87,6 +83,10 @@ msgctxt "field:ir.test_case,phone_prefix:"
 msgid "Phone Prefix"
 msgstr "Préfixe des numéro de téléphone"
 
+msgctxt "field:party.address,color:"
+msgid "Color"
+msgstr "Couleur"
+
 msgctxt "field:party.address,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -95,9 +95,17 @@ msgctxt "field:party.address,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
 
+msgctxt "field:party.address,icon:"
+msgid "Icon"
+msgstr "Icône"
+
 msgctxt "field:party.address,needs_subdivision:"
 msgid "Needs Subdivision"
 msgstr "Subdivision requise"
+
+msgctxt "field:party.address,one_line_street:"
+msgid "Street"
+msgstr "Rue"
 
 msgctxt "field:party.address,return_to_sender:"
 msgid "Return To Sender"
@@ -779,10 +787,6 @@ msgctxt "model:ir.action,name:act_person_form"
 msgid "Persons"
 msgstr "Personnes physiques"
 
-msgctxt "model:ir.action,name:act_related_parties_relate_form"
-msgid "Related parties"
-msgstr "Tiers liés"
-
 msgctxt "model:ir.action,name:start_synthesis_menu"
 msgid "Synthesis"
 msgstr "Synthèse"
@@ -835,9 +839,17 @@ msgctxt "model:ir.ui.menu,name:menu_company_form"
 msgid "Companies"
 msgstr "Personnes morales"
 
+msgctxt "model:ir.ui.menu,name:menu_party_general_configuration"
+msgid "Party Configuration"
+msgstr "Configuration des tiers"
+
 msgctxt "model:ir.ui.menu,name:menu_party_identifier_type_form"
 msgid "Party Identifier Type"
 msgstr "Type d'identifiant de tiers"
+
+msgctxt "model:ir.ui.menu,name:menu_party_relation_type_general_configuration"
+msgid "Party Relation Types"
+msgstr "Types de relation des tiers"
 
 msgctxt "model:ir.ui.menu,name:menu_person_form"
 msgid "Persons"
@@ -894,6 +906,14 @@ msgstr "Synthèse acteur - Contact"
 msgctxt "model:party.synthesis.menu.relationship,name:"
 msgid "Party Synthesis Menu Contact"
 msgstr "Synthèse acteur - Moyens de contact"
+
+msgctxt "model:res.group,name:group_party_manage"
+msgid "Party management"
+msgstr "Gestion de tiers"
+
+msgctxt "model:res.group,name:group_party_read"
+msgid "Party consultation"
+msgstr "Consultation de tiers"
 
 msgctxt "selection:party.interaction,for_object_ref:"
 msgid ""

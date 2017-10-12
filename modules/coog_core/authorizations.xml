@@ -9,6 +9,269 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="general_configuration_menu"/>
             <field name="group" ref="res.group_admin"/>
         </record>
+        <!-- Global Configuration Group -->
+        <record model="res.group" id="group_global_config">
+            <field name="name">Coog Global Configuration</field>
+        </record>
+        <!-- Administration -->
+        <record model="ir.ui.menu-res.group" id="menu_administration_global_config">
+            <field name="menu" ref="ir.menu_administration"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_ui_global_config">
+            <field name="menu" ref="ir.menu_ui"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_models_global_config">
+            <field name="menu" ref="ir.menu_models"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_sequences_global_config">
+            <field name="menu" ref="ir.menu_sequences"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_scheduler_global_config">
+            <field name="menu" ref="ir.menu_scheduler"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_localization_global_config">
+            <field name="menu" ref="ir.menu_localization"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_modules_global_config">
+            <field name="menu" ref="ir.menu_modules"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_res_global_config">
+            <field name="menu" ref="res.menu_res"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_tag_form_global_config">
+            <field name="menu" ref="coog_core.menu_tag_form"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_export_import_global_config">
+            <field name="menu" ref="coog_core.menu_export_import"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_extra_details_configuration_global_config">
+            <field name="menu" ref="coog_core.menu_extra_details_configuration"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_test_case_global_config">
+            <field name="menu" ref="coog_core.menu_test_case"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_event_global_config">
+            <field name="menu" ref="coog_core.menu_event"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <!-- Users -->
+        <record model="res.user-res.group" id="user_admin_group_global_config">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_global_config"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_config_global_config">
+            <field name="model" search="[('model', '=', 'extra_details.configuration')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_event_type">
+            <field name="model" search="[('model', '=', 'event.type')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_event_type_group_global_config">
+            <field name="model" search="[('model', '=', 'event.type')]"/>
+            <field name="group" ref="group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_event_type_action">
+            <field name="model" search="[('model', '=', 'event.type.action')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_event_type_action_group_global_config">
+            <field name="model" search="[('model', '=', 'event.type.action')]"/>
+            <field name="group" ref="group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration">
+            <field name="model" search="[('model', '=', 'extra_details.configuration')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_group_global_config">
+            <field name="model" search="[('model', '=', 'extra_details.configuration')]"/>
+            <field name="group" ref="group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_line">
+            <field name="model" search="[('model', '=', 'extra_details.configuration.line')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_extra_details_configuration_line_group_global_config">
+            <field name="model" search="[('model', '=', 'extra_details.configuration.line')]"/>
+            <field name="group" ref="group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_export_configuration">
+            <field name="model" search="[('model', '=', 'ir.export.configuration')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_export_configuration_group_global_config">
+            <field name="model" search="[('model', '=', 'ir.export.configuration')]"/>
+            <field name="group" ref="group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_export_configuration_model">
+            <field name="model" search="[('model', '=', 'ir.export.configuration.model')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_export_configuration_model_group_global_config">
+            <field name="model" search="[('model', '=', 'ir.export.configuration.model')]"/>
+            <field name="group" ref="group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_export_configuration_field">
+            <field name="model" search="[('model', '=', 'ir.export.configuration.field')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_export_configuration_field_group_global_config">
+            <field name="model" search="[('model', '=', 'ir.export.configuration.field')]"/>
+            <field name="group" ref="group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_export_package_item">
+            <field name="model" search="[('model', '=', 'ir.export_package.item')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_export_package_item_group_global_config">
+            <field name="model" search="[('model', '=', 'ir.export_package.item')]"/>
+            <field name="group" ref="group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_model_method">
+            <field name="model" search="[('model', '=', 'ir.model.method')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_test_case">
+            <field name="model" search="[('model', '=', 'ir.test_case')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_test_case_group_global_config">
+            <field name="model" search="[('model', '=', 'ir.test_case')]"/>
+            <field name="group" ref="group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_test_case_instance">
+            <field name="model" search="[('model', '=', 'ir.test_case.instance')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_test_case_instance_group_global_config">
+            <field name="model" search="[('model', '=', 'ir.test_case.instance')]"/>
+            <field name="group" ref="group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_tag">
+            <field name="model" search="[('model', '=', 'tag')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_tag_group_global_config">
+            <field name="model" search="[('model', '=', 'tag')]"/>
+            <field name="group" ref="group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_sequence">
+            <field name="model" search="[('model', '=', 'ir.sequence')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_sequence_strict">
+            <field name="model" search="[('model', '=', 'ir.sequence.strict')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_ir_sequence_type">
+            <field name="model" search="[('model', '=', 'ir.sequence.type')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
     </data>
 </tryton>
 

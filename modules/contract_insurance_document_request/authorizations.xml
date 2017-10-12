@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Contract Consultation Group -->
+        <!-- Document -->
+        <record model="ir.ui.menu-res.group" id="menu_document_contract_read">
+            <field name="menu" ref="document.menu_document"/>
+            <field name="group" ref="contract.group_contract_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_document_request_line_form_contract_read">
+            <field name="menu" ref="document_request.menu_document_request_line_form"/>
+            <field name="group" ref="contract.group_contract_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_document_reception_contract_read">
+            <field name="menu" ref="document.menu_document_reception"/>
+            <field name="group" ref="contract.group_contract_read"/>
+        </record>
+        <!-- Contract Management Group -->
+        <!-- Document  -->
+         <record model="ir.ui.menu-res.group" id="menu_document_contract_manage">
+            <field name="menu" ref="document.menu_document"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_document_request_line_form_contract_manage">
+            <field name="menu" ref="document_request.menu_document_request_line_form"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_document_reception_contract_manage">
+            <field name="menu" ref="document.menu_document_reception"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <!-- Document Rule Access -->
+        <record model="ir.model.access" id="access_document_rule">
+            <field name="model" search="[('model', '=', 'document.rule')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Admin Group -->
+        <record model="ir.model.access" id="access_document_rule_admin_group">
+            <field name="model" search="[('model', '=', 'document.rule')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Product Management Group Document Rule -->
+        <record model="ir.model.access" id="access_document_rule_product_manage_group">
+            <field name="model" search="[('model', '=', 'document.rule')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_document_receive_line_contract_manage_group">
+            <field name="model" search="[('model', '=', 'document.receive.line')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_document_request_contract_manage_group">
+            <field name="model" search="[('model', '=', 'document.request')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_document_request_line_contract_manage_group">
+            <field name="model" search="[('model', '=', 'document.request.line')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_document_reception_contract_manage_group">
+            <field name="model" search="[('model', '=', 'document.reception')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

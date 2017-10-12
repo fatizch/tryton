@@ -414,6 +414,10 @@ msgctxt "model:ir.ui.menu,name:menu_underwriting_decision_form"
 msgid "Underwriting Decision"
 msgstr "Décision d'analyse de risques"
 
+msgctxt "model:res.group,name:group_contract_underwriting"
+msgid "Contract Underwriting"
+msgstr "Analyse de risques - Contrat"
+
 msgctxt "model:rule_engine,name:underwriting_basic_rule"
 msgid "Underwriting Basic Rule"
 msgstr "Règle basique d'analyse de risque"

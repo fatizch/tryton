@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Global Configuration Group -->
+        <!-- Administration -->
+        <record model="ir.ui.menu-res.group" id="menu_work_days_global_config">
+            <field name="menu" ref="work_days.menu_work_days"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.model.access" id="access_work_days_holidays_global_config">
+            <field name="model" search="[('model', '=', 'work_days.holiday')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_work_days_configuration_global_config">
+            <field name="model" search="[('model', '=', 'work_days.configuration')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Work Days Access Rights -->
+        <record model="ir.model.access" id="access_work_days_holidays">
+            <field name="model" search="[('model', '=', 'work_days.holiday')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_work_days_configuration">
+            <field name="model" search="[('model', '=', 'work_days.configuration')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

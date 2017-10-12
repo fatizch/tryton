@@ -4,6 +4,8 @@ import datetime
 from proteus import Model
 from trytond.modules.company.tests.tools import get_company
 from trytond.modules.currency.tests.tools import get_currency
+from trytond.modules.coog_core.test_framework import execute_test_case, \
+    switch_user
 
 __all__ = ['create_contract_generator', 'init_product', 'init_coverage']
 
@@ -46,8 +48,8 @@ def init_coverage(name=None, start_date=None, company=None):
         currency=get_currency(code='EUR'),
         subscription_behaviour='mandatory')
 
-
 def init_product(name=None, start_date=None, company=None):
+    switch_user('product_user')
     Product = Model.get('offered.product')
 
     if not company:

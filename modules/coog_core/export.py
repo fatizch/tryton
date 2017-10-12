@@ -97,11 +97,12 @@ class ExportImportMixin(Historizable):
         ModelData = Pool().get('ir.model.data')
         model_table = ModelData.__table__()
 
-        cursor.execute(*model_table.select(model_table.db_id,
+        query = model_table.select(model_table.db_id,
                 where=((model_table.model == cls.__name__)
                     & Operator(Concat(model_table.module,
                             Concat('.', model_table.fs_id)),
-                        getattr(cls, name).sql_format(value)))))
+                        value)))
+        cursor.execute(*query)
         return [('id', 'in', [x[0] for x in cursor.fetchall()])]
 
     @classmethod
