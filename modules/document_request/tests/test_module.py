@@ -2,6 +2,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import unittest
+import mock
 
 import trytond.tests.test_tryton
 from trytond.exceptions import UserError
@@ -29,6 +30,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         test_object.save()
         doc_desc = self.DocumentDescription(name="Doc", code=code)
         doc_desc.save()
+        self.DocumentRequestLine.for_object_models = mock.MagicMock(
+            return_value=['coog_core.export_test'])
         line = self.DocumentRequestLine(document_desc=doc_desc,
             for_object=test_object)
         line.save()
