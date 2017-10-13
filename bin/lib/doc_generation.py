@@ -43,7 +43,7 @@ def generate(output_doc_directory=None):
 
     coog_root = os.path.abspath(os.path.join(__file__, '..', '..', '..'))
     doc_files = os.path.join(doc_path, 'coog_doc')
-    documentation_dir = os.path.join(coog_root, 'documentation', 'user_manual')
+    documentation_dir = os.path.join(coog_root, 'doc', 'user_manual')
     modules = os.path.join(coog_root, 'modules')
     language = 'fr'
     doc_format = 'html'
