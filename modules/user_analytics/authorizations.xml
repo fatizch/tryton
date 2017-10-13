@@ -4,6 +4,13 @@ this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
         <!-- User Analytics Manage Group -->
+        <record model="ir.model.access" id="access_res_user_analytics_configuration">
+            <field name="model" search="[('model', '=', 'res.user.analytics.configuration')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <record model="ir.model.access" id="user_analytics_config_admin_group">
             <field name="model" search="[('model', '=', 'res.user.analytics.configuration')]"/>
             <field name="group" ref="res.group_admin"/>
@@ -11,6 +18,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_res_user_connection">
+            <field name="model" search="[('model', '=', 'res.user.connection')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.model.access" id="user_analytics_connection_admin_group">
             <field name="model" search="[('model', '=', 'res.user.connection')]"/>
@@ -20,6 +34,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="access_res_user_connection_daily">
+            <field name="model" search="[('model', '=', 'res.user.connection.daily')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <record model="ir.model.access" id="user_analytics_connection_daily_admin_group">
             <field name="model" search="[('model', '=', 'res.user.connection.daily')]"/>
             <field name="group" ref="res.group_admin"/>
@@ -27,6 +48,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_res_user_connection_date_range">
+            <field name="model" search="[('model', '=', 'res.user.connection.date_range')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.model.access" id="user_analytics_connection_date_range_admin_group">
             <field name="model" search="[('model', '=', 'res.user.connection.date_range')]"/>
@@ -36,6 +64,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="access_res_user_connection_global_daily">
+            <field name="model" search="[('model', '=', 'res.user.connection.global.daily')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <record model="ir.model.access" id="user_analytics_connection_global_admin_group">
             <field name="model" search="[('model', '=', 'res.user.connection.global.daily')]"/>
             <field name="group" ref="res.group_admin"/>
@@ -43,6 +78,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_res_user_connection_global_monthly">
+            <field name="model" search="[('model', '=', 'res.user.connection.global.monthly')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.model.access" id="user_analytics_connection_global_monthly_admin_group">
             <field name="model" search="[('model', '=', 'res.user.connection.global.monthly')]"/>
