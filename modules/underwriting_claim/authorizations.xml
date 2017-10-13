@@ -21,10 +21,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="claim.menu_claim"/>
             <field name="group" ref="underwriting.group_claim_underwriting"/>
         </record>
-        <record model="ir.ui.menu-res.group" id="menu_start_declaration_claim_underwriting">
-            <field name="menu" ref="claim_process.menu_start_declaration"/>
-            <field name="group" ref="underwriting.group_claim_underwriting"/>
-        </record>
         <record model="ir.ui.menu-res.group" id="menu_claim_form_claim_underwriting">
             <field name="menu" ref="claim.menu_claim_form"/>
             <field name="group" ref="underwriting.group_claim_underwriting"/>
@@ -32,10 +28,6 @@ this repository contains the full copyright notices and license terms. -->
         <!-- Underwriting -->
         <record model="ir.ui.menu-res.group" id="menu_underwriting_claim_underwriting">
             <field name="menu" ref="underwriting.menu_underwriting"/>
-            <field name="group" ref="underwriting.group_claim_underwriting"/>
-        </record>
-        <record model="ir.ui.menu-res.group" id="menu_start_underwriting_claim_underwriting">
-            <field name="menu" ref="underwriting_process.menu_start_underwriting"/>
             <field name="group" ref="underwriting.group_claim_underwriting"/>
         </record>
         <record model="ir.ui.menu-res.group" id="menu_underwritings_claim_underwriting">
@@ -228,6 +220,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_start_underwriting_claim_underwriting">
+            <field name="menu" ref="underwriting_process.menu_start_underwriting"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+    </data>
+    <data depends="claim_process">
+        <record model="ir.ui.menu-res.group" id="menu_start_declaration_claim_underwriting">
+            <field name="menu" ref="claim_process.menu_start_declaration"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
         </record>
     </data>
 </tryton>
