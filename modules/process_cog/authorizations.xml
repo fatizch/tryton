@@ -18,12 +18,28 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_process_log_group_admin">
+            <field name="model" search="[('model', '=', 'process.log')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <record model="ir.model.access" id="access_process">
             <field name="model" search="[('model', '=', 'process')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_group_admin">
+            <field name="model" search="[('model', '=', 'process')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
         </record>
         <record model="ir.model.access" id="access_process_action">
             <field name="model" search="[('model', '=', 'process.action')]"/>
@@ -32,12 +48,28 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_process_action_group_admin">
+            <field name="model" search="[('model', '=', 'process.action')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <record model="ir.model.access" id="access_process_configuration">
             <field name="model" search="[('model', '=', 'process.configuration')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_configuration_group_admin">
+            <field name="model" search="[('model', '=', 'process.configuration')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
         </record>
         <record model="ir.model.access" id="access_process_status">
             <field name="model" search="[('model', '=', 'process.status')]"/>
@@ -46,6 +78,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_process_status_group_admin">
+            <field name="model" search="[('model', '=', 'process.status')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <record model="ir.model.access" id="access_process_step">
             <field name="model" search="[('model', '=', 'process.step')]"/>
             <field name="perm_read" eval="True"/>
@@ -53,12 +93,28 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_process_step_group_admin">
+            <field name="model" search="[('model', '=', 'process.step')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <record model="ir.model.access" id="access_process_transition">
             <field name="model" search="[('model', '=', 'process.transition')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_process_transition_group_admin">
+            <field name="model" search="[('model', '=', 'process.transition')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
         </record>
     </data>
 </tryton>
