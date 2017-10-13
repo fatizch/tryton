@@ -9,6 +9,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="contract_set_process.menu_start_validation"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
+        <record model="ir.model.access" id="access_contract_set_validate_find_process">
+            <field name="model" search="[('model', '=', 'contract.set.validate.find_process')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <record model="ir.model.access" id="contract_set_validate_find_process_contract_management_group">
             <field name="model" search="[('model', '=', 'contract.set.validate.find_process')]"/>
             <field name="group" ref="contract.group_contract_manage"/>
