@@ -41,6 +41,38 @@ this repository contains the full copyright notices and license terms. -->
             <field name="user" ref="res.user_admin"/>
             <field name="group" ref="group_contract_underwriting"/>
         </record>
+        <!-- Default Underwriting Decision Access Rights -->
+        <record model="ir.model.access" id="access_underwriting_decision">
+            <field name="model" search="[('model', '=', 'underwriting.decision')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Default Underwriting Rule Access Rights -->
+        <record model="ir.model.access" id="access_underwriting_rule">
+            <field name="model" search="[('model', '=', 'underwriting.rule')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Default Contract Underwriting Access Rights -->
+        <record model="ir.model.access" id="access_contract_underwriting">
+            <field name="model" search="[('model', '=', 'contract.underwriting')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_underwriting_option">
+            <field name="model" search="[('model', '=', 'contract.underwriting.option')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+
         <record model="ir.model.access" id="access_extra_data_group_contract_underwriting">
             <field name="model" search="[('model', '=', 'extra_data')]"/>
             <field name="group" ref="group_contract_underwriting"/>
@@ -168,21 +200,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
-        </record>
-        <!-- Default Contract Underwriting Access Rights -->
-        <record model="ir.model.access" id="access_contract_underwriting">
-            <field name="model" search="[('model', '=', 'contract.underwriting')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="access_contract_underwriting_option">
-            <field name="model" search="[('model', '=', 'contract.underwriting.option')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
         </record>
     </data>
 </tryton>
