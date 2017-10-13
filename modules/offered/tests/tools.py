@@ -4,13 +4,12 @@ import datetime
 from proteus import Model
 from trytond.modules.company.tests.tools import get_company
 from trytond.modules.currency.tests.tools import get_currency
-from trytond.modules.coog_core.test_framework import execute_test_case, \
-    switch_user
+from trytond.modules.coog_core.test_framework import switch_user
 
 __all__ = ['create_contract_generator', 'init_product', 'init_coverage']
 
 
-def create_contract_generator(company=None):
+def create_contract_generator(company=None, user_context=False):
     "Create contract generator "
     Sequence = Model.get('ir.sequence')
     SequenceType = Model.get('ir.sequence.type')
@@ -25,10 +24,9 @@ def create_contract_generator(company=None):
     contract_sequence = Sequence(
         name='Contract Sequence',
         code='contract',
-        company=company)
+        company=company.id)
     contract_sequence.save()
     return contract_sequence
-
 
 def init_coverage(name=None, start_date=None, company=None):
     OptionDescription = Model.get('offered.option.description')
@@ -43,15 +41,15 @@ def init_coverage(name=None, start_date=None, company=None):
     return OptionDescription(
         name=name,
         code=name,
-        company=company,
+        company=company.id,
         start_date=start_date,
         currency=get_currency(code='EUR'),
         subscription_behaviour='mandatory')
 
-def init_product(name=None, start_date=None, company=None):
-    switch_user('product_user')
+def init_product(name=None, start_date=None, company=None, user_context=False):
+    if user_context:
+        switch_user('product_user')
     Product = Model.get('offered.product')
-
     if not company:
         company = get_company()
     if not name:
@@ -59,13 +57,13 @@ def init_product(name=None, start_date=None, company=None):
     if not start_date:
         start_date = datetime.date(2014, 1, 1)
 
-    contract_sequence = create_contract_generator(company)
+    contract_sequence = create_contract_generator(company, user_context)
     product = Product(
         name=name,
         code=name,
-        company=company,
+        company=company.id,
         currency=get_currency(code='EUR'),
-        contract_generator=contract_sequence,
+        contract_generator=contract_sequence.id,
         start_date=start_date)
     coverage = init_coverage(start_date=start_date, company=company)
     product.coverages.append(coverage)

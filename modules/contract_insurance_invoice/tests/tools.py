@@ -9,9 +9,10 @@ __all__ = ['create_billing_mode']
 
 
 def create_billing_mode(frequency=None, payment_term_id=None,
-        direct_debit=False):
+        direct_debit=False, user_context=False):
     "Create billing mode"
-    switch_user('product_user')
+    if user_context:
+        switch_user('product_user')
     PaymentTerm = Model.get('account.invoice.payment_term')
     BillingMode = Model.get('offered.billing_mode')
     if not payment_term_id:
@@ -36,16 +37,20 @@ def create_billing_mode(frequency=None, payment_term_id=None,
     return billing_mode
 
 
-def add_invoice_configuration(product, accounts):
-    switch_user('financial_user')
+def add_invoice_configuration(product, accounts, user_context=False):
+    if user_context:
+        switch_user('financial_user')
     payment_term = create_payment_term()
     payment_term.save()
 
-    freq_monthly = create_billing_mode('monthly', payment_term.id)
-    freq_quarterly = create_billing_mode('quarterly', payment_term.id)
+    freq_monthly = create_billing_mode('monthly', payment_term.id,
+        user_context=user_context)
+    freq_quarterly = create_billing_mode('quarterly', payment_term.id,
+        user_context=user_context)
     freq_monthly_direct_debit = create_billing_mode('monthly', payment_term.id,
-        direct_debit=True)
-    freq_yearly = create_billing_mode('yearly', payment_term.id)
+        direct_debit=True, user_context=user_context)
+    freq_yearly = create_billing_mode('yearly', payment_term.id,
+        user_context=user_context)
 
     product.billing_modes.append(freq_monthly)
     product.billing_modes.append(freq_yearly)

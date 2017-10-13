@@ -106,7 +106,8 @@ level.dunning_fee = fee
 procedure.save()
 
 # #Comment# #Create Product
-product = init_product()
+config = switch_user('product_user')
+product = init_product(user_context=True)
 product = add_quote_number_generator(product)
 product = add_premium_rules(product)
 product = add_invoice_configuration(product, accounts)
