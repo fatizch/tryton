@@ -6,41 +6,14 @@ import datetime
 from proteus import Model, Wizard
 from trytond.tests.tools import activate_modules
 from trytond.modules.currency.tests.tools import get_currency
+from trytond.modules.company_cog.tests.tools import create_company
+from trytond.modules.company.tests.tools import get_company
 
-# Useful for updating the tests without having to recreate a db from scratch
-# import os
-# config = config.set_trytond(
-#     database='postgresql://tryton:tryton@localhost:5432/test_db',
-#     user='admin',
-#     language='en',
-#     config_file=os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
-#         'conf', 'trytond.conf'))
+from trytond.modules.coog_core.test_framework import execute_test_case, \
+    switch_user
 
 # #Comment# #Install Modules
 config = activate_modules('endorsement')
-
-# #Comment# #Get Models
-Company = Model.get('company.company')
-Contract = Model.get('contract')
-Country = Model.get('country.country')
-Endorsement = Model.get('endorsement')
-EndorsementContract = Model.get('endorsement.contract')
-EndorsementContractField = Model.get('endorsement.contract.field')
-EndorsementDefinition = Model.get('endorsement.definition')
-EndorsementDefinitionPartRelation = Model.get(
-    'endorsement.definition-endorsement.part')
-EndorsementPart = Model.get('endorsement.part')
-Field = Model.get('ir.model.field')
-MethodDefinition = Model.get('ir.model.method')
-Option = Model.get('contract.option')
-ContractExtraData = Model.get('contract.extra_data')
-ExtraData = Model.get('extra_data')
-OptionDescription = Model.get('offered.option.description')
-Party = Model.get('party.party')
-Product = Model.get('offered.product')
-Sequence = Model.get('ir.sequence')
-SequenceType = Model.get('ir.sequence.type')
-User = Model.get('res.user')
 
 # #Comment# #Constants
 today = datetime.date.today()
@@ -52,6 +25,7 @@ effective_date = datetime.date(2014, 10, 21)
 currency = get_currency(code='EUR')
 
 # #Comment# #Create or fetch Country
+Country = Model.get('country.country')
 countries = Country.find([('code', '=', 'FR')])
 if not countries:
     country = Country(name='France', code='FR')
@@ -60,25 +34,16 @@ else:
     country, = countries
 
 # #Comment# #Create Company
-company_config = Wizard('company.company.config')
-company_config.execute('company')
-company = company_config.form
-party = Party(name='World Company')
-party.save()
-company.party = party
-company.currency = currency
-company_config.execute('add')
-company, = Company.find([])
-user = User(1)
-user.main_company = company
-user.company = company
-user.save()
+currency = get_currency(code='EUR')
+_ = create_company(currency=currency)
 
-# #Comment# #Reload the context
-config._context = User.get_preferences(True, config.context)
-config._context['company'] = company.id
+execute_test_case('authorizations_test_case')
+config = switch_user('product_user')
+company = get_company()
+currency = get_currency(code='EUR')
 
 # #Comment# #Create Test ExtraData
+ExtraData = Model.get('extra_data')
 extra_data = ExtraData()
 extra_data.name = 'formula'
 extra_data.code = 'formula'
@@ -88,6 +53,8 @@ extra_data.kind = 'contract'
 extra_data.save()
 
 # #Comment# #Create Product
+SequenceType = Model.get('ir.sequence.type')
+Sequence = Model.get('ir.sequence')
 sequence_code = SequenceType()
 sequence_code.name = 'Product sequence'
 sequence_code.code = 'contract'
@@ -108,6 +75,8 @@ quote_sequence.name = 'Quote Sequence'
 quote_sequence.code = quote_sequence_code.code
 quote_sequence.company = company
 quote_sequence.save()
+
+OptionDescription = Model.get('offered.option.description')
 coverage = OptionDescription()
 coverage.company = company
 coverage.currency = currency
@@ -115,6 +84,8 @@ coverage.name = 'Test Coverage'
 coverage.code = 'test_coverage'
 coverage.start_date = product_start_date
 coverage.save()
+
+Product = Model.get('offered.product')
 product = Product()
 product.company = company
 product.currency = currency
@@ -128,20 +99,32 @@ product.extra_data_def.append(extra_data)
 product.save()
 
 # #Comment# #Create Change Extra Data Endorsement
+EndorsementPart = Model.get('endorsement.part')
 change_extra_data_part = EndorsementPart()
 change_extra_data_part.name = 'Change Extra Data'
 change_extra_data_part.code = 'change_extra_data'
 change_extra_data_part.kind = 'extra_data'
 change_extra_data_part.view = 'change_contract_extra_data'
 change_extra_data_part.save()
+EndorsementDefinition = Model.get('endorsement.definition')
 change_extra_data = EndorsementDefinition()
 change_extra_data.name = 'Change Extra Data'
 change_extra_data.code = 'change_extra_data'
+EndorsementDefinitionPartRelation = Model.get(
+    'endorsement.definition-endorsement.part')
 change_extra_data.ordered_endorsement_parts.append(
     EndorsementDefinitionPartRelation(endorsement_part=change_extra_data_part))
 change_extra_data.save()
 
+config = switch_user('contract_user')
+company = get_company()
+currency = get_currency(code='EUR')
+
 # #Comment# #Create Test Contract
+Contract = Model.get('contract')
+Product = Model.get('offered.product')
+product = Product(product.id)
+
 contract = Contract()
 contract.company = company
 contract.start_date = contract_start_date
@@ -162,8 +145,11 @@ contract.extra_datas[0].extra_data_values == {'formula': 1}
 
 
 # #Comment# #New Endorsement
+EndorsementDefinition = Model.get('endorsement.definition')
+change_extra_data = EndorsementDefinition(change_extra_data.id)
 new_endorsement = Wizard('endorsement.start')
 new_endorsement.form.contract = contract
+EndorsementDefinition = Model.get('endorsement.definition')
 new_endorsement.form.endorsement_definition = change_extra_data
 new_endorsement.form.endorsement = None
 new_endorsement.form.applicant = None
@@ -190,6 +176,7 @@ contract.extra_datas[1].extra_data_values == {'formula': 2}
 contract.extra_datas[1].date == effective_date
 # #Res# #True
 
+Endorsement = Model.get('endorsement')
 good_endorsement, = Endorsement.find([
         ('contracts', '=', contract.id)])
 Endorsement.cancel([good_endorsement.id], config._context)

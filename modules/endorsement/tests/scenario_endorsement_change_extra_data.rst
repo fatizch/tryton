@@ -8,34 +8,14 @@ Imports::
     >>> from proteus import Model, Wizard
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.currency.tests.tools import get_currency
+    >>> from trytond.modules.company_cog.tests.tools import create_company
+    >>> from trytond.modules.company.tests.tools import get_company
+    >>> from trytond.modules.coog_core.test_framework import execute_test_case, \
+    ...     switch_user
 
 Install Modules::
 
     >>> config = activate_modules('endorsement')
-
-Get Models::
-
-    >>> Company = Model.get('company.company')
-    >>> Contract = Model.get('contract')
-    >>> Country = Model.get('country.country')
-    >>> Endorsement = Model.get('endorsement')
-    >>> EndorsementContract = Model.get('endorsement.contract')
-    >>> EndorsementContractField = Model.get('endorsement.contract.field')
-    >>> EndorsementDefinition = Model.get('endorsement.definition')
-    >>> EndorsementDefinitionPartRelation = Model.get(
-    ...     'endorsement.definition-endorsement.part')
-    >>> EndorsementPart = Model.get('endorsement.part')
-    >>> Field = Model.get('ir.model.field')
-    >>> MethodDefinition = Model.get('ir.model.method')
-    >>> Option = Model.get('contract.option')
-    >>> ContractExtraData = Model.get('contract.extra_data')
-    >>> ExtraData = Model.get('extra_data')
-    >>> OptionDescription = Model.get('offered.option.description')
-    >>> Party = Model.get('party.party')
-    >>> Product = Model.get('offered.product')
-    >>> Sequence = Model.get('ir.sequence')
-    >>> SequenceType = Model.get('ir.sequence.type')
-    >>> User = Model.get('res.user')
 
 Constants::
 
@@ -50,6 +30,7 @@ Create or fetch Currency::
 
 Create or fetch Country::
 
+    >>> Country = Model.get('country.country')
     >>> countries = Country.find([('code', '=', 'FR')])
     >>> if not countries:
     ...     country = Country(name='France', code='FR')
@@ -59,27 +40,16 @@ Create or fetch Country::
 
 Create Company::
 
-    >>> company_config = Wizard('company.company.config')
-    >>> company_config.execute('company')
-    >>> company = company_config.form
-    >>> party = Party(name='World Company')
-    >>> party.save()
-    >>> company.party = party
-    >>> company.currency = currency
-    >>> company_config.execute('add')
-    >>> company, = Company.find([])
-    >>> user = User(1)
-    >>> user.main_company = company
-    >>> user.company = company
-    >>> user.save()
-
-Reload the context::
-
-    >>> config._context = User.get_preferences(True, config.context)
-    >>> config._context['company'] = company.id
+    >>> currency = get_currency(code='EUR')
+    >>> _ = create_company(currency=currency)
+    >>> execute_test_case('authorizations_test_case')
+    >>> config = switch_user('product_user')
+    >>> company = get_company()
+    >>> currency = get_currency(code='EUR')
 
 Create Test ExtraData::
 
+    >>> ExtraData = Model.get('extra_data')
     >>> extra_data = ExtraData()
     >>> extra_data.name = 'formula'
     >>> extra_data.code = 'formula'
@@ -90,6 +60,8 @@ Create Test ExtraData::
 
 Create Product::
 
+    >>> SequenceType = Model.get('ir.sequence.type')
+    >>> Sequence = Model.get('ir.sequence')
     >>> sequence_code = SequenceType()
     >>> sequence_code.name = 'Product sequence'
     >>> sequence_code.code = 'contract'
@@ -110,6 +82,7 @@ Create Product::
     >>> quote_sequence.code = quote_sequence_code.code
     >>> quote_sequence.company = company
     >>> quote_sequence.save()
+    >>> OptionDescription = Model.get('offered.option.description')
     >>> coverage = OptionDescription()
     >>> coverage.company = company
     >>> coverage.currency = currency
@@ -117,6 +90,7 @@ Create Product::
     >>> coverage.code = 'test_coverage'
     >>> coverage.start_date = product_start_date
     >>> coverage.save()
+    >>> Product = Model.get('offered.product')
     >>> product = Product()
     >>> product.company = company
     >>> product.currency = currency
@@ -131,21 +105,31 @@ Create Product::
 
 Create Change Extra Data Endorsement::
 
+    >>> EndorsementPart = Model.get('endorsement.part')
     >>> change_extra_data_part = EndorsementPart()
     >>> change_extra_data_part.name = 'Change Extra Data'
     >>> change_extra_data_part.code = 'change_extra_data'
     >>> change_extra_data_part.kind = 'extra_data'
     >>> change_extra_data_part.view = 'change_contract_extra_data'
     >>> change_extra_data_part.save()
+    >>> EndorsementDefinition = Model.get('endorsement.definition')
     >>> change_extra_data = EndorsementDefinition()
     >>> change_extra_data.name = 'Change Extra Data'
     >>> change_extra_data.code = 'change_extra_data'
+    >>> EndorsementDefinitionPartRelation = Model.get(
+    ...     'endorsement.definition-endorsement.part')
     >>> change_extra_data.ordered_endorsement_parts.append(
     ...     EndorsementDefinitionPartRelation(endorsement_part=change_extra_data_part))
     >>> change_extra_data.save()
+    >>> config = switch_user('contract_user')
+    >>> company = get_company()
+    >>> currency = get_currency(code='EUR')
 
 Create Test Contract::
 
+    >>> Contract = Model.get('contract')
+    >>> Product = Model.get('offered.product')
+    >>> product = Product(product.id)
     >>> contract = Contract()
     >>> contract.company = company
     >>> contract.start_date = contract_start_date
@@ -163,8 +147,11 @@ Create Test Contract::
 
 New Endorsement::
 
+    >>> EndorsementDefinition = Model.get('endorsement.definition')
+    >>> change_extra_data = EndorsementDefinition(change_extra_data.id)
     >>> new_endorsement = Wizard('endorsement.start')
     >>> new_endorsement.form.contract = contract
+    >>> EndorsementDefinition = Model.get('endorsement.definition')
     >>> new_endorsement.form.endorsement_definition = change_extra_data
     >>> new_endorsement.form.endorsement = None
     >>> new_endorsement.form.applicant = None
@@ -188,6 +175,7 @@ New Endorsement::
     True
     >>> contract.extra_datas[1].date == effective_date
     True
+    >>> Endorsement = Model.get('endorsement')
     >>> good_endorsement, = Endorsement.find([
     ...         ('contracts', '=', contract.id)])
     >>> Endorsement.cancel([good_endorsement.id], config._context)
