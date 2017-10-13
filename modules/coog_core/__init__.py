@@ -94,6 +94,8 @@ def register():
         extra_details.ExtraDetailsConfigurationLine,
         wizard_context.PersistentDataView,
         test_case.TestCaseModel,
+        load_data.GlobalSearchSet,
+        load_data.LanguageTranslatableSet,
         module='coog_core', type_='model')
 
     if config.get('env', 'testing') == 'True':
@@ -126,11 +128,15 @@ def register():
         ir.TranslationOverride,
         diff_blame.RevisionBlameWizard,
         wizard_context.PersistentContextWizard,
+        load_data.GlobalSearchSetWizard,
+        load_data.LanguageTranslatableWizard,
         module='coog_core', type_='wizard')
 
     Pool.register_post_init_hooks(cache_fields_get, module='ir')
     Pool.register_post_init_hooks(event_process_buttons, module='process')
     Pool.register_post_init_hooks(add_global_search_limit, module='coog_core')
+    Pool.register_post_init_hooks(add_readonly_transaction_model,
+        module='coog_core')
 
 
 def cache_fields_get(pool, update):
@@ -243,3 +249,13 @@ def add_global_search_limit(pool, update):
 
     logging.getLogger('modules').info('Limiting global search on all models')
     inject_class(pool, 'model', ModelStorage, GlobalSearchLimitedMixin)
+
+
+def add_readonly_transaction_model(pool, update):
+    if update:
+        return
+    from trytond.model import ModelStorage
+    from trytond.modules.coog_core.model import DynamicReadonlyTransactionMixin
+
+    logging.getLogger('modules').info('Adding readonly transaction model mode')
+    inject_class(pool, 'model', ModelStorage, DynamicReadonlyTransactionMixin)
