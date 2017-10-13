@@ -135,6 +135,12 @@ payable_account2.type = AccountKind(payable_account_kind.id)
 payable_account2.company = company
 payable_account2.save()
 
+Party = Model.get('party.party')
+bank_party = Party(name='Bank Of Mordor')
+bank_party.account_receivable = Account(receivable_account2.id)
+bank_party.account_payable = Account(payable_account2.id)
+lender = bank_party.lender_role.new()
+bank_party.save()
 
 config = switch_user('product_user')
 
@@ -308,13 +314,8 @@ subscriber.account_payable = Account(payable_account.id)
 subscriber.birth_date = datetime.date(1980, 10, 14)
 subscriber.save()
 
-bank_party = Party(name='Bank Of Mordor')
-bank_party.account_receivable = Account(receivable_account2.id)
-bank_party.account_payable = Account(payable_account2.id)
-lender = bank_party.lender_role.new()
-bank_party.save()
-
 # #Comment# #Create Loans
+bank_party = Party(bank_party.id)
 Loan = Model.get('loan')
 loan_payment_date = datetime.date(2014, 5, 1)
 loan_sequence = Sequence()
