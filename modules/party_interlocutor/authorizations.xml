@@ -3,6 +3,13 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <record model="ir.model.access" id="access_party_interlocutor">
+            <field name="model" search="[('model', '=', 'party.interlocutor')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <record model="ir.model.access" id="access_party_interlocutor_group_party_manage">
             <field name="model" search="[('model', '=', 'party.interlocutor')]"/>
             <field name="group" ref="party_cog.group_party_manage"/>
