@@ -29,10 +29,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="account_payment_cog.menu_merged_payment_form"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
-        <record model="ir.ui.menu-res.group" id="menu_message_form_contract_manage">
-            <field name="menu" ref="account_payment_sepa.menu_message_form"/>
-            <field name="group" ref="contract.group_contract_manage"/>
-        </record>
         <record model="ir.ui.menu-res.group" id="menu_create_payments_contract_manage">
             <field name="menu" ref="account_payment_cog.menu_create_payments"/>
             <field name="group" ref="contract.group_contract_manage"/>

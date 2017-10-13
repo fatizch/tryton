@@ -28,6 +28,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_endorsement_loan_field">
+            <field name="model" search="[('model', '=', 'endorsement.loan.field')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <record model="ir.model.access" id="access_endorsement_loan_field_group_contract_manage">
             <field name="model" search="[('model', '=', 'endorsement.loan.field')]"/>
             <field name="group" ref="contract.group_contract_manage"/>
