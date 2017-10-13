@@ -2,7 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tryton>
-    <data>
+    <data depends="coog_core">
         <!-- Global Configuration Group -->
         <!-- Administration -->
         <record model="ir.ui.menu-res.group" id="menu_work_days_global_config">
@@ -25,6 +25,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+    </data>
+    <data>
         <!-- Default Work Days Access Rights -->
         <record model="ir.model.access" id="access_work_days_holidays">
             <field name="model" search="[('model', '=', 'work_days.holiday')]"/>
