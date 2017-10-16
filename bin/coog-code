@@ -47,12 +47,12 @@ _coog_code_st_repo() {
         dirty=$(_coog_code_st_fmt $dirty)
         local untrack
         untrack=$(git status --porcelain | grep -c "??")
-        echo "$repo $branch $mine $origin $master $stage $dirty $untrack"
+        echo "$repo $branch $mine $origin $stage $dirty $untrack $master"
 }
 
 _coog_code_status() {
-        echo "repo branch mine origin master stage dirty untrack"
-        echo "---- ------ ---- ------ ------ ----- ----- -------"
+        echo "repo branch mine origin stage dirty untrack master"
+        echo "---- ------ ---- ------ ----- ----- ------- ------"
         for folder in $COOG_ROOT/*
         do
                 if [ ! -d "$folder" ] || [ ! -d "$folder/.git" ] || [ -e "$folder/.not-coog" ]
