@@ -201,11 +201,16 @@ class Invoice:
                 where=to_update.id.in_(query2)))
 
     def _get_move_line(self, date, amount):
+        broker_journal = None
         line = super(Invoice, self)._get_move_line(date, amount)
-        if (getattr(self, 'business_kind', None) in
-                ['insurer_invoice', 'broker_invoice'] and
+        configuration = Pool().get('account.configuration').get_singleton()
+        if configuration is not None:
+            broker_journal = configuration.broker_bank_transfer_journal
+        if (getattr(self, 'business_kind', None) == 'broker_invoice' and
                 self.type == 'in' and self.total_amount > 0):
-            line.payment_date = line.maturity_date or utils.today()
+            if ((self.business_kind == 'broker_invoice') and
+            (broker_journal is not None)):
+                    line.payment_date = line.maturity_date or utils.today()
         return line
 
     def get_synthesis_rec_name(self, name):

@@ -1,3 +1,4 @@
+* FEA#7108 Ajouter la possibilité de configurer un journal de paiement pour les assureurs si ce dérnier n'est défini la date de paiement des "lignes à payer" ne sera pas alimentée
 * BUG#6965 Utilisation de _func_key dans l'export / import des assureurs
 * BUG#6425 Mise à jour de l'API de la requête du batch de bordereaux assureurs
 

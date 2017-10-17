@@ -1,3 +1,4 @@
+* FEA#7108 Do not define the payment date if the broker payment journal is not defined
 * BUG#6788 Dunning generation on broker parties are not allowed
 * FEA#6642 Add payment term on commission agent
 * BUG#6643 Fix select_ids in commission invoice post batch

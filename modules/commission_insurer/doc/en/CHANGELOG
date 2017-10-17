@@ -1,3 +1,4 @@
+* FEA#7108 Add the ability to set up a payment journal for insurers and block define of the payment date if the insurer payment journal is not defined
 * BUG#6965 Use _func_key in insurer export / import of waiting account
 * BUG#6425 Update link batch select_ids API
 

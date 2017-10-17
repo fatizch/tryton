@@ -5,7 +5,9 @@ from trytond.pool import Pool
 import commission
 import account
 import party
+import invoice
 import batch
+import configuration
 
 
 def register():
@@ -17,6 +19,8 @@ def register():
         account.InvoiceLine,
         account.Invoice,
         party.Insurer,
+        invoice.Invoice,
+        configuration.Configuration,
         batch.CreateEmptyInvoicePrincipalBatch,
         batch.LinkInvoicePrincipalBatch,
         batch.FinalizeInvoicePrincipalBatch,

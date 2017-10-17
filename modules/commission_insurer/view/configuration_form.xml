@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/separator[@id='commission']" position="before">
+        <newline/>
+        <separator id="commission_insurer" string="Insurers" colspan="4"/>
+        <label name="insurer_payment_journal"/>
+        <field name="insurer_payment_journal"/>
+        <label name="insurer_manual_payment_journal"/>
+        <field name="insurer_manual_payment_journal"/>
+        <label name="insurer_invoice_payment_term"/>
+        <field name="insurer_invoice_payment_term"/>
+    </xpath>
+</data>

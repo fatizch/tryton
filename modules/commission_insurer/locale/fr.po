@@ -38,9 +38,17 @@ msgctxt "error:received_premiums:"
 msgid "Received Premium"
 msgstr "Primes reçues"
 
-msgctxt "model:ir.action,name:act_received_premiums_relate"
-msgid "Received Premiums"
-msgstr "Primes reçues"
+msgctxt "field:account.configuration,insurer_invoice_payment_term:"
+msgid "Insurer Invoice Payment Term"
+msgstr "Conditions de paiement pour les borderaux de commissions"
+
+msgctxt "field:account.configuration,insurer_manual_payment_journal:"
+msgid "Insurer Check Journal"
+msgstr "Journal de paiement par chèque des assureurs"
+
+msgctxt "field:account.configuration,insurer_payment_journal:"
+msgid "Insurer Payment Journal"
+msgstr "Journal de paiement automatique des assureurs"
 
 msgctxt "field:account.invoice,insurer_role:"
 msgid "Insurer"
@@ -114,6 +122,24 @@ msgctxt "field:insurer,waiting_account:"
 msgid "Waiting Account"
 msgstr "Compte d'attente"
 
+msgctxt "help:account.configuration,insurer_invoice_payment_term:"
+msgid "Configure the insurer commission invoice payment term"
+msgstr ""
+"Configure les conditions de paiement des borderaux de commissions des "
+"assureurs"
+
+msgctxt "help:account.configuration,insurer_manual_payment_journal:"
+msgid "Configure the check payment journal for insurer "
+msgstr ""
+"Journal par défaut qui va être pris en compte lors des paiements par chèque "
+"pour les assureurs"
+
+msgctxt "help:account.configuration,insurer_payment_journal:"
+msgid "Configure the default payment journal for insurer "
+msgstr ""
+"Journal par défaut qui va être pris en compte lors de la génération des "
+"virements pour les assureurs"
+
 msgctxt "model:account.journal,name:journal_commission_reset"
 msgid "Commission Reset Journal"
 msgstr "Journal de reprise de prime suite à délettrage"
@@ -142,9 +168,17 @@ msgctxt "model:ir.action,name:act_commission_create_invoice_principal"
 msgid "Create Commission Invoice Principal"
 msgstr "Générer les bordereaux assureurs"
 
+msgctxt "model:ir.action,name:act_received_premiums_relate"
+msgid "Received Premiums"
+msgstr "Primes reçues"
+
 msgctxt "model:ir.ui.menu,name:menu_commission_create_invoice_principal"
 msgid "Create Commission Invoice Principal"
 msgstr "Générer les bordereaux assureurs"
+
+msgctxt "view:account.configuration:"
+msgid "Insurers"
+msgstr "Assureurs"
 
 msgctxt "view:commission.create_invoice_principal.ask:"
 msgid "Create Commission Invoice Principal"

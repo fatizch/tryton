@@ -50,6 +50,10 @@ msgctxt "field:account.configuration,commission_invoice_payment_term:"
 msgid "Commission Invoice Payment Term"
 msgstr "Conditions de paiement pour les borderaux de commissions"
 
+msgctxt "field:account.configuration,insurer_payment_journal:"
+msgid "Broker Bank Transfer Journal"
+msgstr "Journal de paiement automatique des courtiers"
+
 msgctxt "field:account.fee,broker_fee:"
 msgid "Broker Fee"
 msgstr "Frais d'apporteur"
@@ -590,32 +594,26 @@ msgctxt "field:contract,show_premium:"
 msgid "Show Premium"
 msgstr "Visualiser les primes"
 
-#, fuzzy
 msgctxt "field:contract.option,annual_premium_excl_tax:"
 msgid "Annual Premium Excluding Taxes"
 msgstr "Prime annuelle hors taxe"
 
-#, fuzzy
 msgctxt "field:contract.option,annual_premium_incl_tax:"
 msgid "Annual Premium Including Taxes"
 msgstr "Prime annuelle TTC"
 
-#, fuzzy
 msgctxt "field:contract.option,annual_taxes:"
 msgid "Annual Taxes"
 msgstr "Taxes annuelles"
 
-#, fuzzy
 msgctxt "field:contract.option,monthly_premium_excl_tax:"
 msgid "Monthly Premium Excluding Taxes"
 msgstr "Prime mensuelle HT"
 
-#, fuzzy
 msgctxt "field:contract.option,monthly_premium_incl_tax:"
 msgid "Monthly Premium Including Taxes"
 msgstr "Prime mensuelle TTC"
 
-#, fuzzy
 msgctxt "field:contract.option,monthly_taxes:"
 msgid "Monthly Taxes"
 msgstr "Taxes mensuelles"
