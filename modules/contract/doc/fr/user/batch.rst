@@ -1,5 +1,5 @@
-Batch de résiliation pour fin de contrat [contract.termination.process]
-=======================================================================
+Batch de résiliation pour fin de contrat [``contract.termination.process``]
+===========================================================================
 
 Ce batch clôt les contrats qui valident les conditions suivantes :
 - status actif ou suspendu

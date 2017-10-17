@@ -21,8 +21,3 @@ User help
 
     user/configuration.rst
 
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

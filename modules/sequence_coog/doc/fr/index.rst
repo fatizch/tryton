@@ -1,21 +1,16 @@
 .. transversal
 
 Evènements planifiés
-=============
+====================
 
 Résumé
 ------
 
 .. include:: summary.rst
 
-Fonctionnalitiées
+Fonctionnalités
 ---------------
 
 .. include:: features.rst
 
 
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

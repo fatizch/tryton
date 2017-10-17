@@ -42,7 +42,9 @@ coog_dep_main() { # install base deps
                 "uwsgi==2.0.15" \
                 "rq==0.8.2" \
                 "celery==4.1.0" \
-                "sphinx==1.4.9" \
+                "sphinx==1.6.4" \
                 "sphinxcontrib-inheritance==0.9.0" \
+                "sphinxprettysearchresults==0.3.2" \
+                "sphinx-rtd-theme==0.2.4" \
                 "pytest==3.2.2"
 }

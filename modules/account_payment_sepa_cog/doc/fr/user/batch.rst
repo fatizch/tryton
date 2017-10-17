@@ -1,5 +1,5 @@
-Batch de traitement des rejets [account.payment.fail]
-=======================================================
+Batch de traitement des rejets [``account.payment.fail``]
+===========================================================
 
 Ce batch traite les paiements pour chaque fichier dans le répertoire spécifié en entrée.
 
@@ -7,8 +7,8 @@ Ce batch traite les paiements pour chaque fichier dans le répertoire spécifié
 - *in_directory*: Argument spécifiant le dossier d'entrée comportant les fichiers de rejet.
 
 
-Batch de création du message de rejets [account.payment.fail.message.create]
-============================================================================
+Batch de création du message de rejets [``account.payment.fail.message.create``]
+================================================================================
 
 Ce batch créé un message SEPA, y associe le message de rejet pour chaque fichier
 dans le répertoire spécifié en entrée.

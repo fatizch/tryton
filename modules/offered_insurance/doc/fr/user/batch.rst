@@ -1,4 +1,4 @@
-Batch de validation de produit [offered.validate]
-=================================================
+Batch de validation de produit [``offered.validate``]
+=====================================================
 
 TODO

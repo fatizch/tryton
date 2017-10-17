@@ -1,4 +1,4 @@
-.. payment
+.. accounting
 
 Tryton Coog - "Paybox System" Payment Support
 =============================================
@@ -13,8 +13,3 @@ Features
 
 .. include:: features.rst
 
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

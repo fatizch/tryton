@@ -18,11 +18,3 @@ User guide
 ----------
 
 .. include:: batch.rst
-
-
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst
-    batch.rst

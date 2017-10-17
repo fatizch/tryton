@@ -47,15 +47,14 @@ def generate(output_doc_directory=None):
     modules = os.path.join(coog_root, 'modules')
     language = 'fr'
     doc_format = 'html'
-    features_file = os.path.join(doc_files, 'trytond_doc', 'doc', language,
-        'fonctionnalites.rst')
+    features_file = os.path.join(doc_files, 'doc_' + language,
+        'catalogue_des_modules', 'fonctionnalites.rst')
 
     # Clean up previous build
     if os.path.exists(doc_files):
         shutil.rmtree(doc_files)
     if os.path.exists(final_html_path):
         shutil.rmtree(final_html_path)
-
 
     def filter_ignore_files(_dir, filenames):
         # return files to NOT copy: any file that is outside of the doc
@@ -65,18 +64,15 @@ def generate(output_doc_directory=None):
                 os.path.join('doc', language) not in _dir)]
         return lst
 
-
     def strip_accents(s):
         return ''.join(c for c in unicodedata.normalize('NFD', s)
             if unicodedata.category(c) != 'Mn')
-
 
     def next_line(text):
         while True:
             line = text.readline()
             if line.strip('\n'):
                 return line
-
 
     shutil.copytree(documentation_dir, doc_files)
     modules_doc_files = os.path.join(doc_files, 'modules')
@@ -85,7 +81,8 @@ def generate(output_doc_directory=None):
     section_data = []
 
     for module in os.listdir(modules_doc_files):
-        module_doc_path = os.path.join(modules_doc_files, module, 'doc', language)
+        module_doc_path = os.path.join(modules_doc_files, module,
+            'doc', language)
         if not os.path.isdir(module_doc_path):
             logger.warning('Missing doc folder for module %s' % module)
             continue
@@ -125,7 +122,7 @@ def generate(output_doc_directory=None):
         except IOError:
             continue
 
-    shutil.copyfile(os.path.join(doc_files, 'index_%s.rst' % language),
+    shutil.move(os.path.join(doc_files, 'index_%s.rst' % language),
         os.path.join(doc_files, 'index.rst'))
 
     with codecs.open(features_file, 'a', encoding='utf-8') as output:
@@ -138,9 +135,11 @@ def generate(output_doc_directory=None):
                 output.writelines([module[1], '^' * len(module[1]), '\n\n'])
                 output.writelines(module[2] + ['\n'])
 
+
     # Generate the doc
     process = subprocess.Popen(['make', doc_format], cwd=doc_files)
     process.communicate()
+
 
     logger.info('Doc generated in ' + doc_files)
     return doc_files, final_html_path

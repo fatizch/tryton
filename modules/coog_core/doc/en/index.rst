@@ -22,8 +22,3 @@ User guide
     user/server_config.rst
 
 
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

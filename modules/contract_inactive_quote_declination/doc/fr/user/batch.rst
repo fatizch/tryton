@@ -1,5 +1,5 @@
-Batch de rejet des devis inactifs [contract.decline.inactive_quotes]
-====================================================================
+Batch de rejet des devis inactifs [``contract.decline.inactive_quotes``]
+========================================================================
 
 Ce batch décline les contrats qui valident les conditions suivantes :
 - status devis (quote).

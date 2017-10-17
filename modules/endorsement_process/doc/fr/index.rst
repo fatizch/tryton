@@ -16,13 +16,3 @@ Fonctionnalités
 Aide utilisateur
 ----------------
 
-.. toctree::
-    :maxdepth: 2
-
-    user/configuration.rst
-
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

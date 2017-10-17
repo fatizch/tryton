@@ -13,8 +13,9 @@ Fonctionnalités
 
 .. include:: features.rst
 
-.. toctree::
-    :hidden:
 
-    summary.rst
-    features.rst
+Aide utilisateur
+----------------
+
+.. toctree::
+    user/batch.rst

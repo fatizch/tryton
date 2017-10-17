@@ -21,8 +21,3 @@ User Help
 
     dev/jeux d essai.rst
 
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

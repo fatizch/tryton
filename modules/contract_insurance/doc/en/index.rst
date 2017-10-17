@@ -21,8 +21,3 @@ User guide
 
    user/creer_une_surprime.rst
 
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

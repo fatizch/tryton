@@ -3,5 +3,5 @@ décès.
 
 * Gestion des bénéficiaires
 * Gestion des délais de traitement (délais de demande des documents, Délais de 
-paiement des prestations)
+  paiement des prestations)
 * Calcul des prestations en intégrant les intérêts légaux et les pénalités

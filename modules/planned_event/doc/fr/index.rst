@@ -1,6 +1,6 @@
 .. transversal
 
-Transverrse - Evènements planifiés
+Transverse - Evènements planifiés
 ==================================
 
 Résumé
@@ -14,8 +14,3 @@ Fonctionnalités
 .. include:: features.rst
 
 
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

@@ -1,5 +1,5 @@
-Batch de nettoyage de la base de données [ir.model.cleandb]
-===========================================================
+Batch de nettoyage de la base de données [``ir.model.cleandb``]
+===============================================================
 
 Le but de ce batch est de détecter les structures de données dans la base
 qui ne sont plus utilisées.

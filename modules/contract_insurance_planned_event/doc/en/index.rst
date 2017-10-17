@@ -16,8 +16,3 @@ Features
 User help
 ---------
 
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

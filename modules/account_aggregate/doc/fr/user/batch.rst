@@ -1,5 +1,5 @@
-Batch de création de snapshot des mouvements comptables [account.move.snapshot.take]
-====================================================================================
+Batch de création de snapshot des mouvements comptables [``account.move.snapshot.take``]
+========================================================================================
 
 Crée un snapshot sur les mouvements comptables au statut "émis" et qui ne
 figurent pas déjà dans une précédente snapshot.

@@ -24,8 +24,3 @@ User guide
    user/imprimer_courrier.rst
 
 
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

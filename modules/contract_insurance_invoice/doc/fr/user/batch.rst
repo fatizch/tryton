@@ -1,5 +1,5 @@
-Batch de création des quittances [contract.invoice.create]
-==========================================================
+Batch de création des quittances [``contract.invoice.create``]
+==============================================================
 
 Pour tous les contrats au statut "actif", crée les quittances dont la date de
 début est inférieure ou égale à la date de traitement et leur donne le statut
@@ -9,8 +9,8 @@ début est inférieure ou égale à la date de traitement et leur donne le statu
 - *Date de traitement à fournir:* date du jour
 
 
-Batch de numérotation des quittances [contract.invoice.set_number]
-==================================================================
+Batch de numérotation des quittances [``contract.invoice.set_number``]
+======================================================================
 
 Attribut un numéro à toutes les quittances validées dont la date de
 début est inférieure ou égale à la date de traitement.
@@ -22,8 +22,8 @@ début est inférieure ou égale à la date de traitement.
 - *Date de traitement à fournir:* date du jour
 
 
-Batch d'émission des quittances [contract.invoice.post]
-=======================================================
+Batch d'émission des quittances [``contract.invoice.post``]
+===========================================================
 
 Fait passer toutes les quittances validées dont la date de début est
 inférieure ou égale à la date de traitement au statut "émises" et crée
@@ -35,8 +35,8 @@ les lignes de mouvements correspondantes.
 - *Date de traitement à fournir:* date du jour
 
 
-Batch de numérotation en masse des quittances [contract.invoice.bulk_set_number]
-==================================================================
+Batch de numérotation en masse des quittances [``contract.invoice.bulk_set_number``]
+====================================================================================
 
 Une alternative au batch de numérotation des quittances s'appuyant sur la base de donnée
 pour améliorer les temps de traitement. Il attribut un numéro à toutes les quittances

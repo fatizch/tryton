@@ -20,8 +20,3 @@ User Help
     user/batch.rst
 
 
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

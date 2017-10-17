@@ -14,10 +14,3 @@ Fonctionnalités
 
 .. include:: features.rst
 
-
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst
-    migration_tuto.rst

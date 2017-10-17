@@ -22,8 +22,3 @@ User help
    user/creer_importer_une_table_tuto
 
 
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

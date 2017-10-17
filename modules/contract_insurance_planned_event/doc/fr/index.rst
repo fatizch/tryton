@@ -16,8 +16,3 @@ Fonctionnalités
 Aide utilisateur
 ----------------
 
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst

@@ -1,7 +1,7 @@
-.. batch_launcher
+.. transversal
 
- - Lancement des batchs depuis le client
-=============================
+Transverse - Lancement des batchs depuis le client
+==================================================
 
 Résumé
 ------
@@ -13,8 +13,3 @@ Fonctionnalités
 
 .. include:: features.rst
 
-.. toctree::
-    :hidden:
-
-    summary.rst
-    features.rst
