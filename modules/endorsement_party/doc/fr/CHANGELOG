@@ -1,3 +1,4 @@
+* BUG#7343 Ajout d'un message d'erreur manquant dans le setup
 * BUG#7152 correction de l'avenant de relation entre tiers
 * Sélection du pays par défaut lors de l'ajout d'une nouvelle adresse
 

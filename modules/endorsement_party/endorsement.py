@@ -242,6 +242,8 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
     def __setup__(cls):
         super(EndorsementParty, cls).__setup__()
         cls._error_messages.update({
+                'not_latest_applied': 'Endorsement "%s" is not the latest '
+                'applied.',
                 'only_one_endorsement_in_progress': 'There may only be one '
                 'endorsement in_progress at a given time per party',
                 'msg_address_modifications': 'Addresses Modifications',

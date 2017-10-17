@@ -1,3 +1,4 @@
+* BUG#7343 Add missing error message in setup
 * BUG#7152 fix party relation endorsement
 * Set default country on new addresses
 
