@@ -75,7 +75,7 @@ class CommissionRecoveryRule(
 class Commission:
     __name__ = 'commission'
 
-    is_recovery = fields.Boolean('Is Recovery Commission')
+    is_recovery = fields.Boolean('Is Recovery Commission', readonly=True)
 
     @classmethod
     def __setup__(cls):

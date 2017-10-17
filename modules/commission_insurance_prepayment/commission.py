@@ -12,7 +12,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, PYSONEncoder
 
-from trytond.modules.commission import Commission as TrytonCommission
 from trytond.modules.coog_core import fields, utils
 
 from trytond.modules.commission_insurance.commission import \
@@ -34,13 +33,9 @@ __all__ = [
 class Commission(WithExtraDetails):
     __name__ = 'commission'
 
-    is_prepayment = fields.Boolean('Is Prepayment',
-        states=TrytonCommission._readonly_states,
-        depends=TrytonCommission._readonly_depends)
+    is_prepayment = fields.Boolean('Is Prepayment', readonly=True)
     redeemed_prepayment = fields.Numeric('Redeemed Prepayment',
-        digits=(16, COMMISSION_AMOUNT_DIGITS),
-        states=TrytonCommission._readonly_states,
-        depends=TrytonCommission._readonly_depends)
+        digits=(16, COMMISSION_AMOUNT_DIGITS), readonly=True)
 
     @classmethod
     def __setup__(cls):

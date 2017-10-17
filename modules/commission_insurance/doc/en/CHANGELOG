@@ -1,3 +1,4 @@
+* BUG#7295 Commission fields should not be modifiable by a user
 * FEA#7108 Do not define the payment date if the broker payment journal is not defined
 * BUG#6788 Dunning generation on broker parties are not allowed
 * FEA#6642 Add payment term on commission agent

@@ -148,6 +148,11 @@ class Commission:
         cls.invoice_line.select = True
         cls.type_.searcher = 'search_type_'
         cls.agent.select = True
+        cls.agent.readonly = True
+        cls.date.readonly = True
+        cls.agent.readonly = True
+        cls.product.readonly = True
+        cls.amount.readonly = True
 
     def get_origin_invoice_line_field(self, name):
         if getattr(self.origin, '__name__', '') != 'account.invoice.line':
