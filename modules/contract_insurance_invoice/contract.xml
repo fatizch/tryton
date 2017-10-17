@@ -154,5 +154,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="priority">15</field>
         </record>
+        <record model="ir.model.method" id="check_contract_invoices_before_renewal">
+            <field name="method_name">check_contract_invoices_before_renewal</field>
+            <field name="name">Check contract invoices before renewal</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">20</field>
+        </record>
     </data>
 </tryton>

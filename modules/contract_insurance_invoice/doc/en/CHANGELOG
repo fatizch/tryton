@@ -1,3 +1,4 @@
+* BUG#7004 Block renewal contract if there are missing posted/paid invoices on the current term
 * FEA#7170 Cleaning reconciliation code: More modularity and possibilities for overriding
 * BUG#7188 Add a loader on contract.billing_information
 * BUG#7145 Can't select write-off journal in reconciliation wizard when processing a write-off

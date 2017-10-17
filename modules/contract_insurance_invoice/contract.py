@@ -235,6 +235,8 @@ class Contract:
                 })
         cls._error_messages.update({
                 'no_payer': 'A payer must be specified',
+                'missing_invoices': 'This contract can not be renewed because '
+                'there are missing invoices on the current term '
                 })
 
     def get_color_from_balance_today(self):
@@ -1246,6 +1248,21 @@ class Contract:
     def rebill_after_renewal(cls, contracts, new_start_date=None, caller=None):
         for contract in contracts:
             contract.invoice_to_end_date()
+
+    @classmethod
+    def _pre_renew_methods(cls):
+        methods = super(Contract, cls)._pre_renew_methods()
+        methods |= {'check_contract_invoices_before_renewal'}
+        return methods
+
+    @classmethod
+    def check_contract_invoices_before_renewal(cls, contracts,
+            new_start_date=None, caller=None):
+        for contract in contracts:
+            if getattr(contract, 'last_posted_invoice_end', None) is not None:
+                if not (contract.last_posted_invoice_end ==
+                        contract.activation_history[-1].end_date):
+                    cls.raise_user_error('missing_invoices')
 
     ###########################################################################
     # Cached invoices calculation to speed up future payments wizard,         #

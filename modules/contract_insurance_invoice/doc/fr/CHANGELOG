@@ -1,3 +1,4 @@
+* BUG#7004 Bloquer le renouvellement des contrats si les quittances n'ont pas été émises/payées pour la période courante
 * FEA#7170 Nettoyage du code de réconciliation: plus de modularité et de possibilitées de surcharges
 * BUG#7188 Ajout d'un loader sur contract.billing_information
 * BUG#7145 Impossibilité de sélectionner un journal de pertes et profits dans l'assistant de lettrage
