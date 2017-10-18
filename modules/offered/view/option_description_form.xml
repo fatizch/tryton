@@ -11,38 +11,36 @@ this repository contains the full copyright notices and license terms. -->
     <label name="end_date"/>
     <field name="end_date" xexpand="0"/>
     <notebook>
-        <page string="Summary" id="summary">
+        <page string="Main" id="summary">
+            <group id="data" colspan="4">
+                <label name="company"/>
+                <group id="small">
+                    <field name="company"/>
+                    <label name="currency"/>
+                    <field name="currency"/>
+                </group>
+            </group>
+            <field name="extra_data_def"/>
+            <field name="extra_data" yfill="1" yexpand="1"/>
+            <separator name="description" colspan="4"/>
             <field name="description" colspan="4"/>
-        </page>
-        <page string="Extra Data" id="extra_data">
-            <field name="extra_data_def" colspan="4"/>
         </page>
         <page string="Rules" id="managers">
             <notebook>
+                <page string="Subscription" id="subscription">
+                    <label name="subscription_behaviour"/>
+                    <field name="subscription_behaviour"/>
+                    <newline/>
+                    <field name="options_required" colspan="2"/>
+                    <field name="options_excluded" colspan="2"/>
+                    <newline/>
+                </page>
                 <page name="ending_rule">
                     <field name="ending_rule" mode="form"/>
                 </page>
             </notebook>
         </page>
-        <page string="Subscription" id="subscription">
-            <label name="subscription_behaviour"/>
-            <field name="subscription_behaviour"/>
-            <newline/>
-            <field name="options_required" colspan="2"/>
-            <field name="options_excluded" colspan="2"/>
-            <newline/>
-        </page>
-        <page string="Administration" id="admin" col="2">
-            <group id="left">
-                <label name="currency"/>
-                <field name="currency"/>
-            </group>
-            <group id="right" col="2">
-                <label name="company"/>
-                <field name="company"/>
-                <newline/>
-                <field name="extra_data" colspan="2"/>
-            </group>
+        <page string="Administration" id="admin">
             <field name="tags" colspan="4"/>
         </page>
     </notebook>

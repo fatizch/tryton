@@ -2,13 +2,13 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
+    <xpath expr="//group[@id='data']" position="inside">
         <label name="item_desc"/>
         <field name="item_desc"/>
-        <label name="insurer"/>
-        <field name="insurer"/>
     </xpath>
     <xpath expr="/form/field[@name='end_date']" position="after">
+        <label name="insurer"/>
+        <field name="insurer"/>
         <label name="family"/>
         <field name="family"/>
         <label name="insurance_kind"/>

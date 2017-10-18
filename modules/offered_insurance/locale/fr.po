@@ -752,10 +752,6 @@ msgctxt "field:offered.product,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:offered.product,contract_generator:"
-msgid "Contract Number Generator"
-msgstr "Générateur de N° de Contrat"
-
 msgctxt "field:offered.product,create_date:"
 msgid "Create Date"
 msgstr "Date de création"

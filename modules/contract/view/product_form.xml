@@ -2,7 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
+    <xpath expr="//label[@name='contract_generator']" position="before">
         <label name="quote_number_sequence"/>
         <field name="quote_number_sequence"/>
     </xpath>

@@ -7,7 +7,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="taxes_included_in_premium"/>
         <newline/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']/field[@name='currency']" position="after">
+    <xpath expr="//group[@id='data']" position="inside">
         <label name="account_for_billing"/>
         <field name="account_for_billing"/>
     </xpath>

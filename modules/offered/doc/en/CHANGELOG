@@ -1,5 +1,6 @@
+* FEA#7234 Enhancement of the product and coverage view. Most useful information are now displayed on the main page
 * FEA#7024 Configure default report template style to be added as default letter style in coog
-* Allow to store extra data on package to be used on rule engine (to apply a reduction for example when subscribing a package)
+* FEA#6173 Allow to store extra data on package to be used on rule engine (to apply a reduction for example when subscribing a package)
 
 Version 1.12 - 2017-04-28
 

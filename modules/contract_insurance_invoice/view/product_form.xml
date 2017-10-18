@@ -5,8 +5,9 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/notebook/page[@id='option']/label[@name='change_coverages_order']" position="before">
         <label name="taxes_included_in_premium"/>
         <field name="taxes_included_in_premium"/>
+        <newline/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='admin']" position="before">
+    <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
         <page id="billing_modes" string="Billing Modes">
             <label name="days_offset_for_subscription_payments"/>
             <field name="days_offset_for_subscription_payments"/>
@@ -18,5 +19,4 @@ this repository contains the full copyright notices and license terms. -->
             <field name="ordered_billing_modes" colspan="4" mode="tree"/>
         </page>
     </xpath>
-
 </data>

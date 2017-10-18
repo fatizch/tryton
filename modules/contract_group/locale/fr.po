@@ -93,11 +93,11 @@ msgstr "Risques possibles"
 
 msgctxt "field:offered.option.description,is_group:"
 msgid "Group Coverage"
-msgstr "Garanties Collectif"
+msgstr "Garantie collective"
 
 msgctxt "field:offered.product,is_group:"
 msgid "Group Product"
-msgstr "Produits Collectif"
+msgstr "Produit collectif"
 
 msgctxt "field:party.party,companies:"
 msgid "Companies"

@@ -11,11 +11,23 @@ this repository contains the full copyright notices and license terms. -->
     <label name="end_date"/>
     <field name="end_date"/>
     <notebook colspan="4">
-        <page string="Summary" id="summary">
+        <page string="Main" id="summary">
+            <group id="data" colspan="4">
+                <label name="company"/>
+                <group id="small">
+                    <field name="company"/>
+                    <label name="currency"/>
+                    <field name="currency"/>
+                </group>
+                <label name="subscriber_kind"/>
+                <field name="subscriber_kind"/>
+                <label name="contract_generator"/>
+                <field name="contract_generator"/>
+            </group>
+            <field name="extra_data_def"/>
+            <field name="extra_data" yfill="1" yexpand="1"/>
+            <separator name="description" colspan="4"/>
             <field name="description" colspan="4"/>
-        </page>
-        <page string="Extra Data" id="extra_data">
-            <field name="extra_data_def" colspan="4"/>
         </page>
         <page string="Option Descriptions" id="option">
             <label name="change_coverages_order"/>
@@ -23,34 +35,19 @@ this repository contains the full copyright notices and license terms. -->
             <newline/>
             <field name="coverages" colspan="4"/>
             <field name="ordered_coverages" colspan="4" mode="tree"/>
-            <field name="packages" colspan="4"/>
+            <field name="packages" colspan="2"/>
         </page>
         <page string="Rules" id="managers">
             <notebook>
+                <page string="Report Templates" id="report_templates">
+                    <label name="report_style_template"/>
+                    <field name="report_style_template"/>
+                    <newline/>
+                    <field name="report_templates" colspan="4"/>
+                </page>
             </notebook>
         </page>
-        <page string="Report Templates" id="report_templates">
-            <field name="report_templates" colspan="4"/>
-            <label name="report_style_template"/>
-            <field name="report_style_template" colspan="3"/>
-        </page>
-        <page string="Administration" id="admin" col="2">
-            <group id="left">
-                <label name="contract_generator"/>
-                <field name="contract_generator"/>
-                <newline/>
-                <label name="currency"/>
-                <field name="currency"/>
-                <newline/>
-                <label name="subscriber_kind"/>
-                <field name="subscriber_kind"/>
-            </group>
-            <group id="right" col="2">
-                <label name="company"/>
-                <field name="company"/>
-                <newline/>
-                <field name="extra_data" colspan="2"/>
-            </group>
+        <page string="Administration" id="admin">
             <field name="tags" colspan="4"/>
         </page>
     </notebook>

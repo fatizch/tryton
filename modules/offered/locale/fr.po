@@ -586,7 +586,7 @@ msgstr "Société"
 
 msgctxt "field:offered.product,contract_generator:"
 msgid "Contract Number Generator"
-msgstr "Générateur de N° de Contrat"
+msgstr "Séquence de numéro de contrat"
 
 msgctxt "field:offered.product,coverages:"
 msgid "Option Descriptions"
@@ -1138,8 +1138,8 @@ msgid "Subscription"
 msgstr "Souscription"
 
 msgctxt "view:offered.option.description:"
-msgid "Summary"
-msgstr "Synthèse"
+msgid "Main"
+msgstr "Principal"
 
 msgctxt "view:offered.package:"
 msgid "Package"
@@ -1174,8 +1174,8 @@ msgid "Rules"
 msgstr "Règles"
 
 msgctxt "view:offered.product:"
-msgid "Summary"
-msgstr "Synthèse"
+msgid "Main"
+msgstr "Principal"
 
 msgctxt "view:tag:"
 msgid "Extra Data"
