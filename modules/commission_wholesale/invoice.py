@@ -40,3 +40,8 @@ class Invoice:
                 columns=[to_update.business_kind],
                 values=[Literal('wholesale_invoice')],
                 where=to_update.id.in_(query)))
+
+    @classmethod
+    def get_commission_invoice_types(cls):
+        return super(Invoice, cls).get_commission_invoice_types() + [
+            'wholesale_invoice']

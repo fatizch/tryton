@@ -12,9 +12,24 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="account_invoice.act_invoice_in_form">
             <field name="domain" eval="[('type', '=', 'in'), ('business_kind', '!=', 'insurer_invoice'), ('business_kind', '!=', 'broker_invoice')]" pyson="1"/>
         </record>
+        <record model="ir.ui.view" id="invoice_view_form">
+            <field name="model">account.invoice</field>
+            <field name="inherit" ref="account_invoice.invoice_view_form"/>
+            <field name="name">invoice_form</field>
+        </record>
+        <record model="ir.ui.view" id="invoice_line_commission_view_list">
+            <field name="model">account.invoice.line</field>
+            <field name="type">tree</field>
+            <field name="name">invoice_line_commission</field>
+        </record>
         <!-- ############################################################ -->
         <!-- ########### Broker Invoices ########### -->
         <!-- ############################################################ -->
+        <record model="ir.ui.view" id="commission_invoice_view_list">
+            <field name="model">account.invoice</field>
+            <field name="type">tree</field>
+            <field name="name">commmission_invoice_list</field>
+        </record>
         <record model="ir.action.act_window" id="act_invoice_broker_invoice_form">
             <field name="name">Broker Invoices</field>
             <field name="res_model">account.invoice</field>
@@ -23,7 +38,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.action.act_window.view" id="act_invoice_broker_invoice_form_view1">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="account_invoice.invoice_view_tree"/>
+            <field name="view" ref="commission_invoice_view_list"/>
             <field name="act_window" ref="act_invoice_broker_invoice_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_invoice_broker_invoice_form_view2">
@@ -44,7 +59,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.action.act_window.view" id="act_invoice_insurer_invoice_form_view1">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="account_invoice.invoice_view_tree"/>
+            <field name="view" ref="commission_invoice_view_list"/>
             <field name="act_window" ref="act_invoice_insurer_invoice_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_invoice_insurer_invoice_form_view2">

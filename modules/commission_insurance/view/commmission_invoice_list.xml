@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tree>
+    <field name="state" icon="icon"/>
+    <field name="business_kind"/>
+    <field name="number"/>
+    <field name="invoice_date"/>
+    <field name="party"/>
+    <field name="total_amount"/>
+    <field name="amount_to_pay_today"/>
+    <button name="cancel" string="Cancel" tree_invisible="1"
+        confirm="Are you sure you want to cancel the commission invoice?"/>
+    <button name="draft" string="Draft" tree_invisible="1"/>
+    <button name="validate_invoice" string="Validate" tree_invisible="1"/>
+    <button name="post" string="Post" tree_invisible="1"/>
+    <field name="color" tree_invisible="1"/>
+    <field name="type" tree_invisible="1"/>
+</tree>

@@ -5,7 +5,7 @@ from decimal import Decimal
 from sql import Cast, Null, Literal
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Or, In
+from trytond.pyson import Eval, Or, In, Not
 from trytond.transaction import Transaction
 from trytond.model import ModelView, Workflow
 from trytond.tools import grouped_slice
@@ -163,11 +163,10 @@ class Invoice:
             ]
         for field in ('taxes', 'tax_amount', 'untaxed_amount'):
             getattr(cls, field).states = {
-                'invisible': Or(In(Eval('business_kind'),
-                        ['insurer_invoice', 'broker_invoice']),
+                'invisible': Or(~Eval('tax_amount'),
                     getattr(cls, field).states.get('invisible', False)),
                 }
-            getattr(cls, field).depends += ['business_kind']
+            getattr(cls, field).depends += ['tax_amount']
 
     @classmethod
     def __register__(cls, module_name):
@@ -199,6 +198,25 @@ class Invoice:
                 columns=[to_update.business_kind],
                 values=[Literal('broker_invoice')],
                 where=to_update.id.in_(query2)))
+
+    @classmethod
+    def get_commission_invoice_types(cls):
+        return ['insurer_invoice', 'broker_invoice']
+
+    @classmethod
+    def view_attributes(cls):
+        is_commission_type = In(Eval('business_kind'),
+            cls.get_commission_invoice_types())
+        return super(Invoice, cls).view_attributes() + [
+            ('//group[@id="invoice_lines"]',
+                'states', {
+                    'invisible': is_commission_type,
+                    }),
+            ('//group[@id="invoice_lines_commission"]',
+                'states', {
+                    'invisible': Not(is_commission_type),
+                    })
+            ]
 
     def _get_move_line(self, date, amount):
         broker_journal = None

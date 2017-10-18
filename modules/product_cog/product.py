@@ -77,6 +77,9 @@ class Product(export.ExportImportMixin):
     __name__ = 'product.product'
     _func_key = 'code'
 
+    def get_rec_name(self, name):
+        return self.name
+
 
 class Uom(export.ExportImportMixin):
     __name__ = 'product.uom'
