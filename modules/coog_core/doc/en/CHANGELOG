@@ -1,3 +1,4 @@
+* FEA#2751 Add the following access rights groups: Coog Financial Consultation, Coog Financial Management, Coog Claim Consultation, Coog Claim Management, Coog Commission Consultation, Coog Commission Management, Coog Contract Consultation, Coog Contract Management, Coog Party Consultation, Coog Party Management, Coog Task Consultation, Coog Task Management, Coog Product Consultation, Coog Product Management, Coog Contract Underwriting, Coog Claim Underwriting and Coog Global Configuration. These groups allow to create functional users with a set of non exhaustive access rights.
 * BUG#7283 Fix duplication of object with a unicity constraint
 * BUG#7168 Add a pyson key to detect that a batch is running
 * FEA#6232 Clean up batch and chain log output

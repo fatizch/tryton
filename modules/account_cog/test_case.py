@@ -143,5 +143,6 @@ class TestCaseModel:
     @classmethod
     def get_user_group_dict(cls):
         user_group_dict = super(TestCaseModel, cls).get_user_group_dict()
-        user_group_dict['financial'].append('account_cog.group_financial_manage')
+        user_group_dict['financial'].append(
+            'account_cog.group_financial_manage')
         return user_group_dict

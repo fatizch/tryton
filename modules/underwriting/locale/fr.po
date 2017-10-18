@@ -523,8 +523,8 @@ msgid "Underwritings"
 msgstr "Demandes de décisions"
 
 msgctxt "model:res.group,name:group_claim_underwriting"
-msgid "Claim Underwriting"
-msgstr "Analyse de risques - Sinistre"
+msgid "Coog Claim Underwriting"
+msgstr "Coog Analyse de Risques Sinistre"
 
 msgctxt "model:underwriting,name:"
 msgid "Underwriting"
@@ -643,12 +643,12 @@ msgid "Finalize"
 msgstr "Finaliser"
 
 msgctxt "view:underwriting:"
-msgid "Complete"
-msgstr "Terminer"
-
-msgctxt "view:underwriting:"
 msgid "Add"
 msgstr "Ajouter"
+
+msgctxt "view:underwriting:"
+msgid "Complete"
+msgstr "Terminer"
 
 msgctxt "view:underwriting:"
 msgid "Draft"

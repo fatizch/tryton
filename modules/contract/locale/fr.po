@@ -1053,6 +1053,10 @@ msgctxt ""
 msgid "Possible Packages"
 msgstr "Formules possibles"
 
+msgctxt "field:event.log,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
 msgctxt "field:event.type.action,notification_delay:"
 msgid "Notification Delay (in days)"
 msgstr ""
@@ -1557,6 +1561,14 @@ msgstr "Contrat"
 msgctxt "model:res.group,name:group_contract_admin"
 msgid "Contract Administration"
 msgstr "Administration des contrats"
+
+msgctxt "model:res.group,name:group_contract_manage"
+msgid "Coog Contract management"
+msgstr "Coog Gestion Contrat"
+
+msgctxt "model:res.group,name:group_contract_read"
+msgid "Coog Contract consultation"
+msgstr "Coog Consultation Contrat"
 
 msgctxt "selection:contract,product_subscriber_kind:"
 msgid "All"

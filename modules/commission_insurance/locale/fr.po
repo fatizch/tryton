@@ -824,12 +824,12 @@ msgid "Insurer Invoices"
 msgstr "Bordereaux assureurs"
 
 msgctxt "model:res.group,name:group_commission_manage"
-msgid "Commission management"
-msgstr "Gestion de commissions"
+msgid "Coog Commission management"
+msgstr "Coog Gestion Commission"
 
 msgctxt "model:res.group,name:group_commission_read"
-msgid "Commission consultation"
-msgstr "Consultation de commissions"
+msgid "Coog Commission consultation"
+msgstr "Coog Consultation Commission"
 
 msgctxt "selection:account.invoice,business_kind:"
 msgid "Broker Invoice"
@@ -1245,13 +1245,13 @@ msgctxt "model:commission.create_invoice.ask,name:commission."
 msgid "Create Commission Invoice"
 msgstr "Générer les bordereaux de commission"
 
-msgctxt "model:ir.action,name:commission.act_agent_form"
-msgid "Agents"
-msgstr "Protocoles de commissionnement"
-
 msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
 msgid "Create Commission Invoices"
 msgstr "Générer les bordereaux de commission"
+
+msgctxt "model:ir.action,name:commission.act_agent_form"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "model:ir.ui.menu,name:commission.menu_commission_create_invoice"
 msgid "Create Commission Invoices"
@@ -1266,20 +1266,20 @@ msgid "Product Template - Commission Agent"
 msgstr "Modèle produit - Protocole de commissionnement"
 
 msgctxt "selection:commission.agent,type_:commission."
-msgid "Principal Of"
-msgstr "Commissionne"
-
-msgctxt "selection:commission.agent,type_:commission."
 msgid "Agent Of"
 msgstr "Est commissionné par"
 
-msgctxt "view:commission.agent:commission."
-msgid "Agents"
-msgstr "Protocoles de commissionnement"
+msgctxt "selection:commission.agent,type_:commission."
+msgid "Principal Of"
+msgstr "Commissionne"
 
 msgctxt "view:commission.agent:commission."
 msgid "Agent"
 msgstr "Protocole de commissionnement"
+
+msgctxt "view:commission.agent:commission."
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "view:commission.create_invoice.ask:commission."
 msgid "Create Commission Invoice"

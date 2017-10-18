@@ -1,3 +1,4 @@
+* FEA#2751 Ajout des groupes de droits d'accès suivants: Coog Consultation Financière, Coog Gestion Financière, Coog Consultation Sinistre, Coog Gestion Sinitre, Coog Consultation Commission, Coog Gestion Commission, Coog Consultation Contrat, Coog Gestion Contrat, Coog Consultation Tiers, Coog Gestion Tiers, Coog Consultation Tâche, Coog Gestion Tâche, Coog Consultation Produit, Coog Gestion Produit, Coog Analyse de Risques Contrat, Coog Analyse de Risques Sinistre et Coog Configuration Globale. Ces groupes permettent de créer des utilisateurs fonctionnels pourvus d'un ensemble non exhaustif de droits d'accès.
 * BUG#7283 Corrige la duplication d'un objet ayant une contrainte d'unicité
 * BUG#7168 Ajout d'un élément dans le pyson pour détecter un batch
 * FEA#6232 Nettoyage de la sortie du log pour les batches et chaînes

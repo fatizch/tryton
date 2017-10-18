@@ -28,6 +28,7 @@ def create_contract_generator(company=None, user_context=False):
     contract_sequence.save()
     return contract_sequence
 
+
 def init_coverage(name=None, start_date=None, company=None):
     OptionDescription = Model.get('offered.option.description')
 
@@ -45,6 +46,7 @@ def init_coverage(name=None, start_date=None, company=None):
         start_date=start_date,
         currency=get_currency(code='EUR'),
         subscription_behaviour='mandatory')
+
 
 def init_product(name=None, start_date=None, company=None, user_context=False):
     if user_context:

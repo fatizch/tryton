@@ -744,7 +744,7 @@ msgid "Previous Synthesis Parties"
 msgstr "Synthèses acteur précédentes"
 
 msgctxt "help:party.configuration,party_lang:"
-msgid "The value set on this field will preset the language on new parties"
+msgid "The default language for new parties."
 msgstr "La valeur définie initialisera la langue sur les tiers"
 
 msgctxt "model:ir.action,name:"
@@ -778,10 +778,6 @@ msgstr "Ouvrir la synthèse"
 msgctxt "model:ir.action,name:act_party_identifier_type_form"
 msgid "Party Identifier Type"
 msgstr "Type d'identifiant de tiers"
-
-msgctxt "model:ir.action,name:act_payments_relate_form"
-msgid "Payments"
-msgstr "Paiements"
 
 msgctxt "model:ir.action,name:act_person_form"
 msgid "Persons"
@@ -908,12 +904,12 @@ msgid "Party Synthesis Menu Contact"
 msgstr "Synthèse acteur - Moyens de contact"
 
 msgctxt "model:res.group,name:group_party_manage"
-msgid "Party management"
-msgstr "Gestion de tiers"
+msgid "Coog Party management"
+msgstr "Coog Gestion Tiers"
 
 msgctxt "model:res.group,name:group_party_read"
-msgid "Party consultation"
-msgstr "Consultation de tiers"
+msgid "Coog Party consultation"
+msgstr "Coog Consultation Tiers"
 
 msgctxt "selection:party.interaction,for_object_ref:"
 msgid ""
@@ -1042,13 +1038,9 @@ msgstr "Synthèse"
 # Custom translations below
 
 msgctxt "field:party.address,name:party."
-msgid "Name"
+msgid "Building Name"
 msgstr "Ligne 2"
 
 msgctxt "field:party.address,street:party."
 msgid "Street"
 msgstr "Rue (Ligne 4)"
-
-msgctxt "field:party.address,streetbis:party."
-msgid "Street (bis)"
-msgstr "Boîte Postale (Ligne 5)"
