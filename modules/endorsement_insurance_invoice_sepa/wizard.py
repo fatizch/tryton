@@ -35,10 +35,13 @@ class ChangeBillingInformation:
                 ~Eval('amend_previous_mandate', False)),
             }, depends=['mandate_needed', 'amend_previous_mandate'])
     amend_previous_mandate = fields.Boolean('Amend Previous Mandate',
-        states={'invisible': Not(Bool(Eval('previous_mandate', 'False'))),
-            }, depends=['mandate_needed'])
+        states={'invisible': Not(Bool(Eval('previous_mandate', 'False'))) |
+            Not(Bool(Eval('amendment_enabled', 'False'))),
+            }, depends=['mandate_needed', 'amendment_enabled'])
     previous_mandate = fields.Many2One('account.payment.sepa.mandate',
         'Previous Mandate', states={'invisible': True})
+    amendment_enabled = fields.Boolean('Amendment Enabled', readonly=True,
+        states={'invisible': True})
 
     @classmethod
     def __setup__(cls):
@@ -57,6 +60,13 @@ class ChangeBillingInformation:
     def default_amend_previous_mandate(cls):
         return False
 
+    @classmethod
+    def default_amendment_enabled(cls):
+        config = Pool().get('account.configuration').get_singleton()
+        if config:
+            return config.enable_amendment
+        return False
+
     def get_other_contracts_party_clause(self):
         clause = super(ChangeBillingInformation,
                 self).get_other_contracts_party_clause()
@@ -69,13 +79,15 @@ class ChangeBillingInformation:
                 '=', payer.id)]
 
     @fields.depends('mandate_needed', 'new_billing_information',
-        'sepa_signature_date', 'payer')
+        'sepa_signature_date', 'payer', 'amendment_enabled')
     def on_change_new_billing_information(self):
         super(ChangeBillingInformation,
             self).on_change_new_billing_information()
         if not self.new_billing_information:
             return
-        Mandate = Pool().get('account.payment.sepa.mandate')
+        pool = Pool()
+        Mandate = pool.get('account.payment.sepa.mandate')
+        amendment_enabled = self.amendment_enabled
         new_info = self.new_billing_information[0]
         previous_info = self.previous_billing_information[0]
         new_account = (new_info.direct_debit_account or
@@ -106,6 +118,8 @@ class ChangeBillingInformation:
             self.new_billing_information = self.new_billing_information
             return
         self.mandate_needed = True
+        if not amendment_enabled:
+            return
         if previous_info.payer in new_account.owners:
             possible_mandates = Mandate.search([
                     ('party', '=', previous_info.payer.id),
@@ -120,9 +134,10 @@ class ChangeBillingInformation:
                     not in amended]
             if possible_mandates:
                 self.amend_previous_mandate = True
-                self.previous_mandate = possible_mandates[0]
-                for contract in self.other_contracts:
-                    contract.to_propagate = 'bank_account'
+                if self.amend_previous_mandate:
+                    self.previous_mandate = possible_mandates[0]
+                    for contract in self.other_contracts:
+                        contract.to_propagate = 'bank_account'
 
     def _update_displayers(self, displayers):
         super(ChangeBillingInformation, self)._update_displayers(displayers)

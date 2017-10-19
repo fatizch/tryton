@@ -36,6 +36,10 @@ msgctxt "error:account.payment:"
 msgid "Unknown amount invoice line : %s %s"
 msgstr "Montant de ligne de quittance inconnu : %s %s"
 
+msgctxt "field:account.configuration,enable_amendment:"
+msgid "Allow Sepa Mandate Amendments"
+msgstr "Autoriser les amendements de mandat SEPA"
+
 msgctxt "field:account.payment,bank_account:"
 msgid "Bank Account"
 msgstr "Compte Bancaire"
@@ -133,6 +137,10 @@ msgstr "Identifiant XML"
 msgctxt "field:bank.account.number,mandates:"
 msgid "Sepa Mandates"
 msgstr "Mandats SEPA"
+
+msgctxt "help:account.configuration,enable_amendment:"
+msgid "If checked, the sepa mandates may be amended rather than recreated"
+msgstr "Si coché, les mandats SEPA pourront être amendés plutôt que recréés"
 
 msgctxt "model:account.payment.do_sepa_messages,name:"
 msgid "Payment Sepa Do Batch"

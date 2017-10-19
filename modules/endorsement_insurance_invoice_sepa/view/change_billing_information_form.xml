@@ -12,5 +12,6 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="amend_previous_mandate"/>
         <field name="amend_previous_mandate"/>
+        <field name="amendment_enabled"/>
     </xpath>
 </data>

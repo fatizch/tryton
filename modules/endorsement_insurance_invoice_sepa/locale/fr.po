@@ -24,6 +24,10 @@ msgctxt "field:contract.billing_information.change,amend_previous_mandate:"
 msgid "Amend Previous Mandate"
 msgstr "Amender le précédent mandat"
 
+msgctxt "field:contract.billing_information.change,amendment_enabled:"
+msgid "Amendment Enabled"
+msgstr "Amendement activé"
+
 msgctxt "field:contract.billing_information.change,mandate_needed:"
 msgid "Mandate Needed"
 msgstr "Mandat Requis"
