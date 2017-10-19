@@ -6,3 +6,4 @@ Editique
 
    imprimer_courrier
    utiliser_champ_genshi_tuto
+   tuto_modele_sms
