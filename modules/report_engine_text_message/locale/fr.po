@@ -1,0 +1,46 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:report.template:"
+msgid "Text Message"
+msgstr "SMS"
+
+msgctxt "field:report.template,genshi_evaluated_message:"
+msgid "Message Genshi Evaluated"
+msgstr "Message genshi évalué"
+
+msgctxt "field:report.template,genshi_evaluated_message_sender:"
+msgid "Message Sender Genshi Evaluated"
+msgstr "Libellé de l'envoyeur genshi évalué"
+
+msgctxt "field:report.template,genshi_evaluated_phone_number:"
+msgid "Phone Number Genshi Evaluated"
+msgstr "Numéro de téléphone genshi évalué"
+
+msgctxt "field:report.template,message:"
+msgid "Message"
+msgstr "Message"
+
+msgctxt "field:report.template,message_sender:"
+msgid "Message Sender"
+msgstr "Libellé de l'envoyeur"
+
+msgctxt "field:report.template,phone_number:"
+msgid "Phone Number"
+msgstr "Numéro de téléphone"
+
+msgctxt "help:report.template,message_sender:"
+msgid ""
+"The message sender name, (3-11 alphanumeric characters or dynamic "
+"expression)"
+msgstr ""
+"Le libellé de l'envoyeur, (3-11 caractères alphanumériques ou expression "
+"dynamique)"
+
+msgctxt "help:report.template,phone_number:"
+msgid ""
+"Recipient Phone Number (0XXXXXXXXX or +33XXXXXXXXXX or dynamic expression"
+msgstr ""
+"Numéro de téléphone du destinataire (0XXXXXXXXX ou +33XXXXXXXXXX ou "
+"expression dynamique)"

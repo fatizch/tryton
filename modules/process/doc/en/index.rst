@@ -12,4 +12,3 @@ Features
 ---------------
 
 .. include:: features.rst
-

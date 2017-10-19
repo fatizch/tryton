@@ -1,7 +1,7 @@
 .. transversal
 
-Transverse - Processus paramétrable
-===================================
+Transverse - Génération de SMS
+==============================
 
 Résumé
 ------
