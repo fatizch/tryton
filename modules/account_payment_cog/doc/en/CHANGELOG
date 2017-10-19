@@ -1,3 +1,4 @@
+* BUG#7338 Add index on payment's group
 * BUG#7275 Do not create payments for blocked lines
 * BUG#6067 Remove tryton action "Pay" from lines to pay list view
 * BUG#7019 Check the creation of a payment group before notifying the event
