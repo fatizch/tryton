@@ -1,3 +1,4 @@
+* BUG#7308 Fix a crash when opening the balance of a party without any lines
 * BUG#6548 Update signals even when a contract is selected
 
 Version 1.12 - 2017-04-28

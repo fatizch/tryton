@@ -1,3 +1,4 @@
+* BUG#7308 Correction d'un crash lors de l'ouverture du compte tiers sur un tiers sans aucune opération comptable
 * BUG#6548 Mise à jour des feux quand un contrat est sélectionné
 
 Version 1.12 - 2017-04-28

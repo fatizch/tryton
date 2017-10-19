@@ -232,7 +232,9 @@ class PartyBalance(ModelCurrency, model.CoogView):
         Line = pool.get('account.party_balance.line')
         lines = []
         scheduled_lines = []
-        for x in MoveLine.browse([int(x) for x in self.all_lines.split(',')]):
+        # Manage the case where there aren't any lines
+        all_lines = self.all_lines.split(',') if self.all_lines else []
+        for x in all_lines and MoveLine.browse([int(x) for x in all_lines]):
             if not self.show_line(x):
                 continue
             fake_line = Line()
