@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='phone_number']" position="after">
+        <newline/>
+        <label name="campaign_name"/>
+        <field name="campaign_name"/>
+        <label name="category"/>
+        <field name="category"/>
+    </xpath>
+</data>
