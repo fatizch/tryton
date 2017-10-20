@@ -29,7 +29,3 @@ msgstr "Code Postal"
 msgctxt "model:ir.test_case.instance,name:zip_code_test_case"
 msgid "Zip Code Test Case"
 msgstr "Jeux d'essai : codes postaux"
-
-msgctxt "model:ir.ui.menu,name:menu_zipcode_form"
-msgid "Zip"
-msgstr "Code Postal"

@@ -235,5 +235,6 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.wizard" id="party.wizard_check_vies">
             <field name="active" eval="False"/>
         </record>
+        <menuitem parent="party.menu_configuration" id="menu_zipcode_form" action="country_cog.act_zip_form"/>
     </data>
 </tryton>

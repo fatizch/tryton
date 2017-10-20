@@ -99,6 +99,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="party_relationship.menu_relation_type"/>
             <field name="group" ref="coog_core.group_global_config"/>
         </record>
+        <record model="ir.ui.menu-res.group" id="menu_zipcode_form_global_config">
+            <field name="menu" ref="party_cog.menu_zipcode_form"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_zipcode_group_party_manage">
+            <field name="menu" ref="party_cog.menu_zipcode_form"/>
+            <field name="group" ref="group_party_manage"/>
+        </record>
         <!-- Users -->
         <record model="res.user-res.group" id="user_admin_group_party_read">
             <field name="user" ref="res.user_admin"/>
@@ -332,6 +340,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_country_zip_group_party_manage">
+            <field name="model" search="[('model', '=', 'country.zip')]"/>
+            <field name="group" ref="group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="False"/>
         </record>
     </data>

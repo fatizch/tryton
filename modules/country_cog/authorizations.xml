@@ -9,10 +9,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="country.menu_country_form"/>
             <field name="group" ref="coog_core.group_global_config"/>
         </record>
-        <record model="ir.ui.menu-res.group" id="menu_zipcode_form_global_config">
-            <field name="menu" ref="country_cog.menu_zipcode_form"/>
-            <field name="group" ref="coog_core.group_global_config"/>
-        </record>
         <record model="ir.model.access" id="access_country_country_global_config_group">
             <field name="model" search="[('model', '=', 'country.country')]"/>
             <field name="group" ref="coog_core.group_global_config"/>

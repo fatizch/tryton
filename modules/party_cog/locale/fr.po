@@ -1035,6 +1035,10 @@ msgctxt "view:party.synthesis.menu:"
 msgid "Synthesis"
 msgstr "Synthèse"
 
+msgctxt "model:ir.ui.menu,name:menu_zipcode_form"
+msgid "Zip"
+msgstr "Code Postal"
+
 # Custom translations below
 
 msgctxt "field:party.address,name:party."

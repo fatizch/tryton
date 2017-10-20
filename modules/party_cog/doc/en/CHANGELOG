@@ -1,3 +1,4 @@
+* BUG#6841 Modify the authorisations on the zip code in order to give the right of modification / creation to a users with party administration right and move ZipCode menu toparty configuration.
 * BUG#7191 Add default sequence on party configuration
 * BUG#6993 Removing simple json import
 * BUG#6811 Do not switch to list view when creating a new address
