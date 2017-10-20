@@ -1,3 +1,4 @@
+* OTH#0000 Extract the check on reject fee craetion to allow a specific overwrite
 * BUG#7332 Reset billing information direct debit data when changing a subscriber
 * FEA#7024 Configure default reports templates to be added as default letters in coog
 * BUG#6505 It is now possible to update the SEPA mandate on the invoice from the payment informations modification wizard

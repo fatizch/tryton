@@ -1,3 +1,4 @@
+* OTH#0000 Extraction de la vérification sur la création des frais de rejet pour permettre une surcharge 
 * BUG#7332 Réinitialisation des données de prélèvement lors d'un changement de souscripteur
 * FEA#7024 Ajout de courriers par defaut "Demande de mandat SEPA"
 * BUG#6505 Il est possible de mettre à jour le mandat SEPA d'une quittance à partir de l'assistant de modification des informations de prélèvement

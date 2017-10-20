@@ -64,6 +64,13 @@ class Payment:
             self.bank_account = self.payer.get_bank_account(self.date)
 
     @classmethod
+    def avoid_reject_fee_creation(cls, reject_fee, journal, payments):
+        if (not reject_fee or not reject_fee.amount or
+                not journal.process_actions_when_payments_failed(payments)):
+            return True
+        return False
+
+    @classmethod
     def fail_create_reject_fee(cls, *args):
         pool = Pool()
         Invoice = pool.get('account.invoice')
@@ -86,9 +93,8 @@ class Payment:
                 payment_date = None
                 journal = key[1]
                 # reject_fee = cls.get_reject_fee(payments_list)
-                if (not reject_fee or not reject_fee.amount or
-                        not journal.process_actions_when_payments_failed(
-                            payments_list)):
+                if cls.avoid_reject_fee_creation(reject_fee, journal,
+                        payments_list):
                     continue
                 if 'retry' in [action[0] for action in
                         journal.get_fail_actions(payments_list)]:
