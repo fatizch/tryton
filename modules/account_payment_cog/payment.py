@@ -813,6 +813,23 @@ class Payment(export.ExportImportMixin, Printable,
     def button_process_fail_payments(cls, payments):
         pass
 
+    @classmethod
+    def delete_payments_by_state(cls, payments_per_state):
+        actions = cls.get_delete_actions()
+        for state, payments in payments_per_state.iteritems():
+            next_state = state
+            while next_state:
+                function, next_state = actions[next_state]
+                function(payments)
+
+    @classmethod
+    def get_delete_actions(cls):
+        return {
+            'processing': (lambda x: cls.approve(x), 'approved'),
+            'approved': (lambda x: cls.draft(x), 'draft'),
+            'draft': (lambda x: cls.delete(x), None),
+            }
+
 
 class Configuration(CompanyMultiValueMixin):
     __metaclass__ = PoolMeta
@@ -1074,21 +1091,8 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
                 payments = sorted(group.payments, key=order_state)
                 for state, payments in groupby(payments, order_state):
                     to_process[state].extend(list(payments))
-        actions = cls.get_delete_actions()
-        for state, payments in to_process.iteritems():
-            next_state = state
-            while next_state:
-                function, next_state = actions[next_state]
-                function(payments)
-
-    @classmethod
-    def get_delete_actions(cls):
         Payment = Pool().get('account.payment')
-        return {
-            'processing': (lambda x: Payment.approve(x), 'approved'),
-            'approved': (lambda x: Payment.draft(x), 'draft'),
-            'draft': (lambda x: Payment.delete(x), None),
-            }
+        Payment.delete_payments_by_state(to_process)
 
     def is_deletable(self):
         if self.journal:

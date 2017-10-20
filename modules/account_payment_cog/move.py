@@ -128,38 +128,62 @@ class MoveLine:
         return (line_table.party == lines[0].party.id)
 
     @classmethod
+    def processing_payments_outstanding_amount(cls, lines):
+        pool = Pool()
+        account = pool.get('account.account').__table__()
+        line = pool.get('account.move.line').__table__()
+        payment = pool.get('account.payment').__table__()
+        kind = lines[0].account.kind
+        company_id = lines[0].move.company.id
+        query_table = line.join(account, condition=account.id == line.account
+            ).join(payment, condition=(payment.line == line.id) &
+                (payment.state == 'processing'))
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*query_table.select(
+                Sum(Coalesce(line.debit, 0) - Coalesce(line.credit, 0)),
+                where=account.active
+                & (account.company == company_id)
+                & Not(line.id.in_([p.id for p in lines]))
+                & cls.payment_outstanding_group_clause(lines, line)
+                & (account.kind == kind)
+                & (line.reconciliation != Null)
+                & (line.payment_date != Null)))
+
+        return cursor.fetchone()[0] or Decimal(0)
+
+    @classmethod
+    def unpaid_outstanding_amount(cls, lines):
+        pool = Pool()
+        cursor = Transaction().connection.cursor()
+        account = pool.get('account.account').__table__()
+        line = pool.get('account.move.line').__table__()
+        kind = lines[0].account.kind
+        company_id = lines[0].move.company.id
+        query_table = line.join(account, condition=account.id == line.account)
+        today_where = ((line.maturity_date <= utils.today())
+            | (line.maturity_date == Null))
+        cursor.execute(*query_table.select(
+                Sum(Coalesce(line.debit, 0) - Coalesce(line.credit, 0)),
+                where=account.active
+                & (account.company == company_id)
+                & Not(line.id.in_([p.id for p in lines]))
+                & cls.payment_outstanding_group_clause(lines, line)
+                & (account.kind == kind)
+                & today_where
+                & (line.reconciliation == Null)
+                & (line.payment_date == Null)))
+
+        return cursor.fetchone()[0] or Decimal(0)
+
+    @classmethod
     def get_outstanding_amount(cls, lines):
         '''
             Calculate outstanding payment amount receivable or payable
             as of today for a specific account
         '''
-        pool = Pool()
-        Account = pool.get('account.account')
-        MoveLine = pool.get('account.move.line')
-        cursor = Transaction().connection.cursor()
-
-        line = MoveLine.__table__()
-        account = Account.__table__()
-
-        today_where = ((line.maturity_date <= utils.today())
-            | (line.maturity_date == Null))
-        group_clause = cls.payment_outstanding_group_clause(lines, line)
-        kind = lines[0].account.kind
-        company_id = lines[0].move.company.id
-        cursor.execute(*line.join(account,
-                condition=account.id == line.account
-                ).select(Sum(Coalesce(line.debit, 0) -
-                    Coalesce(line.credit, 0)),
-                where=(account.active
-                    & (line.reconciliation == Null)
-                    & group_clause
-                    & (account.company == company_id)
-                    & Not(line.id.in_([p.id for p in lines]))
-                    & today_where
-                    & (line.payment_date == Null)
-                    & (account.kind == kind))))
-        value = cursor.fetchone()[0] or Decimal(0)
-        return value
+        unpaid_amount = cls.unpaid_outstanding_amount(lines)
+        processing_amount = cls.processing_payments_outstanding_amount(lines)
+        return unpaid_amount - processing_amount
 
     def new_payment(self, journal, kind, amount):
         return {

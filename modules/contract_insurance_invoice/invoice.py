@@ -337,9 +337,23 @@ class Invoice:
         return []
 
     @classmethod
+    def cancel_payments(cls, payments):
+        if not payments:
+            return
+        for payment in payments:
+            payments_per_state = defaultdict(list)
+            if payment.state in ('draft', 'approved'):
+                payments_per_state[payment.state].append(payment)
+        Pool().get('account.payment').delete_payments_by_state(
+            payments_per_state)
+
+    @classmethod
     @ModelView.button
     @Workflow.transition('cancel')
     def cancel(cls, invoices):
+        payments = sum([list(i.payments) for i in invoices
+            if i.state == 'posted'], [])
+        cls.cancel_payments(payments)
         cls.auto_unreconcile(invoices)
         super(Invoice, cls).cancel(invoices)
 

@@ -1,3 +1,4 @@
+* BUG#7337 Delete draft and approved payments related to an invoice which is cancelled
 * BUG#7004 Block renewal contract if there are missing posted/paid invoices on the current term
 * FEA#7170 Cleaning reconciliation code: More modularity and possibilities for overriding
 * BUG#7188 Add a loader on contract.billing_information
