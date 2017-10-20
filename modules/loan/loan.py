@@ -55,13 +55,13 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
     number = fields.Char('Number', required=True, readonly=True, select=True)
     lender = fields.Function(
         fields.Many2One('party.party', 'Lender',
-        domain=[('is_lender', '=', True)]),
+        domain=[('is_lender', '=', True)], states=_STATES, depends=_DEPENDS),
         'on_change_with_lender', setter='setter_void',
         searcher='search_lender')
     lender_address = fields.Many2One('party.address', 'Lender Address',
         required=True, ondelete='RESTRICT',
-        domain=[('party', '=', Eval('lender'))],
-        depends=['lender'])
+        domain=[('party', '=', Eval('lender'))], states=_STATES,
+        depends=['lender', 'state'])
     company = fields.Many2One('company.company', 'Company', required=True,
         select=True, ondelete='RESTRICT',
         domain=[
@@ -182,6 +182,7 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
             ], 'State', readonly=True)
     state_string = state.translated('state')
     extra_data = fields.Dict('extra_data', 'Extra Data',
+        states={'readonly': Eval('state') != 'draft'}, depends=['state'],
         domain=[('kind', '=', 'loan')])
     extra_data_string = extra_data.translated('extra_data')
     contracts = fields.Many2Many('contract-loan', 'loan', 'contract',
@@ -938,24 +939,37 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
             depends=['currency_digits', 'manual']),
         'get_first_payment_end_balance', 'setter_void')
     start_date = fields.Date('Start Date',
-        states=_STATES_INCREMENT, depends=['loan_state'])
+        states={
+            'required': Eval('loan_state') == 'calculated',
+            'readonly': Eval('loan_state') != 'draft'},
+        depends=['loan_state'])
     end_date = fields.Function(
         fields.Date('End Date', states={'invisible': ~Eval('end_date')}),
         'on_change_with_end_date')
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE', required=True,
         select=True, readonly=True)
-    number_of_payments = fields.Integer('Number of Payments', required=True)
-    rate = fields.Numeric('Annual Rate', digits=(16, 4), required=True)
+    number_of_payments = fields.Integer('Number of Payments', required=True,
+        states={'readonly': Eval('loan_state') != 'draft'},
+        depends=['loan_state'])
+    rate = fields.Numeric('Annual Rate', digits=(16, 4), required=True,
+        states={'readonly': Eval('loan_state') != 'draft'},
+        depends=['loan_state'])
     payment_amount = fields.Numeric('Payment Amount',
         digits=(16, Eval('currency_digits', 2)),
-        states=_STATES_INCREMENT, depends=['loan_state', 'currency_digits'])
+        states={'required': Eval('loan_state') == 'calculated',
+            'readonly': Eval('loan_state') != 'draft'},
+        depends=['loan_state', 'currency_digits'])
     payment_frequency = fields.Selection(coog_date.DAILY_DURATION,
         'Payment Frequency', sort=False, required=True,
+        states={'readonly': Eval('loan_state') != 'draft'},
+        depends=['loan_state'],
         domain=[('payment_frequency', 'in',
                 ['month', 'quarter', 'half_year', 'year'])])
     payment_frequency_string = payment_frequency.translated(
         'payment_frequency')
-    deferral = fields.Selection(DEFERRALS, 'Deferral', sort=False)
+    deferral = fields.Selection(DEFERRALS, 'Deferral', sort=False,
+        states={'readonly': Eval('loan_state') != 'draft'},
+        depends=['loan_state'])
     deferral_string = deferral.translated('deferral')
     manual = fields.Boolean('Manual')
     early_repayment = fields.Numeric('Early Repayment', readonly=True,
@@ -974,7 +988,7 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
                 'incoherent_balances': 'Incoherent begin balance (%(begin)s) '
                 'and end balance (%(end)s) regarding payment amount '
                 '(%(payment)s).',
-                'nb_payments_over_limit' : 'The number of payments '
+                'nb_payments_over_limit': 'The number of payments '
                 '(%(number_of_payments)s) on the increment number '
                 '%(increment)s of the loan %(loan)s exceeds the limit.',
                 })

@@ -1,3 +1,4 @@
+* Bug#7330 Set all loan increment fields to readonly if the loan has been calculated
 * OTH#0000 Fix crashing tests after adding default loan sequence
 * FEA#7194 Add default loan sequence at module installation
 * BUG#6890 Raise an error message if the number of payment exceed the limit.
