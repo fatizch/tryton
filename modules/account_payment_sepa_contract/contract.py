@@ -91,6 +91,30 @@ class Contract:
         if getattr(self, 'subscriber', None) and self.billing_informations:
             self.billing_informations[0].payer = self.subscriber
 
+    @fields.depends('billing_informations')
+    def on_change_subscriber(self):
+        super(Contract, self).on_change_subscriber()
+        if not self.billing_informations:
+            return
+        new_billing_information = self.billing_informations[-1]
+        new_billing_information.sepa_mandate = None
+        if new_billing_information.payer and \
+                new_billing_information.direct_debit_account:
+            Mandate = Pool().get('account.payment.sepa.mandate')
+            possible_mandates = Mandate.search([
+                    ('party', '=', new_billing_information.payer.id),
+                    ('account_number.account', '=',
+                        new_billing_information.direct_debit_account.id),
+                    ('signature_date', '>=', self.start_date)
+                    ])
+            if possible_mandates:
+                new_billing_information.sepa_mandate = possible_mandates[0]
+            else:
+                new_billing_information.direct_debit_account = None
+        else:
+            new_billing_information.direct_debit_account = None
+        self.billing_informations = [new_billing_information]
+
 
 class ContractBillingInformation:
     __name__ = 'contract.billing_information'

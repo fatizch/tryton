@@ -1,3 +1,4 @@
+* BUG#7332 Reset billing information direct debit data when changing a subscriber
 * FEA#7024 Configure default reports templates to be added as default letters in coog
 * BUG#6505 It is now possible to update the SEPA mandate on the invoice from the payment informations modification wizard
 * BUG#6607 No mandate update on non-direct debit invoices
