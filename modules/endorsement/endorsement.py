@@ -1255,6 +1255,9 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
                 'the contracts\' start date',
                 'invalid_format': 'Invalid file format',
                 'no_sequence_defined': 'No sequence defined in configuration',
+                'delete_not_draft_endorsement': 'Impossible to delete the '
+                'endorsement %(number)s because it is not in draft '
+                'but in %(status)s',
                 })
         t = cls.__table__()
         cls._sql_constraints = [
@@ -1287,6 +1290,17 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
                 values['number'] = Sequence.get_id(
                     config.endorsement_number_sequence.id)
         return super(Endorsement, cls).create(vlist)
+
+    @classmethod
+    def delete(cls, endorsements):
+        with model.error_manager():
+            for endorsement in endorsements:
+                if endorsement.state == 'draft':
+                    super(Endorsement, cls).delete(endorsements)
+                else:
+                    cls.append_functional_error('delete_not_draft_endorsement',
+                        {'number': endorsement.number,
+                        'status': endorsement.state_string})
 
     @staticmethod
     def order_last_modification(tables):

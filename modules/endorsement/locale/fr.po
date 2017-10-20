@@ -188,6 +188,14 @@ msgid "No sequence defined in configuration"
 msgstr "Pas de séquence définie dans la configuration"
 
 msgctxt "error:endorsement:"
+msgid ""
+"Impossible to delete the endorsement %(number)s because it is "
+"not in draft but in %(status)s"
+msgstr ""
+"Impossible de supprimer l'avenant %(number)s car il n'est pas "
+"au statut brouillon mais plutôt %(status)s"
+
+msgctxt "error:endorsement:"
 msgid "The endorsement number must be unique."
 msgstr "Le numéro d'avenant doit être unique"
 
