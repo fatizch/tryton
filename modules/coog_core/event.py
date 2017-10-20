@@ -210,9 +210,9 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
             ]
 
     @classmethod
-    def _export_skips(cls):
-        return (super(EventTypeAction, cls)._export_skips() |
-            set(['event_types']))
+    def _export_light(cls):
+        return (super(EventTypeAction, cls)._export_light() |
+            {'event_types'})
 
     @classmethod
     def write(cls, *args):
