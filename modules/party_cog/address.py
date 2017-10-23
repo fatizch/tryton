@@ -176,9 +176,15 @@ class Address(export.ExportImportMixin):
         domain = cls.get_domain_for_find_zip_and_city(data)
         if country:
             domain.append(('country', '=', country.id))
-        zips = Zip.search(domain, limit=1)
+        zips = Zip.search(domain)
         if zips:
-            return zips[0]
+            return cls._filter_possible_zips(data, zips, country)
+
+    @classmethod
+    def _filter_possible_zips(cls, data, zips, country=None):
+        if not zips:
+            return
+        return zips[0]
 
     def get_zip_and_city(self, name):
         data_finder = {'zip': self.zip, 'city': self.city}

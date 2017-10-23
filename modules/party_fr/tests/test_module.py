@@ -83,6 +83,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         zip_code2 = self.ZipCode(zip="2", city='Ruby', country=country,
             hexa_post_id='12')
         zip_code2.save()
+        zip_code3 = self.ZipCode(zip="3", city="Topaz", country=country,
+            line5='THE MOUNTAIN', hexa_post_id='13')
+        zip_code3.save()
 
         dorothy = self.Party(name='Dorothy')
         dorothy.save()
@@ -112,6 +115,27 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(address1.zip, '1')
         self.assertEqual(address1.city, 'Emerald')
         self.assertEqual(address1.address_lines['5_ligne5'], '')
+
+        address2 = self.Address()
+        address2.party = dorothy
+        address2.country = country
+        address2.on_change_with_address_lines()
+        address2.address_lines['5_ligne5'] = 'THE OTHER HILL'
+        address2.zip_and_city = zip_code1
+        address2.on_change_zip_and_city()
+        address2.save()
+        self.assertEqual(address2.address_lines['5_ligne5'], 'THE OTHER HILL')
+        self.assertEqual(address2.zip_and_city, zip_code1)
+        self.assertEqual(address2.zip, '1')
+        self.assertEqual(address2.city, 'Emerald')
+
+        address2.zip_and_city = zip_code3
+        address2.on_change_zip_and_city()
+        address2.save()
+        self.assertEqual(address2.address_lines['5_ligne5'], 'THE OTHER HILL')
+        self.assertEqual(address2.zip_and_city, zip_code3)
+        self.assertEqual(address2.zip, '3')
+        self.assertEqual(address2.city, 'Topaz')
 
 
 def suite():

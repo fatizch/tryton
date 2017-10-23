@@ -49,9 +49,20 @@ class Address:
         return self.zip[0:2]
 
     @classmethod
-    def get_domain_for_find_zip_and_city(cls, data):
-        return super(Address, cls).get_domain_for_find_zip_and_city(data) + [
-            ('line5', '=', data.get('5_ligne5', ''))]
+    def _filter_possible_zips(cls, data, zips, country=None):
+        if not country or country.code != 'FR':
+            return super(Address, cls)._filter_possible_zips(data, zips,
+                country)
+        if not zips:
+            return
+        matching_line5_zips = [
+            z for z in zips if z.line5 == data.get('5_ligne5', '')]
+        if matching_line5_zips:
+            return matching_line5_zips[0]
+        no_line5_zips = [z for z in zips if z.line5 == '']
+        if no_line5_zips:
+            return no_line5_zips[0]
+        return zips[0]
 
     @fields.depends('zip', 'country', 'city', 'zip_and_city', 'address_lines',
         'street')
@@ -59,8 +70,6 @@ class Address:
         super(Address, self).on_change_zip_and_city()
         if self.country and self.country.code == 'FR':
             values = (self.address_lines.copy() if self.address_lines else {})
-            values['5_ligne5'] = (self.zip_and_city.line5
-                if self.zip_and_city else '')
             self.address_lines = values
             self._update_street()
 
