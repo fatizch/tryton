@@ -7,6 +7,7 @@ from trytond.modules.coog_core import fields
 
 __all__ = [
     'Address',
+    'Zip',
     ]
 
 
@@ -78,3 +79,27 @@ class Address:
         res = super(Address, cls)._get_address_zipcode_equivalent_for_import()
         res.update({'streetbis': 'line5'})
         return res
+
+
+class Zip:
+    __metaclass__ = PoolMeta
+    __name__ = 'country.zip'
+
+    @classmethod
+    def get_country_zips_addresses(cls, country_zips):
+        zip_addresses = super(Zip, cls).get_country_zips_addresses(country_zips)
+        country_zips_tuples = [(c.city, c.zip, c.subdivision, c.line5)
+            for c in country_zips if c.country.code == 'FR']
+        return [z for z in zip_addresses if z.country.code != 'FR'
+            or (z.country.code == 'FR' and z.zip_and_city
+                and (z.zip_and_city.city, z.zip_and_city.zip,
+                    z.zip_and_city.subdivision, z.zip_and_city.line5) in
+                country_zips_tuples)]
+
+    @classmethod
+    def get_zip_info(cls, addresses_with_zip):
+        used_zips = set([a.zip_and_city for a in addresses_with_zip])
+        return [' '.join([str(z.line5 or ''), str(z.zip or ''),
+                str(z.city or ''), str(z.subdivision or ''),
+                str(z.country.name or '')])
+            for z in used_zips]

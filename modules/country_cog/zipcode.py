@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 from trytond import backend
 
-from trytond.modules.coog_core import export
+from trytond.modules.coog_core import export, model
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -13,7 +13,7 @@ __all__ = [
     ]
 
 
-class Zip(export.ExportImportMixin):
+class Zip(export.ExportImportMixin, model.FunctionalErrorMixIn):
     __name__ = 'country.zip'
     _rec_name = 'zip'
 

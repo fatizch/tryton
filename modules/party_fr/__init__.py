@@ -15,6 +15,7 @@ import test_case
 def register():
     Pool.register(
         address.Address,
+        address.Zip,
         party.Party,
         test_case.TestCaseModel,
         module='party_fr', type_='model')

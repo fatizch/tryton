@@ -6,11 +6,14 @@ from collections import OrderedDict
 
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Bool, Eval
-from trytond.modules.coog_core import fields, export, utils
+from trytond.server_context import ServerContext
+
+from trytond.modules.coog_core import fields, export, utils, model
 from trytond.modules.country_cog import country
 
 __all__ = [
     'Address',
+    'Zip',
     ]
 
 
@@ -291,3 +294,55 @@ class Address(export.ExportImportMixin):
     def _update_street(self):
         super(Address, self)._update_street()
         self.one_line_street = self.on_change_with_one_line_street()
+
+
+class Zip:
+    __metaclass__ = PoolMeta
+    __name__ = 'country.zip'
+
+    @classmethod
+    def __setup__(cls):
+        super(Zip, cls).__setup__()
+        cls._error_messages.update({
+                'used_zip_code': 'You cannot modify this zip code:\n'
+                ' %(zip_info)s \n'
+                ' as it is used in other addresses. Add a new zipcode instead.'
+                })
+
+    @classmethod
+    def write(cls, *args):
+        # Add check to ensure the user does not overwrite a zip code that is
+        # used in other addresses
+        with model.error_manager():
+            if not ServerContext().get('from_batch', None):
+                params = iter(args)
+                for country_zips, values in zip(params, params):
+                    addresses_with_zip = cls.get_country_zips_addresses(
+                        country_zips)
+                    if addresses_with_zip:
+                        cls.append_functional_error(
+                            'used_zip_code', {
+                                'zip_info': cls.get_zip_info(addresses_with_zip)
+                                })
+            super(Zip, cls).write(*args)
+
+    @classmethod
+    def get_country_zips_addresses(cls, country_zips):
+        PartyAddress = Pool().get('party.address')
+        country_zips_domains = ['OR']
+        for country_zip in country_zips:
+            country_zips_domains.append(
+                [
+                    ('country', '=', country_zip.country),
+                    ('zip', '=', country_zip.zip),
+                    ('city', '=', country_zip.city),
+                    ('subdivision', '=', country_zip.subdivision)
+                    ])
+        return PartyAddress.search([country_zips_domains])
+
+    @classmethod
+    def get_zip_info(cls, addresses_with_zip):
+        used_zips = set([a.zip_and_city for a in addresses_with_zip])
+        return [' '.join([str(z.zip or ''), str(z.city or ''),
+                str(z.subdivision or ''), str(z.country.name or '')])
+            for z in used_zips]

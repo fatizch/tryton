@@ -2,6 +2,16 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:country.zip:"
+msgid ""
+"You cannot modify this zip code:\n"
+" %(zip_info)s \n"
+" as it is used in other addresses. Add a new zipcode instead."
+msgstr ""
+"Vous ne pouvez pas modifier ce code postal :\n"
+" %(zip_info)s \n"
+"car il est utilisé dans d'autres adresses. Veuillez ajouter un nouveau code postal."
+
 msgctxt "error:ir.attachment:"
 msgid ""
 "Some attachments are used on interactions with the following parties:\n"

@@ -32,6 +32,7 @@ def register():
         party.PartyIdentifierType,
         category.PartyCategory,
         address.Address,
+        address.Zip,
         contact_mechanism.ContactMechanism,
         contact_mechanism.PartyInteraction,
         test_case.TestCaseModel,
