@@ -1,3 +1,4 @@
+* BUG#6692 The planned payment date for payments should be updated to the actual payment date
 * BUG#7337 Handle processing payments for the computation of the total outstanding amount on parties
 * BUG#7338 Add index on payment's group
 * BUG#7275 Do not create payments for blocked lines

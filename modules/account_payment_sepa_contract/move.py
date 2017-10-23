@@ -21,11 +21,6 @@ class MoveLine:
                     contract_revision_date=payment['date']):
                 billing_info = self.contract.billing_information \
                     if self.contract else None
-                if (kind == 'receivable' and billing_info and
-                        journal.process_method == 'sepa'):
-                    payment['date'] = \
-                        billing_info.get_direct_debit_planned_date(self) \
-                        or payment['date']
                 mandate = billing_info.sepa_mandate if billing_info else None
         if (not mandate and self.origin and
                 isinstance(self.origin, Invoice) and

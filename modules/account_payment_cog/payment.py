@@ -502,7 +502,9 @@ class Payment(export.ExportImportMixin, Printable,
                 'be failed at the same time.',
                 'transition_approve_refused': 'The transition to the approved '
                 'state is not allowed on the payment with the merged id '
-                '%(merged_id)s'
+                '%(merged_id)s',
+                'update_payment_date': 'Payment dates will automatically be '
+                'updated to %(date)s for consistency:\n\n%(dates)s',
                 })
         cls._buttons.update({
                 'button_fail_payments': {
@@ -752,6 +754,7 @@ class Payment(export.ExportImportMixin, Printable,
     @classmethod
     @Workflow.transition('processing')
     def process(cls, payments, group):
+        cls.update_payment_dates_before_process(payments)
         group = super(Payment, cls).process(payments, group)
         if payments:
             pool = Pool()
@@ -761,6 +764,37 @@ class Payment(export.ExportImportMixin, Printable,
                 Event.notify_events([group], 'payment_group_created')
             Event.notify_events(payments, 'process_payment')
         return group
+
+    @classmethod
+    def update_payment_dates_before_process(cls, payments):
+        if not payments:
+            return
+        update, expected_payment_dates = cls._expected_payment_dates(payments)
+        if not update:
+            return
+        pool = Pool()
+        MoveLine = pool.get('account.move.line')
+        date = max(max(expected_payment_dates), utils.today())
+        if not Transaction().context.get('_batch_treatment_date', None):
+            # By pass warning when in a batch
+            cls.raise_user_warning('update_payment_date_%i' % payments[0].id,
+                'update_payment_date', {'date': str(date),
+                    'dates': '\n'.join(str(x)
+                        for x in expected_payment_dates)})
+        cls.write(payments, {'date': date})
+        lines = [x.line for x in payments]
+        if lines:
+            MoveLine.write(lines, {'payment_date': date})
+
+    @classmethod
+    def _expected_payment_dates(cls, payments):
+        if Transaction().context.get('_batch_treatment_date', None):
+            return True, {Transaction().context.get('_batch_treatment_date')}
+        # PERF : Consider using a query if payments' length is big enough
+        dates = {x.date for x in payments}
+        if (len(dates) == 1 and max(dates) >= utils.today()):
+            return False, dates
+        return True, dates
 
     @classmethod
     def succeed(cls, payments):

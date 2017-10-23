@@ -111,6 +111,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
     def execute(cls, objects, ids, treatment_date, payment_kind=None,
             journal_methods=None, **kwargs):
         with Transaction().set_context(
+                _batch_treatment_date=treatment_date,
                 _record_cache_size=int(kwargs.get('cache_size'))):
             groups = []
             Payment = Pool().get('account.payment')
@@ -282,8 +283,11 @@ class PaymentUpdateBatch(batch.BatchRoot):
             None)
         if not update_method:
             return []
-        for _ids in grouped_slice(ids):
-            update_method(Payment.browse(_ids), payment_kind)
+        with Transaction().set_context(_batch_treatment_date=treatment_date):
+            for _ids in grouped_slice(ids):
+                payments = Payment.browse(_ids)
+                Payment.update_payment_dates_before_process(payments)
+                update_method(payments, payment_kind)
 
 
 class PaymentGroupProcessBatch(batch.BatchRoot):
@@ -447,6 +451,7 @@ class PaymentCreationBatch(batch.BatchRoot):
                 group_by=move_line.id))
 
         move_lines = MoveLine.browse([x[0] for x in cursor.fetchall()])
+        MoveLine.write(move_lines, {'payment_date': treatment_date})
         MoveLine.create_payments(move_lines)
         cls.logger.info('%s created' %
             coog_string.get_print_infos([x.id for x in move_lines], 'payment'))

@@ -9,7 +9,7 @@ from decimal import Decimal
 from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool, PYSONEncoder
+from trytond.pyson import Eval, Bool, PYSONEncoder, Date, If
 from trytond.wizard import StateView, Button, StateTransition, StateAction
 from trytond.transaction import Transaction
 from trytond.modules.account_payment.payment import KINDS
@@ -328,8 +328,11 @@ class PaymentCreationStart(model.CoogView):
     payment_date = fields.Date('Payment Date', states={
             'required': ~Eval('have_lines_payment_date')
              }, help='Payment date is required if at least one line to pay '
-        'doesn\'t have a payment date. When its value is set, it is propagated '
-        'to all lines to pay.')
+        'doesn\'t have a payment date, or it is set in the past. When its '
+        'value is set, it is propagated to all lines to pay.',
+        domain=[If(Bool(Eval('payment_date', False)),
+                [('payment_date', '>=', Date())],
+                [])])
     journal = fields.Many2One('account.payment.journal', 'Payment Journal',
         required=True)
     kind = fields.Selection(KINDS, 'Payment Kind')
@@ -403,7 +406,8 @@ class PaymentCreationStart(model.CoogView):
     @fields.depends('lines_to_pay', 'payment_date')
     def on_change_lines_to_pay(self):
         self.have_lines_payment_date = all(
-            x.payment_date for x in self.lines_to_pay)
+            x.payment_date and x.payment_date >= utils.today()
+            for x in self.lines_to_pay)
         if not self.have_lines_payment_date and self.payment_date is None:
             self.payment_date = utils.today()
 
@@ -428,6 +432,8 @@ class PaymentCreation(model.CoogWizard):
                 'are payable lines some are receivable.',
                 'incompatible_lines_with_kind': 'Selected lines are '
                 'incompatible with selected kind',
+                'updating_payment_date': 'The payment date for all payments '
+                'will be update to %(date)s',
                 })
 
     def get_lines_amount_per_kind(self, lines):
@@ -505,9 +511,14 @@ class PaymentCreation(model.CoogWizard):
         kind = self.get_lines_amount_per_kind(self.start.lines_to_pay)
         if kind.keys()[0] != self.start.kind:
             self.raise_user_error('incompatible_lines_with_kind')
-        if self.start.payment_date:
+        payment_date = self.start.payment_date or utils.today()
+        if any(x.payment_date != payment_date
+                for x in self.start.lines_to_pay):
+            self.raise_user_warning('updating_payment_date_%s' %
+                str(self.start.lines_to_pay[0]), 'updating_payment_date',
+                {'date': str(payment_date)})
             MoveLine.write(list(self.start.lines_to_pay),
-                {'payment_date': self.start.payment_date})
+                {'payment_date': payment_date})
         payments = MoveLine.init_payments(self.start.lines_to_pay,
             self.start.journal)
         for payment in payments:
