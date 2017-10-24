@@ -28,3 +28,12 @@ class RuleEngineRuntime:
     @check_args('beneficiary_definition')
     def _re_beneficiary_share(cls, args):
         return args['beneficiary_definition'].share
+
+    @classmethod
+    def _re_initial_std_start_date(cls, args):
+        if 'loss' in args and args['loss'].initial_std_start_date:
+            return args['loss'].initial_std_start_date
+        if 'claim' in args:
+            for loss in args['claim'].losses:
+                if loss.loss_desc_kind == 'std':
+                    return loss.start_date

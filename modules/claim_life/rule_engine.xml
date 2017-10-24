@@ -35,5 +35,15 @@ est le bénéficiaire</field>
             <field name="long_description">Part du bénéficiaire</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+        <record model="rule_engine.function" id="date_debut_arret_de_travail">
+            <field name="translated_technical_name">date_debut_arret_de_travail</field>
+            <field name="description">Date de début de l'arrêt de travail</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_initial_std_start_date</field>
+            <field name="long_description">Retourne la date de début de l'arrêt de travail</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
     </data>
 </tryton>

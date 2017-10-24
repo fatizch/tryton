@@ -1,3 +1,4 @@
+* FEA#7378 Ajout de la donnée date de début de l'arrêt de travail dans le moteur de règle
 * FEA#7279 Ajout des données complémentaires sur la description d'un bénéficiaire
 * FEA#6385 Permettre d'initialiser le bénéficiare comme étant l'assuré par défaut 
 
