@@ -1,3 +1,4 @@
+* BUG#7374 Ajout d'un index sur le produit du contrat
 * FEA#7024 Ajout de modèles courriers par defaut
 * BUG#6468 Le calcul de la date de début d'une option doit utiliser la date de début manuelle de l'élément couvert si défini
 * FEA#7122 Ajout d'une séquence de numéro de devis par défaut sur la configuration produit
