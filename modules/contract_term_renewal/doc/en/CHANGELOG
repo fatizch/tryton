@@ -1,3 +1,4 @@
+* BUG#5980 Ensure the end date on terminated contacts is not overwritten
 * BUG#7021 Do not allow to renew a contract when it has a final renewal defined
 
 Version 1.12 - 2017-04-28

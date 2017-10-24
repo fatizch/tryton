@@ -1,4 +1,5 @@
-* BUG#7021 Do not allow to renew a contract when it has a final renewal defined
+* BUG#5980 La date de fin n'est plus écrasée lors d'un recalcul sur des contrats terminés
+* BUG#7021 Le renouvellement de contrat terminés n'est plus autorisé.
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout de la chaîne de batch

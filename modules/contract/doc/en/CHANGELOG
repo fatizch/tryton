@@ -1,3 +1,4 @@
+* BUG#5980 Add functions to rule engine to get the status and the final end date of a contract
 * BUG#7374 Add index on contract product
 * FEA#7024 Configure default reports templates to be added as default letters in coog
 * BUG#6468 Use manual_start_date if defined on a covered element to calculate option start_date

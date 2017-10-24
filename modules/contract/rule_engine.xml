@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tryton>
@@ -65,6 +65,26 @@ courant du contrat</field>
             <field name="name">_re_get_contract_end_date</field>
             <field name="long_description">Retourne la date de fin du terme 
 courant du contrat</field>
+            <field name="parent" ref="te_contract"/>
+        </record>
+        <record model="rule_engine.function" id="date_fin_finale_contrat">
+            <field name="translated_technical_name">date_fin_finale_contrat</field>
+            <field name="description">Date de fin finale du contrat</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_final_end_date</field>
+            <field name="long_description">Retourne la date de fin finale du contrat</field>
+            <field name="parent" ref="te_contract"/>
+        </record>
+        <record model="rule_engine.function" id="statut_contrat">
+            <field name="translated_technical_name">statut_contrat</field>
+            <field name="description">Statut courant du contrat</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_status</field>
+            <field name="long_description">Retourne le statut du contrat</field>
             <field name="parent" ref="te_contract"/>
         </record>
         <record model="rule_engine.function" id="te_contract_extra_data">

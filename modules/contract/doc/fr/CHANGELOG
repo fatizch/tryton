@@ -1,3 +1,4 @@
+* BUG#5980 Ajout de fonctions dans le moteur de règle pour récuperer le statut et la date finale de fin du contrat
 * BUG#7374 Ajout d'un index sur le produit du contrat
 * FEA#7024 Ajout de modèles courriers par defaut
 * BUG#6468 Le calcul de la date de début d'une option doit utiliser la date de début manuelle de l'élément couvert si défini

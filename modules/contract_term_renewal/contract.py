@@ -65,11 +65,11 @@ class Contract:
                 })
 
     def get_is_renewable(self, name):
-        if self.product.term_renewal_rule:
-            return self.product.term_renewal_rule[0].allow_renewal
         if self.activation_history and \
                 self.activation_history[-1].final_renewal:
             return False
+        if self.product.term_renewal_rule:
+            return self.product.term_renewal_rule[0].allow_renewal
         return False
 
     def get_end_date_from_given_start_date(self, start_date):
