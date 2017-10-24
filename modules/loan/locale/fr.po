@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.sequence,name:default_loan_sequence"
-msgid "Default Loan Sequence"
-msgstr "Séquence de prêt par défaut"
-
-msgctxt "model:ir.ui.menu,name:menu_lenders_general_configuration"
-msgid "Lenders"
-msgstr "Organismes prêteurs"
-
 msgctxt "error:contract.option.extra_premium:"
 msgid "Initial Capital Per Mil"
 msgstr "Pourmillage sur capital initial"
@@ -671,6 +663,10 @@ msgctxt "field:loan.share,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:offered.option.description,insured_outstanding_balance:"
+msgid "Insured Outstanding Amount"
+msgstr "Montant encours assuré"
+
 msgctxt "field:offered.option.description,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
@@ -800,6 +796,14 @@ msgctxt "help:loan,duration:"
 msgid "Deferral included"
 msgstr "Différé inclus"
 
+msgctxt "help:offered.option.description,insured_outstanding_balance:"
+msgid ""
+"If set, the insured outstanding balances wizard will take this coverage for "
+"the calculation. Otherwise it will be ignored"
+msgstr ""
+"Si coché, l'assistant de calcul de la balance de l'encours assuré prendra en"
+" compte cette garantie. Dans le cas inverse, elle sera ignorée"
+
 msgctxt "model:contract-loan,name:"
 msgid "Contract Loan"
 msgstr "Prêt du contrat"
@@ -832,11 +836,19 @@ msgctxt "model:ir.action,name:act_loan_relate_form"
 msgid "Loans"
 msgstr "Prêts"
 
+msgctxt "model:ir.sequence,name:default_loan_sequence"
+msgid "Default Loan Sequence"
+msgstr "Séquence de prêt par défaut"
+
 msgctxt "model:ir.sequence.type,name:sequence_type_loan"
 msgid "Loan"
 msgstr "Prêt"
 
 msgctxt "model:ir.ui.menu,name:menu_lender_form"
+msgid "Lenders"
+msgstr "Organismes prêteurs"
+
+msgctxt "model:ir.ui.menu,name:menu_lenders_general_configuration"
 msgid "Lenders"
 msgstr "Organismes prêteurs"
 

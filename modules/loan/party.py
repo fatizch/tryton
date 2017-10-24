@@ -124,12 +124,11 @@ class Party:
                     & (history.start_date <= date)
                     & (history.end_date >= date)))
 
-        where_clause = None
+        where_clause = coverage.insured_outstanding_balance == Literal(True)
         if insurer_role:
-            where_clause = coverage.insurer == insurer_role.id
+            where_clause &= coverage.insurer == insurer_role.id
         if ins_kind:
-            clause = coverage.insurance_kind == ins_kind
-            where_clause = where_clause & clause if where_clause else clause
+            where_clause &= coverage.insurance_kind == ins_kind
         cursor.execute(*query_table.select(coverage.insurer, loan_share.id,
                 coverage.insurance_kind, coverage.id,
                 where=where_clause,
