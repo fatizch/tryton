@@ -259,18 +259,20 @@ class Contract(Printable):
     def check_contract_option_extra_data(self):
         ExtraData = Pool().get('extra_data')
         for option in self.options:
-            ExtraData.check_extra_data(option, 'extra_data')
+            ExtraData.check_extra_data(option.current_version, 'extra_data')
 
     def check_covered_element_extra_data(self):
         ExtraData = Pool().get('extra_data')
         for covered_element in self.covered_elements:
-            ExtraData.check_extra_data(covered_element, 'extra_data')
+            ExtraData.check_extra_data(covered_element.current_version,
+                'extra_data')
 
     def check_covered_element_option_extra_data(self):
         ExtraData = Pool().get('extra_data')
         for covered_element in self.covered_elements:
             for option in covered_element.options:
-                ExtraData.check_extra_data(option, 'extra_data')
+                ExtraData.check_extra_data(option.current_version,
+                    'extra_data')
 
     @classmethod
     def update_contract_after_import(cls, contracts):
@@ -1576,6 +1578,9 @@ class CoveredElementVersion(model.CoogSQL, model.CoogView):
             'start': None,
             'extra_data': {},
             }
+
+    def get_rec_name(self, name):
+        return self.covered_element.rec_name
 
 
 class CoveredElementPartyRelation(model.CoogSQL):

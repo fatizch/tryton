@@ -2205,6 +2205,9 @@ class ContractOptionVersion(model.CoogSQL, model.CoogView):
             transaction.database.setnextid(transaction.connection,
                 version_h.table_name, cursor.fetchone()[0] or 0 + 1)
 
+    def get_rec_name(self, name):
+        return self.option.rec_name
+
     @fields.depends('option', 'start', 'start_date')
     def on_change_option(self):
         self.start = self.on_change_with_start_date()
