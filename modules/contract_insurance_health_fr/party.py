@@ -5,9 +5,10 @@ from sql.aggregate import Max
 from collections import defaultdict
 
 from trytond import backend
+from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, model
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -33,22 +34,46 @@ class Party:
         'get_main_insured_ssn', searcher='search_main_insured_ssn')
     main_health_complement = fields.Function(
         fields.Many2One('health.party_complement', 'Main Health Complement',
-            depends=['social_security_insured']),
+            depends=['social_security_dependent'],
+            states={
+                'invisible': Bool(~Eval('social_security_dependent'))}),
         'get_main_health_complement')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
+
+    @classmethod
+    def __setup__(cls):
+        super(Party, cls).__setup__()
+        cls.health_complement.states['invisible'] |= \
+            Bool(Eval('social_security_dependent'))
+        cls._error_messages.update({
+                'ss_dependent_party': 'This party is social security dependent:'
+                '\n%(dependent_party)s\nYou cannot modify the health complement'
+                })
+
+    @classmethod
+    def write(cls, *args):
+        with model.error_manager():
+            params = iter(args)
+            for parties, values in zip(params, params):
+                ss_dependent_parties = [p for p in parties
+                    if p.social_security_dependent]
+                if ss_dependent_parties:
+                    cls.append_functional_error('ss_dependent_party',
+                        {
+                            'dependent_party': [p.name
+                                for p in ss_dependent_parties]
+                        })
 
     def get_main_health_complement(self, name):
         complement = self.get_health_complement_at_date()
         return complement.id if complement else None
 
     def get_health_complement_at_date(self, at_date=None):
-        res = super(Party, self).get_health_complement_at_date(at_date)
-        if res:
-            return res
         if self.social_security_dependent:
             parent = self.social_security_dependent[0]
             return parent.get_health_complement_at_date(at_date)
+        return super(Party, self).get_health_complement_at_date(at_date)
 
     def get_main_insured_ssn(self, name):
         if self.social_security_dependent:

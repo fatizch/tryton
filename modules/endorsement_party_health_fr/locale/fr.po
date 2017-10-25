@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:endorsement.party.change_health_complement:"
+msgid ""
+"The party %(full_name)s is social security dependent. You cannot change the "
+"health complement"
+msgstr ""
+"Ce tiers %(full_name)s est ayant droit. Vous ne pouvez modifier le "
+"complément santé."
+
 msgctxt "error:endorsement.party.health_complement:"
 msgid "New version"
 msgstr "Nouvelle version"

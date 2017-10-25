@@ -25,5 +25,11 @@ this repository contains the full copyright notices and license terms. -->
         <record model="party.relation.type" id="social_security_insured_relation_type" update="1">
             <field name="reverse" ref="contract_insurance_health_fr.social_security_dependent_relation_type"/>
         </record>
+        <!-- Party -->
+        <record model="ir.ui.view" id="party_view_form">
+            <field name="model">party.party</field>
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="name">party_form</field>
+        </record>
     </data>
 </tryton>
