@@ -28,6 +28,7 @@ def register():
     Pool.register(
         res.User,
         party.Party,
+        party.PartyLang,
         party.PartyIdentifier,
         party.PartyIdentifierType,
         category.PartyCategory,

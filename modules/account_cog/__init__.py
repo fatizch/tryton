@@ -37,6 +37,7 @@ def register():
         tax.TaxGroup,
         test_case.TestCaseModel,
         party.Party,
+        party.PartyAccount,
         party.SynthesisMenuMoveLine,
         party.SynthesisMenu,
         account.OpenThirdPartyBalanceStart,

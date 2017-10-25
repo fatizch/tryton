@@ -2,11 +2,12 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, export
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Party',
+    'PartyDunningProcedure',
     ]
 
 
@@ -35,3 +36,8 @@ class Party:
     @classmethod
     def search_dunning_allowed(cls, name, clause):
         return []
+
+
+class PartyDunningProcedure(export.ExportImportMixin):
+    __metaclass__ = PoolMeta
+    __name__ = 'party.party.dunning_procedure'

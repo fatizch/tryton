@@ -9,12 +9,13 @@ from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder, Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import model, fields, coog_string
+from trytond.modules.coog_core import model, fields, coog_string, export
 from trytond.modules.currency_cog import ModelCurrency
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Party',
+    'PartyAccount',
     'SynthesisMenuMoveLine',
     'SynthesisMenu',
     'SynthesisMenuOpen',
@@ -95,6 +96,11 @@ class Party(ModelCurrency, model.CoogView):
             return 'check'
         elif getattr(self, code) > 0:
             return 'rounded_warning'
+
+
+class PartyAccount(export.ExportImportMixin):
+    __metaclass__ = PoolMeta
+    __name__ = 'party.party.account'
 
 
 class SynthesisMenuMoveLine(model.CoogSQL):

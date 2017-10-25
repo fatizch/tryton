@@ -278,8 +278,10 @@ class Address(export.ExportImportMixin):
         equivalents = cls._get_address_zipcode_equivalent_for_import()
         address_fnames = equivalents.keys()
         if all([x in values for x in equivalents.keys()]):
-            zip_and_city = cls.find_zip_and_city(
-                *[values.get(f, None) for f in address_fnames])
+            zip_and_city = cls.find_zip_and_city({
+                    f: values.get(f, None)
+                    for f in address_fnames
+                    })
             for f in address_fnames:
                 values[f] = getattr(zip_and_city, equivalents[f], None)
         return super(Address, cls)._import_json(values, main_object)

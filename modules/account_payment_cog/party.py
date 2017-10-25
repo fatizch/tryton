@@ -10,12 +10,13 @@ from trytond.transaction import Transaction
 from trytond.model import dualmethod
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
-from trytond.modules.coog_core import model, fields, coog_string, utils
+from trytond.modules.coog_core import model, fields, coog_string, utils, export
 from trytond.modules.coog_core import coog_date
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Party',
+    'PartyPaymentDirectDebit',
     'SynthesisMenuPayment',
     'SynthesisMenu',
     'SynthesisMenuOpen',
@@ -82,6 +83,11 @@ class Party:
     @staticmethod
     def default_block_payable_payments():
         return False
+
+
+class PartyPaymentDirectDebit(export.ExportImportMixin):
+    __metaclass__ = PoolMeta
+    __name__ = 'party.party.payment_direct_debit'
 
 
 class SynthesisMenuPayment(model.CoogSQL):

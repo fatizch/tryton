@@ -3,9 +3,12 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
+from trytond.modules.coog_core import export
+
 __metaclass__ = PoolMeta
 __all__ = [
     'Party',
+    'PartyPaymentTerm',
     'PartyAccount',
     ]
 
@@ -28,6 +31,11 @@ class Party:
                 ]
         cls.account_payable.domain = [['OR', ('kind', '=', 'other'),
                 original_domain[0]], original_domain[1]]
+
+
+class PartyPaymentTerm(export.ExportImportMixin):
+    __metaclass__ = PoolMeta
+    __name__ = 'party.party.payment_term'
 
 
 class PartyAccount:

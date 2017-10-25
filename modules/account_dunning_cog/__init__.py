@@ -17,5 +17,6 @@ def register():
         batch.DunningCreationBatch,
         batch.DunningTreatmentBatch,
         party.Party,
+        party.PartyDunningProcedure,
         event.EventLog,
         module='account_dunning_cog', type_='model')

@@ -1,3 +1,4 @@
+* BUG#7388 Correction de l'import export JSON
 * BUG#6794 Interdire la modification d'un code postal si celui ci est utilisé dans d'autres adresses
 * BUG#6841 Modification des autorisations sur le code postal afin de donner le droit en modification/création aux utilisateurs ayant le droit de configurantion des tiers et déplacement du menu ZipCode au niveau de la configuration des tiers .
 * FEA#7191 Ajout de la séquence par défaut sur les tiers

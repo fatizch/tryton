@@ -38,6 +38,7 @@ def register():
         payment.ConfigurationRejectFeeJournal,
         payment.Group,
         party.Party,
+        party.PartyPaymentDirectDebit,
         move.PaymentCreationStart,
         report.ReportTemplate,
         invoice.Invoice,

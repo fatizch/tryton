@@ -29,6 +29,7 @@ from trytond.modules.coog_core import coog_string, UnionMixin
 __metaclass__ = PoolMeta
 __all__ = [
     'Party',
+    'PartyLang',
     'PartyIdentifier',
     'PartyIdentifierType',
     'SynthesisMenuAddress',
@@ -668,6 +669,11 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
     @model.CoogView.button_action('party_cog.start_synthesis_menu')
     def button_start_synthesis_menu(cls, parties):
         pass
+
+
+class PartyLang(export.ExportImportMixin):
+    __metaclass__ = PoolMeta
+    __name__ = 'party.party.lang'
 
 
 class PartyIdentifier(export.ExportImportMixin):

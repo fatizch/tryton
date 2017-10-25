@@ -18,6 +18,7 @@ def register():
         invoice.InvoiceLine,
         invoice.Invoice,
         party.Party,
+        party.PartyPaymentTerm,
         party.PartyAccount,
         report_engine.ReportTemplate,
         move.Move,
