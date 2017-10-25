@@ -605,9 +605,10 @@ class FunctionFinder(ast.NodeVisitor):
         if (isinstance(node, ast.Call) and
                 isinstance(node.func, ast.Name)):
             if node.func.id not in self.allowed_names:
-                if node.func.id not in ('int', 'round', 'max', 'min'):
+                if node.func.id not in Pool().get('rule_engine').get_builtins():
                     raise LookupError(node.func.id)
-            self.functions.append(node.func.id)
+            else:
+                self.functions.append(node.func.id)
         return super(FunctionFinder, self).visit(node)
 
 
@@ -1325,7 +1326,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 self.rule_error(exc, the_result, evaluation_context,
                     err_msg=err_msg)
             except Exception, exc:
-                   self.rule_error(exc, the_result, evaluation_context)
+                self.rule_error(exc, the_result, evaluation_context)
         return the_result
 
     @staticmethod
@@ -1850,8 +1851,7 @@ class TestCase(ModelView, ModelSQL):
         with ServerContext().set_context(rule_debug=True):
             return self.rule.execute({}, test_context)
 
-    @fields.depends('test_values', 'rule')
-    def on_change_test_values(self):
+    def run_test(self):
         try:
             test_result = self.execute_test()
         except Exception as exc:
@@ -1885,7 +1885,7 @@ class TestCase(ModelView, ModelSQL):
     @TrytonModelView.button
     def recalculate(cls, instances):
         for elem in instances:
-            elem.on_change_test_values()
+            elem.run_test()
         cls.save(instances)
 
     @classmethod
@@ -1894,7 +1894,7 @@ class TestCase(ModelView, ModelSQL):
         passed, failed = [], []
         for elem in instances:
             prev_value = elem.expected_result
-            elem.on_change_test_values()
+            elem.run_test()
             if elem.expected_result == prev_value:
                 passed.append(elem)
             else:
@@ -2102,7 +2102,7 @@ class InitTestCaseFromExecutionLog(Wizard):
             'result_value': log.result,
             'result_warnings': log.warnings,
             'result_errors': log.errors,
-            'result_infos': log.info,
+            'result_info': log.info,
             'debug': log.debug,
             'rule': log.rule.id,
             'low_debug': log.low_level_debug,

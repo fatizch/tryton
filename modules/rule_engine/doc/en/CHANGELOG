@@ -1,3 +1,4 @@
+* BUG#7385 Modify FunctionFinder and ignore builtins when adding values on the rule engine test
 * FEA#6956 Rules are now executed in a read only transaction
 
 Version 1.12 - 2017-04-28
