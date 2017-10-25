@@ -272,6 +272,18 @@ Create payment which pay the rest of the second invoice::
     >>> PaymentJournal = Model.get('account.payment.journal')
     >>> payment_journal = PaymentJournal(payment_journal.id)
     >>> pay_line.form.journal = payment_journal
+
+Create warning to simulate clicking yes::
+
+    >>> User = Model.get('res.user')
+    >>> user, = User.find(['login', '=', 'financial_user'])
+    >>> Warning = Model.get('res.user.warning')
+    >>> warning = Warning()
+    >>> warning.always = False
+    >>> warning.user = user
+    >>> warning.name = 'updating_payment_date_%s' % ('account.move.line,' +
+    ...     str(line.id))
+    >>> warning.save()
     >>> pay_line.execute('create_payments')
     >>> payment, = Payment.find()
     >>> payment.amount
