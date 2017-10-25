@@ -94,13 +94,18 @@ class ChangeBillingInformation:
             new_info.direct_debit_account_selector)
         prev_account = (previous_info.direct_debit_account or
             previous_info.direct_debit_account_selector)
-        if (not(new_info.direct_debit) or new_account == prev_account
-                or not new_account):
+        self.new_billing_information = [new_info]
+        if not new_info.direct_debit or not new_account:
             self.mandate_needed = False
             self.amend_previous_mandate = False
             self.previous_mandate = None
-            if new_info.direct_debit:
-                new_info.sepa_mandate = previous_info.sepa_mandate
+            new_info.sepa_mandate = None
+            return
+        if (new_account == prev_account and
+                new_info.payer == previous_info.payer):
+            self.mandate_needed = False
+            self.amend_previous_mandate = False
+            new_info.sepa_mandate = previous_info.sepa_mandate
             return
         possible_mandates = None
         if new_info.payer and new_account:
@@ -115,9 +120,9 @@ class ChangeBillingInformation:
             self.amend_previous_mandate = False
             self.previous_mandate = None
             new_info.sepa_mandate = possible_mandates[0]
-            self.new_billing_information = self.new_billing_information
             return
         self.mandate_needed = True
+        new_info.sepa_mandate = None
         if not amendment_enabled:
             return
         if previous_info.payer in new_account.owners:
