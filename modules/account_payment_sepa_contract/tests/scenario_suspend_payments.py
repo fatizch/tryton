@@ -232,6 +232,17 @@ for line in [x for x in invoice.invoice.move.lines if x.account.kind ==
     line._parent_name = None
     create_payment.form.lines_to_pay.append(line)
 create_payment.form.description = "test"
+
+# #Comment# #Create warning to simulate clicking yes
+User = Model.get('res.user')
+Warning = Model.get('res.user.warning')
+warning = Warning()
+warning.always = False
+warning.user = User(1)
+warning.name = 'updating_payment_date_%s' % ('account.move.line,' +
+    str(line.id))
+warning.save()
+
 create_payment.execute('create_payments')
 
 # #Comment# No payments should be created
@@ -257,6 +268,17 @@ for line in [x for x in invoice.invoice.move.lines if x.account.kind ==
     create_payment.form.lines_to_pay.append(line)
 
 create_payment.form.description = "test"
+
+# #Comment# #Create warning to simulate clicking yes
+User = Model.get('res.user')
+Warning = Model.get('res.user.warning')
+warning = Warning()
+warning.always = False
+warning.user = User(1)
+warning.name = 'updating_payment_date_%s' % ('account.move.line,' +
+    str(line.id))
+warning.save()
+
 create_payment.execute('create_payments')
 
 # #Comment# A payment should be created

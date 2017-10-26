@@ -223,6 +223,17 @@ Create invoice::
     ...     line._parent_name = None
     ...     create_payment.form.lines_to_pay.append(line)
     >>> create_payment.form.description = "test"
+
+Create warning to simulate clicking yes::
+
+    >>> User = Model.get('res.user')
+    >>> Warning = Model.get('res.user.warning')
+    >>> warning = Warning()
+    >>> warning.always = False
+    >>> warning.user = User(1)
+    >>> warning.name = 'updating_payment_date_%s' % ('account.move.line,' +
+    ...     str(line.id))
+    >>> warning.save()
     >>> create_payment.execute('create_payments')
     >>> Payment = Model.get('account.payment')
     >>> len(Payment.find([()])) == 0
@@ -242,6 +253,17 @@ Create invoice::
     ...     line._parent_name = None
     ...     create_payment.form.lines_to_pay.append(line)
     >>> create_payment.form.description = "test"
+
+Create warning to simulate clicking yes::
+
+    >>> User = Model.get('res.user')
+    >>> Warning = Model.get('res.user.warning')
+    >>> warning = Warning()
+    >>> warning.always = False
+    >>> warning.user = User(1)
+    >>> warning.name = 'updating_payment_date_%s' % ('account.move.line,' +
+    ...     str(line.id))
+    >>> warning.save()
     >>> create_payment.execute('create_payments')
     >>> Payment = Model.get('account.payment')
     >>> payment, = Payment.find([()])
