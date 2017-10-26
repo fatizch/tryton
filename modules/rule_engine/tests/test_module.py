@@ -459,7 +459,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             tc.rule = rule
             tc.test_values = []
             self.maxDiff = None
-            tc.on_change_test_values()
+            tc.run_test()
             self.assertEqual(tc.low_debug,
                 u"Entering table_test_code\n\t"
                 "args : ('test', 30)\n\t"
@@ -487,7 +487,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             self.assertEqual(tc.result_value, u'20')
             self.assertEqual(tc.result_warning, u'test warning')
             tc.test_values = [tcv1]
-            tc.on_change_test_values()
+            tc.run_test()
             self.assertEqual(tc.low_debug,
                 u"Entering table_test_code\n\targs : "
                 "('test', 30)\n\tresult = something")
