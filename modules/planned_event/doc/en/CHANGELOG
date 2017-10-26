@@ -1,3 +1,5 @@
+* OTH#0000 Add "tests" folder
+* BUG#7389 Fix crash when using planned events
 * OTH#0000 Fix translations
 * FEA#0000 Add new event type action to generate a planned event
 

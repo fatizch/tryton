@@ -43,7 +43,7 @@ class EventPlanningConfigurationMixin(get_rule_mixin('planning_rule',
     @classmethod
     def event_exists(cls, existing_events, on_object, at_date, event_id,
             processed=True):
-        return any(x.planned_date.date() == at_date and
+        return any(x.planned_date == at_date and
             x.event_type.id == event_id and x.processed == processed
             for x in existing_events)
 

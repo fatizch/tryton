@@ -1,3 +1,5 @@
+* OTH#0000 Ajout du répertoire "tests"
+* BUG#7389 Correctif d'un crash lors de l'utilisation des événements planifiés
 * OTH#0000 Correction des traductions
 * FEA#0000 Ajout d'un nouveau type d'action par événement permettant la génération
   d'événements planifiés
