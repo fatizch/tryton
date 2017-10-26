@@ -367,7 +367,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     @test_framework.prepare_test(
         'contract.test0010_testContractCreation',
         )
-    def test0060_activation_history_getters(self):
+    def test0060_activation_history_getters_and_searcher(self):
         years = (2010, 2011, 2012, 2013)
         contract, = self.Contract.search([])
         contract.activation_history = [self.ActivationHistory(start_date=x,
@@ -400,6 +400,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 contract = self.Contract(contract.id)
                 self.assertEqual(contract.start_date, datetime.date(y, 1, 1))
                 self.assertEqual(contract.end_date, datetime.date(y, 12, 31))
+                contracts = contract.__class__.search([
+                        ('start_date', '=', datetime.date(y, 1, 1)),
+                        ('end_date', '=', datetime.date(y, 12, 31)),
+                        ])
+                self.assertEqual(contracts[0], contract)
 
         # test consultation on first day of periods
         for y in years:
@@ -408,6 +413,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 contract = self.Contract(contract.id)
                 self.assertEqual(contract.start_date, datetime.date(y, 1, 1))
                 self.assertEqual(contract.end_date, datetime.date(y, 12, 31))
+                contracts = contract.__class__.search([
+                        ('start_date', '=', datetime.date(y, 1, 1)),
+                        ('end_date', '=', datetime.date(y, 12, 31)),
+                        ])
+                self.assertEqual(contracts[0], contract)
 
         # test consultation before first periods
         with Transaction().set_context(client_defined_date=datetime.date(
@@ -415,6 +425,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
             contract = self.Contract(contract.id)
             self.assertEqual(contract.start_date, datetime.date(2010, 1, 1))
             self.assertEqual(contract.end_date, datetime.date(2010, 12, 31))
+            contracts = contract.__class__.search([
+                    ('start_date', '=', datetime.date(2010, 1, 1)),
+                    ('end_date', '=', datetime.date(2010, 12, 31)),
+                    ])
+            self.assertEqual(contracts[0], contract)
 
         # test consultation after last period
         with Transaction().set_context(client_defined_date=datetime.date(
@@ -422,6 +437,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
             contract = self.Contract(contract.id)
             self.assertEqual(contract.start_date, datetime.date(2013, 1, 1))
             self.assertEqual(contract.end_date, datetime.date(2013, 12, 31))
+            contracts = contract.__class__.search([
+                    ('start_date', '=', datetime.date(2013, 1, 1)),
+                    ('end_date', '=', datetime.date(2013, 12, 31)),
+                    ])
+            self.assertEqual(contracts[0], contract)
 
     @test_framework.prepare_test('contract.test0001_testPersonCreation')
     def test0060_get_contacts(self):

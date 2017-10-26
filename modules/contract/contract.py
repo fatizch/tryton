@@ -851,21 +851,22 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         Operator = fields.SQL_OPERATORS[operator]
         ActivationHistory = pool.get('contract.activation_history')
         activation_history = ActivationHistory.__table__()
+        query_table = cls.build_activation_history_query(activation_history,
+            today=None, where_clause=(
+                activation_history.active != Literal(False)))
 
         if name == 'end_date':
             column = NullIf(Max(Coalesce(
-                        activation_history.end_date, datetime.date.max)),
+                        query_table.end_date, datetime.date.max)),
                 datetime.date.max)
         elif name == 'start_date':
-            column = Max(activation_history.start_date)
+            column = Max(query_table.start_date)
         elif name == 'initial_start_date':
-            column = Min(activation_history.start_date)
+            column = Min(query_table.start_date)
 
-        query = activation_history.select(activation_history.contract,
+        query = query_table.select(query_table.id,
             having=Operator(column, value),
-            group_by=activation_history.contract,
-            where=activation_history.active != Literal(False))
-
+            group_by=query_table.id)
         return [('id', 'in', query)]
 
     @classmethod
