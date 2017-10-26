@@ -280,6 +280,7 @@ pay_line.form.journal = payment_journal
 
 # #Comment# #Create warning to simulate clicking yes
 User = Model.get('res.user')
+user, = User.find(['login', '=', 'financial_user'])
 Warning = Model.get('res.user.warning')
 warning = Warning()
 warning.always = False
