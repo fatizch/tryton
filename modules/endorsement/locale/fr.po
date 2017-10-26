@@ -2025,8 +2025,8 @@ msgid "Creation date"
 msgstr "Date de Création"
 
 msgctxt "field:res.group,endorsement_definitions:"
-msgid "Endorsement Definition"
-msgstr "Définition d'avenant"
+msgid "Endorsement Definitions"
+msgstr "Définitions d'avenant"
 
 msgctxt "model:contract.manage_options,name:"
 msgid "Manage Options"
@@ -2705,6 +2705,10 @@ msgstr "Reprendre l'avenant"
 msgctxt "view:offered.product:"
 msgid "Endorsements"
 msgstr "Avenants"
+
+msgctxt "view:res.group:"
+msgid "Endorsement Definitions"
+msgstr "Définitions d'avenant"
 
 msgctxt "wizard_button:endorsement.decline,select_reason,decline:"
 msgid "Decline"

@@ -51,6 +51,7 @@ __all__ = [
     'TemplateTemplateParameterRelation',
     'ReportTemplate',
     'ReportTemplateVersion',
+    'ReportTemplateGroupRelation',
     'Printable',
     'CoogReport',
     'ReportGenerate',
@@ -156,6 +157,11 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         help='If True, the recipient will be required when printing the '
         'document. This will make simultaneous printing impossible for this '
         'model.')
+    groups = fields.Many2Many(
+        'report.template-res.group', 'report_template',
+        'group', 'Groups',
+        help= 'If the user belongs to one of the groups linked to the report '
+        'template, he can see it in the report wizard.')
 
     @classmethod
     def __setup__(cls):
@@ -704,7 +710,9 @@ class Printable(Model):
         return contact.main_address
 
     def get_available_doc_templates(self, kind=None):
-        DocumentTemplate = Pool().get('report.template')
+        pool = Pool()
+        DocumentTemplate = pool.get('report.template')
+        user = pool.get('res.user')(Transaction().user)
 
         if kind:
             domain_kind = ('kind', '=', kind)
@@ -716,7 +724,9 @@ class Printable(Model):
             domain = [
                 ('on_model.model', '=', self.__name__),
                 ]
-        return DocumentTemplate.search(domain)
+        domain.append(['OR', ('groups', '=', None),
+                ('groups', 'in', [x.id for x in user.groups])])
+        return list(set(DocumentTemplate.search(domain)))
 
     def build_template_domain(self, domain_kind):
         template_holders_sub_domains = self.get_template_holders_sub_domains()
@@ -1557,3 +1567,14 @@ class ReportCreatePreviewLine(model.CoogView):
     file_basename = fields.Char('Filename')
     extension = fields.Char('Extension')
     output_report_filepath = fields.Char('Output report filepath')
+
+
+class ReportTemplateGroupRelation(model.CoogSQL, model.CoogView):
+    'Report Template Group Relation'
+
+    __name__ = 'report.template-res.group'
+
+    report_template = fields.Many2One('report.template', 'Report Template',
+        required=True, ondelete='CASCADE', select=True)
+    group = fields.Many2One('res.group', 'Group',
+        required=True, ondelete='CASCADE', select=True)

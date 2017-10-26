@@ -8,6 +8,7 @@ import ir
 import event
 import tools
 import batch
+import res
 
 
 def register():
@@ -19,6 +20,7 @@ def register():
         report_engine.ReportCreateSelectTemplate,
         report_engine.ReportCreatePreview,
         report_engine.ReportCreatePreviewLine,
+        report_engine.ReportTemplateGroupRelation,
         event.EventTypeAction,
         event.EventTypeActionReportTemplate,
         event.ReportProductionRequest,
@@ -28,6 +30,7 @@ def register():
         tools.SelectTemplatesForConversion,
         tools.MatchDisplayer,
         batch.ReportProductionRequestTreatmentBatch,
+        res.Group,
         module='report_engine', type_='model')
 
     Pool.register(

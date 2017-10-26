@@ -23,6 +23,9 @@ class Group(ExportImportMixin):
     __name__ = 'res.group'
     func_key = 'name'
 
+    actions = fields.Many2Many('ir.action-res.group', 'group',
+       'action', 'Actions')
+
     @classmethod
     def _export_skips(cls):
         result = super(Group, cls)._export_skips()

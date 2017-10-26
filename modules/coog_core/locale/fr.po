@@ -89,18 +89,6 @@ msgctxt "error:missing_export_configuration:"
 msgid "Can't find configuration for code %s."
 msgstr ""
 
-msgctxt "field:account.account,id:"
-msgid ""
-msgstr " "
-
-msgctxt "field:account.account.type,id:"
-msgid ""
-msgstr " "
-
-msgctxt "field:account.tax,id:"
-msgid ""
-msgstr " "
-
 msgctxt "field:batch.params_config,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -1185,6 +1173,10 @@ msgctxt "field:party.category,id:"
 msgid ""
 msgstr " "
 
+msgctxt "field:res.group,actions:"
+msgid "Actions"
+msgstr "Actions"
+
 msgctxt "field:res.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -1324,18 +1316,6 @@ msgid ""
 msgstr ""
 "Le nom de la méthode utilisé pour décider si le jeux d'essai doit être lancé"
 
-msgctxt "model:account.account,name:"
-msgid "account.account"
-msgstr "Compte"
-
-msgctxt "model:account.account.type,name:"
-msgid "account.account.type"
-msgstr "Type de compte"
-
-msgctxt "model:account.tax,name:"
-msgid "Account Tax"
-msgstr "Compte de taxe"
-
 msgctxt "model:batch.params_config,name:"
 msgid "Batch Parameters Configuration"
 msgstr "Configuration des paramètres de batch"
@@ -1407,6 +1387,7 @@ msgstr "Donnée de détail"
 msgctxt "model:global_search.set,name:"
 msgid "Global Search Set"
 msgstr "Configurer la recherche globale"
+
 
 msgctxt "model:ir.action,name:act_display_access_field_rights"
 msgid "User Field Access Rights Monitoring"
@@ -1676,6 +1657,7 @@ msgstr "Voir batch de validation"
 
 msgctxt "model:language_translatable.set,name:"
 msgid "Language Translatable Set"
+
 msgstr "Configurer les langues traduisibles"
 
 msgctxt "model:party.category,name:"
@@ -1685,6 +1667,7 @@ msgstr "Catégorie"
 msgctxt "model:res.group,name:group_global_config"
 msgid "Coog Global Configuration"
 msgstr "Coog Configuration Globale"
+
 
 msgctxt "model:tag,name:"
 msgid "Tag"
