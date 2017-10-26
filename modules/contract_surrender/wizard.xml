@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- #################### -->
+        <!-- # Surrender Wizard # -->
+        <!-- #################### -->
+        <record model="ir.action.wizard" id="act_surrender_contract">
+            <field name="name">Surrender</field>
+            <field name="wiz_name">contract.surrender</field>
+        </record>
+        <!-- ######################## -->
+        <!-- # Surrender Parameters # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="surrender_parameters_view_form">
+            <field name="model">contract.surrender.parameters</field>
+            <field name="type">form</field>
+            <field name="name">surrender_parameters_form</field>
+        </record>
+        <!-- ##################### -->
+        <!-- # Surrender Preview # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="surrender_preview_view_form">
+            <field name="model">contract.surrender.preview</field>
+            <field name="type">form</field>
+            <field name="name">surrender_preview_form</field>
+        </record>
+    </data>
+</tryton>

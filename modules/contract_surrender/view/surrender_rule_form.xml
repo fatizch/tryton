@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="rule"/>
+    <field name="rule" colspan="3"/>
+    <field name="rule_extra_data" no_command="1" colspan="4"/>
+    <label name="surrender_account"/>
+    <field name="surrender_account" colspan="3"/>
+    <label name="eligibility_rule"/>
+    <field name="eligibility_rule" colspan="3"/>
+    <field name="eligibility_rule_extra_data" no_command="1" colspan="4"/>
+</form>

@@ -1,0 +1,252 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.option:"
+msgid "Surrender of %(option)s"
+msgstr "Rachat de %(option)s"
+
+msgctxt "error:contract.surrender:"
+msgid ""
+"Impossible to surrender before the contract's start_date (%(start_date)s)"
+msgstr ""
+"Il n'est pas possible de racheter le contrat avant sa date de début "
+"(%(start_date)s)"
+
+msgctxt "error:contract:"
+msgid "Contract %(contract)s cannot be surrendered"
+msgstr "Le contrat %(contract)s ne peut pas être racheté"
+
+msgctxt "error:contract:"
+msgid "Contracts will automatically be surrendered"
+msgstr "Les contrats seront automatiquement rachetés"
+
+msgctxt "error:contract:"
+msgid "Contracts will be surrendered"
+msgstr "Les contrats seront rachetés"
+
+msgctxt "error:contract:"
+msgid ""
+"No options were found that can be surrendered for contract %(contract)s"
+msgstr "Aucune garantie ne peut être rachetée sur le contrat %(contract)s"
+
+msgctxt "error:contract:"
+msgid "Surrender of %(contract)s"
+msgstr "Rachat du contrat %(contract)s"
+
+msgctxt "field:account.configuration,surrender_journal:"
+msgid "Surrender Journal"
+msgstr "Journal de rachat"
+
+msgctxt "field:account.configuration,surrender_payment_term:"
+msgid "Surrender payment term"
+msgstr "Conditions de paiement de rachat"
+
+msgctxt "field:contract,can_surrender:"
+msgid "Can surrender"
+msgstr "Rachat possible"
+
+msgctxt "field:contract,surrender_invoice:"
+msgid "Surrender invoice"
+msgstr "Facture de rachat"
+
+msgctxt "field:contract.surrender.parameters,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.surrender.parameters,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.surrender.parameters,surrender_date:"
+msgid "Surrender Date"
+msgstr "Date de rachat"
+
+msgctxt "field:contract.surrender.preview,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.surrender.preview,currency:"
+msgid "Currency"
+msgstr "Devise"
+
+msgctxt "field:contract.surrender.preview,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:contract.surrender.preview,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:contract.surrender.preview,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.surrender.preview,surrender_value:"
+msgid "Surrender Value"
+msgstr "Valeur de rachat"
+
+msgctxt "field:offered.option.description,surrender_rules:"
+msgid "Surrender Rules"
+msgstr "Règles de rachat"
+
+msgctxt "field:offered.option.description.surrender_rule,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:offered.option.description.surrender_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.surrender_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.surrender_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.option.description.surrender_rule,eligibility_rule:"
+msgid "Eligibility Rule"
+msgstr "Règle d'éligibilité"
+
+msgctxt ""
+"field:offered.option.description.surrender_rule,eligibility_rule_extra_data:"
+msgid "Eligibility Rule Extra Data"
+msgstr "Paramètres d'éligibilité"
+
+msgctxt "field:offered.option.description.surrender_rule,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:offered.option.description.surrender_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.option.description.surrender_rule,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:offered.option.description.surrender_rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres"
+
+msgctxt "field:offered.option.description.surrender_rule,surrender_account:"
+msgid "Surrender Account"
+msgstr "Compte de rachat"
+
+msgctxt "field:offered.option.description.surrender_rule,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:offered.option.description.surrender_rule,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:offered.option.description.surrender_rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "help:account.configuration,surrender_journal:"
+msgid "The journal that will be used to pay surrendered contracts"
+msgstr "Ce journal sera utilisée pour le règlement des rachats de contrats"
+
+msgctxt "help:account.configuration,surrender_payment_term:"
+msgid "The payment term that will be used to pay surrendered contracts"
+msgstr ""
+"Ces conditions de paiement seront utilisées lors des rachats de contrats"
+
+msgctxt "help:contract,surrender_invoice:"
+msgid "The surrender invoice for the contract"
+msgstr "La facture de rachat du contrat"
+
+msgctxt "help:contract.surrender.parameters,surrender_date:"
+msgid "The date at which the contract will be surrendered"
+msgstr "La date de rachat souhaitée"
+
+msgctxt "help:contract.surrender.preview,surrender_value:"
+msgid "The amount that will be surrendered"
+msgstr "La valeur de rachat qui sera reversée"
+
+msgctxt "help:offered.option.description.surrender_rule,eligibility_rule:"
+msgid ""
+"If set, the rule result must be True to allow surrendering of the contract"
+msgstr ""
+"Si renseignée, le résultat de la règle doit être \"Vrai\" pour permettre le "
+"rachat de la garantie"
+
+msgctxt "help:offered.option.description.surrender_rule,rule:"
+msgid ""
+"If set, the rule result will be used to compute the surrender value of the "
+"contract"
+msgstr ""
+"Si renseignée, la valeur de retour de la règle contiendra la valeur de "
+"rachat de la garantie"
+
+msgctxt "help:offered.option.description.surrender_rule,surrender_account:"
+msgid "The account that will be used to pay surrender lines for this coverage"
+msgstr "Ce compte sera utilisé pour payer les rachats de la garantie"
+
+msgctxt "model:contract.sub_status,name:sub_status_surrendered"
+msgid "Surrendered"
+msgstr "Rachat"
+
+msgctxt "model:contract.surrender.parameters,name:"
+msgid "Surrender Parameters"
+msgstr "Paramètres du rachat"
+
+msgctxt "model:contract.surrender.preview,name:"
+msgid "Surrender Preview"
+msgstr "Prévisualisation du rachat"
+
+msgctxt "model:event.type,name:event_surrender_contract"
+msgid "Contract Surrender"
+msgstr "Rachat du contrat"
+
+msgctxt "model:ir.action,name:act_surrender_contract"
+msgid "Surrender"
+msgstr "Rachat"
+
+msgctxt "model:offered.option.description.surrender_rule,name:"
+msgid "Option Description Surrender Rule"
+msgstr "Règle de rachat de garantie"
+
+msgctxt "selection:account.invoice,business_kind:"
+msgid "Surrender"
+msgstr "Rachat de contrat"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Surrender"
+msgstr "Rachat de contrat"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Surrender Eligibility"
+msgstr "Eligibilité de rachat"
+
+msgctxt "view:account.configuration:"
+msgid "Surrender"
+msgstr "Racheter"
+
+msgctxt "view:contract:"
+msgid "Surrender"
+msgstr "Racheter"
+
+msgctxt "wizard_button:contract.surrender,parameters,calculate:"
+msgid "Preview"
+msgstr "Prévisualiser"
+
+msgctxt "wizard_button:contract.surrender,parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:contract.surrender,preview,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:contract.surrender,preview,parameters:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:contract.surrender,preview,surrender:"
+msgid "Surrender"
+msgstr "Racheter"
