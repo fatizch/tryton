@@ -41,7 +41,7 @@ _coog_env_paths() { # set paths
         [ -d $COOG_ROOT/trytond ] && COOG_TRYTOND=$COOG_ROOT/trytond
         [ -d $COOG_ROOT/proteus ] && COOG_PROTEUS=$COOG_ROOT/proteus
         [ -d $COOG_ROOT/sao ] && COOG_SAO=$COOG_ROOT/sao
-        [ -d $COOG_ROOT/coog-bench ] && COOG_BENCH=$COOG_ROOT/coog-bench/public
+        [ -d $COOG_ROOT/coog-bench ] && COOG_BENCH=$COOG_ROOT/coog-bench/dist
         [ -d $COOG_ROOT/conf ] && COOG_CONF=$COOG_ROOT/conf
         COOG_COOG="$COOG_ROOT/coog"
         COOG_BIN="$COOG_COOG/bin/bin"
