@@ -301,7 +301,8 @@ class Invoice:
     def _get_move_line(self, date, amount):
         line = super(Invoice, self)._get_move_line(date, amount)
         line.move = self.move
-        if not self.contract or not self.contract_invoice or not line:
+        if (not self.contract or not self.contract_invoice or not line
+                or self.business_kind != 'contract_invoice'):
             return line
         line.contract = self.contract.id
         contract_revision_date = max(line.maturity_date,

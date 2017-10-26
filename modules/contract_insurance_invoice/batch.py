@@ -36,26 +36,58 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
         return 'contract'
 
     @classmethod
-    def select_ids(cls, treatment_date):
-        cursor = Transaction().connection.cursor()
+    def _select_ids_tables(cls, treatment_date):
         pool = Pool()
-
         contract = pool.get('contract').__table__()
         contract_invoice = pool.get('contract.invoice').__table__()
         invoice = pool.get('account.invoice').__table__()
+        return {
+            'contract': contract,
+            'contract_invoice': contract_invoice,
+            'invoice': invoice,
+            }
 
-        query_table = contract.join(contract_invoice, 'LEFT OUTER', condition=(
+    @classmethod
+    def _select_ids_query_table(cls, tables, treatment_date):
+        contract = tables['contract']
+        contract_invoice = tables['contract_invoice']
+        invoice = tables['invoice']
+        return contract.join(contract_invoice, 'LEFT OUTER', condition=(
                 contract.id == contract_invoice.contract)
             ).join(invoice, 'LEFT OUTER', condition=(
                 contract_invoice.invoice == invoice.id) &
             (invoice.state != 'cancel'))
 
-        cursor.execute(*query_table.select(contract.id, group_by=contract.id,
-                where=(contract.status == 'active'),
-                having=(
-                    (Max(contract_invoice.end) < treatment_date)
-                    | (Max(contract_invoice.end) == Null))))
+    @classmethod
+    def _select_ids_columns(cls, tables, treatment_date):
+        return tables['contract'].id
 
+    @classmethod
+    def _select_ids_where_clause(cls, tables, treatment_date):
+        return (tables['contract'].status == 'active')
+
+    @classmethod
+    def _select_ids_group_by_clause(cls, tables, treatment_date):
+        return tables['contract'].id
+
+    @classmethod
+    def _select_ids_having_clause(cls, tables, treatment_date):
+        return ((Max(tables['contract_invoice'].end) < treatment_date)
+            | (Max(tables['contract_invoice'].end) == Null))
+
+    @classmethod
+    def select_ids(cls, treatment_date):
+        cursor = Transaction().connection.cursor()
+
+        tables = cls._select_ids_tables(treatment_date)
+        query = cls._select_ids_query_table(tables, treatment_date)
+        cursor.execute(*query.select(
+                cls._select_ids_columns(tables, treatment_date),
+                where=cls._select_ids_where_clause(tables, treatment_date),
+                group_by=cls._select_ids_group_by_clause(tables,
+                    treatment_date),
+                having=cls._select_ids_having_clause(tables, treatment_date)
+                ))
         return cursor.fetchall()
 
     @classmethod
