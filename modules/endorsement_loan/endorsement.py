@@ -230,7 +230,6 @@ class LoanIncrement:
 
 
 class LoanPayment:
-    _history = True
     __metaclass__ = PoolMeta
     __name__ = 'loan.payment'
 
@@ -513,7 +512,6 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     def _prepare_restore_history(cls, instances, at_date):
         for loan in instances['loan']:
             instances['loan.increment'] += loan.increments
-            instances['loan.payment'] += loan.payments
 
     @classmethod
     def draft(cls, loan_endorsements):
@@ -530,6 +528,10 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
             loan_endorsement.set_applied_on(None)
             loan_endorsement.state = 'draft'
             loan_endorsement.save()
+            loan = Pool().get('loan')(loan_endorsement.loan.id)
+            loan.draft([loan])
+            loan.calculate()
+            loan.save()
 
     @classmethod
     def check_in_progress_unicity(cls, loan_endorsements):

@@ -1,3 +1,4 @@
+* BUG#2443 The endorsement cancel recalculate the loan amortization table
 * BUG#6765 Better views in loan related endorsements
 * BUG#6523 Properly handle removing a loan which is not covered by all options
 

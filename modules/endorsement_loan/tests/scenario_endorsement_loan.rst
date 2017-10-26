@@ -412,6 +412,13 @@ Test result::
     True
     >>> loan.end_date == new_loan_end_date
     True
+    >>> user, = User.find(['login', '=', 'admin'])
+    >>> Warning = Model.get('res.user.warning')
+    >>> warning = Warning()
+    >>> warning.always = False
+    >>> warning.user = user
+    >>> warning.name = loan.rec_name
+    >>> warning.save()
 
 Test cancellation::
 
