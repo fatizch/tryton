@@ -362,6 +362,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             deferral='',
             manual=True)
         increment.payment_amount = increment.calculate_payment_amount()
+        loan.draft([loan])
         loan.increments = list(loan.increments) + [increment]
         loan.save()
         loan.calculate()
@@ -385,6 +386,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             deferral=None,
             manual=True)
         increment.payment_amount = increment.calculate_payment_amount()
+        loan.draft([loan])
         loan.increments = list(loan.increments) + [increment]
         loan.calculate()
         loan.save()

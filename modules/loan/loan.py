@@ -208,6 +208,11 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
                     'Are you sure you want to continue?'),
                 'bad_increment_start': 'Increment start date cannot be before '
                 'first payment date !',
+                'invalid_nb_payments': 'The number of payments '
+                '(%(number_of_payments)s) on the increment number '
+                '%(increment)s of the loan %(loan)s is invalid.',
+                'invalid_increments': 'All the increments on loan %(loan)s '
+                'must have a start date and a end date',
                 })
         cls._transitions |= set((
                 ('draft', 'calculated'),
@@ -222,10 +227,6 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
                     },
                 'add_manual_increment': {
                     'invisible': Eval('state') != 'draft',
-                    },
-                'propagate_first_payment_date': {
-                    'invisible': Eval('state') != 'draft',
-                    'readonly': ~Eval('first_payment_date', False),
                     },
                 })
 
@@ -247,6 +248,32 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
                     cls.raise_user_error('no_sequence')
                 vals['number'] = Sequence.get_id(sequence.id)
         return super(Loan, cls).create(vlist)
+
+    @classmethod
+    def validate(cls, loans):
+        super(Loan, cls).validate(loans)
+        with model.error_manager():
+            for loan in loans:
+                if loan.state == 'calculated':
+                    if not all(x.start_date and x.end_date
+                            for x in loan.increments):
+                        cls.raise_user_error('invalid_increments', {
+                                'loan': loan.id
+                                })
+                    loan._check_loan_consistency()
+
+    def _check_loan_consistency(self):
+        for increment in self.increments:
+            duration = coog_date.duration_between(
+                increment.start_date, increment.end_date,
+                increment.payment_frequency) + 1
+            if duration != increment.number_of_payments:
+                self.append_functional_error('invalid_nb_payments', {
+                        'number_of_payments': int(
+                            increment.number_of_payments),
+                        'increment': increment.number,
+                        'loan': increment.loan.id,
+                        })
 
     @classmethod
     def view_attributes(cls):
@@ -479,6 +506,9 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
                     from_date = coog_date.add_duration(increment.start_date,
                         increment.payment_frequency, j,
                         stick_to_end_of_month=True)
+                # We are on the last payment on the increment
+                if j == increment.number_of_payments:
+                    increment.end_date = payment.start_date
         self.increments = increments
         self.payments = payments
         self.set_early_payment_amounts()
@@ -774,7 +804,7 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
                 is_new = True
             if idx == 0:
                 continue
-            previous_end = sorted_increments[idx - 1].on_change_with_end_date()
+            previous_end = sorted_increments[idx - 1].last_payment_date()
             if not previous_end:
                 continue
             previous_end = coog_date.add_duration(previous_end,
@@ -893,20 +923,6 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
             loan.calculate()
             loan.save()
 
-    @model.CoogView.button_change('first_payment_date', 'increments')
-    def propagate_first_payment_date(self):
-        if not self.increments:
-            return
-        self.increments[0].start_date = self.first_payment_date
-        self.increments[0].end_date = \
-            self.increments[0].on_change_with_end_date()
-        for idx, increment in enumerate(self.increments[1:]):
-            increment.start_date = coog_date.add_duration(
-                self.increments[idx].end_date,
-                self.increments[idx].payment_frequency, 1)
-            increment.end_date = increment.on_change_with_end_date()
-        self.increments = list(self.increments)
-
     @classmethod
     @model.CoogView.button_action('loan.act_add_manual_increment')
     def add_manual_increment(cls, loans):
@@ -943,9 +959,10 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
             'required': Eval('loan_state') == 'calculated',
             'readonly': Eval('loan_state') != 'draft'},
         depends=['loan_state'])
-    end_date = fields.Function(
-        fields.Date('End Date', states={'invisible': ~Eval('end_date')}),
-        'on_change_with_end_date')
+    end_date = fields.Date('End Date', states={
+            'required': Eval('loan_state') == 'calculated',
+            'readonly': Eval('loan_state') != 'draft',
+            }, depends=['loan_state'])
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE', required=True,
         select=True, readonly=True)
     number_of_payments = fields.Integer('Number of Payments', required=True,
@@ -988,9 +1005,6 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
                 'incoherent_balances': 'Incoherent begin balance (%(begin)s) '
                 'and end balance (%(end)s) regarding payment amount '
                 '(%(payment)s).',
-                'nb_payments_over_limit': 'The number of payments '
-                '(%(number_of_payments)s) on the increment number '
-                '%(increment)s of the loan %(loan)s exceeds the limit.',
                 })
 
     @classmethod
@@ -1005,6 +1019,7 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
 
         increment_h = TableHandler(cls, module_name)
         inexisting_start_date = not increment_h.column_exist('start_date')
+        inexisting_end_date = not increment_h.column_exist('end_date')
         # Migration from 1.6: fix typo in deferral
         increment_h.column_rename('deferal', 'deferral')
         if TableHandler.table_exist('loan_increment__history'):
@@ -1041,6 +1056,16 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
         # Migration from 1.8 , drop lender column
         if loan_h.column_exist('lender'):
             loan_h.drop_column('lender')
+
+        # Migration from 1.12 Store end_date
+        if inexisting_end_date:
+            for increment_slice in grouped_slice(
+                    cls.search([('loan', '!=', None)])):
+                increments = []
+                for increment in increment_slice:
+                    increment.end_date = increment.last_payment_date()
+                    increments.append(increment)
+                cls.save(increments)
 
     @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
         'deferral', 'loan', 'number_of_payments', 'payment_amount',
@@ -1105,21 +1130,18 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
     def on_change_rate(self):
         self.update_payment_data()
 
-    @fields.depends('number_of_payments', 'payment_frequency', 'start_date',
-    'loan', 'number')
-    def on_change_with_end_date(self, name=None):
-        if (self.start_date and self.payment_frequency
-                and self.number_of_payments):
-            try:
-                return coog_date.add_duration(self.start_date,
-                    self.payment_frequency, self.number_of_payments - 1,
-                    stick_to_end_of_month=True)
-            except ValueError:
-                self.raise_user_error('nb_payments_over_limit', {
-                            'number_of_payments': int(self.number_of_payments),
-                            'increment': self.number,
-                            'loan': self.loan.id
-                            })
+    def last_payment_date(self):
+        if not hasattr(self, 'loan') or not self.loan:
+            return
+        next_increment = [x for x in self.loan.increments if x.number >
+            self.number]
+        if next_increment:
+            next_increment = sorted(next_increment, key=lambda x: x.number)[0]
+        until_date = next_increment.start_date if next_increment else \
+            datetime.date.max
+        payments = [x for x in self.loan.payments if x.start_date < until_date]
+        payments = sorted(payments, key=lambda x: x.number)
+        return payments[-1].start_date if payments else None
 
     def get_first_payment_end_balance(self, name=None):
         if not self.begin_balance:

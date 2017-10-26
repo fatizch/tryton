@@ -39,7 +39,6 @@ this repository contains the full copyright notices and license terms. -->
         <label name="first_payment_date"/>
         <group id="first_payment_date_group" string="" col="2">
             <field name="first_payment_date"/>
-            <button name="propagate_first_payment_date" string="_Propagate Dates" icon="tryton-executable"/>
         </group>
         <newline/>
         <label name="deferral"/>
