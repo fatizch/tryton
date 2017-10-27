@@ -73,6 +73,10 @@ class Invoice:
                 'previous_invoices_not_posted': 'There are %s invoices with '
                 'a start date before %s on contract %s. Proceeding further '
                 'will post those as well.\n\n\t%s',
+                'future_invoices_existing': 'You cannot cancel this invoice.\n'
+                'There are %(number_invoices)s invoice(s) with a start date '
+                'after %(start_date)s on contract %(contract)s.'
+                '\n\n\t%(invoices)s',
                 })
         cls.untaxed_amount.states = {
             'invisible': Bool(Eval('contract_invoice')),
@@ -337,6 +341,25 @@ class Invoice:
             return old_invoices
         return []
 
+    def check_future_invoices_cancelled(self):
+        future_invoices = self.__class__.search([
+                ('contract', '=', self.contract.id),
+                ('start', '>', self.start),
+                ('state', '!=', 'cancel')],
+            order=[('start', 'ASC')])
+        if future_invoices:
+            self.raise_user_error(
+                'future_invoices_existing',
+                {
+                    'number_invoices': str(len(future_invoices)),
+                    'start_date': str(self.start),
+                    'contract': self.contract.rec_name,
+                    'invoices': '\n\t'.join([x.description
+                        for x in future_invoices]),
+                })
+            return future_invoices
+        return []
+
     @classmethod
     def cancel_payments(cls, payments):
         if not payments:
@@ -352,6 +375,8 @@ class Invoice:
     @ModelView.button
     @Workflow.transition('cancel')
     def cancel(cls, invoices):
+        if len(invoices) == 1 and invoices[0].contract and invoices[0].start:
+            invoices[0].check_future_invoices_cancelled()
         payments = sum([list(i.payments) for i in invoices
             if i.state == 'posted'], [])
         cls.cancel_payments(payments)
