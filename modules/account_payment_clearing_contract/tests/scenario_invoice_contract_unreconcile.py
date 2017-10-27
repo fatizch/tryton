@@ -284,7 +284,7 @@ user, = User.find(['login', '=', 'financial_user'])
 Warning = Model.get('res.user.warning')
 warning = Warning()
 warning.always = False
-warning.user = User(1)
+warning.user = user
 warning.name = 'updating_payment_date_%s' % ('account.move.line,' +
     str(line.id))
 warning.save()
