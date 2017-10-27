@@ -28,10 +28,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Show Loan Average Premium</field>
             <field name="wiz_name">loan.average_premium_rate.display</field>
         </record>
-        <record model="ir.action.keyword" id="act_loan_average_premium_display_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">contract,-1</field>
-            <field name="action" ref="act_loan_average_premium_display"/>
+        <!-- ############ -->
+        <!-- # Contract # -->
+        <!-- ############ -->
+        <record model="ir.ui.view" id="contract_view_form">
+            <field name="model">contract</field>
+            <field name="inherit" ref="contract.contract_view_form"/>
+            <field name="name">contract_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_view_list">
+            <field name="model">contract</field>
+            <field name="inherit" ref="contract.contract_view_tree"/>
+            <field name="name">contract_list</field>
         </record>
     </data>
 </tryton>

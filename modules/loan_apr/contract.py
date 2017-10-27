@@ -23,6 +23,15 @@ __all__ = [
 class Contract:
     __name__ = 'contract'
 
+    @classmethod
+    def __setup__(cls):
+        super(Contract, cls).__setup__()
+        cls._buttons.update({
+                'button_loan_average_premium': {
+                    'invisible': ~Eval('is_loan'),
+                    },
+                })
+
     def calculate_premium_aggregates(self, start=None, end=None):
         futures = self.get_future_invoices(self, start, end)
         per_contract_entity = defaultdict(
@@ -69,6 +78,12 @@ class Contract:
                     for k in values.iterkeys() if k[0] == model_name])
             return result
         return values
+
+    @classmethod
+    @model.CoogView.button_action(
+        'loan_apr.act_loan_average_premium_display')
+    def button_loan_average_premium(cls, contracts):
+        pass
 
 
 class LoanShare:

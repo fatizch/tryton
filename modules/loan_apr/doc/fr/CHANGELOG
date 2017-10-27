@@ -1,3 +1,4 @@
+* BUG#4847 Afficher l'action "Afficher le taux moyen prêt" uniquement pour les contrats emprunteur.
 * BUG#6646 Calcul du nombre d'année en décimal et non en valeur entière
 
 Version 1.12 - 2017-04-28

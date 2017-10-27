@@ -222,6 +222,10 @@ msgctxt "selection:loan.average_premium_rule.fee_rule,action:"
 msgid "Do not use fee"
 msgstr "Ne pas prendre en compte les frais"
 
+msgctxt "view:contract:"
+msgid "Show Loan Average Premium"
+msgstr "Afficher le taux moyen prêt"
+
 msgctxt "view:loan.average_premium_rate.display.values:"
 msgid "Contract Loans"
 msgstr "Prêts"
