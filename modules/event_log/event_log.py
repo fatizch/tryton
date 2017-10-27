@@ -1,7 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
-from sql.conditionals import Coalesce
 
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
@@ -28,9 +27,6 @@ class EventLog(model.CoogSQL, model.CoogView):
     object_ = fields.Reference('Object', selection='models_get', readonly=True,
         required=True)
     date = fields.DateTime('Date', readonly=True, required=True)
-    date_str = fields.Function(
-        fields.Char('Date'),
-        'on_change_with_date_str')
     user = fields.Many2One('res.user', 'User', readonly=True, required=True,
         ondelete='RESTRICT')
     event_type = fields.Many2One('event.type', 'Event Type', required=True,
@@ -40,12 +36,6 @@ class EventLog(model.CoogSQL, model.CoogView):
     def __setup__(cls):
         super(EventLog, cls).__setup__()
         cls._order.insert(0, ('date', 'DESC'))
-
-    @fields.depends('date')
-    def on_change_with_date_str(self, name=None):
-        if self.date:
-            return Pool().get('ir.date').datetime_as_string(self.date)
-        return ''
 
     @fields.depends('object_', 'description')
     def on_change_with_description_str(self, name=None):
@@ -58,11 +48,6 @@ class EventLog(model.CoogSQL, model.CoogView):
                 return self.object_.rec_name
         else:
             return ''
-
-    @staticmethod
-    def order_date_str(tables):
-        table, _ = tables[None]
-        return [Coalesce(table.date, datetime.date.min)]
 
     @staticmethod
     def models_get():
