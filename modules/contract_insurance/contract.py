@@ -447,6 +447,12 @@ class ContractOption(Printable):
     item_desc = fields.Function(
         fields.Many2One('offered.item.description', 'Item Description'),
         'on_change_with_item_desc')
+    extra_premiums_allowed = fields.Function(
+        fields.Boolean('Extra premium allowed'),
+        'getter_extra_premiums_allowed')
+    exclusions_allowed = fields.Function(
+        fields.Boolean('Exclusions allowed'),
+        'getter_exclusions_allowed')
 
     @classmethod
     def __setup__(cls):
@@ -461,6 +467,15 @@ class ContractOption(Printable):
                 'propagate_extra_premiums': _CONTRACT_STATUS_STATES,
                 'propagate_exclusions': _CONTRACT_STATUS_STATES,
                 })
+        for fname in ['extra_premiums', 'extra_premium_discounts',
+                'extra_premium_increases']:
+            cur_state = getattr(cls, fname).states.get('invisible', False)
+            getattr(cls, fname).states['invisible'] = cur_state | ~Eval(
+                'extra_premiums_allowed')
+            getattr(cls, fname).depends.append('extra_premiums_allowed')
+        cls.exclusions.states['invisible'] = cls.exclusions.states.get(
+            'invisible', False) | ~Eval('exclusions_allowed')
+        cls.exclusions.depends.append('exclusions_allowed')
         cls._error_messages.update({
                 'option_start_anterior_to_covered_start': 'Manual option start '
                 'date %(manual_start_date)s is anterior to covered element '
@@ -533,6 +548,10 @@ class ContractOption(Printable):
     @fields.depends('item_desc')
     def on_change_coverage(self):
         super(ContractOption, self).on_change_coverage()
+        self.exclusions_allowed = (self.coverage and
+            self.coverage.with_exclusions)
+        self.extra_premiums_allowed = (self.coverage and
+            self.coverage.with_extra_premiums)
 
     @fields.depends('covered_element', 'item_desc')
     def on_change_covered_element(self):
@@ -592,6 +611,16 @@ class ContractOption(Printable):
     @fields.depends('parent_contract')
     def on_change_with_contract_status(self, name=None):
         return self.parent_contract.status if self.parent_contract else ''
+
+    def getter_exclusions_allowed(self, name):
+        if not self.coverage:
+            return False
+        return self.coverage.with_exclusions
+
+    def getter_extra_premiums_allowed(self, name):
+        if not self.coverage:
+            return False
+        return self.coverage.with_extra_premiums
 
     @classmethod
     def search_parent_contract(cls, name, clause):

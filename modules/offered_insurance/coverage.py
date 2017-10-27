@@ -1,6 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from sql import Null
+from sql.conditionals import Case
+
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 from trytond.cache import Cache
 from trytond.pyson import Eval
 
@@ -23,6 +28,10 @@ class OptionDescription:
         states={'required': ~Eval('is_service')}, ondelete='RESTRICT',
         depends=['is_service'])
     family = fields.Selection([('generic', 'Generic')], 'Family')
+    with_extra_premiums = fields.Boolean('With extra premiums',
+        help='If True, subscribed options will have extra premiums')
+    with_exclusions = fields.Boolean('With exclusions',
+        help='If True, subscribed options will have exclusions')
     family_string = family.translated('family')
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         ondelete='RESTRICT', states={'required': ~Eval('is_service')},
@@ -39,6 +48,28 @@ class OptionDescription:
         super(OptionDescription, cls).__setup__()
         cls.extra_data_def.domain = [
             ('kind', 'in', cls.kind_list_for_extra_data_domain())]
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        coverage = TableHandler(cls)
+
+        # Migration from 1.12 : Add with_extra_premiums field
+        migrate_extra_premium = not coverage.column_exist(
+            'with_extra_premiums')
+
+        super(OptionDescription, cls).__register__(module_name)
+
+        if migrate_extra_premium:
+            cursor = Transaction().connection.cursor()
+            coverage = cls.__table__()
+            cursor.execute(*coverage.update(
+                    columns=[coverage.with_extra_premiums,
+                        coverage.with_exclusions],
+                    values=[Case((coverage.item_desc != Null, True),
+                            else_=False),
+                        Case((coverage.item_desc != Null, True), else_=False)],
+                    ))
 
     @classmethod
     def create(cls, vlist):

@@ -5,6 +5,10 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="//group[@id='data']" position="inside">
         <label name="item_desc"/>
         <field name="item_desc"/>
+        <label name="with_extra_premiums"/>
+        <field name="with_extra_premiums"/>
+        <label name="with_exclusions"/>
+        <field name="with_exclusions"/>
     </xpath>
     <xpath expr="/form/field[@name='end_date']" position="after">
         <label name="insurer"/>

@@ -1,3 +1,4 @@
+* FEA#7439 Possibility to disable extra premiums / exclusions per coverage
 * BUG#5664 Fix checks methods on contract options and covered elements extra datas
 * FEA#7024 Configure default reports templates to be added as default letters in coog
 * BUG#7132 Migrate function which set the contract subscriber covered as covered element from contract_life_process
