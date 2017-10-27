@@ -113,6 +113,10 @@ class Contract(Printable):
                 covered_element.options = covered_element.options
         return instances
 
+    def get_all_options(self):
+        return (super(Contract, self).get_all_options()
+            + self.covered_element_options)
+
     @fields.depends('product')
     def on_change_product(self):
         super(Contract, self).on_change_product()

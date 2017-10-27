@@ -10,5 +10,5 @@ def register():
         contract.MigratorContractOption,
         contract.MigratorContractEvent,
         contract.MigratorContractPremium,
-        contract.MigratorContractPremiumWaiver,
+        contract.MigratorContractWaiverPremium,
         module='migrator_contract', type_='model')

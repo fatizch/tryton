@@ -8,5 +8,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="offered.coverage_view_form"/>
             <field name="name">option_description_form</field>
         </record>
+        <record model="ir.ui.view" id="waiver_rule_view_form">
+            <field name="model">waiver_premium.rule</field>
+            <field name="type">form</field>
+            <field name="name">waiver_rule_form</field>
+        </record>
+        <record model="ir.ui.view" id="waiver_rule_view_list">
+            <field name="model">waiver_premium.rule</field>
+            <field name="type">form</field>
+            <field name="name">waiver_rule_form</field>
+        </record>
     </data>
 </tryton>

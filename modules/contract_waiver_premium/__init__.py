@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 import waiver
 import offered
+import rule_engine
 import contract
 import wizard
 import invoice
@@ -11,10 +12,12 @@ import invoice
 
 def register():
     Pool.register(
-        waiver.PremiumWaiver,
-        waiver.PremiumWaiverContractOption,
+        waiver.WaiverPremium,
+        waiver.WaiverPremiumOption,
         offered.OptionDescription,
-        offered.OptionDescriptionTaxRelationForWaiver,
+        offered.WaiverPremiumRule,
+        offered.WaiverPremiumRuleTaxRelation,
+        rule_engine.RuleEngine,
         contract.Contract,
         contract.ContractOption,
         wizard.CreateWaiverChoice,

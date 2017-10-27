@@ -4,9 +4,7 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
         <page string="Waiver of Premium" id="waiver_of_premium">
-            <label name="with_waiver_of_premium"/>
-            <field name="with_waiver_of_premium"/>
-            <field name="taxes_for_waiver" colspan="4"/>
+            <field name="waiver_premium_rule" mode="form,tree" colspan="4"/>
         </page>
     </xpath>
 </data>

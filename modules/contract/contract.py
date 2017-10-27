@@ -1447,6 +1447,9 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     def button_reactivate(cls, contracts):
         pass
 
+    def get_all_options(self):
+        return self.options
+
     def get_all_extra_data(self, at_date):
         res = self.product.get_all_extra_data(at_date)
         if not at_date:

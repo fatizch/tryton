@@ -3,6 +3,32 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- Default Waiver Rule Rule Access -->
+        <record model="ir.model.access" id="access_offered_waiver_rule">
+            <field name="model" search="[('model', '=', 'waiver_premium.rule')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Admin Group -->
+        <record model="ir.model.access" id="access_offered_waiver_rule_admin_group">
+            <field name="model" search="[('model', '=', 'waiver_premium.rule')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Product Management Group -->
+        <record model="ir.model.access" id="access_waiver_rule_manage_group">
+            <field name="model" search="[('model', '=', 'waiver_premium.rule')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <!-- Contract Management Group -->
         <record model="ir.model.access" id="access_contract_waiver_premium_contract_manage_group">
             <field name="model" search="[('model', '=', 'contract.waiver_premium')]"/>

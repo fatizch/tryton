@@ -6,17 +6,21 @@ msgctxt "error:contract.waiver_premium.create:"
 msgid "You are trying to create overlapping waivers"
 msgstr "Vous essayez de créer des exonérations qui se chevauchent."
 
-msgctxt "error:contract:"
+msgctxt "error:waiver_premium.rule:"
 msgid "Waiver of Premium"
-msgstr "Exonération"
+msgstr "Exonération de prime"
 
 msgctxt "field:account.invoice.line.detail,waiver:"
 msgid "Waiver Of Premium"
-msgstr "Exonération"
+msgstr "Exonération de prime"
+
+msgctxt "field:contract,waivers:"
+msgid "Waivers Of Premium"
+msgstr "Exonérations de prime"
 
 msgctxt "field:contract,with_waiver_of_premium:"
 msgid "With Waiver Of Premium"
-msgstr "Avec exonération"
+msgstr "Avec exonération de prime"
 
 msgctxt "field:contract.option,waivers:"
 msgid "Waivers"
@@ -25,6 +29,10 @@ msgstr "Exonérations"
 msgctxt "field:contract.option,with_waiver_of_premium:"
 msgid "With Waiver Of Premium"
 msgstr "Avec exonération"
+
+msgctxt "field:contract.waiver_premium,automatic:"
+msgid "Automatic"
+msgstr "Automatique"
 
 msgctxt "field:contract.waiver_premium,contract:"
 msgid "Contract"
@@ -44,7 +52,7 @@ msgstr "Créé par"
 
 msgctxt "field:contract.waiver_premium,end_date:"
 msgid "End Date"
-msgstr "Date de Fin"
+msgstr "Date de fin"
 
 msgctxt "field:contract.waiver_premium,id:"
 msgid "ID"
@@ -64,7 +72,11 @@ msgstr "Nom"
 
 msgctxt "field:contract.waiver_premium,start_date:"
 msgid "Start Date"
-msgstr "Date d'Effet"
+msgstr "Date de début"
+
+msgctxt "field:contract.waiver_premium,waiver_options:"
+msgid "Waiver Options"
+msgstr "Exonérations de garantie"
 
 msgctxt "field:contract.waiver_premium,write_date:"
 msgid "Write Date"
@@ -90,6 +102,10 @@ msgctxt "field:contract.waiver_premium-contract.option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:contract.waiver_premium-contract.option,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
 msgctxt "field:contract.waiver_premium-contract.option,id:"
 msgid "ID"
 msgstr "ID"
@@ -101,6 +117,10 @@ msgstr "Garantie"
 msgctxt "field:contract.waiver_premium-contract.option,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:contract.waiver_premium-contract.option,start_date:"
+msgid "Start Date"
+msgstr "Date de début"
 
 msgctxt "field:contract.waiver_premium-contract.option,waiver:"
 msgid "Waiver"
@@ -122,17 +142,18 @@ msgctxt "field:contract.waiver_premium.create.choice,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:contract.waiver_premium.create.choice,contract_parties:"
-msgid "Contract Parties"
-msgstr "Tiers du contrat"
+msgctxt ""
+"field:contract.waiver_premium.create.choice,contract_covered_elements:"
+msgid "Contract Covered Elements"
+msgstr "Risques couverts du contrat"
 
-msgctxt "field:contract.waiver_premium.create.choice,covered_party:"
-msgid "Covered Party"
-msgstr "Assuré"
+msgctxt "field:contract.waiver_premium.create.choice,covered_element:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
 
 msgctxt "field:contract.waiver_premium.create.choice,end_date:"
 msgid "End Date"
-msgstr "Date de Fin"
+msgstr "Date de fin"
 
 msgctxt "field:contract.waiver_premium.create.choice,id:"
 msgid "ID"
@@ -144,7 +165,7 @@ msgstr "Garanties"
 
 msgctxt "field:contract.waiver_premium.create.choice,start_date:"
 msgid "Start Date"
-msgstr "Date d'Effet"
+msgstr "Date de début"
 
 msgctxt "field:contract.waiver_premium.set_end_date.choice,id:"
 msgid "ID"
@@ -152,67 +173,157 @@ msgstr "ID"
 
 msgctxt "field:contract.waiver_premium.set_end_date.choice,new_end_date:"
 msgid "End Date"
-msgstr "Date de Fin"
+msgstr "Date de fin"
 
 msgctxt "field:contract.waiver_premium.set_end_date.choice,waivers:"
 msgid "Waiver"
 msgstr "Exonération"
 
-msgctxt "field:coverage-account.tax-for_waiver,coverage:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "field:coverage-account.tax-for_waiver,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:coverage-account.tax-for_waiver,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:coverage-account.tax-for_waiver,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:coverage-account.tax-for_waiver,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:coverage-account.tax-for_waiver,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:coverage-account.tax-for_waiver,tax:"
-msgid "Tax"
-msgstr "Taxe"
-
-msgctxt "field:coverage-account.tax-for_waiver,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:coverage-account.tax-for_waiver,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:coverage-account.tax-for_waiver,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:offered.option.description,taxes_for_waiver:"
+msgctxt "field:offered.option.description,taxes:"
 msgid "Taxes"
 msgstr "Taxes"
+
+msgctxt "field:offered.option.description,waiver_premium_rule:"
+msgid "Waiver Of Premium Rule"
+msgstr "Règle d'exonération de prime"
 
 msgctxt "field:offered.option.description,with_waiver_of_premium:"
 msgid "With Waiver Of Premium"
 msgstr "Avec exonération"
 
+msgctxt "field:waiver_premium.rule,account_for_waiver:"
+msgid "Account to compensate the Waiver"
+msgstr "Compte pour compenser l'exonération"
+
+msgctxt "field:waiver_premium.rule,automatic:"
+msgid "Automatic"
+msgstr "Automatique"
+
+msgctxt "field:waiver_premium.rule,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:waiver_premium.rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:waiver_premium.rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:waiver_premium.rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:waiver_premium.rule,duration_rule:"
+msgid "Duration Rule"
+msgstr "Règle de calcul de période"
+
+msgctxt "field:waiver_premium.rule,duration_rule_extra_data:"
+msgid "Duration Rule Extra Data"
+msgstr "Paramètres de la règle"
+
+msgctxt "field:waiver_premium.rule,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:waiver_premium.rule,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:waiver_premium.rule,invoice_line_period_behaviour:"
+msgid "Invoice Line Period Behaviour"
+msgstr "Comportement par rapport à la période de la ligne de facturation"
+
+msgctxt "field:waiver_premium.rule,rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:waiver_premium.rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:waiver_premium.rule,taxes:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "field:waiver_premium.rule,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:waiver_premium.rule,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:waiver_premium.rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:waiver_premium.rule-account.tax,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:waiver_premium.rule-account.tax,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:waiver_premium.rule-account.tax,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:waiver_premium.rule-account.tax,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:waiver_premium.rule-account.tax,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:waiver_premium.rule-account.tax,tax:"
+msgid "Tax"
+msgstr "Taxe"
+
+msgctxt "field:waiver_premium.rule-account.tax,waiver_rule:"
+msgid "Waiver Premium Rule"
+msgstr "Règle d'exonération de prime"
+
+msgctxt "field:waiver_premium.rule-account.tax,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:waiver_premium.rule-account.tax,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:waiver_premium.rule-account.tax,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "help:waiver_premium.rule,duration_rule:"
+msgid "Returns a list containing the start and the end date"
+msgstr ""
+"Retourne une liste contenant la date de début et de fin de l'exonération"
+
+msgctxt "help:waiver_premium.rule,invoice_line_period_behaviour:"
+msgid ""
+"Defines the behaviour between the invoice line period vs the waiver of "
+"premium period One Day Overlap allows a full waiver of premium if there is "
+"at least one day overlap, Total Overlap allows a waiver of premium only if "
+"the whole invoice line period is within the waiver period"
+msgstr ""
+"Définit le comportement entre la période de la ligne de facturation et la "
+"période de l'exonération de prime. Chevauchement d'un jour permet d'exonérer"
+" si il y a un chevauchement d'au moins un jour, Chevauchement total permet "
+"d'exonérer que si la période totale de la ligne de facturation est incluse "
+"dans la période de l'exonération"
+
 msgctxt "model:contract.waiver_premium,name:"
-msgid "Premium Waiver"
-msgstr "Exonération"
+msgid "Waiver Premium"
+msgstr "Exonération de prime"
 
 msgctxt "model:contract.waiver_premium-contract.option,name:"
-msgid "Premium Waiver - Contract Option Relation"
-msgstr "Relation exonération - option"
+msgid "Waiver Premium Option"
+msgstr "Exonération de garantie"
 
 msgctxt "model:contract.waiver_premium.create.choice,name:"
 msgid "Create Waiver Choice"
@@ -221,10 +332,6 @@ msgstr "Choix de l'exonération"
 msgctxt "model:contract.waiver_premium.set_end_date.choice,name:"
 msgid "Create Waiver Choice"
 msgstr "Choix de l'exonération"
-
-msgctxt "model:coverage-account.tax-for_waiver,name:"
-msgid "Option Description Tax Relation For Waiver"
-msgstr "Relation garantie offerte - taxes pour l'exonération"
 
 msgctxt "model:ir.action,name:act_create_waiver_wizard"
 msgid "Create Waiver"
@@ -236,15 +343,38 @@ msgstr "Définir la date de fin"
 
 msgctxt "model:ir.action,name:act_show_waivers_of_premium"
 msgid "Waivers Of Premiums"
-msgstr "Exonérations"
+msgstr "Exonérations de prime"
 
-msgctxt "selection:offered.option.description,with_waiver_of_premium:"
-msgid "With Waiver Of Premium"
-msgstr "Avec exonération"
+msgctxt ""
+"model:rule_engine,name:waiver_of_premium_for_first_n_months_from_initial_start_date"
+msgid "Waiver of Premium for first N months from initial start date"
+msgstr ""
+"Exonération de prime pour les N premiers mois depuis la date initiale du "
+"contrat"
 
-msgctxt "selection:offered.option.description,with_waiver_of_premium:"
-msgid "Without Waiver Of Premium"
-msgstr "Sans exonération"
+msgctxt "model:rule_engine.rule_parameter,string:nb_month"
+msgid "Number of month"
+msgstr "Nombre de mois"
+
+msgctxt "model:waiver_premium.rule,name:"
+msgid "Waiver of Premium Rule"
+msgstr "Règle d'exonération de prime"
+
+msgctxt "model:waiver_premium.rule-account.tax,name:"
+msgid "Option Description Tax Relation For Waiver"
+msgstr "Relation Garantie - Taxe"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Waiver Of Premium Duration"
+msgstr "Période d'exonération de prime"
+
+msgctxt "selection:waiver_premium.rule,invoice_line_period_behaviour:"
+msgid "One Day Overlap"
+msgstr "Chevauchement d'un jour"
+
+msgctxt "selection:waiver_premium.rule,invoice_line_period_behaviour:"
+msgid "Total Overlap"
+msgstr "Chevauchement total"
 
 msgctxt "view:contract.waiver_premium.create.choice:"
 msgid "New Waivers Of Premiums"
@@ -255,8 +385,8 @@ msgid "New Waivers Of Premiums"
 msgstr "Nouvelles exonérations"
 
 msgctxt "view:contract.waiver_premium:"
-msgid "Waivers Of Premiums"
-msgstr "Exonérations"
+msgid "End Waiver"
+msgstr "Définir la date de fin"
 
 msgctxt "view:contract:"
 msgid "Create Waiver"
@@ -264,7 +394,11 @@ msgstr "Créer une exonération"
 
 msgctxt "view:offered.option.description:"
 msgid "Waiver of Premium"
-msgstr "Exonération"
+msgstr "Exonération de prime"
+
+msgctxt "view:waiver_premium.rule:"
+msgid "%"
+msgstr "%"
 
 msgctxt "wizard_button:contract.waiver_premium.create,choice,end:"
 msgid "Cancel"

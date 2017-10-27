@@ -17,7 +17,7 @@ __all__ = [
     'MigratorContractOption',
     'MigratorContractEvent',
     'MigratorContractPremium',
-    'MigratorContractPremiumWaiver',
+    'MigratorContractWaiverPremium',
     'MigratorContractVersion'
     ]
 
@@ -622,14 +622,14 @@ class MigratorContractOption(migrator.Migrator):
         return to_create
 
 
-class MigratorContractPremiumWaiver(migrator.Migrator):
+class MigratorContractWaiverPremium(migrator.Migrator):
     """Migrator contract premium waiver"""
 
     __name__ = 'migrator.contract.premium_waiver'
 
     @classmethod
     def __setup__(cls):
-        super(MigratorContractPremiumWaiver, cls).__setup__()
+        super(MigratorContractWaiverPremium, cls).__setup__()
         cls.table = Table('contract_premium_waiver')
         cls.model = 'contract.waiver_premium'
         cls.func_key = 'contract'
@@ -646,7 +646,7 @@ class MigratorContractPremiumWaiver(migrator.Migrator):
 
     @classmethod
     def populate(cls, row):
-        row = super(MigratorContractPremiumWaiver, cls).populate(row)
+        row = super(MigratorContractWaiverPremium, cls).populate(row)
         cls.resolve_key(row, 'contract', 'contract')
         return row
 

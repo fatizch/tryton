@@ -21,10 +21,5 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Set Waiver End Date</field>
             <field name="wiz_name">contract.waiver_premium.set_end_date</field>
         </record>
-        <record model="ir.action.keyword" id="act_set_waiver_end_date_wizard_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">contract.waiver_premium,-1</field>
-            <field name="action" ref="act_set_waiver_end_date_wizard"/>
-        </record>
     </data>
 </tryton>

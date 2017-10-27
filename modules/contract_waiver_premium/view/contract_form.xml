@@ -9,4 +9,7 @@ this repository contains the full copyright notices and license terms. -->
             <button name="create_waiver" string="Create Waiver"/>
         </group>
     </xpath>
+     <xpath expr="/form/notebook/page[@id='invoicing']" position="inside">
+        <field name="waivers" colspan="4"/>
+    </xpath>
 </data>

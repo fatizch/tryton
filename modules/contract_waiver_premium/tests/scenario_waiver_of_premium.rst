@@ -33,6 +33,7 @@ Get Models::
     >>> ItemDescription = Model.get('offered.item.description')
     >>> Option = Model.get('contract.option')
     >>> OptionDescription = Model.get('offered.option.description')
+    >>> WaiverPremiumRule = Model.get('waiver_premium.rule')
     >>> Party = Model.get('party.party')
     >>> PaymentTerm = Model.get('account.invoice.payment_term')
     >>> PaymentTermLine = Model.get('account.invoice.payment_term.line')
@@ -267,10 +268,13 @@ Create Product::
     >>> coverage2.item_desc = item_description
     >>> coverage2.start_date = product_start_date
     >>> coverage2.account_for_billing = product_account
-    >>> coverage2.with_waiver_of_premium = 'with_waiver_of_premium'
     >>> coverage2.taxes.append(tax1)
-    >>> coverage2.taxes_for_waiver.append(tax_waiver)
     >>> coverage2.save()
+    >>> waiver_rule = WaiverPremiumRule()
+    >>> waiver_rule.invoice_line_period_behaviour = 'one_day_overlap'
+    >>> waiver_rule.taxes.append(tax_waiver)
+    >>> waiver_rule.coverage = coverage2
+    >>> waiver_rule.save()
     >>> product.company = company
     >>> product.currency = currency
     >>> product.name = 'Test Product'

@@ -1,3 +1,5 @@
+* FEA#7383 Possibilité de configurer des périodes d'exonération de prime automatique avec un taux (par exemple 50% de réduction pendant les 3 premiers mois du contrat). Ajout d'un compte de charge de compensation dans le cas où l'exonération n'est pas prise en charge par l'assureur.
+
 Version 1.12 - 2017-04-28
 
 Version 1.10 - 2016-11-02

@@ -18,6 +18,10 @@ class Contract:
     with_waiver_of_premium = fields.Function(
         fields.Boolean('With Waiver Of Premium'),
         'get_with_waiver_of_premium')
+    waivers = fields.One2Many('contract.waiver_premium', 'contract',
+        'Waivers Of Premium',
+        states={'invisible': ~Eval('waivers')}, readonly=True,
+        delete_missing=True)
 
     @classmethod
     def __setup__(cls):
@@ -27,9 +31,6 @@ class Contract:
                     'invisible': Or(~Eval('with_waiver_of_premium'),
                         Eval('status') != 'active'),
                     },
-                })
-        cls._error_messages.update({
-                'waiver_line': 'Waiver of Premium',
                 })
 
     @classmethod
@@ -47,7 +48,7 @@ class Contract:
         pass
 
     def get_with_waiver_of_premium(self, name):
-        all_options = self.options + self.covered_element_options
+        all_options = self.get_all_options()
         return any((x.with_waiver_of_premium for x in all_options))
 
     def finalize_invoices_lines(self, lines):
@@ -76,33 +77,99 @@ class Contract:
                 InvoiceLineDetail(**{x: getattr(line.details[0], x, None)
                         for x in line_detail_fields})]
             waiver_line.details[0].waiver = waiver
-            waiver_line.taxes = [x.id for x in
-                option.coverage.taxes_for_waiver]
-            waiver_line.account = \
-                option.coverage.get_account_for_waiver_line()
-            waiver_line.unit_price *= -1
-            waiver_line.description += ' - ' + self.raise_user_error(
-                'waiver_line', raise_exception=False)
+            option.coverage.init_waiver_line(waiver_line)
             lines.append(waiver_line)
+
+    @classmethod
+    def _calculate_methods(cls, product):
+        return super(Contract, cls)._calculate_methods(product) + [
+            ('contract', 'create_automatic_waiver')]
+
+    def create_automatic_waiver(self):
+        pool = Pool()
+        Waiver = pool.get('contract.waiver_premium')
+        WaiverOption = pool.get('contract.waiver_premium-contract.option')
+        options_to_waive = [o for o in self.get_all_options()
+            if o.with_automatic_waiver_premium]
+        if not options_to_waive:
+            return
+        if self.start_date == self.initial_start_date:
+            previous = []
+            existings = [w for w in self.waivers if w.automatic]
+        else:
+            # Renewal
+            previous = [w for w in self.waivers
+                if w.automatic and w.start_date < self.start_date]
+            existings = [w for w in self.waivers
+                if w.automatic and w.start_date >= self.start_date]
+        manual_waivers = [w for w in self.waivers if not w.automatic]
+        if existings:
+            # TODO : What if we want to have several waivers within a period
+            waiver = existings[0]
+        else:
+            waiver = Waiver(automatic=True, waiver_options=[])
+
+        # Remove waiver on unsubscribed options
+        waiver_options = [wo for wo in waiver.waiver_options
+            if wo.option in options_to_waive]
+        for option in options_to_waive:
+            waiver_option = [wo for wo in waiver_options
+                if wo.option == option]
+            if waiver_option:
+                waiver_option = waiver_option[0]
+            else:
+                waiver_option = WaiverOption(option=option)
+                waiver_options.append(waiver_option)
+            res = option.calculate_automatic_premium_duration()
+            if res and len(res) == 2:
+                waiver_option.start_date, waiver_option.end_date = res
+            else:
+                waiver_option.start_date, waiver_option.end_date = None, None
+
+        waiver.waiver_options = waiver_options
+        waiver.start_date = waiver.get_start_date()
+        waivers = previous + manual_waivers
+        if waiver.waiver_options and waiver.start_date:
+            waivers.append(waiver)
+        self.waivers = waivers
 
 
 class ContractOption:
     __name__ = 'contract.option'
 
-    waivers = fields.Many2Many(
-        'contract.waiver_premium-contract.option', 'option',
-        'waiver', 'Waivers')
+    waivers = fields.One2Many('contract.waiver_premium-contract.option',
+        'option', 'Waivers')
     with_waiver_of_premium = fields.Function(
         fields.Boolean('With Waiver Of Premium'),
         'get_with_waiver_of_premium')
 
     def get_with_waiver_of_premium(self, name):
-        return bool(self.coverage.with_waiver_of_premium !=
-            'without_waiver_of_premium')
+        return self.coverage.with_waiver_of_premium
 
-    def get_waiver_at_date(self, date):
-        return utils.get_good_version_at_date(self, 'waivers',
-            at_date=date)
+    def get_waiver_at_date(self, from_date, to_date):
+        waiver_option = utils.get_good_version_at_date(self, 'waivers',
+            at_date=from_date)
+        if not waiver_option:
+            return
+        behaviour = \
+            self.coverage.waiver_premium_rule[0].invoice_line_period_behaviour
+        if behaviour == 'one_day_overlap':
+            return waiver_option.waiver
+        elif (behaviour == 'total_overlap' and not waiver_option.end_date
+                or waiver_option.end_date >= to_date):
+            return waiver_option.waiver
 
     def get_waiver_for_invoice_line(self, line):
-        return self.get_waiver_at_date(line.coverage_start)
+        return self.get_waiver_at_date(line.coverage_start, line.coverage_end)
+
+    def calculate_automatic_premium_duration(self):
+        if not self.with_waiver_of_premium:
+            return [None, None]
+        exec_context = {'date': self.start_date}
+        self.init_dict_for_rule_engine(exec_context)
+        return self.coverage.waiver_premium_rule[0].calculate_duration_rule(
+            exec_context)
+
+    def with_automatic_waiver_premium(self):
+        return (self.coverage.with_waiver_of_premium
+            and self.coverage.waiver_premium_rule[0].automatic)

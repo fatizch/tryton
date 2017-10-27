@@ -8,6 +8,11 @@ this repository contains the full copyright notices and license terms. -->
     <label name="start_date"/>
     <field name="start_date"/>
     <label name="end_date"/>
-    <field name="end_date"/>
-    <field name="options" colspan="4"/>
+    <group id="end_date">
+        <field name="end_date"/>
+        <button name="end_waiver" string="End Waiver"/>
+    </group>
+    <label name="automatic"/>
+    <field name="automatic"/>
+    <field name="waiver_options" colspan="4"/>
 </form>

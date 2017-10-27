@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine" id="waiver_of_premium_for_first_n_months_from_initial_start_date">
+            <field name="name">Waiver of Premium for first N months from initial start date</field>
+            <field name="short_name">waiver_of_premium_for_first_n_months_from_initial_start_date</field>
+            <field name="algorithm">return [date_effet_initiale_contrat(), ajouter_jours(ajouter_mois(date_effet_initiale_contrat(), param_nb_month(), True), -1)]    </field>
+            <field name="status">validated</field>
+            <field name="type_">waiver_duration</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="nb_month">
+            <field name="name">nb_month</field>
+            <field name="type_">integer</field>
+            <field name="string">Number of month</field>
+            <field name="parent_rule" ref="waiver_of_premium_for_first_n_months_from_initial_start_date"/>
+        </record>
+    </data>
+</tryton>

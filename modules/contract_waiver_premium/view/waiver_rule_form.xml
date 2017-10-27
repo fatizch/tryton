@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="coverage"/>
+    <field name="coverage"/>
+    <newline/>
+    <label name="invoice_line_period_behaviour"/>
+    <field name="invoice_line_period_behaviour"/>
+    <label name="rate"/>
+    <group name="rate" string="">
+        <field name="rate" xexpand="0" factor="100"/>
+        <label string="%" name="rate" xexpand="0" xalign="0"/>
+    </group>
+    <label name="automatic"/>
+    <field name="automatic"/>
+    <newline/>
+    <label name="duration_rule"/>
+    <field name="duration_rule"/>
+    <field name="duration_rule_extra_data" colspan="2" no_command="1"/>
+    <label name="account_for_waiver"/>
+    <field name="account_for_waiver"/>
+    <field name="taxes" colspan="4"/>
+</form>

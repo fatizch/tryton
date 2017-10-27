@@ -6,10 +6,10 @@ from trytond.modules.coog_core import fields
 __all__ = [
     'InvoiceLineDetail',
     ]
-__metaclass__ = PoolMeta
 
 
 class InvoiceLineDetail:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice.line.detail'
 
     waiver = fields.Many2One('contract.waiver_premium', 'Waiver Of Premium',
