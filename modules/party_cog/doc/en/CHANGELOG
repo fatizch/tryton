@@ -1,3 +1,4 @@
+* BUG#7403 Clear zip and city when changing an addresse's country
 * BUG#7388 Fix JSON import export
 * BUG#6794 Forbid writing a zip code when it is used in other addresses
 * BUG#6841 Modify the authorisations on the zip code in order to give the right of modification / creation to a users with party administration right and move ZipCode menu toparty configuration.

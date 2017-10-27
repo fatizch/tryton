@@ -297,6 +297,14 @@ class Address(export.ExportImportMixin):
         super(Address, self)._update_street()
         self.one_line_street = self.on_change_with_one_line_street()
 
+    @fields.depends('country', 'zip', 'city', 'zip_and_city')
+    def on_change_country(self):
+        super(Address, self).on_change_country()
+        if self.zip_and_city and self.zip_and_city.country != self.country:
+            self.zip_and_city = None
+            self.zip = None
+            self.city = None
+
 
 class Zip:
     __metaclass__ = PoolMeta
