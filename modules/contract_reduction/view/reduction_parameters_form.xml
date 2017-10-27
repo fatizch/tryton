@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form col="2">
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="reduction_date"/>
+    <field name="reduction_date"/>
+</form>

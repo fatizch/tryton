@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- #################### -->
+        <!-- # Reduction Wizard # -->
+        <!-- #################### -->
+        <record model="ir.action.wizard" id="act_reduce_contract">
+            <field name="name">Reduction</field>
+            <field name="wiz_name">contract.reduce</field>
+        </record>
+        <!-- ######################## -->
+        <!-- # Reduction Parameters # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="reduction_parameters_view_form">
+            <field name="model">contract.reduce.parameters</field>
+            <field name="type">form</field>
+            <field name="name">reduction_parameters_form</field>
+        </record>
+        <!-- ##################### -->
+        <!-- # Reduction Preview # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="reduction_preview_view_form">
+            <field name="model">contract.reduce.preview</field>
+            <field name="type">form</field>
+            <field name="name">reduction_preview_form</field>
+        </record>
+    </data>
+</tryton>

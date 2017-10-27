@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <record model="contract.sub_status" id="sub_status_reduced">
+        <field name="name">Contract Reduced</field>
+        <field name="code">contract_reduced</field>
+        <field name="status">terminated</field>
+    </record>
+</data>

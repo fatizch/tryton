@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ###################### -->
+        <!-- # Option Description # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="coverage_view_form">
+            <field name="model">offered.option.description</field>
+            <field name="inherit" ref="offered.coverage_view_form"/>
+            <field name="name">coverage_form</field>
+        </record>
+        <!-- ##################################### -->
+        <!-- # Option Description Reduction Rule # -->
+        <!-- ##################################### -->
+        <record model="ir.ui.view" id="reduction_rule_view_form">
+            <field name="model">offered.option.description.reduction_rule</field>
+            <field name="type">form</field>
+            <field name="name">reduction_rule_form</field>
+        </record>
+        <record model="ir.ui.view" id="reduction_rule_view_list">
+            <field name="model">offered.option.description.reduction_rule</field>
+            <field name="type">tree</field>
+            <field name="name">reduction_rule_list</field>
+        </record>
+    </data>
+</tryton>

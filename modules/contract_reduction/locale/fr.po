@@ -1,0 +1,220 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.reduce:"
+msgid ""
+"Impossible to reduce the contract before the contract's start_date "
+"(%(start_date)s)"
+msgstr ""
+"Impossible de réduire le contrat avant sa date d'effet (%(start_date)s)"
+
+msgctxt "error:contract.reduce:"
+msgid "No reduction rule was found on product %(product)s"
+msgstr ""
+"Aucune règle de mise en réduction n'existe pour le produit %(product)s"
+
+msgctxt "error:contract:"
+msgid "A contract that was surrendered cannot be reduced"
+msgstr "Il n'est pas possible de mettre en réduction un contrat racheté"
+
+msgctxt "error:contract:"
+msgid "Contract %(contract)s cannot be reduced"
+msgstr "Le contrat %(contract)s ne peut pas être mis en réduction"
+
+msgctxt "error:contract:"
+msgid "Contracts will automatically be reduced"
+msgstr "Les contrats vont être automatiquement mis en réduction"
+
+msgctxt "error:contract:"
+msgid "Contracts will be reduced"
+msgstr "Les contrats seront mis en réduction"
+
+msgctxt "error:contract:"
+msgid "No options were found that can be reduced for contract %(contract)s"
+msgstr ""
+"Aucune option ne peut être mise en réduction sur le contrat %(contract)s"
+
+msgctxt "field:contract,can_reduce:"
+msgid "Can be reduced"
+msgstr "Peut être mis en réduction"
+
+msgctxt "field:contract,reduction_date:"
+msgid "Reduction Date"
+msgstr "Date de mise en réduction"
+
+msgctxt "field:contract.reduce.parameters,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.reduce.parameters,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.reduce.parameters,reduction_date:"
+msgid "Reduction Date"
+msgstr "Date de mise en réduction"
+
+msgctxt "field:contract.reduce.preview,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.reduce.preview,currency:"
+msgid "Currency"
+msgstr "Devise"
+
+msgctxt "field:contract.reduce.preview,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision de la devise"
+
+msgctxt "field:contract.reduce.preview,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:contract.reduce.preview,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.reduce.preview,reduction_value:"
+msgid "Reduction Value"
+msgstr "Valeur de réduction"
+
+msgctxt "field:offered.option.description,reduction_rules:"
+msgid "Reduction Rules"
+msgstr "Règles de mise en réduction"
+
+msgctxt "field:offered.option.description.reduction_rule,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:offered.option.description.reduction_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.reduction_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.reduction_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.option.description.reduction_rule,eligibility_rule:"
+msgid "Eligibility Rule"
+msgstr "Règle d'éligibilité"
+
+msgctxt ""
+"field:offered.option.description.reduction_rule,eligibility_rule_extra_data:"
+msgid "Eligibility Rule Extra Data"
+msgstr "Paramètres d'éligibilité"
+
+msgctxt "field:offered.option.description.reduction_rule,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:offered.option.description.reduction_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.option.description.reduction_rule,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:offered.option.description.reduction_rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de la règle"
+
+msgctxt "field:offered.option.description.reduction_rule,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:offered.option.description.reduction_rule,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:offered.option.description.reduction_rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "help:contract,reduction_date:"
+msgid "The date at which the contract was reduced"
+msgstr "La date à laquelle le contrat a été mis en réduction"
+
+msgctxt "help:contract.reduce.parameters,reduction_date:"
+msgid "The date at which the contract will be reduced"
+msgstr "La date de mise en réduction demandée"
+
+msgctxt "help:contract.reduce.preview,reduction_value:"
+msgid "The contract value after reduction"
+msgstr "La valeur du contrat après mise en réduction"
+
+msgctxt "help:offered.option.description.reduction_rule,eligibility_rule:"
+msgid ""
+"If set, the rule result must be True to allow reduction of the contract"
+msgstr ""
+"Si renseignée, le résultat doit être 'Vrai' pour permettre la mise en "
+"réduction du contrat"
+
+msgctxt "help:offered.option.description.reduction_rule,rule:"
+msgid ""
+"If set, the rule result will be used to compute the reduction value of the "
+"contract"
+msgstr ""
+"Si renseignée, la mise en réduction de la garantie sera possible, et sa "
+"valeur de réduction calculée à l'aide de cette règle"
+
+msgctxt "model:contract.reduce.parameters,name:"
+msgid "Reduction Parameters"
+msgstr "Paramètres de mise en réduction"
+
+msgctxt "model:contract.reduce.preview,name:"
+msgid "Reduction Preview"
+msgstr "Prévisualisation de la mise en réduction"
+
+msgctxt "model:contract.sub_status,name:sub_status_reduced"
+msgid "Contract Reduced"
+msgstr "Contrat mis en réduction"
+
+msgctxt "model:event.type,name:event_contract_reduction"
+msgid "Contract Reduction"
+msgstr "Mise en réduction du contrat"
+
+msgctxt "model:ir.action,name:act_reduce_contract"
+msgid "Reduction"
+msgstr "Mise en réduction"
+
+msgctxt "model:offered.option.description.reduction_rule,name:"
+msgid "Option Description Reduction Rule"
+msgstr "Règle de mise en réduction de garantie"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Reduction"
+msgstr "Valeur de réduction"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Reduction Eligibility"
+msgstr "Eligibilité de mise en réduction"
+
+msgctxt "view:contract:"
+msgid "Reduce"
+msgstr "Mettre en réduction"
+
+msgctxt "wizard_button:contract.reduce,parameters,calculate:"
+msgid "Preview"
+msgstr "Prévisualiser"
+
+msgctxt "wizard_button:contract.reduce,parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:contract.reduce,preview,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:contract.reduce,preview,parameters:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:contract.reduce,preview,reduce:"
+msgid "Reduce"
+msgstr "Mettre en réduction"
