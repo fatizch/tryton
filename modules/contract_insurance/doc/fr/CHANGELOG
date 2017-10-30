@@ -1,3 +1,4 @@
+* BUG#2982: Vérifier qu'une personne physique n'a pas été ajouté plus d'une fois en tant que personne couverte sur le contrat
 * FEA#7439 Possibilité de débrancher les surprimes / exclusions par garantie
 * BUG#5664 Correction des vérifications de données complémentaires sur les garanties et les éléments couverts
 * FEA#7024 Ajout de modéles de courriers par défaut pour "Certificat d'adhésion" - "Echéancier" -"Brouillard" - "Demande mandat SEPA"

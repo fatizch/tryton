@@ -12,7 +12,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.tools import grouped_slice
 from trytond.pyson import Eval, If, Or, Bool, Len
 from trytond.transaction import Transaction
-from trytond.model import ModelView
+from trytond.model import ModelView, Unique
 
 from trytond.modules.coog_core import model, fields
 from trytond.modules.coog_core import utils
@@ -963,6 +963,14 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         searcher='search_party_code')
 
     multi_mixed_view = options
+
+    @classmethod
+    def __setup__(cls):
+        super(CoveredElement, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('party_unique', Unique(t, t.party, t.contract), 'The party '
+                'cannot be added more than once on the same contract')]
 
     @classmethod
     def search_rec_name(cls, name, clause):

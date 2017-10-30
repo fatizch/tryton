@@ -2,6 +2,13 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.covered_element:"
+msgid ""
+"The party cannot be added more than once on the same contract"
+msgstr ""
+"Un tiers ne peut pas être ajouté plus d'une fois sur le même "
+"contrat en tant que personne couverte"
+
 msgctxt "error:contract.manage_exclusion:"
 msgid "At least one exclusion must be selected"
 msgstr "Au moins une exclusion doit être sélectionnée"

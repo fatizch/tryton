@@ -1,3 +1,4 @@
+* BUG#2982: Check that a party has not been added more than once as a covered element on the contract
 * FEA#7439 Possibility to disable extra premiums / exclusions per coverage
 * BUG#5664 Fix checks methods on contract options and covered elements extra datas
 * FEA#7024 Configure default reports templates to be added as default letters in coog

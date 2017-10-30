@@ -46,6 +46,14 @@ class ModuleTestCase(test_framework.CoogTestCase):
         party.gender = 'male'
         party.save()
 
+        party = self.Party()
+        party.is_person = True
+        party.name = 'Antoine'
+        party.first_name = 'Jeff'
+        party.birth_date = datetime.date(1988, 7, 30)
+        party.gender = 'male'
+        party.save()
+
         party, = self.Party.search([('name', '=', 'DOE')])
         self.assert_(party.id)
 
@@ -119,7 +127,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract, = self.Contract.search([])
         start_date = contract.start_date
 
-        def set_test_case(new_date, ant_date, post_date):
+        def set_test_case(new_date, ant_date, post_date, party):
             if (contract.covered_elements and
                     contract.covered_elements[0].options):
                 for option in contract.covered_elements[0].options:
@@ -128,7 +136,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
             covered_element.item_desc = coverage.item_desc
             covered_element.contract = contract
             covered_element.product = covered_element.on_change_with_product()
-            party = self.Party.search([('is_person', '=', True)])[0]
             covered_element.party = party
             covered_element.save()
 
@@ -160,8 +167,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         new_date = start_date + datetime.timedelta(weeks=2)
         ant_date = new_date - datetime.timedelta(weeks=1)
         post_date = new_date + datetime.timedelta(weeks=1)
+        party = self.Party.search([('is_person', '=', True)])[0]
 
-        set_test_case(new_date, ant_date, post_date)
+        set_test_case(new_date, ant_date, post_date, party)
 
         self.assertEqual(new_date, contract.start_date)
         self.assertEqual(new_date, contract.appliable_conditions_date)
@@ -176,8 +184,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         new_date = start_date - datetime.timedelta(weeks=2)
         ant_date = new_date - datetime.timedelta(weeks=1)
         post_date = new_date + datetime.timedelta(weeks=1)
+        party1 = self.Party.search([('is_person', '=', True)])[1]
 
-        set_test_case(new_date, ant_date, post_date)
+        set_test_case(new_date, ant_date, post_date, party1)
 
         self.assertEqual(new_date, contract.start_date)
         self.assertEqual(new_date, contract.appliable_conditions_date)
@@ -201,7 +210,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         except when they would be anterior to new contract start_date.
         """
 
-        def set_test_case(new_date, fixed_date):
+        def set_test_case(new_date, fixed_date, party):
 
             if (contract.covered_elements and
                     contract.covered_elements[0].options):
@@ -216,7 +225,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
             covered_element.contract = contract
             covered_element.item_desc = coverage.item_desc
             covered_element.product = covered_element.on_change_with_product()
-            party = self.Party.search([('is_person', '=', True)])[0]
             covered_element.party = party
             covered_element.save()
             contract.covered_elements = [covered_element.id]
@@ -299,8 +307,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # to new start date if not manually set
         new_date = start_date + datetime.timedelta(weeks=2)
         fixed_date = start_date + datetime.timedelta(weeks=1)
+        party = self.Party.search([('is_person', '=', True)])[0]
 
-        set_test_case(new_date, fixed_date)
+        set_test_case(new_date, fixed_date, party)
 
         contract_cov_opt = contract.covered_elements[0].options[0]
         self.assertEqual(new_date, contract.start_date)
@@ -337,8 +346,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract.save()
         new_date = start_date - datetime.timedelta(weeks=2)
         fixed_date = start_date + datetime.timedelta(weeks=1)
+        party1 = self.Party.search([('is_person', '=', True)])[1]
 
-        set_test_case(new_date, fixed_date)
+        set_test_case(new_date, fixed_date, party1)
 
         contract_cov_opt = contract.covered_elements[0].options[0]
         self.assertEqual(new_date, contract.start_date)
@@ -469,12 +479,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         end_option1 = current_end - datetime.timedelta(weeks=2)
         end_option2 = current_end - datetime.timedelta(weeks=4)
 
-        def add_covered_element_with_options(option_end_dates):
+        def add_covered_element_with_options(option_end_dates, party):
             covered_element = self.CoveredElement()
             covered_element.item_desc = coverage.item_desc
             covered_element.contract = contract
             covered_element.product = covered_element.on_change_with_product()
-            party = self.Party.search([('is_person', '=', True)])[0]
             covered_element.party = party
             covered_element.save()
             options = []
@@ -497,10 +506,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         def build_contract_covered_elements(end_date1, end_date2):
             self.CoveredElement.delete(contract.covered_elements)
+            party = self.Party.search([('is_person', '=', True)])[0]
+            party1 = self.Party.search([('is_person', '=', True)])[1]
+
             contract.covered_elements = [add_covered_element_with_options(
-                    [end_date1, end_date2]),
+                    [end_date1, end_date2], party),
                 add_covered_element_with_options(
-                    [end_date2, end_date2])]
+                    [end_date2, end_date2], party1)]
 
         contract.options = []
         build_contract_covered_elements(end_option1, end_option2)
