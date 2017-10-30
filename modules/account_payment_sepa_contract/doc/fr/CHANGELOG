@@ -1,3 +1,4 @@
+* OTH#0000 Correction du scenario de test sur l'annulation de quittance
 * OTH#0000 Extraction de la vérification sur la création des frais de rejet pour permettre une surcharge 
 * BUG#7332 Réinitialisation des données de prélèvement lors d'un changement de souscripteur
 * FEA#7024 Ajout de courriers par defaut "Demande de mandat SEPA"

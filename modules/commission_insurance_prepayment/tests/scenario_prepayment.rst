@@ -252,6 +252,7 @@ Generate insurer and broker invoice::
 
 Cancel invoice::
 
+    >>> first_invoice.click('cancel')
     >>> last_invoice.click('cancel')
     >>> line, = last_invoice.invoice.lines
     >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
