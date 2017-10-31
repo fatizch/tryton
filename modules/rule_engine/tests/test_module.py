@@ -785,23 +785,19 @@ class ModuleTestCase(test_framework.CoogTestCase):
         with Transaction().set_context({'active_id': log.id,
                     'active_model': 'rule_engine.log',
                     'rule_id': log.rule.id}):
+            action = {}
             wizard_id, _, _ = self.InitTestCaseFromExecutionLog.create()
             wizard = self.InitTestCaseFromExecutionLog(wizard_id)
-            test_case_dict = wizard.default_select_values(None)
-            test_case_dict['description'] = 'Test test case'
-            for call in test_case_dict['test_values']:
-                if call['name'] in ('add_error', 'add_warning', 'add_info'):
-                    call['override_value'] = False
-            wizard.execute(wizard_id, {'select_values': test_case_dict},
-                'create_test_case')
+            wizard.do_created_test_case(action)
 
         with Transaction().set_context({'active_id': rule.id}):
+            print('ici')
             wizard_id, _, _ = self.RunTests.create()
             wizard = self.RunTests(wizard_id)
             wizard._execute('report')
             res = wizard.default_report(None)
             self.assertEqual(res, {'report':
-                    'Test test case ... SUCCESS'})
+                    'result: 20 ... SUCCESS'})
 
 
 def suite():

@@ -29,11 +29,12 @@ from trytond.cache import Cache
 from trytond.model import DictSchemaMixin, ModelView as TrytonModelView, Unique
 from trytond.model import fields as tryton_fields, Model
 from trytond.wizard import Wizard, StateView, Button, StateTransition
+from trytond.wizard import StateAction
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.tools import memoize
 from trytond.tools import cursor_dict
-from trytond.pyson import Eval, Or, Bool, If
+from trytond.pyson import Eval, Or, Bool, If, PYSONEncoder
 from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import (coog_date, coog_string, fields,
@@ -2054,12 +2055,8 @@ class InitTestCaseFromExecutionLog(Wizard):
 
     __name__ = 'rule_engine.test_case.init'
 
-    start_state = 'select_values'
-    select_values = StateView('rule_engine.test_case',
-        'rule_engine.test_case_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Accept', 'create_test_case', 'tryton-go-next')])
-    create_test_case = StateTransition()
+    start_state = 'created_test_case'
+    created_test_case = StateAction('rule_engine.act_create_test_case')
 
     @classmethod
     def __setup__(cls):
@@ -2079,7 +2076,10 @@ class InitTestCaseFromExecutionLog(Wizard):
             return False
         return True
 
-    def default_select_values(self, name):
+    def do_created_test_case(self, action):
+        encoder = PYSONEncoder()
+        TestCase = Pool().get('rule_engine.test_case')
+        testcase = TestCase()
         active_id = Transaction().context.get('active_id')
         active_model = Transaction().context.get('active_model')
         if active_model != 'rule_engine.log':
@@ -2096,24 +2096,23 @@ class InitTestCaseFromExecutionLog(Wizard):
         description = ', '.join(['result: %s' % log.result] + ['%s: %s' % (
                     x['name'], x['value'])
                 for x in test_values if x['override_value']])
-        return {
-            'expected_result': '[%s, [%s], [%s], [%s]]' % (
-                log.result, log.errors, log.warnings, log.info),
-            'result_value': log.result,
-            'result_warnings': log.warnings,
-            'result_errors': log.errors,
-            'result_info': log.info,
-            'debug': log.debug,
-            'rule': log.rule.id,
-            'low_debug': log.low_level_debug,
-            'rule_text': log.rule.algorithm,
-            'test_values': test_values,
-            'description': description,
-            }
-
-    def transition_create_test_case(self):
-        self.select_values.save()
-        return 'end'
+        testcase.expected_result = '[%s, [%s], [%s], [%s]]' % (
+            log.result, log.errors, log.warnings, log.info)
+        testcase.result_value = log.result
+        testcase.result_warnings = log.warnings
+        testcase.result_errors = log.errors
+        testcase.result_info = log.info
+        testcase.debug = log.debug
+        testcase.rule = log.rule.id
+        testcase.low_debug = log.low_level_debug
+        testcase.rule_text = log.rule.algorithm
+        testcase.test_values = test_values
+        testcase.description = description
+        testcase.save()
+        action['pyson_domain'] = encoder.encode([('id', '=',
+                    testcase.id)])
+        action['pyson_search_value'] = encoder.encode([])
+        return action, {'res_id': testcase.id}
 
 
 class ValidateRuleTestCases(Wizard):

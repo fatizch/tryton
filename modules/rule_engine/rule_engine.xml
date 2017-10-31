@@ -205,6 +205,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">rule_engine,-1</field>
             <field name="action" ref="run_tests_wizard"/>
         </record>
+        <record model="ir.action.act_window" id="act_create_test_case">
+            <field name="name">New test case</field>
+            <field name="res_model">rule_engine.test_case</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_create_test_case_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="test_case_form"/>
+            <field name="act_window" ref="act_create_test_case"/>
+        </record>
         <!-- ############################################################ -->
         <!-- Table Menu -->
         <!-- ############################################################ -->

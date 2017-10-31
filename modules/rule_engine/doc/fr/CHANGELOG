@@ -1,3 +1,4 @@
+* BUG#7385 Modification du wizard de jeu de tests en ajoutant une action qui permet d'afficher un nouveau cas de test avec les jeux de tests déjà existant
 * BUG#7385 Modification de la fonction 'FunctionFinder' en ignorant la liste de tout les bultins lorsqu'on ajoute les valeurs au niveau des jeux de tests
 * FEA#6956 Les règles s'exécutent désormais en lecture seule
 

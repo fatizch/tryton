@@ -909,6 +909,10 @@ msgctxt "model:ir.action,name:"
 msgid "Tags"
 msgstr "Labels"
 
+msgctxt "model:ir.action,name:act_create_test_case"
+msgid "New test case"
+msgstr "Nouveau jeu de test"
+
 msgctxt "model:ir.action,name:act_rule_engine_log_relate_form"
 msgid "Rule Engine Logs"
 msgstr "Traces du moteur de règle"
