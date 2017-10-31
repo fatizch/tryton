@@ -5,7 +5,7 @@
 * FEA#6232 Nettoyage de la sortie du log pour les batches et chaînes
 * BUG#7026 Gel des dépendances et suppression de l'attribut "_config" du modèle de base des batchs
 * OTH#0000 Ajout des méthode clear / has errors sur le gestionnaire d'erreur
-* FEA#7076 Ajout d'un point d'entrée de configuration generale
+* FEA#7076 Ajout d'un point d'entrée de configuration générale
 * FEA#6377 Séparation de l'initialisation des recherches globales et des langues traduisibles du cas de test au profit d'un assistant d'initialisation
 * FEA#7015 Ajout d'une fonction technique pour ajouter une condition de lecture seule sur tous les champs d'un modèle
 * BUG#6993 Suppression de l'import simplejson
