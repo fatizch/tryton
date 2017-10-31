@@ -1,5 +1,5 @@
 * BUG#7346 Ajout de paramétrage pour activer la fonctionnalité des amendements de mandat SEPA
-* FEA#7246 Ajouter la consultation des paiements à partir des tiers
+* FEA#7246 Ajout de la consultation des paiements à partir des tiers
 * BUG#7058 Les amendements doivent renvoyer un IBAN compact
 * BUG#6999 Retirer le tiers des clés de regroupement pour les groupes de paiement sepa
 * BUG#6939 Correction du domain du bouton de génération du message SEPA
