@@ -1,5 +1,5 @@
 * BUG#7216: Migration de la méthode check_options_dates
-* Retrouve un processus pour une souscription en cours sans tâche associée. Utile pour les souscriptions créées depuis un système externe.
+* FEA#6210 Retrouve un processus pour une souscription en cours sans tâche associée. Utile pour les souscriptions créées depuis un système externe.
 
 Version 1.12 - 2017-04-28* FEA#0000 Possibilité d'utiliser les processus sur les notifications
 
