@@ -17,7 +17,7 @@
 * FEA#0000 Ajout d'une chaîne de batchs parallélisables pour le traitement des paiements
 * FEA#0000 Envoi du nom complet (nom + prénom) dans les fichiers SEPA
 * FEA#0000 Gestion de la notion de payeur pour tous les types de paiement
-* FEA#0000 Possibilité d'ajouter des informations liées aux paiements individuels dans le libellé de prélèvement
+* FEA#6172 Possibilité d'ajouter des informations liées aux paiements individuels dans le libellé de prélèvement
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Remplacer process batch avec un batch qui appele le methode 'do'
