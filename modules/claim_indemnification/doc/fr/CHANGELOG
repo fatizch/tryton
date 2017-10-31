@@ -1,7 +1,7 @@
 * BUG#7179 Les lignes de paiement des factures de prestation sont désormais bien réconciliées lorsque que le bénéficiaire à reçu un trop perçu
 * OTH#0000 Correction du scenario de test
 * BUG#7095 Corrigez le crash dans le batch de création d'indemnisations en raison de devices manquantes
-* FEA#7046 Amélioration des la vue de validation et contrôle des indémnisations
+* FEA#7046 Amélioration des vues de validation et du contrôle des indemnisations
 * BUG#7044 Ne pas tenter d'annuler une indemnisation déjà annulée
 * BUG#6882 Des avertissements ou errors ne sont plus levés en cas de refus de service lors de la fermeture d'une prestation
 * FEA#5907 Gestion des indemnisations multiples sur une période
@@ -10,7 +10,7 @@
 * OTH#0000 Correctifs des warnings sur la classe Configuration lors du lancement du serveur
 * BUG#6358 Utiliser la date du jour pour valider l'existence d'un compte bancaire à l'ordonnancement
 * BUG#6346 Le batch de création de prestations créé des prestations ayant les mêmes propriétés que la dernière prestation créée pour un service donné
-* FEA#6352 Dans le batch de création des périodes d'indemnisation (périodes de rente), ordonnancement automatique des périodes si possible (e.g.: aucun document requis)
+* FEA#6352 Ordonnancement automatique des périodes si possible (e.g.: aucun document requis) dans le batch de cré ation des pé riodes d'indemnisation
 * Ajout d'une fonction de validation des prestations
 * Ajout d'une valeur par défaut pour la condition de paiement dans la configuration de sinistre
 
