@@ -1,6 +1,6 @@
 * BUG#385 Bloquer la possibilité de pouvoir supprimer un avenant qui a été appliqué
 * BUG#6003 Remplace désormais la version de l'option du contrat si sa date d'effet est identique à la version précédente de l'option de contrat
-* FEA#7077 Ajouter des avenants préconfiguré
+* FEA#7077 Ajout d'avenants préconfigurés
 * BUG#7120 Suppression de l'initialisation de la raison de résiliation dans l'avenant de modification de garantie
 * BUG#7114 Nettoyage du contenu des avenants
 * BUG#6993 Suppression de l'import simplejson
