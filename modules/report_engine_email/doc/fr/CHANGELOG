@@ -1,6 +1,6 @@
-* FEA#6410 Hide button manual sending when it is not allowed on the report template
-* FIX#0000 Attachments variable moved at the top of the function to avoid crash
-* FEA#6356 Filtre les pièces jointes des emails de lamême façcon que les actions par type d'événement 
+* FEA#6410 Le bouton "Envoi manuel eMail" est désormais caché lorsque ce n'est pas autorisé sur le modèle de courrier.
+* BUG#0000 La variable "attachments" est déplacé en haut de la fonction afin d'éviter un crash
+* FEA#6356 Les pièces jointes des emails sont filtrées de la même façon que les actions par type d'événement 
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Support du stockage dans la GED interne pour les modèles de courrier en pièce jointe
