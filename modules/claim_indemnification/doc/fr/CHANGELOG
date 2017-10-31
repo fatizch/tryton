@@ -12,7 +12,7 @@
 * BUG#6346 Le batch de création de prestations créé des prestations ayant les mêmes propriétés que la dernière prestation créée pour un service donné
 * FEA#6352 Ordonnancement automatique des périodes si possible (e.g.: aucun document requis) dans le batch de cré ation des pé riodes d'indemnisation
 * Ajout d'une fonction de validation des prestations
-* Ajout d'une valeur par défaut pour la condition de paiement dans la configuration de sinistre
+* FEA#6117 Ajout d'une valeur par défaut pour la condition de paiement dans la configuration de sinistre
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Amélioration de l'experience utilisateur (amélioration de l'interface)

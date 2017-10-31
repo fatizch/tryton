@@ -12,7 +12,7 @@
 * BUG#6346 The indemnification creation batch will create indemnifications with the same properties as the last one created for a given service
 * FEA#6352 In indemnification creation batch, automatically schedule indemnifications when possible (e.g: no required documents)
 * Add indemnifications validation function
-* Add default value for payment term in claim configuration
+* FEA#6117 Add default value for payment term in claim configuration
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Enhance user experience (interface improvements)
