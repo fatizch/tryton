@@ -16,7 +16,7 @@
 * OTH#0000 Fix missing import Printable
 * OTH#0000 Fix typo: use template.get_extension instead of template.output_format
 * FEA#2227 Store template version data in database
-* FEA#0000 Add strftime function to report context to format date in any possible way
+* FEA#6180 Add strftime function to report context to format date in any possible way
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Support for all conversion combination between storage in EDM and export format

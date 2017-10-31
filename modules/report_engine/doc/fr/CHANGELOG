@@ -16,7 +16,7 @@
 * OTH#0000 Corriger import manquant 
 * OTH#0000 Correctif: Utilisation de template.get_extension au lieu de template.output_format
 * FEA#2227 Stocker les modèles de courriers dans la base de données
-* FEA#0000 Ajout de la fonction strftime dans le contexte du rapport pour formatter les dates de toutes les façons possibles
+* FEA#6180 Ajout de la fonction strftime dans le contexte du rapport pour formatter les dates de toutes les façons possibles
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Support de toutes les combinaisons de conversion entre le stockage en ged et
