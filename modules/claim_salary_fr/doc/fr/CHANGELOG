@@ -1,7 +1,7 @@
 * BUG#7105 Erreur dans le calcul des tranches de salaire si celui ci est déclaré annuellement
 * OTH#0000 Renommer le référence service au delivered_service dans get_currency
 * BUG#6499 L'initialisation des périodes de salaire doit se baser sur la date de sortie de l'entreprise
-* FEA#6465 Permettre d'accéder aux tranches TA, TB, TC depuis coog-api
+* FEA#6465 Les tranches TA, TB, TC sont désormais accessibles depuis coog-api
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout de l'assistant de salaires permettant de saisir les salaires et de calculer les salaires nets.
