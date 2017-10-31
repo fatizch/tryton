@@ -19,7 +19,7 @@
 * OTH#0000 Ajout de l'appel au super dans la méthode 'default_start' de l'assistant de traitement des paiements
 * FEA#6439 Possibilité de sommer les paiements sélectionnés
 * FEA#6316 Possibilité de forcer l'accusé réception sur des groupes de paiement sans qu'il y ai eu planification.
-* FEA#6402 Notification d'événement lors de la planfication de l'accusé récéption d'un groupe de paiement
+* FEA#6402 Notification d'événement lors de la planfication de l'accusé réception d'un groupe de paiement
 * FEA#6316 Ajout d'un paramètre de batch permettant de forcer l'accusé réception sur des groupes de paiement sans accusé réception planifié mais qui sont en traitement.
 * FEA#6316 Utilisation de la date de traitement du batch pour récupérer les groupes de paiement avec une date de paiement minimale inférieure ou égale.
 * FEA#0000 Ajout d'une chaîne de batchs parallélisables pour le traitement des paiements
