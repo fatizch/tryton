@@ -1,7 +1,7 @@
 * BUG#2982: Vérifier qu'une personne physique n'a pas été ajouté plus d'une fois en tant que personne couverte sur le contrat
 * FEA#7439 Possibilité de débrancher les surprimes / exclusions par garantie
 * BUG#5664 Correction des vérifications de données complémentaires sur les garanties et les éléments couverts
-* FEA#7024 Ajout de modéles de courriers par défaut pour "Certificat d'adhésion" - "Echéancier" -"Brouillard" - "Demande mandat SEPA"
+* FEA#7024 Ajout de modèles de courriers par défaut pour "Certificat d'adhésion" - "Echéancier" -"Brouillard" - "Demande mandat SEPA"
 * BUG#7132 Migration de la fonction d'attribution du souscripteur du contrat en tant qu'élément couvert depuis le module "contract_life_process"
 * BUG#7029 Correction de l'initialisation des options par défaut
 * BUG#6757 Correction du calcul de la date d'effet d'un élément couvert
