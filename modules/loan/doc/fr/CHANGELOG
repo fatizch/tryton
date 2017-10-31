@@ -7,7 +7,7 @@
 * BUG#6890 Ajout d'un message d'erreur quand le nombre de paiement dépasse la limite.
 * BUG#6828 Récuperer la date de fin d'option même si le prêt n'a pas de date de fin
 * BUG#6563 Correction du calcul du prorata du TAEA selon le nombre de jours dans l'année
-* FEA#6457 Possibilité de customiser le mode de tri du champs 'latest_loan_shares'
+* FEA#6457 Possibilité de personnaliser le mode de tri du champs 'latest_loan_shares'
 * BUG#6458 Correction du calcul de l'échéancier suite à insertion de paliers
 * BUG#6398 Tri des quotités par numéro de prêt sur la vue contrat
 
