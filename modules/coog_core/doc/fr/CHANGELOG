@@ -3,7 +3,7 @@
 * BUG#7283 Corrige la duplication d'un objet ayant une contrainte d'unicité
 * BUG#7168 Ajout d'un élément dans le pyson pour détecter un batch
 * FEA#6232 Nettoyage de la sortie du log pour les batches et chaînes
-* FEA#7026 Gel des dépendances et suppression de l'attribut "_config" du modèle de base des batchs
+* BUG#7026 Gel des dépendances et suppression de l'attribut "_config" du modèle de base des batchs
 * OTH#0000 Ajout des méthode clear / has errors sur le gestionnaire d'erreur
 * FEA#7076 Ajout d'un point d'entrée de configuration generale
 * FEA#6377 Séparation de l'initialisation des recherches globales et des langues traduisibles du cas de test au profit d'un assistant d'initialisation

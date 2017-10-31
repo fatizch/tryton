@@ -3,7 +3,7 @@
 * BUG#7283 Fix duplication of object with a unicity constraint
 * BUG#7168 Add a pyson key to detect that a batch is running
 * FEA#6232 Clean up batch and chain log output
-* FEA#7026 Freeze dependencies and remove attribute "_config" from base batches model
+* BUG#7026 Freeze dependencies and remove attribute "_config" from base batches model
 * OTH#0000 Add clear / has error methods on error manager
 * FEA#7076 Add general configuration entrypoint
 * FEA#6377 Move initialisation of global search and translatable languages from test case to a wizard
