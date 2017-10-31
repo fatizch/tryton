@@ -17,7 +17,7 @@ __all__ = [
     'DeclineRenewal',
     'Renew',
     'ConfirmRenew',
-]
+    ]
 
 
 class ActivationHistory:
@@ -64,9 +64,12 @@ class Contract:
                 "a planned termination. It can't be renewed",
                 })
 
+    def finally_renewed(self):
+        return (self.activation_history and 
+            self.activation_history[-1].final_renewal)
+
     def get_is_renewable(self, name):
-        if self.activation_history and \
-                self.activation_history[-1].final_renewal:
+        if self.finally_renewed():
             return False
         if self.product.term_renewal_rule:
             return self.product.term_renewal_rule[0].allow_renewal

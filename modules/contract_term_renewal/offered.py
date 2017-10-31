@@ -9,7 +9,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Product',
     'ProductTermRenewalRule',
-]
+    ]
 
 
 class Product:
@@ -20,10 +20,10 @@ class Product:
         'Term Renewal Rule', delete_missing=True, size=1)
 
     def get_contract_end_date(self, exec_context):
-        if not exec_context['contract'].is_renewable:
-            return exec_context['contract'].final_end_date
-        if self.term_renewal_rule:
+        if self.term_renewal_rule and not \
+                exec_context['contract'].finally_renewed():
             return self.term_renewal_rule[0].calculate_rule(exec_context)
+        return exec_context['contract'].final_end_date
 
 
 class ProductTermRenewalRule(
