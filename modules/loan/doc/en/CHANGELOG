@@ -1,3 +1,4 @@
+* OTH#2443 Improve the migration performances
 * BUG#2443 The end date on increments is now stored instead of being calculated
 * BUG#7331 Allow to ignore coverages for the insured outstanding balance calculation
 * BUG#7330 Set all loan increment fields to readonly if the loan has been calculated

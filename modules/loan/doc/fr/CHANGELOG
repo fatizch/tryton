@@ -1,3 +1,4 @@
+* OTH#2443 Amélioration des performances de migration
 * BUG#2443 La date de fin sur les paliers est désormais stockée plutôt que calculée
 * BUG#7331 Possibilitée d'ignorer des garanties dans le calcul des balances d'encours assurés
 * BUG#7330 Mettre tous les champs  des paliers d'un prêt en lecture seule si le prêt a été calculé

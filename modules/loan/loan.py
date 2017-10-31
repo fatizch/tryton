@@ -4,6 +4,7 @@ import datetime
 import bisect
 from decimal import Decimal
 from sql.conditionals import Coalesce
+from sql.aggregate import Min, Max
 from dateutil.relativedelta import relativedelta
 
 from trytond import backend
@@ -1059,13 +1060,41 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
 
         # Migration from 1.12 Store end_date
         if inexisting_end_date:
-            for increment_slice in grouped_slice(
-                    cls.search([('loan', '!=', None)])):
-                increments = []
-                for increment in increment_slice:
-                    increment.end_date = increment.last_payment_date()
-                    increments.append(increment)
-                cls.save(increments)
+            cls._migrate_increment_end_date()
+
+    @classmethod
+    def _migrate_increment_end_date(cls):
+        cursor = Transaction().connection.cursor()
+        loan_payment = Pool().get('loan.payment').__table__()
+        loan_increment = cls.__table__()
+        loan_increment_2 = cls.__table__()
+        # Brace yourself for the query of hell.
+        increment_join = loan_increment.join(loan_increment_2, 'LEFT OUTER',
+            condition=((loan_increment.loan == loan_increment_2.loan) &
+                (loan_increment_2.start_date > loan_increment.start_date))
+            ).select(loan_increment.id, loan_increment.loan,
+                loan_increment.start_date,
+                Min(loan_increment_2.start_date).as_(
+                    'next_increment_date'), group_by=[
+                    loan_increment.id, loan_increment.loan,
+                    loan_increment.start_date],
+                    order_by=[loan_increment.loan, loan_increment.start_date])
+        payment_join = increment_join.join(loan_payment, condition=(
+            (increment_join.loan == loan_payment.loan) &
+            (loan_payment.start_date < Coalesce(
+                increment_join.next_increment_date, datetime.date.max)) &
+            (loan_payment.start_date >= increment_join.start_date)))
+        update_data = payment_join.select(increment_join.id,
+            increment_join.loan, increment_join.start_date,
+            Max(loan_payment.start_date).as_('end_date'),
+            group_by=[increment_join.id, increment_join.loan,
+                increment_join.start_date])
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*loan_increment.update(
+                columns=[loan_increment.end_date],
+                values=[update_data.end_date],
+                from_=[update_data],
+                where=update_data.id == loan_increment.id))
 
     @fields.depends('begin_balance', 'currency', 'first_payment_end_balance',
         'deferral', 'loan', 'number_of_payments', 'payment_amount',
