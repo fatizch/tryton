@@ -1,6 +1,6 @@
 * BUG#6732 Affichage d'une erreur lors d'un échec dans l'assistant de représentation d'un paiement paybox depuis un paiement impayé
 * FEA#6542 Améliorations: Création d'un paiement depuis un rejet, améliorations de l'interface utilisateur
-* FEA#6565 Echoue le groupe de paiement lors de l'échec du paiement paybox
+* FEA#6565 Mise en échec automatique du groupe de paiement lors de l'échec du paiement paybox
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Création du module
