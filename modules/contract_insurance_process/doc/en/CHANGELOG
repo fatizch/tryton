@@ -1,5 +1,5 @@
 * BUG#7216: Migrate check_options_dates method
-* Find a process for a pending subscription without task. Usefull for subscriptions created from an external system.
+* FEA#6210 Find a process for a pending subscription without task. Usefull for subscriptions created from an external system.
 
 Version 1.12 - 2017-04-28* FEA#0000 Contract Notifications are now processable
 
