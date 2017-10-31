@@ -3,7 +3,7 @@
 * BUG#7058 Les amendements doivent renvoyer un IBAN compact
 * BUG#6999 Retirer le tiers des clés de regroupement pour les groupes de paiement sepa
 * BUG#6939 Correction du domain du bouton de génération du message SEPA
-* FEA#5500 Nouveau standard sepa: Rulebooks SDD Core V9.0 et SDD B2B V7.0: générer uniquement des séquences de types 'RCUR' pour les paiements sepa et retirer le type'FRST'
+* FEA#5500 Nouveau standard sepa: Rulebooks SDD Core V9.0 et SDD B2B V7.0: générer uniquement des séquences de types 'RCUR' pour les paiements sepa et retirer le type 'FRST'
 * BUG#6107 Le compte bancaire ne s'affiche plus dans l'assistant de création de paiement lorsque la méthode de traitement est autre que SEPA
 * BUG#6817 Retirer le tiers des clés de regroupement pour les groupes de paiement sepa
 * OTH#0000 Suite de #6792
@@ -13,9 +13,9 @@
 * OTH#0000 Le bouton "Générer le message" est désormais caché si le groupe de paiement n'est pas de type SEPA
 * BUG#6345 regrouper les paiments SEPA par mandat ou payeur pour le traitement par batch
 * FEA#6441 Recherche automatique des mandats via leur tiers / numéro de compte
-* FEA#0000 Diviser le batch de rejet de paiement pour améliorer les performances
-* FEA#0000 Ajout d'une chaine de batchs parallélisables pour le traitement des paiements
-* FEA#0000 Envoyer le nom complet (nom + prénom) dans les fichiers SEPA
+* FEA#0000 Division du batch de rejet de paiement pour améliorer les performances
+* FEA#0000 Ajout d'une chaîne de batchs parallélisables pour le traitement des paiements
+* FEA#0000 Envoi du nom complet (nom + prénom) dans les fichiers SEPA
 * FEA#0000 Gestion de la notion de payeur pour tous les types de paiement
 * FEA#0000 Possibilité d'ajouter des informations liées aux paiements individuels dans le libellé de prélèvement
 
