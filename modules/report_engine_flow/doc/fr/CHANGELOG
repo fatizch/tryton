@@ -1,6 +1,6 @@
 * OTH#0000 Remonter de la méthode group-by dans report_engine
-* Ajout des en têtes dans les modèles de courrier de flux
-* Ajout de la gestion des en têtes dans le batch d'extraction de masse des flux
+* FEA#6266 Ajout des en têtes dans les modèles de courrier de flux
+* FEA#6266 Ajout de la gestion des en têtes dans le batch d'extraction de masse des flux
 Version 1.12 - 2017-04-28
 * FEA#0000 Utilisation de l'ouverture de fichier securisée pour assurer l'écriture concurrente dans les fichiers de flux
 * FEA#0000 Ajout du nom de fichier et du répertoire d'export sur les modèles de courriers de flux
