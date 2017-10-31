@@ -2,7 +2,7 @@
 * BUG#6930 Remplacer le contexte de transaction par un contexte de serveur lors de l'initialisation de _payment_term_change
 * BUG#6709 Restoration de la méthode get_invoice_sequence sur les périodes
 * FEA#6453 Ajout de la gestion des filtres sur les quittances pour les rapports
-* Nouvelle option sur les conditions de paiement pour synchroniser une date d'échéance à la fin du trimestre par exemple
+* FEA#6234 Nouvelle option sur les conditions de paiement pour synchroniser une date d'échéance à la fin du trimestre par exemple
 * FEA#6116 Les quittances liées à un tiers sont les quittances du contrat au lieu de tous les types métier de quittances
 
 Version 1.12 - 2017-04-28
