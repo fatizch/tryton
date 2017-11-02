@@ -207,11 +207,14 @@ class Invoice:
     def view_attributes(cls):
         is_commission_type = In(Eval('business_kind'),
             cls.get_commission_invoice_types())
-        return super(Invoice, cls).view_attributes() + [
-            ('//group[@id="invoice_lines"]',
-                'states', {
-                    'invisible': is_commission_type,
-                    }),
+        attributes = []
+        for path, attr, state in super(Invoice, cls).view_attributes():
+            if path == '//group[@id="invoice_lines"]' and attr == 'states':
+                state = {
+                    'invisible': Or(state['invisible'], is_commission_type),
+                    }
+            attributes.append((path, attr, state))
+        return attributes + [
             ('//group[@id="invoice_lines_commission"]',
                 'states', {
                     'invisible': Not(is_commission_type),
