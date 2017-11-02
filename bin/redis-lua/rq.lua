@@ -197,7 +197,7 @@ api.help = function()
 end
 
 api.fail = function(queue)
-    local filter = check_filter({2, 1})
+    local filter = check_filter({2, 1}) -- [fail]
     local result = {}
     local fails = redis.call('LRANGE', broker.fail_list, 0, -1)
     for _, id in ipairs(fails) do
@@ -232,7 +232,7 @@ api.list = function(criteria)
 end
 
 api.flist = function()
-    local filter = check_filter({2, 1})
+    local filter = check_filter({2, 1}) -- [fail]
     local header, result = list_init()
 
     local fails = redis.call('LRANGE', broker.fail_list, 0, -1)
@@ -252,7 +252,7 @@ end
 
 api.q = function(queue)
     assert(queue, 'missing queue')
-    local filter = check_filter({0, 1})
+    local filter = check_filter({0, 1}) -- [wait, success, fail]
 
     local wait = 0
     local success = 0
@@ -295,7 +295,7 @@ end
 
 api.qlist = function(queue, ...)
     assert(queue, 'missing queue')
-    local filter = check_filter({0, 1}, ...)
+    local filter = check_filter({0, 1}, ...) -- [wait, success, fail]
     local header, result = list_init()
 
     local pattern = broker.patterns[1]
@@ -313,7 +313,7 @@ end
 
 api.qcount = function(queue, ...)
     assert(queue, 'missing queue')
-    local filter = check_filter({0, 1}, ...)
+    local filter = check_filter({0, 1}, ...) -- [wait, success, fail]
 
     local result = 0
     local pattern = broker.patterns[1]
@@ -330,7 +330,7 @@ end
 
 api.qtime = function(queue, ...)
     assert(queue, 'missing queue')
-    local filter = check_filter({0, 1}, ...)
+    local filter = check_filter({0, 1}, ...) -- [wait, success, fail]
 
     local result = 0
     local pattern = broker.patterns[1]
@@ -348,7 +348,7 @@ end
 
 api.qarchive = function(queue, ...)
     assert(queue, 'missing queue')
-    local filter = check_filter({1, 2}, ...)
+    local filter = check_filter({1, 2}, ...) -- [success]
     assert(not filter[STATUS[1]], 'archiving waiting jobs: no sense')
 
     local result = 0
@@ -367,7 +367,7 @@ end
 
 api.qremove = function(queue, ...)
     assert(queue, 'missing queue')
-    local filter = check_filter({0, 1}, ...)
+    local filter = check_filter({0, 1}, ...) -- [wait, success, fail]
 
     if filter[STATUS[1]] then
         redis.call('DEL', broker.queue_pattern .. queue)
