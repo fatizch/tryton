@@ -234,17 +234,17 @@ msgctxt "view:process:"
 msgid "Loss Description"
 msgstr "Descripteur de préjudice"
 
+msgctxt "wizard_button:claim.declare,process_parameters,action:"
+msgid "Start Process"
+msgstr "Démarrer le processus"
+
 msgctxt "wizard_button:claim.declare,process_parameters,close_claim:"
 msgid "Close"
 msgstr "Clore"
 
 msgctxt "wizard_button:claim.declare,process_parameters,close_claim:"
 msgid "Close claims"
-msgstr "Clore les sinistres"
-
-msgctxt "wizard_button:claim.declare,process_parameters,confirm_declaration:"
-msgid "Start Process"
-msgstr "Démarrer le processus"
+msgstr "Clôre les sinistres"
 
 msgctxt "wizard_button:claim.declare,process_parameters,end:"
 msgid "Cancel"

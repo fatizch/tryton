@@ -207,8 +207,8 @@ msgid "Gross Salary"
 msgstr "Salaire brut"
 
 msgctxt "field:claim.service,net_salary:"
-msgid "Net Salary"
-msgstr "Salaire net"
+msgid "Gross Salary"
+msgstr "Salaire brut"
 
 msgctxt "field:claim.service,net_salary_bonus:"
 msgid "Net Salary Bonus"
@@ -219,8 +219,8 @@ msgid "Salary"
 msgstr "Salaire"
 
 msgctxt "field:claim.service,salary_bonus:"
-msgid "Gross Salary"
-msgstr "Salaire brut"
+msgid "Gross Salary Bonus"
+msgstr "Bonus salaire brut"
 
 msgctxt "field:claim.service,salary_mode:"
 msgid "Salary Mode"

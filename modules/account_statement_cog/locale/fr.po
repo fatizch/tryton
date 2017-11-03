@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_statement_journals_general_configuration"
-msgid "Statement Journals"
-msgstr "Journaux de relevés"
-
-msgctxt "model:ir.ui.menu,name:menu_statement_cancel_motives_general_configuration"
-msgid "Statement Cancel Motives"
-msgstr "Motifs d'annulation de relevé"
-
 msgctxt "error:account.move:"
 msgid "The statement is already cancelled"
 msgstr "Le relevé est déja annulé"
@@ -364,9 +356,18 @@ msgctxt "model:ir.ui.menu,name:menu_statement_bank_deposit_form"
 msgid "Bank Deposit Ticket"
 msgstr "Bordereaux de chèques"
 
+msgctxt ""
+"model:ir.ui.menu,name:menu_statement_cancel_motives_general_configuration"
+msgid "Statement Cancel Motives"
+msgstr "Motifs d'annulation de relevé"
+
 msgctxt "model:ir.ui.menu,name:menu_statement_journal_cancel_motive_form"
 msgid "Cancel motives"
 msgstr "Motifs d'annulation"
+
+msgctxt "model:ir.ui.menu,name:menu_statement_journals_general_configuration"
+msgid "Statement Journals"
+msgstr "Journaux de relevés"
 
 msgctxt "model:statement.journal-statement.journal.cancel_motive,name:"
 msgid "Journal - Statement Journal Cancel Motives"

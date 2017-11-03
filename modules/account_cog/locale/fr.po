@@ -246,6 +246,10 @@ msgctxt "field:party.party,receivable_today_icon:"
 msgid "Receivable Today Icon"
 msgstr "Icône de à recevoir aujourd'hui"
 
+msgctxt "field:party.party.account,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:party.synthesis.menu.move.line,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -772,12 +776,12 @@ msgid "Receivable"
 msgstr "À recevoir"
 
 msgctxt "selection:account.account.template,kind:account."
-msgid "Receivable"
-msgstr "À recevoir"
-
-msgctxt "selection:account.account.template,kind:account."
 msgid "Payable"
 msgstr "À payer"
+
+msgctxt "selection:account.account.template,kind:account."
+msgid "Receivable"
+msgstr "À recevoir"
 
 msgctxt "selection:account.move.line,move_state:account."
 msgid "Posted"

@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_dunning_procedures_general_configuration"
-msgid "Dunning Procedures"
-msgstr "Procédures de relance"
-
-msgctxt "field:party.party,dunning_allowed:"
-msgid "Dunning Allowed"
-msgstr "Relance autorisée"
-
 msgctxt "error:account.dunning.procedure:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
@@ -70,6 +62,14 @@ msgctxt "field:account.dunning.update,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt "field:party.party,dunning_allowed:"
+msgid "Dunning Allowed"
+msgstr "Relance autorisée"
+
+msgctxt "field:party.party.dunning_procedure,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "help:account.dunning.level,days_from_previous_step:"
 msgid "Days are defined based on the previous level execution date"
 msgstr ""
@@ -92,3 +92,7 @@ msgstr "Batch de traitement des relances"
 msgctxt "model:account.dunning.update,name:"
 msgid "Dunning Update Batch"
 msgstr "Batch de mise à jour des relances"
+
+msgctxt "model:ir.ui.menu,name:menu_dunning_procedures_general_configuration"
+msgid "Dunning Procedures"
+msgstr "Procédures de relance"

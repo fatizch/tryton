@@ -1126,8 +1126,8 @@ msgid "Administration"
 msgstr "Administration"
 
 msgctxt "view:offered.option.description:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
+msgid "Main"
+msgstr "Principal"
 
 msgctxt "view:offered.option.description:"
 msgid "Rules"
@@ -1136,10 +1136,6 @@ msgstr "Règles"
 msgctxt "view:offered.option.description:"
 msgid "Subscription"
 msgstr "Souscription"
-
-msgctxt "view:offered.option.description:"
-msgid "Main"
-msgstr "Principal"
 
 msgctxt "view:offered.package:"
 msgid "Package"
@@ -1158,8 +1154,8 @@ msgid "Administration"
 msgstr "Administration"
 
 msgctxt "view:offered.product:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
+msgid "Main"
+msgstr "Principal"
 
 msgctxt "view:offered.product:"
 msgid "Option Descriptions"
@@ -1172,10 +1168,6 @@ msgstr "Modèles de courrier"
 msgctxt "view:offered.product:"
 msgid "Rules"
 msgstr "Règles"
-
-msgctxt "view:offered.product:"
-msgid "Main"
-msgstr "Principal"
 
 msgctxt "view:tag:"
 msgid "Extra Data"

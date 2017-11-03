@@ -70,7 +70,7 @@ msgstr "Produits"
 
 msgctxt "field:contract.set,rec_name:"
 msgid "Name"
-msgstr "Numéro"
+msgstr "Nom"
 
 msgctxt "field:contract.set,status:"
 msgid "Status"
@@ -108,6 +108,54 @@ msgctxt "field:offered.configuration,contract_set_number_sequence:"
 msgid "Contract Set Number Sequence"
 msgstr "Séquence du numéro d'ensemble de contrats"
 
+msgctxt "field:offered.configuration.contract_set_number_sequence,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt ""
+"field:offered.configuration.contract_set_number_sequence,configuration:"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt ""
+"field:offered.configuration.contract_set_number_sequence,contract_set_number_sequence:"
+msgid "Contract Set Number Sequence"
+msgstr "Séquence du numéro d'ensemble de contrats"
+
+msgctxt ""
+"field:offered.configuration.contract_set_number_sequence,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:offered.configuration.contract_set_number_sequence,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.configuration.contract_set_number_sequence,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.configuration.contract_set_number_sequence,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:offered.configuration.contract_set_number_sequence,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.configuration.contract_set_number_sequence,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:offered.configuration.contract_set_number_sequence,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:offered.configuration.contract_set_number_sequence,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "model:contract.set,name:"
 msgid "Contract Set"
 msgstr "Ensemble de contrats"
@@ -139,6 +187,10 @@ msgstr "Numéro d'ensemble de contrats"
 msgctxt "model:ir.ui.menu,name:menu_contract_set"
 msgid "Contract Sets"
 msgstr "Ensembles de contrats"
+
+msgctxt "model:offered.configuration.contract_set_number_sequence,name:"
+msgid "Configuration Contract Set Number Sequence"
+msgstr "Configuration du numéro de séquence d'ensemble de contrats"
 
 msgctxt "selection:contract.set,status:"
 msgid "Active"

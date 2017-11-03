@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_payment_terms_general_configuration"
-msgid "Payment Terms"
-msgstr "Conditions de paiement"
-
-msgctxt "error:report.template:"
-msgid "Contract Invoice"
-msgstr "Quittance de contrat"
-
 msgctxt "error:account.invoice.change_payment_term:"
 msgid "The invoice must be posted !"
 msgstr "La quittance doit être émise !"
@@ -21,6 +13,10 @@ msgid ""
 msgstr ""
 "Une quittance donnée (%(invoice_name)s) doit avoir une configuration de "
 "taxes uniforme sur ses produits"
+
+msgctxt "error:report.template:"
+msgid "Contract Invoice"
+msgstr "Quittance de contrat"
 
 msgctxt "field:account.configuration,default_customer_payment_term:"
 msgid "Default Customer Payment Term"
@@ -37,6 +33,10 @@ msgstr "Couleur"
 msgctxt "field:account.invoice,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
+
+msgctxt "field:account.invoice,form_color:"
+msgid "Color"
+msgstr "Couleur"
 
 msgctxt "field:account.invoice,icon:"
 msgid "Icon"
@@ -100,13 +100,13 @@ msgctxt "field:account.move.line,is_invoice_canceled:"
 msgid "Invoice Canceled"
 msgstr "Quittance annulée"
 
-msgctxt "field:ir.test_case,fiscal_year_number:"
-msgid "Number of Fiscal Years to create"
-msgstr "Nombre d'années fiscales à créer"
-
 msgctxt "field:ir.test_case,test_cases:"
 msgid "Test Cases"
 msgstr "Jeux de Test"
+
+msgctxt "field:party.party.payment_term,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:report.template,event_type_actions:"
 msgid "Event Type Actions"
@@ -114,8 +114,7 @@ msgstr "Actions par type d'événement"
 
 msgctxt "help:account.invoice.payment_term.line.delta,quarter:"
 msgid "Synchronise to calendar quarter -> march, june, september, december"
-msgstr ""
-"Synchroniser au calendrier civil -> mars, juin, septembre, décembre"
+msgstr "Synchroniser au calendrier civil -> mars, juin, septembre, décembre"
 
 msgctxt "model:account.invoice.change_payment_term.select_term,name:"
 msgid "Select Term"
@@ -140,6 +139,10 @@ msgstr "Emission d'une quittance"
 msgctxt "model:ir.action,name:act_change_payment_term"
 msgid "Change Payment Term"
 msgstr "Ré-échelonner"
+
+msgctxt "model:ir.ui.menu,name:menu_payment_terms_general_configuration"
+msgid "Payment Terms"
+msgstr "Conditions de paiement"
 
 msgctxt "model:res.group,name:group_invoice_read"
 msgid "Invoice consultation"
@@ -274,9 +277,9 @@ msgid "Posted"
 msgstr "Emise"
 
 msgctxt "view:account.invoice:account_invoice."
-msgid "Post"
-msgstr "Emettre"
-
-msgctxt "view:account.invoice:account_invoice."
 msgid "Invoice"
 msgstr "Quittance"
+
+msgctxt "view:account.invoice:account_invoice."
+msgid "Post"
+msgstr "Emettre"

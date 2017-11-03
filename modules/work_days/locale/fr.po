@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_work_days_general_configuration"
-msgid "Work Days Configuration"
-msgstr "Configuration des jours ouvrés"
-
 msgctxt "error:batch.params_config:"
 msgid "No configuration given"
 msgstr "Configuration absente"
@@ -134,6 +130,10 @@ msgctxt "model:ir.ui.menu,name:menu_work_days"
 msgid "Work Days"
 msgstr "Jours Ouvrés"
 
+msgctxt "model:ir.ui.menu,name:menu_work_days_general_configuration"
+msgid "Work Days Configuration"
+msgstr "Configuration des jours ouvrés"
+
 msgctxt "model:work_days.configuration,name:"
 msgid "Configuration"
 msgstr "Configuration"
@@ -231,8 +231,8 @@ msgid "All Saint's Day"
 msgstr "La Toussaint"
 
 msgctxt "model:work_days.holiday,name:ww1_armistice_holiday"
-msgid "Second World War Armisitice"
-msgstr "Armistice 1945"
+msgid "First World War Armisitice"
+msgstr "Armistice 1918"
 
 msgctxt "model:work_days.holiday,name:ww1_armistice_holiday_alsace"
 msgid "First World War Armisitice"

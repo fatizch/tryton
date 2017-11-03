@@ -94,6 +94,10 @@ msgctxt "field:document.request.line,claim:"
 msgid "Claim"
 msgstr "Sinistre"
 
+msgctxt "field:document.request.line,claim_status:"
+msgid "Claim Status"
+msgstr "Statut du sinistre"
+
 msgctxt "field:document.rule,benefit:"
 msgid "Benefit"
 msgstr "Prestation"

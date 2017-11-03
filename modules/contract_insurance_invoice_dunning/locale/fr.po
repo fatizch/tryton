@@ -98,7 +98,8 @@ msgctxt "model:account.dunning.level,name:void_contract_level"
 msgid "Void Contract"
 msgstr "Résiliation contentieuse"
 
-msgctxt "model:account.dunning.procedure,name:french_default_dunning_procedure"
+msgctxt ""
+"model:account.dunning.procedure,name:french_default_dunning_procedure"
 msgid "French Default Dunning Procedure"
 msgstr "Procédure de relance française par défaut"
 

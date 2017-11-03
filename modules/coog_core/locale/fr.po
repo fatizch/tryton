@@ -28,12 +28,16 @@ msgstr ""
 msgctxt "error:export_not_found:"
 msgid "Cannot import : no object %s with functionnal key : \"%s\" were found."
 msgstr ""
+"Import impossible: aucun objet %s avec la clé fonctionnelle: \"%s\" n'a été "
+"trouvé."
 
 msgctxt "error:export_not_unique:"
 msgid ""
 "Cannot import : the following objects:\\n%s\\n share the same functional "
 "key:\\n\"%s\"."
 msgstr ""
+"Import impossible: les objets suivants:\\n%s\\n partagent la même clé "
+"fonctionnelle:\\n\"%s\"."
 
 msgctxt "error:extra_details.configuration:"
 msgid "The model must be unique!"
@@ -87,7 +91,7 @@ msgstr ""
 
 msgctxt "error:missing_export_configuration:"
 msgid "Can't find configuration for code %s."
-msgstr ""
+msgstr "Aucun configuration trouvée pour le code %s."
 
 msgctxt "field:batch.params_config,id:"
 msgid "ID"
@@ -439,7 +443,7 @@ msgstr "Nom long"
 
 msgctxt "field:extra_details.configuration.line,type_:"
 msgid "Type"
-msgstr "Type de demande de décisions"
+msgstr "Type"
 
 msgctxt "field:extra_details.configuration.line,write_date:"
 msgid "Write Date"
@@ -1388,7 +1392,6 @@ msgctxt "model:global_search.set,name:"
 msgid "Global Search Set"
 msgstr "Configurer la recherche globale"
 
-
 msgctxt "model:ir.action,name:act_display_access_field_rights"
 msgid "User Field Access Rights Monitoring"
 msgstr "Visualisation des droits d'accès utilisateur sur les champs"
@@ -1657,7 +1660,6 @@ msgstr "Voir batch de validation"
 
 msgctxt "model:language_translatable.set,name:"
 msgid "Language Translatable Set"
-
 msgstr "Configurer les langues traduisibles"
 
 msgctxt "model:party.category,name:"
@@ -1667,7 +1669,6 @@ msgstr "Catégorie"
 msgctxt "model:res.group,name:group_global_config"
 msgid "Coog Global Configuration"
 msgstr "Coog Configuration Globale"
-
 
 msgctxt "model:tag,name:"
 msgid "Tag"
@@ -1679,7 +1680,7 @@ msgstr "Relation objet label"
 
 msgctxt "model:wizard.persistent_data.view,name:"
 msgid "Persistent Data View"
-msgstr ""
+msgstr "Vue des données persistantes"
 
 msgctxt "selection:event.type.action,treatment_kind:"
 msgid "Asynchronous Batch"
@@ -1916,6 +1917,10 @@ msgstr "Description des habilitations des menus"
 msgctxt "view:language_translatable.set:"
 msgid "Apply translatable languages"
 msgstr "Appliquer la configuration des langues"
+
+msgctxt "view:res.group:"
+msgid "Actions"
+msgstr "Actions"
 
 msgctxt "view:tag-object:"
 msgid "Tagged Object"

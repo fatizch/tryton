@@ -38,6 +38,10 @@ msgctxt "model:ir.action,name:act_template_form"
 msgid "Accounting Products"
 msgstr "Produits comptables"
 
+msgctxt "model:ir.ui.menu,name:"
+msgid "Accounting Variants"
+msgstr "Variantes comptables"
+
 msgctxt "model:ir.ui.menu,name:menu_category_list"
 msgid "Categories"
 msgstr "Catégories"
@@ -45,10 +49,6 @@ msgstr "Catégories"
 msgctxt "model:ir.ui.menu,name:menu_main_product"
 msgid "Accounting Products"
 msgstr "Produits comptables"
-
-msgctxt "model:ir.ui.menu,name:menu_product"
-msgid "Accounting Variants"
-msgstr "Variantes comptables"
 
 msgctxt "model:ir.ui.menu,name:menu_template"
 msgid "Accounting Products"

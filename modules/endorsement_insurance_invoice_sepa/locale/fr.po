@@ -49,6 +49,10 @@ msgctxt "field:contract.direct_debit_account.change,amend_previous_mandate:"
 msgid "Amend Previous Mandate"
 msgstr "Amender le précédent"
 
+msgctxt "field:contract.direct_debit_account.change,amendment_enabled:"
+msgid "Amendment Enabled"
+msgstr "Amendement activé"
+
 msgctxt "field:contract.direct_debit_account.change,mandate_needed:"
 msgid "Mandate Needed"
 msgstr "Mandat Requis"

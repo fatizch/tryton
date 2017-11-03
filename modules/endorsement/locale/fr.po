@@ -180,20 +180,20 @@ msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
 
 msgctxt "error:endorsement:"
+msgid ""
+"Impossible to delete the endorsement %(number)s because it is not in draft "
+"but in %(status)s"
+msgstr ""
+"Impossible de supprimer l'avenant %(number)s car il n'est pas au statut "
+"brouillon mais plutôt %(status)s"
+
+msgctxt "error:endorsement:"
 msgid "Invalid file format"
 msgstr "Format de fichier non valide"
 
 msgctxt "error:endorsement:"
 msgid "No sequence defined in configuration"
 msgstr "Pas de séquence définie dans la configuration"
-
-msgctxt "error:endorsement:"
-msgid ""
-"Impossible to delete the endorsement %(number)s because it is "
-"not in draft but in %(status)s"
-msgstr ""
-"Impossible de supprimer l'avenant %(number)s car il n'est pas "
-"au statut brouillon mais plutôt %(status)s"
 
 msgctxt "error:endorsement:"
 msgid "The endorsement number must be unique."
@@ -2718,18 +2718,6 @@ msgctxt "wizard_button:endorsement.decline,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:endorsement.start,basic_preview,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt "wizard_button:endorsement.start,basic_preview,cancel:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:endorsement.start,basic_preview,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
 msgid "Next"
@@ -2870,10 +2858,6 @@ msgctxt ""
 "wizard_button:endorsement.start,select_endorsement,start_endorsement:"
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
-
-msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
 
 msgctxt "wizard_button:endorsement.start,summary,cancel:"
 msgid "Cancel"

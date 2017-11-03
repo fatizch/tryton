@@ -11,8 +11,8 @@ msgid "No sequence defined in configuration"
 msgstr "Pas de séquence définie dans la configuration"
 
 msgctxt "field:account.configuration,snapshot_sequence:"
-msgid "Default Snapshot Sequence"
-msgstr "Séquence des instantanés par défaut"
+msgid "Snapshot Sequence"
+msgstr "Séquence des instantanés"
 
 msgctxt "field:account.configuration.snapshot_sequence,company:"
 msgid "Company"
@@ -258,20 +258,20 @@ msgctxt "model:ir.action,name:act_snapshot"
 msgid "Take a Snapshot of Moves"
 msgstr "Prendre un instantané des mouvements"
 
+msgctxt "model:ir.sequence,name:"
+msgid "Snapshot Sequence"
+msgstr "Séquence des instantanés"
+
 msgctxt "model:ir.sequence,name:default_snapshot_sequence"
-msgid "Snapshot Sequence"
-msgstr "Séquence des instantanés"
+msgid "Default Snapshot Sequence"
+msgstr "Séquence des instantanés par défaut"
 
-msgctxt "model:ir.sequence,name:snapshot_sequence"
-msgid "Snapshot Sequence"
-msgstr "Séquence des instantanés"
-
-msgctxt ""
-"model:ir.sequence.type,name:default_sequence_account_move_snapshot_type"
+msgctxt "model:ir.sequence.type,name:"
 msgid "Account Move Snapshot"
 msgstr "Instantané de mouvement comptable"
 
-msgctxt "model:ir.sequence.type,name:sequence_account_move_snapshot"
+msgctxt ""
+"model:ir.sequence.type,name:default_sequence_account_move_snapshot_type"
 msgid "Account Move Snapshot"
 msgstr "Instantané de mouvement comptable"
 

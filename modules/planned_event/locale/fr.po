@@ -10,13 +10,13 @@ msgctxt "field:event.type.action,delay:"
 msgid "Planned In"
 msgstr "Planifié dans"
 
+msgctxt "field:event.type.action,delay_unit:"
+msgid "Unit"
+msgstr "Unité"
+
 msgctxt "field:event.type.action,planned_event_types:"
 msgid "Planned Event Types"
 msgstr "Types des événements planifiés"
-
-msgctxt "field:event.type.action,unit:"
-msgid "Unit"
-msgstr "Unité"
 
 msgctxt "field:event.type.action-planned_event.type,action:"
 msgid "Action"

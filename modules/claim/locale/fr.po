@@ -1237,7 +1237,7 @@ msgid "Claims"
 msgstr "Sinistres"
 
 msgctxt "model:ir.action,name:act_close_claim_wizard"
-msgid "Clôre les sinistres"
+msgid "Close Claims"
 msgstr "Clore les sinistres"
 
 msgctxt "model:ir.action,name:act_closing_reason_form"
@@ -1349,7 +1349,7 @@ msgid "Party Synthesis Menu Claim"
 msgstr "Synthèse"
 
 msgctxt "model:res.group,name:group_claim"
-msgid "Sinistre"
+msgid "Claim"
 msgstr "sinistre"
 
 msgctxt "model:res.group,name:group_claim_admin"

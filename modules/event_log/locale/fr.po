@@ -18,10 +18,6 @@ msgctxt "field:event.log,date:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "field:event.log,date_str:"
-msgid "Date"
-msgstr "Date"
-
 msgctxt "field:event.log,description:"
 msgid "Description"
 msgstr "Description"

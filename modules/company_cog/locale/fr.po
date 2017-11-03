@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_companies_general_configuration"
-msgid "Companies"
-msgstr "Sociétés"
-
 msgctxt "error:company.company:"
 msgid "The language must be configured on company %(party)s before going on"
 msgstr "La langue doit d'abord être configurée sur la société %(party)s"
@@ -29,3 +25,7 @@ msgstr "Nom de la société principale"
 msgctxt "model:ir.test_case.instance,name:main_company_test_case"
 msgid "Main Company Test Case"
 msgstr "Jeux d'essai : compagnie"
+
+msgctxt "model:ir.ui.menu,name:menu_companies_general_configuration"
+msgid "Companies"
+msgstr "Sociétés"

@@ -216,7 +216,7 @@ msgstr "ID"
 
 msgctxt "field:report.create.preview.line,output_report_filepath:"
 msgid "Output report filepath"
-msgstr ""
+msgstr "Chemin du fichier de sortie du rapport "
 
 msgctxt "field:report.create.preview.line,server_filepath:"
 msgid "Server Filename"
@@ -676,6 +676,14 @@ msgstr ""
 "Si aucun format n'est spécifié, le document ne sera pas stocké dans la GED "
 "interne"
 
+msgctxt "help:report.template,groups:"
+msgid ""
+"If the user belongs to one of the groups linked to the report template, he "
+"can see it in the report wizard."
+msgstr ""
+"Si l'utilisateur appartient à l'un des groupes liés au modèle de courrier, "
+"il pourra le voir dans l'assistant de rapport."
+
 msgctxt "help:report.template,modifiable_before_printing:"
 msgid ""
 "Set to true if you want to modify the generated document before sending or "
@@ -794,7 +802,7 @@ msgstr "Relation entre modèle de courrier et paramètres de modèle"
 
 msgctxt "model:report.template-res.group,name:"
 msgid "Report Template Group Relation"
-msgstr ""
+msgstr "Relation modèle de courrier groupe"
 
 msgctxt "model:report.template.parameter,name:"
 msgid "Template Parameter"
@@ -951,10 +959,6 @@ msgstr "Pièces jointes"
 msgctxt "view:report_production.request:"
 msgid "Report Production Request"
 msgstr "Demande de production de document"
-
-msgctxt "view:res.group:"
-msgid "Buttons and Actions"
-msgstr "Boutons et actions"
 
 msgctxt "view:res.group:"
 msgid "Report Templates"

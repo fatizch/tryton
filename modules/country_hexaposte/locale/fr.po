@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:country.hexapost.set,data_file:"
+msgid "Default data file"
+msgstr "Fichier de données par défaut"
+
 msgctxt "field:country.hexapost.set,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -9,6 +13,10 @@ msgstr "Identifiant"
 msgctxt "field:country.hexapost.set,resource:"
 msgid "Resource"
 msgstr "Ressource"
+
+msgctxt "field:country.hexapost.set,use_default:"
+msgid "Use default file"
+msgstr "Utiliser le fichier par défaut"
 
 msgctxt "field:country.zip,hexa_post_id:"
 msgid "Hexa Post Id"

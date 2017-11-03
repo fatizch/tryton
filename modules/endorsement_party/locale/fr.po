@@ -31,12 +31,12 @@ msgid "Update %s"
 msgstr "Mise à jour de %s"
 
 msgctxt "error:endorsement.party:"
-msgid "Endorsement \"%s\" is not the latest applied."
-msgstr "L'avenant \"%s\" n'est pas le plus récent appliqué"
-
-msgctxt "error:endorsement.party:"
 msgid "Addresses Modifications"
 msgstr "Modifications des adresses"
+
+msgctxt "error:endorsement.party:"
+msgid "Endorsement \"%s\" is not the latest applied."
+msgstr "L'avenant \"%s\" n'est pas le plus récent appliqué"
 
 msgctxt "error:endorsement.party:"
 msgid "Relations Modifications"

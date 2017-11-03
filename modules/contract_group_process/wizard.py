@@ -67,7 +67,7 @@ class ImportProcessSelect:
         cls._error_messages.update({
                 'group_process': 'Subscription Group Process (FR)',
                 'group_process_description': 'This process allows '
-                'managers to launch a group insurance subscribtion process',
+                'managers to launch a group insurance subscription process',
                 })
 
     def available_processes(self):

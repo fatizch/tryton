@@ -66,6 +66,10 @@ msgctxt "field:bank.account.number,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:bank_cog.data.set,data_file:"
+msgid "Default Data file"
+msgstr "Fichier de données par défaut"
+
 msgctxt "field:bank_cog.data.set,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -73,6 +77,10 @@ msgstr "Identifiant"
 msgctxt "field:bank_cog.data.set,resource:"
 msgid "Resource"
 msgstr "Ressource"
+
+msgctxt "field:bank_cog.data.set,use_default:"
+msgid "Use default file"
+msgstr "Utiliser le fichier par défaut"
 
 msgctxt "field:ir.test_case,currency:"
 msgid "Main Currency"

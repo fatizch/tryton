@@ -1,3 +1,127 @@
 #
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.invoice,deposits:"
+msgid "Deposit"
+msgstr "Versement"
+
+msgctxt "field:contract,is_cash_value:"
+msgid "Is Cash Value"
+msgstr "Est une valeur cash"
+
+msgctxt "field:contract.deposit,amount:"
+msgid "Amount"
+msgstr "Montant initial"
+
+msgctxt "field:contract.deposit,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.deposit,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:contract.deposit,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.deposit,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.deposit,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.deposit,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:contract.deposit,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision de la devise"
+
+msgctxt "field:contract.deposit,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:contract.deposit,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:contract.deposit,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.deposit,invoice:"
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "field:contract.deposit,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.deposit,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:contract.deposit,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:contract.deposit,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.deposit,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.option.description,buyback_rule:"
+msgid "Buyback Rule"
+msgstr "Règle de rachat"
+
+msgctxt "field:offered.option.description,buyback_rule_extra_data:"
+msgid "Buyback Rule Extra Data"
+msgstr "Données complémentaires de la règle de rachat"
+
+msgctxt "field:offered.option.description,is_cash_value:"
+msgid "Is Cash Value"
+msgstr "Est une valeur cash"
+
+msgctxt "field:offered.product,is_cash_value:"
+msgid "Is Cash Value"
+msgstr "Est une valeur cash"
+
+msgctxt "help:contract.deposit,date:"
+msgid "The date at which the deposit amount was effectively received"
+msgstr "La date à laquelle le montant du chèque a été effectivement reçue"
+
+msgctxt "help:contract.deposit,state:"
+msgid "The current state of the deposit"
+msgstr "État courant du versement"
+
+msgctxt "model:contract.deposit,name:"
+msgid "Contract Deposit"
+msgstr "Versement du contrat"
+
+msgctxt "model:ir.action,name:act_open_deposits"
+msgid "Deposits"
+msgstr "Versements"
+
+msgctxt "selection:contract.deposit,state:"
+msgid "Draft"
+msgstr "Brouillons"
+
+msgctxt "selection:contract.deposit,state:"
+msgid "Received"
+msgstr "Reçus"
+
+msgctxt "selection:offered.option.description,family:"
+msgid "Cash Value"
+msgstr "Valeur cash"
+
+msgctxt "view:contract:"
+msgid "Deposits"
+msgstr "Versements"

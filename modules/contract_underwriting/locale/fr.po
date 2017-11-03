@@ -415,8 +415,8 @@ msgid "Underwriting Decision"
 msgstr "Décision d'analyse de risques"
 
 msgctxt "model:res.group,name:group_contract_underwriting"
-msgid "Contract Underwriting"
-msgstr "Analyse de risques - Contrat"
+msgid "Coog Contract Underwriting"
+msgstr "Coog Analyse de risques - Contrat"
 
 msgctxt "model:rule_engine,name:underwriting_basic_rule"
 msgid "Underwriting Basic Rule"

@@ -73,13 +73,13 @@ msgctxt "field:import.process.displayer,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:import.process.displayer,to_install:"
-msgid "To Install"
-msgstr "Installer"
-
 msgctxt "field:import.process.displayer,id:"
 msgid "ID"
 msgstr "Identifiant"
+
+msgctxt "field:import.process.displayer,is_visible:"
+msgid "Is Visible"
+msgstr "Est visible"
 
 msgctxt "field:import.process.displayer,name:"
 msgid "Process"
@@ -88,6 +88,10 @@ msgstr "Nom du processus"
 msgctxt "field:import.process.displayer,path:"
 msgid "Path"
 msgstr "Chemin"
+
+msgctxt "field:import.process.displayer,to_install:"
+msgid "To Install"
+msgstr "Installer"
 
 msgctxt "field:import.process.select,id:"
 msgid "ID"

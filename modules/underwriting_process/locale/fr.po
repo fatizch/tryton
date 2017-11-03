@@ -139,6 +139,10 @@ msgctxt "field:underwriting.start.find_process,results:"
 msgid "Results"
 msgstr "Résultats"
 
+msgctxt "field:underwriting.start.find_process,underwriting_type:"
+msgid "Type"
+msgstr "Type"
+
 msgctxt "field:underwriting.start.find_process.result,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -154,10 +158,6 @@ msgstr "Sélectionné"
 msgctxt "field:underwriting.start.find_process.result,target:"
 msgid "Target"
 msgstr "Cible"
-
-msgctxt "field:underwriting.start.find_process,underwriting_type:"
-msgid "Type"
-msgstr "Type de demande de décisions"
 
 msgctxt "model:ir.action,name:act_underwriting_start"
 msgid "Start Underwriting"

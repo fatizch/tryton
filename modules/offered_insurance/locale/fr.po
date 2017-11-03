@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_insurers_general_configuration"
-msgid "Insurers"
-msgstr "Assureurs"
-
 msgctxt "error:extra_data:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
@@ -676,6 +672,14 @@ msgctxt "field:offered.option.description,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
+msgctxt "field:offered.option.description,with_exclusions:"
+msgid "With exclusions"
+msgstr "Avec exclusions"
+
+msgctxt "field:offered.option.description,with_extra_premiums:"
+msgid "With extra premiums"
+msgstr "Avec surprimes"
+
 msgctxt "field:offered.option.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -996,6 +1000,14 @@ msgctxt "help:extra_data,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
 
+msgctxt "help:offered.option.description,with_exclusions:"
+msgid "If True, subscribed options will have exclusions"
+msgstr "Si vrai, les options souscrites auront des exclusions"
+
+msgctxt "help:offered.option.description,with_extra_premiums:"
+msgid "If True, subscribed options will have extra premiums"
+msgstr "Si vrai, les options souscrites auront des surprimes"
+
 msgctxt "help:process,delete_button:"
 msgid ""
 "If not null, a button will be added on the view with the given name, which "
@@ -1077,6 +1089,10 @@ msgid "Extra Premium Kind"
 msgstr "Type de Surprime"
 
 msgctxt "model:ir.ui.menu,name:menu_insurer_form"
+msgid "Insurers"
+msgstr "Assureurs"
+
+msgctxt "model:ir.ui.menu,name:menu_insurers_general_configuration"
 msgid "Insurers"
 msgstr "Assureurs"
 

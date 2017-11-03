@@ -590,19 +590,9 @@ msgctxt ""
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt ""
-"field:claim.indemnification.assistant.control.element,recipient:"
-msgid "Payment recipient"
-msgstr "Destinataire du paiement"
-
 msgctxt "field:claim.indemnification.assistant.control.element,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
-
-msgctxt ""
-"field:claim.indemnification.assistant.control.element,status:"
-msgid "Status"
-msgstr "Statut"
 
 msgctxt "field:claim.indemnification.assistant.control.element,id:"
 msgid "ID"
@@ -630,9 +620,17 @@ msgctxt "field:claim.indemnification.assistant.control.element,reason:"
 msgid "Control Reason"
 msgstr "Raison du contrôle manuel"
 
+msgctxt "field:claim.indemnification.assistant.control.element,recipient:"
+msgid "Payment Recipient"
+msgstr "Destinataire du paiement"
+
 msgctxt "field:claim.indemnification.assistant.control.element,start_date:"
 msgid "Start Date"
 msgstr "Date de début"
+
+msgctxt "field:claim.indemnification.assistant.control.element,status:"
+msgid "Status"
+msgstr "Statut"
 
 msgctxt "field:claim.indemnification.assistant.validate.element,action:"
 msgid "Action"
@@ -664,19 +662,9 @@ msgctxt ""
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt ""
-"field:claim.indemnification.assistant.validate.element,recipient:"
-msgid "Payment recipient"
-msgstr "Destinataire du paiement"
-
 msgctxt "field:claim.indemnification.assistant.validate.element,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
-
-msgctxt ""
-"field:claim.indemnification.assistant.validate.element,status:"
-msgid "Status"
-msgstr "Statut"
 
 msgctxt "field:claim.indemnification.assistant.validate.element,id:"
 msgid "ID"
@@ -700,9 +688,17 @@ msgctxt "field:claim.indemnification.assistant.validate.element,note:"
 msgid "Extra Information"
 msgstr "Commentaire"
 
+msgctxt "field:claim.indemnification.assistant.validate.element,recipient:"
+msgid "Payment Recipient"
+msgstr "Destinataire du paiement"
+
 msgctxt "field:claim.indemnification.assistant.validate.element,start_date:"
 msgid "Start Date"
 msgstr "Date de début"
+
+msgctxt "field:claim.indemnification.assistant.validate.element,status:"
+msgid "Status"
+msgstr "Statut"
 
 msgctxt "field:claim.indemnification.assistant.view,control:"
 msgid "Indemnifications to control"
@@ -1598,8 +1594,8 @@ msgid "Schedule"
 msgstr "Ordonnancer"
 
 msgctxt "view:claim.indemnification_calculation_result:"
-msgid "Calculation"
-msgstr "Résultats du calcul"
+msgid "Multiple indemnifications were calculated"
+msgstr "Plusieurs indemnisations ont été calculées"
 
 msgctxt "view:claim.indemnification_definition:"
 msgid "Informations"

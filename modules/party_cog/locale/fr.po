@@ -385,6 +385,10 @@ msgctxt "field:party.party,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:party.party.lang,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:party.relation,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -861,6 +865,10 @@ msgctxt "model:ir.ui.menu,name:menu_person_form"
 msgid "Persons"
 msgstr "Personnes physiques"
 
+msgctxt "model:ir.ui.menu,name:menu_zipcode_form"
+msgid "Zip"
+msgstr "Code Postal"
+
 msgctxt "model:party.identifier,name:"
 msgid "Party Identifier"
 msgstr "Identifiant de tiers"
@@ -1044,10 +1052,6 @@ msgstr "Synthèse acteur"
 msgctxt "view:party.synthesis.menu:"
 msgid "Synthesis"
 msgstr "Synthèse"
-
-msgctxt "model:ir.ui.menu,name:menu_zipcode_form"
-msgid "Zip"
-msgstr "Code Postal"
 
 # Custom translations below
 

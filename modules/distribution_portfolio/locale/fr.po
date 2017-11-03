@@ -46,6 +46,50 @@ msgctxt "field:party.configuration,default_portfolio:"
 msgid "Default Portfolio"
 msgstr "Portefeuille par défaut"
 
+msgctxt "field:party.configuration.default_portfolio,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:party.configuration.default_portfolio,configuration:"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "field:party.configuration.default_portfolio,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.configuration.default_portfolio,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.configuration.default_portfolio,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.configuration.default_portfolio,default_portfolio:"
+msgid "Default Portfolio"
+msgstr "Portefeuille par défaut"
+
+msgctxt "field:party.configuration.default_portfolio,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.configuration.default_portfolio,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:party.configuration.default_portfolio,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.configuration.default_portfolio,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.configuration.default_portfolio,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:party.party,portfolio:"
 msgid "Portfolio"
 msgstr "Portefeuille"
@@ -70,6 +114,18 @@ msgstr ""
 "Il s'agit du portefeuille par défaut dans le cas où l'utilisateur n'est pas "
 "assigné à un réseau de distribution rattaché à un portefeuille."
 
+msgctxt "help:party.configuration.default_portfolio,default_portfolio:"
+msgid ""
+"This is the default portfolio if the user is not assigned to any "
+"distribution network belonging to a portfolio."
+msgstr ""
+"Il s'agit du portefeuille par défaut dans le cas où l'utilisateur n'est pas "
+"assigné à un réseau de distribution rattaché à un portefeuille."
+
 msgctxt "model:ir.ui.menu,name:menu_distribution_configuration"
 msgid "Configuration"
 msgstr "Configuration"
+
+msgctxt "model:party.configuration.default_portfolio,name:"
+msgid "Configuration Default Portfolio"
+msgstr "Configuration du portefeuille par défaut"

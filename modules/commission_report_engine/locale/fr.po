@@ -64,9 +64,9 @@ msgid "Invoice Report Configuration"
 msgstr "Configuration des rapports de bordereaux commission"
 
 msgctxt "model:ir.action,name:act_invoice_report_definition_form"
-msgid "Report Invoice Definitions"
-msgstr "Définition des rapports de bordereaux de commission"
+msgid "Report Invoice Definition Filters"
+msgstr "Filtres de définition des rapports de bordereaux de commission"
 
 msgctxt "model:ir.ui.menu,name:menu_configuration_invoice_report_definition"
-msgid "Report Invoice Definitions"
-msgstr "Définition des rapports de quittance"
+msgid "Report Invoice Definition Filters"
+msgstr "Filtres de définition des rapports de quittance"

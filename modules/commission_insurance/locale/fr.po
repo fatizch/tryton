@@ -1127,6 +1127,26 @@ msgctxt "view:account.configuration:"
 msgid "Commission"
 msgstr "Commission"
 
+msgctxt "view:account.invoice:"
+msgid "Are you sure you want to cancel the commission invoice?"
+msgstr "Êtes-vous sûr de vouloir annuler le bordereau?"
+
+msgctxt "view:account.invoice:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "view:account.invoice:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "view:account.invoice:"
+msgid "Post"
+msgstr "Poster"
+
+msgctxt "view:account.invoice:"
+msgid "Validate"
+msgstr "Valider"
+
 msgctxt "view:commission.aggregated:"
 msgid "Total"
 msgstr "Total"
@@ -1266,41 +1286,21 @@ msgid "Product Template - Commission Agent"
 msgstr "Modèle produit - Protocole de commissionnement"
 
 msgctxt "selection:commission.agent,type_:commission."
-msgid "Agent Of"
-msgstr "Est commissionné par"
-
-msgctxt "selection:commission.agent,type_:commission."
 msgid "Principal Of"
 msgstr "Commissionne"
 
-msgctxt "view:account.invoice:"
-msgid "Are you sure you want to cancel the commission invoice?"
-msgstr "Êtes-vous sûr de vouloir annuler le bordereau?"
-msgctxt "view:account.invoice:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "view:account.invoice:"
-msgid "Draft"
-msgstr "Brouillon"
-
-msgctxt "view:account.invoice:"
-msgid "Post"
-msgstr "Poster"
-
-msgctxt "view:account.invoice:"
-msgid "Validate"
-msgstr "Valider"
-
-msgctxt "view:commission.agent:commission."
-msgid "Agent"
-msgstr "Protocole de commissionnement"
+msgctxt "selection:commission.agent,type_:commission."
+msgid "Agent Of"
+msgstr "Est commissionné par"
 
 msgctxt "view:commission.agent:commission."
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
 
+msgctxt "view:commission.agent:commission."
+msgid "Agent"
+msgstr "Protocole de commissionnement"
+
 msgctxt "view:commission.create_invoice.ask:commission."
 msgid "Create Commission Invoice"
 msgstr "Générer les bordereaux de commission"
-

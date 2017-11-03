@@ -46,6 +46,60 @@ msgctxt "field:endorsement.configuration,endorsement_set_number_sequence:"
 msgid "Endorsement Set Number Sequence"
 msgstr "Séquence du numéro d'ensemble d'avenants"
 
+msgctxt ""
+"field:endorsement.configuration.endorsement_set_number_sequence,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_set_number_sequence,configuration:"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_set_number_sequence,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_set_number_sequence,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_set_number_sequence,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_set_number_sequence,endorsement_set_number_sequence:"
+msgid "Endorsement Set Number Sequence"
+msgstr "Séquence du numéro d'ensemble d'avenants"
+
+msgctxt "field:endorsement.configuration.endorsement_set_number_sequence,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_set_number_sequence,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_set_number_sequence,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_set_number_sequence,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:endorsement.configuration.endorsement_set_number_sequence,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:endorsement.set,contract_set:"
 msgid "Contract Set"
 msgstr "Ensemble de contrats"
@@ -133,6 +187,11 @@ msgstr "ID"
 msgctxt "field:endorsement.set.decline.select_reason,reason:"
 msgid "Reason"
 msgstr "Raison"
+
+msgctxt ""
+"model:endorsement.configuration.endorsement_set_number_sequence,name:"
+msgid "Endorsement Configuration Endorsement Set Sequence"
+msgstr "Configuration d'avenant: séquence d'ensemble d'avenants"
 
 msgctxt "model:endorsement.set,name:"
 msgid "Endorsement Set"

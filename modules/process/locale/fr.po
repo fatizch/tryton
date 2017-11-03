@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "model:ir.ui.menu,name:menu_process_configuration_general_configuration"
-msgid "Process Configuration"
-msgstr "Configuration de processus"
-
 msgctxt "error:process.action:"
 msgid "Method %s does not exist on model %s"
 msgstr "La méthode %s n'existe pas sur le modèle %s"
@@ -13,10 +9,6 @@ msgstr "La méthode %s n'existe pas sur le modèle %s"
 msgctxt "error:process.action:"
 msgid "Source Code Unavailable"
 msgstr "La source n'est pas disponible"
-
-msgctxt "error:process.process-act_window:"
-msgid "The action must be unique per process / language"
-msgstr "L'action doit être uniquer par processus / langue"
 
 msgctxt "error:process.step:"
 msgid "The technical name must be unique"
@@ -56,10 +48,6 @@ msgctxt "field:ir.model,is_workflow:"
 msgid "Is Workflow"
 msgstr "Processus"
 
-msgctxt "field:process,action_windows:"
-msgid "Action Windows"
-msgstr "Action Windows"
-
 msgctxt "field:process,all_steps:"
 msgid "All Steps"
 msgstr "Toutes les Etapes"
@@ -91,10 +79,6 @@ msgstr "ID"
 msgctxt "field:process,menu_icon:"
 msgid "Menu Icon"
 msgstr "Icône du Menu"
-
-msgctxt "field:process,menu_items:"
-msgid "Menus"
-msgstr "Menus"
 
 msgctxt "field:process,menu_name:"
 msgid "Menu name"
@@ -151,38 +135,6 @@ msgstr "Entête XML"
 msgctxt "field:process,xml_tree:"
 msgid "Tree View XML"
 msgstr "Description de la Vue Arbre"
-
-msgctxt "field:process-menu,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:process-menu,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:process-menu,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:process-menu,menu:"
-msgid "Menu"
-msgstr "Menu"
-
-msgctxt "field:process-menu,process:"
-msgid "Process"
-msgstr "Processus"
-
-msgctxt "field:process-menu,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:process-menu,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:process-menu,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
 
 msgctxt "field:process-process.step,create_date:"
 msgid "Create Date"
@@ -323,50 +275,6 @@ msgstr "Modifié par"
 msgctxt "field:process.configuration,write_uid:"
 msgid "Write User"
 msgstr "Modifié par"
-
-msgctxt "field:process.process-act_window,action_window:"
-msgid "Action Window"
-msgstr "Action Window"
-
-msgctxt "field:process.process-act_window,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:process.process-act_window,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:process.process-act_window,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:process.process-act_window,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:process.process-act_window,language:"
-msgid "Language"
-msgstr "Langues"
-
-msgctxt "field:process.process-act_window,process:"
-msgid "Process"
-msgstr "Traiter"
-
-msgctxt "field:process.process-act_window,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:process.process-act_window,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:process.process-act_window,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:process.process-act_window,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
 
 msgctxt "field:process.status,code:"
 msgid "Code"
@@ -648,15 +556,20 @@ msgctxt "model:ir.action,name:report_generate_graph"
 msgid "Graph"
 msgstr "Graphique"
 
+msgctxt "model:ir.ui.menu,name:"
+msgid "Processes"
+msgstr "Processus"
+
 msgctxt "model:ir.ui.menu,name:menu_configuration"
 msgid "Configuration"
 msgstr "Configuration"
 
-msgctxt "model:ir.ui.menu,name:menu_process_desc"
-msgid "Processes"
-msgstr "Processus"
+msgctxt ""
+"model:ir.ui.menu,name:menu_process_configuration_general_configuration"
+msgid "Process Configuration"
+msgstr "Configuration de processus"
 
-msgctxt "model:ir.ui.menu,name:menu_process_lang"
+msgctxt "model:ir.ui.menu,name:menu_process_desc"
 msgid "Processes"
 msgstr "Processus"
 
@@ -676,10 +589,6 @@ msgctxt "model:process,name:"
 msgid "Process"
 msgstr "Descripteur de Processus"
 
-msgctxt "model:process-menu,name:"
-msgid "Process Menu Relation"
-msgstr "Relation Processus Menu"
-
 msgctxt "model:process-process.step,name:"
 msgid "Process to Step relation"
 msgstr "Relation Processus - Etape"
@@ -691,10 +600,6 @@ msgstr "Action de processus"
 msgctxt "model:process.configuration,name:"
 msgid "Process Configuration"
 msgstr "Configuration des processus"
-
-msgctxt "model:process.process-act_window,name:"
-msgid "Process to Action Window Relation"
-msgstr "Relation entre le processus et les actions des fenêtres"
 
 msgctxt "model:process.status,name:"
 msgid "Process Status"

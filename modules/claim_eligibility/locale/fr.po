@@ -122,6 +122,10 @@ msgctxt "field:claim.service,rejection_extra_data_values:"
 msgid "Rejection Extra Data"
 msgstr "Données complémentaires refus"
 
+msgctxt "field:claim.service,rejection_extra_eligibility_data_summary:"
+msgid "Rejection Eligibility Extra Data Summary"
+msgstr "Résumé des données complémentaires refus d'éligibilité"
+
 msgctxt "model:benefit.eligibility.rule,name:"
 msgid "Benefit Eligibility Rule"
 msgstr "Règle de validation des droits"

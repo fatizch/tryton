@@ -129,7 +129,7 @@ msgstr "Le produit %s est inactif le %s"
 
 msgctxt "error:contract:"
 msgid "The contract number must be unique."
-msgstr ""
+msgstr "Le numéro de contrat doit être unique"
 
 msgctxt "error:contract:"
 msgid "There are dates for which no %s address is defined"
@@ -1059,7 +1059,7 @@ msgstr "Contrat"
 
 msgctxt "field:event.type.action,notification_delay:"
 msgid "Notification Delay (in days)"
-msgstr ""
+msgstr "Délai avant notifications (en jours)"
 
 msgctxt "field:ir.sequence,name:default_quote_contract_sequence"
 msgid "Default Quote Contract Sequence"
@@ -1149,7 +1149,7 @@ msgstr "Produit"
 
 msgctxt "field:offered.product.quote_number_sequence,quote_number_sequence:"
 msgid "Quote Number Sequence"
-msgstr ""
+msgstr "Numéro de séquence de devis"
 
 msgctxt "field:offered.product.quote_number_sequence,rec_name:"
 msgid "Name"
@@ -1415,6 +1415,10 @@ msgctxt "model:ir.action,name:act_decline"
 msgid "Decline"
 msgstr "Décliner"
 
+msgctxt "model:ir.action,name:act_event_log_relate_form"
+msgid "Event Logs"
+msgstr "Logs d'événements"
+
 msgctxt "model:ir.action,name:act_hold_contract"
 msgid "Hold Contract"
 msgstr "Suspendre le contrat"
@@ -1433,7 +1437,7 @@ msgstr "Pièces jointes liées"
 
 msgctxt "model:ir.action,name:act_related_parties_relate_form"
 msgid "Related parties"
-msgstr ""
+msgstr "Tiers associés"
 
 msgctxt "model:ir.action,name:act_stop"
 msgid "Stop Contract"
@@ -1528,7 +1532,7 @@ msgstr "Notifications"
 
 msgctxt "model:ir.ui.menu,name:menu_contract_substatus_general_configuration"
 msgid "Contract Sub-status"
-msgstr ""
+msgstr "Sous statut du contrat"
 
 msgctxt "model:ir.ui.menu,name:menu_quote_form"
 msgid "Quotes"
@@ -1540,11 +1544,11 @@ msgstr "Sous statut"
 
 msgctxt "model:offered.configuration.default_quote_number_sequence,name:"
 msgid "Configuration Default Quote Number Sequence"
-msgstr ""
+msgstr "Configuration par défaut des numéros de séquence de devis"
 
 msgctxt "model:offered.product.quote_number_sequence,name:"
 msgid "Product Quote Number Sequence"
-msgstr ""
+msgstr "Numéro de séquence du produit en devis"
 
 msgctxt "model:party.synthesis.menu.contract,name:"
 msgid "Party Synthesis Menu Contract"
