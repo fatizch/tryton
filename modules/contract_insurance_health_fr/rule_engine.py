@@ -15,10 +15,12 @@ class RuleEngineRuntime:
 
     @classmethod
     def get_health_complement(cls, args, person):
+        if person and person.social_security_dependent:
+            parent = person.social_security_dependent[0]
+            return cls.get_health_complement(args, parent)
         hc = None
-        if person and person.main_health_complement:
-            hc = utils.get_value_at_date(
-                person.main_health_complement, args['date'])
+        if person and person.health_complement:
+            hc = utils.get_value_at_date(person.health_complement, args['date'])
         if not hc:
             cls.append_error(args, 'Cannot find health complement information')
             return

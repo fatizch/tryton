@@ -28,7 +28,9 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
         super(ChangePartyHealthComplement, cls).__setup__()
         cls._error_messages.update({
                 'social_security_dependent': 'The party %(full_name)s is social'
-                ' security dependent. You cannot change the health complement',
+                ' security dependent. You cannot change its health complement, '
+                'change social security insured\'s main health complement '
+                'instead',
                 })
 
     @classmethod
@@ -136,14 +138,12 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
     def check_before_start(cls, select_screen):
         super(ChangePartyHealthComplement, cls).check_before_start(
             select_screen)
-        ss_dependents = [x.party
+        dependents = [x.party
             for x in select_screen.endorsement.party_endorsements
             if x.party.social_security_dependent]
-        ss_depents_names = [' '.join([str(p.name), str(p.first_name or '')])
-            for p in ss_dependents]
-        if ss_dependents:
+        if dependents:
             cls.append_functional_error('social_security_dependent', {
-                    'full_name': ss_depents_names,
+                    'full_name': [str(p.rec_name) for p in dependents],
                     })
 
 

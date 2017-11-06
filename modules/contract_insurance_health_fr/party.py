@@ -5,7 +5,7 @@ from sql.aggregate import Max
 from collections import defaultdict
 
 from trytond import backend
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Or
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields, model
@@ -36,7 +36,7 @@ class Party:
         fields.Many2One('health.party_complement', 'Main Health Complement',
             depends=['social_security_dependent'],
             states={
-                'invisible': Bool(~Eval('social_security_dependent'))}),
+                'invisible': ~Eval('social_security_dependent')}),
         'get_main_health_complement')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
@@ -44,11 +44,14 @@ class Party:
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
-        cls.health_complement.states['invisible'] |= \
-            Bool(Eval('social_security_dependent'))
+        cls.health_complement.states['invisible'] = Or(
+            cls.health_complement.states.get('invisible', False),
+            Bool(Eval('social_security_dependent')))
         cls._error_messages.update({
-                'ss_dependent_party': 'This party is social security dependent:'
-                '\n%(dependent_party)s\nYou cannot modify the health complement'
+                'social_security_dependent_party': 'This party is social '
+                'security dependent:\n%(dependent_party)s\nYou cannot modify '
+                'its health complement, change social security insured\'s main '
+                'health complement'
                 })
 
     @classmethod
@@ -59,7 +62,8 @@ class Party:
                 ss_dependent_parties = [p for p in parties
                     if p.social_security_dependent]
                 if ss_dependent_parties:
-                    cls.append_functional_error('ss_dependent_party',
+                    cls.append_functional_error(
+                        'social_security_dependent_party',
                         {
                             'dependent_party': [p.name
                                 for p in ss_dependent_parties]
