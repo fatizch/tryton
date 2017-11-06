@@ -7,7 +7,7 @@ import wizard
 import dunning
 import move
 import payment
-
+import batch
 
 def register():
     Pool.register(
@@ -17,6 +17,7 @@ def register():
         dunning.Level,
         move.PartyBalance,
         payment.Payment,
+        batch.RenewContracts,
         module='contract_set_insurance_invoice', type_='model')
     Pool.register(
         contract.DisplayContractSetPremium,

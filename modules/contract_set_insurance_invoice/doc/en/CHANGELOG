@@ -1,3 +1,4 @@
+* BUG#7473 Treat contracts in contract_set in the same renewal task in batch processing
 * BUG#7412 Allow to renew contract in contract set if the other is not active
 
 Version 1.12 - 2017-04-28
