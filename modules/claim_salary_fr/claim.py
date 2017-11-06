@@ -413,7 +413,8 @@ class ClaimService:
         salary_to_use = Decimal(0)
         bonus = Decimal(0)
 
-        periods = self.calculate_salaries_period_dates()
+        periods = \
+            self.claim.delivered_services[0].calculate_salaries_period_dates()
         if not periods:
             return
         min_date = min([period[0] for period in periods if period[2]])

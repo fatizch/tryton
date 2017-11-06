@@ -97,7 +97,7 @@ class SalariesComputation(Wizard):
                         service.option, service.loss.start_date)
                     if benefit_at_date.net_salary_mode:
                         net_limit_mode = True
-                        rule = benefit_at_date.net_calculation_rule.rule
+                        rule = benefit_at_date.net_calculation_rule
                         break
                 if net_limit_mode:
                     break
@@ -141,12 +141,12 @@ class SalariesComputation(Wizard):
             self.raise_user_error('no_rule')
         salaries = delivered_service.salary
         return {
-            'rule': rule.id,
+            'rule': rule.rule.id,
             'periods': [s.id for s in salaries],
             'rates': salaries[0].get_rates_per_range(
-                net_salary_rule=delivered_rule),
+                net_salary_rule=rule),
             'fixed_amounts': salaries[0].get_rates_per_range(fixed=True,
-                net_salary_rule=delivered_rule)
+                net_salary_rule=rule)
             }
 
     def update_salary(self):
