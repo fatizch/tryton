@@ -1,3 +1,4 @@
+* BUG#7442 Do not allow removing contributions in salary wizard
 * BUG#7495 Take net salary rule computation into account when getting rates per range
 * BUG#7494 Wrong salary mode when computing salary range
 * BUG#7105 Wrong salary range computation when salary is defined yearly

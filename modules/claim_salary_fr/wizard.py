@@ -19,7 +19,7 @@ class StartSetSalaries(model.CoogView):
     __name__ = 'claim.start_set_salaries'
 
     periods = fields.One2Many('claim.salary', None, 'Periods',
-        order=[('from_date', 'ASC')])
+        order=[('from_date', 'ASC')], readonly=True)
     net_limit_mode = fields.Boolean('Net Limit Mode')
 
 
@@ -40,13 +40,14 @@ class StartSetContributions(model.CoogView):
     __metaclass__ = PoolMeta
     __name__ = 'claim.start_set_contributions'
 
-    rates = fields.One2Many('claim.contributions_view', None, 'Rates')
+    rates = fields.One2Many('claim.contributions_view', None, 'Rates',
+        readonly=True)
     fixed_amounts = fields.One2Many('claim.contributions_view', None,
-        'Fixed Amounts')
+        'Fixed Amounts', readonly=True)
     rule = fields.Many2One('rule_engine', 'Rule', states={
            'invisible': True})
     periods = fields.One2Many('claim.salary', None, 'Periods',
-        order=[('from_date', 'ASC')])
+        order=[('from_date', 'ASC')], readonly=True)
 
 
 class SalariesComputation(Wizard):

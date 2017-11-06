@@ -1,3 +1,4 @@
+* BUG#7442 Interdiction de supprimer les contributions dans l'assistant des salaires
 * BUG#7495 Prise en compte de la règle de calcul du salaire net lors du calcul des taux par tranches
 * BUG#7494 Erreur dans le mode de salaire utilisé pour calculer les tranches de salaire
 * BUG#7105 Erreur dans le calcul des tranches de salaire si celui ci est déclaré annuellement
