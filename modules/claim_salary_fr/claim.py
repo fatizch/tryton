@@ -154,14 +154,15 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
             tables[k]['extra_data'] = data_def['id']
             tables[k][key] = v
 
-    def get_rates_per_range(self, fixed=False):
+    def get_rates_per_range(self, fixed=False, net_salary_rule=None):
         ExtraData = Pool().get('extra_data')
         delivered = self.delivered_service
-        net_calculuation_rule = delivered.benefit.benefit_rules[0]. \
+        net_calculation_rule = net_salary_rule or \
+            delivered.benefit.benefit_rules[0]. \
             option_benefit_at_date(delivered.option,
                 delivered.loss.start_date).net_calculation_rule
-        extra_datas = net_calculuation_rule.contributions if not fixed \
-            else net_calculuation_rule.fixed_contributions
+        extra_datas = net_calculation_rule.contributions if not fixed \
+            else net_calculation_rule.fixed_contributions
         tables = defaultdict(lambda: {
                 'ta': 0,
                 'tb': 0,

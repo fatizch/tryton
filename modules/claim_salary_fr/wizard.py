@@ -142,8 +142,10 @@ class SalariesComputation(Wizard):
         return {
             'rule': rule.id,
             'periods': [s.id for s in salaries],
-            'rates': salaries[0].get_rates_per_range(),
-            'fixed_amounts': salaries[0].get_rates_per_range(fixed=True)
+            'rates': salaries[0].get_rates_per_range(
+                net_salary_rule=delivered_rule),
+            'fixed_amounts': salaries[0].get_rates_per_range(fixed=True,
+                net_salary_rule=delivered_rule)
             }
 
     def update_salary(self):
