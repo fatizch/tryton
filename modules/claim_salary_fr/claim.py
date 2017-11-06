@@ -407,6 +407,7 @@ class ClaimService:
         salary_range = {'TA': 0, 'TB': 0, 'TC': 0}
         salaries = self.claim.delivered_services[0].salary \
             if not current_salary else [current_salary]
+        salary_mode = self.claim.delivered_services[0].salary_mode
         pmss = Decimal(0)
         salary_to_use = Decimal(0)
         bonus = Decimal(0)
@@ -425,7 +426,7 @@ class ClaimService:
                 in_period = False
             # calculate prorata in order to calculate the salary as it was a
             # full month
-            if self.salary_mode != 'last_year':
+            if salary_mode != 'last_year':
                 begin_date = datetime.date(cur_salary.to_date.year,
                     cur_salary.to_date.month, 1)
             else:
@@ -442,18 +443,18 @@ class ClaimService:
                     salary_to_add = \
                         (getattr(cur_salary, salary_def, 0) or 0)
                     if salary_to_add:
-                        if self.salary_mode != 'last_year':
+                        if salary_mode != 'last_year':
                             pmss += TableCell.get(pmss_table,
                                 cur_salary.from_date) * prorata
                         sum_prorata += prorata
                         salary_to_use += salary_to_add
-            if self.salary_mode == 'last_year':
+            if salary_mode == 'last_year':
                 for i in range(0, 12):
                     pmss += TableCell.get(pmss_table, cur_salary.from_date +
                         relativedelta(months=i)) * prorata
 
         # Calculate monthly salary
-        if self.salary_mode != 'last_year' and not current_salary and \
+        if salary_mode != 'last_year' and not current_salary and \
                 sum_prorata:
             salary_to_use *= 12 / sum_prorata
             pmss *= 12 / sum_prorata
