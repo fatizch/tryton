@@ -636,6 +636,10 @@ def values_mixin(value_model):
             pool = Pool()
             return pool.get(field_.model_name)(instance_id).rec_name
 
+        @classmethod
+        def _auto_update_ignore_fields(cls):
+            return set()
+
     return Mixin
 
 
@@ -2212,6 +2216,10 @@ class EndorsementOption(relation_mixin(
     @classmethod
     def _ignore_fields_for_matching(cls):
         return {'contract'}
+
+    @classmethod
+    def _auto_update_ignore_fields(cls):
+        return {'current_extra_data'}
 
 
 class EndorsementOptionVersion(relation_mixin(

@@ -763,6 +763,8 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
         displayer = Displayer.new_displayer(covered_element,
             self.effective_date)
         displayer.parent = str(parent)
+        if isinstance(parent, Pool().get('endorsement.contract')):
+            displayer.contract = parent.contract
         displayer.parent_rec_name = self.get_parent_name(parent)
         if not save_values:
             # Not modified covered
@@ -859,6 +861,7 @@ class CoveredElementDisplayer(model.CoogView):
                 Eval('item_kind') == 'company',
                 ('is_person', '=', False),
                 ())], depends=['item_kind'])
+    contract = fields.Many2One('contract', 'Contract')
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         readonly=True)
     item_kind = fields.Function(fields.Char('Item Kind'),
@@ -1012,6 +1015,16 @@ class CoveredElementDisplayer(model.CoogView):
         covered.party = self.party
         covered.name = self.name
         covered.versions = [self.to_version()]
+        covered.contract = self.contract
+        covered.main_contract = self.contract
+        covered.product = self.contract.product
+        covered.update_default_options()
+        if covered.options:
+            options_with_date = []
+            for option in covered.options:
+                option.manual_start_date = self.effective_date
+                options_with_date.append(option)
+            covered.options = options_with_date
         return covered
 
     def match_values(self, values):
@@ -1813,7 +1826,6 @@ class ManageExclusionsOptionDisplayer(model.CoogView):
                 for x in Option(displayer.option_id).exclusion_list}
         else:
             current_exclusions = set([])
-
         exclusions = [Exclusion(exclusion=x, action='nothing')
             for x in current_exclusions & new_exclusions]
         exclusions += [Exclusion(exclusion=x, action='added')

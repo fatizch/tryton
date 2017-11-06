@@ -573,6 +573,10 @@ class EndorsementCoveredElementOption(relation_mixin(
     def _ignore_fields_for_matching(cls):
         return {'covered_element', 'contract'}
 
+    @classmethod
+    def _auto_update_ignore_fields(cls):
+        return {'current_extra_data'}
+
 
 class EndorsementCoveredElementOptionVersion(relation_mixin(
             'endorsement.contract.option.version.field', 'version',

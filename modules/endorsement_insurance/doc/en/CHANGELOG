@@ -1,3 +1,4 @@
+* BUG#6483 Initialize options in new covered element endorsement
 * BUG#6644 Add a default motive on new extra_premium endorsement
 * BUG#6510 Handle contract status in extra_premium endorsement
 

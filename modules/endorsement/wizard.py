@@ -285,6 +285,8 @@ class EndorsementWizardStepMixin(model.CoogView):
         endorsement.clean()
         new_values = {}
         for k, v in data_dict.iteritems():
+            if k in endorsement._auto_update_ignore_fields():
+                continue
             field = Model._fields[k]
             if isinstance(field, tryton_fields.Function):
                 if not field.setter:

@@ -1,3 +1,4 @@
+* BUG#6483 Initialisation des options dans l'avenant de nouvel élément couvert
 * BUG#6644 Motif par défaut lors d'un ajout de surprime
 * BUG#6510 Prise en compte du statut du contrat dans la gestion des surprimes
 
