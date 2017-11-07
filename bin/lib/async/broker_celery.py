@@ -10,6 +10,8 @@ from celery import Task
 import async.config as config
 from async.tasks import tasks
 
+from trytond.modules.coog_core.batch import BatchRootNoSelect
+
 broker_url = os.environ.get('TRYTOND_ASYNC_CELERY')
 assert broker_url, 'TRYTOND_ASYNC_CELERY should be set'
 app = Celery('coog', broker=broker_url, backend=broker_url)
@@ -47,11 +49,9 @@ class CoogTask(Task):
             with Transaction().set_context(
                     User.get_preferences(context_only=True)):
                 batch = pool.get(batch_name)
+                if issubclass(batch, BatchRootNoSelect):
+                    return
                 objects = batch.convert_to_instances(ids)
-                if objects == ids:
-                    # This case occurs when the batch is a NoSelect
-                    objects = pool.get(batch.get_batch_main_model_name()
-                        ).browse(ids[0])
                 getattr(batch, method)(task_id, objects, *args, **kwargs)
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
