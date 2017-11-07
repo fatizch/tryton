@@ -1,7 +1,7 @@
 .. transversal
 
 Transverse - Génération de SMS PrimoTexto
-========================================
+=========================================
 
 Résumé
 ------

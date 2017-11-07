@@ -15,6 +15,7 @@ Introduction
 Configuration du serveur
 ========================
 .. _`Configuration du serveur`:
+
 1. Editer le fichier de configuration depuis coog-admin an lançant la commande **"./coog edit-app"**.
 2. Ajouter les lignes suivantes::
 
