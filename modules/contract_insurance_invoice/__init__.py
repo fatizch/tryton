@@ -54,6 +54,7 @@ def register():
         event.EventTypeAction,
         invoice.Invoice,
         invoice.InvoiceLine,
+        invoice.InvoiceTax,
         invoice.InvoiceLineAggregatesDisplay,
         invoice.InvoiceLineAggregatesDisplayLine,
         invoice.InvoiceLineDetail,

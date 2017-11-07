@@ -21,6 +21,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Invoice',
     'InvoiceLine',
+    'InvoiceTax',
     'InvoiceLineDetail',
     'InvoiceLineAggregates',
     'InvoiceLineAggregatesDisplay',

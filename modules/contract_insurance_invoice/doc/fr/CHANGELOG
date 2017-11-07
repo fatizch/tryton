@@ -1,3 +1,4 @@
+* BUG#7492 Ajout du contrat sur les lignes de mouvement des taxes
 * BUG#7395 Ajout d'un contrôle sur l'annulation manuelle de quittance
 * OTH#0000 Séparation de la requête du batch de quittancement pour faciliter les surcharges
 * BUG#7337 Suppression des paiements brouillons ou approuvés associés à une quittance lors de son annulation

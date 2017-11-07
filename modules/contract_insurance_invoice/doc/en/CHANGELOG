@@ -1,3 +1,4 @@
+* BUG#7492 Add contract on account move lines of taxes
 * BUG#7395 Add check on manual invoice cancelling
 * OTH#0000 Split the contract invoice creation batch query to ease override
 * BUG#7337 Delete draft and approved payments related to an invoice which is cancelled
