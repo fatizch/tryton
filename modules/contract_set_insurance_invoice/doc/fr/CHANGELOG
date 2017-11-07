@@ -1,3 +1,4 @@
+* BUG#7497 Définition de la bonne date fonctionnelle dans le context du document
 * BUG#7473 Traitement des contrats d'un ensemble de contrats dans la même tâche lors du renouvellement par batch
 * BUG#7412 Ajout de la possibilité de renouveler un contrat d'un ensemble de contrats si l'autre n'est pas actif
 

@@ -168,3 +168,9 @@ class ContractSet:
                 taxes[key] += value
         return [sorted(reports_per_date.values(), key=keyfunc), total,
             dict(taxes)]
+
+    def get_report_functional_date(self, event_code):
+        if event_code == 'renew_contract_set':
+            return max(
+                [c.activation_history[-1].start_date for c in self.contracts])
+        return super(ContractSet, self).get_report_functional_date(event_code)
