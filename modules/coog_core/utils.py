@@ -468,7 +468,7 @@ def version_getter(instances, names, version_model, reverse_fname,
                 if k == reverse_fname or k not in field_map:
                     continue
                 if k in to_convert:
-                    v = json.loads(v, object_hook=JSONDecoder())
+                    v = json.loads(v or '{}', object_hook=JSONDecoder())
                 result[field_map[k]][base_id] = v
     return result
 
