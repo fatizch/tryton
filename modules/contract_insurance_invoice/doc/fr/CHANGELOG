@@ -1,3 +1,4 @@
+* BUG#7467 Conservation de la précision lors de la conversion des fréquences d'une prime
 * BUG#7492 Ajout du contrat sur les lignes de mouvement des taxes
 * BUG#7395 Ajout d'un contrôle sur l'annulation manuelle de quittance
 * OTH#0000 Séparation de la requête du batch de quittancement pour faciliter les surcharges

@@ -509,4 +509,4 @@ class OptionDescriptionPremiumRule:
             if factor is None:
                 continue
             line.frequency = new_frequency
-            line.amount = line.amount / factor
+            line.amount = Decimal.quantize(line.amount / factor, line.amount)
