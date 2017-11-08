@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ###################################################### -->
+        <!-- ######### Bank MobilityEndorsement Definition ######### -->
+        <!-- ###################################################### -->
+        <record model="endorsement.definition" id="mobilite_bancaire_definition">
+            <field name="code">mobilite_bancaire</field>
+            <field name="name">Mobilite Bancaire</field>
+            <field name="active" eval="False"/>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="mobilite_bancaire_relation">
+            <field name="definition" ref="mobilite_bancaire_definition"/>
+            <field name="endorsement_part" ref="endorsement_insurance_invoice.change_direct_debit_account_endorsement_part"/>
+            <field name="order">100</field>
+        </record>
+    </data>
+</tryton>

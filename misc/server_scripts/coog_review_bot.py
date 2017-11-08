@@ -54,7 +54,7 @@ from datetime import date, timedelta
 CONF_FILE = '~/coog.conf'
 TITLE_FORMAT = re.compile('^([A-Za-z_][\w\.-]+)+ ?:')
 CODEREVIEW_URL = 'http://rietveld.coopengo.com'
-REDMINE_URL = 'https://redmine.coopengo.com'
+REDMINE_URL = 'https://support.coopengo.com'
 ISSUE_REGEXP = re.compile('(rietveld.coopengo.com/)([0-9]+)')
 
 

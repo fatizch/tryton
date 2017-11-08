@@ -5,7 +5,7 @@ import requests
 import sys
 requests.packages.urllib3.disable_warnings()
 
-REDMINE_URL = 'https://redmine.coopengo.com'
+REDMINE_URL = 'https://support.coopengo.com'
 
 try:
     _, redmine_api_key, project_name, version_name = sys.argv

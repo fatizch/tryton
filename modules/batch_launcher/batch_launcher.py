@@ -44,9 +44,9 @@ class LaunchBatch(Wizard):
         self.check_required_params()
         extra_args = {p.code: p.value for p in self.start.parameters}
         ids = BatchModel.select_ids(**extra_args)
-        objects = BatchModel.convert_to_instances((x[0] for x in ids)) \
+        objects = BatchModel.convert_to_instances([x[0] for x in ids]) \
             if ids else []
-        BatchModel.execute(objects, ids, **extra_args)
+        BatchModel.execute(objects, [x[0] for x in ids], **extra_args)
         return 'end'
 
     def check_required_params(self):

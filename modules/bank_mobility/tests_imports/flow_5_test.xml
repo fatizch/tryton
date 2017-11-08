@@ -1,0 +1,549 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<n0:Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:n0="urn:iso:std:iso:20022:tech:xsd:acmt.02z.001.01:Report" xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:acmt.02y.001.01    ../doc/sepa_doc/20160728105510_acmt.02z.001.01_AccountSwitchingInformationServiceResponseV01_Flow5_Report.xsd">
+  <!-- Memo: M - Obligatoire; R: Requis (Obligatoire pour ka communauté française); D - Dépendant; A: Vivement recommandé; O: Optionnel; N: Non utilisé-->
+  <!-- Les balises commentés avec le flag [MOBILITY] sont celles utilisées pour le traitement Coog de la mobilité bancaire -->
+  <!-- Message Root M[1..1]-->
+  <n0:AcctSwtchngInfSvcRptV01>
+    <!-- Assignment M[1..1]: Identifie le message banque-client -->
+    <n0:Assgnmt>
+      <!-- Message Identification M[1..1]: Référence point à point, telle que fournie par l'assigneur et envoyée à la partie suivante dans la chaîne afin d'identifier de façon non ambiguë le message. -->
+      <n0:MsgId>MessageId</n0:MsgId>
+      <!-- Creation Date Time M[1..1]: Date et heure de création du message -->
+      <n0:CreDtTm>2017-10-11T14:00:01Z</n0:CreDtTm>
+      <!-- Creator O[1..0] Partie ayant créé la demande de mobilité - Etablissement d'arrivée -->
+      <!-- Assigner M[1..1] Partie qui assigne la demande à une autre partie. Il s'agit aussi de l'émétteur du message - Banque de l'émetteur -->
+      <n0:Assgnr>
+        <!-- Agent R[1..1] Identification d'un institution financière - Banque émettrice du message-->
+        <n0:Agt>
+          <!-- Financial institution identification M[1..1] Set d'élément utilisé pour identifier de manière unique et non ambiguë une institution financière-->
+          <n0:FinInstnId>
+            <!-- BICFI R[0..1] Code d'identification d'une institution financière - BIC Banque émettrice -->
+            <n0:BICFI>BQFFFRPP</n0:BICFI>
+          </n0:FinInstnId>
+        </n0:Agt>
+      </n0:Assgnr>
+      <!-- Assignee M[1..1] Partie à laquelle la demande est assignée. Il s'agit aussi du récepteur du message - Client émetteur des opérations de virements et de prélèvements. -->
+      <n0:Assgne>
+        <!-- Party R[1..1] Identification d'une personne physique ou d'une organisation - Partie réceptrice du message -->
+        <n0:Pty>
+          <!-- Name R[0..1] Nom utilisé pour identifier une partie - Règle de formatage : Limité à 70 caractères -->
+          <n0:Nm>Mutuelle XXX</n0:Nm>
+          <!-- Identification R[0..1] Identification unique et non ambiguë d'une partie -->
+          <n0:Id>
+            <!-- OrganisationIdentification R[1..1] -->
+            <n0:OrgId>
+              <!-- Other R[0..*] Autre identifiant. Une seule occurrence. Si présent, AnyBIC non renseigné. -->
+              <n0:Othr>
+                <!-- Identification M[1..1] Identification de la partie. - IBAN du compte de l'émetteur de l'opération d'origine : donneur d'ordre pour un virement, créancier pour un prélèvement -->
+                <n0:Id>FEMUFR21XXX</n0:Id>
+              </n0:Othr>
+            </n0:OrgId>
+          </n0:Id>
+        </n0:Pty>
+      </n0:Assgne>
+    </n0:Assgnmt>
+    <!-- Modification [0..*] Information concernant la donnée modifiée - Règles de formatage : Plusieurs occurrences possibles si la banque de l'émetteur regroupe plusieurs "Modifications" dans un seul message. L’absence d’occurrence n’est possible que pour la fourniture de messages ‘vides’ dans le cadre d’un accord bilatéral entre la banque de l’émetteur et son client émetteur -->
+    <n0:Mod>
+      <!-- [MOBILITY] Identification M[1..1] Identification unique telle qu'assignée par la partie émettrice, pour identifier de façon non ambiguë l'information de modification au sein du message -->
+      <n0:Id>Modification_1</n0:Id>
+      <!-- Account Switching Reference M[1..1] Référence de mobilité - Donne la référence du mandat de mobilité et la date de signature du mandat pour la gestion de la preuve. -->
+      <n0:AcctSwtchngRef>
+        <!-- [MOBILITY] Account Switching Identification M[1..1] Identifiant de mobilité - Référence du mandat de mobilité telle que créée par l'établissement d'arrivée.-->
+        <n0:AcctSwtchngId>MOB-BDFEFRPPCCT-20170930-000001</n0:AcctSwtchngId>
+        <!-- [MOBILITY] Date of signature M[1..1] Date de signature du mandat de mobilité -->
+        <n0:DtOfSgntr>2017-09-30</n0:DtOfSgntr>
+      </n0:AcctSwtchngRef>
+      <!-- Original Party And Account Identification R[0..1] Identification d'origine de la partie et du compte - Informations telles que reçues par la banque de l'émetteur -->
+      <n0:OrgnlPtyAndAcctId>
+        <!-- Party M[1..1] Identification d'une personne physique ou d'une organisation -->
+        <n0:Pty>
+          <!-- Name R[0..1] Intitulé du compte dans l'établissement de départ, regle de formatage: limité à 70 caractères -->
+          <n0:Nm>Martin JEAN</n0:Nm>
+        </n0:Pty>
+        <!-- Account R[0..1] N° de compte du client en mobilité dans l'établissement de départ -->
+        <n0:Acct>
+          <!-- [MOBILITY] IBAN M[1..1] IBAN du client en mobilité dans l'établissement de départ -->
+          <n0:IBAN>FR7630004000031234567890143</n0:IBAN>
+        </n0:Acct>
+        <!-- Agent R[0..1] Identification d'une institution financière - Etablissement de départ -->
+        <n0:Agt>
+          <n0:FinInstnId>
+            <!-- [MOBILITY] -->
+            <n0:BICFI>BNPAFRPPXXX</n0:BICFI>
+          </n0:FinInstnId>
+        </n0:Agt>
+      </n0:OrgnlPtyAndAcctId>
+      <!-- UpdatedPartyAndAccountIdentification M[1..1] Identification de la partie et/ou du compte dans l'établissement d'arrivée - Informations telles que reçues par la banque de l'émetteur-->
+      <n0:UpdtdPtyAndAcctId>
+        <!-- Party M[1..1] Identification d'une personne physique ou d'une organisation -->
+        <n0:Pty>
+          <!-- Name R[0..1] Intitulé du compte dans l'établissement d'arrivée Règle de formatage : Limité à 70 caractères -->
+          <n0:Nm>Martin JEAN</n0:Nm>
+        </n0:Pty>
+        <!-- Account R[0..1] N° de compte du client en mobilité dans l'établissement d'arrivée -->
+        <n0:Acct>
+          <!-- [MOBILITY] IBAN M[1..1] Iban du client dans l'établissement d'arrivée -->
+          <n0:IBAN>FR7630001007941234567890185</n0:IBAN>
+        </n0:Acct>
+        <!-- Agent R[0..1] Etablissement d'arrivée -->
+        <n0:Agt>
+          <n0:FinInstnId>
+            <!-- [MOBILITY] BICFI R[0..1] BIC Etablissement d'arrivée -->
+            <n0:BICFI>BDFEFRPPCCT</n0:BICFI>
+          </n0:FinInstnId>
+        </n0:Agt>
+      </n0:UpdtdPtyAndAcctId>
+      <!-- Additional Information O[0..1] Information complémentaire, format libre, pour compléter l'information liée à la modification -->
+      <n0:AddtlInf>Free information zone, max 140 characters</n0:AddtlInf>
+      <!-- TransactionReport R[0..n] Utilisable autant de fois que de familles d'opérations rapportées, soit au maximum 2 fois niveau 3.0 « Modification » -->
+      <n0:TxRprt>
+        <!-- Transaction Summary R[0..1] Ensemble d'information sur les écritures-->
+        <n0:TxsSummry>
+          <!-- TotalEntriesPerBankTransactionCode R[0..n] Total des écritures par code opération bancaire. -->
+          <n0:TtlNtriesPerBkTxCd>
+            <!-- Number of entries R[0..1] Nombre total d'écritures pour ce code opération-->
+            <n0:NbOfNtries>2</n0:NbOfNtries>
+            <!-- BankTransactionCode M[1..1]Code opération bancaire. Code générique à ce niveau. Les BTC sont exprimés sens vu de l'émetteur. -->
+            <n0:BkTxCd>
+              <!-- Domaine R[0..1] -->
+              <n0:Domn>
+                <!-- Code Domaine M[1..1] Renseigner avec PMNT -->
+                <n0:Cd>PMNT</n0:Cd>
+                <!-- Family M[1..1] Famille -->
+                <n0:Fmly>
+                  <!-- Code famille M[1..1] IDDT pour prélèvement émis, ICDT pour virement émis. -->
+                  <n0:Cd>IDDT</n0:Cd>
+                  <!-- Code sous famille M[1..1] Renseigner avec OTHR pour un code générique sinon ESCT pour ls SCT émis, XBCT pour virement international émis, ESDD pour les SDD Core émis, BBDD pour les SDD B2B émis -->
+                  <n0:SubFmlyCd>OTHR</n0:SubFmlyCd>
+                </n0:Fmly>
+              </n0:Domn>
+            </n0:BkTxCd>
+          </n0:TtlNtriesPerBkTxCd>
+        </n0:TxsSummry>
+        <!-- Transaction Details R[0..n] Niveau Opération -->
+        <n0:TxDtls>
+          <!-- BankTransactionCode R[0..1] Code opération bancaire- Code spécifique à ce niveau. Les BTC sont exprimés sens vu de l'émetteur. -->
+          <n0:BkTxCd>
+            <n0:Domn>
+              <!-- Code Domaine M[1..1] Renseigner avec PMNT -->
+              <n0:Cd>PMNT</n0:Cd>
+              <!-- Family M[1..1] Famille -->
+              <n0:Fmly>
+                <!-- Code famille M[1..1] IDDT pour prélèvement émis, ICDT pour virement émis. -->
+                <n0:Cd>IDDT</n0:Cd>
+                <!-- Code sous famille M[1..1] Renseigner avec OTHR pour un code générique sinon ESCT pour ls SCT émis, XBCT pour virement international émis, ESDD pour les SDD Core émis, BBDD pour les SDD B2B émis -->
+                <n0:SubFmlyCd>ESDD</n0:SubFmlyCd>
+              </n0:Fmly>
+            </n0:Domn>
+          </n0:BkTxCd>
+          <!-- Références de la transaction R[0..1] Références de la transaction -->
+          <n0:Refs>
+            <!-- EndToEndIdentification D[0..1] Référence de bout en bout - Obligatoire pour opérations SEPA -->
+            <n0:EndToEndId>EndToEndId1</n0:EndToEndId>
+            <!-- [MOBILITY] MandateIdentification D[0..1] Identifiant du Mandat - Obligatoire pour prélèvement émis -->
+            <n0:MndtId>COO11405-0000000260</n0:MndtId>
+          </n0:Refs>
+          <!-- RelatedParties R[0..1] Entités concernées par la transaction -->
+          <!-- RelatedAgents R[0..1] -->
+          <!-- Remittance Information D[0..1] Motif du paiement - Selon ce qui aura été reçu dans le flux 3 Règle de formatage : Soit Unstructured soit Structured. Pas les deux ensembles -->
+          <n0:RmtInf>
+            <!-- Unstructured D[0..n] Motif du paiement sous forme non structurée. Limité à une occurrence -->
+            <n0:Ustrd>Prelevement assurance 1</n0:Ustrd>
+            <!-- Structured D[0..n] Motif du paiement sous forme structurée utilisé uniquement en cas de réception de prélèvement au format XML (pour le détail de la structure cf le guide prélèvement) -->
+          </n0:RmtInf>
+        </n0:TxDtls>
+        <n0:TxDtls>
+          <!-- BankTransactionCode R[0..1] Code opération bancaire- Code spécifique à ce niveau. Les BTC sont exprimés sens vu de l'émetteur. -->
+          <n0:BkTxCd>
+            <n0:Domn>
+              <!-- Code Domaine M[1..1] Renseigner avec PMNT -->
+              <n0:Cd>PMNT</n0:Cd>
+              <!-- Family M[1..1] Famille -->
+              <n0:Fmly>
+                <!-- Code famille M[1..1] IDDT pour prélèvement émis, ICDT pour virement émis. -->
+                <n0:Cd>IDDT</n0:Cd>
+                <!-- Code sous famille M[1..1] Renseigner avec OTHR pour un code générique sinon ESCT pour ls SCT émis, XBCT pour virement international émis, ESDD pour les SDD Core émis, BBDD pour les SDD B2B émis -->
+                <n0:SubFmlyCd>ESDD</n0:SubFmlyCd>
+              </n0:Fmly>
+            </n0:Domn>
+          </n0:BkTxCd>
+          <!-- Références de la transaction R[0..1] Références de la transaction -->
+          <n0:Refs>
+            <!-- EndToEndIdentification D[0..1] Référence de bout en bout - Obligatoire pour opérations SEPA -->
+            <n0:EndToEndId>EndToEndId2</n0:EndToEndId>
+            <!-- [MOBILITY] MandateIdentification D[0..1] Identifiant du Mandat - Obligatoire pour prélèvement émis -->
+            <n0:MndtId>COO11405-0000000261</n0:MndtId>
+          </n0:Refs>
+          <!-- RelatedParties R[0..1] Entités concernées par la transaction -->
+          <!-- RelatedAgents R[0..1] -->
+          <!-- Remittance Information D[0..1] Motif du paiement - Selon ce qui aura été reçu dans le flux 3 Règle de formatage : Soit Unstructured soit Structured. Pas les deux ensembles -->
+          <n0:RmtInf>
+            <!-- Unstructured D[0..n] Motif du paiement sous forme non structurée. Limité à une occurrence -->
+            <n0:Ustrd>Prelevement assurance 2</n0:Ustrd>
+            <!-- Structured D[0..n] Motif du paiement sous forme structurée utilisé uniquement en cas de réception de prélèvement au format XML (pour le détail de la structure cf le guide prélèvement) -->
+          </n0:RmtInf>
+        </n0:TxDtls>
+      </n0:TxRprt>
+      <n0:TxRprt>
+        <!-- Transaction Summary R[0..1] Ensemble d'information sur les écritures-->
+        <n0:TxsSummry>
+          <!-- TotalEntriesPerBankTransactionCode R[0..n] Total des écritures par code opération bancaire. -->
+          <n0:TtlNtriesPerBkTxCd>
+            <!-- Number of entries R[0..1] Nombre total d'écritures pour ce code opération-->
+            <n0:NbOfNtries>2</n0:NbOfNtries>
+            <!-- BankTransactionCode M[1..1]Code opération bancaire. Code générique à ce niveau. Les BTC sont exprimés sens vu de l'émetteur. -->
+            <n0:BkTxCd>
+              <!-- Domaine R[0..1] -->
+              <n0:Domn>
+                <!-- Code Domaine M[1..1] Renseigner avec PMNT -->
+                <n0:Cd>PMNT</n0:Cd>
+                <!-- Family M[1..1] Famille -->
+                <n0:Fmly>
+                  <!-- Code famille M[1..1] IDDT pour prélèvement émis, ICDT pour virement émis. -->
+                  <n0:Cd>ICDT</n0:Cd>
+                  <!-- Code sous famille M[1..1] Renseigner avec OTHR pour un code générique sinon ESCT pour ls SCT émis, XBCT pour virement international émis, ESDD pour les SDD Core émis, BBDD pour les SDD B2B émis -->
+                  <n0:SubFmlyCd>OTHR</n0:SubFmlyCd>
+                </n0:Fmly>
+              </n0:Domn>
+            </n0:BkTxCd>
+          </n0:TtlNtriesPerBkTxCd>
+        </n0:TxsSummry>
+        <!-- Transaction Details R[0..n] Niveau Opération -->
+        <n0:TxDtls>
+          <!-- BankTransactionCode R[0..1] Code opération bancaire- Code spécifique à ce niveau. Les BTC sont exprimés sens vu de l'émetteur. -->
+          <n0:BkTxCd>
+            <n0:Domn>
+              <!-- Code Domaine M[1..1] Renseigner avec PMNT -->
+              <n0:Cd>PMNT</n0:Cd>
+              <!-- Family M[1..1] Famille -->
+              <n0:Fmly>
+                <!-- Code famille M[1..1] IDDT pour prélèvement émis, ICDT pour virement émis. -->
+                <n0:Cd>ICDT</n0:Cd>
+                <!-- Code sous famille M[1..1] Renseigner avec OTHR pour un code générique sinon ESCT pour ls SCT émis, XBCT pour virement international émis, ESDD pour les SDD Core émis, BBDD pour les SDD B2B émis -->
+                <n0:SubFmlyCd>ESCT</n0:SubFmlyCd>
+              </n0:Fmly>
+            </n0:Domn>
+          </n0:BkTxCd>
+          <!-- Références de la transaction R[0..1] Références de la transaction -->
+          <n0:Refs>
+            <!-- EndToEndIdentification D[0..1] Référence de bout en bout - Obligatoire pour opérations SEPA -->
+            <n0:EndToEndId>EndToEndId3</n0:EndToEndId>
+            <!-- [MOBILITY] MandateIdentification D[0..1] Identifiant du Mandat - Obligatoire pour prélèvement émis -->
+          </n0:Refs>
+          <!-- RelatedParties R[0..1] Entités concernées par la transaction -->
+          <!-- RelatedAgents R[0..1] -->
+          <!-- Remittance Information D[0..1] Motif du paiement - Selon ce qui aura été reçu dans le flux 3 Règle de formatage : Soit Unstructured soit Structured. Pas les deux ensembles -->
+          <n0:RmtInf>
+            <!-- Unstructured D[0..n] Motif du paiement sous forme non structurée. Limité à une occurrence -->
+            <n0:Ustrd>Virement assurance 1</n0:Ustrd>
+            <!-- Structured D[0..n] Motif du paiement sous forme structurée utilisé uniquement en cas de réception de prélèvement au format XML (pour le détail de la structure cf le guide prélèvement) -->
+          </n0:RmtInf>
+        </n0:TxDtls>
+        <n0:TxDtls>
+          <!-- BankTransactionCode R[0..1] Code opération bancaire- Code spécifique à ce niveau. Les BTC sont exprimés sens vu de l'émetteur. -->
+          <n0:BkTxCd>
+            <n0:Domn>
+              <!-- Code Domaine M[1..1] Renseigner avec PMNT -->
+              <n0:Cd>PMNT</n0:Cd>
+              <!-- Family M[1..1] Famille -->
+              <n0:Fmly>
+                <!-- Code famille M[1..1] IDDT pour prélèvement émis, ICDT pour virement émis. -->
+                <n0:Cd>ICDT</n0:Cd>
+                <!-- Code sous famille M[1..1] Renseigner avec OTHR pour un code générique sinon ESCT pour ls SCT émis, XBCT pour virement international émis, ESDD pour les SDD Core émis, BBDD pour les SDD B2B émis -->
+                <n0:SubFmlyCd>ESCT</n0:SubFmlyCd>
+              </n0:Fmly>
+            </n0:Domn>
+          </n0:BkTxCd>
+          <!-- Références de la transaction R[0..1] Références de la transaction -->
+          <n0:Refs>
+            <!-- EndToEndIdentification D[0..1] Référence de bout en bout - Obligatoire pour opérations SEPA -->
+            <n0:EndToEndId>EndToEndId4</n0:EndToEndId>
+            <!-- [MOBILITY] MandateIdentification D[0..1] Identifiant du Mandat - Obligatoire pour prélèvement émis -->
+          </n0:Refs>
+          <!-- RelatedParties R[0..1] Entités concernées par la transaction -->
+          <!-- RelatedAgents R[0..1] -->
+          <!-- Remittance Information D[0..1] Motif du paiement - Selon ce qui aura été reçu dans le flux 3 Règle de formatage : Soit Unstructured soit Structured. Pas les deux ensembles -->
+          <n0:RmtInf>
+            <!-- Unstructured D[0..n] Motif du paiement sous forme non structurée. Limité à une occurrence -->
+            <n0:Ustrd>Virement assurance 2</n0:Ustrd>
+            <!-- Structured D[0..n] Motif du paiement sous forme structurée utilisé uniquement en cas de réception de prélèvement au format XML (pour le détail de la structure cf le guide prélèvement) -->
+          </n0:RmtInf>
+        </n0:TxDtls>
+      </n0:TxRprt>
+    </n0:Mod>
+    <n0:Mod>
+      <!-- [MOBILITY] Identification M[1..1] Identification unique telle qu'assignée par la partie émettrice, pour identifier de façon non ambiguë l'information de modification au sein du message -->
+      <n0:Id>Modification_2</n0:Id>
+      <!-- Account Switching Reference M[1..1] Référence de mobilité - Donne la référence du mandat de mobilité et la date de signature du mandat pour la gestion de la preuve. -->
+      <n0:AcctSwtchngRef>
+        <!-- [MOBILITY] Account Switching Identification M[1..1] Identifiant de mobilité - Référence du mandat de mobilité telle que créée par l'établissement d'arrivée.-->
+        <n0:AcctSwtchngId>MOB-BDFEFRPPCCT-20171001-000002</n0:AcctSwtchngId>
+        <!-- [MOBILITY] Date of signature M[1..1] Date de signature du mandat de mobilité -->
+        <n0:DtOfSgntr>2017-10-01</n0:DtOfSgntr>
+      </n0:AcctSwtchngRef>
+      <!-- Original Party And Account Identification R[0..1] Identification d'origine de la partie et du compte - Informations telles que reçues par la banque de l'émetteur -->
+      <n0:OrgnlPtyAndAcctId>
+        <!-- Party M[1..1] Identification d'une personne physique ou d'une organisation -->
+        <n0:Pty>
+          <!-- Name R[0..1] Intitulé du compte dans l'établissement de départ, regle de formatage: limité à 70 caractères -->
+          <n0:Nm>Jacky Mitchell</n0:Nm>
+        </n0:Pty>
+        <!-- Account R[0..1] N° de compte du client en mobilité dans l'établissement de départ -->
+        <n0:Acct>
+          <!-- [MOBILITY] IBAN M[1..1] IBAN du client en mobilité dans l'établissement de départ -->
+          <n0:IBAN>FR7612548029981234567890161</n0:IBAN>
+        </n0:Acct>
+        <!-- Agent R[0..1] Identification d'une institution financière - Etablissement de départ -->
+        <n0:Agt>
+          <n0:FinInstnId>
+            <n0:BICFI>AXABFRPPXXX</n0:BICFI>
+          </n0:FinInstnId>
+        </n0:Agt>
+      </n0:OrgnlPtyAndAcctId>
+      <!-- UpdatedPartyAndAccountIdentification M[1..1] Identification de la partie et/ou du compte dans l'établissement d'arrivée - Informations telles que reçues par la banque de l'émetteur-->
+      <n0:UpdtdPtyAndAcctId>
+        <!-- Party M[1..1] Identification d'une personne physique ou d'une organisation -->
+        <n0:Pty>
+          <!-- Name R[0..1] Intitulé du compte dans l'établissement d'arrivée Règle de formatage : Limité à 70 caractères -->
+          <n0:Nm>Jacky Mitchell</n0:Nm>
+        </n0:Pty>
+        <!-- Account R[0..1] N° de compte du client en mobilité dans l'établissement d'arrivée -->
+        <n0:Acct>
+          <!-- [MOBILITY] IBAN M[1..1] Iban du client dans l'établissement d'arrivée -->
+          <n0:IBAN>FR7630007000111234567890144</n0:IBAN>
+        </n0:Acct>
+        <!-- Agent R[0..1] Etablissement d'arrivée -->
+        <n0:Agt>
+          <n0:FinInstnId>
+            <!-- BICFI R[0..1] BIC Etablissement d'arrivée -->
+            <n0:BICFI>NATXFRPPXXX</n0:BICFI>
+          </n0:FinInstnId>
+        </n0:Agt>
+      </n0:UpdtdPtyAndAcctId>
+      <!-- Additional Information O[0..1] Information complémentaire, format libre, pour compléter l'information liée à la modification -->
+      <n0:AddtlInf>Free information zone, max 140 characters</n0:AddtlInf>
+      <!-- TransactionReport R[0..n] Utilisable autant de fois que de familles d'opérations rapportées, soit au maximum 2 fois niveau 3.0 « Modification » -->
+      <n0:TxRprt>
+        <!-- Transaction Summary R[0..1] Ensemble d'information sur les écritures-->
+        <n0:TxsSummry>
+          <!-- TotalEntriesPerBankTransactionCode R[0..n] Total des écritures par code opération bancaire. -->
+          <n0:TtlNtriesPerBkTxCd>
+            <!-- Number of entries R[0..1] Nombre total d'écritures pour ce code opération-->
+            <n0:NbOfNtries>1</n0:NbOfNtries>
+            <!-- BankTransactionCode M[1..1]Code opération bancaire. Code générique à ce niveau. Les BTC sont exprimés sens vu de l'émetteur. -->
+            <n0:BkTxCd>
+              <!-- Domaine R[0..1] -->
+              <n0:Domn>
+                <!-- Code Domaine M[1..1] Renseigner avec PMNT -->
+                <n0:Cd>PMNT</n0:Cd>
+                <!-- Family M[1..1] Famille -->
+                <n0:Fmly>
+                  <!-- Code famille M[1..1] IDDT pour prélèvement émis, ICDT pour virement émis. -->
+                  <n0:Cd>IDDT</n0:Cd>
+                  <!-- Code sous famille M[1..1] Renseigner avec OTHR pour un code générique sinon ESCT pour ls SCT émis, XBCT pour virement international émis, ESDD pour les SDD Core émis, BBDD pour les SDD B2B émis -->
+                  <n0:SubFmlyCd>OTHR</n0:SubFmlyCd>
+                </n0:Fmly>
+              </n0:Domn>
+            </n0:BkTxCd>
+          </n0:TtlNtriesPerBkTxCd>
+        </n0:TxsSummry>
+        <!-- Transaction Details R[0..n] Niveau Opération -->
+        <n0:TxDtls>
+          <!-- BankTransactionCode R[0..1] Code opération bancaire- Code spécifique à ce niveau. Les BTC sont exprimés sens vu de l'émetteur. -->
+          <n0:BkTxCd>
+            <n0:Domn>
+              <!-- Code Domaine M[1..1] Renseigner avec PMNT -->
+              <n0:Cd>PMNT</n0:Cd>
+              <!-- Family M[1..1] Famille -->
+              <n0:Fmly>
+                <!-- Code famille M[1..1] IDDT pour prélèvement émis, ICDT pour virement émis. -->
+                <n0:Cd>IDDT</n0:Cd>
+                <!-- Code sous famille M[1..1] Renseigner avec OTHR pour un code générique sinon ESCT pour ls SCT émis, XBCT pour virement international émis, ESDD pour les SDD Core émis, BBDD pour les SDD B2B émis -->
+                <n0:SubFmlyCd>ESDD</n0:SubFmlyCd>
+              </n0:Fmly>
+            </n0:Domn>
+          </n0:BkTxCd>
+          <!-- Références de la transaction R[0..1] Références de la transaction -->
+          <n0:Refs>
+            <!-- EndToEndIdentification D[0..1] Référence de bout en bout - Obligatoire pour opérations SEPA -->
+            <n0:EndToEndId>EndToEndId5</n0:EndToEndId>
+            <!-- [MOBILITY] MandateIdentification D[0..1] Identifiant du Mandat - Obligatoire pour prélèvement émis -->
+            <n0:MndtId>COO11404-0000000262</n0:MndtId>
+          </n0:Refs>
+          <!-- RelatedParties R[0..1] Entités concernées par la transaction -->
+          <!-- RelatedAgents R[0..1] -->
+          <!-- Remittance Information D[0..1] Motif du paiement - Selon ce qui aura été reçu dans le flux 3 Règle de formatage : Soit Unstructured soit Structured. Pas les deux ensembles -->
+          <n0:RmtInf>
+            <!-- Unstructured D[0..n] Motif du paiement sous forme non structurée. Limité à une occurrence -->
+            <n0:Ustrd>Prelevement assurance 3</n0:Ustrd>
+            <!-- Structured D[0..n] Motif du paiement sous forme structurée utilisé uniquement en cas de réception de prélèvement au format XML (pour le détail de la structure cf le guide prélèvement) -->
+          </n0:RmtInf>
+        </n0:TxDtls>
+      </n0:TxRprt>
+      <n0:TxRprt>
+        <!-- Transaction Summary R[0..1] Ensemble d'information sur les écritures-->
+        <n0:TxsSummry>
+          <!-- TotalEntriesPerBankTransactionCode R[0..n] Total des écritures par code opération bancaire. -->
+          <n0:TtlNtriesPerBkTxCd>
+            <!-- Number of entries R[0..1] Nombre total d'écritures pour ce code opération-->
+            <n0:NbOfNtries>1</n0:NbOfNtries>
+            <!-- BankTransactionCode M[1..1]Code opération bancaire. Code générique à ce niveau. Les BTC sont exprimés sens vu de l'émetteur. -->
+            <n0:BkTxCd>
+              <!-- Domaine R[0..1] -->
+              <n0:Domn>
+                <!-- Code Domaine M[1..1] Renseigner avec PMNT -->
+                <n0:Cd>PMNT</n0:Cd>
+                <!-- Family M[1..1] Famille -->
+                <n0:Fmly>
+                  <!-- Code famille M[1..1] IDDT pour prélèvement émis, ICDT pour virement émis. -->
+                  <n0:Cd>ICDT</n0:Cd>
+                  <!-- Code sous famille M[1..1] Renseigner avec OTHR pour un code générique sinon ESCT pour ls SCT émis, XBCT pour virement international émis, ESDD pour les SDD Core émis, BBDD pour les SDD B2B émis -->
+                  <n0:SubFmlyCd>OTHR</n0:SubFmlyCd>
+                </n0:Fmly>
+              </n0:Domn>
+            </n0:BkTxCd>
+          </n0:TtlNtriesPerBkTxCd>
+        </n0:TxsSummry>
+        <!-- Transaction Details R[0..n] Niveau Opération -->
+        <n0:TxDtls>
+          <!-- BankTransactionCode R[0..1] Code opération bancaire- Code spécifique à ce niveau. Les BTC sont exprimés sens vu de l'émetteur. -->
+          <n0:BkTxCd>
+            <n0:Domn>
+              <!-- Code Domaine M[1..1] Renseigner avec PMNT -->
+              <n0:Cd>PMNT</n0:Cd>
+              <!-- Family M[1..1] Famille -->
+              <n0:Fmly>
+                <!-- Code famille M[1..1] IDDT pour prélèvement émis, ICDT pour virement émis. -->
+                <n0:Cd>ICDT</n0:Cd>
+                <!-- Code sous famille M[1..1] Renseigner avec OTHR pour un code générique sinon ESCT pour ls SCT émis, XBCT pour virement international émis, ESDD pour les SDD Core émis, BBDD pour les SDD B2B émis -->
+                <n0:SubFmlyCd>ESCT</n0:SubFmlyCd>
+              </n0:Fmly>
+            </n0:Domn>
+          </n0:BkTxCd>
+          <!-- Références de la transaction R[0..1] Références de la transaction -->
+          <n0:Refs>
+            <!-- EndToEndIdentification D[0..1] Référence de bout en bout - Obligatoire pour opérations SEPA -->
+            <n0:EndToEndId>EndToEndId6</n0:EndToEndId>
+            <!-- [MOBILITY] MandateIdentification D[0..1] Identifiant du Mandat - Obligatoire pour prélèvement émis -->
+          </n0:Refs>
+          <!-- RelatedParties R[0..1] Entités concernées par la transaction -->
+          <!-- RelatedAgents R[0..1] -->
+          <!-- Remittance Information D[0..1] Motif du paiement - Selon ce qui aura été reçu dans le flux 3 Règle de formatage : Soit Unstructured soit Structured. Pas les deux ensembles -->
+          <n0:RmtInf>
+            <!-- Unstructured D[0..n] Motif du paiement sous forme non structurée. Limité à une occurrence -->
+            <n0:Ustrd>Virement assurance 3</n0:Ustrd>
+            <!-- Structured D[0..n] Motif du paiement sous forme structurée utilisé uniquement en cas de réception de prélèvement au format XML (pour le détail de la structure cf le guide prélèvement) -->
+          </n0:RmtInf>
+        </n0:TxDtls>
+      </n0:TxRprt>
+    </n0:Mod>
+    <n0:Mod>
+      <!-- [MOBILITY] Identification M[1..1] Identification unique telle qu'assignée par la partie émettrice, pour identifier de façon non ambiguë l'information de modification au sein du message -->
+      <n0:Id>Modification_3</n0:Id>
+      <!-- Account Switching Reference M[1..1] Référence de mobilité - Donne la référence du mandat de mobilité et la date de signature du mandat pour la gestion de la preuve. -->
+      <n0:AcctSwtchngRef>
+        <!-- [MOBILITY] Account Switching Identification M[1..1] Identifiant de mobilité - Référence du mandat de mobilité telle que créée par l'établissement d'arrivée.-->
+        <n0:AcctSwtchngId>MOB-BDFEFRPPCCT-20171001-000003</n0:AcctSwtchngId>
+        <!-- [MOBILITY] Date of signature M[1..1] Date de signature du mandat de mobilité -->
+        <n0:DtOfSgntr>2017-10-01</n0:DtOfSgntr>
+      </n0:AcctSwtchngRef>
+      <!-- Original Party And Account Identification R[0..1] Identification d'origine de la partie et du compte - Informations telles que reçues par la banque de l'émetteur -->
+      <n0:OrgnlPtyAndAcctId>
+        <!-- Party M[1..1] Identification d'une personne physique ou d'une organisation -->
+        <n0:Pty>
+          <!-- Name R[0..1] Intitulé du compte dans l'établissement de départ, regle de formatage: limité à 70 caractères -->
+          <n0:Nm>Francois Fillon</n0:Nm>
+        </n0:Pty>
+        <!-- Account R[0..1] N° de compte du client en mobilité dans l'établissement de départ -->
+        <n0:Acct>
+          <!-- [MOBILITY] IBAN M[1..1] IBAN du client en mobilité dans l'établissement de départ -->
+          <n0:IBAN>FR7611315000011234567890138</n0:IBAN>
+        </n0:Acct>
+        <!-- Agent R[0..1] Identification d'une institution financière - Etablissement de départ -->
+        <n0:Agt>
+          <n0:FinInstnId>
+            <n0:BICFI>CEPAFRPP131</n0:BICFI>
+          </n0:FinInstnId>
+        </n0:Agt>
+      </n0:OrgnlPtyAndAcctId>
+      <!-- UpdatedPartyAndAccountIdentification M[1..1] Identification de la partie et/ou du compte dans l'établissement d'arrivée - Informations telles que reçues par la banque de l'émetteur-->
+      <n0:UpdtdPtyAndAcctId>
+        <!-- Party M[1..1] Identification d'une personne physique ou d'une organisation -->
+        <n0:Pty>
+          <!-- Name R[0..1] Intitulé du compte dans l'établissement d'arrivée Règle de formatage : Limité à 70 caractères -->
+          <n0:Nm>Penelope Fillon</n0:Nm>
+        </n0:Pty>
+        <!-- Account R[0..1] N° de compte du client en mobilité dans l'établissement d'arrivée -->
+        <n0:Acct>
+          <!-- [MOBILITY] IBAN M[1..1] Iban du client dans l'établissement d'arrivée -->
+          <n0:IBAN>FR7610107001011234567890129</n0:IBAN>
+        </n0:Acct>
+        <!-- Agent R[0..1] Etablissement d'arrivée -->
+        <n0:Agt>
+          <n0:FinInstnId>
+            <!-- BICFI R[0..1] BIC Etablissement d'arrivée -->
+            <n0:BICFI>BREDFRPPXXX</n0:BICFI>
+          </n0:FinInstnId>
+        </n0:Agt>
+      </n0:UpdtdPtyAndAcctId>
+      <!-- Additional Information O[0..1] Information complémentaire, format libre, pour compléter l'information liée à la modification -->
+      <n0:AddtlInf>Free information zone, max 140 characters</n0:AddtlInf>
+      <n0:TxRprt>
+        <!-- Transaction Summary R[0..1] Ensemble d'information sur les écritures-->
+        <n0:TxsSummry>
+          <!-- TotalEntriesPerBankTransactionCode R[0..n] Total des écritures par code opération bancaire. -->
+          <n0:TtlNtriesPerBkTxCd>
+            <!-- Number of entries R[0..1] Nombre total d'écritures pour ce code opération-->
+            <n0:NbOfNtries>1</n0:NbOfNtries>
+            <!-- BankTransactionCode M[1..1]Code opération bancaire. Code générique à ce niveau. Les BTC sont exprimés sens vu de l'émetteur. -->
+            <n0:BkTxCd>
+              <!-- Domaine R[0..1] -->
+              <n0:Domn>
+                <!-- Code Domaine M[1..1] Renseigner avec PMNT -->
+                <n0:Cd>PMNT</n0:Cd>
+                <!-- Family M[1..1] Famille -->
+                <n0:Fmly>
+                  <!-- Code famille M[1..1] IDDT pour prélèvement émis, ICDT pour virement émis. -->
+                  <n0:Cd>ICDT</n0:Cd>
+                  <!-- Code sous famille M[1..1] Renseigner avec OTHR pour un code générique sinon ESCT pour ls SCT émis, XBCT pour virement international émis, ESDD pour les SDD Core émis, BBDD pour les SDD B2B émis -->
+                  <n0:SubFmlyCd>OTHR</n0:SubFmlyCd>
+                </n0:Fmly>
+              </n0:Domn>
+            </n0:BkTxCd>
+          </n0:TtlNtriesPerBkTxCd>
+        </n0:TxsSummry>
+        <!-- Transaction Details R[0..n] Niveau Opération -->
+        <n0:TxDtls>
+          <!-- BankTransactionCode R[0..1] Code opération bancaire- Code spécifique à ce niveau. Les BTC sont exprimés sens vu de l'émetteur. -->
+          <n0:BkTxCd>
+            <n0:Domn>
+              <!-- Code Domaine M[1..1] Renseigner avec PMNT -->
+              <n0:Cd>PMNT</n0:Cd>
+              <!-- Family M[1..1] Famille -->
+              <n0:Fmly>
+                <!-- Code famille M[1..1] IDDT pour prélèvement émis, ICDT pour virement émis. -->
+                <n0:Cd>ICDT</n0:Cd>
+                <!-- Code sous famille M[1..1] Renseigner avec OTHR pour un code générique sinon ESCT pour ls SCT émis, XBCT pour virement international émis, ESDD pour les SDD Core émis, BBDD pour les SDD B2B émis -->
+                <n0:SubFmlyCd>ESCT</n0:SubFmlyCd>
+              </n0:Fmly>
+            </n0:Domn>
+          </n0:BkTxCd>
+          <!-- Références de la transaction R[0..1] Références de la transaction -->
+          <n0:Refs>
+            <!-- EndToEndIdentification D[0..1] Référence de bout en bout - Obligatoire pour opérations SEPA -->
+            <n0:EndToEndId>EndToEndId7</n0:EndToEndId>
+            <!-- [MOBILITY] MandateIdentification D[0..1] Identifiant du Mandat - Obligatoire pour prélèvement émis -->
+          </n0:Refs>
+          <!-- RelatedParties R[0..1] Entités concernées par la transaction -->
+          <!-- RelatedAgents R[0..1] -->
+          <!-- Remittance Information D[0..1] Motif du paiement - Selon ce qui aura été reçu dans le flux 3 Règle de formatage : Soit Unstructured soit Structured. Pas les deux ensembles -->
+          <n0:RmtInf>
+            <!-- Unstructured D[0..n] Motif du paiement sous forme non structurée. Limité à une occurrence -->
+            <n0:Ustrd>Virement assurance 4</n0:Ustrd>
+            <!-- Structured D[0..n] Motif du paiement sous forme structurée utilisé uniquement en cas de réception de prélèvement au format XML (pour le détail de la structure cf le guide prélèvement) -->
+          </n0:RmtInf>
+        </n0:TxDtls>
+      </n0:TxRprt>
+    </n0:Mod>
+  </n0:AcctSwtchngInfSvcRptV01>
+</n0:Document>
