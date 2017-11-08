@@ -86,16 +86,22 @@ class ContractOption:
 
     @fields.depends('parent_contract', 'coverage', 'start_date',
         'covered_element', 'currency', 'appliable_conditions_date',
-        'has_coverage_amount', 'free_coverage_amount')
+        'has_coverage_amount', 'free_coverage_amount',
+        'current_coverage_amount')
     def get_possible_amounts(self):
+        selection, values = [('', '')], []
         if self.has_coverage_amount and not self.free_coverage_amount:
-            vals = self.get_coverage_amount_rule_result(utils.today())
-            if vals:
-                return [('', '')] + map(
+            values = self.get_coverage_amount_rule_result(utils.today())
+            if values:
+                selection += map(
                     lambda x: (str(x), self.currency.amount_as_string(x)),
-                    vals
-                    )
-        return [('', '')]
+                    values)
+        if (self.current_coverage_amount and
+                self.current_coverage_amount not in values):
+            selection.append((str(self.current_coverage_amount),
+                    self.currency.amount_as_string(
+                        self.current_coverage_amount)))
+        return selection
 
     def get_coverage_amount_rule_result(self, at_date):
         if not self.has_coverage_amount:
@@ -135,11 +141,9 @@ class ContractOption:
             if self.current_coverage_amount_selection else None)
         self.on_change_current_coverage_amount()
 
-    @fields.depends('current_coverage_amount', 'free_coverage_amount')
+    @fields.depends('current_coverage_amount')
     def on_change_with_current_coverage_amount_selection(self, name=None):
-        return (str(self.current_coverage_amount)
-            if self.current_coverage_amount and not self.free_coverage_amount
-            else '')
+        return str(self.current_coverage_amount or '')
 
     @fields.depends('coverage')
     def on_change_with_has_coverage_amount(self, name=None):
