@@ -10,7 +10,6 @@ from celery import Task
 import async.config as config
 from async.tasks import tasks
 
-from trytond.modules.coog_core.batch import BatchRootNoSelect
 
 broker_url = os.environ.get('TRYTOND_ASYNC_CELERY')
 assert broker_url, 'TRYTOND_ASYNC_CELERY should be set'
@@ -37,6 +36,7 @@ class CoogTask(Task):
         import tryton_init
         from trytond.transaction import Transaction
         from trytond.pool import Pool
+        from trytond.modules.coog_core.batch import BatchRootNoSelect
         user_id = kwargs.get('user', None)
         database = tryton_init.database(kwargs.get('database'))
         with Transaction().start(database, 0, readonly=True):
