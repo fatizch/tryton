@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:benefit.rule:"
+msgid "Multiple indemnification rules allowed"
+msgstr "Plusieurs règles d'indemnisation autorisées"
+
 msgctxt "error:claim.create_indemnification:"
 msgid ""
 "The contract was terminated on the %(contract_end)s, a new indemnification "

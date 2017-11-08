@@ -97,6 +97,10 @@ class BenefitRule:
     @classmethod
     def __setup__(cls):
         super(BenefitRule, cls).__setup__()
+        cls._error_messages.update({
+                'multiple_indemnification_rules': 'Multiple indemnification '
+                'rules allowed',
+                })
         cls.indemnification_rule.states['invisible'] = And(
             cls.indemnification_rule.states.get('invisible', True),
             ~Eval('force_indemnification_rule'))
@@ -128,6 +132,12 @@ class BenefitRule:
                 And(Bool(Eval('is_group')), ~Eval('force_annuity_frequency')))
         cls.annuity_frequency.depends.extend(['force_annuity_frequency',
             'is_group'])
+
+    def get_rec_name(self, name):
+        if not self.indemnification_rule and self.indemnification_rules:
+            return self.raise_user_error('multiple_indemnification_rules',
+                raise_exception=False)
+        return super(BenefitRule, self).get_rec_name(name)
 
     @classmethod
     def default_force_annuity_frequency(cls):

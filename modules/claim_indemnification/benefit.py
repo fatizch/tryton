@@ -112,6 +112,7 @@ class BenefitRule(
                 'msg_beneficiary_share': 'Share for current beneficiary : '
                 '%(share)s %%',
                 'msg_final_result': 'Total after share : %(amount).2f',
+                'no_indemnification_rule': 'No indemnification rule defined',
                 })
         cls.indemnification_rule.domain = [('type_', '=', 'benefit')]
         cls.deductible_rule.domain = [('type_', '=', 'benefit_deductible')]
@@ -127,6 +128,12 @@ class BenefitRule(
             handler.column_rename('rule_extra_data',
                 'indemnification_rule_extra_data')
         super(BenefitRule, cls).__register__(module)
+
+    def get_rec_name(self, name):
+        if self.indemnification_rule:
+            return self.indemnification_rule.rec_name
+        return self.raise_user_error('no_indemnification_rule',
+            raise_exception=False)
 
     @fields.depends('benefit', 'requires_frequency')
     def on_change_benefit(self):

@@ -3,6 +3,10 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:benefit.rule:"
+msgid "No indemnification rule defined"
+msgstr "Aucune règle d'indemnisation définie"
+
+msgctxt "error:benefit.rule:"
 msgid "Share for current beneficiary : %(share)s %%"
 msgstr "Répartition pour le bénéficiaire courant : %(share)s %%"
 
