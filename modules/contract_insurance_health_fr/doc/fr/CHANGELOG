@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#7371 Ne pas autoriser la modification de complément santé si le tiers est ayant droit. Afficher le complément santé de l'assuré principal dans ce cas.
 * BUG#7293 Blocage de la modification du paramétrage du complément santé par la vue du tiers
 

@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * OTH#0000 Correction des tests suite à a9c384af2
 * BUG#6931 Ajout d'un scénario de test sur le dé-réconciliation en cascade
 

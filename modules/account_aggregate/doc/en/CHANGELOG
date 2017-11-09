@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * FEA#7111 Add default snapshot sequence in account configuration
 * BUG#6578 Add output_dir argument and generate output filename for snapshot output batch
 * BUG#6887 Only creates snapshot if export is activated on fiscal year

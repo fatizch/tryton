@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#6732 Show an error if no paybox payment created by the button on pending failed payments
 * FEA#6542 Improvements: Payment creation from rejected payment, user interface enhancements
 * FEA#6565 Fails the payment group on paybox payment failure

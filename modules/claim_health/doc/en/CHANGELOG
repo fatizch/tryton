@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#6927 Contract's billing information bank account is claim_bank_account's default value if the subscriber has no bank account to date
 
 Version 1.12 - 2017-04-28

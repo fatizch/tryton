@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * FEA#7234 Amélioration de la vue produit et garanties. Les informations les plus utiles sont ramenées sur la page principale.
 * FEA#7024 Ajout d'un style par défaut qui sera appliqué aux modèles de courriers créés par défaut dans coog
 * FEA#6173 Ajout de données complémentaires au niveau d'une formule pour pouvoir l'utiliser au niveau du moteur de règle (pour appliquer une réduction par exemple lors de la souscription d'une formule)

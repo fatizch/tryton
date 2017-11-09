@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#5980 Correctif du calcul de la date de fin de contrat
 * BUG#5980 La date de fin n'est plus écrasée lors d'un recalcul sur des contrats terminés
 * BUG#7021 Le renouvellement de contrat terminés n'est plus autorisé.

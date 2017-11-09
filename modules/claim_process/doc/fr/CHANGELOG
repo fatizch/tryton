@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#6891 Ne pas exporter les descripteurs d'événement lors de l'export d'un process
 * BUG#6659 Correction d'un bug dans le calcul des documents à demander pour l'indemnisation
 

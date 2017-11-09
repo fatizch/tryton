@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#7434 Ajout d'un nom pour la règle d'indemnisation dans la vue liste
 * BUG#6350 Correction du crash lors de la création d'une période d'indémnisation depuis l'assistant de création
 

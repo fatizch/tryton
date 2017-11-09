@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * OTH#0000 Move group-by method to report_engine
 * FEA#6266 Add header field to the report template flux
 * FEA#6266 Add header management into the Base Mass Flow Batch

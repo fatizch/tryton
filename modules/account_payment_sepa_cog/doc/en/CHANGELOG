@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#7346 Add configuration to enable the SEPA amendment feature
 * FEA#7246 Add payments as a linked record to party
 * BUG#7058 Amendments should return a compact IBAN

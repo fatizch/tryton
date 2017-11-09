@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * FEA#7294 Gestion des autorisations de l'édition manuelle des modèles de courrier
 * FEA#7024 Ajout de modèles de courriers par défaut
 * BUG#7065 La variable 'Adresse' dans les rapports contient désormais l'adresse principale du contact

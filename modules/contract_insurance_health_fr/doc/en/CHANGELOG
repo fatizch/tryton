@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#7371 Do not allow writing on health complement if the party is social security dependent. Display main complement health in this case.
 * BUG#7293 Avoid to direct edit health care complement setting from party view
 

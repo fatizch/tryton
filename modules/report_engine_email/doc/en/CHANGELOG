@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * FEA#6410 Hide button manual sending when it is not allowed on the report template
 * BUG#0000 "attachments" variable has been  moved to the top of the function to avoid crash
 * FEA#6356 Filter email attachments objects with the same behavior as event type action

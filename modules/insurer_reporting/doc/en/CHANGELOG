@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * OTH#0000 Now, the batch parameter 'possible_days' stop the batch execution if empty or not given
 * FEA#6898 Enhance batch which print automatically insurer reporting
 * FEA#6360 Add batch to automatically print insurer reporting

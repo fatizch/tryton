@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * OTH#0000 Ajout d'un index sur le champs event_type_action de TaskQueueDefinition
 * OTH#0000 Ajout de l'utilisateur de transaction dans le contexte genshi
 * FEA#6383 Création du module 

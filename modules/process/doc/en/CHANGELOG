@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#6995 Fix crash when calling parent method of __getattr__ in ClassAttr mixin
 * OTH#0000 Fix #6394 migration detection
 * OTH#0000 Add specific view for process termination

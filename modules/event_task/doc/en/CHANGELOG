@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * OTH#0000 Add index on the field  'event_type_action' of TaskQueueDefinition
 * OTH#0000 Add the user transaction into the genshi context
 * FEA#6383 Module creation

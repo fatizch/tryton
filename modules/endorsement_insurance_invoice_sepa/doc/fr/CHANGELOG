@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#7400 Réinitialiser le mandat sepa si aucun mandat n'est trouvé
 * BUG#7239 Ne pas vérifier les mandats amendés lors de la réactivation d'un contrat
 * BUG#6902 Corrige l'avenant de changements de quittancement sur un contrat sans payeur

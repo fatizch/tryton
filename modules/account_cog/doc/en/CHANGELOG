@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * OTH#0000 Fix translations
 * BUG#7181 Ignore account moves which have an incomplete origin
 * BUG#6931 The un-reconciliation is now done recursively on SPLIT lines (Waterfall un-reconciliation)

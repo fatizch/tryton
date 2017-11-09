@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * OTH#0000 Désormais, le paramètre de batch 'possible_days' empêche l'execution du batch si vide ou non renseigné
 * FEA#6898 Amélioration du batch pour imprimer les rapports de type stock assureur
 * FEA#6360 Ajout d'un batch pour imprimer automatiquement les rapports de type stock assureur

@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#5374 Cohérence entre la fonction de récupération des dates de contrat et des fonctions de recherche sur ces dernières
 * BUG#5980 Ajout de fonctions dans le moteur de règle pour récuperer le statut et la date finale de fin du contrat
 * BUG#7374 Ajout d'un index sur le produit du contrat

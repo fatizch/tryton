@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout des champs holiday_year et holiday_date permettant de calculer les dates des jours fériés d'une certaine année.
 

@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * OTH#0000 No need to decode empty dict values in version_getter
 * FEA#7001 Add the number of succeeded jobs in the generated batch log
 * FEA#7218 Improve documentation delivery and content

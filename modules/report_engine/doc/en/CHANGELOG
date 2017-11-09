@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * FEA#7294 Manage authorizations on report template in report wizard
 * FEA#7024 Configure default reports templates
 * BUG#7065 Address variable in reports is now the main contact address

@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#7403 Effacer le code postal et la ville lorsqu'on change le pays d'une adresse
 * BUG#7388 Correction de l'import export JSON
 * BUG#6794 Interdire la modification d'un code postal si celui ci est utilisé dans d'autres adresses

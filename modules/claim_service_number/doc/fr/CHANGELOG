@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#7325 erreur lors de la création d'un sinistre si aucune sequence n'est défini sur la prestation
 * OTH#0000 Ajout du flag 'on_delete' sur les champs séquences des prestations
 * Création du module

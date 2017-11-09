@@ -1,3 +1,4 @@
+Version 1.14 - 2017-11-09
 * BUG#7118 Override of the update fiscal year wizard to support invoice sequences
 * BUG#6930 Replace transaction context by server context when setting _payment_term_change
 * BUG#6709 Restore the get_invoice_sequence on the periods
