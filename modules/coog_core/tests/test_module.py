@@ -924,6 +924,108 @@ class ModuleTestCase(test_framework.CoogTestCase):
             ]
         self.assertEqual(periods, periods_must_be)
 
+    def test_0120_pre_commit_sub_transaction_behavior(self):
+        from trytond.modules.coog_core import model
+
+        inc = mock.Mock()
+
+        class TestModel(ModelSQL, model._RevisionMixin):
+            'Test Sub Transaction Model'
+            __name__ = 'coog_core.test_model_sub_transaction'
+            value = fields.Integer('Value')
+
+        TestModel.__setup__()
+        TestModel.__post_setup__()
+        TestModel.__register__('coog_core')
+        inc.increment = 0
+        real_main_transaction = Transaction()
+
+        real_main_transaction.commit()
+
+        def some_substitute(*args):
+            return 42
+
+        @model.pre_commit_transaction()
+        def pre_commit_function(increment, crash_at=-1, inc_first=False):
+            hook_ret, sub_transaction = sub_transaction_test_model(increment,
+                crash_at, inc_first)
+            return [sub_transaction]
+
+        @model.sub_transaction_retry(2, 10)
+        def sub_transaction_test_model(increment, crash_at, inc_first):
+            if inc_first:
+                increment.increment += 1
+            if increment.increment == crash_at:
+                1 / 0
+            TestModel.create([{
+                    'value': increment.increment
+                    }])
+            if not inc_first:
+                increment.increment += 1
+
+        self.assertEqual(len(TestModel.search([])), 0)
+
+        with Transaction().new_transaction():
+            ret = pre_commit_function(inc,
+                substitute_hook=some_substitute)
+            self.assertEqual(ret, 42)
+
+
+        with Transaction().new_transaction():
+            self.assertEqual(len(TestModel.search([])), 1)
+
+        def commit_should_fail():
+            with Transaction().new_transaction() as transaction:
+                self.assertEqual(len(TestModel.search([])), 1)
+                # Create object and save it into the fake_main_transaction
+                TestModel.create([{
+                        'value': -99,
+                        }])
+                res = pre_commit_function(inc, crash_at=inc.increment)
+                self.assertEqual(res, None)
+                transaction.commit()
+
+        self.assertRaises(ZeroDivisionError, commit_should_fail)
+        self.assertEqual(inc.increment, 1)
+        # Sub transaction has fail and crashes it's main_transaction
+        # which is the fake_main_transaction here.
+        # So everything should have been rollbacked:
+        # 1. The object created into the fake_main_transaction
+        # 2. The objected created into the sub transaction of the delayed
+        # method
+        with Transaction().new_transaction():
+            self.assertEqual(len(TestModel.search([])), 1)
+
+        def commit_should_succeed_with_retry():
+            # Here we check if the sub transaction retry
+            # succeed after a failure
+            with Transaction().new_transaction():
+                self.assertEqual(len(TestModel.search([])), 1)
+                # Create object and save it into the fake_main_transaction
+                TestModel.create([{
+                        'value': -99,
+                        }])
+                pre_commit_function(inc, crash_at=inc.increment + 1,
+                    inc_first=True)
+
+        commit_should_succeed_with_retry()
+        self.assertEqual(inc.increment, 3)
+        # Sub transaction has fail but incrementing first will allow the second
+        # try to succeed, so the transactions will be committed with:
+        # 1. The object created into the fake_main_transaction
+        # 2. The objected created into the sub transaction of the delayed
+        # method
+        with Transaction().new_transaction():
+            self.assertEqual(len(TestModel.search([])), 3)
+
+        with Transaction().new_transaction():
+            # check whether multiple call is working
+            for x in range(10 - inc.increment, 0, -1):
+                pre_commit_function(inc, inc_first=True)
+
+        with Transaction().new_transaction():
+            self.assertEqual(inc.increment, 10)
+
     def test_string_replace(self):
         s = u'café-THÉ:20$'
 

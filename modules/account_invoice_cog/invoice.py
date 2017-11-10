@@ -103,6 +103,118 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
                 })
 
     @classmethod
+    def set_number(cls, invoices):
+        '''
+        This method is almost a copy past from the original one (trytond
+        account_invoice module).
+        We need to override it completely in order to postpone the strict
+        sequence get number which is putting down the performances in case of
+        concurrency uses.
+        See _delayed_set_number docstring for more informations.
+        '''
+        if ServerContext().get('from_batch', False):
+            return super(Invoice, cls).set_number(invoices)
+        filtered_invoices = []
+        Date = Pool().get('ir.date')
+        filtered_invoices = []
+        for invoice in invoices:
+            if invoice.state in {'posted', 'paid'}:
+                continue
+            if not invoice.tax_identifier:
+                invoice.tax_identifier = invoice.get_tax_identifier()
+            if invoice.number:
+                continue
+            if not invoice.invoice_date and invoice.type == 'out':
+                invoice.invoice_date = Date.today()
+            filtered_invoices.append(invoice)
+        cls.save(invoices)
+        return cls._delayed_set_number(filtered_invoices,
+            substitute_hook=cls._negative_id_as_number)
+
+    @classmethod
+    def _negative_id_as_number(cls, invoices):
+        for invoice in invoices:
+            invoice.number = str(invoice.id * -1)
+        cls.save(invoices)
+
+    @classmethod
+    @model.pre_commit_transaction()
+    def _delayed_set_number(cls, invoices):
+        '''
+        This method will be executed using a two phase commit manager.
+        Once the function is called, its execution is delayed at the commit
+        time of the DataManager which occurs juste before the main transaction
+        commit.
+        The code of this function is a copy past from the trytond set_number
+        and get_next_number methods (account_invoice_module). We need to bypass
+        these in order to postpone the code execution just before the main
+        transaction commit and then, significantly improve the concurrency
+        set_number performances. (i.e: while multiple users applies
+        endorsements which recalculate / rebill at the same time.
+        '''
+        pool = Pool()
+        Period = pool.get('account.period')
+        sub_transaction = None
+        pattern = {}
+        to_write = []
+        for invoice in invoices:
+            period_id = Period.find(
+                invoice.company.id, date=(invoice.accounting_date or
+                    invoice.invoice_date),
+                test_state=invoice.type != 'in')
+            period = Period(period_id)
+            fiscalyear = period.fiscalyear
+            pattern.setdefault('company', invoice.company.id)
+            pattern.setdefault('fiscalyear', fiscalyear.id)
+            pattern.setdefault('period', period.id)
+            invoice_type = invoice.type
+            # JCA : Avoid forced read of invoice lines unless necessary
+            forced_type = ServerContext().get('forced_invoice_type', None)
+            if forced_type:
+                invoice_type += forced_type
+            else:
+                if (all(l.amount < 0 for l in invoice.lines if l.product)
+                        and invoice.total_amount < 0):
+                    invoice_type += '_credit_note'
+                else:
+                    invoice_type += '_invoice'
+            for invoice_sequence in fiscalyear.invoice_sequences:
+                if invoice_sequence.match(pattern):
+                    sequence = getattr(
+                        invoice_sequence, '%s_sequence' % invoice_type)
+                    break
+            else:
+                invoice.raise_user_error('no_invoice_sequence', {
+                        'invoice': invoice.rec_name,
+                        'fiscalyear': fiscalyear.rec_name,
+                        })
+            # sub_transaction given as parameter will be popped from
+            # arguments by the decorator. This last will use it as main
+            # transaction for it's code execution if valid otherwise it
+            # will creates a new one.
+            number, sub_transaction = \
+                invoice._sub_transaction_get_sequence(sequence,
+                    sub_transaction=sub_transaction)
+            to_write += [[invoice], {'number': number}]
+        with ServerContext().set_context(pre_commit_number=True):
+            if to_write:
+                cls.write(*to_write)
+        return [sub_transaction] if sub_transaction else []
+
+    @model.sub_transaction_retry(10, 1000)
+    def _sub_transaction_get_sequence(self, sequence):
+        '''
+        This decorated function will be executed in a sub transaction.
+        If the code fails (concurrent access for instance),
+        the decorator will reexecute the code within a new sub transaction.
+        The decorator takes the number of max retries and the time in ms
+        to wait.
+        '''
+        with Transaction().set_context(date=self.invoice_date):
+            Sequence = Pool().get('ir.sequence.strict')
+            return Sequence.get_id(sequence.id)
+
+    @classmethod
     def view_attributes(cls):
         return super(Invoice, cls).view_attributes() + [
             ('/tree', 'colors', Eval('color')),
@@ -155,7 +267,8 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
 
     @classmethod
     def check_modify(cls, invoices):
-        if not ServerContext().get('_payment_term_change', False):
+        if (not ServerContext().get('_payment_term_change', False) and
+                not ServerContext().get('pre_commit_number', False)):
             super(Invoice, cls).check_modify(invoices)
 
     def get_taxes_included(self, name=None):

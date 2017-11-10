@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import time
 import inspect
 import logging
 import datetime
@@ -26,6 +27,7 @@ from trytond.tools import reduce_ids, cursor_dict, memoize
 from trytond.config import config
 from trytond.pyson import Or
 
+from cache import CoogCache, get_cache_holder
 import fields
 import export
 import summary
@@ -62,15 +64,17 @@ __all__ = [
 class PostExecutionDataManager(object):
 
     _instance = None
-    queue = []
+    finish_queue = []
+    commit_queue = []
 
     def __new__(cls):
         if cls._instance is None:
             cls._instance = object.__new__(cls)
         return cls._instance
 
-    def put(self, func, *args, **kwargs):
-        self.queue.append((func, args, kwargs))
+    def put(self, queue, func, *args, **kwargs):
+        queue = getattr(self, '%s_queue' % queue)
+        queue.append((func, args, kwargs))
 
     def abort(self, trans):
         self._finish()
@@ -79,7 +83,18 @@ class PostExecutionDataManager(object):
         pass
 
     def commit(self, trans):
-        pass
+        '''
+        The pre-committed method may return a list of transaction to commit.
+        In this case, all the sub_transaction returned will be committed at
+        the same time just before the main transaction commit.
+        '''
+        to_commit = []
+        for fct, args, kwargs in self.commit_queue:
+            res = fct(*args, **kwargs)
+            if res and isinstance(res, list):
+                to_commit += res
+        assert all(isinstance(x, Transaction) for x in to_commit)
+        trans.add_sub_transactions(to_commit)
 
     def tpc_vote(self, trans):
         pass
@@ -90,7 +105,7 @@ class PostExecutionDataManager(object):
         Function must never do C(reate)U(pdate)D(elete) operations
         """
         with Transaction().new_transaction(readonly=True):
-            for fct, args, kwargs in self.queue:
+            for fct, args, kwargs in self.finish_queue:
                 fct(*args, **kwargs)
         self._finish()
 
@@ -98,7 +113,8 @@ class PostExecutionDataManager(object):
         self._finish()
 
     def _finish(self):
-        self.queue = []
+        self.finish_queue = []
+        self.commit_queue = []
 
 
 class BrokerCheckDataManager(PostExecutionDataManager):
@@ -106,6 +122,86 @@ class BrokerCheckDataManager(PostExecutionDataManager):
     def tpc_begin(self, trans):
         assert async_broker
         async_broker.get_module().connection.ping()
+
+
+def sub_transaction_retry(n, sleep_time):
+    '''
+    This decorated method will create a new transaction and set this one as
+    current transaction before executing the decorated function.
+    If the called function fails, a new sub transaction is created after
+    waiting sleep_time milliseconds. The decorator will make n retries.
+    If sub_transaction argument is given as keyword argument to the decorated
+    function, the decorator will pop it and use it as sub transaction.
+    this returns the decorated function result and the sub_transaction.
+    '''
+    def wrapper(func):
+        assert (isinstance(func, types.UnboundMethodType)
+            or isinstance(func, types.FunctionType)), type(func)
+        cache_holder = get_cache_holder()
+        sub_transaction_cache = cache_holder.get(
+            'sub_transaction_function_cache')
+        if not sub_transaction_cache:
+            sub_transaction_cache = CoogCache()
+            cache_holder['sub_transaction_function_cache'] = \
+                sub_transaction_cache
+        def decorate(*args, **kwargs):
+            try:
+                cached_transaction = sub_transaction_cache[id(func)]
+            except KeyError:
+                cached_transaction = None
+            sub_transaction = kwargs.pop('sub_transaction', None) or \
+                cached_transaction
+            main_transaction = Transaction()
+            for retry in range(n, 0, -1):
+                if not sub_transaction:
+                    Transaction().new_transaction()
+                    sub_transaction = Transaction()
+                    sub_transaction_cache[id(func)] = sub_transaction
+                else:
+                    main_transaction.set_current_transaction(sub_transaction)
+                try:
+                    res = func(*args, **kwargs)
+                    return res, sub_transaction
+                except Exception:
+                    if retry == 1:
+                        raise
+                    time.sleep(sleep_time / 1000.0)
+                    continue
+                finally:
+                    if sub_transaction:
+                        main_transaction._local.transactions.pop()
+                        sub_transaction = None
+        return decorate
+    return wrapper
+
+
+def pre_commit_transaction(DataManager=PostExecutionDataManager):
+    '''
+    The decorated method will be executed just before the commit of the current
+    transaction.
+    If the pre commit function is called with 'substitute_hook' as
+    keyword argument, the argument will be pop and the hook will be called with
+    all the given parameters for the original call.
+    The substitute_hook could be useful if we want to set temporary values to
+    some related object to the delayed call. The hook must take the same
+    arguments as the delayed method.
+    The delayed method may return a list of sub_transaction (None otherwise)
+    that will be committed together at the same time.
+    '''
+    def wrapper(func):
+        assert (isinstance(func, types.UnboundMethodType)
+            or isinstance(func, types.FunctionType)), type(func)
+        def decorate(*args, **kwargs):
+            transaction = Transaction()
+            datamanager = transaction.join(DataManager())
+            hook = kwargs.pop('substitute_hook', None)
+            datamanager.put('commit', func, *args, **kwargs)
+            if hook:
+                if isinstance(hook, types.UnboundMethodType):
+                    args = tuple(list(args)[1:])
+                return hook(*args, **kwargs)
+        return decorate
+    return wrapper
 
 
 def post_transaction(DataManager=PostExecutionDataManager):
@@ -122,7 +218,7 @@ def post_transaction(DataManager=PostExecutionDataManager):
         def decorate(*args, **kwargs):
             transaction = Transaction()
             datamanager = transaction.join(DataManager())
-            datamanager.put(func, *args, **kwargs)
+            datamanager.put('finish', func, *args, **kwargs)
             return True
 
         return decorate

@@ -1,3 +1,5 @@
+* BUG#7413 Amélioration significative des performances en concurrence sur l'attribution des numéros de quittance.
+
 Version 1.14 - 2017-11-09
 * BUG#7118 Surcharge de l'assistant de mise à jour des périodes fiscales afin de supporter les sequences de quittancement
 * BUG#6930 Remplacer le contexte de transaction par un contexte de serveur lors de l'initialisation de _payment_term_change
