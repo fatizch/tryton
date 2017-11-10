@@ -11,5 +11,22 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="health.menu_health_configuration"/>
             <field name="group" ref="offered.group_product_manage"/>
         </record>
+        <!-- Party Management Group Access Rights -->
+        <record model="ir.model.access" id="access_health_party_complement_group_party_manage">
+            <field name="model" search="[('model', '=', 'health.party_complement')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Access Rights -->
+        <record model="ir.model.access" id="access_health_party_complement">
+            <field name="model" search="[('model', '=', 'health.party_complement')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
     </data>
 </tryton>
