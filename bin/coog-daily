@@ -98,7 +98,7 @@ coog_daily_main() {
             _coog_daily_check_modules "commission_insurance" &&                 \
                 coog_chain_main commission_insurance commission                 \
                     --treatment_date="$LAST_DAY_OF_THE_MONTH"                   \
-                    --with_draft=0                                              \
+                    --no-with_draft                                              \
                     --agent_type=agent
             )
             [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
