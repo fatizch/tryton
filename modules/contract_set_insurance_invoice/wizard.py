@@ -24,7 +24,8 @@ class Renew:
         for contract in contracts:
             if contract.contract_set:
                 active_contracts = [c for c in contract.contract_set.contracts
-                    if c.status in ['active', 'hold']]
+                    if c.status in ['active', 'hold'] and c.activation_history
+                    and not c.activation_history[-1].final_renewal]
                 if not set(active_contracts).issubset(
                         contracts):
                     cls.raise_user_error('must_renew_all',

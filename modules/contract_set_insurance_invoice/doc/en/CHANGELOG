@@ -1,3 +1,5 @@
+* BUG#7542 In a contract set if a contract has already a planned termination date Coog must not prevent to renew 
+
 Version 1.14 - 2017-11-09
 * BUG#7497 Now set the right report functional date into the report context
 * BUG#7473 Treat contracts in contract_set in the same renewal task in batch processing

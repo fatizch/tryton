@@ -1,3 +1,5 @@
+* BUG#7542 Dans un ensemble de contrat, si un des contrats a une résiliation planifiée, Coog ne doit pas empêcher de renouveller les autres contrats
+
 Version 1.14 - 2017-11-09
 * BUG#7497 Définition de la bonne date fonctionnelle dans le context du document
 * BUG#7473 Traitement des contrats d'un ensemble de contrats dans la même tâche lors du renouvellement par batch
