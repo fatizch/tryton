@@ -11,7 +11,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.model.access" id="access_contract_option_beneficiary_group_contract_manage">
-            <field name="model" search="[('model', '=', 'offered.item.description')]"/>
+            <field name="model" search="[('model', '=', 'contract.option.beneficiary')]"/>
             <field name="group" ref="contract.group_contract_manage"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
