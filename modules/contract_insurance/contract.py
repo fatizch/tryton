@@ -221,6 +221,7 @@ class Contract(Printable):
             for option in element.options:
                 option.notify_contract_end_date_change(value)
             element.options = element.options
+            element.notify_contract_end_date_change(value)
         self.covered_elements = self.covered_elements
 
     def notify_start_date_change(self, value):
@@ -1531,6 +1532,12 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         if not self.parent:
             return options
         return options + self.parent.fill_list_with_covered_options(at_date)
+
+    def notify_contract_end_date_change(self, new_end_date):
+        if self.versions:
+            to_date_versions = [v for v in self.versions
+                if v.start is None or v.start < new_end_date]
+            self.versions = to_date_versions
 
 
 class CoveredElementVersion(model.CoogSQL, model.CoogView):

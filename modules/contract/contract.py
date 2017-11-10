@@ -525,6 +525,10 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         for option in self.options:
             option.notify_contract_end_date_change(value)
         self.options = self.options
+        if self.extra_datas:
+            to_date_extra_datas = [d for d in self.extra_datas
+                if d.date is None or d.date < value]
+            self.extra_datas = to_date_extra_datas
 
     def notify_start_date_change(self, value):
         for option in self.options:
@@ -1984,6 +1988,10 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         if (new_end_date and self.manual_end_date and
                 self.manual_end_date > new_end_date):
             self.manual_end_date = None
+        if self.versions:
+            to_date_versions = [v for v in self.versions
+                if v.start is None or v.start < new_end_date]
+            self.versions = to_date_versions
 
     def notify_contract_start_date_change(self, new_start_date):
         if self.automatic_end_date and \
