@@ -28,7 +28,8 @@ Imports::
 
 Install Modules::
 
-    >>> config = activate_modules('contract_insurance_invoice_dunning')
+    >>> config = activate_modules(['contract_insurance_invoice_dunning',
+    ...         'account_payment_sepa_contract'])
 
 Create country::
 
@@ -246,3 +247,128 @@ Process dunnning::
     True
     >>> contract.end_date == first_invoice.end
     True
+    >>> procedure.from_payment_date = True
+    >>> procedure.save()
+    >>> PaymentTerm = Model.get('account.invoice.payment_term')
+    >>> PaymentTermLine = Model.get('account.invoice.payment_term.line')
+    >>> payment_term = PaymentTerm()
+    >>> payment_term.name = 'rest_direct'
+    >>> payment_term.lines.append(PaymentTermLine())
+    >>> payment_term.save()
+    >>> BillingMode = Model.get('offered.billing_mode')
+    >>> direct_monthly = BillingMode()
+    >>> direct_monthly.name = 'direct monthly'
+    >>> direct_monthly.code = 'direct_monthly'
+    >>> direct_monthly.frequency = 'monthly'
+    >>> direct_monthly.frequency = 'monthly'
+    >>> direct_monthly.allowed_payment_terms.append(payment_term)
+    >>> direct_monthly.direct_debit = True
+    >>> direct_monthly.allowed_direct_debit_days = '15'
+    >>> direct_monthly.save()
+    >>> product.billing_modes.append(direct_monthly)
+    >>> product.save()
+    >>> Bank = Model.get('bank')
+    >>> Party = Model.get('party.party')
+    >>> party_bank = Party()
+    >>> party_bank.name = 'Bank'
+    >>> party_bank.save()
+    >>> bank = Bank()
+    >>> bank.party = party_bank
+    >>> bank.bic = 'NSMBFRPPXXX'
+    >>> bank.save()
+    >>> Number = Model.get('bank.account.number')
+    >>> Account = Model.get('bank.account')
+    >>> two_months_ago = datetime.date.today() - relativedelta(months=2)
+    >>> subscriber_account = Account()
+    >>> subscriber_account.bank = bank
+    >>> subscriber_account.owners.append(subscriber)
+    >>> subscriber_account.currency = currency
+    >>> subscriber_account.number = 'BE82068896274468'
+    >>> subscriber_account.save()
+    >>> Mandate = Model.get('account.payment.sepa.mandate')
+    >>> mandate = Mandate()
+    >>> mandate.company = company
+    >>> mandate.party = subscriber
+    >>> mandate.account_number = subscriber_account.numbers[0]
+    >>> mandate.identification = 'MANDATE'
+    >>> mandate.type = 'recurrent'
+    >>> mandate.signature_date = two_months_ago
+    >>> mandate.save()
+    >>> mandate.click('request')
+    >>> mandate.click('validate_mandate')
+
+Create Payment Journal::
+
+    >>> company_account = Account()
+    >>> company_account.bank = bank
+    >>> company_account.owners.append(Party(company.party.id))
+    >>> company_account.currency = currency
+    >>> company_account.number = 'ES8200000000000000000000'
+    >>> company_account.save()
+    >>> Journal = Model.get('account.payment.journal')
+    >>> journal = Journal()
+    >>> journal.name = 'SEPA Journal'
+    >>> journal.company = company
+    >>> journal.currency = currency
+    >>> journal.process_method = 'sepa'
+    >>> journal.sepa_payable_flavor = 'pain.001.001.03'
+    >>> journal.sepa_receivable_flavor = 'pain.008.001.02'
+    >>> journal.sepa_charge_bearer = 'DEBT'
+    >>> journal.sepa_bank_account_number = company_account.numbers[0]
+    >>> journal.failure_billing_mode, = BillingMode.find([('code', '=',
+    ...     'monthly')])
+    >>> journal.save()
+    >>> Configuration = Model.get('account.configuration')
+    >>> configuration = Configuration(1)
+    >>> configuration.direct_debit_journal = journal
+    >>> configuration.save()
+    >>> Product = Model.get('offered.product')
+    >>> contract_start_date = datetime.date(
+    ...     two_months_ago.year, two_months_ago.month, 1)
+    >>> Contract = Model.get('contract')
+    >>> ContractPremium = Model.get('contract.premium')
+    >>> BillingInformation = Model.get('contract.billing_information')
+    >>> contract = Contract()
+    >>> contract.company = company
+    >>> contract.subscriber = subscriber
+    >>> contract.start_date = contract_start_date
+    >>> contract.product = Product(product.id)
+    >>> contract.billing_informations.append(BillingInformation(
+    ...         date=contract_start_date,
+    ...         billing_mode=BillingMode(direct_monthly.id),
+    ...         direct_debit_day=15,
+    ...         direct_debit_account=Account(subscriber_account.id),
+    ...         payer=subscriber.id,
+    ...         payment_term=BillingMode(direct_monthly.id).allowed_payment_terms[0]))
+    >>> contract.contract_number = 'test_2'
+    >>> contract.save()
+    >>> Wizard('contract.activate', models=[contract]).execute('apply')
+    >>> contract.billing_information.direct_debit is True
+    True
+    >>> bool(contract.billing_information.direct_debit_day) is True
+    True
+    >>> ContractInvoice = Model.get('contract.invoice')
+    >>> Contract.first_invoice([contract.id], config.context)
+    >>> first_invoice = ContractInvoice.find(
+    ...     [('contract', '=', contract.id)],
+    ...     order=[('start', 'ASC')])[0]
+    >>> config._context['client_defined_date'] = two_months_ago
+    >>> first_invoice.invoice.click('post')
+    >>> config._context['client_defined_date'] = None
+    >>> assert all(x.maturity_date == x.payment_date
+    ...     for x in first_invoice.invoice.lines_to_pay)
+    >>> Contract.rebill_contracts([contract.id], contract.start_date, config.context)
+    >>> first_rebilled = ContractInvoice.find([('contract', '=', contract.id),
+    ...         ('invoice_state', '=', 'posted')],
+    ...         order=[('start', 'ASC')])[0]
+    >>> first_cancelled = ContractInvoice.find([('contract', '=', contract.id),
+    ...         ('invoice_state', '=', 'cancel')],
+    ...     order=[('start', 'ASC')])[0]
+    >>> def key(line):
+    ...     return line.maturity_date
+    >>> cancelled_lines_to_pay = sorted(first_cancelled.invoice.lines_to_pay, key=key)
+    >>> new_lines_to_pay = sorted(first_rebilled.invoice.lines_to_pay, key=key)
+    >>> assert len(cancelled_lines_to_pay) == len(new_lines_to_pay) == 1
+    >>> for cancelled, new in zip(cancelled_lines_to_pay, new_lines_to_pay):
+    ...     assert new.maturity_date == cancelled.maturity_date
+    ...     assert new.payment_date != cancelled.payment_date

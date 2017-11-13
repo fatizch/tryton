@@ -232,6 +232,7 @@ class Contract:
         cls.__rpc__.update({'ws_rate_contracts': RPC(readonly=False)})
         cls._buttons.update({
                 'first_invoice': {},
+                'rebill_contracts': {},
                 })
         cls._error_messages.update({
                 'no_payer': 'A payer must be specified',
@@ -825,6 +826,22 @@ class Contract:
         if actions['cancel']:
             ContractInvoice.cancel(actions['cancel'])
 
+        rebill_data = ServerContext().get('rebill_data', None)
+        if rebill_data is None:
+            return
+
+        cancelled_by_contract = {}
+
+        def key(x):
+            return x.contract.id
+        cancelled = sorted(actions['cancel'], key=key)
+        for contract_id, grouped in groupby(cancelled, key=key):
+            by_date = defaultdict(list)
+            for invoice in grouped:
+                by_date[invoice.start or datetime.date.min].append(invoice)
+            cancelled_by_contract[contract_id] = by_date
+        rebill_data['cancelled_invoices'] = cancelled_by_contract
+
     def get_first_invoices_date(self):
         return max(self.start_date, utils.today())
 
@@ -963,6 +980,9 @@ class Contract:
         if not lang:
             self.company.raise_user_error('missing_lang',
                 {'party': self.company.rec_name})
+        cancelled = self.get_cancelled_invoice_in_rebill(start)
+        payment_term = cancelled.invoice.payment_term if cancelled else \
+            billing_information.payment_term
         return Invoice(
             invoice_address=None,  # Will be really set in finalize invoice
             contract=self,
@@ -973,7 +993,7 @@ class Contract:
             party=self.subscriber,
             currency=self.currency,
             account=self.subscriber.account_receivable,
-            payment_term=billing_information.payment_term,
+            payment_term=payment_term,
             state='validated',
             invoice_date=start,
             accounting_date=None,
@@ -983,6 +1003,16 @@ class Contract:
                 lang.strftime(end, lang.code, lang.date) if end else '',
                 ),
             )
+
+    def get_cancelled_invoice_in_rebill(self, date):
+        rebill_data = ServerContext().get('rebill_data', {})
+        if not rebill_data:
+            return
+        cancelled_invoices = rebill_data.get('cancelled_invoices', {})
+        invoices_for_contract = cancelled_invoices.get(self.id, {})
+        date_invoices = invoices_for_contract.get(date, [])
+        if date_invoices and len(date_invoices) == 1:
+            return date_invoices[0]
 
     def finalize_invoices_lines(self, lines):
         for line in lines:
@@ -1014,35 +1044,45 @@ class Contract:
         if last_posted:
             return max(last_posted[0].start, utils.today())
 
+    @classmethod
+    def rebill_contracts(cls, contracts, start, end=None, post_end=None):
+        for contract in contracts:
+            contract.rebill(start, end, post_end)
+
     def rebill(self, start, end=None, post_end=None):
         pool = Pool()
         Invoice = pool.get('account.invoice')
 
-        # Store the end date of the last invoice to be able to know up til when
-        # we should rebill
-        rebill_end = end or self.get_rebill_end_date() or utils.today()
+        rebill_data = ServerContext().get('rebill_data', {})
 
-        # Calculate the date until which we will repost invoices
-        post_end = post_end or self.get_rebill_post_end(
-            rebill_end) or utils.today()
+        with ServerContext().set_context(rebill_data=rebill_data):
+            # Store the end date of the last invoice to be able to
+            # know up til when we should rebill
 
-        # Delete or cancel overlapping invoices
-        self.clean_up_contract_invoices([self], from_date=start)
+            rebill_end = end or self.get_rebill_end_date() or utils.today()
 
-        # Rebill
-        if not rebill_end:
-            return
-        self.invoice([self], rebill_end)
+            # Calculate the date until which we will repost invoices
+            post_end = post_end or self.get_rebill_post_end(
+                rebill_end) or utils.today()
 
-        # Post
-        if not post_end:
-            return
-        invoices_to_post = Invoice.search([
-                ('contract', '=', self.id),
-                ('start', '<=', post_end),
-                ('state', '=', 'validated')], order=[('start', 'ASC')])
-        if invoices_to_post:
-            Invoice.post(invoices_to_post)
+            # Delete or cancel overlapping invoices
+            self.clean_up_contract_invoices([self], from_date=start)
+
+            # Rebill
+            if not rebill_end:
+                return
+
+            self.invoice([self], rebill_end)
+
+            # Post
+            if not post_end:
+                return
+            invoices_to_post = Invoice.search([
+                    ('contract', '=', self.id),
+                    ('start', '<=', post_end),
+                    ('state', '=', 'validated')], order=[('start', 'ASC')])
+            if invoices_to_post:
+                Invoice.post(invoices_to_post)
 
     def is_invoiced_to_end(self):
         return self.last_invoice_end and self.last_invoice_end >= self.end_date
@@ -2133,6 +2173,10 @@ class ContractInvoice(model.CoogSQL, model.CoogView):
         if self.invoice_state in ('validated', 'draft'):
             return 'delete'
         return 'cancel'
+
+    def get_cancelled_in_rebill(self):
+        return self.contract.get_cancelled_invoice_in_rebill(self.start) if \
+            self.contract else None
 
 
 class InvoiceContractStart(model.CoogView):

@@ -451,6 +451,10 @@ class Invoice:
         # Use Coog report_engine module instead
         return
 
+    def get_cancelled_in_rebill(self):
+        return self.contract_invoice.get_cancelled_in_rebill() \
+            if self.contract_invoice else None
+
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'

@@ -1,3 +1,5 @@
+* BUG#6932 Conservation de la date d'échéance initiale si la procédure de relance se base sur la date de paiement
+
 Version 1.14 - 2017-11-09
 * FEA#7097 Ajout d'une procédure de relance par défaut
 * BUG#6617 Passage en sans-effet des contrats jamais payés
