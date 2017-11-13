@@ -188,6 +188,12 @@ msgstr ""
 "brouillon mais plutôt %(status)s"
 
 msgctxt "error:endorsement:"
+msgid ""
+"Cancellation of this endorsement is not allowed in order to preserve the data integrity"
+msgstr ""
+"L'annulation de cet avenant est impossible afin de préserver l'intégrité des données"
+
+msgctxt "error:endorsement:"
 msgid "Invalid file format"
 msgstr "Format de fichier non valide"
 

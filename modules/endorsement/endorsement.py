@@ -1262,6 +1262,8 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
                 'delete_not_draft_endorsement': 'Impossible to delete the '
                 'endorsement %(number)s because it is not in draft '
                 'but in %(status)s',
+                'no_cancel_endorsement': 'Cancellation of this endorsement is '
+                'not allowed in order to preserve the data integrity',
                 })
         t = cls.__table__()
         cls._sql_constraints = [
@@ -1425,9 +1427,15 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
     @model.CoogView.button
     @Workflow.transition('canceled')
     def cancel(cls, endorsements):
+        DatabaseIntegrityError = backend.get('DatabaseIntegrityError')
         pool = Pool()
         Event = pool.get('event')
-        cls._draft(endorsements)
+        try:
+            cls._draft(endorsements)
+        except DatabaseIntegrityError:
+            transaction = Transaction()
+            transaction.rollback()
+            cls.raise_user_error('no_cancel_endorsement')
         cls.write(endorsements, {
                 'rollback_date': None,
                 'state': 'canceled',

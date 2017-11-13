@@ -1,3 +1,5 @@
+* BUG#2067 Vérification de la possibilité d'annulation d'un avenant dans le cas échéant renvoyer un message erreur compréhensible par l'utilisateur
+
 Version 1.14 - 2017-11-09
 * BUG#385 Bloquer la possibilité de pouvoir supprimer un avenant qui a été appliqué
 * BUG#6003 Remplace désormais la version de l'option du contrat si sa date d'effet est identique à la version précédente de l'option de contrat
