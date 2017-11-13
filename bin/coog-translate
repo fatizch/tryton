@@ -13,7 +13,6 @@ _coog_translate_usage() {
 }
 
 coog_translate_start() { # create translation database - module_name [branch_name]
-    set -euo pipefail
     local module
     local branch
     local passfile
@@ -23,25 +22,19 @@ coog_translate_start() { # create translation database - module_name [branch_nam
     [ $# -gt 1 ] && branch="$2"
     passfile=/tmp/tryton.passfile
     echo admin > "$passfile"
-    set +u
     coog code foreach git checkout master
     coog code foreach git pull
     coog code foreach git submodule deinit -f .
     coog code foreach git submodule init
     coog code foreach git submodule update
     coog code foreach git reset --hard
-    set -u
     git -C "$COOG_COOG" checkout "$branch"
     git -C "$COOG_COOG" pull
-    set +u
     coog code foreach git clean -fd
     coog repo link
-    set -u
     dropdb --if-exists "$COOG_TRANSLATION_DB_NAME"
     createdb "$COOG_TRANSLATION_DB_NAME"
-    set +u
     TRYTONPASSFILE="$passfile" DB_NAME="$COOG_TRANSLATION_DB_NAME" coog module update ir
-    set -u
     DB_NAME="$COOG_TRANSLATION_DB_NAME" python "$COOG_BIN"/translation-prepare.py "$module"
 }
 
@@ -50,7 +43,6 @@ coog_translate_clear() { # drop translation database
 }
 
 coog_translate_export() { # generate module translations - module_list
-    set -euo pipefail
     local args
     if [ -z "$1" ]
     then
