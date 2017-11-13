@@ -23,7 +23,8 @@ class Product:
         if self.term_renewal_rule and not \
                 exec_context['contract'].finally_renewed():
             return self.term_renewal_rule[0].calculate_rule(exec_context)
-        return exec_context['contract'].final_end_date
+        elif self.term_renewal_rule:
+            return exec_context['contract'].final_end_date
 
 
 class ProductTermRenewalRule(

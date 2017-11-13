@@ -1,3 +1,5 @@
+* OTH#0000 Fix typo from commit 941d5db2
+
 Version 1.14 - 2017-11-09
 * BUG#5890 Fix contract end date calculation
 * BUG#5980 Ensure the end date on terminated contacts is not overwritten
