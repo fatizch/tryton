@@ -1,3 +1,4 @@
+* BUG#7539 Add invoices deletion authorization to the financial management group
 * BUG#7413 Significantly improve concurency performances on the invoice set number
 
 Version 1.14 - 2017-11-09
