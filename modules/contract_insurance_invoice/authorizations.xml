@@ -58,6 +58,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="access_account_invoice_tax_contract_manage_group">
+            <field name="model" search="[('model', '=', 'account.invoice.tax')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <record model="ir.model.access" id="access_contract_billing_information_contract_manage_group">
             <field name="model" search="[('model', '=', 'contract.billing_information')]"/>
             <field name="group" ref="contract.group_contract_manage"/>
@@ -215,6 +223,13 @@ this repository contains the full copyright notices and license terms. -->
         <!-- Default Contract Insurance Invoice Access Rights -->
         <record model="ir.model.access" id="access_account_invoice_line_detail">
             <field name="model" search="[('model', '=', 'account.invoice.line.detail')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_invoice_tax">
+            <field name="model" search="[('model', '=', 'account.invoice.tax')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>

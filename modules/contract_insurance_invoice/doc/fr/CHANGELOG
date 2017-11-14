@@ -1,3 +1,5 @@
+* BUG#7535 Ajout des autorisations sur les taxes de quittance pour le groupe de gestion des contrats
+
 Version 1.14 - 2017-11-09
 * BUG#7467 Conservation de la précision lors de la conversion des fréquences d'une prime
 * BUG#7492 Ajout du contrat sur les lignes de mouvement des taxes

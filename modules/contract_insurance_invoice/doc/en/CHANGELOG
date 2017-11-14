@@ -1,3 +1,5 @@
+* BUG#7535 Add missing authorizations on invoice taxes for the contract management group
+
 Version 1.14 - 2017-11-09
 * BUG#7467 Keep the premium precision when converting its frequency
 * BUG#7492 Add contract on account move lines of taxes
