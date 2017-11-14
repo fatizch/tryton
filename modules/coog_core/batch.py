@@ -278,11 +278,11 @@ class BatchRootNoSelect(BatchRoot):
 
     @classmethod
     def get_batch_main_model_name(cls):
-        raise ''
+        raise NotImplementedError
 
     @classmethod
     def get_batch_search_model(cls):
-        raise ''
+        raise NotImplementedError
 
     @classmethod
     def select_ids(cls, **kwargs):
