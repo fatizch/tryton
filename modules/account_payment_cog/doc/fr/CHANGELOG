@@ -1,3 +1,5 @@
+* BUG#7538 Ajout des droits sur les boutons des paiements
+
 Version 1.14 - 2017-11-09
 * BUG#6692 La date prévisionnelle des prélèvements / virements doit être mise à jour pour refléter la date réelle
 * BUG#7337 Prise en compte des paiements en traitement dans le calcul du montant total en attente sur les tiers

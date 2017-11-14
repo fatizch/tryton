@@ -198,10 +198,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">process_payments</field>
             <field name="model" search="[('model', '=', 'account.payment')]"/>
         </record>
-        <record model="ir.model.button-res.group" id="action_process_payment_button_group_res_group_account_admin">
-            <field name="button" ref="button_action_process_payment"/>
-            <field name="group" ref="contract.group_contract_admin"/>
-        </record>
         <!-- ############################################################ -->
         <!-- ########### Relate Payments Group to Payments ########### -->
         <!-- ############################################################ -->
