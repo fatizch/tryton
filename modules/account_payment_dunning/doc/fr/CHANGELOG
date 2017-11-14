@@ -1,3 +1,5 @@
+* BUG#7537 Ne pas générer de relance si la ligne d'un paiement est déjà réconciliée
+
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
 

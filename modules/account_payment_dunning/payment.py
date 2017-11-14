@@ -83,6 +83,8 @@ class Payment:
         Dunning.save(dunnings)
 
     def _set_dunning(self, level):
+        if self.line.reconciliation:
+            return None
         if self.line.dunnings:
             dunning = self.line.dunnings[-1]
             if level.sequence > dunning.level.sequence:

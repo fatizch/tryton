@@ -1,3 +1,5 @@
+* BUG#7537 Do not set dunning if payment line is already reconciled
+
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
 
