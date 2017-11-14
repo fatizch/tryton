@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from dateutil.rrule import rrule, YEARLY, MONTHLY
 from dateutil.relativedelta import relativedelta
 
@@ -509,4 +509,8 @@ class OptionDescriptionPremiumRule:
             if factor is None:
                 continue
             line.frequency = new_frequency
-            line.amount = Decimal.quantize(line.amount / factor, line.amount)
+            try:
+                line.amount = Decimal.quantize(line.amount / factor,
+                    line.amount)
+            except InvalidOperation:
+                line.amount = line.amount / factor
