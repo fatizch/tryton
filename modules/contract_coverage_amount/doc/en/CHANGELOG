@@ -1,3 +1,5 @@
+* BUG#7436 Handle coverage amounts in option management endorsements
+
 Version 1.14 - 2017-11-09
 * OTH#0000 The current value of the coverage amount should always be available in the selection field
 * OTH#0000 Allow to access the coverage amount of another option in rule engine

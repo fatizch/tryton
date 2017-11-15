@@ -10,6 +10,23 @@ msgstr ""
 "Le montant de couverture \"%(coverage_amount)s\" n'est pas valide pour la "
 "garantie \"%(coverage)s\""
 
+msgctxt "field:contract.manage_options.option_displayer,coverage_amount:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
+
+msgctxt ""
+"field:contract.manage_options.option_displayer,coverage_amount_selection:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
+
+msgctxt "field:contract.manage_options.option_displayer,free_coverage_amount:"
+msgid "Free Coverage Amount"
+msgstr "Montant de couverture libre"
+
+msgctxt "field:contract.manage_options.option_displayer,has_coverage_amount:"
+msgid "Has Coverage Amount"
+msgstr "Avec montant de couverture"
+
 msgctxt "field:contract.option,current_coverage_amount:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"

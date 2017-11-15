@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='extra_data']" position="after">
+        <newline/>
+        <label name="coverage_amount"/>
+        <field name="coverage_amount"/>
+        <label name="coverage_amount_selection"/>
+        <field name="coverage_amount_selection"/>
+        <field name="has_coverage_amount" invisible="1"/>
+        <field name="free_coverage_amount" invisible="1"/>
+    </xpath>
+</data>

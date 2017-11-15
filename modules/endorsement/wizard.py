@@ -959,7 +959,8 @@ class ManageOptions(EndorsementWizardStepMixin):
                 if not v.start or v.start <= new_option.effective_date],
             key=lambda x: x.start or datetime.date.min)
         current_version = new_versions[-1]
-        if current_version.start_date == new_option.effective_date:
+        if (getattr(current_version, 'start_date', -1) ==
+                new_option.effective_date):
             current_version.extra_data = new_option.extra_data
         elif not current_version.start or (current_version.start !=
                 new_option.effective_date):
@@ -1140,7 +1141,7 @@ class OptionDisplayer(model.CoogView):
             return self._parent.product
 
     @fields.depends('action', 'cur_option_id', 'effective_date', 'end_date',
-        'extra_data', 'extra_data_as_string', 'sub_status')
+        'extra_data', 'extra_data_as_string', 'sub_status', 'icon')
     def on_change_action(self):
         if not self.action:
             return
@@ -1159,6 +1160,31 @@ class OptionDisplayer(model.CoogView):
                     self.end_date = pool.get('contract.option')(
                         self.cur_option_id).end_date
 
+    @fields.depends('action', 'cur_option_id', 'effective_date', 'extra_data',
+        'extra_data_as_string', 'parent', 'coverage_id',
+        methods=['action'])
+    def on_change_extra_data(self):
+        if not self.extra_data and self.action is None:
+            self.extra_data_as_string = ''
+            return
+        self.refresh_extra_data()
+        self.update_extra_data_string()
+        self.update_action()
+
+    def update_action(self):
+        if self.action not in ('modified', 'nothing'):
+            return
+        option = Pool().get('contract.option')(self.cur_option_id)
+        version = option.get_version_at_date(self.effective_date)
+        old_action = self.action
+        self.action = 'modified' if self._check_modified(option,
+            version) else 'nothing'
+        if old_action != self.action:
+            self.update_icon()
+
+    def _check_modified(self, option, version):
+        return self.extra_data != version.extra_data
+
     def update_icon(self):
         self.icon = ''
         if self.action == 'terminated':
@@ -1169,26 +1195,6 @@ class OptionDisplayer(model.CoogView):
             self.icon = 'void'
         elif self.action == 'modified':
             self.icon = 'shuffle'
-
-    @fields.depends('action', 'cur_option_id', 'effective_date', 'extra_data',
-        'extra_data_as_string', 'parent', 'coverage_id')
-    def on_change_extra_data(self):
-        if not self.extra_data and self.action is None:
-            self.extra_data_as_string = ''
-            return
-        self.refresh_extra_data()
-        self.update_extra_data_string()
-        if self.action == 'added':
-            return
-        previous_extra_data = Pool().get('contract.option')(
-            self.cur_option_id).get_version_at_date(
-            self.effective_date).extra_data
-        if self.extra_data != previous_extra_data and self.action == 'nothing':
-            self.action = 'modified'
-        elif self.extra_data == previous_extra_data and (
-                self.action == 'modified'):
-            self.action = 'nothing'
-        self.update_icon()
 
     def refresh_extra_data(self):
         if not self.product:
@@ -1245,6 +1251,7 @@ class OptionDisplayer(model.CoogView):
             version = Version(**model.dictionarize(previous_version,
                     self._option_fields_to_extract()))
             version.start = self.effective_date
+        version.start_date = self.effective_date
         version.extra_data = self.extra_data
         return version
 

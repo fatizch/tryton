@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="endorsement">
+        <!-- #################### -->
+        <!-- # Option Displayer # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="contract_manage_options_option_displayer_view_form">
+            <field name="model">contract.manage_options.option_displayer</field>
+            <field name="inherit" ref="endorsement.contract_manage_options_option_displayer_view_form"/>
+            <field name="name">contract_manage_options_option_displayer_form</field>
+        </record>
+    </data>
+</tryton>
