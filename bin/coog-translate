@@ -9,7 +9,11 @@ _coog_translate_usage() {
     coog translate start <module> [branch]
     coog translate export module,list
     coog translate clear
-    "
+
+The translate commands are targeting the \coog_translation_db\" database.
+If you want to use another one, override the COOG_TRANSLATION_DB_NAME
+environment variable
+"
 }
 
 coog_translate_start() { # create translation database - module_name [branch_name]
