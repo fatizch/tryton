@@ -1,3 +1,5 @@
+* FEA#7558 Allow to override the end of line separator when using the BaseMassFlowBatch
+
 Version 1.14 - 2017-11-09
 * OTH#0000 Move group-by method to report_engine
 * FEA#6266 Add header field to the report template flux

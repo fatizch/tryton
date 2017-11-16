@@ -1,3 +1,5 @@
+* FEA#7558 Permettre de surcharger facilement le separateur de fin de ligne lors de la génération d'un fichier avec l'outil BaseMassFlowBatch
+
 Version 1.14 - 2017-11-09
 * OTH#0000 Remonter de la méthode group-by dans report_engine
 * FEA#6266 Ajout des en têtes dans les modèles de courrier de flux

@@ -70,16 +70,24 @@ class BaseMassFlowBatch(batch.MemorySavingBatch):
                 cls.format_object(object, *args, **kwargs))
 
     @classmethod
+    def line_separator(cls):
+        """
+        Return the separator to use between each line
+        """
+        return '\n'
+
+    @classmethod
     def line_writer(cls, filename, lines, *args, **kwargs):
         """
         Defines how the lines are flushed.
         Lines is a generator expression and we use flush_size argument
         to control the memory usage when flushing data.
         """
+        separator = cls.line_separator()
         flush_size = int(cls.get_flush_size(*args, **kwargs))
         for lines in utils.iterator_slice(lines, flush_size):
             with utils.safe_open(filename, 'ab') as fo_:
-                fo_.write('\n'.join(lines) + '\n')
+                fo_.write(separator.join(lines) + separator)
 
     @classmethod
     def get_filename(cls, *args, **kwargs):
