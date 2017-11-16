@@ -200,8 +200,15 @@ class TooFewFunctionCall(Exception):
 
 
 def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
-    class BaseRuleMixin(object):
-        pass
+    class BaseRuleMixin(model.FunctionalErrorMixIn):
+
+        def raise_result_errors(self, result):
+            if result.errors:
+                for error in result.print_errors():
+                    self.append_functional_error(error)
+            if result.warnings:
+                self.raise_user_warning(str((self.__name__, self.id)),
+                    '\r\r'.join(result.print_warnings()))
 
     if not extra_name:
         extra_name = field_name + '_extra_data'
@@ -217,10 +224,12 @@ def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
     setattr(BaseRuleMixin, extra_name + '_string',
         rule_extra_data.translated(extra_name))
 
-    def calculate(self, args, return_full=False):
+    def calculate(self, args, return_full=False, raise_errors=False):
         rule = getattr(self, field_name, None)
         if rule:
             res = rule.execute(args, getattr(self, extra_name))
+            if raise_errors:
+                self.raise_result_errors(res)
             if return_full:
                 return res
             return res.result
@@ -271,23 +280,31 @@ class RuleEngineResult(object):
         result += ']'
         return result
 
+    def _format_for_print(self, data):
+        if isinstance(data, str):
+            return unicode(data, 'utf8')
+        elif isinstance(data, unicode):
+            return data
+        else:
+            return unicode(data)
+
     def print_errors(self):
-        return map(unicode, self.errors)
+        return map(self._format_for_print, self.errors)
 
     def print_warnings(self):
-        return map(unicode, self.warnings)
+        return map(self._format_for_print, self.warnings)
 
     def print_info(self):
-        return map(unicode, self.info)
+        return map(self._format_for_print, self.info)
 
     def print_debug(self):
-        return map(unicode, self.debug)
+        return map(self._format_for_print, self.debug)
 
     def print_result(self):
-        return unicode(self.result)
+        return self._format_for_print(self.result)
 
     def print_low_level_debug(self):
-        return map(unicode, self.low_level_debug)
+        return map(self._format_for_print, self.low_level_debug)
 
 
 class RuleExecutionLog(ModelSQL, ModelView):

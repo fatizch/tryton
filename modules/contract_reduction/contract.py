@@ -170,15 +170,8 @@ class Option:
             data_dict = {}
             data_dict['date'] = reduction_date
             self.init_dict_for_rule_engine(data_dict)
-            result = reduction_rule.calculate_eligibility_rule(
-                data_dict, return_full=True)
-            if result.errors:
-                for error in result.print_errors():
-                    self.append_functional_error(error)
-            if result.warnings:
-                self.raise_user_warning(str(('reduction', self.id)),
-                    '\r\r'.join(result.print_warnings()))
-            return result.result
+            return reduction_rule.calculate_eligibility_rule(
+                data_dict, raise_errors=True)
         return True
 
     def reduce(self, reduction_date):

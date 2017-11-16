@@ -26,6 +26,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">endorsement_definition_list</field>
         </record>
+        <record model="ir.ui.view" id="endorsement_start_rule_view_form">
+            <field name="model">endorsement.start.rule</field>
+            <field name="type">form</field>
+            <field name="name">start_rule_form</field>
+        </record>
         <record model="ir.ui.view" id="endorsement_definition_light_view_list">
             <field name="model">endorsement.definition</field>
             <field name="type">tree</field>

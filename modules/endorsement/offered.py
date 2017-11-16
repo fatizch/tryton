@@ -9,6 +9,7 @@ from trytond.cache import Cache
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import model, fields, coog_string
+from trytond.modules.rule_engine import get_rule_mixin
 from .endorsement import field_mixin
 from .wizard import EndorsementWizardPreviewMixin
 
@@ -16,6 +17,7 @@ from .wizard import EndorsementWizardPreviewMixin
 __metaclass__ = PoolMeta
 __all__ = [
     'EndorsementDefinitionGroupRelation',
+    'EndorsementStartRule',
     'EndorsementDefinition',
     'EndorsementPart',
     'EndorsementDefinitionPartRelation',
@@ -64,6 +66,13 @@ class EndorsementDefinition(model.CoogSQL, model.CoogView):
     groups = fields.Many2Many(
         'endorsement.definition-res.group', 'definition',
         'group', 'Groups')
+    start_rule = fields.One2Many(
+        'endorsement.start.rule', 'definition',
+        'Endorsement Start Rule', delete_missing=True, size=1,
+        help="This rule will be executed when the user tries to start "
+        "an endorsement. You can add user errors and warnings. "
+        "The endorsement creation will only be allowed if the rule returns "
+        "the value True")
 
     _endorsement_by_code_cache = Cache('endorsement_definition_by_code')
 
@@ -195,6 +204,23 @@ class EndorsementDefinition(model.CoogSQL, model.CoogView):
             method_names |= endorsement_part.get_draft_methods_for_model(
                 model_name)
         return method_names
+
+
+class EndorsementStartRule(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoogSQL, model.CoogView):
+    'Endorsement Start Rule'
+    __name__ = 'endorsement.start.rule'
+
+    definition = fields.Many2One('endorsement.definition',
+        'Definition', required=True, ondelete='CASCADE',
+        select=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(EndorsementStartRule, cls).__setup__()
+        cls.rule.required = True
+        cls.rule.domain = [('type_', '=', 'endorsement_start')]
 
 
 class EndorsementPart(model.CoogSQL, model.CoogView):

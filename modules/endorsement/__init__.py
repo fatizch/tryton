@@ -8,6 +8,7 @@ import event
 import document
 import party
 import group
+import rule_engine
 
 
 def register():
@@ -15,6 +16,7 @@ def register():
         endorsement.EndorsementConfiguration,
         offered.EndorsementSubState,
         offered.EndorsementDefinition,
+        offered.EndorsementStartRule,
         endorsement.OfferedConfiguration,
         endorsement.EndorsementConfigurationNumberSequence,
         offered.EndorsementPart,
@@ -62,6 +64,7 @@ def register():
         event.EventLog,
         document.DocumentDescription,
         group.Group,
+        rule_engine.RuleEngine,
         module='endorsement', type_='model')
 
     Pool.register(

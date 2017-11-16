@@ -2137,6 +2137,9 @@ class StartEndorsement(Wizard):
                 'endorsement.',
                 'no_preview_defined': 'No preview state is defined on the '
                 'endorsement definition',
+                'creation_not_allowed': 'The rule %s defined on endorsement %s '
+                'does not allow you to create an endorsement '
+                'with these parameters.'
                 })
 
     @property
@@ -2207,7 +2210,20 @@ class StartEndorsement(Wizard):
             self.select_endorsement.init_new_endorsement()
         return self.definition.endorsement_parts[0].view
 
+    def check_start_rule(self):
+        definition = self.select_endorsement.endorsement_definition
+        if not definition or not definition.start_rule:
+            return
+        context_ = {}
+        self.select_endorsement.init_dict(context_)
+        res = definition.start_rule[0].calculate_rule(context_,
+            raise_errors=True)
+        if res is not True:
+            self.raise_user_error('creation_not_allowed',
+                definition.start_rule[0].rule.name, definition.name)
+
     def check_before_start(self):
+        self.check_start_rule()
         definition = self.select_endorsement.endorsement_definition
         for part in definition.endorsement_parts:
             view = getattr(self, part.view)

@@ -24,5 +24,12 @@ this repository contains the full copyright notices and license terms. -->
         <page name="groups">
             <field name="groups"/>
         </page>
+        <page string="Rules" id="rules">
+            <notebook>
+                <page string="Start Rule" id="start_rule_page">
+                    <field name="start_rule" mode="form"/>
+                </page>
+            </notebook>
+        </page>
     </notebook>
 </form>

@@ -19,9 +19,15 @@ log_step('Starting trytond instance')
 
 conf = config.set_trytond()
 
+Lang = Model.get('ir.lang')
+fr, = Lang.find([('code', '=', 'fr')])
+fr.translatable = True
+fr.save()
+
 Module = Model.get('ir.module')
 to_install = Module.find([('name', '=', module),
         ('state', '=', 'not activated')])
+
 if to_install:
     to_install[0].click('activate')
 
