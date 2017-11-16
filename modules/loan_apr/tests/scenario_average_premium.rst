@@ -439,7 +439,7 @@ Test Average Premium Rate Wizard, fee => prorata::
     >>> abs(loans[1].average_premium_rate - Decimal('0.14611595')) <= Decimal('1e-8')
     True
     >>> abs(loans[0].current_loan_shares[0].average_premium_rate -
-    ...     Decimal('0.00878255')) <= Decimal('1e-8')
+    ...     Decimal('0.00823850')) <= Decimal('1e-8')
     True
     >>> abs(loans[0].base_premium_amount - Decimal('255.85')) <= Decimal('1e-2')
     True

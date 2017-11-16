@@ -1,3 +1,5 @@
+* Bug#7503 Ignore fees when calculating the average premium rate for options
+
 Version 1.14 - 2017-11-09
 * BUG#4847 Only display "Show Loan Average Premium" action on loan contracts
 * BUG#6646 Use decimal number of years instead of integer for apr calculation

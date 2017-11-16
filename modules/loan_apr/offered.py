@@ -180,7 +180,6 @@ class LoanAveragePremiumRule(model.CoogSQL, model.CoogView):
         if not self.use_default_rule:
             # TODO : Plug in rules
             return 0, 0
-        Fee = Pool().get('account.fee')
         loan = share.loan
         share_amount = 0
         for entity in [share.option] + list(share.option.extra_premiums):
@@ -191,72 +190,14 @@ class LoanAveragePremiumRule(model.CoogSQL, model.CoogView):
             loan_insured[cur_share.loan.id] = cur_share.loan.amount * \
                 cur_share.share
             max_insured = max(max_insured, loan_insured[cur_share.loan.id])
-        prorata_ratio = loan_insured[loan.id] / sum(loan_insured.values())
-        fee_amount = 0
 
-        # Same algorithm than for contract-wide average premium rate
-        biggest_loans = {k for k, v in loan_insured.items()
-            if max_insured == v}
-        longest_duration = max([coog_date.number_of_days_between(
-                    x.funds_release_date,
-                    x.end_date)
-                for x in contract.used_loans])
-        longest_loans = {x.id for x in contract.used_loans
-            if coog_date.number_of_days_between(x.funds_release_date,
-                x.end_date) == longest_duration}
-        top_loans = longest_loans & biggest_loans
-        biggest, longest = None, None
-        if top_loans and loan.id in top_loans:
-            if len(top_loans) == 1:
-                is_top = True
-            else:
-                is_top = loan.id == [x.loan.id
-                    for x in contract.ordered_loans
-                    if x.loan.id in top_loans][0]
-            biggest, longest = is_top, is_top
-        elif top_loans:
-            biggest, longest = False, False
-        if biggest is None:
-            if loan.id in biggest_loans:
-                if len(biggest_loans) == 1:
-                    biggest = True
-                else:
-                    biggest = loan.id == [x.loan.id
-                        for x in contract.ordered_loans
-                        if x.loan.id in biggest_loans][0]
-            else:
-                biggest = False
-        if longest is None:
-            if loan.id in longest_loans:
-                if len(longest_loans) == 1:
-                    longest = True
-                else:
-                    longest = loan.id == [x.loan.id
-                        for x in contract.ordered_loans
-                        if x.loan.id in longest_loans][0]
-            else:
-                longest = False
-        ratios = {
-            'longest': longest,
-            'biggest': biggest,
-            'prorata': prorata_ratio,
-            }
-        rule_fees = dict([(x.fee, x.action) for x in self.fee_rules])
-        for k, v in contract.extract_premium('offered').iteritems():
-            if k[0] != 'account.fee':
-                continue
-            action = rule_fees.get(Fee(k[1]), self.default_fee_action)
-            if action == 'do_not_use':
-                continue
-            fee_amount += sum(v.values()) * ratios[action]
-        base_value = share_amount + fee_amount
         den = (loan.amount *
             coog_date.number_of_years_between(loan.funds_release_date,
                 loan.end_date, prorata_method=coog_date.prorata_exact) *
             share.share)
         if den:
-            return base_value, base_value * 100 / den
-        return base_value, None
+            return share_amount, share_amount * 100 / den
+        return share_amount, None
 
 
 class FeeRule(model.CoogSQL, model.CoogView):
