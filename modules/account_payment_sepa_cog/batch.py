@@ -86,10 +86,6 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
                 })
 
     @classmethod
-    def convert_to_instances(cls, ids, in_directory):
-        return ids[:]
-
-    @classmethod
     def select_ids(cls, in_directory):
         if not in_directory:
             raise Exception("'in_directory' is required")

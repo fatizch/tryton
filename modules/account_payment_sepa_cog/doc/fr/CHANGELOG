@@ -1,3 +1,5 @@
+* BUG#7569 Correction d'un plantage du batch de rejet SEPA
+
 Version 1.14 - 2017-11-09
 * BUG#7346 Ajout de paramétrage pour activer la fonctionnalité des amendements de mandat SEPA
 * FEA#7246 Ajout de la consultation des paiements à partir des tiers
