@@ -33,14 +33,14 @@ class PoolObjectEncoder(JSONEncoder):
 
 
 class PoolObjectDecoder(JSONDecoder):
-    def default(self, obj):
-        pool = Pool()
-        if isinstance(obj, dict) and '__pool__' in obj.keys():
-            model_name, id_ = obj['data'].split(',')
-            return pool.get(model_name, type='*')(eval(id_))
-        elif isinstance(obj, dict) and '__function__' in obj.keys():
-            return pickle.loads(obj['data'])
-        elif isinstance(obj, dict) and '__method__' in obj.keys():
-            model_name, method_name = obj['data'].split(',')
-            return getattr(pool.get(model_name, type='*'), method_name)
-        return super(PoolObjectDecoder, self).default(obj)
+
+    def __call__(self, obj_):
+        if isinstance(obj_, dict) and '__pool__' in obj_.keys():
+            model_name, id_ = obj_['data'].split(',')
+            return Pool().get(model_name)(eval(id_))
+        elif isinstance(obj_, dict) and '__function__' in obj_.keys():
+            return pickle.loads(obj_['data'])
+        elif isinstance(obj_, dict) and '__method__' in obj_.keys():
+            model_name, method_name = obj_['data'].split(',')
+            return getattr(Pool().get(model_name), method_name)
+        return super(PoolObjectDecoder, self).__call__(obj_)

@@ -464,6 +464,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                     filename += '_' + datetime.now().strftime("%H%M%S%f")
             filename += ext
             out_path = os.path.join(export_dirname, filename)
+            report['export_filename'] = out_path
             with open(out_path, 'a') as out:
                 out.write(report['data'])
 

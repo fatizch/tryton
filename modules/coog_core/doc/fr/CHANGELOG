@@ -1,3 +1,5 @@
+* BUG#7587 Correctif des encodeur / décodeur du contexte persistant pour les assistants
+
 Version 1.14 - 2017-11-09
 * OTH#0000 Inutile de décoder les valeurs de dictionnaire vides dans version_getter
 * FEA#7001 Ajout du nombre de batch en succès dans la log d'exécution des batchs
