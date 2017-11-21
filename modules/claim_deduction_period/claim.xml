@@ -24,10 +24,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">deduction_period_list</field>
         </record>
-        <record model="ir.ui.view" id="deduction_period_without_date_view_list">
-            <field name="model">claim.loss.deduction.period</field>
+        <record model="ir.ui.view" id="deduction_period_display_view_list">
+            <field name="model">claim.loss.deduction.period.display</field>
             <field name="type">tree</field>
-            <field name="name">deduction_period_without_date_list</field>
+            <field name="name">deduction_period_display_list</field>
         </record>
     </data>
 </tryton>

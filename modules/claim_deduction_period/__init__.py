@@ -16,8 +16,9 @@ def register():
         benefit.BenefitRule,
         claim.Loss,
         claim.DeductionPeriod,
+        wizard.DeductionPeriodDisplay,
         wizard.IndemnificationDefinition,
-        rule_engine.RuleRuntime,
+        rule_engine.RuleEngineRuntime,
         module='claim_deduction_period', type_='model')
     Pool.register(
         wizard.CreateIndemnification,

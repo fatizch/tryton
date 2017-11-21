@@ -8,6 +8,9 @@ this repository contains the full copyright notices and license terms. -->
         <suffix name="currency_symbol"/>
     </field>
     <field name="currency"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
     <field name="currency_digits" tree_invisible="1"/>
     <field name="currency_symbol" tree_invisible="1"/>
+    <field name="deduction_id" tree_invisible="1"/>
 </tree>

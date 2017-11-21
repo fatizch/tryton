@@ -91,14 +91,6 @@ msgctxt "field:benefit.loss.description.deduction_period_kind,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:claim.indemnification_definition,deduction_period_kinds:"
-msgid "Deduction Kinds"
-msgstr "Types de prestation annexe"
-
-msgctxt "field:claim.indemnification_definition,deduction_periods:"
-msgid "Future Deduction Periods"
-msgstr "Futures prestations annexes"
-
 msgctxt "field:claim.loss,deduction_kinds:"
 msgid "Deduction Kinds"
 msgstr "Types de prestation annexe"
@@ -161,7 +153,7 @@ msgstr "Evénement"
 
 msgctxt "field:claim.loss.deduction.period,rec_name:"
 msgid "Name"
-msgstr "Numéro"
+msgstr "Nom"
 
 msgctxt "field:claim.loss.deduction.period,start_date:"
 msgid "Start Date"
@@ -183,6 +175,86 @@ msgctxt "field:claim.loss.deduction.period,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:claim.loss.deduction.period.display,amount_kind:"
+msgid "Amount Kind"
+msgstr "Type de montant"
+
+msgctxt "field:claim.loss.deduction.period.display,amount_received:"
+msgid "Amount Received"
+msgstr "Montant reçu"
+
+msgctxt "field:claim.loss.deduction.period.display,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.loss.deduction.period.display,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.loss.deduction.period.display,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.loss.deduction.period.display,currency:"
+msgid "Currency"
+msgstr "Devise"
+
+msgctxt "field:claim.loss.deduction.period.display,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:claim.loss.deduction.period.display,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:claim.loss.deduction.period.display,daily_amount:"
+msgid "Daily Amount"
+msgstr "Montant par jour"
+
+msgctxt "field:claim.loss.deduction.period.display,deduction_id:"
+msgid "Deduction ID"
+msgstr "Id de la période de prestation annexe"
+
+msgctxt "field:claim.loss.deduction.period.display,deduction_kind:"
+msgid "Deduction Kind"
+msgstr "Type de prestation annexe"
+
+msgctxt "field:claim.loss.deduction.period.display,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:claim.loss.deduction.period.display,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.loss.deduction.period.display,loss:"
+msgid "Loss"
+msgstr "Préjudice"
+
+msgctxt "field:claim.loss.deduction.period.display,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:claim.loss.deduction.period.display,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:claim.loss.deduction.period.display,total_amount:"
+msgid "Total Amount"
+msgstr "Montant Total"
+
+msgctxt "field:claim.loss.deduction.period.display,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:claim.loss.deduction.period.display,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.loss.deduction.period.display,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "model:benefit.loss.description-deduction_period_kind,name:"
 msgid "Loss Description to Deduction Period Kind Relation"
 msgstr "Relation Descripteur de préjudice - Type de prestation annexe"
@@ -194,6 +266,10 @@ msgstr "Type de prestation annexe"
 msgctxt "model:claim.loss.deduction.period,name:"
 msgid "Deduction Period"
 msgstr "Prestations annexes"
+
+msgctxt "model:claim.loss.deduction.period.display,name:"
+msgid "Deduction Period Display"
+msgstr "Période de prestation annexe"
 
 msgctxt "model:ir.action,name:act_deduction_period_kind"
 msgid "Deduction Period Kind"
@@ -208,6 +284,14 @@ msgid "Per Day"
 msgstr "Par jour"
 
 msgctxt "selection:claim.loss.deduction.period,amount_kind:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "selection:claim.loss.deduction.period.display,amount_kind:"
+msgid "Per Day"
+msgstr "Par jour"
+
+msgctxt "selection:claim.loss.deduction.period.display,amount_kind:"
 msgid "Total"
 msgstr "Total"
 

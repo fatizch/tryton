@@ -8,17 +8,17 @@ from trytond.modules.rule_engine.rule_engine import check_args
 
 
 __all__ = [
-    'RuleRuntime',
+    'RuleEngineRuntime',
     ]
 
 
-class RuleRuntime:
+class RuleEngineRuntime:
     __metaclass__ = PoolMeta
     __name__ = 'rule_engine.runtime'
 
     @classmethod
     @check_args('loss')
-    def _re_get_deduction_period_amount(self, args, code, start_date,
+    def _re_get_deduction_period_amount(cls, args, code, start_date,
             end_date, daily=True, round=False):
         loss = args['loss']
         amount = Decimal(0)
@@ -31,7 +31,13 @@ class RuleRuntime:
         for period in loss.deduction_periods:
             if period.deduction_kind not in allowed:
                 continue
+            if period.start_date > end_date:
+                continue
             latest_start = max(start_date, period.start_date)
+            if not period.end_date:
+                cls.append_error(args, 'the end date must be defined for '
+                    'the deduction %s from %s' % (period.deduction_kind.name,
+                        period.start_date))
             earliest_end = min(end_date, period.end_date)
             days = (earliest_end - latest_start).days + 1
             if days <= 0:

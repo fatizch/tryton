@@ -27,7 +27,8 @@ class RuleEngineRuntime:
     def _re_ijss_before_part_time(cls, args):
         delivered = args['indemnification'].service
         at_date = args['indemnification_detail_start_date']
-        ijss = {e.date: e.extra_data_values['ijss']
+        ijss = {e.date or delivered.loss.start_date:
+            e.extra_data_values['ijss']
             if 'ijss' in e.extra_data_values else 0
             for e in delivered.extra_datas
             if (e.date or delivered.loss.start_date) < at_date}

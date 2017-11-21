@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Equal, Not
 
@@ -91,9 +93,10 @@ class IndemnificationDetail:
             'benefit.loss.description.deduction_period_kind').search(
             [('xml_id', '=', 'claim_group_life_fr.part_time_deduction_type')]
             )[0]
-        if any([x.start_date <= self.end_date and x.end_date >= self.start_date
-                    for x in self.indemnification.service.loss.deduction_periods
-                    if x.deduction_kind == part_time]):
+        if any([x.start_date <= self.end_date and
+                (x.end_date or datetime.date.max) >= self.start_date
+                for x in self.indemnification.service.loss.deduction_periods
+                if x.deduction_kind == part_time]):
             res += ' (' + part_time.name + ')'
         return res
 

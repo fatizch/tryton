@@ -3,7 +3,7 @@
 from decimal import Decimal
 
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.coog_core import model, fields, coog_date
 from trytond.modules.currency_cog import ModelCurrency
@@ -44,8 +44,10 @@ class DeductionPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
     loss = fields.Many2One('claim.loss', 'Loss', required=True, select=True,
         ondelete='CASCADE')
     start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End Date', required=True,
-        domain=[('end_date', '>=', Eval('start_date'))],
+    end_date = fields.Date('End Date',
+        domain=[If(Bool(Eval('end_date', False)),
+                [('end_date', '>=', Eval('start_date'))],
+                [])],
         depends=['start_date'])
     deduction_kind = fields.Many2One(
         'benefit.loss.description.deduction_period_kind', 'Deduction Kind',
@@ -53,7 +55,7 @@ class DeductionPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
     amount_kind = fields.Selection([
             ('total', 'Total'), ('per_day', 'Per Day')], 'Amount Kind')
     amount_received = fields.Numeric('Amount Received',
-        domain=[('amount_received', '>', 0)],
+        domain=[('amount_received', '>=', 0)],
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     daily_amount = fields.Function(
         fields.Numeric('Daily Amount', digits=(16, Eval('currency_digits', 2)),
@@ -69,6 +71,11 @@ class DeductionPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
         super(DeductionPeriod, cls).__setup__()
         cls.currency = fields.Many2One('currency.currency', 'Currency',
             required=True, ondelete='RESTRICT')
+        cls._order = [('start_date', 'DESC')]
+
+    @classmethod
+    def default_amount_received(cls):
+        return Decimal('0')
 
     @classmethod
     def default_amount_kind(cls):
@@ -82,6 +89,8 @@ class DeductionPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
         elif self.amount_kind == 'per_day':
             return self.amount_received
         elif self.amount_kind == 'total':
+            if not self.start_date or not self.end_date:
+                return
             period_length = Decimal(coog_date.number_of_days_between(
                     self.start_date, self.end_date))
             if round:
@@ -97,6 +106,8 @@ class DeductionPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
         if self.amount_kind == 'total':
             return self.amount_received
         elif self.amount_kind == 'per_day':
+            if not self.start_date or not self.end_date:
+                return
             period_length = Decimal(coog_date.number_of_days_between(
                     self.start_date, self.end_date))
             return self.amount_received * period_length
