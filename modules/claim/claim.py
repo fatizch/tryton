@@ -979,6 +979,10 @@ class ClaimSubStatus(model.CoogSQL, model.CoogView):
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
+        cls._error_messages.update({
+                'no_sub_status_found': 'No sub status has been found with the '
+                'code %s.'
+                })
 
     @classmethod
     def create(cls, vlist):
@@ -1011,9 +1015,11 @@ class ClaimSubStatus(model.CoogSQL, model.CoogView):
         sub_status_id = cls._get_claim_sub_status_cache.get(code, default=-1)
         if sub_status_id != -1:
             return cls(sub_status_id)
-        instance = cls.search([('code', '=', code)])[0]
-        cls._get_claim_sub_status_cache.set(code, instance.id)
-        return instance
+        instances = cls.search([('code', '=', code)])
+        if len(instances) != 1:
+            cls.raise_user_error('no_sub_status_found', code)
+        cls._get_claim_sub_status_cache.set(code, instances[0].id)
+        return instances[0]
 
 
 class ClaimServiceExtraDataRevision(model._RevisionMixin, model.CoogSQL,

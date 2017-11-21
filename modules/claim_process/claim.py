@@ -119,6 +119,12 @@ class Claim(CoogProcessFramework):
         if to_save:
             Services.save(to_save)
 
+    def set_sub_status(self, sub_status_code):
+        SubStatus = Pool().get('claim.sub_status')
+        sub_status = SubStatus.get_sub_status(sub_status_code)
+        self.sub_status = sub_status
+        self.save()
+
 
 class Process:
     __name__ = 'process'

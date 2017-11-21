@@ -70,6 +70,10 @@ msgstr ""
 "dans la configuration"
 
 msgctxt "error:claim.sub_status:"
+msgid "No sub status has been found with the code %s."
+msgstr "Il n'y a aucun sous statut avec le code %s."
+
+msgctxt "error:claim.sub_status:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
 
