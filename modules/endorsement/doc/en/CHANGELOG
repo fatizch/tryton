@@ -1,3 +1,4 @@
+* BUG#7600 Fix problem related to the endorsement of contract termination made in the future
 * FEA#7547 Add endorsement related data to rule engine
 * FEA#7548 The creation of an endorsement can now be forbidden by a business rule
 * BUG#2067 Add a friendly user error when it is not possible to cancel an endorsement

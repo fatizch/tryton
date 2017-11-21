@@ -1,3 +1,4 @@
+* BUG#7600 Erreur lors de l'application d'un avenant de résiliation après un renouvellement
 * FEA#7547 Ajout de données d'avenant au moteur de règle
 * FEA#7548 La création d'un avenant peut maintenant être interdite par une règle métier
 * BUG#2067 Vérification de la possibilité d'annulation d'un avenant dans le cas échéant renvoyer un message erreur compréhensible par l'utilisateur

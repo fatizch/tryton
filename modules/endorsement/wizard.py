@@ -1447,7 +1447,7 @@ class TerminateContract(EndorsementWizardStepMixin):
                         definition=self.endorsement_definition,
                         values=self.endorsement_values()))
                 endorsement.activation_history = history_endorsements
-            endorsement.save()
+        endorsement.save()
 
     @classmethod
     def state_view_name(cls):
