@@ -129,6 +129,7 @@ class ContractRightSuspension(model.CoogSQL, model.CoogView):
     'Contract Right Suspension'
 
     __name__ = 'contract.right_suspension'
+    _func_key = 'id'
 
     contract = fields.Many2One('contract', 'Contract',
         states=SUSPENSION_STATES, depends=['active', 'type_'],

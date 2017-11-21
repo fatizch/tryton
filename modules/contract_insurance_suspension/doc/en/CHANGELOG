@@ -1,3 +1,5 @@
+* BUG#7582 Define _func_key as id data when exporting a contract suspension in JSON
+
 Version 1.14 - 2017-11-09
 * BUG#6957 The contract reactivation endorsement now update the rights suspensions end date
 
