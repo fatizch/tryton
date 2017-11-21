@@ -1636,7 +1636,10 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             },
         depends=['contract_status', 'start_date', 'end_date', 'product'])
     end_date = fields.Function(
-        fields.Date('End Date', states=_CONTRACT_STATUS_STATES,
+        fields.Date('End Date', states={
+                'readonly': Bool(Eval('contract_status')) & (
+                    Eval('contract_status') != 'quote'),
+                'invisible': ~Eval('end_date')},
             depends=_CONTRACT_STATUS_DEPENDS),
         'get_end_date', setter='set_end_date')
     automatic_end_date = fields.Date('Automatic End Date', readonly=True)
