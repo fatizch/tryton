@@ -68,7 +68,7 @@ class Contract:
         # it is a contract's first activation. If the contract is reactivated
         # after it has been suspended or terminated, its behaviour should not
         # change.
-        if self.status not in ['hold', 'terminated']:
+        if self.status == 'quote':
             self.check_no_amended_mandates()
 
     def check_no_amended_mandates(self):

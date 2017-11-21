@@ -1,3 +1,5 @@
+* BUG#7623 Ne vérifier les mandats amendés que quand le statut du contrat est en devis
+
 Version 1.14 - 2017-11-09
 * BUG#7400 Réinitialiser le mandat sepa si aucun mandat n'est trouvé
 * BUG#7239 Ne pas vérifier les mandats amendés lors de la réactivation d'un contrat
