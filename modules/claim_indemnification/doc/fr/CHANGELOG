@@ -1,3 +1,5 @@
+* BUG#7621 Ne pas afficher d'alerte sur la somme des parts si la délégation que la compagnie a avec l'assureur ne prévoit pas le calcul et le paiement des prestations
+
 Version 1.14 - 2017-11-09
 * BUG#7179 Les lignes de paiement des factures de prestation sont désormais bien réconciliées lorsque que le bénéficiaire à reçu un trop perçu
 * OTH#0000 Correction du scenario de test
