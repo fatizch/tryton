@@ -12,6 +12,7 @@ import endorsement
 
 def register():
     Pool.register(
+        endorsement.Endorsement,
         rule_engine.RuleEngine,
         offered.OptionDescription,
         offered.OptionDescriptionReductionRule,
