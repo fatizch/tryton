@@ -1,3 +1,5 @@
+* BUG#7591 The field family is not required in a medical act description as some medical acts do not belong to any specific family
+
 Version 1.14 - 2017-11-09
 * BUG#6927 Contract's billing information bank account is claim_bank_account's default value if the subscriber has no bank account to date
 

@@ -1,3 +1,5 @@
+* BUG#7591 Le champ famille n'est pas requis dans la description d'un acte médical car certains actes médicaux n'appartiennent à aucune famille spécifique
+
 Version 1.14 - 2017-11-09
 * BUG#6927 Le compte bancaire du quittancement à jour du contract est la valeur par défaut de claim_bank_account si le souscripteur n'a pas de compte bancaire à date
 
