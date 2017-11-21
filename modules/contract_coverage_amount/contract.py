@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
+import datetime
+
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 from trytond.rpc import RPC
@@ -155,6 +157,42 @@ class ContractOption:
         if not self.coverage or not self.coverage.coverage_amount_rules:
             return False
         return self.coverage.coverage_amount_rules[0].free_input
+
+    def new_version_at_date(self, at_date):
+        prev_version = self.get_version_at_date(at_date)
+        new_version = super(ContractOption, self).new_version_at_date(
+            at_date)
+        if new_version.id > 0:
+            return new_version
+        new_version.coverage_amount = prev_version.coverage_amount
+        return new_version
+
+    def _get_coverage_amount_change_date(self, at_date, increase=False):
+        '''
+            Returns the last (from the given "at_date") date at which the
+            coverage amount changed.
+
+            If "increase" is True, only increases will be considered
+        '''
+        prev_coverage, prev_date = None, None
+        for version in reversed(self.versions):
+            date = version.start or datetime.date.min
+            if date > at_date:
+                continue
+            if prev_date is None:
+                prev_coverage = version.coverage_amount
+                prev_date = date
+                continue
+            if not increase:
+                if prev_coverage == version.coverage_amount:
+                    continue
+                return prev_date
+            if prev_coverage > version.coverage_amount:
+                return prev_date
+            elif prev_coverage != version.coverage_amount:
+                prev_coverage = version.coverage_amount
+                prev_date = date
+        return self.start_date if self.has_coverage_amount else None
 
 
 class ContractOptionVersion(model.CoogSQL, model.CoogView, ModelCurrency):

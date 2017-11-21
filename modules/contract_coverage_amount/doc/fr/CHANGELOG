@@ -1,3 +1,4 @@
+* FEA#7605 Fonctions du moteur de règle pour accéder aux dates de modification et valeurs du montant de couverture à des dates données
 * BUG#7436 Gestion des montants de couverture dans l'avenant de modification des garanties
 
 Version 1.14 - 2017-11-09

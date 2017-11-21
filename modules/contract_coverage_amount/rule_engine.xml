@@ -25,5 +25,30 @@ le tarif d'une garantie du montant de couverture d'une autre</field>
             <field name="name">_re_get_other_coverage_amount</field>
             <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
         </record>
+        <record model="rule_engine.function" id="montant_de_couverture_a_date">
+            <field name="translated_technical_name">montant_de_couverture_au</field>
+            <field name="description">Montant de couverture à date</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_coverage_amount_at_date</field>
+            <field name="fct_args">date</field>
+            <field name="long_description">Retourne le montant de couverture en vigueur à la date
+passée en paramètre</field>
+            <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
+        </record>
+        <record model="rule_engine.function" id="date_changement_de_montant_de_couverture">
+            <field name="translated_technical_name">date_changement_montant_couvert</field>
+            <field name="description">Date du dernier changement de montant de couverture</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_coverage_amount_change_date</field>
+            <field name="fct_args">date</field>
+            <field name="long_description">Retourne la dernière date de changement de montant de
+couverture antérieure à la date passée en paramètre. Un paramètre optionnel, si
+Vrai, seulement les augmentations de capitales sont prises en compte</field>
+            <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
+        </record>
     </data>
 </tryton>

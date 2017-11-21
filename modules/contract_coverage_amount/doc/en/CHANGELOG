@@ -1,3 +1,4 @@
+* FEA#7605 Rule engine functions to access coverage amount modification date / value at a given date
 * BUG#7436 Handle coverage amounts in option management endorsements
 
 Version 1.14 - 2017-11-09
