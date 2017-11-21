@@ -1048,6 +1048,11 @@ class Contract(CoogProcessFramework):
                             }}))
         Endorsement.save([x for x in endorsements if x is not None])
 
+    def init_dict_for_rule_engine(self, args):
+        super(Contract, self).init_dict_for_rule_engine(args)
+        endorsement_context = ServerContext().get('endorsement_context', {})
+        args.update(endorsement_context)
+
 
 class ContractOption(object):
     __metaclass__ = PoolMeta
@@ -1584,6 +1589,7 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
     @classmethod
     def run_methods(cls, endorsements, kind):
         Method = Pool().get('ir.model.method')
+        RuleEngine = Pool().get('rule_engine')
         if kind == 'apply':
             method_name = 'get_methods_for_model'
         elif kind == 'draft':
@@ -1609,8 +1615,11 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
                 if not methods:
                     continue
                 methods.sort(key=lambda x: x.priority)
-                for method in methods:
-                    method.execute(endorsement, instance)
+                with ServerContext().set_context(
+                    endorsement_context=RuleEngine.build_endorsement_context(
+                            endorsement.endorsement, kind)):
+                    for method in methods:
+                        method.execute(endorsement, instance)
                 instance.save()
 
     @classmethod

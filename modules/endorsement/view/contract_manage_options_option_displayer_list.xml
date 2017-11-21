@@ -13,4 +13,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="parent_rec_name" tree_invisible="1"/>
     <field name="coverage_id" tree_invisible="1"/>
     <field name="action" tree_invisible="1"/>
+    <field name="manager" tree_invisible="1"/>
 </tree>

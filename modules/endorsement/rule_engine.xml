@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="te_endorsement">
+            <field name="description">Avenant</field>
+            <field name="type">folder</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="translated_technical_name">avenant</field>
+        </record>
+        <record model="rule_engine.context-function" id="def_context-te_endorsement">
+            <field name="context" ref="rule_engine.default_context"/>
+            <field name="tree_element" ref="te_endorsement"/>
+        </record>
+        <record model="rule_engine.function" id="endorsement_in_progess">
+            <field name="translated_technical_name">avenant_en_cours</field>
+            <field name="description">La règle est-elle exécutée dans un context d'avenant?</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_endorsement_in_progess</field>
+            <field name="long_description">Retourne vrai si un avenant est en cours, sinon faux</field>
+            <field name="parent" ref="te_endorsement"/>
+        </record>
+        <record model="rule_engine.function" id="endorsement_effective_date">
+            <field name="translated_technical_name">date_effet_avenant</field>
+            <field name="description">Date d'effet de l'avenant</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_endorsement_effective_date</field>
+            <field name="long_description">Retourne la date d'effet de l'avenant</field>
+            <field name="parent" ref="te_endorsement"/>
+        </record>
+        <record model="rule_engine.function" id="endorsement_definition">
+            <field name="translated_technical_name">definition_avenant</field>
+            <field name="description">Définition de l'avenant</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_endorsement_definition</field>
+            <field name="long_description">Retourne le code de la définition de l'avenant</field>
+            <field name="parent" ref="te_endorsement"/>
+        </record>
+        <record model="rule_engine.function" id="endorsement_action">
+            <field name="translated_technical_name">action_avenant</field>
+            <field name="description">Action de l'avenant</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_endorsement_action</field>
+            <field name="long_description">Retourne l'action en cours sur l'avenant: 'apply' si l'avenant est en train d'être appliqué, 'draft' si l'avenant est en train d'être annulé, 'None' si l'avenant est en cours de saisie</field>
+            <field name="parent" ref="te_endorsement"/>
+        </record>
+    </data>
+</tryton>

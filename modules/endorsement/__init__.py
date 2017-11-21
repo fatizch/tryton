@@ -65,6 +65,7 @@ def register():
         document.DocumentDescription,
         group.Group,
         rule_engine.RuleEngine,
+        rule_engine.RuleEngineRuntime,
         module='endorsement', type_='model')
 
     Pool.register(

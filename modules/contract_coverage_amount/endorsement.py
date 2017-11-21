@@ -4,6 +4,7 @@ from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields
 
@@ -51,7 +52,7 @@ class OptionDisplayer:
         self.update_action()
 
     @fields.depends('has_coverage_amount', 'free_coverage_amount',
-        'coverage_amount', 'cur_option_id', 'effective_date')
+        'coverage_amount', 'cur_option_id', 'effective_date', 'manager')
     def select_coverage_amounts(self):
         selection, values = [('', '')], []
         if not self.has_coverage_amount:
@@ -60,8 +61,15 @@ class OptionDisplayer:
         assert self.cur_option_id
         option = Pool().get('contract.option')(self.cur_option_id)
         if not self.free_coverage_amount:
-            values = option.get_coverage_amount_rule_result(
-                self.effective_date)
+            with ServerContext().set_context(
+                    endorsement_context={
+                        '_endorsement_definition':
+                        self.manager.endorsement_definition,
+                        '_endorsement_effective_date':
+                        self.manager.effective_date,
+                        '_endorsement_action': None}):
+                values = option.get_coverage_amount_rule_result(
+                    self.effective_date)
             if values:
                 selection += map(
                     lambda x: (str(x), option.currency.amount_as_string(x)),

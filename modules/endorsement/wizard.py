@@ -715,9 +715,10 @@ class ManageOptions(EndorsementWizardStepMixin):
     current_parent = fields.Selection('get_possible_parents',
         'Parent')
     all_options = fields.One2Many('contract.manage_options.option_displayer',
-        None, 'All Options')
+        'manager', 'All Options')
     current_options = fields.One2Many(
-        'contract.manage_options.option_displayer', None, 'Current Options')
+        'contract.manage_options.option_displayer', 'manager',
+        'Current Options')
     new_coverage = fields.Many2One('offered.option.description',
         'New Coverage', domain=[('id', 'in', Eval('possible_coverages'))],
         states={'invisible': ~Eval('possible_coverages')},
@@ -1101,6 +1102,8 @@ class OptionDisplayer(model.CoogView):
     display_name = fields.Char('Name', readonly=True)
     cur_option_id = fields.Integer('Existing Option', readonly=True)
     effective_date = fields.Date('Effective Date', readonly=True)
+    manager = fields.Many2One('contract.manage_options', 'Manager',
+        readonly=True)
     sub_status = fields.Many2One('contract.sub_status', 'Sub Status',
         states={
             'required': In(Eval('action'), ['terminated', 'void']),
