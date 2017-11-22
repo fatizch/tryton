@@ -4,6 +4,7 @@ this repository contains the full copyright notices and license terms. -->
 <tree>
     <field name="type_"/>
     <field name="name"/>
+    <field name="short_name"/>
     <field name="status"/>
     <field name="debug_mode"/>
     <field name="tags_name"/>

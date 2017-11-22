@@ -1,3 +1,5 @@
+* FEA#7598 Add the "Code" column in the rules list view so it can be filtered on
+
 Version 1.14 - 2017-11-09
 * BUG#7385 Modify the test case wizard by adding a state action in order to display a new test case rule engine
 * BUG#7385 Modify FunctionFinder and ignore builtins when adding values on the rule engine test

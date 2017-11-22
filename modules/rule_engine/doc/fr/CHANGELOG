@@ -1,3 +1,5 @@
+* FEA#7598 Ajout de la colonne "Code" dans la vue de la liste des règles pour pouvoir filtrer dessus
+
 Version 1.14 - 2017-11-09
 * BUG#7385 Modification du wizard de jeu de tests en ajoutant une action qui permet d'afficher un nouveau cas de test avec les jeux de tests déjà existant
 * BUG#7385 Modification de la fonction 'FunctionFinder' en ignorant la liste de tout les bultins lorsqu'on ajoute les valeurs au niveau des jeux de tests
