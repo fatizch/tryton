@@ -1,3 +1,5 @@
+* BUG#7630 Correction d'une anomalie où les identifiants de tiers configurés étaient ignorés
+
 Version 1.14 - 2017-11-09
 * BUG#7403 Effacer le code postal et la ville lorsqu'on change le pays d'une adresse
 * BUG#7388 Correction de l'import export JSON

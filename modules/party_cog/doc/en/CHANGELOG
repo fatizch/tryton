@@ -1,3 +1,5 @@
+* BUG#7630 Fix a bug where the custom party identifiers were no longer available
+
 Version 1.14 - 2017-11-09
 * BUG#7403 Clear zip and city when changing an addresse's country
 * BUG#7388 Fix JSON import export

@@ -684,11 +684,13 @@ class PartyIdentifier(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(PartyIdentifier, cls).__setup__()
+        cls.__previous_type_selection = cls.type.selection
+        cls.type.selection = 'get_types'
         cls.type.required = True
 
     @classmethod
     def get_types(cls):
-        types = super(PartyIdentifier, cls).get_types()
+        types = cls._get_base_types()
         lang = Transaction().language
         dyn_types = cls._identifier_type_cache.get(lang)
         if dyn_types is not None:
@@ -699,6 +701,10 @@ class PartyIdentifier(export.ExportImportMixin):
                     coog_string.translate_value(identifier_type, 'name')))
         cls._identifier_type_cache.set(lang, dyn_types)
         return types + dyn_types
+
+    @classmethod
+    def _get_base_types(cls):
+        return cls.__previous_type_selection
 
     def get_summary_content(self, label, at_date=None, lang=None):
         return (self.type, self.code)
