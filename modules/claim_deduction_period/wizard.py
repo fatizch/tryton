@@ -80,7 +80,8 @@ class IndemnificationDefinition:
         for period in self.service.loss.deduction_periods:
             if self.start_date and (period.start_date and
                     period.start_date >= self.start_date or
-                    period.end_date and period.end_date >= self.end_date):
+                    period.end_date and self.end_date and
+                    period.end_date >= self.end_date):
                 in_period_deduction.append(period)
 
         self.deduction_periods = [self.new_deduction_period(x)

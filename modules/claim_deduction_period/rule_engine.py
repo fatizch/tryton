@@ -38,6 +38,7 @@ class RuleEngineRuntime:
                 cls.append_error(args, 'the end date must be defined for '
                     'the deduction %s from %s' % (period.deduction_kind.name,
                         period.start_date))
+                return amount
             earliest_end = min(end_date, period.end_date)
             days = (earliest_end - latest_start).days + 1
             if days <= 0:

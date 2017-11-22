@@ -75,6 +75,6 @@ class BenefitRule:
         for period in loss.deduction_periods:
             if start_date <= period.start_date <= end_date:
                 dates.add(period.start_date)
-            if start_date <= period.end_date <= end_date:
+            if period.end_date and start_date <= period.end_date <= end_date:
                 dates.add(period.end_date + relativedelta(days=1))
         return dates
