@@ -1,3 +1,5 @@
+* BUG#7643 La création automatique d'exonérations de primes n'est faite que pour les options qui possèdent une exonération de prime
+
 Version 1.14 - 2017-11-09
 * FEA#7383 Possibilité de configurer des périodes d'exonération de prime automatique avec un taux (par exemple 50% de réduction pendant les 3 premiers mois du contrat). Ajout d'un compte de charge de compensation dans le cas où l'exonération n'est pas prise en charge par l'assureur.
 

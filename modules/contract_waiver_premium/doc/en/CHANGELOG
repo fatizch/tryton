@@ -1,3 +1,5 @@
+* BUG#7643 Automatic creation of waivers of premiums is only done for options which have a waiver of premium
+
 Version 1.14 - 2017-11-09
 * FEA#7383 Allow to configure automatic waiver of premium periods with a rate. Add an account to compensate the waiver if not paid by the insurer
 

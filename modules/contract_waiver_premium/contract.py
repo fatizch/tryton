@@ -90,7 +90,7 @@ class Contract:
         Waiver = pool.get('contract.waiver_premium')
         WaiverOption = pool.get('contract.waiver_premium-contract.option')
         options_to_waive = [o for o in self.get_all_options()
-            if o.with_automatic_waiver_premium]
+            if o.with_automatic_waiver_premium()]
         if not options_to_waive:
             return
         if self.start_date == self.initial_start_date:
