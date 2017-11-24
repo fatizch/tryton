@@ -26,4 +26,5 @@ def register():
     Pool.register(
         wizard.Reduce,
         endorsement.StartEndorsement,
+        wizard.CancelReduction,
         module='contract_reduction', type_='wizard')

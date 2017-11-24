@@ -9,5 +9,6 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/group[@id='button_change_start_date']" position="inside">
         <field name="can_reduce" invisible="1"/>
         <button string="Reduce" name="button_reduce"/>
+        <button string="Cancel Reduction" name="button_cancel_reduction"/>
     </xpath>
 </data>

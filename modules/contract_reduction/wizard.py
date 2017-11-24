@@ -16,6 +16,7 @@ __all__ = [
     'Reduce',
     'ReduceParameters',
     'ReducePreview',
+    'CancelReduction',
     ]
 
 
@@ -117,3 +118,18 @@ class ReducePreview(model.CoogView):
     reduction_value = fields.Numeric('Reduction Value',
         digits=(16, Eval('currency_digits', 2)), readonly=True,
         depends=['currency_digits'], help='The contract value after reduction')
+
+
+class CancelReduction(Wizard):
+    'Cancel Reduction'
+    __name__ = 'contract.cancel.reduction'
+
+    start_state = 'cancel_reduction'
+    cancel_reduction = StateTransition()
+
+    def transition_cancel_reduction(self):
+        assert Transaction().context.get('active_model') == 'contract'
+        contract = Pool().get('contract')(
+            Transaction().context.get('active_id'))
+        contract.cancel_reduction([contract])
+        return 'end'

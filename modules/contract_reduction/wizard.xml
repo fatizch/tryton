@@ -26,5 +26,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">reduction_preview_form</field>
         </record>
+        <!-- ########################### -->
+        <!-- # Cancel Reduction Wizard # -->
+        <!-- ########################### -->
+        <record model="ir.action.wizard" id="act_cancel_reduction_contract">
+            <field name="name">Cancel Reduction</field>
+            <field name="wiz_name">contract.cancel.reduction</field>
+        </record>
     </data>
 </tryton>

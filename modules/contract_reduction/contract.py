@@ -31,6 +31,8 @@ class Contract:
         cls._buttons.update({
                 'button_reduce': {
                     'readonly': ~Eval('can_reduce', False)},
+                'button_cancel_reduction': {
+                    'readonly': ~Eval('reduction_date')},
                 })
         cls._error_messages.update({
                 'will_reduce': 'Contracts will be reduced',
@@ -41,6 +43,10 @@ class Contract:
                 'auto_reducing': 'Contracts will automatically be reduced',
                 'cannot_reduce_surrendered': 'A contract that was surrendered '
                 'cannot be reduced',
+                'will_cancel_reduction': 'Contracts reduction will be '
+                'cancelled',
+                'contract_not_reduced': 'Contract %(contract)s is not reduced.'
+                'Therefore, it cannot be reactivated.',
                 })
 
     def get_icon(self, name=None):
@@ -63,6 +69,12 @@ class Contract:
     @classmethod
     @model.CoogView.button_action('contract_reduction.act_reduce_contract')
     def button_reduce(cls, contracts):
+        pass
+
+    @classmethod
+    @model.CoogView.button_action(
+        'contract_reduction.act_cancel_reduction_contract')
+    def button_cancel_reduction(cls, contracts):
         pass
 
     @classmethod
@@ -153,6 +165,29 @@ class Contract:
             manager.clear_errors()
         return result
 
+    @classmethod
+    def cancel_reduction(cls, contracts):
+        cls.raise_user_warning('will_cancel_reduction_%s' % str([x.id for x in
+                    contracts[:10]]), 'will_cancel_reduction')
+        Event = Pool().get('event')
+        with model.error_manager():
+            for contract in contracts:
+                if not contract.reduction_date:
+                    cls.append_functional_error('contract_not_reduced', {
+                        'contract': contract.rec_name})
+                contract._cancel_reduction_remove_date()
+                contract._cancel_options_reduction()
+                cls.save([contract])
+                contract.rebill(utils.today())
+            Event.notify_events(contracts, 'contract_reduction_cancelling')
+
+    def _cancel_reduction_remove_date(self):
+        self.reduction_date = None
+
+    def _cancel_options_reduction(self):
+        for option in self._get_calculate_targets('options'):
+            option.cancel_reduction()
+
 
 class Option:
     __metaclass__ = PoolMeta
@@ -186,3 +221,11 @@ class Option:
         data_dict['date'] = reduction_date
         self.init_dict_for_rule_engine(data_dict)
         return self.coverage.reduction_rules[0].calculate_rule(data_dict)
+
+    def cancel_reduction(self):
+        SubStatus = Pool().get('contract.sub_status')
+        reduced_status = SubStatus.get_sub_status('contract_reduced')
+        if self.sub_status != reduced_status:
+            return
+        self.manual_end_date = None
+        self.sub_status = None

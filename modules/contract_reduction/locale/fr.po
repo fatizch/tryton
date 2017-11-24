@@ -23,6 +23,17 @@ msgid "Contract %(contract)s cannot be reduced"
 msgstr "Le contrat %(contract)s ne peut pas être mis en réduction"
 
 msgctxt "error:contract:"
+msgid ""
+"Contract %(contract)s is not reduced.Therefore, it cannot be reactivated."
+msgstr ""
+"Le contract %(contract)s n'est pas réduit. Il n'est donc pas possible de le "
+"réactiver."
+
+msgctxt "error:contract:"
+msgid "Contracts reduction will be cancelled"
+msgstr "La mise en réduction des contrats sera annulée"
+
+msgctxt "error:contract:"
 msgid "Contracts will automatically be reduced"
 msgstr "Les contrats vont être automatiquement mis en réduction"
 
@@ -197,9 +208,17 @@ msgctxt "model:contract.sub_status,name:sub_status_reduced"
 msgid "Contract Reduced"
 msgstr "Contrat mis en réduction"
 
+msgctxt "model:event.type,name:event_cancel_contract_reduction"
+msgid "Contract Reduction Cancelling"
+msgstr "Annulation de la mise en réduction"
+
 msgctxt "model:event.type,name:event_contract_reduction"
 msgid "Contract Reduction"
 msgstr "Mise en réduction du contrat"
+
+msgctxt "model:ir.action,name:act_cancel_reduction_contract"
+msgid "Cancel Reduction"
+msgstr "Annuler la mise en réduction"
 
 msgctxt "model:ir.action,name:act_reduce_contract"
 msgid "Reduction"
@@ -216,6 +235,10 @@ msgstr "Valeur de réduction"
 msgctxt "selection:rule_engine,type_:"
 msgid "Reduction Eligibility"
 msgstr "Eligibilité de mise en réduction"
+
+msgctxt "view:contract:"
+msgid "Cancel Reduction"
+msgstr "Annuler la mise en réduction"
 
 msgctxt "view:contract:"
 msgid "Reduce"
