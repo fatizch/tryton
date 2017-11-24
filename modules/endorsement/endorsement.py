@@ -1166,6 +1166,8 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
         states={'readonly': Eval('state') != 'draft'}, depends=['state'])
     effective_date = fields.Date('Effective Date',
         states={'readonly': Eval('state') != 'draft'}, depends=['state'])
+    signature_date = fields.Date('Signature Date',
+        states={'readonly': Eval('state') != 'draft'}, depends=['state'])
     state = fields.Selection([
             ('draft', 'Draft'),
             ('in_progress', 'In Progress'),

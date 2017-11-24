@@ -13,13 +13,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="context" ref="rule_engine.default_context"/>
             <field name="tree_element" ref="te_endorsement"/>
         </record>
-        <record model="rule_engine.function" id="endorsement_in_progess">
+        <record model="rule_engine.function" id="endorsement_in_progress">
             <field name="translated_technical_name">avenant_en_cours</field>
             <field name="description">La règle est-elle exécutée dans un context d'avenant?</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_get_endorsement_in_progess</field>
+            <field name="name">_re_get_endorsement_in_progress</field>
             <field name="long_description">Retourne vrai si un avenant est en cours, sinon faux</field>
             <field name="parent" ref="te_endorsement"/>
         </record>
@@ -31,6 +31,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_endorsement_effective_date</field>
             <field name="long_description">Retourne la date d'effet de l'avenant</field>
+            <field name="parent" ref="te_endorsement"/>
+        </record>
+        <record model="rule_engine.function" id="endorsement_signature_date">
+            <field name="translated_technical_name">date_signature_avenant</field>
+            <field name="description">Date de signature de l'avenant</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_endorsement_signature_date</field>
+            <field name="long_description">Retourne la date signature de l'avenant</field>
             <field name="parent" ref="te_endorsement"/>
         </record>
         <record model="rule_engine.function" id="endorsement_definition">
@@ -50,7 +60,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_endorsement_action</field>
-            <field name="long_description">Retourne l'action en cours sur l'avenant: 'apply' si l'avenant est en train d'être appliqué, 'draft' si l'avenant est en train d'être annulé, 'None' si l'avenant est en cours de saisie</field>
+            <field name="long_description">Retourne l'action en cours sur l'avenant: 'apply' si l'avenant est en train d'être appliqué, 'draft' si l'avenant est en train d'être annulé, 'in_progress' si l'avenant est en cours de saisie, 'start' si l'avenant est sur le point d'être créé</field>
             <field name="parent" ref="te_endorsement"/>
         </record>
     </data>

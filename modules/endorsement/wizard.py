@@ -104,8 +104,8 @@ class EndorsementWizardStepMixin(model.CoogView):
             - endorsement_part : the endorsement_part the current state view
                 is being related to.
     '''
-    effective_date = fields.Date('Effective Date', states={
-            'readonly': True})
+    effective_date = fields.Date('Effective Date', states={'readonly': True})
+    signature_date = fields.Date('Signature Date', states={'readonly': True})
     endorsement_definition = fields.Many2One('endorsement.definition',
         'Endorsement Definition', states={'readonly': True})
     endorsement_part = fields.Many2One('endorsement.part',
@@ -160,10 +160,12 @@ class EndorsementWizardStepMixin(model.CoogView):
         self.endorsement_part = self.wizard.get_endorsement_part_for_state(
             self.step_name)
         self.effective_date = self.wizard.select_endorsement.effective_date
+        self.signature_date = self.wizard.select_endorsement.signature_date
         return {
             'endorsement_definition': self.endorsement_definition.id,
             'endorsement_part': self.endorsement_part.id,
             'effective_date': self.effective_date,
+            'signature_date': self.signature_date,
             }
 
     def step_previous(self):
@@ -1948,6 +1950,7 @@ class SelectEndorsement(model.CoogView):
     contract = fields.Many2One('contract', 'Contract')
     effective_date = fields.Date('Effective Date', states={
             'invisible': ~Bool(Eval('endorsement_definition', False))})
+    signature_date = fields.Date('Signature Date')
     endorsement = fields.Many2One('endorsement', 'Endorsement',
         states={'invisible': True})
     endorsement_definition = fields.Many2One('endorsement.definition',
@@ -2018,15 +2021,15 @@ class SelectEndorsement(model.CoogView):
         self.effective_date_before_today = self.effective_date < utils.today()
         self.on_change_contract()
 
-    def init_dict(self, data_dict):
-        # Use rule engine API for future improved implementation
-        data_dict.update({
-                'contract': getattr(self, 'contract', None),
-                'applicant': getattr(self, 'applicant', None),
-                'date': self.effective_date,
-                'endorsement_date': self.effective_date,
-                'endorsement_definition': self.endorsement_definition,
-                })
+    @fields.depends('effective_date', 'endorsement_definition',
+        'signature_date')
+    def init_dict(self, data_dict, action='in_progress'):
+        RuleEngine = Pool().get('rule_engine')
+        contract = getattr(self, 'contract', None)
+        context_ = RuleEngine.build_endorsement_context(self, action=action)
+        if contract:
+            with ServerContext().set_context(endorsement_context=context_):
+                contract.init_dict_for_rule_engine(data_dict)
 
     def init_new_endorsement(self):
         endorsement = self._get_new_endorsement()
@@ -2055,7 +2058,7 @@ class SelectEndorsement(model.CoogView):
         return [x.id for x in candidates]
 
     def _fields_to_copy(self):
-        return ['applicant', 'effective_date']
+        return ['applicant', 'effective_date', 'signature_date']
 
 
 class BasicPreview(EndorsementWizardPreviewMixin, model.CoogView):
@@ -2218,7 +2221,7 @@ class StartEndorsement(Wizard):
         if not definition or not definition.start_rule:
             return
         context_ = {}
-        self.select_endorsement.init_dict(context_)
+        self.select_endorsement.init_dict(context_, action='start')
         res = definition.start_rule[0].calculate_rule(context_,
             raise_errors=True)
         if res is not True:

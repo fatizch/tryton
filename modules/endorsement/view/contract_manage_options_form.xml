@@ -22,5 +22,6 @@ this repository contains the full copyright notices and license terms. -->
         <field name="possible_coverages"/>
         <field name="possible_parents"/>
         <field name="all_options"/>
+        <label name="signature_date"/>
     </group>
 </form>

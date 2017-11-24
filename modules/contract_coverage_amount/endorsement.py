@@ -54,6 +54,7 @@ class OptionDisplayer:
     @fields.depends('has_coverage_amount', 'free_coverage_amount',
         'coverage_amount', 'cur_option_id', 'effective_date', 'manager')
     def select_coverage_amounts(self):
+        RuleEngine = Pool().get('rule_engine')
         selection, values = [('', '')], []
         if not self.has_coverage_amount:
             return selection
@@ -62,12 +63,8 @@ class OptionDisplayer:
         option = Pool().get('contract.option')(self.cur_option_id)
         if not self.free_coverage_amount:
             with ServerContext().set_context(
-                    endorsement_context={
-                        '_endorsement_definition':
-                        self.manager.endorsement_definition,
-                        '_endorsement_effective_date':
-                        self.manager.effective_date,
-                        '_endorsement_action': None}):
+                    endorsement_context=RuleEngine.build_endorsement_context(
+                        self.manager, action='in_progress')):
                 values = option.get_coverage_amount_rule_result(
                     self.effective_date)
             if values:

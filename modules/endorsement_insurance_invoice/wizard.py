@@ -496,8 +496,8 @@ class ChangeDirectDebitAccount(ChangeBillingInformation):
         if not contract:
             return False
         if not utils.get_good_version_at_date(contract,
-                'billing_informations', data_dict['endorsement_date'],
-                'date').direct_debit:
+                'billing_informations',
+                data_dict['_endorsement_effective_date'], 'date').direct_debit:
             return True
         return False
 

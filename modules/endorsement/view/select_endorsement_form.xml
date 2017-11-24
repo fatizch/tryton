@@ -10,6 +10,8 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <label name="effective_date"/>
     <field name="effective_date"/>
+    <label name="signature_date"/>
+    <field name="signature_date"/>
     <newline/>
     <label name="contract"/>
     <field name="contract"/>
