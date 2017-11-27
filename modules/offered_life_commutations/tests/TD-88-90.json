@@ -1,0 +1,1849 @@
+[
+    {
+        "__name__": "table",
+        "_func_key": "TD-88-90",
+        "cells": [
+            [
+                "22",
+                "97987"
+            ],
+            [
+                "64",
+                "76295"
+            ],
+            [
+                "106",
+                "2"
+            ],
+            [
+                "23",
+                "97830"
+            ],
+            [
+                "65",
+                "74720"
+            ],
+            [
+                "24",
+                "97677"
+            ],
+            [
+                "66",
+                "73075"
+            ],
+            [
+                "25",
+                "97524"
+            ],
+            [
+                "67",
+                "71366"
+            ],
+            [
+                "26",
+                "97373"
+            ],
+            [
+                "68",
+                "69559"
+            ],
+            [
+                "27",
+                "97222"
+            ],
+            [
+                "69",
+                "67655"
+            ],
+            [
+                "28",
+                "97070"
+            ],
+            [
+                "70",
+                "65649"
+            ],
+            [
+                "29",
+                "96916"
+            ],
+            [
+                "71",
+                "63543"
+            ],
+            [
+                "30",
+                "96759"
+            ],
+            [
+                "72",
+                "61285"
+            ],
+            [
+                "31",
+                "96597"
+            ],
+            [
+                "73",
+                "58911"
+            ],
+            [
+                "32",
+                "96429"
+            ],
+            [
+                "74",
+                "56416"
+            ],
+            [
+                "33",
+                "96255"
+            ],
+            [
+                "75",
+                "53818"
+            ],
+            [
+                "34",
+                "96071"
+            ],
+            [
+                "76",
+                "51086"
+            ],
+            [
+                "35",
+                "95878"
+            ],
+            [
+                "77",
+                "48251"
+            ],
+            [
+                "36",
+                "95676"
+            ],
+            [
+                "78",
+                "45284"
+            ],
+            [
+                "37",
+                "95463"
+            ],
+            [
+                "79",
+                "42203"
+            ],
+            [
+                "38",
+                "95237"
+            ],
+            [
+                "80",
+                "39041"
+            ],
+            [
+                "39",
+                "94997"
+            ],
+            [
+                "81",
+                "35824"
+            ],
+            [
+                "40",
+                "94746"
+            ],
+            [
+                "82",
+                "32518"
+            ],
+            [
+                "41",
+                "94476"
+            ],
+            [
+                "83",
+                "29220"
+            ],
+            [
+                "0",
+                "10000"
+            ],
+            [
+                "42",
+                "94182"
+            ],
+            [
+                "84",
+                "25962"
+            ],
+            [
+                "1",
+                "99129"
+            ],
+            [
+                "43",
+                "93868"
+            ],
+            [
+                "85",
+                "22780"
+            ],
+            [
+                "2",
+                "99057"
+            ],
+            [
+                "44",
+                "93515"
+            ],
+            [
+                "86",
+                "19725"
+            ],
+            [
+                "3",
+                "99010"
+            ],
+            [
+                "45",
+                "93133"
+            ],
+            [
+                "87",
+                "16843"
+            ],
+            [
+                "4",
+                "98977"
+            ],
+            [
+                "46",
+                "92727"
+            ],
+            [
+                "88",
+                "14133"
+            ],
+            [
+                "5",
+                "98948"
+            ],
+            [
+                "47",
+                "92295"
+            ],
+            [
+                "89",
+                "11625"
+            ],
+            [
+                "6",
+                "98921"
+            ],
+            [
+                "48",
+                "91833"
+            ],
+            [
+                "90",
+                "9389"
+            ],
+            [
+                "7",
+                "98897"
+            ],
+            [
+                "49",
+                "91332"
+            ],
+            [
+                "91",
+                "7438"
+            ],
+            [
+                "8",
+                "98876"
+            ],
+            [
+                "50",
+                "90778"
+            ],
+            [
+                "92",
+                "5763"
+            ],
+            [
+                "9",
+                "98855"
+            ],
+            [
+                "51",
+                "90171"
+            ],
+            [
+                "93",
+                "4350"
+            ],
+            [
+                "10",
+                "98835"
+            ],
+            [
+                "52",
+                "89511"
+            ],
+            [
+                "94",
+                "3211"
+            ],
+            [
+                "11",
+                "98814"
+            ],
+            [
+                "53",
+                "88791"
+            ],
+            [
+                "95",
+                "2315"
+            ],
+            [
+                "12",
+                "98793"
+            ],
+            [
+                "54",
+                "88011"
+            ],
+            [
+                "96",
+                "1635"
+            ],
+            [
+                "13",
+                "98771"
+            ],
+            [
+                "55",
+                "87165"
+            ],
+            [
+                "97",
+                "1115"
+            ],
+            [
+                "14",
+                "98745"
+            ],
+            [
+                "56",
+                "86241"
+            ],
+            [
+                "98",
+                "740"
+            ],
+            [
+                "15",
+                "98712"
+            ],
+            [
+                "57",
+                "85256"
+            ],
+            [
+                "99",
+                "453"
+            ],
+            [
+                "16",
+                "98667"
+            ],
+            [
+                "58",
+                "84211"
+            ],
+            [
+                "100",
+                "263"
+            ],
+            [
+                "17",
+                "98606"
+            ],
+            [
+                "59",
+                "83083"
+            ],
+            [
+                "101",
+                "145"
+            ],
+            [
+                "18",
+                "98520"
+            ],
+            [
+                "60",
+                "81884"
+            ],
+            [
+                "102",
+                "76"
+            ],
+            [
+                "19",
+                "98406"
+            ],
+            [
+                "61",
+                "80602"
+            ],
+            [
+                "103",
+                "37"
+            ],
+            [
+                "20",
+                "98277"
+            ],
+            [
+                "62",
+                "79243"
+            ],
+            [
+                "104",
+                "17"
+            ],
+            [
+                "21",
+                "98137"
+            ],
+            [
+                "63",
+                "77807"
+            ],
+            [
+                "105",
+                "7"
+            ]
+        ],
+        "code": "TD-88-90",
+        "dimension1": [
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "0",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "0",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "0"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "1",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "1",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "1"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "10",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "10",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "10"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "100",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "100",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "100"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "101",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "101",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "101"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "102",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "102",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "102"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "103",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "103",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "103"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "104",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "104",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "104"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "105",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "105",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "105"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "106",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "106",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "106"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "11",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "11",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "11"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "12",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "12",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "12"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "13",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "13",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "13"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "14",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "14",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "14"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "15",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "15",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "15"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "16",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "16",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "16"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "17",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "17",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "17"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "18",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "18",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "18"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "19",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "19",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "19"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "2",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "2",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "2"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "20",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "20",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "20"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "21",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "21",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "21"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "22",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "22",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "22"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "23",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "23",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "23"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "24",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "24",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "24"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "25",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "25",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "25"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "26",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "26",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "26"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "27",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "27",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "27"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "28",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "28",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "28"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "29",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "29",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "29"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "3",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "3",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "3"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "30",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "30",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "30"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "31",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "31",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "31"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "32",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "32",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "32"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "33",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "33",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "33"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "34",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "34",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "34"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "35",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "35",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "35"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "36",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "36",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "36"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "37",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "37",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "37"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "38",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "38",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "38"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "39",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "39",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "39"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "4",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "4",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "4"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "40",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "40",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "40"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "41",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "41",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "41"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "42",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "42",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "42"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "43",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "43",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "43"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "44",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "44",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "44"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "45",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "45",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "45"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "46",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "46",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "46"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "47",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "47",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "47"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "48",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "48",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "48"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "49",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "49",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "49"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "5",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "5",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "5"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "50",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "50",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "50"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "51",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "51",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "51"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "52",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "52",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "52"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "53",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "53",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "53"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "54",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "54",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "54"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "55",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "55",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "55"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "56",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "56",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "56"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "57",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "57",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "57"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "58",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "58",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "58"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "59",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "59",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "59"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "6",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "6",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "6"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "60",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "60",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "60"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "61",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "61",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "61"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "62",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "62",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "62"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "63",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "63",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "63"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "64",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "64",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "64"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "65",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "65",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "65"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "66",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "66",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "66"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "67",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "67",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "67"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "68",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "68",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "68"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "69",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "69",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "69"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "7",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "7",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "7"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "70",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "70",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "70"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "71",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "71",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "71"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "72",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "72",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "72"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "73",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "73",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "73"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "74",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "74",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "74"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "75",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "75",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "75"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "76",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "76",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "76"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "77",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "77",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "77"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "78",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "78",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "78"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "79",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "79",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "79"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "8",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "8",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "8"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "80",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "80",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "80"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "81",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "81",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "81"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "82",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "82",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "82"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "83",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "83",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "83"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "84",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "84",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "84"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "85",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "85",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "85"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "86",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "86",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "86"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "87",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "87",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "87"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "88",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "88",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "88"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "89",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "89",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "89"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "9",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "9",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "9"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "90",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "90",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "90"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "91",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "91",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "91"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "92",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "92",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "92"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "93",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "93",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "93"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "94",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "94",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "94"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "95",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "95",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "95"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "96",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "96",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "96"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "97",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "97",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "97"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "98",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "98",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "98"
+            },
+            {
+                "__name__": "table.dimension.value",
+                "_func_key": "99",
+                "date": null,
+                "end": null,
+                "end_date": null,
+                "name": "99",
+                "sequence": null,
+                "start": null,
+                "start_date": null,
+                "type": "dimension1",
+                "value": "99"
+            }
+        ],
+        "dimension2": [],
+        "dimension3": [],
+        "dimension4": [],
+        "dimension_kind1": "value",
+        "dimension_kind2": null,
+        "dimension_kind3": null,
+        "dimension_kind4": null,
+        "dimension_name1": "Age",
+        "dimension_name2": "",
+        "dimension_name3": "",
+        "dimension_name4": "",
+        "dimension_order1": "alpha",
+        "dimension_order2": "alpha",
+        "dimension_order3": "alpha",
+        "dimension_order4": "alpha",
+        "name": "TD-88-90",
+        "number_of_digits": 5,
+        "tags": [],
+        "type_": "numeric"
+    }
+]

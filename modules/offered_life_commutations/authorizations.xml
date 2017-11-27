@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="offered">
+        <record model="ir.model.access" id="access_commutation_manager_read_only">
+            <field name="model" search="[('model', '=', 'table.commutation_manager')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_commutation_manager_group_admin">
+            <field name="model" search="[('model', '=', 'table.commutation_manager')]"/>
+            <field name="group" ref="offered.group_product_manage"/>}
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_commutation_manager_line_read_only">
+            <field name="model" search="[('model', '=', 'table.commutation_manager.line')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_commutation_manager_line_group_admin">
+            <field name="model" search="[('model', '=', 'table.commutation_manager.line')]"/>
+            <field name="group" ref="offered.group_product_manage"/>}
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

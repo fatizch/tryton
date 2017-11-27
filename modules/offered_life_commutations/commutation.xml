@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ####################### -->
+        <!-- # Commutation Manager # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="table_commutation_manager_view_form">
+            <field name="model">table.commutation_manager</field>
+            <field name="type">form</field>
+            <field name="name">table_commutation_manager_form</field>
+        </record>
+        <!-- Entry point -->
+        <record model="ir.action.act_window" id="act_open_commutation_manager">
+            <field name="name">Commutation Manager</field>
+            <field name="res_model">table.commutation_manager</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_open_commutation_manager_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="table_commutation_manager_view_form"/>
+            <field name="act_window" ref="act_open_commutation_manager"/>
+        </record>
+        <menuitem parent="rule_engine.menu_rule_engine" sequence="15" action="act_open_commutation_manager" id="menu_open_commutation_manager"/>
+        <!-- ############################ -->
+        <!-- # Commutation Manager Line # -->
+        <!-- ############################ -->
+        <record model="ir.ui.view" id="commutation_manager_line_view_list">
+            <field name="model">table.commutation_manager.line</field>
+            <field name="type">tree</field>
+            <field name="name">commutation_manager_line_list</field>
+        </record>
+    </data>
+</tryton>

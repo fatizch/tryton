@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="commutation">
+            <field name="translated_technical_name">commutation</field>
+            <field name="description">Commutation</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_life_commutation</field>
+            <field name="long_description">Permet d'accéder aux données des tables de commutation
+d'assurance-vie. Le "type" correspond à la colonne technique à charger :
+dx, qx, px, vx, Dx, Cx, Mx, Nx, Rx, Ax, A"x, ax</field>
+            <field name="fct_args">Code table de mortalite, taux technique, nombre d'echeances par an, age, type</field>
+            <field name="parent" ref="rule_engine.dossier_outils"/>
+        </record>
+    </data>
+</tryton>

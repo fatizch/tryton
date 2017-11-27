@@ -1,0 +1,131 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:table.commutation_manager,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:table.commutation_manager,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:table.commutation_manager,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:table.commutation_manager,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:table.commutation_manager,lines:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "field:table.commutation_manager,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:table.commutation_manager,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:table.commutation_manager,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:table.commutation_manager,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:table.commutation_manager.line,base_table:"
+msgid "Base table"
+msgstr "Table de base"
+
+msgctxt "field:table.commutation_manager.line,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:table.commutation_manager.line,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:table.commutation_manager.line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:table.commutation_manager.line,data_table:"
+msgid "Target table"
+msgstr "Table générée"
+
+msgctxt "field:table.commutation_manager.line,frequency:"
+msgid "Frequency"
+msgstr "Fréquence"
+
+msgctxt "field:table.commutation_manager.line,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:table.commutation_manager.line,manager:"
+msgid "Manager"
+msgstr "Gestionnaire"
+
+msgctxt "field:table.commutation_manager.line,rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:table.commutation_manager.line,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:table.commutation_manager.line,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:table.commutation_manager.line,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:table.commutation_manager.line,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:ir.action,name:act_open_commutation_manager"
+msgid "Commutation Manager"
+msgstr "Gestionnaires de commutations"
+
+msgctxt "model:ir.ui.menu,name:menu_open_commutation_manager"
+msgid "Commutation Manager"
+msgstr "Gestionnaire de commutation"
+
+msgctxt "model:table.commutation_manager,name:"
+msgid "Commutation Manager"
+msgstr "Gestionnaire de Commutation"
+
+msgctxt "model:table.commutation_manager.line,name:"
+msgid "Commutation Manager Line"
+msgstr "Commutation"
+
+msgctxt "selection:table.commutation_manager.line,frequency:"
+msgid "Half yearly"
+msgstr "Semestrielle"
+
+msgctxt "selection:table.commutation_manager.line,frequency:"
+msgid "Monthly"
+msgstr "Mensuelle"
+
+msgctxt "selection:table.commutation_manager.line,frequency:"
+msgid "Quarterly"
+msgstr "Trimestrielle"
+
+msgctxt "selection:table.commutation_manager.line,frequency:"
+msgid "Yearly"
+msgstr "Annuelle"
+
+msgctxt "view:table.commutation_manager.line:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:table.commutation_manager.line:"
+msgid "Refresh"
+msgstr "Rafraîchir"
