@@ -6,7 +6,6 @@ from decimal import Decimal
 from proteus import Model, Wizard
 from trytond.tests.tools import activate_modules
 
-from trytond.modules.party_cog.tests.tools import create_party_person
 from trytond.modules.contract.tests.tools import add_quote_number_generator
 from trytond.modules.currency.tests.tools import get_currency
 from trytond.modules.country_cog.tests.tools import create_country

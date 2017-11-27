@@ -1,4 +1,5 @@
-* Bug#7621 Do not display indemnification beneficiary share warning if the delegation for the insurer doesn't contain calculate or pay indemnification
+* BUG#7642 Error when creating a loss with an end_date inside a deductible period
+* BUG#7621 Do not display indemnification beneficiary share warning if the delegation for the insurer doesn't contain calculate or pay indemnification
 
 Version 1.14 - 2017-11-09
 * BUG#7179 Claim invoices payment lines are now properly reconciled when beneficiaries had overdue

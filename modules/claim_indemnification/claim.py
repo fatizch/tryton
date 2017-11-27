@@ -402,8 +402,8 @@ class ClaimService:
                         start_date=self.loss.start_date,
                         end_date=self.loss.end_date
                         )
+                    indemnification.beneficiary = beneficiary[0][0]
                     indemnification.init_from_service(self)
-                    indemnification.beneficiary = beneficiary[0]
                     indemnification.save()
                     Indemnification.calculate([indemnification])
                     self.indemnifications = [indemnification]
