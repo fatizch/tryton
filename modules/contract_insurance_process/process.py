@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, utils
@@ -48,18 +48,91 @@ class ContractSubscribeFindProcess(ProcessStart):
 
     __name__ = 'contract.subscribe.find_process'
 
-    effective_date = fields.Date('Effective Date', required=True)
+    start_date = fields.Date('Effective Date', required=True, states={
+            'readonly': Bool(Eval('start_date_readonly'))},
+        depends=['start_date_readonly'])
+    signature_date = fields.Date('Signature Date')
+    appliable_conditions_date = fields.Date('Appliable Conditions Date',
+        required=True, states={'readonly': ~Eval('free_conditions_date')},
+        depends=['free_conditions_date'])
     product = fields.Many2One('offered.product', 'Product', domain=[
             ['OR',
-                [('end_date', '>=', Eval('effective_date'))],
+                [('end_date', '>=', Eval('appliable_conditions_date'))],
                 [('end_date', '=', None)],
                 ],
             ['OR',
-                [('start_date', '<=', Eval('effective_date'))],
+                [('start_date', '<=', Eval('appliable_conditions_date'))],
                 [('start_date', '=', None)],
                 ]
-            ], depends=['effective_date'], required=True)
+            ], depends=['appliable_conditions_date'], required=True)
     party = fields.Many2One('party.party', 'Party', states={'invisible': True})
+    free_conditions_date = fields.Boolean('Free Conditions Date', readonly=True)
+    start_date_readonly = fields.Boolean('Start Date Is Read Only',
+        readonly=True)
+    errors = fields.Text("Errors", states={'invisible': ~Eval('errors')},
+        readonly=True)
+
+    @classmethod
+    def view_attributes(cls):
+        return super(ContractSubscribeFindProcess, cls).view_attributes() + [(
+                'group[@id="error_group"]',
+                'states',
+                {'invisible': ~Eval('errors')}
+                ),
+            ]
+
+    @classmethod
+    def default_free_conditions_date(cls):
+        configuration = Pool().get('offered.configuration').get_singleton()
+        return configuration.free_conditions_date if configuration else False
+
+    @fields.depends(methods=['product'])
+    def on_change_signature_date(self):
+        self.simulate_init()
+
+    @fields.depends(methods=['product'])
+    def on_change_start_date(self):
+        self.simulate_init()
+
+    @fields.depends(methods=['product'])
+    def on_change_appliable_conditions_date(self):
+        self.simulate_init()
+
+    @fields.depends('product', 'start_date', 'signature_date',
+        'appliable_conditions_date', 'free_conditions_date')
+    def on_change_product(self):
+        self.simulate_init()
+
+    def _fields_to_init(self):
+        return ('appliable_conditions_date', 'start_date',
+            'signature_date', 'product')
+
+    def format_errors(self, rule_engine_errors):
+        return '\n'.join(rule_engine_errors)
+
+    def unset_product(self):
+        self.product = None
+
+    def simulate_init(self):
+        self.start_date_readonly = False
+        Contract = Pool().get('contract')
+        simulated = Contract()
+        for f in self._fields_to_init():
+            setattr(simulated, f, getattr(self, f))
+        rule_res = simulated.update_from_data_rule(return_full=True)
+        if rule_res and rule_res.errors:
+            self.unset_product()
+            self.errors = self.format_errors(rule_res.errors)
+            return rule_res
+        else:
+            self.errors = ''
+        simulated.init_from_baseline_rule()
+        for f in self._fields_to_init():
+            new = getattr(simulated, f)
+            setattr(self, f, new)
+        if rule_res and rule_res.result and 'start_date' in rule_res.result:
+            self.start_date_readonly = True
+        return rule_res
 
     @classmethod
     def build_process_domain(cls):
@@ -86,7 +159,7 @@ class ContractSubscribeFindProcess(ProcessStart):
         if Transaction().context.get('active_model') == 'party.party':
             return Transaction().context.get('active_id', None)
 
-    @fields.depends('effective_date', 'product')
+    @fields.depends('appliable_conditions_date', 'product')
     def on_change_with_good_process(self):
         return super(ContractSubscribeFindProcess,
             self).on_change_with_good_process()
@@ -112,8 +185,11 @@ class ContractSubscribe(ProcessFinder):
         if res:
             if process_param.party:
                 obj.subscriber = process_param.party
-            obj.init_from_product(process_param.product,
-                process_param.effective_date)
+            obj.start_date = process_param.start_date
+            obj.signature_date = process_param.signature_date
+            obj.appliable_conditions_date = \
+                process_param.appliable_conditions_date
+            obj.init_from_product(process_param.product)
         return res, errs
 
     def finalize_main_object(self, obj):

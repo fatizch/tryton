@@ -8,10 +8,13 @@ from trytond.modules.company.model import (CompanyMultiValueMixin,
     CompanyValueMixin)
 
 from trytond.modules.coog_core import fields, model
+from trytond.modules.rule_engine import get_rule_mixin
+from trytond.modules.rule_engine.rule_engine import RuleEngineResult
 
 __all__ = [
     'Product',
-    'ProductQuoteNumberSequence'
+    'ProductQuoteNumberSequence',
+    'ContractDataRule'
     ]
 __metaclass__ = PoolMeta
 
@@ -29,11 +32,47 @@ class Product(CompanyMultiValueMixin):
                 'required': Bool(Eval('context', {}).get('company')),
                 'invisible': ~Eval('context', {}).get('company'),
                 }))
+    contract_data_rule = fields.One2Many(
+        'contract.data.rule', 'product',
+        'Contract Data Rule', delete_missing=True, size=1)
+
+    @classmethod
+    def __setup__(cls):
+        super(Product, cls).__setup__()
+        cls._error_messages.update({
+                'data_rule_misconfigured': 'The field %(field)s on contracts '
+                'cannot be set by a data rule. Please fix the contract data '
+                'rule on product %(product)s',
+                })
 
     @classmethod
     def _export_light(cls):
         return (super(Product, cls)._export_light() |
             set(['quote_number_sequence']))
+
+    def update_contract_from_rule(self, contract, no_rule_errors,
+            **kwargs):
+        rule = self.contract_data_rule[0]
+        exec_context = {}
+        try:
+            contract.init_dict_for_rule_engine(exec_context)
+            res = rule.calculate_rule(exec_context, **kwargs)
+        except Exception as e:
+            if no_rule_errors:
+                return {}
+            else:
+                raise e
+        if isinstance(res, RuleEngineResult):
+            result = res.result
+        else:
+            result = res
+        auth_fields = rule._get_authorized_fields()
+        for k, v in result.items():
+            if k not in auth_fields:
+                self.raise_user_error('data_rule_misconfigured',
+                    {'field': k, 'product': self.name})
+            setattr(contract, k, v)
+        return res
 
 
 class ProductQuoteNumberSequence(model.CoogSQL, CompanyValueMixin):
@@ -65,3 +104,25 @@ class ProductQuoteNumberSequence(model.CoogSQL, CompanyValueMixin):
         migrate_property(
             'offered.product', field_names, cls, value_names,
             parent='product', fields=fields)
+
+
+class ContractDataRule(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoogSQL, model.CoogView):
+    'Contract Data Rule'
+    __name__ = 'contract.data.rule'
+
+    product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
+        required=True, select=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(ContractDataRule, cls).__setup__()
+        cls.rule.required = True
+        cls.rule.domain = [('type_', '=', 'contract_data')]
+        cls.rule.help = 'This rules defines how to initalize a new contract.' \
+            ' It should return a dictionnary whose keys are the fields to ' \
+            'update on the contract, and whose values are the new field values'
+
+    def _get_authorized_fields(self):
+        return ['start_date']

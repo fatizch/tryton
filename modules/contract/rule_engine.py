@@ -2,11 +2,13 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool, PoolMeta
 
+from trytond.modules.coog_core import fields
 from trytond.modules.rule_engine import check_args
 
 __metaclass__ = PoolMeta
 __all__ = [
     'RuleEngineRuntime',
+    'RuleEngine',
     ]
 
 
@@ -99,3 +101,18 @@ class RuleEngineRuntime:
     @check_args('contract')
     def _re_number_of_activation_periods(cls, args):
         return len(args['contract'].activation_history)
+
+
+class RuleEngine:
+    __name__ = 'rule_engine'
+
+    @classmethod
+    def __setup__(cls):
+        super(RuleEngine, cls).__setup__()
+        cls.type_.selection.append(('contract_data', 'Contract Data'))
+
+    @fields.depends('type_')
+    def on_change_with_result_type(self, name=None):
+        if self.type_ == 'contract_data':
+            return 'dict'
+        return super(RuleEngine, self).on_change_with_result_type(name)

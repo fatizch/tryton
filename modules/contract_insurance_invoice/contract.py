@@ -1187,8 +1187,8 @@ class Contract:
     def on_change_product(self):
         super(Contract, self).on_change_product()
 
-    def init_from_product(self, product, start_date=None, end_date=None):
-        super(Contract, self).init_from_product(product, start_date, end_date)
+    def init_from_product(self, product):
+        super(Contract, self).init_from_product(product)
         if not self.product or not self.product.billing_modes:
             return
         self.init_billing_information()

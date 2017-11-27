@@ -31,20 +31,27 @@ class ContractSubscribeFindProcess:
         super(ContractSubscribeFindProcess, cls).__setup__()
         cls.product.states['invisible'] = True
 
-    @fields.depends('distributor', 'effective_date')
+    @fields.depends('distributor', 'appliable_conditions_date')
     def on_change_with_authorized_commercial_products(self):
-        if self.distributor and self.effective_date is not None:
+        if self.distributor and self.appliable_conditions_date is not None:
             return [x.id for x in self.distributor.all_com_products
                 if (not x.start_date or
-                    (x.start_date <= self.effective_date)) and
-                (not x.end_date or (self.effective_date <= x.end_date))]
+                    (x.start_date <= self.appliable_conditions_date)) and
+                (not x.end_date or (
+                        self.appliable_conditions_date <= x.end_date))]
         else:
             return []
 
-    @fields.depends('commercial_product')
-    def on_change_with_product(self):
+    @fields.depends('commercial_product', methods=['product'])
+    def on_change_commercial_product(self):
         if self.commercial_product is not None:
-            return self.commercial_product.product.id
+            self.product = self.commercial_product.product.id
+            res = self.simulate_init()
+            if res and res.errors:
+                self.unset_product()
+        else:
+            self.start_date_readonly = False
+            self.product = None
 
     @fields.depends('commercial_product')
     def on_change_with_good_process(self):
@@ -52,6 +59,10 @@ class ContractSubscribeFindProcess:
             self.product = self.commercial_product.product
         return super(ContractSubscribeFindProcess,
             self).on_change_with_good_process()
+
+    def unset_product(self):
+        super(ContractSubscribeFindProcess, self).unset_product()
+        self.commercial_product = None
 
 
 class ContractSubscribe:

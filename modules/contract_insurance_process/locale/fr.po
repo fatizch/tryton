@@ -138,9 +138,17 @@ msgctxt "field:contract.option,status_selection:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:contract.subscribe.find_process,effective_date:"
-msgid "Effective Date"
-msgstr "Date d'effet"
+msgctxt "field:contract.subscribe.find_process,appliable_conditions_date:"
+msgid "Appliable Conditions Date"
+msgstr "Date de Conditions"
+
+msgctxt "field:contract.subscribe.find_process,errors:"
+msgid "Errors"
+msgstr "Erreurs"
+
+msgctxt "field:contract.subscribe.find_process,free_conditions_date:"
+msgid "Free Conditions Date"
+msgstr "Date de conditions libre"
 
 msgctxt "field:contract.subscribe.find_process,good_process:"
 msgid "Good Process"
@@ -161,6 +169,18 @@ msgstr "Tiers"
 msgctxt "field:contract.subscribe.find_process,product:"
 msgid "Product"
 msgstr "Produit"
+
+msgctxt "field:contract.subscribe.find_process,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
+msgctxt "field:contract.subscribe.find_process,start_date:"
+msgid "Effective Date"
+msgstr "Date d'effet"
+
+msgctxt "field:contract.subscribe.find_process,start_date_readonly:"
+msgid "Start Date Is Read Only"
+msgstr "La date d'effet est en lecture seule"
 
 msgctxt "field:process,display_steps_without_status:"
 msgid "Display Steps Without Status"

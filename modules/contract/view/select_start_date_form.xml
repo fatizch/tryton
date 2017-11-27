@@ -14,4 +14,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="former_appliable_conditions_date"/>
     <label name="new_appliable_conditions_date"/>
     <field name="new_appliable_conditions_date"/>
+    <newline/>
+    <field name="free_conditions_date" invisible="1"/>
+    <newline/>
 </form>

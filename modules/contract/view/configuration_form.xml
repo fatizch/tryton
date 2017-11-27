@@ -5,5 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form" position="inside">
         <label name="default_quote_number_sequence"/>
         <field name="default_quote_number_sequence"/>
+        <label name="free_conditions_date"/>
+        <field name="free_conditions_date"/>
     </xpath>
 </data>

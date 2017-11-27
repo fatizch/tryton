@@ -32,6 +32,7 @@ def register():
     Pool.register(
         offered.Product,
         offered.ProductQuoteNumberSequence,
+        offered.ContractDataRule,
         contract.ContractSubStatus,
         configuration.Configuration,
         configuration.ConfigurationDefaultQuoteNumberSequence,
@@ -44,6 +45,7 @@ def register():
         contract.ContractSelectStartDate,
         service.ContractService,
         rule_engine.RuleEngineRuntime,
+        rule_engine.RuleEngine,
         party.Party,
         global_search.GlobalSearchSet,
         wizard.PackageSelection,

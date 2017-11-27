@@ -324,8 +324,6 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                         )},
                 })
         cls._error_messages.update({
-                'inactive_product_at_date':
-                'Product %s is inactive at date %s',
                 'activation_period_overlaps': 'Activation Periods "%(first)s"'
                 ' and "%(second)s" overlap.',
                 'no_quote_sequence': 'No quote sequence defined',
@@ -765,9 +763,9 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         return values
 
     @fields.depends('product', 'options', 'start_date', 'extra_datas',
-        'appliable_conditions_date')
+        'signature_date', 'appliable_conditions_date')
     def on_change_product(self):
-        self.init_from_product(self.product, self.start_date)
+        self.init_from_product(self.product)
         if self.product:
             self.subscriber_kind = ('person' if self.product.subscriber_kind in
                 ['all', 'person'] else 'company')
@@ -776,10 +774,6 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             self.subscriber_kind = 'all'
             self.product_subscriber_kind = 'all'
         self.extra_data_values = self.extra_data_values
-
-    @fields.depends('start_date')
-    def on_change_start_date(self):
-        self.appliable_conditions_date = self.start_date
 
     @fields.depends('subscriber')
     def on_change_with_current_policy_owner(self, name=None):
@@ -972,9 +966,6 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                 return True
         return False
 
-    def set_appliable_conditions_date(self, new_date):
-        self.appliable_conditions_date = new_date
-
     def get_rec_name(self, name):
         if self.status in ['quote', 'declined']:
             return self.quote_number
@@ -1019,7 +1010,8 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     def init_contract(self, product, party, contract_dict=None):
         self.subscriber = party
         at_date = contract_dict.get('start_date', utils.today())
-        self.init_from_product(product, at_date)
+        self.start_date = at_date
+        self.init_from_product(product)
 
     def before_activate(self):
         self.calculate()
@@ -1094,28 +1086,45 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             cls.raise_user_error('invalid_format')
         return return_values
 
-    def init_from_product(self, product, start_date=None, end_date=None):
+    def update_from_data_rule(self, no_rule_errors=False, **kwargs):
+        """
+        no_rule_errors: no exception at all will be raised in rule execution
+        kwargs: they are forwarded to the calculate method of rule_mixin
+        """
+        return self._update_from_data_rule(no_rule_errors, **kwargs)
+
+    @fields.depends('product', 'start_date', 'signature_date',
+        'appliable_conditions_date')
+    def _update_from_data_rule(self, no_rule_errors, **kwargs):
+        # JMO: we decorate the inner function to not mess with code inspection
+        # used for example in step process
+        if not self.product or not self.product.contract_data_rule:
+            return
+        return self.product.update_contract_from_rule(self, no_rule_errors,
+            **kwargs)
+
+    def init_from_baseline_rule(self):
+        if not self.start_date and self.signature_date:
+            self.start_date = self.signature_date
+        configuration = Pool().get('offered.configuration').get_singleton()
+        if not self.appliable_conditions_date or not configuration \
+                or not configuration.free_conditions_date:
+            self.appliable_conditions_date = self.start_date
+
+    def init_from_product(self, product):
         if product is None:
             self.options = []
             self.extra_datas = []
             self.extra_data_values = {}
             return
 
-        if not start_date:
-            start_date = utils.today()
-        if utils.is_effective_at_date(product, start_date):
-            self.product = product
-            start_date = (max(product.start_date, start_date)
-                if start_date else product.start_date)
-            self.start_date = start_date
-            self.appliable_conditions_date = self.start_date
-            self.status = 'quote'
-            self.company = product.company
-            self.init_options()
-            self.init_extra_data()
-        else:
-            self.raise_user_error('inactive_product_at_date',
-                (product.name, start_date))
+        self.product = product
+        self.update_from_data_rule()
+        self.init_from_baseline_rule()
+        self.status = 'quote'
+        self.company = product.company
+        self.init_options()
+        self.init_extra_data()
 
     def init_extra_data(self):
         if not self.product:
@@ -2362,11 +2371,15 @@ class ContractSelectStartDate(model.CoogView):
     former_appliable_conditions_date = fields.Date(
         'Former appliable conditions date', readonly=True)
     new_appliable_conditions_date = fields.Date(
-        'New appliable conditions date', required=True)
+        'New appliable conditions date', required=True,
+        states={'readonly': ~Eval('free_conditions_date')},
+        depends=['free_conditions_date'])
+    free_conditions_date = fields.Boolean('Free Conditions Date', readonly=True)
 
-    @fields.depends('new_start_date')
+    @fields.depends('new_start_date', 'free_conditions_date')
     def on_change_new_start_date(self):
-        self.new_appliable_conditions_date = self.new_start_date
+        if not self.free_conditions_date:
+            self.new_appliable_conditions_date = self.new_start_date
 
 
 class ContractChangeStartDate(Wizard):
@@ -2388,11 +2401,14 @@ class ContractChangeStartDate(Wizard):
         Contract = pool.get('contract')
         active_id = Transaction().context.get('active_id')
         selected_contract = Contract(active_id)
+        configuration = pool.get('offered.configuration').get_singleton()
         return {
             'contract': selected_contract.id,
             'former_start_date': selected_contract.start_date,
             'former_appliable_conditions_date':
             selected_contract.appliable_conditions_date,
+            'free_conditions_date': True if configuration and
+            configuration.free_conditions_date else False,
             }
 
     def transition_apply(self):
@@ -2401,9 +2417,8 @@ class ContractChangeStartDate(Wizard):
         Contract = pool.get('contract')
         active_id = Transaction().context.get('active_id')
         selected_contract = Contract(active_id)
-        selected_contract.set_appliable_conditions_date(
-                self.change_date.new_appliable_conditions_date
-                )
+        selected_contract.appliable_conditions_date = \
+            self.change_date.new_appliable_conditions_date
         selected_contract.start_date = new_date
         selected_contract.save()
         return 'end'

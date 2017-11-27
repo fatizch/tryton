@@ -6,4 +6,9 @@ this repository contains the full copyright notices and license terms. -->
         <label name="quote_number_sequence"/>
         <field name="quote_number_sequence"/>
     </xpath>
+    <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
+        <page id="contract_data" string="Contract Data">
+            <field name="contract_data_rule" mode="form"/>
+        </page>
+    </xpath>
 </data>

@@ -28,6 +28,10 @@ class Configuration(CompanyMultiValueMixin):
                 ('code', '=', 'quote'),
                 ('company', '=', Eval('context', {}).get('company', -1)),
                 ]))
+    free_conditions_date = fields.Boolean('Free Conditions Date', help='If '
+        'checked, users will be able to freely enter the conditions date of a '
+        'contract subscription. If not, the conditions date will be the '
+        'effective date')
 
     @classmethod
     def default_default_quote_number_sequence(cls, **kwargs):

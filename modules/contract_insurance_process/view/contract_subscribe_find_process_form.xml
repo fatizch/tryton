@@ -3,13 +3,24 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/label[@name='good_process']" position="before">
-        <label name="effective_date"/>
-        <field name="effective_date"/>
+        <label name="signature_date"/>
+        <field name="signature_date"/>
+        <label name="appliable_conditions_date"/>
+        <field name="appliable_conditions_date"/>
+        <label name="start_date"/>
+        <field name="start_date"/>
         <newline/>
         <label name="product"/>
         <field name="product" colspan="3"/>
         <newline/>
         <label name="party"/>
         <field name="party" colspan="3"/>
+        <field name="free_conditions_date"  invisible="1"/>
+        <field name="start_date_readonly" invisible="1"/>
+        <newline/>
+        <group id="error_group" colspan="4">
+            <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
+            <field name="errors"/>
+        </group>
     </xpath>
 </data>

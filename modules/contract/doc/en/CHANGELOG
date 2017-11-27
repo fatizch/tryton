@@ -1,3 +1,4 @@
+* FEA#7567 The contract dates can now be initialized by a business rule on the product
 * FEA#7557 Hide option end_date field if unset
 * BUG#1824 Clean versioned data when changing a contract's end date
 
