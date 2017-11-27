@@ -62,7 +62,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="group" ref="offered.group_offered_admin"/>
         </record>
         <record model="endorsement.configuration" id="endorsement_configuration">
-            <field name="endorsement_set_number_sequence" ref="sequence_number"/>
+            <field name="endorsement_set_sequence" ref="sequence_number"/>
         </record>
         <record model="ir.ui.view" id="configuration_view_form">
             <field name="model">endorsement.configuration</field>

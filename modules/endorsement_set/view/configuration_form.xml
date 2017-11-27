@@ -4,7 +4,7 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='endorsement_number_sequence']" position="after">
         <newline/>
-        <label name="endorsement_set_number_sequence"/>
-        <field name="endorsement_set_number_sequence"/>
+        <label name="endorsement_set_sequence"/>
+        <field name="endorsement_set_sequence"/>
     </xpath>
 </data>

@@ -30,17 +30,17 @@ class Configuration(CompanyMultiValueMixin):
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.configuration'
 
-    endorsement_set_number_sequence = fields.MultiValue(
+    endorsement_set_sequence = fields.MultiValue(
         fields.Many2One('ir.sequence', 'Endorsement Set Number Sequence'))
 
 
 class ConfigurationEndorsementSetSequence(model.CoogSQL, CompanyValueMixin):
     'Endorsement Configuration Endorsement Set Sequence'
-    __name__ = 'endorsement.configuration.endorsement_set_number_sequence'
+    __name__ = 'endorsement.configuration.endorsement_set_sequence'
 
     configuration = fields.Many2One('account.configuration', 'Configuration',
         ondelete='CASCADE', select=True)
-    endorsement_set_number_sequence = fields.Many2One('ir.sequence',
+    endorsement_set_sequence = fields.Many2One('ir.sequence',
         'Endorsement Set Number Sequence')
 
     @classmethod
@@ -56,8 +56,8 @@ class ConfigurationEndorsementSetSequence(model.CoogSQL, CompanyValueMixin):
 
     @classmethod
     def _migrate_property(cls, field_names, value_names, fields):
-        field_names.append('endorsement_set_number_sequence')
-        value_names.append('endorsement_set_number_sequence')
+        field_names.append('endorsement_set_sequence')
+        value_names.append('endorsement_set_sequence')
         migrate_property(
             'endorsement.configuration', field_names, cls, value_names,
             parent='configuration', fields=fields)
@@ -129,13 +129,13 @@ class EndorsementSet(model.CoogSQL, model.CoogView, Printable):
         Configuration = pool.get('endorsement.configuration')
 
         config = Configuration(1)
-        if not config.endorsement_set_number_sequence:
+        if not config.endorsement_set_sequence:
             cls.raise_user_error('no_sequence_defined')
         vlist = [v.copy() for v in vlist]
         for values in vlist:
             if not values.get('number'):
                 values['number'] = Sequence.get_id(
-                    config.endorsement_set_number_sequence.id)
+                    config.endorsement_set_sequence.id)
         return super(EndorsementSet, cls).create(vlist)
 
     @classmethod
