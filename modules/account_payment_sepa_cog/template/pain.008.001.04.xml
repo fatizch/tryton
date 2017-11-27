@@ -60,7 +60,7 @@ this repository contains the full copyright notices and license terms. -->
             <!-- PmtTpInf -->
             <!-- ReqdColltnDt -->
             <InitgPty>
-                ${PartyIdentification(group.company.party)}
+                ${PartyIdentification(group.journal.sepa_creditor or group.company.party)}
             </InitgPty>
             <!-- FwdgAgt -->
         </GrpHdr>
@@ -73,7 +73,7 @@ this repository contains the full copyright notices and license terms. -->
             <!-- PmtTpInf -->
             <ReqdColltnDt>${payment.date.isoformat()}</ReqdColltnDt>
             <Cdtr>
-                ${PartyIdentification(group.company.party)}
+                ${PartyIdentification(group.journal.sepa_creditor or group.company.party)}
             </Cdtr>
             <CdtrAcct>
                 ${Account(group.journal.sepa_bank_account_number)}

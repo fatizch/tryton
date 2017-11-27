@@ -1,3 +1,4 @@
+* FEA#7663 Possibilité de choisir un créditeur SEPA autre que la compagnie sur le journal de paiement
 * BUG#7569 Correction d'un plantage du batch de rejet SEPA
 
 Version 1.14 - 2017-11-09

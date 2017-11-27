@@ -685,6 +685,10 @@ class Journal:
         'Last Receivable Payment SEPA Creation',
         states={'invisible': Eval('process_method') != 'sepa'},
         depends=['process_method'])
+    sepa_creditor = fields.Many2One('party.party', 'Sepa Creditor',
+        states={'invisible': Eval('process_method') != 'sepa'},
+        depends=['process_method'], help='Is used for the Creditor section '
+        'of receivable SEPA messages')
 
     def get_next_possible_payment_date(self, line, day):
         if self.process_method != 'sepa':

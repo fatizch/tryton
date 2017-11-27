@@ -2,6 +2,11 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
+    <xpath expr="/form/label[@name='sepa_bank_account_number']" position="before">
+        <newline/>
+        <label name="sepa_creditor"/>
+        <field name="sepa_creditor"/>
+    </xpath>
     <xpath expr="/form/field[@name='sepa_receivable_flavor']" position="after">
         <newline/>
         <label name="last_sepa_receivable_payment_creation_date"/>

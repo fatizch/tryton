@@ -1,3 +1,4 @@
+* FEA#7663 Allow to set a SEPA creditor other than company on payment journal
 * BUG#7569 Fix crash of SEPA fail batch
 
 Version 1.14 - 2017-11-09

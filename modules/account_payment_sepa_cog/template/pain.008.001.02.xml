@@ -61,7 +61,7 @@ this repository contains the full copyright notices and license terms. -->
             </PmtTpInf>
             <ReqdColltnDt>${key['date'].isoformat()}</ReqdColltnDt>
             <Cdtr>
-                ${PartyIdentification(group.company.party, id=False)}
+                ${PartyIdentification(group.journal.sepa_creditor or group.company.party, id=False)}
             </Cdtr>
             <CdtrAcct>
                 ${Account(group.journal.sepa_bank_account_number)}
@@ -75,7 +75,7 @@ this repository contains the full copyright notices and license terms. -->
             <!-- ChrgsAcct -->
             <!-- ChrgsAcctAgt -->
             <CdtrSchmeId>
-                ${PartyIdentification(group.company.party)}
+                ${PartyIdentification(group.journal.sepa_creditor or group.company.party)}
             </CdtrSchmeId>
             <DrctDbtTxInf py:for="payment in payments">
                 <PmtId>

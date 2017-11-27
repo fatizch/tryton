@@ -97,6 +97,10 @@ msgctxt ""
 msgid "Last Receivable Payment SEPA Creation"
 msgstr "Date de la dernière génération des prélèvements SEPA"
 
+msgctxt "field:account.payment.journal,sepa_creditor:"
+msgid "Sepa Creditor"
+msgstr "Créditeur Sepa"
+
 msgctxt "field:account.payment.journal.update.sepa,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -141,6 +145,10 @@ msgstr "Mandats SEPA"
 msgctxt "help:account.configuration,enable_amendment:"
 msgid "If checked, the sepa mandates may be amended rather than recreated"
 msgstr "Si coché, les mandats SEPA pourront être amendés plutôt que recréés"
+
+msgctxt "help:account.payment.journal,sepa_creditor:"
+msgid "Is used for the Creditor section of receivable SEPA messages"
+msgstr "Est utilisé pour la section Créditeur des messages SEPA à recevoir"
 
 msgctxt "model:account.payment.do_sepa_messages,name:"
 msgid "Payment Sepa Do Batch"
