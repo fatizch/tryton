@@ -3,6 +3,9 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='invoicing']/field[@name='fees']" position="before">
+        <label name="block_invoicing_until"/>
+        <field name="block_invoicing_until"/>
+        <newline/>
         <field name="billing_informations" colspan="4"/>
     </xpath>
 </data>

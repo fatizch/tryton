@@ -147,6 +147,10 @@ class CustomRrule(object):
 class Contract:
     __name__ = 'contract'
 
+    block_invoicing_until = fields.Date('Block Invoicing Until', readonly=True,
+        states={'invisible': ~Eval('block_invoicing_until')},
+        help='If set, no invoices will be generated before this date, and the '
+        'first invoice will start at this date')
     invoices = fields.One2Many('contract.invoice', 'contract', 'Invoices',
         delete_missing=True)
     due_invoices = fields.Function(
@@ -754,6 +758,11 @@ class Contract:
         return (invoice_rrule, until_date, billing_information)
 
     def get_invoice_periods(self, up_to_date, from_date=None):
+        if self.block_invoicing_until:
+            if from_date:
+                from_date = max(self.block_invoicing_until, from_date)
+            else:
+                from_date = self.block_invoicing_until
         contract_end_date = self.activation_history[-1].end_date
         if from_date:
             start = max(from_date, self.start_date)
@@ -2208,13 +2217,14 @@ class InvoiceContract(Wizard):
         Contract = pool.get('contract')
         contract = Contract(Transaction().context.get('active_ids')[0])
         if contract.last_invoice_end:
-            return {
-                'up_to_date': coog_date.add_day(contract.last_invoice_end, 1),
-                }
+            date = coog_date.add_day(contract.last_invoice_end, 1)
         else:
-            return {
-                'up_to_date': contract.start_date,
-                }
+            date = contract.initial_start_date
+        if contract.block_invoicing_until:
+            date = max(date, contract.block_invoicing_until)
+        return {
+            'up_to_date': date,
+            }
 
     def do_invoice(self, action):
         pool = Pool()
