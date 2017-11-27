@@ -71,7 +71,9 @@ coog_batch_exec() { # execute batch - [--check] <name> [args*]
     [ $ok -eq 0 ] && echo "$((_coog_batch_gen - _coog_batch_ko)) succeeded job(s) and $_coog_batch_ko failed job(s)" && return 0
     coog_batch_split "$1" || return $?
     coog_batch_join "$1"
+    local ok=$?
     echo "$((_coog_batch_gen-_coog_batch_ko)) succeeded job(s) and $_coog_batch_ko failed job(s)"
+    return $ok
 }
 
 coog_batch_replay() { # replay failed jobs - <name>
