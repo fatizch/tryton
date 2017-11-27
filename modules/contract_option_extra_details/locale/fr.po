@@ -1,0 +1,79 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:contract.option,current_extra_details:"
+msgid "Current details"
+msgstr "Détails à aujourd'hui"
+
+msgctxt "field:contract.option.version,extra_details:"
+msgid "Extra Details"
+msgstr "Détails"
+
+msgctxt "field:contract.option.version,extra_summary:"
+msgid "Extra Summary"
+msgstr "Détails"
+
+msgctxt "field:offered.option.description,extra_details_rule:"
+msgid "Extra Details Rule"
+msgstr "Règle de détails"
+
+msgctxt "field:offered.option.description.extra_detail_rule,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:offered.option.description.extra_detail_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.extra_detail_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.extra_detail_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.option.description.extra_detail_rule,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:offered.option.description.extra_detail_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.option.description.extra_detail_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:offered.option.description.extra_detail_rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de règle"
+
+msgctxt "field:offered.option.description.extra_detail_rule,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:offered.option.description.extra_detail_rule,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:offered.option.description.extra_detail_rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "help:offered.option.description.extra_detail_rule,rule:"
+msgid ""
+"When contract recalculation is triggered, this rule will be called, and its "
+"result (a dict) will be set on the options extra details"
+msgstr ""
+"Lors du recalcul du contrat, cette règle sera appelée, et son résultat (un "
+"dictionnaire) sera renseigné comme \"détails de garanties\""
+
+msgctxt "model:offered.option.description.extra_detail_rule,name:"
+msgid "Coverage Extra Details"
+msgstr "Détails de garantie"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Option Extra Detail"
+msgstr "Détails de garanties"

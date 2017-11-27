@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ################### -->
+        <!-- # Contract Option # -->
+        <!-- ################### -->
+        <record model="ir.ui.view" id="option_view_form">
+            <field name="model">contract.option</field>
+            <field name="inherit" ref="contract.option_view_form"/>
+            <field name="name">option_form</field>
+        </record>
+        <!-- ########################### -->
+        <!-- # Contract Option Version # -->
+        <!-- ########################### -->
+        <record model="ir.ui.view" id="option_version_view_form">
+            <field name="model">contract.option.version</field>
+            <field name="inherit" ref="contract.option_version_view_form"/>
+            <field name="name">option_version_form</field>
+        </record>
+        <record model="ir.ui.view" id="option_version_view_list">
+            <field name="model">contract.option.version</field>
+            <field name="inherit" ref="contract.option_version_view_list"/>
+            <field name="name">option_version_list</field>
+        </record>
+    </data>
+</tryton>
