@@ -39,15 +39,18 @@ class DocumentRule(
             ('day', 'Days')],
         'Reminder Unit', states={'required': Bool(Eval('reminder_delay'))},
         depends=['reminder_delay'])
+    reception_requires_attachment = fields.Boolean(
+        'Reception Requires Attachment', help='If checked, the attachments'
+        'will be required to mark the document request lines as "received"')
 
     @classmethod
     def __register__(cls, module_name):
         cursor = Transaction().connection.cursor()
+        TableHandler = backend.get('TableHandler')
+        document_rule = TableHandler(cls)
         super(DocumentRule, cls).__register__(module_name)
         # Migration from 1.3: Drop sub_document_rules column
-        TableHandler = backend.get('TableHandler')
         cursor = Transaction().connection.cursor()
-        document_rule = TableHandler(cls)
         if document_rule.column_exist('start_date'):
             document_rule.drop_column('start_date')
         if document_rule.column_exist('end_date'):
@@ -141,6 +144,11 @@ class Product:
         if not self.document_rules:
             return []
         return self.document_rules[0].calculate_required_documents(args)
+
+    @property
+    def reception_requires_attachment(self):
+        if self.document_rules:
+            return self.document_rules[0].reception_requires_attachment
 
 
 class OptionDescription:

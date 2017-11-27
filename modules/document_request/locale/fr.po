@@ -102,6 +102,10 @@ msgctxt "field:document.request,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:document.request.line,allow_force_receive:"
+msgid "Force Receive"
+msgstr "Reception forcée autorisée"
+
 msgctxt "field:document.request.line,attachment:"
 msgid "Attachment"
 msgstr "Pièce jointe"

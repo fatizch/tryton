@@ -42,7 +42,10 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     first_reception_date = fields.Date('First Reception Date')
     request_date = fields.Date('Request Date', states={'readonly': True})
     received = fields.Function(
-        fields.Boolean('Received', depends=['attachment', 'reception_date']),
+        fields.Boolean('Received',
+            states={'readonly': ~Eval('allow_force_receive')},
+            depends=['allow_force_receive'],
+            ),
         'on_change_with_received', setter='setter_void',
         searcher='search_received')
     request = fields.Many2One('document.request', 'Document Request',
@@ -66,6 +69,8 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
         states={'invisible': True})
     reminders_sent = fields.Integer('Reminders Sent')
     details = fields.Text('Details')
+    allow_force_receive = fields.Function(fields.Boolean('Force Receive'),
+        'get_allow_force_receive')
 
     _models_get_request_line_cache = Cache('models_get_request_line')
 
@@ -172,18 +177,25 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
         if self.attachment:
             self.attachment_name = self.attachment.name
             self.attachment_data = self.attachment.data
-            self.received = True
+            if self.attachment_data or self.allow_force_receive:
+                self.received = True
+            else:
+                self.received = False
         else:
             self.received = False
         self.on_change_received()
 
-    @fields.depends('reception_date')
+    @fields.depends('reception_date', 'for_object', 'attachment_data',
+        'allow_force_receive')
     def on_change_with_received(self, name=None):
-        return bool(self.reception_date)
+        return bool(self.reception_date) and (self.attachment_data or
+            self.allow_force_receive)
 
-    @fields.depends('received', 'reception_date', 'first_reception_date')
+    @fields.depends('received', 'reception_date', 'first_reception_date',
+        'allow_force_receive')
     def on_change_received(self):
-        if self.received:
+        if self.received and (self.attachment_data or
+                self.allow_force_receive):
             if not self.reception_date:
                 self.reception_date = utils.today()
             if not self.first_reception_date:
@@ -191,8 +203,12 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
         else:
             self.reception_date = None
 
-    @fields.depends('reception_date')
+    @fields.depends('reception_date', 'attachment_data',
+        'allow_force_receive')
     def on_change_with_reception_date(self, name=None):
+        if (not self.attachment_data and not
+                self.allow_force_receive):
+            return None
         return self.reception_date if self.reception_date else utils.today()
 
     def get_rec_name(self, name):
@@ -275,6 +291,19 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
                 for x in sublist]
         cls.update_reminder(document_lines, treatment_date,
             increment=not force_remind)
+
+    def attachment_not_required(self):
+        '''
+        Returns a boolean which define whether the "received" field on document
+        request line can be set manually.
+        This is allowed by default unless the configuration related to the
+        document request does not allow it.
+        '''
+        # Default behavior: Allow force receive
+        return True
+
+    def get_allow_force_receive(self, name=None):
+        return self.attachment_not_required()
 
 
 class DocumentRequest(Printable, model.CoogSQL, model.CoogView):

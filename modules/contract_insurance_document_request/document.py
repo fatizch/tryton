@@ -63,6 +63,12 @@ class DocumentRequestLine:
         return super(DocumentRequestLine, cls).for_object_models() + \
             ['contract']
 
+    def attachment_not_required(self):
+        if self.contract:
+            return not self.contract.product.reception_requires_attachment
+        return super(DocumentRequestLine,
+            self).get_for_object_attachment_required()
+
 
 class DocumentRequest:
     __metaclass__ = PoolMeta

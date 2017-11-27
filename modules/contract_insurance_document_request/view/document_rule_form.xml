@@ -12,4 +12,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="rule"/>
     <newline/>
     <field name="rule_extra_data" no_command="1" colspan="2"/>
+    <newline/>
+    <label name="reception_requires_attachment"/>
+    <field name="reception_requires_attachment"/>
 </form>

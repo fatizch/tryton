@@ -1,3 +1,5 @@
+* FEA#7638 Add configuration to disable manual document line request reception
+
 Version 1.14 - 2017-11-09
 * BUG#7314 Filter model for on object reference on document request line
 * FEA#6408 Add new global entry point for pending document request

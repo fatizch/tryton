@@ -26,4 +26,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="attachment" colspan="4"/>
     <field name="attachment_data"/>
     <field name="matching_attachments" colspan="6"/>
+    <field name="allow_force_receive" invisible="1"/>
 </form>

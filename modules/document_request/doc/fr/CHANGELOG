@@ -1,3 +1,5 @@
+* FEA#7638 Ajout de la possibilitée de bloquer la reception manuelle de ligne de demande de document
+
 Version 1.14 - 2017-11-09
 * BUG#7314 Filtrer les modèles disponibles sur l'objet de la demande de document 
 * FEA#6408 Nouveau point d'entrée global montrant les demandes de document en cours
