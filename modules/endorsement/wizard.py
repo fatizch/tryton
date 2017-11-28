@@ -2224,9 +2224,10 @@ class StartEndorsement(Wizard):
         self.select_endorsement.init_dict(context_, action='start')
         res = definition.start_rule[0].calculate_rule(context_,
             raise_errors=True)
-        if res is not True:
+        manager = ServerContext().get('error_manager', None)
+        if (res is not True and (not manager or not manager._errors)):
             self.raise_user_error('creation_not_allowed',
-                definition.start_rule[0].rule.name, definition.name)
+                (definition.start_rule[0].rule.name, definition.name))
 
     def check_before_start(self):
         self.check_start_rule()
