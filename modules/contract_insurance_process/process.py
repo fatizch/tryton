@@ -86,15 +86,18 @@ class ContractSubscribeFindProcess(ProcessStart):
         configuration = Pool().get('offered.configuration').get_singleton()
         return configuration.free_conditions_date if configuration else False
 
-    @fields.depends(methods=['product'])
+    @fields.depends('product', 'start_date', 'signature_date',
+        'appliable_conditions_date', 'free_conditions_date')
     def on_change_signature_date(self):
         self.simulate_init()
 
-    @fields.depends(methods=['product'])
+    @fields.depends('product', 'start_date', 'signature_date',
+        'appliable_conditions_date', 'free_conditions_date')
     def on_change_start_date(self):
         self.simulate_init()
 
-    @fields.depends(methods=['product'])
+    @fields.depends('product', 'start_date', 'signature_date',
+        'appliable_conditions_date', 'free_conditions_date')
     def on_change_appliable_conditions_date(self):
         self.simulate_init()
 
