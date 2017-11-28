@@ -8,10 +8,10 @@ this repository contains the full copyright notices and license terms. -->
     <field name="endorsement_definition" widget="selection"/>
     <field name="endorsement_definition_candidates" invisible="1"/>
     <newline/>
-    <label name="effective_date"/>
-    <field name="effective_date"/>
     <label name="signature_date"/>
     <field name="signature_date"/>
+    <label name="effective_date"/>
+    <field name="effective_date"/>
     <newline/>
     <label name="contract"/>
     <field name="contract"/>
