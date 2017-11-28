@@ -1,4 +1,5 @@
-* BUG #7587 Fix the encoder / decoder for the persistant context wizards
+* OTH#0000 Never crash when searching for a translation
+* BUG#7587 Fix the encoder / decoder for the persistant context wizards
 
 Version 1.14 - 2017-11-09
 * OTH#0000 No need to decode empty dict values in version_getter

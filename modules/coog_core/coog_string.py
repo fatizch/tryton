@@ -128,10 +128,10 @@ def translate(model, var_name, src, ttype, lang=None):
     Translation = Pool().get('ir.translation')
     language = lang.code if lang else Transaction().language
     target = '%s%s' % (model.__name__, ',%s' % var_name if var_name else '')
-    res = Translation.get_source(target, ttype, language, src)
-    if not res:
+    try:
+        return Translation.get_source(target, ttype, language, src)
+    except:
         return src
-    return res
 
 
 def translate_bool(value, lang=None):
