@@ -1,3 +1,4 @@
+# FEA#7665 Permettre l'utilisation de la date de début et de fin d'une ligne de commission dans le moteur de règle (cela est utile lorsque des dates de calcul sont définies dans le plan de commissionnement)
 * BUG#7514 Restauration de la relation 'commission' à partir de contrat/quittance
 
 Version 1.14 - 2017-11-09

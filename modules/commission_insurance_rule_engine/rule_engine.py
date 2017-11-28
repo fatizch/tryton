@@ -39,6 +39,16 @@ class RuleEngineRuntime:
         if args['invoice_line']:
             return args['invoice_line'].coverage_end
 
+    @classmethod
+    @check_args('commission_start_date')
+    def _re_commission_start_date(cls, args):
+        return args['commission_start_date']
+
+    @classmethod
+    @check_args('commission_end_date')
+    def _re_commission_end_date(cls, args):
+        return args['commission_end_date']
+
 
 class RuleEngine:
     __name__ = 'rule_engine'

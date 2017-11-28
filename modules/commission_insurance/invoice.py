@@ -128,6 +128,8 @@ class InvoiceLine:
                         'coverage': option.coverage,
                         'option': option,
                         'nb_years': delta.years,
+                        'commission_start_date': pattern['date_start'],
+                        'commission_end_date': pattern['date_end'],
                         'plan': plan,
                         'invoice_line': self,
                         })

@@ -548,6 +548,10 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
     def get_context_formula(self, amount, product, pattern=None):
         context = super(Plan, self).get_context_formula(amount, product)
         context['names']['nb_years'] = (pattern or {}).get('nb_years', 0)
+        context['names']['commission_end_date'] = (pattern or {}).get(
+            'commission_end_date', 0)
+        context['names']['commission_start_date'] = (pattern or {}).get(
+            'commission_start_date', 0)
         context['names']['invoice_line'] = (pattern or {}).get('invoice_line',
             None)
         return context

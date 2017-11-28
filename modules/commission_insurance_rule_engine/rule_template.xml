@@ -9,7 +9,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="rule_engine" id="commission_escompte">
             <field name="name">Commission en escompte</field>
             <field name="short_name">commission_escompte</field>
-            <field name="algorithm">nb_annee = annees_entre(date_effet_initiale_contrat(), date_debut_ligne_quittance())
+            <field name="algorithm">nb_annee = annees_entre(date_effet_initiale_contrat(), date_debut_ligne_commission())
 if nb_annee == 0:
     return param_pourcentage_1ere_annee() * 0.01 * montant_ligne_quittance()
 elif nb_annee == 1:
