@@ -21,5 +21,28 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">contract,-1</field>
             <field name="action" ref="act_filter_commission"/>
         </record>
+        <record model="ir.action.act_window" id="act_commission_contract_relate_form">
+            <field name="name">Commissions</field>
+            <field name="res_model">commission</field>
+            <field name="domain" eval="[('commissioned_contract', '=', Eval('active_id'))]" pyson="1"/>
+            <field name="search_value" eval="[('amount', '!=', 0)]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_commission_contract_relate_keyword1">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_commission_contract_relate_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_commission_contract_domain_broker">
+            <field name="name">Broker</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain" eval="[('type_', '=', 'out')]" pyson="1"/>
+            <field name="act_window" ref="act_commission_contract_relate_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_commission_contract_domain_insurer">
+            <field name="name">Insurer</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[('type_', '=', 'in')]" pyson="1"/>
+            <field name="act_window" ref="act_commission_contract_relate_form"/>
+        </record>
     </data>
 </tryton>

@@ -121,7 +121,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- # Filter commission # -->
         <!-- ##################### -->
         <record model="ir.action.wizard" id="act_filter_commission">
-            <field name="name">Commissions</field>
+            <field name="name">Aggregated commissions</field>
             <field name="wiz_name">commission.filter_commission</field>
             <field name="model"></field>
         </record>

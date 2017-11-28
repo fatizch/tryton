@@ -176,17 +176,25 @@ class Commission:
 
     @classmethod
     def search_commissioned_contract(cls, name, clause):
-        return [('commissioned_option.parent_contract',) +
-            tuple(clause[1:])]
+        return ['OR',
+            [('commissioned_option.parent_contract',) +
+            tuple(clause[1:])],
+            [('origin.invoice.contract',) +
+            tuple(clause[1:]) + ('account.invoice.line',)],
+            ]
 
     def get_commissioned_subscriber(self, name):
-        if self.commissioned_option:
-            return self.commissioned_option.parent_contract.subscriber.id
+        if self.commissioned_contract:
+            return self.commissioned_contract.subscriber.id
 
     @classmethod
     def search_commissioned_subscriber(cls, name, clause):
-        return [('commissioned_option.parent_contract.subscriber',) +
-            tuple(clause[1:])]
+        return ['OR',
+            [('commissioned_option.parent_contract.subscriber',) +
+            tuple(clause[1:])],
+            [('origin.invoice.contract.subscriber',) +
+            tuple(clause[1:]) + ('account.invoice.line',)],
+            ]
 
     def get_party(self, name):
         return self.agent.party.id if self.agent else None

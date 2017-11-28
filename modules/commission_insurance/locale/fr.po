@@ -760,8 +760,8 @@ msgid "Commissions Synthesis"
 msgstr "Synthèse des commissions"
 
 msgctxt "model:ir.action,name:act_filter_commission"
-msgid "Commissions"
-msgstr "Commissions"
+msgid "Aggregated commissions"
+msgstr "Commissions agrégées"
 
 msgctxt "model:ir.action,name:act_invoice_broker_invoice_form"
 msgid "Broker Invoices"
@@ -770,6 +770,14 @@ msgstr "Bordereaux courtiers"
 msgctxt "model:ir.action,name:act_invoice_insurer_invoice_form"
 msgid "Insurer Invoices"
 msgstr "Bordereaux assureurs"
+
+msgctxt "model:ir.action.act_window.domain,name:act_commission_contract_domain_broker"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "model:ir.action.act_window.domain,name:act_commission_contract_domain_insurer"
+msgid "Insurer"
+msgstr "Assureur"
 
 msgctxt "model:ir.action.act_window.domain,name:act_commission_domain_broker"
 msgid "Broker"

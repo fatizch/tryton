@@ -73,7 +73,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ########### Commissions ########### -->
         <!-- ################################### -->
         <record model="ir.action.act_window" id="commission.act_commission_relate">
-            <field name="active" eval="False"/>
+            <field name="search_value" eval="[('amount', '!=', 0)]" pyson="1"/>
         </record>
         <record model="ir.action.act_window" id="commission.act_commission_from_relate">
             <field name="active" eval="False"/>

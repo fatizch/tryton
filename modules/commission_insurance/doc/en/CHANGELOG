@@ -1,3 +1,5 @@
+* BUG#7514 Restore commission relate from contract/invoice
+
 Version 1.14 - 2017-11-09
 * FEA#7243 Enhance broker and insurer commission invoice views to remove unused or misleading fields
 * BUG#7295 Commission fields should not be modifiable by a user
