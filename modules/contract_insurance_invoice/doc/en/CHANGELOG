@@ -1,3 +1,4 @@
+* OTH#0000 Fix contract invoice searcher following 4b8f11179
 * FEA#7640 Block contract invoicing before a given date
 * BUG#7535 Add missing authorizations on invoice taxes for the contract management group
 

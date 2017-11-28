@@ -227,10 +227,10 @@ class Invoice:
             condition=(contract_invoice.invoice == invoice.id))
 
         if not isinstance(value, list):
-            value = cls.contract.sql_format(value)
+            value = getattr(cls, name).sql_format(value)
         if value != []:
             query = query_table.select(invoice.id,
-                where=Operator(contract_invoice.contract, value))
+                where=Operator(getattr(contract_invoice, name), value))
         else:
             query = []
 
