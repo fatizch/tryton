@@ -129,7 +129,7 @@ def translate(model, var_name, src, ttype, lang=None):
     language = lang.code if lang else Transaction().language
     target = '%s%s' % (model.__name__, ',%s' % var_name if var_name else '')
     try:
-        return Translation.get_source(target, ttype, language, src)
+        return Translation.get_source(target, ttype, language, src) or src
     except:
         return src
 
