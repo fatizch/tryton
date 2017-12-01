@@ -1,3 +1,4 @@
+* BUG#7682 Cancel invoices after reduction date
 * FEA#7616 Add a wizard which allows cancelling a contract's reduction
 * FEA#7601 Forbid endorsement cancellation on reduced contracts
 

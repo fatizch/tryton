@@ -91,6 +91,9 @@ class Contract:
         for contract in contracts:
             contract.apply_reduction(reduction_date)
         cls.save(contracts)
+        if utils.is_module_installed('contract_insurance_invoice'):
+            for contract in contracts:
+                contract.rebill(reduction_date)
         Event.notify_events(contracts, 'contract_reduction')
 
     @classmethod
@@ -178,7 +181,8 @@ class Contract:
                 contract._cancel_reduction_remove_date()
                 contract._cancel_options_reduction()
                 cls.save([contract])
-                contract.rebill(utils.today())
+                if utils.is_module_installed('contract_insurance_invoice'):
+                    contract.rebill(utils.today())
             Event.notify_events(contracts, 'contract_reduction_cancelling')
 
     def _cancel_reduction_remove_date(self):
