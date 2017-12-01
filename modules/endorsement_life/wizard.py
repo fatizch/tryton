@@ -129,13 +129,9 @@ class ManageBeneficiaries(EndorsementWizardStepMixin):
             patched_option = per_key[option.parent]
             old_option = Option(option.option_id) if option.option_id else None
 
-            if (getattr(old_option, 'beneficiary_clause', None) !=
-                    option.beneficiary_clause):
-                patched_option.beneficiary_clause = option.beneficiary_clause
-            if (getattr(old_option, 'customized_beneficiary_clause', None) !=
-                    option.customized_beneficiary_clause):
-                patched_option.customized_beneficiary_clause = \
-                    option.customized_beneficiary_clause
+            patched_option.beneficiary_clause = option.beneficiary_clause
+            patched_option.customized_beneficiary_clause = \
+                option.customized_beneficiary_clause
 
             old_beneficiaries = {x.id: x
                 for x in getattr(old_option, 'beneficiaries', [])}
@@ -193,6 +189,8 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
     display_name = fields.Char('Option', readonly=True)
     coverage = fields.Many2One('offered.option.description', 'Coverage',
         readonly=True)
+    beneficiary_clause_customizable = fields.Boolean(
+        'Beneficiary Clause Customizable', readonly=True)
     beneficiary_clause = fields.Many2One('clause', 'Beneficiary Clause',
         states={'required': ~Eval('customized_beneficiary_clause')},
         domain=[('coverages', '=', Eval('coverage'))],
@@ -201,17 +199,19 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
         'Customized Beneficiary Clause',
         states={
             'required': ~Eval('beneficiary_clause'),
-            }, depends=['beneficiary_clause'],
+            'readonly': ~Eval('beneficiary_clause_customizable'),
+            }, depends=['beneficiary_clause',
+            'beneficiary_clause_customizable'],
         )
     beneficiaries = fields.One2Many(
         'contract.manage_beneficiaries.beneficiary', None, 'Beneficiaries')
 
     @fields.depends('beneficiary_clause', 'customized_beneficiary_clause')
-    def on_change_with_customized_beneficiary_clause(self):
-        if (self.beneficiary_clause and
-                self.customized_beneficiary_clause == ''):
-            return self.beneficiary_clause.content
-        return self.customized_beneficiary_clause
+    def on_change_beneficiary_clause(self):
+        self.customized_beneficiary_clause = self.beneficiary_clause.content \
+            if self.beneficiary_clause else ''
+        self.beneficiary_clause_customizable = bool(self.beneficiary_clause and
+            self.beneficiary_clause.customizable)
 
     @fields.depends('beneficiaries', 'option_id')
     def on_change_beneficiaries(self):
@@ -238,6 +238,8 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
         displayer.coverage = option.coverage
         displayer.beneficiary_clause = getattr(option, 'beneficiary_clause',
             None)
+        displayer.beneficiary_clause_customizable = displayer.beneficiary_clause and \
+            displayer.beneficiary_clause.customizable
         displayer.customized_beneficiary_clause = getattr(option,
             'customized_beneficiary_clause', '')
 

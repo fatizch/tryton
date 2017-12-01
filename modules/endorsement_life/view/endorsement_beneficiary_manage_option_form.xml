@@ -11,4 +11,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="beneficiaries" group="beneficiaries" mode="tree" yexpand="0"/>
         <field name="beneficiaries" group="beneficiaries" mode="form" expand_toolbar="0"/>
     </group>
+    <newline/>
+    <field name="beneficiary_clause_customizable" invisible="1"/>
+    <newline/>
 </form>
