@@ -1,3 +1,4 @@
+* FEA#7655 Amélioration de performances pour le batch de traiment des relances
 * BUG#6932 Conservation de la date d'échéance initiale si la procédure de relance se base sur la date de paiement
 
 Version 1.14 - 2017-11-09

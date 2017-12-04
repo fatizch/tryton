@@ -113,9 +113,6 @@ class Dunning:
             This method will filter to treat only the higher level for a
             contract
         '''
-        # JCA : If this is too long (in account.dunning.treat batch), maybe set
-        # a flag in the context to avoid the test (since it is already
-        # performed in the batch query.
         return super(Dunning, cls).process(
             [x for x in dunnings if x.is_contract_main])
 

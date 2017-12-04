@@ -1,3 +1,4 @@
+* FEA#7655 Improve performances of dunning treatment batch
 * BUG#6932 Keep initial maturity date if dunning procedure is based on payment date
 
 Version 1.14 - 2017-11-09

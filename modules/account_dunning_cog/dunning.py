@@ -6,7 +6,6 @@ from operator import attrgetter
 from itertools import groupby
 
 from trytond.model import Unique
-from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import fields, utils, export, coog_string
@@ -23,9 +22,7 @@ class Dunning(export.ExportImportMixin):
     __name__ = 'account.dunning'
     _func_key = 'id'
 
-    last_process_date = fields.Date('Last Process Date', states={
-            'invisible': Eval('state') == 'done',
-            })
+    last_process_date = fields.Date('Last Process Date', readonly=True)
     attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments',
         delete_missing=True)
 
@@ -62,7 +59,7 @@ class Dunning(export.ExportImportMixin):
             ('party.dunning_allowed', '=', True)]
 
     @classmethod
-    def process(cls, dunnings):
+    def do_process(cls, dunnings):
         if not dunnings:
             return
         dunnings = [x for x in dunnings if x.state == 'draft']
@@ -78,6 +75,11 @@ class Dunning(export.ExportImportMixin):
                         [values, {'state': 'done', 'last_process_date': date}]
                         for date, values in update_dates.iteritems()], []))
         cls.notify_dunning_per_level(dunnings)
+
+    @classmethod
+    def process(cls, dunnings):
+        # carefull, only do_process is called in batch
+        cls.do_process(dunnings)
 
     def calculate_last_process_date(self):
         if not self.last_process_date or not self.level.days_from_previous_step:

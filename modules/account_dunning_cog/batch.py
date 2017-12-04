@@ -137,5 +137,5 @@ class DunningTreatmentBatch(batch.BatchRoot):
     @classmethod
     def execute(cls, objects, ids):
         Dunning = Pool().get('account.dunning')
-        Dunning.process(objects)
+        Dunning.do_process(objects)
         cls.logger.info('Dunnings Process')
