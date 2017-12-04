@@ -996,14 +996,12 @@ class Contract(CoogProcessFramework):
         # Create endorsements for rollback points BEFORE super
         pool = Pool()
         ContractEndorsement = pool.get('endorsement.contract')
-        endorsement = ContractEndorsement.new_rollback_point(contracts,
+        ContractEndorsement.new_rollback_point(contracts,
             at_date, 'automatic_termination_endorsement', {'values': {
                     'status': 'terminated',
                     'sub_status': termination_reason.id,
                     'end_date': at_date,
                     }})
-        if endorsement:
-            endorsement.save()
 
         return super(Contract, cls).terminate(contracts, at_date,
             termination_reason)
@@ -1013,21 +1011,18 @@ class Contract(CoogProcessFramework):
         # Create endorsements for rollback points BEFORE super
         pool = Pool()
         ContractEndorsement = pool.get('endorsement.contract')
-        endorsement = ContractEndorsement.new_rollback_point(contracts,
+        ContractEndorsement.new_rollback_point(contracts,
             contracts[0].start_date, 'automatic_void_endorsement',
             {'values': {
                     'status': 'void',
                     'sub_status': void_reason.id,
                     }})
-        if endorsement:
-            endorsement.save()
 
         super(Contract, cls).void(contracts, void_reason)
 
     @classmethod
     def reactivate(cls, contracts):
         pool = Pool()
-        Endorsement = pool.get('endorsement')
         ContractEndorsement = pool.get('endorsement.contract')
         previous_dates = {contract.id: contract.end_date
             for contract in contracts}
@@ -1035,18 +1030,16 @@ class Contract(CoogProcessFramework):
         if ServerContext().get('no_reactivate_endorsement', False):
             return
         new_dates = {contract.id: contract.end_date for contract in contracts}
-        endorsements = []
         for dates, contract_group in groupby(contracts,
                 lambda x: (previous_dates[x.id], new_dates[x.id])):
-            endorsements.append(ContractEndorsement.new_rollback_point(
+            ContractEndorsement.new_rollback_point(
                     list(contract_group), coog_date.add_day(dates[0], 1),
                     'automatic_reactivation_endorsement',
                     {'values': {
                             'status': 'active',
                             'end_date': dates[1],
                             'sub_status': None,
-                            }}))
-        Endorsement.save([x for x in endorsements if x is not None])
+                            }})
 
     def init_dict_for_rule_engine(self, args):
         super(Contract, self).init_dict_for_rule_engine(args)
@@ -2107,7 +2100,6 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
     def new_rollback_point(cls, contracts, at_date, definition,
             init_dict=None):
         pool = Pool()
-        cursor = Transaction().connection.cursor()
         Endorsement = pool.get('endorsement')
         Configuration = pool.get('offered.configuration')
         ContractEndorsement = pool.get('endorsement.contract')
@@ -2115,23 +2107,23 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             definition = Configuration.get_auto_definition(definition)
             if not definition:
                 return
-        init_dict = init_dict or {}
-        endorsement = Endorsement()
-        contract_endorsements = []
+        user = Transaction().user
+        endorsements = []
         for contract in contracts:
-            contract_endorsements.append(ContractEndorsement(
-                    contract=contract, applied_on=datetime.datetime.now(),
-                    **init_dict))
-        table_ = endorsement.__table__()
-        current_timestamp, = cursor.execute(*table_.select(CurrentTimestamp()))
-        endorsement.contract_endorsements = contract_endorsements
-        endorsement.effective_date = at_date
-        endorsement.state = 'applied'
-        endorsement.applied_by = Transaction().user
-        endorsement.rollback_date = current_timestamp
-        endorsement.application_date = datetime.datetime.now()
-        endorsement.definition = definition
-        return endorsement
+            init_dict = init_dict or {}
+            endorsement = Endorsement()
+            now = datetime.datetime.now()
+            contract_endorsements = [ContractEndorsement(contract=contract,
+                    applied_on=now, **init_dict)]
+            endorsement.contract_endorsements = contract_endorsements
+            endorsement.effective_date = at_date
+            endorsement.state = 'applied'
+            endorsement.applied_by = user
+            endorsement.rollback_date = now
+            endorsement.application_date = now
+            endorsement.definition = definition
+            endorsements.append(endorsement)
+        Endorsement.save(endorsements)
 
     @classmethod
     def check_contracts_status(cls, contracts):

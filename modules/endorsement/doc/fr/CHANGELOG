@@ -1,3 +1,4 @@
+* FEA#7655 Création d'un avenant par contrat pour la résiliation, résiliation sans effet, réactivation
 * FEA#7629 Ajout de la date de signature sur les avenants
 * BUG#7600 Erreur lors de l'application d'un avenant de résiliation après un renouvellement
 * FEA#7547 Ajout de données d'avenant au moteur de règle

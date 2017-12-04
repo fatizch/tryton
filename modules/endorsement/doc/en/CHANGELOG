@@ -1,3 +1,4 @@
+* FEA#7655 Create one endorsement per contract in terminate, void, reactivate
 * FEA#7629 Add signature date on endorsements
 * BUG#7600 Fix problem related to the endorsement of contract termination made in the future
 * FEA#7547 Add endorsement related data to rule engine
