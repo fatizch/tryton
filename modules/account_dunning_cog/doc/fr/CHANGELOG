@@ -1,3 +1,5 @@
+* BUG#7674 Ne pas traiter une relance déjà traitée
+
 Version 1.14 - 2017-11-09
 * BUG#6871 Suppression du code de migration 1.4
 

@@ -63,6 +63,9 @@ class Dunning(export.ExportImportMixin):
 
     @classmethod
     def process(cls, dunnings):
+        if not dunnings:
+            return
+        dunnings = [x for x in dunnings if x.state == 'draft']
         cls.process_dunning_per_level(dunnings)
         update_dates = defaultdict(list)
         for dunning in dunnings:
