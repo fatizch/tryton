@@ -122,6 +122,7 @@ class Product:
         return lines
 
     def get_contract_dates(self, dates, contract):
+        dates.add(contract.initial_start_date)
         dates.add(contract.start_date)
 
     def get_option_dates(self, dates, option):
@@ -224,7 +225,7 @@ class OptionDescriptionPremiumRule(
             return False
         if isinstance(rated_instance, Option):
             return (rated_instance.status not in ['void', 'declined']) and (
-                (rated_instance.start_date or datetime.date.min) <=
+                (rated_instance.initial_start_date or datetime.date.min) <=
                 date <= (rated_instance.final_end_date or datetime.date.max))
         return True
 

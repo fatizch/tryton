@@ -1,3 +1,5 @@
+* BUG#7677 Wrong premium computation after a contract reactivation: premium before the last renewal are deleted 
+
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
 * FEA#0000 Add 'at given date' premium date rule type

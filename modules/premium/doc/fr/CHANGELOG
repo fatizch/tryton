@@ -1,3 +1,5 @@
+* BUG#7677 Erreur lors du recalcul des primes après une réactivation: les primes antérieures au dernier renouvellement sont supprimées
+
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout du type 'à une date donnée' aux règles de dates de calcul de primes
