@@ -79,13 +79,15 @@ class ShowAllInvoicesLine(model.CoogView):
     start = fields.Date('Start', readonly=True)
     end = fields.Date('End', readonly=True)
     amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
-        depends=['currency_digits'])
+        depends=['currency_digits'], readonly=True)
     tax_amount = fields.Numeric('Tax Amount',
-        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
+        readonly=True)
     fee = fields.Numeric('Fee', digits=(16, Eval('currency_digits', 2)),
-        depends=['currency_digits'])
+        depends=['currency_digits'], readonly=True)
     total_amount = fields.Numeric('Total Amount',
-        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
+        readonly=True)
     currency_digits = fields.Integer('Currency Digits', readonly=True)
     currency_symbol = fields.Char('Currency Symbol', readonly=True)
     details = fields.One2Many('contract.invoice.show_all.line', None,
