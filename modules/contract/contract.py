@@ -121,8 +121,9 @@ class ActivationHistory(model.CoogSQL, model.CoogView):
         return True
 
     def clean_before_reactivate(self):
-        self.termination_reason = None
-        self.end_date = None
+        if (self.contract.status != 'hold'):
+            self.termination_reason = None
+            self.end_date = None
 
     def get_rec_name(self, name):
         Date = Pool().get('ir.date')

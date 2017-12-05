@@ -1,3 +1,4 @@
+* BUG#7660 Ne pas modifier la raison et la date de fin de l'historique d'activation lors de la réactivation d'un contrat suspendu déjà renouvelé
 * BUG#7633 Possibilité de filtrer par date d'effet initiale pour retouver les contrats renoncés
 * FEA#7567 Les dates du contrats peuvent être initialisées par une règle métier défini sur le produit
 * FEA#7557 Masquer l'affichage du champs "date de fin" des garanties si vide
