@@ -1,3 +1,5 @@
+* FEA7681 Ajout de la date de début de gestion et de la date de fin de gestion aux sinistres
+
 Version 1.14 - 2017-11-09
 * FEA#6502 Ajout d'un paramétrage par défaut du comportement des sinistres lors de la résiliation au niveau d'un produit
 

@@ -67,7 +67,11 @@ class Indemnification:
                 'covered_element_rupture': 'The covered element '
                 '%(party_rec_name)s is in rupture for the contract '
                 '%(contract)s at %(date)s and the beneficiary should be the '
-                'covered element itself, not %(benef_rec_name)s'
+                'covered element itself, not %(benef_rec_name)s',
+                'dates_not_in_management': 'The indemnification period '
+                '(%(indemn_start)s - %(indemn_end)s) is not compatible with '
+                'the claim\'s management period (%(management_start)s - '
+                '%(management_end)s).',
                 })
 
     def get_possible_products(self, name):
@@ -118,17 +122,30 @@ class Indemnification:
                         'date': Date.date_as_string(
                             covered_element.contract_exit_date, lang),
                         'benef_rec_name': indemnification.beneficiary.rec_name})
-            if not indemnification.service:
-                continue
-            contract = indemnification.service.contract
-            if not contract or contract.status != 'terminated':
-                continue
-            if (contract.post_termination_claim_behaviour !=
-                    'stop_indemnisations'):
-                continue
-            if (contract.end_date > indemnification.start_date or
-                    contract.end_date > indemnification.end_date):
-                cls.append_functional_error('bad_dates', {
-                        'indemn_start': indemnification.start_date,
-                        'indemn_end': indemnification.end_date,
-                        'contract_end': contract.end_date})
+            if indemnification.service and indemnification.service.contract:
+                contract = indemnification.service.contract
+                if (contract.status == 'terminated' and
+                        contract.post_termination_claim_behaviour ==
+                        'stop_indemnisations' and
+                        contract.final_end_date < indemnification.end_date):
+                    cls.append_functional_error('bad_dates', {
+                            'indemn_start': indemnification.start_date,
+                            'indemn_end': indemnification.end_date,
+                            'contract_end': contract.end_date})
+            if indemnification.service and indemnification.service.claim \
+                    and indemnification.service.contract:
+                management_start = indemnification.service. \
+                    claim.management_start_date
+                management_end = indemnification.service. \
+                    claim.management_end_date
+                management_start_statement = management_start and \
+                    indemnification.start_date < management_start
+                management_end_statement = management_end and \
+                    indemnification.end_date > management_end
+                if management_start_statement or management_end_statement:
+                    cls.raise_user_warning('dates_not_in_management',
+                        'dates_not_in_management', {
+                            'indemn_start': indemnification.start_date,
+                            'indemn_end': indemnification.end_date,
+                            'management_start': management_start,
+                            'management_end': management_end})

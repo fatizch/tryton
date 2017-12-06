@@ -22,6 +22,8 @@ class Claim:
         ondelete='RESTRICT', domain=[
             ('party', '=', Eval('legal_entity'))
             ], depends=['legal_entity'])
+    management_start_date = fields.Date('Management Start Date')
+    management_end_date = fields.Date('Management End Date')
 
     def get_recipients(self):
         recipients = [self.legal_entity] if self.legal_entity else []

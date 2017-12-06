@@ -23,6 +23,14 @@ msgctxt "field:claim,legal_entity:"
 msgid "Legal Entity"
 msgstr "Société"
 
+msgctxt "field:claim,management_end_date:"
+msgid "Management End Date"
+msgstr "Date de fin de gestion"
+
+msgctxt "field:claim,management_start_date:"
+msgid "Management Start Date"
+msgstr "Date de début de gestion"
+
 msgctxt "field:contract,post_termination_claim_behaviour:"
 msgid "Post Termination Claim Behaviour"
 msgstr "Comportement des sinistres suite à résiliation"
@@ -34,15 +42,6 @@ msgstr "Date de début de la gestion complète"
 msgctxt "field:contract.option,previous_claims_management_rule:"
 msgid "Previous Claims Management Rule"
 msgstr "Règle de reprise de la gestion des prestations"
-
-msgctxt "field:endorsement.contract.terminate,is_group:"
-msgid "Is Group"
-msgstr "Est collectif"
-
-msgctxt ""
-"field:endorsement.contract.terminate,post_termination_claim_behaviour:"
-msgid "Post Termination Claim Behaviour"
-msgstr "Comportement des sinistres suite à résiliation"
 
 msgctxt "field:offered.product,default_termination_claim_behaviour:"
 msgid "Default Post Termination Claim Behaviour"
@@ -87,26 +86,6 @@ msgstr "Reprise au niveau atteint"
 msgctxt "selection:contract.option,previous_claims_management_rule:"
 msgid "No management"
 msgstr "Aucune reprise de gestion "
-
-msgctxt ""
-"selection:endorsement.contract.terminate,post_termination_claim_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt ""
-"selection:endorsement.contract.terminate,post_termination_claim_behaviour:"
-msgid "Lock Indemnifications"
-msgstr "Bloquer les prestations au niveau atteint"
-
-msgctxt ""
-"selection:endorsement.contract.terminate,post_termination_claim_behaviour:"
-msgid "Normal Indemnifications"
-msgstr "Continuer les indemnisations"
-
-msgctxt ""
-"selection:endorsement.contract.terminate,post_termination_claim_behaviour:"
-msgid "Stop Indemnifications"
-msgstr "Arrêter les indemnisations"
 
 msgctxt "selection:offered.product,default_termination_claim_behaviour:"
 msgid ""

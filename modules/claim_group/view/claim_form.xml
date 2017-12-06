@@ -8,4 +8,11 @@ this repository contains the full copyright notices and license terms. -->
         <label name="interlocutor"/>
         <field name="interlocutor"/>
     </xpath>
+    <xpath expr="/form/field[@name='declaration_date']" position="after">
+        <newline/>
+        <label name="management_start_date"/>
+        <field name="management_start_date"/>
+        <label name="management_end_date"/>
+        <field name="management_end_date"/>
+    </xpath>
 </data>
