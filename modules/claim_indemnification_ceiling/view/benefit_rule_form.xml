@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='indemnification_rule']" position="after">
+        <label name="indemnification_ceiling_rule"/>
+        <field name="indemnification_ceiling_rule"/>
+    </xpath>
+</data>

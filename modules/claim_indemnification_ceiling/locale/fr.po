@@ -1,0 +1,23 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:claim.service:"
+msgid ""
+"The total of indemnifications %(amount)s  for %(service)s is above ceiling "
+"%(ceiling)s."
+msgstr ""
+"Le total des indemnisations %(amount)s  pour la prestation %(service)s est "
+"au dessus du plafond %(ceiling)s."
+
+msgctxt "field:benefit.rule,indemnification_ceiling_rule:"
+msgid "Indemnification Ceiling Rule"
+msgstr "Règle de plafond d'indemnisation"
+
+msgctxt "field:benefit.rule,indemnification_ceiling_rule_extra_data:"
+msgid "Indemnification Ceiling Rule Extra Data"
+msgstr "Paramètres de règle de plafond d'indemnisation"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Indemnification Ceiling"
+msgstr "Plafond d'indemnisation"
