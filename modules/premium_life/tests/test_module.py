@@ -29,6 +29,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract = Mock()
         period = Mock()
         contract.start_date = datetime.date(2014, 03, 01)
+        contract.initial_start_date = datetime.date(2014, 03, 01)
         contract.end_date = datetime.date(2016, 12, 31)
         period.start_date = datetime.date(2014, 03, 01)
         period.end_date = datetime.date(2016, 12, 31)
