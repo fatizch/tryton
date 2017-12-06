@@ -1474,7 +1474,7 @@ msgstr "Importer le Fichier"
 
 msgctxt "model:ir.action,name:revision_blame"
 msgid "Diff Blame Revision"
-msgstr "Différence dé Révisions"
+msgstr "Différence de révisions"
 
 msgctxt "model:ir.action,name:translatable_language_apply_wizard"
 msgid "Set Translatable Languages"
