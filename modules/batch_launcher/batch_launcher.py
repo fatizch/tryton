@@ -35,18 +35,39 @@ class LaunchBatch(Wizard):
         logging.getLogger().warning(
             'Module shoud not be installed in production.')
 
+    @classmethod
+    def split_batch(cls, l, n):
+        assert n >= 0, 'Negative split size'
+        group = []
+        for ids in l:
+            # using list to group jobs (not tuple or dict)
+            if not isinstance(ids, list):
+                ids = [ids]
+            if n > 0 and len(group) + len(ids) > n:
+                if len(ids) > len(group):
+                    yield ids[:]
+                else:
+                    yield group
+                    group = ids[:]
+            else:
+                group.extend(ids)
+        if len(group) > 0:
+            yield group
+
     def transition_process(self):
         BatchModel = Pool().get(self.start.batch.model)
         for param in self.start.parameters:
             if param.code == 'treatment_date' and self.start.treatment_date:
-                param.value = str(self.start.treatment_date)
+                param.value = self.start.treatment_date
                 break
         self.check_required_params()
         extra_args = {p.code: p.value for p in self.start.parameters}
         ids = BatchModel.select_ids(**extra_args)
-        objects = BatchModel.convert_to_instances([x[0] for x in ids]) \
-            if ids else []
-        BatchModel.execute(objects, [x[0] for x in ids], **extra_args)
+        for sub_ids in self.split_batch(ids, extra_args.get('job_size') or 0):
+            sub_ids = list(sub_ids)
+            objects = BatchModel.convert_to_instances(sub_ids) \
+                if sub_ids else []
+            BatchModel.execute(objects, [x[0] for x in sub_ids], **extra_args)
         return 'end'
 
     def check_required_params(self):
@@ -88,6 +109,7 @@ class LaunchBatch(Wizard):
             'available_batches': [x.id for x in all_batches],
             'parameters': [],
             'loaded_parameters': loaded_parameters,
+            'treatment_date': None,
             }
 
     @classmethod
