@@ -9,7 +9,7 @@ __all__ = ['create_billing_mode']
 
 
 def create_billing_mode(frequency=None, payment_term_id=None,
-        direct_debit=False, user_context=False):
+        direct_debit=False, code=None, user_context=False):
     "Create billing mode"
     if user_context:
         switch_user('product_user')
@@ -25,7 +25,7 @@ def create_billing_mode(frequency=None, payment_term_id=None,
 
     billing_mode = BillingMode(
         name=frequency,
-        code=frequency,
+        code=code or frequency,
         frequency=frequency)
     billing_mode.allowed_payment_terms.append(payment_term)
     if direct_debit:

@@ -1,3 +1,5 @@
+* FEA#7662 Sepa Mandate is now a calculated field on invoices and on invoice lines to pay
+
 Version 1.14 - 2017-11-09
 * OTH#0000 Fix test on invoice cancelling
 * OTH#0000 Extract the check on reject fee craetion to allow a specific overwrite

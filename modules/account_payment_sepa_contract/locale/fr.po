@@ -27,28 +27,13 @@ msgctxt "field:account.invoice,sepa_mandate:"
 msgid "Sepa Mandate"
 msgstr "Mandat SEPA"
 
-msgctxt ""
-"field:account.payment.payment_information_update_sepa_mandate,allowed_sepa_mandates:"
-msgid "Allowed Sepa Mandates"
-msgstr "Mandats SEPA autorisés"
-
-msgctxt "field:account.payment.payment_information_update_sepa_mandate,id:"
-msgid "ID"
-msgstr "Identifiant"
-
-msgctxt ""
-"field:account.payment.payment_information_update_sepa_mandate,invoices_to_update:"
-msgid "Invoices To Update"
-msgstr "Quittances à mettre à jour"
-
-msgctxt "field:account.payment.payment_information_update_sepa_mandate,payer:"
-msgid "Payer"
-msgstr "Payeur"
-
-msgctxt ""
-"field:account.payment.payment_information_update_sepa_mandate,sepa_mandate:"
+msgctxt "field:account.move.line,sepa_mandate:"
 msgid "Sepa Mandate"
 msgstr "Mandat SEPA"
+
+msgctxt "field:account.move.line,bank_account:"
+msgid "Bank Account"
+msgstr "Compte bancaire"
 
 msgctxt "field:contract,payer:"
 msgid "Payer"
@@ -61,10 +46,6 @@ msgstr "Payeur"
 msgctxt "field:contract.billing_information,sepa_mandate:"
 msgid "Sepa Mandate"
 msgstr "Mandat SEPA"
-
-msgctxt "model:account.payment.payment_information_update_sepa_mandate,name:"
-msgid "Payment Information Update Sepa Mandate"
-msgstr "Informations de paiement: mise à jour de mandat SEPA"
 
 msgctxt "model:report.template,name:default_mandat_sepa_template"
 msgid "Letter of sepa mandat"

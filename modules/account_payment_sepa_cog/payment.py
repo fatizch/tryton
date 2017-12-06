@@ -9,7 +9,7 @@ from collections import namedtuple
 from dateutil.relativedelta import relativedelta
 from collections import defaultdict
 from sql.aggregate import Max
-from sql import Null
+from sql import Null, Literal
 from sql.conditionals import Case, Coalesce
 
 import genshi
@@ -148,20 +148,18 @@ class Mandate(model.CoogSQL, model.CoogView):
         payment = Payment.__table__()
         mandate = cls.__table__()
         cursor = Transaction().connection.cursor()
+        res = {x.id: 'RCUR' for x in mandates}
         sub_query = payment.join(mandate,
             condition=((mandate.id == payment.sepa_mandate) &
                 (payment.sepa_mandate.in_([x.id for x in mandates])))
             ).select(payment.sepa_mandate, mandate.type,
-                mandate.type.as_('mandate_type'),
-                group_by=[payment.sepa_mandate, mandate.type]
+                group_by=[payment.sepa_mandate, mandate.type],
+                where=mandate.type == 'one-off',
                 )
-
-        type_ = Case(
-            (sub_query.mandate_type == 'one-off', 'OOFF'),
-            else_='RCUR')
+        type_ = Literal('OOFF')
 
         cursor.execute(*sub_query.select(sub_query.sepa_mandate, type_))
-        res = dict(cursor.fetchall())
+        res.update(dict(cursor.fetchall()))
         return res
 
     # Overload sequence_type to prevent using 'FRST' type which is handled by

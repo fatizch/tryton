@@ -48,39 +48,6 @@ class Contract:
         for contract in contracts:
             contract.init_sepa_mandate()
 
-    @classmethod
-    def update_mandates_from_date(cls, contracts, date):
-        # Update sepa mandate on already generated invoices from a given start
-        # date. The basic idea is to modify existing validated or posted
-        # invoices for which there is a planned payment after the date.
-        Invoice = Pool().get('account.invoice')
-        update_data = {}
-        for contract in contracts:
-            value = utils.get_value_at_date(
-                contract.billing_informations, date).sepa_mandate
-            if value:
-                update_data[contract.id] = value
-        if not update_data:
-            return
-        clause = ['OR'] + [
-            [('contract', '=', contract), ('state', '=', 'posted'),
-                ('party', '=', mandate.party)]
-            for contract, mandate in update_data.items()]
-
-        invoices = Invoice.search(clause)
-        to_save = []
-        for invoice in invoices:
-            if not invoice.sepa_mandate:
-                continue
-            if invoice.state == 'posted' and max(
-                    [x.payment_date or x.maturity_date for x in
-                        invoice.lines_to_pay] or [datetime.date.min]) < date:
-                continue
-            invoice.sepa_mandate = update_data[invoice.contract.id]
-            to_save.append(invoice)
-        if to_save:
-            Invoice.save(to_save)
-
     def action_required_when_payments_failed(self):
         # when contract is void without due amount no need to process any
         # action following a payment failed

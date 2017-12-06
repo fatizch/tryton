@@ -1,0 +1,14 @@
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="move_line_view_form">
+            <field name="model">account.move.line</field>
+            <field name="inherit" ref="account.move_line_view_form"/>
+            <field name="name">move_line_form</field>
+        </record>
+        <record model="ir.ui.view" id="move_line_to_pay_view_list">
+            <field name="model">account.move.line</field>
+            <field name="inherit" ref="account_cog.move_line_to_pay_view_list"/>
+            <field name="name">move_line_to_pay_list</field>
+        </record>
+    </data>
+</tryton>

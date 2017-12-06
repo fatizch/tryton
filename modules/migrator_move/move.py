@@ -68,8 +68,6 @@ class MigratorInvoiceMoveLine(migrator.Migrator):
                     None, invoice.contract.contract_number))
                 continue
             direct_debit = billing_info.direct_debit
-            if direct_debit:
-                invoice.sepa_mandate = billing_info.sepa_mandate.id
 
             move_lines = invoice._get_move_line_invoice_line()
             move_lines += invoice._get_move_line_invoice_tax()
