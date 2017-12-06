@@ -153,7 +153,7 @@ class Contract:
             # When reducing, contracts should not be terminated
             cls.raise_user_warning('auto_reducing_%s' % ','.join(
                     [str(x.id) for x in to_reduce]), 'auto_reducing')
-            Contract.reduce(to_reduce, at_date)
+            cls.reduce(to_reduce, at_date)
         if to_terminate:
             super(Contract, cls).terminate(to_terminate, at_date,
                 termination_reason)

@@ -1,3 +1,4 @@
+* OTH#0000 Correction de l'appel à la méthode reduce dans la méthode terminate
 * BUG#7682 Annulation des quittances postérieures à la date de mise en réduction
 * FEA#7616 Ajout d'un assistant permettant l'annulation de la mise en réduction d'un contrat
 * FEA#7601 Interdiction de l'annulation d'avenant sur les contrats mis en réduction
