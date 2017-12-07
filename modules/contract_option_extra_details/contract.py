@@ -104,3 +104,7 @@ class ContractOptionVersion(WithExtraDetails):
     def __setup__(cls):
         super(ContractOptionVersion, cls).__setup__()
         cls.extra_details.readonly = True
+
+    @classmethod
+    def default_extra_details(cls):
+        return {}
