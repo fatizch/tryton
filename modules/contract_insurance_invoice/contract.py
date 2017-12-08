@@ -2041,11 +2041,13 @@ class Premium:
             return []
         if self.main_contract.product.taxes_included_in_premium:
             line_amount = Tax.reverse_compute(line_amount, self.taxes, start)
-            line_amount = line_amount.quantize(
-                Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1])
-        else:
+        if self._round_unit_price_to_currency():
             line_amount = self.main_contract.company.currency.round(
                 line_amount)
+        else:
+            # Round to maximum allowed precision
+            line_amount = line_amount.quantize(
+                Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1])
         return [InvoiceLine(
                 type='line',
                 description=self.get_description(),
@@ -2060,6 +2062,9 @@ class Premium:
                 coverage_end=end,
                 details=[InvoiceLineDetail.new_detail_from_premium(self)],
                 )]
+
+    def _round_unit_price_to_currency(self):
+        return not self.main_contract.product.taxes_included_in_premium
 
 
 class ContractInvoice(model.CoogSQL, model.CoogView):

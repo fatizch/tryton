@@ -1,3 +1,4 @@
+* OTH#0000 Facilitation de la surcharge des règles d'arrondi des lignes de quittance
 * OTH#0000 Correction du searcher de quittance de contrat suite au commit 4b8f11179
 * FEA#7640 Blocage du quittancement des contrats avant une date
 * BUG#7535 Ajout des autorisations sur les taxes de quittance pour le groupe de gestion des contrats
