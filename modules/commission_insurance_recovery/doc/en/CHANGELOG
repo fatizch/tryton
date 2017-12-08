@@ -1,3 +1,5 @@
+* BUG#7707 Do not query commission recoveries if not necessary
+
 Version 1.14 - 2017-11-09
 * BUG#7278 Fix wrong computation of sum_of_commission
 * BUG#6782 Fix non paid invoices filtering out in recovery
