@@ -1,3 +1,4 @@
+* FEA#7725 La séquence de mandat SEPA peut être configurée par produit
 * FEA#7662 Le mandat SEPA est désormais un champ calculé sur les quittances et sur les lignes à payer
 
 Version 1.14 - 2017-11-09

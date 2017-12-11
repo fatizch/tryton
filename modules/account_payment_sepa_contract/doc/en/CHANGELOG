@@ -1,3 +1,4 @@
+* FEA#7725 SEPA mandate sequence can be configured per product
 * FEA#7662 Sepa Mandate is now a calculated field on invoices and on invoice lines to pay
 
 Version 1.14 - 2017-11-09

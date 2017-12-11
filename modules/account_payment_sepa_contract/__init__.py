@@ -10,6 +10,7 @@ import invoice
 import move
 import payment
 import event
+import offered
 
 
 def register():
@@ -25,6 +26,7 @@ def register():
         payment.PaymentCreationStart,
         event.EventLog,
         payment.MergedPaymentsByContracts,
+        offered.Product,
         module='account_payment_sepa_contract', type_='model')
     Pool.register_post_init_hooks(
         migrate_1_8_add_payer_from_mandate,

@@ -105,12 +105,19 @@ class ContractBillingInformation:
             set(['sepa_mandate']))
 
     def new_mandate(self, type_, scheme, state):
-        Mandate = Pool().get('account.payment.sepa.mandate')
+        pool = Pool()
+        Sequence = pool.get('ir.sequence')
+        Mandate = pool.get('account.payment.sepa.mandate')
+        identification = None  # will be set at creation if None below
+        product_mandate_sequence = self.contract.product.sepa_mandate_sequence
+        if product_mandate_sequence:
+            identification = Sequence.get_id(product_mandate_sequence.id)
         return Mandate(
             party=self.contract.payer,
             account_number=self.direct_debit_account.numbers[0],
             type=type_,
             scheme=scheme,
+            identification=identification,
             signature_date=(self.contract.signature_date or
                 self.contract.start_date),
             company=self.contract.company,
