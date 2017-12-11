@@ -75,7 +75,12 @@ class PlanLines(
         if 'option' in context['names']:
             context['names']['option'].init_dict_for_rule_engine(args)
         if 'invoice_line' in context['names']:
-            args['date'] = context['names']['invoice_line'].coverage_start
+            # use the commission start date as date instead of invoice line
+            # date to handle commission split
+            if 'commission_start_date' in context['names']:
+                args['date'] = context['names']['commission_start_date']
+            else:
+                args['date'] = context['names']['invoice_line'].coverage_start
         return Decimal(self.calculate_rule(args))
 
     def check_formula(self):
