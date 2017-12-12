@@ -26,8 +26,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_billing_frequency</field>
-            <field name="long_description">Retourne le code de la fréquence de 
-facturation parmis les valeurs suivantes: 'once_per_contract', 'monthly', 
+            <field name="long_description">Retourne le code de la fréquence de
+facturation parmis les valeurs suivantes: 'once_per_contract', 'monthly',
 'quarterly', 'half_yearly', 'yearly'</field>
             <field name="parent" ref="dossier_quittancement"/>
         </record>
@@ -38,8 +38,8 @@ facturation parmis les valeurs suivantes: 'once_per_contract', 'monthly',
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_billing_frequency_string</field>
-            <field name="long_description">Retourne le nom de la fréquence 
-de facturation traduite. Les valeurs possibles sont 'Une fois par contrat', 
+            <field name="long_description">Retourne le nom de la fréquence
+de facturation traduite. Les valeurs possibles sont 'Une fois par contrat',
 'Mensuel', 'Trimestriel', 'Semestriel', 'Annuel'</field>
             <field name="parent" ref="dossier_quittancement"/>
         </record>
@@ -71,8 +71,18 @@ prélevé automatiquement</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_billing_is_once_per_contract</field>
-            <field name="long_description">Retourne vrai si le mode quittancement 
+            <field name="long_description">Retourne vrai si le mode quittancement
 est défini en prime unique</field>
+            <field name="parent" ref="dossier_quittancement"/>
+        </record>
+        <record model="rule_engine.function" id="blocage_du_quittancement">
+            <field name="translated_technical_name">block_invoicing_until</field>
+            <field name="description">Blocage du quittancement jusqu'au</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_block_invoicing_until</field>
+            <field name="long_description">Retourne la date éventuelle jusqu'à laquelle le quittancement est bloqué</field>
             <field name="parent" ref="dossier_quittancement"/>
         </record>
         <record model="rule_engine.function" id="billing_frequency_code">
@@ -82,8 +92,8 @@ est défini en prime unique</field>
             <field name="language" ref="ir.lang_en"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_billing_frequency</field>
-            <field name="long_description">Return the billing frequency code. 
-The value can be 'once_per_contract', 'monthly', 'quarterly', 'half_yearly', 
+            <field name="long_description">Return the billing frequency code.
+The value can be 'once_per_contract', 'monthly', 'quarterly', 'half_yearly',
 'yearly''</field>
             <field name="parent" ref="billing_folder"/>
         </record>
@@ -94,8 +104,8 @@ The value can be 'once_per_contract', 'monthly', 'quarterly', 'half_yearly',
             <field name="language" ref="ir.lang_en"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_billing_frequency_string</field>
-            <field name="long_description">Return the billing frequency code. 
-The value can be 'once_per_contract', 'monthly', 'quarterly', 'half_yearly', 
+            <field name="long_description">Return the billing frequency code.
+The value can be 'once_per_contract', 'monthly', 'quarterly', 'half_yearly',
 'yearly'</field>
             <field name="parent" ref="billing_folder"/>
         </record>
@@ -106,7 +116,7 @@ The value can be 'once_per_contract', 'monthly', 'quarterly', 'half_yearly',
             <field name="language" ref="ir.lang_en"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_direct_debit</field>
-            <field name="long_description">Return True if the billing mode of 
+            <field name="long_description">Return True if the billing mode of
 the contract is direct debit </field>
             <field name="parent" ref="billing_folder"/>
         </record>
@@ -117,7 +127,7 @@ the contract is direct debit </field>
             <field name="language" ref="ir.lang_en"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_direct_debit_day</field>
-            <field name="long_description">Return the day when the invoice is 
+            <field name="long_description">Return the day when the invoice is
 withdrawn</field>
             <field name="parent" ref="billing_folder"/>
         </record>
@@ -128,7 +138,7 @@ withdrawn</field>
             <field name="language" ref="ir.lang_en"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_billing_is_once_per_contract</field>
-            <field name="long_description">Return True is the billing mode is 
+            <field name="long_description">Return True is the billing mode is
 once per contract</field>
             <field name="parent" ref="billing_folder"/>
         </record>
@@ -140,8 +150,8 @@ once per contract</field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="fct_args">date</field>
             <field name="name">_re_get_option_paid_amount_at_date</field>
-            <field name="long_description">Retourne la somme des quittances 
-payées à aujourd'hui pour une garantie sur une période de couverture allant 
+            <field name="long_description">Retourne la somme des quittances
+payées à aujourd'hui pour une garantie sur une période de couverture allant
 jusqu'à la date passée en paramètre.</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
@@ -152,9 +162,19 @@ jusqu'à la date passée en paramètre.</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_last_paid_invoice_end</field>
-            <field name="long_description">Retourne la date de fin de la dernière 
+            <field name="long_description">Retourne la date de fin de la dernière
 quittance payée sur le contrat</field>
             <field name="parent" ref="dossier_quittancement"/>
+        </record>
+        <record model="rule_engine.function" id="block_invoicing_until">
+            <field name="translated_technical_name">block_invoicing_until</field>
+            <field name="description">Block Invoicing Until</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_en"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_block_invoicing_until</field>
+            <field name="long_description">Returns the date (if existing) until the invoicing is blocked</field>
+            <field name="parent" ref="billing_folder"/>
         </record>
     </data>
 </tryton>

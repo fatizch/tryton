@@ -66,3 +66,8 @@ class RuleEngineRuntime:
     @check_args('contract')
     def _re_last_paid_invoice_end(cls, args):
         return args['contract'].last_paid_invoice_end
+
+    @classmethod
+    @check_args('contract')
+    def _re_block_invoicing_until(cls, args):
+        return args['contract'].block_invoicing_until
