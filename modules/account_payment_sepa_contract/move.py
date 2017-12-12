@@ -75,5 +75,5 @@ class MoveLine:
             sepa_mandate = line.sepa_mandate
             if sepa_mandate:
                 bank_account_per_lines[line.id] = \
-                    sepa_mandate.account_number.account
+                    sepa_mandate.account_number.account.id
         return bank_account_per_lines

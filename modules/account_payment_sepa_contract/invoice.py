@@ -20,11 +20,11 @@ class Invoice:
 
     sepa_mandate = fields.Function(fields.Many2One(
             'account.payment.sepa.mandate', 'Sepa Mandate',
-            states={'invisible': ~Eval('sepa_mandate'),
-                }),
+        states={'invisible': ~Eval('sepa_mandate')}),
         'get_sepa_mandate')
     bank_account = fields.Function(
-        fields.Many2One('bank.account', 'Bank Account'),
+        fields.Many2One('bank.account', 'Bank Account',
+        states={'invisible': ~Eval('bank_account')}),
         'get_bank_account')
 
     @classmethod
