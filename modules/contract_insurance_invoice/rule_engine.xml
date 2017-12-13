@@ -27,8 +27,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_billing_frequency</field>
             <field name="long_description">Retourne le code de la fréquence de
-facturation parmis les valeurs suivantes: 'once_per_contract', 'monthly',
-'quarterly', 'half_yearly', 'yearly'</field>
+ facturation parmis les valeurs suivantes: 'once_per_contract', 'monthly',
+ 'quarterly', 'half_yearly', 'yearly'</field>
             <field name="parent" ref="dossier_quittancement"/>
         </record>
         <record model="rule_engine.function" id="frequence_quittancement_nom">
@@ -39,8 +39,8 @@ facturation parmis les valeurs suivantes: 'once_per_contract', 'monthly',
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_billing_frequency_string</field>
             <field name="long_description">Retourne le nom de la fréquence
-de facturation traduite. Les valeurs possibles sont 'Une fois par contrat',
-'Mensuel', 'Trimestriel', 'Semestriel', 'Annuel'</field>
+ de facturation traduite. Les valeurs possibles sont 'Une fois par contrat',
+ 'Mensuel', 'Trimestriel', 'Semestriel', 'Annuel'</field>
             <field name="parent" ref="dossier_quittancement"/>
         </record>
         <record model="rule_engine.function" id="prelevement_automatique">
@@ -51,7 +51,7 @@ de facturation traduite. Les valeurs possibles sont 'Une fois par contrat',
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_direct_debit</field>
             <field name="long_description">Retourne vrai si la quittance sera
-prélevé automatiquement</field>
+ prélevé automatiquement</field>
             <field name="parent" ref="dossier_quittancement"/>
         </record>
         <record model="rule_engine.function" id="jour_prelevement_automatique">
@@ -72,7 +72,7 @@ prélevé automatiquement</field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_billing_is_once_per_contract</field>
             <field name="long_description">Retourne vrai si le mode quittancement
-est défini en prime unique</field>
+ est défini en prime unique</field>
             <field name="parent" ref="dossier_quittancement"/>
         </record>
         <record model="rule_engine.function" id="blocage_du_quittancement">
@@ -93,8 +93,8 @@ est défini en prime unique</field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_billing_frequency</field>
             <field name="long_description">Return the billing frequency code.
-The value can be 'once_per_contract', 'monthly', 'quarterly', 'half_yearly',
-'yearly''</field>
+ The value can be 'once_per_contract', 'monthly', 'quarterly', 'half_yearly',
+ 'yearly''</field>
             <field name="parent" ref="billing_folder"/>
         </record>
         <record model="rule_engine.function" id="billing_frequency_name">
@@ -105,8 +105,8 @@ The value can be 'once_per_contract', 'monthly', 'quarterly', 'half_yearly',
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_billing_frequency_string</field>
             <field name="long_description">Return the billing frequency code.
-The value can be 'once_per_contract', 'monthly', 'quarterly', 'half_yearly',
-'yearly'</field>
+ The value can be 'once_per_contract', 'monthly', 'quarterly', 'half_yearly',
+ 'yearly'</field>
             <field name="parent" ref="billing_folder"/>
         </record>
         <record model="rule_engine.function" id="is_direct_debit">
@@ -117,7 +117,7 @@ The value can be 'once_per_contract', 'monthly', 'quarterly', 'half_yearly',
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_direct_debit</field>
             <field name="long_description">Return True if the billing mode of
-the contract is direct debit </field>
+ the contract is direct debit </field>
             <field name="parent" ref="billing_folder"/>
         </record>
         <record model="rule_engine.function" id="direct_debit_day">
@@ -128,7 +128,7 @@ the contract is direct debit </field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_direct_debit_day</field>
             <field name="long_description">Return the day when the invoice is
-withdrawn</field>
+ withdrawn</field>
             <field name="parent" ref="billing_folder"/>
         </record>
         <record model="rule_engine.function" id="once_per_contract">
@@ -139,7 +139,7 @@ withdrawn</field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_contract_billing_is_once_per_contract</field>
             <field name="long_description">Return True is the billing mode is
-once per contract</field>
+ once per contract</field>
             <field name="parent" ref="billing_folder"/>
         </record>
         <record model="rule_engine.function" id="option_paid_amount">
@@ -151,8 +151,8 @@ once per contract</field>
             <field name="fct_args">date</field>
             <field name="name">_re_get_option_paid_amount_at_date</field>
             <field name="long_description">Retourne la somme des quittances
-payées à aujourd'hui pour une garantie sur une période de couverture allant
-jusqu'à la date passée en paramètre.</field>
+ payées à aujourd'hui pour une garantie sur une période de couverture allant
+ jusqu'à la date passée en paramètre.</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
         <record model="rule_engine.function" id="last_paid_invoice_end">
@@ -163,7 +163,7 @@ jusqu'à la date passée en paramètre.</field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_last_paid_invoice_end</field>
             <field name="long_description">Retourne la date de fin de la dernière
-quittance payée sur le contrat</field>
+ quittance payée sur le contrat</field>
             <field name="parent" ref="dossier_quittancement"/>
         </record>
         <record model="rule_engine.function" id="block_invoicing_until">
