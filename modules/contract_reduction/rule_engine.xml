@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="date_mise_en_reduction">
+            <field name="translated_technical_name">date_de_reduction</field>
+            <field name="description">Date de la mise en réduction</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_contract_reduction_date</field>
+            <field name="long_description">La date de mise en réduction du contrat</field>
+            <field name="parent" ref="contract.te_contract"/>
+        </record>
+        <record model="rule_engine.function" id="valeur_de_reduction_de_la_garantie">
+            <field name="translated_technical_name">valeur_reduite</field>
+            <field name="description">Valeur de réduction</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_option_reduction_value</field>
+            <field name="long_description">La valeur de réduction de la garantie, 0 si non réduite</field>
+            <field name="parent" ref="offered_insurance.dossier_garantie"/>
+        </record>
+    </data>
+</tryton>

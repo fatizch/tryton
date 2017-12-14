@@ -14,6 +14,7 @@ def register():
     Pool.register(
         endorsement.Endorsement,
         rule_engine.RuleEngine,
+        rule_engine.RuleRuntime,
         offered.OptionDescription,
         offered.OptionDescriptionReductionRule,
         contract.Contract,

@@ -1,3 +1,4 @@
+* FEA#7777 Store reduction value to make sure it will never evolve
 * OTH#0000 Call reduce method properly in terminate method
 * BUG#7682 Cancel invoices after reduction date
 * FEA#7616 Add a wizard which allows cancelling a contract's reduction

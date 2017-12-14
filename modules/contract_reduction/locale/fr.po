@@ -76,6 +76,10 @@ msgctxt "field:contract,reduction_date:"
 msgid "Reduction Date"
 msgstr "Date de mise en réduction"
 
+msgctxt "field:contract.option,reduction_value:"
+msgid "Reduction Value"
+msgstr "Valeur réduite"
+
 msgctxt "field:contract.reduce.parameters,contract:"
 msgid "Contract"
 msgstr "Contrat"

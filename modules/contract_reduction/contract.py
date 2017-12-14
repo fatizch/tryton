@@ -197,6 +197,11 @@ class Option:
     __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
+    reduction_value = fields.Numeric('Reduction Value', states={
+            'readonly': True,
+            'invisible': ~Eval('reduction_value'),
+            })
+
     def reduction_allowed(self, reduction_date):
         if not self.parent_contract.can_reduce:
             return False
@@ -219,6 +224,8 @@ class Option:
         if not self.reduction_allowed(reduction_date):
             self.manual_end_date = reduction_date
             self.sub_status = reduce_status
+        else:
+            self.reduction_value = self.calculate_reduction(reduction_date)
 
     def calculate_reduction(self, reduction_date):
         data_dict = {}
@@ -229,6 +236,7 @@ class Option:
     def cancel_reduction(self):
         SubStatus = Pool().get('contract.sub_status')
         reduced_status = SubStatus.get_sub_status('contract_reduced')
+        self.reduction_value = None
         if self.sub_status != reduced_status:
             return
         self.manual_end_date = None
