@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
+
 from sql import Table, Literal
 from decimal import Decimal
 
@@ -8,7 +10,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Bool, Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.rule_engine import get_rule_mixin
 
 
@@ -33,8 +35,8 @@ class OptionDescription:
     def get_with_waiver_of_premium(self, name):
         return bool(self.waiver_premium_rule)
 
-    def init_waiver_line(self, line):
-        return self.waiver_premium_rule[0].init_waiver_line(line)
+    def init_waiver_line(self, line, waiver_option):
+        return self.waiver_premium_rule[0].init_waiver_line(line, waiver_option)
 
 
 class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
@@ -59,12 +61,14 @@ class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
     invoice_line_period_behaviour = fields.Selection([
             ('one_day_overlap', 'One Day Overlap'),
             ('total_overlap', 'Total Overlap'),
-            # TODO ('prorate', 'Prorate'),
+            ('proportion', 'Proportion'),
             ], 'Invoice Line Period Behaviour', help='Defines the behaviour '
             'between the invoice line period vs the waiver of premium period '
             'One Day Overlap allows a full waiver of premium if there is at '
             'least one day overlap, Total Overlap allows a waiver of premium '
-            'only if the whole invoice line period is within the waiver period'
+            'only if the whole invoice line period is within the waiver period,'
+            ' Proportion allows a waiver of premium proportional to the ratio '
+            'between the waiver period and the invoice line period'
             )
 
     @classmethod
@@ -139,10 +143,29 @@ class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
         return (self.account_for_waiver if self.account_for_waiver
             else self.coverage.insurer.party.account_payable)
 
-    def init_waiver_line(self, line):
+    def init_waiver_line(self, line, waiver_option):
+        InvoiceLine = Pool().get('account.invoice.line')
         line.taxes = [x.id for x in self.taxes]
         line.account = self.get_account_for_waiver_line()
-        line.unit_price *= -1 * self.rate
+        if self.invoice_line_period_behaviour == 'proportion':
+            assert line.details
+            premium = getattr(line.details[0], 'premium', None)
+            if not premium:
+                return line
+            line.unit_price = -1 * utils.get_prorated_amount_on_period(
+                max(line.coverage_start, waiver_option.start_date
+                    or datetime.date.min),
+                min(line.coverage_end, waiver_option.end_date
+                    or datetime.date.max),
+                frequency=premium.frequency, value=premium.amount,
+                sync_date=premium.main_contract.start_date,
+                interval_start=premium.start,
+                proportion=True, recursion=True
+                ) * self.rate
+            line.unit_price = line.unit_price.quantize(
+                Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1])
+        else:
+            line.unit_price *= -1 * self.rate
         line.description += ' - ' + self.raise_user_error(
             'waiver_line', raise_exception=False)
         return line

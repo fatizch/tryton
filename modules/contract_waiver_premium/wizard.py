@@ -115,10 +115,28 @@ class CreateWaiver(Wizard):
         ContractInvoice = pool.get('contract.invoice')
         contract_id = Transaction().context['active_id']
         self.create_waiver(contract_id)
-        to_reinvoice = ContractInvoice.search([('contract', '=', contract_id),
-                ('invoice.state', 'in', ['validated', 'posted', 'paid']),
-                ('start', '>=', self.choice.start_date),
-                ('start', '<=', self.choice.end_date or datetime.date.max)])
+        # handle case where choice start date falls in the middle
+        # of an invoicing period
+        invoice_term_including_start = False
+        for option in self.choice.options:
+            if option.coverage.waiver_premium_rule:
+                behaviour = option.coverage.waiver_premium_rule[0]. \
+                    invoice_line_period_behaviour
+                if behaviour in ['one_day_overlap', 'proportion']:
+                    invoice_term_including_start = True
+                    break
+        if invoice_term_including_start:
+            to_reinvoice = ContractInvoice.search([
+                    ('contract', '=', contract_id),
+                    ('invoice.state', 'in', ['validated', 'posted', 'paid']),
+                    ('end', '>=', self.choice.start_date),
+                    ('start', '<=', self.choice.end_date or datetime.date.max)])
+        else:
+            to_reinvoice = ContractInvoice.search([
+                    ('contract', '=', contract_id),
+                    ('invoice.state', 'in', ['validated', 'posted', 'paid']),
+                    ('start', '>=', self.choice.start_date),
+                    ('start', '<=', self.choice.end_date or datetime.date.max)])
         invoices = self._reinvoice(to_reinvoice)
         Contract = pool.get('contract')
         Contract(contract_id).reconcile()

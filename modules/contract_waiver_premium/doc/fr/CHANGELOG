@@ -1,3 +1,4 @@
+* FEA#7672 Ajout de la gestion du prorata sur les exonérations de primes. Lorsque ce comportement est selectionné, ce comportement permet de faire un prorata sur la fréquence de niveau inférieur afin d'obtenir une seule quittance avec le montant à payer. Par exemple, si la fréquence de quittancement est trimestrielle et que nous avons une quittance dont deux des trois mois sont exonérés, alors la quittance affichera le montant à payer pour un seul mois.
 * BUG#7643 La création automatique d'exonérations de primes n'est faite que pour les options qui possèdent une exonération de prime
 
 Version 1.14 - 2017-11-09

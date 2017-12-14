@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or
-from trytond.modules.coog_core import fields, model, utils
+from trytond.modules.coog_core import fields, model
 
 
 __metaclass__ = PoolMeta
@@ -68,16 +68,16 @@ class Contract:
                 option = line.details[0].premium.option
             if not option:
                 continue
-            waiver = option.get_waiver_for_invoice_line(line)
-            if not waiver:
+            waiver_option = option.get_waiver_option_for_invoice_line(line)
+            if not waiver_option:
                 continue
             waiver_line = InvoiceLine(**{x: getattr(line, x, None)
                     for x in line_fields})
             waiver_line.details = [
                 InvoiceLineDetail(**{x: getattr(line.details[0], x, None)
                         for x in line_detail_fields})]
-            waiver_line.details[0].waiver = waiver
-            option.coverage.init_waiver_line(waiver_line)
+            waiver_line.details[0].waiver = waiver_option
+            option.coverage.init_waiver_line(waiver_line, waiver_option)
             lines.append(waiver_line)
 
     @classmethod
@@ -147,19 +147,28 @@ class ContractOption:
         return self.coverage.with_waiver_of_premium
 
     def get_waiver_at_date(self, from_date, to_date):
-        waiver_option = utils.get_good_version_at_date(self, 'waivers',
-            at_date=from_date)
-        if not waiver_option:
+        waiver_option = None
+        overlap_waivers = []
+        for waiver in self.waivers:
+            if (not waiver.start_date or waiver.start_date <= to_date) and (
+                    not waiver.end_date or waiver.end_date >= from_date):
+                overlap_waivers.append(waiver)
+        if not overlap_waivers:
             return
+        assert len(overlap_waivers) == 1
+        waiver_option = overlap_waivers[0]
         behaviour = \
             self.coverage.waiver_premium_rule[0].invoice_line_period_behaviour
-        if behaviour == 'one_day_overlap':
+        assert behaviour in ['one_day_overlap', 'proportion', 'total_overlap']
+        if behaviour in ('one_day_overlap', 'proportion'):
             return waiver_option.waiver
-        elif (behaviour == 'total_overlap' and not waiver_option.end_date
-                or waiver_option.end_date >= to_date):
+        elif behaviour == 'total_overlap' and (not waiver_option.end_date
+                or waiver_option.end_date >= to_date) \
+                and (not waiver_option.start_date
+                or waiver_option.start_date <= from_date):
             return waiver_option.waiver
 
-    def get_waiver_for_invoice_line(self, line):
+    def get_waiver_option_for_invoice_line(self, line):
         return self.get_waiver_at_date(line.coverage_start, line.coverage_end)
 
     def calculate_automatic_premium_duration(self):
