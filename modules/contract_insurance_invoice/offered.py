@@ -199,6 +199,8 @@ class BillingMode(model.CoogSQL, model.CoogView):
                     bymonth = start.month
                 bymonth = [((bymonth - 1 + interval * x) % 12) + 1
                     for x in range(0, 12 / interval)]
+            elif bymonth is None:
+                bymonth = start.month
         elif self.frequency == 'monthly':
             freq = MONTHLY
             bymonth = None

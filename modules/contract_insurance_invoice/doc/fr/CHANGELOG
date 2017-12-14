@@ -1,3 +1,4 @@
+* BUG#7750 Correction du calcul des périodes de quittancements pour des périodicités annuelles non synchronisées
 * OTH#0000 Facilitation de la surcharge des règles d'arrondi des lignes de quittance
 * OTH#0000 Correction du searcher de quittance de contrat suite au commit 4b8f11179
 * FEA#7640 Blocage du quittancement des contrats avant une date
