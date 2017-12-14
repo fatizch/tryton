@@ -11,6 +11,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="report_engine.report_template_form"/>
             <field name="name">report_template_form</field>
         </record>
+        <!-- ############################### -->
+        <!-- # Document Creation - Succeed # -->
+        <!-- ############################### -->
+        <record model="ir.ui.view" id="document_create_flow_succeed_form">
+            <field name="model">report.create.flow_succeed_generated</field>
+            <field name="type">form</field>
+            <field name="name">report_create_flow_succeed_form</field>
+        </record>
         <!-- ##################### -->
         <!-- #   Flow Variable   # -->
         <!-- ##################### -->

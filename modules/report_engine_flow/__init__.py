@@ -10,6 +10,7 @@ def register():
         report_engine.ReportTemplate,
         report_engine.FlowVariable,
         report_engine.TemplateVariableRelation,
+        report_engine.ReportFlowSucceedGenerated,
         module='report_engine_flow', type_='model')
 
     Pool.register(

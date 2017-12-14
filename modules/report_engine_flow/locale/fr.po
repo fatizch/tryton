@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:report.create:"
+msgid ""
+"Report flow generation had succeeded! You generated a "
+"%(report_template_name)s report."
+msgstr ""
+"L'impression a réussi! Vous avez imprimé un courrier "
+"%(report_template_name)s"
+
 msgctxt "error:report.flow.variable:"
 msgid "The description must be unique."
 msgstr "La description doit être unique."
@@ -19,6 +27,14 @@ msgid "You cannot print a flow and a model at the same time"
 msgstr ""
 "Vous ne pouvez pas lancer l'impression d'un modèle et générer un flux en "
 "même temps"
+
+msgctxt "field:report.create.flow_succeed_generated,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:report.create.flow_succeed_generated,template_name:"
+msgid "template"
+msgstr "Modèle"
 
 msgctxt "field:report.flow.variable,create_date:"
 msgid "Create Date"
@@ -215,6 +231,10 @@ msgctxt "model:ir.ui.menu,name:menu_flow_variables"
 msgid "Flow Variables"
 msgstr "Variables de flux"
 
+msgctxt "model:report.create.flow_succeed_generated,name:"
+msgid "Report Generated Flow Succeed"
+msgstr "Génération de flux de courrier réussie"
+
 msgctxt "model:report.flow.variable,name:"
 msgid "Flow Variable"
 msgstr "Variable de flux"
@@ -270,3 +290,12 @@ msgstr "Donnée de flux"
 msgctxt "view:report.template:"
 msgid "Generated Code"
 msgstr "Code généré"
+
+msgctxt "wizard_button:report.create,flow_succeed_generated,end:"
+msgid "OK"
+msgstr "OK"
+
+#, fuzzy
+msgctxt "wizard_button:report.create,flow_succeed_generated,end:"
+msgid "Ok"
+msgstr "Ok"

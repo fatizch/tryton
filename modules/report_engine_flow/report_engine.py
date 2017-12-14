@@ -7,6 +7,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Not, Or
 from trytond.model import Unique
 from trytond.config import config
+from trytond.wizard import StateView, Button
 
 from trytond.modules.coog_core import fields, model, coog_string, utils
 
@@ -20,6 +21,7 @@ __all__ = [
     'ReportGenerate',
     'ReportTemplate',
     'ReportCreate',
+    'ReportFlowSucceedGenerated',
     'FlowVariable',
     'TemplateVariableRelation',
     ]
@@ -302,7 +304,7 @@ class ReportTemplate:
                 'output_mixin': 'You cannot print a flow'
                 ' and a model at the same time',
                 'input_flow_variable': 'From Flow Variable',
-                'process_method_default_flux': 'Default Flux'
+                'process_method_default_flux': 'Default Flux',
                 })
         for fname in ['modifiable_before_printing',
                 'split_reports', 'document_desc',
@@ -391,8 +393,29 @@ class ReportTemplate:
                     report['report_name']), report['data'])
 
 
+class ReportFlowSucceedGenerated(model.CoogView):
+    'Report Generated Flow Succeed'
+
+    __name__ = 'report.create.flow_succeed_generated'
+
+    template_name = fields.Char('template', readonly=True)
+
 class ReportCreate:
     __name__ = 'report.create'
+
+    flow_succeed_generated = StateView('report.create.flow_succeed_generated',
+        'report_engine_flow.document_create_flow_succeed_form', [
+            Button('Ok', 'end', 'tryton-ok', default=True),
+            ])
+
+    @classmethod
+    def __setup__(cls):
+        super(ReportCreate, cls).__setup__()
+        cls._error_messages.update({
+                'report_template_message': 'Report flow generation '
+                'had succeeded! You generated a '
+                '%(report_template_name)s report.',
+                })
 
     def report_execute(self, ids, doc_template, report_context):
         if doc_template.input_kind != 'flow':
@@ -417,6 +440,13 @@ class ReportCreate:
             'template': doc_template,
             }
 
+    def default_flow_succeed_generated(self, fields):
+        return {'template_name':
+                self.raise_user_error('report_template_message',
+                    {'report_template_name':
+                        self.select_template.template.name},
+                    raise_exception=False)}
+        
     @classmethod
     def create_flow_file(cls, filepath, content):
         temporary_folder = config.get('TMP', 'folder') or '/tmp/'
@@ -429,4 +459,4 @@ class ReportCreate:
         next_state = super(ReportCreate, self).transition_generate()
         if self.select_template.template.input_kind != 'flow':
             return next_state
-        return 'end'
+        return 'flow_succeed_generated'
