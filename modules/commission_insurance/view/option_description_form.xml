@@ -2,7 +2,9 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/tree/field[@name='start_date']" position="before">
-        <field name="extra_data_summary"/>
+    <xpath expr="/form/notebook/page[@id='admin']" position="before">
+        <page id="commission" string="Commission">
+            <field name="agents" colspan="4"/>
+        </page>
     </xpath>
 </data>

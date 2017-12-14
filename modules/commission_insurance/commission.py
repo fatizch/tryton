@@ -815,6 +815,14 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
         'over the party\'s one and the global configuration')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
+    commissioned_products = fields.Function(
+        fields.Many2Many('offered.product', None, None,
+            'Commissioned Products'),
+        'get_commissioned_products', searcher='search_commissioned_products')
+    commissioned_products_name = fields.Function(
+        fields.Char('Commissioned Products'),
+        'get_commissioned_products_name',
+        searcher='search_commissioned_products')
 
     @classmethod
     def __setup__(cls):
@@ -867,6 +875,17 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
 
     def get_rec_name(self, name):
         return self.plan.rec_name
+
+    def get_commissioned_products(self, name):
+        return [p.id for p in self.plan.commissioned_products
+            ] if self.plan else []
+
+    def get_commissioned_products_name(self, name):
+        return ', '.join([x.name for x in self.commissioned_products])
+
+    @classmethod
+    def search_commissioned_products(cls, name, clause):
+        return [('plan.commissioned_products',) + tuple(clause[1:])]
 
     @classmethod
     def search_func_key(cls, name, clause):

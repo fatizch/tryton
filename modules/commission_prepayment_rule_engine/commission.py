@@ -92,7 +92,7 @@ class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule')):
     __name__ = 'commission.plan.line'
 
     prepayment_formula_description = fields.Function(fields.Char('Prepayment'),
-        'get_prepayment_formula_description')
+        'get_formula_description')
 
     @classmethod
     def __setup__(cls):

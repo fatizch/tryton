@@ -2,8 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form" position="inside">
-        <newline/>
+    <xpath expr="/form/notebook" position="before">
         <label name="wholesale_broker"/>
         <field name="wholesale_broker"/>
         <label name="delegation_of_payment"/>

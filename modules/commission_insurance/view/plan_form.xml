@@ -10,13 +10,11 @@ this repository contains the full copyright notices and license terms. -->
         <notebook colspan="4">
             <page name="lines">
                 <field name="lines" colspan="2" view_ids="commission.plan_line_view_list_sequence"/>
-                <field name="commissioned_products"/>
-            </page>
-            <page name="computation_dates">
-                <field name="computation_dates"/>
+                <field name="computation_dates" colspan="2"/>
             </page>
             <page id="admin" string="Administration">
                 <field name="tags" colspan="2"/>
+                <field name="commissioned_products" colspan="2"/>
             </page>
         </notebook>
     </xpath>

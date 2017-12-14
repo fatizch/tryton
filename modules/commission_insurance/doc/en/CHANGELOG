@@ -1,4 +1,5 @@
-# FEA#7665 Allow to use commission start and end date in rule engine when calculation date are defined in a commission plan
+* FEA#7359 Add more informations on commission plans and agents to help the user understand what agents are used for a product and the hierarchy of commissions if defined
+* FEA#7665 Allow to use commission start and end date in rule engine when calculation date are defined in a commission plan
 * BUG#7514 Restore commission relate from contract/invoice
 
 Version 1.14 - 2017-11-09

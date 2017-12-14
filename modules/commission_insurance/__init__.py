@@ -10,6 +10,7 @@ import payment
 import account
 import batch
 import test_case
+import offered
 
 
 def register():
@@ -24,6 +25,8 @@ def register():
         commission.PlanLinesCoverageRelation,
         commission.PlanCalculationDate,
         commission.Agent,
+        offered.Product,
+        offered.OptionDescription,
         invoice.InvoiceLine,
         invoice.Invoice,
         party.Party,

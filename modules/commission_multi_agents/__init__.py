@@ -4,6 +4,7 @@ from trytond.pool import Pool
 import commission
 import invoice
 import contract
+import offered
 
 
 def register():
@@ -16,4 +17,5 @@ def register():
         invoice.InvoiceLine,
         contract.Contract,
         contract.ContractOption,
+        offered.OptionDescription,
         module='commission_multi_agents', type_='model')

@@ -3,6 +3,9 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <record model="ir.ui.view" id="commission.agent_view_list">
+            <field name="field_childs">childs</field>
+        </record>
         <record model="ir.ui.view" id="agent_view_list">
             <field name="model">commission.agent</field>
             <field name="inherit" ref="commission.agent_view_list"/>

@@ -6,6 +6,7 @@ __all__ = [
     'ReportTemplate',
     ]
 
+
 class ReportTemplate:
     __metaclass__ = PoolMeta
     __name__ = 'report.template'

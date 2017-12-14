@@ -8,6 +8,7 @@ import party
 import invoice
 import batch
 import configuration
+import offered
 
 
 def register():
@@ -21,6 +22,7 @@ def register():
         party.Insurer,
         invoice.Invoice,
         configuration.Configuration,
+        offered.OptionDescription,
         batch.CreateEmptyInvoicePrincipalBatch,
         batch.LinkInvoicePrincipalBatch,
         batch.FinalizeInvoicePrincipalBatch,

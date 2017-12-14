@@ -2,9 +2,25 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:commission.agent,childs:"
+msgid "Childs"
+msgstr "Enfants"
+
 msgctxt "field:commission.agent,commissioned_agents:"
 msgid "Commissioned Agent"
 msgstr "Protocoles de commission liés"
+
+msgctxt "field:commission.agent,from_commission_agents:"
+msgid "From Commission Agents"
+msgstr "Depuis les protocoles"
+
+msgctxt "field:commission.agent,from_plans:"
+msgid "From Plans"
+msgstr "Depuis les plans"
+
+msgctxt "field:commission.agent,parents:"
+msgid "Parents"
+msgstr "Parents"
 
 msgctxt "field:commission.agent,second_level_commission:"
 msgid "Second level commission"

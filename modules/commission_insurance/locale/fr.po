@@ -126,6 +126,14 @@ msgctxt "field:commission.agent,agent_payment_term:"
 msgid "Commission Agent Payment Term"
 msgstr "Condition de paiement du protocole de commissionnement"
 
+msgctxt "field:commission.agent,commissioned_products:"
+msgid "Commissioned Products"
+msgstr "Produits commissionnés"
+
+msgctxt "field:commission.agent,commissioned_products_name:"
+msgid "Commissioned Products"
+msgstr "Produits commissionnés"
+
 msgctxt "field:commission.agent,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -618,6 +626,18 @@ msgctxt "field:contract.option,monthly_taxes:"
 msgid "Monthly Taxes"
 msgstr "Taxes mensuelles"
 
+msgctxt "field:offered.option.description,agents:"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
+
+msgctxt "field:offered.option.description,commission_plan_lines:"
+msgid "Commission Plan Lines"
+msgstr "Lignes de plan de commission"
+
+msgctxt "field:offered.product,agents:"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
+
 msgctxt "field:party.party,agents:"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
@@ -721,6 +741,10 @@ msgstr "Bordereau de commission généré"
 msgctxt "model:ir.action,name:"
 msgid "Aggregated commissions"
 msgstr "Commissions agrégées"
+
+msgctxt "model:ir.action,name:act_agent_relate_form"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "model:ir.action,name:act_broker_commissioned_contract_relate_form"
 msgid "Commissioned Contracts"
@@ -1277,17 +1301,21 @@ msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
 msgid "Create Commission Invoices"
 msgstr "Générer les bordereaux de commission"
 
+msgctxt "model:ir.ui.menu,name:commission.menu_commission_create_invoice"
+msgid "Create Commission Invoices"
+msgstr "Générer les bordereaux de commission"
+
 msgctxt "model:ir.action,name:commission.act_agent_form"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
+
+msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
 
 msgctxt "model:ir.ui.menu,name:commission.menu_commission_create_invoice"
 msgid "Create Commission Invoices"
 msgstr "Générer les bordereaux de commission"
-
-msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
-msgid "Agents"
-msgstr "Protocoles de commissionnement"
 
 msgctxt "model:product.template-commission.agent,name:commission."
 msgid "Product Template - Commission Agent"

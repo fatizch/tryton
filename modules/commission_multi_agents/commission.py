@@ -43,6 +43,17 @@ class Agent:
             ],
         states={'invisible': Eval('type_') != 'agent'},
         depends=['type_', 'id'])
+    from_commission_agents = fields.Many2Many('commission.agent-agent',
+        'to_second_level_agent', 'from_agent', 'From Commission Agents',
+        readonly=True)
+    from_plans = fields.Many2Many('commission_plan-agent', 'agent',
+        'plan', 'From Plans', readonly=True)
+    childs = fields.Function(
+        fields.One2Many('commission.agent', None, 'Childs'),
+        'get_childs')
+    parents = fields.Function(
+        fields.Many2Many('commission.agent', None, None, 'Parents'),
+        'get_parents')
 
     @classmethod
     def __register__(cls, module_name):
@@ -52,6 +63,18 @@ class Agent:
         agent = TableHandler(cls)
         if agent.column_exist('commissioned_with_agent'):
             agent.drop_column('commissioned_with_agent')
+
+    @classmethod
+    def _export_skips(cls):
+        return super(Agent, cls)._export_skips() | {'from_commission_agents',
+            'from_plans'}
+
+    @classmethod
+    def copy(cls, agents, default=None):
+        default = default.copy() if default else {}
+        default.setdefault('from_commission_agents', None)
+        default.setdefault('from_plans', None)
+        return super(Agent, cls).copy(agents, default=default)
 
     @classmethod
     def search_second_level_commission(cls, name, clause):
@@ -80,6 +103,13 @@ class Agent:
             ('commissioned_agents', tuple([x.id
                         for x in self.commissioned_agents])),)
 
+    def get_childs(self, name=None):
+        return [a.id for a in self.commissioned_agents
+            ] + self.plan.get_agent_childs()
+
+    def get_parents(self, name=None):
+        return [x.id for x in self.from_plans + self.from_commission_agents]
+
 
 class AgentAgentRelation(model.CoogSQL, model.CoogView):
     'Multi Agent Relation'
@@ -107,6 +137,13 @@ class Plan:
     @classmethod
     def _export_light(cls):
         return super(Plan, cls)._export_light() | {'commissioned_agents'}
+
+    def get_agent_childs(self):
+        res = []
+        for agent in self.commissioned_agents:
+            res.append(agent.id)
+            res += agent.get_childs()
+        return res
 
 
 class PlanAgentRelation(model.CoogSQL, model.CoogView):

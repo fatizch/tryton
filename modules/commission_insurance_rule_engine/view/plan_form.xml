@@ -6,7 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <label name="rule_engine_key"/>
         <field name="rule_engine_key"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='admin']/field[@name='tags']" position="before">
+    <xpath expr="/form/notebook/page[@name='lines']" position="inside">
         <field name="extra_data_def" colspan="2"/>
     </xpath>
 </data>
