@@ -14,7 +14,7 @@ from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields, model, export, utils
 
-from .contract import FREQUENCIES, CustomRrule
+from .contract import FREQUENCIES
 
 __metaclass__ = PoolMeta
 
@@ -177,7 +177,7 @@ class BillingMode(model.CoogSQL, model.CoogView):
                 base_date = billing_info.date
             else:
                 base_date = billing_info.contract.start_date
-        return CustomRrule(start, interval, end=end, base_date=base_date)
+        return utils.CustomRrule(start, interval, end=end, base_date=base_date)
 
     def get_rrule(self, start, until=None):
         bymonthday = int(self.sync_day) if self.sync_day else None

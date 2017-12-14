@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 import intervaltree
 import datetime
-import calendar
 from collections import defaultdict
 from decimal import Decimal
 from itertools import groupby
@@ -11,7 +10,7 @@ from sql import Column, Null, Literal
 from sql.aggregate import Max, Count, Sum
 from sql.conditionals import Coalesce
 
-from dateutil.rrule import rrule, rruleset, MONTHLY, DAILY
+from dateutil.rrule import rrule, rruleset
 from dateutil.relativedelta import relativedelta
 
 from trytond.pool import Pool, PoolMeta
@@ -55,93 +54,6 @@ FREQUENCIES = [
     ('half_yearly', 'Half-yearly'),
     ('yearly', 'Yearly'),
     ]
-
-
-class CustomRrule(object):
-    '''
-        This class implements the two methods `between` and `after` which are
-        the two methods of `rrule` that we use in get_amount.
-
-        The purpose of this override is to manually manage some edge cases
-        which are not (yet) properly handled by `rrule`.
-        See `premium._get_rrule` for more informations.
-    '''
-    def __init__(self, start, interval, end=None, base_date=None,
-            follow_end_of_month=True):
-        assert start
-        assert interval
-        assert base_date is None or base_date <= start
-        self._base_date = base_date or start
-        self._interval = interval
-        self._start = start
-        self._end = end
-        self._iter_pos = None
-        self._follow_end_of_month = follow_end_of_month
-        self.set_base_iter_pos()
-
-    def set_base_iter_pos(self):
-        self._base_iter_pos = 0
-        if self._start == self._base_date:
-            return
-        date = self._base_date
-        while date < self._start:
-            self._base_iter_pos += 1
-            date = coog_date.add_month(self._base_date,
-                self._interval * self._base_iter_pos,
-                stick_to_end_of_month=self._follow_end_of_month)
-        self._base_iter_pos -= 1
-
-    def __iter__(self):
-        self._iter_pos = self._base_iter_pos
-        return self
-
-    def next(self):
-        date = coog_date.add_month(self._base_date,
-            self._interval * self._iter_pos,
-            stick_to_end_of_month=self._follow_end_of_month)
-        if self._end and self._end < date:
-            raise StopIteration
-        self._iter_pos += 1
-        return datetime.datetime.combine(date, datetime.time())
-
-    def between(self, start, end):
-        assert start
-        assert end
-        start = start.date()
-        end = end.date() if not self._end else min(end.date(),
-            self._end + datetime.timedelta(1))
-        cur_date = self._base_date
-        result = []
-        i = self._base_iter_pos
-        while cur_date < end:
-            if cur_date > start:
-                # If the date matches the end of the month and end is the end
-                # of the month, we want the final date to be end + 1 in order
-                # to be consistent with the rrule API
-                if cur_date == coog_date.get_end_of_month(cur_date):
-                    cur_date = cur_date + relativedelta(days=1)
-                result.append(datetime.datetime.combine(cur_date,
-                        datetime.time()))
-            cur_date = coog_date.add_month(self._base_date, self._interval * i,
-                stick_to_end_of_month=self._follow_end_of_month)
-            i += 1
-        return result
-
-    def after(self, date):
-        assert date
-        date = date.date() if not self._end else min(date.date(),
-            self._end + datetime.timedelta(1))
-        if date < self._base_date:
-            return self.after(self._start)
-        cur_date = coog_date.add_month(self._base_date,
-            self._interval * self._base_iter_pos,
-            stick_to_end_of_month=self._follow_end_of_month)
-        i = self._base_iter_pos + 1
-        while cur_date <= date:
-            cur_date = coog_date.add_month(self._base_date, self._interval * i,
-                stick_to_end_of_month=self._follow_end_of_month)
-            i += 1
-        return datetime.datetime.combine(cur_date, datetime.time())
 
 
 class Contract:
@@ -1894,135 +1806,18 @@ class Premium:
     def get_description(self):
         return getattr(self.parent, 'full_name', self.parent.rec_name)
 
-    def _custom_rrule(self, start, interval):
-        if ((self.main_contract.start_date + relativedelta(days=1)).month !=
-                self.main_contract.start_date.month):
-            # If the contract start date is at the end of month, we force the
-            # rrule to follow the end of month to make sure we have full months
-            return CustomRrule(start, interval, follow_end_of_month=True)
-        if (self.main_contract.start_date.day > start.day and
-                start.month != (start + relativedelta(days=1)).month):
-            # Special case, the rrule must be synced relative to the contract
-            # start day rather than the period start. For instance, if the
-            # contract is synced on 30/03, we want a 28/02 - 29/03 to be a full
-            # month, so we force the sync date to 30/01
-            base_start = start + relativedelta(months=-1)
-            base_start = datetime.date(base_start.year, base_start.month,
-                self.main_contract.start_date.day)
-            return CustomRrule(base_start, interval)
-        return CustomRrule(start, interval, follow_end_of_month=False)
-
-    def _get_rrule(self, start):
-        if self.frequency in ('monthly', 'quarterly', 'half_yearly'):
-            freq = MONTHLY
-            interval = {
-                'monthly': 1,
-                'quarterly': 3,
-                'half_yearly': 6,
-                }.get(self.frequency)
-            # Special case for monthly iterations that may skip inexisting
-            # days. For instance, a monthly rrule starting on the 31st of
-            # January will skip over february, etc...
-            # A solution should be implemented soon(TM) :
-            # https://github.com/dateutil/dateutil/issues/285
-            # In the meantime, we use a CustomRrule to manage those edge cases.
-            if start.day in (28, 29, 30, 31):
-                return self._custom_rrule(start, interval)
-        elif self.frequency == 'yearly':
-            freq = DAILY
-            # Get current year contract start_date
-            month, day = start.month, start.day
-            if month == 2 and day == 29:
-                # Handle leap year...
-                month, day = 3, 1
-            rule_start = datetime.datetime.combine(
-                datetime.date(start.year - 1, month, day), datetime.time())
-            rule = rrule(DAILY, bymonth=self.main_contract.start_date.month,
-                bymonthday=self.main_contract.start_date.day,
-                dtstart=rule_start)
-            year_start = rule.before(datetime.datetime.combine(start,
-                    datetime.time()), inc=True)
-            interval = 366 if calendar.isleap(year_start.year) else 365
-        elif self.frequency == 'yearly_360':
-            freq = DAILY
-            interval = 360
-        elif self.frequency == 'yearly_365':
-            freq = DAILY
-            interval = 365
-        elif self.frequency in ('once_per_contract'):
-            return rrule(MONTHLY, dtstart=self.start, count=2)
-        else:
-            return
-        return rrule(freq, interval=interval, dtstart=start)
-
-    def get_amount(self, start, end):
-        if self.frequency == 'once_per_invoice':
-            return self.amount
-        if start is None:
-            return self.amount if self.frequency == 'at_contract_signature' \
-                else 0
-        elif self.frequency == 'at_contract_signature':
-            return 0
-        elif self.frequency == 'once_per_year':
-            start_date = self.main_contract.start_date
-            stick = (start_date.month, start_date.day) == (2, 29)
-            amount = 0
-            for year in xrange(end.year - start.year + 1):
-                new_date = coog_date.add_year(start_date, start.year -
-                        start_date.year + year, stick)
-                if start <= new_date <= end:
-                    amount += self.amount
-            return amount
-        # For yearly frequencies, only use the date to calculate the prorata on
-        # the remaining days, after taking the full years out.
-        #
-        # This is necessary since the yearly frequency is translated in a
-        # daily rule because the number of days may vary.
-        occurences = []
-        if self.frequency.startswith('yearly'):
-            nb_years = coog_date.number_of_years_between(start, end)
-            if nb_years:
-                occurences = [None] * (nb_years - 1) + [
-                    coog_date.add_year(start, nb_years)]
-                start = occurences[-1]
-                occurences[-1] = datetime.datetime.combine(occurences[-1],
-                    datetime.time())
-        rrule = self._get_rrule(start)
-        start = datetime.datetime.combine(start, datetime.time())
-        end = datetime.datetime.combine(end, datetime.time())
-        if not occurences:
-            # In our use case, a period will be "1900-01-01 / 1900-01-31". The
-            # 'between' method returns "full" periods and excludes the start
-            # and end dates, so we have to search for
-            # "1900-01-01 / 1900-02-02" in order to have a match at
-            # "1900-02-01"
-            occurences = rrule.between(start, end + datetime.timedelta(2))
-        amount = len(occurences) * self.amount
-        last_date = occurences[-1] if occurences else start
-        next_date = rrule.after(last_date)
-        if self.frequency in ('once_per_contract'):
-            if (last_date <= datetime.datetime.combine(self.start,
-                    datetime.time()) <= next_date):
-                return self.amount
-            elif (start <= datetime.datetime.combine(self.start,
-                    datetime.time())):
-                return self.amount
-            else:
-                return 0
-
-        # Rrules 'between' returns the date after the occurence, so if
-        # last_date == end it means that there is an extra day to prorate
-        if last_date <= end and (next_date - last_date).days != 0:
-            if self.prorate_premiums:
-                # Do not add parenthesis anywhere here. We want to first
-                # multiply the amount with the number of days, and divide
-                # after to avoid Decimal limitations
-                amount += self.amount * \
-                    Decimal((end - last_date).days + 1) \
-                    / Decimal((next_date - last_date).days)
-            elif (end - last_date).days + 1 != 0:
-                amount += self.amount
-        return amount
+    def get_amount(self, start, end, frequency=None, amount=None,
+            sync_date=None, interval_start=None, proportion=None,
+            recursion=False):
+        frequency = frequency or self.frequency
+        amount = amount if amount is not None else self.amount
+        proportion = proportion if proportion is not None \
+            else self.prorate_premiums
+        sync_date = sync_date or self.main_contract.start_date
+        recursion = False
+        interval_start = interval_start or self.start
+        return utils.get_prorated_amount_on_period(start, end, frequency,
+            amount, sync_date, interval_start, proportion, recursion)
 
     def get_invoice_lines(self, start, end):
         pool = Pool()

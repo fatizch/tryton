@@ -6,6 +6,7 @@ import datetime
 import mock
 from decimal import Decimal
 
+from datetime import date
 from sql import Column
 
 import trytond.tests.test_tryton
@@ -970,7 +971,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 substitute_hook=some_substitute)
             self.assertEqual(ret, 42)
 
-
         with Transaction().new_transaction():
             self.assertEqual(len(TestModel.search([])), 1)
 
@@ -1053,6 +1053,268 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 pyson_condition=condition)
             res = action.filter_objects([good_obj, bad_obj, empty_obj])
             self.assertEqual(res, [good_obj], condition)
+
+    def test_get_prorated_amount_on_period(self):
+        sync_date = date(2011, 10, 21)
+        frequency = 'monthly'
+        value = Decimal(100)
+        proportion = True
+        for period, res_value in (
+                ((date(2014, 1, 1), date(2014, 1, 31)), Decimal(100)),
+                ((date(2014, 1, 16), date(2014, 1, 31)), Decimal(100) *
+                    Decimal(16) / Decimal(31)),
+                ((date(2014, 1, 1), date(2014, 2, 28)), Decimal(200)),
+                ((date(2014, 1, 1), date(2014, 3, 31)), Decimal(300)),
+                ((date(2014, 1, 1), date(2014, 12, 31)), Decimal(1200)),
+                ((date(2014, 1, 15), date(2014, 2, 23)), Decimal(100) +
+                    Decimal(100) * Decimal(9) / Decimal(28)),
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    proportion=proportion, frequency=frequency, value=value,
+                    sync_date=sync_date), res_value)
+
+        proportion = False
+        for period, expected in (
+                ((date(2014, 1, 1), date(2014, 1, 31)), Decimal(100)),
+                ((date(2014, 1, 16), date(2014, 1, 31)), Decimal(100)),
+                ((date(2014, 1, 1), date(2014, 2, 28)), Decimal(200)),
+                ((date(2014, 1, 1), date(2014, 3, 31)), Decimal(300)),
+                ((date(2014, 1, 1), date(2014, 12, 31)), Decimal(1200)),
+                ((date(2014, 1, 15), date(2014, 2, 23)), Decimal(200)),
+                ):
+            res = utils.get_prorated_amount_on_period(*period, proportion=proportion,
+                frequency=frequency, value=value, sync_date=sync_date)
+            self.assertEqual(res, expected, 'Expected %s , got %s '
+                    'for period %s ' % (expected, res, period))
+
+        frequency = 'yearly'
+        proportion = True
+        for period, res_value in (
+                ((date(2014, 1, 1), date(2014, 12, 31)), Decimal(100)),
+                ((date(2014, 1, 1), date(2014, 1, 31)),
+                    Decimal(100) * Decimal(31) / Decimal(365)),
+                ((date(2014, 1, 1), date(2015, 12, 31)), Decimal(200)),
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    proportion=proportion, frequency=frequency, value=value,
+                    sync_date=sync_date), res_value)
+
+        proportion = False
+        for period, expected in (
+                ((date(2014, 1, 1), date(2014, 12, 31)), Decimal(100)),
+                ((date(2014, 1, 1), date(2014, 1, 31)), Decimal(100)),
+                ((date(2014, 1, 1), date(2015, 1, 1)), Decimal(200)),
+                ((date(2014, 1, 1), date(2015, 6, 1)), Decimal(200)),
+                ):
+            res = utils.get_prorated_amount_on_period(*period, proportion=proportion,
+                frequency=frequency, value=value, sync_date=sync_date)
+            self.assertEqual(res, expected, 'Expected %s , got %s '
+                    'for period %s ' % (expected, res, period))
+
+        proportion = True
+        for period, res_value in (
+                ((date(2015, 2, 1), date(2016, 1, 31)), Decimal(100)),
+                ((date(2015, 3, 1), date(2016, 2, 29)), Decimal(100)),
+                ((date(2016, 1, 1), date(2016, 1, 31)),
+                    Decimal(100) * Decimal(31) / Decimal(365)),
+                ((date(2017, 1, 1), date(2017, 1, 31)),
+                    Decimal(100) * Decimal(31) / Decimal(366)),
+                ((date(2016, 1, 1), date(2017, 1, 31)),
+                    Decimal(100) +
+                    Decimal(100) * Decimal(31) / Decimal(366)),
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    proportion=proportion, frequency=frequency, value=value,
+                    sync_date=sync_date), res_value)
+
+        frequency = 'once_per_contract'
+        interval_start = date(2014, 1, 1)
+
+        for period, res_value in (
+                ((date(2014, 1, 1), date(2014, 1, 31)), Decimal(100)),
+                ((date(2014, 1, 1), date(2015, 12, 31)), Decimal(100)),
+                ((date(2014, 2, 1), date(2014, 2, 28)), Decimal(0)),
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    proportion=proportion, frequency=frequency, value=value,
+                    sync_date=sync_date, interval_start=interval_start),
+                res_value)
+
+        frequency = 'at_contract_signature'
+        value = Decimal(900)
+
+        for period, res_value in (
+                ((None, None), Decimal(900)),
+                ((date(2014, 1, 1), date(2015, 12, 31)), Decimal(0)),
+                ((date(2014, 2, 1), date(2014, 2, 28)), Decimal(0)),
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    proportion=proportion, frequency=frequency, value=value,
+                    sync_date=sync_date), res_value)
+
+        frequency = 'once_per_year'
+        value = Decimal(100)
+
+        for period, res_value in (
+                ((date(2015, 10, 1), date(2015, 10, 22)), Decimal(100)),
+                ((date(2015, 10, 1), date(2015, 10, 21)), Decimal(100)),
+                ((date(2015, 10, 1), date(2015, 10, 20)), Decimal(0)),
+                ((date(2015, 10, 1), date(2017, 10, 21)), Decimal(300)),
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    frequency=frequency, value=value, sync_date=sync_date,
+                    proportion=proportion), res_value)
+
+        sync_date = date(2012, 2, 29)
+
+        for period, res_value in (
+                ((date(2015, 2, 1), date(2015, 3, 1)), Decimal(100)),
+                ((date(2015, 2, 1), date(2015, 2, 28)), Decimal(100)),
+                ((date(2015, 2, 1), date(2015, 2, 27)), Decimal(0)),
+                ((date(2016, 2, 1), date(2016, 3, 1)), Decimal(100)),
+                ((date(2016, 2, 1), date(2016, 2, 29)), Decimal(100)),
+                ((date(2016, 2, 1), date(2016, 2, 28)), Decimal(0)),
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    frequency=frequency, value=value, sync_date=sync_date,
+                    proportion=proportion), res_value)
+
+        frequency = 'monthly'
+        value = Decimal(200)
+        sync_date = date(2016, 11, 29)
+        interval_start = date(2016, 11, 29)
+
+        for period, res_value in (
+                ((date(2016, 11, 29), date(2017, 11, 28)), Decimal(2400)),
+                ((date(2016, 11, 29), date(2017, 2, 28)), Decimal(600)),
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    frequency=frequency, value=value, sync_date=sync_date,
+                    interval_start=interval_start, proportion=proportion),
+                res_value)
+
+        sync_date = date(2016, 11, 30)
+        interval_start = date(2016, 11, 30)
+
+        for period, res_value in (
+                ((date(2016, 11, 30), date(2017, 11, 29)), Decimal(2400)),
+                ((date(2016, 11, 30), date(2017, 2, 28)), Decimal(600)),
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    frequency=frequency, value=value, sync_date=sync_date,
+                    interval_start=interval_start, proportion=proportion),
+                res_value)
+
+        interval_start = date(2017, 1, 29)
+        value = Decimal(30)
+        sync_date = date(2016, 11, 30)
+
+        for period, res_value in (
+                ((date(2017, 1, 29), date(2017, 1, 31)), Decimal(3)),
+                ((date(2017, 1, 29), date(2017, 1, 29)), Decimal(1)),
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    frequency=frequency, value=value, sync_date=sync_date,
+                    interval_start=interval_start, proportion=proportion),
+                res_value)
+
+        # This case is special. Since the reference date is March the 30th,
+        # we assume that a period going from the 30th April to the 29th May is
+        # a full month, even though the standard "follow end of month" would
+        # make it a month minus one day.
+        # The second test sets the reference date to February the 28th. In
+        # that case, we apply the end month following rule, so the same period
+        # from the 30th April to 29th May is not a full month.
+
+        sync_date = date(2017, 3, 30)
+        interval_start = date(2017, 4, 30)
+
+        for period, res_value in (
+                ((date(2017, 4, 30), date(2017, 5, 29)), Decimal(30)),
+                ((date(2017, 5, 30), date(2017, 6, 29)), Decimal(30)),
+                ((date(2018, 2, 28), date(2018, 3, 29)), Decimal(30)),
+                ((date(2020, 2, 29), date(2020, 3, 29)), Decimal(30)),
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    frequency=frequency, value=value, sync_date=sync_date,
+                    interval_start=interval_start, proportion=proportion),
+                res_value)
+
+        value = Decimal(31)
+        sync_date = date(2017, 2, 28)
+
+        for period, res_value in (
+                ((date(2017, 4, 30), date(2017, 5, 29)), Decimal(30)),
+                ((date(2017, 5, 30), date(2017, 6, 29)), Decimal(31)),
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    frequency=frequency, value=value, sync_date=sync_date,
+                    interval_start=interval_start, proportion=proportion),
+                res_value)
+
+        proportion = True
+        recursion = True
+        frequency = 'quarterly'
+        value = Decimal(300)
+        sync_date = date(2017, 1, 1)
+        interval_start = date(2017, 10, 1)
+        for period, res_value in (
+                ((date(2017, 11, 1), date(2017, 12, 31)), Decimal(200)),
+                ((date(2017, 10, 1), date(2017, 12, 31)), Decimal(300)),
+                ((date(2017, 11, 1), date(2017, 11, 30)), Decimal(100)),
+                ((date(2017, 12, 1), date(2017, 12, 13)), Decimal(300) /
+                    Decimal(3) * Decimal(13) / Decimal(31))
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    frequency=frequency, value=value, sync_date=sync_date,
+                    interval_start=interval_start, proportion=proportion,
+                    recursion=recursion), res_value)
+
+        recursion = False
+        for period, res_value in (
+                ((date(2017, 11, 1), date(2017, 12, 31)), Decimal(300) *
+                    Decimal(61) / Decimal(92)),
+                ((date(2017, 10, 1), date(2017, 12, 31)), Decimal(300)),
+                ((date(2017, 11, 1), date(2017, 11, 30)), Decimal(300) *
+                    Decimal(30) / Decimal(92)),
+                ((date(2017, 12, 1), date(2017, 12, 13)), Decimal(300) *
+                    Decimal(13) / Decimal(90))
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    frequency=frequency, value=value, sync_date=sync_date,
+                    interval_start=interval_start, proportion=proportion,
+                    recursion=recursion), res_value)
+
+        frequency = 'yearly'
+        value = Decimal(1200)
+        recursion = True
+        interval_start = date(2017, 1, 1)
+        for period, res_value in (
+                ((date(2017, 1, 1), date(2017, 12, 31)), Decimal(1200)),
+                ((date(2017, 1, 1), date(2017, 6, 30)), Decimal(600)),
+                ((date(2017, 2, 1), date(2017, 2, 28)), Decimal(100)),
+                ((date(2017, 12, 1), date(2017, 12, 13)), Decimal(1200)
+                    / Decimal(12) * Decimal(13) / Decimal(31))
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    frequency=frequency, value=value, sync_date=sync_date,
+                    interval_start=interval_start, proportion=proportion,
+                    recursion=recursion), res_value)
+
+        recursion = False
+        for period, res_value in (
+                ((date(2017, 1, 1), date(2017, 12, 31)), Decimal(1200)),
+                ((date(2017, 1, 1), date(2017, 6, 30)), Decimal(1200)
+                    * Decimal(181) / Decimal(365)),
+                ((date(2017, 2, 1), date(2017, 2, 28)), Decimal(1200)
+                    * Decimal(28) / Decimal(365)),
+                ((date(2017, 12, 1), date(2017, 12, 13)), Decimal(1200)
+                    * Decimal(13) / Decimal(365))
+                ):
+            self.assertEqual(utils.get_prorated_amount_on_period(*period,
+                    frequency=frequency, value=value, sync_date=sync_date,
+                    interval_start=interval_start, proportion=proportion,
+                    recursion=recursion), res_value)
 
 
 def suite():
