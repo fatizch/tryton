@@ -67,7 +67,7 @@ class LaunchBatch(Wizard):
             sub_ids = list(sub_ids)
             objects = BatchModel.convert_to_instances(sub_ids) \
                 if sub_ids else []
-            BatchModel.execute(objects, [x[0] for x in sub_ids], **extra_args)
+            BatchModel.execute(objects, sub_ids, **extra_args)
         return 'end'
 
     def check_required_params(self):

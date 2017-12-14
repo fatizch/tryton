@@ -1,7 +1,6 @@
 # This file is part of Tryton.  The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import logging
-import os
 import codecs
 
 from io import BytesIO
@@ -102,7 +101,7 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
         return definition
 
     @classmethod
-    def treat_mobility_modification(cls, message_id, modification_id, 
+    def treat_mobility_modification(cls, message_id, modification_id,
             date_of_signature, original_iban, original_bic, updated_iban,
             updated_bic, mandate_identification):
         # search original bank account
@@ -159,13 +158,13 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
             message_id, modification_id)
 
     @classmethod
-    def endorse_contracts(cls, prev_mandates, new_mandates, date_of_signature, 
+    def endorse_contracts(cls, prev_mandates, new_mandates, date_of_signature,
             message_id, modification_id):
         pool = Pool()
         BillingInformation = pool.get('contract.billing_information')
         Endorsement = pool.get('endorsement')
 
-        # 1) build a dictionary 'to_endorse' with 
+        # 1) build a dictionary 'to_endorse' with
         # - original_mandate as key
         # - (contract_to_endorse, related_bil_info, new_mandate) list as value
 
@@ -183,11 +182,11 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
             ordered_bil_infos.sort(
                 key=lambda x: x.date if x.date else date.min)
             for i in xrange(len(ordered_bil_infos) - 1, -1, -1):
-                if (ordered_bil_infos[i].date is None or 
+                if (ordered_bil_infos[i].date is None or
                         ordered_bil_infos[i].date <= date_of_signature):
                     ordered_bil_infos = ordered_bil_infos[i:]
                     break
-            bil_info_to_endorse = [x for x in ordered_bil_infos if x in 
+            bil_info_to_endorse = [x for x in ordered_bil_infos if x in
                 bil_info_set]
             if not bil_info_to_endorse:
                 continue
@@ -246,7 +245,6 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
         EndorsementWizardStepMixin._update_endorsement(endorsement_contract,
             contract._save_values)
         return endorsement_contract
-
 
     @classmethod
     def find_bank_account(cls, iban, bic):
@@ -349,4 +347,3 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
         new_mandate.state = 'validated'
         new_mandate.save()
         return new_mandate
-
