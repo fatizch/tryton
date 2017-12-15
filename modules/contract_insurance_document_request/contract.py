@@ -150,8 +150,9 @@ class Contract(RemindableInterface):
 
         existing_document_desc_code = [request.document_desc.code
             for request in self.document_request_lines]
-        rule_doc_descs_by_code = {x.code: x for x in
-            DocumentDesc.search([('code', 'in', documents.keys())])}
+        with Transaction().set_context(remove_document_desc_filter=True):
+            rule_doc_descs_by_code = {x.code: x for x in
+                DocumentDesc.search([('code', 'in', documents.keys())])}
         to_save = []
         for code, rule_result_values in documents.iteritems():
             if code in existing_document_desc_code:

@@ -1,3 +1,4 @@
+* BUG#7796 Calculating required documents should not break if the user is not allowed to access some documents
 FEA#7638 Add configuration on product document rules to disable the manual reception of document line requests
 
 Version 1.14 - 2017-11-09
