@@ -5,7 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <label name="rule"/>
     <field name="rule"/>
     <field name="rule_extra_data" no_command="1" colspan="2"/>
-    <field name="decisions" colspan="4" yexpand="0" yfill="0"/>
+    <field name="decisions" colspan="4"/>
     <label name="accepted_decision"/>
     <field name="accepted_decision"/>
 </form>
