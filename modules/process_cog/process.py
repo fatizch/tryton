@@ -17,6 +17,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateView, Button
 from trytond.server_context import ServerContext
 from trytond.wizard import StateTransition
+from trytond.exceptions import UserWarning, UserError
 
 from trytond.modules.coog_core import utils, model, fields
 from trytond.modules.process import ProcessFramework
@@ -310,6 +311,7 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
                 'button_delete_task': RPC(instantiate=0, readonly=0),
                 'button_hold_task': RPC(instantiate=0, readonly=0),
                 'button_postpone': RPC(instantiate=0, readonly=0),
+                'attach_to_process': RPC(readonly=False, instantiate=0),
                 })
 
     @classmethod
@@ -324,6 +326,47 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
         else:
             default = {'logs': []}
         return super(CoogProcessFramework, cls).copy(instances, default)
+
+    def get_default_process_filter_clause(self, process_kind):
+        return []
+
+    def find_default_process(self, process_kind):
+        Process = Pool().get('process')
+        processes = Process.search([
+                ('kind', '=', process_kind),
+                self.get_default_process_filter_clause(process_kind),
+                ])
+        return processes[0] if processes else None
+
+    def attach_to_process(self, process_kind):
+        process = self.find_default_process(process_kind)
+        if not process:
+            raise Exception("No %s process found for %s " % (
+                    process_kind, self.rec_name))
+        current_state = process.first_step()
+        self.current_state = current_state
+        self.save()
+        self.fast_forward_process()
+
+    def fast_forward_process(self):
+        Transaction().commit()
+        visited = set([])
+
+        while True:
+            if not self.current_state:
+                return
+            if self.current_state in visited:
+                break
+            visited.add(self.current_state)
+            try:
+                next_meth = self.__class__._default_button_method(
+                    'next_%s' % self.current_state.process.id)
+                next_meth([self])
+                self.save()
+                Transaction().commit()
+            except:
+                Transaction().rollback()
+                break
 
     @classmethod
     @model.CoogView.button_action('process_cog.act_resume_process')

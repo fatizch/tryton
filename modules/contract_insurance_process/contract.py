@@ -44,6 +44,9 @@ class Contract(CoogProcessFramework):
             cls._buttons['button_resume']['invisible']
             & (Eval('status') != 'quote'))
 
+    def get_default_process_filter_clause(self, process_kind):
+        return ('for_products', 'in', [self.product.id])
+
     @classmethod
     def copy(cls, contracts, default=None):
         clones = super(Contract, cls).copy(contracts, default)

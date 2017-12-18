@@ -1,3 +1,5 @@
+* FEA7773 Add an RPC method to attach a business object to a process and fast forward it
+
 Version 1.14 - 2017-11-09
 * FEA#7302 Add french documentation for default processes import
 * FEA#7126 Add wizard to import JSON processes

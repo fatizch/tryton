@@ -1,3 +1,5 @@
+* FEA7773 Ajout d'une méthode RPC pour attacher un objet métier à un processus et faire "avance-rapide"
+
 Version 1.14 - 2017-11-09
 * FEA#7302 Ajout d'une documentation sur l'import des processus par défaut
 * FEA#7126 Ajout d'un assistant pour importer des processus en JSON
