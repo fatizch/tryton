@@ -123,7 +123,7 @@ class ChangeBillingInformation:
             return
         self.mandate_needed = True
         new_info.sepa_mandate = None
-        if not amendment_enabled:
+        if not amendment_enabled or previous_info.payer != new_info.payer:
             return
         if previous_info.payer in new_account.owners:
             possible_mandates = Mandate.search([

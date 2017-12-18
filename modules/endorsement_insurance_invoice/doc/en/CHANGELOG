@@ -1,3 +1,5 @@
+* BUG#7815 A new mandate must be created when the payer changes
+
 Version 1.14 - 2017-11-09
 * BUG#6650 Show the payer in the change bank account endorsement
 

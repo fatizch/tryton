@@ -1,3 +1,5 @@
+* BUG#7815 Un nouveau mandat doit être crée quand le payeur change
+
 Version 1.14 - 2017-11-09
 * BUG#6650 Affichage du payeur dans le changement de compte bancaire
 
