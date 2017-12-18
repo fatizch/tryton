@@ -315,6 +315,21 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="res.group" id="group_contract_super_group">
+            <field name="name">Coog Contract Manager Group</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_contract_super_group">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_contract_super_group"/>
+        </record>
+        <record model="ir.action-res.group" id="act_change_sub_status_group_contract_super_group">
+            <field name="action" ref="act_change_sub_status"/>
+            <field name="group" ref="group_contract_super_group"/>
+        </record>
+        <record model="ir.model.button-res.group" id="change_active_sub_status_group_contract_super_group">
+            <field name="button" ref="change_active_sub_status"/>
+            <field name="group" ref="group_contract_super_group"/>
+        </record>
     </data>
     <data depends="event_log">
         <record model="ir.model.access" id="access_event_log_group_contract_manage">

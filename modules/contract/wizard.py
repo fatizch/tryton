@@ -24,6 +24,8 @@ __all__ = [
     'ContractReactivateCheck',
     'ContractReactivate',
     'RelatedAttachments',
+    'ChangeSubStatus',
+    'SelectSubStatus',
     ]
 
 
@@ -508,3 +510,55 @@ class RelatedAttachments(model.CoogWizard):
         action['pyson_domain'] = encoder.encode([('id', 'in',
                     [x.id for x in res])])
         return action, {}
+
+
+class ChangeSubStatus(model.CoogWizard):
+    'Contract Change Sub Status'
+
+    __name__ = 'contract.sub_status.change'
+
+    start_state = 'select_sub_status'
+    select_sub_status = StateView('contract.sub_status.select',
+        'contract.contract_select_sub_status_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Apply Sub Status', 'apply_sub_status',
+                'tryton-go-next', default=True),
+            ])
+    apply_sub_status = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(ChangeSubStatus, cls).__setup__()
+        cls._error_messages.update({
+                'no_selected_contract': 'No contract selected',
+                })
+
+    def default_select_sub_status(self, name):
+        Contract = Pool().get('contract')
+        if Transaction().context.get('active_model') != 'contract':
+            self.raise_user_error('no_selected_contract')
+        contract = Contract(Transaction().context.get('active_id'))
+        return {
+            'contract': contract.id,
+            'previous_sub_status': (contract.sub_status.id
+                if contract.sub_status else None),
+            'new_sub_status': None,
+            }
+
+    def transition_apply_sub_status(self):
+        contract = self.select_sub_status.contract
+        contract.sub_status = self.select_sub_status.new_sub_status
+        Pool().get('contract').save([contract])
+        return 'end'
+
+
+class SelectSubStatus(model.CoogView):
+    'Contract Select Sub Status'
+
+    __name__ = 'contract.sub_status.select'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    previous_sub_status = fields.Many2One('contract.sub_status',
+        'Current Sub Status', readonly=True)
+    new_sub_status = fields.Many2One('contract.sub_status',
+        'New Sub Status', domain=[('status', '=', 'active')])

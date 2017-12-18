@@ -12,7 +12,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">contract_form</field>
         </record>
         <record model="ir.action.act_window.domain" id="act_contract_domain_suspended">
-            <field name="name">Suspended Payments</field>
+            <field name="name">Contracts with Suspended Payments</field>
             <field name="sequence" eval="35"/>
             <field name="domain" eval="[('billing_informations.suspensions.active', '=', True)]" pyson="1"/>
             <field name="act_window" ref="contract.act_contract_form"/>

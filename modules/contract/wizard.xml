@@ -83,5 +83,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">contract,-1</field>
             <field name="action" ref="act_related_attachments"/>
         </record>
+        <!-- ############################## -->
+        <!-- # Contract Change Sub Status # -->
+        <!-- ############################## -->
+        <record model ="ir.action.wizard" id="act_change_sub_status">
+            <field name="name">Change Sub Status</field>
+            <field name="wiz_name">contract.sub_status.change</field>
+        </record>
+        <record model="ir.ui.view" id="contract_select_sub_status_view_form">
+            <field name="model">contract.sub_status.select</field>
+            <field name="type">form</field>
+            <field name="name">contract_select_sub_status_form</field>
+        </record>
     </data>
 </tryton>

@@ -51,6 +51,10 @@ msgctxt "error:contract.reactivate:"
 msgid "No contract found"
 msgstr "Pas de contrat trouvé"
 
+msgctxt "error:contract.sub_status.change:"
+msgid "No contract selected"
+msgstr "Aucun contrat sélectionné"
+
 msgctxt "error:contract.sub_status:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
@@ -138,6 +142,15 @@ msgstr "Créer une notification"
 msgctxt "error:event.type.action:"
 msgid "WARNING: The Pyson Condition is applied on contract."
 msgstr "Attention : La condition Pyson est appliquée sur le contrat"
+
+msgctxt "error:offered.product:"
+msgid ""
+"The field %(field)s on contracts cannot be set by a data rule. Please fix "
+"the contract data rule on product %(product)s"
+msgstr ""
+"Le champ %(field)s sur les contrats ne peut être renseigné par une règle de "
+"données. Veuillez réviser la règle de données contrat sur le produit "
+"%(product)s"
 
 msgctxt "field:contract,activation_history:"
 msgid "Activation History"
@@ -491,6 +504,50 @@ msgctxt "field:contract.contact.type,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract.data.rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.data.rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.data.rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.data.rule,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.data.rule,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:contract.data.rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.data.rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:contract.data.rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de règle"
+
+msgctxt "field:contract.data.rule,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:contract.data.rule,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.data.rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:contract.decline.select_reason,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -562,50 +619,6 @@ msgstr "Raison de suspension"
 msgctxt "field:contract.hold.select_hold_status,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.data.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:contract.data.rule,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:contract.data.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.data.rule,id:"
-msgid "ID"
-msgstr "Identifiant"
-
-msgctxt "field:contract.data.rule,product:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "field:contract.data.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.data.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:contract.data.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de règle"
-
-msgctxt "field:contract.data.rule,write_date:"
-msgid "Write Date"
-msgstr "Modifié par"
-
-msgctxt "field:contract.data.rule,write_uid:"
-msgid "Write User"
-msgstr "Modifié par"
-
-msgctxt "field:contract.data.rule,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
 
 msgctxt "field:contract.notification,contract:"
 msgid "Contract"
@@ -891,6 +904,10 @@ msgctxt "field:contract.select_start_date,former_start_date:"
 msgid "Former Start Date"
 msgstr "Date d'effet précédente"
 
+msgctxt "field:contract.select_start_date,free_conditions_date:"
+msgid "Free Conditions Date"
+msgstr "Date de conditions libre"
+
 msgctxt "field:contract.select_start_date,id:"
 msgid "ID"
 msgstr "ID"
@@ -1018,6 +1035,22 @@ msgstr "Mis à jour par"
 msgctxt "field:contract.sub_status,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:contract.sub_status.select,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.sub_status.select,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.sub_status.select,new_sub_status:"
+msgid "New Sub Status"
+msgstr "Nouveau sous statut"
+
+msgctxt "field:contract.sub_status.select,previous_sub_status:"
+msgid "Current Sub Status"
+msgstr "Sous statut actuel"
 
 msgctxt "field:contract.termination.process,id:"
 msgid "ID"
@@ -1321,6 +1354,10 @@ msgctxt "model:contract.contact.type,name:subscriber"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
+msgctxt "model:contract.data.rule,name:"
+msgid "Contract Data Rule"
+msgstr "Règle de données du contrat"
+
 msgctxt "model:contract.decline.select_reason,name:"
 msgid "Reason selector to decline contract"
 msgstr "Motif pour décliner le contrat"
@@ -1332,10 +1369,6 @@ msgstr "Données Complémentaires"
 msgctxt "model:contract.hold.select_hold_status,name:"
 msgid "End date selector for contract"
 msgstr "Choix de la date de fin pour le contrat"
-
-msgctxt "model:contract.data.rule,name:"
-msgid "Contract Data Rule"
-msgstr "Règle de données du contrat"
 
 msgctxt "model:contract.notification,name:"
 msgid "Contract Notification"
@@ -1384,6 +1417,10 @@ msgstr "Terme atteint"
 msgctxt "model:contract.sub_status,name:sub_status_terminated"
 msgid "Terminated"
 msgstr "Résilié"
+
+msgctxt "model:contract.sub_status.select,name:"
+msgid "Contract Select Sub Status"
+msgstr "Sélection du sous statut"
 
 msgctxt "model:contract.termination.process,name:"
 msgid "Contract end date termination batch"
@@ -1458,6 +1495,10 @@ msgstr "Activer"
 msgctxt "model:ir.action,name:act_change_start_date"
 msgid "Change Start Date"
 msgstr "Modifier la date d'effet"
+
+msgctxt "model:ir.action,name:act_change_sub_status"
+msgid "Change Sub Status"
+msgstr "Changer les détails du statut"
 
 msgctxt "model:ir.action,name:act_contact_type_form"
 msgid "Contact Type"
@@ -1633,6 +1674,10 @@ msgstr "Coog Gestion Contrat"
 msgctxt "model:res.group,name:group_contract_read"
 msgid "Coog Contract consultation"
 msgstr "Coog Consultation Contrat"
+
+msgctxt "model:res.group,name:group_contract_super_group"
+msgid "Coog Contract Manager Group"
+msgstr "Coog manager gestionnaire contract"
 
 msgctxt "selection:contract,product_subscriber_kind:"
 msgid "All"
@@ -1885,6 +1930,10 @@ msgid "Administration"
 msgstr "Administration"
 
 msgctxt "view:contract:"
+msgid "Change Sub Status"
+msgstr "Changer les détails du statut"
+
+msgctxt "view:contract:"
 msgid "Change start date"
 msgstr "Modifier la date d'effet"
 
@@ -1975,6 +2024,15 @@ msgstr "Annuler"
 msgctxt "wizard_button:contract.stop,select_contracts,stop:"
 msgid "Ok"
 msgstr "Ok"
+
+msgctxt ""
+"wizard_button:contract.sub_status.change,select_sub_status,apply_sub_status:"
+msgid "Apply Sub Status"
+msgstr "Appliquer le sous statut"
+
+msgctxt "wizard_button:contract.sub_status.change,select_sub_status,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt ""
 "wizard_button:contract.wizard.option_subscription,options_displayer,end:"

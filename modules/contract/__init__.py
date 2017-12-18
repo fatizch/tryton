@@ -64,6 +64,7 @@ def register():
         event.EventTypeAction,
         event.EventLog,
         test_case.TestCaseModel,
+        wizard.SelectSubStatus,
         module='contract', type_='model')
     Pool.register(
         wizard.OptionSubscription,
@@ -75,5 +76,6 @@ def register():
         contract.ContractHold,
         wizard.ContractReactivate,
         wizard.RelatedAttachments,
+        wizard.ChangeSubStatus,
         party.PartyReplace,
         module='contract', type_='wizard')

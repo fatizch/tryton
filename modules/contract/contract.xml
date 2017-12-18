@@ -264,5 +264,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="group" ref="group_contract_admin"/>
             <field name="menu" ref="offered.menu_contract_configuration"/>
         </record>
+        <record model="ir.model.button" id="change_active_sub_status">
+            <field name="name">change_active_sub_status</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
     </data>
 </tryton>

@@ -19,5 +19,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="contract.option_view_form"/>
             <field name="name">option_form</field>
         </record>
+        <record model="ir.ui.view" id="contract_view_list">
+            <field name="model">contract</field>
+            <field name="inherit" ref="contract.contract_view_tree"/>
+            <field name="name">contract_list</field>
+        </record>
     </data>
 </tryton>

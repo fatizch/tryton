@@ -250,9 +250,10 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             'readonly': Eval('status') != 'quote',
             'required': Bool(Eval('is_sub_status_required')),
             'invisible': ~Eval('is_sub_status_required')
+            & ~Eval('sub_status', False)
             },
         domain=[('status', '=', Eval('status'))], ondelete='RESTRICT',
-        depends=['status', 'is_sub_status_required'])
+        depends=['status', 'is_sub_status_required', 'sub_status'])
     is_sub_status_required = fields.Function(
         fields.Boolean('Is Sub Status Required', depends=['status']),
         'on_change_with_is_sub_status_required')
@@ -323,6 +324,10 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                         Eval('status') != 'hold',
                         Eval('status') != 'quote',
                         )},
+                'change_active_sub_status': {
+                    'readonly': Eval('status') != 'active',
+                    'invisible': Eval('status') != 'active',
+                    }
                 })
         cls._error_messages.update({
                 'activation_period_overlaps': 'Activation Periods "%(first)s"'
@@ -1619,6 +1624,11 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
 
     def check_subscriber_contacts(self):
         self.check_contacts(self.subscriber, 'subscriber')
+
+    @classmethod
+    @model.CoogView.button_action('contract.act_change_sub_status')
+    def change_active_sub_status(cls, contracts):
+        pass
 
 
 class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,

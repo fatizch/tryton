@@ -1248,8 +1248,8 @@ msgid "Payment Suspensions"
 msgstr "Suspensions de paiement"
 
 msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_suspended"
-msgid "Suspended Payments"
-msgstr "Paiements suspendus"
+msgid "Contracts with Suspended Payments"
+msgstr "Contrats avec paiements suspendus"
 
 msgctxt "model:ir.action.act_window.domain,name:act_invoice_domain_all"
 msgid "All"

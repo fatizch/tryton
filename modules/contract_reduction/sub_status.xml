@@ -7,4 +7,9 @@ this repository contains the full copyright notices and license terms. -->
         <field name="code">contract_reduced</field>
         <field name="status">terminated</field>
     </record>
+    <record model="contract.sub_status" id="sub_status_active_reduced">
+        <field name="name">Contract Reduced</field>
+        <field name="code">contract_active_reduced</field>
+        <field name="status">active</field>
+    </record>
 </data>

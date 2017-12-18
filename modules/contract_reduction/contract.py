@@ -116,6 +116,7 @@ class Contract:
                         'contract': contract.rec_name})
 
     def apply_reduction(self, reduction_date):
+        SubStatus = Pool().get('contract.sub_status')
         self.reduction_date = reduction_date
         for option in self.options:
             option.reduce(reduction_date)
@@ -125,6 +126,8 @@ class Contract:
                 option.reduce(reduction_date)
             covered_element.options = list(covered_element.options)
         self.covered_elements = list(self.covered_elements)
+        reduced_active = SubStatus.get_sub_status('contract_active_reduced')
+        self.sub_status = reduced_active
 
     def calculate_reductions(self, reduction_date):
         reductions = []
@@ -172,7 +175,10 @@ class Contract:
     def cancel_reduction(cls, contracts):
         cls.raise_user_warning('will_cancel_reduction_%s' % str([x.id for x in
                     contracts[:10]]), 'will_cancel_reduction')
-        Event = Pool().get('event')
+        pool = Pool()
+        Event = pool.get('event')
+        SubStatus = pool.get('contract.sub_status')
+        reduced_active = SubStatus.get_sub_status('contract_active_reduced')
         with model.error_manager():
             for contract in contracts:
                 if not contract.reduction_date:
@@ -180,6 +186,8 @@ class Contract:
                         'contract': contract.rec_name})
                 contract._cancel_reduction_remove_date()
                 contract._cancel_options_reduction()
+                if contract.sub_status == reduced_active:
+                    contract.sub_status = None
                 cls.save([contract])
                 if utils.is_module_installed('contract_insurance_invoice'):
                     contract.rebill(utils.today())

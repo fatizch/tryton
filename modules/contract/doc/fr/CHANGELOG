@@ -1,3 +1,4 @@
+* FEA#7737 Ajout de l'assistant 'Changer les détails du statut' sur les contrats actifs
 * BUG#7660 Ne pas modifier la raison et la date de fin de l'historique d'activation lors de la réactivation d'un contrat suspendu déjà renouvelé
 * BUG#7633 Possibilité de filtrer par date d'effet initiale pour retouver les contrats renoncés
 * FEA#7567 Les dates du contrats peuvent être initialisées par une règle métier défini sur le produit
