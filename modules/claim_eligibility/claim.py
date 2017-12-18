@@ -179,6 +179,18 @@ class ClaimService:
                 })
         Pool().get('event').notify_events([self], 'refuse_claim_service')
 
+    def getter_can_be_indemnified(self, name):
+        return super(ClaimService, self).getter_can_be_indemnified(name) \
+            and self.eligibility_status in ('accepted', '')
+
+    @classmethod
+    def searcher_can_be_indemnified(cls, name, clause):
+        return ['AND',
+            super(ClaimService, cls).searcher_can_be_indemnified(
+                name, clause),
+            [('eligibility_status', 'in', ('accepted', ''))]
+            ]
+
 
 class ClaimIndemnification:
     __metaclass__ = PoolMeta

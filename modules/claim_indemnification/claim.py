@@ -282,6 +282,12 @@ class ClaimService:
     indemnification_start_date = fields.Function(
         fields.Date('Indemnification Start Date'),
         'get_indemnification_start_date')
+    can_be_indemnified = fields.Function(
+        fields.Boolean('Can Be Indemnified',
+            help='Indicates if a service can be used to create '
+            'indemnifications'),
+        'getter_can_be_indemnified',
+        searcher='searcher_can_be_indemnified')
 
     @classmethod
     def __setup__(cls):
@@ -563,6 +569,13 @@ class ClaimService:
             period_start_date, period_end_date = self.get_full_period(
                 period_end_date + relativedelta(days=1))
         return res
+
+    def getter_can_be_indemnified(self, name):
+        return True
+
+    @classmethod
+    def searcher_can_be_indemnified(cls, name, clause):
+        return []
 
 
 class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,

@@ -1,3 +1,4 @@
+* BUG#7756 Ajout du champ "Peut être indemnisé" sur les services
 * BUG#7642 Erreur lors de la création d'un sinistre lorsque la date de fin est saisie et que la période est une période de franchise
 * BUG#7621 Ne pas afficher d'alerte sur la somme des parts si la délégation que la compagnie a avec l'assureur ne prévoit pas le calcul et le paiement des prestations
 

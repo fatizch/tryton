@@ -10,5 +10,6 @@ this repository contains the full copyright notices and license terms. -->
         <field name="payment_accepted_until_date"/>
         <label name="paid_until_date"/>
         <field name="paid_until_date"/>
+        <field name="can_be_indemnified" invisible="1"/>
     </xpath>
 </data>

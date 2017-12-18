@@ -403,7 +403,7 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
 
     service = fields.Many2One('claim.service', 'Service', ondelete='CASCADE',
         required=True, select=True, states={'readonly': ~Eval('id')},
-        depends=['id'])
+        depends=['id'], domain=[('can_be_indemnified', '=', True)])
     identified = fields.Boolean('Identified Party',
         help='The beneficiary has properly been identified')
     party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT',

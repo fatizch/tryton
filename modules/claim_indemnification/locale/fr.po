@@ -1033,6 +1033,10 @@ msgctxt "field:claim.service,annuity_frequency:"
 msgid "Annuity Frequency"
 msgstr "Fréquence des indemnisations"
 
+msgctxt "field:claim.service,can_be_indemnified:"
+msgid "Can Be Indemnified"
+msgstr "Peut être indemnisé"
+
 msgctxt "field:claim.service,claim_status:"
 msgid "Claim Status"
 msgstr "Statut du sinistre"
@@ -1100,6 +1104,10 @@ msgid ""
 msgstr ""
 "Pour les indemnisations de type \"capital\", la date à laquelle "
 "l'indemnisation sera versée"
+
+msgctxt "help:claim.service,can_be_indemnified:"
+msgid "Indicates if a service can be used to create indemnifications"
+msgstr "Indique si un service peut être utilisé pour créer des indemnisations"
 
 msgctxt "model:account.invoice.line.claim_detail,name:"
 msgid "Claim Invoice Line Detail"
