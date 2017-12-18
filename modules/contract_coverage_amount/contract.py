@@ -176,7 +176,7 @@ class ContractOption:
         '''
         prev_coverage, prev_date = None, None
         for version in reversed(self.versions):
-            date = version.start or datetime.date.min
+            date = version.start or self.start_date
             if date > at_date:
                 continue
             if prev_date is None:
@@ -185,13 +185,14 @@ class ContractOption:
                 continue
             if not increase:
                 if prev_coverage == version.coverage_amount:
+                    prev_date = date
                     continue
                 return prev_date
             if prev_coverage > version.coverage_amount:
                 return prev_date
             elif prev_coverage != version.coverage_amount:
                 prev_coverage = version.coverage_amount
-                prev_date = date
+            prev_date = date
         return self.start_date if self.has_coverage_amount else None
 
 
