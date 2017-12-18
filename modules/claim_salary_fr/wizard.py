@@ -47,7 +47,7 @@ class StartSetContributions(model.CoogView):
     rule = fields.Many2One('rule_engine', 'Rule', states={
            'invisible': True})
     periods = fields.One2Many('claim.salary', None, 'Periods',
-        order=[('from_date', 'ASC')], readonly=True)
+        order=[('from_date', 'ASC')])
 
 
 class SalariesComputation(Wizard):

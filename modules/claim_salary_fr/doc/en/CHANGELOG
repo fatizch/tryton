@@ -1,3 +1,5 @@
+* BUG#7792 Allow deleting periods in claim salary wizard
+
 Version 1.14 - 2017-11-09
 * BUG#7442 Do not allow removing contributions in salary wizard
 * BUG#7495 Take net salary rule computation into account when getting rates per range
