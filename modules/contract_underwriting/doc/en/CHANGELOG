@@ -1,3 +1,5 @@
+* BUG#7751 Add authorizations : 'creation, modification ,reading' on underwriting options in order to be able to make decision on it
+
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
 

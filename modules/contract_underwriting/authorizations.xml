@@ -65,6 +65,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_contract_underwriting_option_group">
+            <field name="model" search="[('model', '=', 'contract.underwriting.option')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <record model="ir.model.access" id="access_contract_underwriting_option">
             <field name="model" search="[('model', '=', 'contract.underwriting.option')]"/>
             <field name="perm_read" eval="True"/>
@@ -103,7 +111,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
+            <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.model.access" id="access_underwriting_decision_group_contract_underwriting">
             <field name="model" search="[('model', '=', 'underwriting.decision')]"/>
