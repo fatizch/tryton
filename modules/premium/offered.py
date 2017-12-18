@@ -82,17 +82,7 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
             self.duration_unit = None
 
     def get_rule_for_contract(self, contract):
-        max_date = contract.end_date
-        if not max_date:
-            return
-        if self.type_ == 'yearly_custom_date':
-            return rrule.rrule(rrule.YEARLY, dtstart=contract.start_date,
-                until=max_date, bymonthday=self.custom_date.day,
-                bymonth=self.custom_date.month)
-        elif self.type_ == 'yearly_on_start_date':
-            return rrule.rrule(rrule.YEARLY, dtstart=contract.start_date,
-                until=max_date)
-        elif self.type_ == 'duration_initial_start_date':
+        if self.type_ == 'duration_initial_start_date':
             date = coog_date.add_duration(contract.initial_start_date,
                 self.duration_unit, self.duration, True)
             return [datetime.datetime.combine(date, datetime.time())]
@@ -103,6 +93,18 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
         elif self.type_ == 'at_given_date':
             return [datetime.datetime.combine(
                     self.custom_date, datetime.time.min)]
+
+        # Manage rrules
+        max_date = contract.end_date
+        if not max_date:
+            return
+        if self.type_ == 'yearly_custom_date':
+            return rrule.rrule(rrule.YEARLY, dtstart=contract.start_date,
+                until=max_date, bymonthday=self.custom_date.day,
+                bymonth=self.custom_date.month)
+        elif self.type_ == 'yearly_on_start_date':
+            return rrule.rrule(rrule.YEARLY, dtstart=contract.start_date,
+                until=max_date)
 
 
 class Product:
