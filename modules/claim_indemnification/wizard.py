@@ -612,6 +612,8 @@ class CreateIndemnification(Wizard):
     def possible_services(self, claim):
         res = []
         for delivered in claim.delivered_services:
+            if delivered.can_be_indemnified is False:
+                continue
             if not delivered.loss.end_date or not delivered.indemnifications:
                 res.append(delivered)
                 continue
