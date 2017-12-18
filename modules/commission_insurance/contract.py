@@ -55,16 +55,16 @@ class Contract:
             ('plan.commissioned_products', '=', Eval('product')),
             ('party', '=', Eval('broker_party')),
             ['OR',
-                ('end_date', '>=', Eval('start_date')),
+                ('end_date', '>=', Eval('initial_start_date')),
                 ('end_date', '=', None),
                 ],
             ['OR',
-                ('start_date', '<=', Eval('start_date')),
+                ('start_date', '<=', Eval('initial_start_date')),
                 ('start_date', '=', None),
                 ],
             ],
         states=_STATES, depends=_DEPENDS + ['broker_party', 'product',
-            'start_date'])
+            'initial_start_date'])
     insurer_agent_cache = Cache('contract_insurer_agent')
 
     @classmethod

@@ -1,3 +1,4 @@
+* BUG#7755 Change the definition of the domain of 'agent' field by replacing 'start_date' by 'initial_start_date'
 * FEA#7359 Add more informations on commission plans and agents to help the user understand what agents are used for a product and the hierarchy of commissions if defined
 * FEA#7665 Allow to use commission start and end date in rule engine when calculation date are defined in a commission plan
 * BUG#7514 Restore commission relate from contract/invoice
