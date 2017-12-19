@@ -57,6 +57,19 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">document.request,-1</field>
             <field name="action" ref="report_engine.letter_generation_wizard"/>
         </record>
+        <!-- ######################## -->
+        <!-- # Document Description # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="document_desc_form">
+            <field name="model">document.description</field>
+            <field name="inherit" ref="document.document_desc_form"/>
+            <field name="name">document_description_form</field>
+        </record>
+        <record model="ir.ui.view" id="document_desc_list">
+            <field name="model">document.description</field>
+            <field name="inherit" ref="document.document_desc_tree"/>
+            <field name="name">document_description_list</field>
+        </record>
         <!-- ###################### -->
         <!-- # Document Reception # -->
         <!-- ###################### -->

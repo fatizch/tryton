@@ -17,7 +17,9 @@ from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.report_engine import Printable
 from trytond.modules.rule_engine import get_rule_mixin
 
+
 __all__ = [
+    'DocumentDescription',
     'DocumentRequestLine',
     'DocumentRequest',
     'DocumentReception',
@@ -25,6 +27,15 @@ __all__ = [
     'ReattachDocument',
     'ReceiveDocumentLine',
     ]
+
+
+class DocumentDescription:
+    __metaclass__ = PoolMeta
+    __name__ = 'document.description'
+
+    reception_requires_attachment = fields.Boolean(
+        'Reception Requires Attachment', help='If checked, the attachments'
+        'will be required to mark the document request lines as "received"')
 
 
 class DocumentRequestLine(model.CoogSQL, model.CoogView):
@@ -46,7 +57,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
             states={'readonly': ~Eval('allow_force_receive')},
             depends=['allow_force_receive'],
             ),
-        'on_change_with_received', setter='setter_void',
+        getter='on_change_with_received', setter='setter_void',
         searcher='search_received')
     request = fields.Many2One('document.request', 'Document Request',
         ondelete='CASCADE', select=True)
@@ -171,45 +182,68 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     def get_default_remind_fields(cls):
         return ['received']
 
-    @fields.depends('attachment', 'reception_date', 'received',
-        'attachment_name', 'attachment_data')
-    def on_change_attachment(self):
-        if self.attachment:
-            self.attachment_name = self.attachment.name
-            self.attachment_data = self.attachment.data
-            if self.attachment_data or self.allow_force_receive:
-                self.received = True
-            else:
-                self.received = False
-        else:
-            self.received = False
-        self.on_change_received()
-
-    @fields.depends('reception_date', 'for_object', 'attachment_data',
-        'allow_force_receive')
-    def on_change_with_received(self, name=None):
-        return bool(self.reception_date) and (self.attachment_data or
-            self.allow_force_receive)
-
-    @fields.depends('received', 'reception_date', 'first_reception_date',
-        'allow_force_receive')
-    def on_change_received(self):
-        if self.received and (self.attachment_data or
-                self.allow_force_receive):
-            if not self.reception_date:
+    @fields.depends('attachment', 'attachment_data', 'reception_date',
+        'first_reception_date', 'allow_force_receive')
+    def update_lines_fields(self, uncheck_receive=False):
+        if self.attachment or self.attachment_data:
+            if not self.reception_date and not uncheck_receive:
                 self.reception_date = utils.today()
             if not self.first_reception_date:
-                self.first_reception_date = utils.today()
+                self.first_reception_date = self.reception_date
+            if self.attachment:
+                self.attachment_name = self.attachment.name
+                self.attachment_data = self.attachment.data
         else:
-            self.reception_date = None
+            if self.allow_force_receive:
+                if not self.first_reception_date:
+                    self.first_reception_date = self.reception_date
+            else:
+                self.reception_date = None
+                self.attachment_name = None
+                self.attachment_data = None
 
-    @fields.depends('reception_date', 'attachment_data',
+    @fields.depends('attachment', 'reception_date', 'first_reception_date',
+        'allow_force_receive', 'received')
+    def on_change_reception_date(self):
+        kwargs = {}
+        if not self.reception_date:
+            kwargs['uncheck_receive'] = True
+        self.update_lines_fields(**kwargs)
+
+    @fields.depends('attachment', 'reception_date', 'first_reception_date',
+        'allow_force_receive', 'received')
+    def on_change_received(self):
+        if self.allow_force_receive:
+            if self.received:
+                self.reception_date = utils.today()
+            else:
+                self.reception_date = None
+
+        kwargs = {}
+        if self.allow_force_receive and not self.received:
+            kwargs['uncheck_receive'] = True
+        self.update_lines_fields(**kwargs)
+
+    @fields.depends('reception_date', 'attachment', 'attachment_data',
         'allow_force_receive')
-    def on_change_with_reception_date(self, name=None):
-        if (not self.attachment_data and not
-                self.allow_force_receive):
-            return None
-        return self.reception_date if self.reception_date else utils.today()
+    def on_change_with_received(self, name=None):
+        return bool(self.reception_date) and (
+            (bool(self.attachment) or bool(self.attachment_data)) or
+            self.allow_force_receive)
+
+    @fields.depends('attachment', 'attachment_date', 'reception_date',
+        'first_reception_date', 'allow_force_receive', 'received')
+    def on_change_attachment(self):
+        if not self.attachment:
+            self.attachment_data = None
+        self.update_lines_fields()
+
+    @fields.depends('attachment', 'reception_date', 'first_reception_date',
+        'allow_force_receive', 'received', 'attachment_data')
+    def on_change_attachment_data(self):
+        if not self.attachment_data:
+            self.attachment = None
+        self.update_lines_fields()
 
     def get_rec_name(self, name):
         return self.document_desc.name if self.document_desc else ''
@@ -300,7 +334,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
         document request does not allow it.
         '''
         # Default behavior: Allow force receive
-        return True
+        return not self.document_desc.reception_requires_attachment
 
     def get_allow_force_receive(self, name=None):
         return self.attachment_not_required()

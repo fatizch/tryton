@@ -11,6 +11,7 @@ import party
 
 def register():
     Pool.register(
+        document.DocumentDescription,
         document.DocumentRequest,
         document.DocumentRequestLine,
         batch.DocumentRequestBatch,

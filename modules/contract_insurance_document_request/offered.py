@@ -39,9 +39,6 @@ class DocumentRule(
             ('day', 'Days')],
         'Reminder Unit', states={'required': Bool(Eval('reminder_delay'))},
         depends=['reminder_delay'])
-    reception_requires_attachment = fields.Boolean(
-        'Reception Requires Attachment', help='If checked, the attachments'
-        'will be required to mark the document request lines as "received"')
 
     @classmethod
     def __register__(cls, module_name):

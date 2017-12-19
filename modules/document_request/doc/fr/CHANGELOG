@@ -1,3 +1,4 @@
+* BUG#7801 Réusinage du code des changements automatiques sur les champs des lignes de documents et paramétrage de bloquage de la récéption manuelle de ligne de document déplacée sur les modèles de document pour une meilleur granularité
 * FEA#7638 Ajout de la possibilitée de bloquer la reception manuelle de ligne de demande de document
 
 Version 1.14 - 2017-11-09

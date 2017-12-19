@@ -62,10 +62,6 @@ msgctxt "field:document.rule,documents:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "field:document.rule,reception_requires_attachment:"
-msgid "Reception Requires Attachment"
-msgstr "La réception requiert la pièce jointe"
-
 msgctxt "field:document.rule,id:"
 msgid "ID"
 msgstr "ID"

@@ -246,6 +246,10 @@ msgctxt "model:ir.action,name:"
 msgid "Document Reception"
 msgstr "Réception des documents"
 
+msgctxt "field:document.description,reception_requires_attachment:"
+msgid "Reception Requires Attachment"
+msgstr "La réception requiert la pièce jointe"
+
 msgctxt "model:ir.action,name:act_document_request_line_form"
 msgid "Document Request Lines"
 msgstr "Demandes de document"
