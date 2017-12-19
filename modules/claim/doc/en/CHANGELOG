@@ -1,3 +1,5 @@
+* BUG#7827 Load hidden field "Claim" in the loss view form
+
 Version 1.14 - 2017-11-09
 * OTH#0000 Add a method to verify a loss before activating it
 * BUG#7017 The claims data is now read only if the claim is closed

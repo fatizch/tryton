@@ -1,3 +1,5 @@
+* BUG#7827 Chargement caché du champ "Sinistre" dans la vue des préjudices
+
 Version 1.14 - 2017-11-09
 * OTH#0000 Ajout d'une methode pour verifier l'etat d'un évennement avant l'activation
 * BUG#7017 Les données des sinistres sont désormais en lecture seule si le dossier est clôt
