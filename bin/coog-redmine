@@ -1,0 +1,97 @@
+# vim: set ft=sh:
+
+_coog_redmine_get_base_url() {
+    echo https://support.coopengo.com
+}
+
+_coog_redmine_get_issue() {
+    echo "$1" | grep -Eo "^[0-9]+$"
+}
+
+_coog_redmine_send() {
+    if [ "${REDMINE_TOKEN:-}" = "" ]; then
+        echo Cannot read REDMINE_TOKEN environment variable
+        exit 1
+    fi
+
+    URL=$(_coog_redmine_get_base_url)/"$2"
+    H1='"Content-Type: application/json"'
+    H2='"X-Redmine-API-Key: '$REDMINE_TOKEN'"'
+    if [ "${3:-}" = "" ]; then
+        echo curl -s -k -H "$H1" -X "$1" -H "$H2" "$URL" | bash
+    else
+        echo curl -s -k -H "$H1" -X "$1" --data "@$3" -H "$H2" "$URL" | bash
+    fi
+}
+
+coog_redmine_time() { # Do your timesheets - issue minutes activity [message]
+    # Freely adapted from https://github.com/gcoop-libre/redmine-bash-utils
+    set -eou pipefail
+    IFS=$'\n\t'
+    PROJECT=0
+    if [ "${1:-}" = "-p" ]; then
+        PROJECT=1
+        shift
+    fi
+    if [ "$#" != 3 ] && [ "$#" != 4 ]; then
+        echo "Usage : coog redmine time <issue> <minutes> <activity> [message]"
+        echo ""
+        echo "Activities:"
+        echo "    8:  Analyse besoin & archi"
+        echo "    9:  Developpement"
+        echo "    13: Test"
+        echo "    16: Configuration"
+        echo "    14: Documentation"
+        echo "    15: Support métier & formation"
+        echo "    17: Integration"
+        echo "    20: Correction danos"
+        echo "    19: Management/Pilotage"
+        echo "    22: Congés"
+        echo "    23: Formation"
+        echo "    64: Review"
+        exit 1
+    fi
+
+    VALID_MINUTES=$(echo "$2" | grep -Eo "^[0-9]+$")
+    [[ "$VALID_MINUTES" != "$2" ]] && echo "invalid MINUTES: $2" && exit 1
+    MINUTES="$2"
+
+    ISSUE_ID=$(_coog_redmine_get_issue "$1")
+
+    ACTIVITY="$3"
+    COMMENT=${4:-}
+
+    HOURS=$(echo "scale = 10;$MINUTES/60" | bc | awk '{printf "%0.2f",$1}')
+
+    SPENT_ON=$(date +%Y-%m-%d)
+
+    echo "{" > /tmp/data.json
+    echo "    \"time_entry\": {" >> /tmp/data.json
+    echo "        \"activity_id\": \"$ACTIVITY\"," >> /tmp/data.json
+    echo "        \"comments\": \"$COMMENT\"," >> /tmp/data.json
+    echo "        \"hours\": $HOURS," >> /tmp/data.json
+    if [ "$PROJECT" = 0 ]; then
+        echo "        \"issue_id\": $ISSUE_ID," >> /tmp/data.json
+    else
+        echo "        \"project_id\": $ISSUE_ID," >> /tmp/data.json
+    fi
+    echo "        \"spent_on\": \"$SPENT_ON\"" >> /tmp/data.json
+    echo "    }" >> /tmp/data.json
+    echo "}" >> /tmp/data.json
+
+    _coog_redmine_send POST time_entries.json /tmp/data.json
+}
+
+coog_redmine_projects() { # List projects
+    set -eou pipefail
+    IFS=$'\n\t'
+    set +e
+    VALUES=$(_coog_redmine_send GET projects.json)
+    if [ "$?" != 0 ]; then
+        echo "$VALUES"
+        exit 1
+    fi
+    set -e
+    VALUES=$(echo "$VALUES" | python -mjson.tool)
+    echo "$VALUES" | grep -E '^            ("id"|"name")' | sed 'N;s/ *"id": \([0-9]*\),\n *"name": "\(.*\)",/\2: \1/g' | sort
+}
