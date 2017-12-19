@@ -146,9 +146,9 @@ class Contract:
         if not self.broker:
             self.agency = None
 
-    @fields.depends('broker_party', 'product', 'start_date')
+    @fields.depends('broker_party', 'product', 'initial_start_date')
     def on_change_with_agent(self):
-        if self.product and self.start_date:
+        if self.product and self.initial_start_date:
             return utils.auto_complete_with_domain(self, 'agent')
 
     @classmethod
