@@ -120,7 +120,7 @@ class ReportGenerate:
                     msg.attach(img)
         else:
             if selected_letter.html_body:
-                msg = MIMEText('related')
+                msg = MIMEMultipart('related')
                 msg.attach(MIMEText(
                         selected_letter.genshi_evaluated_email_body.encode(
                             'utf-8'),

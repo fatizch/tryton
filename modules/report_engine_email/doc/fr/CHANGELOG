@@ -1,3 +1,5 @@
+* BUG#7835 Correctif des modèles de courrier de type email avec un corp en HTML et sans pièces jointes
+
 Version 1.14 - 2017-11-09
 * FEA#6410 Le bouton "Envoi manuel eMail" est désormais caché lorsque ce n'est pas autorisé sur le modèle de courrier.
 * BUG#0000 La variable "attachments" est déplacé en haut de la fonction afin d'éviter un crash

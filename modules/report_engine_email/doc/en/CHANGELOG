@@ -1,3 +1,5 @@
+* BUG#7835 Fix email report templates with an HTML body and without attachments
+
 Version 1.14 - 2017-11-09
 * FEA#6410 Hide button manual sending when it is not allowed on the report template
 * BUG#0000 "attachments" variable has been  moved to the top of the function to avoid crash
