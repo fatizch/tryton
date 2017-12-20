@@ -23,7 +23,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'DocumentDescription': 'document.description',
             'Attachment': 'ir.attachment',
             'ExportTest': 'coog_core.export_test',
-        }
+            }
 
     def create_doc_request_line(self, code="doc"):
         test_object = self.ExportTest()
@@ -50,6 +50,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         attachment.save()
         line.attachment = attachment
         line.on_change_attachment()
+        # on_change_with_received will be also called by the client
+        line.received = line.on_change_with_received()
         self.assertTrue(line.received)
         self.assertEqual(line.reception_date, utils.today())
         self.assertEqual(line.first_reception_date, utils.today())
