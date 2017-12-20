@@ -1,3 +1,4 @@
+* BUG#7836 Correctif des paramètres des tâches en file d'attente
 * FEA#7673 Ajout de la fonction get_prorated_amount_on_period qui permet de calculer un certain montant étant donnés un montant de départ et un intervalle dans le temps. Elle est principalement utilisée pour calculer un montant étant donnés une prime et un intervalle de temps.
 * OTH#0000 Ne jamais crasher en cas d'absence d'une traduction à l'affichage
 * BUG#7587 Correctif des encodeur / décodeur du contexte persistant pour les assistants

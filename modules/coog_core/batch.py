@@ -257,7 +257,7 @@ class BatchRoot(ModelView):
         broker = async_broker.get_module()
         assert broker
         broker.enqueue(cls.__name__, 'batch_exec', (cls.__name__, records,
-                params), **kwargs)
+                cls.serializable_params(params)), **kwargs)
 
     @classmethod
     @model.post_transaction(model.BrokerCheckDataManager)
@@ -266,7 +266,10 @@ class BatchRoot(ModelView):
         enqueue a new job
         ex: ViewValidationBatch.enqueue([(100,), (101,)], {'crash': 100})
         '''
-        cls._enqueue(records, params or cls._default_config_items, **kwargs)
+        batch_params = cls._default_config_items
+        batch_params.update(cls.get_batch_configuration())
+        batch_params.update(params)
+        cls._enqueue(records, batch_params, **kwargs)
 
 
 class BatchRootNoSelect(BatchRoot):
