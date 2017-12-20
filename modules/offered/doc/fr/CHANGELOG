@@ -1,3 +1,5 @@
+* #BUG7728 Le style par défaut est optionnel
+
 Version 1.14 - 2017-11-09
 * FEA#7234 Amélioration de la vue produit et garanties. Les informations les plus utiles sont ramenées sur la page principale.
 * FEA#7024 Ajout d'un style par défaut qui sera appliqué aux modèles de courriers créés par défaut dans coog

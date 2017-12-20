@@ -1,3 +1,5 @@
+* #BUG7728 Make the default style optional
+
 Version 1.14 - 2017-11-09
 * FEA#7234 Enhancement of the product and coverage view. Most useful information are now displayed on the main page
 * FEA#7024 Configure default report template style to be added as default letter style in coog

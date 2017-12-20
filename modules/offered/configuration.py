@@ -3,6 +3,8 @@
 from trytond.model import fields
 from trytond.tools import file_open
 from trytond.model import ModelView, ModelSQL, ModelSingleton
+from trytond.pyson import Eval
+
 __all__ = ['Configuration']
 
 
@@ -10,7 +12,13 @@ class Configuration(ModelSingleton, ModelSQL, ModelView):
     'Offered Configuration'
     __name__ = 'offered.configuration'
 
-    style_template = fields.Binary('Default report style')
+    use_default_style = fields.Boolean("Use Default Style",
+        depends=['input_kind'],
+        help="If checked, the report templates will use Coog's default style "
+        "if there is no style defined on the product")
+    style_template = fields.Binary('Default report style', states={
+            'invisible': ~Eval('use_default_style')},
+        depends=['use_default_style'])
     path = fields.Function(fields.Char('Path'),
         'get_path', setter='setter_default_report_style_template')
 
