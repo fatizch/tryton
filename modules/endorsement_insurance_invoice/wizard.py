@@ -295,9 +295,19 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
         self.do_update_endorsement(endorsement)
         endorsement.save()
 
+    def add_owner_to_account(self, account, owner):
+        self.raise_user_warning(account.number, 'payer_not_account_owner')
+        account.owners = list(account.owners) + [owner.id]
+        account.save()
+
     def set_account_owner(self):
         new_info = self.new_billing_information[0]
+        if not new_info.payer:
+            return
         if new_info.direct_debit_account:
+            if new_info.payer not in new_info.direct_debit_account.owners:
+                self.add_owner_to_account(new_info.direct_debit_account,
+                    new_info.payer)
             return
         if not new_info.direct_debit_account_selector:
             return
@@ -307,13 +317,8 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
                 new_info.direct_debit_account_selector
             new_info.direct_debit_account_selector = None
             return
-        self.raise_user_warning(
-            new_info.direct_debit_account_selector.number,
-            'payer_not_account_owner')
-        new_info.direct_debit_account_selector.owners = list(
-            new_info.direct_debit_account_selector.owners) + [
-                new_info.payer.id]
-        new_info.direct_debit_account_selector.save()
+        self.add_owner_to_account(new_info.direct_debit_account_selector,
+            new_info.payer)
         new_info.direct_debit_account = new_info.direct_debit_account_selector
         new_info.direct_debit_account_selector = None
 
