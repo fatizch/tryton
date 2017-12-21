@@ -13,7 +13,6 @@ class Configuration(ModelSingleton, ModelSQL, ModelView):
     __name__ = 'offered.configuration'
 
     use_default_style = fields.Boolean("Use Default Style",
-        depends=['input_kind'],
         help="If checked, the report templates will use Coog's default style "
         "if there is no style defined on the product")
     style_template = fields.Binary('Default report style', states={
