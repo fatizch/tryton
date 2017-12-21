@@ -696,6 +696,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         readonly=True, depends=['note'])
     journal = fields.Many2One('account.payment.journal', 'Journal',
         ondelete='RESTRICT')
+    invoice_line_details = fields.One2Many('account.invoice.line.claim_detail',
+        'indemnification', 'Invoice Line Details', delete_missing=False)
 
     @classmethod
     def __setup__(cls):
@@ -929,14 +931,23 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 for x in self._get_taxes().values())
 
     def get_rec_name(self, name):
-        return u'%s - %s: %s [%s]' % (
+        payment_line = None
+        if self.is_paid:
+            payment_lines = [x for x in self.invoice_line_details
+                if x.invoice.reconciliation_date
+                and not x.is_regularisation]
+            if payment_lines:
+                payment_line = payment_lines[0]
+        return u'%s - %s: %s [%s] %s' % (
             coog_string.translate_value(self, 'start_date')
             if self.start_date else '',
             coog_string.translate_value(self, 'end_date')
             if self.end_date else '',
-            self.get_currency().amount_as_string(self.amount)
-            if self.amount else '',
+            self.get_currency().amount_as_string(self.amount),
             coog_string.translate_value(self, 'status') if self.status else '',
+            coog_string.translate_value(payment_line,
+                'invoice_line_reconciliation_date') if payment_line
+                and payment_line.invoice_line_reconciliation_date else '',
             )
 
     def is_pending(self):

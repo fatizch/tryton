@@ -34,5 +34,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="account_invoice.invoice_line_view_form"/>
             <field name="name">invoice_line_form</field>
         </record>
+        <!-- ############################# -->
+        <!-- # Invoice Line Claim Detail # -->
+        <!-- ############################# -->
+        <record model="ir.ui.view" id="invoice_line_claim_detail_view_list">
+            <field name="model">account.invoice.line.claim_detail</field>
+            <field name="type">tree</field>
+            <field name="name">invoice_line_claim_detail_list</field>
+        </record>
+        <record model="ir.ui.view" id="invoice_line_claim_detail_view_form">
+            <field name="model">account.invoice.line.claim_detail</field>
+            <field name="type">form</field>
+            <field name="name">invoice_line_claim_detail_form</field>
+        </record>
     </data>
 </tryton>

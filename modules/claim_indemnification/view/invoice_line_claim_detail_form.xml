@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="invoice"/>
+    <field name="invoice"/>
+    <label name="invoice_line_invoice_date"/>
+    <field name="invoice_line_invoice_date"/>
+    <label name="invoice_line_reconciliation_date"/>
+    <field name="invoice_line_reconciliation_date"/>
+    <label name="invoice_line_state"/>
+    <field name="invoice_line_state"/>
+    <label name="invoice_line_total_amount"/>
+    <group id="total_amount">
+        <field name="invoice_line_total_amount" xexpand="0"/>
+        <label name="invoice_line_currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+    <label name="is_regularisation"/>
+    <field name="is_regularisation"/>
+</form>

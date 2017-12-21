@@ -4,6 +4,7 @@ from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
+from trytond.pyson import Eval
 
 from trytond.modules.coog_core import model, fields, utils
 
@@ -100,6 +101,37 @@ class ClaimInvoiceLineDetail(model.CoogSQL, model.CoogView):
     service = fields.Function(
         fields.Many2One('claim.service', 'Services'),
         'get_service')
+    invoice = fields.Function(
+        fields.Many2One('account.invoice', 'Invoice'),
+        'getter_invoice')
+    invoice_line_invoice_date = fields.Function(
+        fields.Date('Invoice Date'),
+        'getter_invoice_field')
+    invoice_line_reconciliation_date = fields.Function(
+        fields.Date('Invoice Reconciliation Date'),
+        'getter_invoice_field')
+    invoice_line_state = fields.Function(
+        fields.Selection([
+                ('draft', 'Draft'),
+                ('validated', 'Validated'),
+                ('posted', 'Posted'),
+                ('paid', 'Paid'),
+                ('cancel', 'Canceled')], 'Invoice State'),
+        'getter_invoice_field')
+    invoice_line_total_amount = fields.Function(
+        fields.Numeric('Invoice Total Amount',
+            digits=(16, Eval('invoice_line_currency_digits', 2)),
+            depends=['invoice_line_currency_digits']),
+        'getter_invoice_field')
+    invoice_line_currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'getter_invoice_field')
+    is_regularisation = fields.Function(
+        fields.Boolean('Is Regularisation'),
+        'getter_is_regularisation')
+    invoice_line_currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'getter_invoice_field')
 
     @classmethod
     def __register__(cls, module):
@@ -128,3 +160,20 @@ class ClaimInvoiceLineDetail(model.CoogSQL, model.CoogView):
 
     def get_rec_name(self, name):
         return self.indemnification.rec_name
+
+    def getter_invoice(self, name):
+        return self.invoice_line.invoice.id
+
+    def getter_invoice_field(self, name):
+        if not self.invoice:
+            return
+        if name.startswith('invoice_line_'):
+            name = name[13:]
+        value = getattr(self.invoice, name)
+        if isinstance(value, model.CoogSQL):
+            return value.id
+        return value
+
+    def getter_is_regularisation(self, name):
+        return self.invoice_line.unit_price * \
+            self.indemnification.total_amount < 0

@@ -196,9 +196,44 @@ msgctxt "field:account.invoice.line.claim_detail,indemnification:"
 msgid "Indemnification"
 msgstr "Prestations"
 
+msgctxt "field:account.invoice.line.claim_detail,invoice:"
+msgid "Invoice"
+msgstr "Quittance"
+
 msgctxt "field:account.invoice.line.claim_detail,invoice_line:"
 msgid "Invoice Line"
 msgstr "Ligne de quittance"
+
+msgctxt ""
+"field:account.invoice.line.claim_detail,invoice_line_currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision de la devise"
+
+msgctxt ""
+"field:account.invoice.line.claim_detail,invoice_line_currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:account.invoice.line.claim_detail,invoice_line_invoice_date:"
+msgid "Invoice Date"
+msgstr "Date de facturation"
+
+msgctxt ""
+"field:account.invoice.line.claim_detail,invoice_line_reconciliation_date:"
+msgid "Invoice Reconciliation Date"
+msgstr "Date de réconciliation de la quittance"
+
+msgctxt "field:account.invoice.line.claim_detail,invoice_line_state:"
+msgid "Invoice State"
+msgstr "État de la facture"
+
+msgctxt "field:account.invoice.line.claim_detail,invoice_line_total_amount:"
+msgid "Invoice Total Amount"
+msgstr "Montant total de la quittance"
+
+msgctxt "field:account.invoice.line.claim_detail,is_regularisation:"
+msgid "Is Regularisation"
+msgstr "Est une régularisation"
 
 msgctxt "field:account.invoice.line.claim_detail,rec_name:"
 msgid "Name"
@@ -471,6 +506,10 @@ msgstr "Date de Fin"
 msgctxt "field:claim.indemnification,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:claim.indemnification,invoice_line_details:"
+msgid "Invoice Line Details"
+msgstr "Détails de ligne de quittance"
 
 msgctxt "field:claim.indemnification,is_paid:"
 msgid "Paid"
@@ -1256,6 +1295,26 @@ msgstr "Montant"
 msgctxt "selection:account.invoice,business_kind:"
 msgid "Claim Invoice"
 msgstr "Remboursement Sinistre"
+
+msgctxt "selection:account.invoice.line.claim_detail,invoice_line_state:"
+msgid "Canceled"
+msgstr "Annulée"
+
+msgctxt "selection:account.invoice.line.claim_detail,invoice_line_state:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:account.invoice.line.claim_detail,invoice_line_state:"
+msgid "Paid"
+msgstr "Payée"
+
+msgctxt "selection:account.invoice.line.claim_detail,invoice_line_state:"
+msgid "Posted"
+msgstr "Postée"
+
+msgctxt "selection:account.invoice.line.claim_detail,invoice_line_state:"
+msgid "Validated"
+msgstr "Validée"
 
 msgctxt "selection:benefit,indemnification_kind:"
 msgid "Annuity"
