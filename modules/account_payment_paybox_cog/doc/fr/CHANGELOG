@@ -1,3 +1,5 @@
+* BUG#7837 L'évènement de création du group de paiement n'est plus levée avant l'attribution de l'url de paiement sur le groupe
+
 Version 1.14 - 2017-11-09
 * BUG#6732 Affichage d'une erreur lors d'un échec dans l'assistant de représentation d'un paiement paybox depuis un paiement impayé
 * FEA#6542 Améliorations: Création d'un paiement depuis un rejet, améliorations de l'interface utilisateur

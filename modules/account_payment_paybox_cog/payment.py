@@ -6,6 +6,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import StateAction
 from trytond.pyson import Eval, Bool, If, And
 from trytond.wizard import StateView, Button, StateTransition
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields, model, coog_string, utils
 from trytond.modules.account_payment.payment import KINDS
@@ -221,3 +222,14 @@ class ProcessPayment:
         _, res = self.do_process(None)
         self.paybox_url_view.paybox_url = res['paybox_url']
         return 'paybox_url_view'
+
+    def do_process(self, action):
+        # TODO: Properly postpone event notification at the end of the 
+        # transaction block
+        with ServerContext().set_context(postpone_payment_group_event=True):
+            action, res = super(ProcessPayment, self).do_process(action)
+        if res['res_id']:
+            pool = Pool()
+            group = pool.get('account.payment.group')(res['res_id'][0])
+            pool.get('event').notify_events([group], 'payment_group_created')
+        return action, res

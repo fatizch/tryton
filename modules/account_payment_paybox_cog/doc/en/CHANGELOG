@@ -1,3 +1,5 @@
+* BUG#7837 The payment group created event is no more raised before the payment url assigment on the group.
+
 Version 1.14 - 2017-11-09
 * BUG#6732 Show an error if no paybox payment created by the button on pending failed payments
 * FEA#6542 Improvements: Payment creation from rejected payment, user interface enhancements

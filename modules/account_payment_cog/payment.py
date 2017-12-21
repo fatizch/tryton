@@ -13,6 +13,7 @@ from trytond.wizard import StateView, Button, StateTransition, Wizard
 from trytond.wizard import StateAction
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Not, In, Bool, PYSONEncoder, And
+from trytond.server_context import ServerContext
 
 from trytond.modules.account_payment.payment import KINDS
 from trytond.modules.coog_core import export, fields, model
@@ -760,7 +761,8 @@ class Payment(export.ExportImportMixin, Printable,
             pool = Pool()
             Event = pool.get('event')
             cls.set_description(payments)
-            if group:
+            if group and not ServerContext().get(
+                    'postpone_payment_group_event', False):
                 Event.notify_events([group], 'payment_group_created')
             Event.notify_events(payments, 'process_payment')
         return group
