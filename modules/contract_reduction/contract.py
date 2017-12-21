@@ -109,7 +109,7 @@ class Contract:
                     {'contract': contract.rec_name})
             options = [x for x in (contract.options +
                     contract.covered_element_options)
-                if x.reduction_allowed(reduction_date)]
+                if x.reduction_allowed(reduction_date, raise_errors=True)]
             if not options:
                 contract.append_functional_error(
                     'no_reductionable_options', {
@@ -210,7 +210,7 @@ class Option:
             'invisible': ~Eval('reduction_value'),
             })
 
-    def reduction_allowed(self, reduction_date):
+    def reduction_allowed(self, reduction_date, raise_errors=False):
         if not self.parent_contract.can_reduce:
             return False
         if not self.is_active_at_date(reduction_date):
@@ -222,8 +222,9 @@ class Option:
             data_dict = {}
             data_dict['date'] = reduction_date
             self.init_dict_for_rule_engine(data_dict)
-            return reduction_rule.calculate_eligibility_rule(
-                data_dict, raise_errors=True)
+            res = reduction_rule.calculate_eligibility_rule(
+                data_dict, raise_errors=raise_errors, return_full=True)
+            return res.result and not res.errors
         return True
 
     def reduce(self, reduction_date):
