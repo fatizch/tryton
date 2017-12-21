@@ -164,6 +164,10 @@ class Loss:
         return super(Loss, cls)._get_skip_set_readonly_fields() + [
             'ltd_end_date', 'std_end_date']
 
+    @fields.depends('loss_kind')
+    def on_change_with_possible_loss_descs(self, name=None):
+        return super(Loss, self).on_change_with_possible_loss_descs(name)
+
     def get_loss_kind(self, name):
         return self.loss_desc.loss_kind
 

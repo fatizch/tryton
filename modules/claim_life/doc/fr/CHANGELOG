@@ -1,3 +1,5 @@
+* BUG#7832 Ajout d'une dépendance technique sur le champ type de préjudice
+
 Version 1.14 - 2017-11-09
 * FEA#7378 Ajout de la donnée date de début de l'arrêt de travail dans le moteur de règle
 * FEA#7279 Ajout des données complémentaires sur la description d'un bénéficiaire
