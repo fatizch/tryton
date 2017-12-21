@@ -130,6 +130,8 @@ class ClaimService:
             if eligible:
                 service.eligibility_status = 'accepted'
                 accepted.append(service)
+            elif not eligible and service.benefit.refuse_from_rules:
+                service.eligibility_status = 'refused'
             to_save.append(service)
         if to_save:
             cls.save(to_save)

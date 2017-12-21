@@ -4,6 +4,8 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
         <page string="Eligibility" id="eligibility">
+            <label name="refuse_from_rules"/>
+            <field name="refuse_from_rules"/>
             <field name="eligibility_rules" colspan="4"/>
         </page>
     </xpath>
