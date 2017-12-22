@@ -34,6 +34,10 @@ class Contract(RemindableInterface):
         'contract', 'Documents',
         states={'readonly': Eval('status') != 'quote'},
         depends=['status'], delete_missing=True, target_not_required=True)
+    hidden_waiting_request_lines = fields.Function(
+        fields.Many2Many('document.request.line', None, None,
+            'Hidden Waiting Request Lines'),
+        'get_hidden_waiting_request_lines')
     hidden_waiting_requests = fields.Function(
         fields.Boolean('Hidden waiting requests'),
         'get_hidden_waiting_requests',
@@ -89,7 +93,7 @@ class Contract(RemindableInterface):
         return documents_per_contract
 
     @classmethod
-    def get_hidden_waiting_requests(cls, contracts, name):
+    def get_hidden_waiting_request_lines(cls, contracts, name):
         # This getter allows the user to know if there are request lines which
         # he is not allowed to view, and which are not yet received.
         pool = Pool()
@@ -105,15 +109,19 @@ class Contract(RemindableInterface):
             where_clause &= line.document_desc == Null
 
         cursor = Transaction().connection.cursor()
-        cursor.execute(*line.select(line.contract,
+        cursor.execute(*line.select(line.id, line.contract,
                 where=where_clause,
-                group_by=[line.contract],
+                group_by=[line.contract, line.id],
                 having=Count(line.id) > 0))
 
-        result = {x.id: False for x in contracts}
-        for contract_id, in cursor.fetchall():
-            result[contract_id] = True
+        result = {x.id: [] for x in contracts}
+        for line_id, contract_id, in cursor.fetchall():
+            result[contract_id].append(line_id)
         return result
+
+    @classmethod
+    def get_hidden_waiting_requests(cls, contracts, name):
+        return {c.id: bool(c.hidden_waiting_request_lines) for c in contracts}
 
     @classmethod
     def search_hidden_waiting_requests(cls, name, clause):
@@ -195,17 +203,19 @@ class Contract(RemindableInterface):
     def check_required_documents(self, only_blocking=False):
         missing = False
         non_conform = False
+        request_lines = (self.document_request_lines
+            + self.hidden_waiting_request_lines)
         if not only_blocking and not self.doc_received:
             missing = True
-        elif not all((x.received for x in self.document_request_lines
+        elif not all((x.received for x in request_lines
                 if x.blocking)):
             missing = True
         elif not only_blocking and not all((line.attachment.is_conform
-                for line in self.document_request_lines
+                for line in request_lines
                 if line.attachment)):
             non_conform = True
         elif not all((line.attachment.is_conform
-                for line in self.document_request_lines
+                for line in request_lines
                 if line.blocking and line.attachment)):
             non_conform = True
         if missing:
