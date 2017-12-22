@@ -673,12 +673,12 @@ msgid "Start Date"
 msgstr "Date de Début"
 
 msgctxt "field:offered.option.description,with_exclusions:"
-msgid "With exclusions"
-msgstr "Avec exclusions"
+msgid "Exclusions Management"
+msgstr "Gestion des exclusions"
 
 msgctxt "field:offered.option.description,with_extra_premiums:"
-msgid "With extra premiums"
-msgstr "Avec surprimes"
+msgid "Extra Premium Management"
+msgstr "Gestion des surprimes"
 
 msgctxt "field:offered.option.description,write_date:"
 msgid "Write Date"
@@ -1001,12 +1001,12 @@ msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
 
 msgctxt "help:offered.option.description,with_exclusions:"
-msgid "If True, subscribed options will have exclusions"
-msgstr "Si vrai, les options souscrites auront des exclusions"
+msgid "If True, it is be possible to add exclusions to subscribed options"
+msgstr "Si vrai, il est possible d'ajouter des exclusions sur les options souscrites"
 
 msgctxt "help:offered.option.description,with_extra_premiums:"
-msgid "If True, subscribed options will have extra premiums"
-msgstr "Si vrai, les options souscrites auront des surprimes"
+msgid "If True, it is possible to add extra premiums to subscribed options"
+msgstr "Si vrai, il est possible d'ajouter des surprimes sur les options souscrites"
 
 msgctxt "help:process,delete_button:"
 msgid ""

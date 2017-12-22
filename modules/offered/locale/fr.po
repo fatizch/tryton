@@ -1138,6 +1138,10 @@ msgid "Administration"
 msgstr "Administration"
 
 msgctxt "view:offered.option.description:"
+msgid "Ending"
+msgstr "Terminaison"
+
+msgctxt "view:offered.option.description:"
 msgid "Main"
 msgstr "Principal"
 

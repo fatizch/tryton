@@ -35,7 +35,7 @@ this repository contains the full copyright notices and license terms. -->
                     <field name="options_excluded" colspan="2"/>
                     <newline/>
                 </page>
-                <page name="ending_rule">
+                <page string="Ending" id="ending">
                     <field name="ending_rule" mode="form"/>
                 </page>
             </notebook>

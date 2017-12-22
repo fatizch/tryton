@@ -28,10 +28,12 @@ class OptionDescription:
         states={'required': ~Eval('is_service')}, ondelete='RESTRICT',
         depends=['is_service'])
     family = fields.Selection([('generic', 'Generic')], 'Family')
-    with_extra_premiums = fields.Boolean('With extra premiums',
-        help='If True, subscribed options will have extra premiums')
-    with_exclusions = fields.Boolean('With exclusions',
-        help='If True, subscribed options will have exclusions')
+    with_extra_premiums = fields.Boolean('Extra Premium Management',
+        help='If True, it is be possible to add extra premiums to subscribed'
+        ' options')
+    with_exclusions = fields.Boolean('Exclusions Management',
+        help='If True, it is be possible to add exclusions to subscribed'
+        ' options')
     family_string = family.translated('family')
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         ondelete='RESTRICT', states={'required': ~Eval('is_service')},

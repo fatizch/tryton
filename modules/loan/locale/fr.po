@@ -672,7 +672,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:offered.option.description,insured_outstanding_balance:"
 msgid "Insured Outstanding Amount"
-msgstr "Montant encours assuré"
+msgstr "Prise en compte du montant assuré dans l'encours"
 
 msgctxt "field:offered.option.description,is_loan:"
 msgid "Is Loan"
