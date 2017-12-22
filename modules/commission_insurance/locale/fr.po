@@ -82,6 +82,10 @@ msgctxt "field:commission,commissioned_contract:"
 msgid "Commissioned Contract"
 msgstr "Contrat commissionné"
 
+msgctxt "field:commission,commissioned_covered_element:"
+msgid "Covered Element"
+msgstr "Elément couvert"
+
 msgctxt "field:commission,commissioned_option:"
 msgid "Commissioned Option"
 msgstr "Option commissionnée"

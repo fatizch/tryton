@@ -6,6 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="party"/>
         <field name="commissioned_contract"/>
         <field name="commissioned_subscriber"/>
+        <field name="commissioned_covered_element"/>
         <field name="commissioned_option"/>
         <field name="broker" tree_invisible="1"/>
     </xpath>

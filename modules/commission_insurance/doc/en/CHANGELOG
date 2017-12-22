@@ -1,3 +1,4 @@
+* FEA#0000 Add covered element on commission list
 * OTH#0000 Update on_change_with_agent following 7755
 * BUG#7755 Change the definition of the domain of 'agent' field by replacing 'start_date' by 'initial_start_date'
 * FEA#7359 Add more informations on commission plans and agents to help the user understand what agents are used for a product and the hierarchy of commissions if defined

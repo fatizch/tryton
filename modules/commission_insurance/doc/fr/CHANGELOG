@@ -1,3 +1,4 @@
+* FEA#0000 Ajout de l'élement couvert dans la vue liste des commissions (utile quand plusieurs assurés souscrivent la même option pour différencier les commissions)
 * OTH#0000 Mise à jour de la méthode on_change_with_agent après la correction 7755
 * BUG#7755 Modification de la définition du domaine du protocole de commissionnement en remplacant la date de début du contrat par la date d'effet initiale
 * FEA#7359 Ajout d'informations supplémentaires sur les plans et protocoles de commissionnements afin d'aider l'utilisateur à comprendre quels sont les protocoles utilisés (directement ou en cascade) pour un produit

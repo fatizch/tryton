@@ -75,6 +75,9 @@ class Commission:
         fields.Many2One('party.party', 'Contract Subscriber'),
         'get_commissioned_subscriber',
         searcher='search_commissioned_subscriber')
+    commissioned_covered_element = fields.Function(
+        fields.Many2One('contract.covered_element', 'Covered Element'),
+        'get_commissioned_covered_element')
     start = fields.Date('Start', readonly=True)
     end = fields.Date('End', readonly=True)
     line_tax_rate = fields.Function(
@@ -186,6 +189,11 @@ class Commission:
     def get_commissioned_subscriber(self, name):
         if self.commissioned_contract:
             return self.commissioned_contract.subscriber.id
+
+    def get_commissioned_covered_element(self, name):
+        if (self.commissioned_option
+                and self.commissioned_option.covered_element):
+            return self.commissioned_option.covered_element.id
 
     @classmethod
     def search_commissioned_subscriber(cls, name, clause):
