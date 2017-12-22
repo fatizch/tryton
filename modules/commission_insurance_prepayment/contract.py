@@ -114,8 +114,9 @@ class Contract:
     def reactivate(cls, contracts):
         super(Contract, cls).reactivate(contracts)
         # Force prepayment recalculation
-        cls.create_prepayment_commissions(contracts, adjustement=False,
-            start_date=None, end_date=None)
+        with ServerContext().set_context(reactivate=True):
+            cls.create_prepayment_commissions(contracts, adjustement=False,
+                start_date=None, end_date=None)
 
     @classmethod
     def do_terminate(cls, contracts):
@@ -234,7 +235,8 @@ class ContractOption:
                     for x in agents_plans_to_compute])
             for agent, plan in agents_plans_to_compute:
                 if ((agent.id, self.id) in all_prepayments and
-                        not plan.adjust_prepayment and adjustment):
+                        not plan.adjust_prepayment and adjustment
+                        and not ServerContext().get('reactivate', False)):
                     continue
                 amount, rate = self._get_prepayment_amount_and_rate(agent, plan)
                 if amount is None:

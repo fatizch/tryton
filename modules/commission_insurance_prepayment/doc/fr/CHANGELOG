@@ -1,3 +1,5 @@
+* BUG#7583 Générer une ligne d'ajustement au lieu d'une ligne de précompte lors de la réactivation d'un contrat
+
 Version 1.14 - 2017-11-09
 * BUG#6059 Les commissions agrégées de précomptes sont désormais groupées par date
 
