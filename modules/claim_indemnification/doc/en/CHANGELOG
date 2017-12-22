@@ -1,3 +1,4 @@
+* BUG#7583 Various fixes on claim indemnification process
 * FEA#7802 Display indemnification invoice details
 * BUG#7766 Filter services in indemnifications wizard
 * BUG#7756 Add "Can be indemnificated" field on claim services

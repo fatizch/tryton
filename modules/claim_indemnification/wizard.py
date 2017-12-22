@@ -10,7 +10,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, Equal, Bool, Len, If
 
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
-from trytond.modules.coog_core import fields, model, utils
+from trytond.modules.coog_core import fields, model, utils, wizard_context
 from trytond.modules.coog_core.coog_date import FREQUENCY_CONVERSION_TABLE
 
 
@@ -564,7 +564,7 @@ class IndemnificationRegularisation(model.CoogView):
             self.payback_method == 'planned')
 
 
-class CreateIndemnification(Wizard):
+class CreateIndemnification(wizard_context.PersistentContextWizard):
     'Create Indemnification'
     __name__ = 'claim.create_indemnification'
 
@@ -572,16 +572,17 @@ class CreateIndemnification(Wizard):
     select_service_needed = StateTransition()
     select_service = StateView('claim.select_service',
         'claim_indemnification.select_service_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Cancel', 'cancel', 'tryton-cancel'),
             Button('Continue', 'service_selected', 'tryton-go-next',
                 default=True)])
     service_selected = StateTransition()
     definition = StateView('claim.indemnification_definition',
         'claim_indemnification.indemnification_definition_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Cancel', 'cancel', 'tryton-cancel'),
             Button('Possible Services', 'select_service', 'tryton-go-previous'),
             Button('Calculate', 'calculate', 'tryton-go-next', default=True)])
     calculate = StateTransition()
+    cancel = StateTransition()
     result = StateView('claim.indemnification_calculation_result',
         'claim_indemnification.indemnification_calculation_result_view_form', [
             Button('Previous', 'definition', 'tryton-go-previous'),
@@ -677,9 +678,24 @@ class CreateIndemnification(Wizard):
             if len(possible_services) == 1 else None,
             }
 
+    def _reset_indemnifications(self):
+        if 'indemnifications' in self.wizard_context:
+            indemnifications = self.wizard_context['indemnifications']
+            if indemnifications:
+                Pool().get('claim.indemnification').delete(indemnifications)
+            self.wizard_context.pop('indemnifications')
+        if hasattr(self, 'result') and self.result and getattr(
+                self.result, 'indemnification', None):
+            self.result.indemnification = []
+
     def transition_service_selected(self):
         self.definition.service = self.select_service.selected_service
+        self._reset_indemnifications()
         return 'definition'
+
+    def transition_cancel(self):
+        self._reset_indemnifications()
+        return 'end'
 
     def get_end_date(self, start_date, service):
         if service.loss.end_date:
@@ -840,6 +856,8 @@ class CreateIndemnification(Wizard):
         return 'result'
 
     def default_result(self, name):
+        self.wizard_context['indemnifications'] = list(
+            self.result.indemnification)
         return {
             'indemnification': [x.id for x in self.result.indemnification],
             }

@@ -303,6 +303,9 @@ class ClaimService:
                 'multiple_capital_indemnifications': 'There may not be '
                 'multiple capital indemnifications for a given beneficiary, '
                 'the current one will be cancelled',
+                'period_will_be_deleted': 'The period "%(description)s" will '
+                'be definitely deleted for the calculation, event if you '
+                'cancel the process'
                 })
 
     @classmethod
@@ -464,6 +467,12 @@ class ClaimService:
                     'multiple_capital_indemnifications')
             ClaimIndemnification.cancel_indemnification(to_cancel)
         if to_delete:
+            for deletion in to_delete:
+                cls.raise_user_warning('period_%s' % deletion.id,
+                    'period_will_be_deleted', {
+                        'description' : deletion.rec_name + ' - ' +
+                        deletion.service.rec_name})
+
             ClaimIndemnification.delete(to_delete)
 
     @classmethod
