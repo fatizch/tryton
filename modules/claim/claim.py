@@ -450,7 +450,8 @@ class Loss(model.CoogSQL, model.CoogView):
                 'code "%(loss_desc_code)s" in the configuration',
                 'no_event_description_on_loss_desc': 'There is no event '
                 'description for the loss description "%(loss_desc)s" '
-                'in the configuration'
+                'in the configuration',
+                'no_end_date': 'Missing end date for loss\n%(loss)s,\n',
                 })
         cls._buttons.update({
                 'draft': {
@@ -654,9 +655,14 @@ class Loss(model.CoogSQL, model.CoogView):
 
     @classmethod
     def validate(cls, instances):
-        super(Loss, cls).validate(instances)
-        for instance in instances:
-            instance.check_end_date()
+        with model.error_manager():
+            super(Loss, cls).validate(instances)
+            for instance in instances:
+                instance.check_end_date()
+                if instance.with_end_date and instance.end_date is None \
+                        and instance.closing_reason:
+                    cls.append_functional_error('no_end_date',
+                        {'loss': instance.rec_name})
 
     def get_possible_duplicates(self):
         if not self.do_check_duplicates():
