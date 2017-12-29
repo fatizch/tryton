@@ -1,3 +1,4 @@
+* BUG#7879 Fix behaviour of invoicing blocking which sometime caused duplicate invoices on a period
 * BUG#7750 Fix non-synced billing period calculation
 * OTH#0000 Make invoice line rounding behaviour easier to override
 * OTH#0000 Fix contract invoice searcher following 4b8f11179
