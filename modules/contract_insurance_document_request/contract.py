@@ -73,19 +73,24 @@ class Contract(RemindableInterface):
 
     @classmethod
     def get_calculated_required_documents(cls, contracts):
-        contracts_args = {c: {
-                'date': c.start_date,
-                'appliable_conditions_date': c.appliable_conditions_date,
-                } for c in contracts}
         documents_per_contract = {c: {} for c in contracts}
-        for contract, contract_args in contracts_args.iteritems():
+        for contract in contracts:
+            ctr_args = {
+                'date': contract.start_date,
+                'appliable_conditions_date': contract.appliable_conditions_date,
+                }
+            contract.init_dict_for_rule_engine(ctr_args)
             product_docs = contract.product.calculate_required_documents(
-                contract_args)
+                ctr_args)
             documents_per_contract[contract].update(product_docs)
             for option in contract.covered_element_options + contract.options:
                 if option.status != 'active':
                     continue
-                args = contract_args.copy()
+                args = {
+                    'date': contract.start_date,
+                    'appliable_conditions_date':
+                    contract.appliable_conditions_date,
+                    }
                 option.init_dict_for_rule_engine(args)
                 option_docs = option.coverage.calculate_required_documents(
                     args)
