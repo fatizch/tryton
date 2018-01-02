@@ -140,6 +140,8 @@ class Contract:
 
     @fields.depends('broker', 'agent', 'agency', 'product', 'start_date')
     def on_change_broker(self):
+        # Careful with depends, some clients are depending on the current
+        # behaviour
         self.broker_party = self.on_change_with_broker_party()
         if self.broker_party:
             self.agent = self.on_change_with_agent()

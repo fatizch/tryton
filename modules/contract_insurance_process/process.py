@@ -189,6 +189,7 @@ class ContractSubscribe(ProcessFinder):
             if process_param.party:
                 obj.subscriber = process_param.party
             obj.start_date = process_param.start_date
+            obj.initial_start_date = obj.start_date
             obj.signature_date = process_param.signature_date
             obj.appliable_conditions_date = \
                 process_param.appliable_conditions_date
