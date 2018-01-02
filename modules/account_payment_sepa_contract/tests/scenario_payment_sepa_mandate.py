@@ -57,7 +57,8 @@ contract_start_date = datetime.date(day=1, month=today.month, year=today.year
 config._context['client_defined_date'] = contract_start_date
 
 # #Comment# #Create Fiscal Year
-fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company))
+fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
+    today=contract_start_date))
 fiscalyear.click('create_period')
 second_fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
     contract_start_date + relativedelta(years=1)))

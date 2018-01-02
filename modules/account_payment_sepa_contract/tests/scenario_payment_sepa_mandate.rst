@@ -54,7 +54,8 @@ Reload the context::
 
 Create Fiscal Year::
 
-    >>> fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company))
+    >>> fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
+    ...     today=contract_start_date))
     >>> fiscalyear.click('create_period')
     >>> second_fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
     ...     contract_start_date + relativedelta(years=1)))

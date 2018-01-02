@@ -48,10 +48,13 @@ Reload the context::
 
     >>> User = Model.get('res.user')
     >>> config._context = User.get_preferences(True, config.context)
+    >>> today = datetime.date(datetime.date.today().year, 6, 1)
+    >>> config._context['client_defined_date'] = today
 
 Create Fiscal Year::
 
-    >>> fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company))
+    >>> fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
+    ...         today=today))
     >>> fiscalyear.click('create_period')
 
 Create chart of accounts::
@@ -146,7 +149,7 @@ Create Subscriber::
 
 Create Contract::
 
-    >>> contract_start_date = datetime.date.today()
+    >>> contract_start_date = today
     >>> Contract = Model.get('contract')
     >>> ContractPremium = Model.get('contract.premium')
     >>> BillingInformation = Model.get('contract.billing_information')
@@ -278,7 +281,7 @@ Process dunnning::
     >>> bank.save()
     >>> Number = Model.get('bank.account.number')
     >>> Account = Model.get('bank.account')
-    >>> two_months_ago = datetime.date.today() - relativedelta(months=2)
+    >>> two_months_ago = today - relativedelta(months=2)
     >>> subscriber_account = Account()
     >>> subscriber_account.bank = bank
     >>> subscriber_account.owners.append(subscriber)
@@ -354,7 +357,7 @@ Create Payment Journal::
     ...     order=[('start', 'ASC')])[0]
     >>> config._context['client_defined_date'] = two_months_ago
     >>> first_invoice.invoice.click('post')
-    >>> config._context['client_defined_date'] = None
+    >>> config._context['client_defined_date'] = today
     >>> assert all(x.maturity_date == x.payment_date
     ...     for x in first_invoice.invoice.lines_to_pay)
     >>> Contract.rebill_contracts([contract.id], contract.start_date, config.context)

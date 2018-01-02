@@ -42,8 +42,14 @@ company = get_company()
 User = Model.get('res.user')
 config._context = User.get_preferences(True, config.context)
 
+# We put today in the middle of year, to not have to create several fiscal years
+# when we invoice two months in the past etc.
+today = datetime.date(datetime.date.today().year, 6, 1)
+config._context['client_defined_date'] = today
+
 # #Comment# #Create Fiscal Year
-fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company))
+fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
+        today=today))
 fiscalyear.click('create_period')
 
 # #Comment# #Create chart of accounts
@@ -134,7 +140,9 @@ product.save()
 subscriber = create_party_person()
 
 # #Comment# #Create Contract
-contract_start_date = datetime.date.today()
+
+
+contract_start_date = today
 Contract = Model.get('contract')
 ContractPremium = Model.get('contract.premium')
 BillingInformation = Model.get('contract.billing_information')
@@ -267,7 +275,7 @@ bank.save()
 Number = Model.get('bank.account.number')
 Account = Model.get('bank.account')
 
-two_months_ago = datetime.date.today() - relativedelta(months=2)
+two_months_ago = today - relativedelta(months=2)
 
 subscriber_account = Account()
 subscriber_account.bank = bank
@@ -353,7 +361,7 @@ first_invoice = ContractInvoice.find(
 config._context['client_defined_date'] = two_months_ago
 first_invoice.invoice.click('post')
 
-config._context['client_defined_date'] = None
+config._context['client_defined_date'] = today
 
 assert all(x.maturity_date == x.payment_date
     for x in first_invoice.invoice.lines_to_pay)
