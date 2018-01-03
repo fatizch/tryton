@@ -1,3 +1,5 @@
+* BUG#7897 Amélioration de la gestion des modules inactifs dans le template "brouillard"
+
 Version 1.14 - 2017-11-09
 * BUG#2982: Vérifier qu'une personne physique n'a pas été ajouté plus d'une fois en tant que personne couverte sur le contrat
 * FEA#7439 Possibilité de débrancher les surprimes / exclusions par garantie
