@@ -29,7 +29,8 @@ class Contract:
         parties = set([])
         for covered_element in [x for x in self.covered_elements if x.party]:
             for option in covered_element.options:
-                if option.start_date <= at_date and option.end_date > at_date:
+                if option.start_date <= at_date and (
+                        not option.end_date or option.end_date > at_date):
                     parties.add(covered_element.party)
         for p in parties:
             contacts.append(Contact(
