@@ -1,3 +1,4 @@
+* FEA#7848 Add a batch to facilitate the creation of data update treatments
 * BUG#7836 Fix the enqueued task parameters
 * FEA#7673 Add get_prorated_amount_on_period function, which allows to compute a certain amount given a start amount and a period of time. This function is mainly used to compute an amount given a premium and a time period.
 * OTH#0000 Never crash when searching for a translation

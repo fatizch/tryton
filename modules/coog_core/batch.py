@@ -550,3 +550,60 @@ class MemorySavingBatch(BatchRoot):
         Execute method only checks mandatory parameters.
         """
         cls.check_mandatory_parameters(*args, **kwargs)
+
+
+class DataUpdateBatch(BatchRoot):
+    'Data Update Batch'
+    __name__ = 'batch.data_update'
+
+    logger = logging.getLogger(__name__)
+
+    @classmethod
+    def convert_to_instances(cls, ids, *args, **kwargs):
+        return ids[:]
+
+    @classmethod
+    def select_ids(cls, method_name=None, model=None, no_select=False,
+            include=None, include_file=None, exclude=None, exclude_file=None):
+        """
+            If "model" is not set, the batch will behave as a "NoSelect" batch
+
+            Ids to include are either:
+                --include : a list of ids (ex: [1, 2, 3, 4])
+                --include-file : the name of a file with an id per line
+                else all ids in the given model
+
+            Specific ids can be excluded with:
+                --exclude : a list of ids (ex: [1, 2, 3, 4])
+                --exclude-file : the name of a file with an id per line
+        """
+        if no_select:
+            # No select mode
+            return [(0,)]
+        excluded = []
+        if include is not None:
+            ids = eval(include)
+        elif include_file is not None:
+            with open(include_file) as f:
+                ids = eval(f.read())
+        else:
+            ids = [x.id for x in Pool().get(model).search([])]
+        if exclude is not None:
+            excluded = eval(exclude)
+        elif exclude_file is not None:
+            with open(exclude_file) as f:
+                excluded = eval(f.read())
+        return [(x,) for x in set(ids) - set(excluded)]
+
+    @classmethod
+    def execute(cls, objects, ids, method_name=None, model=None,
+            no_select=False, include=None, include_file=None, exclude=None,
+            exclude_file=None):
+        assert method_name.startswith('data_update_'), 'Invalid method ' + \
+            method_name
+        if model is None:
+            # No select mode
+            getattr(cls, method_name)()
+        else:
+            to_treat = Pool().get(model).browse(ids)
+            getattr(cls, method_name)(to_treat)

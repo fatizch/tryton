@@ -66,6 +66,7 @@ def register():
         batch.ViewValidationBatch,
         batch.CleanDatabaseBatch,
         batch.NoSelectBatchExample,
+        batch.DataUpdateBatch,
         test_case_framework.TestCaseModel,
         test_case_framework.TestCaseInstance,
         test_case_framework.TestCaseRequirementRelation,
