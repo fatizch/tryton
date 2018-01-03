@@ -1673,7 +1673,10 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             depends=_CONTRACT_STATUS_DEPENDS),
         'get_start_date', searcher="searcher_start_date")
     final_end_date = fields.Function(
-        fields.Date('Final End Date'),
+        fields.Date('Final End Date', states={'invisible':
+                Or(~Eval('final_end_date'),
+                    Eval('final_end_date') == Eval('end_date'))},
+            depends=['end_date']),
         'get_final_end_date')
     manual_start_date = fields.Date('Manual Start Date',
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
@@ -2048,8 +2051,8 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             if end_date >= option.start_date:
                 if not option.parent_contract:
                     continue
-                if (not option.parent_contract.end_date
-                        or end_date <= option.parent_contract.end_date):
+                if (not option.parent_contract.final_end_date
+                        or end_date <= option.parent_contract.final_end_date):
                     if (end_date and option.automatic_end_date and
                             option.automatic_end_date < end_date):
                         cls.raise_user_error(
@@ -2061,7 +2064,7 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
                 else:
                     cls.raise_user_error('end_date_posterior_to_contract',
                         {'end_date': Date.date_as_string(
-                            option.parent_contract.end_date),
+                            option.parent_contract.final_end_date),
                         'option': option.rec_name,
                         'contract': option.parent_contract.rec_name})
 
