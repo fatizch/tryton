@@ -307,16 +307,18 @@ class Group:
                 journal.save()
 
     def process_sepa(self):
-        # This methods does not call super (defined in account_payment_sepa
-        # => payment.py
-        #
-        # The reason is that the sepa_mandate_sequence_type is set whatever the
-        # existing value is, and right before the call to generate_message. So
-        # the only way to properly set the sequence_type (that is, use the
-        # same sequence_type for all the payments of a given merged group) is
-        # to do so in this method.
-        #
-        # See https://redmine.coopengo.com/issues/1443
+        '''
+          This methods does not call super (defined in account_payment_sepa
+          => payment.py
+
+          The reason is that the sepa_mandate_sequence_type is set whatever the
+          existing value is, and right before the call to generate_message. So
+          the only way to properly set the sequence_type (that is, use the
+          same sequence_type for all the payments of a given merged group) is
+          to do so in this method.
+
+          See https://redmine.coopengo.com/issues/1443
+        '''
         self.payments_update_sepa(self.payments, self.kind)
         self.generate_message(_save=False)
         if self.kind == 'receivable':
@@ -683,10 +685,19 @@ class Journal:
         'Last Receivable Payment SEPA Creation',
         states={'invisible': Eval('process_method') != 'sepa'},
         depends=['process_method'])
-    sepa_creditor = fields.Many2One('party.party', 'Sepa Creditor',
+    sepa_party = fields.Many2One('party.party', 'Sepa Creditor / Debtor',
         states={'invisible': Eval('process_method') != 'sepa'},
-        depends=['process_method'], help='Is used for the Creditor section '
-        'of receivable SEPA messages')
+        depends=['process_method'], help='If set, will be used in place of '
+        'the company for the Creditor / Debtor section of SEPA messages')
+
+    @classmethod
+    def __register__(cls, module):
+        TableHandler = backend.get('TableHandler')
+        handler = TableHandler(cls, module)
+        # Migrate from 1.14 : rename 'sepa_creditor' to 'sepa_party'
+        if handler.column_exist('sepa_creditor'):
+            handler.column_rename('sepa_creditor', 'sepa_party')
+        super(Journal, cls).__register__(module)
 
     def get_next_possible_payment_date(self, line, day):
         if self.process_method != 'sepa':
