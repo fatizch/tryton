@@ -169,7 +169,8 @@ class Loss:
         return super(Loss, self).on_change_with_possible_loss_descs(name)
 
     def get_loss_kind(self, name):
-        return self.loss_desc.loss_kind
+        if self.loss_desc:
+            return self.loss_desc.loss_kind
 
     def get_start_end_dates(self, name):
         if 'start_date' in name:
@@ -242,7 +243,7 @@ class Loss:
         # Update without func_key is not handled for now
         values['_func_key'] = None
 
-    def init_loss(self, loss_desc_code, **kwargs):
+    def init_loss(self, loss_desc_code=None, **kwargs):
         self.return_to_work_date = None
         self.end_date = None
         super(Loss, self).init_loss(loss_desc_code, **kwargs)

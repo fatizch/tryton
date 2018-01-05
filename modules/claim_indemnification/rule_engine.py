@@ -69,6 +69,46 @@ class RuleEngineRuntime:
         return share if share is not None else 1
 
     @classmethod
+    @check_args('loss', 'service')
+    def _re_total_amount_period_for_covered(cls, args, start=None, end=None,
+            kind='capital', for_this_claim=False, ignore_service=False):
+        Indemnification = Pool().get('claim.indemnification')
+        loss = args.get('loss')
+        covered = loss.covered_person
+        claim = loss.claim if for_this_claim else None
+        service = args.get('service')
+        kwargs = {}
+        if ignore_service:
+            kwargs['services_to_ignore'] = [service]
+
+        def total_amount_for(covered, claim, start, end):
+            indemnifications = Indemnification._get_indemnifications_for_period(
+                service.option, covered, [kind], start, end, claim, **kwargs)
+            return sum(x.total_amount for x in indemnifications)
+
+        return total_amount_for(covered, claim, start=start, end=end)
+
+    @classmethod
+    @check_args('loss', 'service')
+    def _re_total_indemnification_days_for_covered(cls, args, start=None,
+            end=None, kind='period', for_this_claim=None,
+            ignore_service=False):
+        Indemnification = Pool().get('claim.indemnification')
+        loss = args.get('loss')
+        covered = loss.covered_person
+        claim = loss.claim if for_this_claim else None
+        service = args.get('service')
+        kwargs = {}
+        if ignore_service:
+            kwargs['services_to_ignore'] = [service]
+
+        indemnifications = Indemnification._get_indemnifications_for_period(
+            service.option, covered, [kind], start, end, claim, **kwargs)
+
+        return sum(coog_date.number_of_days_between(x.start_date, x.end_date)
+            for x in indemnifications)
+
+    @classmethod
     @check_args('benefit', 'option', 'loss')
     def _re_number_of_deductible_days(cls, args, from_date, to_date):
         pool = Pool()

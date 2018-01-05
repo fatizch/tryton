@@ -352,7 +352,7 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
                 to_save.append(claim)
         cls.save(to_save)
 
-    def add_new_loss(self, loss_desc_code, **kwargs):
+    def add_new_loss(self, loss_desc_code=None, **kwargs):
         loss = Pool().get('claim.loss')()
         loss.claim = self
         loss.init_loss(loss_desc_code, **kwargs)
@@ -385,16 +385,21 @@ class Loss(model.CoogSQL, model.CoogView):
     state = fields.Selection([('draft', 'Draft'), ('active', 'Active')],
         'State', required=True, readonly=True)
     loss_desc = fields.Many2One('benefit.loss.description', 'Loss Descriptor',
-        ondelete='RESTRICT', required=True,
+        ondelete='RESTRICT', states={
+            'required': Eval('state') != 'draft',
+            },
         domain=[('id', 'in', Eval('possible_loss_descs'))],
-        depends=['possible_loss_descs'])
+        depends=['possible_loss_descs', 'state'])
     possible_loss_descs = fields.Function(
         fields.Many2Many('benefit.loss.description', None, None,
             'Possible Loss Descs', ),
         'on_change_with_possible_loss_descs')
     event_desc = fields.Many2One('benefit.event.description', 'Event',
+        states={
+            'required': Eval('state') != 'draft',
+            },
         domain=[('loss_descs', '=', Eval('loss_desc'))],
-        depends=['loss_desc'], ondelete='RESTRICT', required=True)
+        depends=['loss_desc', 'state'], ondelete='RESTRICT')
     services = fields.One2Many(
         'claim.service', 'loss', 'Claim Services', delete_missing=True,
         target_not_required=True, domain=[
@@ -427,7 +432,7 @@ class Loss(model.CoogSQL, model.CoogView):
     available_closing_reasons = fields.Function(
         fields.One2Many('claim.closing_reason', None,
             'Available Closing Reason'),
-        'get_available_closing_reasons')
+        'on_change_with_available_closing_reasons')
     closing_reason = fields.Many2One('claim.closing_reason', 'Closing Reason',
         domain=[('id', 'in', Eval('available_closing_reasons'))],
         states={
@@ -482,8 +487,10 @@ class Loss(model.CoogSQL, model.CoogView):
         if self.claim:
             return self.claim.status
 
-    def get_available_closing_reasons(self, name=None):
-        return [x.id for x in self.loss_desc.closing_reasons]
+    @fields.depends('loss_desc')
+    def on_change_with_available_closing_reasons(self, name=None):
+        if self.loss_desc:
+            return [x.id for x in self.loss_desc.closing_reasons]
 
     @fields.depends('claim', 'event_desc', 'loss_desc', 'start_date')
     def on_change_with_possible_loss_descs(self, name=None):
@@ -507,8 +514,9 @@ class Loss(model.CoogSQL, model.CoogView):
         return res
 
     def get_func_key(self, name):
-        return '|'.join([self.claim.name, str(self.get_date()),
-                self.loss_desc.loss_kind])
+        if self.loss_desc:
+            return '|'.join([self.claim.name, str(self.get_date()),
+                    self.loss_desc.loss_kind])
 
     def get_loss_desc_code(self, name):
         return self.loss_desc.code if self.loss_desc else ''
@@ -615,19 +623,15 @@ class Loss(model.CoogSQL, model.CoogView):
             if service:
                 self.services = self.services + (service,)
 
-    def init_loss(self, loss_desc_code, **kwargs):
+    def init_loss(self, loss_desc_code=None, **kwargs):
         pool = Pool()
-        LossDesc = pool.get('benefit.loss.description')
-        loss_descs = LossDesc.search([('code', '=', loss_desc_code)])
-        if not loss_descs:
-            self.raise_user_error('no_loss_desc_found',
-                {'loss_desc_code': loss_desc_code})
-        self.loss_desc = loss_descs[0]
-        if not self.loss_desc.event_descs:
-            self.raise_user_error('no_event_description_on_loss_desc',
-                {'loss_desc': self.loss_desc.rec_name})
-        self.event_desc = self.loss_desc.event_descs[0]
-        self.extra_data = utils.init_extra_data(self.loss_desc.extra_data_def)
+        if loss_desc_code:
+            LossDesc = pool.get('benefit.loss.description')
+            self.loss_desc, = LossDesc.search([('code', '=', loss_desc_code)])
+            self.event_desc = self.loss_desc.event_descs[0]
+            self.extra_data = utils.init_extra_data(self.loss_desc.extra_data_def)
+        else:
+            self.loss_desc = None
         if not kwargs:
             return
         for arg, value in kwargs.iteritems():
@@ -641,7 +645,8 @@ class Loss(model.CoogSQL, model.CoogView):
 
     @property
     def loss(self):
-        return getattr(self, self.loss_desc.loss_kind + '_loss')
+        if self.loss_desc:
+            return getattr(self, self.loss_desc.loss_kind + '_loss')
 
     def get_all_extra_data(self, at_date):
         return self.extra_data or {}
@@ -677,11 +682,13 @@ class Loss(model.CoogSQL, model.CoogView):
         return {'loss_desc', 'start_date'}
 
     def get_possible_duplicates_clauses(self):
-        return [
+        clause = [
             ('id', '!=', self.id),
-            ('loss_desc', '=', self.loss_desc.id),
             ('start_date', '=', self.start_date),
             ]
+        if self.loss_desc:
+            clause += ('loss_desc', '=', self.loss_desc.id),
+        return clause
 
     @classmethod
     def do_check_duplicates(cls):

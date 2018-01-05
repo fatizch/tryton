@@ -1,4 +1,5 @@
 * BUG#7853 Divers correctifs sur le processus d'indemnisation des sinistres
+* FEA#7747 Ajout de méthodes dans le moteur de règles pour le calcul d'indemnisation
 * FEA#7802 Affichage des détails des quittances liées à une indemnisation
 * BUG#7766 Filtrer les services dans l'assistant d'indemnisations
 * BUG#7756 Ajout du champ "Peut être indemnisé" sur les services

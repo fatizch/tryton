@@ -263,7 +263,7 @@ class BenefitRule(
         return res
 
     def do_calculate_indemnification_rule(self, args):
-        result = self.calculate_indemnification_rule(args)
+        result = self.calculate_indemnification_rule(args, raise_errors=True)
         if (not args['indemnification'].share or
                 args['indemnification'].share == 1):
             return result

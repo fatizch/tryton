@@ -1290,6 +1290,26 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     def modify_indemnification(cls, indemnifications):
         pass
 
+    @classmethod
+    def _get_indemnifications_for_period(cls, option, covered, kinds,
+            start=None, end=None, claim=None, services_to_ignore=None):
+        start = start or datetime.date.min
+        end = end or datetime.date.max
+        domain = [
+            ('loss.start_date', '>=', start),
+            ('loss.start_date', '<=', end),
+            ('loss.covered_person', '=', covered.id),
+            ('option', '=', option.id)]
+        if claim:
+            domain.append(('claim', '=', claim.id))
+        if services_to_ignore:
+            domain.append(('id', 'not in', [x.id for x in services_to_ignore]))
+        services = Pool().get('claim.service').search(domain)
+        # Maybe just calculated ones?
+        return [i for s in services for i in s.indemnifications
+            if 'cancel' not in i.status and 'rejected' not in i.status
+            and i.kind in kinds]
+
 
 class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
         WithExtraDetails):

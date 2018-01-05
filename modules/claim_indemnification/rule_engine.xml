@@ -197,6 +197,28 @@ pour le bénéficiaire (entre 0 et 1)</field>
             <field name="name">_re_indemnification_share</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+        <record model="rule_engine.function" id="total_amount_period_for_covered">
+            <field name="translated_technical_name">montant_total_indemnisation_period_personne_couverte</field>
+            <field name="description">Montant total des indemnisations pour la période et la personne couverte</field>
+            <field name="long_description">Montant total des indemnisations pour la période et la personne couverte</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_total_amount_period_for_covered</field>
+            <field name="fct_args">Date debut periode, Date fin periode, Type indemnisation, Pour la prestation courante, ignorer les prestation pour ce service</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="total_indemnification_days_for_covered">
+            <field name="translated_technical_name">nombre_total_jours_indemnisation_personne_couverte</field>
+            <field name="description">Nombre total de jours d'indemnisations pour la personne couverte</field>
+            <field name="long_description">Nombre total de jours d'indemnisations pour la personne couverte</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_total_indemnification_days_for_covered</field>
+            <field name="fct_args">Date debut periode, Date fin periode, Type indemnisation, Pour la prestation courante, ignorer les prestation pour ce service</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
         <record model="rule_engine.function" id="beneficiary_documents_reception_date">
             <field name="translated_technical_name">reception_des_documents_beneficiaire</field>
             <field name="description">Réception des documents bénéficiaire</field>
