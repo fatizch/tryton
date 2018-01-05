@@ -31,6 +31,15 @@ msgid "Start date is required"
 msgstr "La date de début est requise"
 
 msgctxt "error:claim.create_indemnification:"
+msgid "The journal is required"
+msgstr "Le journal est requis"
+
+msgctxt "error:claim.create_indemnification:"
+msgid "The beneficiary is required"
+msgstr "Le bénéficiaire est requis"
+
+
+msgctxt "error:claim.create_indemnification:"
 msgid ""
 "The contract was terminated on the %(contract_end)s, a new indemnification "
 "cannot start on %(indemn_start)s."

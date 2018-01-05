@@ -384,7 +384,7 @@ class SelectService(model.CoogView):
     __name__ = 'claim.select_service'
 
     selected_service = fields.Many2One('claim.service', 'Selected Service',
-        required=True,
+        states={'required': Bool(Eval('possible_services'))},
         domain=([('id', 'in', Eval('possible_services'))]),
         depends=['possible_services'])
     contract = fields.Many2One('contract', 'Contract', readonly=True)
@@ -444,13 +444,11 @@ class IndemnificationDefinition(model.CoogView):
         domain=[If(Len(Eval('possible_beneficiaries', [])) == 0, [],
                 [('id', 'in', Eval('possible_beneficiaries'))])],
         states={'readonly': Len(Eval('possible_beneficiaries', [])) == 1},
-        depends=['possible_beneficiaries'],
-        required=True)
+        depends=['possible_beneficiaries'])
     beneficiary_share = fields.Numeric('Beneficiary Share', readonly=True)
     possible_beneficiaries = fields.Many2Many('party.party', None, None,
         'Possible Beneficiaries', readonly=True)
-    journal = fields.Many2One('account.payment.journal', 'Journal',
-        required=True)
+    journal = fields.Many2One('account.payment.journal', 'Journal')
     product = fields.Many2One('product.product', 'Product', states={
             'invisible': Bool(Eval('product', False)) &
             (Len(Eval('possible_products', [])) == 1),
@@ -626,6 +624,8 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
                 'the loss end date',
                 'end_date_required': 'End date is required',
                 'start_date_required': 'Start date is required',
+                'journal_required': 'The journal is required',
+                'beneficiary_required': 'The beneficiary is required',
                 })
 
     def possible_services(self, claim):
@@ -707,6 +707,8 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
             self.result.indemnification = []
 
     def transition_service_selected(self):
+        if not self.select_service.selected_service:
+            return 'select_service_needed'
         self.definition.service = self.select_service.selected_service
         self._reset_indemnifications()
         return 'definition'
@@ -793,6 +795,10 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
             input_start_date = self.definition.indemnification_date
         input_end_date = self.definition.end_date
         service = self.definition.service
+        if not self.definition.journal:
+            self.raise_user_error('journal_required')
+        if not self.definition.beneficiary:
+            self.raise_user_error('beneficiary_required')
         if self.definition.is_period:
             if not input_start_date:
                 self.raise_user_error('start_date_required')

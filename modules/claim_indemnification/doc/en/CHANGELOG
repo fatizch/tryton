@@ -1,3 +1,4 @@
+* BUG#7891 Indemnification process fixes for some required fields
 * FEA#7850 Enhance claim services display in indemnifications wizard
 * BUG#7583 Various fixes on claim indemnification process
 * FEA#7747 Add methods to the rule engine for indemnification calculation
