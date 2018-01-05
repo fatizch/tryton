@@ -873,7 +873,13 @@ class ReportGenerate(CoogReport):
             data['id'])
         template = pool.get('report.template')(data['doc_template'][0])
         party = pool.get('party.party')(data['party'])
-        version = template.get_selected_version(utils.today(), party.lang)
+        if party and party.lang:
+            lang = party.lang
+        else:
+            lang = pool.get('res.user')(Transaction().user).language
+        if not lang:
+            raise Exception('No language defined')
+        version = template.get_selected_version(utils.today(), lang)
         extension = os.path.splitext(version.name)[1][1:]
         filename, ext = cls.get_filename(template, name_giver,
             pool.get('party.party')(data['party']))

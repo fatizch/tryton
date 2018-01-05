@@ -1,3 +1,5 @@
+* BUG#7882 Utilisation de la langue utilisateur lorsqu'il n'y a pas de destinataire défini lors de la génération des rapports
+
 Version 1.14 - 2017-11-09
 * FEA#7294 Gestion des autorisations de l'édition manuelle des modèles de courrier
 * FEA#7024 Ajout de modèles de courriers par défaut

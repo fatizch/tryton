@@ -1,3 +1,5 @@
+* BUG#7882 Use user's language if no recipient is defined when generating reports
+
 Version 1.14 - 2017-11-09
 * FEA#7294 Manage authorizations on report template in report wizard
 * FEA#7024 Configure default reports templates
