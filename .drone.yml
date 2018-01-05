@@ -27,6 +27,7 @@ pipeline:
 
   check-flake8:
     image: coog-test/base-tests
+    secrets: [ GITHUB_TOKEN ]
     commands:
       - /workspace/drone/tests/checks/check-flake8
     when:
