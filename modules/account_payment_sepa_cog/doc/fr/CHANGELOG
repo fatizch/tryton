@@ -1,3 +1,4 @@
+* BUG#7904 Implémentation des informations d'amendements aussi pour le CFONB
 * FEA#7663 Gestion du débiteur SEPA différent de la compagnie
 * FEA#7663 Possibilité de choisir un créditeur SEPA autre que la compagnie sur le journal de paiement
 * BUG#7569 Correction d'un plantage du batch de rejet SEPA

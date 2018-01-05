@@ -238,12 +238,8 @@ class Group:
 
     def get_sepa_template(self):
         if self.kind == 'payable':
-            if self.journal.sepa_payable_flavor.endswith('-cfonb'):
-                return super(Group, self).get_sepa_template()
             return loader.load('%s.xml' % self.journal.sepa_payable_flavor)
         elif self.kind == 'receivable':
-            if self.journal.sepa_receivable_flavor.endswith('-cfonb'):
-                return super(Group, self).get_sepa_template()
             return loader.load('%s.xml' % self.journal.sepa_receivable_flavor)
 
     @classmethod
