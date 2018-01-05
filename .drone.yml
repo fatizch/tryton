@@ -13,11 +13,11 @@ clone:
 pipeline:
   before-check:
     image: coog-test/base-tests
-    commands:		
+    commands:
       - git clone --recursive --depth=1 https://github.com/coopengo/coog-drone /workspace/drone/tests
       - /workspace/drone/tests/checks/before-check
 
-  check-meta: 
+  check-meta:
     image: coog-test/base-tests
     secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
     commands:
