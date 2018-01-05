@@ -391,15 +391,33 @@ class SelectService(model.CoogView):
     option = fields.Many2One('contract.option', 'Option', readonly=True)
     possible_services = fields.Many2Many('claim.service', None, None,
         'Possible Services', states={'invisible': True})
+    start_date = fields.Date('Start Date', readonly=True,
+        states={'invisible': ~Eval('selected_service')})
+    end_date = fields.Date('End Date', readonly=True,
+        states={'invisible': ~Eval('selected_service')})
+    loss_desc = fields.Many2One('benefit.loss.description', 'Loss Descriptor',
+        readonly=True, states={'invisible': ~Eval('selected_service')})
+    event_desc = fields.Many2One('benefit.event.description',
+        'Event Description', readonly=True,
+        states={'invisible': ~Eval('selected_service')})
 
-    @fields.depends('contract', 'option', 'selected_service')
+    @fields.depends('contract', 'option', 'selected_service', 'start_date',
+        'end_date', 'loss_desc', 'event_desc')
     def on_change_selected_service(self):
         if self.selected_service:
             self.contract = self.selected_service.contract
             self.option = self.selected_service.option
+            self.start_date = self.selected_service.loss.start_date
+            self.end_date = self.selected_service.loss.end_date
+            self.loss_desc = self.selected_service.loss.loss_desc
+            self.event_desc = self.selected_service.loss.event_desc
         else:
             self.contract = None
             self.option = None
+            self.start_date = None
+            self.end_date = None
+            self.loss_desc = None
+            self.event_desc = None
 
 
 class IndemnificationDefinition(model.CoogView):

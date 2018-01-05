@@ -1060,9 +1060,21 @@ msgctxt "field:claim.select_service,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:claim.select_service,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:claim.select_service,event_desc:"
+msgid "Event Description"
+msgstr "Fait générateur"
+
 msgctxt "field:claim.select_service,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:claim.select_service,loss_desc:"
+msgid "Loss Descriptor"
+msgstr "Descripteur de préjudice"
 
 msgctxt "field:claim.select_service,option:"
 msgid "Option"
@@ -1075,6 +1087,10 @@ msgstr "Prestations possibles"
 msgctxt "field:claim.select_service,selected_service:"
 msgid "Selected Service"
 msgstr "Prestation sélectionnée"
+
+msgctxt "field:claim.select_service,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
 
 msgctxt "field:claim.service,annuity_frequency:"
 msgid "Annuity Frequency"

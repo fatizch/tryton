@@ -11,6 +11,7 @@ __all__ = [
     'IndemnificationControlElement',
     'IndemnificationDefinition',
     'CreateIndemnification',
+    'SelectService',
     ]
 
 
@@ -106,3 +107,18 @@ class CreateIndemnification:
         self.definition.beneficiary_def.extra_data_values = \
             self.definition.beneficiary_extra_data
         self.definition.beneficiary_def.save()
+
+
+class SelectService:
+    __name__ = 'claim.select_service'
+
+    covered_person = fields.Many2One('party.party', 'Covered Person',
+        readonly=True, states={'invisible': ~Eval('selected_service')})
+
+    @fields.depends('covered_person')
+    def on_change_selected_service(self):
+        super(SelectService, self).on_change_selected_service()
+        if self.selected_service:
+            self.covered_person = self.selected_service.loss.covered_person
+        else:
+            self.covered_person = None

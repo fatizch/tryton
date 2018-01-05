@@ -31,6 +31,7 @@ def register():
         wizard.IndemnificationValidateElement,
         wizard.IndemnificationControlElement,
         wizard.IndemnificationDefinition,
+        wizard.SelectService,
         module='claim_life', type_='model')
     Pool.register(
         party.PartyReplace,

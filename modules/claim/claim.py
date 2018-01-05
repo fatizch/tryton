@@ -870,9 +870,12 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
         return ', '.join(values)
 
     def get_rec_name(self, name):
+        res = ''
+        if self.loss:
+            res += self.loss.rec_name
         if self.benefit:
-            return self.benefit.rec_name
-        return super(ClaimService, self).get_rec_name(name)
+            res += ' - ' + self.benefit.rec_name
+        return res
 
     def get_summary(self, name=None):
         res = ''

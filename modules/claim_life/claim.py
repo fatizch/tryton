@@ -195,6 +195,8 @@ class Loss:
 
     def get_rec_name(self, name):
         res = super(Loss, self).get_rec_name(name)
+        if self.covered_person:
+            res += ' - ' + self.covered_person.full_name
         if self.is_a_relapse:
             res = '%s (%s)' % (res, self.raise_user_error('relapse',
                 raise_exception=False))
