@@ -53,10 +53,6 @@ msgstr ""
 "Date de fin manquante pour le préjudice\n"
 "%(loss)s,\n"
 
-msgstr ""
-"Aucune description de préjudice n'a été trouvée avec le code "
-"%(loss_desc_code)s dans la configuration"
-
 msgctxt "error:claim.loss:"
 msgid ""
 "The loss %(loss)s could be a duplicate of:\n"
