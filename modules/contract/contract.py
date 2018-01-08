@@ -845,7 +845,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                             'end_date_anterior_to_start_date')
                     if good_activation_history[-1].end_date != value:
                         good_activation_history[-1].end_date = value
-                        contract.activation_history = good_activation_history
+                    contract.activation_history = good_activation_history
             cls.save(to_save)
 
     @classmethod

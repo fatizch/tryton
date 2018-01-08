@@ -220,42 +220,48 @@ len(contract.options) == 1
 # #Res# #True
 
 # #Comment# #Test Terminate Endorsement
+
 EndorsementDefinition = Model.get('endorsement.definition')
 terminate_contract = EndorsementDefinition(terminate_contract.id)
 SubStatus = Model.get('contract.sub_status')
 terminated_status, = SubStatus.find([('code', '=', 'terminated')])
 
-# #Comment# #New Endorsement
-new_endorsement = Wizard('endorsement.start')
-new_endorsement.form.contract = contract
-new_endorsement.form.endorsement_definition = terminate_contract
-new_endorsement.form.endorsement = None
-new_endorsement.form.applicant = None
-new_endorsement.form.effective_date = contract_start_date + \
-    relativedelta(months=3)
-new_endorsement.execute('start_endorsement')
-new_endorsement.form.termination_reason = terminated_status
-new_endorsement.execute('terminate_contract_next')
-new_endorsement.execute('apply_endorsement')
 
-contract = Contract(contract.id)
+def get_terminated(contract, effective_date):
+    new_endorsement = Wizard('endorsement.start')
+    new_endorsement.form.contract = contract
+    new_endorsement.form.endorsement_definition = terminate_contract
+    new_endorsement.form.endorsement = None
+    new_endorsement.form.applicant = None
+    new_endorsement.form.effective_date = effective_date
+    new_endorsement.execute('start_endorsement')
+    new_endorsement.form.termination_reason = terminated_status
+    new_endorsement.execute('terminate_contract_next')
+    new_endorsement.execute('apply_endorsement')
+    return Contract(contract.id)
+
+
+def get_cancelled():
+    good_endorsement, = Endorsement.find([
+            ('contracts', '=', contract.id),
+            ('state', '=', 'applied')])
+    Endorsement.cancel([good_endorsement.id], config._context)
+    return Contract(contract.id)
+
+start_plus_three = contract_start_date + relativedelta(months=3)
+contract = get_terminated(contract, start_plus_three)
 contract.start_date == contract_start_date
 # #Res# #True
 contract.initial_start_date == contract_start_date
 # #Res# #True
 contract.status == 'terminated'
 # #Res# #True
-contract.end_date == contract_start_date + relativedelta(months=3)
+contract.end_date == start_plus_three
 # #Res# #True
 contract.termination_reason == terminated_status
 # #Res# #True
 
-good_endorsement, = Endorsement.find([
-        ('contracts', '=', contract.id),
-        ('state', '=', 'applied')])
-Endorsement.cancel([good_endorsement.id], config._context)
-contract = Contract(contract.id)
-
+contract = get_cancelled()
 contract.start_date == contract_start_date
 # #Res# #True
 contract.end_date is None
@@ -264,7 +270,120 @@ contract.termination_reason is None
 # #Res# #True
 
 
+# #Comment# #Test Terminate Endorsement with several terms
+#contract_start_date = datetime.date(2014, 4, 10)
+first_term_end = datetime.date(2015, 4, 9)
+contract.end_date = first_term_end
+contract.save()
+
+
+History = Model.get('contract.activation_history')
+for start, end in [
+        ((2015, 4, 10), (2016, 4, 9)),
+        ((2016, 4, 10), (2017, 4, 9))]:
+    history = History(start_date=datetime.date(*start),
+        end_date=datetime.date(*end), contract=contract.id)
+    history.save()
+
+# #Comment# #Case 1 : today is in first term, we end before first_term_end
+
+config._context['client_defined_date'] = first_term_end
+contract.reload()
+assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
+    x.termination_reason) for x in contract.activation_history]
+contract = get_terminated(contract, start_plus_three)
+assert len(contract.activation_history) == 1, [(x.start_date, x.end_date,
+    x.termination_reason) for x in contract.activation_history]
+assert contract.end_date == start_plus_three
+assert contract.termination_reason == terminated_status
+
+contract = get_cancelled()
+assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
+    x.termination_reason) for x in contract.activation_history]
+assert contract.end_date == first_term_end
+assert contract.termination_reason == None
+
+# #Comment# #Case 1b : today is in first term, we end at first_term_end
+
+assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
+    x.termination_reason) for x in contract.activation_history]
+contract = get_terminated(contract, first_term_end)
+assert len(contract.activation_history) == 1, [(x.start_date, x.end_date,
+    x.termination_reason) for x in contract.activation_history]
+assert contract.end_date == first_term_end
+assert contract.termination_reason == terminated_status
+
+contract = get_cancelled()
+assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
+    x.termination_reason) for x in contract.activation_history]
+assert contract.end_date == first_term_end
+assert contract.termination_reason == None
+
+# #Comment# #Case 2: today is in second term, we terminate before first_term_end
+config._context['client_defined_date'] = datetime.date(2015, 4, 10)
+contract.reload()
+second_term_end = contract.activation_history[1].end_date
+assert contract.end_date == second_term_end
+User = Model.get('res.user')
+user, = User.find(['login', '=', 'contract_user'])
+Warning = Model.get('res.user.warning')
+warning = Warning()
+warning.always = False
+warning.user = user
+warning.name = 'termination_before_active_start_date_%s' % str(contract.id)
+warning.save()
+
+contract = get_terminated(contract, start_plus_three)
+assert len(contract.activation_history) == 1, [(x.start_date, x.end_date,
+    x.termination_reason) for x in contract.activation_history]
+assert contract.end_date == start_plus_three
+assert contract.termination_reason == terminated_status
+
+contract = get_cancelled()
+assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
+    x.termination_reason) for x in contract.activation_history]
+assert contract.end_date == second_term_end
+assert contract.termination_reason == None
+
+# #Comment# #Case 2b: today is in second term, we terminate at first_term_end
+config._context['client_defined_date'] = datetime.date(2015, 4, 10)
+contract.reload()
+second_term_end = contract.activation_history[1].end_date
+assert contract.end_date == second_term_end
+User = Model.get('res.user')
+user, = User.find(['login', '=', 'contract_user'])
+Warning = Model.get('res.user.warning')
+warning = Warning()
+warning.always = False
+warning.user = user
+warning.name = 'termination_before_active_start_date_%s' % str(contract.id)
+warning.save()
+
+contract = get_terminated(contract, first_term_end)
+assert len(contract.activation_history) == 1, [(x.start_date, x.end_date,
+    x.termination_reason) for x in contract.activation_history]
+assert contract.end_date == first_term_end
+assert contract.termination_reason == terminated_status
+
+contract = get_cancelled()
+assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
+    x.termination_reason) for x in contract.activation_history]
+assert contract.end_date == second_term_end
+assert contract.termination_reason == None
+
 # #Comment# #Test Void Endorsement
+config._context['client_defined_date'] = first_term_end
+
+contract.reload()
+User = Model.get('res.user')
+user, = User.find(['login', '=', 'contract_user'])
+Warning = Model.get('res.user.warning')
+warning = Warning()
+warning.always = False
+warning.user = user
+warning.name = 'void_renewed_contract'
+warning.save()
+
 void_contract = EndorsementDefinition(void_contract.id)
 SubStatus = Model.get('contract.sub_status')
 error, = SubStatus.find([('code', '=', 'error')])

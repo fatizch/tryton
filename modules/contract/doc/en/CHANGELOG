@@ -1,3 +1,4 @@
+* BUG#7885 Fix behavior of termination when there are several future activation periods
 * BUG#7783 Limit option's end date with contract's final end date instead of contract's end date
 * FEA#7737 Add 'Contract Change Sub Status' wizard on active contracts
 * BUG#7660: Do not set termination reason and end date of the activation history when reactivating a hold contract that has already been renewed

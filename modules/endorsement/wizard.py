@@ -1364,7 +1364,6 @@ class TerminateContract(EndorsementWizardStepMixin):
         lang = pool.get('res.user')(Transaction().user).language
         EndorsementActivationHistory = pool.get(
             'endorsement.contract.activation_history')
-        ActivationHistory = pool.get('contract.activation_history')
         Contract = pool.get('contract')
         contract_id, endorsement = self._get_contracts().items()[0]
 
@@ -1376,79 +1375,24 @@ class TerminateContract(EndorsementWizardStepMixin):
             self.raise_user_error('termination_date_must_be_posterior',
                 Date.date_as_string(contract.start_date, lang))
 
-        # first case : we are terminating a contract after its current
-        # term
-        if self.termination_date > (contract.end_date or datetime.date.max):
-            if last_period.end_date == contract.end_date or \
-                    self.termination_date > last_period.end_date:
-                self.raise_user_error('termination_date_must_be_anterior',
-                    Date.date_as_string(last_period.end_date, lang))
-            endorsement.activation_history = [EndorsementActivationHistory(
-                    action='update',
-                    contract_endorsement=endorsement,
-                    activation_history=last_period,
-                    definition=self.endorsement_definition,
-                    values=self.endorsement_values())]
-        # second case : we are terminating a contract during its current
-        # term
-        else:
-            # No next period
-            if contract.end_date == last_period.end_date:
-                if self.termination_date < last_period.start_date:
-                    history_endorsements = []
-                    valid_activation_history = []
-                    for activation_history in contract.activation_history:
-                        if (activation_history.start_date >
-                                self.termination_date):
-                            history_endorsements.append(
-                                EndorsementActivationHistory(
-                                    action='remove',
-                                    contract_endorsement=endorsement,
-                                    activation_history=activation_history))
-                        else:
-                            valid_activation_history.append(activation_history)
-                    latest = max(valid_activation_history,
-                        key=attrgetter('start_date'))
-                    history_endorsements.append(EndorsementActivationHistory(
-                            action='update',
-                            contract_endorsement=endorsement,
-                            activation_history=latest,
-                            values=self.endorsement_values()))
-                    endorsement.activation_history = history_endorsements
-                # remove activation_history
-                else:
-                    endorsement.activation_history = [
-                        EndorsementActivationHistory(
-                            action='update',
-                            contract_endorsement=endorsement,
-                            activation_history=last_period,
-                            definition=self.endorsement_definition,
-                            values=self.endorsement_values())]
-            # We have a next period, we must remove it,
-            # And update the current term period
-            else:
-                if self.termination_date > last_period.end_date:
-                    self.raise_user_error(
-                        'termination_date_must_be_anterior',
-                        Date.date_as_string(last_period.end_date, lang))
-                history_endorsements = []
-                history_endorsements.append(EndorsementActivationHistory(
-                        action='remove',
-                        contract_endorsement=endorsement,
-                        activation_history=last_period,
-                        definition=self.endorsement_definition))
+        if self.termination_date > (last_period.end_date or datetime.date.max):
+            self.raise_user_error(
+                'termination_date_must_be_anterior',
+                Date.date_as_string(last_period.end_date, lang))
 
-                current_activation_history, = ActivationHistory.search([
-                        ('contract', '=', contract),
-                        ('end_date', '=', contract.end_date)])
+        to_update = next((x for x in contract.activation_history
+                if x.start_date < self.termination_date and
+                (x.end_date or datetime.date.max > self.termination_date)))
 
-                history_endorsements.append(EndorsementActivationHistory(
-                        action='update',
-                        contract_endorsement=endorsement,
-                        activation_history=current_activation_history,
-                        definition=self.endorsement_definition,
-                        values=self.endorsement_values()))
-                endorsement.activation_history = history_endorsements
+        endorsement.activation_history = [EndorsementActivationHistory(
+                action='update',
+                contract_endorsement=endorsement,
+                activation_history=to_update,
+                definition=self.endorsement_definition,
+                values=self.endorsement_values())]
+        # no need to clean up future periods
+        # they will be removed by the setter of end_date on contract
+
         endorsement.save()
 
     @classmethod
