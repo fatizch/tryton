@@ -804,11 +804,11 @@ class PlanCalculationDate(model.CoogSQL, model.CoogView):
 
     def get_reference_date(self, invoice_line):
         if self.reference_date == 'contract_start':
-            return invoice_line.invoice.contract.start_date
+            return invoice_line.invoice.contract.initial_start_date
         if self.reference_date == 'contract_signature':
-            return invoice_line.invoice.contract.dignature_date
+            return invoice_line.invoice.contract.signature_date
         if self.reference_date == 'option_start':
-            return invoice_line.details[0].get_option().start_date
+            return invoice_line.details[0].get_option().initial_start_date
 
 
 class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):

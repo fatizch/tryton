@@ -1,3 +1,4 @@
+* BUG#7875 Utilisation de initial_start_date au lieu de start_date dans l'algorithme de calcul des dates de recalcul
 * FEA#0000 Ajout de l'élement couvert dans la vue liste des commissions (utile quand plusieurs assurés souscrivent la même option pour différencier les commissions)
 * OTH#0000 Mise à jour de la méthode on_change_with_agent après la correction 7755
 * BUG#7755 Modification de la définition du domaine du protocole de commissionnement en remplacant la date de début du contrat par la date d'effet initiale
