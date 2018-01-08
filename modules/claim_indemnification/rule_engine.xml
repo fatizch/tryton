@@ -219,6 +219,16 @@ pour le bénéficiaire (entre 0 et 1)</field>
             <field name="fct_args">Date debut periode, Date fin periode, Type indemnisation, Pour la prestation courante, ignorer les prestation pour ce service</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+        <record model="rule_engine.function" id="indemnification_is_manual">
+            <field name="translated_technical_name">indemnisation_manuelle</field>
+            <field name="description">Informe si l'indemnisation est manuelle</field>
+            <field name="long_description">Retourne vrai si l'indemnisation est manuelle</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_indemnification_is_manual</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
         <record model="rule_engine.function" id="beneficiary_documents_reception_date">
             <field name="translated_technical_name">reception_des_documents_beneficiaire</field>
             <field name="description">Réception des documents bénéficiaire</field>

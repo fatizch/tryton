@@ -470,7 +470,7 @@ class ClaimService:
             for deletion in to_delete:
                 cls.raise_user_warning('period_%s' % deletion.id,
                     'period_will_be_deleted', {
-                        'description' : deletion.rec_name + ' - ' +
+                        'description': deletion.rec_name + ' - ' +
                         deletion.service.rec_name})
 
             ClaimIndemnification.delete(to_delete)

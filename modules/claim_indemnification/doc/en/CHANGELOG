@@ -1,3 +1,4 @@
+* BUG#7893 Add rule engine method to define wether an indemnification is manual or not.
 * BUG#7891 Indemnification process fixes for some required fields
 * FEA#7850 Enhance claim services display in indemnifications wizard
 * BUG#7583 Various fixes on claim indemnification process

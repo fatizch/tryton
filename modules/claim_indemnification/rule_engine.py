@@ -240,6 +240,11 @@ class RuleEngineRuntime:
             end_date)
 
     @classmethod
+    @check_args('indemnification')
+    def _re_indemnification_is_manual(cls, args):
+        return args['indemnification'].manual
+
+    @classmethod
     @check_args('indemnification', 'service')
     def _re_beneficiary_documents_reception_date(cls, args):
         beneficiary, = [x for x in args['service'].beneficiaries
