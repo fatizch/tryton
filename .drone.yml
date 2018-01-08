@@ -21,7 +21,7 @@ pipeline:
     image: coog-test/base-tests
     secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
     commands:
-      - node /workspace/drone/tests/checks/check-meta.js
+      - /workspace/drone/tests/checks/check-meta.py
     when:
       status: [ success, failure ]
 
@@ -42,7 +42,7 @@ pipeline:
       - DB_CACHE="/workspace/drone/coog-test-manual-db-cache"
       - TRYTOND_ASYNC_RQ="redis://127.0.0.1:6379/1"
     commands:
-      - node /workspace/drone/tests/checks/check-meta.js tests || /workspace/drone/tests/checks/check-tests
+      - /workspace/drone/tests/checks/check-meta.py tests || /workspace/drone/tests/checks/check-tests
     when:
       status: [ success, failure ]
       event: [pull_request]
