@@ -276,6 +276,8 @@ class OptionDescriptionPremiumRule(
     def get_not_rated_line(cls, rule_dict, date):
         # Default behaviour : Create a 0 amount line at date, for instance to
         # detect end of options.
+        if not date:
+            return []
         return [cls._premium_result_class(0, rule_dict)]
 
 
