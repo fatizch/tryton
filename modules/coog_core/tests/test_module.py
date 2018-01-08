@@ -1026,6 +1026,88 @@ class ModuleTestCase(test_framework.CoogTestCase):
         with Transaction().new_transaction():
             self.assertEqual(inc.increment, 10)
 
+    def test_0125_test_last_version_modified_before(self):
+        l = []
+        for x in range(0, 10):
+            an_obj = mock.Mock()
+            an_obj.val = x
+            l.append(an_obj)
+        single_list = [mock.Mock()]
+        single_list[0].val = 42
+
+        def key_func(x):
+            return x.val
+
+        r = utils.get_last_version_modified_before(single_list, single_list[0],
+            less_than_key=key_func, compare_key=key_func, inclusive=True)
+
+        self.assertEqual(r, single_list[0])
+
+        r = utils.get_last_version_modified_before(single_list, single_list[0],
+            less_than_key=key_func, compare_key=key_func, inclusive=False)
+
+        self.assertEqual(r, None)
+
+        # The list does not contains the element but the compare_key /
+        # sort key is working well, so the higher value element of l should
+        # be returned
+        r = utils.get_last_version_modified_before(l, single_list[0],
+            less_than_key=key_func, compare_key=key_func, inclusive=True)
+
+        self.assertEqual(r, l[-1])
+
+        # The list does not contains the element but the compare_key /
+        # sort key is working well. No elements are matching and the call is
+        # inclusive. But because the element is not in the list, it will not be
+        # returned.
+        single_list[0].val = -1
+        r = utils.get_last_version_modified_before(l, single_list[0],
+            less_than_key=key_func, compare_key=key_func, inclusive=True)
+
+        self.assertEqual(r, None)
+
+        single_list[0].value = 0
+        r = utils.get_last_version_modified_before(l, l[3],
+            less_than_key=key_func, compare_key=key_func, inclusive=True)
+
+        # It is equivalent to l[3] But this is a representation of what happend
+        # into the function: The selected records will be the first three objs
+        # which are smaller than l[3] (l[0], l[1], l[2]) and it is including
+        # the value l[3] => (l[0], l[1], l[2], l[3])
+        # Because we want the bigger of the list, it will be the last element.
+        self.assertEqual(r, l[0:4][-1])
+
+        single_list[0].val = 0
+        r = utils.get_last_version_modified_before(l, l[3],
+            less_than_key=key_func, compare_key=key_func, inclusive=False)
+
+        # See comment above
+        self.assertEqual(r, l[0:3][-1])
+
+        other_list = [mock.Mock(val=0), mock.Mock(val=3), mock.Mock(val=9)]
+        values_with_duplicates = l + other_list
+
+        r = utils.get_last_version_modified_before(
+            values_with_duplicates, l[-1],
+            less_than_key=key_func, compare_key=key_func, inclusive=True)
+
+        self.assertEqual(r, sorted(values_with_duplicates, key=key_func,
+            reverse=True)[1])
+
+        only_duplicates = [mock.Mock(val=5) for x in range(0, 5)]
+
+        r = utils.get_last_version_modified_before(
+            only_duplicates, only_duplicates[-1],
+            less_than_key=key_func, compare_key=key_func, inclusive=False)
+
+        self.assertEqual(r, None)
+
+        r = utils.get_last_version_modified_before(
+            only_duplicates, only_duplicates[-1],
+            less_than_key=key_func, compare_key=key_func, inclusive=True)
+
+        self.assertEqual(r, only_duplicates[-1])
+
     def test_string_replace(self):
         s = u'café-THÉ:20$'
 

@@ -420,7 +420,16 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
                 select_screen.contract, 'billing_informations',
                 select_screen.effective_date,
                 'date') or select_screen.contract.billing_informations[0]
-        billing_mode = cur_parameters.billing_mode
+        last_modified_parameter = utils.get_last_version_modified_before(
+            select_screen.contract.billing_informations, cur_parameters,
+            less_than_key=lambda x: x.date or datetime.date.min,
+            compare_key=lambda x: x.billing_mode.id
+            if x.billing_mode else None,
+            inclusive=True)
+        if not last_modified_parameter:
+            last_modified_parameter = \
+                select_screen.contract.billing_informations[0]
+        billing_mode = last_modified_parameter.billing_mode
         if select_screen.effective_date < utils.today():
             # Make sure an invoice exists at this date
             if not ContractInvoice.search([
@@ -429,13 +438,13 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
                 cls.append_functional_error('no_matching_invoice_date',
                     (select_screen.contract.rec_name,
                         select_screen.effective_date))
-        rrule, until = billing_mode.get_rrule(cur_parameters.date
+        rrule, until = billing_mode.get_rrule(last_modified_parameter.date
             or select_screen.contract.start_date
             or select_screen.contract.initial_start_date,
             until=select_screen.effective_date)
         if datetime.datetime.combine(select_screen.effective_date,
                 datetime.datetime.min.time()) not in rrule:
-            if select_screen.effective_date != (cur_parameters.date or
+            if select_screen.effective_date != (last_modified_parameter.date or
                     select_screen.contract.start_date):
                 cls.append_functional_error('unauthorized_date', (
                         select_screen.effective_date, billing_mode.rec_name))

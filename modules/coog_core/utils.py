@@ -5,6 +5,7 @@ import datetime
 import time
 import json
 import calendar
+import operator
 from filelock import FileLock
 from decimal import Decimal
 
@@ -198,6 +199,35 @@ def get_good_versions_at_date(instance, var_name, at_date=None,
         at_date = today()
     return filter_list_at_date(getattr(instance, var_name, []), at_date,
         start_var_name, end_var_name)
+
+
+def get_last_version_modified_before(instances, instance, less_than_key,
+        compare_key, inclusive=False):
+    '''
+    This method returns the last modified object from the given 
+    "instances" list which came just before the given "instance" in this list.
+    The less_than_key parameter is a function which must returns the fields
+    for the sort of the "instances" (The method tells whether an instance is
+    higher / greater than another).
+    The compare_key parameter is a function which returns the field / a value
+    to compare instances objects to defined whether the object is different or
+    not.
+    If inclusive is set to True, the value of "instance" will be included in the
+    processing. So if the object  before "instance" in "instances is different,
+    This instance will be returned as the last modified object.
+    '''
+    relate = operator.lt if not inclusive else operator.le
+    instances = sorted([x for x in instances if relate(less_than_key(x),
+                less_than_key(instance))], key=less_than_key, reverse=True)
+    for idx, to_check in enumerate(instances):
+        try:
+            if compare_key(to_check) != compare_key(instances[idx + 1]):
+                return to_check
+        except IndexError:
+            break
+
+    if inclusive and instance in instances:
+        return instance
 
 
 def get_good_version_at_date(instance, var_name, at_date=None,
