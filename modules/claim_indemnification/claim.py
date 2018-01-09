@@ -211,23 +211,27 @@ class Loss:
                 self.__class__.raise_user_error(
                     'unpaid_indemnification', len(unpaid))
             if not self.end_date:
-                return
+                continue
             self.check_indemnification_gaps(service)
         for service in self.services:
             if (service.benefit.indemnification_kind != 'capital' or
                     service.eligibility_status == 'refused'):
                 continue
-            total_share = sum(x.share for x in service.indemnifications)
             service_delegation = service.option.coverage.insurer. \
                 get_delegation(service.option.coverage.insurance_kind)
             if not service_delegation:
                 continue
-            if total_share != 1:
+            share_valid, total_share = self.total_share_valid(service)
+            if not share_valid:
                 if service_delegation.claim_create_indemnifications or \
                         service_delegation.claim_pay_indemnifications:
                     self.append_functional_error('bad_indemnification_shares', {
                             'service': self.rec_name,
                             'total_share': str(int(total_share * 100))})
+
+    def total_share_valid(self, service):
+        total_share = sum(x.share for x in service.indemnifications)
+        return total_share == 1, total_share
 
     @classmethod
     def activate(cls, losses):

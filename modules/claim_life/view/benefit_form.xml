@@ -4,12 +4,16 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
         <page string="Beneficiary" id="beneficiary">
-			<field name="beneficiary_extra_data_def" colspan="4"/>
-			<field name="beneficiary_documents" colspan="4"/>
+            <field name="beneficiary_extra_data_def" colspan="4"/>
+            <field name="beneficiary_documents" colspan="4"/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']/field[@name='beneficiary_kind']" position="after">
-		<label name="manual_share_management"/>
-		<field name="manual_share_management"/>
+        <label name="ignore_shares"/>
+        <field name="ignore_shares"/>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']/field[@name='indemnification_kind']" position="after">
+        <label name="manual_share_management"/>
+        <field name="manual_share_management"/>
     </xpath>
 </data>

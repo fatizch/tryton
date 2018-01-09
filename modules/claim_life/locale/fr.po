@@ -81,6 +81,10 @@ msgctxt "field:benefit,beneficiary_extra_data_def:"
 msgid "Beneficiary Extra Data"
 msgstr "Données complémentaires du bénéficiaire"
 
+msgctxt "field:benefit,ignore_shares:"
+msgid "Ignore Shares"
+msgstr "Ignorer les parts bénéficiaire"
+
 msgctxt "field:benefit,manual_share_management:"
 msgid "Manual Share Management"
 msgstr "Gestion manuelle des parts bénéficiaire"
@@ -164,6 +168,10 @@ msgstr "Date de réception des documents"
 msgctxt "field:claim.beneficiary,extra_data_values:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
+
+msgctxt "field:claim.beneficiary,ignore_share:"
+msgid "Ignore Share"
+msgstr "Ignorer la part bénéficiaire"
 
 msgctxt "field:claim.beneficiary,id:"
 msgid "ID"
@@ -292,6 +300,11 @@ msgid ""
 msgstr ""
 "Liste des données complémentaires à saisir lors du traitement d'un sinistre "
 "pour un bénéficiaire"
+
+msgctxt "help:benefit,ignore_shares:"
+msgid "If checked, the shares will be ignored when closing the claim"
+msgstr ""
+"Si coché, les parts bénéficiaire seront ignorées à la fermeture du dossier"
 
 msgctxt "help:benefit,manual_share_management:"
 msgid ""

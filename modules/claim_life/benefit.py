@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool, Or
 
 from trytond.modules.coog_core import fields, model
 
@@ -31,11 +31,14 @@ class Benefit:
         states={'invisible': Eval('beneficiary_kind') != 'manual_list'},
         domain=[('kind', '=', 'beneficiary')],
         depends=['beneficiary_kind'])
+    ignore_shares = fields.Boolean('Ignore Shares',
+        help='If checked, the shares will be ignored when closing the claim')
     manual_share_management = fields.Boolean('Manual Share Management',
         help='If set, the beneficiary share treatment has to be '
         'handle manually in the capital computation rule',
-        states={'invisible': Eval('beneficiary_kind') != 'manual_list'},
-        depends=['beneficiary_kind'])
+        states={'invisible': Or(Eval('beneficiary_kind') != 'manual_list',
+                Bool(Eval('ignore_shares')))},
+        depends=['beneficiary_kind', 'ignore_shares'])
 
     @classmethod
     def __setup__(cls):

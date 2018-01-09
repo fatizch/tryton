@@ -320,6 +320,10 @@ class Loss:
                 return self.claim.losses[0].start_date
         return super(Loss, self).get_date()
 
+    def total_share_valid(self, service):
+        valid, total_share = super(Loss, self).total_share_valid(service)
+        return service.benefit.ignore_shares or valid, total_share
+
 
 class ClaimService:
     __metaclass__ = PoolMeta
@@ -424,7 +428,10 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
             [('share', '>', 0), ('share', '<=', 1)]],
         help='The percentage of the calculated indemnification that will be '
         'paid to this beneficiary',
-        states={'readonly': Bool(Eval('identified', False))},
+        states={
+            'readonly': Bool(Eval('identified', False)),
+            'invisible': Bool(Eval('ignore_share', False)),
+            },
         depends=['identified'])
     description = fields.Text('Description',
         help='In case the party is not properly identified, this field should '
@@ -444,6 +451,8 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
             states={'invisible': ~Eval('identified')}, depends=['identified']),
         'getter_documents_reception_date')
     extra_data_values = fields.Dict('extra_data', 'Extra Data')
+    ignore_share = fields.Function(fields.Boolean('Ignore Share'),
+        'on_change_with_ignore_share')
 
     @classmethod
     def __setup__(cls):
@@ -533,6 +542,11 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
         assert self.party
         self.identified = True
         self.update_documents()
+
+    @fields.depends('service')
+    def on_change_with_ignore_share(self, name=None):
+        if self.service:
+            return self.service.benefit.ignore_shares
 
     def update_documents(self):
         DocumentRequestLine = Pool().get('document.request.line')
