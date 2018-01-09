@@ -122,6 +122,10 @@ msgctxt "model:commission_plan-agent,name:"
 msgid "Commission Plan - Agent"
 msgstr "LIen Plan de Commissionnement - Protocole de Commission"
 
+msgctxt "view:commission.agent:"
+msgid "Hierarchy"
+msgstr "Hierarchie"
+
 msgctxt "view:commission.plan:"
 msgid "Commissioned Agents"
 msgstr "Protocoles de commissionnement liés"

@@ -6,6 +6,12 @@ msgctxt "error:account.fee:"
 msgid "Broker Fee"
 msgstr "Frais d'apporteur"
 
+msgctxt "help:commission.agent,agent_payment_term:"
+msgid "If defined, this payment has priority over the party's one and "
+"the global configuration"
+msgstr "Si défini, cette condition de paiement sera prioritaire face à celle"
+" sur le tiers ainsi que sur la configuration globale"
+
 msgctxt "error:account.invoice.line:"
 msgid "No broker define on contract %s for broker fee %s"
 msgstr ""
@@ -775,6 +781,10 @@ msgctxt "model:ir.action,name:act_commission_aggregated_relate_details"
 msgid "Filtering wizard"
 msgstr "Assistant de filtrage"
 
+msgctxt "model:ir.action,name:act_commission_contract_relate_form"
+msgid "Commissions"
+msgstr "Commissions"
+
 msgctxt "model:ir.action,name:act_commission_create_agents"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
@@ -799,11 +809,25 @@ msgctxt "model:ir.action,name:act_invoice_insurer_invoice_form"
 msgid "Insurer Invoices"
 msgstr "Bordereaux assureurs"
 
-msgctxt "model:ir.action.act_window.domain,name:act_commission_contract_domain_broker"
+msgctxt "model:ir.action,name:act_option_agents_relate_form"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
+
+msgctxt "model:ir.action,name:act_product_agents_relate_form"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
+
+msgctxt "model:ir.action,name:act_received_premiums_relate"
+msgid "Received Premiums"
+msgstr "Primes reçues"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_commission_contract_domain_broker"
 msgid "Broker"
 msgstr "Courtier"
 
-msgctxt "model:ir.action.act_window.domain,name:act_commission_contract_domain_insurer"
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_commission_contract_domain_insurer"
 msgid "Insurer"
 msgstr "Assureur"
 
@@ -1312,6 +1336,10 @@ msgstr "Générer les bordereaux de commission"
 msgctxt "model:ir.action,name:commission.act_agent_form"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
+msgid "Create Commission Invoices"
+msgstr "Générer les bordereaux de commission"
 
 msgctxt "model:ir.ui.menu,name:commission.menu_agent_form"
 msgid "Agents"
