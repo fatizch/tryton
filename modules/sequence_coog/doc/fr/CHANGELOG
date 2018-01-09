@@ -1,3 +1,5 @@
+* BUG#7912 L'erreur n'est plus affichée en vue formulaire si une séquence n'a pas de sous-séquence en date
+
 Version 1.14 - 2017-11-09
 * OTH#0000 Ajout d'un index sur le champs parent
 

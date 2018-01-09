@@ -6,6 +6,7 @@ import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, Or, And, If
+from trytond.exceptions import UserError
 
 from trytond.modules.coog_core import fields, model, utils
 from trytond.server_context import ServerContext
@@ -93,6 +94,18 @@ class Sequence(model.CoogSQL):
                             'end_date:': end_date,
                             })
 
+    @property
+    def _sql_sequence_name(self):
+        if self.sub_sequences:
+            sequence = self.get_valid_sequence_at_date()
+            return '%s_%s' % (self._table, sequence.id)
+        return super(Sequence, self)._sql_sequence_name
+
+    def update_sql_sequence(self, number_next=None):
+        if not number_next and not self.number_next:
+            return
+        return super(Sequence, self).update_sql_sequence(number_next)
+
     @classmethod
     def set_number_next(cls, sequences, name, value):
         sequences = [s for s in sequences if not s.sub_sequences]
@@ -120,7 +133,12 @@ class Sequence(model.CoogSQL):
     def get_number_next(self, name):
         if not self.sub_sequences:
             return super(Sequence, self).get_number_next(name)
-        return self.get_valid_sequence_at_date().get_number_next(name)
+        try:
+            return self.get_valid_sequence_at_date().get_number_next(name)
+        except UserError:
+            # We don't want the User Error to be raised in function getter
+            # Event if we do not find a valid sequence at date.
+            pass
 
     def get_valid_sequence_at_date(self, at_date=None):
         at_date = at_date or ServerContext().get('sequence_date',
