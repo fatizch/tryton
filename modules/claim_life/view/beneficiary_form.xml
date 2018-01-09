@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <form col="2">
     <label name="service"/>
-    <field name="service"/>
+    <field name="service" widget="selection"/>
     <newline/>
     <label name="party"/>
     <group name="party" string="">

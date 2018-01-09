@@ -36,6 +36,8 @@ class Claim:
             help='The beneficiaries for the different services for which '
             'they must be set manually',
             domain=[('service', 'in', Eval('services_with_beneficiaries'))],
+            context={'field_services':
+                Eval('services_with_beneficiaries', [])},
             states={'invisible': ~Eval('services_with_beneficiaries')},
             depends=['services_with_beneficiaries']),
         'getter_beneficiaries', 'setter_void')
@@ -467,6 +469,15 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
                     'invisible': Bool(Eval('documents_reception_date')),
                     },
                 })
+
+    @classmethod
+    def default_service(cls):
+        ctx_services = Transaction().context.get('field_services', [])
+        if ctx_services:
+            services = Pool().get('claim.service').browse(ctx_services)
+            possible_services = [x for  x in services if x.can_be_indemnified]
+            if len(possible_services) == 1:
+                return possible_services[0].id
 
     @classmethod
     def delete(cls, beneficiaries):

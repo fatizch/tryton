@@ -1,3 +1,4 @@
+* FEA#7938 Improve the claim beneficiary creation view form
 * FEA#7917 Add configuration to ignore beneficiary shares at claim closing
 * BUG#7832  Add technical dependency on field loss kind.
 
