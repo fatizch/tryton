@@ -103,5 +103,6 @@ class EventTypeAction:
         pool = Pool()
         Contract = pool.get('contract')
         if self.action != 'cancel_or_delete_non_periodic_invoices':
-            return super(EventTypeAction, self).execute(objects, event_code)
+            return super(EventTypeAction, self).execute(objects, event_code,
+                description, **kwargs)
         Contract.clean_up_contract_invoices(objects, non_periodic=True)

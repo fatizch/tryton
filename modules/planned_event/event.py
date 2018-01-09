@@ -66,7 +66,8 @@ class EventTypeAction:
 
     def execute(self, objects, event_code, description=None, **kwargs):
         if self.action != 'generate_planned_event':
-            return super(EventTypeAction, self).execute(objects, event_code)
+            return super(EventTypeAction, self).execute(objects, event_code,
+                description, **kwargs)
         PlannedEvent = Pool().get('planned.event')
         event_date = kwargs.get('event_date', utils.today())
         for planned_event_type in self.planned_event_types:

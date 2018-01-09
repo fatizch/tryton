@@ -106,7 +106,8 @@ class EventTypeAction:
 
     def execute(self, objects, event_code, description=None, **kwargs):
         if self.action != 'generate_documents':
-            return super(EventTypeAction, self).execute(objects, event_code)
+            return super(EventTypeAction, self).execute(objects, event_code,
+                description, **kwargs)
         self.action_generate_documents(objects, event_code, description,
             **kwargs)
 

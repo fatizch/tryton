@@ -49,7 +49,8 @@ class EventTypeAction:
 
     def execute(self, objects, event_code, description=None, **kwargs):
         if self.action != 'process_task':
-            return super(EventTypeAction, self).execute(objects, event_code)
+            return super(EventTypeAction, self).execute(objects, event_code,
+                description, **kwargs)
         pool = Pool()
         with ServerContext().set_context(
                 genshi_context=self.build_genshi_context(objects, event_code,

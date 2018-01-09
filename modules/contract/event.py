@@ -107,7 +107,8 @@ class EventTypeAction:
 
     def execute(self, objects, event_code, description=None, **kwargs):
         if self.action != 'create_contract_notification':
-            return super(EventTypeAction, self).execute(objects, event_code)
+            return super(EventTypeAction, self).execute(objects, event_code,
+                description, **kwargs)
         if not objects:
             return
         ContractNotification = Pool().get('contract.notification')
