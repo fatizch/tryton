@@ -202,8 +202,8 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
                 self.attachment_name = None
                 self.attachment_data = None
 
-    @fields.depends('attachment', 'reception_date', 'first_reception_date',
-        'allow_force_receive', 'received')
+    @fields.depends('attachment', 'attachment_data', 'reception_date',
+        'first_reception_date', 'allow_force_receive', 'received')
     def on_change_reception_date(self):
         kwargs = {}
         if not self.reception_date:
@@ -215,7 +215,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     def on_change_received(self):
         if self.allow_force_receive:
             if self.received:
-                self.reception_date = utils.today()
+                self.reception_date = self.reception_date or utils.today()
             else:
                 self.reception_date = None
 
