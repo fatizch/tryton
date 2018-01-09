@@ -118,7 +118,8 @@ class Party:
                     & (loan.currency == currency.id))
             ).join(contract, condition=(
                     (covered_element.contract == contract.id)
-                    & (contract.status == 'active')),
+                    & ((contract.status == 'active') |
+                        (contract.status == 'hold'))),
             ).join(history, condition=(
                     (history.contract == contract.id)
                     & (history.start_date <= date)

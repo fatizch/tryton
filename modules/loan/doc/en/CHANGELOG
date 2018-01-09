@@ -1,3 +1,5 @@
+* BUG#7915 Modify the calculation of the insured outstanding loan balance by taking into account active and hold contracts
+
 Version 1.14 - 2017-11-09
 * OTH#2443 Improve the migration performances
 * BUG#2443 The end date on increments is now stored instead of being calculated

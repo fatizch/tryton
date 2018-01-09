@@ -1,3 +1,5 @@
+* BUG#7915 Modifier le calcul de l'encours assuré en prenant en compte les contrats actives et suspendus
+
 Version 1.14 - 2017-11-09
 * OTH#2443 Amélioration des performances de migration
 * BUG#2443 La date de fin sur les paliers est désormais stockée plutôt que calculée
