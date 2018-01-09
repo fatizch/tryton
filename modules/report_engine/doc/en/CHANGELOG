@@ -1,3 +1,4 @@
+* FEA#7946 Allow to define a custom format string for dates in report templates
 * BUG#7882 Use user's language if no recipient is defined when generating reports
 
 Version 1.14 - 2017-11-09

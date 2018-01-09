@@ -990,10 +990,11 @@ class ReportGenerate(CoogReport):
         else:
             report_context['SenderAddress'] = None
 
-        def format_date(value, lang=None):
+        def format_date(value, lang=None, format_=None):
             if lang is None:
                 lang = report_context['Lang']
-            return pool.get('ir.lang').strftime(value, lang.code, lang.date)
+            return pool.get('ir.lang').strftime(value, lang.code,
+                format_ or lang.date)
 
         report_context['_stored_variables'] = {}
 
