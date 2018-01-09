@@ -1,3 +1,4 @@
+* BUG#7876 Support de la réactivation des contrats sans effet
 * BUG#7951 Correction des surcharges de la méthode execute de event type action 
 * BUG#7885 Correction du comportement de la résiliation avec plusieurs périodes d'activation futures
 * BUG#7783 La date de fin de la garantie est limitée par la date de fin définitive du contrat plutôt que la date de fin courante

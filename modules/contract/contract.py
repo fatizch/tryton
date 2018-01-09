@@ -317,7 +317,8 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                 'button_hold': {
                     'invisible': Eval('status') != 'active'},
                 'button_reactivate': {
-                    'invisible': Eval('status') != 'terminated'},
+                    'invisible': (
+                        not(Eval('status').in_(['terminated', 'void'])))},
                 'button_stop': {
                     'invisible': And(
                         Eval('status') != 'active',
@@ -1524,7 +1525,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             values['_func_key'] = 'None'  # We are creating a new contract
 
     def get_reactivation_end_date(self):
-        if self.status != 'terminated':
+        if self.status not in ['terminated', 'void']:
             self.append_functional_error('cannot_reactivate_non_terminated')
             return None
         if self.sub_status.code == 'reached_end_date':
@@ -1542,9 +1543,10 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                 new_end_date = min([x for x in dates if x] or [None])
             finally:
                 transaction.rollback()
-        if new_end_date is not None and new_end_date <= previous_end_date:
-            self.append_functional_error('cannot_reactivate_max_end_date')
-            return None
+        if self.status == 'terminated':
+            if new_end_date is not None and new_end_date <= previous_end_date:
+                self.append_functional_error('cannot_reactivate_max_end_date')
+                return None
         return new_end_date
 
     def init_contacts(self, party, type_code):

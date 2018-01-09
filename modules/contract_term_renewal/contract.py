@@ -82,8 +82,9 @@ class Contract:
 
     def get_date_used_for_contract_end_date(self):
         date = super(Contract, self).get_date_used_for_contract_end_date()
+        contract_start_date = self.start_date or self.initial_start_date
         rule_date = self.get_end_date_from_given_start_date(
-            self.start_date)
+            contract_start_date)
         if date and rule_date:
             return min(date, rule_date)
         elif date:

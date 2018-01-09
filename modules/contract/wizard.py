@@ -477,7 +477,7 @@ class ContractReactivate(model.CoogWizard):
         new_end_date = contract.get_reactivation_end_date()
         result = {
             'contract': contract.id,
-            'previous_end_date': contract.end_date,
+            'previous_end_date': contract.end_date or new_end_date,
             'new_end_date': new_end_date,
             'termination_reason': contract.sub_status.id,
             'will_be_terminated': ((new_end_date or datetime.date.max)
@@ -486,6 +486,11 @@ class ContractReactivate(model.CoogWizard):
         return result
 
     def transition_reactivate(self):
+        History = Pool().get('contract.activation_history')
+        if self.validate_reactivation.contract.status == 'void':
+            History.write(History.search([
+                        ('contract', '=', self.validate_reactivation.contract),
+                        ('active', '=', False)]), {'active': True})
         Pool().get('contract').reactivate(
             [self.validate_reactivation.contract])
         return 'end'

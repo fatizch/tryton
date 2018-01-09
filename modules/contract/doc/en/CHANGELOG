@@ -1,3 +1,4 @@
+* BUG#7876 Modify the reactivate process in order to be able to activate void contract
 * BUG#7951 Fix override of method execute in event type action
 * BUG#7885 Fix behavior of termination when there are several future activation periods
 * BUG#7783 Limit option's end date with contract's final end date instead of contract's end date
