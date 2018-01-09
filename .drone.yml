@@ -19,24 +19,25 @@ pipeline:
 
   check-meta:
     image: coog-test/base-tests
-    secrets: [ GITHUB_TOKEN, REDMINE_TOKEN ]
+    secrets: [GITHUB_TOKEN, REDMINE_TOKEN]
     commands:
       - /workspace/drone/tests/checks/check-meta.py
     when:
-      status: [ success, failure ]
+      event: [pull_request]
+      status: [success, failure]
 
   check-flake8:
     image: coog-test/base-tests
-    secrets: [ GITHUB_TOKEN ]
+    secrets: [GITHUB_TOKEN]
     commands:
       - /workspace/drone/tests/checks/check-flake8
     when:
-      status: [ success, failure ]
       event: [pull_request]
+      status: [success, failure]
 
-  test-modules:
+  check-tests:
     image: coog-test/base-tests
-    secrets: [ GITHUB_TOKEN ]
+    secrets: [GITHUB_TOKEN, REDMINE_TOKEN]
     environment:
       - PYTHONPATH=/workspace/drone/coog/bin/lib:/workspace/drone/trytond:/workspace/drone/proteus
       - DB_CACHE="/workspace/drone/coog-test-manual-db-cache"
@@ -44,8 +45,8 @@ pipeline:
     commands:
       - /workspace/drone/tests/checks/check-meta.py tests || /workspace/drone/tests/checks/check-tests
     when:
-      status: [ success, failure ]
       event: [pull_request]
+      status: [success, failure]
 
 services:
   database:
@@ -55,4 +56,4 @@ services:
       - POSTGRES_PASSWORD=postgres
 
   redis:
-    image: redis
+    image: redis:3.2
