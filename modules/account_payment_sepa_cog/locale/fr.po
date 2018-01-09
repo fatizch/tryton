@@ -36,6 +36,12 @@ msgctxt "error:account.payment:"
 msgid "Unknown amount invoice line : %s %s"
 msgstr "Montant de ligne de quittance inconnu : %s %s"
 
+msgctxt "error:account.payment:"
+msgid ""
+"The selected bank account %(bank_account)s is different than that of the SEPA mandate %(sepa_bank_account)s"
+msgstr ""
+"Le compte bancaire sélectionné %(bank_account)s est différent du compte bancaire sur le mandat SEPA %(sepa_bank_account)s"
+
 msgctxt "field:account.configuration,enable_amendment:"
 msgid "Allow Sepa Mandate Amendments"
 msgstr "Autoriser les amendements de mandat SEPA"

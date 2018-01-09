@@ -1,3 +1,4 @@
+* BUG#7646 Vérifier que le compte bancaire est en accord avec le mandat SEPA avant d'approuver un paiement créé manuellement
 * BUG#7904 Implémentation des informations d'amendements aussi pour le CFONB
 * FEA#7663 Gestion du débiteur SEPA différent de la compagnie
 * FEA#7663 Possibilité de choisir un créditeur SEPA autre que la compagnie sur le journal de paiement

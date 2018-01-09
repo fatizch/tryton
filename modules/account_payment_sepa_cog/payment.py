@@ -10,7 +10,7 @@ from dateutil.relativedelta import relativedelta
 from collections import defaultdict
 from sql.aggregate import Max
 from sql import Null, Literal
-from sql.conditionals import Case, Coalesce
+from sql.conditionals import Coalesce
 
 import genshi
 import genshi.template
@@ -490,6 +490,9 @@ class Payment:
                 'direct_debit_disbursement': 'Direct Debit Disbursement of',
                 'missing_bank_acount': ('Missing bank account for "%(party)s" '
                     'at "%(date)s"'),
+                'bad_bank_account': 'The selected bank account'
+                ' %(bank_account)s is different than that of the SEPA mandate'
+                ' %(sepa_bank_account)s',
                 })
         cls.sepa_mandate.states['invisible'] = Eval('kind') == 'payable'
         cls.sepa_mandate.states['readonly'] = Eval('state') != 'draft'
@@ -586,6 +589,22 @@ class Payment:
                     'sepa_return_reason_code': None,
                     'sepa_bank_reject_date': None
                     })
+
+    @classmethod
+    def approve(cls, payments):
+        with model.error_manager():
+            for payment in payments:
+                if payment.kind != 'receivable' or not payment.sepa_mandate:
+                    continue
+                sepa_bank_account = payment.sepa_mandate.account_number
+                if (not sepa_bank_account or
+                        payment.bank_account != sepa_bank_account.account):
+                    cls.append_functional_error(
+                        'bad_bank_account', {
+                            'bank_account': payment.bank_account.number,
+                            'sepa_bank_account':
+                            sepa_bank_account.number})
+        super(Payment, cls).approve(payments)
 
     @classmethod
     def payments_fields_to_update_after_fail(cls, reject_reason):

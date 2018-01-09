@@ -1,3 +1,4 @@
+* BUG#7646 Before approving a manual payment check that the bank account is equal to the bank account on the SEPA mandate
 * BUG#7904 Implement amendment informations also for CFONB
 * FEA#7663 Manage a SEPA debtor other than the company
 * FEA#7663 Allow to set a SEPA creditor other than company on payment journal
