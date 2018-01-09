@@ -337,12 +337,14 @@ contract_2_invoice.invoice.click('post')
 contract_2_invoice_2.invoice.click('post')
 contract_2_invoice_2.invoice.save()
 
-# #Comment# #Because the current billing information on the contract has a SEPA mandate
+# #Comment# #Because the current billing information on the contract has
+# a SEPA mandate
 # #Comment# #For now we have a sepa mandate on the contract_invoice_2.
 contract_invoice_2.invoice.sepa_mandate == mandate
 # #Res# #True
 
-# #Comment# #Because the current billing information on the contract has a SEPA mandate
+# #Comment# #Because the current billing information on the contract has a
+# SEPA mandate
 # #Comment# #For now we have a sepa mandate on the contract_2_invoice_2.
 # #Comment# #We'll add a billing information without sepa mandate later.
 contract_2_invoice_2.invoice.sepa_mandate == mandate2
@@ -354,9 +356,9 @@ contract_2_invoice_2.invoice.sepa_mandate == mandate2
 billing_information_no_sepa = BillingInformation(
     date=contract_invoice_2.invoice.lines_to_pay[0].payment_date,
     billing_mode=monthly_manual,
-        payment_term=monthly_manual.allowed_payment_terms[0],
-        payer=subscriber,
-        sepa_mandate=None)
+    payment_term=monthly_manual.allowed_payment_terms[0],
+    payer=subscriber,
+    sepa_mandate=None)
 contract.billing_informations.append(billing_information_no_sepa)
 contract.save()
 contract_invoice_2.reload()
@@ -486,7 +488,8 @@ contract_invoice_2.invoice.sepa_mandate is None
 
 # #Comment# #Set billing information sepa mandate to mandate 3
 # #Comment# #At the date of the payment_date of the lines_to_pay[1]
-# #Comment# #So the sepa_mandate for lines_to_pay[0] must still be None and mandate_3 for
+# #Comment# #So the sepa_mandate for lines_to_pay[0] must still be None and
+# mandate_3 for
 # #Comment# #the lines_to_pay[1]
 billing_information_no_sepa_2 = BillingInformation(
         date=contract_2_invoice_2.invoice.lines_to_pay[1].payment_date,
@@ -510,7 +513,7 @@ contract_2_invoice_2.invoice.lines_to_pay[1].sepa_mandate.id == mandate3.id
 
 # #Comment# #We get the first line to pay after today, which is lines_to_pay[0]
 # #Comment# #with no sepa mandate
-contract_2_invoice_2.invoice.sepa_mandate == None
+contract_2_invoice_2.invoice.sepa_mandate is None
 # #Res# #True
 
 config._context['client_defined_date'] = \

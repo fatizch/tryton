@@ -1,13 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import datetime
-
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, And, Bool
 from trytond.transaction import Transaction
 from trytond.model import dualmethod
 
-from trytond.modules.coog_core import model, fields, utils
+from trytond.modules.coog_core import model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [

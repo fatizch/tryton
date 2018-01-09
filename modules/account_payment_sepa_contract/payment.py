@@ -120,7 +120,6 @@ class Payment:
         Invoice.post(invoices_to_create)
         lines_to_write = []
         for i, p in zip(invoices_to_create, payment_date_to_update):
-            lines_to_write += [list(i.lines_to_pay), p]
             # Update only if payment_date is not defined. Else use contract
             # configuration in order to set the payment date
             for line in i.lines_to_pay:
