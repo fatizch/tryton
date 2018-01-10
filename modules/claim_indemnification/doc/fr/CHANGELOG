@@ -1,3 +1,4 @@
+* OTH#0000 Cacher la liste des informations des quittances si vide (suite à l'évolution #7802)
 * BUG#7893 Ajout d'une méthode du moteur de règle  pour savoir si l'indemnisation est manuelle
 * BUG#7891 Correctifs du processus d'indemnisations sur certains champs requis
 * FEA#7850 Amélioration de l'affichage des services dans l'assistant d'indemnisations

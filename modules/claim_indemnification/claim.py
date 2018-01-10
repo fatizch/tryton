@@ -710,7 +710,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     journal = fields.Many2One('account.payment.journal', 'Journal',
         ondelete='RESTRICT')
     invoice_line_details = fields.One2Many('account.invoice.line.claim_detail',
-        'indemnification', 'Invoice Line Details', delete_missing=False)
+        'indemnification', 'Invoice Line Details', delete_missing=False,
+        states={'invisible': ~Eval('invoice_line_details')})
 
     @classmethod
     def __setup__(cls):

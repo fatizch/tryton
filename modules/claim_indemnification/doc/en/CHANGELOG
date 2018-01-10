@@ -1,3 +1,4 @@
+* OTH#0000 Hide invoice line in indemnification if empty following 7802
 * BUG#7893 Add rule engine method to define wether an indemnification is manual or not.
 * BUG#7891 Indemnification process fixes for some required fields
 * FEA#7850 Enhance claim services display in indemnifications wizard
