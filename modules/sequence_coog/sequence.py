@@ -80,6 +80,10 @@ class Sequence(model.CoogSQL):
         cls.type.domain = [If(~Eval('sub_sequences'), cls.type.domain,
                 [('type', '=', 'incremental')])]
         cls.type.depends.append('sub_sequences')
+        readonly_state = cls.number_next.states.get('readonly', False)
+        readonly_state = Or(readonly_state, Bool(Eval('sub_sequences')))
+        cls.number_next.states['readonly'] = readonly_state
+        cls.number_next.depends.append('sub_sequences')
 
     @classmethod
     def validate(cls, records):
@@ -93,13 +97,6 @@ class Sequence(model.CoogSQL):
                             'start_date': start_date,
                             'end_date:': end_date,
                             })
-
-    @property
-    def _sql_sequence_name(self):
-        if self.sub_sequences:
-            sequence = self.get_valid_sequence_at_date()
-            return '%s_%s' % (self._table, sequence.id)
-        return super(Sequence, self)._sql_sequence_name
 
     def update_sql_sequence(self, number_next=None):
         if not number_next and not self.number_next:
