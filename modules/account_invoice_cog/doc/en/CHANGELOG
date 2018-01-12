@@ -1,3 +1,4 @@
+* BUG#7961 Fix possible holes in invoice numbering if an error is raised during the processing
 * BUG#7539 Add invoices deletion authorization to the financial management group
 * BUG#7413 Significantly improve concurency performances on the invoice set number
 

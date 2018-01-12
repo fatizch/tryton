@@ -1,3 +1,4 @@
+* BUG#7961 Correctif du traitement des sous-transactions lors du commit du PostExecutionDataManager
 * FEA#7848 Ajout d'un batch permettant de facilement créer des traitements de reprise de données
 * BUG#7836 Correctif des paramètres des tâches en file d'attente
 * FEA#7673 Ajout de la fonction get_prorated_amount_on_period qui permet de calculer un certain montant étant donnés un montant de départ et un intervalle dans le temps. Elle est principalement utilisée pour calculer un montant étant donnés une prime et un intervalle de temps.

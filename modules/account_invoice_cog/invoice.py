@@ -139,7 +139,7 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
 
     @classmethod
     @model.pre_commit_transaction()
-    def _delayed_set_number(cls, invoices):
+    def _delayed_set_number(cls, invoices, sub_transactions=None):
         '''
         This method will be executed using a two phase commit manager.
         Once the function is called, its execution is delayed at the commit
@@ -155,9 +155,11 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
         pool = Pool()
         Period = pool.get('account.period')
         sub_transaction = None
-        pattern = {}
         to_write = []
+        if sub_transactions is None:
+            sub_transactions = []
         for invoice in invoices:
+            pattern = {}
             period_id = Period.find(
                 invoice.company.id, date=(invoice.accounting_date or
                     invoice.invoice_date),
@@ -192,14 +194,19 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
             # arguments by the decorator. This last will use it as main
             # transaction for it's code execution if valid otherwise it
             # will creates a new one.
+            # Any raised exception will be returned instead of the function
+            # result, so we must handle it properly and not forget to
+            # rollback the sub transaction.
             number, sub_transaction = \
                 invoice._sub_transaction_get_sequence(sequence,
                     sub_transaction=sub_transaction)
+            sub_transactions.append(sub_transaction)
+            if isinstance(number, Exception):
+                raise number
             to_write += [[invoice], {'number': number}]
         with ServerContext().set_context(pre_commit_number=True):
             if to_write:
                 cls.write(*to_write)
-        return [sub_transaction] if sub_transaction else []
 
     @model.sub_transaction_retry(10, 1000)
     def _sub_transaction_get_sequence(self, sequence):

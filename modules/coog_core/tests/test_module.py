@@ -9,6 +9,7 @@ from decimal import Decimal
 from datetime import date
 from sql import Column
 
+from trytond import backend
 import trytond.tests.test_tryton
 from trytond.model import ModelSQL, fields
 from trytond.transaction import Transaction
@@ -946,18 +947,27 @@ class ModuleTestCase(test_framework.CoogTestCase):
         def some_substitute(*args):
             return 42
 
+        DatabaseOperationalError = backend.get('DatabaseOperationalError')
+
         @model.pre_commit_transaction()
-        def pre_commit_function(increment, crash_at=-1, inc_first=False):
-            hook_ret, sub_transaction = sub_transaction_test_model(increment,
-                crash_at, inc_first)
-            return [sub_transaction]
+        def pre_commit_function(increment, crash_at=-1, inc_first=False,
+                sub_transactions=None,
+                exception_class=DatabaseOperationalError):
+            if sub_transactions is None:
+                sub_transactions = []
+            ret, sub_transaction = sub_transaction_test_model(increment,
+                crash_at, inc_first, exception_class)
+            sub_transactions.append(sub_transaction)
+            if isinstance(ret, Exception):
+                raise ret
 
         @model.sub_transaction_retry(2, 10)
-        def sub_transaction_test_model(increment, crash_at, inc_first):
+        def sub_transaction_test_model(increment, crash_at, inc_first,
+                exception_class=DatabaseOperationalError):
             if inc_first:
                 increment.increment += 1
             if increment.increment == crash_at:
-                1 / 0
+                raise exception_class('Error')
             TestModel.create([{
                     'value': increment.increment
                     }])
@@ -975,7 +985,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             self.assertEqual(len(TestModel.search([])), 1)
 
         def commit_should_fail():
-            with Transaction().new_transaction() as transaction:
+            with Transaction().new_transaction():
                 self.assertEqual(len(TestModel.search([])), 1)
                 # Create object and save it into the fake_main_transaction
                 TestModel.create([{
@@ -983,9 +993,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         }])
                 res = pre_commit_function(inc, crash_at=inc.increment)
                 self.assertEqual(res, None)
-                transaction.commit()
 
-        self.assertRaises(ZeroDivisionError, commit_should_fail)
+        DatabaseOperationalError = backend.get('DatabaseOperationalError')
+        self.assertRaises(DatabaseOperationalError, commit_should_fail)
         self.assertEqual(inc.increment, 1)
         # Sub transaction has fail and crashes it's main_transaction
         # which is the fake_main_transaction here.
@@ -1025,6 +1035,24 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         with Transaction().new_transaction():
             self.assertEqual(inc.increment, 10)
+
+        def commit_should_fail_without_retry():
+            # Here we check if the sub transaction fails without retrying
+            # when an exception different from DatabaseOperationalError
+            # is raised
+            with Transaction().new_transaction():
+                TestModel.create([{
+                        'value': -99,
+                        }])
+                pre_commit_function(inc, crash_at=inc.increment + 1,
+                    inc_first=True, exception_class=ZeroDivisionError)
+        # ZeroDivisionError will be re-raised
+        self.assertRaises(ZeroDivisionError,
+            commit_should_fail_without_retry)
+        # Because it has not retried, the increment in only incremented once
+        self.assertEqual(inc.increment, 11)
+
+
 
     def test_0125_test_last_version_modified_before(self):
         l = []

@@ -1,3 +1,4 @@
+* BUG#7961 Correctif des trous possibles dans la numérotation de quittances si une erreur est levée au milieu du traitement
 * BUG#7539 Ajout du droit de suppression des quittances pour le groupe gestion financier
 * BUG#7413 Amélioration significative des performances en concurrence sur l'attribution des numéros de quittance.
 

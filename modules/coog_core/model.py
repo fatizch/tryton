@@ -15,6 +15,7 @@ from sql.conditionals import Coalesce
 
 from contextlib import contextmanager
 
+from trytond import backend
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.model import UnionMixin as TrytonUnionMixin, Unique, ModelStorage
 from trytond.exceptions import UserError
@@ -84,17 +85,22 @@ class PostExecutionDataManager(object):
 
     def commit(self, trans):
         '''
-        The pre-committed method may return a list of transaction to commit.
-        In this case, all the sub_transaction returned will be committed at
+        The pre-committed method must take a list of sub transaction as
+        extra argument (which the function will fulfill).
+        All the sub_transaction added in the list will be committed at
         the same time just before the main transaction commit.
         '''
         to_commit = []
-        for fct, args, kwargs in self.commit_queue:
-            res = fct(*args, **kwargs)
-            if res and isinstance(res, list):
-                to_commit += res
-        assert all(isinstance(x, Transaction) for x in to_commit)
-        trans.add_sub_transactions(to_commit)
+        try:
+            for fct, args, kwargs in self.commit_queue:
+                fct(*args, sub_transactions=to_commit, **kwargs)
+                assert all(isinstance(x, Transaction) for x in to_commit)
+        except:
+            raise
+        finally:
+            sub_transactions = [
+                x for x in to_commit if isinstance(x, Transaction)]
+            trans.add_sub_transactions(sub_transactions)
 
     def tpc_vote(self, trans):
         pass
@@ -133,6 +139,8 @@ def sub_transaction_retry(n, sleep_time):
     If sub_transaction argument is given as keyword argument to the decorated
     function, the decorator will pop it and use it as sub transaction.
     this returns the decorated function result and the sub_transaction.
+    If an error occurs, the proper exception will be returned instead of the
+    function result. The sub transaction should be rollbacked in this case.
     '''
     def wrapper(func):
         assert (isinstance(func, types.UnboundMethodType)
@@ -145,6 +153,7 @@ def sub_transaction_retry(n, sleep_time):
             cache_holder['sub_transaction_function_cache'] = \
                 sub_transaction_cache
         def decorate(*args, **kwargs):
+            DatabaseOperationalError = backend.get('DatabaseOperationalError')
             try:
                 cached_transaction = sub_transaction_cache[id(func)]
             except KeyError:
@@ -162,9 +171,10 @@ def sub_transaction_retry(n, sleep_time):
                 try:
                     res = func(*args, **kwargs)
                     return res, sub_transaction
-                except Exception:
-                    if retry == 1:
-                        raise
+                except Exception as e:
+                    if (not isinstance(e, DatabaseOperationalError) or
+                            retry == 1):
+                        return e, sub_transaction
                     time.sleep(sleep_time / 1000.0)
                     continue
                 finally:
