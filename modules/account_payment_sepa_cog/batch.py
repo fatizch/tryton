@@ -59,12 +59,6 @@ class PaymentTreatmentBatch:
                 })
 
     @classmethod
-    def parse_params(cls, params):
-        params = super(PaymentTreatmentBatch, cls).parse_params(params)
-        assert params.get('job_size') == 0
-        return params
-
-    @classmethod
     def select_ids_regroup_key(cls, payment, payment_kind):
         if payment.journal.process_method == 'sepa':
             return payment.sepa_mandate if payment_kind == 'receivable' \

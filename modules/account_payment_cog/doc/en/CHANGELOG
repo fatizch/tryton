@@ -1,3 +1,4 @@
+* BUG#7900 Allow non 0 job size for payment processing batch
 * BUG#7538 Add missing authorizations on buttons for account payments
 
 Version 1.14 - 2017-11-09

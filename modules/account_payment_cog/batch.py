@@ -47,12 +47,6 @@ class PaymentTreatmentBatch(batch.BatchRoot):
                 })
 
     @classmethod
-    def parse_params(cls, params):
-        params = super(PaymentTreatmentBatch, cls).parse_params(params)
-        assert params.get('job_size') == 0
-        return params
-
-    @classmethod
     def get_batch_main_model_name(cls):
         return 'account.payment'
 
@@ -152,12 +146,6 @@ class PaymentGroupCreationBatch(batch.BatchRoot):
                 'split': False,
                 'payment_kind': '',
                 })
-
-    @classmethod
-    def parse_params(cls, params):
-        params = super(PaymentGroupCreationBatch, cls).parse_params(params)
-        assert params.get('job_size') == 0
-        return params
 
     @classmethod
     def get_batch_main_model_name(cls):
