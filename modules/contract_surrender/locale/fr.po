@@ -82,6 +82,10 @@ msgctxt "field:contract.surrender.preview,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt "field:contract.surrender.preview,surrender_date:"
+msgid "Surrender Date"
+msgstr "Date de rachat"
+
 msgctxt "field:contract.surrender.preview,surrender_value:"
 msgid "Surrender Value"
 msgstr "Valeur de rachat"

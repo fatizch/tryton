@@ -85,6 +85,7 @@ class Reduce(Wizard):
         self.preview.currency_symbol = contract.currency_symbol
         self.preview.reduction_value = sum([x[1] for x in reductions],
             Decimal(0))
+        self.preview.reduction_date = self.parameters.reduction_date
         return 'preview'
 
     def default_preview(self, name):
@@ -118,6 +119,7 @@ class ReducePreview(model.CoogView):
     reduction_value = fields.Numeric('Reduction Value',
         digits=(16, Eval('currency_digits', 2)), readonly=True,
         depends=['currency_digits'], help='The contract value after reduction')
+    reduction_date = fields.Date('Reduction Date', readonly=True)
 
 
 class CancelReduction(Wizard):

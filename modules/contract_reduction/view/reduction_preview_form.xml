@@ -4,6 +4,8 @@ this repository contains the full copyright notices and license terms. -->
 <form col="2">
     <label name="contract"/>
     <field name="contract"/>
+    <label name="reduction_date"/>
+    <field name="reduction_date"/>
     <label name="reduction_value"/>
     <group id="reduction_value">
         <field name="reduction_value" xexpand="0"/>

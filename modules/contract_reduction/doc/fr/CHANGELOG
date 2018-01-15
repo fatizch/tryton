@@ -1,3 +1,4 @@
+* FEA#7959 Ajout de la date de réduction dans l'étape de prévisualisation de l'assitant de mise en réduction
 * BUG#7852 Correction de la boucle d'avertissement dans la règle d'éligibilité
 * FEA#7777 Stockage de la valeur réduite afin de s'assurer de sa stabilité
 * OTH#0000 Correction de l'appel à la méthode reduce dans la méthode terminate

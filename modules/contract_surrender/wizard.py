@@ -83,6 +83,7 @@ class Surrender(Wizard):
         self.preview.currency_symbol = contract.currency_symbol
         self.preview.surrender_value = sum([x[1] for x in surrenders],
             Decimal(0))
+        self.preview.surrender_date = self.parameters.surrender_date
         return 'preview'
 
     def default_preview(self, name):
@@ -129,3 +130,4 @@ class SurrenderPreview(model.CoogView):
     surrender_value = fields.Numeric('Surrender Value',
         digits=(16, Eval('currency_digits', 2)), readonly=True,
         depends=['currency_digits'], help='The amount that will be surrendered')
+    surrender_date = fields.Date('Surrender Date', readonly=True)
