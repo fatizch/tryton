@@ -12,7 +12,12 @@ coog_worker_start() { # start - <nb>
         local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
                 >&2 echo "already running" && return 1
         coog_env_bak "$out_file" "$pid" || return $?
-        WSGI_LOG_FILE=$out_file uwsgi -M -T --module trytond.application:app --http :8000 --http-timeout 600 --processes "$1" --pidfile "$pid_file" &> "$out_file" &
+        WSGI_LOG_FILE=$out_file uwsgi -M -T \
+            --module trytond.application:app \
+            --http :8000 --http-timeout 600 \
+            --logformat "%(wid) %(rssM) %(ltime) %(rpc) %(status) %(msecs)" \
+            --processes "$1" \
+            --pidfile "$pid_file" &> "$out_file" &
         echo worker started
 }
 
