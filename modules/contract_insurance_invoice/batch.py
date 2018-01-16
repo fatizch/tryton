@@ -120,7 +120,8 @@ class PostInvoiceContractBatch(batch.BatchRoot):
         query_table = contract_invoice.join(account_invoice, 'LEFT',
             condition=(account_invoice.id == contract_invoice.invoice)
             ).join(contract,
-                condition=(Not(contract.status.in_(['hold', 'quote'])) &
+                condition=(Not(contract.status.in_(
+                            ['hold', 'quote', 'declined'])) &
                     (contract.id == contract_invoice.contract)))
 
         cursor.execute(*query_table.select(account_invoice.id,

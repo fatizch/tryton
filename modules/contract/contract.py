@@ -1224,11 +1224,15 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     @classmethod
     def decline_contract(cls, contracts, reason):
         Event = Pool().get('event')
+        cls.do_decline(contracts, reason)
+        Event.notify_events(contracts, 'decline_contract',
+            description=reason.name)
+
+    @classmethod
+    def do_decline(cls, contracts, reason):
         for contract in contracts:
             contract.decline(reason)
         cls.save(contracts)
-        Event.notify_events(contracts, 'decline_contract',
-            description=reason.name)
 
     def clean_up_versions(self):
         pool = Pool()

@@ -1222,6 +1222,11 @@ class Contract:
                         contract.activation_history[-1].end_date):
                     cls.raise_user_error('missing_invoices')
 
+    @classmethod
+    def do_decline(cls, contracts, reason):
+        super(Contract, cls).do_decline(contracts, reason)
+        cls.clean_up_contract_invoices(contracts, from_date=datetime.date.min)
+
     ###########################################################################
     # Cached invoices calculation to speed up future payments wizard,         #
     # report generation, & co                                                 #
