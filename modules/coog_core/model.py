@@ -153,7 +153,9 @@ def sub_transaction_retry(n, sleep_time):
             cache_holder['sub_transaction_function_cache'] = \
                 sub_transaction_cache
         def decorate(*args, **kwargs):
+            import psycopg2
             DatabaseOperationalError = backend.get('DatabaseOperationalError')
+            InterfaceError = psycopg2.InterfaceError
             try:
                 cached_transaction = sub_transaction_cache[id(func)]
             except KeyError:
@@ -172,8 +174,10 @@ def sub_transaction_retry(n, sleep_time):
                     res = func(*args, **kwargs)
                     return res, sub_transaction
                 except Exception as e:
-                    if (not isinstance(e, DatabaseOperationalError) or
+                    if (not (isinstance(e, DatabaseOperationalError) or
+                                isinstance(e, InterfaceError)) or
                             retry == 1):
+                        sub_transaction_cache[id(func)] = None
                         return e, sub_transaction
                     time.sleep(sleep_time / 1000.0)
                     continue
