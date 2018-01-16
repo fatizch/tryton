@@ -35,6 +35,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">rounded_warning</field>
             <field name="path">icons/rounded_warning.svg</field>
         </record>
+        <record model="ir.ui.icon" id="reload_and_check_icon">
+            <field name="name">reload_and_check</field>
+            <field name="path">icons/reload_and_check.svg</field>
+        </record>
         <record model="ir.ui.icon" id="play_icon">
             <field name="name">play</field>
             <field name="path">icons/play.svg</field>
