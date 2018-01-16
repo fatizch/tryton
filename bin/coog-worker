@@ -2,54 +2,56 @@
 # worker management - start, stop, log, etc.
 
 _coog_worker_file() { # get file name - <ext>
-        echo "$COOG_TMP/$COOG_FILE_WRK.$1"
+    echo "$COOG_TMP/$COOG_FILE_WRK.$1"
 }
 
 coog_worker_start() { # start - <nb>
-        [ -z "$1" ] && echo missing workers number && return 1
-        local pid_file; pid_file=$(_coog_worker_file pid)
-        local out_file; out_file=$(_coog_worker_file out)
-        local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
-                >&2 echo "already running" && return 1
-        coog_env_bak "$out_file" "$pid" || return $?
-        WSGI_LOG_FILE=$out_file uwsgi -M -T \
-            --module trytond.application:app \
-            --http :8000 --http-timeout 600 \
-            --logformat "%(wid) %(rssM) %(ltime) %(rpc) %(status) %(msecs)" \
-            --processes "$1" \
-            --pidfile "$pid_file" &> "$out_file" &
-        echo worker started
+    [ -z "$WSGI_LOG_FORMAT" ] &&
+        WSGI_LOG_FORMAT="%(wid) %(ltime) %(rpc) %(status) %(rsize)B %(msecs)ms"
+    [ -z "$1" ] && echo missing workers number && return 1
+    local pid_file; pid_file=$(_coog_worker_file pid)
+    local out_file; out_file=$(_coog_worker_file out)
+    local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
+        >&2 echo "already running" && return 1
+    coog_env_bak "$out_file" "$pid" || return $?
+    WSGI_LOG_FILE=$out_file uwsgi -M -T \
+        --module trytond.application:app \
+        --http :8000 --http-timeout 600 \
+        --logformat "$WSGI_LOG_FORMAT" \
+        --processes "$1" \
+        --pidfile "$pid_file" &> "$out_file" &
+    echo worker started
 }
 
 coog_worker_stop() { # stop
-        local pid_file; pid_file=$(_coog_worker_file pid)
-        local out_file; out_file=$(_coog_worker_file out)
-        local pid; pid=$(coog_env_int "$pid_file") || return $?
-        coog_env_bak "$out_file" "$pid"
-        echo worker stopped
+    local pid_file; pid_file=$(_coog_worker_file pid)
+    local out_file; out_file=$(_coog_worker_file out)
+    local pid; pid=$(coog_env_int "$pid_file") || return $?
+    coog_env_bak "$out_file" "$pid"
+    echo worker stopped
 }
 
 coog_worker_kill() { # kill
-        coog_worker_pid | xargs kill -9 &> /dev/null
-        echo worker killed
+    coog_worker_pid | xargs kill -9 &> /dev/null
+    echo worker killed
 }
 
 coog_worker_pid() { # get pid
-        local pid_file; pid_file=$(_coog_worker_file pid)
-        coog_env_pid "$pid_file"
+    local pid_file; pid_file=$(_coog_worker_file pid)
+    coog_env_pid "$pid_file"
 }
 
 coog_worker_log() { # less logs - [less args]
-        local out_file; out_file=$(_coog_worker_file out)
-        less "$@" "$out_file"
+    local out_file; out_file=$(_coog_worker_file out)
+    less "$@" "$out_file"
 }
 
 coog_worker_head() { # head logs - [head args]
-        local out_file; out_file=$(_coog_worker_file out)
-        head "$@" "$out_file"
+    local out_file; out_file=$(_coog_worker_file out)
+    head "$@" "$out_file"
 }
 
 coog_worker_tail() { # tail logs - [tail args]
-        local out_file; out_file=$(_coog_worker_file out)
-        tail "$@" "$out_file"
+    local out_file; out_file=$(_coog_worker_file out)
+    tail "$@" "$out_file"
 }
