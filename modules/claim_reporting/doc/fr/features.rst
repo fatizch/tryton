@@ -1,0 +1,1 @@
+- **Stock assureur:** Génération d'un rapport avec l'ensemble des sinistres d'un assureur

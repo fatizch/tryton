@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ########################## -->
+        <!-- # Claim Reporting Result # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="claim_reporting_result_view_form">
+            <field name="model">claim_reporting.result</field>
+            <field name="type">form</field>
+            <field name="name">claim_reporting_result_form</field>
+        </record>
+        <!-- ########################## -->
+        <!-- # Claim Report Configure # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="claim_reporting_configure_view_form">
+            <field name="model">claim_reporting.claim.configure</field>
+            <field name="type">form</field>
+            <field name="name">claim_reporting_configure_form</field>
+        </record>
+        <!-- ################################## -->
+        <!-- # Insurer Report Claim Wizard # -->
+        <!-- ################################## -->
+        <record model="ir.action.wizard" id="act_insurer_report_claim">
+            <field name="name">Insurer Report Claim</field>
+            <field name="wiz_name">claim_reporting.claim</field>
+        </record>
+        <menuitem parent="report_engine.menu_report" sequence="1" id="menu_claim_report_insurer" name="Insurer Claim Report" icon="printer" action="act_insurer_report_claim"/>
+    </data>
+</tryton>

@@ -50,7 +50,7 @@ class InsurerReportContractBatch(batch.BatchRoot):
         insurer_table = Insurer.__table__()
         party_table = pool.get('party.party').__table__()
         where_clause = Literal(True)
-        insurers = Insurer.search([('stock_reports', '!=', None)])
+        insurers = cls.get_insurers()
         if not insurers:
             return []
 
@@ -72,14 +72,20 @@ class InsurerReportContractBatch(batch.BatchRoot):
         return cursor.fetchall()
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, products=None,
-             possible_days=None):
-        pool = Pool()
-        InsurerReportWizard = pool.get('insurer_reporting.contract',
+    def get_reporting_wizard(cls):
+        InsurerReportWizard = Pool().get('insurer_reporting.contract',
             type='wizard')
         wizard_id, _, _ = InsurerReportWizard.create()
-        create_reports = InsurerReportWizard(wizard_id)
+        return InsurerReportWizard(wizard_id)
 
+    @classmethod
+    def get_insurers(cls):
+        return Pool().get('insurer').search([('stock_reports', '!=', None)])
+
+    @classmethod
+    def execute(cls, objects, ids, treatment_date, products=None,
+             possible_days=None):
+        create_reports = cls.get_reporting_wizard()
         for template in [tmpl for insurer in objects for tmpl in
                 insurer.stock_reports]:
             create_reports.configure_report.insurer = objects[0]

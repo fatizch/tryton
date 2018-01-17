@@ -629,7 +629,8 @@ class Loss(model.CoogSQL, model.CoogView):
             LossDesc = pool.get('benefit.loss.description')
             self.loss_desc, = LossDesc.search([('code', '=', loss_desc_code)])
             self.event_desc = self.loss_desc.event_descs[0]
-            self.extra_data = utils.init_extra_data(self.loss_desc.extra_data_def)
+            self.extra_data = utils.init_extra_data(
+                self.loss_desc.extra_data_def)
         else:
             self.loss_desc = None
         if not kwargs:
@@ -972,6 +973,15 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
                 extra_data = ExtraData(extra_data_values=values, date=at_date)
                 self.extra_datas = [x for x in self.extra_datas
                     if not x.date or x.date < at_date] + [extra_data]
+
+    def get_contact(self):
+        return self.claim.claimant if self.claim else None
+
+    def get_sender(self):
+        return None
+
+    def get_object_for_contact(self):
+        return None
 
 
 class ClaimSubStatus(model.CoogSQL, model.CoogView):

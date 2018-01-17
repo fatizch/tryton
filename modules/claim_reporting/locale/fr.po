@@ -1,0 +1,55 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:claim_reporting.claim.configure,at_date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:claim_reporting.claim.configure,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim_reporting.claim.configure,insurer:"
+msgid "Insurer"
+msgstr "Assureur"
+
+msgctxt "field:claim_reporting.claim.configure,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:claim_reporting.result,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim_reporting.result,reports:"
+msgid "Reports"
+msgstr "Rapports"
+
+msgctxt "model:claim_reporting.claim.configure,name:"
+msgid "Configure Insurer Claim Reporting"
+msgstr "Configuration du rapport assureur sinistres"
+
+msgctxt "model:claim_reporting.result,name:"
+msgid "Insurer Claim Reporting Result"
+msgstr "Résultat du rapport assureur sinistres"
+
+msgctxt "model:ir.action,name:act_insurer_report_claim"
+msgid "Insurer Report Claim"
+msgstr "Rapport assureur: sinistes"
+
+msgctxt "model:ir.ui.menu,name:menu_claim_report_insurer"
+msgid "Insurer Claim Report"
+msgstr "Rapport assureur: sinistres"
+
+msgctxt "wizard_button:claim_reporting.claim,configure_report,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:claim_reporting.claim,configure_report,result:"
+msgid "Report"
+msgstr "Rapports/Courriers"
+
+msgctxt "wizard_button:claim_reporting.claim,result,end:"
+msgid "Ok"
+msgstr "Ok"
