@@ -4,7 +4,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.model import fields as tryton_fields, Unique
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import utils, fields, export
+from trytond.modules.coog_core import utils, fields, export, model
 from trytond.modules.coog_core import coog_string
 
 
@@ -210,6 +210,19 @@ class BankAccount(export.ExportImportMixin):
             objects = n.objects_using_me_for_party(for_party)
             if objects:
                 return objects
+
+    @classmethod
+    def delete(cls, records):
+        for account in records:
+            account.owners = []
+        # by doing this, we trigger deleting the link between the bank accounts
+        # and their owners BEFORE deleting the bank accounts. This ensures all
+        # checks that concern this link are made. If and only if all checks
+        # pass, the bank accounts are deleted. For further information about
+        # how we got in this situation in the first place, please read
+        # redmine #7978
+        cls.save(records)
+        super(BankAccount, cls).delete(records)
 
 
 class BankAccountNumber(export.ExportImportMixin):

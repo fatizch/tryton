@@ -1,3 +1,5 @@
+* BUG#7978 Fix crash when deleting a bank account used in other objects
+
 Version 1.14 - 2017-11-09
 * FEA#6377 Move initialisation of banks from test case to a wizard
 Version 1.12 - 2017-04-28
