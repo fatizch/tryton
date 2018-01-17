@@ -27,6 +27,7 @@ __all__ = [
     'IndemnificationControlElement',
     'IndemnificationAssistantView',
     'IndemnificationAssistant',
+    'DeleteIndemnification',
     ]
 
 
@@ -603,7 +604,7 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
         'claim_indemnification.indemnification_calculation_result_view_form', [
             Button('Previous', 'definition', 'tryton-go-previous'),
             Button('Validate', 'regularisation', 'tryton-go-next',
-                default=True)])
+            default=True)])
     regularisation = StateTransition()
     init_previous = StateTransition()
     select_regularisation = StateView('claim.indemnification_regularisation',
@@ -936,4 +937,22 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
                 'payback_method': payback_method,
                 'payment_term': payment_term.id if payment_term else None
                 })
+        return 'end'
+
+
+class DeleteIndemnification(Wizard):
+    'Delete Indemnification Detail'
+
+    __name__ = 'claim.indemnification.delete'
+
+    start_state = 'delete_selection'
+    delete_selection = StateTransition()
+
+    def transition_delete_selection(self):
+        ids = Transaction().context.get('active_ids')
+        model = Transaction().context.get('active_model')
+        assert model == 'claim.indemnification.detail'
+        IndemnificationDetail = Pool().get('claim.indemnification.detail')
+        details = IndemnificationDetail.browse(ids)
+        IndemnificationDetail.remove_indemnifications(details)
         return 'end'

@@ -799,6 +799,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     def taxable_lines(self):
         return [(self.product.supplier_taxes, self.amount, 1)]
 
+    def is_removable(self):
+        return self.status in ('calculated', 'scheduled')
+
     def get_is_paid(self, name):
         pool = Pool()
         cursor = Transaction().connection.cursor()
@@ -1374,6 +1377,8 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
         super(IndemnificationDetail, cls).__setup__()
         cls._error_messages.update({
                 'capital_string': 'Capital',
+                'indemnification_not_removable': 'The indemnification '
+                '%(indemnification)s cannot be removed',
                 })
         cls._order = [('start_date', 'ASC')]
 
@@ -1391,6 +1396,24 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
     def get_indemnification_status(self, name):
         if self.indemnification:
             return self.indemnification.status
+
+    @classmethod
+    def remove_indemnifications(cls, details):
+        Indemnification = Pool().get('claim.indemnification')
+        indemnifications = list({x.indemnification for x in details})
+        cls.check_indemnification_removable(
+            indemnifications)
+        Indemnification.delete(indemnifications)
+
+    @classmethod
+    def check_indemnification_removable(cls, indemnifications):
+        with model.error_manager():
+            for indemnification in indemnifications:
+                if not indemnification.is_removable():
+                    cls.append_functional_error(
+                        'indemnification_not_removable', {
+                            'indemnification': indemnification.rec_name,
+                            })
 
     def get_indemnification_note(self, name):
         return self.indemnification.note

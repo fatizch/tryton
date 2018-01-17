@@ -57,5 +57,6 @@ def register():
         wizard.FillExtraData,
         wizard.CreateIndemnification,
         wizard.IndemnificationAssistant,
+        wizard.DeleteIndemnification,
         party.PartyReplace,
         module='claim_indemnification', type_='wizard')

@@ -121,5 +121,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="button" ref="claim_create_claim_indemnification_button"/>
             <field name="group" ref="res.group_admin"/>
         </record>
+        <!-- ############################################################ -->
+        <!-- ############## Indemnification Deletion Wizard ############# -->
+        <!-- ############################################################ -->
+        <record model="ir.action.wizard" id="act_delete_indemnification_wizard">
+            <field name="name">Delete Associated Indemnification(s)</field>
+            <field name="wiz_name">claim.indemnification.delete</field>
+        </record>
+        <record model="ir.action.keyword" id="act_delete_indemnification_from_detail_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">claim.indemnification.detail,-1</field>
+            <field name="action" ref="act_delete_indemnification_wizard"/>
+        </record>
     </data>
 </tryton>
