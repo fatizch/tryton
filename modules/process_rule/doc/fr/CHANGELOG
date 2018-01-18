@@ -1,3 +1,5 @@
+* BUG#8026 Verfication que la cible existe avant d'y accéder
+
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
 

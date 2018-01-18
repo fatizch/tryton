@@ -104,7 +104,7 @@ class ProcessAction(
         for path in self.target_path.split('.')[1:]:
             new_targets = [getattr(x, path) for x in new_targets
                 if getattr(x, path)]
-            if isinstance(new_targets[0], tuple):
+            if new_targets and isinstance(new_targets[0], tuple):
                 new_targets = sum(new_targets, ())
         return new_targets
 
