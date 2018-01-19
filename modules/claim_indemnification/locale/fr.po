@@ -812,8 +812,8 @@ msgid "Amount"
 msgstr "Montant"
 
 msgctxt "field:claim.indemnification.detail,amount_per_unit:"
-msgid "Amount per Unit"
-msgstr "Montant par Unité"
+msgid "Amount per unit"
+msgstr "Montant par unité"
 
 msgctxt "field:claim.indemnification.detail,base_amount:"
 msgid "Base Amount"
@@ -896,7 +896,7 @@ msgid "Kind"
 msgstr "Type de donnée"
 
 msgctxt "field:claim.indemnification.detail,nb_of_unit:"
-msgid "Nb of Unit"
+msgid "Nb of unit"
 msgstr "Nombre d'Unité"
 
 msgctxt "field:claim.indemnification.detail,rec_name:"
@@ -1069,8 +1069,12 @@ msgid "Selected Service"
 msgstr "Prestation sélectionnée"
 
 msgctxt "field:claim.select_service,start_date:"
-msgid "Start Date"
-msgstr "Date d'Effet"
+msgid "Loss Date"
+msgstr "Date"
+
+msgctxt "field:claim.select_service,with_end_date:"
+msgid "With End Date"
+msgstr "Avec Date de Fin"
 
 msgctxt "field:claim.service,annuity_frequency:"
 msgid "Annuity Frequency"

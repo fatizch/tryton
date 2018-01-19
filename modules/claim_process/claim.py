@@ -326,11 +326,18 @@ class ClaimDeclare(ProcessFinder):
 
     def default_process_parameters(self, name):
         active_model = Transaction().context.get('active_model', None)
-        if active_model != 'party.party':
-            return {}
-        return {
-            'party': Transaction().context.get('active_id', None),
-            }
+        if active_model == 'party.party':
+            return {
+                'party': Transaction().context.get('active_id', None),
+                }
+        elif active_model == 'contract':
+            contract_id = Transaction().context.get('active_id', None)
+            contract = Pool().get('contract')(contract_id)
+            if contract and contract.subscriber:
+                return {
+                    'party': contract.subscriber.id,
+                    }
+        return {}
 
     def transition_confirm_declaration(self):
         open_claims = []

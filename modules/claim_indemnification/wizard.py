@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, Equal, Bool, Len, If
+from trytond.pyson import Eval, Equal, Bool, Len, If, Or
 
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 from trytond.modules.coog_core import fields, model, utils, wizard_context
@@ -392,10 +392,13 @@ class SelectService(model.CoogView):
     option = fields.Many2One('contract.option', 'Option', readonly=True)
     possible_services = fields.Many2Many('claim.service', None, None,
         'Possible Services', states={'invisible': True})
-    start_date = fields.Date('Start Date', readonly=True,
+    start_date = fields.Date('Loss Date', readonly=True,
         states={'invisible': ~Eval('selected_service')})
+    with_end_date = fields.Boolean('With End Date', readonly=True,
+        states={'invisible': True})
     end_date = fields.Date('End Date', readonly=True,
-        states={'invisible': ~Eval('selected_service')})
+        states={'invisible': Or(~Eval('selected_service'),
+                Bool(~Eval('with_end_date')))})
     loss_desc = fields.Many2One('benefit.loss.description', 'Loss Descriptor',
         readonly=True, states={'invisible': ~Eval('selected_service')})
     event_desc = fields.Many2One('benefit.event.description',
@@ -403,12 +406,13 @@ class SelectService(model.CoogView):
         states={'invisible': ~Eval('selected_service')})
 
     @fields.depends('contract', 'option', 'selected_service', 'start_date',
-        'end_date', 'loss_desc', 'event_desc')
+        'with_end_date', 'end_date', 'loss_desc', 'event_desc')
     def on_change_selected_service(self):
         if self.selected_service:
             self.contract = self.selected_service.contract
             self.option = self.selected_service.option
             self.start_date = self.selected_service.loss.start_date
+            self.with_end_date = self.selected_service.loss.with_end_date
             self.end_date = self.selected_service.loss.end_date
             self.loss_desc = self.selected_service.loss.loss_desc
             self.event_desc = self.selected_service.loss.event_desc
@@ -416,6 +420,7 @@ class SelectService(model.CoogView):
             self.contract = None
             self.option = None
             self.start_date = None
+            self.with_end_date = False
             self.end_date = None
             self.loss_desc = None
             self.event_desc = None

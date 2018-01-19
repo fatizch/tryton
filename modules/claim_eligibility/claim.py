@@ -38,7 +38,7 @@ class ClaimService:
             ('study_in_progress', 'Study In Progress'),
             ('accepted', 'Accepted'),
             ('refused', 'Refused'),
-            ], 'Eligibility Status',
+            ], 'Eligibility Status', readonly=True)
         )
     eligibility_status_string = eligibility_status.translated(
         'eligibility_status')
@@ -165,14 +165,14 @@ class ClaimService:
 
     def getter_can_be_indemnified(self, name):
         return super(ClaimService, self).getter_can_be_indemnified(name) \
-            and self.eligibility_status in ('accepted', '')
+            and self.eligibility_status != 'refused'
 
     @classmethod
     def searcher_can_be_indemnified(cls, name, clause):
         return ['AND',
             super(ClaimService, cls).searcher_can_be_indemnified(
                 name, clause),
-            [('eligibility_status', 'in', ('accepted', ''))]
+            [('eligibility_status', '!=', 'refused')]
             ]
 
 

@@ -3,7 +3,7 @@
 import datetime
 
 from trytond.rpc import RPC
-from trytond.pyson import Eval, Bool, Or
+from trytond.pyson import Eval, Bool, Or, And
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.model import Unique
@@ -413,7 +413,8 @@ class Loss(model.CoogSQL, model.CoogView):
     extra_data = fields.Dict('extra_data', 'Extra Data', states={
             'invisible': ~Eval('extra_data'),
             }, depends=['extra_data'])
-    start_date = fields.Date('Loss Date')
+    start_date = fields.Date('Loss Date',
+        help='Date of the event, or start date of a period')
     with_end_date = fields.Function(
         fields.Boolean('With End Date'), 'get_with_end_date')
     end_date = fields.Date('End Date',
@@ -437,7 +438,7 @@ class Loss(model.CoogSQL, model.CoogView):
         domain=[('id', 'in', Eval('available_closing_reasons'))],
         states={
             'readonly': Eval('claim_status') == 'closed',
-            'invisible': Bool(~Eval('with_end_date'))},
+            'invisible': Or(Bool(~Eval('with_end_date')), ~Eval('end_date'))},
         depends=['available_closing_reasons', 'claim_status', 'with_end_date'],
         ondelete='RESTRICT')
 
@@ -460,10 +461,13 @@ class Loss(model.CoogSQL, model.CoogView):
                 })
         cls._buttons.update({
                 'draft': {
-                    'readonly': Or(Eval('state') == 'draft',
-                        Eval('claim_status') == 'closed'),
+                    'readonly': Or(Eval('state') == 'draft', Eval('claim_status') == 'closed'),
+                    'invisible': Or(Eval('state') == 'draft', Eval('claim_status') == 'closed'),
                     },
-                'activate': {'readonly': Eval('state') == 'active'},
+                'activate': {
+                    'invisible': Or(Eval('state') == 'active', ~Eval('loss_desc')),
+                    'readonly': Or(Eval('state') == 'active', ~Eval('loss_desc')),
+                    },
                 })
 
     @classmethod

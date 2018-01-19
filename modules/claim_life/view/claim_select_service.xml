@@ -3,8 +3,8 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='event_desc']" position="after">
-        <newline/>
         <label name="covered_person"/>
         <field name="covered_person"/>
+        <newline/>
     </xpath>
 </data>

@@ -11,10 +11,23 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="claim.claim_service_view_form"/>
             <field name="name">claim_service_form</field>
         </record>
+        <!-- ########################## -->
+        <!-- # Claim Service Decision # -->
+        <!-- ########################## -->
         <record model="ir.ui.view" id="claim_service_decision_view_list">
             <field name="model">claim.service</field>
             <field name="type">tree</field>
             <field name="name">service_decision_list</field>
+        </record>
+        <record model="ir.ui.view" id="claim_service_simple_view_list">
+            <field name="model">claim.service</field>
+            <field name="type">tree</field>
+            <field name="name">claim_service_simple_list</field>
+        </record>
+        <record model="ir.ui.view" id="claim_service_simple_view_form">
+            <field name="model">claim.service</field>
+            <field name="type">form</field>
+            <field name="name">claim_service_simple_form</field>
         </record>
     </data>
 </tryton>

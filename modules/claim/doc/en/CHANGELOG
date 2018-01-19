@@ -1,3 +1,4 @@
+* FEA#8028 UI enhancements on claim declaration process
 * BUG#7817 If a loss requires an end date, the closing reason can only be defined if an end date is defined.
 * BUG#7827 Load hidden field "Claim" in the loss view form
 

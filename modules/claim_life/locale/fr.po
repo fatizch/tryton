@@ -231,6 +231,10 @@ msgctxt "field:claim.indemnification_definition,beneficiary_extra_data:"
 msgid "Beneficiary Extra Data"
 msgstr "Données complémentaires du bénéficiaire"
 
+msgctxt "field:claim.select_service,covered_person:"
+msgid "Covered Person"
+msgstr "Personne assurée"
+
 msgctxt "field:claim.loss,covered_person:"
 msgid "Covered Person"
 msgstr "Personne assurée"

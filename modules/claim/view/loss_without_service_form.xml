@@ -3,9 +3,12 @@
 this repository contains the full copyright notices and license terms. -->
 <form>
     <label name="state"/>
-    <field name="state"/>
-    <button string="Draft" name="draft"/>
-    <button string="Activate" name="activate"/>
+    <group id="button">
+        <field name="state"/>
+        <button string="Draft" name="draft"/>
+        <button string="Activate" name="activate"/>
+    </group>
+    <newline/>
     <label name="loss_desc"/>
     <field name="loss_desc" widget="selection"/>
     <label name="event_desc"/>

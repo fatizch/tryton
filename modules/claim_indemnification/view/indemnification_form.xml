@@ -1,55 +1,37 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form col="4">
+<form>
     <label name="service"/>
     <field name="service"/>
     <label name="status"/>
     <field name="status"/>
-    <newline/>
     <label name="beneficiary"/>
     <field name="beneficiary"/>
     <label name="journal"/>
     <field name="journal"/>
-    <newline/>
-    <group id="header" colspan="4" col="7">
-        <label name="status"/>
-        <group id="status" colspan="3" col="4">
-            <field name="status" colspan="1" xexpand="0"/>
-            <field name="note" colspan="3" xexpand="1"/>
-        </group>
+    <group id="left" colspan="2" col="2">
+        <field name="note" colspan="2"/>
+        <label name="start_date"/>
+        <field name="start_date"/>
+        <label name="end_date"/>
+        <field name="end_date"/>
+        <label name="product"/>
+        <field name="product"/>
+        <label name="manual"/>
+        <field name="manual"/>
     </group>
-    <label name="start_date"/>
-    <field name="start_date"/>
-    <label name="end_date"/>
-    <field name="end_date"/>
-    <newline/>
-    <label name="product"/>
-    <field name="product"/>
-    <newline/>
-    <group id="amount" string="" colspan="4" col="6">
+    <group id="right" colspan="2" col="3">
         <label name="amount"/>
-        <group id="amount">
-            <field name="amount" xexpand="0"/>
-            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
-        </group>
+        <field name="amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
         <label name="tax_amount"/>
-        <group id="tax_amount">
-            <field name="tax_amount" xexpand="0"/>
-            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
-        </group>
+        <field name="tax_amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
         <label name="total_amount"/>
-        <group id="total_amount">
-            <field name="total_amount" xexpand="0"/>
-            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
-        </group>
-    </group>
-    <label name="manual"/>
-    <field name="manual"/>
-    <label name="is_paid"/>
-    <field name="is_paid"/>
-    <label name="local_currency_amount"/>
-    <group id="local_amount">
+        <field name="total_amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+        <label name="local_currency_amount"/>
         <field name="local_currency_amount"/>
         <field name="local_currency"/>
     </group>

@@ -908,6 +908,12 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             return False
         return self.product.taxes_included
 
+    @fields.depends('manual', 'details')
+    def on_change_manual(self):
+        for detail in self.details:
+            detail.is_manual_indemnification = self.manual
+        self.details = list(self.details)
+
     def get_amount(self, name):
         if not self.product.supplier_taxes:
             return self.total_amount
@@ -1333,27 +1339,60 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
     start_date = fields.Date('Start Date',
         states={
             'invisible': Eval('indemnification_kind') == 'capital',
-            }, depends=['indemnification_kind'])
+            'readonly': Or(~Eval('is_manual_indemnification'),
+                Eval('indemnification_status') != 'calculated')
+            },
+        depends=['indemnification_status', 'is_manual_indemnification',
+            'indemnification_kind'])
     end_date = fields.Date('End Date',
         states={
             'invisible': Eval('indemnification_kind') == 'capital',
-            }, depends=['indemnification_kind'])
+            'readonly': Or(~Eval('is_manual_indemnification'),
+                Eval('indemnification_status') != 'calculated')
+            },
+        depends=['indemnification_status', 'is_manual_indemnification',
+            'indemnification_kind'])
     indemnification_kind = fields.Function(
         fields.Selection(INDEMNIFICATION_KIND, 'Indemnification Kind',
             sort=False),
         'get_indemnification_kind')
     kind = fields.Selection(INDEMNIFICATION_DETAIL_KIND, 'Kind', sort=False)
     kind_string = kind.translated('kind')
-    amount_per_unit = fields.Numeric('Amount per Unit',
+    amount_per_unit = fields.Numeric('Amount per unit',
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
-        depends=['currency_digits'])
-    nb_of_unit = fields.Numeric('Nb of Unit')
-    unit = fields.Selection(coog_date.DAILY_DURATION, 'Unit')
+        states={
+            'readonly': Or(~Eval('is_manual_indemnification'),
+                Eval('indemnification_status') != 'calculated')
+            },
+        depends=['indemnification_status', 'is_manual_indemnification',
+            'currency_digits'])
+    nb_of_unit = fields.Numeric('Nb of unit',
+        states={
+            'readonly': Or(~Eval('is_manual_indemnification'),
+                Eval('indemnification_status') != 'calculated')
+            },
+        depends=['indemnification_status', 'is_manual_indemnification'])
+    unit = fields.Selection(coog_date.DAILY_DURATION, 'Unit',
+        states={
+            'readonly': Or(~Eval('is_manual_indemnification'),
+                Eval('indemnification_status') != 'calculated')
+            },
+        depends=['indemnification_status', 'is_manual_indemnification'])
     unit_string = unit.translated('unit')
     amount = fields.Numeric('Amount',
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
-        depends=['currency_digits'])
-    description = fields.Text('Description')
+        states={
+            'readonly': Or(~Eval('is_manual_indemnification'),
+                Eval('indemnification_status') != 'calculated')
+            },
+        depends=['indemnification_status', 'is_manual_indemnification',
+            'currency_digits'])
+    description = fields.Text('Description',
+        states={
+            'readonly': Or(~Eval('is_manual_indemnification'),
+                Eval('indemnification_status') != 'calculated')
+            },
+        depends=['indemnification_status', 'is_manual_indemnification'])
     duration_description = fields.Function(
         fields.Char('Duration'),
         'get_duration_description')
@@ -1361,7 +1400,12 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
         fields.Char('Status'), 'get_status_string')
     base_amount = fields.Numeric('Base Amount',
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
-        depends=['currency_digits'])
+        states={
+            'readonly': Or(~Eval('is_manual_indemnification'),
+                Eval('indemnification_status') != 'calculated')
+            },
+        depends=['indemnification_status', 'is_manual_indemnification',
+            'currency_digits'])
     benefit_description = fields.Function(
         fields.Char('Prestation'),
         'get_benefit_description')
@@ -1371,10 +1415,20 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
     indemnification_beneficiary = fields.Function(
         fields.Many2One('party.party', 'Beneficiary'),
         'getter_indemnification_beneficiary')
+    is_manual_indemnification = fields.Function(
+        fields.Boolean('Manual Calculation'),
+        'getter_is_manual_indemnification')
 
     @classmethod
     def __setup__(cls):
         super(IndemnificationDetail, cls).__setup__()
+        cls.extra_details.states['readonly'] = Or(
+            cls.extra_details.states.get('readonly', False),
+            Or(
+                ~Eval('is_manual_indemnification'),
+                Eval('indemnification_status') != 'calculated'))
+        cls.extra_details.depends += [
+            'indemnification_status', 'is_manual_indemnification']
         cls._error_messages.update({
                 'capital_string': 'Capital',
                 'indemnification_not_removable': 'The indemnification '
@@ -1420,6 +1474,9 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
 
     def get_indemnification_kind(self, name):
         return self.indemnification.kind
+
+    def getter_is_manual_indemnification(self, name):
+        return self.indemnification and self.indemnification.manual
 
     def getter_indemnification_beneficiary(self, name):
         if self.indemnification.beneficiary:

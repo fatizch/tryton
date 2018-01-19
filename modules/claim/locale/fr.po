@@ -737,7 +737,11 @@ msgstr "Prestations Fournies"
 
 msgctxt "field:claim.loss,start_date:"
 msgid "Loss Date"
-msgstr "Date de début"
+msgstr "Date"
+
+msgctxt "help:claim.loss,start_date:"
+msgid "Date of the event, or start date of a period"
+msgstr "Date de l'évènement, ou date de début de période"
 
 msgctxt "field:claim.loss,state:"
 msgid "State"

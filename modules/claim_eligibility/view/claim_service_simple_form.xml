@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form col="2">
+    <label name="eligibility_status"/>
+    <field name="eligibility_status"/>
+    <label name="indemnification_start_date"/>
+    <field name="indemnification_start_date"/>
+    <label name="eligibility_comment_wrapped"/>
+    <label name="benefit_summary"/>
+    <field name="eligibility_comment_wrapped" yexpand="0"/>
+    <field name="benefit_summary" yexpand="0"/>
+    <button name="check_eligibility" string="Check Eligibility" colspan="2" icon="reload_and_check"/>
+    <button name="validate_services" string="Validate Eligibility" icon="check"/>
+    <button name="reject_services" string="Decline Eligibility" icon="cancel-list"/>
+</form>
