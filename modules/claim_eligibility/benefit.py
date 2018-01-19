@@ -79,7 +79,7 @@ class Benefit:
             return self.eligibility_rules[0].check_eligibility(exec_context)
         return True, ''
 
-    @fields.depends('refuse_from_rules', 'self.refuse_decision_default')
+    @fields.depends('refuse_from_rules', 'refuse_decision_default')
     def on_change_refuse_from_rules(self):
         if self.refuse_decision_default and not self.refuse_from_rules:
             self.refuse_decision_default = None

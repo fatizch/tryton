@@ -56,7 +56,7 @@ msgstr "Règles de validation des droits"
 
 msgctxt "field:benefit,refuse_decision_default:"
 msgid "Default Refuse Decision"
-msgstr "Décision de refus pas défaut"
+msgstr "Décision de refus par défaut"
 
 msgctxt "field:benefit,refuse_from_rules:"
 msgid "Refuse From Eligibility Rules"
