@@ -1,3 +1,4 @@
+* FEA#8032 Ajout d'une vérification qui empêche l'ordonnancement en cas de période précédente manquante
 * FEA#7975 Ajout d'une action depuis une ligne de détail d'indemnisation afin de supprimer l'indemnisation associée
 * OTH#0000 Cacher la liste des informations des quittances si vide (suite à l'évolution #7802)
 * BUG#7893 Ajout d'une méthode du moteur de règle  pour savoir si l'indemnisation est manuelle

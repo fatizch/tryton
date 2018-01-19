@@ -750,6 +750,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'not_enough_money': 'The invoices for %(party_names)s '
                 'are negative and contain a continuous payback: '
                 'they will not be validated',
+                'missing_previous_indemnification': 'You can not schedule '
+                'the indemnification %(indemnification)s because a scheduled '
+                'period of %(missing_days)s day(s) should be ahead'
                 })
         cls._order = [('start_date', 'ASC')]
 
@@ -976,6 +979,15 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     def is_pending(self):
         return self.amount > 0 and self.status not in ['paid', 'rejected']
 
+    def previous_indemnification(self, filter_status=None):
+        indemnifications = [x for x in self.service.indemnifications if
+            x.end_date and x.end_date < self.start_date
+            and (not filter_status or x.status in filter_status)]
+        if not indemnifications:
+            return
+        indemnifications = sorted(indemnifications, key=lambda x: x.end_date)
+        return indemnifications[-1]
+
     @classmethod
     def check_schedulability(cls, indemnifications):
         cancel_indemnifications = cls.search([
@@ -985,6 +997,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 ])
         service_to_not_schedule = [i.service
             for i in cancel_indemnifications]
+        to_schedule = []
         for indemnification in indemnifications:
             if ('cancel' not in indemnification.status and
                     indemnification.service in service_to_not_schedule):
@@ -994,6 +1007,22 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             if indemnification.service.loss.state == 'draft':
                 cls.append_functional_error('cannot_schedule_draft_loss',
                     {'loss': indemnification.service.loss.rec_name})
+            previous_indemnification = \
+                indemnification.previous_indemnification(['calculated',
+                        'scheduled', 'controlled', 'validated', 'paid'])
+            delta = 0
+            if (previous_indemnification and
+                    previous_indemnification.service.loss.with_end_date):
+                delta = (indemnification.start_date -
+                    previous_indemnification.end_date).days
+            if delta > 1 or (previous_indemnification
+                    and previous_indemnification.status == 'calculated'
+                    and previous_indemnification not in to_schedule):
+                cls.append_functional_error(
+                    'missing_previous_indemnification', {
+                        'indemnification': indemnification.rec_name,
+                        'missing_days': delta - 1,
+                        })
             journal = indemnification.journal
             if (journal and journal.needs_bank_account() and
                     not indemnification.beneficiary.get_bank_account(
@@ -1001,6 +1030,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 cls.append_functional_error('no_bank_account', (
                         indemnification.beneficiary.rec_name,
                         indemnification.service.claim.name))
+            to_schedule.append(indemnification)
 
     @classmethod
     @ModelView.button

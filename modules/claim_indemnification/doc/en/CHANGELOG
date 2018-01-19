@@ -1,3 +1,4 @@
+* FEA#8032 Add check which prevent scheduling if the previous period is missing
 * FEA#7975 Add action on indemnification detail lines to delete the related indemnification
 * OTH#0000 Hide invoice line in indemnification if empty following 7802
 * BUG#7893 Add rule engine method to define wether an indemnification is manual or not.
