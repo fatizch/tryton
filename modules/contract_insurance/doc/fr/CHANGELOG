@@ -1,3 +1,4 @@
+* BUG#8027 La recherche de la personne assuré doit plus s'appuyer sur toute autre personne liée à l'assuré par un contrat
 * BUG#7897 Amélioration de la gestion des modules inactifs dans le template "brouillard"
 
 Version 1.14 - 2017-11-09

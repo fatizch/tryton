@@ -1456,18 +1456,18 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
     @classmethod
     def get_possible_covered_elements(cls, party, at_date):
         matches = []
-        for covered in cls.search([('party', '=', party.id)]):
-            # Check dates
-            if not covered.is_valid_at_date(at_date):
-                continue
-
-            # Filter out lines which are not covered by any option
-            if covered.contract:
-                if not covered.is_covered_at_date(at_date):
+        for contract in party.contracts:
+            for element in contract.covered_elements:
+                # Check dates
+                if not element.is_valid_at_date(at_date):
                     continue
-            elif not covered.parent.is_covered_at_date(at_date):
-                continue
-            matches.append(covered)
+                # Filter out lines which are not covered by any option
+                if element.contract:
+                    if not element.is_covered_at_date(at_date):
+                        continue
+                elif not element.parent.is_covered_at_date(at_date):
+                    continue
+                matches.append(element)
         return matches
 
     def match_key(self, from_name=None, party=None):
