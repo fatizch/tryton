@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 import benefit
 import claim
+import rule_engine
 import wizard
 
 
@@ -11,10 +12,14 @@ def register():
     Pool.register(
         benefit.Benefit,
         benefit.BenefitEligibilityRule,
+        benefit.BenefitEligibilityDecision,
+        benefit.BenefitBenefitEligibility,
         claim.Claim,
         claim.ClaimService,
-        claim.ClaimIndemnification,
         claim.ExtraData,
+        claim.ClaimIndemnification,
+        rule_engine.RuleEngineRuntime,
+        wizard.ClaimServiceManualDisplay,
         module='claim_eligibility', type_='model')
     Pool.register(
         wizard.ManualValidationEligibility,

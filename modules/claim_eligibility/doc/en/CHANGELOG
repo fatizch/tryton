@@ -1,3 +1,4 @@
+* FEA#7983 Eligibility decisions for delivered services now have their own configuration model instead of using extras datas
 * FEA#7782 Allow automatic refusal of a service from eligibility rules
 
 Version 1.14 - 2017-11-09

@@ -7,6 +7,15 @@ this repository contains the full copyright notices and license terms. -->
             <label name="refuse_from_rules"/>
             <field name="refuse_from_rules"/>
             <field name="eligibility_rules" colspan="4"/>
+            <field name="eligibility_decisions" widget="one2many" colspan="4"/>
+            <group id='default_decisions' col="6">
+                <label name="decision_default"/>
+                <field name="decision_default"/>
+                <label name="accept_decision_default"/>
+                <field name="accept_decision_default"/>
+                <label name="refuse_decision_default"/>
+                <field name="refuse_decision_default"/>
+            </group>
         </page>
     </xpath>
 </data>

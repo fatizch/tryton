@@ -1,3 +1,4 @@
+* FEA#7983 Les décisions d'éligibilité pour les services délivrés ont leurs modèles de configuration plutôt que l'utilisation de données complémentaires
 * FEA#7782 Ajout du refus automatique d'un service depuis les règles d'éligibilité
 
 Version 1.14 - 2017-11-09

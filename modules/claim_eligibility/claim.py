@@ -8,10 +8,10 @@ from trytond.modules.coog_core import model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'ClaimIndemnification',
-    'ClaimService',
     'Claim',
+    'ClaimService',
     'ExtraData',
+    'ClaimIndemnification',
     ]
 
 
@@ -38,25 +38,25 @@ class ClaimService:
             ('study_in_progress', 'Study In Progress'),
             ('accepted', 'Accepted'),
             ('refused', 'Refused'),
-            ], 'Eligibility Status')
+            ], 'Eligibility Status',
+        )
     eligibility_status_string = eligibility_status.translated(
         'eligibility_status')
     eligibility_comment = fields.Char('Eligibility Comment')
     eligibility_comment_wrapped = fields.Function(
         fields.Text('Eligibility Comment'),
         'on_change_with_eligibility_comment_wrapped')
-    eligibility_extra_data_values = fields.Dict('extra_data',
-        'Eligibility Extra Data')
-    extra_eligibility_data_summary = fields.Function(
-        fields.Text('Eligibility Extra Data Summary',
-            depends=['eligibility_extra_data_values']),
-        'get_eligibility_extra_data_summary')
-    rejection_extra_eligibility_data_summary = fields.Function(
-        fields.Text('Rejection Eligibility Extra Data Summary',
-            depends=['rejection_extra_data_values']),
-        'get_rejection_extra_data_summary')
-    rejection_extra_data_values = fields.Dict('extra_data',
-        'Rejection Extra Data')
+    eligibility_decision = fields.Many2One(
+        'benefit.eligibility.decision', 'Eligibility Decision',
+        ondelete='RESTRICT', select=True, domain=[
+            ('id', 'in', Eval('possible_decisions')),
+            ('state', '=', Eval('eligibility_status'))
+            ],
+        readonly=True, depends=['possible_decisions', 'eligibility_status'])
+    possible_decisions = fields.Function(
+        fields.Many2Many('benefit.eligibility.decision', None, None,
+            'Possible Decisions'),
+        getter='on_change_with_possible_decisions')
 
     @classmethod
     def __setup__(cls):
@@ -72,24 +72,20 @@ class ClaimService:
                 'warning_refuse_service': 'Confirm service refusal'
                 })
 
-    @staticmethod
-    def default_eligibility_status():
-        return 'study_in_progress'
-
-    @classmethod
-    def get_eligibility_extra_data_summary(cls, services, name):
-        return Pool().get('extra_data').get_extra_data_summary(services,
-            'eligibility_extra_data_values')
-
-    @classmethod
-    def get_rejection_extra_data_summary(cls, services, name):
-        return Pool().get('extra_data').get_extra_data_summary(services,
-            'rejection_extra_data_values')
-
     def init_from_loss(self, loss, benefit):
-        self.eligibility_extra_data_values = {}
-        self.rejection_extra_data_values = {}
         super(ClaimService, self).init_from_loss(loss, benefit)
+        if benefit:
+            self.eligibility_decision = benefit.decision_default
+            if self.eligibility_decision:
+                self.eligibility_status = \
+                    self.eligibility_decision.state
+            else:
+                self.eligibility_status = 'study_in_progress'
+
+    @fields.depends('benefit', 'eligibility_status')
+    def on_change_with_possible_decisions(self, name=None):
+        if self.benefit:
+            return [x.id for x in self.benefit.eligibility_decisions]
 
     @classmethod
     def get_wrapper(cls):
@@ -99,11 +95,11 @@ class ClaimService:
     def on_change_with_eligibility_comment_wrapped(self, name=None):
         comment = ''
         if (self.eligibility_status == 'accepted' and
-                self.extra_eligibility_data_summary):
-            comment = '%s\n' % self.extra_eligibility_data_summary
+                self.eligibility_decision):
+            comment = '%s\n' % self.eligibility_decision.description
         if (self.eligibility_status == 'refused' and
-                self.rejection_extra_data_values):
-            comment = '%s\n' % self.rejection_extra_eligibility_data_summary
+                self.eligibility_decision):
+            comment = '%s\n' % self.eligibility_decision.description
         if not self.eligibility_comment:
             return comment
         wrapper = self.get_wrapper()
@@ -127,11 +123,16 @@ class ClaimService:
                 continue
             eligible, message = service.calculate_eligibility()
             service.eligibility_comment = message
-            if eligible:
-                service.eligibility_status = 'accepted'
+            if eligible and service.benefit.accept_decision_default:
+                service.eligibility_decision = \
+                    service.benefit.accept_decision_default
+                service.eligibility_status = service.eligibility_decision.state
                 accepted.append(service)
-            elif not eligible and service.benefit.refuse_from_rules:
-                service.eligibility_status = 'refused'
+            elif not eligible and service.benefit.refuse_from_rules and \
+                    service.benefit.refuse_decision_default:
+                service.eligibility_decision = \
+                    service.benefit.refuse_decision_default
+                service.eligibility_status = service.eligibility_decision.state
             to_save.append(service)
         if to_save:
             cls.save(to_save)
@@ -150,34 +151,15 @@ class ClaimService:
     def reject_services(cls, services):
         pass
 
-    def init_eligibility_extra_data_values(self):
-        ExtraData = Pool().get('extra_data')
-        extra_datas = ExtraData.search(
-            [('kind', '=', 'manual_eligibility_reason')])
-        self.eligibility_extra_data_values = {
-            x.name: None for x in extra_datas}
-
-    def init_rejection_extra_data_values(self):
-        ExtraData = Pool().get('extra_data')
-        extra_datas = ExtraData.search(
-            [('kind', '=', 'manual_rejection_reason')])
-        self.rejection_extra_data_values = {
-            x.name: None for x in extra_datas}
-
-    def get_all_extra_data(self, at_date):
-        res = super(ClaimService, self).get_all_extra_data(at_date)
-        res.update(self.eligibility_extra_data_values)
-        return res
-
-    def accept_eligibility(self, extra_data):
+    def accept_eligibility(self, decision):
         self.__class__.write([self], {
-                'eligibility_status': 'accepted',
-                'eligibility_extra_data_values': extra_data})
+                'eligibility_status': decision.state,
+                'eligibility_decision': decision.id})
 
-    def reject_eligibility(self, extra_data):
+    def reject_eligibility(self, decision):
         self.__class__.write([self], {
-                'eligibility_status': 'refused',
-                'rejection_extra_data_values': extra_data,
+                'eligibility_status': decision.state,
+                'eligibility_decision': decision.id,
                 })
         Pool().get('event').notify_events([self], 'refuse_claim_service')
 

@@ -3,8 +3,14 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='benefit']" position="after">
-        <label name="eligibility_status"/>
+        <newline/>
+        <label name='eligibility_status'/>
         <field name="eligibility_status"/>
+        <label name='eligibility_decision'/>
+        <field name='eligibility_decision'/>
         <button name="check_eligibility" string="Check Eligibility"/>
+        <newline/>
+        <field name="possible_decisions" invisible="1"/>
+        <field name="loss" invisible="1"/>
     </xpath>
 </data>

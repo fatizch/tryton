@@ -12,7 +12,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">benefit_form</field>
         </record>
         <!-- ############################################################ -->
-        <!-- ########### Benefit Eigibility Rule ########### -->
+        <!-- ########### Benefit Eligibility Rule ########### -->
         <!-- ############################################################ -->
         <record model="ir.ui.view" id="benefit_eligibility_rule_view_list">
             <field name="model">benefit.eligibility.rule</field>
@@ -23,6 +23,19 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">benefit.eligibility.rule</field>
             <field name="type">form</field>
             <field name="name">benefit_eligibility_rule_form</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Benefit Eligibility Decision ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="benefit_eligibility_decision_view_form">
+            <field name="model">benefit.eligibility.decision</field>
+            <field name="type">form</field>
+            <field name="name">eligibility_decision_form</field>
+        </record>
+        <record model="ir.ui.view" id="benefit_eligibility_decision_view_list">
+            <field name="model">benefit.eligibility.decision</field>
+            <field name="type">tree</field>
+            <field name="name">eligibility_decision_list</field>
         </record>
     </data>
 </tryton>

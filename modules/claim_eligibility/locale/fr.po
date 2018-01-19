@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:benefit.eligibility.decision:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
 msgctxt "error:claim.indemnification:"
 msgid "The claim service is not eligible"
 msgstr "L'éligibilité de la prestation n'a pas été validée"
@@ -15,12 +19,8 @@ msgstr ""
 "de faire des régularisations."
 
 msgctxt "error:claim.manual_rejection_eligibility:"
-msgid ""
-"Rejection cannot be processed without knowing the reason : "
-"%(extra_data_key)s must be filled"
-msgstr ""
-"Le refus ne peut être traité sans renseigner de motif: %(extra_data_key)s "
-"doit être renseigné"
+msgid "Rejection cannot be processed without knowing the reason"
+msgstr "Le refus ne peut être traité sans renseigner de motif"
 
 msgctxt "error:claim.manual_validation_eligibility:"
 msgid ""
@@ -31,24 +31,116 @@ msgstr ""
 "nécessaire de faire des régularisations."
 
 msgctxt "error:claim.manual_validation_eligibility:"
-msgid ""
-"Validation cannot be processed without knowing the reason : %s must be "
-"filled"
-msgstr ""
-"La validation ne peut être effectuée sans connaître le motif : le champs "
-"'%s' doit être renseigné"
+msgid "Validation cannot be processed without knowing the reason"
+msgstr "La validation ne peut être effectuée sans connaître le motif"
 
 msgctxt "error:claim.service:"
 msgid "Confirm service refusal"
 msgstr "Confirmer  le refus de prestation"
 
+msgctxt "field:benefit,accept_decision_default:"
+msgid "Default Accept Decision"
+msgstr "Décision d'acceptation par défaut"
+
+msgctxt "field:benefit,decision_default:"
+msgid "Default Decision"
+msgstr "Décision par défaut"
+
+msgctxt "field:benefit,eligibility_decisions:"
+msgid "Eligibility Decisions"
+msgstr "Décisions d'éligibilité"
+
 msgctxt "field:benefit,eligibility_rules:"
 msgid "Benefit Eligibility Rules"
 msgstr "Règles de validation des droits"
 
+msgctxt "field:benefit,refuse_decision_default:"
+msgid "Default Refuse Decision"
+msgstr "Décision de refus pas défaut"
+
 msgctxt "field:benefit,refuse_from_rules:"
 msgid "Refuse From Eligibility Rules"
 msgstr "Refuser depuis les règles d'éligibilité"
+
+msgctxt "field:benefit-benefit.eligibility_decision,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:benefit-benefit.eligibility_decision,benefit_eligibility:"
+msgid "Eligibility Decision"
+msgstr "Décision d'éligibilité"
+
+msgctxt "field:benefit-benefit.eligibility_decision,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-benefit.eligibility_decision,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-benefit.eligibility_decision,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit-benefit.eligibility_decision,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:benefit-benefit.eligibility_decision,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit-benefit.eligibility_decision,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:benefit-benefit.eligibility_decision,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:benefit-benefit.eligibility_decision,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:benefit.eligibility.decision,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:benefit.eligibility.decision,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit.eligibility.decision,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit.eligibility.decision,description:"
+msgid "Long Description"
+msgstr "Description longue"
+
+msgctxt "field:benefit.eligibility.decision,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:benefit.eligibility.decision,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.eligibility.decision,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:benefit.eligibility.decision,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:benefit.eligibility.decision,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:benefit.eligibility.decision,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
 
 msgctxt "field:benefit.eligibility.rule,benefit:"
 msgid "Benefit"
@@ -106,29 +198,53 @@ msgctxt "field:claim.service,eligibility_comment_wrapped:"
 msgid "Eligibility Comment"
 msgstr "Commentaire"
 
-msgctxt "field:claim.service,eligibility_extra_data_values:"
-msgid "Eligibility Extra Data"
-msgstr "Données complémentaires Eligibilité"
+msgctxt "field:claim.service,eligibility_decision:"
+msgid "Eligibility Decision"
+msgstr "Décision d'éligibilité"
 
 msgctxt "field:claim.service,eligibility_status:"
 msgid "Eligibility Status"
 msgstr "Statut des droits"
 
-msgctxt "field:claim.service,extra_eligibility_data_summary:"
-msgid "Eligibility Extra Data Summary"
-msgstr "Résumé des données complémentaires de validation des droits"
-
 msgctxt "field:claim.service,indemnification_start_date:"
 msgid "Indemnification Start Date"
 msgstr "Date de début d'indemnisation"
 
-msgctxt "field:claim.service,rejection_extra_data_values:"
-msgid "Rejection Extra Data"
-msgstr "Données complémentaires refus"
+msgctxt "field:claim.service,possible_decisions:"
+msgid "Possible Decisions"
+msgstr "Décisions possibles"
 
-msgctxt "field:claim.service,rejection_extra_eligibility_data_summary:"
-msgid "Rejection Eligibility Extra Data Summary"
-msgstr "Résumé des données complémentaires refus d'éligibilité"
+msgctxt "field:claim.service.manual,eligibility_decision:"
+msgid "Eligibility Decision"
+msgstr "Décision d'éligibilité"
+
+msgctxt "field:claim.service.manual,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.service.manual,possible_decisions:"
+msgid "Possible Decisions"
+msgstr "Décisions possibles"
+
+msgctxt "help:benefit,accept_decision_default:"
+msgid ""
+"If the service is automatically accepted, then this decision will be used "
+"by default"
+msgstr ""
+"Si la prestation est acceptée automatiquement, alors la décision définie ici "
+"sera celle appliquée par défaut"
+
+msgctxt "help:benefit,decision_default:"
+msgid "The default decision to be set when delivering a new service"
+msgstr "La décision par défaut à appliquer à la prestation fournie"
+
+msgctxt "help:benefit,refuse_decision_default:"
+msgid ""
+"If the service is automatically refused, then this decision will be used by"
+" default"
+msgstr ""
+"Si la prestation est automatiquement refusée, alors la décision définie ici "
+"sera celle appliquée par défaut"
 
 msgctxt "help:benefit,refuse_from_rules:"
 msgid ""
@@ -138,9 +254,21 @@ msgstr ""
 "Si Vrai, un service non éligible sera refusé. Sinon, il faudra faire une "
 "analyse manuelle afin de déterminer s'il est refusé."
 
+msgctxt "model:benefit-benefit.eligibility_decision,name:"
+msgid "Benefit Benefit Eligibility Decision Relation"
+msgstr "Relation Prestation Décision d'éligibilité"
+
+msgctxt "model:benefit.eligibility.decision,name:"
+msgid "Benefit Eligibility Decision"
+msgstr "Décision d'éligibilité"
+
 msgctxt "model:benefit.eligibility.rule,name:"
 msgid "Benefit Eligibility Rule"
 msgstr "Règle de validation des droits"
+
+msgctxt "model:claim.service.manual,name:"
+msgid "Claim Service Manual Display"
+msgstr "Affichage de décision manuelle du service "
 
 msgctxt "model:event.type,name:event_accept_service"
 msgid "Accept Claim Service"
@@ -157,6 +285,18 @@ msgstr "Refuser les droits"
 msgctxt "model:ir.action,name:act_validate_eligibility_wizard"
 msgid "Validate Eligibility"
 msgstr "Valider les droits"
+
+msgctxt "selection:benefit.eligibility.decision,state:"
+msgid "Accepted"
+msgstr "Accepté"
+
+msgctxt "selection:benefit.eligibility.decision,state:"
+msgid "Refused"
+msgstr "Refusé"
+
+msgctxt "selection:benefit.eligibility.decision,state:"
+msgid "Study In Progress"
+msgstr "Etude en cours"
 
 msgctxt "selection:claim.service,eligibility_status:"
 msgid "Accepted"

@@ -4,8 +4,10 @@ this repository contains the full copyright notices and license terms. -->
 <tree>
     <field name="loss_summary"/>
     <field name="benefit_summary"/>
-    <field name="eligibility_status"/>
     <field name="eligibility_comment_wrapped"/>
+    <field name="eligibility_status"/>
+    <field name="eligibility_decision"/>
+    <field name="possible_decisions" tree_invisible="1"/>
     <field name="indemnification_start_date"/>
     <field name="insurer_delegations"/>
     <button name="check_eligibility" string="Check Eligibility"/>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="service_eligibility_status">
+            <field name="translated_technical_name">statut_eligibilite_prestation</field>
+            <field name="description">Retourne le statut de la prestation</field>
+            <field name="long_description">Retourne le statut de la prestation (éligibilité: ('study_in_progress', 'accepted', 'refused'))</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_service_eligibility_status</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="service_eligibility_decision_code">
+            <field name="translated_technical_name">code_decision_eligibilite_prestation</field>
+            <field name="description">Retourne le code de la décision sur la prestation</field>
+            <field name="long_description">Retourne le code de la déccision sur la prestation (éligibilité)</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_service_eligibility_decision_code</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+    </data>
+</tryton>
+
