@@ -39,7 +39,6 @@ class ClaimService:
             ('accepted', 'Accepted'),
             ('refused', 'Refused'),
             ], 'Eligibility Status', readonly=True)
-        )
     eligibility_status_string = eligibility_status.translated(
         'eligibility_status')
     eligibility_comment = fields.Char('Eligibility Comment')
