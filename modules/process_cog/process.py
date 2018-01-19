@@ -1200,9 +1200,8 @@ class ProcessStep(model.CoogSQL, model.TaggedMixin):
 
     @classmethod
     def _export_light(cls):
-        result = super(ProcessStep, cls)._export_light()
-        result.add('main_model')
-        return result
+        return super(ProcessStep, cls)._export_light() | {
+            'main_model', 'entering_wizard', 'exiting_wizard'}
 
     @classmethod
     def default_button_domain(cls):

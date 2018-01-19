@@ -1,3 +1,4 @@
+* BUG#8020 Correction d'une erreur à l'export de wizards
 * FEA7773 Ajout d'une méthode RPC pour attacher un objet métier à un processus et faire "avance-rapide"
 
 Version 1.14 - 2017-11-09
