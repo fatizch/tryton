@@ -86,7 +86,7 @@ coog_redmine_projects() { # List projects
     set -eou pipefail
     IFS=$'\n\t'
     set +e
-    VALUES=$(_coog_redmine_send GET projects.json)
+    VALUES=$(_coog_redmine_send GET projects.json?limit=100)
     if [ "$?" != 0 ]; then
         echo "$VALUES"
         exit 1
