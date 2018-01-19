@@ -654,7 +654,7 @@ class Payment:
             party=self.party,
             invoice_address=self.party.main_address,
             currency=self.currency,
-            account=self.party.account_receivable,
+            account=self.party.account_receivable_used,
             state='draft',
             description=name_for_billing,
             sepa_mandate=sepa_mandate,

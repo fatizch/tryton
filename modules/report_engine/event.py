@@ -189,7 +189,8 @@ class EventTypeAction:
 
     def cache_data(self):
         data = super(EventTypeAction, self).cache_data()
-        data['report_templates'] = [x.id for x in self.report_templates]
+        if self.report_templates:
+            data['report_templates'] = [x.id for x in self.report_templates]
         return data
 
 

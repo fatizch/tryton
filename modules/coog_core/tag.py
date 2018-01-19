@@ -43,7 +43,6 @@ class TagObjectRelation(model.CoogSQL, model.CoogView):
     'Relation tag to object'
 
     __name__ = 'tag-object'
-    _rec_name = 'object_'
 
     tag = fields.Many2One('tag', 'Tag', ondelete='CASCADE', required=True,
         select=True)
@@ -52,3 +51,6 @@ class TagObjectRelation(model.CoogSQL, model.CoogView):
     @staticmethod
     def models_get():
         return utils.models_get()
+
+    def get_rec_name(self, name):
+        return self.object_.rec_name

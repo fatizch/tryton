@@ -109,7 +109,7 @@ class Commission:
             insurer_role=insurer,
             invoice_address=insurer.party.address_get(type='invoice'),
             currency=company.currency,
-            account=insurer.party.account_payable,
+            account=insurer.party.account_payable_used,
             payment_term=insurer.party.supplier_payment_term,
             invoice_date=date,
             business_kind='insurer_invoice',

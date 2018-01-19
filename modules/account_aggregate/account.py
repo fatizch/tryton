@@ -149,9 +149,9 @@ class Configuration(CompanyMultiValueMixin):
                 ]))
 
     @classmethod
-    def default_snapshot_sequence(cls):
+    def default_snapshot_sequence(cls, **pattern):
         return cls.multivalue_model(
-            'snapshot_sequence').default_snapshot_sequence()
+            'snapshot_sequence').default_snapshot_sequence(**pattern)
 
 
 class ConfigurationSnapshotSequence(model.CoogSQL, CompanyValueMixin):
@@ -196,9 +196,12 @@ class ConfigurationSnapshotSequence(model.CoogSQL, CompanyValueMixin):
             parent='configuration', fields=fields)
 
     @classmethod
-    def default_snapshot_sequence(cls):
-        sequences = Pool().get('ir.sequence').search(
-            [('code', '=', 'account.move.snapshot')])
+    def default_snapshot_sequence(cls, **pattern):
+        domain = [('code', '=', 'account.move.snapshot')]
+        if pattern:
+            for key, value in pattern['pattern'].iteritems():
+                domain.append((str(key), '=', value))
+        sequences = Pool().get('ir.sequence').search(domain)
         if len(sequences) == 1:
             return sequences[0].id
 

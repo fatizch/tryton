@@ -109,7 +109,7 @@ class Invoice:
 
     def __get_account_payment_term(self):
         if self.business_kind == 'in_invoice_insurance' and self.party:
-            self.account = self.party.account_receivable
+            self.account = self.party.account_receivable_used
             if self.party.customer_payment_term:
                 self.payment_term = self.party.customer_payment_term
             else:

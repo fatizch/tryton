@@ -56,7 +56,7 @@ class MigratorInvoice(migrator.Migrator):
         cls.resolve_key(row, 'contract_number',
             'contract', dest_key='contract')
         row['contract'] = Contract(row['contract'])
-        row['account'] = row['contract'].subscriber.account_receivable
+        row['account'] = row['contract'].subscriber.account_receivable_used
         row['company'] = row['contract'].company
         row['currency'] = row['contract'].get_currency()
         row['is_commission_invoice'] = False

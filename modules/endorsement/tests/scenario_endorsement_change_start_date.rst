@@ -300,7 +300,7 @@ Case 1 : today is in first term, we end before first_term_end::
     >>> assert contract.end_date == first_term_end
     >>> assert contract.termination_reason == None
 
-Case 1a, : today is in first term, we end at first_term_end::
+Case 1b : today is in first term, we end at first_term_end::
 
     >>> assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
     ...     x.termination_reason) for x in contract.activation_history]

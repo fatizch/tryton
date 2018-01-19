@@ -815,7 +815,6 @@ class Contract:
         ContractInvoice = pool.get('contract.invoice')
         account_invoices, contract_invoices = cls._calculate_invoices(periods)
         cls._finalize_invoices(contract_invoices)
-
         Invoice.save(account_invoices)
         ContractInvoice.save(contract_invoices)
         return contract_invoices
@@ -910,7 +909,7 @@ class Contract:
             journal=None,
             party=self.subscriber,
             currency=self.currency,
-            account=self.subscriber.account_receivable,
+            account=self.subscriber.account_receivable_used,
             payment_term=payment_term,
             state='validated',
             invoice_date=start,
@@ -1059,7 +1058,7 @@ class Contract:
         for subscriber, contract_group in subscribers.iteritems():
             sub_clause.append([
                     ('party', '=', subscriber.id),
-                    ('account', '=', subscriber.account_receivable.id),
+                    ('account', '=', subscriber.account_receivable_used.id),
                     ('contract', 'in', [x.id for x in contract_group]),
                     ])
         clause.append(sub_clause)
@@ -1868,7 +1867,6 @@ class ContractInvoice(model.CoogSQL, model.CoogView):
     'Contract Invoice'
 
     __name__ = 'contract.invoice'
-    _rec_name = 'invoice'
 
     contract = fields.Many2One('contract', 'Contract', required=True,
         ondelete='CASCADE', select=True)
@@ -1904,6 +1902,9 @@ class ContractInvoice(model.CoogSQL, model.CoogView):
 
     def get_invoice_state(self, name):
         return self.invoice.state
+
+    def get_rec_name(self, name):
+        return self.invoice.rec_name
 
     def get_planned_payment_date(self, name):
         if self.invoice_state in ['posted', 'paid']:

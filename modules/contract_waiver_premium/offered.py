@@ -141,7 +141,7 @@ class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
 
     def get_account_for_waiver_line(self):
         return (self.account_for_waiver if self.account_for_waiver
-            else self.coverage.insurer.party.account_payable)
+            else self.coverage.insurer.party.account_payable_used)
 
     def init_waiver_line(self, line, waiver_option):
         InvoiceLine = Pool().get('account.invoice.line')

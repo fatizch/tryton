@@ -10,7 +10,7 @@ from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.server_context import ServerContext
 from trytond.cache import Cache
-from trytond.pyson import Eval, PYSONEncoder, Not, In
+from trytond.pyson import Eval, PYSONEncoder, Not, In, If
 from trytond.transaction import Transaction
 from trytond.model import fields as tryton_fields, ModelView, Model
 from trytond.wizard import Wizard, StateView, Button, StateAction
@@ -453,6 +453,15 @@ class IrModule:
                 state in ('activated', 'to upgrade', 'to activate'))
         cls._is_module_installed_cache.set('_check_initialized', True)
         return cls._is_module_installed_cache.get(module_name, False)
+
+    @classmethod
+    def view_attributes(cls):
+        return [('/tree', 'colors',
+                If(Eval('state').in_(['to upgrade', 'to install']),
+                    'blue',
+                    If(Eval('state') == 'uninstalled',
+                        'grey',
+                        'black')))]
 
 
 class IrModel(ExportImportMixin):

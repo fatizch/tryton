@@ -294,7 +294,7 @@ class CreateStatement(Wizard):
             'number': self.payment_informations.number,
             'amount': line.amount if line else self.start.amount,
             'account': line.account if line else
-            self.start.party.account_receivable,
+            self.start.party.account_receivable_used,
             'invoice': invoice if invoice else None,
             'description': self.payment_informations.description,
             'date': self.start.date,

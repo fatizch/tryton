@@ -52,7 +52,6 @@ def register():
         party.SynthesisMenuOpenState,
         PartyMenuTreeExpansion,
         party.PartyReplaceAsk,
-        configuration.ConfigurationSequence,
         configuration.Configuration,
         module='party_cog', type_='model')
     Pool.register(

@@ -89,7 +89,6 @@ class Insurer(model.CoogView, model.CoogSQL):
     'Insurer'
 
     __name__ = 'insurer'
-    _rec_name = 'party'
     _func_key = 'func_key'
 
     func_key = fields.Function(fields.Char('Functional Key'),

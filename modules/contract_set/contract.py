@@ -38,10 +38,10 @@ class Configuration(CompanyMultiValueMixin):
             domain=[('code', '=', 'contract_set_number')]))
 
     @classmethod
-    def default_contract_set_number_sequence(cls):
+    def default_contract_set_number_sequence(cls, **pattern):
         return cls.multivalue_model(
             'contract_set_number_sequence'
-            ).default_contract_set_number_sequence()
+            ).default_contract_set_number_sequence(**pattern)
 
 
 class ConfigurationContractSetNumberSequence(model.CoogSQL, CompanyValueMixin):
@@ -74,9 +74,12 @@ class ConfigurationContractSetNumberSequence(model.CoogSQL, CompanyValueMixin):
             parent='configuration', fields=fields)
 
     @classmethod
-    def default_contract_set_number_sequence(cls):
-        sequences = Pool().get('ir.sequence').search(
-            [('code', '=', 'contract_set_number')])
+    def default_contract_set_number_sequence(cls, **pattern):
+        domain = [('code', '=', 'contract_set_number')]
+        if pattern:
+            for key, value in pattern['pattern'].iteritems():
+                domain.append((str(key), '=', value))
+        sequences = Pool().get('ir.sequence').search(domain)
         if len(sequences) == 1:
             return sequences[0].id
 

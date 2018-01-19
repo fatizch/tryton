@@ -35,10 +35,12 @@ __all__ = [
 class Lender(model.CoogSQL, model.CoogView):
     'Lender'
     __name__ = 'lender'
-    _rec_name = 'party'
 
     party = fields.Many2One('party.party', 'Party', required=True,
         ondelete='CASCADE', select=True)
+
+    def get_rec_name(self, name):
+        return self.party.rec_name
 
 
 class Party:

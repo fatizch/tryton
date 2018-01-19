@@ -30,7 +30,7 @@ class Agent:
     def account(self):
         if (self.type_ == 'agent' and self.wholesale_broker and
                 not self.delegation_of_payment):
-            return self.party.account_receivable
+            return self.party.account_receivable_used
         return super(Agent, self).account
 
 
@@ -71,7 +71,7 @@ class Commission:
             account = insurer.party.account_receivable
         else:
             payment_term = insurer.party.supplier_payment_term
-            account = insurer.party.account_payable
+            account = insurer.party.account_payable_used
         return Invoice(
             company=key['company'],
             type=key['type'],

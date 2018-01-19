@@ -123,7 +123,6 @@ class JournalFailureAction(model.CoogSQL, model.CoogView):
     'Journal Failure Action'
 
     __name__ = 'account.payment.journal.failure_action'
-    _rec_name = 'reject_reason'
     _func_key = 'func_key'
 
     reject_reason = fields.Many2One('account.payment.journal.reject_reason',
@@ -196,6 +195,9 @@ class JournalFailureAction(model.CoogSQL, model.CoogView):
             actions += [('manual',),
                 ('print', self.report_template_if_exceeded)]
         return actions
+
+    def get_rec_name(self, name):
+        return self.reject_reason.rec_name
 
     @fields.depends('rejected_payment_fee')
     def on_change_with_is_fee_required(self, name=None):

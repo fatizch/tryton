@@ -144,7 +144,7 @@ class Contract:
             journal=config.surrender_journal,
             party=self.subscriber,
             currency=self.currency,
-            account=self.subscriber.account_payable,
+            account=self.subscriber.account_payable_used,
             payment_term=config.surrender_payment_term,
             state='validated',
             invoice_date=max(utils.today(), surrender_date),
