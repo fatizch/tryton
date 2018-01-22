@@ -1,3 +1,4 @@
+* BUG#7981 Vérifier si l'utilisateur a entré un chemin pour le paramètre in_directory du batch account.payment.fail (même si ce chemin n'existe pas), sinon le paramètre déclaré dans batch.conf sera utilisé par défaut
 * BUG#7646 Vérifier que le compte bancaire est en accord avec le mandat SEPA avant d'approuver un paiement créé manuellement
 * BUG#7904 Implémentation des informations d'amendements aussi pour le CFONB
 * FEA#7663 Gestion du débiteur SEPA différent de la compagnie

@@ -9,7 +9,12 @@ CHAIN_REQUIRED=()
 chain_params "$@"
 chain_begin
 
-chain_step account.payment.fail --in_directory="$IN_DIRECTORY"
+if [ -z "$IN_DIRECTORY" ]; then
+    chain_step account.payment.fail --in_directory="$IN_DIRECTORY"
+else
+    chain_step account.payment.fail
+fi
+
 chain_wait account.payment.fail || chain_end
 
 chain_step account.payment.fail.message.create  --in_directory="$IN_DIRECTORY" --archive="$ARCHIVE"
