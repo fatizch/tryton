@@ -37,5 +37,21 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">eligibility_decision_list</field>
         </record>
+        <record model="ir.action.act_window" id="act_benefit_eligibility_decision_form">
+            <field name="name">Benefit Eligibility Decision</field>
+            <field name="res_model">benefit.eligibility.decision</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_benefit_eligibility_decision_form_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="benefit_eligibility_decision_view_list"/>
+            <field name="act_window" ref="act_benefit_eligibility_decision_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_benefit_eligibility_decision_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="benefit_eligibility_decision_view_form"/>
+            <field name="act_window" ref="act_benefit_eligibility_decision_form"/>
+        </record>
+        <menuitem parent="claim.menu_claim_configuration" id="menu_benefit_eligibility_decision_form"
+            icon="tryton-list" action="act_benefit_eligibility_decision_form"/>
     </data>
 </tryton>
