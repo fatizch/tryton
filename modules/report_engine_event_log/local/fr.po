@@ -2,9 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:report.template,generate_event_logs:"
-msgid "Generate Event Logs"
-msgstr "Générer des logs d'évènement"
+msgctxt "field:report.template,generate_event:"
+msgid "Generate Event"
+msgstr "Générer un événement"
+
+msgctxt "help:report.template,generate_event:"
+msgid "If true, an event will be generated each time the report is generated."
+msgstr ""
+"Si cochée, un événement est généré chaque fois que le courrier est imprimé."
 
 msgctxt "model:event.type,name:event_report_generation"
 msgid "Generate Report"

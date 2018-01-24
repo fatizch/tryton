@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='export_dir']" position="after">
-        <label name="generate_event_logs"/>
-        <field name="generate_event_logs"/>
+        <label name="generate_event"/>
+        <field name="generate_event"/>
     </xpath>
 </data>

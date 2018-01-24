@@ -14,29 +14,24 @@ __all__ = [
 class ReportTemplate:
     __name__ = 'report.template'
 
-    generate_event_logs = fields.Boolean('Generate Event Logs')
-
-    _do_generate_event_logs_cache = Cache('_do_generate_event_logs')
+    generate_event = fields.Boolean('Generate Event', help='If true, an event'
+            ' will be generated each time the report is generated.')
 
     @staticmethod
-    def default_generate_event_logs():
+    def default_generate_event():
         return False
 
     @classmethod
-    def do_generate_event_logs(cls, data):
-        _object = cls._do_generate_event_logs_cache.get(
-                data['id'])
-        if _object is None:
-            pool = Pool()
-            Event = pool.get('event')
-            model = pool.get(data['model'])
-            report_template = pool.get('report.template')(
-                data['doc_template'][0])
-            _object = model.search( [('id', '=', data['id']),])
-            cls._do_generate_event_logs_cache.set(data['id'],
-                    _object[0].id)
-        if report_template.generate_event_logs :
-            Event.notify_events(_object,'generate_report',
+    def do_generate_event(cls, data):
+        pool = Pool()
+        Event = pool.get('event')
+        model = pool.get(data['model'])
+        report_template = pool.get('report.template')(
+            data['doc_template'][0])
+        _objects = [model(data['id'])]
+        # TODO : cache report_template.generate_event
+        if report_template.generate_event :
+            Event.notify_events(_objects,'generate_report',
                 report_template.name)
 
 
@@ -48,7 +43,7 @@ class ReportGenerate:
     def execute(cls, ids, data):
         result = super(ReportGenerate, cls).execute(ids, data)
         report_template = Pool().get('report.template')
-        report_template.do_generate_event_logs(data)
+        report_template.do_generate_event(data)
         return result
 
 
@@ -60,5 +55,5 @@ class ReportGenerateFromFile:
     def execute(cls, ids, data):
         result = super(ReportGenerateFromFile, cls).execute(ids, data)
         report_template = Pool().get('report.template')
-        report_template.do_generate_event_logs(data)
+        report_template.do_generate_event(data)
         return result
