@@ -108,6 +108,14 @@ msgstr ""
 "l'adresse (%s) associée (%s)"
 
 msgctxt "error:contract:"
+msgid ""
+"Deletion not allowed because the contracts %(contracts)s are not quote or "
+"declined."
+msgstr ""
+"La suppresion n'est pas autorisée car les contrats %(contracts)s ne sont pas"
+" déclinés ou en cours de souscription"
+
+msgctxt "error:contract:"
 msgid "Invalid end date for last %s contact"
 msgstr "Date de fin invalide pour la dernière adresse du %s"
 

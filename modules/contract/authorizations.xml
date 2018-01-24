@@ -116,7 +116,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="False"/>
+            <field name="perm_delete" eval="True"/>
         </record>
         <record model="ir.model.access" id="access_contract_activation_history_group_contract_manage">
             <field name="model" search="[('model', '=', 'contract.activation_history')]"/>
@@ -124,7 +124,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="False"/>
+            <field name="perm_delete" eval="True"/>
         </record>
         <record model="ir.model.access" id="access_contract_contact_group_contract_manage">
             <field name="model" search="[('model', '=', 'contract.contact')]"/>

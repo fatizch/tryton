@@ -1,3 +1,4 @@
+* BUG#7979 Autoriser/Réactiver la suppression de devis et de contrats déclinés
 * BUG#7876 Support de la réactivation des contrats sans effet
 * BUG#7951 Correction des surcharges de la méthode execute de event type action 
 * BUG#7885 Correction du comportement de la résiliation avec plusieurs périodes d'activation futures

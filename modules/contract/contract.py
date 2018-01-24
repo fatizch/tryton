@@ -358,6 +358,8 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                 'incompatible with associated address (%s) end (%s)',
                 'bad_contact_follow_up': 'There are dates for which no '
                 '%s address is defined',
+                'delete_not_allowed': 'Deletion not allowed because the '
+                'contracts %(contracts)s are not quote or declined.',
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
         # if issue with following code, apply SQL script from Github PR #815
@@ -1635,6 +1637,16 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     @model.CoogView.button_action('contract.act_change_sub_status')
     def change_active_sub_status(cls, contracts):
         pass
+
+    @classmethod
+    def delete(cls, contracts):
+        active_contracts = [x.contract_number for x in contracts
+            if x.status not in ['quote', 'declined']]
+        if active_contracts:
+            cls.raise_user_error('delete_not_allowed', {
+                    'contracts': ', '.join(active_contracts),
+                    })
+        super(Contract, cls).delete(active_contracts)
 
 
 class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
