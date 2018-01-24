@@ -110,7 +110,7 @@ class BenefitEligibilityRule(
         return res.result, '\n'.join(res.print_info())
 
 
-class BenefitEligibilityDecision(model.ModelSQL, model.CoogView):
+class BenefitEligibilityDecision(model.CoogSQL, model.CoogView):
     'Benefit Eligibility Decision'
 
     __name__ = 'benefit.eligibility.decision'
