@@ -1,3 +1,4 @@
+* OTH#0000 Add "Hard" tag in the "test converter"
 * BUG#8013 Reactivate Debug Object
 * BUG#8025 Fix sub transactions crash in scenarios
 * BUG#7961 Fix the sub transactions processing at PostExecutionDataManager commit

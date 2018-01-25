@@ -1,4 +1,5 @@
-* BUG#8013 Reactivation de Debug Object
+* OTH#0000 Ajout de la balise"Hard" dans le "test converter"
+* BUG#8013 Réactivation de Debug Object
 * BUG#8025 Correctif du crash des sous-transactions dans les des scénarios
 * BUG#7961 Correctif du traitement des sous-transactions lors du commit du PostExecutionDataManager
 * FEA#7848 Ajout d'un batch permettant de facilement créer des traitements de reprise de données

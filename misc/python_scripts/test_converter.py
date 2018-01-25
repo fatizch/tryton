@@ -17,6 +17,8 @@ def convert_file(input_file, output_file):
                 o_file.write('\n\n')
             elif line.startswith('# #Res# #'):
                 o_file.write('    ' + line[9:])
+            elif line.startswith('# #Hard# #'):
+                o_file.write('    ' + line[10:])
             elif line.lstrip().startswith('#'):
                 # No need to copy commented lines
                 continue
