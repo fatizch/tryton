@@ -243,8 +243,8 @@ msgid "Close"
 msgstr "Clore"
 
 msgctxt "wizard_button:claim.declare,process_parameters,close_claim:"
-msgid "Close claims"
-msgstr "Clôre les sinistres"
+msgid "Close Claims"
+msgstr "Clore les sinistres"
 
 msgctxt "wizard_button:claim.declare,process_parameters,end:"
 msgid "Cancel"

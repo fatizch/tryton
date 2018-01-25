@@ -1472,7 +1472,7 @@ msgstr "Prestation"
 
 msgctxt "view:claim.close_reason_view:"
 msgid "Close Claim"
-msgstr "Clôre les sinistres"
+msgstr "Clore les sinistres"
 
 msgctxt "view:claim.loss:"
 msgid "Activate"
@@ -1503,8 +1503,8 @@ msgid "Substatus"
 msgstr "Sous statut"
 
 msgctxt "view:claim:"
-msgid "Close claims"
-msgstr "Clôre les sinistres"
+msgid "Close Claims"
+msgstr "Clore les sinistres"
 
 msgctxt "view:claim:"
 msgid "Losses"

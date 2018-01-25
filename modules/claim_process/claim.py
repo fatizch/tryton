@@ -300,10 +300,10 @@ class ClaimDeclare(ProcessFinder):
         # after modifying the buttons
         if confirm_buttons:
             cls.process_parameters.buttons.append(confirm_buttons[0])
-        if 'Close claims' not in [b.string for b in
+        if 'Close Claims' not in [b.string for b in
                 cls.process_parameters.buttons]:
             cls.process_parameters.buttons.insert(
-                1, Button('Close claims', 'close_claim', 'tryton-delete'))
+                1, Button('Close Claims', 'close_claim', 'tryton-delete'))
         cls._error_messages.update({
                 'no_claim_selected':
                 'You must select at least one open claim.',
