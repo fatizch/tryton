@@ -26,6 +26,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Insurer Report Claim</field>
             <field name="wiz_name">claim_reporting.claim</field>
         </record>
-        <menuitem parent="report_engine.menu_report" sequence="1" id="menu_claim_report_insurer" name="Insurer Claim Report" icon="printer" action="act_insurer_report_claim"/>
+        <menuitem parent="insurer_reporting.menu_report_insurer" sequence="2" id="menu_report_insurer_claim" action="act_insurer_report_claim"/>
     </data>
 </tryton>
