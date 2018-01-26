@@ -1,3 +1,4 @@
+* BUG#8119 Manage contract without end date in get_future_invoices
 * BUG#7987 Deletion / Cancellation of invoices when declining a quote
 * BUG#7879 Fix behaviour of invoicing blocking which sometime caused duplicate invoices on a period
 * BUG#7750 Fix non-synced billing period calculation

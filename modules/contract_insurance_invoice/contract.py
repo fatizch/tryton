@@ -10,7 +10,7 @@ from sql import Column, Null, Literal
 from sql.aggregate import Max, Count, Sum
 from sql.conditionals import Coalesce
 
-from dateutil.rrule import rrule, rruleset
+from dateutil.rrule import rruleset
 from dateutil.relativedelta import relativedelta
 
 from trytond.pool import Pool, PoolMeta
@@ -1240,8 +1240,8 @@ class Contract:
             invoices = cls.load_from_cached_invoices(cached[sub_key])
         else:
             periods = {x: [contract]
-                for x in contract.get_invoice_periods(contract.end_date,
-                    contract.start_date)}
+                for x in contract.get_invoice_periods(
+                    contract.end_date or to_date, contract.start_date)}
             _, contract_invoices = contract._calculate_invoices(periods)
             invoices = contract.dump_future_invoices(contract_invoices)
             cached[sub_key] = cls.dump_to_cached_invoices(invoices)
