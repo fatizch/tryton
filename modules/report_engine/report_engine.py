@@ -42,7 +42,7 @@ from trytond.filestore import filestore
 from trytond.tools import file_open
 
 from trytond.modules.coog_core import fields, model, utils, coog_string
-from trytond.modules.coog_core import wizard_context
+from trytond.modules.coog_core import wizard_context, coog_date
 
 logger = logging.getLogger(__name__)
 
@@ -1019,9 +1019,16 @@ class ReportGenerate(CoogReport):
         report_context['Date'] = pool.get('ir.date').today()
         report_context['FDate'] = format_date
         report_context['relativedelta'] = relativedelta
+        report_context['ConvertFrequency'] = coog_date.convert_frequency
         report_context['Company'] = pool.get('party.party')(
             Transaction().context.get('company'))
         SelectedModel = pool.get(data['model'])
+
+        def search_and_stream(*args, **kwargs):
+            return model.search_and_stream(SelectedModel, *args, **kwargs)
+
+        report_context['Search'] = search_and_stream
+
         selected_obj = SelectedModel(data['id'])
         report_context.update(selected_obj.get_publishing_context(
                 report_context))

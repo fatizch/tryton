@@ -1075,3 +1075,31 @@ class DynamicReadonlyTransactionMixin(ModelStorage):
         if ServerContext().get('readonly_transaction', False):
             raise exception.ReadOnlyException('Readonly Transaction')
         return super(DynamicReadonlyTransactionMixin, cls).create(vlist)
+
+
+def search_and_stream(klass, domain, offset=0, order=None, batch_size=None):
+    '''
+        Yields the records returned by the search on "domain".
+        - "offset" can be used to set the initial offset for the search
+        - "order" controls the search order (like in the 'search' method)
+        - "batch_size" is the number of elements to search for per bucket
+
+        The goal of this method is to be able to seemlessly iterate over a
+        large number of records without breaking tryton's cache mechanisms
+        by using "smaller" groups.
+
+        Caveat : This method is intended for readonly use only. Modifying
+        the returned records may cause the search perimeter to evolve
+        across iterations, which can make some potential results to
+        disappear from the final output
+    '''
+    batch_size = batch_size or config.getint('cache', 'record')
+    cur_offset = offset
+    while True:
+        records = klass.search(domain, offset=cur_offset, limit=batch_size,
+            order=order)
+        if len(records) == 0:
+            break
+        for record in records:
+            yield record
+        cur_offset += batch_size
