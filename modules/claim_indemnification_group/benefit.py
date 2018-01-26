@@ -192,26 +192,28 @@ class BenefitRule:
     def get_is_group(self, name):
         return self.benefit.is_group
 
-    def _calculate_rule(self, rule_name, args, default_value):
+    def _calculate_rule(self, rule_name, args, default_value, **kwargs):
         option = args.get('option', None)
         if not option or getattr(self, 'force_' + rule_name):
             return getattr(OriginalBenefitRule, 'calculate_' + rule_name)(
-                self, args)
+                self, args, **kwargs)
         # Use option defined rule
         version = option.get_version_at_date(args['date'])
         option_benefit = version.get_benefit(self.benefit)
         if not getattr(option_benefit, rule_name):
             return default_value
-        return getattr(option_benefit, 'calculate_' + rule_name)(args)
+        return getattr(option_benefit, 'calculate_' + rule_name)(args,
+            **kwargs)
 
-    def calculate_deductible_rule(self, args):
-        return self._calculate_rule('deductible_rule', args, datetime.date.min)
+    def calculate_deductible_rule(self, args, **kwargs):
+        return self._calculate_rule('deductible_rule', args, datetime.date.min,
+            **kwargs)
 
-    def calculate_indemnification_rule(self, args):
-        return self._calculate_rule('indemnification_rule', args, [])
+    def calculate_indemnification_rule(self, args, **kwargs):
+        return self._calculate_rule('indemnification_rule', args, [], **kwargs)
 
-    def calculate_revaluation_rule(self, args):
-        return self._calculate_rule('revaluation_rule', args, [])
+    def calculate_revaluation_rule(self, args, **kwargs):
+        return self._calculate_rule('revaluation_rule', args, [], **kwargs)
 
     def required_extra_data_for_rule(self, rule_name, date, option):
         if getattr(self, 'force_' + rule_name):

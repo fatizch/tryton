@@ -1,3 +1,5 @@
+* OTH#0000 Code fix following 5d5a04299c: missing kwargs in method
+
 Version 1.14 - 2017-11-09
 * BUG#7434 Add rec name for indemnification rule in list view
 * BUG#6350 Fix crash when creating indemnification period with the wizard

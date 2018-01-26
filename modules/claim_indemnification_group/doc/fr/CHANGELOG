@@ -1,3 +1,5 @@
+* OTH#0000 Correction suite au commit 5d5a04299c: Manque le paramètre kwargs dans les méthodes de calcul
+
 Version 1.14 - 2017-11-09
 * BUG#7434 Ajout d'un nom pour la règle d'indemnisation dans la vue liste
 * BUG#6350 Correction du crash lors de la création d'une période d'indémnisation depuis l'assistant de création
