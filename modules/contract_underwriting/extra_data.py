@@ -9,6 +9,7 @@ __all__ = [
 
 
 class ExtraData:
+    __metaclass__ = PoolMeta
     __name__ = 'extra_data'
 
     @classmethod

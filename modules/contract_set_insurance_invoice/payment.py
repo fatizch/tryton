@@ -7,6 +7,7 @@ __all__ = [
 
 
 class Payment:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment'
 
     @classmethod

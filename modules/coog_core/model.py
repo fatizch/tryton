@@ -5,6 +5,7 @@ import inspect
 import logging
 import datetime
 import json
+import types
 
 from functools import wraps
 from genshi.template import NewTextTemplate
@@ -32,7 +33,6 @@ from cache import CoogCache, get_cache_holder
 import fields
 import export
 import summary
-import types
 import exception
 
 try:
@@ -143,7 +143,7 @@ def sub_transaction_retry(n, sleep_time):
     function result. The sub transaction should be rollbacked in this case.
     '''
     def wrapper(func):
-        assert (isinstance(func, types.UnboundMethodType)
+        assert (isinstance(func, types.MethodType)
             or isinstance(func, types.FunctionType)), type(func)
         cache_holder = get_cache_holder()
         sub_transaction_cache = cache_holder.get(
@@ -203,7 +203,7 @@ def pre_commit_transaction(DataManager=PostExecutionDataManager):
     that will be committed together at the same time.
     '''
     def wrapper(func):
-        assert (isinstance(func, types.UnboundMethodType)
+        assert (isinstance(func, types.MethodType)
             or isinstance(func, types.FunctionType)), type(func)
         def decorate(*args, **kwargs):
             transaction = Transaction()
@@ -211,7 +211,7 @@ def pre_commit_transaction(DataManager=PostExecutionDataManager):
             hook = kwargs.pop('substitute_hook', None)
             datamanager.put('commit', func, *args, **kwargs)
             if hook:
-                if isinstance(hook, types.UnboundMethodType):
+                if isinstance(hook, types.MethodType):
                     args = tuple(list(args)[1:])
                 return hook(*args, **kwargs)
         return decorate
@@ -226,7 +226,7 @@ def post_transaction(DataManager=PostExecutionDataManager):
     code which may do update / write operations.
     '''
     def wrapper(func):
-        assert (isinstance(func, types.UnboundMethodType)
+        assert (isinstance(func, types.MethodType)
             or isinstance(func, types.FunctionType)), type(func)
 
         def decorate(*args, **kwargs):
@@ -1030,7 +1030,7 @@ class MethodDefinition(CoogSQL, CoogView):
 
     def execute(self, caller, callees, **kwargs):
         method = getattr(Pool().get(self.model.model), self.method_name)
-        if not hasattr(method, 'im_self') or method.im_self:
+        if is_class_or_dual_method(method):
             if not isinstance(callees, (list, tuple)):
                 callees = [callees]
             return method(callees, caller=caller, **kwargs)
@@ -1103,3 +1103,8 @@ def search_and_stream(klass, domain, offset=0, order=None, batch_size=None):
         for record in records:
             yield record
         cur_offset += batch_size
+
+def is_class_or_dual_method(method):
+    return hasattr(method, '_dualmethod') or (
+        isinstance(method, types.MethodType) and
+        isinstance(method.__self__, PoolMeta))

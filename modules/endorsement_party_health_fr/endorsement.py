@@ -68,6 +68,7 @@ class EndorsementPartyHealthComplement(relation_mixin(
 
 
 class EndorsementParty:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.party'
 
     @classmethod

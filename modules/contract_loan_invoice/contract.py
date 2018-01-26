@@ -15,6 +15,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     @classmethod
@@ -76,6 +77,7 @@ class Contract:
 
 
 class ExtraPremium:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option.extra_premium'
 
     @classmethod
@@ -92,6 +94,7 @@ class ExtraPremium:
 
 
 class Premium:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.premium'
 
     loan = fields.Many2One('loan', 'Loan', select=True, ondelete='RESTRICT',

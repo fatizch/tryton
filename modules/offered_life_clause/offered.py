@@ -13,6 +13,7 @@ __all__ = [
 
 
 class OptionDescription:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.option.description'
 
     beneficiaries_clauses = fields.Many2Many(

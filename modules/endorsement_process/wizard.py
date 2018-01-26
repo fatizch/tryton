@@ -104,6 +104,7 @@ class PreviewChangesWizard(Wizard):
 class StartEndorsement:
     'Start Endorsement'
 
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start'
 
     @classmethod

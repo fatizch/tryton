@@ -242,6 +242,7 @@ class FlowVariable(model.CoogSQL, model.CoogView):
 
 
 class ReportGenerate:
+    __metaclass__ = PoolMeta
     __name__ = 'report.generate'
 
     @classmethod
@@ -272,6 +273,7 @@ class ReportGenerate:
 
 
 class ReportTemplate:
+    __metaclass__ = PoolMeta
     __name__ = 'report.template'
 
     variables_relation = fields.One2Many(
@@ -400,7 +402,9 @@ class ReportFlowSucceedGenerated(model.CoogView):
 
     template_name = fields.Char('template', readonly=True)
 
+
 class ReportCreate:
+    __metaclass__ = PoolMeta
     __name__ = 'report.create'
 
     flow_succeed_generated = StateView('report.create.flow_succeed_generated',
@@ -446,7 +450,7 @@ class ReportCreate:
                     {'report_template_name':
                         self.select_template.template.name},
                     raise_exception=False)}
-        
+
     @classmethod
     def create_flow_file(cls, filepath, content):
         temporary_folder = config.get('TMP', 'folder') or '/tmp/'

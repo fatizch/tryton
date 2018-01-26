@@ -21,6 +21,7 @@ _scipy_lock = Lock()
 
 
 class Loan:
+    __metaclass__ = PoolMeta
     __name__ = 'loan'
 
     taea = fields.Function(

@@ -28,6 +28,7 @@ __all__ = [
 
 
 class Move:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move'
 
     @classmethod
@@ -107,6 +108,7 @@ class Move:
 
 
 class MoveLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move.line'
 
     payment_date = fields.Date('Payment Date',

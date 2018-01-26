@@ -88,7 +88,7 @@ class ContractUnderwriting(model.CoogSQL, model.CoogView):
                 'postponed': 'The underwriting decision is postponed',
                 })
 
-    @fields.depends('decision', 'needs_subscriber_validation')
+    @fields.depends('decision')
     def on_change_with_needs_subscriber_validation(self, name=''):
         if not self.decision:
             return False
@@ -340,6 +340,7 @@ class ContractUnderwritingOption(model.CoogSQL, model.CoogView):
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     underwritings = fields.One2Many('contract.underwriting',

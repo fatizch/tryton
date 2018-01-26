@@ -16,6 +16,7 @@ __all__ = [
 
 
 class Claim:
+    __metaclass__ = PoolMeta
     __name__ = 'claim'
 
     all_services_refused = fields.Function(
@@ -32,6 +33,7 @@ class Claim:
 
 
 class ClaimService:
+    __metaclass__ = PoolMeta
     __name__ = 'claim.service'
 
     eligibility_status = fields.Selection([
@@ -195,6 +197,7 @@ class ClaimIndemnification:
 
 
 class ExtraData:
+    __metaclass__ = PoolMeta
     __name__ = 'extra_data'
 
     @classmethod

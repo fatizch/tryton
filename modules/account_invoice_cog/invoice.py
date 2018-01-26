@@ -22,6 +22,7 @@ __all__ = [
 
 
 class InvoiceLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice.line'
 
     @classmethod

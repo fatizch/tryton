@@ -108,6 +108,7 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     fees = fields.Many2Many('offered.product-account.fee', 'product', 'fee',
@@ -282,6 +283,7 @@ class OptionDescriptionPremiumRule(
 
 
 class OptionDescription:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.option.description'
 
     fees = fields.Many2Many('offered.option.description-account.fee',

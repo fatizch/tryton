@@ -15,6 +15,7 @@ __all__ = [
 
 
 class Benefit:
+    __metaclass__ = PoolMeta
     __name__ = 'benefit'
 
     documents_rules = fields.One2Many('document.rule', 'benefit',
@@ -28,6 +29,7 @@ class Benefit:
 
 
 class DocumentRule:
+    __metaclass__ = PoolMeta
     __name__ = 'document.rule'
 
     benefit = fields.Many2One('benefit', 'Benefit', ondelete='CASCADE',
@@ -38,6 +40,7 @@ class DocumentRule:
 
 
 class LossDescription:
+    __metaclass__ = PoolMeta
     __name__ = 'benefit.loss.description'
 
     documents = fields.Many2Many(

@@ -21,6 +21,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     def appliable_fees(self):
@@ -32,6 +33,7 @@ class Contract:
 
 
 class CoveredElement:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element'
 
     premiums = fields.One2Many('contract.premium', 'covered_element',
@@ -45,6 +47,7 @@ class CoveredElement:
 
 
 class ExtraPremium:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option.extra_premium'
 
     flat_amount_frequency = fields.Selection(EXTRA_PREMIUM_FREQUENCIES,
@@ -65,6 +68,7 @@ class ExtraPremium:
 
 
 class Premium:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.premium'
 
     covered_element = fields.Many2One('contract.covered_element',

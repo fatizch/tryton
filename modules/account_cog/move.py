@@ -491,6 +491,7 @@ class Line(export.ExportImportMixin):
 
 
 class CreateMove:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move.template.create'
 
     def create_move(self):
@@ -513,6 +514,7 @@ class CreateMove:
 
 
 class Reconciliation:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move.reconciliation'
 
     @classmethod
@@ -555,6 +557,7 @@ class Reconciliation:
 
 
 class Reconcile:
+    __metaclass__ = PoolMeta
     __name__ = 'account.reconcile'
 
     def get_accounts(self):
@@ -647,6 +650,7 @@ class Reconcile:
 
 
 class ReconcileShow:
+    __metaclass__ = PoolMeta
     __name__ = 'account.reconcile.show'
 
     post_leftovers = fields.Boolean('Post Left Over Moves')
@@ -659,6 +663,7 @@ class ReconcileShow:
 
 
 class ReconcileLines:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move.reconcile_lines'
 
     def transition_reconcile(self):
@@ -683,6 +688,7 @@ class ReconcileLines:
 
 
 class ReconcileLinesWriteOff:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move.reconcile_lines.writeoff'
 
     post_writeoff = fields.Boolean('Post Writeoff Move')

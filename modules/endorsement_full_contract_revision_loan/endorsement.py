@@ -11,6 +11,7 @@ __all__ = [
 
 
 class Loan:
+    __metaclass__ = PoolMeta
     __name__ = 'loan'
 
     @classmethod

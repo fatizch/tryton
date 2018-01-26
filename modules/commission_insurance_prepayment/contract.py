@@ -21,6 +21,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     @dualmethod
@@ -129,6 +130,7 @@ class Contract:
 
 
 class ContractOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     first_year_premium = fields.Function(

@@ -198,6 +198,7 @@ class Configuration(export.ExportImportMixin):
 
 
 class OpenThirdPartyBalanceStart:
+    __metaclass__ = PoolMeta
     __name__ = 'account.open_third_party_balance.start'
     third_party_balance_option = fields.Selection([
             ('all', 'All'),
@@ -235,6 +236,7 @@ class OpenThirdPartyBalanceStart:
 
 
 class OpenThirdPartyBalance:
+    __metaclass__ = PoolMeta
     __name__ = 'account.open_third_party_balance'
 
     def do_print_(self, action):
@@ -253,6 +255,7 @@ class OpenThirdPartyBalance:
 
 
 class ThirdPartyBalance:
+    __metaclass__ = PoolMeta
     __name__ = 'account.third_party_balance'
 
     @classmethod

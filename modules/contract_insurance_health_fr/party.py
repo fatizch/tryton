@@ -19,6 +19,7 @@ __all__ = [
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
     _func_key = 'func_key'
 
@@ -195,6 +196,7 @@ class Party:
 
 
 class PartyRelation:
+    __metaclass__ = PoolMeta
     __name__ = 'party.relation'
 
     @classmethod
@@ -254,6 +256,7 @@ class PartyRelation:
 
 
 class HealthPartyComplement:
+    __metaclass__ = PoolMeta
     __name__ = 'health.party_complement'
 
     department = fields.Function(

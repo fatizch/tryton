@@ -10,6 +10,7 @@ __all__ = [
 
 
 class Sequence:
+    __metaclass__ = PoolMeta
     __name__ = 'ir.sequence'
 
     @classmethod
@@ -18,6 +19,7 @@ class Sequence:
 
 
 class SequenceStrict:
+    __metaclass__ = PoolMeta
     __name__ = 'ir.sequence.strict'
 
     @classmethod

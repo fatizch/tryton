@@ -17,6 +17,7 @@ __all__ = [
 
 
 class Option:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     @classmethod
@@ -36,6 +37,7 @@ class Option:
 
 
 class OptionVersion:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option.version'
 
     benefits = fields.One2Many('contract.option.benefit', 'version',

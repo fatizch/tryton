@@ -9,6 +9,7 @@ __all__ = [
 
 
 class TerminateContract:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.terminate'
 
     def endorsement_values(self):

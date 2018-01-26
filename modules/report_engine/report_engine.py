@@ -475,6 +475,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         input_ext = from_ext or self.get_extension('input_kind')
         if input_ext == to_ext or not to_ext:
             return input_ext, data
+        if not isinstance(data, (bytes, bytearray)):
+            data = bytes(data, 'utf8')
         return ReportModel.convert(
             Report(template_extension=input_ext, extension=to_ext), data)
 
@@ -908,7 +910,7 @@ class ReportGenerate(CoogReport):
         filename, ext = cls.get_filename(template, name_giver,
             pool.get('party.party')(data['party']))
         oext = ext or oext
-        return (oext, bytearray(content), False, filename)
+        return (oext, content, False, filename)
 
     @classmethod
     def execute(cls, ids, data):
@@ -1095,7 +1097,7 @@ class ReportGenerate(CoogReport):
         client_filepath, server_filepath = cls.create_shared_tmp_dir()
         client_filepath = os.path.join(client_filepath, filename)
         server_filepath = os.path.join(server_filepath, filename)
-        with open(server_filepath, 'w') as f:
+        with open(server_filepath, 'wb') as f:
             f.write(report_data)
             return(client_filepath, server_filepath)
 
@@ -1195,7 +1197,7 @@ class ReportGenerateFromFile(CoogReport):
 
     @classmethod
     def execute(cls, ids, data):
-        with open(data['output_report_filepath'], 'r') as f:
+        with open(data['output_report_filepath'], 'rb') as f:
             value = bytearray(f.read())
         return (data['output_report_filepath'].split('.')[-1], value, False,
             os.path.splitext(
@@ -1208,11 +1210,11 @@ class ReportGenerateFromFile(CoogReport):
         report = Pool().get('ir.action.report')(
             template_extension=input_format, extension=output_format)
         for input_path in input_paths:
-            with open(input_path, 'r') as f:
-                data = bytearray(f.read())
+            with open(input_path, 'rb') as f:
+                data = f.read()
             oext, conv_data = cls.convert(report, data)
             output_path = os.path.splitext(input_path)[0] + '.' + oext
-            with open(output_path, 'w') as f:
+            with open(output_path, 'wb') as f:
                 f.write(conv_data)
             conv_paths.append(output_path)
         if len(conv_paths) > 1:
@@ -1501,8 +1503,8 @@ class ReportCreate(wizard_context.PersistentContextWizard):
 
     def set_attachment(self, instance, report):
         report_name_wo_ext, ext = report['file_basename'], report['extension']
-        with open(report['server_filepath'], 'r') as f:
-            original_data = bytearray(f.read())
+        with open(report['server_filepath'], 'rb') as f:
+            original_data = f.read()
         return self.select_template.template._create_attachment_from_report({
                 'original_ext': ext.split(os.extsep)[-1],
                 'report_type': ext.split(os.extsep)[-1],

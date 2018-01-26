@@ -14,6 +14,7 @@ __all__ = [
 
 
 class EventLog:
+    __metaclass__ = PoolMeta
     __name__ = 'event.log'
 
     @classmethod

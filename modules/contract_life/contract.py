@@ -13,6 +13,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     @classmethod
@@ -41,6 +42,7 @@ class Contract:
 
 
 class ContractOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     person = fields.Function(
@@ -63,6 +65,7 @@ class ContractOption:
 
 
 class CoveredElement:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element'
 
     def find_options_for_covered(self, at_date):

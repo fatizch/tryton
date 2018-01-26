@@ -12,6 +12,7 @@ __all__ = [
 
 
 class ReportTemplate:
+    __metaclass__ = PoolMeta
     __name__ = 'report.template'
 
     generate_event = fields.Boolean('Generate Event', help='If true, an event'

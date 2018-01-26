@@ -24,6 +24,7 @@ class ProcessProductRelation(model.CoogSQL):
 
 
 class Process:
+    __metaclass__ = PoolMeta
     __name__ = 'process'
 
     for_products = fields.Many2Many('process-offered.product',

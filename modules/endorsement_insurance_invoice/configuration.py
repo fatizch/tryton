@@ -11,6 +11,7 @@ __all__ = [
 
 
 class Configuration:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.configuration'
 
     split_invoices_on_endorsement_dates = fields.Boolean(

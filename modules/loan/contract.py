@@ -31,6 +31,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     is_loan = fields.Function(
@@ -253,6 +254,7 @@ class ContractLoan(model.CoogSQL, model.CoogView):
 
 
 class ContractOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     is_loan = fields.Function(
@@ -399,6 +401,7 @@ class ContractOption:
 
 
 class ExtraPremium:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option.extra_premium'
 
     capital_per_mil_rate = fields.Numeric('Rate on Capital', states={
@@ -646,6 +649,7 @@ class LoanShare(model.CoogSQL, model.CoogView, model.ExpandTreeMixin):
 
 
 class OptionSubscription:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.wizard.option_subscription'
 
     def default_options_displayer(self, values):
@@ -667,6 +671,7 @@ class OptionSubscription:
 
 
 class OptionsDisplayer:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.wizard.option_subscription.options_displayer'
 
     is_loan = fields.Boolean('Is Loan')
@@ -727,6 +732,7 @@ class OptionsDisplayer:
 
 
 class WizardOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.wizard.option_subscription.options_displayer.option'
 
     share = fields.Numeric('Loan Share', digits=(16, 4),
@@ -776,6 +782,7 @@ class WizardOption:
 
 
 class DisplayContractPremium:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.premium.display'
 
     def new_line(self, name, line=None):

@@ -122,6 +122,7 @@ class RuleDocumentDescriptionRelation(model.CoogSQL, model.CoogView):
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     document_rules = fields.One2Many('document.rule', 'product',
@@ -149,6 +150,7 @@ class Product:
 
 
 class OptionDescription:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.option.description'
 
     document_rules = fields.One2Many('document.rule', 'option',

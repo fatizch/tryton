@@ -45,6 +45,7 @@ class Dunning(Printable):
 
 
 class Level:
+    __metaclass__ = PoolMeta
     __name__ = 'account.dunning.level'
 
     report_template = fields.Many2One('report.template', 'Report Template',

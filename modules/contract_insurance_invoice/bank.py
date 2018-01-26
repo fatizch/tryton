@@ -10,6 +10,7 @@ __all__ = [
 
 
 class BankAccount:
+    __metaclass__ = PoolMeta
     __name__ = 'bank.account'
 
     def objects_using_me_for_party(self, party=None):

@@ -12,6 +12,7 @@ __all__ = [
 
 class TestCaseModel:
     __name__ = 'ir.test_case'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def new_person(cls, sex='male', with_address=True):

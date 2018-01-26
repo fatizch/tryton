@@ -20,6 +20,7 @@ __all__ = [
 
 
 class MoveLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move.line'
 
     principal_invoice_line = fields.Many2One('account.invoice.line',
@@ -38,6 +39,7 @@ class MoveLine:
 
 
 class InvoiceLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice.line'
 
     principal_lines = fields.One2Many('account.move.line',
@@ -46,6 +48,7 @@ class InvoiceLine:
 
 
 class Invoice:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice'
 
     insurer_role = fields.Many2One('insurer', 'Insurer', ondelete='RESTRICT',

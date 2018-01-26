@@ -31,6 +31,7 @@ __all__ = [
 class OptionSubscription:
     'Option Subscription'
 
+    __metaclass__ = PoolMeta
     __name__ = 'contract.wizard.option_subscription'
 
     def default_options_displayer(self, values):
@@ -69,6 +70,7 @@ class OptionSubscription:
 class OptionsDisplayer:
     'Select Covered Element'
 
+    __metaclass__ = PoolMeta
     __name__ = 'contract.wizard.option_subscription.options_displayer'
 
     covered_element = fields.Many2One('contract.covered_element',
@@ -112,6 +114,7 @@ class OptionsDisplayer:
 
 
 class WizardOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.wizard.option_subscription.options_displayer.option'
 
     def init_subscribed_option(self, displayer, option):

@@ -18,6 +18,7 @@ __all__ = [
 
 
 class Invoice:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice'
 
     @classmethod

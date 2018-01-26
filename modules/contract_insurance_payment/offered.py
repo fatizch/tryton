@@ -13,6 +13,7 @@ __all__ = [
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     payment_journal = fields.Many2One('account.payment.journal',
@@ -26,6 +27,7 @@ class Product:
 
 
 class BillingMode:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.billing_mode'
 
     failure_billing_mode = fields.Many2One('offered.billing_mode',

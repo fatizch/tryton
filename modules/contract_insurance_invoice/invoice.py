@@ -34,6 +34,7 @@ _DEPENDS = ['contract_invoice']
 
 
 class Invoice:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice'
 
     start = fields.Function(
@@ -456,6 +457,7 @@ class Invoice:
 
 
 class InvoiceLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice.line'
     # XXX maybe change for the description
     coverage_start = fields.Date('Start Date')
@@ -533,6 +535,7 @@ class InvoiceLine:
 
 
 class InvoiceTax:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice.tax'
 
     def get_move_lines(self):

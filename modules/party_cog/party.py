@@ -1237,6 +1237,7 @@ class SynthesisMenuSet(Wizard):
 
 
 class PartyReplace:
+    __metaclass__ = PoolMeta
     __name__ = 'party.replace'
 
     @classmethod
@@ -1269,6 +1270,7 @@ class PartyReplace:
 
 
 class PartyReplaceAsk:
+    __metaclass__ = PoolMeta
     __name__ = 'party.replace.ask'
 
     is_person = fields.Function(

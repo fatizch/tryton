@@ -13,6 +13,7 @@ __all__ = [
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     term_renewal_rule = fields.One2Many(

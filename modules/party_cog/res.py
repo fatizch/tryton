@@ -11,6 +11,7 @@ __metaclass__ = PoolMeta
 
 
 class User:
+    __metaclass__ = PoolMeta
     __name__ = 'res.user'
     party_synthesis = fields.Char('Synthesis Parties')
     party_synthesis_previous = fields.Char('Previous Synthesis Parties')

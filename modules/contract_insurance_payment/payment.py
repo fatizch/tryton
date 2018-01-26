@@ -23,6 +23,7 @@ __all__ = [
 
 
 class Journal:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.journal'
 
     failure_billing_mode = fields.Many2One('offered.billing_mode',
@@ -36,6 +37,7 @@ class Journal:
 
 
 class JournalFailureAction:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.journal.failure_action'
 
     @classmethod
@@ -47,6 +49,7 @@ class JournalFailureAction:
 
 
 class Payment:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment'
 
     contract = fields.Function(

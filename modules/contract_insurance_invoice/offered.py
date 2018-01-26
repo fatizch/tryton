@@ -291,6 +291,7 @@ class PaymentTermLineRelativeDelta(export.ExportImportMixin):
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     billing_modes = fields.Many2Many('offered.product-offered.billing_mode',
@@ -432,6 +433,7 @@ class BillingModePaymentTermRelation(model.CoogSQL, model.CoogView):
 
 
 class OptionDescription:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.option.description'
 
     account_for_billing = fields.Many2One('account.account',
@@ -463,6 +465,7 @@ class OptionDescription:
 
 
 class OptionDescriptionPremiumRule:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.option.description.premium_rule'
 
     match_contract_frequency = fields.Boolean('Match Contract Frequency',

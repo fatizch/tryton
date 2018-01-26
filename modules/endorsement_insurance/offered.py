@@ -18,6 +18,7 @@ __all__ = [
 
 
 class EndorsementPart:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.part'
 
     covered_elements_fields = fields.One2Many(

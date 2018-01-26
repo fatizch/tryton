@@ -49,6 +49,7 @@ class PaymentSepaDoBatch(batch.BatchRoot):
 
 
 class PaymentTreatmentBatch:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.process'
 
     @classmethod
@@ -158,6 +159,7 @@ class PaymentFailMessageCreationBatch(batch.BatchRootNoSelect):
 
 
 class PaymentGroupCreationBatch:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.group.create'
 
     @classmethod
@@ -182,6 +184,7 @@ class PaymentGroupCreationBatch:
 
 
 class PaymentGroupProcessBatch:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.group.process'
 
     @classmethod

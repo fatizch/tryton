@@ -9,6 +9,7 @@ __all__ = [
 
 
 class StartFullContractRevision:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.full_revision_start'
 
     def update_endorsement(self, base_endorsement, wizard):

@@ -20,6 +20,7 @@ __all__ = [
 
 
 class EventTypeAction:
+    __metaclass__ = PoolMeta
     __name__ = 'event.type.action'
 
     notification_delay = fields.Integer(
@@ -118,6 +119,7 @@ class EventTypeAction:
 
 
 class EventLog:
+    __metaclass__ = PoolMeta
     __name__ = 'event.log'
 
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',

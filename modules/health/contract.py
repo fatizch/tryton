@@ -14,6 +14,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     is_health = fields.Function(
@@ -31,6 +32,7 @@ class Contract:
 
 
 class Option:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     is_health = fields.Function(
@@ -42,6 +44,7 @@ class Option:
 
 
 class CoveredElement:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element'
 
     is_health = fields.Function(

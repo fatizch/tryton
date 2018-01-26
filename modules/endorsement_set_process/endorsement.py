@@ -16,6 +16,7 @@ __all__ = [
 
 
 class Endorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement'
 
     generated_sets_processes_over = fields.Function(
@@ -112,6 +113,7 @@ class EndorsementSet(CoogProcessFramework):
 
 
 class EndorsementPartUnion:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.part.union'
 
     @classmethod

@@ -22,6 +22,7 @@ __all__ = [
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     claims = fields.One2Many('claim', 'claimant', 'Claims', readonly=True)
@@ -77,6 +78,7 @@ class SynthesisMenuClaim(model.CoogSQL):
 
 
 class SynthesisMenu:
+    __metaclass__ = PoolMeta
     __name__ = 'party.synthesis.menu'
 
     @classmethod

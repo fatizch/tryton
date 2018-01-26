@@ -10,6 +10,7 @@ __all__ = [
 
 
 class BenefitRule:
+    __metaclass__ = PoolMeta
     __name__ = 'benefit.rule'
 
     def option_benefit_at_date(self, option, date):

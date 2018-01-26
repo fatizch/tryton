@@ -22,6 +22,7 @@ __all__ = [
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     insurer_role = fields.One2Many('insurer', 'party', 'Insurer',
@@ -216,6 +217,7 @@ class InsurerDelegation(model.CoogView, model.CoogSQL):
 
 
 class PartyReplace:
+    __metaclass__ = PoolMeta
     __name__ = 'party.replace'
 
     @classmethod

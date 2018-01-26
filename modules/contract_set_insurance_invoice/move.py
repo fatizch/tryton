@@ -9,6 +9,7 @@ __all__ = [
 
 
 class PartyBalance:
+    __metaclass__ = PoolMeta
     __name__ = 'account.party_balance'
 
     def invoices_report_for_balance(self, contract):

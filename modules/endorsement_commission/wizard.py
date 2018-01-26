@@ -162,6 +162,7 @@ class ChangeContractBroker(ChangeContractCommission):
 
 
 class StartEndorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start'
 
     change_commission = StateView('endorsement.contract.change_commission',

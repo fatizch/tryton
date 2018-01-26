@@ -10,6 +10,7 @@ __all__ = [
 
 
 class Move:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move'
 
     @classmethod
@@ -32,6 +33,7 @@ class Move:
 
 
 class MoveLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move.line'
 
     def get_synthesis_rec_name(self, name):

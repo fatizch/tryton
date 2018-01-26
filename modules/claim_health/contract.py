@@ -12,6 +12,7 @@ __all__ = [
 
 
 class CoveredElement:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element'
 
     claim_bank_account = fields.Function(

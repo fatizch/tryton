@@ -30,6 +30,7 @@ ANNUAL_CONVERSION_TABLE = {
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     broker = fields.Function(
@@ -226,6 +227,7 @@ class Contract:
 
 
 class ContractOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     annual_premium_incl_tax = fields.Function(

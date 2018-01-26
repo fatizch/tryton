@@ -14,6 +14,7 @@ __all__ = [
 
 
 class Process:
+    __metaclass__ = PoolMeta
     __name__ = 'process'
 
     @classmethod
@@ -23,6 +24,7 @@ class Process:
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     @classmethod

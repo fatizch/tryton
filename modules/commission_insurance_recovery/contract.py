@@ -18,6 +18,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     @classmethod
@@ -53,6 +54,7 @@ class Contract:
 
 
 class ContractOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     def recovery_agent_plans_used(self):

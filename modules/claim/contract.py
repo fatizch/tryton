@@ -12,6 +12,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     claims = fields.Function(
@@ -34,6 +35,7 @@ class Contract:
 
 
 class Option:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     benefits = fields.Function(

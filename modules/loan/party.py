@@ -44,6 +44,7 @@ class Lender(model.CoogSQL, model.CoogView):
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     lender_role = fields.One2Many('lender', 'party', 'Lender', states={
@@ -195,6 +196,7 @@ class SynthesisMenuLoan(model.CoogSQL):
 
 
 class SynthesisMenu:
+    __metaclass__ = PoolMeta
     __name__ = 'party.synthesis.menu'
 
     @classmethod
@@ -383,6 +385,7 @@ class InsuredOutstandingLoanBalanceSelectDate(model.CoogView):
 
 
 class PartyReplace:
+    __metaclass__ = PoolMeta
     __name__ = 'party.replace'
 
     @classmethod

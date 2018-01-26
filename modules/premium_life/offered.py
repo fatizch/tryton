@@ -12,6 +12,7 @@ __all__ = [
 
 
 class ProductPremiumDate:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product.premium_date'
 
     @classmethod

@@ -17,6 +17,7 @@ __all__ = [
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     is_loan = fields.Function(
@@ -31,6 +32,7 @@ class Product:
 
 
 class OptionDescription:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.option.description'
 
     is_loan = fields.Function(

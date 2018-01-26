@@ -23,6 +23,7 @@ __all__ = [
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     contracts = fields.One2ManyDomain('contract', 'subscriber',
@@ -134,6 +135,7 @@ class SynthesisMenuContrat(model.CoogSQL):
 
 
 class SynthesisMenu:
+    __metaclass__ = PoolMeta
     __name__ = 'party.synthesis.menu'
 
     @classmethod

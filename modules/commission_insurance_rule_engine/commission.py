@@ -17,6 +17,7 @@ __all__ = [
 
 
 class Plan:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.plan'
 
     rule_engine_key = fields.Char('Rule Engine Key',
@@ -91,6 +92,7 @@ class PlanLines(
 
 
 class Agent:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.agent'
 
     extra_data = fields.Dict('extra_data', 'Extra Data')

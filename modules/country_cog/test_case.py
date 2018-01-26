@@ -15,6 +15,7 @@ __all__ = [
 
 class TestCaseModel:
     __name__ = 'ir.test_case'
+    __metaclass__ = PoolMeta
 
     load_all_zipcodes = fields.Boolean('Load all Zip Codes')
     main_zip = fields.Integer('Main Zip')

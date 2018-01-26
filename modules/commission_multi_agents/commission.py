@@ -17,6 +17,7 @@ __all__ = [
 
 
 class Commission:
+    __metaclass__ = PoolMeta
     __name__ = 'commission'
 
     def update_agent_from_contract(self):
@@ -26,6 +27,7 @@ class Commission:
 
 
 class Agent:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.agent'
 
     second_level_commission = fields.Function(
@@ -123,6 +125,7 @@ class AgentAgentRelation(model.CoogSQL, model.CoogView):
 
 
 class Plan:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.plan'
 
     second_level_commission = fields.Boolean('Second level commission',

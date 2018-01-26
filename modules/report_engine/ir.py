@@ -11,6 +11,7 @@ __all__ = [
 
 
 class Model:
+    __metaclass__ = PoolMeta
     __name__ = 'ir.model'
 
     printable = fields.Boolean('Printable')

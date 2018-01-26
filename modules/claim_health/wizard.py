@@ -15,6 +15,7 @@ __all__ = [
 
 
 class ModifyCoveredElement:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element.modify'
 
     possible_claim_bank_owners = fields.Many2Many('party.party', None, None,
@@ -65,6 +66,7 @@ class ModifyCoveredElement:
 
 
 class CoveredElementDisplayer:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element.modify.displayer'
 
     claim_bank_account = fields.Many2One('bank.account', 'Claim Bank Account')
@@ -117,6 +119,7 @@ class CoveredElementDisplayer:
 
 
 class ChangeContractSubscriber:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.subscriber_change'
 
     @classmethod

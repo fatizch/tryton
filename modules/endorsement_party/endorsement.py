@@ -125,6 +125,7 @@ class Party:
 
 
 class Relation:
+    __metaclass__ = PoolMeta
     __name__ = 'party.relation'
     _history = True
 

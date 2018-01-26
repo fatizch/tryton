@@ -53,6 +53,7 @@ COMMISSION_RATE_DIGITS = 4
 
 
 class Commission:
+    __metaclass__ = PoolMeta
     __name__ = 'commission'
 
     commissioned_contract = fields.Function(
@@ -1094,6 +1095,7 @@ class CreateAgentsAsk(model.CoogView):
 
 
 class CreateInvoice:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.create_invoice'
 
     def do_create_(self, action):
@@ -1120,6 +1122,7 @@ class CreateInvoice:
 
 
 class CreateInvoiceAsk:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.create_invoice.ask'
 
     post_invoices = fields.Boolean('Post Invoices')

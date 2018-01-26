@@ -97,6 +97,7 @@ class EventLog(model.CoogSQL, model.CoogView):
 
 class Event:
     __name__ = 'event'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def notify_events(cls, objects, event_code, description=None, **kwargs):
@@ -113,5 +114,6 @@ class Event:
 
 class Trigger:
     __name__ = 'ir.trigger'
+    __metaclass__ = PoolMeta
 
     event_type = fields.Many2One('event.type', 'Event Type')

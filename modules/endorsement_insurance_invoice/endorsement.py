@@ -69,6 +69,7 @@ class BillingInformation(object):
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     @classmethod
@@ -148,6 +149,7 @@ class Contract:
 
 
 class Endorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement'
 
     def new_endorsement(self, endorsement_part):
@@ -162,6 +164,7 @@ class Endorsement:
 
 
 class EndorsementContract:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract'
 
     billing_informations = fields.One2Many(

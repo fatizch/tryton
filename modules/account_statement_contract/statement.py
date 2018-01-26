@@ -15,6 +15,7 @@ __all__ = [
 
 
 class Line:
+    __metaclass__ = PoolMeta
     __name__ = 'account.statement.line'
 
     contract = fields.Many2One('contract', 'Contract',

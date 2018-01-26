@@ -24,6 +24,7 @@ __all__ = [
 
 class Line:
     'Account Statement Line'
+    __metaclass__ = PoolMeta
     __name__ = 'account.statement.line'
 
     party_payer = fields.Many2One('party.party', 'Payer', required=True,
@@ -210,6 +211,7 @@ class Statement(export.ExportImportMixin):
 
 
 class LineGroup:
+    __metaclass__ = PoolMeta
     __name__ = 'account.statement.line.group'
 
     cancel_motive = fields.Function(fields.Char('Cancel motive',

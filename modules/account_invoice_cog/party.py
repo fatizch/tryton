@@ -14,6 +14,7 @@ __all__ = [
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     @classmethod
@@ -39,6 +40,7 @@ class PartyPaymentTerm(export.ExportImportMixin):
 
 
 class PartyAccount:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party.account'
 
     @classmethod

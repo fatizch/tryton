@@ -17,6 +17,7 @@ __all__ = [
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     def get_option_dates(self, dates, option):
@@ -40,6 +41,7 @@ class Product:
 
 
 class OptionDescriptionPremiumRule:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.option.description.premium_rule'
 
     @classmethod
@@ -97,6 +99,7 @@ class OptionDescriptionPremiumRule:
 
 
 class OptionDescription:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.option.description'
 
     def get_rated_instances(self, base_instance):
@@ -115,6 +118,7 @@ class OptionDescription:
 
 
 class ProductPremiumDate:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product.premium_date'
 
     @classmethod

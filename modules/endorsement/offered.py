@@ -397,6 +397,7 @@ class EndorsementExtraDataField(
 class Product:
     'Product'
 
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     endorsement_definitions = fields.Many2Many(

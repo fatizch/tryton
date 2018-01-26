@@ -14,6 +14,7 @@ __all__ = [
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     is_group = fields.Boolean('Group Product')
@@ -28,6 +29,7 @@ class Product:
 
 
 class OptionDescription:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.option.description'
 
     is_group = fields.Boolean('Group Coverage')

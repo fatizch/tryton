@@ -20,6 +20,7 @@ FEE_ACTIONS = [
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     average_loan_premium_rule = fields.Many2One('loan.average_premium_rule',

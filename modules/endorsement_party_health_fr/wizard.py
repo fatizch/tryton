@@ -148,6 +148,7 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
 
 
 class StartEndorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start'
 
 

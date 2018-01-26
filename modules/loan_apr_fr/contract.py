@@ -16,6 +16,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     _premium_per_loan_cache = Cache('premiums_per_loan')

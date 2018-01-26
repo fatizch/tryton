@@ -10,6 +10,7 @@ __all__ = [
 
 
 class Event:
+    __metaclass__ = PoolMeta
     __name__ = 'event'
 
     @classmethod

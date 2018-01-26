@@ -11,6 +11,7 @@ __all__ = [
 
 
 class Invoice:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice'
 
     report_commissions = fields.Function(
@@ -27,6 +28,7 @@ class Invoice:
 
 
 class InvoiceLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice.line'
 
     tax_rate = fields.Function(

@@ -13,6 +13,7 @@ __all__ = [
 
 
 class Configuration:
+    __metaclass__ = PoolMeta
     __name__ = 'account.configuration'
 
     @classmethod
@@ -59,6 +60,7 @@ class Configuration:
 
 
 class Fee:
+    __metaclass__ = PoolMeta
     __name__ = 'account.fee'
 
     product = fields.Many2One('product.product', 'Product', required=True,

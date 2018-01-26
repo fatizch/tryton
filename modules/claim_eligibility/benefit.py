@@ -21,6 +21,7 @@ __all__ = [
 
 
 class Benefit:
+    __metaclass__ = PoolMeta
     __name__ = 'benefit'
 
     eligibility_rules = fields.One2Many('benefit.eligibility.rule', 'benefit',

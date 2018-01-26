@@ -18,6 +18,7 @@ __all__ = [
 
 
 class Move:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move'
 
     @classmethod
@@ -44,6 +45,7 @@ class Move:
 
 
 class MoveLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move.line'
 
     contract = fields.Many2One('contract', 'Contract', select=True,
@@ -184,6 +186,7 @@ WHERE
 
 
 class ReconcileShow:
+    __metaclass__ = PoolMeta
     __name__ = 'account.reconcile.show'
 
     remaining_repartition_method = fields.Selection([
@@ -270,6 +273,7 @@ class ReconcileShow:
 
 
 class Reconcile:
+    __metaclass__ = PoolMeta
     __name__ = 'account.reconcile'
 
     def transition_reconcile(self):

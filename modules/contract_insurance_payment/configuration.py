@@ -9,6 +9,7 @@ __all__ = [
 
 
 class Configuration:
+    __metaclass__ = PoolMeta
     __name__ = 'account.configuration'
 
     def get_payment_journal(self, line):

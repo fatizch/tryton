@@ -15,6 +15,7 @@ __all__ = [
 
 
 class Move:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move'
 
     is_invoice_canceled = fields.Function(
@@ -49,6 +50,7 @@ class Move:
 
 
 class MoveLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move.line'
 
     is_invoice_canceled = fields.Function(

@@ -1,8 +1,8 @@
 # encoding: utf-8
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from contextlib import nested
 import random
+import time
 import sys
 import pprint
 import traceback
@@ -342,8 +342,7 @@ class RuleExecutionLog(ModelSQL, ModelView):
         self.warnings = '\n'.join(result.print_warnings())
         self.info = '\n'.join(result.print_info())
         self.debug = '\n'.join(result.print_debug())
-        self.low_level_debug = '\n'.join(x.decode('utf-8')
-            for x in result.low_level_debug)
+        self.low_level_debug = '\n'.join(result.low_level_debug)
         self.result = result.print_result()
         self.calls = '\n'.join(['|&|'.join(x) for x in result.calls])
         self.context = result.context
@@ -1176,23 +1175,39 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return exec_context
 
     @classmethod
-    def get_static_context(cls):
+    def get_static_modules(cls):
         return {
-            '__builtins__': cls.get_builtins(),
             'Decimal': Decimal,
             'datetime': datetime,
+            'time': time,
             'relativedelta': relativedelta,
+            }
+
+    @classmethod
+    def get_static_context(cls):
+        context = {
+            '__builtins__': cls.get_builtins(),
             'True': True,
             'False': False,
             'None': None,
             }
+        context.update(cls.get_static_modules())
+        return context
 
     @classmethod
     def get_builtins(cls):
+
         # Returns python builtins which will be available in the rule engine.
-        # Some (like __import__) must be disabled for security reasons
+        # Some (like __import__) must be restricted for security reasons.
+        # Ideally, import should be forbidden, but in python3,
+        # calling datetime.date.today(), for example, will internally
+        # call __import__("time"). So me must allow some imports.
+
+        def safe_import(name, globals=None, locals=None, fromlist=(), level=0):
+            return cls.get_static_modules()[name]
+
         return {
-            #  '__import__': __import__,        # Importing, NEVER allow
+            '__import__': safe_import,
             'abs': abs,                         # Absolute value
             'all': all,                         # Boolean intersect
             'any': any,                         # Boolean union
@@ -1203,7 +1218,6 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             #  'callable': callable,            # If it's needed, it's bad
             'chr': chr,                         # Convert int to string
             #  'classmethod': classmethod,      # If needed, it's bad
-            'cmp': cmp,                         # Default comparison
             # 'compile': compile,               # Compile bytecode
             'complex': complex,                 # Complex numbers, why not
             # 'delattr': delattr,               # Remove attribute
@@ -1254,7 +1268,6 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             # 'property': property,             # Define an object property
             'range': range,                     # Get number ranges
             # 'raw_input': raw_input,           # Get input from the console
-            'reduce': reduce,                   # Aggregate lists
             #  'reload': reload,                # Reload a python module
             'repr': repr,                       # Repr value of an object
             'reversed': reversed,               # Reverse a list
@@ -1272,7 +1285,6 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             'unichr': unichr,                   # Cast to unicode char
             'unicode': unicode,                 # Cast to unicode
             #  'vars': vars,                    # Introspect module
-            'xrange': xrange,                   # Alternate range
             'zip': zip,                         # Aggregate iterators
             }
 
@@ -1454,9 +1466,8 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         if not self.id or not getattr(self, 'debug_mode', None):
             return result
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
-        with nested(Transaction().new_transaction(),
-                    ServerContext().set_context(readonly_transaction=False)
-                    ) as (transaction, _):
+        with Transaction().new_transaction() as transaction, \
+                ServerContext().set_context(readonly_transaction=False):
             RuleExecution = Pool().get('rule_engine.log')
             rule_execution = RuleExecution()
             rule_execution.rule = self.id

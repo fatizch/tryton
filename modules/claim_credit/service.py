@@ -12,6 +12,7 @@ __all__ = [
 
 
 class ClaimService:
+    __metaclass__ = PoolMeta
     __name__ = 'claim.service'
 
     is_loan = fields.Function(

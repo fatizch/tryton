@@ -12,6 +12,7 @@ __all__ = [
 
 
 class Configuration:
+    __metaclass__ = PoolMeta
     __name__ = 'account.configuration'
 
     default_customer_payment_term = fields.Many2One(

@@ -14,6 +14,7 @@ __all__ = [
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     health_complement = fields.One2Many('health.party_complement', 'party',
@@ -66,6 +67,7 @@ class HealthPartyComplement(model._RevisionMixin, model.CoogSQL,
 
 
 class PartyReplace:
+    __metaclass__ = PoolMeta
     __name__ = 'party.replace'
 
     @classmethod

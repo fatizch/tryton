@@ -151,6 +151,7 @@ class Contract(CoogProcessFramework):
 
 
 class ContractOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     status_selection = fields.Function(

@@ -11,6 +11,7 @@ __all__ = [
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     dunning_procedure = fields.Many2One('account.dunning.procedure',

@@ -14,6 +14,7 @@ __all__ = [
 
 
 class MoveLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move.line'
 
     broker_fee_invoice_line = fields.Many2One('account.invoice.line',
@@ -31,6 +32,7 @@ class MoveLine:
 
 
 class Fee:
+    __metaclass__ = PoolMeta
     __name__ = 'account.fee'
 
     broker_fee = fields.Boolean('Broker Fee')

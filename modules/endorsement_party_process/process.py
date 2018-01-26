@@ -96,6 +96,7 @@ class EndorsementPartyStartProcess(ProcessFinder):
 
 
 class EndorsementFindProcess:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start.find_process'
 
     @classmethod
@@ -105,6 +106,7 @@ class EndorsementFindProcess:
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     @classmethod

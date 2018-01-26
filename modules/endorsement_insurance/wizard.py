@@ -1308,6 +1308,7 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
 
 
 class ManageOptions:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.manage_options'
 
     def calculate_possible_parents(self):
@@ -1440,6 +1441,7 @@ class ManageOptions:
 
 
 class OptionDisplayer:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.manage_options.option_displayer'
 
     @property
@@ -1863,6 +1865,7 @@ class ManageExclusionsDisplayer(model.CoogView):
 
 
 class VoidContract:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.void'
 
     def step_update(self):
@@ -1891,6 +1894,7 @@ class VoidContract:
 
 
 class StartEndorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start'
 
     new_covered_element = StateView('contract.covered_element.new',

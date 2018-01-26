@@ -16,6 +16,7 @@ __all__ = [
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     ssn_no_key = fields.Function(fields.Char('SSN', size=13),

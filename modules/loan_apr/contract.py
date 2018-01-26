@@ -21,6 +21,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     @classmethod
@@ -87,6 +88,7 @@ class Contract:
 
 
 class LoanShare:
+    __metaclass__ = PoolMeta
     __name__ = 'loan.share'
 
     average_premium_rate = fields.Function(

@@ -13,6 +13,7 @@ __all__ = [
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     orias = fields.Function(
@@ -22,6 +23,7 @@ class Party:
 
 
 class PartyIdentifier:
+    __metaclass__ = PoolMeta
     __name__ = 'party.identifier'
 
     @classmethod

@@ -14,6 +14,7 @@ __all__ = [
 
 
 class Process:
+    __metaclass__ = PoolMeta
     __name__ = 'process'
 
     @classmethod
@@ -24,6 +25,7 @@ class Process:
 
 
 class EndorsementFindProcess:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start.find_process'
 
     @fields.depends('contracts', 'model', 'good_process')
@@ -62,6 +64,7 @@ class EndorsementFindProcess:
 
 
 class EndorsementStartProcess:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start_process'
 
     @classmethod

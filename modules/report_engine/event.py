@@ -38,6 +38,7 @@ class EventTypeActionReportTemplate(model.CoogSQL, model.CoogView):
 
 
 class EventTypeAction:
+    __metaclass__ = PoolMeta
     __name__ = 'event.type.action'
 
     report_templates = fields.Many2Many('event.type.action-report.template',

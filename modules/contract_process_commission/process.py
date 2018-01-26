@@ -12,6 +12,7 @@ __all__ = [
 
 
 class ContractSubscribe:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.subscribe'
 
     def init_main_object_from_process(self, contract, process_param):

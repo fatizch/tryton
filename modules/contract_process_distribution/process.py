@@ -14,6 +14,7 @@ __all__ = [
 
 
 class ContractSubscribeFindProcess:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.subscribe.find_process'
 
     distributor = fields.Many2One('distribution.network', 'Distributor',
@@ -66,6 +67,7 @@ class ContractSubscribeFindProcess:
 
 
 class ContractSubscribe:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.subscribe'
 
     def init_main_object_from_process(self, obj, process_param):

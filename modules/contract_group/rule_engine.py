@@ -11,6 +11,7 @@ __all__ = [
 
 
 class RuleEngineRuntime:
+    __metaclass__ = PoolMeta
     __name__ = 'rule_engine.runtime'
 
     @classmethod

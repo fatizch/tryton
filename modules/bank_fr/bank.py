@@ -16,6 +16,7 @@ __all__ = [
 
 
 class Bank:
+    __metaclass__ = PoolMeta
     __name__ = 'bank'
 
     agencies = fields.One2Many('bank.agency', 'bank', 'Agencies',
@@ -80,6 +81,7 @@ class Agency(model.CoogSQL, model.CoogView):
 
 
 class BankAccount:
+    __metaclass__ = PoolMeta
     __name__ = 'bank.account'
 
     @classmethod

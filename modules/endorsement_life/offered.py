@@ -15,6 +15,7 @@ __all__ = [
 
 
 class EndorsementPart:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.part'
 
     beneficiary_fields = fields.One2Many(

@@ -18,6 +18,7 @@ __metaclass__ = PoolMeta
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     @classmethod
@@ -76,6 +77,7 @@ class DisplayContractSetPremium(Wizard):
 
 
 class ContractSet:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.set'
 
     def invoice_contracts_to_end_date(self):

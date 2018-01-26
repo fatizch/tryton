@@ -5,6 +5,7 @@ import pydot
 import inspect
 import ast
 import json
+import types
 from unidecode import unidecode
 
 from sql import Literal, Table
@@ -699,7 +700,7 @@ class ProcessAction(ModelSQL, ModelView):
                     self.on_model.model, target.__name__))
         # Test if classmethod or not
         method = getattr(target.__class__, self.method_name)
-        if not hasattr(method, 'im_self') or method.im_self:
+        if model.is_class_or_dual_method(method):
             target = [target]
         call_method(method, target, self.parameters)
 

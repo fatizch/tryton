@@ -57,6 +57,7 @@ FREQUENCIES = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     block_invoicing_until = fields.Date('Block Invoicing Until', readonly=True,
@@ -1356,6 +1357,7 @@ class Contract:
 
 
 class ContractFee:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.fee'
 
     active = fields.Boolean('Active')
@@ -1386,6 +1388,7 @@ class ContractFee:
 
 
 class ContractOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     @classmethod
@@ -1428,6 +1431,7 @@ class ContractOption:
 
 
 class ExtraPremium:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option.extra_premium'
 
     active = fields.Boolean('Active')
@@ -1774,6 +1778,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
 
 
 class Premium:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.premium'
 
     account = fields.Many2One('account.account', 'Account', required=True,
@@ -2042,6 +2047,7 @@ class InvoiceContract(Wizard):
 
 
 class DisplayContractPremium:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.premium.display'
 
     @classmethod
@@ -2054,6 +2060,7 @@ class DisplayContractPremium:
 
 
 class ContractSubStatus:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.sub_status'
 
     hold_billing = fields.Boolean('Hold Billing', depends=['status'],

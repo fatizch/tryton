@@ -363,6 +363,7 @@ class ManageBeneficiariesDisplayer(model.CoogView):
 
 
 class StartEndorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start'
 
 

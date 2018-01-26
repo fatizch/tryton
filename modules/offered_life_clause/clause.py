@@ -12,6 +12,7 @@ __all__ = [
 
 
 class Clause:
+    __metaclass__ = PoolMeta
     __name__ = 'clause'
 
     coverages = fields.Many2Many(

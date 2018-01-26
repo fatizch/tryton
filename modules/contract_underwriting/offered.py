@@ -112,6 +112,7 @@ class UnderwritingDecisionUnderwritingDecision(model.CoogSQL, model.CoogView):
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     @classmethod
@@ -122,6 +123,7 @@ class Product:
 
 
 class OptionDescription:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.option.description'
 
     underwriting_rules = fields.One2Many(

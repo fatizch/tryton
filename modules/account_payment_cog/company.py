@@ -8,6 +8,7 @@ __metaclass__ = PoolMeta
 
 
 class Company:
+    __metaclass__ = PoolMeta
     __name__ = 'company.company'
 
     def get_payment_journal(self, currency, kind='manual'):

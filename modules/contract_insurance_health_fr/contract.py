@@ -11,6 +11,7 @@ __all__ = [
 
 
 class CoveredElement:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element'
 
     @classmethod
@@ -24,6 +25,7 @@ class CoveredElement:
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     @classmethod

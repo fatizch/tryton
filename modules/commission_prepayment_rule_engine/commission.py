@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 from decimal import Decimal
-from types import FloatType, IntType
 
 from trytond.pool import PoolMeta
 from trytond.model import Unique
@@ -20,6 +19,7 @@ __metaclass__ = PoolMeta
 
 
 class Plan:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.plan'
 
     prepayment_payment_rule = fields.Many2One(
@@ -48,8 +48,8 @@ class Plan:
             try:
                 for date, percentage in schedule:
                     if (not isinstance(date, datetime.date) or
-                            not isinstance(percentage, FloatType) and
-                            not isinstance(percentage, IntType) and
+                            not isinstance(percentage, float) and
+                            not isinstance(percentage, int) and
                             not isinstance(percentage, Decimal)):
                         self.raise_user_error('invalid_rule_result', schedule)
             except:

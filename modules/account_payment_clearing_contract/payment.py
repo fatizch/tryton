@@ -11,6 +11,7 @@ __all__ = [
 
 
 class Payment:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment'
 
     def create_clearing_move(self, date=None):

@@ -11,6 +11,7 @@ __all__ = [
 
 
 class User:
+    __metaclass__ = PoolMeta
     __name__ = 'res.user'
 
     dist_network = fields.Many2One('distribution.network',

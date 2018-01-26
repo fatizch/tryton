@@ -24,6 +24,7 @@ __all__ = [
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     bank_role = fields.One2Many('bank', 'party', 'Bank', states={
@@ -157,6 +158,7 @@ class SynthesisMenuBankAccoount(model.CoogSQL):
 
 
 class SynthesisMenu:
+    __metaclass__ = PoolMeta
     __name__ = 'party.synthesis.menu'
 
     @classmethod

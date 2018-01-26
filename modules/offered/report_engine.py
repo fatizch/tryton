@@ -15,6 +15,7 @@ __all__ = [
 
 
 class ReportTemplate:
+    __metaclass__ = PoolMeta
     __name__ = 'report.template'
 
     products = fields.Many2Many('report.template-offered.product',

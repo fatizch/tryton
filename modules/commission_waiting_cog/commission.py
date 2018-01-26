@@ -16,6 +16,7 @@ __metaclass__ = PoolMeta
 
 
 class Commission:
+    __metaclass__ = PoolMeta
     __name__ = 'commission'
 
     @classmethod
@@ -30,6 +31,7 @@ class Commission:
 
 
 class Agent:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.agent'
 
     @classmethod
@@ -38,6 +40,7 @@ class Agent:
 
 
 class CreateAgents:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.create_agents'
 
     def new_agent(self, party, plan):
@@ -52,6 +55,7 @@ class CreateAgents:
 
 
 class CreateAgentsAsk:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.create_agents.ask'
 
     waiting_account = fields.Many2One('account.account', 'Waiting Account',

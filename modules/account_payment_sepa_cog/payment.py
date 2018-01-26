@@ -216,6 +216,7 @@ class Mandate(model.CoogSQL, model.CoogView):
 
 
 class Group:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.group'
 
     main_sepa_message = fields.Function(
@@ -453,6 +454,7 @@ class Group:
 
 
 class Payment:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment'
 
     bank_account = fields.Many2One('bank.account', 'Bank Account',
@@ -685,6 +687,7 @@ class Payment:
 
 
 class InvoiceLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice.line'
 
     @classmethod
@@ -694,6 +697,7 @@ class InvoiceLine:
 
 
 class Journal:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.journal'
 
     last_sepa_receivable_payment_creation_date = fields.Date(
@@ -738,6 +742,7 @@ class Journal:
 
 
 class Message:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.sepa.message'
 
     @classmethod
@@ -841,6 +846,7 @@ class MergedPayments(MergedBySepaPartyMixin):
 
 
 class PaymentCreationStart:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.payment_creation.start'
 
     bank_account = fields.Many2One('bank.account', 'Bank Account',
@@ -942,6 +948,7 @@ class PaymentCreationStart:
 
 
 class PaymentCreation:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.creation'
 
     def init_payment(self, payment):

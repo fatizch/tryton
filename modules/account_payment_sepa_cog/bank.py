@@ -14,6 +14,7 @@ __all__ = [
 
 
 class Bank:
+    __metaclass__ = PoolMeta
     __name__ = 'bank'
 
     @classmethod
@@ -23,6 +24,7 @@ class Bank:
 
 
 class BankAccount:
+    __metaclass__ = PoolMeta
     __name__ = 'bank.account'
 
     def objects_using_me_for_party(self, party=None):
@@ -38,6 +40,7 @@ class BankAccount:
 
 class BankAccountNumber:
     'Bank Account Number'
+    __metaclass__ = PoolMeta
     __name__ = 'bank.account.number'
 
     mandates = fields.One2Many('account.payment.sepa.mandate',

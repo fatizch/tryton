@@ -21,6 +21,7 @@ __all__ = [
 
 
 class Dunning:
+    __metaclass__ = PoolMeta
     __name__ = 'account.dunning'
 
     contract = fields.Function(
@@ -148,6 +149,7 @@ class Dunning:
 
 
 class Procedure:
+    __metaclass__ = PoolMeta
     __name__ = 'account.dunning.procedure'
 
     from_payment_date = fields.Boolean('Maturity Date From Payment Date',
@@ -155,6 +157,7 @@ class Procedure:
 
 
 class Level:
+    __metaclass__ = PoolMeta
     __name__ = 'account.dunning.level'
 
     contract_action = fields.Selection([

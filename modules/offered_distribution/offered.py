@@ -11,6 +11,7 @@ __all__ = [
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     com_products = fields.One2Many('distribution.commercial_product',

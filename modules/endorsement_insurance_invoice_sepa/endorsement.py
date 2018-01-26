@@ -11,6 +11,7 @@ __all__ = [
 
 
 class Endorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement'
 
     @classmethod
@@ -39,6 +40,7 @@ class Endorsement:
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     @classmethod

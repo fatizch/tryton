@@ -250,6 +250,7 @@ class EndorsementSet(model.CoogSQL, model.CoogView, Printable):
 
 
 class Endorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement'
 
     endorsement_set = fields.Many2One('endorsement.set', 'Endorsement Set',

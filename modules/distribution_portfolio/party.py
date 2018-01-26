@@ -12,6 +12,7 @@ __all__ = [
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     portfolio = fields.Many2One('distribution.network', 'Portfolio',

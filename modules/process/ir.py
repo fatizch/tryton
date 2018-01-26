@@ -4,7 +4,6 @@ from trytond.pool import PoolMeta
 
 from trytond.modules.coog_core import fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Model',
     ]
@@ -16,6 +15,7 @@ class Model:
         field so we can find which classes are workflow compatible.
     '''
 
+    __metaclass__ = PoolMeta
     __name__ = 'ir.model'
 
     is_workflow = fields.Boolean('Is Workflow')

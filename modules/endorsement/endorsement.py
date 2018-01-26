@@ -125,7 +125,7 @@ def field_mixin(model):
                     else:
                         field_method = getattr(FieldModel,
                             real_field.selection)
-                        if field_method.__self__ is None:
+                        if model.is_class_or_dual_method(field_method):
                             # Classmethod, we can call it
                             key['selection'] = field_method()
                         else:

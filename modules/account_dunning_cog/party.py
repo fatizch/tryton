@@ -12,6 +12,7 @@ __all__ = [
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     dunning_allowed = fields.Function(fields.Boolean(

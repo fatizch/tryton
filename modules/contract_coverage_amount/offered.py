@@ -15,6 +15,7 @@ __all__ = [
 
 
 class OptionDescription:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.option.description'
 
     coverage_amount_rules = fields.One2Many('offered.coverage_amount.rule',

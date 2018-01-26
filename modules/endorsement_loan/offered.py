@@ -21,6 +21,7 @@ __all__ = [
 
 
 class EndorsementDefinition:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.definition'
 
     is_loan = fields.Function(
@@ -42,6 +43,7 @@ class EndorsementDefinition:
 
 
 class EndorsementPart:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.part'
 
     loan_fields = fields.One2Many(

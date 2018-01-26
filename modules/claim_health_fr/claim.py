@@ -12,6 +12,7 @@ __all__ = [
 
 
 class HealthLoss:
+    __metaclass__ = PoolMeta
     __name__ = 'claim.loss.health'
 
     act_coefficient = fields.Numeric('Medical Act Coefficient')
@@ -25,6 +26,7 @@ class HealthLoss:
 
 
 class Claim:
+    __metaclass__ = PoolMeta
     __name__ = 'claim'
 
     slip_code = fields.Char('Slip Code')

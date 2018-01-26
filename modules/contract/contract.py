@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 import json
+import types
 from sql import Null, Window, Literal
 from sql.conditionals import NullIf, Coalesce
 from sql.aggregate import Max, Min
@@ -560,7 +561,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             if not instances:
                 continue
             method = getattr(instances[0].__class__, method_name)
-            if not hasattr(method, 'im_self') or method.im_self:
+            if model.is_class_or_dual_method(method):
                 method(instances)
             else:
                 for instance in instances:

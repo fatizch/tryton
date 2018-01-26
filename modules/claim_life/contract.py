@@ -11,6 +11,7 @@ __all__ = [
 
 
 class ContractOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     def is_item_covered(self, loss):

@@ -12,6 +12,7 @@ __all__ = [
 
 
 class Configuration:
+    __metaclass__ = PoolMeta
     __name__ = 'account.configuration'
 
     broker_bank_transfer_journal = fields.Many2One('account.payment.journal',

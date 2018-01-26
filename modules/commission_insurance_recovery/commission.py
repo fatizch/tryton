@@ -20,6 +20,7 @@ __all__ = [
 
 
 class Plan:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.plan'
 
     commission_recovery = fields.Many2One('commission.plan.recovery_rule',
@@ -73,6 +74,7 @@ class CommissionRecoveryRule(
 
 
 class Commission:
+    __metaclass__ = PoolMeta
     __name__ = 'commission'
 
     is_recovery = fields.Boolean('Is Recovery Commission', readonly=True)
@@ -103,6 +105,7 @@ class Commission:
 
 
 class Agent:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.agent'
 
     @classmethod

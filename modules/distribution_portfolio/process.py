@@ -14,6 +14,7 @@ __all__ = [
 
 
 class ContractSubscribeFindProcess:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.subscribe.find_process'
 
     authorized_distributors = fields.Many2Many('distribution.network', None,

@@ -792,6 +792,7 @@ class ContractOption(Printable):
 
 
 class ContractOptionVersion:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option.version'
 
     @classmethod

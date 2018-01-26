@@ -97,6 +97,7 @@ class Commission(WithExtraDetails):
 
 
 class PlanLines:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.plan.line'
 
     prepayment_formula = fields.Char('Prepayment Formula',
@@ -112,6 +113,7 @@ class PlanLines:
 
 
 class Plan:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.plan'
 
     adjust_prepayment = fields.Boolean('Adjust Prepayment')
@@ -145,6 +147,7 @@ class Plan:
 
 
 class Agent:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.agent'
 
     @classmethod
@@ -301,6 +304,7 @@ class FilterAggregatedCommissions:
 
 class AggregatedCommission:
 
+    __metaclass__ = PoolMeta
     __name__ = 'commission.aggregated'
 
     @classmethod

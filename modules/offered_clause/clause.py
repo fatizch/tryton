@@ -10,6 +10,7 @@ __all__ = [
 
 
 class Clause:
+    __metaclass__ = PoolMeta
     __name__ = 'clause'
 
     products = fields.Many2Many('offered.product-clause', 'clause', 'product',

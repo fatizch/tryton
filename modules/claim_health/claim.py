@@ -87,6 +87,7 @@ class Loss(model.CoogSQL, model.CoogView):
 
 
 class Claim:
+    __metaclass__ = PoolMeta
     __name__ = 'claim'
 
     quote_date = fields.Date('Quote Date')
@@ -94,6 +95,7 @@ class Claim:
 
 
 class ClaimService:
+    __metaclass__ = PoolMeta
     __name__ = 'claim.service'
 
     delivered_amount = fields.Numeric('Delivered Amount', readonly=True,

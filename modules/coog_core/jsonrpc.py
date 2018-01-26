@@ -21,8 +21,11 @@ class PoolObjectEncoder(JSONEncoder):
         simple functions (not nested functions or functions with nested
         functions) and simple classmethods from tryton models.
         """
-        if hasattr(obj, '__metaclass__') and issubclass(obj.__metaclass__,
-                PoolMeta):
+        if isinstance(obj.__class__, PoolMeta) or \
+                obj.__class__.__name__ == 'TranslateModel':
+            # JMO: The ligne above is a workaround for cases, in python3,
+            # where obj is an instance of TranslateModel,
+            # but not of type PoolMeta
             return {'__pool__': True, 'data': str(obj)}
         elif isinstance(obj, types.FunctionType):
             return {'__function__': True, 'data': pickle.dumps(obj)}

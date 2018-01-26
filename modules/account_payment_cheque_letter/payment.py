@@ -23,6 +23,7 @@ __all__ = [
 
 class MergedPayments:
 
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.merged'
 
     formatted_string_amount = fields.Function(
@@ -49,6 +50,7 @@ class MergedPayments:
 
 
 class Payment:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment'
 
     is_cheque_letter = fields.Function(
@@ -118,6 +120,7 @@ class Payment:
 
 
 class Journal:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.journal'
 
     validate_process = fields.Boolean('Validate on processing', states={
@@ -136,6 +139,7 @@ class Journal:
 
 
 class Group:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.group'
 
     @classmethod
@@ -201,6 +205,7 @@ class Group:
 
 
 class ProcessPaymentStart:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.process.start'
 
     is_cheque_letter = fields.Boolean('Cheque letter payment',
@@ -224,6 +229,7 @@ class ProcessPaymentStart:
 
 
 class ProcessPayment:
+    __metaclass__ = PoolMeta
     __name__ = 'account.payment.process'
 
     process_with_cheque_letter = StateAction(

@@ -17,6 +17,7 @@ __all__ = [
 
 
 class Agent:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.agent'
 
     wholesale_broker = fields.Boolean('Wholesale Broker',
@@ -35,6 +36,7 @@ class Agent:
 
 
 class Commission:
+    __metaclass__ = PoolMeta
     __name__ = 'commission'
 
     @fields.depends('agent')
@@ -86,6 +88,7 @@ class Commission:
 
 
 class CreateInvoicePrincipal:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.create_invoice_principal'
 
     @classmethod

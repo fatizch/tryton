@@ -21,6 +21,7 @@ __metaclass__ = PoolMeta
 
 
 class InvoiceLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice.line'
 
     broker_fee_lines = fields.One2Many('account.move.line',
@@ -154,6 +155,7 @@ class InvoiceLine:
 
 
 class Invoice:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice'
 
     @classmethod

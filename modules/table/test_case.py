@@ -15,6 +15,7 @@ __all__ = [
 
 class TestCaseModel:
     __name__ = 'ir.test_case'
+    __metaclass__ = PoolMeta
 
     @classmethod
     def create_table_from_filename(cls, filename):

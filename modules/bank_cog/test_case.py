@@ -16,6 +16,7 @@ __all__ = [
 
 class TestCaseModel:
     __name__ = 'ir.test_case'
+    __metaclass__ = PoolMeta
 
     number_of_banks = fields.Integer('Number of Banks')
 

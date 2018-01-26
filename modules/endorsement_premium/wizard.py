@@ -136,6 +136,7 @@ class ContractPreviewPremium(model.CoogView):
 
 
 class StartEndorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start'
 
     preview_contract_premiums = StateView(

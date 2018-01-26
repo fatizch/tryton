@@ -10,6 +10,7 @@ __all__ = [
 
 
 class ReportTemplate:
+    __metaclass__ = PoolMeta
     __name__ = 'report.template'
 
     @classmethod

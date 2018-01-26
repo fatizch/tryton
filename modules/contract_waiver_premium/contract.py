@@ -13,6 +13,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     with_waiver_of_premium = fields.Function(
@@ -135,6 +136,7 @@ class Contract:
 
 
 class ContractOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     waivers = fields.One2Many('contract.waiver_premium-contract.option',

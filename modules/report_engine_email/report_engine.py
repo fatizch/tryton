@@ -71,6 +71,7 @@ class TemplateTemplateRelation(model.CoogSQL, model.CoogView):
 
 
 class ReportGenerate:
+    __metaclass__ = PoolMeta
     __name__ = 'report.generate'
 
     @classmethod
@@ -186,6 +187,7 @@ class ReportGenerate:
 @model.genshi_evaluated_fields('email_sender', 'email_dest', 'email_cc',
     'email_bcc', 'email_subject', 'email_body')
 class ReportTemplate:
+    __metaclass__ = PoolMeta
     __name__ = 'report.template'
 
     email_sender = fields.Char('Email Sender', states=EMAIL_REQUIRED_STATES,
@@ -321,6 +323,7 @@ class ReportGenerateEmail(Report):
 
 
 class ReportCreateSelectTemplate:
+    __metaclass__ = PoolMeta
     __name__ = 'report.create.select_template'
 
     recipient_email = fields.Many2One('party.contact_mechanism',
@@ -345,6 +348,7 @@ class ReportCreateSelectTemplate:
 
 
 class ReportCreate:
+    __metaclass__ = PoolMeta
     __name__ = 'report.create'
 
     open_email = StateAction('report_engine_email.generate_email')

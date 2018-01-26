@@ -15,6 +15,7 @@ __all__ = [
 
 class LossDescription:
 
+    __metaclass__ = PoolMeta
     __name__ = 'benefit.loss.description'
 
     @classmethod

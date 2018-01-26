@@ -17,6 +17,7 @@ __all__ = [
 
 
 class Invoice:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice'
 
     @classmethod
@@ -62,6 +63,7 @@ class Invoice:
 
 
 class InvoiceLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.invoice.line'
 
     claim_details = fields.One2Many('account.invoice.line.claim_detail',

@@ -11,6 +11,7 @@ __all__ = [
 
 
 class Insurer:
+    __metaclass__ = PoolMeta
     __name__ = 'insurer'
 
     waiting_account = fields.Many2One('account.account', 'Waiting Account',

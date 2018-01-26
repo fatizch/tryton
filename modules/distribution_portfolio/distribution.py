@@ -16,6 +16,7 @@ __all__ = [
 
 
 class DistributionNetwork:
+    __metaclass__ = PoolMeta
     __name__ = 'distribution.network'
 
     portfolio_size = fields.Function(

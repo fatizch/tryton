@@ -15,6 +15,7 @@ __all__ = [
 
 
 class EventTypeAction:
+    __metaclass__ = PoolMeta
     __name__ = 'event.type.action'
 
     def get_contracts_from_object(self, object_):
@@ -50,6 +51,7 @@ class EventTypeAction:
 
 
 class EventLog:
+    __metaclass__ = PoolMeta
     __name__ = 'event.log'
 
     @classmethod

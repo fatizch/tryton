@@ -45,6 +45,7 @@ __all__ = [
 
 
 class ExtraPremiumDisplayer:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.extra_premium.displayer'
 
     is_loan = fields.Boolean('Is Loan', readonly=True, states={
@@ -59,6 +60,7 @@ class ExtraPremiumDisplayer:
 
 
 class ManageExtraPremium:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.manage_extra_premium'
 
     @classmethod
@@ -84,6 +86,7 @@ class ManageExtraPremium:
 
 
 class NewExtraPremium:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.new_extra_premium'
 
     is_loan = fields.Boolean('Is Loan', readonly=True, states={
@@ -98,6 +101,7 @@ class NewExtraPremium:
 
 
 class ManageOptions:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.manage_options'
 
     def _update_added(self, new_option, parent, existing_options, per_id):
@@ -129,6 +133,7 @@ class ManageOptions:
 
 
 class OptionDisplayer:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.manage_options.option_displayer'
 
     @classmethod
@@ -1163,6 +1168,7 @@ class SharePerLoan(model.CoogView):
 
 
 class SelectEndorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start.select_endorsement'
 
     @fields.depends('endorsement_definition', 'effective_date', 'endorsement',
@@ -1324,6 +1330,7 @@ class ContractPreview(model.CoogView):
 
 
 class StartEndorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start'
 
     change_loan_data = StateView('endorsement.loan.change',

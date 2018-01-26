@@ -7,6 +7,7 @@ __all__ = ['OptionDescription']
 
 
 class OptionDescription:
+    __metaclass__ = PoolMeta
     __name__ = 'offered.option.description'
 
     @classmethod

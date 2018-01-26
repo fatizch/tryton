@@ -15,6 +15,7 @@ __all__ = [
 
 
 class Zip:
+    __metaclass__ = PoolMeta
     __name__ = 'country.zip'
 
     line5 = fields.Char('Line 5', select=True)

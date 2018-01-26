@@ -19,6 +19,7 @@ __all__ = [
 
 
 class Process:
+    __metaclass__ = PoolMeta
     __name__ = 'process'
 
     @classmethod
@@ -28,6 +29,7 @@ class Process:
 
 
 class ProcessAction:
+    __metaclass__ = PoolMeta
     __name__ = 'process.action'
 
     @classmethod
@@ -206,6 +208,7 @@ class ContractSubscribe(ProcessFinder):
 
 
 class ProcessResume:
+    __metaclass__ = PoolMeta
     __name__ = 'process.resume'
 
     def do_resume(self, action):

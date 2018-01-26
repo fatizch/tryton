@@ -20,6 +20,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     def check_coverage_amount(self):
@@ -28,6 +29,7 @@ class Contract:
 
 
 class CoveredElement:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element'
 
     def check_coverage_amount(self):
@@ -36,6 +38,7 @@ class CoveredElement:
 
 
 class ContractOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     current_coverage_amount = fields.Function(

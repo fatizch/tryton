@@ -90,6 +90,7 @@ class StartFullContractRevision(EndorsementWizardStepMixin):
 
 
 class StartEndorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start'
 
     full_contract_revision_action = model.VoidStateAction()

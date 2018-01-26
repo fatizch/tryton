@@ -13,6 +13,7 @@ __all__ = [
 class ContractSubscribeFindProcess:
     'Contract Subscribe Find Process'
 
+    __metaclass__ = PoolMeta
     __name__ = 'contract.subscribe.find_process'
 
     @classmethod
@@ -27,6 +28,7 @@ class ContractSubscribeFindProcess:
 class ContractSubscribe:
     'Contract Subscribe'
 
+    __metaclass__ = PoolMeta
     __name__ = 'contract.subscribe'
 
     def init_main_object_from_process(self, obj, process_param):

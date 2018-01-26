@@ -9,6 +9,7 @@ __all__ = [
 
 
 class ReportTemplate:
+    __metaclass__ = PoolMeta
     __name__ = 'report.template'
 
     def get_possible_kinds(self):

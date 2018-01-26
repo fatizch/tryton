@@ -36,6 +36,7 @@ ANNUITY_FREQUENCIES = [
 
 
 class Benefit:
+    __metaclass__ = PoolMeta
     __name__ = 'benefit'
 
     indemnification_kind = fields.Selection(INDEMNIFICATION_KIND,

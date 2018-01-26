@@ -166,7 +166,7 @@ class ExportTestSelection(model.CoogSQL, CompanyValueMixin):
     multivalue_selection = fields.Char('Multivalue Selection')
 
 
-class ExportTestTarget2:
+class ExportTestTarget2(model.CoogSQL):
     'no doc'
     __name__ = 'coog_core.export_test_target'
     _func_key = 'char'
@@ -184,7 +184,7 @@ class ExportTestTarget2:
         return set(['many2one'])
 
 
-class ExportTestTargetSlave2:
+class ExportTestTargetSlave2(model.CoogSQL):
     'no doc'
     __name__ = 'coog_core.export_test_target_slave'
     _func_key = 'char'

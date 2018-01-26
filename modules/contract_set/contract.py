@@ -254,6 +254,7 @@ class ContractSet(model.CoogSQL, model.CoogView, Printable):
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
     contract_set = fields.Many2One('contract.set', 'Contract Set',
         ondelete='SET NULL', states=_STATES, depends=_DEPENDS, select=True)
@@ -322,6 +323,7 @@ class ContractSetDecline(model.CoogWizard):
 
 
 class ReportTemplate:
+    __metaclass__ = PoolMeta
     __name__ = 'report.template'
 
     def get_possible_kinds(self):

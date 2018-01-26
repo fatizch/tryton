@@ -10,6 +10,7 @@ __all__ = [
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = 'product.product'
 
     capped_amount = fields.Numeric('Capped amount')

@@ -10,6 +10,7 @@ __all__ = [
 
 
 class Claim:
+    __metaclass__ = PoolMeta
     __name__ = 'claim'
 
     indemnifications = fields.Function(

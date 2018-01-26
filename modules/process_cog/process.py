@@ -1468,6 +1468,7 @@ class ProcessResume(Wizard):
 
 
 class GenerateGraph:
+    __metaclass__ = PoolMeta
     __name__ = 'process.generate_graph.report'
 
     @classmethod

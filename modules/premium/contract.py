@@ -31,6 +31,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     all_premiums = fields.One2Many('contract.premium', 'main_contract',
@@ -284,6 +285,7 @@ class Contract:
 
 
 class ContractOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     premiums = fields.One2Many('contract.premium', 'option', 'Premiums',

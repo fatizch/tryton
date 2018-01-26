@@ -4,7 +4,6 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import fields
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Attachment',
@@ -13,6 +12,7 @@ __all__ = [
 
 class Attachment:
     __name__ = 'ir.attachment'
+    __metaclass__ = PoolMeta
 
     document_desc = fields.Many2One('document.description',
         'Document Description', ondelete='SET NULL')

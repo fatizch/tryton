@@ -138,6 +138,7 @@ class SynthesisMenuMoveLine(model.CoogSQL):
 
 
 class SynthesisMenu:
+    __metaclass__ = PoolMeta
     __name__ = 'party.synthesis.menu'
 
     @classmethod

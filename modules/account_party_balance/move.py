@@ -24,6 +24,7 @@ _FIELDS = ['all_lines', 'lines', 'hide_reconciled_lines',
 
 
 class MoveLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move.line'
 
     bank_account = fields.Function(

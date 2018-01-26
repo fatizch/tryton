@@ -14,6 +14,7 @@ _all_ = [
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     extra_data = fields.Dict('extra_data', 'Extra Data',

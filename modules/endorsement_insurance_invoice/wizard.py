@@ -33,6 +33,7 @@ __all__ = [
 
 
 class BasicPreview:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start.preview_changes'
 
     previous_total_invoice_amount = fields.Numeric(
@@ -540,6 +541,7 @@ class ContractDisplayer(model.CoogView):
 
 
 class NewCoveredElement:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element.new'
 
     @classmethod
@@ -564,6 +566,7 @@ class NewCoveredElement:
 class NewOptionOnCoveredElement:
     'New Covered Element Option'
 
+    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element.add_option'
 
     @classmethod
@@ -586,6 +589,7 @@ class NewOptionOnCoveredElement:
 
 
 class RemoveOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element.option.remove'
 
     @classmethod
@@ -608,6 +612,7 @@ class RemoveOption:
 
 
 class ModifyCoveredElementInformation:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element.modify'
 
     @classmethod
@@ -632,6 +637,7 @@ class ModifyCoveredElementInformation:
 
 
 class ManageExtraPremium:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.manage_extra_premium'
 
     @classmethod
@@ -654,6 +660,7 @@ class ManageExtraPremium:
 
 
 class ChangeContractStartDate:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.change_start_date'
 
     @classmethod
@@ -676,6 +683,7 @@ class ChangeContractStartDate:
 
 
 class ChangeContractExtraData:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.change_extra_data'
 
     @classmethod
@@ -700,6 +708,7 @@ class ChangeContractExtraData:
 class TerminateContract:
     'Terminate Contract'
 
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.terminate'
 
     @classmethod
@@ -724,6 +733,7 @@ class TerminateContract:
 class VoidContract:
     'Void Contract'
 
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.void'
 
     @classmethod
@@ -746,6 +756,7 @@ class VoidContract:
 
 
 class ChangeContractSubscriber:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.subscriber_change'
 
     @classmethod
@@ -768,6 +779,7 @@ class ChangeContractSubscriber:
 
 
 class ManageOptions:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.manage_options'
 
     @classmethod
@@ -790,6 +802,7 @@ class ManageOptions:
 
 
 class StartEndorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.start'
 
 

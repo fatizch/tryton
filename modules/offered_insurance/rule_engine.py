@@ -66,6 +66,7 @@ class RuleEngineExtraData(model.CoogSQL):
 
 
 class RuleEngine:
+    __metaclass__ = PoolMeta
     __name__ = 'rule_engine'
 
     extra_data_used = fields.Many2Many(
@@ -164,6 +165,7 @@ class RuleEngine:
 
 
 class RuleEngineRuntime:
+    __metaclass__ = PoolMeta
     __name__ = 'rule_engine.runtime'
 
     @classmethod

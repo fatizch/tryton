@@ -21,6 +21,7 @@ __all__ = [
 
 
 class ActivationHistory:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.activation_history'
 
     final_renewal = fields.Boolean('Final Renewal', readonly=True)
@@ -35,6 +36,7 @@ class ActivationHistory:
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     is_renewable = fields.Function(

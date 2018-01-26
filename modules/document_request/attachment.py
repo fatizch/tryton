@@ -16,6 +16,7 @@ BLOCKING_STATUSES = ['invalid']
 class Attachment:
     'Attachment'
 
+    __metaclass__ = PoolMeta
     __name__ = 'ir.attachment'
 
     status = fields.Selection('status_get', 'Status', required=True)

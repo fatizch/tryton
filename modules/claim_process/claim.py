@@ -127,6 +127,7 @@ class Claim(CoogProcessFramework):
 
 
 class Process:
+    __metaclass__ = PoolMeta
     __name__ = 'process'
 
     for_loss_descs = fields.Many2Many('process-benefit.loss.description',
@@ -403,6 +404,7 @@ class ClaimDeclare(ProcessFinder):
 class CloseClaim:
     'Clase Claims'
 
+    __metaclass__ = PoolMeta
     __name__ = 'claim.close'
 
     process = StateAction('claim_process.declaration_process_launcher')

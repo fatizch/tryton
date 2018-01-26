@@ -43,9 +43,6 @@ def launch_function(module_name, method_name):
 
 
 def prepare_test(*_args):
-    for arg in _args:
-        if not isinstance(arg, str) or isinstance(arg, unicode):
-            raise Exception('Parameters must be strings, not %s' % type(arg))
 
     def decorator(f, forced=False):
         def wrap(*args, **kwargs):

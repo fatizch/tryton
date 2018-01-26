@@ -40,6 +40,7 @@ __all__ = [
 
 
 class FiscalYear:
+    __metaclass__ = PoolMeta
     __name__ = 'account.fiscalyear'
 
     export_moves = fields.Boolean('Export Moves',
@@ -69,6 +70,7 @@ class FiscalYear:
 
 
 class Journal:
+    __metaclass__ = PoolMeta
     __name__ = 'account.journal'
     aggregate = fields.Boolean('Aggregate')
     aggregate_posting = fields.Boolean('Aggregate Posting',
@@ -83,6 +85,7 @@ class Journal:
 
 
 class Move:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move'
     snapshot = fields.Many2One('account.move.snapshot', 'Snapshot',
         select=True, readonly=True)
@@ -134,6 +137,7 @@ class Move:
 
 
 class Line:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move.line'
     snapshot = fields.Function(fields.Many2One('account.move.snapshot',
             'Snapshot'), 'get_move_field', searcher='search_move_field')

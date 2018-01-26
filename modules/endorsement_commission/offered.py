@@ -10,6 +10,7 @@ __all__ = [
 
 
 class EndorsementPart:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement.part'
 
     @classmethod

@@ -10,6 +10,7 @@ __metaclass__ = PoolMeta
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     @classmethod
@@ -21,6 +22,7 @@ class Contract:
 
 
 class ContractOption:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
     def agent_plans_used(self):

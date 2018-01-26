@@ -16,6 +16,7 @@ __all__ = [
 
 
 class IndemnificationValidateElement:
+    __metaclass__ = PoolMeta
     __name__ = 'claim.indemnification.assistant.validate.element'
 
     covered_person = fields.Many2One(
@@ -34,6 +35,7 @@ class IndemnificationValidateElement:
 
 
 class IndemnificationControlElement:
+    __metaclass__ = PoolMeta
     __name__ = 'claim.indemnification.assistant.control.element'
 
     covered_person = fields.Many2One(
@@ -53,6 +55,7 @@ class IndemnificationControlElement:
 
 class IndemnificationDefinition:
     'Indemnification Definition'
+    __metaclass__ = PoolMeta
     __name__ = 'claim.indemnification_definition'
 
     beneficiary_extra_data = fields.Dict('extra_data',
@@ -80,6 +83,7 @@ class IndemnificationDefinition:
 
 
 class CreateIndemnification:
+    __metaclass__ = PoolMeta
     __name__ = 'claim.create_indemnification'
 
     def default_definition(self, name):
@@ -110,6 +114,7 @@ class CreateIndemnification:
 
 
 class SelectService:
+    __metaclass__ = PoolMeta
     __name__ = 'claim.select_service'
 
     covered_person = fields.Many2One('party.party', 'Covered Person',

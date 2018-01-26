@@ -15,6 +15,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     allowed_portfolios = fields.Function(
@@ -38,6 +39,7 @@ class Contract:
 
 
 class CoveredElement:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element'
 
     allowed_portfolios = fields.Function(
@@ -72,6 +74,7 @@ class CoveredElement:
 
 
 class Beneficiary:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.option.beneficiary'
 
     allowed_portfolios = fields.Function(
@@ -101,6 +104,7 @@ class Beneficiary:
 
 
 class ContractBillingInformation:
+    __metaclass__ = PoolMeta
     __name__ = 'contract.billing_information'
 
     allowed_portfolios = fields.Function(

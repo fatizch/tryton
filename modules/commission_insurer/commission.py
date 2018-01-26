@@ -26,6 +26,7 @@ __all__ = [
 
 
 class Agent:
+    __metaclass__ = PoolMeta
     __name__ = 'commission.agent'
 
     insurer = fields.Many2One('insurer', 'Insurer', ondelete='RESTRICT',
@@ -67,6 +68,7 @@ class Agent:
 
 
 class Commission:
+    __metaclass__ = PoolMeta
     __name__ = 'commission'
 
     @classmethod

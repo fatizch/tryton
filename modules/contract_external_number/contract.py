@@ -14,6 +14,7 @@ __all__ = [
 
 
 class Contract:
+    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
     external_number = fields.Char('External Number',

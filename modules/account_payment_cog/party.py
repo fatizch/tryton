@@ -24,6 +24,7 @@ __all__ = [
 
 
 class Party:
+    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     block_payable_payments = fields.Boolean('Block Payments')
@@ -121,6 +122,7 @@ class SynthesisMenuPayment(model.CoogSQL):
 
 
 class SynthesisMenu:
+    __metaclass__ = PoolMeta
     __name__ = 'party.synthesis.menu'
 
     @classmethod

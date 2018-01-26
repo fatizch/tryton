@@ -16,6 +16,7 @@ __all__ = [
 
 
 class Event:
+    __metaclass__ = PoolMeta
     __name__ = 'event'
 
     @classmethod
@@ -30,6 +31,7 @@ class Event:
 
 
 class EventLog:
+    __metaclass__ = PoolMeta
     __name__ = 'event.log'
 
     @classmethod
@@ -68,6 +70,7 @@ class EventLog:
 
 
 class EventTypeAction:
+    __metaclass__ = PoolMeta
     __name__ = 'event.type.action'
 
     @classmethod

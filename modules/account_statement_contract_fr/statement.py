@@ -15,6 +15,7 @@ __all__ = [
 
 
 class Line:
+    __metaclass__ = PoolMeta
     __name__ = 'account.statement.line'
 
     bank = fields.Many2One('bank', 'Bank',
@@ -55,6 +56,7 @@ class Statement:
 
 
 class PaymentInformations:
+    __metaclass__ = PoolMeta
     __name__ = 'account_statement.payment_informations'
 
     bank = fields.Many2One('bank', 'Bank', states={

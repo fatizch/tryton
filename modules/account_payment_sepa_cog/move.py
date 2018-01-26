@@ -10,6 +10,7 @@ __all__ = [
 
 
 class MoveLine:
+    __metaclass__ = PoolMeta
     __name__ = 'account.move.line'
 
     def new_payment(self, journal, kind, amount):

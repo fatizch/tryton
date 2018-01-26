@@ -12,6 +12,7 @@ __all__ = [
 
 class TestCaseModel:
     __name__ = 'ir.test_case'
+    __metaclass__ = PoolMeta
 
     currency = fields.Many2One('currency.currency', 'Main Currency',
         ondelete='RESTRICT')
