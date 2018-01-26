@@ -5,6 +5,7 @@ from decimal import Decimal
 
 from trytond.pool import Pool
 from trytond.model import ModelSingleton
+from trytond.cache import Cache
 from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
 
 from trytond.modules.coog_core import model, fields
@@ -29,6 +30,8 @@ class CommutationManager(ModelSingleton, model.CoogSQL, model.CoogView):
     lines = fields.One2Many('table.commutation_manager.line', 'manager',
         'Lines', delete_missing=True)
 
+    _table_per_parameters = Cache('commutation_table_per_parameters')
+
     @classmethod
     def get_life_commutation(cls, table_code, rate, frequency, age):
         Cell = Pool().get('table.cell')
@@ -37,17 +40,39 @@ class CommutationManager(ModelSingleton, model.CoogSQL, model.CoogView):
 
     @classmethod
     def find_table(cls, base_code, rate, frequency):
+        Table = Pool().get('table')
+        table = cls._table_per_parameters.get((base_code, rate, frequency), -1)
+        if table != -1:
+            return Table(table)
+        found = False
         manager = cls.get_singleton()
-        if not manager:
-            return None
+        assert manager, 'Undefined commutation manager'
         for line in manager.lines:
-            if line.base_table.code != base_code:
-                continue
-            if line.rate != rate:
-                continue
-            if line.frequency != frequency:
-                continue
-            return line.data_table
+            cls._table_per_parameters.set(
+                (line.base_table.code, line.rate, line.frequency),
+                line.data_table.id)
+            if found is False and ((base_code, rate, frequency) ==
+                    (line.base_table.code, line.rate, line.frequency)):
+                found = line.data_table
+        if found is False:
+            raise Exception('Unknown commutation')
+        return found
+
+    @classmethod
+    def create(cls, vlist):
+        res = super(CommutationManager, cls).create(vlist)
+        cls._table_per_parameters.clear()
+        return res
+
+    @classmethod
+    def write(cls, *args):
+        super(CommutationManager, cls).write(*args)
+        cls._table_per_parameters.clear()
+
+    @classmethod
+    def delete(cls, managers):
+        super(CommutationManager, cls).delete(managers)
+        cls._table_per_parameters.clear()
 
 
 class CommutationManagerLine(model.CoogSQL, model.CoogView):
