@@ -527,9 +527,9 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             }
         reporting_data.update(context_)
         context_['reporting_data'] = reporting_data
-        if self.parameters:
-            reporting_data.update({x.name_in_template: None
-                    for x in self.parameters})
+        for x in self.parameters:
+            if x.name_in_template not in reporting_data:
+                reporting_data[x.name_in_template] = None
         functional_date = context_.get('functional_date')
         if functional_date and functional_date != utils.today():
             with Transaction().set_context(

@@ -1,6 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import logging
+import datetime
+
+from decimal import Decimal
 from sql import Literal, Null
 from itertools import groupby
 
@@ -56,3 +59,31 @@ class ReportProductionRequestTreatmentBatch(batch.BatchRoot):
         reports, attachments = ReportProductionRequest.treat_requests(objects)
         cls.logger.info('Produced %s reports, and created %s attachments' %
             (len(reports), len(attachments)))
+
+
+class ReportRequestCreationBatch(batch.BatchRoot):
+    'Report Request Creation Batch'
+    @classmethod
+    def execute(cls, objects, ids, template, **template_args):
+        pool = Pool()
+        Template = pool.get('report.template')
+        Request = pool.get('report_production.request')
+        template, = Template.search([('code', '=', template)])
+        context = {}
+        for param in template.parameters:
+            if param.name in template_args:
+                key = param.name_in_template
+                if param.type_ == 'date':
+                    context[key] = datetime.datetime.strptime(
+                        template_args[param.name], '%Y-%m-%d').date()
+                elif param.type_ == 'boolean':
+                    context[key] = template_args[param.name] not in (
+                        'False', '0', 'false')
+                elif param.type_ == 'integer':
+                    context[key] = int(template_args[param.name])
+                elif param.type_ == 'numeric':
+                    context[key] = Decimal(template_args[param.name])
+                else:
+                    context[key] = template_args[param.name]
+        Request.create_report_production_requests(
+            template, objects, context)

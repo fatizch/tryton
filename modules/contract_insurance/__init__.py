@@ -8,6 +8,7 @@ import party
 import report_engine
 import wizard
 import rule_engine
+import batch
 
 from trytond.modules.coog_core import expand_tree
 CoveredElementTreeExpansion = expand_tree('contract.covered_element')
@@ -40,6 +41,7 @@ def register():
         wizard.ExclusionSelector,
         wizard.ExclusionDisplay,
         rule_engine.RuleEngineRuntime,
+        batch.ContractDocumentRequestCreation,
         module='contract_insurance', type_='model')
 
     Pool.register(
