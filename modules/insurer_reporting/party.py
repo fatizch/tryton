@@ -27,4 +27,4 @@ class Insurer:
 
     stock_reports = fields.Many2Many('insurer-report.template', 'insurer',
         'report_template', 'Stock Reports', domain=[
-            ('kind', 'like', 'insurer_report_%')])
+            ('kind', 'like', '%insurer_report%')])

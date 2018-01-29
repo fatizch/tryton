@@ -25,3 +25,9 @@ class InsurerReportClaimBatch(InsurerReportContractBatch):
     def get_insurers(cls):
         return Pool().get('insurer').search(
             [('claim_stock_reports', '!=', None)])
+
+    @classmethod
+    def get_templates_to_print(cls, objects):
+        return [tmpl for insurer in objects
+            for tmpl in insurer.claim_stock_reports
+            if tmpl.kind == 'claim_insurer_report']

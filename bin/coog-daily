@@ -180,6 +180,13 @@ coog_daily_main() {
                 --possible_days="$LAST_DAY"
             )
             [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
+            (
+            _coog_daily_check_modules "claim_reporting" &&                  \
+                coog_chain_main claim_reporting claim_stock     \
+                --treatment_date="$TODAY_DATE"                      \
+                --possible_days="$LAST_DAY"
+            )
+            [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
         fi
 
         (

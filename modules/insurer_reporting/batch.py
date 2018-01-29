@@ -30,12 +30,19 @@ class InsurerReportContractBatch(batch.BatchRoot):
 
     @classmethod
     def parse_params(cls, params):
-        params = super(InsurerReportContractBatch, cls).parse_params(params)
-        assert params['job_size'] == 1, 'Job size for this batch must be 1'
+        assert params.get('job_size', cls.get_conf_item('job_size')) == 1, \
+            'Job size for this batch must be 1'
+        params['possible_days'] = params.get('possible_days',
+            cls.get_conf_item('possible_days'))
+        params['products'] = params.get('products',
+            cls.get_conf_item('products'))
         return params
 
     @classmethod
-    def select_ids(cls, treatment_date, products=None, possible_days=None):
+    def select_ids(cls, treatment_date, **kwargs):
+        cls.parse_params(kwargs)
+        possible_days = kwargs['possible_days']
+        products = kwargs.get('products', None)
         possible_days = possible_days.split(',') if possible_days else []
         if not possible_days or (possible_days
                     and not str(treatment_date.day) in possible_days):
@@ -83,11 +90,14 @@ class InsurerReportContractBatch(batch.BatchRoot):
         return Pool().get('insurer').search([('stock_reports', '!=', None)])
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, products=None,
-             possible_days=None):
+    def get_templates_to_print(cls, objects):
+        return [tmpl for insurer in objects for tmpl in insurer.stock_reports
+            if tmpl.kind != 'claim_insurer_report']
+
+    @classmethod
+    def execute(cls, objects, ids, treatment_date, **kwargs):
         create_reports = cls.get_reporting_wizard()
-        for template in [tmpl for insurer in objects for tmpl in
-                insurer.stock_reports]:
+        for template in cls.get_templates_to_print(objects):
             create_reports.configure_report.insurer = objects[0]
             create_reports.configure_report.template = template
             create_reports.configure_report.at_date = treatment_date
