@@ -30,6 +30,8 @@ class Contract:
         cls._buttons.update({
                 'button_surrender': {
                     'readonly': ~Eval('can_surrender', False)},
+                'button_cancel_surrender': {
+                    'readonly': ~Eval('surrender_invoice', False)},
                 })
         cls._error_messages.update({
                 'will_surrender': 'Contracts will be surrendered',
@@ -40,6 +42,10 @@ class Contract:
                 'surrender_invoice_description': 'Surrender of %(contract)s',
                 'auto_surrendering': 'Contracts will automatically be '
                 'surrendered',
+                'will_cancel_surrender': 'Contracts surrender will be '
+                'cancelled',
+                'contract_not_surrendered': 'Contract %(contract)s is not '
+                'surrendered. Therefore, it cannot be reactivated.',
                 })
 
     @classmethod
@@ -69,6 +75,12 @@ class Contract:
     @classmethod
     @model.CoogView.button_action('contract_surrender.act_surrender_contract')
     def button_surrender(cls, contracts):
+        pass
+
+    @classmethod
+    @model.CoogView.button_action(
+        'contract_surrender.act_cancel_surrender_contract')
+    def button_cancel_surrender(cls, contracts):
         pass
 
     @classmethod
@@ -198,6 +210,55 @@ class Contract:
             result = not manager.has_errors
             manager.clear_errors()
         return result
+
+    @classmethod
+    def cancel_surrender(cls, contracts):
+        cls.raise_user_warning('will_cancel_surrender_%s' % str([x.id for x in
+                    contracts[:10]]), 'will_cancel_surrender')
+        pool = Pool()
+        Event = pool.get('event')
+        with model.error_manager():
+            for contract in contracts:
+                if not contract.surrender_invoice:
+                    cls.append_functional_error('contract_not_surrendered', {
+                            'contract': contract.rec_name})
+        if contracts:
+            cls._cancel_surrender_invoices(contracts)
+            for contract in contracts:
+                contract._clean_contract_sub_status()
+                contract.activate_contract()
+            cls.save(contracts)
+            for contract in contracts:
+                contract.rebill(utils.today())
+            Event.notify_events(contracts, 'contract_surrender_cancelling')
+
+    @classmethod
+    def _cancel_surrender_invoices(cls, contracts):
+        AccountInvoice = Pool().get('account.invoice')
+        to_cancel = []
+        to_delete = []
+        for contract in contracts:
+            if contract.surrender_invoice:
+                if contract.surrender_invoice.state in ('posted', 'paid'):
+                    to_cancel.append(
+                        AccountInvoice(contract.surrender_invoice.id))
+                elif contract.surrender_invoice.state in ('draft, validated'):
+                    to_delete.append(
+                        AccountInvoice(contract.surrender_invoice.id))
+        if to_cancel:
+            AccountInvoice.cancel(to_cancel)
+        if to_delete:
+            AccountInvoice.delete(to_delete)
+
+    def _clean_contract_sub_status(self):
+        SubStatus = Pool().get('contract.sub_status')
+        surrender_status = SubStatus.get_sub_status('surrendered')
+        if self.sub_status and self.sub_status == surrender_status:
+            self.sub_status = None
+        if self.activation_history and self.termination_reason and \
+                self.termination_reason == surrender_status:
+            self.activation_history[-1].clean_before_reactivate()
+            self.activation_history = self.activation_history
 
 
 class Option:

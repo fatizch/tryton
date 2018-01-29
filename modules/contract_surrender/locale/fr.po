@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.cancel.surrender:"
+msgid "No selected contract"
+msgstr "Aucun contrat sélectionné"
+
 msgctxt "error:contract.option:"
 msgid "Surrender of %(option)s"
 msgstr "Rachat de %(option)s"
@@ -16,6 +20,18 @@ msgstr ""
 msgctxt "error:contract:"
 msgid "Contract %(contract)s cannot be surrendered"
 msgstr "Le contrat %(contract)s ne peut pas être racheté"
+
+msgctxt "error:contract:"
+msgid ""
+"Contract %(contract)s is not surrendered. Therefore, it cannot be "
+"reactivated."
+msgstr ""
+"Le contrat %(contract)s n'est pas un rachat. Il ne peut donc pas être "
+"réactivé."
+
+msgctxt "error:contract:"
+msgid "Contracts surrender will be cancelled"
+msgstr "Le rachat du contrat sera annulé"
 
 msgctxt "error:contract:"
 msgid "Contracts will automatically be surrendered"
@@ -203,9 +219,17 @@ msgctxt "model:contract.surrender.preview,name:"
 msgid "Surrender Preview"
 msgstr "Prévisualisation du rachat"
 
+msgctxt "model:event.type,name:event_cancel_contract_surrender"
+msgid "Contract Surrender Cancelling"
+msgstr "Annulation du rachat de contrat"
+
 msgctxt "model:event.type,name:event_surrender_contract"
 msgid "Contract Surrender"
 msgstr "Rachat du contrat"
+
+msgctxt "model:ir.action,name:act_cancel_surrender_contract"
+msgid "Cancel Surrender"
+msgstr "Annuler le rachat"
 
 msgctxt "model:ir.action,name:act_surrender_contract"
 msgid "Surrender"
@@ -230,6 +254,10 @@ msgstr "Eligibilité de rachat"
 msgctxt "view:account.configuration:"
 msgid "Surrender"
 msgstr "Racheter"
+
+msgctxt "view:contract:"
+msgid "Cancel Surrender"
+msgstr "Annuler le rachat"
 
 msgctxt "view:contract:"
 msgid "Surrender"

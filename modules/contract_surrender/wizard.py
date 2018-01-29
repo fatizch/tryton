@@ -16,6 +16,7 @@ __all__ = [
     'Surrender',
     'SurrenderParameters',
     'SurrenderPreview',
+    'CancelSurrender',
     ]
 
 
@@ -131,3 +132,28 @@ class SurrenderPreview(model.CoogView):
         digits=(16, Eval('currency_digits', 2)), readonly=True,
         depends=['currency_digits'], help='The amount that will be surrendered')
     surrender_date = fields.Date('Surrender Date', readonly=True)
+
+
+class CancelSurrender(Wizard):
+    'Cancel Surrender'
+    __name__ = 'contract.cancel.surrender'
+
+    start_state = 'cancel_surrender'
+    cancel_surrender = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(CancelSurrender, cls).__setup__()
+        cls._error_messages.update({
+                'no_selected_contract': 'No selected contract',
+                })
+
+    def transition_cancel_surrender(self):
+        assert Transaction().context.get('active_model') == 'contract'
+        contract_id = Transaction().context.get('active_id')
+        with model.error_manager():
+            if not contract_id:
+                self.append_functional_error('no_selected_contract')
+            contract = Pool().get('contract')(contract_id)
+            contract.cancel_surrender([contract])
+            return 'end'

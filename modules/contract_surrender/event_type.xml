@@ -7,5 +7,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Contract Surrender</field>
             <field name="code">surrender_contract</field>
         </record>
+        <record model="event.type" id="event_cancel_contract_surrender">
+            <field name="name">Contract Surrender Cancelling</field>
+            <field name="code">contract_surrender_cancelling</field>
+        </record>
     </data>
 </tryton>

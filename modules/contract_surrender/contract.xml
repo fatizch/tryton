@@ -11,5 +11,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
+        <record model="ir.model.button" id="button_cancel_surrender">
+            <field name="name">button_cancel_surrender</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_surrender">
+            <field name="name">button_surrender</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
     </data>
 </tryton>

@@ -25,4 +25,5 @@ def register():
 
     Pool.register(
         wizard.Surrender,
+        wizard.CancelSurrender,
         module='contract_surrender', type_='wizard')

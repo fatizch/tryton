@@ -26,5 +26,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">surrender_preview_form</field>
         </record>
+        <!-- ########################### -->
+        <!-- # Cancel Surrender Wizard # -->
+        <!-- ########################### -->
+        <record model="ir.action.wizard" id="act_cancel_surrender_contract">
+            <field name="name">Cancel Surrender</field>
+            <field name="wiz_name">contract.cancel.surrender</field>
+        </record>
     </data>
 </tryton>
