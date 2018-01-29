@@ -23,10 +23,11 @@ class Party:
         'get_companies', searcher='search_companies')
 
     def get_companies(self, name):
-        res = [covered.main_contract.subscriber.id
-            for covered in self.covered_elements
+        covered_elements = sorted(self.covered_elements,
+            key=lambda x: x.start_date, reverse=True)
+        return [covered.main_contract.subscriber.id
+            for covered in covered_elements
             if not covered.main_contract.subscriber.is_person]
-        return res
 
     @classmethod
     def search_companies(cls, name, clause):
