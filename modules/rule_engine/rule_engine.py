@@ -1124,6 +1124,8 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             raise Exception('unknown context element')
 
     def build_context(self, debug):
+        if hasattr(self, '_exec_context'):
+            return self._exec_context
         pre_context = None
         if self.id >= 0 and not debug:
             pre_context = self._prepare_context_cache.get(self.id)
@@ -1131,8 +1133,9 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             pre_context = self.get_full_context_for_execution()
             if self.id >= 0 and not debug:
                 self._prepare_context_cache.set(self.id, pre_context)
-        return {k: self.deflat_element(v) for
+        self._exec_context = {k: self.deflat_element(v) for
             k, v in pre_context.iteritems()}
+        return self._exec_context
 
     @classmethod
     def format_context(cls, context):
@@ -1485,6 +1488,14 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 transaction.rollback()
 
     def execute(self, arguments, parameters=None):
+        transaction_rules = getattr(Transaction(), '_rules', None)
+        if transaction_rules is None:
+            transaction_rules = {}
+            Transaction()._rules = transaction_rules
+        if self.id not in transaction_rules:
+            transaction_rules[self.id] = self
+        rule = transaction_rules[self.id]
+
         # We cannot use lambda in a loop
         def kwarg_function(value):
             return lambda: value
@@ -1492,9 +1503,9 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         parameters_as_func = {}
         for k, v in (parameters or {}).iteritems():
             parameters_as_func[k] = v if callable(v) else kwarg_function(v)
-        result = self.compute(arguments, parameters_as_func)
-        result.context = self.format_context(arguments)
-        self.add_debug_log(result, arguments.get('date', None))
+        result = rule.compute(arguments, parameters_as_func)
+        result.context = rule.format_context(arguments)
+        rule.add_debug_log(result, arguments.get('date', None))
         return result
 
     @staticmethod
