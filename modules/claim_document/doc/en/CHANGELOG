@@ -1,3 +1,5 @@
+* BUG#8157 Add claim document request in the batch plan
+
 Version 1.14 - 2017-11-09
 * BUG#7017 Document request lines are now read only if the claim is closed
 

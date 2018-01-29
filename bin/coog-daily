@@ -210,10 +210,18 @@ coog_daily_main() {
         [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
-        _coog_daily_check_modules "document_request" &&                         \
+        _coog_daily_check_modules "contract_insurance_document_request" &&                         \
             coog_chain_main document_request document_process                   \
             --treatment_date="$TODAY_DATE"                                      \
             --on_model="contract"
+        )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
+
+        (
+        _coog_daily_check_modules "claim_document" &&                       \
+            coog_chain_main document_request document_process     \
+            --treatment_date="$TODAY_DATE"                        \
+            --on_model="claim"
         )
         [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
