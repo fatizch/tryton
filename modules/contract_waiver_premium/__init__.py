@@ -8,6 +8,7 @@ import rule_engine
 import contract
 import wizard
 import invoice
+import batch
 
 
 def register():
@@ -23,6 +24,7 @@ def register():
         wizard.CreateWaiverChoice,
         wizard.SetWaiverEndDateChoice,
         invoice.InvoiceLineDetail,
+        batch.WaiverPeriodsCreationBatch,
         module='contract_waiver_premium', type_='model')
 
     Pool.register(

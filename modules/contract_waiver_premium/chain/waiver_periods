@@ -1,0 +1,14 @@
+#!/bin/bash
+
+CHAIN_NAME=waiver_periods
+
+CHAIN_PARAMETERS=('TREATMENT_DATE', 'PERIOD_START', 'PERIOD_END', 'PRODUCTS')
+CHAIN_REQUIRED=('TREATMENT_DATE', 'PERIOD_START', 'PERIOD_END')
+
+chain_params "$@"
+chain_begin
+
+chain_step contract.waiver.create ${GIVEN_PARAMETERS[@]}
+chain_wait contract.waiver.create || chain_end
+
+chain_end

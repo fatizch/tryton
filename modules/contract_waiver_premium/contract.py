@@ -48,6 +48,31 @@ class Contract:
     def create_waiver(cls, contracts):
         pass
 
+    @classmethod
+    def create_full_waiver_period(cls, contracts, start, end, rebill=True):
+        for contract in contracts:
+            contract._create_full_waiver(start, end)
+        cls.save(contracts)
+        if rebill:
+            for contract in contracts:
+                contract.rebill(start)
+
+    def _create_full_waiver(self, start, end):
+        if self.initial_start_date > end or (self.final_end_date and
+                self.final_end_date < start):
+            return
+        pool = Pool()
+        Waiver = pool.get('contract.waiver_premium')
+        WaiverOption = pool.get('contract.waiver_premium-contract.option')
+        waiver = Waiver()
+        waiver.contract = self
+        waiver.automatic = True
+        waiver.waiver_options = [
+            WaiverOption(start_date=start, end_date=end, option=option)
+            for option in self.covered_element_options
+            if option.status not in ('void', 'quote', 'refused', 'declined')]
+        self.waivers = list(self.waivers) + [waiver]
+
     def get_with_waiver_of_premium(self, name):
         all_options = self.get_all_options()
         return any((x.with_waiver_of_premium for x in all_options))
