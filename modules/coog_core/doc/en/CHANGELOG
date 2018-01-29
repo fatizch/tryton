@@ -1,3 +1,4 @@
+* BUG#8091 Use "Decimal" in the "convert_frequency" function
 * FEA#8095 Add a search and stream feature to optimize reportings
 * OTH#0000 Add "Hard" tag in the "test converter"
 * BUG#8013 Reactivate Debug Object

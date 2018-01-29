@@ -1,3 +1,4 @@
+* BUG#8091 Utilisation de "Decimal" dans la fonction "convert_frequency"
 * FEA#8095 Ajout d'une fonctionnalité de recherche optimisée pour les reportings
 * BUG#8013 Reactivation de Debug Object
 * OTH#0000 Ajout de la balise"Hard" dans le "test converter"

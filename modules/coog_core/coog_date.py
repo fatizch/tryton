@@ -220,7 +220,7 @@ def convert_frequency(from_frequency, to_frequency):
         elif freq in ['year', 'yearly']:
             return 12
     return (convert_frequency_to_month(to_frequency) /
-        float(convert_frequency_to_month(from_frequency)))
+        Decimal(convert_frequency_to_month(from_frequency)))
 
 
 def get_next_date_in_sync_with(date, day):
