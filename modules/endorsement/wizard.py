@@ -1381,8 +1381,8 @@ class TerminateContract(EndorsementWizardStepMixin):
                 Date.date_as_string(last_period.end_date, lang))
 
         to_update = next((x for x in contract.activation_history
-                if x.start_date < self.termination_date and
-                (x.end_date or datetime.date.max > self.termination_date)))
+                if x.start_date <= self.termination_date and
+                ((x.end_date or datetime.date.max) >= self.termination_date)))
 
         endorsement.activation_history = [EndorsementActivationHistory(
                 action='update',

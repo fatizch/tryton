@@ -285,6 +285,26 @@ for start, end in [
         end_date=datetime.date(*end), contract=contract.id)
     history.save()
 
+# #Comment# #Case 0 : today is in second term, we end in second term
+
+first_month_second_term = datetime.date(2015, 4, 20)
+config._context['client_defined_date'] = first_month_second_term
+contract.reload()
+second_term_end = contract.activation_history[1].end_date
+assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
+    x.termination_reason) for x in contract.activation_history]
+contract = get_terminated(contract, first_month_second_term)
+assert len(contract.activation_history) == 2, [(x.start_date, x.end_date,
+    x.termination_reason) for x in contract.activation_history]
+assert contract.end_date == first_month_second_term
+assert contract.termination_reason == terminated_status
+
+contract = get_cancelled()
+assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
+    x.termination_reason) for x in contract.activation_history]
+assert contract.end_date == second_term_end
+assert contract.termination_reason == None
+
 # #Comment# #Case 1 : today is in first term, we end before first_term_end
 
 config._context['client_defined_date'] = first_term_end
@@ -322,7 +342,6 @@ assert contract.termination_reason == None
 # #Comment# #Case 2: today is in second term, we terminate before first_term_end
 config._context['client_defined_date'] = datetime.date(2015, 4, 10)
 contract.reload()
-second_term_end = contract.activation_history[1].end_date
 assert contract.end_date == second_term_end
 User = Model.get('res.user')
 user, = User.find(['login', '=', 'contract_user'])
