@@ -1,3 +1,4 @@
+* BUG#8140 Permettre de renseigner une personne morale en tant que bénéficiaire
 * FEA#7938 Amélioration de la saisie dans la vue de création de  bénéficiaire
 * FEA#7917 Ajout de configuration pour ignorer les parts bénéficiaire lors de la fermeture d'un dossier
 * BUG#7832 Ajout d'une dépendance technique sur le champ type de préjudice

@@ -422,7 +422,6 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
     party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT',
         help='The identified party that will receive part of (or all of) the '
         'calculated indemnification',
-        domain=[('is_person', '=', True)],
         states={'required': Bool(Eval('identified', False)),
             'readonly': Bool(Eval('identified', False))},
         depends=['identified'])
