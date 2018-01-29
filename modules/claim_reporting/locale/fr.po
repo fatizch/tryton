@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-#WARNING !!!! DON'T REMOVE THIS TRANSLATION
+# WARNING !!!! DON'T REMOVE THIS TRANSLATION
 msgctxt "error:report.template:"
 msgid "Insurer Report Claim"
 msgstr "Rapport assureur sinistre"
