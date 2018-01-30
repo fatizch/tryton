@@ -13,16 +13,18 @@ from trytond.modules.coog_core import model, fields
 
 
 __all__ = [
-    'Surrender',
+    'PlanSurrender',
     'SurrenderParameters',
     'SurrenderPreview',
+    'ValidateSurrender',
+    'ValidateSurrenderParameters',
     'CancelSurrender',
     ]
 
 
-class Surrender(Wizard):
-    'Surrender'
-    __name__ = 'contract.surrender'
+class PlanSurrender(Wizard):
+    'Plan Surrender'
+    __name__ = 'contract.plan.surrender'
 
     start_state = 'parameters'
     parameters = StateView('contract.surrender.parameters',
@@ -42,7 +44,7 @@ class Surrender(Wizard):
 
     @classmethod
     def __setup__(cls):
-        super(Surrender, cls).__setup__()
+        super(PlanSurrender, cls).__setup__()
         cls._error_messages.update({
                 'invalid_date': 'Impossible to surrender before the '
                 'contract\'s start_date (%(start_date)s)',
@@ -94,7 +96,8 @@ class Surrender(Wizard):
 
     def transition_surrender(self):
         contract = self.parameters.contract
-        contract.surrender([contract], self.parameters.surrender_date)
+        contract.plan_surrender([contract],
+            self.parameters.surrender_date)
         return 'open_invoice'
 
     def do_open_invoice(self, action):
@@ -103,7 +106,8 @@ class Surrender(Wizard):
         invoice, = Invoice.search([
                 ('contract', '=', contract.id),
                 ('business_kind', '=', 'surrender'),
-                ('state', 'in', ('posted', 'paid'))])
+                ('state', 'in',
+                    ('validated', 'posted', 'paid'))])
         return action, {
             'res_id': invoice.id,
             'res_ids': [invoice.id],
@@ -125,13 +129,80 @@ class SurrenderPreview(model.CoogView):
     __name__ = 'contract.surrender.preview'
 
     contract = fields.Many2One('contract', 'Contract', readonly=True)
-    currency = fields.Many2One('currency.currency', 'Currency', readonly=True)
+    currency = fields.Many2One('currency.currency', 'Currency',
+        readonly=True)
     currency_digits = fields.Integer('Currency Digits', readonly=True)
     currency_symbol = fields.Char('Currency Symbol', readonly=True)
     surrender_value = fields.Numeric('Surrender Value',
         digits=(16, Eval('currency_digits', 2)), readonly=True,
-        depends=['currency_digits'], help='The amount that will be surrendered')
+        depends=['currency_digits'],
+        help='The amount that will be surrendered')
     surrender_date = fields.Date('Surrender Date', readonly=True)
+
+
+class ValidateSurrender(Wizard):
+    'Validate Surrender'
+    __name__ = 'contract.validate.surrender'
+
+    start_state = 'parameters'
+    parameters = StateView('contract.validate.surrender.preview',
+        'contract_surrender.validate_surrender_parameters_view_form',
+        [Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Confirm Surrender', 'surrender',
+                'tryton-go-next', default=True),
+            ])
+    surrender = StateTransition()
+    open_invoice = StateAction('account_invoice.act_invoice_in_form')
+
+    def default_parameters(self, name):
+        if self.parameters._default_values:
+            return self.parameters._default_values
+        assert Transaction().context.get('active_model') == 'contract'
+        contract = Pool().get('contract')(
+            Transaction().context.get('active_id'))
+        return {
+            'contract': contract.id,
+            'surrender_date': contract.surrender_invoice.invoice_date,
+            'currency': contract.currency.id,
+            'currency_digits': contract.currency_digits,
+            'currency_symbol': contract.currency_symbol,
+            'surrender_value': contract.surrender_invoice.total_amount,
+            }
+
+    def transition_surrender(self):
+        self.parameters.contract.validate_surrender([self.parameters.contract],
+            self.parameters.surrender_date)
+        return 'open_invoice'
+
+    def do_open_invoice(self, action):
+        Invoice = Pool().get('account.invoice')
+        contract = self.parameters.contract
+        invoice, = Invoice.search([
+                ('contract', '=', contract.id),
+                ('business_kind', '=', 'surrender'),
+                ('state', 'in',
+                    ('validated', 'posted', 'paid'))])
+        return action, {
+            'res_id': invoice.id,
+            'res_ids': [invoice.id],
+            'res_model': 'account.invoice',
+            }
+
+
+class ValidateSurrenderParameters(model.CoogView):
+    'Validate Surrender Parameters'
+    __name__ = 'contract.validate.surrender.preview'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    surrender_date = fields.Date('Surrender Date', readonly=True)
+    currency = fields.Many2One('currency.currency', 'Currency',
+        readonly=True)
+    currency_digits = fields.Integer('Currency Digits', readonly=True)
+    currency_symbol = fields.Char('Currency Symbol', readonly=True)
+    surrender_value = fields.Numeric('Surrender Value',
+        digits=(16, Eval('currency_digits', 2)), readonly=True,
+        depends=['currency_digits'],
+        help='The amount that will be surrendered')
 
 
 class CancelSurrender(Wizard):

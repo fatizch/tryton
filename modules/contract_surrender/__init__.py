@@ -21,9 +21,11 @@ def register():
         contract.Option,
         wizard.SurrenderParameters,
         wizard.SurrenderPreview,
+        wizard.ValidateSurrenderParameters,
         module='contract_surrender', type_='model')
 
     Pool.register(
-        wizard.Surrender,
+        wizard.PlanSurrender,
+        wizard.ValidateSurrender,
         wizard.CancelSurrender,
         module='contract_surrender', type_='wizard')

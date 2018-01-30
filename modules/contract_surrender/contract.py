@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or, In
 from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import model, fields, utils
@@ -23,18 +23,32 @@ class Contract:
         fields.Many2One('account.invoice', 'Surrender invoice',
             help='The surrender invoice for the contract'),
         'getter_surrender_invoice')
+    surrender_invoice_state = fields.Function(
+        fields.Selection([
+                ('', ''),
+                ('draft', 'Draft'),
+                ('validated', 'Validated'),
+                ('posted', 'Posted'),
+                ('paid', 'Paid'),
+                ('cancel', 'Canceled'),
+                ], 'Surrender Invoice State'),
+        'getter_surrender_invoice_state')
 
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls._buttons.update({
-                'button_surrender': {
+                'button_plan_surrender': {
                     'readonly': ~Eval('can_surrender', False)},
+                'button_validate_surrender': {
+                    'readonly': Or(~Eval('surrender_invoice', False),
+                        In(Eval('surrender_invoice_state'),
+                            ['posted', 'paid']))},
                 'button_cancel_surrender': {
                     'readonly': ~Eval('surrender_invoice', False)},
                 })
         cls._error_messages.update({
-                'will_surrender': 'Contracts will be surrendered',
+                'will_surrender': 'Confirm contracts surrender',
                 'cannot_surrender': 'Contract %(contract)s cannot be '
                 'surrendered',
                 'no_surrenderable_options': 'No options were found that can '
@@ -42,6 +56,7 @@ class Contract:
                 'surrender_invoice_description': 'Surrender of %(contract)s',
                 'auto_surrendering': 'Contracts will automatically be '
                 'surrendered',
+                'plan_surrender': 'Contracts surrender will be planned',
                 'will_cancel_surrender': 'Contracts surrender will be '
                 'cancelled',
                 'contract_not_surrendered': 'Contract %(contract)s is not '
@@ -67,14 +82,25 @@ class Contract:
         result = {x.id: None for x in contracts}
         for invoice in Invoice.search([
                     ('contract', 'in', [x.id for x in contracts]),
-                    ('state', 'in', ('posted', 'paid')),
+                    ('state', 'in', ('validated', 'posted', 'paid')),
                     ('business_kind', '=', 'surrender')]):
             result[invoice.contract.id] = invoice.id
         return result
 
+    def getter_surrender_invoice_state(self, name):
+        if self.surrender_invoice:
+            return self.surrender_invoice.state
+
     @classmethod
-    @model.CoogView.button_action('contract_surrender.act_surrender_contract')
-    def button_surrender(cls, contracts):
+    @model.CoogView.button_action(
+        'contract_surrender.act_plan_surrender_contract')
+    def button_plan_surrender(cls, contracts):
+        pass
+
+    @classmethod
+    @model.CoogView.button_action(
+        'contract_surrender.act_validate_surrender_contract')
+    def button_validate_surrender(cls, contracts):
         pass
 
     @classmethod
@@ -85,19 +111,35 @@ class Contract:
 
     @classmethod
     def surrender(cls, contracts, surrender_date):
-        SubStatus = Pool().get('contract.sub_status')
-        surrender_reason = SubStatus.get_sub_status('surrendered')
-        cls.do_surrender(contracts, surrender_date)
-        cls.terminate(contracts, surrender_date, surrender_reason)
+        cls.plan_surrender(contracts, surrender_date)
+        cls.validate_surrender(contracts, surrender_date)
 
     @classmethod
-    def do_surrender(cls, contracts, surrender_date):
+    def validate_surrender(cls, contracts, surrender_date):
+        cls.raise_user_warning('will_surrender_%s' % str([x.id for x in
+                    contracts[:10]]), 'will_surrender')
+        pool = Pool()
+        SubStatus = pool.get('contract.sub_status')
+        Event = pool.get('event')
+        surrender_reason = SubStatus.get_sub_status('surrendered')
+        cls.post_surrender_invoices(contracts)
+        cls.terminate(contracts, surrender_date, surrender_reason)
+        Event.notify_events(contracts, 'surrender_contract')
+
+    @classmethod
+    def post_surrender_invoices(cls, contracts):
+        Invoice = Pool().get('account.invoice')
+        Invoice.post([c.surrender_invoice for c in contracts
+                if c.surrender_invoice.state in ('draft', 'validated')])
+
+    @classmethod
+    def plan_surrender(cls, contracts, surrender_date):
         pool = Pool()
         Invoice = pool.get('account.invoice')
         ContractInvoice = pool.get('contract.invoice')
         Event = pool.get('event')
-        cls.raise_user_warning('will_surrender_%s' % str([x.id for x in
-                    contracts[:10]]), 'will_surrender')
+        cls.raise_user_warning('plan_surrender_%s' % str([x.id for x in
+                    contracts[:10]]), 'plan_surrender')
         with model.error_manager():
             cls.check_for_surrender(contracts, surrender_date)
         contract_invoices = cls.generate_surrender_invoices(contracts,
@@ -105,8 +147,7 @@ class Contract:
         if contract_invoices:
             Invoice.save([x.invoice for x in contract_invoices])
             ContractInvoice.save(contract_invoices)
-            Invoice.post([x.invoice for x in contract_invoices])
-        Event.notify_events(contracts, 'surrender_contract')
+        Event.notify_events(contracts, 'plan_surrender_contract')
 
     @classmethod
     def check_for_surrender(cls, contracts, surrender_date):

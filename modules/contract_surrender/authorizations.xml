@@ -3,12 +3,16 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <record model="ir.model.button-res.group" id="validate_surrender_button_contract_super_group">
+        <record model="ir.model.button-res.group" id="cancel_surrender_button_contract_super_group">
             <field name="button" ref="button_cancel_surrender"/>
             <field name="group" ref="contract.group_contract_super_group"/>
         </record>
-        <record model="ir.model.button-res.group" id="surrender_button_group_contract_manage">
-            <field name="button" ref="button_surrender"/>
+        <record model="ir.model.button-res.group" id="validate_surrender_button_contract_super_group">
+            <field name="button" ref="button_validate_surrender"/>
+            <field name="group" ref="contract.group_contract_super_group"/>
+        </record>
+        <record model="ir.model.button-res.group" id="plan_surrender_button_group_contract_manage">
+            <field name="button" ref="button_plan_surrender"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
     </data>

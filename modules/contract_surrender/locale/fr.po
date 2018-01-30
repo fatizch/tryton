@@ -10,36 +10,47 @@ msgctxt "error:contract.option:"
 msgid "Surrender of %(option)s"
 msgstr "Rachat de %(option)s"
 
-msgctxt "error:contract.surrender:"
+msgctxt "error:contract.plan.surrender:"
 msgid ""
 "Impossible to surrender before the contract's start_date (%(start_date)s)"
 msgstr ""
-"Il n'est pas possible de racheter le contrat avant sa date de début "
-"(%(start_date)s)"
+"Impossible de rachter le contrat avant sa date de début (%(start_date)s)"
+
+msgctxt "error:contract:"
+msgid "Confirm contracts surrender"
+msgstr "Confirmer le rachat"
 
 msgctxt "error:contract:"
 msgid "Contract %(contract)s cannot be surrendered"
 msgstr "Le contrat %(contract)s ne peut pas être racheté"
 
 msgctxt "error:contract:"
-msgid ""
-"Contract %(contract)s is not surrendered. Therefore, it cannot be "
-"reactivated."
-msgstr ""
-"Le contrat %(contract)s n'est pas un rachat. Il ne peut donc pas être "
-"réactivé."
-
-msgctxt "error:contract:"
 msgid "Contracts surrender will be cancelled"
 msgstr "Le rachat du contrat sera annulé"
+
+msgctxt "error:contract:"
+msgid "Contracts surrender will be planned"
+msgstr "Le rachat sera plannifié"
 
 msgctxt "error:contract:"
 msgid "Contracts will automatically be surrendered"
 msgstr "Les contrats seront automatiquement rachetés"
 
 msgctxt "error:contract:"
-msgid "Contracts will be surrendered"
-msgstr "Les contrats seront rachetés"
+msgid ""
+"Deletion not allowed because the contracts %(contracts)s are not quote or "
+"declined."
+msgstr ""
+"La suppression n'est pas autorisée car les contrats %(contract)s ne sont pas"
+" des devis ou déclinés"
+
+msgctxt "error:contract:"
+msgid ""
+"Le contrat %(contract)s n'est pas un rachat. En conséquent, il ne peut être "
+"réactivé."
+msgstr ""
+"Le contrat %(contract)s n'est pas un rachat. En conséquent, il ne peut être "
+"réactivé."
 
 msgctxt "error:contract:"
 msgid ""
@@ -65,6 +76,10 @@ msgstr "Rachat possible"
 msgctxt "field:contract,surrender_invoice:"
 msgid "Surrender invoice"
 msgstr "Facture de rachat"
+
+msgctxt "field:contract,surrender_invoice_state:"
+msgid "Surrender Invoice State"
+msgstr "État de la quittance de rachat"
 
 msgctxt "field:contract.surrender.parameters,contract:"
 msgid "Contract"
@@ -103,6 +118,34 @@ msgid "Surrender Date"
 msgstr "Date de rachat"
 
 msgctxt "field:contract.surrender.preview,surrender_value:"
+msgid "Surrender Value"
+msgstr "Valeur de rachat"
+
+msgctxt "field:contract.validate.surrender.preview,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.validate.surrender.preview,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:contract.validate.surrender.preview,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision de la devise"
+
+msgctxt "field:contract.validate.surrender.preview,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:contract.validate.surrender.preview,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.validate.surrender.preview,surrender_date:"
+msgid "Surrender Date"
+msgstr "Date de rachat"
+
+msgctxt "field:contract.validate.surrender.preview,surrender_value:"
 msgid "Surrender Value"
 msgstr "Valeur de rachat"
 
@@ -188,6 +231,10 @@ msgctxt "help:contract.surrender.preview,surrender_value:"
 msgid "The amount that will be surrendered"
 msgstr "La valeur de rachat qui sera reversée"
 
+msgctxt "help:contract.validate.surrender.preview,surrender_value:"
+msgid "The amount that will be surrendered"
+msgstr "La valeur de rachat qui sera reversée"
+
 msgctxt "help:offered.option.description.surrender_rule,eligibility_rule:"
 msgid ""
 "If set, the rule result must be True to allow surrendering of the contract"
@@ -219,21 +266,53 @@ msgctxt "model:contract.surrender.preview,name:"
 msgid "Surrender Preview"
 msgstr "Prévisualisation du rachat"
 
+msgctxt "model:contract.validate.surrender.preview,name:"
+msgid "Validate Surrender Parameters"
+msgstr "Paramètres du rachat"
+
 msgctxt "model:event.type,name:event_cancel_contract_surrender"
 msgid "Contract Surrender Cancelling"
 msgstr "Annulation du rachat de contrat"
+
+msgctxt "model:event.type,name:event_plan_surrender_contract"
+msgid "Plan Contract Surrender"
+msgstr "Planifier le rachat"
 
 msgctxt "model:event.type,name:event_surrender_contract"
 msgid "Contract Surrender"
 msgstr "Rachat du contrat"
 
+msgctxt "model:ir.action,name:"
+msgid "Surrender Contracts"
+msgstr "Rachats"
+
 msgctxt "model:ir.action,name:act_cancel_surrender_contract"
 msgid "Cancel Surrender"
 msgstr "Annuler le rachat"
 
-msgctxt "model:ir.action,name:act_surrender_contract"
-msgid "Surrender"
-msgstr "Rachat"
+msgctxt "model:ir.action,name:act_plan_surrender_contract"
+msgid "Racheter"
+msgstr "Racheter"
+
+msgctxt "model:ir.action,name:act_validate_surrender_contract"
+msgid "Validate Surrender"
+msgstr "Valider le rachat"
+
+msgctxt "model:ir.action,name:act_window_surrender_contract"
+msgid "Surrender Contracts"
+msgstr "Rachats"
+
+msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_planned"
+msgid "Planned Surrenders"
+msgstr "Rachats planifiés"
+
+msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_surrender"
+msgid "Rachats"
+msgstr "Rachats"
+
+msgctxt "model:ir.ui.menu,name:menu_surrender_contract_form"
+msgid "Surrender Contracts"
+msgstr "Rachats"
 
 msgctxt "model:offered.option.description.surrender_rule,name:"
 msgid "Option Description Surrender Rule"
@@ -242,6 +321,30 @@ msgstr "Règle de rachat de garantie"
 msgctxt "selection:account.invoice,business_kind:"
 msgid "Surrender"
 msgstr "Rachat de contrat"
+
+msgctxt "selection:contract,surrender_invoice_state:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:contract,surrender_invoice_state:"
+msgid "Canceled"
+msgstr "Annulée"
+
+msgctxt "selection:contract,surrender_invoice_state:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:contract,surrender_invoice_state:"
+msgid "Paid"
+msgstr "Payée"
+
+msgctxt "selection:contract,surrender_invoice_state:"
+msgid "Posted"
+msgstr "Postée"
+
+msgctxt "selection:contract,surrender_invoice_state:"
+msgid "Validated"
+msgstr "Validée"
 
 msgctxt "selection:rule_engine,type_:"
 msgid "Surrender"
@@ -263,22 +366,34 @@ msgctxt "view:contract:"
 msgid "Surrender"
 msgstr "Racheter"
 
-msgctxt "wizard_button:contract.surrender,parameters,calculate:"
+msgctxt "view:contract:"
+msgid "Validate Surrender"
+msgstr "Valider le rachat"
+
+msgctxt "wizard_button:contract.plan.surrender,parameters,calculate:"
 msgid "Preview"
 msgstr "Prévisualiser"
 
-msgctxt "wizard_button:contract.surrender,parameters,end:"
+msgctxt "wizard_button:contract.plan.surrender,parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:contract.surrender,preview,end:"
+msgctxt "wizard_button:contract.plan.surrender,preview,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:contract.surrender,preview,parameters:"
+msgctxt "wizard_button:contract.plan.surrender,preview,parameters:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "wizard_button:contract.surrender,preview,surrender:"
+msgctxt "wizard_button:contract.plan.surrender,preview,surrender:"
 msgid "Surrender"
 msgstr "Racheter"
+
+msgctxt "wizard_button:contract.validate.surrender,parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:contract.validate.surrender,parameters,surrender:"
+msgid "Confirm Surrender"
+msgstr "Confirmer le rachat"

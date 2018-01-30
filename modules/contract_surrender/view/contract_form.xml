@@ -5,7 +5,9 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/group[@id='button_change_start_date']" position="inside">
         <field name="can_surrender" invisible="1"/>
         <field name="surrender_invoice" invisible="1"/>
-        <button string="Surrender" name="button_surrender"/>
-        <button string="Cancel Surrender" name="button_cancel_surrender"/>
+        <field name="surrender_invoice_state" invisible="1"/>
+        <button string="Surrender" name="button_plan_surrender"/>
+        <button string="Validate Surrender" name="button_validate_surrender"/>
+	<button string="Cancel Surrender" name="button_cancel_surrender"/>
     </xpath>
 </data>

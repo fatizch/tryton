@@ -6,9 +6,9 @@ this repository contains the full copyright notices and license terms. -->
         <!-- #################### -->
         <!-- # Surrender Wizard # -->
         <!-- #################### -->
-        <record model="ir.action.wizard" id="act_surrender_contract">
-            <field name="name">Surrender</field>
-            <field name="wiz_name">contract.surrender</field>
+        <record model="ir.action.wizard" id="act_plan_surrender_contract">
+            <field name="name">Plan Surrender</field>
+            <field name="wiz_name">contract.plan.surrender</field>
         </record>
         <!-- ######################## -->
         <!-- # Surrender Parameters # -->
@@ -25,6 +25,21 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">contract.surrender.preview</field>
             <field name="type">form</field>
             <field name="name">surrender_preview_form</field>
+        </record>
+        <!-- ############################# -->
+        <!-- # Validate Surrender Wizard # -->
+        <!-- ############################# -->
+        <record model="ir.action.wizard" id="act_validate_surrender_contract">
+            <field name="name">Validate Surrender</field>
+            <field name="wiz_name">contract.validate.surrender</field>
+        </record>
+        <!-- ############################## -->
+        <!-- # Validate Surrender Preview # -->
+        <!-- ############################## -->
+        <record model="ir.ui.view" id="validate_surrender_parameters_view_form">
+            <field name="model">contract.validate.surrender.preview</field>
+            <field name="type">form</field>
+            <field name="name">validate_surrender_preview_form</field>
         </record>
         <!-- ########################### -->
         <!-- # Cancel Surrender Wizard # -->

@@ -11,13 +11,48 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
+        <record model="ir.model.button" id="button_plan_surrender">
+            <field name="name">button_plan_surrender</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_validate_surrender">
+            <field name="name">button_validate_surrender</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
         <record model="ir.model.button" id="button_cancel_surrender">
             <field name="name">button_cancel_surrender</field>
             <field name="model" search="[('model', '=', 'contract')]"/>
         </record>
-        <record model="ir.model.button" id="button_surrender">
-            <field name="name">button_surrender</field>
-            <field name="model" search="[('model', '=', 'contract')]"/>
+        <!-- ################################## -->
+        <!-- # Contract Surrender Entry Point # -->
+        <!-- ################################## -->
+        <record model="ir.action.act_window" id="act_window_surrender_contract">
+            <field name="name">Surrender Contracts</field>
+            <field name="res_model">contract</field>
+            <field name="domain" eval="[('invoices', 'where', [('invoice.business_kind', '=', 'surrender'), ('invoice.state', '!=', 'cancel')])]" pyson="1"/>
         </record>
+        <record model="ir.action.act_window.view" id="act_contract_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="contract.contract_view_tree"/>
+            <field name="act_window" ref="act_window_surrender_contract"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_contract_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="contract_view_form"/>
+            <field name="act_window" ref="act_window_surrender_contract"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_contract_domain_planned">
+            <field name="name">Planned Surrenders</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[('invoices', 'where', [('invoice.state', 'in', ('draft', 'validated'))])]" pyson="1"/>
+            <field name="act_window" ref="act_window_surrender_contract"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_contract_domain_surrender">
+            <field name="name">Validated Surrenders</field>
+            <field name="sequence" eval="30"/>
+            <field name="domain" eval="[('invoices', 'where', [('invoice.state', 'in', ('posted', 'paid'))])]" pyson="1"/>
+            <field name="act_window" ref="act_window_surrender_contract"/>
+        </record>
+        <menuitem parent="contract.menu_contract" sequence="20" id="menu_surrender_contract_form" icon="contract" action="act_window_surrender_contract"/>
     </data>
 </tryton>

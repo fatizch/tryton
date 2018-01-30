@@ -1,3 +1,5 @@
+* FEA#8106 Add new surrenders entry point in contracts
+* FEA#7995 Allow a double validation for surrenders
 * FEA#7994  Add a wizard which allows cancelling a contract's surrender
 * FEA#7959 Add surrender date to surrender wizard preview step
 
