@@ -1,3 +1,4 @@
+* BUG#8177 Correction d'un crash sur la consultation de liste d'ensemble d'avenants dans le cas où cette dérnière ne contient pas d'avenants
 * BUG#7653 Réduction de la longueur du nom technique de la Séquence du numéro d'ensemble d'avenants
 
 Version 1.14 - 2017-11-09

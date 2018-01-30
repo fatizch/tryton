@@ -200,8 +200,8 @@ class EndorsementSet(model.CoogSQL, model.CoogView, Printable):
 
     def get_state(self, name):
         state = set([x.state for x in self.endorsements])
-        assert len(state) == 1
-        return state.pop()
+        assert len(state) <= 1
+        return state.pop() if len(state) == 1 else ''
 
     def get_contracts_summary(self, name):
         return '\n'.join([contract.contract_number + ' | ' +

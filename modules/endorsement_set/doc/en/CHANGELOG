@@ -1,3 +1,4 @@
+* BUG#8177 Fix a crash on endorsement set if endorsement list is empty
 * BUG#7653 Shorten the Endorsement Set Sequence technical name
 
 Version 1.14 - 2017-11-09
