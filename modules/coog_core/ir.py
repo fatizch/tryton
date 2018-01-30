@@ -14,6 +14,7 @@ from trytond.pyson import Eval, PYSONEncoder, Not, In, If
 from trytond.transaction import Transaction
 from trytond.model import fields as tryton_fields, ModelView, Model
 from trytond.wizard import Wizard, StateView, Button, StateAction
+from trytond.tools import memoize
 
 import fields
 import utils
@@ -243,28 +244,25 @@ class View(ExportImportMixin):
         return view
 
     @classmethod
+    @memoize(10)
     def get_rng(cls, type_):
         rng = super(View, cls).get_rng(type_)
-        key = (cls.__name__, type_, 'override')
-        cache_rng = cls._get_rng_cache.get(key, None)
-        if cache_rng is None:
-            if type_ == 'tree':
-                attributes = etree.fromstring(TREE_ATTRIBUTES)
-                for attr in attributes.iterchildren("*"):
-                    rng.append(attr)
-            elif type_ == 'form':
-                widgets = rng.xpath(
-                    '//ns:define/ns:optional/ns:attribute'
-                    '[@name="widget"]/ns:choice',
-                    namespaces={'ns': 'http://relaxng.org/ns/structure/1.0'})[0]
-                for widget_name in FORM_WIDGETS:
-                    subelem = etree.SubElement(widgets,
-                        '{http://relaxng.org/ns/structure/1.0}value')
-                    subelem.text = widget_name
-                attributes = etree.fromstring(FORM_ATTRIBUTES)
-                for attr in attributes.iterfind('*'):
-                    rng.append(attr)
-            cls._get_rng_cache.set(key, rng)
+        if type_ == 'tree':
+            attributes = etree.fromstring(TREE_ATTRIBUTES)
+            for attr in attributes.iterchildren("*"):
+                rng.append(attr)
+        elif type_ == 'form':
+            widgets = rng.xpath(
+                '//ns:define/ns:optional/ns:attribute'
+                '[@name="widget"]/ns:choice',
+                namespaces={'ns': 'http://relaxng.org/ns/structure/1.0'})[0]
+            for widget_name in FORM_WIDGETS:
+                subelem = etree.SubElement(widgets,
+                    '{http://relaxng.org/ns/structure/1.0}value')
+                subelem.text = widget_name
+            attributes = etree.fromstring(FORM_ATTRIBUTES)
+            for attr in attributes.iterfind('*'):
+                rng.append(attr)
         return rng
 
 

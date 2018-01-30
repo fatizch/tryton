@@ -1,3 +1,4 @@
+* FEA#8160 Cache fonction pour les rng (pas serialisable)
 * BUG#8093 Utilisation d'une instance partagée de la règle dans une même transaction
 * FEA#7598 Ajout de la colonne "Code" dans la vue de la liste des règles pour pouvoir filtrer dessus
 

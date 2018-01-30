@@ -3,6 +3,7 @@
 from lxml import etree
 
 from trytond.pool import PoolMeta
+from trytond.tools import memoize
 
 
 __all__ = [
@@ -15,6 +16,7 @@ class View:
     __name__ = 'ir.ui.view'
 
     @classmethod
+    @memoize(10)
     def get_rng(cls, type_):
         rng = super(View, cls).get_rng(type_)
         if type_ == 'form':
