@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 from collections import defaultdict
-from operator import attrgetter
 from dateutil.relativedelta import relativedelta
 
 from trytond.pool import Pool, PoolMeta
@@ -206,8 +205,8 @@ class EndorsementWizardStepMixin(model.CoogView):
         if (not error_manager or 'effective_date_before_start_date'
                 not in [x[0] for x in error_manager._errors]):
             if (not cls.allow_effective_date_before_contract(select_screen) and
-                    any([x.start_date > select_screen.effective_date
-                            for x in contracts if x.start_date])):
+                    any([x.initial_start_date > select_screen.effective_date
+                            for x in contracts if x.initial_start_date])):
                 Endorsement.append_functional_error(
                     'effective_date_before_start_date')
         if (not error_manager or 'active_contract_required'
