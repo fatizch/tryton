@@ -1,3 +1,5 @@
+* FEA#8110 L'assistant de création de paiement bloque désormais la selection du journal si un journal est déja défini sur le produit associé à la selection
+
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout d'un modèle pour voir les paiements regroupés par contrats

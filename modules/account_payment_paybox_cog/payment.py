@@ -132,6 +132,29 @@ class PaymentCreation(model.FunctionalErrorMixIn):
                 '%(payment_date)s)'
                 })
 
+    @classmethod
+    def get_product_journals_from_lines(cls, lines):
+        '''
+        Paybox is systematically added in possible journals,
+        so we remove it from product_journals
+        '''
+        return [x for x in
+            super(PaymentCreation, cls).get_product_journals_from_lines(lines)
+            if x.process_method != 'paybox']
+
+    @classmethod
+    def get_possible_journals(cls, lines, kind=None):
+        '''
+        Paybox must be always available when creating a payment.
+        '''
+        possible_journals = set(super(
+                PaymentCreation, cls).get_possible_journals(lines, kind))
+        Journal = Pool().get('account.payment.journal')
+        if kind != 'receivable':
+            return list(possible_journals)
+        return list(possible_journals | set(Journal.search(
+                [('process_method', '=', 'paybox')])))
+
     def transition_create_payments(self):
         if (self.start.process_method == 'paybox'
                 and not self.start.party.email):
@@ -174,7 +197,6 @@ class PaymentCreation(model.FunctionalErrorMixIn):
             start['bank_account'] = None
         else:
             start = super(PaymentCreation, self).default_start(values)
-        start['kind'] = 'receivable'
         return start
 
     def do_start_process_wizard(self, action):
@@ -224,7 +246,7 @@ class ProcessPayment:
         return 'paybox_url_view'
 
     def do_process(self, action):
-        # TODO: Properly postpone event notification at the end of the 
+        # TODO: Properly postpone event notification at the end of the
         # transaction block
         with ServerContext().set_context(postpone_payment_group_event=True):
             action, res = super(ProcessPayment, self).do_process(action)

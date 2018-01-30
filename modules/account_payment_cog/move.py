@@ -336,7 +336,9 @@ class PaymentCreationStart(model.CoogView):
                 [('payment_date', '>=', Date())],
                 [])])
     journal = fields.Many2One('account.payment.journal', 'Payment Journal',
-        required=True)
+        required=True, domain=[('id', 'in', Eval('possible_journals'))],
+        states={'readonly': Bool(Eval('single_journal'))},
+        depends=['possible_journals', 'single_journal'])
     kind = fields.Selection(KINDS, 'Payment Kind')
     process_method = fields.Char('Process Method', states={'invisible': True})
     motive = fields.Many2One('account.payment.motive', 'Motive',
@@ -357,6 +359,9 @@ class PaymentCreationStart(model.CoogView):
     have_lines_payment_date = fields.Boolean('Lines Have Payment Date')
     created_payments = fields.Many2Many('account.payment', None, None,
         'Created Payments')
+    possible_journals = fields.Many2Many('account.payment.journal',
+        None, None, 'Possible Journals', readonly=True)
+    single_journal = fields.Boolean('Single Journal', readonly=True)
 
     @classmethod
     def view_attributes(cls):
@@ -413,6 +418,18 @@ class PaymentCreationStart(model.CoogView):
         if not self.have_lines_payment_date and self.payment_date is None:
             self.payment_date = utils.today()
 
+    @fields.depends('lines_to_pay', 'kind')
+    def on_change_with_possible_journals(self, name=None):
+        return [x.id for x in Pool().get('account.payment.creation',
+                type='wizard').get_possible_journals(self.lines_to_pay,
+                self.kind)]
+
+    @fields.depends('possible_journals')
+    def on_change_with_single_journal(self, name=None):
+        if len(self.possible_journals) > 1:
+            return False
+        return True
+
 
 class PaymentCreation(model.CoogWizard):
     'Payment Creation'
@@ -450,38 +467,31 @@ class PaymentCreation(model.CoogWizard):
             self.raise_user_error('incompatible_lines')
         return res
 
-    def default_start(self, values):
+    @classmethod
+    def get_possible_journals(cls, lines, kind=None):
+        '''
+        There is no payment journal restriction from any configuration
+        '''
+        return Pool().get('account.payment.journal').search([()])
+
+    def get_payment_journals_from_lines(self, lines):
+        return list(set([x.get_payment_journal() for x in lines]))
+
+    @classmethod
+    def get_move_lines_from_active_model(cls):
         pool = Pool()
         Line = pool.get('account.move.line')
         Account = pool.get('account.account')
         model = Transaction().context.get('active_model')
         if model == 'account.move.line':
             active_ids = Transaction().context.get('active_ids', [])
-            lines = [l for l in Line.browse(active_ids)
+            return [l for l in Line.browse(active_ids)
                 if l.reconciliation is None and l.payment_amount != 0]
-            if not lines:
-                return {}
-            kind = self.get_lines_amount_per_kind(lines)
-            parties = list(set([l.party for l in lines]))
-            payment_dates = list(set([l.payment_date for l in lines]))
-            journals = list(set([x.get_payment_journal() for x in lines]))
-            journal = journals[0] if len(journals) == 1 else None
-            return {
-                'lines_to_pay': active_ids,
-                'total_amount': kind.values()[0],
-                'kind': kind.keys()[0],
-                'multiple_parties': len(parties) != 1,
-                'party': parties[0].id if len(parties) == 1 else None,
-                'payment_date': payment_dates[0]
-                if len(payment_dates) == 1 else None,
-                'journal': journal.id if journal else None
-                if len(lines) == 1 else None,
-                }
         elif model == 'party.party':
             active_id = Transaction().context.get('active_id', None)
             accounts = [x.id for x in Account.search(
                     [('kind', 'in', ('receivable', 'payable'))])]
-            lines = Line.search([
+            return Line.search([
                     ('account', 'in', accounts),
                     ['OR',
                         [('credit', '>', 0)],
@@ -489,17 +499,55 @@ class PaymentCreation(model.CoogWizard):
                     ('party', '=', active_id),
                     ('reconciliation', '=', None)
                     ])
+        return []
+
+    @classmethod
+    def check_selection(cls, lines=None):
+        pass
+
+    def default_start(self, values):
+        self.check_selection()
+        model = Transaction().context.get('active_model')
+        lines = self.get_move_lines_from_active_model()
+        possible_journals = self.get_possible_journals(lines)
+        res = {
+            'kind': 'payable',
+            'possible_journals': [x.id for x in possible_journals],
+            'single_journal': len(possible_journals) == 1,
+            }
+        if model == 'account.move.line':
+            if not lines:
+                return {}
+            kind = self.get_lines_amount_per_kind(lines)
+            parties = list(set([l.party for l in lines]))
+            payment_dates = list(set([l.payment_date for l in lines]))
+            journals = self.get_payment_journals_from_lines(lines)
+            journal = journals[0] if len(journals) == 1 else None
+            res.update({
+                    'lines_to_pay': [x.id for x in lines],
+                    'total_amount': kind.values()[0],
+                    'kind': kind.keys()[0],
+                    'multiple_parties': len(parties) != 1,
+                    'party': parties[0].id if len(parties) == 1 else None,
+                    'payment_date': payment_dates[0]
+                    if len(payment_dates) == 1 else None,
+                    'journal': journal.id if journal else None
+                    if len(lines) == 1 else None,
+                    })
+            return res
+        elif model == 'party.party':
+            active_id = Transaction().context.get('active_id', None)
             move_line_ids = [x.id for x in lines if x.payment_amount != 0]
             payment_dates = list(set([l.payment_date for l in lines]))
-            return {
-                'kind': 'payable',
-                'multiple_parties': False,
-                'party': active_id,
-                'lines_to_pay': move_line_ids,
-                'payment_date': payment_dates[0]
-                if len(payment_dates) == 1 else None,
-                }
-        return {'kind': 'payable'}
+            res.update({
+                    'kind': 'payable',
+                    'multiple_parties': False,
+                    'party': active_id,
+                    'lines_to_pay': move_line_ids,
+                    'payment_date': payment_dates[0]
+                    if len(payment_dates) == 1 else None,
+                    })
+        return res
 
     def init_payment(self, payment):
         if self.start.description:

@@ -15,13 +15,17 @@ def register():
     Pool.register(
         payment.Payment,
         payment.Journal,
+        payment.JournalFailureAction,
+        payment.MergedPaymentsByContracts,
+        payment.PaymentCreationStart,
         configuration.Configuration,
         offered.Product,
-        payment.JournalFailureAction,
         offered.BillingMode,
         move.MoveLine,
         event.EventLog,
         contract.Contract,
         report.ReportTemplate,
-        payment.MergedPaymentsByContracts,
         module='contract_insurance_payment', type_='model')
+    Pool.register(
+        payment.PaymentCreation,
+        module='contract_insurance_payment', type_='wizard')

@@ -1,3 +1,5 @@
+* FEA#8110 The payment creation wizard blocks the payment journal selection if a payment journal is already defined on the product related to the selection
+
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
 * FEA#0000 Add model to view merged payments by contracts

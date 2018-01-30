@@ -19,6 +19,8 @@ __all__ = [
     'Journal',
     'JournalFailureAction',
     'MergedPaymentsByContracts',
+    'PaymentCreationStart',
+    'PaymentCreation',
     ]
 
 
@@ -286,3 +288,86 @@ class MergedPaymentsByContracts(MergedPaymentsMixin):
             tables)
         clause['contract'] = move_line.contract
         return clause
+
+
+class PaymentCreationStart:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.payment.payment_creation.start'
+
+    @fields.depends('single_journal', 'journal')
+    def on_change_with_lines_to_pay_filter(self, name=None):
+        Line = Pool().get('account.move.line')
+        ids = super(PaymentCreationStart, self
+            ).on_change_with_lines_to_pay_filter(name)
+        if not ids or not self.single_journal:
+            return ids
+        lines = Line.browse(ids)
+        return [x.id for x in lines if x.contract
+            and x.contract.product.payment_journal == self.journal]
+
+
+class PaymentCreation:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.payment.creation'
+
+    @classmethod
+    def __setup__(cls):
+        super(PaymentCreation, cls).__setup__()
+        cls._error_messages.update({
+                'different_payment_journal': 'Please check whether all '
+                'involved products have the same defined payment journal.'
+                })
+
+    @classmethod
+    def get_product_journals_from_lines(cls, lines):
+        products = list({x.contract.product for x in lines
+                if x.contract and x.contract.product})
+        payment_journals = list({x.payment_journal for x in products
+                if x.payment_journal})
+        return payment_journals
+
+    @classmethod
+    def any_journal_not_allowed(cls, lines, payment_journals):
+        allowed_journals = cls.get_possible_journals(lines)
+        for payment_journal in payment_journals:
+            if payment_journal not in allowed_journals:
+                return True
+        return False
+
+    @classmethod
+    def get_possible_journals(cls, lines, kind=None):
+        '''
+        Here, we return only one possible journal (Journal mix is not allowed
+        because the related product defines the payment journal to use)
+        '''
+        payment_journals = cls.get_product_journals_from_lines(lines)
+        if payment_journals:
+            return [payment_journals[0]] if payment_journals else []
+        return super(PaymentCreation, cls).get_possible_journals(lines, kind)
+
+    @classmethod
+    def check_selection(cls, lines=None):
+        lines = lines or cls.get_move_lines_from_active_model()
+        if not lines:
+            return super(PaymentCreation, cls).check_selection()
+        payment_journals = cls.get_product_journals_from_lines(lines)
+        if cls.any_journal_not_allowed(lines, payment_journals):
+            cls.raise_user_error('different_payment_journal')
+        return payment_journals
+
+    def default_start(self, values):
+        lines = self.get_move_lines_from_active_model()
+        payment_journals = self.get_product_journals_from_lines(lines)
+        defaults = super(PaymentCreation, self).default_start(values)
+        if payment_journals:
+            defaults['journal'] = payment_journals[0].id \
+                if payment_journals[0] else None
+        return defaults
+
+    def transition_create_payments(self):
+        payment_journals = self.get_product_journals_from_lines(
+            self.start.lines_to_pay)
+        if self.any_journal_not_allowed(self.start.lines_to_pay,
+                payment_journals):
+            self.raise_user_error('different_payment_journal')
+        return super(PaymentCreation, self).transition_create_payments()

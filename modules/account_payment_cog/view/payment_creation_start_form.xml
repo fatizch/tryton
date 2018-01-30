@@ -29,5 +29,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="have_lines_payment_date" invisible="1"/>
     <group id="invisible" string="">
         <field name="lines_to_pay_filter" colspan="4"/>
+        <field name="possible_journals"/>
+        <field name="single_journal"/>
     </group>
 </form>

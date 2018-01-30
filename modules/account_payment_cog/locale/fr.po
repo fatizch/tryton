@@ -681,6 +681,14 @@ msgctxt "field:account.payment.payment_creation.start,total_amount:"
 msgid "Total Amount"
 msgstr "Montant total"
 
+msgctxt "field:account.payment.payment_creation.start,possible_journals:"
+msgid "Possible Journals"
+msgstr "Journaux possibles"
+
+msgctxt "field:account.payment.payment_creation.start,single_journal:"
+msgid "Single Journal"
+msgstr "Journal seul"
+
 msgctxt "field:account.payment.payment_information_selection,id:"
 msgid "ID"
 msgstr "ID"
