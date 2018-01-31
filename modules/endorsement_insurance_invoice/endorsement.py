@@ -96,7 +96,10 @@ class Contract:
             self)._get_invoice_rrule_and_billing_information(start)
         if not config.split_invoices_on_endorsement_dates:
             return invoice_rrule
-        endorsement_dates = self.rebill_endorsement_dates()
+        until = invoice_rrule[1]
+        endorsement_dates = [x for x in self.rebill_endorsement_dates()
+            if (not start or x.date() > start) and
+            (not until or x.date() < until)]
         if endorsement_dates:
             invoice_rrule[0].rrule(endorsement_dates)
         return invoice_rrule

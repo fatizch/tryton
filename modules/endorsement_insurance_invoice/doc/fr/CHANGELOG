@@ -1,4 +1,5 @@
-* BUG#7626: Correction de la vérification de la date d'effet autorisée lors du lancement d'avenant de modification des paramètres de quittancement
+* BUG#8168 Correction d'une anomalie lors du calcul des périodes de quittancement avec des dates d'avenant tarifant
+* BUG#7626 Correction de la vérification de la date d'effet autorisée lors du lancement d'avenant de modification des paramètres de quittancement
 * BUG#7815 Un nouveau mandat doit être crée quand le payeur change
 
 Version 1.14 - 2017-11-09
