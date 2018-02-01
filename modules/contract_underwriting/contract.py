@@ -4,6 +4,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, If
 from trytond.model import dualmethod
+from trytond.rpc import RPC
 
 from trytond.modules.coog_core import model, fields, utils
 from trytond.modules.contract import _STATES as CONTRACT_STATES
@@ -87,6 +88,12 @@ class ContractUnderwriting(model.CoogSQL, model.CoogView):
                 'the insurer',
                 'postponed': 'The underwriting decision is postponed',
                 })
+
+    def get_rec_name(self, name):
+        if self.decision:
+            return self.decision.rec_name
+        else:
+            super(ContractUnderwriting, self).get_rec_name(name)
 
     @fields.depends('decision')
     def on_change_with_needs_subscriber_validation(self, name=''):
@@ -346,6 +353,13 @@ class Contract:
     underwritings = fields.One2Many('contract.underwriting',
         'contract', 'Underwritings', delete_missing=True,
         states=CONTRACT_STATES)
+
+    @classmethod
+    def __setup__(cls):
+        super(Contract, cls).__setup__()
+        cls.__rpc__.update({
+                'update_underwritings': RPC(readonly=False, instantiate=0),
+                })
 
     @classmethod
     def view_attributes(cls):

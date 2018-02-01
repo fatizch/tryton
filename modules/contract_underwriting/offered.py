@@ -86,6 +86,9 @@ class UnderwritingDecision(model.CoogSQL, model.CoogView):
             ('code_unique', Unique(t, t.code), 'The code must be unique'),
             ]
 
+    def get_rec_name(self, name):
+        return self.name
+
     @staticmethod
     def default_level():
         return 'contract'
