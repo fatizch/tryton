@@ -18,15 +18,42 @@ _coog_redmine_send() {
     H1='"Content-Type: application/json"'
     H2='"X-Redmine-API-Key: '$REDMINE_TOKEN'"'
     if [ "${3:-}" = "" ]; then
-        echo curl -s -k -H "$H1" -X "$1" -H "$H2" "$URL" | bash
+        RES="$(echo curl -s -k -H "$H1" -X "$1" -H "$H2" "$URL" | bash)"
     else
-        echo curl -s -k -H "$H1" -X "$1" --data "@$3" -H "$H2" "$URL" | bash
+        RES="$(echo curl -s -k -H "$H1" -X "$1" --data "@$3" -H "$H2" "$URL" | bash)"
     fi
+    set +e
+    ERROR="$(grep -E 'Redmine [^ ]* error' <<< $RES)"
+    set -e
+    if [ "$RES" == "" ] || [ "$ERROR" != "" ]; then
+        exit 13
+    fi
+    echo "$RES"
+}
+
+_coog_redmine_parse_time() {
+    set -euo pipefail
+    _coog_redmine_send GET "time_entries.json$1" | \
+        python -mjson.tool | \
+        sed 's/^ *"hours": \(.*\),/\1/gp;d' | \
+        python -c "import sys; print(sum([float(x[:-1] or 0) for x in sys.stdin]))"
+}
+
+coog_redmine_report() { # Reports your current timesheet entries
+    set -euo pipefail
+    VALUE=$(_coog_redmine_parse_time "?user_id=me'&'limit=200'&'spent_on=t")
+    echo "Today: $VALUE"
+    VALUE=$(_coog_redmine_parse_time "?user_id=me'&'limit=200'&'spent_on=ld")
+    echo "Yesterday: $VALUE"
+    VALUE=$(_coog_redmine_parse_time "?user_id=me'&'limit=200'&'spent_on=w")
+    echo "This week: $VALUE"
+    VALUE=$(_coog_redmine_parse_time "?user_id=me'&'limit=200'&'spent_on=m")
+    echo "This month: $VALUE"
 }
 
 coog_redmine_time() { # Do your timesheets - issue minutes activity [message]
     # Freely adapted from https://github.com/gcoop-libre/redmine-bash-utils
-    set -eou pipefail
+    set -euo pipefail
     IFS=$'\n\t'
     PROJECT=0
     if [ "${1:-}" = "-p" ]; then
@@ -87,7 +114,7 @@ coog_redmine_time() { # Do your timesheets - issue minutes activity [message]
 }
 
 coog_redmine_projects() { # List projects
-    set -eou pipefail
+    set -euo pipefail
     IFS=$'\n\t'
     set +e
     VALUES=$(_coog_redmine_send GET projects.json?limit=100)
