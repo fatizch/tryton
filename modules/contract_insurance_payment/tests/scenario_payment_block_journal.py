@@ -262,8 +262,6 @@ product.save()
 create_payment = Wizard('account.payment.creation', lines_to_pay)
 [x.id for x in create_payment.form.possible_journals] == [journal2.id]
 # #Res# #True
-create_payment.form.single_journal
-# #Res# #True
 create_payment.form.journal == journal2
 # #Res# #True
 
@@ -277,8 +275,6 @@ product2.save()
 create_payment = Wizard('account.payment.creation', lines_to_pay)
 len(create_payment.form.possible_journals) == 2
 # #Res# #True
-create_payment.form.single_journal
-# #Res# #False
 
 # #Comment# #Remove Set the journal on 1 product only: we are able to generate
 # the payment but the journal won't be selectable
@@ -287,6 +283,4 @@ product2.save()
 
 create_payment = Wizard('account.payment.creation', lines_to_pay)
 [x.id for x in create_payment.form.possible_journals] == [journal.id]
-# #Res# #True
-create_payment.form.single_journal
 # #Res# #True

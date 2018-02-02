@@ -454,7 +454,9 @@ class IndemnificationDefinition(model.CoogView):
     beneficiary_share = fields.Numeric('Beneficiary Share', readonly=True)
     possible_beneficiaries = fields.Many2Many('party.party', None, None,
         'Possible Beneficiaries', readonly=True)
-    journal = fields.Many2One('account.payment.journal', 'Journal')
+    journal = fields.Many2One('account.payment.journal', 'Journal',
+        domain=[('id', 'in', Eval('possible_journals'))],
+        depends=['possible_journals'])
     product = fields.Many2One('product.product', 'Product', states={
             'invisible': Bool(Eval('product', False)) &
             (Len(Eval('possible_products', [])) == 1),
@@ -462,10 +464,12 @@ class IndemnificationDefinition(model.CoogView):
         depends=['possible_products'])
     possible_products = fields.Many2Many('product.product', None, None,
         'Possible Products')
+    possible_journals = fields.Many2Many('account.payment.journal', None, None,
+        'Possible Journals')
 
     @fields.depends('beneficiary', 'beneficiary_share', 'is_period',
         'possible_beneficiaries', 'possible_products', 'product', 'start_date',
-        'service', 'indemnification_date')
+        'service', 'indemnification_date', 'possible_journals')
     def on_change_service(self):
         if not self.service:
             self.is_period = False
@@ -484,6 +488,14 @@ class IndemnificationDefinition(model.CoogView):
                 if len(beneficiary_data) == 1:
                     self.beneficiary = beneficiary_data[0][0]
                     self.beneficiary_share = beneficiary_data[0][1]
+            Journal = Pool().get('account.payment.journal')
+            if benefit.payment_journals:
+                self.possible_journals = [
+                    x.id for x in benefit.payment_journals]
+            else:
+                self.possible_journals = [x.id for x in Journal.search([])]
+            self.journal = self.possible_journals[0] \
+                if len(self.possible_journals) == 1 else None
         self.update_product()
 
     @fields.depends('beneficiary', 'beneficiary_share', 'service',
@@ -738,7 +750,8 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
 
     def default_definition(self, name):
         result = getattr(self, 'result', None)
-        configuration = Pool().get('claim.configuration').get_singleton()
+        pool = Pool()
+        configuration = pool.get('claim.configuration').get_singleton()
         if self.result and getattr(result, 'indemnification', None):
             service = self.result.indemnification[0].service
             beneficiary = self.result.indemnification[0].beneficiary
@@ -782,6 +795,12 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
         if end_date and start_date > end_date:
             start_date = None
             end_date = None
+        if service.benefit.payment_journals:
+            possible_journals = [
+                x.id for x in service.benefit.payment_journals]
+        else:
+            Journal = pool.get('account.payment.journal')
+            possible_journals = [x.id for x in Journal.search([])]
         return {
             'service': service.id,
             'start_date': start_date,
@@ -791,7 +810,9 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
             'extra_data': extra_data,
             'product': product_id,
             'beneficiary_share': share,
-            'journal': configuration.payment_journal.id,
+            'possible_journals': possible_journals,
+            'journal': possible_journals[0] if len(possible_journals) == 1
+            else None,
             }
 
     def check_input(self):

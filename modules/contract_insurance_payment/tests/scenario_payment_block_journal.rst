@@ -257,8 +257,6 @@ But the journal won't be selectable.::
     >>> create_payment = Wizard('account.payment.creation', lines_to_pay)
     >>> [x.id for x in create_payment.form.possible_journals] == [journal2.id]
     True
-    >>> create_payment.form.single_journal
-    True
     >>> create_payment.form.journal == journal2
     True
 
@@ -271,8 +269,6 @@ Remove journals to be able to change payment journal without any::
     >>> create_payment = Wizard('account.payment.creation', lines_to_pay)
     >>> len(create_payment.form.possible_journals) == 2
     True
-    >>> create_payment.form.single_journal
-    False
 
 Remove Set the journal on 1 product only: we are able to generate::
 
@@ -280,6 +276,4 @@ Remove Set the journal on 1 product only: we are able to generate::
     >>> product2.save()
     >>> create_payment = Wizard('account.payment.creation', lines_to_pay)
     >>> [x.id for x in create_payment.form.possible_journals] == [journal.id]
-    True
-    >>> create_payment.form.single_journal
     True

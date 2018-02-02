@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'MoveLine',
@@ -25,3 +24,12 @@ class MoveLine:
     def _process_payment_key(cls, line):
         return super(MoveLine, cls)._process_payment_key(line) + \
             (line.contract, )
+
+    @classmethod
+    def get_configuration_journals_from_lines(cls, lines):
+        products = list({x.contract.product for x in lines
+                if x.contract and x.contract.product})
+        payment_journals = list({x.payment_journal for x in products
+                if x.payment_journal})
+        return payment_journals
+

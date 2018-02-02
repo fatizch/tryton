@@ -133,16 +133,6 @@ class PaymentCreation(model.FunctionalErrorMixIn):
                 })
 
     @classmethod
-    def get_product_journals_from_lines(cls, lines):
-        '''
-        Paybox is systematically added in possible journals,
-        so we remove it from product_journals
-        '''
-        return [x for x in
-            super(PaymentCreation, cls).get_product_journals_from_lines(lines)
-            if x.process_method != 'paybox']
-
-    @classmethod
     def get_possible_journals(cls, lines, kind=None):
         '''
         Paybox must be always available when creating a payment.

@@ -237,6 +237,14 @@ class MoveLine:
         return account_configuration.get_payment_journal(self)
 
     @classmethod
+    def get_payment_journals_from_lines(cls, lines):
+        return list(set([x.get_payment_journal() for x in lines]))
+
+    @classmethod
+    def get_configuration_journals_from_lines(cls, lines):
+        return []
+
+    @classmethod
     def _process_payment_key(cls, line):
         return (line.party, line.get_payment_journal(), line.account.kind)
 
@@ -337,8 +345,7 @@ class PaymentCreationStart(model.CoogView):
                 [])])
     journal = fields.Many2One('account.payment.journal', 'Payment Journal',
         required=True, domain=[('id', 'in', Eval('possible_journals'))],
-        states={'readonly': Bool(Eval('single_journal'))},
-        depends=['possible_journals', 'single_journal'])
+        depends=['possible_journals'])
     kind = fields.Selection(KINDS, 'Payment Kind')
     process_method = fields.Char('Process Method', states={'invisible': True})
     motive = fields.Many2One('account.payment.motive', 'Motive',
@@ -361,7 +368,6 @@ class PaymentCreationStart(model.CoogView):
         'Created Payments')
     possible_journals = fields.Many2Many('account.payment.journal',
         None, None, 'Possible Journals', readonly=True)
-    single_journal = fields.Boolean('Single Journal', readonly=True)
 
     @classmethod
     def view_attributes(cls):
@@ -424,12 +430,6 @@ class PaymentCreationStart(model.CoogView):
                 type='wizard').get_possible_journals(self.lines_to_pay,
                 self.kind)]
 
-    @fields.depends('possible_journals')
-    def on_change_with_single_journal(self, name=None):
-        if len(self.possible_journals) > 1:
-            return False
-        return True
-
 
 class PaymentCreation(model.CoogWizard):
     'Payment Creation'
@@ -453,6 +453,9 @@ class PaymentCreation(model.CoogWizard):
                 'incompatible with selected kind',
                 'updating_payment_date': 'The payment date for all payments '
                 'will be update to %(date)s',
+                'different_payment_journal': 'Please check whether all '
+                'involved journal configuration for the selected lines have '
+                'the same defined payment journal.'
                 })
 
     def get_lines_amount_per_kind(self, lines):
@@ -473,9 +476,6 @@ class PaymentCreation(model.CoogWizard):
         There is no payment journal restriction from any configuration
         '''
         return Pool().get('account.payment.journal').search([()])
-
-    def get_payment_journals_from_lines(self, lines):
-        return list(set([x.get_payment_journal() for x in lines]))
 
     @classmethod
     def get_move_lines_from_active_model(cls):
@@ -503,7 +503,22 @@ class PaymentCreation(model.CoogWizard):
 
     @classmethod
     def check_selection(cls, lines=None):
-        pass
+        lines = lines or cls.get_move_lines_from_active_model()
+        if not lines:
+            return
+        Line = Pool().get('account.move.line')
+        payment_journals = Line.get_configuration_journals_from_lines(lines)
+        if cls.any_journal_not_allowed(lines, payment_journals):
+            cls.raise_user_error('different_payment_journal')
+        return payment_journals
+
+    @classmethod
+    def any_journal_not_allowed(cls, lines, payment_journals):
+        allowed_journals = cls.get_possible_journals(lines)
+        for payment_journal in payment_journals:
+            if payment_journal not in allowed_journals:
+                return True
+        return False
 
     def default_start(self, values):
         self.check_selection()
@@ -513,15 +528,15 @@ class PaymentCreation(model.CoogWizard):
         res = {
             'kind': 'payable',
             'possible_journals': [x.id for x in possible_journals],
-            'single_journal': len(possible_journals) == 1,
             }
         if model == 'account.move.line':
             if not lines:
                 return {}
+            Line = Pool().get(model)
             kind = self.get_lines_amount_per_kind(lines)
             parties = list(set([l.party for l in lines]))
             payment_dates = list(set([l.payment_date for l in lines]))
-            journals = self.get_payment_journals_from_lines(lines)
+            journals = Line.get_payment_journals_from_lines(lines)
             journal = journals[0] if len(journals) == 1 else None
             res.update({
                     'lines_to_pay': [x.id for x in lines],
@@ -558,6 +573,13 @@ class PaymentCreation(model.CoogWizard):
         MoveLine = pool.get('account.move.line')
         Payment = pool.get('account.payment')
 
+        payment_journals = MoveLine.get_configuration_journals_from_lines(
+            self.start.lines_to_pay)
+        if self.any_journal_not_allowed(self.start.lines_to_pay,
+                payment_journals):
+            self.raise_user_error('different_payment_journal')
+        if self.start.journal not in payment_journals:
+            self.raise_user_error('bad_payment_journal')
         kind = self.get_lines_amount_per_kind(self.start.lines_to_pay)
         if kind.keys()[0] != self.start.kind:
             self.raise_user_error('incompatible_lines_with_kind')

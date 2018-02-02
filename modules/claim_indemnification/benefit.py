@@ -14,6 +14,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Benefit',
     'BenefitProduct',
+    'BenefitPaymentJournal',
     'BenefitRule',
     ]
 
@@ -53,6 +54,10 @@ class Benefit:
         depends=['indemnification_kind'])
     products = fields.Many2Many('benefit-product', 'benefit', 'product',
         'Products')
+    payment_journals = fields.Many2Many('benefit-account.payment.journal',
+        'benefit', 'payment_journal', 'Payment Journals', help='The payment '
+        'journals defined here will be pickable when creating a new '
+        'indemnification period on a delivered service for this benefit')
 
     def has_automatic_period_calculation(self):
         return self.automatic_period_calculation and \
@@ -82,6 +87,17 @@ class BenefitProduct(model.CoogSQL):
         ondelete='CASCADE', select=True)
     product = fields.Many2One('product.product', 'Product', required=True,
         ondelete='RESTRICT')
+
+
+class BenefitPaymentJournal(model.CoogSQL):
+    'Benefit Payment Journal relation'
+
+    __name__ = 'benefit-account.payment.journal'
+
+    benefit = fields.Many2One('benefit', 'Benefit', required=True,
+        ondelete='CASCADE', select=True)
+    payment_journal = fields.Many2One('account.payment.journal', 'Product',
+        required=True, ondelete='CASCADE')
 
 
 class BenefitRule(

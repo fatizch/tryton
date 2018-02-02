@@ -25,6 +25,7 @@ def register():
         party.InsurerDelegation,
         benefit.Benefit,
         benefit.BenefitProduct,
+        benefit.BenefitPaymentJournal,
         benefit.BenefitRule,
         claim.Claim,
         claim.Loss,
@@ -59,4 +60,5 @@ def register():
         wizard.IndemnificationAssistant,
         wizard.DeleteIndemnification,
         party.PartyReplace,
+        payment.PaymentCreation,
         module='claim_indemnification', type_='wizard')

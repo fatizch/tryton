@@ -2,6 +2,13 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.move.line:"
+msgid ""
+"Please check whether the lines to pay are all related to a claim invoice."
+msgstr ""
+"Veuillez vérifier que toutes les lignes à payer séléctionnées proviennent "
+"d'une facture fournisseur."
+
 msgctxt "error:benefit.rule:"
 msgid "No indemnification rule defined"
 msgstr "Aucune règle d'indemnisation définie"
@@ -95,8 +102,8 @@ msgid ""
 "scheduled period of %(missing_days)s day(s) should be ahead"
 msgstr ""
 "Vous ne pouvez pas ordonnancer l'indemnisation %(indemnification)s parce "
-"qu'une période précédente ordonnancée de %(missing_days)s jour(s) "
-"est manquante"
+"qu'une période précédente ordonnancée de %(missing_days)s jour(s) est "
+"manquante"
 
 msgctxt "error:claim.loss:"
 msgid "%s indemnification(s) remains unpaid"
@@ -233,7 +240,7 @@ msgid "Is Regularisation"
 msgstr "Est une régularisation"
 
 msgctxt "field:account.invoice.line.claim_detail,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:account.invoice.line.claim_detail,service:"
@@ -264,9 +271,53 @@ msgctxt "field:benefit,indemnification_kind:"
 msgid "Indemnification Kind"
 msgstr "Type d'indemnisation"
 
+msgctxt "field:benefit,payment_journals:"
+msgid "Payment Journals"
+msgstr "Journaux de paiement"
+
 msgctxt "field:benefit,products:"
 msgid "Products"
 msgstr "Produits comptables"
+
+msgctxt "field:benefit-account.payment.journal,benefit:"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "field:benefit-account.payment.journal,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-account.payment.journal,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:benefit-account.payment.journal,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:benefit-account.payment.journal,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:benefit-account.payment.journal,payment_journal:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:benefit-account.payment.journal,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:benefit-account.payment.journal,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:benefit-account.payment.journal,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:benefit-account.payment.journal,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit-product,benefit:"
 msgid "Benefit"
@@ -293,7 +344,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:benefit-product,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit-product,write_date:"
@@ -361,7 +412,7 @@ msgid "Indemnification Rule Extra Data"
 msgstr "Paramètres de règle de prestation"
 
 msgctxt "field:benefit.rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.rule,requires_frequency:"
@@ -557,7 +608,7 @@ msgid "Product"
 msgstr "Contributions"
 
 msgctxt "field:claim.indemnification,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim.indemnification,service:"
@@ -789,7 +840,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:claim.indemnification.control.rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim.indemnification.control.rule,rule:"
@@ -900,6 +951,10 @@ msgctxt "field:claim.indemnification.detail,indemnification_status:"
 msgid "Indemnification Status"
 msgstr "Statut de l'indemnisation"
 
+msgctxt "field:claim.indemnification.detail,is_manual_indemnification:"
+msgid "Manual Calculation"
+msgstr "Calcul Manuel"
+
 msgctxt "field:claim.indemnification.detail,kind:"
 msgid "Kind"
 msgstr "Type de donnée"
@@ -909,7 +964,7 @@ msgid "Nb of unit"
 msgstr "Nombre d'Unité"
 
 msgctxt "field:claim.indemnification.detail,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim.indemnification.detail,start_date:"
@@ -979,6 +1034,10 @@ msgstr "Journal"
 msgctxt "field:claim.indemnification_definition,possible_beneficiaries:"
 msgid "Possible Beneficiaries"
 msgstr "Bénéficiaires possibles"
+
+msgctxt "field:claim.indemnification_definition,possible_journals:"
+msgid "Possible Journals"
+msgstr "Journaux possibles"
 
 msgctxt "field:claim.indemnification_definition,possible_products:"
 msgid "Possible Products"
@@ -1144,6 +1203,14 @@ msgstr ""
 "Les périodes vont être automatiquement recalculées depuis les informations "
 "des précédentes"
 
+msgctxt "help:benefit,payment_journals:"
+msgid ""
+"The payment journals defined here will be pickable when creating a new "
+"indemnification period on a delivered service for this benefit"
+msgstr ""
+"Les journaux de paiement définis ici seront utilisables lors de la création "
+"d'une période d'indémnisation sur un service délivré pour la prestation"
+
 msgctxt "help:claim.configuration,sorting_method:"
 msgid "This value will be used to sort indemnifications by start date"
 msgstr ""
@@ -1176,6 +1243,10 @@ msgstr "Sinistre"
 msgctxt "model:account.journal.type,name:journal_type_claim"
 msgid "Claim"
 msgstr "Sinistre"
+
+msgctxt "model:benefit-account.payment.journal,name:"
+msgid "Benefit Payment Journal relation"
+msgstr "Relation prestation journaux de paiement"
 
 msgctxt "model:benefit-product,name:"
 msgid "Benefit Product relation"

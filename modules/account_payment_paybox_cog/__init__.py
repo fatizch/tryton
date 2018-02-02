@@ -4,6 +4,7 @@ from trytond.pool import Pool
 import payment
 import batch
 import wizard
+import move
 
 
 def register():
@@ -13,6 +14,7 @@ def register():
         payment.PaymentCreationStart,
         payment.ProcessPayboxUrl,
         batch.PaymentAcknowledgeBatch,
+        move.MoveLine,
         module='account_payment_paybox_cog', type_='model')
     Pool.register(
         payment.PaymentCreation,

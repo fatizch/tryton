@@ -30,6 +30,5 @@ this repository contains the full copyright notices and license terms. -->
     <group id="invisible" string="">
         <field name="lines_to_pay_filter" colspan="4"/>
         <field name="possible_journals"/>
-        <field name="single_journal"/>
     </group>
 </form>

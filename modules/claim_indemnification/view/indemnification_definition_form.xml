@@ -15,7 +15,7 @@ this repository contains the full copyright notices and license terms. -->
     <label name="product"/>
     <field name="product" widget="selection"/>
     <label name="journal"/>
-    <field name="journal"/>
+    <field name="journal" widget="selection"/>
     <field name="service" invisible="1"/>
     <field name="possible_products" invisible="1"/>
     <field name="is_period" invisible="1"/>

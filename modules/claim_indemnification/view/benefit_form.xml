@@ -7,6 +7,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="benefit_rules" colspan="4"/>
         </page>
         <page id="accounting" string="Accounting" col="4">
+            <field name="payment_journals" colspan="4" widget="one2many"/>
             <field name="products" colspan="4"/>
         </page>
     </xpath>
