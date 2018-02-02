@@ -3,7 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 import copy
 import StringIO
-
+import datetime
 import json
 
 from sql.aggregate import Max
@@ -528,6 +528,8 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             return utils.get_value_at_date([x for x in Address.search(
                         [('party', '=', self.id), ('active', '=', False)])],
                 at_date, 'start_date')
+        addresses = sorted(addresses, key=lambda x: x.start_date or
+            datetime.date.min, reverse=True)
         for address in addresses:
             if not type or getattr(address, type):
                 return address
