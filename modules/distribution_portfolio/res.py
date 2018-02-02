@@ -18,6 +18,11 @@ class User:
         'Distribution Network')
 
     @classmethod
+    def __setup__(cls):
+        super(User, cls).__setup__()
+        cls._context_fields.append('dist_network')
+
+    @classmethod
     def _export_light(cls):
         result = super(User, cls)._export_light()
         result.add('dist_network')

@@ -1,3 +1,5 @@
+* FEA#8122 Le réseau de distribution de l'utilisateur est disponible dans les préférences côté client
+
 Version 1.14 - 2017-11-09
 * BUG #7110 Typo dans le __name__ de la valeur multiple du portefuille par défaut de distribution
 
