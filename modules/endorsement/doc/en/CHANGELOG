@@ -1,5 +1,6 @@
 * BUG#8041 Replace the contract start_date by the initial_start_date on the check method which is applied before launching endorsement modification
 * BUG#8144 Fix termination in current term with past periods
+* BUG#8147 Allow termination on suspended contracts
 * FEA#7655 Create one endorsement per contract in terminate, void, reactivate
 * FEA#7629 Add signature date on endorsements
 * BUG#7600 Fix problem related to the endorsement of contract termination made in the future

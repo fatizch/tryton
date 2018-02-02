@@ -1292,12 +1292,19 @@ class TerminateContract(EndorsementWizardStepMixin):
                 'termination_date_must_be_posterior': 'The termination date '
                 'must be posterior to the contract start date: %s',
                 'termination_before_active_start_date': 'You are trying to '
-                'terminate the contract before its active start date'
+                'terminate the contract before its active start date',
+                'termination_on_terminate_or_void_contract': 'You cannot '
+                'terminate the contracts %(contracts)s because they are '
+                'terminated or void.'
                 })
 
     @classmethod
     def is_multi_instance(cls):
         return False
+
+    @classmethod
+    def allow_inactive_contracts(cls):
+        return True
 
     @classmethod
     def get_methods_for_model(cls, model_name):
@@ -1325,6 +1332,13 @@ class TerminateContract(EndorsementWizardStepMixin):
         for contract in contracts:
             if select_screen.effective_date < contract.start_date:
                 to_warn.append(str(contract.id))
+        inactive_contracts = [x.contract_number for x in contracts
+            if x.status in ['void', 'terminated']]
+        if inactive_contracts:
+            cls.raise_user_error(
+                'termination_on_terminate_or_void_contract', {
+                        'contracts': ', '.join(inactive_contracts),
+                    })
         if to_warn:
             warning_id = ','.join(to_warn[0:10])
             cls.raise_user_warning(

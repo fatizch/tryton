@@ -124,6 +124,14 @@ msgctxt "error:endorsement.contract.terminate:"
 msgid "You are trying to terminate the contract before its active start date"
 msgstr "Vous essayez de résiliser le contrat avant sa date d'effet courante"
 
+msgctxt "error:endorsement.contract.terminate:"
+msgid ""
+"You cannot terminate the contracts %(contracts)s because they are terminated"
+" or void."
+msgstr ""
+"Vous ne pouvez pas résilier les contrats %(contracts)s parce qu'ils sont "
+"résiliés ou résiliés sans effet."
+
 msgctxt "error:endorsement.contract.void:"
 msgid "You are trying to void a renewed contract"
 msgstr "Vous essayez d'annuler un contrat qui a été renouvelé"
@@ -303,6 +311,10 @@ msgctxt "field:contract.manage_options,possible_parents:"
 msgid "Possible Parents"
 msgstr "Parents possibles"
 
+msgctxt "field:contract.manage_options,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:contract.manage_options.option_displayer,action:"
 msgid "Action"
 msgstr "Action"
@@ -444,12 +456,16 @@ msgid "Number"
 msgstr "Numéro"
 
 msgctxt "field:endorsement,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement,rollback_date:"
 msgid "Rollback Date"
 msgstr "Date de restauration"
+
+msgctxt "field:endorsement,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:endorsement,state:"
 msgid "State"
@@ -500,7 +516,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:endorsement.configuration,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.configuration,write_date:"
@@ -550,7 +566,7 @@ msgstr "Identifiant"
 
 msgctxt ""
 "field:endorsement.configuration.endorsement_number_sequence,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt ""
@@ -628,7 +644,7 @@ msgid "Options"
 msgstr "Options"
 
 msgctxt "field:endorsement.contract,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract,state:"
@@ -696,7 +712,7 @@ msgid "Keep if Empty"
 msgstr "Conserver si vide"
 
 msgctxt "field:endorsement.contract.activation_history,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.activation_history,relation:"
@@ -753,7 +769,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.activation_history.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.activation_history.field,write_date:"
@@ -801,6 +817,10 @@ msgctxt "field:endorsement.contract.change_extra_data,new_extra_data_date:"
 msgid "Date of New Extra Data"
 msgstr "Date d'effet des nouvelles données complémentaires"
 
+msgctxt "field:endorsement.contract.change_extra_data,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:endorsement.contract.change_start_date,current_start_date:"
 msgid "Current Start Date"
 msgstr "Date d'effet actuelle"
@@ -824,6 +844,10 @@ msgstr "ID"
 msgctxt "field:endorsement.contract.change_start_date,new_start_date:"
 msgid "New Start Date"
 msgstr "Nouvelle date d'effet"
+
+msgctxt "field:endorsement.contract.change_start_date,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:endorsement.contract.contact,action:"
 msgid "Action"
@@ -870,7 +894,7 @@ msgid "Keep if Empty"
 msgstr "Conserver si vide"
 
 msgctxt "field:endorsement.contract.contact,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.contact,relation:"
@@ -926,7 +950,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.contact.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.contact.field,write_date:"
@@ -990,7 +1014,7 @@ msgid "Extra Data Values"
 msgstr "Valeurs de données complémentaires"
 
 msgctxt "field:endorsement.contract.extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.extra_data,relation:"
@@ -1046,7 +1070,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.extra_data.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.extra_data.field,write_date:"
@@ -1094,7 +1118,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.field,write_date:"
@@ -1166,7 +1190,7 @@ msgid "Options"
 msgstr "Options"
 
 msgctxt "field:endorsement.contract.option,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.option,relation:"
@@ -1226,7 +1250,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.option.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.option.field,write_date:"
@@ -1286,7 +1310,7 @@ msgid "Endorsement"
 msgstr "Modèle d'Avenant"
 
 msgctxt "field:endorsement.contract.option.version,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.option.version,relation:"
@@ -1346,7 +1370,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.option.version.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.option.version.field,write_date:"
@@ -1389,6 +1413,10 @@ msgctxt "field:endorsement.contract.reactivate,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt "field:endorsement.contract.reactivate,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:endorsement.contract.recalculate,effective_date:"
 msgid "Effective Date"
 msgstr "Date effective"
@@ -1404,6 +1432,10 @@ msgstr "Avenant unitaire"
 msgctxt "field:endorsement.contract.recalculate,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:endorsement.contract.recalculate,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:endorsement.contract.subscriber_change,all_parties:"
 msgid "Display All Parties"
@@ -1437,6 +1469,10 @@ msgctxt "field:endorsement.contract.subscriber_change,possible_subscribers:"
 msgid "Possible Subscribers"
 msgstr "Souscripteurs possibles"
 
+msgctxt "field:endorsement.contract.subscriber_change,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:endorsement.contract.terminate,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -1460,6 +1496,10 @@ msgstr "Avenant unitaire"
 msgctxt "field:endorsement.contract.terminate,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:endorsement.contract.terminate,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:endorsement.contract.terminate,termination_date:"
 msgid "Termination Date"
@@ -1492,6 +1532,10 @@ msgstr "Avenant unitaire"
 msgctxt "field:endorsement.contract.void,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:endorsement.contract.void,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:endorsement.contract.void,void_reason:"
 msgid "Void Reason"
@@ -1570,7 +1614,7 @@ msgid "Products"
 msgstr "Produits"
 
 msgctxt "field:endorsement.definition,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.definition,report_templates:"
@@ -1622,7 +1666,7 @@ msgid "Order"
 msgstr "Ordre"
 
 msgctxt "field:endorsement.definition-endorsement.part,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.definition-endorsement.part,write_date:"
@@ -1662,7 +1706,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:endorsement.definition-product,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.definition-product,write_date:"
@@ -1698,7 +1742,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:endorsement.definition-report.template,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.definition-report.template,report_template:"
@@ -1742,7 +1786,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:endorsement.definition-res.group,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.definition-res.group,write_date:"
@@ -1788,6 +1832,10 @@ msgstr "ID"
 msgctxt "field:endorsement.manage_contacts,possible_contracts:"
 msgid "Possible Contracts"
 msgstr "Contrats disponibles"
+
+msgctxt "field:endorsement.manage_contacts,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:endorsement.manage_contacts.contact,action:"
 msgid "Action"
@@ -1890,7 +1938,7 @@ msgid "Option fields"
 msgstr "Champs des garanties souscrites"
 
 msgctxt "field:endorsement.part,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.part,view:"
@@ -1925,6 +1973,10 @@ msgctxt "field:endorsement.start.dummy_step,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:endorsement.start.dummy_step,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:endorsement.start.preview_changes,id:"
 msgid "ID"
 msgstr "ID"
@@ -1950,7 +2002,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:endorsement.start.rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.start.rule,rule:"
@@ -2028,6 +2080,10 @@ msgctxt "field:endorsement.start.select_endorsement,product:"
 msgid "Product"
 msgstr "Produit"
 
+msgctxt "field:endorsement.start.select_endorsement,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:endorsement.sub_state,code:"
 msgid "Code"
 msgstr "Code"
@@ -2053,7 +2109,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.sub_state,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.sub_state,state:"

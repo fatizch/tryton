@@ -1,3 +1,4 @@
+* BUG#8147 Permettre la résiliation de contrats suspendus
 * BUG#8041 La date d'effet de l'avenant doit être postérieure à la date d'effet initiale, et non pas seulement à la date d'effet courante
 * BUG#8144 Correction de la résiliation dans le terme courant avec des périodes dans le passé
 * FEA#7655 Création d'un avenant par contrat pour la résiliation, résiliation sans effet, réactivation
