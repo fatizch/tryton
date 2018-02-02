@@ -1,3 +1,4 @@
+* BUG#8189 Fix depends on contract broker
 * BUG#7914 Remove "agents" field from product / coverage form view and add relate instead
 * BUG#7875 Use initial_start_date instead of start_date in dates recalculation algorithm 
 * FEA#0000 Add covered element on commission list
