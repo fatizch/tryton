@@ -49,6 +49,10 @@ coog_redmine_time() { # Do your timesheets - issue minutes activity [message]
         echo "    22: Congés"
         echo "    23: Formation"
         echo "    64: Review"
+        echo ""
+        echo "You can set the REDMINE_DATE environment variable to change the"
+        echo "date at which the time entry should be set. Default behavior is"
+        echo "to use the current date. Expected format is YYYY-MM-DD"
         exit 1
     fi
 
@@ -63,7 +67,7 @@ coog_redmine_time() { # Do your timesheets - issue minutes activity [message]
 
     HOURS=$(echo "scale = 10;$MINUTES/60" | bc | awk '{printf "%0.2f",$1}')
 
-    SPENT_ON=$(date +%Y-%m-%d)
+    SPENT_ON=${REDMINE_DATE:-$(date +%Y-%m-%d)}
 
     echo "{" > /tmp/data.json
     echo "    \"time_entry\": {" >> /tmp/data.json
