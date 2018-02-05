@@ -47,8 +47,12 @@ coog_redmine_report() { # Reports your current timesheet entries
     echo "Yesterday: $VALUE"
     VALUE=$(_coog_redmine_parse_time "?user_id=me'&'limit=200'&'spent_on=w")
     echo "This week: $VALUE"
+    VALUE=$(_coog_redmine_parse_time "?user_id=me'&'limit=200'&'spent_on=lw")
+    echo "Last week: $VALUE"
     VALUE=$(_coog_redmine_parse_time "?user_id=me'&'limit=200'&'spent_on=m")
     echo "This month: $VALUE"
+    VALUE=$(_coog_redmine_parse_time "?user_id=me'&'limit=200'&'spent_on=lm")
+    echo "Last month: $VALUE"
 }
 
 coog_redmine_time() { # Do your timesheets - issue minutes activity [message]
