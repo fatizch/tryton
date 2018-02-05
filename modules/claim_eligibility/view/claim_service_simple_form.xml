@@ -11,7 +11,7 @@ this repository contains the full copyright notices and license terms. -->
         <button name="validate_services" string="Validate Eligibility" icon="check"/>
         <button name="reject_services" string="Decline Eligibility" icon="cancel-list"/>
     </group>
-    <separator colspan="2"/>
+    <separator id="separator" colspan="2"/>
     <label name="eligibility_comment_wrapped" xalign="0"/>
     <label name="benefit_summary" xalign="0"/>
     <field name="eligibility_comment_wrapped" yexpand="0"/>
