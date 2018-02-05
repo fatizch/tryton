@@ -3,7 +3,7 @@
 import datetime
 
 from trytond.rpc import RPC
-from trytond.pyson import Eval, Bool, Or, And
+from trytond.pyson import Eval, Bool, Or
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.model import Unique
@@ -438,7 +438,7 @@ class Loss(model.CoogSQL, model.CoogView):
         domain=[('id', 'in', Eval('available_closing_reasons'))],
         states={
             'readonly': Eval('claim_status') == 'closed',
-            'invisible': Or(Bool(~Eval('with_end_date')), ~Eval('end_date'))},
+            'invisible': ~Eval('with_end_date')},
         depends=['available_closing_reasons', 'claim_status', 'with_end_date'],
         ondelete='RESTRICT')
 
@@ -461,12 +461,20 @@ class Loss(model.CoogSQL, model.CoogView):
                 })
         cls._buttons.update({
                 'draft': {
-                    'readonly': Or(Eval('state') == 'draft', Eval('claim_status') == 'closed'),
-                    'invisible': Or(Eval('state') == 'draft', Eval('claim_status') == 'closed'),
+                    'readonly': Or(
+                        Eval('state') == 'draft',
+                        Eval('claim_status') == 'closed'),
+                    'invisible': Or(
+                        Eval('state') == 'draft',
+                        Eval('claim_status') == 'closed'),
                     },
                 'activate': {
-                    'invisible': Or(Eval('state') == 'active', ~Eval('loss_desc')),
-                    'readonly': Or(Eval('state') == 'active', ~Eval('loss_desc')),
+                    'invisible': Or(
+                        Eval('state') == 'active',
+                        ~Eval('loss_desc')),
+                    'readonly': Or(
+                        Eval('state') == 'active',
+                        ~Eval('loss_desc')),
                     },
                 })
 

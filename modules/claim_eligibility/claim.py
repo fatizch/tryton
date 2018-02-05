@@ -58,6 +58,7 @@ class ClaimService:
         fields.Many2Many('benefit.eligibility.decision', None, None,
             'Possible Decisions'),
         getter='on_change_with_possible_decisions')
+    icon = fields.Function(fields.Char('Icon'), 'get_icon')
 
     @classmethod
     def __setup__(cls):
@@ -175,6 +176,16 @@ class ClaimService:
                 name, clause),
             [('eligibility_status', '!=', 'refused')]
             ]
+
+    def get_icon(self, name):
+        if self.eligibility_status == 'study_in_progress':
+            return 'reload_and_check'
+        elif self.eligibility_status == 'accepted':
+            return 'check'
+        elif self.eligibility_status == 'refused':
+            return 'cancel-list'
+        else:
+            return None
 
 
 class ClaimIndemnification:

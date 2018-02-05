@@ -9,7 +9,7 @@ from sql.aggregate import Max
 from sql.conditionals import Coalesce
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If, Bool, In, And, Or, Equal
+from trytond.pyson import Eval, If, Bool, In, And, Equal
 from trytond.transaction import Transaction
 from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.report_engine import Printable
@@ -125,10 +125,7 @@ class Loss:
                 ())
             ], depends=['end_date'])
     is_a_relapse = fields.Boolean('Is A Relapse',
-        states={
-            'invisible': Or(Eval('loss_desc_kind') != 'std',
-                ~Eval('is_a_relapse'))}, readonly=True,
-        depends=['loss_desc_kind', 'is_a_relapse'])
+        states={'invisible': ~Eval('with_end_date')}, depends=['with_end_date'])
     loss_kind = fields.Function(
         fields.Char('Loss Kind'),
         'get_loss_kind')
