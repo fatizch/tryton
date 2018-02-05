@@ -93,6 +93,8 @@ resquests_details = []
 for issue in get_issues():
     issue['updated_on'] = datetime.datetime.strptime(issue['updated_on'],
         '%Y-%m-%dT%H:%M:%SZ')
+    issue['custom_fields'] = {x['name']: x.get('value', '').encode('utf-8')
+        for x in issue['custom_fields'] if not x.get('multiple', False)}
     resquests_details.append(issue)
 
 basic = Template(source='', filepath='scrum_request_template.odt')
