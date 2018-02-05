@@ -180,11 +180,14 @@ class Loss:
 
     @classmethod
     def set_start_end_dates(cls, losses, name, value):
+        losses_to_update = [l for l in losses
+            if l.loss_desc_kind in ('ltd', 'std')]
         if 'start_date' in name:
             date = 'start_date'
         else:
             date = 'end_date'
-        cls.write(losses, {date: value})
+        if losses_to_update:
+            cls.write(losses_to_update, {date: value})
 
     def close(self, sub_status, date=None):
         super(Loss, self).close(sub_status, date)
