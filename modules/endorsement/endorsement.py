@@ -36,7 +36,7 @@ from trytond.modules.company.model import (CompanyMultiValueMixin,
 
 
 _STATES_WITH_SUBSTATES = ['declined']
-STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS = ['quote', 'declined', 'void']
+STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS = ['quote', 'declined']
 
 __all__ = [
     'field_mixin',
@@ -983,7 +983,12 @@ class Contract(CoogProcessFramework):
         self.save()
 
     def reactivate_through_endorsement(self, caller=None):
+        History = Pool().get('contract.activation_history')
         with ServerContext().set_context(no_reactivate_endorsement=True):
+            if self.status == 'void':
+                History.write(History.search([
+                        ('contract', '=', self),
+                        ('active', '=', False)]), {'active': True})
             self.reactivate([self])
 
     @classmethod
