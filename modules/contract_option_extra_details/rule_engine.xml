@@ -14,14 +14,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="fct_args">Identifiant du detail, date</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
-        <record model="rule_engine.function" id="computing_current_extra_details">
-            <field name="translated_technical_name">calcul_des_details_courants</field>
-            <field name="description">En cours de calcul des détails à la date du jour</field>
+        <record model="rule_engine.function" id="current_extra_details_mode">
+            <field name="translated_technical_name">mode_de_calcul_des_details</field>
+            <field name="description">Mode de calcul des détails</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_computing_current_extra_details</field>
-            <field name="long_description">Permet de différencier le calcul des détails de garantie stockées de celui affiché à la date du jour sur les garanties</field>
+            <field name="name">_re_extra_details_computing_mode</field>
+            <field name="long_description">Permet de différencier différents mode de calcul. Il est possible
+                d'utiliser des modes particulier, par exemple pour l'éditique
+
+Valeurs possibles : 'normal', 'current', autres...</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
     </data>

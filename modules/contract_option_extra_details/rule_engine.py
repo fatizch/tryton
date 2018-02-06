@@ -42,5 +42,5 @@ class Runtime:
             None)
 
     @classmethod
-    def _re_computing_current_extra_details(cls, args):
-        return bool(args.get('_computing_current_extra_details', False))
+    def _re_extra_details_computing_mode(cls, args):
+        return args.get('_extra_details_mode', 'normal')

@@ -72,13 +72,12 @@ class ContractOption:
     def getter_current_extra_details(self, name):
         if not self.coverage.extra_details_rule:
             return
-        return self._get_extra_details_at_date(utils.today(), current=True)
+        return self._get_extra_details_at_date(utils.today(), mode='current')
 
-    def _get_extra_details_at_date(self, date, current=False):
+    def _get_extra_details_at_date(self, date, mode='normal'):
         data = {'date': date}
         self.init_dict_for_rule_engine(data)
-        if current:
-            data['_computing_current_extra_details'] = True
+        data['_extra_details_mode'] = mode
         return self.coverage.calculate_extra_details(data)
 
     def compute_missing_details(self, date=None):
