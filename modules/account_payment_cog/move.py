@@ -578,8 +578,6 @@ class PaymentCreation(model.CoogWizard):
         if self.any_journal_not_allowed(self.start.lines_to_pay,
                 payment_journals):
             self.raise_user_error('different_payment_journal')
-        if self.start.journal not in payment_journals:
-            self.raise_user_error('bad_payment_journal')
         kind = self.get_lines_amount_per_kind(self.start.lines_to_pay)
         if kind.keys()[0] != self.start.kind:
             self.raise_user_error('incompatible_lines_with_kind')
