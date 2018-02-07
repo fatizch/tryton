@@ -12,7 +12,6 @@ from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields, utils
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Dunning',
     'Procedure',

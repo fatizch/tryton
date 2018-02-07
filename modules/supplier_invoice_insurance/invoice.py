@@ -5,7 +5,6 @@ from trytond.pyson import Eval, If
 
 from trytond.modules.coog_core import fields, utils
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Invoice',
     'InvoiceLine',

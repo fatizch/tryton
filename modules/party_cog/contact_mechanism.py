@@ -16,7 +16,6 @@ MEDIA = _TYPES + [
     ]
 VALID_EMAIL_REGEX = r"[^@]+@[^@]+\.[^@]+"
 
-__metaclass__ = PoolMeta
 __all__ = [
     'ContactMechanism',
     'PartyInteraction',

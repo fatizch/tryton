@@ -6,7 +6,6 @@ from trytond.pyson import Eval
 
 from trytond.modules.coog_core import fields, model, coog_string
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Commission',
     'Agent',

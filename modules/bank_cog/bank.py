@@ -8,7 +8,6 @@ from trytond.modules.coog_core import utils, fields, export, model
 from trytond.modules.coog_core import coog_string
 
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Bank',

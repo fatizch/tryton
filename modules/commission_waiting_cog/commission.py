@@ -12,7 +12,6 @@ __all__ = [
     'CreateAgents',
     'CreateAgentsAsk',
     ]
-__metaclass__ = PoolMeta
 
 
 class Commission:

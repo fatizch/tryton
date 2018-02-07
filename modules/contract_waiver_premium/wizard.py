@@ -9,7 +9,6 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, PYSONEncoder
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'CreateWaiverChoice',
     'CreateWaiver',

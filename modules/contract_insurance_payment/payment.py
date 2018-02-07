@@ -13,7 +13,6 @@ from trytond.modules.coog_core import fields
 from trytond.modules.account_payment_cog.payment import MergedPaymentsMixin
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Payment',
     'Journal',

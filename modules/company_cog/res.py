@@ -3,7 +3,6 @@
 from trytond.pool import PoolMeta
 from trytond.modules.coog_core import export
 
-__metaclass__ = PoolMeta
 __all__ = [
     'User',
     'Employee',

@@ -16,7 +16,6 @@ from trytond.pyson import Eval, Bool, If, Len, Not, In
 from trytond.modules.coog_core import fields, model, coog_string, coog_date, \
     utils
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ContractLoan',

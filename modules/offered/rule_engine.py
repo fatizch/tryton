@@ -5,7 +5,6 @@ from trytond.pool import PoolMeta
 from trytond.modules.coog_core import fields, model
 from trytond.modules.rule_engine import get_rule_mixin
 
-__metaclass__ = PoolMeta
 __all__ = [
     'RuleEngine',
     'OptionDescriptionEndingRule',

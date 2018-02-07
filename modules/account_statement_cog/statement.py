@@ -11,7 +11,6 @@ from trytond.model import ModelView
 from trytond.modules.account_statement.statement import _STATES, _DEPENDS
 from trytond.modules.coog_core import fields, export, model
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Line',

@@ -5,7 +5,6 @@ from trytond.pool import Pool, PoolMeta
 from trytond.modules.coog_core import fields
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Process',
     'EndorsementFindProcess',

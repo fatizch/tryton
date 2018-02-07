@@ -8,7 +8,6 @@ from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.claim_indemnification.benefit import ANNUITY_FREQUENCIES
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Option',
     'OptionVersion',

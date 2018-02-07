@@ -15,7 +15,6 @@ from trytond.modules.company.model import (CompanyValueMixin,
 from trytond.modules.coog_core import model, fields
 from trytond.modules.report_engine import Printable
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Configuration',
     'ConfigurationEndorsementSetSequence',

@@ -11,7 +11,6 @@ EXTRA_PREMIUM_FREQUENCIES = [
     ('yearly', 'Per Year'),
     ]
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'CoveredElement',

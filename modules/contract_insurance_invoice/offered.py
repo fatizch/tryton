@@ -16,7 +16,6 @@ from trytond.modules.coog_core import fields, model, export, utils
 
 from .contract import FREQUENCIES
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'BillingMode',

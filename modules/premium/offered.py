@@ -25,7 +25,6 @@ PREMIUM_FREQUENCY = [
     ('at_contract_signature', 'At contract signature'),
     ]
 
-__metaclass__ = PoolMeta
 __all__ = [
     'ProductPremiumDate',
     'Product',

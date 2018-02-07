@@ -9,7 +9,6 @@ from trytond.wizard import Wizard
 
 from trytond.modules.coog_core import model, fields, coog_string
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Party',

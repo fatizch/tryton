@@ -12,7 +12,6 @@ from trytond.pyson import Eval, Len, PYSONEncoder
 
 from trytond.modules.coog_core import fields, coog_string, model
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Party',
     'SynthesisMenu',

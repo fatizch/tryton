@@ -5,7 +5,6 @@ from trytond.pool import PoolMeta, Pool
 
 MODULE_NAME = 'offered_life_clause'
 
-__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]

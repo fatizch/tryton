@@ -10,7 +10,6 @@ from trytond.rpc import RPC
 from trytond.modules.coog_core import fields, utils, model
 from trytond.modules.currency_cog import ModelCurrency
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'CoveredElement',

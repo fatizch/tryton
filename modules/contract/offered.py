@@ -16,7 +16,6 @@ __all__ = [
     'ProductQuoteNumberSequence',
     'ContractDataRule'
     ]
-__metaclass__ = PoolMeta
 
 
 class Product(CompanyMultiValueMixin):

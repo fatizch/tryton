@@ -11,7 +11,6 @@ import fields
 import coog_string
 import utils
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Event',
     'EventType',

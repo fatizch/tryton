@@ -46,7 +46,6 @@ __all__ = [
     'OpenCommissionSynthesisYearLine',
     'FilterAggregatedCommissions',
     ]
-__metaclass__ = PoolMeta
 
 COMMISSION_AMOUNT_DIGITS = 8
 COMMISSION_RATE_DIGITS = 4

@@ -7,7 +7,6 @@ from trytond.modules.coog_core import model, fields
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'CloseClaim',
     'ClaimCloseReasonView',

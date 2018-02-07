@@ -5,7 +5,6 @@ from trytond.pool import PoolMeta
 from trytond.modules.coog_core import fields
 from trytond.modules.report_engine import Printable
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Dunning',
     'Level',

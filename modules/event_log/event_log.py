@@ -6,7 +6,6 @@ from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.coog_core import model, fields, utils
 
-__metaclass__ = PoolMeta
 __all__ = [
     'EventLog',
     'Trigger',

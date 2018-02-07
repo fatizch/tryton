@@ -3,7 +3,6 @@
 from trytond.pool import PoolMeta, Pool
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'Endorsement',

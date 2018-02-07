@@ -9,7 +9,6 @@ from trytond.modules.coog_core import model, fields
 from trytond.modules.coog_core import coog_string
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Product',
     'ItemDescription',

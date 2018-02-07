@@ -5,7 +5,6 @@ from trytond.pool import PoolMeta
 from trytond import backend
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'OptionDescription',
     ]

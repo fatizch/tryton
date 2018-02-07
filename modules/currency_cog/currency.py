@@ -8,7 +8,6 @@ from trytond.modules.coog_core import export, utils
 
 import string_utils
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Currency',

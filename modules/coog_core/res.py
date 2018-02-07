@@ -10,7 +10,6 @@ from trytond.cache import Cache
 from export import ExportImportMixin
 
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Group',

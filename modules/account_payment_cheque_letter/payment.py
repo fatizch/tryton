@@ -9,7 +9,6 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, Equal, PYSONEncoder, Bool
 from trytond.wizard import StateAction
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Journal',

@@ -24,7 +24,6 @@ from trytond.tools.multivalue import migrate_property
 from trytond.modules.company.model import (CompanyValueMixin,
     CompanyMultiValueMixin)
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Payment',

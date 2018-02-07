@@ -17,7 +17,6 @@ from trytond.modules.contract.contract import CONTRACTSTATUSES
 from trytond.wizard import StateTransition, StateView, Button
 from trytond.modules.report_engine import Printable
 
-__metaclass__ = PoolMeta
 __all__ = [
     'ContractSet',
     'Contract',

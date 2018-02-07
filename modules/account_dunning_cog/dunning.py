@@ -10,7 +10,6 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import fields, utils, export, coog_string
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Dunning',
     'Level',

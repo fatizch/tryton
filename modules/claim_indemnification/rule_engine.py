@@ -11,7 +11,6 @@ from trytond.transaction import Transaction
 from trytond.modules.rule_engine import check_args
 from trytond.modules.coog_core import coog_date, fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'RuleEngine',
     'RuleEngineRuntime',

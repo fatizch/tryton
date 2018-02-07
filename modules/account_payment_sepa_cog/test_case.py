@@ -4,7 +4,6 @@ from trytond.pool import Pool, PoolMeta
 
 MODULE_NAME = 'account_payment_sepa_cog'
 
-__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]

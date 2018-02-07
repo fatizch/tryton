@@ -6,7 +6,6 @@ from trytond.modules.company import CompanyReport
 
 from trytond.modules.coog_core import fields
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Line',

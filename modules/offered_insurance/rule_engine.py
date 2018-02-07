@@ -22,7 +22,6 @@ from trytond.modules.rule_engine import check_args, RuleTools
 #     a key in the 'args' parameter of the function                           #
 ###############################################################################
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'RuleEngineExtraData',

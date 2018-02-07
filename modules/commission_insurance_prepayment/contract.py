@@ -13,7 +13,6 @@ from trytond.modules.coog_core import fields
 from trytond.modules.commission_insurance.commission import \
     COMMISSION_AMOUNT_DIGITS, COMMISSION_RATE_DIGITS
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ContractOption'

@@ -10,7 +10,6 @@ from trytond.pyson import Eval
 from trytond.modules.coog_core import export, fields, utils
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Account',
     'AccountTemplate',

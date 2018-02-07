@@ -14,7 +14,6 @@ from trytond.modules.coog_core import fields
 from trytond.modules.document_request.document import RemindableInterface
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Claim',
     ]

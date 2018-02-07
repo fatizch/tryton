@@ -26,7 +26,6 @@ from trytond.modules.coog_core import utils, fields, model, export, summary
 from trytond.modules.coog_core import coog_string, UnionMixin
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Party',
     'PartyLang',

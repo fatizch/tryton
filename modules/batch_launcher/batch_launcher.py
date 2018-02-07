@@ -9,7 +9,6 @@ from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.modules.coog_core import model, fields
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'LaunchBatch',
     'SelectBatch',

@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
 __all__ = [
     'PartyBalance',
     ]

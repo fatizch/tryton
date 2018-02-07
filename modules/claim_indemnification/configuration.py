@@ -4,7 +4,6 @@ from trytond.pyson import Bool, Eval
 from trytond.pool import PoolMeta
 from trytond.modules.coog_core import fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Configuration'
     ]

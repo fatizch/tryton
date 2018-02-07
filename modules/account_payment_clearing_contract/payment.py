@@ -4,7 +4,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import ModelView, Workflow
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Payment',
     ]

@@ -4,7 +4,6 @@ from trytond.pool import PoolMeta
 
 from trytond.modules.coog_core import export, fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Company',
     ]

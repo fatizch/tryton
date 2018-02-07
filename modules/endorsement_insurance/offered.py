@@ -6,7 +6,6 @@ from trytond.pyson import Eval, And
 from trytond.modules.coog_core import fields, model
 from trytond.modules.endorsement.endorsement import field_mixin
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'EndorsementPart',

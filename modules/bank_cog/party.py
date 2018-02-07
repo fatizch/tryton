@@ -13,7 +13,6 @@ from trytond.modules.party_cog.party import STATES_COMPANY
 from trytond.wizard import Wizard
 
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Party',

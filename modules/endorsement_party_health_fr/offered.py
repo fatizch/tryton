@@ -6,7 +6,6 @@ from trytond.modules.coog_core import model
 from trytond.modules.endorsement.endorsement import field_mixin
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'EndorsementHealthComplementField',
     ]

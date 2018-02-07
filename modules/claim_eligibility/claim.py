@@ -6,7 +6,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.modules.coog_core import model, fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Claim',
     'ClaimService',

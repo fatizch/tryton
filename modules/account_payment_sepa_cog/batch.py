@@ -13,7 +13,6 @@ from trytond.transaction import Transaction
 from trytond.modules.coog_core import batch, utils
 from .sepa_handler import CAMT054CoogPassive
 
-__metaclass__ = PoolMeta
 __all__ = [
     'PaymentSepaDoBatch',
     'PaymentTreatmentBatch',

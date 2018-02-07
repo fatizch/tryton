@@ -3,7 +3,6 @@
 from trytond.pool import Pool, PoolMeta
 from .agency_loader import AgenciesLoader
 
-__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]

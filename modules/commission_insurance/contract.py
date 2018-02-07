@@ -19,7 +19,6 @@ __all__ = [
     'Contract',
     'ContractOption',
     ]
-__metaclass__ = PoolMeta
 
 ANNUAL_CONVERSION_TABLE = {
     'yearly': 1,

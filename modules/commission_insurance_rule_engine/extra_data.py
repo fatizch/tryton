@@ -4,7 +4,6 @@ from trytond.pool import PoolMeta
 
 from trytond.modules.coog_core import model, fields
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'ExtraData',

@@ -4,7 +4,6 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import utils, fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'Option',

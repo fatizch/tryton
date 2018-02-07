@@ -12,7 +12,6 @@ from trytond.pyson import Eval
 from trytond.modules.coog_core import fields, coog_date
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Loan',
     ]

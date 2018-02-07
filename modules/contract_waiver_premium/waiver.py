@@ -7,7 +7,6 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import model, fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'WaiverPremiumOption',
     'WaiverPremium',

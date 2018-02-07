@@ -9,7 +9,6 @@ from trytond.modules.coog_core import utils, fields
 
 SSN_LENGTH = 15
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Party',
     ]

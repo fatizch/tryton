@@ -15,7 +15,6 @@ from trytond.transaction import Transaction
 from trytond.modules.account_payment.payment import KINDS
 from trytond.modules.coog_core import fields, model, utils
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Move',

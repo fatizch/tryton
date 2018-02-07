@@ -7,7 +7,6 @@ from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
-__metaclass__ = PoolMeta
 __all__ = [
     'EventLog',
     ]

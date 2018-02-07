@@ -9,7 +9,6 @@ from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.endorsement.endorsement import field_mixin
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'EndorsementDefinition',
     'EndorsementPart',

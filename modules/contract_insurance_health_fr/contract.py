@@ -3,7 +3,6 @@
 from trytond import backend
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
 __all__ = [
     'CoveredElement',
     'Contract',

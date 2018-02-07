@@ -5,7 +5,6 @@ from trytond.modules.coog_core import fields
 from trytond.pyson import Eval
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'IndemnificationValidateElement',
     'IndemnificationControlElement',

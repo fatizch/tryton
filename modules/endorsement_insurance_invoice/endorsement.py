@@ -9,7 +9,6 @@ from trytond.pyson import Eval, Or, Bool
 from trytond.modules.coog_core import model, fields
 from trytond.modules.endorsement.endorsement import relation_mixin
 
-__metaclass__ = PoolMeta
 __all__ = [
     'BillingInformation',
     'Contract',

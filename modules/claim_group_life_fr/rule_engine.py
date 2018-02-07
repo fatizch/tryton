@@ -6,7 +6,6 @@ from trytond.modules.rule_engine import check_args
 from trytond.modules.coog_core import coog_date
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'RuleEngineRuntime',
     ]

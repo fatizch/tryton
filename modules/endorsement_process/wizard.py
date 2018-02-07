@@ -9,7 +9,6 @@ from trytond.modules.coog_core import fields, model
 from trytond.modules.endorsement.endorsement import \
     STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS
 
-__metaclass__ = PoolMeta
 __all__ = [
     'StartEndorsement',
     'EndorsementFindProcess',

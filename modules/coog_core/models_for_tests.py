@@ -10,7 +10,6 @@ import model
 import export
 import fields
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'TestMethodDefinitions',

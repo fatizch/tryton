@@ -14,7 +14,6 @@ from trytond.server_context import ServerContext
 from trytond.modules.coog_core import export, fields, model, utils, coog_sql
 from trytond.modules.report_engine import Printable
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Invoice',
     'InvoiceLine',

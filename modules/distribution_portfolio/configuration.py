@@ -7,7 +7,6 @@ from trytond.modules.coog_core import fields, model
 from trytond.modules.company.model import (CompanyValueMixin,
     CompanyMultiValueMixin)
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Configuration',
     'ConfigurationDefaultPortfolio',

@@ -5,7 +5,6 @@ from trytond.pyson import Eval
 
 from trytond.modules.coog_core import model, fields, utils
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Party',
     'HealthPartyComplement',

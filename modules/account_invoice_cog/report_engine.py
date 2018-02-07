@@ -3,7 +3,6 @@
 from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 
-__metaclass__ = PoolMeta
 __all__ = [
     'ReportTemplate',
     ]

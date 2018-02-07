@@ -16,7 +16,6 @@ __all__ = [
     'OptionDescription',
     ]
 
-__metaclass__ = PoolMeta
 
 
 class DocumentRule(

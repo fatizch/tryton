@@ -11,7 +11,6 @@ from trytond.pyson import Eval, Not, Bool
 from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.party_cog.party import STATES_COMPANY
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Party',

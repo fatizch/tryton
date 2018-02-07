@@ -10,7 +10,6 @@ from sql.operators import NotIn
 
 from trytond.modules.coog_core import fields, export, model, coog_string
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Journal',

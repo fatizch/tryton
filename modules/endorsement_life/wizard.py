@@ -10,7 +10,6 @@ from trytond.modules.endorsement.wizard import (EndorsementWizardStepMixin,
     add_endorsement_step)
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'ManageBeneficiaries',
     'ManageBeneficiariesOptionDisplayer',

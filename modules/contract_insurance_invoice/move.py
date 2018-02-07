@@ -8,7 +8,6 @@ from trytond.config import config
 
 from trytond.modules.coog_core import fields, utils
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Move',
     'MoveLine',

@@ -13,7 +13,6 @@ from trytond.modules.endorsement.wizard import EndorsementWizardPreviewMixin
 
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
 
-__metaclass__ = PoolMeta
 __all__ = [
     'StartEndorsement',
     'PreviewContractPremiums',

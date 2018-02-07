@@ -6,7 +6,6 @@ from trytond.pyson import Eval, And, Or, Not, In
 from trytond.modules.coog_core import fields, model
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ExtraPremium',

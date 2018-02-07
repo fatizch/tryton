@@ -5,7 +5,6 @@ from trytond.pool import PoolMeta
 from trytond.modules.coog_core import utils
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'ContractSubscribe',
     ]

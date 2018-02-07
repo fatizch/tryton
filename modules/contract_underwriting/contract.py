@@ -9,7 +9,6 @@ from trytond.rpc import RPC
 from trytond.modules.coog_core import model, fields, utils
 from trytond.modules.contract import _STATES as CONTRACT_STATES
 
-__metaclass__ = PoolMeta
 __all__ = [
     'ContractUnderwriting',
     'ContractUnderwritingOption',

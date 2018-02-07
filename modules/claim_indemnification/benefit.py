@@ -10,7 +10,6 @@ from trytond.modules.coog_core import model, fields, coog_date
 from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.currency_cog import ModelCurrency
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Benefit',
     'BenefitProduct',

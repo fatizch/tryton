@@ -4,7 +4,6 @@ from dateutil import rrule
 
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'ProductPremiumDate',

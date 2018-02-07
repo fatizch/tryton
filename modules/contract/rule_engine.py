@@ -5,7 +5,6 @@ from trytond.pool import Pool, PoolMeta
 from trytond.modules.coog_core import fields
 from trytond.modules.rule_engine import check_args
 
-__metaclass__ = PoolMeta
 __all__ = [
     'RuleEngineRuntime',
     'RuleEngine',

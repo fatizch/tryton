@@ -15,7 +15,6 @@ __all__ = [
     'PrepaymentPaymentDateRule',
     'PlanLines',
     ]
-__metaclass__ = PoolMeta
 
 
 class Plan:

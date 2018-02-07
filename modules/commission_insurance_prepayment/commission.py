@@ -18,7 +18,6 @@ from trytond.modules.commission_insurance.commission import \
     COMMISSION_AMOUNT_DIGITS
 from trytond.modules.coog_core.extra_details import WithExtraDetails
 
-__metaclass__ = PoolMeta
 __all__ = [
     'PlanLines',
     'Commission',

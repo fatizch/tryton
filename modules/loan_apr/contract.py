@@ -10,7 +10,6 @@ from trytond.wizard import Wizard, StateView, Button
 from trytond.pyson import Eval
 from trytond.modules.coog_core import fields, model
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'LoanShare',

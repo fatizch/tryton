@@ -23,7 +23,6 @@ from trytond.modules.coog_core import utils, model, fields
 from trytond.modules.process import ProcessFramework
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Status',
     'ProcessAction',

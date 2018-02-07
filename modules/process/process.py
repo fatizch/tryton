@@ -22,7 +22,6 @@ from trytond.pool import Pool, PoolMeta
 from trytond.modules.coog_core import coog_string, utils
 from trytond.modules.coog_core import fields, model, export
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Status',
     'ProcessStepRelation',

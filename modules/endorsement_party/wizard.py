@@ -13,7 +13,6 @@ from trytond.modules.party_relationship import PartyRelationAll
 from trytond.modules.party_cog.relationship \
     import PartyRelationAll as PartyRelationAllCoog
 
-__metaclass__ = PoolMeta
 __all__ = [
     'AddressDisplayer',
     'ChangePartyAddress',

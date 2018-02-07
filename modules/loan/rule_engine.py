@@ -5,7 +5,6 @@ from trytond.pool import PoolMeta
 from trytond.modules.rule_engine import check_args
 from .loan import Loan
 
-__metaclass__ = PoolMeta
 __all__ = [
     'RuleEngineRuntime',
     ]

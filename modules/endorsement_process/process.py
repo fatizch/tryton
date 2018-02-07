@@ -6,7 +6,6 @@ from trytond.modules.coog_core import model
 from trytond.modules.endorsement.endorsement import \
     STATUS_INCOMPATIBLE_WITH_ENDORSEMENTS
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Process',
     'Contract',

@@ -5,7 +5,6 @@ from trytond.pyson import Eval, And
 from trytond.server_context import ServerContext
 from trytond.modules.coog_core import fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'EventTypeAction',
     ]

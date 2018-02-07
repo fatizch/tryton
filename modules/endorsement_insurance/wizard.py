@@ -13,7 +13,6 @@ from trytond.modules.contract_insurance.contract import IS_PARTY
 from trytond.modules.endorsement.wizard import EndorsementWizardStepMixin, \
     add_endorsement_step
 
-__metaclass__ = PoolMeta
 __all__ = [
     'NewCoveredElement',
     'NewOptionOnCoveredElement',

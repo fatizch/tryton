@@ -10,7 +10,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.modules.rule_engine import check_args
 
-__metaclass__ = PoolMeta
 __all__ = [
     'RuleEngineRuntime',
     ]

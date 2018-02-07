@@ -17,7 +17,6 @@ from trytond.model import ModelView, Workflow
 from trytond.modules.coog_core import utils, model, fields
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Invoice',
     'InvoiceLine',

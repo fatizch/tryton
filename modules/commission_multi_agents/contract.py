@@ -6,7 +6,6 @@ __all__ = [
     'Contract',
     'ContractOption',
     ]
-__metaclass__ = PoolMeta
 
 
 class Contract:

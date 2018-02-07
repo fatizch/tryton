@@ -13,7 +13,6 @@ from trytond.pyson import PYSONEncoder
 from trytond.modules.coog_core import model, fields, coog_string, utils, export
 from trytond.modules.coog_core import coog_date
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Party',
     'PartyPaymentDirectDebit',

@@ -14,7 +14,6 @@ from .endorsement import field_mixin
 from .wizard import EndorsementWizardPreviewMixin
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'EndorsementDefinitionGroupRelation',
     'EndorsementStartRule',

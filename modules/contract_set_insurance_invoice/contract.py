@@ -14,7 +14,6 @@ __all__ = [
     'ContractSet',
     ]
 
-__metaclass__ = PoolMeta
 
 
 class Contract:

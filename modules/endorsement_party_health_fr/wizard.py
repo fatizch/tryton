@@ -6,7 +6,6 @@ from trytond.modules.coog_core import fields, model
 from trytond.modules.endorsement.wizard import (EndorsementWizardStepMixin,
     add_endorsement_step)
 
-__metaclass__ = PoolMeta
 __all__ = [
     'ChangePartyHealthComplement',
     'StartEndorsement',

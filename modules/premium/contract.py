@@ -21,7 +21,6 @@ from trytond.modules.contract import _STATES, _DEPENDS
 
 from offered import PREMIUM_FREQUENCY
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ContractOption',

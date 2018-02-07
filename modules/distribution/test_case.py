@@ -7,7 +7,6 @@ from trytond.modules.coog_core import coog_string
 
 MODULE_NAME = 'distribution'
 
-__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]

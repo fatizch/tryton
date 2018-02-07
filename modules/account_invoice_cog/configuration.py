@@ -5,7 +5,6 @@ from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 from trytond.cache import Cache
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Configuration',
     ]

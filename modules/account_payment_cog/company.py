@@ -4,7 +4,6 @@ from trytond.pool import Pool, PoolMeta
 
 
 __all__ = ['Company']
-__metaclass__ = PoolMeta
 
 
 class Company:

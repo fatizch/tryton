@@ -16,7 +16,6 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, utils, coog_date, coog_sql
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Agent',
     'Commission',

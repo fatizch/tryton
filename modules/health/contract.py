@@ -5,7 +5,6 @@ from trytond.pyson import Eval, Or
 
 from trytond.modules.coog_core import fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'Option',

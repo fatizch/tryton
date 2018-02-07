@@ -17,7 +17,6 @@ __all__ = [
     'InvoiceLine',
     'Invoice',
     ]
-__metaclass__ = PoolMeta
 
 
 class InvoiceLine:

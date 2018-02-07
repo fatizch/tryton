@@ -7,7 +7,6 @@ from trytond.pool import PoolMeta, Pool
 
 MODULE_NAME = 'table'
 
-__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]

@@ -7,7 +7,6 @@ from trytond.modules.coog_core import fields, model
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Endorsement',
     'EndorsementPartUnion',

@@ -32,7 +32,6 @@ POSSIBLE_EXTRA_PREMIUM_RULES = [
     ('rate', 'Pourcentage'),
     ]
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ContractOption',

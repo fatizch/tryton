@@ -6,7 +6,6 @@ from trytond.modules.endorsement.wizard import \
     EndorsementWizardStepMixin, add_endorsement_step
 from trytond.modules.coog_core import utils, fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'ContractRenew',
     'StartEndorsement',

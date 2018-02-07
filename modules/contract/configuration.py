@@ -11,7 +11,6 @@ from trytond.modules.company.model import (CompanyValueMixin,
 from trytond.modules.coog_core import fields, model
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Configuration',
     'ConfigurationDefaultQuoteNumberSequence',

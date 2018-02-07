@@ -3,7 +3,6 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import And, Eval
 
-__metaclass__ = PoolMeta
 __all__ = [
     'EndorsementPart',
     ]

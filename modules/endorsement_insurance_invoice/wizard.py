@@ -10,7 +10,6 @@ from trytond.modules.endorsement.wizard import EndorsementWizardStepMixin
 from trytond.modules.endorsement.wizard import EndorsementRecalculateMixin
 from trytond.modules.endorsement.wizard import add_endorsement_step
 
-__metaclass__ = PoolMeta
 __all__ = [
     'BasicPreview',
     'RecalculateAndReinvoiceContract',

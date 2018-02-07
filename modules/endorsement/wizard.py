@@ -22,7 +22,6 @@ OPTION_ACTIONS = [
     ('added', 'Added'),
     ]
 
-__metaclass__ = PoolMeta
 __all__ = [
     'add_endorsement_step',
     'DummyStep',

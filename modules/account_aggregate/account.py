@@ -21,7 +21,6 @@ from trytond.modules.company.model import (CompanyValueMixin,
 
 from trytond.modules.coog_core import fields, model, utils
 
-__metaclass__ = PoolMeta
 __all__ = [
     'FiscalYear',
     'Journal',

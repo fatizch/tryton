@@ -32,7 +32,6 @@ from trytond.modules.contract import _STATES
 from trytond.modules.contract import _CONTRACT_STATUS_STATES
 from trytond.modules.contract import _CONTRACT_STATUS_DEPENDS
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ContractFee',

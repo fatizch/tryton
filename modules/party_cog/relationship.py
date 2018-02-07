@@ -5,7 +5,6 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core import fields, coog_string, export
 
-__metaclass__ = PoolMeta
 __all__ = [
     'RelationType',
     'PartyRelation',

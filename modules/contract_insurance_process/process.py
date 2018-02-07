@@ -8,7 +8,6 @@ from trytond.modules.coog_core import fields, utils
 from trytond.modules.process_cog.process import ProcessFinder, ProcessStart
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Process',
     'ProcessAction',

@@ -24,7 +24,6 @@ import fields
 import coog_string
 from historizable import Historizable
 
-__metaclass__ = PoolMeta
 __all__ = [
     'NotExportImport',
     'ExportImportMixin',

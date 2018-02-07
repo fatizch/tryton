@@ -12,7 +12,6 @@ from trytond.cache import Cache
 
 from trytond.modules.coog_core import model, fields, coog_string, utils
 
-__metaclass__ = PoolMeta
 __all__ = [
     'ClosingReason',
     'LossDescriptionClosingReason',

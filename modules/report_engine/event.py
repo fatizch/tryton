@@ -16,7 +16,6 @@ from trytond.wizard import StateView, Button
 
 from .report_engine import Printable
 
-__metaclass__ = PoolMeta
 __all__ = [
     'EventTypeAction',
     'EventTypeActionReportTemplate',

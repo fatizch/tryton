@@ -12,7 +12,6 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, utils
 
-__metaclass__ = PoolMeta
 __all__ = [
     'EventTypeAction',
     'EventLog',

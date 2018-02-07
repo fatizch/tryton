@@ -8,7 +8,6 @@ from trytond.modules.coog_core import fields
 
 MODULE_NAME = 'bank_cog'
 
-__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]

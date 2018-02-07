@@ -4,7 +4,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields
 from trytond.cache import Cache
 
-__metaclass__ = PoolMeta
 __all__ = [
     'OfferedConfiguration',
     ]

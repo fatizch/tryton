@@ -15,7 +15,6 @@ from trytond.server_context import ServerContext
 
 import func_library
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'ReportGenerate',

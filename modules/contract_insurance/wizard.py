@@ -10,7 +10,6 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, model
 
-__metaclass__ = PoolMeta
 __all__ = [
     'OptionSubscription',
     'OptionsDisplayer',

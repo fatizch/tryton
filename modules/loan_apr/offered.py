@@ -5,7 +5,6 @@ from trytond.pyson import Eval, Bool
 
 from trytond.modules.coog_core import model, fields, coog_string, coog_date
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Product',
     'LoanAveragePremiumRule',

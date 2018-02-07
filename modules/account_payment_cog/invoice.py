@@ -6,7 +6,6 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields
-__metaclass__ = PoolMeta
 __all__ = [
     'Invoice',
     ]

@@ -4,7 +4,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import export
 from trytond.config import config
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Country',
     'CountrySubdivision',

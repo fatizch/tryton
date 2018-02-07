@@ -9,7 +9,6 @@ from trytond.transaction import Transaction
 from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Product',
     'OptionDescription',

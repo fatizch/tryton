@@ -7,7 +7,6 @@ import utils
 import fields
 import export
 
-__metaclass__ = PoolMeta
 
 __all__ = [
     'Attachment',

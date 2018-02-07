@@ -9,7 +9,6 @@ from trytond.cache import Cache
 from trytond.modules.coog_core import coog_date
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     ]

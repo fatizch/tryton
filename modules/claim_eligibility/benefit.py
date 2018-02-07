@@ -11,7 +11,6 @@ from trytond.transaction import Transaction
 from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Benefit',
     'BenefitEligibilityRule',

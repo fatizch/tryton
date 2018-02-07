@@ -3,7 +3,6 @@
 from trytond.modules.coog_core import model, fields
 from trytond.pool import PoolMeta
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Group',
     ]

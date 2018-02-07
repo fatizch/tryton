@@ -5,7 +5,6 @@ from trytond.pool import PoolMeta
 from trytond.modules.coog_core import model, fields
 from trytond.pyson import Eval, Equal, Bool
 
-__metaclass__ = PoolMeta
 __all__ = [
     'HealthLoss',
     'Loss',

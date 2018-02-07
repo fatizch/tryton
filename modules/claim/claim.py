@@ -14,7 +14,6 @@ from trytond.modules.report_engine import Printable
 from trytond.modules.currency_cog import ModelCurrency
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Claim',
     'Loss',

@@ -9,7 +9,6 @@ from trytond.pyson import Eval, And, Or
 from trytond.transaction import Transaction
 from trytond.modules.coog_core import fields, model, utils
 
-__metaclass__ = PoolMeta
 __all__ = [
     'ActivationHistory',
     'Contract',

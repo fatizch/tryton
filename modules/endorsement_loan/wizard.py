@@ -17,7 +17,6 @@ PAYMENT_FIELDS = ['kind', 'number', 'start_date', 'begin_balance',
     'amount', 'principal', 'interest', 'outstanding_balance',
     'currency_digits']
 
-__metaclass__ = PoolMeta
 __all__ = [
     'ExtraPremiumDisplayer',
     'NewExtraPremium',

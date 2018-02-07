@@ -7,7 +7,6 @@ from trytond.model import dualmethod
 
 from trytond.modules.coog_core import model, fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ContractBillingInformation',

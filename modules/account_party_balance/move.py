@@ -9,7 +9,6 @@ from trytond.transaction import Transaction
 from trytond.modules.coog_core import fields, model, coog_date, utils
 from trytond.modules.currency_cog import ModelCurrency
 
-__metaclass__ = PoolMeta
 __all__ = [
     'MoveLine',
     'OpenPartyBalance',

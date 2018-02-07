@@ -3,7 +3,6 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.server_context import ServerContext
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Event',
     ]

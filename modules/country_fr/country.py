@@ -8,7 +8,6 @@ from trytond import backend
 
 from trytond.modules.coog_core import coog_string, fields
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Zip',
     ]

@@ -6,7 +6,6 @@ from trytond.wizard import Wizard, StateView, StateAction, Button
 
 from trytond.modules.coog_core import fields, model
 
-__metaclass__ = PoolMeta
 __all__ = [
     'GetDatesForProcessTimings',
     'ProcessTimingSelectDates',

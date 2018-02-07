@@ -7,7 +7,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields, coog_date
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Product',
     'OptionDescriptionPremiumRule',

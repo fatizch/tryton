@@ -7,7 +7,6 @@ from trytond.pyson import If, Bool, Eval
 from trytond.modules.coog_core import model, fields
 from trytond.modules.rule_engine import get_rule_mixin
 
-__metaclass__ = PoolMeta
 __all__ = [
     'OptionDescription',
     'CoverageAmountRule',

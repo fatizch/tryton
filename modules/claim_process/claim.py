@@ -10,7 +10,6 @@ from trytond.modules.process_cog.process import ProcessFinder, ProcessStart
 from trytond.wizard import Button, StateTransition, StateAction
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Claim',
     'Process',

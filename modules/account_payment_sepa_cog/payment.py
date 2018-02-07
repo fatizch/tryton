@@ -24,7 +24,6 @@ from trytond.modules.coog_core import fields, coog_date, utils, model
 from trytond.modules.coog_core import coog_string
 from .sepa_handler import CAMT054Coog
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Mandate',
     'Group',

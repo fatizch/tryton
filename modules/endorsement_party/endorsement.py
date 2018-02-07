@@ -11,7 +11,6 @@ from trytond.modules.endorsement.endorsement import values_mixin, \
     relation_mixin
 
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Address',
     'Relation',

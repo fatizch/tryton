@@ -6,7 +6,6 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import model, fields, utils, coog_string
 
-__metaclass__ = PoolMeta
 __all__ = [
     'DistributionNetwork',
     'CommercialProduct',

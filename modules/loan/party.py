@@ -17,7 +17,6 @@ from trytond.wizard import Wizard, StateView, Button
 from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.party_cog.party import STATES_COMPANY
 
-__metaclass__ = PoolMeta
 __all__ = [
     'Lender',
     'Party',
