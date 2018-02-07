@@ -73,7 +73,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:covered_element.end_reason,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:covered_element.end_reason,tags:"
@@ -261,7 +261,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:extra_premium.kind,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:extra_premium.kind,write_date:"
@@ -300,12 +300,16 @@ msgctxt "field:insurer,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:insurer,options:"
+msgid "Insurer"
+msgstr "Assureur"
+
 msgctxt "field:insurer,party:"
 msgid "Insurer"
 msgstr "Assureur"
 
 msgctxt "field:insurer,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:insurer,write_date:"
@@ -345,7 +349,7 @@ msgid "Insurer"
 msgstr "Assureur"
 
 msgctxt "field:insurer.delegation,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:insurer.delegation,write_date:"
@@ -389,7 +393,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:offered.exclusion,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.exclusion,text:"
@@ -449,7 +453,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:offered.item.description,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.item.description,sub_item_descs:"
@@ -504,7 +508,7 @@ msgid "End Reason"
 msgstr "Motif de sortie"
 
 msgctxt "field:offered.item.description-covered_element.end_reason,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt ""
@@ -545,7 +549,7 @@ msgid "Item Desc"
 msgstr "Desc Risque"
 
 msgctxt "field:offered.item.description-extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.item.description-extra_data,write_date:"
@@ -580,8 +584,9 @@ msgctxt "field:offered.item.description-sub_item.description,item_desc:"
 msgid "Item Desc"
 msgstr "Desc Risque"
 
+#, fuzzy
 msgctxt "field:offered.item.description-sub_item.description,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.item.description-sub_item.description,sub_item_desc:"
@@ -937,7 +942,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:process-offered.product,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:process-offered.product,write_date:"
@@ -981,7 +986,7 @@ msgid "Parent Rule"
 msgstr "Règle parent"
 
 msgctxt "field:rule_engine-extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine-extra_data,write_date:"
@@ -1002,11 +1007,13 @@ msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
 
 msgctxt "help:offered.option.description,with_exclusions:"
 msgid "If True, it is be possible to add exclusions to subscribed options"
-msgstr "Si vrai, il est possible d'ajouter des exclusions sur les options souscrites"
+msgstr ""
+"Si vrai, il est possible d'ajouter des exclusions sur les options souscrites"
 
 msgctxt "help:offered.option.description,with_extra_premiums:"
-msgid "If True, it is possible to add extra premiums to subscribed options"
-msgstr "Si vrai, il est possible d'ajouter des surprimes sur les options souscrites"
+msgid "If True, it is be possible to add extra premiums to subscribed options"
+msgstr ""
+"Si vrai, il est possible d'ajouter des surprimes sur les options souscrites"
 
 msgctxt "help:process,delete_button:"
 msgid ""

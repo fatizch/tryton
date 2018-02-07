@@ -13,6 +13,7 @@ __metaclass__ = PoolMeta
 
 __all__ = [
     'Party',
+    'Insurer',
     'SynthesisMenuClaim',
     'SynthesisMenu',
     'SynthesisMenuOpen',
@@ -41,6 +42,14 @@ class Party:
 
     def get_last_claim_id(self, name):
         return self.claims[-1].id if self.claims else None
+
+
+class Insurer:
+    __metaclass__ = PoolMeta
+    __name__ = 'insurer'
+
+    benefits = fields.One2Many('benefit', 'insurer', 'Benefits',
+        target_not_required=True, readonly=True)
 
 
 class SynthesisMenuClaim(model.CoogSQL):

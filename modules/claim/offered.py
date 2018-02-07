@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import utils, fields
@@ -21,7 +21,8 @@ class OptionDescription:
             'currency_digits': Eval('currency_digits'),
             }, states={
             'readonly': ~Eval('start_date'),
-            }, depends=['currency_digits', 'start_date'])
+            }, domain=[('insurer', '=', Eval('insurer'))],
+            depends=['currency_digits', 'start_date', 'insurer'])
 
     def get_possible_benefits(self, loss_desc=None, event_desc=None,
             at_date=None):

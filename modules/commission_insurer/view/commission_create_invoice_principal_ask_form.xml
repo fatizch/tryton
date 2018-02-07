@@ -13,5 +13,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="post_invoices"/>
     <label name="until_date"/>
     <field name="until_date"/>
+    <label name="notice_kind"/>
+    <field name="notice_kind"/>
     <field name="insurers" colspan="4"/>
 </form>

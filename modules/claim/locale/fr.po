@@ -55,6 +55,14 @@ msgstr ""
 
 msgctxt "error:claim.loss:"
 msgid ""
+"No loss description found with the code \"%(loss_desc_code)s\" in the "
+"configuration"
+msgstr ""
+"Aucune description d'événement avec le code \"%(loss_desc_code)s\" dans la "
+"configuration"
+
+msgctxt "error:claim.loss:"
+msgid ""
 "The loss %(loss)s could be a duplicate of:\n"
 "\n"
 "%(losses)s"
@@ -62,6 +70,14 @@ msgstr ""
 "L'événement %(loss)s est peut-être un doublon de :\n"
 "\n"
 "%(losses)s"
+
+msgctxt "error:claim.loss:"
+msgid ""
+"There is no event description for the loss description \"%(loss_desc)s\" in "
+"the configuration"
+msgstr ""
+"Il n'y à pas de description d'événement pour le descripteur de préjudice "
+"\"%loss_desc)s\" dans la configuration"
 
 msgctxt "error:claim.sub_status:"
 msgid "No sub status has been found with the code %s."
@@ -143,6 +159,10 @@ msgctxt "field:benefit,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:benefit,insurer:"
+msgid "Insurer"
+msgstr "Assureur"
+
 msgctxt "field:benefit,loss_descs:"
 msgid "Loss Descriptions"
 msgstr "Descripteurs de préjudice"
@@ -151,8 +171,12 @@ msgctxt "field:benefit,name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:benefit,options:"
+msgid "Options"
+msgstr "Options"
+
 msgctxt "field:benefit,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit,start_date:"
@@ -166,6 +190,10 @@ msgstr "Labels"
 msgctxt "field:benefit,tags_name:"
 msgid "Tags"
 msgstr "Labels"
+
+msgctxt "field:benefit,waiting_account:"
+msgid "Waiting Account"
+msgstr "Compte d'attente"
 
 msgctxt "field:benefit,write_date:"
 msgid "Write Date"
@@ -204,7 +232,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:benefit-extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit-extra_data,write_date:"
@@ -244,7 +272,7 @@ msgid "Loss Description"
 msgstr "Descripteur de préjudice"
 
 msgctxt "field:benefit-loss.description,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit-loss.description,write_date:"
@@ -292,7 +320,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.event.description,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.event.description,sequence:"
@@ -336,7 +364,7 @@ msgid "Loss Description"
 msgstr "Descripteur de préjudice"
 
 msgctxt "field:benefit.event.description-loss.description,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.event.description-loss.description,write_date:"
@@ -400,7 +428,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.loss.description,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.loss.description,with_end_date:"
@@ -444,7 +472,7 @@ msgid "Loss Description"
 msgstr "Descripteur de préjudice"
 
 msgctxt "field:benefit.loss.description-extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.loss.description-extra_data,write_date:"
@@ -520,7 +548,7 @@ msgid "Contracts"
 msgstr "Contrats"
 
 msgctxt "field:claim,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim,status:"
@@ -612,7 +640,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:claim.closing_reason,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim.closing_reason,write_date:"
@@ -644,8 +672,8 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:claim.configuration,rec_name:"
-msgid "Name"
-msgstr "Numéro"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:claim.configuration,write_date:"
 msgid "Write Date"
@@ -728,7 +756,7 @@ msgid "Possible Loss Descs"
 msgstr "Possible Loss Descs"
 
 msgctxt "field:claim.loss,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim.loss,services:"
@@ -738,10 +766,6 @@ msgstr "Prestations Fournies"
 msgctxt "field:claim.loss,start_date:"
 msgid "Loss Date"
 msgstr "Date"
-
-msgctxt "help:claim.loss,start_date:"
-msgid "Date of the event, or start date of a period"
-msgstr "Date de l'évènement, ou date de début de période"
 
 msgctxt "field:claim.loss,state:"
 msgid "State"
@@ -848,7 +872,7 @@ msgid "Coverage"
 msgstr "Garantie"
 
 msgctxt "field:claim.service,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim.service,summary:"
@@ -908,7 +932,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:claim.service.extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim.service.extra_data,write_date:"
@@ -952,8 +976,8 @@ msgid "Name"
 msgstr "Numéro"
 
 msgctxt "field:claim.sub_status,rec_name:"
-msgid "Name"
-msgstr "Numéro"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:claim.sub_status,status:"
 msgid "Status"
@@ -978,6 +1002,18 @@ msgstr "Sinistres"
 msgctxt "field:contract.option,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
+
+msgctxt "field:event.log,claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "field:insurer,benefits:"
+msgid "Benefits"
+msgstr "Prestations"
+
+msgctxt "field:insurer,options:"
+msgid "Insurer"
+msgstr "Assureur"
 
 msgctxt "field:insurer.delegation,claim_create:"
 msgid "Claim Creation"
@@ -1008,7 +1044,7 @@ msgid "Benefit Loss Description"
 msgstr "Description de sinistre"
 
 msgctxt "field:loss.description-claim.closing_reason,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:loss.description-claim.closing_reason,write_date:"
@@ -1052,7 +1088,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:option.description-benefit,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:option.description-benefit,write_date:"
@@ -1100,7 +1136,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.claim,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:party.synthesis.menu.claim,write_date:"
@@ -1121,6 +1157,10 @@ msgid ""
 msgstr ""
 "Si cochée, la prestation sera exercée automatiquement une fois le préjudice "
 "déclaré"
+
+msgctxt "help:claim.loss,start_date:"
+msgid "Date of the event, or start date of a period"
+msgstr "Date de l'évènement, ou date de début de période"
 
 msgctxt "model:account.journal,name:"
 msgid "Claim"
@@ -1217,6 +1257,10 @@ msgstr "Prestations"
 msgctxt "model:ir.action,name:act_claim_configuration"
 msgid "Claim Configuration"
 msgstr "Configuration Sinistre"
+
+msgctxt "model:ir.action,name:act_claim_event_log_relate_form"
+msgid "Event Logs"
+msgstr "Logs d'événements"
 
 msgctxt "model:ir.action,name:act_claim_form"
 msgid "Claims"

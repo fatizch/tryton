@@ -54,10 +54,24 @@ class Benefit:
         depends=['indemnification_kind'])
     products = fields.Many2Many('benefit-product', 'benefit', 'product',
         'Products')
+    waiting_account = fields.Function(fields.Many2One(
+            'account.account', 'Waiting Account'),
+        'getter_waiting_account')
     payment_journals = fields.Many2Many('benefit-account.payment.journal',
         'benefit', 'payment_journal', 'Payment Journals', help='The payment '
         'journals defined here will be pickable when creating a new '
         'indemnification period on a delivered service for this benefit')
+
+    @classmethod
+    def validate(cls, benefits):
+        super(Benefit, cls).validate(benefits)
+        with model.error_manager():
+            for benefit in benefits:
+                accounts = list(
+                    set(benefit.get_benefit_accounts()))
+                if len(accounts) > 1:
+                    cls.append_functional_error('different_product_accounts',
+                        {'benefit': benefit.rec_name})
 
     def has_automatic_period_calculation(self):
         return self.automatic_period_calculation and \
@@ -72,6 +86,15 @@ class Benefit:
         if not self.benefit_rules:
             return
         return self.benefit_rules[0].do_calculate_deductible_rule(args)
+
+    def getter_waiting_account(self, name):
+        accounts = self.get_benefit_accounts()
+        if accounts:
+            return accounts[0]
+
+    def get_benefit_accounts(self):
+        return list({x.account_expense_used for x in self.products
+            if x.account_expense and x.account_expense_used})
 
     @staticmethod
     def default_indemnification_kind():

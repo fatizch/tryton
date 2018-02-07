@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="//group[@id='invoice_lines']" position="after">
+        <group id="invoice_lines_claim" colspan="6" yexpand="1" yfill="1">
+            <field name="lines" colspan="6"
+                view_ids="claim_insurer.invoice_line_claim_view_list,account_invoice.invoice_line_view_form"/>
+        </group>
+    </xpath>
+</data>

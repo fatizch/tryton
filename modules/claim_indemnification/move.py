@@ -12,7 +12,6 @@ class MoveLine:
     __metaclass__ = PoolMeta
     __name__ = 'account.move.line'
 
-
     @classmethod
     def __setup__(cls):
         super(MoveLine, cls).__setup__()

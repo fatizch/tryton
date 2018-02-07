@@ -36,6 +36,10 @@ this repository contains the full copyright notices and license terms. -->
                 <label name="company"/>
                 <field name="company"/>
             </group>
+            <group id="insurer" colspan="2" col="4">
+                <label name="insurer"/>
+                <field name="insurer"/>
+            </group>
             <field name="tags" colspan="4"/>
         </page>
     </notebook>

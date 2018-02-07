@@ -41,6 +41,15 @@ class Benefit:
                 service.loss.get_date())]
         return {k: v for k, v in values.iteritems() if k in required}
 
+    @classmethod
+    def get_benefit_accounts(self, name=None):
+        accounts = super(Benefit, self).getter_waiting_account(name)
+        if not self.is_group:
+            return accounts
+        return accounts + [
+            x.account_expense_used for x in self.company_products
+            if x.account_expense and x.account_expense_used]
+
 
 class BenefitCompanyProduct(model.CoogSQL):
     'Benefit Company Product relation'

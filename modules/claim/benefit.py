@@ -1,6 +1,8 @@
 # -*- coding:utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import logging
+
 from trytond.pyson import Eval
 from trytond.pool import Pool, PoolMeta
 from trytond.model import Unique
@@ -216,6 +218,8 @@ class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
     __name__ = 'benefit'
     _func_key = 'code'
 
+    logger = logging.getLogger(__name__)
+
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True, translate=True)
     company = fields.Many2One('company.company', 'Company', required=True,
@@ -240,6 +244,10 @@ class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
     automatically_deliver = fields.Boolean('Automatically Deliver',
         help='If True the benefit will automatically be delivered after loss '
         'declaration')
+    insurer = fields.Many2One('insurer', 'Insurer', ondelete='RESTRICT',
+        required=True)
+    options = fields.Many2Many('option.description-benefit', 'benefit',
+        'coverage', 'Options', readonly=True)
 
     @classmethod
     def __setup__(cls):
@@ -251,6 +259,9 @@ class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
         cls._error_messages.update({
                 'other_enum': 'Other',
                 'subscriber_enum': 'Subscriber',
+                'different_product_accounts': 'There are different expense '
+                'accounts on products of the benefit %(benefit)s, ensure all '
+                'the products have the same account before saving',
                 })
 
     @classmethod
@@ -258,6 +269,7 @@ class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
         TableHandler = backend.get('TableHandler')
         table = TableHandler(cls, module_name)
 
+        insurer_exist = table.column_exist('insurer')
         super(Benefit, cls).__register__(module_name)
 
         # Migration from 1.6 Drop Offered inheritance
@@ -265,9 +277,28 @@ class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
             table.drop_column('template')
             table.drop_column('template_behaviour')
 
+        # Migration from 1.12: Insurer is now required on benefits
+        if not insurer_exist:
+            cls._migrate_insurer_benefit()
+
     @classmethod
     def _export_light(cls):
         return super(Benefit, cls)._export_light() | {'company', 'loss_descs'}
+
+    @classmethod
+    def _migrate_insurer_benefit(cls):
+        benefits = cls.search([])
+        to_write = []
+        for benefit in benefits:
+            insurers = list({x.insurer for x in benefit.options})
+            if len(insurers) != 1:
+                cls.logger.warning('Impossible to migrate insurer for the '
+                    'benefit %s (%s possible insurer(s) found)' % (
+                        benefit.rec_name, len(insurers)))
+            else:
+                to_write += [[benefit], {'insurer': insurers[0].id}]
+        if to_write:
+            cls.write(*to_write)
 
     @classmethod
     def get_beneficiary_kind(cls):

@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 import logging
 
-from sql import Null
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
@@ -15,7 +14,38 @@ __all__ = [
     ]
 
 
-class CreateEmptyInvoicePrincipalBatch(batch.BatchRoot):
+class BaseInvoicePrincipalBatch(batch.BatchRoot):
+
+    @classmethod
+    def possible_notice_kind(cls):
+        return ('options',)
+
+    @classmethod
+    def parse_params(cls, params):
+        params = super(BaseInvoicePrincipalBatch, cls).parse_params(
+            params)
+        assert params.get('notice_kind') in cls.possible_notice_kind()
+        return params
+
+    @classmethod
+    def get_principal_line_description(cls, notice_kind):
+        if notice_kind == 'options':
+            return Pool().get('account.invoice'
+            ).raise_user_error('batch_premiums_received',
+                raise_exception=False)
+        raise NotImplementedError
+
+    @classmethod
+    def get_insurers(cls, notice_kind):
+        if notice_kind == 'options':
+            Insurer = Pool().get('insurer')
+            return Insurer.search([
+                    ('options.account_for_billing', '!=', None)
+                    ])
+        raise NotImplementedError
+
+
+class CreateEmptyInvoicePrincipalBatch(BaseInvoicePrincipalBatch):
     'Insurer Empty Invoice Principal Creation Batch'
 
     __name__ = 'commission.invoice_principal.create_empty'
@@ -41,17 +71,11 @@ class CreateEmptyInvoicePrincipalBatch(batch.BatchRoot):
         return 'insurer'
 
     @classmethod
-    def select_ids(cls, treatment_date):
-        insurer = Pool().get('insurer').__table__()
-        cursor = Transaction().connection.cursor()
-
-        cursor.execute(*insurer.select(insurer.id,
-                where=(insurer.waiting_account != Null)))
-
-        return cursor.fetchall()
+    def select_ids(cls, treatment_date, notice_kind=None):
+        return [(x.id,) for x in cls.get_insurers(notice_kind)]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date):
+    def execute(cls, objects, ids, treatment_date, notice_kind=None):
         pool = Pool()
         Journal = pool.get('account.journal')
         Company = pool.get('company.company')
@@ -60,15 +84,14 @@ class CreateEmptyInvoicePrincipalBatch(batch.BatchRoot):
 
         company = Company(Transaction().context.get('company'))
         journal = Journal.search([('type', '=', 'commission')], limit=1)[0]
-        premium_line_description = pool.get('account.invoice'
-            ).raise_user_error('batch_premiums_received',
-                raise_exception=False)
+        line_description = cls.get_principal_line_description(
+            notice_kind)
 
         CreateInvoicePrincipal.create_empty_invoices(objects, company, journal,
-            treatment_date, premium_line_description)
+            treatment_date, line_description, notice_kind)
 
 
-class LinkInvoicePrincipalBatch(batch.BatchRoot):
+class LinkInvoicePrincipalBatch(BaseInvoicePrincipalBatch):
     'Insurer Invoice Principal Link Batch'
 
     __name__ = 'commission.invoice_principal.link'
@@ -80,39 +103,40 @@ class LinkInvoicePrincipalBatch(batch.BatchRoot):
         return 'insurer'
 
     @classmethod
-    def select_ids(cls, treatment_date):
+    def select_ids(cls, treatment_date, notice_kind=None):
         until_date = treatment_date
         pool = Pool()
-        insurers = pool.get('insurer').search([
-                ('waiting_account', '!=', None)])
 
-        invoices = pool.get('commission').select_lines(
-                [a.waiting_account.id for a in insurers], with_data=False,
-                max_date=until_date)
+        Insurer = pool.get('insurer')
+        insurers = cls.get_insurers(notice_kind)
+
+        accounts = [x[1].id for x in
+            Insurer.get_insurers_waiting_accounts(insurers, notice_kind)]
+        invoices = pool.get('commission').select_lines(accounts,
+                with_data=False, max_date=until_date)
         return ([[invoice]] for invoice in invoices)
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date):
+    def execute(cls, objects, ids, treatment_date, notice_kind=None):
         pool = Pool()
         Journal = pool.get('account.journal')
         Company = pool.get('company.company')
         CreateInvoicePrincipal = pool.get(
             'commission.create_invoice_principal', type='wizard')
-        insurers = Pool().get('insurer').search([
-                ('waiting_account', '!=', None)])
+        insurers = cls.get_insurers(notice_kind)
 
         company = Company(Transaction().context.get('company'))
         journal = Journal.search([('type', '=', 'commission')], limit=1)[0]
 
-        premium_line_description = pool.get('account.invoice'
-            ).raise_user_error('batch_premiums_received',
-                raise_exception=False)
+        line_description = cls.get_principal_line_description(
+            notice_kind)
+
         CreateInvoicePrincipal.link_invoices_and_lines(
             insurers, treatment_date, company, journal,
-            premium_line_description, invoice_ids=ids)
+            line_description, notice_kind, invoice_ids=ids)
 
 
-class FinalizeInvoicePrincipalBatch(batch.BatchRoot):
+class FinalizeInvoicePrincipalBatch(BaseInvoicePrincipalBatch):
     'Insurer Invoice Principal Finalize Batch'
 
     __name__ = 'commission.invoice_principal.finalize'
@@ -137,17 +161,11 @@ class FinalizeInvoicePrincipalBatch(batch.BatchRoot):
         return 'insurer'
 
     @classmethod
-    def select_ids(cls, treatment_date):
-        insurer = Pool().get('insurer').__table__()
-        cursor = Transaction().connection.cursor()
-
-        cursor.execute(*insurer.select(insurer.id,
-            where=(insurer.waiting_account != Null)))
-
-        return cursor.fetchall()
+    def select_ids(cls, treatment_date, notice_kind=None):
+        return [(x.id,) for x in cls.get_insurers(notice_kind)]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date):
+    def execute(cls, objects, ids, treatment_date, notice_kind=None):
         pool = Pool()
         Journal = pool.get('account.journal')
         Company = pool.get('company.company')
@@ -156,9 +174,8 @@ class FinalizeInvoicePrincipalBatch(batch.BatchRoot):
         company = Company(Transaction().context.get('company'))
         journal = Journal.search([('type', '=', 'commission')], limit=1)[0]
 
-        premium_line_description = pool.get('account.invoice'
-            ).raise_user_error('batch_premiums_received',
-                raise_exception=False)
+        line_description = cls.get_principal_line_description(
+            notice_kind)
         CreateInvoicePrincipal.finalize_invoices_and_lines(
             objects, company, journal, treatment_date,
-            premium_line_description)
+            line_description, notice_kind)

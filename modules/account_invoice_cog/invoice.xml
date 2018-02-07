@@ -39,5 +39,13 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <menuitem id="account_invoice.menu_invoices" icon="invoice" name="Invoices"/>
         <menuitem id="account_invoice.menu_invoice_out_form" icon="invoice" action="account_invoice.act_invoice_out_form"/>
+        <!-- ################ -->
+        <!-- # Invoice Line # -->
+        <!-- ################ -->
+        <record model="ir.ui.view" id="invoice_line_view_form">
+            <field name="model">account.invoice.line</field>
+            <field name="inherit" ref="account_invoice.invoice_line_view_form"/>
+            <field name="name">invoice_line_form</field>
+        </record>
     </data>
 </tryton>

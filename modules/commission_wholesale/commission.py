@@ -114,7 +114,7 @@ class CreateInvoicePrincipal:
 
     @classmethod
     def finalize_invoices_and_lines(cls, insurers, company, journal,
-            date, description):
+            date, description, fname):
         '''
         This method adds the commission amount paid to wholesale brokers to the
         insurer invoice
@@ -123,30 +123,34 @@ class CreateInvoicePrincipal:
         pool = Pool()
         Line = pool.get('account.move.line')
         Invoice = pool.get('account.invoice')
+        Insurer = pool.get('insurer')
 
         commission_invoices = super(CreateInvoicePrincipal, cls).\
             finalize_invoices_and_lines(insurers, company, journal,
-                date, description)
+                date, description, fname)
         for commission_invoice in commission_invoices:
-            account = commission_invoice.insurer_role.waiting_account
-            if not account:
-                return commission_invoice
-
-            lines = Line.search(
-                cls.get_wholesale_brokers_line_domain(account,
-                    commission_invoice.party, date),
-                order=[('party', 'ASC')])
-            if not lines:
-                continue
-            for party, party_lines in groupby(lines, key=lambda x: x.party):
-                amount = sum(-l.amount for l in lines)
-                invoice_line = cls.get_wholesale_brokers_line(amount, account,
-                    party)
-                invoice_line.invoice = commission_invoice
-                invoice_line.save()
-                Line.write(list(party_lines), {
-                        'principal_invoice_line': invoice_line.id,
-                        })
+            accounts = list({x[1]
+                    for x in Insurer.get_insurers_waiting_accounts(
+                        [commission_invoice.insurer_role], fname)})
+            if not accounts:
+                return [commission_invoice]
+            for account in accounts:
+                lines = Line.search(
+                    cls.get_wholesale_brokers_line_domain(account,
+                        commission_invoice.party, date),
+                    order=[('party', 'ASC')])
+                if not lines:
+                    continue
+                for party, party_lines in groupby(
+                        lines, key=lambda x: x.party):
+                    amount = sum(-l.amount for l in lines)
+                    invoice_line = cls.get_wholesale_brokers_line(
+                        amount, account, party)
+                    invoice_line.invoice = commission_invoice
+                    invoice_line.save()
+                    Line.write(list(party_lines), {
+                            'principal_invoice_line': invoice_line.id,
+                            })
         Invoice.update_taxes(commission_invoices)
         return commission_invoices
 

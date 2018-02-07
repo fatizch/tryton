@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.action.act_window" id="act_invoice_claim_insurer_invoice_form">
+            <field name="name">Claim Insurer Invoices</field>
+            <field name="res_model">account.invoice</field>
+            <field name="domain" eval="[('business_kind', '=', 'claim_insurer_invoice')]" pyson="1"/>
+            <field name="search_value"></field>
+        </record>
+            <menuitem parent="claim.menu_claim" sequence="13" action="commission_insurer.act_commission_create_invoice_principal" id="menu_commission_create_invoice_principal"/>
+        <menuitem parent="claim.menu_claim" action="act_invoice_claim_insurer_invoice_form"
+            id="menu_invoice_claim_insurer_invoice" sequence="14"/>
+        </data>
+        <record model="ir.ui.view" id="invoice_line_view_form">
+            <field name="model">account.invoice.line</field>
+            <field name="inherit" ref="account_invoice.invoice_line_view_form"/>
+            <field name="name">invoice_line_form</field>
+        </record>
+        <record model="ir.ui.view" id="invoice_view_form">
+            <field name="model">account.invoice</field>
+            <field name="inherit" ref="account_invoice.invoice_view_form"/>
+            <field name="name">invoice_form</field>
+        </record>
+        <record model="ir.ui.view" id="invoice_line_claim_view_list">
+            <field name="model">account.invoice.line</field>
+            <field name="type">tree</field>
+            <field name="name">invoice_line_claim_list</field>
+        </record>
+</tryton>

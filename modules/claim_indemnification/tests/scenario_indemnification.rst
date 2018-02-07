@@ -72,10 +72,26 @@ Create Payment Journal::
     >>> config = switch_user('product_user')
     >>> company = get_company()
 
+Create Insurer::
+
+    >>> Insurer = Model.get('insurer')
+    >>> Party = Model.get('party.party')
+    >>> Account = Model.get('account.account')
+    >>> insurer = Insurer()
+    >>> insurer.party = Party()
+    >>> insurer.party.name = 'Insurer'
+    >>> insurer.party.account_receivable = Account(accounts['receivable'].id)
+    >>> insurer.party.account_payable = Account(accounts['payable'].id)
+    >>> insurer.party.save()
+    >>> insurer.save()
+
 Create Product::
 
     >>> product = init_product(start_date=datetime.date(2009, 3, 15))
     >>> product = add_quote_number_generator(product)
+    >>> for coverage in product.coverages:
+    ...     coverage.insurer = Insurer(insurer.id)
+    ...     coverage.save()
     >>> product.save()
 
 Create Claim Configuration::
@@ -143,6 +159,7 @@ Create Claim Configuration::
     >>> benefit.products.append(account_product)
     >>> benefit.loss_descs.append(LossDesc(loss_desc.id))
     >>> benefit.benefit_rules.append(benefit_rule)
+    >>> benefit.insurer = Insurer(insurer.id)
     >>> benefit.save()
     >>> product.coverages[0].benefits.append(benefit)
     >>> product.save()

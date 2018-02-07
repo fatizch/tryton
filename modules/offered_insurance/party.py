@@ -98,6 +98,8 @@ class Insurer(model.CoogView, model.CoogSQL):
         required=True)
     delegations = fields.One2Many('insurer.delegation', 'insurer',
         'Insurer Delegations', delete_missing=True)
+    options = fields.One2Many('offered.option.description', 'insurer',
+        'Insurer', delete_missing=True, readonly=True)
 
     @classmethod
     def __setup__(cls):

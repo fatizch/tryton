@@ -98,7 +98,7 @@ coog_daily_main() {
             _coog_daily_check_modules "commission_insurance" &&                 \
                 coog_chain_main commission_insurance commission                 \
                     --treatment_date="$LAST_DAY_OF_THE_MONTH"                   \
-                    --no-with_draft                                              \
+                    --no-with_draft                                             \
                     --agent_type=agent
             )
             [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
@@ -106,9 +106,18 @@ coog_daily_main() {
             (
             _coog_daily_check_modules "commission_insurer" &&                   \
                 coog_chain_main commission_insurer commission                   \
-                --treatment_date="$LAST_DAY_OF_THE_MONTH"
+                --treatment_date="$LAST_DAY_OF_THE_MONTH"                       \
+                --notice_kind="options"
             )
             [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
+            (
+            _coog_daily_check_modules "claim_insurer" &&                        \
+                coog_chain_main commission_insurer commission                   \
+                --treatment_date="$LAST_DAY_OF_THE_MONTH"                       \
+                --notice_kind="benefits"
+            )
+            [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
+
         fi
 
         (

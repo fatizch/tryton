@@ -36,6 +36,7 @@ def register():
         contract.Option,
         rule_engine.RuleEngineRuntime,
         party.Party,
+        party.Insurer,
         offered.OptionDescription,
         test_case.TestCaseModel,
         wizard.BenefitToDeliver,

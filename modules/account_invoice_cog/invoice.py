@@ -25,6 +25,10 @@ class InvoiceLine:
     __metaclass__ = PoolMeta
     __name__ = 'account.invoice.line'
 
+    invoice_business_kind = fields.Function(fields.Char(
+            'Invoice Business Kind'),
+        'getter_invoice_business_kind')
+
     @classmethod
     def __setup__(cls):
         super(InvoiceLine, cls).__setup__()
@@ -49,6 +53,9 @@ class InvoiceLine:
         if 'other' not in result:
             result.append('other')
         return result
+
+    def getter_invoice_business_kind(self, name=None):
+        return self.invoice.business_kind
 
 
 class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):

@@ -112,7 +112,6 @@ PaymentTerm = Model.get('account.invoice.payment_term')
 insurer, = Insurer.find([])
 insurer.party.supplier_payment_term, = PaymentTerm.find([])
 insurer.party.save()
-insurer.waiting_account = company_waiting_account
 insurer.save()
 agent = Agent(party=insurer.party)
 agent.type_ = 'principal'
@@ -172,6 +171,7 @@ Invoice = Model.get('account.invoice')
 create_invoice = Wizard('commission.create_invoice_principal')
 create_invoice.form.insurers.append(agent.party)
 create_invoice.form.until_date = None
+create_invoice.form.notice_kind = 'options'
 create_invoice.execute('create_')
 invoice, = Invoice.find([('type', '=', 'in')])
 invoice.total_amount == Decimal('40')
