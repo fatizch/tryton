@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import unicodedata
+
 from trytond.pool import PoolMeta
 
 __all__ = [
@@ -29,3 +31,14 @@ class Address:
 
     def street_for_sepa(self):
         return self.one_line_street
+
+    @property
+    def sepa_adrline_1(self):
+        return unicodedata.normalize('NFKD', ' '.join(
+                [x.strip() for x in self.street.splitlines() if x.strip()]
+                )).encode('ascii', 'replace')[:70]
+
+    @property
+    def sepa_adrline_2(self):
+        return unicodedata.normalize('NFKD', ' '.join(
+                [self.zip, self.city])).encode('ascii', 'replace')[:70]

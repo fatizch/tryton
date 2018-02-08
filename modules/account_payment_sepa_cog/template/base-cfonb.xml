@@ -6,6 +6,11 @@ this repository contains the full copyright notices and license terms. -->
     <py:def function="PartyIdentification(party, id=True, name=True)">
         <!-- EPC limits to 70 instead of 140 -->
         <Nm py:if="name">${party.name[:70]}</Nm>
+        <py:with vars="address = party.address_get()">
+            <PstlAdr py:if="address">
+                ${PostalAddress(address)}
+            </PstlAdr>
+        </py:with>
         <Id py:if="id and party.sepa_creditor_identifier_used">
             <PrvtId>
                 <Othr>
@@ -19,5 +24,18 @@ this repository contains the full copyright notices and license terms. -->
         </Id>
         <!-- CtryOfRes -->
         <!-- CtctDtls -->
+    </py:def>
+    <py:def function="PostalAddress(address)">
+        <!-- AdrTp -->
+        <!-- Dept -->
+        <!-- SubDept -->
+        <!-- <StrtNm py:if="address.street">${address.street_for_sepa()[:70]}</StrtNm> -->
+        <!-- BldgNb -->
+        <PstCd py:if="address.zip">${address.zip[:16]}</PstCd>
+        <TwnNm py:if="address.city">${address.city[:35]}</TwnNm>
+        <CtrySubDvsn py:if="address.subdivision">${address.subdivision.rec_name[:35]}</CtrySubDvsn>
+        <Ctry py:if="address.country">${normalize('NFKD', address.country.code).encode('ascii', 'replace')}</Ctry>
+        <AdrLine py:if="address.sepa_adrline_1">${address.sepa_adrline_1}</AdrLine>
+        <AdrLine py:if="address.sepa_adrline_2">${address.sepa_adrline_2}</AdrLine>
     </py:def>
 </py:strip>
