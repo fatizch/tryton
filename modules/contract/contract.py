@@ -192,10 +192,11 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             ],
         states=_STATES, depends=['status', 'start_date', 'product',
             'extra_data_values'], target_not_required=True,
-            order=[('coverage', 'ASC'), ('start_date', 'ASC')])
+        order=[('coverage.sequence', 'ASC NULLS LAST'), ('start_date', 'ASC')])
     declined_options = fields.One2ManyDomain('contract.option', 'contract',
         'Declined Options', states=_STATES, depends=['status'],
-        domain=[('status', '=', 'declined')], target_not_required=True)
+        domain=[('status', '=', 'declined')], target_not_required=True,
+        order=[('coverage.sequence', 'ASC NULLS LAST'), ('start_date', 'ASC')])
     activation_history = fields.One2Many('contract.activation_history',
         'contract', 'Activation History', order=[('start_date', 'ASC')],
         states=_STATES, depends=_DEPENDS, delete_missing=True)
@@ -1040,8 +1041,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         contract = Contract()
         contract.init_contract(product, party, contract_dict)
         contract.options = []
-        for coverage in [x.coverage for x in product.ordered_coverages
-                if x.coverage.is_service]:
+        for coverage in [x for x in product.coverages if x.is_service]:
             contract.options.append(SubscribedOpt.new_option_from_coverage(
                     coverage, product, at_date))
         contract.activate_contract()
@@ -1370,7 +1370,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
 
     @classmethod
     def get_coverages(cls, product):
-        return [x.coverage for x in product.ordered_coverages]
+        return list(product.coverages)
 
     def get_package(self, at_date=None):
         if not at_date:
@@ -1987,31 +1987,6 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
                 [('contract.contract_number',) + tuple(clause[1:])],
                 [('coverage.rec_name',) + tuple(clause[1:])],
                 ]
-
-    @classmethod
-    def order_coverage(cls, tables):
-        coverage_order = tables.get('coverage_order_tables')
-        if coverage_order is not None:
-            return [coverage_order[None][0].order]
-
-        pool = Pool()
-        table, _ = tables[None]
-        contract = tables.get('contract')
-        if contract is None:
-            contract = pool.get('contract').__table__()
-
-        relation = pool.get('offered.product-option.description').__table__()
-
-        query_table = contract.join(relation, condition=(
-                contract.product == relation.product)).select(
-                contract.id.as_('contract'), relation.coverage, relation.order)
-        tables['coverage_order_tables'] = {
-            None: (query_table,
-                (query_table.contract == table.contract) &
-                (query_table.coverage == table.coverage)
-                )}
-
-        return [query_table.order]
 
     @classmethod
     def order_start_date(cls, tables):

@@ -85,8 +85,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 ], limit=1)
         product_a.coverages = [coverage_a]
         product_a.save()
-        self.assertEqual([x.coverage for x in product_a.ordered_coverages],
-            [coverage_a])
 
 
 def suite():

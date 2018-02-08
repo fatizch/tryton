@@ -1,8 +1,13 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from sql import Literal, Window
+from sql.aggregate import Min
+from sql.conditionals import Coalesce
+from sql.functions import RowNumber
+
 from trytond.pool import Pool
 from trytond.model import Unique
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond import backend
 
@@ -55,15 +60,7 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
             ('currency', '=', Eval('currency')),
             ('company', '=', Eval('company')),
             ], depends=['currency', 'company'],
-            order=[('order', 'ASC')],
-            states={'invisible': Bool(Eval('change_coverages_order'))})
-    change_coverages_order = fields.Function(
-        fields.Boolean('Change Order'),
-        'get_change_coverages_order', 'setter_void')
-    ordered_coverages = fields.One2Many('offered.product-option.description',
-        'product', 'Ordered Coverages', order=[('order', 'ASC')],
-        states={'invisible': ~Eval('change_coverages_order')},
-        delete_missing=True)
+        order=[('coverage.sequence', 'ASC NULLS LAST')])
     packages = fields.Many2Many('offered.product-package', 'product',
         'package', 'Packages', domain=[('options', 'in', Eval('coverages'))],
         depends=['coverages'])
@@ -127,8 +124,6 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @classmethod
     def _export_skips(cls):
         result = super(Product, cls)._export_skips()
-        # ordered_coverages should be enough
-        result.add('coverages')
         result.add('report_templates')
         return result
 
@@ -231,9 +226,6 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
                     % dict(SUBSCRIBER_KIND)[self.subscriber_kind]])
         return True, []
 
-    def get_change_coverages_order(self, name):
-        return False
-
     def get_publishing_values(self):
         result = super(Product, self).get_publishing_values()
         result['name'] = self.name
@@ -297,10 +289,11 @@ class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
             ('currency', '=', Eval('currency')),
             ('company', '=', Eval('company')),
             ], depends=['currency', 'company'])
+    sequence = fields.Integer('Sequence', help='Used to order the coverages '
+        'accross the application')
     products_name = fields.Function(
         fields.Char('Products'),
         'on_change_with_products_name', searcher='search_products')
-
     is_service = fields.Function(
         fields.Boolean('Is a Service'),
         'on_change_with_is_service')
@@ -311,6 +304,7 @@ class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
         t = cls.__table__()
+        cls._order = [('sequence', 'ASC NULLS LAST')]
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
@@ -318,14 +312,32 @@ class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        table = TableHandler(cls, module_name)
+        handler = TableHandler(cls, module_name)
+        Relation = Pool().get('offered.product-option.description')
+
+        # Migrate from 1.10 Use global ordering for coverages
+        migrate_sequence = (not handler.column_exist('sequence') and
+            TableHandler.table_exist(Relation._table))
 
         super(OptionDescription, cls).__register__(module_name)
 
-        # Migration from 1.6 Drop Offered inheritance
-        if table.column_exist('template'):
-            table.drop_column('template')
-            table.drop_column('template_behaviour')
+        if migrate_sequence:
+            cursor = Transaction().connection.cursor()
+            table = cls.__table__()
+            old_table = Relation.__table__()
+            window_coverage = Window([])
+            values = old_table.select(old_table.coverage,
+                Min(Coalesce(old_table.order, Literal(0))).as_('sequence'),
+                RowNumber(window=window_coverage).as_('number'),
+                group_by=[old_table.coverage],
+                order_by=[
+                    Min(Coalesce(old_table.order, Literal(0)))])
+            cursor.execute(*table.update(
+                    columns=[table.sequence],
+                    values=[values.number],
+                    from_=[values],
+                    where=values.coverage == table.id))
+
 
     @classmethod
     def is_master_object(cls):
@@ -460,7 +472,19 @@ class ProductOptionDescriptionRelation(model.CoogSQL, model.CoogView):
         required=True, select=True)
     coverage = fields.Many2One('offered.option.description',
         'Option Description', ondelete='RESTRICT', required=True, select=True)
-    order = fields.Integer('Order')
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        handler = TableHandler(cls, module_name)
+
+        # Migrate from 1.10 Use global ordering for coverages
+        migrate_sequence = handler.column_exist('order')
+
+        super(ProductOptionDescriptionRelation, cls).__register__(module_name)
+
+        if migrate_sequence:
+            handler.drop_column('order')
 
 
 class ProductExtraDataRelation(model.CoogSQL):

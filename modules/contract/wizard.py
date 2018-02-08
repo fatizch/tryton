@@ -144,8 +144,8 @@ class OptionsDisplayer(model.CoogView):
         if not self.contract:
             return
         self.options = []
-        self.update_options(self.contract.options, [x.coverage
-            for x in self.contract.product.ordered_coverages])
+        self.update_options(self.contract.options,
+            self.contract.product.coverages)
 
     @fields.depends('options', 'package')
     def on_change_options(self):

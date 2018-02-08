@@ -797,8 +797,8 @@ class ManageOptions(EndorsementWizardStepMixin):
 
     def update_current_options(self):
         new_options = []
-        coverage_order = {x.coverage.id: idx
-            for idx, x in enumerate(self.contract.product.ordered_coverages)}
+        coverage_order = {x.id: idx
+            for idx, x in enumerate(self.contract.product.coverages)}
         for option in sorted(self.all_options, key=lambda x: (x.parent,
                     coverage_order[x.coverage.id], x.start_date)):
             if option.parent == self.current_parent:

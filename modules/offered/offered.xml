@@ -134,14 +134,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-        <!-- ############################################################ -->
-        <!-- ########### Product Option Relation ########### -->
-        <!-- ############################################################ -->
-        <record model="ir.ui.view" id="product-option_description_view_list">
-            <field name="model">offered.product-option.description</field>
-            <field name="type">tree</field>
-            <field name="name">product-option_description_list</field>
-        </record>
         <!--################################################################ -->
         <!-- Contract Number Generator -->
         <!--################################################################ -->

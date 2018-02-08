@@ -96,9 +96,9 @@ class OptionsDisplayer:
     def on_change_covered_element(self):
         self.options = []
         if self.covered_element:
-            self.update_options(self.covered_element.options, [x.coverage
-                    for x in self.contract.product.ordered_coverages
-                    if x.coverage.item_desc is not None])
+            self.update_options(self.covered_element.options,
+                [x for x in self.contract.product.coverages
+                    if x.item_desc is not None])
 
     @fields.depends('covered_element')
     def on_change_with_party(self):

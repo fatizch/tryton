@@ -240,8 +240,7 @@ class Contract(Printable):
     def get_coverages(cls, product):
         if not product:
             return []
-        return [x.coverage for x in product.ordered_coverages
-            if x.coverage.is_service]
+        return [x for x in product.coverages if x.is_service]
 
     def init_covered_elements(self):
         for elem in self.covered_elements:
@@ -486,38 +485,6 @@ class ContractOption(Printable):
                 'manual start date %(covered_start_date)s for option '
                 '%(option)s in contract %(contract)s'
                 })
-
-    @classmethod
-    def order_coverage(cls, tables):
-        super(ContractOption, cls).order_coverage(tables)
-
-        pool = Pool()
-        table, _ = tables[None]
-        query_table, _ = tables['coverage_order_tables'][None]
-
-        contract = tables.get('contract')
-        if contract is None:
-            contract = pool.get('contract').__table__()
-
-        covered_element = tables.get('contract.covered_element')
-        if covered_element is None:
-            covered_element = pool.get('contract.covered_element').__table__()
-
-        new_query_table = query_table.join(covered_element, 'LEFT OUTER',
-            condition=(covered_element.contract == query_table.contract)
-            ).select(query_table.contract, query_table.coverage,
-                query_table.order, covered_element.id.as_('covered_element'))
-
-        tables['coverage_order_tables'] = {
-            None: (new_query_table,
-                (new_query_table.coverage == table.coverage) &
-                (
-                    ((new_query_table.contract == table.contract)
-                        & (table.contract != Null)) |
-                    ((new_query_table.covered_element == table.covered_element)
-                        & (table.covered_element != Null))
-                    ))}
-        return [new_query_table.order]
 
     def get_full_name(self, name):
         return super(ContractOption, self).get_full_name(name)
@@ -876,13 +843,15 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             ], states={'readonly': IS_READ_ONLY},
         depends=['item_desc', 'product', 'contract_status'],
         target_not_required=True,
-        order=[('coverage', 'ASC'), ('start_date', 'ASC')])
+        order=[('coverage.sequence', 'ASC NULLS LAST'), ('start_date', 'ASC')])
     declined_options = fields.One2ManyDomain('contract.option',
         'covered_element', 'Declined Options',
         domain=[('status', '=', 'declined')], target_not_required=True,
+        order=[('coverage.sequence', 'ASC NULLS LAST'), ('start_date', 'ASC')],
         readonly=True)
     all_options = fields.One2Many('contract.option', 'covered_element',
         'Options', target_not_required=True, delete_missing=True,
+        order=[('coverage.sequence', 'ASC NULLS LAST'), ('start_date', 'ASC')],
         readonly=True)
     parent = fields.Many2One('contract.covered_element', 'Parent',
         ondelete='CASCADE', select=True, readonly=True)
@@ -1325,8 +1294,7 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
 
     @classmethod
     def get_coverages(cls, product, item_desc):
-        return [x.coverage for x in product.ordered_coverages
-            if x.coverage.item_desc == item_desc]
+        return [x for x in product.coverages if x.item_desc == item_desc]
 
     def init_options(self, product, start_date):
         existing = dict(((x.coverage, x) for x in getattr(

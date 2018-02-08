@@ -42,6 +42,8 @@ this repository contains the full copyright notices and license terms. -->
         </page>
         <page string="Administration" id="admin">
             <field name="tags" colspan="4"/>
+            <label name="sequence"/>
+            <field name="sequence"/>
         </page>
     </notebook>
 </form>

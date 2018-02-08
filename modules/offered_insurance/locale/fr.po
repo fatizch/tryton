@@ -753,10 +753,6 @@ msgctxt "field:offered.package-option.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.product,change_coverages_order:"
-msgid "Change Order"
-msgstr "Modifier l'Ordre"
-
 msgctxt "field:offered.product,code:"
 msgid "Code"
 msgstr "Code"
