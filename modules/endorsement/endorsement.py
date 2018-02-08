@@ -466,7 +466,7 @@ def values_mixin(value_model):
                     prev_value = getattr(base_object, k, '') or ''
                 else:
                     prev_value = ''
-                field = ValueModel._fields[k]
+                field = ValueModel._fields.get(k, None)
                 if isinstance(field, tryton_fields.Function):
                     field = field._field
                 if isinstance(field, tryton_fields.Many2One):
@@ -533,15 +533,17 @@ def values_mixin(value_model):
             result = []
             if hasattr(self, 'action') and self.action == 'add':
                 for fname, ffield, _, new in vals:
+                    field_string = ffield.string if ffield else fname
                     label = u'%s' % coog_string.translate(
-                        ValueModel, fname, ffield.string, 'field')
+                        ValueModel, fname, field_string, 'field')
                     value = u' → %s' % new
                     result.append((label, value))
             else:
                 for fname, ffield, old, new in vals:
+                    field_string = ffield.string if ffield else fname
                     if old != new:
                         label = u'%s' % coog_string.translate(
-                            ValueModel, fname, ffield.string, 'field')
+                            ValueModel, fname, field_string, 'field')
                         value = u'%s → %s' % (old, new)
                         result.append((label, value))
             return result

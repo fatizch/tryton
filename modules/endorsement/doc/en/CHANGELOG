@@ -1,3 +1,4 @@
+* BUG#8164 Fix display of migrated fields in endorsement summary
 * BUG#8200 Ability to reactivate void contract by using reactivate contract endorsement
 * BUG#8041 Replace the contract start_date by the initial_start_date on the check method which is applied before launching endorsement modification
 * BUG#8144 Fix termination in current term with past periods
