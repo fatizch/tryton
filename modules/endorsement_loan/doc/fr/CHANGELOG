@@ -1,3 +1,5 @@
+* BUG#8053 Pas de prise en compte des contrats sans effet dans les avenants d'ajout / suppression de prêts
+
 Version 1.14 - 2017-11-09
 * BUG#2443 L'annulation d'avenant recalcule la table d'amortissement des prêts
 * BUG#6765 Amélioration des vues sur les avenants de modification de prêts

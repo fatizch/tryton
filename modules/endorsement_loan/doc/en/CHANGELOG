@@ -1,3 +1,5 @@
+* BUG#8053 Ignore void contracts on add / remove loan endorsements
+
 Version 1.14 - 2017-11-09
 * BUG#2443 The endorsement cancel recalculate the loan amortization table
 * BUG#6765 Better views in loan related endorsements

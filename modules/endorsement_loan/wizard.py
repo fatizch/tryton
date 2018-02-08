@@ -278,7 +278,8 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoogView):
             all_contracts.add(ctr_endorsement.contract)
             all_contracts |= set([
                     x for loan in ctr_endorsement.contract.loans
-                    for x in loan.contracts])
+                    for x in loan.contracts
+                    if x.is_active_at_date(self.effective_date)])
             contract = Contract(ctr_endorsement.contract.id)
             utils.apply_dict(contract, ctr_endorsement.apply_values())
             new_matches[contract.id] = set([x.loan.id
@@ -1435,9 +1436,10 @@ class StartEndorsement:
     def default_loan_select_contracts(self, name):
         Contract = Pool().get('contract')
         all_loans = [x.id for x in self.endorsement.loans]
-        possible_contracts = Contract.search([
-                ('covered_elements.options.loan_shares.loan', 'in',
-                    all_loans)])
+        possible_contracts = [x for x in Contract.search([
+                    ('covered_elements.options.loan_shares.loan', 'in',
+                        all_loans)])
+            if x.is_active_at_date(self.endorsement.effective_date)]
         contract_displayers = []
         for contract_endorsement in self.endorsement.contract_endorsements:
             contract = contract_endorsement.contract
