@@ -748,6 +748,7 @@ class RuleParameter(DictSchemaMixin, model.CoogSQL, model.CoogView):
 
 class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     "Rule"
+    _history = True
     __name__ = 'rule_engine'
     _func_key = 'short_name'
 

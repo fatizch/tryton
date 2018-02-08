@@ -1,3 +1,4 @@
+* FEA#8149 Add history on rules to consult different versions
 * FEA#8160 Function cache for rng (not serializable)
 * BUG#8093 Use a single shared rule engine instance across a transaction
 * FEA#7598 Add the "Code" column in the rules list view so it can be filtered on
