@@ -1,3 +1,4 @@
+* OTH#0000 Correctif du message d'erreur lors de la création d'un paiement à partir de lignes n'ayant pas la même configuration de journaux de paiement
 * BUG#7900 Possibilité de découper le batch de traitement des paiements
 * BUG#7538 Ajout des droits sur les boutons des paiements
 

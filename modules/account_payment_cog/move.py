@@ -452,9 +452,9 @@ class PaymentCreation(model.CoogWizard):
                 'incompatible with selected kind',
                 'updating_payment_date': 'The payment date for all payments '
                 'will be update to %(date)s',
-                'different_payment_journal': 'Please check whether all '
-                'involved journal configuration for the selected lines have '
-                'the same defined payment journal.'
+                'different_payment_journal': 'The allowed payment journals '
+                'for the selected lines are different and do not allow '
+                'them to be processed at the same time.'
                 })
 
     def get_lines_amount_per_kind(self, lines):
