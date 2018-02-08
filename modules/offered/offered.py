@@ -326,18 +326,20 @@ class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
             table = cls.__table__()
             old_table = Relation.__table__()
             window_coverage = Window([])
-            values = old_table.select(old_table.coverage,
+            sub_query = old_table.select(old_table.coverage,
                 Min(Coalesce(old_table.order, Literal(0))).as_('sequence'),
-                RowNumber(window=window_coverage).as_('number'),
                 group_by=[old_table.coverage],
                 order_by=[
                     Min(Coalesce(old_table.order, Literal(0)))])
+            values = sub_query.select(
+                sub_query.coverage,
+                RowNumber(window=window_coverage).as_('number'))
+
             cursor.execute(*table.update(
                     columns=[table.sequence],
                     values=[values.number],
                     from_=[values],
                     where=values.coverage == table.id))
-
 
     @classmethod
     def is_master_object(cls):
