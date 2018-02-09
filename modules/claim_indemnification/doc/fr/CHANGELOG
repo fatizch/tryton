@@ -1,3 +1,4 @@
+* BUG#8241 La date de dernière indemnisation payée ignore les périodes déductibles
 * FEA#7982 Ajout des journaux de paiement disponibles sur les prestations pour la création de périodes d'indemnisation
 * FEA#8032 Ajout d'une vérification qui empêche l'ordonnancement en cas de période précédente manquante
 * FEA#7975 Ajout d'une action depuis une ligne de détail d'indemnisation afin de supprimer l'indemnisation associée

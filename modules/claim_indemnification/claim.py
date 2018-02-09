@@ -341,7 +341,8 @@ class ClaimService:
 
     def get_last_indemnification_date(self, name):
         indemnifications = [x for x in self.indemnifications
-            if x.status == 'paid']
+            if x.status == 'paid'
+            and not all(d.kind == 'deductible' for d in x.details)]
         if indemnifications:
             return max(x.end_date or x.start_date for x in indemnifications)
         return None
