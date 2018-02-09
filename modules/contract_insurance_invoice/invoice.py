@@ -698,8 +698,7 @@ class InvoiceLineAggregates(Wizard):
                 })
         for line in invoice.lines:
             lines[line.detail.rated_entity]['base_amount'] += line.amount
-            lines[line.detail.rated_entity]['tax_amount'] += sum(
-                    [x['amount'] for x in line._get_taxes().values()], 0)
+            lines[line.detail.rated_entity]['tax_amount'] += line.tax_amount
 
         for k, v in lines.iteritems():
             v['rated_entity'] = k.rec_name

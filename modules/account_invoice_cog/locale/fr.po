@@ -80,6 +80,26 @@ msgctxt "field:account.invoice.change_payment_term.select_term,new_term:"
 msgid "New Payment Term"
 msgstr "Nouvelles conditions de paiement"
 
+msgctxt "field:account.invoice.line,tax_amount:"
+msgid "Tax Amount"
+msgstr "Montant de la taxe"
+
+msgctxt "field:account.invoice.line,tax_lines:"
+msgid "Tax Lines"
+msgstr "Lignes de taxe"
+
+msgctxt "field:account.invoice.line,tax_rate:"
+msgid "Tax Rate"
+msgstr "Taux de taxe"
+
+msgctxt "field:account.invoice.line,taxed_amount:"
+msgid "Taxed Amount"
+msgstr "Montant taxé"
+
+msgctxt "field:account.invoice.line-account.tax,amount:"
+msgid "Amount"
+msgstr "Montant"
+
 msgctxt "field:account.invoice.payment_term,is_one_shot:"
 msgid "One Shot"
 msgstr "En une fois"

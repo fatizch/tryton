@@ -22,18 +22,6 @@ msgctxt "field:account.invoice,report_commissions:"
 msgid "Commissions To Report"
 msgstr "Commissions incluses dans le rapport"
 
-msgctxt "field:account.invoice.line,tax_amount:"
-msgid "Tax Amount"
-msgstr "Montant de la taxe"
-
-msgctxt "field:account.invoice.line,tax_rate:"
-msgid "Tax Rate"
-msgstr "Taux de taxe"
-
-msgctxt "field:account.invoice.line,taxed_amount:"
-msgid "Taxed Amount"
-msgstr "Montant taxé"
-
 msgctxt "field:commission,commission_rate:"
 msgid "Commission Rate"
 msgstr "Taux de commission"

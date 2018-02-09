@@ -5,7 +5,6 @@ from trytond.modules.coog_core import fields
 
 __all__ = [
     'Invoice',
-    'InvoiceLine',
     ]
 
 
@@ -24,24 +23,3 @@ class Invoice:
         commissions.sort(key=lambda x: x.commissioned_contract.id)
         commissions = [x.id for x in commissions]
         return commissions
-
-
-class InvoiceLine:
-    __metaclass__ = PoolMeta
-    __name__ = 'account.invoice.line'
-
-    tax_rate = fields.Function(
-        fields.Numeric('Tax Rate', digits=(16, 2)), 'get_tax_rate')
-    taxed_amount = fields.Function(
-        fields.Numeric('Taxed Amount', digits=(16, 2)), 'get_taxed_amount')
-    tax_amount = fields.Function(
-        fields.Numeric('Tax Amount', digits=(16, 2)), 'get_tax_amount')
-
-    def get_tax_rate(self, name):
-        return sum([x.rate for x in self.taxes])
-
-    def get_tax_amount(self, name):
-        return sum([x['amount'] for x in self._get_taxes()])
-
-    def get_taxed_amount(self, name):
-        return self.tax_amount + self.amount

@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from decimal import Decimal
 from collections import defaultdict
 
 from sql import Cast
@@ -17,6 +18,7 @@ from trytond.modules.report_engine import Printable
 __all__ = [
     'Invoice',
     'InvoiceLine',
+    'InvoiceLineTax',
     ]
 
 
@@ -24,6 +26,17 @@ class InvoiceLine:
     __metaclass__ = PoolMeta
     __name__ = 'account.invoice.line'
 
+    tax_lines = fields.One2Many('account.invoice.line-account.tax', 'line',
+        'Tax Lines', readonly=True, delete_missing=False)
+    tax_amount = fields.Function(
+        fields.Numeric('Tax Amount'),
+        'getter_tax_amount')
+    tax_rate = fields.Function(
+        fields.Numeric('Tax Rate', digits=(16, 2)),
+        'getter_tax_rate')
+    taxed_amount = fields.Function(
+        fields.Numeric('Taxed Amount', digits=(16, 2)),
+        'getter_taxed_amount')
     invoice_business_kind = fields.Function(fields.Char(
             'Invoice Business Kind'),
         'getter_invoice_business_kind')
@@ -44,6 +57,20 @@ class InvoiceLine:
         table.index_action('company', 'remove')
         table.index_action(['company', 'id'], 'add')
         table.index_action(['invoice', 'company'], 'add')
+
+    def getter_tax_amount(self, name):
+        return sum([x.amount for x in self.tax_lines], Decimal(0))
+
+    def getter_tax_rate(self, name):
+        return sum([x.rate for x in self.taxes])
+
+    def getter_taxed_amount(self, name):
+        return self.tax_amount + self.amount
+
+    def _round_taxes(self, taxes):
+        # In the case of taxes included, we need the non-rounded amounts
+        if not self.invoice.taxes_included or not self.invoice.currency:
+            return super(InvoiceLine, self)._round_taxes(taxes)
 
     @classmethod
     def _account_domain(cls, type_):
@@ -437,7 +464,7 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
             Tax included option is only available if taxes are rounded per line
             This code implements the Sum Preserving Rounding algorithm
         '''
-        if not self.taxes_included or not self.currency:
+        if not self.reverse_tax_included():
             return super(Invoice, self)._round_taxes(taxes)
         expected_amount_non_rounded = 0
         sum_of_rounded = 0
@@ -459,3 +486,105 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
             assert rounded_of_sum == sum_of_rounded
         for k in initial_data:
             initial_data[k] = self.currency.round(initial_data[k])
+
+    def reverse_tax_included(self):
+        return self.taxes_included and self.currency
+
+
+class InvoiceLineTax:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.invoice.line-account.tax'
+
+    amount = fields.Function(
+        fields.Numeric('Amount'),
+        'getter_amount')
+
+    def getter_amount(self, name):
+        # The point of this method is to re-affect the delta between the basic
+        # calculation (line per line tax) and the effective calculation (on the
+        # full invoice, with all intelligent roundings) on each individual tax
+        # / line
+
+        # The approach is:
+        #    - to calculate the taxes for the full invoice
+        #    - to calculate the taxes line by line
+        #    - to apply the delta between the two line by line, so as to obtain
+        #    a null delta
+
+        #  Example: An invoice of 34.75 (31.92 + 2.83 taxes)
+        #  The expected lines are as follow (0.09 tax rate):
+        #      - 9.94 taxes included
+        #      - 7.40 taxes included
+        #      - 4.30 taxes included
+        #      - 4.30 taxes included
+        #      - 4.30 taxes included
+        #      - 4.30 taxes included
+        #      - 0.21 untaxed
+
+        #  The taxes included mechanism will convert those lines to:
+        #      - 9.1192, rounded to 9.12
+        #      - 6.7890, rounded to 6.79
+        #      - 3.9450, rounded to 3.95
+        #      - 3.9450, rounded to 3.95
+        #      - 3.9450, rounded to 3.95
+        #      - 3.9450, rounded to 3.95
+        #      - 0.21
+
+        #  The corresponding taxes are then calculated:
+        #      - 0.8208
+        #      - 0.6111
+        #      - 0.3555
+        #      - 0.3555
+        #      - 0.3555
+        #      - 0.3555
+        #      - 0
+
+        #  In order to have a taxes included amount equal to the sum of the base
+        #  amount + the tax amount, we round taxes as follow:
+        #      - 0.82 (easy)
+        #      - 0.61 (easy)
+        #      - 0.35 (logically, we should round to 0.36, but that would make
+        #      - 0.35      the sum of base amount (3.95) and tax amount (0.36)
+        #      - 0.35      be 4.31 when the expected taxes included amount
+        #      - 0.35      should be 4.30)
+        #      - 0
+
+        #  The goal of this method is to be able to properly return 0.35 for the
+        #  tax amount of the 3.95 lines
+
+        currency = self.line.invoice.currency
+        line_taxes = self.line._get_taxes()
+        line_key = [k for k in line_taxes if k['tax'] == self.tax.id][0]
+
+        if not self.reverse_tax_included():
+            # Nothing to do, we return the rounded result
+            return line_taxes[line_key]['amount']
+
+        # This is the non rounded amount to tax. In our case, we will have
+        # 3.9450
+        expected_amount_non_rounded = self.line.unit_price
+        sum_of_rounded = 0
+        for taxline in line_taxes.itervalues():
+            # 3.9450 + 0.3555 = 4.3005
+            expected_amount_non_rounded += taxline['amount']
+            # base => 3.9450 rounded to 3.95
+            # amount => 0.3555 rounded to 0.36
+            for attribute in ('base', 'amount'):
+                taxline[attribute] = currency.round(taxline[attribute])
+            if sum_of_rounded == 0:
+                sum_of_rounded = taxline['base']
+            # sum_of_rounded = 3.95 + 0.36 = 4.31
+            sum_of_rounded += taxline['amount']
+            # rounded_of_sum = 4.30
+            rounded_of_sum = currency.round(expected_amount_non_rounded)
+            if sum_of_rounded != rounded_of_sum:
+                # The difference is affected to the amount, so that both values
+                # are equal: amount => 0.36 - 0.01 = 0.35
+                taxline['amount'] += rounded_of_sum - sum_of_rounded
+                sum_of_rounded += rounded_of_sum - sum_of_rounded
+
+        return line_taxes[line_key]['amount']
+
+    def reverse_tax_included(self):
+        invoice = self.line.invoice
+        return invoice.taxes_included and invoice.currency

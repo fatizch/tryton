@@ -16,7 +16,6 @@ def register():
         wizard.InsurerReportResult,
         report_engine.ReportTemplate,
         account.Invoice,
-        account.InvoiceLine,
         contract.Contract,
         contract.CoveredElement,
         party.InsurerReportTemplate,

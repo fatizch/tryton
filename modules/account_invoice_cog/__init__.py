@@ -17,6 +17,7 @@ def register():
     Pool.register(
         invoice.InvoiceLine,
         invoice.Invoice,
+        invoice.InvoiceLineTax,
         party.Party,
         party.PartyPaymentTerm,
         party.PartyAccount,
