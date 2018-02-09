@@ -6,6 +6,7 @@ try:
 except ImportError:
     import StringIO
 from decimal import Decimal, ROUND_HALF_UP
+import stat
 import sys
 import zipfile
 import traceback
@@ -1416,11 +1417,20 @@ class ReportCreate(wizard_context.PersistentContextWizard):
             lower=False)
         report['output_report_filepath'] = self._get_report_filepath(report)
 
+    def _apply_acl_rights(self, filename):
+        os.chmod(filename, stat.S_IRUSR | stat.S_IXUSR | stat.S_IWUSR |
+            stat.S_IRGRP | stat.S_IWGRP | stat.S_IROTH | stat.S_IWOTH)
+
     def _get_report_filepath(self, report):
+        restrict_rights = config.getboolean('report',
+            'tmp_folder_acl_restrict', default=False)
         if (self.select_template.template.output_format == 'pdf' and
                 not os.path.isfile(report['server_filepath'])):
             # Generate unique temporary output report filepath
-            return os.path.join(tempfile.mkdtemp(), coog_string.slugify(
+            tmp_directory = tempfile.mkdtemp()
+            if not restrict_rights:
+                self._apply_acl_rights(tmp_directory)
+            return os.path.join(tmp_directory, coog_string.slugify(
                     report['output_report_name'], lower=False) + '.pdf')
         else:
             return report['server_filepath']

@@ -1,3 +1,4 @@
+* BUG#8192 Add configuration to set ACL rights on the report output folder
 * OTH#0000 Allow to specify the model to search_and_stream on
 * FEA#8137 Add a batch to create report production requests on a lot of records in one go
 * FEA#7946 Allow to define a custom format string for dates in report templates
