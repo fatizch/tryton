@@ -1027,7 +1027,9 @@ class ReportGenerate(CoogReport):
         SelectedModel = pool.get(data['model'])
 
         def search_and_stream(*args, **kwargs):
-            return model.search_and_stream(SelectedModel, *args, **kwargs)
+            model_name = kwargs.pop('model_name', data['model'])
+            Target = pool.get(model_name)
+            return model.search_and_stream(Target, *args, **kwargs)
 
         report_context['Search'] = search_and_stream
 

@@ -1,3 +1,4 @@
+* OTH#0000 Allow to specify the model to search_and_stream on
 * FEA#8137 Add a batch to create report production requests on a lot of records in one go
 * FEA#7946 Allow to define a custom format string for dates in report templates
 * BUG#7882 Use user's language if no recipient is defined when generating reports

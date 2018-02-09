@@ -1,3 +1,4 @@
+* OTH#0000 Possibilité de forcer le modèle de recherche dans search_and_stream
 * FEA#8137 Ajout d'un batch permettant de créer en masse des demandes de production de documents
 * FEA#7946 Permettre d'utiliser un format d'impression personnalisé pour la date dans les courriers
 * BUG#7882 Utilisation de la langue utilisateur lorsqu'il n'y a pas de destinataire défini lors de la génération des rapports
