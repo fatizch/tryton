@@ -1,8 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import math
 from collections import defaultdict
 from decimal import Decimal
-from threading import Lock
 
 from trytond.rpc import RPC
 from trytond.pool import PoolMeta, Pool
@@ -16,7 +16,53 @@ __all__ = [
     'Loan',
     ]
 
-_scipy_lock = Lock()
+
+def find_dec_root(func, x, step, tol):
+    '''
+        Basic naive function root calculation (dicot)
+        It supposes that function is decreasing
+        Implementation could be a subject of improvements
+    '''
+    fx = func(x)
+    if math.fabs(fx) <= tol:
+        return x
+
+    if fx > 0:
+        x_min, fx_min = x, fx
+        while True:
+            x += step
+            fx = func(x)
+            if fx > 0:
+                x_min, fx_min = x, fx
+            elif fx == 0:
+                x_min, x_max, fx_min, fx_max = x, x, fx, fx
+                break
+            else:
+                x_max, fx_max = x, fx
+                break
+    elif fx == 0:
+        x_min, x_max, fx_min, fx_max = x, x, fx, fx
+    else:
+        x_max, fx_max = x, fx
+        while True:
+            x -= step
+            fx = func(x)
+            if fx < 0:
+                x_max, fx_max = x, fx
+            elif fx == 0:
+                x_min, x_max, fx_min, fx_max = x, x, fx, fx
+                break
+            else:
+                x_min, fx_min = x, fx
+                break
+    assert x_min >= 0
+
+    if (x_min != x_max):
+        pivot = x_min + ((x_max - x_min) * (fx_min / (fx_min - fx_max)))
+    else:
+        pivot = x_min
+
+    return find_dec_root(func, pivot, step / 5, tol)
 
 
 class Loan:
@@ -110,17 +156,9 @@ class Loan:
     @classmethod
     def _calculate_annual_percentage_rate(cls, capitals, payments):
         '''
-            Uses Scipy to properly solve the Annual Percentage Rate equation (
-            http://en.wikipedia.org/wiki/Annual_percentage_rate#European_Union)
-
-            Requires scipy installed :
-                - sudo apt-get install gfortran libopenblas-dev liblapack-dev
-                - pip install scipy
-
-            LD_LIBRARY_PATH should be set in os.env :
-                export LD_LIBRARY_PATH=/usr/lib/openblas-base/
+            Calculate TAEG
+            http://en.wikipedia.org/wiki/Annual_percentage_rate#European_Union
         '''
-        from scipy.optimize import fsolve
 
         def fx(x):
             result = 0.0
@@ -130,6 +168,4 @@ class Loan:
                 result -= float(capital) / ((1 + x) ** float(nb_year))
             return result
 
-        # Solve fx(x) = 0, tolerance value = 1e-7, approximate_value = 0.003
-        with _scipy_lock:
-            return Decimal(fsolve(fx, 0.003, xtol=1e-7)[0])
+        return Decimal(find_dec_root(fx, 0.1, 0.02, 1e-7))
