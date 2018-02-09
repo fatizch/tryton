@@ -1,3 +1,4 @@
+* BUG#8253 Ajout de la possibiliter de renouveller un seul contrat d'un ensemble de contrat
 * BUG#7542 Dans un ensemble de contrat, si un des contrats a une résiliation planifiée, Coog ne doit pas empêcher de renouveller les autres contrats
 
 Version 1.14 - 2017-11-09
