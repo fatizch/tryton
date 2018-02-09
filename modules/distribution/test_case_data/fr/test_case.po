@@ -13,14 +13,14 @@ msgstr "Dept"
 msgid "Agency"
 msgstr "Agence"
 
+msgid "Commercial"
+msgstr "Commercial"
+
 msgid "Commercial Partners"
 msgstr "Partenaires Commerciaux"
 
 msgid "Partner"
 msgstr "Partenaire"
-
-msgid "broker"
-msgstr "courtier"
 
 msgid "Broker"
 msgstr "Courtier"
