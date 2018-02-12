@@ -55,7 +55,6 @@ def find_dec_root(func, x, step, tol):
             else:
                 x_min, fx_min = x, fx
                 break
-    assert x_min >= 0
 
     if (x_min != x_max):
         pivot = x_min + ((x_max - x_min) * (fx_min / (fx_min - fx_max)))
