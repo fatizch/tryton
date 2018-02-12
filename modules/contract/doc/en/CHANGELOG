@@ -1,3 +1,4 @@
+* BUG#4856 Use only two columns for options form view
 * BUG#7979 Allow/reactivate the deletion of quotes and declined contracts
 * BUG#7876 Modify the reactivate process in order to be able to activate void contract
 * BUG#7951 Fix override of method execute in event type action

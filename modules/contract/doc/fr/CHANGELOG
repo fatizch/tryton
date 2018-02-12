@@ -1,3 +1,4 @@
+* BUG#4856 Utilisation de seulement deux colonnes pour la vue formulaire des garanties
 * BUG#7979 Autoriser/Réactiver la suppression de devis et de contrats déclinés
 * BUG#7876 Support de la réactivation des contrats sans effet
 * BUG#7951 Correction des surcharges de la méthode execute de event type action 

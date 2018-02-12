@@ -6,7 +6,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="contract"/>
     <newline/>
     <notebook colspan="4">
-        <page string="Main Data" id="main_data">
+        <page string="Main Data" id="main_data" col="2">
             <label name="coverage"/>
             <field name="coverage"/>
             <newline/>
