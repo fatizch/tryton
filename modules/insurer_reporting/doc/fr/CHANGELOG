@@ -1,3 +1,5 @@
+* OTH#0000 Correction de la gestion des paramétres de batch reportée depuis la 1.12
+
 Version 1.14 - 2017-11-09
 * OTH#0000 Désormais, le paramètre de batch 'possible_days' empêche l'execution du batch si vide ou non renseigné
 * FEA#6898 Amélioration du batch pour imprimer les rapports de type stock assureur
