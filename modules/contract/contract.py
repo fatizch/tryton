@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 import json
-import types
 from sql import Null, Window, Literal
 from sql.conditionals import NullIf, Coalesce
 from sql.aggregate import Max, Min
@@ -2012,7 +2011,7 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         if (new_end_date and self.manual_end_date and
                 self.manual_end_date > new_end_date):
             self.manual_end_date = None
-        if self.versions:
+        if self.versions and new_end_date:
             to_date_versions = [v for v in self.versions
                 if v.start is None or v.start < new_end_date]
             self.versions = to_date_versions
