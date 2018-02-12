@@ -1,3 +1,4 @@
+* FEA#8116 Ajout de la colonne nom du sinistre dans la vue liste des sinistres au début du processus de déclaration
 * FEA#7620 Ajout de la méthode set_sub_status afin de permettre la mise à jour du sous statut d'un sinistre depuis la configuration d'un processus
 
 Version 1.14 - 2017-11-09

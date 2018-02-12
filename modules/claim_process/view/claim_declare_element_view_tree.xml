@@ -3,6 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <tree editable="bottom">
     <field name="select"/>
+    <field name="name"/>
     <field name="declaration_date"/>
     <field name="status"/>
     <field name="losses_summary" width="500"/>
