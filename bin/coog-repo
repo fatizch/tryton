@@ -23,7 +23,7 @@ _coog_repo_list() { # list repositories
         local f
         for f in $COOG_ROOT/*
         do
-                [ -d $f ] && [ -d $f/modules ] && basename $f
+                [ $f != "$COOG_ROOT/coog-doc" ] && [ -d $f ] && [ -d $f/modules ] && basename $f
         done
 }
 
