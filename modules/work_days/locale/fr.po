@@ -30,13 +30,13 @@ msgctxt "field:work_days.configuration,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:work_days.configuration,day:"
+msgid "Day"
+msgstr "Jour"
+
 msgctxt "field:work_days.configuration,holidays:"
 msgid "Holidays"
 msgstr "Jours Fériés"
-
-msgctxt "field:work_days.configuration,holidays_year:"
-msgid "Holidays Year"
-msgstr "Année des jours fériés"
 
 msgctxt "field:work_days.configuration,id:"
 msgid "ID"
@@ -46,9 +46,17 @@ msgctxt "field:work_days.configuration,name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:work_days.configuration,number_of_working_days:"
+msgid "Number Of Working Days"
+msgstr "Nombre de jours ouvrés"
+
 msgctxt "field:work_days.configuration,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:work_days.configuration,shifted_day:"
+msgid "Shifted Day"
+msgstr "Jour décalé"
 
 msgctxt "field:work_days.configuration,write_date:"
 msgid "Write Date"
@@ -231,11 +239,11 @@ msgid "All Saint's Day"
 msgstr "La Toussaint"
 
 msgctxt "model:work_days.holiday,name:ww1_armistice_holiday"
-msgid "First World War Armisitice"
+msgid "First World War Armistice"
 msgstr "Armistice 1918"
 
 msgctxt "model:work_days.holiday,name:ww1_armistice_holiday_alsace"
-msgid "First World War Armisitice"
+msgid "First World War Armistice"
 msgstr "Armistice 1918"
 
 msgctxt "model:work_days.holiday,name:ww2_armistice_holiday"
@@ -248,7 +256,7 @@ msgstr "Armistice 1945"
 
 msgctxt "selection:work_days.holiday,holiday_type:"
 msgid "Easter Related Holiday"
-msgstr "Jour Férié lié à Pâques"
+msgstr "Jour férié lié à Pâques"
 
 msgctxt "selection:work_days.holiday,holiday_type:"
 msgid "Input"
@@ -256,7 +264,7 @@ msgstr "Saisie"
 
 msgctxt "selection:work_days.holiday,holiday_type:"
 msgid "Weekly Day Off"
-msgstr "Jour de Repos Hebdomadaire"
+msgstr "Jour de repos hebdomadaire"
 
 msgctxt "selection:work_days.holiday,month:"
 msgid ""

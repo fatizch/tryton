@@ -6,7 +6,13 @@ this repository contains the full copyright notices and license terms. -->
     <field name="name"/>
     <label name="code"/>
     <field name="code"/>
-    <label name="holidays_year"/>
-    <field name="holidays_year"/>
+    <label name="day"/>
+    <field name="day"/>
+    <label name="number_of_working_days"/>
+    <group id="shifted_day">
+        <field name="number_of_working_days"/>
+        <label name="shifted_day"/>
+        <field name="shifted_day"/>
+    </group>
     <field name="holidays" colspan="4"/>
 </form>

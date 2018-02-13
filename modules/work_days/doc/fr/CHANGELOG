@@ -1,3 +1,5 @@
+* FEA#8162 Calcul de la date après N jours ouvrés depuis l'application en utilisant le même calcul que celui utilisé pour le batch (utile pour anticiper la date qui va être utilisée dans le prochain plan batch)
+
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout des champs holiday_year et holiday_date permettant de calculer les dates des jours fériés d'une certaine année.

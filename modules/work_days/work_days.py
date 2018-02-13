@@ -4,6 +4,7 @@ import datetime
 from dateutil import rrule
 from dateutil.easter import easter
 
+from trytond import backend
 from trytond.pyson import Eval
 
 from trytond.model import ModelView, ModelSQL, fields, Model
@@ -26,9 +27,12 @@ class Configuration(ModelSQL, ModelView):
         'Holidays')
     code = fields.Char('Code', required=True, select=True)
     name = fields.Char('Name', required=True, translate=True)
-    holidays_year = fields.Function(
-        fields.Integer('Holidays Year'),
-        'get_holidays_year', setter='setter_void')
+    day = fields.Function(fields.Date('Day'), 'get_day', setter='setter_void')
+    number_of_working_days = fields.Function(
+        fields.Integer('Number Of Working Days'),
+        'getter_void', setter='setter_void')
+    shifted_day = fields.Function(fields.Date('Shifted Day'),
+        'on_change_with_shifted_day')
 
     @classmethod
     def __setup__(cls):
@@ -42,32 +46,26 @@ class Configuration(ModelSQL, ModelView):
         super(Configuration, cls).validate(configurations)
         cls.check_duplicates(configurations)
 
+    def getter_void(self, name):
+        pass
+
     @classmethod
     def setter_void(cls, objects, name, values):
         pass
 
-    def get_holidays_year(self, name):
-        return int(datetime.date.today().year)
+    def get_day(self, name):
+        return datetime.date.today()
 
-    @fields.depends('holidays', 'holidays_year')
-    def on_change_holidays_year(self, name=None):
-        if self.holidays_year is None:
-            for holiday in self.holidays:
-                holiday.holiday_date = None
-            return
-        if self.holidays_year < 1:
-            self.holidays_year = 1
-        elif self.holidays_year > 9999:
-            self.holidays_year = 9999
+    @fields.depends('holidays', 'day')
+    def on_change_day(self, name=None):
+        year = self.day.year if self.day else None
         for holiday in self.holidays:
-            if holiday.holiday_type == 'weekly_day_off':
-                holiday.holiday_date = None
-            elif holiday.holiday_type == 'easter_holiday':
-                holiday.holiday_date = easter(self.holidays_year) + \
-                    datetime.timedelta(days=holiday.easter_delta_days)
-            else:
-                holiday.holiday_date = datetime.date(self.holidays_year,
-                        int(holiday.month), int(holiday.day))
+            holiday.holiday_date = holiday.calculate_date(year)
+
+    @fields.depends('day', 'number_of_working_days', 'holidays')
+    def on_change_with_shifted_day(self, name=None):
+        return (self.add_workdays(self.day, self.number_of_working_days)
+            if self.day and self.number_of_working_days else None)
 
     @staticmethod
     def is_duplicate_fixed(fixed_holidays):
@@ -201,9 +199,20 @@ class Holiday(ModelSQL, ModelView):
             'invisible': Eval('holiday_type') != 'weekly_day_off',
             'required': Eval('holiday_type') == 'weekly_day_off'
             }, depends=['holiday_type'])
-    holiday_date = fields.Date("Holiday's Date", states={
-            'invisible': Eval('holiday_type') == 'weekly_day_off'},
-        depends=['holiday_type'])
+    holiday_date = fields.Function(
+        fields.Date("Holiday's Date", states={
+                'invisible': Eval('holiday_type') == 'weekly_day_off'},
+            depends=['holiday_type']),
+        'on_change_with_holiday_date')
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        holiday_h = TableHandler(cls, module_name)
+        has_holiday_date = holiday_h.column_exist('holiday_date')
+        super(Holiday, cls).__register__(module_name)
+        if has_holiday_date:
+            holiday_h.drop_column('holiday_date')
 
     @classmethod
     def __setup__(cls):
@@ -228,6 +237,22 @@ class Holiday(ModelSQL, ModelView):
 
     def on_change_holiday_type(self, name=None):
         self.day, self.month, self.easter_delta_days = None, None, None
+
+    @fields.depends('configuration', 'holiday_type', 'easter_delta_days',
+        'month', 'day')
+    def on_change_with_holiday_date(self, name=None):
+        if self.configuration and self.configuration.day:
+            return self.calculate_date(self.configuration.day.year)
+
+    def calculate_date(self, year):
+        year = max(min(year, datetime.MAXYEAR), datetime.MINYEAR)
+        if year is None or self.holiday_type == 'weekly_day_off':
+            return None
+        elif self.holiday_type == 'easter_holiday':
+            return easter(year) + datetime.timedelta(
+                days=self.easter_delta_days)
+        else:
+            return datetime.date(year, int(self.month), int(self.day))
 
 
 class BatchParamsConfig(Model):

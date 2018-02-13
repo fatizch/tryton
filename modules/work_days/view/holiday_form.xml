@@ -1,17 +1,19 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form col="4">
-    <label name="name"/>
-    <field name="name" colspan="3"/>
+<form>
     <label name="holiday_type"/>
     <field name="holiday_type"/>
-    <label name="month"/>
-    <field name="month"/>
+    <label name="name"/>
+    <field name="name"/>
     <label name="day"/>
     <field name="day"/>
+    <label name="month"/>
+    <field name="month"/>
+    <newline/>
     <label name="easter_delta_days"/>
     <field name="easter_delta_days"/>
+    <newline/>
     <label name="weekly_day"/>
     <field name="weekly_day"/>
 </form>

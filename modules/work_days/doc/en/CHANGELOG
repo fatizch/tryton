@@ -1,5 +1,6 @@
+* FEA#8162 Calculate the day after n open days from the application using the same algorithm as the one used for the batch
+
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
 * FEA#0000 Add fields holidays_year and holiday_date which allow to compute holiday dates for a particular year.
-
 * FEA#0000 Module Creation
