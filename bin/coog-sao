@@ -1,0 +1,9 @@
+# vim: set ft=sh:
+# sao management - build
+
+coog_sao_build() { # build sao - [branch]
+    local branch
+    branch=HEAD
+    [ ! -z "$1" ] && branch=$1
+    ( cd "$COOG_SAO" && ./build/build "$branch" )
+}
