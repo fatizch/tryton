@@ -1,108 +1,89 @@
 # vim: set ft=sh:
 # repositories/projects management - link, git actions, etc
 
-_coog_repo_enter_modules() { # move to trytond modules folder
-        _coog_repo_wd=`pwd`
-        cd $COOG_TRYTOND/trytond/modules
-}
-
-_coog_repo_enter_plugins() { # move to tryton plugins folder
-        _coog_repo_wd=`pwd`
-        cd $COOG_TRYTON/tryton/plugins
-}
-
-_coog_repo_leave() { # move back to initial wd
-        cd $_coog_repo_wd
-}
-
 _coog_repo_rm() { # remove all links from wd
-        find -type l -delete
+    find -type l -delete
 }
 
 _coog_repo_list() { # list repositories
-        local f
-        for f in $COOG_ROOT/*
-        do
-                [ $f != "$COOG_ROOT/coog-doc" ] && [ -d $f ] && [ -d $f/modules ] && basename $f
-        done
+    local f
+    for f in $(ls -1 "$COOG_ROOT")
+    do
+        f="$COOG_ROOT/$f"
+        [ "$f" != "$COOG_ROOT/coog-doc" ] \
+            && [ -d "$f" ] \
+            && [ -d "$f/modules" ] \
+            && basename "$f"
+    done
 }
 
 coog_repo_main() { # list repositories
-        _coog_repo_list
+    _coog_repo_list
 }
 
 _coog_repo_list_repos() { # guess modules list from link args
-        if [ $# -eq 0 ]
-        then
-                echo `_coog_repo_list`
-        else
-                echo $@
-        fi
+    if [ $# -eq 0 ]
+    then
+        _coog_repo_list
+    else
+        echo "$@"
+    fi
 }
 
-coog_repo_cleanm() { # clean non module folders - <repo>
-        [ -z "$1" ] && echo "missing repo name" && return 1
-        for module in $COOG_ROOT/$1/modules/*
-        do
-                if [ ! -f "$module/tryton.cfg" ]
-                then
-                        local m
-                        m=$(basename "$module")
-                        rm -rf "$module"
-                        rm -f "$COOG_TRYTOND/trytond/modules/$m"
-                        echo "removed $1:$m"
-                fi
-        done
+_coog_repo_linkm() {
+    for repo in $(_coog_repo_list_repos "$@")
+    do
+        if [ -d "$COOG_ROOT/$repo/modules" ]
+        then
+            for m in $(ls -1 "$COOG_ROOT/$repo/modules")
+            do
+                ln -s "$COOG_ROOT/$repo/modules/$m" .
+            done
+        fi
+    done
 }
 
 coog_repo_linkm() { # link repos modules - <repos> - default: all
-        local repos
-        local repo
-        repos=$(_coog_repo_list_repos $*)
-        _coog_repo_enter_modules || return 1
-        _coog_repo_rm
-        for repo in $repos
-        do
-                if [ -d "$COOG_ROOT/$repo/modules" ]
-                then
-                        coog_repo_cleanm "$repo"
-                        ln -s "$COOG_ROOT/$repo"/modules/* .
-                fi
-        done
-        _coog_repo_leave
+    ( cd "$COOG_TRYTOND/trytond/modules" \
+        && _coog_repo_rm \
+        && _coog_repo_linkm "$@")
+}
+
+_coog_repo_linkp() {
+    for repo in $(_coog_repo_list_repos "$@")
+    do
+        if [ -d "$COOG_ROOT/$repo/plugins" ]
+        then
+            for p in $(ls -1 "$COOG_ROOT/$repo/plugins")
+            do
+                ln -s "$COOG_ROOT/$repo/plugins/$p" .
+            done
+        fi
+    done
 }
 
 coog_repo_linkp() { # link repos plugins - <repos> - default: all
-        local repos
-        local repo
-        repos=`_coog_repo_list_repos $*`
-        _coog_repo_enter_plugins || return 1
-        _coog_repo_rm
-        for repo in $repos
-        do
-                [ -d $COOG_ROOT/$repo/plugins ] && ln -s $COOG_ROOT/$repo/plugins/* .
-        done
-        _coog_repo_leave
-}
-
-coog_repo_link() { # link repos - <repos> - default: all
-        coog_repo_linkm $*
-        coog_repo_linkp $*
+    ( cd "$COOG_TRYTON/tryton/plugins" \
+        && _coog_repo_rm \
+        && _coog_repo_linkp "$@")
 }
 
 coog_repo_unlinkm() { # unlink all repos modules
-        _coog_repo_enter_modules || return 1
-        _coog_repo_rm
-        _coog_repo_leave
+    ( cd "$COOG_TRYTOND/trytond/modules" \
+        &&_coog_repo_rm)
 }
 
 coog_repo_unlinkp() { # unlink all repos plugins
-        _coog_repo_enter_plugins || return 1
-        _coog_repo_rm
-        _coog_repo_leave
+    ( cd "$COOG_TRYTON/tryton/plugins" \
+        &&_coog_repo_rm)
+}
+
+coog_repo_link() { # link repos - <repos> - default: all
+    coog_repo_linkm "$@"
+    coog_repo_linkp "$@"
 }
 
 coog_repo_unlink() { # unlink all repos
-        coog_repo_unlinkm
-        coog_repo_unlinkp
+    coog_repo_unlinkm
+    coog_repo_unlinkp
 }
