@@ -1,0 +1,69 @@
+# vim: set ft=sh:
+# api management - start, stop, log, etc.
+
+_coog_api_file() {
+    echo "$COOG_TMP/$COOG_FILE_API.$1"
+}
+
+coog_api_pid() { # get pid
+    local pid_file; pid_file=$(_coog_api_file pid)
+    coog_env_pid "$pid_file"
+}
+
+coog_api_start() { # start
+    local pid_file; pid_file=$(_coog_api_file pid)
+    local out_file; out_file=$(_coog_api_file out)
+    local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
+        >&2 echo "already running" && return 1
+    coog_env_bak "$out_file" "$pid" || return $?
+    COOG_API_COOG_URL=$COOG_API_COOG_URL COOG_API_COOG_DB=$COOG_API_COOG_DB \
+        forever start --sourceDir "$COOG_API" --pidFile "$pid_file" \
+        -e "$out_file" -o "$out_file" -w svc
+    echo api started
+}
+
+coog_api_debug() { # debug
+    local pid_file; pid_file=$(_coog_api_file pid)
+    local out_file; out_file=$(_coog_api_file out)
+    local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
+        >&2 echo "already running" && return 1
+    coog_env_bak "$out_file" "$pid" || return $?
+    COOG_API_COOG_URL=$COOG_API_COOG_URL COOG_API_COOG_DB=$COOG_API_COOG_DB \
+        forever start --sourceDir "$COOG_API" --pidFile "$pid_file" \
+        -c "node --inspect-brk" -e "$out_file" -o "$out_file" -w svc
+    echo api started
+}
+
+coog_api_stop() { # stop
+    local pid_file; pid_file=$(_coog_api_file pid)
+    local out_file; out_file=$(_coog_api_file out)
+    local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null)
+    [ -z "$pid" ] && echo "api already stopped" && return 0
+    forever stop "$pid"
+    coog_env_bak "$out_file" "$pid"
+    echo api stopped
+}
+
+coog_api_kill() { # kill
+    forever stopall
+    echo api killed
+}
+
+coog_api_log() { # log
+    local out_file; out_file=$(_coog_api_file out)
+    less "$@" "$out_file"
+}
+
+coog_api_head() { # head logs - [head args]
+    local out_file; out_file=$(_coog_api_file out)
+    head "$@" "$out_file"
+}
+
+coog_api_tail() { # tail -f logs
+    local out_file; out_file=$(_coog_api_file out)
+    tail "$@" "$out_file"
+}
+
+coog_api_status() { # forever status
+    forever list | grep "$(coog_api_pid)"
+}
