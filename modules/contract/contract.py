@@ -1641,7 +1641,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     @classmethod
     def delete(cls, contracts):
         active_contracts = [x.contract_number for x in contracts
-            if x.status not in ['quote', 'declined']]
+            if x.contract_number or x.status not in ['quote', 'declined']]
         if active_contracts:
             cls.raise_user_error('delete_not_allowed', {
                     'contracts': ', '.join(active_contracts),

@@ -1,3 +1,4 @@
+* BUG#8208 Forbid deletion of numbered contracts
 * BUG#8249 Check new end date exists before cleaning versions
 * BUG#4856 Use only two columns for options form view
 * BUG#7979 Allow/reactivate the deletion of quotes and declined contracts
