@@ -61,13 +61,19 @@ class ManualValidationEligibility(Wizard):
             return 'end'
         assert Transaction().context.get('active_model') == 'claim.service'
         service = Service(active_id)
-        possible_eligibilities = [x for x in service.possible_decisions
+        possible_eligibilities = [x
+            for x in service.benefit.eligibility_decisions
             if x.state == 'accepted']
-        if possible_eligibilities:
+        if not possible_eligibilities:
+            return 'finalize_validation'
+        elif len(possible_eligibilities) == 1:
+            self.display_service.eligibility_decision = \
+                possible_eligibilities[0]
+            return 'finalize_validation'
+        else:
             self.display_service.possible_decisions = \
                 possible_eligibilities
             return 'display_service'
-        return 'finalize_validation'
 
     def default_display_service(self, fields):
         return {
@@ -86,13 +92,15 @@ class ManualValidationEligibility(Wizard):
         Service = pool.get('claim.service')
         active_id = Transaction().context.get('active_id')
         service = Service(active_id)
-        if (service.eligibility_status == 'accepted' and
-                service.eligibility_decision !=
+        if (self.display_service._default_values
+                and service.eligibility_status == 'accepted'
+                and service.eligibility_decision !=
                 self.display_service.eligibility_decision):
             self.raise_user_warning('eligibility_data_change',
                 'eligibility_data_change')
-        Service.accept_eligibility(service,
-            self.display_service.eligibility_decision)
+        Service.accept_eligibility(service, 'accepted',
+            self.display_service._default_values.get(
+                'eligibility_decision', None))
         Event.notify_events([service], 'accept_claim_service')
         return 'end'
 
@@ -129,13 +137,18 @@ class ManualRejectionEligibility(Wizard):
             return 'end'
         assert Transaction().context.get('active_model') == 'claim.service'
         service = Service(active_id)
-        possible_eligibilities = [x for x in service.possible_decisions
+        possible_eligibilities = [x
+            for x in service.benefit.eligibility_decisions
             if x.state == 'refused']
-        if possible_eligibilities:
+        if not possible_eligibilities:
+            return 'end'
+        elif len(possible_eligibilities) == 1:
+            self.select_reason.eligibility_decision = possible_eligibilities[0]
+            return 'register_reason'
+        else:
             self.select_reason.possible_decisions = \
                 possible_eligibilities
             return 'select_reason'
-        return 'end'
 
     def default_select_reason(self, fields):
         return {

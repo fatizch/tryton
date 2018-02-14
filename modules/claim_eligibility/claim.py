@@ -3,7 +3,7 @@
 from textwrap import TextWrapper
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If
 from trytond.modules.coog_core import model, fields
 
 __all__ = [
@@ -48,10 +48,10 @@ class ClaimService:
         'on_change_with_eligibility_comment_wrapped')
     eligibility_decision = fields.Many2One(
         'benefit.eligibility.decision', 'Eligibility Decision',
-        ondelete='RESTRICT', select=True, domain=[
-            ('id', 'in', Eval('possible_decisions')),
-            ('state', '=', Eval('eligibility_status'))
-            ],
+        ondelete='RESTRICT', select=True,
+        domain=[If((Eval('eligibility_status', '') == 'accepted')
+                & ~Eval('possible_decisions', []), [],
+            ['id', 'in', Eval('possible_decisions')])],
         readonly=True, depends=['possible_decisions', 'eligibility_status'])
     possible_decisions = fields.Function(
         fields.Many2Many('benefit.eligibility.decision', None, None,
@@ -86,7 +86,8 @@ class ClaimService:
     @fields.depends('benefit', 'eligibility_status')
     def on_change_with_possible_decisions(self, name=None):
         if self.benefit:
-            return [x.id for x in self.benefit.eligibility_decisions]
+            return [x.id for x in self.benefit.eligibility_decisions
+                if x.state == self.eligibility_status]
 
     @classmethod
     def get_wrapper(cls):
@@ -152,10 +153,10 @@ class ClaimService:
     def reject_services(cls, services):
         pass
 
-    def accept_eligibility(self, decision):
-        self.__class__.write([self], {
-                'eligibility_status': decision.state,
-                'eligibility_decision': decision.id})
+    def accept_eligibility(self, state, decision):
+        self.eligibility_status = state
+        self.eligibility_decision = decision or None
+        self.save()
 
     def reject_eligibility(self, decision):
         self.__class__.write([self], {
