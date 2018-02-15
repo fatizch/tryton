@@ -1,3 +1,4 @@
+* BUG#8321 Update 'change_broker' in order to update the agent value of validated invoices if we change broker contract
 * BUG#8189 Fix depends on contract broker
 * BUG#7914 Remove "agents" field from product / coverage form view and add relate instead
 * BUG#7875 Use initial_start_date instead of start_date in dates recalculation algorithm 

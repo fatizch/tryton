@@ -161,6 +161,7 @@ class Contract:
         Commission = pool.get('commission')
         Agent = pool.get('commission.agent')
         Event = pool.get('event')
+        invoice = pool.get('account.invoice')
         per_agent = defaultdict(list)
         [per_agent[contract.agent].append(contract) for contract in contracts]
 
@@ -188,10 +189,17 @@ class Contract:
                         'agency': agency})
             Commission.modify_agent(Commission.search([
                         ('commissioned_contract', 'in',
-                            per_agent[from_agent]),
+                            [x.id for x in per_agent[from_agent]]),
                         ('agent', '=', from_agent),
                         ('origin.coverage_start', '>=', at_date,
                             'account.invoice.line')]),
+                to_agent)
+
+            invoice.modify_invoice_agent(invoice.search([
+                        ('contract', 'in',
+                            [x.id for x in per_agent[from_agent]]),
+                        ('agent', '=', from_agent),
+                        ('start', '>=', at_date)]),
                 to_agent)
         Event.notify_events(contracts, 'broker_changed')
 

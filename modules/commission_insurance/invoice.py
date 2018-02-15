@@ -171,6 +171,8 @@ class Invoice:
                 }
             getattr(cls, field).depends += ['tax_amount']
 
+        cls._check_modify_exclude.append('agent')
+
     @classmethod
     def __register__(cls, module_name):
         pool = Pool()
@@ -345,3 +347,9 @@ class Invoice:
                     ('broker_fee_invoice_line.invoice', 'in', ids)
                     ])
             MoveLine.write(move_lines, {'broker_fee_invoice_line': None})
+
+    @classmethod
+    def modify_invoice_agent(cls, invoices, new_agent):
+        assert new_agent
+        if invoices:
+            cls.write(invoices, {'agent': new_agent.id})

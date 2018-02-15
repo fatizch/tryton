@@ -1,3 +1,4 @@
+* BUG#8321 Modification de la méthode 'Change_broker' afin de pouvoir mettre à jour les quittances validées si il y a un changement d'apporteur
 * BUG#8189 Correction des dépendances du champ courtier
 * BUG#7914 Suppression des "Protocoles de commissionnement" de la vue forme produit / garantie et ajout d'une relation à la place
 * BUG#7875 Utilisation de initial_start_date au lieu de start_date dans l'algorithme de calcul des dates de recalcul
