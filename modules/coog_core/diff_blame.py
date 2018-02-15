@@ -244,7 +244,7 @@ def difference(base, other, type_excludes=None):
             for b in set(base_value):
                 try:
                     o = other_value[other_value.index(b)]
-                except:
+                except KeyError:
                     added = DifferenceAdded(fname,
                         field, b.rec_name, base._instance)
                     dlist.append(added)
@@ -261,7 +261,7 @@ def difference(base, other, type_excludes=None):
             for o in set(other_value):
                 try:
                     base_value[base_value.index(o)]
-                except:
+                except KeyError:
                     dlist.append(DifferenceRemoved(
                              fname, field, o.rec_name, base._instance))
         elif isinstance(field, tryton_fields.Many2Many):

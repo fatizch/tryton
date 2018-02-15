@@ -66,7 +66,7 @@ class Contract:
                 })
 
     def finally_renewed(self):
-        return (self.activation_history and 
+        return (self.activation_history and
             self.activation_history[-1].final_renewal)
 
     def get_is_renewable(self, name):

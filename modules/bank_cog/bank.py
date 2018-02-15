@@ -4,9 +4,8 @@ from trytond.pool import Pool, PoolMeta
 from trytond.model import fields as tryton_fields, Unique
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import utils, fields, export, model
+from trytond.modules.coog_core import utils, fields, export
 from trytond.modules.coog_core import coog_string
-
 
 
 __all__ = [

@@ -3,17 +3,14 @@
 # #Title# #Contract Start Date Endorsement Scenario
 # #Comment# #Imports
 import sys
-from proteus import config, Model, Wizard
+from proteus import Model, Wizard
 
 import datetime
-from decimal import Decimal
 from subprocess import check_output as qx
 from subprocess import Popen as popen
 
 
-from trytond.tests.tools import activate_modules
-from trytond.modules.coog_core.test_framework import execute_test_case, \
-    switch_user
+from trytond.modules.coog_core.test_framework import execute_test_case
 from trytond.modules.currency.tests.tools import get_currency
 from trytond.modules.country_cog.tests.tools import create_country
 from trytond.modules.company.tests.tools import create_company, get_company
@@ -27,8 +24,6 @@ from trytond.modules.contract_insurance_invoice.tests.tools import \
     add_invoice_configuration
 
 
-# #Comment# #Install Modules
-config = activate_modules('bank_mobility')
 # #Comment# #Get Models
 IrModel = Model.get('ir.model')
 Bank = Model.get('bank')
@@ -59,12 +54,13 @@ _ = create_company(currency=currency)
 
 # #Comment# #Reload the context
 execute_test_case('authorizations_test_case')
-config = switch_user('admin')
+
 company = get_company()
 
 # #Comment# #Create chart of accounts
 _ = create_chart(company)
 accounts = get_accounts(company)
+
 
 # #Comment# Create Banks
 def create_bank(bank_name, bank_bic):
@@ -76,12 +72,12 @@ def create_bank(bank_name, bank_bic):
     bank.bic = bank_bic
     bank.save()
     return bank
-bank = create_bank('BNP-Paribas SA','BNPAFRPPXXX')
-bank2 = create_bank('AXA Banque SA','AXABFRPPXXX')
-bank3 = create_bank('Caisse d\'Epargne CEPAC','CEPAFRPP131')
-bank4 = create_bank('Banque de France','BDFEFRPPCCT')
-bank5 = create_bank('Natixis','NATXFRPPXXX')
-bank6 = create_bank('BRED Banque Populaire','BREDFRPPXXX')
+bank = create_bank('BNP-Paribas SA', 'BNPAFRPPXXX')
+bank2 = create_bank('AXA Banque SA', 'AXABFRPPXXX')
+bank3 = create_bank('Caisse d\'Epargne CEPAC', 'CEPAFRPP131')
+bank4 = create_bank('Banque de France', 'BDFEFRPPCCT')
+bank5 = create_bank('Natixis', 'NATXFRPPXXX')
+bank6 = create_bank('BRED Banque Populaire', 'BREDFRPPXXX')
 company_account = BankAccount()
 company_account.bank = bank
 company_account.owners.append(company.party)
@@ -97,6 +93,7 @@ product = add_invoice_configuration(product, accounts)
 product = add_insurer_to_product(product)
 product.save()
 
+
 # #Comment# #Local Methods
 def create_party_and_bank_account(last_name, first_name, iban, cur_bank):
     s = create_party_person(last_name, first_name)
@@ -108,6 +105,7 @@ def create_party_and_bank_account(last_name, first_name, iban, cur_bank):
     s_acc.save()
     return s, s_acc
 
+
 def create_mandate(party, account, identification, signature_date):
     m = Mandate()
     m.company = company
@@ -115,14 +113,15 @@ def create_mandate(party, account, identification, signature_date):
     m.account_number = account.numbers[0]
     m.identification = identification
     m.type = 'recurrent'
-    m.signature_date = datetime.date(2017,1,1)
-    m.start_date = datetime.date(2017,1,1)
+    m.signature_date = datetime.date(2017, 1, 1)
+    m.start_date = datetime.date(2017, 1, 1)
     m.save()
     m.click('request')
     m.click('validate_mandate')
     return m
 
-def create_contract(subscriber, start_date, mandate, contract_number, \
+
+def create_contract(subscriber, start_date, mandate, contract_number,
         subscriber_account):
     monthly_direct_debit, = BillingMode.find([
             ('code', '=', 'monthly_direct_debit')])
@@ -146,33 +145,33 @@ def create_contract(subscriber, start_date, mandate, contract_number, \
     return contract
 
 # #Comment# #Create Subscriber 1
-subscriber, subscriber_account = create_party_and_bank_account( \
-    'Martin', 'Jean','FR76 3000 4000 0312 3456 7890 143', bank)
+subscriber, subscriber_account = create_party_and_bank_account(
+    'Martin', 'Jean', 'FR76 3000 4000 0312 3456 7890 143', bank)
 # #Comment# #Create SEPA mandate 1 and 2
-mandate1 = create_mandate(subscriber, subscriber_account, \
-        'COO11405-0000000260', datetime.date(2017,1,1))
-mandate2 = create_mandate(subscriber, subscriber_account, \
-        'COO11405-0000000261', datetime.date(2017,1,1))
+mandate1 = create_mandate(subscriber, subscriber_account,
+        'COO11405-0000000260', datetime.date(2017, 1, 1))
+mandate2 = create_mandate(subscriber, subscriber_account,
+        'COO11405-0000000261', datetime.date(2017, 1, 1))
 
 # #Comment# #Create Contract 1 and 2
-contract = create_contract(subscriber, datetime.date(2017,1,1), mandate1, '1', \
+contract = create_contract(subscriber, datetime.date(2017, 1, 1), mandate1, '1',
         subscriber_account)
-contract2 = create_contract(subscriber, datetime.date(2017,1,1), mandate2, \
+contract2 = create_contract(subscriber, datetime.date(2017, 1, 1), mandate2,
         '2', subscriber_account)
 
 # #Comment# #Create Subscriber 2
-subscriber2, subscriber_account2 = create_party_and_bank_account( \
+subscriber2, subscriber_account2 = create_party_and_bank_account(
     'Mitchell', 'Jacky', 'FR76 1254 8029 9812 3456 7890 161', bank2)
 # #Comment# #Create SEPA mandate 3
-mandate3 = create_mandate(subscriber2, subscriber_account2, \
-        'COO11404-0000000262', datetime.date(2017,1,1))
+mandate3 = create_mandate(subscriber2, subscriber_account2,
+    'COO11404-0000000262', datetime.date(2017, 1, 1))
 
 # #Comment# #Create Contract 3
-contract3 = create_contract(subscriber2, datetime.date(2017,1,1), mandate3, \
+contract3 = create_contract(subscriber2, datetime.date(2017, 1, 1), mandate3,
         '3', subscriber_account2)
 
 # #Comment# #Create Subscriber 3
-subscriber3, subscriber_account3 = create_party_and_bank_account( \
+subscriber3, subscriber_account3 = create_party_and_bank_account(
         'Fillon', 'François', 'FR76 1131 5000 0112 3456 7890 138', bank3)
 
 
@@ -183,8 +182,10 @@ bank_mobility_batch, = IrModel.find([('model', '=', 'bank.mobility')])
 
 base_file_path = coog_root + '/coog/modules/bank_mobility'
 
+
 def debug_print(to_print):
     print >> sys.stderr, to_print
+
 
 def import_flow_5(file_name):
     debug_print('testing %s' % file_name)
@@ -251,22 +252,22 @@ updt_sepa_mandate_3, = Mandate.find([('identification', '=',
             'COO11404-0000000262'), ('amendment_of', '!=', None)])
 
 orgl_sepa_mandate_1 and (orgl_sepa_mandate_1.start_date ==
-    datetime.date(2017,1,1))
+    datetime.date(2017, 1, 1))
 # #Res# #True
 orgl_sepa_mandate_2 and (orgl_sepa_mandate_2.start_date ==
-    datetime.date(2017,1,1))
+    datetime.date(2017, 1, 1))
 # #Res# #True
 orgl_sepa_mandate_3 and (orgl_sepa_mandate_3.start_date ==
-    datetime.date(2017,1,1))
+    datetime.date(2017, 1, 1))
 # #Res# #True
 updt_sepa_mandate_1 and (updt_sepa_mandate_1.start_date ==
-    datetime.date(2017,9,30))
+    datetime.date(2017, 9, 30))
 # #Res# #True
 updt_sepa_mandate_2 and (updt_sepa_mandate_2.start_date ==
-    datetime.date(2017,9,30))
+    datetime.date(2017, 9, 30))
 # #Res# #True
 updt_sepa_mandate_3 and (updt_sepa_mandate_3.start_date ==
-    datetime.date(2017,10,1))
+    datetime.date(2017, 10, 1))
 # #Res# #True
 
 # #Comment# #Test on Contracts
@@ -276,13 +277,13 @@ contract_3, = Contract.find([('contract_number', '=', '3')])
 
 contract_billing_information_1, = BillingInformation.find([
         ('contract', '=', contract_1.id),
-        ('date', '=', datetime.date(2017,  9, 30))])
+        ('date', '=', datetime.date(2017, 9, 30))])
 contract_billing_information_2, = BillingInformation.find([
         ('contract', '=', contract_2.id),
-        ('date', '=', datetime.date(2017,  9, 30))])
+        ('date', '=', datetime.date(2017, 9, 30))])
 contract_billing_information_3, = BillingInformation.find([
         ('contract', '=', contract_3.id),
-        ('date', '=', datetime.date(2017, 10,  1))])
+        ('date', '=', datetime.date(2017, 10, 1))])
 
 contract_billing_information_1 and \
     contract_billing_information_1.direct_debit_account == \

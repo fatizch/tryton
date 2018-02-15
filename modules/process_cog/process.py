@@ -17,7 +17,6 @@ from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateView, Button
 from trytond.server_context import ServerContext
 from trytond.wizard import StateTransition
-from trytond.exceptions import UserWarning, UserError
 
 from trytond.modules.coog_core import utils, model, fields
 from trytond.modules.process import ProcessFramework
@@ -363,7 +362,7 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
                 next_meth([self])
                 self.save()
                 Transaction().commit()
-            except:
+            except Exception:
                 Transaction().rollback()
                 break
 

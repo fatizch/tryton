@@ -178,7 +178,7 @@ class CoogTestCase(ModuleTestCase):
                             ('code', '=', 'fr')])
                     test_case_instance.save()
                     transaction.commit()
-                except:
+                except Exception:
                     transaction.rollback()
             with Transaction().new_transaction() as transaction, \
                     Transaction().set_context(TESTING=True):

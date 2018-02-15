@@ -19,7 +19,7 @@ class TestCaseModel:
     def run_test_case_method(cls, method):
         try:
             company = cls.get_company()
-        except:
+        except Exception:
             company = None
         if company:
             with Transaction().set_context(company=company.id):
@@ -52,7 +52,7 @@ class TestCaseModel:
         try:
             cls.get_company()
             return False
-        except:
+        except Exception:
             return True
 
     @classmethod

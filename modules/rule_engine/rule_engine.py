@@ -1951,7 +1951,7 @@ class TestCase(ModelView, ModelSQL):
     def do_test(self):
         try:
             test_result = self.execute_test()
-        except:
+        except Exception:
             raise
             return False, sys.exc_info()
         try:
@@ -1959,7 +1959,7 @@ class TestCase(ModelView, ModelSQL):
             return True, None
         except AssertionError:
             return False, unicode(test_result) + ' vs. ' + self.expected_result
-        except:
+        except Exception:
             return False, str(sys.exc_info())
 
     @classmethod

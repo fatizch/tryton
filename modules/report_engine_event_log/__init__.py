@@ -3,6 +3,7 @@
 from trytond.pool import Pool
 import report_engine
 
+
 def register():
     Pool.register(
         report_engine.ReportTemplate,

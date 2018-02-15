@@ -13,7 +13,6 @@ from trytond.modules.party_cog.party import STATES_COMPANY
 from trytond.wizard import Wizard
 
 
-
 __all__ = [
     'Party',
     'SynthesisMenuBankAccoount',

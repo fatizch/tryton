@@ -26,7 +26,7 @@ class Historizable(ModelSQL):
                 cursor.execute(*model_table.select(model_table.manual_history,
                         where=model_table.model == cls.__name__))
                 force_historize = cursor.fetchone()[0] or False
-            except:
+            except Exception:
                 t.rollback()
         cls._code_history = getattr(cls, '_code_history', cls._history)
         cls._history = cls._history or force_historize

@@ -82,7 +82,7 @@ class DisplayContractPremium(Wizard):
         try:
             contracts = Pool().get('contract').browse(
                 Transaction().context.get('active_ids'))
-        except:
+        except Exception:
             self.raise_user_error('no_contract_found')
         lines = []
         for contract in contracts:

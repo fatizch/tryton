@@ -9,6 +9,7 @@ import move
 import payment
 import batch
 
+
 def register():
     Pool.register(
         contract.Contract,

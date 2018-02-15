@@ -14,6 +14,7 @@ from trytond.wizard import Button, StateView, StateTransition
 from trytond.model import ModelSingleton
 from trytond.transaction import Transaction
 from trytond.cache import Cache
+from trytond.error import UserError
 import model
 import fields
 import export
@@ -130,7 +131,7 @@ class TestCaseModel(ModelSingleton, model.CoogSQL, model.CoogView):
             for elem in order:
                 try:
                     cls.run_test_case(elem)
-                except:
+                except Exception:
                     logging.getLogger('test_case').warning('Error executing '
                         'test case %s' % elem.__name__)
                     raise
@@ -616,7 +617,7 @@ class TestCaseWizard(model.CoogWizard):
                             transaction.rollback()
                     logging.getLogger('test_case').info('Successfully '
                         'imported %s' % elem.filename)
-                except:
+                except UserError:
                     logging.getLogger('test_case').error('Failed to import %s'
                         % elem.filename)
                     raise

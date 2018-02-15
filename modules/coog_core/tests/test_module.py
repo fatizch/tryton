@@ -1052,8 +1052,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # Because it has not retried, the increment in only incremented once
         self.assertEqual(inc.increment, 11)
 
-
-
     def test_0125_test_last_version_modified_before(self):
         l = []
         for x in range(0, 10):
@@ -1192,8 +1190,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 ((date(2014, 1, 1), date(2014, 12, 31)), Decimal(1200)),
                 ((date(2014, 1, 15), date(2014, 2, 23)), Decimal(200)),
                 ):
-            res = utils.get_prorated_amount_on_period(*period, proportion=proportion,
-                frequency=frequency, value=value, sync_date=sync_date)
+            res = utils.get_prorated_amount_on_period(*period,
+                proportion=proportion, frequency=frequency, value=value,
+                sync_date=sync_date)
             self.assertEqual(res, expected, 'Expected %s , got %s '
                     'for period %s ' % (expected, res, period))
 
@@ -1216,8 +1215,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 ((date(2014, 1, 1), date(2015, 1, 1)), Decimal(200)),
                 ((date(2014, 1, 1), date(2015, 6, 1)), Decimal(200)),
                 ):
-            res = utils.get_prorated_amount_on_period(*period, proportion=proportion,
-                frequency=frequency, value=value, sync_date=sync_date)
+            res = utils.get_prorated_amount_on_period(*period,
+                proportion=proportion, frequency=frequency, value=value,
+                sync_date=sync_date)
             self.assertEqual(res, expected, 'Expected %s , got %s '
                     'for period %s ' % (expected, res, period))
 

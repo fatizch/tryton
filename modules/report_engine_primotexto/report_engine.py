@@ -71,7 +71,7 @@ class ReportGenerate:
                 'code': response.status_code,
                 'reason': response.reason or '',
                 })
-        if  (process_method == 'primotexto' and response.ok 
+        if (process_method == 'primotexto' and response.ok
                 and not result.get('snapshotId')):
             ReportTemplate.raise_user_error('primotexto_url_error', {
                 'code': '200',

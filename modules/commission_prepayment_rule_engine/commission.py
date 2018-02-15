@@ -51,7 +51,7 @@ class Plan:
                             not isinstance(percentage, int) and
                             not isinstance(percentage, Decimal)):
                         self.raise_user_error('invalid_rule_result', schedule)
-            except:
+            except ValueError:
                 self.raise_user_error('invalid_rule_result', schedule)
 
             return schedule

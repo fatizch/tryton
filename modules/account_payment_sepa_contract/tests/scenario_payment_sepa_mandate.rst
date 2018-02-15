@@ -328,7 +328,7 @@ Post contract invoices::
     >>> contract_2_invoice_2.invoice.click('post')
     >>> contract_2_invoice_2.invoice.save()
 
-Because the current billing information on the contract has a SEPA mandate::
+Because the current billing information on the contract has::
 
 
 For now we have a sepa mandate on the contract_invoice_2.::
@@ -336,7 +336,7 @@ For now we have a sepa mandate on the contract_invoice_2.::
     >>> contract_invoice_2.invoice.sepa_mandate == mandate
     True
 
-Because the current billing information on the contract has a SEPA mandate::
+Because the current billing information on the contract has a::
 
 
 For now we have a sepa mandate on the contract_2_invoice_2.::
@@ -358,9 +358,9 @@ So the related invoice will not have a sepa mandate defined.::
     >>> billing_information_no_sepa = BillingInformation(
     ...     date=contract_invoice_2.invoice.lines_to_pay[0].payment_date,
     ...     billing_mode=monthly_manual,
-    ...         payment_term=monthly_manual.allowed_payment_terms[0],
-    ...         payer=subscriber,
-    ...         sepa_mandate=None)
+    ...     payment_term=monthly_manual.allowed_payment_terms[0],
+    ...     payer=subscriber,
+    ...     sepa_mandate=None)
     >>> contract.billing_informations.append(billing_information_no_sepa)
     >>> contract.save()
     >>> contract_invoice_2.reload()
@@ -518,7 +518,7 @@ Set billing information sepa mandate to mandate 3::
 At the date of the payment_date of the lines_to_pay[1]::
 
 
-So the sepa_mandate for lines_to_pay[0] must still be None and mandate_3 for::
+So the sepa_mandate for lines_to_pay[0] must still be None and::
 
 
 the lines_to_pay[1]::
@@ -547,7 +547,7 @@ We get the first line to pay after today, which is lines_to_pay[0]::
 
 with no sepa mandate::
 
-    >>> contract_2_invoice_2.invoice.sepa_mandate == None
+    >>> contract_2_invoice_2.invoice.sepa_mandate is None
     True
     >>> config._context['client_defined_date'] = \
     ...     contract_2_invoice_2.invoice.lines_to_pay[1].payment_date

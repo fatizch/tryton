@@ -511,7 +511,7 @@ def values_mixin(value_model):
                     try:
                         prev_translated, v_translated = _translate_selection(
                             prev_value, v)
-                    except:
+                    except Exception:
                         prev_translated, v_translated = prev_value, v
                     vals.append((k, field, prev_translated or '',
                             v_translated or ''))

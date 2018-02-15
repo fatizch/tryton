@@ -54,7 +54,8 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
     @classmethod
     def parse_params(cls, params):
         params = super(BankMobilityBatch, cls).parse_params(params)
-        assert params['in_directory'], "'in_directory' is missing in batch arguments"
+        assert params['in_directory'], "'in_directory' is missing in batch' \
+            'arguments'"
         assert params['archive'], "'archive' is missing in batch arguments"
         return params
 
@@ -115,7 +116,7 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
             orgl_bank_account)
         if not sepa_mandates and mandate_identification:
             cls.raise_user_error('mandate_not_found',
-                {'identification':', '.join(mandate_identification)})
+                {'identification': ', '.join(mandate_identification)})
         for mandate in sepa_mandates:
             if mandate.signature_date >= date_of_signature:
                 cls.raise_user_error('mandate_signature_date_in_future',
@@ -199,12 +200,12 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
         endorsements = []
         for key, value in to_endorse.iteritems():
             endorsement, = Endorsement.create([{
-                    'effective_date' : date_of_signature,
-                    'definition' : endorsement_definition.id,
+                    'effective_date': date_of_signature,
+                    'definition': endorsement_definition.id,
                     }])
             endorsement.contract_endorsements = [
                 cls.get_contract_endorsement(
-                    x[0], x[1], date_of_signature,x[2]) for x in value]
+                    x[0], x[1], date_of_signature, x[2]) for x in value]
             endorsement.number = '_'.join([endorsement.number, message_id,
                     modification_id])
 
@@ -273,7 +274,8 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
             return bank_account[0]
 
     @classmethod
-    def create_or_update_bank_account(cls, iban, bic, date_of_signature, owners):
+    def create_or_update_bank_account(cls, iban, bic, date_of_signature,
+            owners):
         pool = Pool()
         Bank = pool.get('bank')
         BankAccountNumber = pool.get('bank.account.number')

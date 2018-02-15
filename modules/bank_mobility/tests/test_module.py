@@ -9,6 +9,7 @@ import trytond.tests.test_tryton
 from trytond.modules.coog_core import test_framework
 from trytond.tests.test_tryton import doctest_setup, doctest_teardown
 
+
 class ModuleTestCase(test_framework.CoogTestCase):
     '''
     Test Coog module.

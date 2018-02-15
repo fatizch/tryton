@@ -4,7 +4,7 @@ import datetime
 
 from sql.conditionals import Coalesce
 
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 

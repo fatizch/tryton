@@ -5,7 +5,6 @@ import pydot
 import inspect
 import ast
 import json
-import types
 from unidecode import unidecode
 
 from sql import Literal, Table
@@ -17,7 +16,7 @@ from trytond.report import Report
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 from trytond.pyson import Eval, Bool, Or, And, Not
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import Pool
 
 from trytond.modules.coog_core import coog_string, utils
 from trytond.modules.coog_core import fields, model, export
@@ -721,7 +720,7 @@ class ProcessAction(ModelSQL, ModelView):
             GoodModel = Pool().get(self.on_model.model)
             func = getattr(GoodModel, self.method_name)
             return ''.join(inspect.getsourcelines(func)[0])
-        except:
+        except Exception:
             return self.raise_user_error('source_code_unavailable',
                 raise_exception=False)
 

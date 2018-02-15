@@ -271,7 +271,7 @@ contract.termination_reason is None
 
 
 # #Comment# #Test Terminate Endorsement with several terms
-#contract_start_date = datetime.date(2014, 4, 10)
+# contract_start_date = datetime.date(2014, 4, 10)
 first_term_end = datetime.date(2015, 4, 9)
 contract.end_date = first_term_end
 contract.save()
@@ -303,7 +303,7 @@ contract = get_cancelled()
 assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
     x.termination_reason) for x in contract.activation_history]
 assert contract.end_date == second_term_end
-assert contract.termination_reason == None
+assert contract.termination_reason is None
 
 # #Comment# #Case 1 : today is in first term, we end before first_term_end
 
@@ -321,7 +321,7 @@ contract = get_cancelled()
 assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
     x.termination_reason) for x in contract.activation_history]
 assert contract.end_date == first_term_end
-assert contract.termination_reason == None
+assert contract.termination_reason is None
 
 # #Comment# #Case 1b : today is in first term, we end at first_term_end
 
@@ -337,7 +337,7 @@ contract = get_cancelled()
 assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
     x.termination_reason) for x in contract.activation_history]
 assert contract.end_date == first_term_end
-assert contract.termination_reason == None
+assert contract.termination_reason is None
 
 # #Comment# #Case 2: today is in second term, we terminate before first_term_end
 config._context['client_defined_date'] = datetime.date(2015, 4, 10)
@@ -362,7 +362,7 @@ contract = get_cancelled()
 assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
     x.termination_reason) for x in contract.activation_history]
 assert contract.end_date == second_term_end
-assert contract.termination_reason == None
+assert contract.termination_reason is None
 
 # #Comment# #Case 2b: today is in second term, we terminate at first_term_end
 config._context['client_defined_date'] = datetime.date(2015, 4, 10)
@@ -388,7 +388,7 @@ contract = get_cancelled()
 assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
     x.termination_reason) for x in contract.activation_history]
 assert contract.end_date == second_term_end
-assert contract.termination_reason == None
+assert contract.termination_reason is None
 
 # #Comment# #Test Void Endorsement
 config._context['client_defined_date'] = first_term_end

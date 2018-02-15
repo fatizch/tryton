@@ -32,4 +32,3 @@ class MoveLine:
         payment_journals = list({x.payment_journal for x in products
                 if x.payment_journal})
         return payment_journals
-

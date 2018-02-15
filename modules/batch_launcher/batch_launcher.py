@@ -4,7 +4,7 @@ import logging
 import inspect
 
 from trytond.pyson import Eval, Bool, Not
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.modules.coog_core import model, fields
 
@@ -167,7 +167,7 @@ class SelectBatch(model.CoogView):
                     'get_batch_main_model_name')()
                 return Model.search([('model', '=', target_name)],
                     limit=1)[0].id
-            except:
+            except Exception:
                 # The batch does not implement
                 # get_batch_main_model_name() method
                 # Ignoring...

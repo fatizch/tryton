@@ -1,6 +1,5 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
 from trytond.config import config
 from trytond.transaction import Transaction
 from trytond.modules.coog_core import fields
@@ -8,7 +7,6 @@ from trytond.modules import get_module_info
 from trytond.cache import Cache
 
 from export import ExportImportMixin
-
 
 
 __all__ = [

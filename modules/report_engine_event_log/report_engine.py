@@ -1,6 +1,5 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.cache import Cache
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.coog_core import fields
 
@@ -30,8 +29,8 @@ class ReportTemplate:
             data['doc_template'][0])
         _objects = [model(data['id'])]
         # TODO : cache report_template.generate_event
-        if report_template.generate_event :
-            Event.notify_events(_objects,'generate_report',
+        if report_template.generate_event:
+            Event.notify_events(_objects, 'generate_report',
                 report_template.name)
 
 

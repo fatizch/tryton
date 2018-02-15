@@ -4,7 +4,7 @@ import datetime
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import Pool
 from trytond.model import Model, fields as tryton_fields
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
@@ -1337,7 +1337,7 @@ class TerminateContract(EndorsementWizardStepMixin):
             cls.raise_user_error(
                 'termination_on_terminate_or_void_contract', {
                         'contracts': ', '.join(inactive_contracts),
-                    })
+                })
         if to_warn:
             warning_id = ','.join(to_warn[0:10])
             cls.raise_user_warning(

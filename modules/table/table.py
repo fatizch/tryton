@@ -109,7 +109,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
             try:
                 cursor.execute('CREATE EXTENSION IF NOT EXISTS tablefunc', ())
                 transaction.commit()
-            except:
+            except Exception:
                 import logging
                 logger = logging.getLogger('database')
                 logger.warning('Unable to activate tablefunc extension, '

@@ -150,7 +150,7 @@ class TestCaseModel:
                             data['street'], data['streetbis']]),
                     country=cls.get_country(data['country']),
                     zip=data['zip'].zfill(5), city=data['city'])
-            except:
+            except ValueError:
                 cls.get_logger().debug('Unable to create address from %s' %
                     str(data))
                 pass

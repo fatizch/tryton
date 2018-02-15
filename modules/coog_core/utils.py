@@ -204,7 +204,7 @@ def get_good_versions_at_date(instance, var_name, at_date=None,
 def get_last_version_modified_before(instances, instance, less_than_key,
         compare_key, inclusive=False):
     '''
-    This method returns the last modified object from the given 
+    This method returns the last modified object from the given
     "instances" list which came just before the given "instance" in this list.
     The less_than_key parameter is a function which must returns the fields
     for the sort of the "instances" (The method tells whether an instance is

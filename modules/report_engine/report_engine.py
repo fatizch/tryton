@@ -161,7 +161,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     groups = fields.Many2Many(
         'report.template-res.group', 'report_template',
         'group', 'Groups',
-        help= 'If the user belongs to one of the groups linked to the report '
+        help='If the user belongs to one of the groups linked to the report '
         'template, he can see it in the report wizard.')
 
     @classmethod
@@ -639,7 +639,7 @@ class ReportTemplateVersion(model.CoogSQL, model.CoogView):
                 filename = filestore._filename(file_id, prefix=prefix)
                 try:
                     data = filestore.get(file_id, prefix=prefix)
-                except:
+                except Exception:
                     logger.warning('Could not find template version %s' %
                         filestore._filename(file_id, prefix=prefix))
                 else:
@@ -704,7 +704,7 @@ class Printable(Model):
     def get_lang(self):
         try:
             return self.get_contact().lang.code
-        except:
+        except Exception:
             return Transaction().language
 
     def get_address(self):
@@ -1073,7 +1073,7 @@ class ReportGenerate(CoogReport):
                     raise exc
             except UserError:
                 raise
-            except:
+            except Exception:
                 pass
             raise exc
 

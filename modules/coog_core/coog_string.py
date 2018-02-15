@@ -130,7 +130,7 @@ def translate(model, var_name, src, ttype, lang=None):
     target = '%s%s' % (model.__name__, ',%s' % var_name if var_name else '')
     try:
         return Translation.get_source(target, ttype, language, src) or src
-    except:
+    except ValueError:
         return src
 
 

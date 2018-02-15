@@ -49,7 +49,7 @@ def analyze(meth):
             p.on_enter(Transaction().user,
                 uuid.uuid4().hex, cls.__name__, [], {})
             wrapped_meth = profile(m)
-        except:
+        except Exception:
             perf_logger.exception('batch: error on enter')
         else:
             m = wrapped_meth
@@ -57,7 +57,7 @@ def analyze(meth):
         try:
             PerfLog().on_leave(unicode(
                     {'args': args, 'kwargs': kwargs, 'return': ret}))
-        except:
+        except Exception:
             perf_logger.exception('batch: error on leave')
         return ret
     return wrap
@@ -416,7 +416,7 @@ class CleanDatabaseBatch(BatchRoot):
         for cur_model in objects:
             try:
                 c = pool.get(cur_model.model)
-            except:
+            except KeyError:
                 buf.append('DROP TABLE "%s";' % cur_model.model.replace(
                         '.', '_'))
                 buf.append('DROP SEQUENCE "%s_id_seq";' %

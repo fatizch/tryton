@@ -474,7 +474,7 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
         ctx_services = Transaction().context.get('field_services', [])
         if ctx_services:
             services = Pool().get('claim.service').browse(ctx_services)
-            possible_services = [x for  x in services if x.can_be_indemnified]
+            possible_services = [x for x in services if x.can_be_indemnified]
             if len(possible_services) == 1:
                 return possible_services[0].id
 

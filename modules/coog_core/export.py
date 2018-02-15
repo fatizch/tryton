@@ -14,7 +14,7 @@ from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
 from trytond.model import ModelSQL, ModelView, fields as tryton_fields
 from trytond.model import Unique
 from trytond.wizard import Wizard, StateView, StateTransition, Button
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import Pool
 from trytond.rpc import RPC
 from trytond.exceptions import UserError
 from trytond.transaction import Transaction

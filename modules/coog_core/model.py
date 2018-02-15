@@ -95,7 +95,7 @@ class PostExecutionDataManager(object):
             for fct, args, kwargs in self.commit_queue:
                 fct(*args, sub_transactions=to_commit, **kwargs)
                 assert all(isinstance(x, Transaction) for x in to_commit)
-        except:
+        except Exception:
             raise
         finally:
             sub_transactions = [
@@ -152,6 +152,7 @@ def sub_transaction_retry(n, sleep_time):
             sub_transaction_cache = CoogCache()
             cache_holder['sub_transaction_function_cache'] = \
                 sub_transaction_cache
+
         def decorate(*args, **kwargs):
             import psycopg2
             DatabaseOperationalError = backend.get('DatabaseOperationalError')
@@ -205,6 +206,7 @@ def pre_commit_transaction(DataManager=PostExecutionDataManager):
     def wrapper(func):
         assert (isinstance(func, types.MethodType)
             or isinstance(func, types.FunctionType)), type(func)
+
         def decorate(*args, **kwargs):
             transaction = Transaction()
             datamanager = transaction.join(DataManager())
@@ -595,7 +597,7 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
         try:
             return super(CoogSQL, cls).search(domain=domain, offset=offset,
                 limit=limit, order=order, count=count, query=query)
-        except:
+        except Exception:
             logging.getLogger('root').debug('Bad domain on model %s : %r' % (
                     cls.__name__, domain))
             raise
@@ -984,7 +986,7 @@ class MethodDefinition(CoogSQL, CoogView):
             Model = Pool().get(self.model.model)
             func = getattr(Model, self.method_name)
             return ''.join(inspect.getsourcelines(func)[0])
-        except:
+        except ValueError:
             return 'Source Code unavailable'
 
     @fields.depends('model')
@@ -1103,6 +1105,7 @@ def search_and_stream(klass, domain, offset=0, order=None, batch_size=None):
         for record in records:
             yield record
         cur_offset += batch_size
+
 
 def is_class_or_dual_method(method):
     return hasattr(method, '_dualmethod') or (
