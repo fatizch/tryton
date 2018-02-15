@@ -2,13 +2,13 @@ Comment installer les processus métiers par défaut de Coog
 ==========================================================
 
 Ce document a pour but de référencer et documenter les processus disponibles par défaut dans Coog.
-En fonction des modules installés, ces derniers seront visibles dans l’arbre des points d’entrée de l’application 
+En fonction des modules installés, ces derniers seront visibles dans l’arbre des points d’entrée de l’application
 
 *(Cf image ci-dessous)*
 
     .. image :: images/left_tree.png
 
-Une liste de processus s'affiche en fonction des modules qui sont installés. 
+Une liste de processus s'affiche en fonction des modules qui sont installés.
 Il suffit dès lors de cocher les processus voulus puis, cliquer sur "Import de processus" afin d'importer le paramétrage par défaut.
 
     .. image :: images/import_process.png
@@ -22,9 +22,9 @@ Voici un tableau des processus par défaut disponible avec les modules requis as
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+
 | Nom du processus                                              | Module(s) requis                                                                                                                     |
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+
-| Processus standard de souscription de contract d'assurance    | contract_insurance_invoice, contract_insurance_process                                                                               |
+| Processus standard de souscription de contract d'assurance    | contract_insurance_invoice, contract_process                                                                               |
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+
-| Processus de souscripteur assurance emprunteur                | contract_loan_invoice, contract_insurance_process                                                                                    |
+| Processus de souscripteur assurance emprunteur                | contract_loan_invoice, contract_process                                                                                    |
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+
 | Processus d'analyse médicale                                  | underwriting_process                                                                                                                 |
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+

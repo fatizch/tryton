@@ -6,12 +6,12 @@ this repository contains the full copyright notices and license terms. -->
         <!-- Commission Consultation Group -->
         <!-- Distribution -->
         <record model="ir.ui.menu-res.group" id="menu_commercial_product_form_commission_read">
-            <field name="menu" ref="offered_distribution.menu_commercial_product_form"/>
+            <field name="menu" ref="contract_distribution.menu_commercial_product_form"/>
             <field name="group" ref="commission_insurance.group_commission_read"/>
         </record>
         <!-- Commission Management Group -->
         <record model="ir.ui.menu-res.group" id="menu_commercial_product_form_commission_manage">
-            <field name="menu" ref="offered_distribution.menu_commercial_product_form"/>
+            <field name="menu" ref="contract_distribution.menu_commercial_product_form"/>
             <field name="group" ref="commission_insurance.group_commission_manage"/>
         </record>
         <record model="ir.model.access" id="access_distribution_commercial_product_group_commission_manage">
@@ -21,14 +21,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
-        </record>
-        <!-- Default Contract Process Commission Access Rights -->
-        <record model="ir.model.access" id="access_distribution_commercial_product">
-            <field name="model" search="[('model', '=', 'distribution.commercial_product')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.model.access" id="access_distribution_network-commercial_product_group_commission_manage">
             <field name="model" search="[('model', '=', 'distribution.network-commercial_product')]"/>

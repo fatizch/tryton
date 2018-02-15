@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="contract_subscribe_find_process_form">
+            <field name="model">contract.subscribe.find_process</field>
+            <field name="inherit" ref="process_cog.process_parameters_form"/>
+            <field name="name">contract_subscribe_find_process_form</field>
+        </record>
+        <record model="ir.action.wizard" id="subscription_process_launcher">
+            <field name="name">Start Subscription</field>
+            <field name="wiz_name">contract.subscribe</field>
+        </record>
+        <menuitem parent="contract.menu_contract" sequence="1" action="subscription_process_launcher" id="menu_start_subscription" icon="contract-action"/>
+        <!--################################################################-->
+        <!--Synthesis-->
+        <!--################################################################-->
+        <record model="ir.action.keyword" id="act_menu_subscribe_contract">
+            <field name="keyword">form_action</field>
+            <field name="model">party.synthesis.menu,-1</field>
+            <field name="action" ref="contract_process.subscription_process_launcher"/>
+        </record>
+        <record model="ir.action.keyword" id="act_start_subscription">
+            <field name="keyword">form_action</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="subscription_process_launcher"/>
+        </record>
+    </data>
+</tryton>

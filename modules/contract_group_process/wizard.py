@@ -4,7 +4,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import utils
-from trytond.modules.contract_insurance_process.process import (
+from trytond.modules.contract_process.process import (
     ContractSubscribeFindProcess, ContractSubscribe)
 
 
