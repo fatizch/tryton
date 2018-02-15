@@ -163,6 +163,11 @@ Create Claim Configuration::
     >>> benefit.save()
     >>> product.coverages[0].benefits.append(benefit)
     >>> product.save()
+    >>> PaybackReason = Model.get('claim.indemnification.payback_reason')
+    >>> payback_reason = PaybackReason()
+    >>> payback_reason.code = 'payback_reason'
+    >>> payback_reason.name = 'Payback Reason'
+    >>> payback_reason.save()
     >>> config = switch_user('contract_user')
     >>> company = get_company()
     >>> accounts = get_accounts(company)
@@ -305,6 +310,8 @@ Generate Regularisation::
     >>> create.execute('calculate')
     >>> create.execute('regularisation')
     >>> create.form.payback_method = 'planned'
+    >>> PaybackReason = Model.get('claim.indemnification.payback_reason')
+    >>> create.form.payback_reason = PaybackReason(payback_reason.id)
     >>> create.execute('apply_regularisation')
     >>> indemnifications = service.indemnifications
     >>> len(indemnifications) == 2

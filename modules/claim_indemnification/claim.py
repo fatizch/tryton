@@ -11,14 +11,14 @@ from itertools import groupby
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or, Bool, In, Not, Len
-from trytond.model import ModelView
+from trytond.model import ModelView, Unique
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 from trytond.tools import grouped_slice
 from trytond.error import UserError
 
 from trytond.modules.coog_core import fields, model, coog_string, utils, \
-    coog_date
+    coog_date, export
 from trytond.modules.account.tax import TaxableMixin
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.claim_indemnification.benefit import \
@@ -38,6 +38,7 @@ __all__ = [
     'Indemnification',
     'IndemnificationDetail',
     'IndemnificationControlRule',
+    'IndemnificationPaybackReason',
     ]
 
 
@@ -713,6 +714,12 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     invoice_line_details = fields.One2Many('account.invoice.line.claim_detail',
         'indemnification', 'Invoice Line Details', delete_missing=False,
         states={'invisible': ~Eval('invoice_line_details')})
+    payback_reason = fields.Many2One('claim.indemnification.payback_reason',
+        'Payback Reason', states={
+            'invisible': Not(In(Eval('status'),
+                    ['cancelled', 'cancel_paid'])),
+            'required': Eval('status') == 'cancel_paid'
+            }, ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
@@ -773,11 +780,19 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         TableHandler = backend.get('TableHandler')
         handler = TableHandler(cls, module)
 
-        # Migrate from 1.8 : rename 'amount' to 'total_amount'
-        if handler.column_exist('amount'):
-            handler.column_rename('amount', 'total_amount')
-
+        # Migrate from 1.12: add payback_reason field and set it to 'migration'
+        cursor = Transaction().connection.cursor()
+        do_migrate = not handler.column_exist('payback_reason')
         super(Indemnification, cls).__register__(module)
+        if not do_migrate:
+            return
+        table = cls.__table__()
+        payback_reason_table = Pool().get(
+            'claim.indemnification.payback_reason').__table__()
+        query = table.update(columns=[table.payback_reason],
+            values=payback_reason_table.select(payback_reason_table.id,
+                where=(payback_reason_table.code == 'migration')))
+        cursor.execute(*query)
 
     @classmethod
     def _get_skip_set_readonly_fields(cls):
@@ -1016,13 +1031,14 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 and not x.is_regularisation]
             if payment_lines:
                 payment_line = payment_lines[0]
-        return u'%s - %s: %s [%s] %s' % (
+        return u'%s - %s: %s [%s] %s %s' % (
             coog_string.translate_value(self, 'start_date')
             if self.start_date else '',
             coog_string.translate_value(self, 'end_date')
             if self.end_date else '',
             self.get_currency().amount_as_string(self.amount),
             coog_string.translate_value(self, 'status') if self.status else '',
+            self.payback_reason.name if self.payback_reason else '',
             coog_string.translate_value(payment_line,
                 'invoice_line_reconciliation_date') if payment_line
                 and payment_line.invoice_line_reconciliation_date else '',
@@ -1604,8 +1620,10 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
         return details
 
     def get_status_string(self, name):
-        return '%s - [%s]' % (
-            self.kind_string, self.indemnification.status_string)
+        return '%s - [%s] %s' % (
+            self.kind_string, self.indemnification.status_string,
+            self.indemnification.payback_reason.name
+            if self.indemnification.payback_reason else '')
 
 
 class IndemnificationControlRule(
@@ -1619,3 +1637,29 @@ class IndemnificationControlRule(
     def __setup__(cls):
         super(IndemnificationControlRule, cls).__setup__()
         cls.rule.required = True
+
+
+class IndemnificationPaybackReason(model.CoogSQL, model.CoogView,
+        export.ExportImportMixin):
+    'Indemnification Payback Reason'
+
+    __name__ = 'claim.indemnification.payback_reason'
+    _func_key = 'code'
+
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name', required=True)
+    active = fields.Boolean('Active')
+
+    @classmethod
+    def __setup__(cls):
+        super(IndemnificationPaybackReason, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
+            ]
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coog_string.slugify(self.name)

@@ -12,6 +12,8 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="payback_method"/>
         <field name="payback_method" xexpand="1"/>
+        <label name="payback_reason"/>
+        <field name="payback_reason" xexpand="1"/>
         <label name="payment_term"/>
         <field name="payment_term" xexpand="1"/>
     </group>

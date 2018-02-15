@@ -86,5 +86,55 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="claim.claim_service_view_list"/>
             <field name="name">service_list</field>
         </record>
+        <!-- ###################################################### -->
+        <!-- ########### Indemnification Payback Reason ########### -->
+        <!-- ###################################################### -->
+        <record model="ir.ui.view" id="indemnification_payback_reason_form">
+            <field name="model">claim.indemnification.payback_reason</field>
+            <field name="type">form</field>
+            <field name="name">indemnification_payback_reason_form</field>
+        </record>
+        <record model="ir.ui.view" id="indemnification_payback_reason_list">
+            <field name="model">claim.indemnification.payback_reason</field>
+            <field name="type">tree</field>
+            <field name="name">indemnification_payback_reason_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_indemnification_payback_reason_form">
+            <field name="name">Payback Reason</field>
+            <field name="res_model">claim.indemnification.payback_reason</field>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_indemnification_payback_reason_domain_active">
+            <field name="name">Active</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain" eval="[('active', '=', True)]" pyson="1"/>
+            <field name="act_window" ref="act_indemnification_payback_reason_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_indemnification_payback_reason_domain_inactive">
+            <field name="name">Inactive</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[('active', '=', False)]" pyson="1"/>
+            <field name="act_window" ref="act_indemnification_payback_reason_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_indemnification_payback_reason_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="indemnification_payback_reason_list"/>
+            <field name="act_window" ref="act_indemnification_payback_reason_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_indemnification_payback_reason_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="indemnification_payback_reason_form"/>
+            <field name="act_window" ref="act_indemnification_payback_reason_form"/>
+        </record>
+        <menuitem name="Indemnification Payback Reasons" parent="claim.menu_claim_configuration" id="menu_indemnification_payback_reasons" action="act_indemnification_payback_reason_form"/>
+        <record model="claim.indemnification.payback_reason" id="migration_payback_reason">
+            <field name="code">migration</field>
+            <field name="name">Migration</field>
+            <field name="active">False</field>
+        </record>
+        <record model="claim.indemnification.payback_reason" id="erreur_payback_reason">
+            <field name="code">erreur</field>
+            <field name="name">Erreur</field>
+            <field name="active">True</field>
+        </record>
     </data>
 </tryton>

@@ -587,6 +587,11 @@ class IndemnificationRegularisation(model.CoogView):
         depends=['payment_term_required'])
     currency_digits = fields.Integer(
         'Currency Digits', states={'invisible': True})
+    payback_reason = fields.Many2One('claim.indemnification.payback_reason',
+        'Payback Reason', states={
+            'invisible': ~Eval('payback_required'),
+            'required': Bool(Eval('payback_required'))},
+        depends=['payback_required'])
 
     @fields.depends('remaining_amount')
     def on_change_with_payback_required(self):
@@ -656,7 +661,7 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
                 continue
             sorted_indemnifications = sorted([x
                     for x in delivered.indemnifications
-                    if x.status != 'cancelled'],
+                    if 'cancel' not in x.status],
                 key=lambda x: x.start_date)
             if sorted_indemnifications[-1].end_date < delivered.loss.end_date:
                 res.append(delivered)
@@ -957,11 +962,13 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
         indemnification.save()
         cancelled = self.select_regularisation.cancelled
         payback_method = self.select_regularisation.payback_method
+        payback_reason = self.select_regularisation.payback_reason
         payment_term = getattr(self.select_regularisation, 'payment_term',
             None)
         Indemnification.write(list(cancelled), {
                 'payback_method': payback_method,
-                'payment_term': payment_term.id if payment_term else None
+                'payback_reason': payback_reason,
+                'payment_term': payment_term.id if payment_term else None,
                 })
         return 'end'
 

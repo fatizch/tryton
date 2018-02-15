@@ -9,6 +9,14 @@ msgstr ""
 "Veuillez vérifier que toutes les lignes à payer séléctionnées proviennent "
 "d'une facture fournisseur."
 
+msgctxt "error:account.payment.creation:"
+msgid ""
+"The allowed payment journals for the selected lines are different and do not"
+" allow them to be processed at the same time."
+msgstr ""
+"Les journaux de paiement autorisés pour les lignes sélectionnées sont "
+"différents et ne permettent pas leur traitement simultané."
+
 msgctxt "error:benefit.rule:"
 msgid "No indemnification rule defined"
 msgstr "Aucune règle d'indemnisation définie"
@@ -60,6 +68,10 @@ msgstr "Capital"
 msgctxt "error:claim.indemnification.detail:"
 msgid "The indemnification %(indemnification)s cannot be removed"
 msgstr "L'indemnisation %(indemnification)s ne peut pas être supprimée"
+
+msgctxt "error:claim.indemnification.payback_reason:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
 
 msgctxt "error:claim.indemnification:"
 msgid ""
@@ -187,6 +199,22 @@ msgstr "Détail du sinistre"
 msgctxt "field:account.invoice.line,claim_details:"
 msgid "Claim Details"
 msgstr "Détails du sinistre"
+
+msgctxt "field:account.invoice.line,tax_amount:"
+msgid "Tax Amount"
+msgstr "Taxe"
+
+msgctxt "field:account.invoice.line,tax_lines:"
+msgid "Tax Lines"
+msgstr "Lignes de taxe"
+
+msgctxt "field:account.invoice.line,tax_rate:"
+msgid "Tax Rate"
+msgstr "Taux de taxe"
+
+msgctxt "field:account.invoice.line,taxed_amount:"
+msgid "Taxed Amount"
+msgstr "Montant TTC"
 
 msgctxt "field:account.invoice.line.claim_detail,claim:"
 msgid "Claim"
@@ -615,6 +643,10 @@ msgctxt "field:claim.indemnification,payback_method:"
 msgid "Repayment Method"
 msgstr "Méthode de régularisation"
 
+msgctxt "field:claim.indemnification,payback_reason:"
+msgid "Payback Reason"
+msgstr "Raison d'annulation"
+
 msgctxt "field:claim.indemnification,payment_term:"
 msgid "Payment Term"
 msgstr "Conditions de paiement"
@@ -1011,6 +1043,50 @@ msgctxt "field:claim.indemnification.detail,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:claim.indemnification.payback_reason,active:"
+msgid "Active"
+msgstr "Active"
+
+msgctxt "field:claim.indemnification.payback_reason,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:claim.indemnification.payback_reason,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.indemnification.payback_reason,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.indemnification.payback_reason,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.indemnification.payback_reason,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.indemnification.payback_reason,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:claim.indemnification.payback_reason,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:claim.indemnification.payback_reason,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:claim.indemnification.payback_reason,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.indemnification.payback_reason,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:claim.indemnification_calculation_result,id:"
 msgid "ID"
 msgstr "ID"
@@ -1103,6 +1179,10 @@ msgstr "Nouveau montant d'indemnisation"
 msgctxt "field:claim.indemnification_regularisation,payback_method:"
 msgid "Payback Method"
 msgstr "Méthode de régularisation"
+
+msgctxt "field:claim.indemnification_regularisation,payback_reason:"
+msgid "Payback Reason"
+msgstr "Raison d'annulation"
 
 msgctxt "field:claim.indemnification_regularisation,payback_required:"
 msgid "Payback Required"
@@ -1324,6 +1404,10 @@ msgctxt "model:claim.indemnification.detail,name:"
 msgid "Indemnification Detail"
 msgstr "Détail de l'indemnisation"
 
+msgctxt "model:claim.indemnification.payback_reason,name:"
+msgid "Indemnification Payback Reason"
+msgstr "Raison d'annulation d'indemnisation"
+
 msgctxt "model:claim.indemnification_calculation_result,name:"
 msgid "Indemnification Calculation Result"
 msgstr "Resultat du calcul"
@@ -1384,6 +1468,10 @@ msgctxt "model:ir.action,name:act_indemnification_control_rule"
 msgid "Indemnification Control Rule"
 msgstr "Règle de contrôle des prestations"
 
+msgctxt "model:ir.action,name:act_indemnification_payback_reason_form"
+msgid "Payback Reason"
+msgstr "Raison d'annulation"
+
 msgctxt "model:ir.action,name:indemnification_control_wizard"
 msgid "Indemnification Control Wizard"
 msgstr "Assistant de contrôle des prestations"
@@ -1392,6 +1480,16 @@ msgctxt "model:ir.action,name:indemnification_validate_wizard"
 msgid "Indemnification Validation Wizard"
 msgstr "Assistant de validation des prestations"
 
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_indemnification_payback_reason_domain_active"
+msgid "Active"
+msgstr "Actives"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_indemnification_payback_reason_domain_inactive"
+msgid "Inactive"
+msgstr "Inactives"
+
 msgctxt "model:ir.ui.menu,name:menu_control_indemnification"
 msgid "Controler les Indemnifications"
 msgstr "Contrôler les indemnisations"
@@ -1399,6 +1497,10 @@ msgstr "Contrôler les indemnisations"
 msgctxt "model:ir.ui.menu,name:menu_indemnification_control_rule"
 msgid "Indemnification Control Rule"
 msgstr "Règle de contrôle des prestations"
+
+msgctxt "model:ir.ui.menu,name:menu_indemnification_payback_reasons"
+msgid "Indemnification Payback Reasons"
+msgstr "Raisons d'annulation d'indemnisations"
 
 msgctxt "model:ir.ui.menu,name:menu_validate_indemnification"
 msgid "Validate Indemnifications"

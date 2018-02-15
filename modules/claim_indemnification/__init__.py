@@ -30,6 +30,7 @@ def register():
         claim.Claim,
         claim.Loss,
         claim.ClaimService,
+        claim.IndemnificationPaybackReason,
         claim.Indemnification,
         claim.IndemnificationDetail,
         invoice.Invoice,

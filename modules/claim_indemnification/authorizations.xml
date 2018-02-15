@@ -173,6 +173,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_indemnification_payback_reason">
+            <field name="model" search="[('model', '=', 'claim.indemnification.payback_reason')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <!-- Admin Group -->
         <record model="ir.model.access" id="access_claim_indemnification_admin_group">
             <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
@@ -231,6 +238,14 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.model.access" id="access_control_rule_group_claim_manage">
             <field name="model" search="[('model', '=', 'claim.indemnification.control.rule')]"/>
             <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_indemnification_payback_reason_group_claim_manage">
+            <field name="model" search="[('model', '=', 'claim.indemnification.payback_reason')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
