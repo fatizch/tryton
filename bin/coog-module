@@ -177,12 +177,15 @@ coog_module_create() { # creates a new module in the modules folder - <module_na
         echo 'msgstr "Content-Type: text/plain; charset=utf-8\n"' >> "$module_folder"/locale/fr.po
 }
 
-
 coog_module_optimize() { # Remove all symlinks to unused modules in the current database
     cd "$COOG_TRYTOND/trytond/modules" || exit
     (ls --ignore=__init__.py | sort) > src
     coog_module_list | sort > ins
     for i in $(diff src ins | grep "<" | cut -d " " -f 2); do
+        if [ "$i" != ins ] && [ "$i" != src ]
+        then
+            echo "rm $i module"
+        fi
         rm "$i"
     done
     cd - > /dev/null
