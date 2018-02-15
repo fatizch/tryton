@@ -60,6 +60,16 @@ class Invoice:
             line.payment_date = utils.today()
         return line
 
+    @property
+    def tax_date(self):
+        Benefit = Pool().get('benefit')
+        if self.business_kind == 'claim_invoice' and \
+                Benefit.tax_date_is_indemnification_date() and \
+                self.lines and self.lines[0].claim_detail and \
+                self.lines[0].claim_detail.indemnification:
+            return self.lines[0].claim_detail.indemnification.tax_date
+        return super(Invoice, self).tax_date
+
 
 class InvoiceLine:
     __metaclass__ = PoolMeta

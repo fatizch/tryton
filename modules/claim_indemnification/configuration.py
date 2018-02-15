@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pyson import Bool, Eval
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import fields
 
 __all__ = [
@@ -31,6 +31,9 @@ class Configuration:
     claim_default_payment_term = fields.Many2One(
         'account.invoice.payment_term', 'Default Payment Term', required=True,
         ondelete='RESTRICT')
+    tax_at_indemnification_date = fields.Boolean('Tax At Indemnification Date',
+        help='If true, the tax date for invoices will be the date of the '
+        'indemnification. Oherwise, the tax date will be the invoice date')
 
     @staticmethod
     def default_show_indemnification_limit():
@@ -39,3 +42,8 @@ class Configuration:
     @staticmethod
     def default_sorting_method():
         return 'DESC'
+
+    @classmethod
+    def write(cls, *args):
+        Pool().get('benefit')._indemnification_tax_date_config_cache.clear()
+        super(Configuration, cls).write(*args)

@@ -1,3 +1,4 @@
+* FEA#8225 Permettre de régler la date de taxe sur la date d'indemnisation
 * BUG#8241 La date de dernière indemnisation payée ignore les périodes déductibles
 * FEA#7982 Ajout des journaux de paiement disponibles sur les prestations pour la création de périodes d'indemnisation
 * FEA#8032 Ajout d'une vérification qui empêche l'ordonnancement en cas de période précédente manquante

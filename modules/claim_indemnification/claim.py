@@ -753,7 +753,12 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'they will not be validated',
                 'missing_previous_indemnification': 'You can not schedule '
                 'the indemnification %(indemnification)s because a scheduled '
-                'period of %(missing_days)s day(s) should be ahead'
+                'period of %(missing_days)s day(s) should be ahead',
+                'tax_change_in_period': 'The tax %(tax)s starts on '
+                '%(tax_start)s and ends on %(tax_end)s . Please create '
+                'different indemnifications between %(period_start)s and '
+                '%(period_end)s so that no tax changes happen during a '
+                'given indemnification.',
                 })
         cls._order = [('start_date', 'ASC')]
 
@@ -785,6 +790,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         super(Indemnification, cls).validate(indemnifications)
         with model.error_manager():
             cls.check_insurer_delegation(indemnifications)
+            cls.check_tax_dates(indemnifications)
 
     @classmethod
     def check_insurer_delegation(cls, indemnifications):
@@ -794,6 +800,51 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                     'claim_create_indemnifications'):
                 cls.append_functional_error('cannot_create_indemnifications',
                     {'insurer': coverage.insurer.rec_name})
+
+    @classmethod
+    def check_tax_dates(cls, indemnifications):
+        Benefit = Pool().get('benefit')
+        if not Benefit.tax_date_is_indemnification_date():
+            return
+        Date = Pool().get('ir.date')
+        for indemn in indemnifications:
+            all_taxes = []
+            all_taxes.extend(indemn.product.supplier_taxes)
+            for tax in indemn.product.supplier_taxes:
+                if tax.childs:
+                    all_taxes.extend(tax.childs)
+            for tax in all_taxes:
+                tax_start = tax.start_date or datetime.date.min
+                tax_end = tax.end_date or datetime.date.max
+                indemn_end = indemn.end_date or datetime.date.max
+                if (indemn.start_date < tax_start <= indemn_end) \
+                        or (indemn.start_date <= tax_end < indemn_end):
+                    cls.append_functional_error('tax_change_in_period', {
+                            'tax': tax.rec_name,
+                            'tax_start': Date.date_as_string(tax_start),
+                            'tax_end': Date.date_as_string(tax_end),
+                            'period_start': Date.date_as_string(
+                                indemn.start_date),
+                            'period_end': Date.date_as_string(indemn.end_date)})
+
+    def _get_applied_product_supplier_taxes(self):
+        taxes = self.product.supplier_taxes
+        if not taxes:
+            return []
+
+        def get_applied_taxes(taxes):
+            res = []
+            for tax in taxes:
+                start_date = tax.start_date or datetime.date.min
+                end_date = tax.end_date or datetime.date.max
+                if not (start_date <= self.tax_date <= end_date):
+                    continue
+                res.append(tax)
+                if len(tax.childs):
+                    res.extend(get_applied_taxes(tax.childs))
+            return res
+
+        return get_applied_taxes(taxes)
 
     @property
     def tax_date(self):
@@ -1275,13 +1326,18 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         return invoice_line
 
     def _group_to_claim_invoice_key(self):
-        return {
+        key = {
             'party': self.beneficiary,
             'product': self.product,
             'company': self.service.contract.company,
             'currency': self.currency,
             'journal': self.journal,
+            'applied_taxes': [],
             }
+        if self.service.benefit.tax_date_is_indemnification_date():
+            key['applied_taxes'] = sorted([x.id for x in
+                    self._get_applied_product_supplier_taxes()])
+        return key
 
     @classmethod
     def invoice(cls, indemnifications):

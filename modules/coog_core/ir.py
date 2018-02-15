@@ -214,6 +214,8 @@ class DateClass:
 
     @staticmethod
     def date_as_string(date, lang=None):
+        if not date:
+            return ''
         Lang = Pool().get('ir.lang')
         if not lang:
             lang = utils.get_user_language()

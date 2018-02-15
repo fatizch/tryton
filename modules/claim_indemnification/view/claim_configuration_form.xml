@@ -17,5 +17,8 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="claim_default_payment_term"/>
         <field name="claim_default_payment_term"/>
+        <newline/>
+        <label name="tax_at_indemnification_date"/>
+        <field name="tax_at_indemnification_date"/>
     </xpath>
 </data>

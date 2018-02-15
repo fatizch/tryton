@@ -1,3 +1,4 @@
+* FEA#8225 Allow to set tax_date at indemnification start
 * BUG#8241 The last paid indemnification date ignores deductible periods
 * FEA#7982 Add payment journals on benefits for the indemnification periods creation
 * FEA#8032 Add check which prevent scheduling if the previous period is missing

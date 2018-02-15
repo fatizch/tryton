@@ -3,8 +3,9 @@
 from dateutil.relativedelta import relativedelta
 
 from trytond import backend
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
+from trytond.cache import Cache
 
 from trytond.modules.coog_core import model, fields, coog_date
 from trytond.modules.rule_engine import get_rule_mixin
@@ -60,6 +61,19 @@ class Benefit:
         'benefit', 'payment_journal', 'Payment Journals', help='The payment '
         'journals defined here will be pickable when creating a new '
         'indemnification period on a delivered service for this benefit')
+
+    _indemnification_tax_date_config_cache = Cache(
+        'indemnification_tax_date_config')
+
+    @classmethod
+    def tax_date_is_indemnification_date(cls):
+        cached = cls._indemnification_tax_date_config_cache.get(1, -1)
+        if cached != -1:
+            return cached
+        claim_config = Pool().get('claim.configuration').get_singleton()
+        value = claim_config.tax_at_indemnification_date
+        cls._indemnification_tax_date_config_cache.set(1, value)
+        return value
 
     @classmethod
     def validate(cls, benefits):
