@@ -1,3 +1,4 @@
+* BUG#8331 Fix crash on save of benefit
 * OTH#0000 Code fix following 5d5a04299c: missing kwargs in method
 
 Version 1.14 - 2017-11-09

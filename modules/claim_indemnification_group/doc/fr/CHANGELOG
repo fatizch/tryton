@@ -1,3 +1,4 @@
+* BUG#8331 Correction du crash sur la sauvegarde du paramétrage de prestation
 * OTH#0000 Correction suite au commit 5d5a04299c: Manque le paramètre kwargs dans les méthodes de calcul
 
 Version 1.14 - 2017-11-09

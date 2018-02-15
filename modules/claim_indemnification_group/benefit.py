@@ -41,9 +41,8 @@ class Benefit:
                 service.loss.get_date())]
         return {k: v for k, v in values.iteritems() if k in required}
 
-    @classmethod
-    def get_benefit_accounts(self, name=None):
-        accounts = super(Benefit, self).getter_waiting_account(name)
+    def get_benefit_accounts(self):
+        accounts = super(Benefit, self).get_benefit_accounts()
         if not self.is_group:
             return accounts
         return accounts + [
