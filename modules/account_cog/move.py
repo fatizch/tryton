@@ -46,10 +46,9 @@ class Move(export.ExportImportMixin):
     origin_item = fields.Function(
         fields.Reference('Origin', selection='get_origin'),
         'get_origin_item')
-    cancel_moves = fields.One2Many('account.move', 'origin', 'Cancel Moves')
     cancel_move = fields.Function(
         fields.Many2One('account.move', 'Cancel Move'),
-        'get_cancel_move')
+        'getter_cancel_move')
     is_origin_canceled = fields.Function(
         fields.Boolean('Origin Canceled'),
         'get_is_origin_canceled')
@@ -61,6 +60,10 @@ class Move(export.ExportImportMixin):
     def __setup__(cls):
         super(Move, cls).__setup__()
         cls.origin.select = True
+        cls._error_messages.update({
+                'cannot_cancel_twice': 'You cannot cancel the move %(move)s '
+                'more than once',
+                })
 
     def get_kind(self, name):
         return ''
@@ -81,7 +84,7 @@ class Move(export.ExportImportMixin):
                 return '%s,%s' % (origin_item.__name__, origin_item.id)
 
     @classmethod
-    def get_cancel_move(cls, moves, name):
+    def getter_cancel_move(cls, moves, name):
         cursor = Transaction().connection.cursor()
         res = {x.id: None for x in moves}
         move = cls.__table__()
@@ -140,6 +143,12 @@ class Move(export.ExportImportMixin):
                 to_reconcile[(line.account, line.party)].append(line)
         for lines in to_reconcile.itervalues():
             Line.reconcile(lines)
+
+    def cancel(self, default=None):
+        if self.cancel_move:
+            self.raise_user_error('cannot_cancel_twice', {
+                    'move': self.rec_name})
+        return super(Move, self).cancel(default)
 
 
 class Line(export.ExportImportMixin):
@@ -517,6 +526,14 @@ class Reconciliation:
     __name__ = 'account.move.reconciliation'
 
     @classmethod
+    def __setup__(cls):
+        super(Reconciliation, cls).__setup__()
+        cls._error_messages.update({
+                'unreconcile_cancel_move': 'You cannot unreconcile lines '
+                'which are part of a cancelled move',
+                })
+
+    @classmethod
     def create_reconciliations_from_lines(cls, packet_lines):
         Reconciliation = Pool().get('account.move.reconciliation')
         reconciliations = []
@@ -536,6 +553,11 @@ class Reconciliation:
                     for x in reconciliations], []):
             all_reconciliations.extend(line.waterfall_reconciliations(
                 reconciliations + all_reconciliations))
+
+        for reconciliation in (all_reconciliations or reconciliations):
+            if any(line.move.cancel_move for line in reconciliation.lines):
+                cls.raise_user_error('unreconcile_cancel_move')
+
         # Prepare list of split moves which lines will be automatically
         # reconciliated together because each lines are de-reconciled
         split_moves = []

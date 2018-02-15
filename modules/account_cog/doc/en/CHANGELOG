@@ -1,3 +1,5 @@
+* BUG#7838 Forbid multiple cancellation of a given move
+
 Version 1.14 - 2017-11-09
 * OTH#0000 Fix translations
 * BUG#7181 Ignore account moves which have an incomplete origin

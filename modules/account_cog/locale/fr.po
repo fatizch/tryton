@@ -2,9 +2,17 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.move:"
+msgid "You cannot cancel the move %(move)s more than once"
+msgstr "Vous ne pouvez pas annuler le mouvement %(move)s plusieurs fois"
+
 msgctxt "error:account.move.line:"
 msgid "Automatic Split Move"
 msgstr "Découpage automatique"
+
+msgctxt "error:account.move.reconciliation:"
+msgid "You cannot unreconcile lines which are part of a cancelled move"
+msgstr "Vous ne pouvez pas dé-réconcilier une ligne d'un mouvement annulé"
 
 msgctxt "error:fiscal_year.set.wizard:"
 msgid "Fiscal Year"
@@ -53,10 +61,6 @@ msgstr "Identifiant XML"
 msgctxt "field:account.move,cancel_move:"
 msgid "Cancel Move"
 msgstr "Mouvement d'annulation"
-
-msgctxt "field:account.move,cancel_moves:"
-msgid "Cancel Moves"
-msgstr "Mouvements d'annulation"
 
 msgctxt "field:account.move,icon:"
 msgid "Icon"
