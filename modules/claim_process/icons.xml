@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="claim_declaration">
+            <field name="name">claim_declaration</field>
+            <field name="path">icons/claim_declaration.svg</field>
+        </record>
+    </data>
+</tryton>

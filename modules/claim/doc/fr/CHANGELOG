@@ -1,3 +1,4 @@
+* OTH#0000 Icônes pour les sinistres
 * FEA#8028 Améliorations graphiques sur le processus de déclaration de sinistre
 * BUG#7817 Si une date de fin est requise sur un préjudice, le motif de fin ne peut être renseigné que si la date de fin l'est également.
 * BUG#7827 Chargement caché du champ "Sinistre" dans la vue des préjudices

@@ -78,6 +78,7 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
     _claim_number_generator_cache = Cache('claim_number_generator')
     losses_description = fields.Function(
         fields.Char('Losses Description'), 'get_losses_description')
+    icon = fields.Function(fields.Char('Icon'), 'get_icon')
 
     @classmethod
     def __setup__(cls):
@@ -154,6 +155,11 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
         if not self.losses:
             return self.rec_name
         return ', '.join([x.rec_name for x in self.losses])
+
+    def get_icon(self, name=None):
+        if 'open' in self.status:
+            return 'flash_blue'
+        return 'claim'
 
     @classmethod
     def validate(cls, claims):

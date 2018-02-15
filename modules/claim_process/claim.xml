@@ -37,7 +37,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Start Declaration</field>
             <field name="wiz_name">claim.declare</field>
         </record>
-        <menuitem parent="claim.menu_claim" sequence="1" action="declaration_process_launcher" id="menu_start_declaration"/>
+        <menuitem parent="claim.menu_claim" sequence="1" action="declaration_process_launcher" id="menu_start_declaration" icon="claim_declaration"/>
         <record model="ir.action.act_window" id="act_claim_logs">
             <field name="name">Logs</field>
             <field name="res_model">process.log</field>
