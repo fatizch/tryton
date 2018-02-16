@@ -86,15 +86,8 @@ class InvoiceLine:
                 continue
             commission_rate = (commission_amount / amount).quantize(
                 Decimal(10) ** -COMMISSION_RATE_DIGITS)
-            if (commission_data and commission_data[-1][3] == commission_rate
-                    and commission_data[-1][1] == coog_date.add_day(
-                        start, -1)):
-                # Same rate => extend previous line
-                commission_data[-1][1] = end
-                commission_data[-1][2] += commission_amount
-            else:
-                commission_data.append([start, end, commission_amount,
-                        commission_rate])
+            commission_data.append([start, end, commission_amount,
+                commission_rate])
 
         commissions = []
         for start, end, commission_amount, commission_rate in commission_data:

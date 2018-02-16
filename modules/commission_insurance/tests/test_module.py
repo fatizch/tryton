@@ -66,7 +66,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         with mock.patch.object(self.Currency, 'compute',
                 return_value=Decimal(310)):
-            # Same rate => One line
+            # Same rate => two lines
             invoice_line._get_commission_amount = mock.Mock(
                 side_effect=[Decimal(15), Decimal(16)])
             commissions = invoice_line.get_commissions_for_agent(agent, plan)
@@ -83,11 +83,15 @@ class ModuleTestCase(test_framework.CoogTestCase):
                                 'date_start': datetime.date(2000, 1, 16),
                                 'date_end': datetime.date(2000, 1, 31)}}),
                     ])
-            self.assertEqual(len(commissions), 1)
+            self.assertEqual(len(commissions), 2)
             self.assertEqual(commissions[0].commission_rate, Decimal('.1'))
             self.assertEqual(commissions[0].start, datetime.date(2000, 1, 1))
-            self.assertEqual(commissions[0].end, datetime.date(2000, 1, 31))
-            self.assertEqual(commissions[0].amount, Decimal('31'))
+            self.assertEqual(commissions[0].end, datetime.date(2000, 1, 15))
+            self.assertEqual(commissions[0].amount, Decimal('15'))
+            self.assertEqual(commissions[1].commission_rate, Decimal('.1'))
+            self.assertEqual(commissions[1].start, datetime.date(2000, 1, 16))
+            self.assertEqual(commissions[1].end, datetime.date(2000, 1, 31))
+            self.assertEqual(commissions[1].amount, Decimal('16'))
 
             # Different rate => two lines
             invoice_line._get_commission_amount = mock.Mock(

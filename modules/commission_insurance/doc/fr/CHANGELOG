@@ -1,3 +1,4 @@
+* FEA#8274 Forcer le découpage des lignes de commissions selon les dates de recalcul même si le taux ne change pas
 * BUG#8321 Modification de la méthode 'Change_broker' afin de pouvoir mettre à jour les quittances validées si il y a un changement d'apporteur
 * BUG#8189 Correction des dépendances du champ courtier
 * BUG#7914 Suppression des "Protocoles de commissionnement" de la vue forme produit / garantie et ajout d'une relation à la place
