@@ -138,7 +138,7 @@ class MoveLine:
         company_id = lines[0].move.company.id
         query_table = line.join(account, condition=account.id == line.account
             ).join(payment, condition=(payment.line == line.id) &
-                (payment.state == 'processing'))
+                (payment.state.in_(['processing', 'approved'])))
         cursor = Transaction().connection.cursor()
         cursor.execute(*query_table.select(
                 Sum(Coalesce(line.debit, 0) - Coalesce(line.credit, 0)),
