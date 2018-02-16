@@ -10,6 +10,10 @@ coog_server_clearcache() { # clear redis cache
         [ $? -eq 0 ] && echo redis cache cleared
         find "$COOG_ROOT" -name "*.pyc" -delete
         [ $? -eq 0 ] && echo pyc files cleared
+        for repo in $(coog_repo_main)
+        do
+            find "$COOG_ROOT/$repo/modules" -type d -empty -delete
+        done
 }
 
 coog_server_launch() { # launch - [trytond args]
