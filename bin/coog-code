@@ -2,119 +2,135 @@
 # source code informations
 
 _coog_code_st_fmt() {
-        [ -z "$1" ] && echo 0 && return 1
-        echo "$1" | cut -d " " -f 1
+    [ -z "$1" ] && echo 0 && return 1
+    echo "$1" | cut -d " " -f 1
 }
 
 _coog_code_st_repo() {
-        local repo
-        repo=$(basename "$(pwd)")
-        local branch
-        branch=$(git rev-parse --abbrev-ref HEAD)
-        [ "$branch" = HEAD ] && branch=X
-        local mine
-        if [ "$branch" = X ]
-        then
-                mine=X
-        else
-                mine=$(git diff --shortstat "origin/$branch" "$branch" 2> /dev/null) || mine=NA
-                mine=$(_coog_code_st_fmt $mine)
-        fi
-        local origin
-        if [ "$branch" = X ]
-        then
-                origin=X
-        else
-                origin=$(git diff --shortstat "origin/$branch" "$branch" 2> /dev/null) || origin=NA
-                origin=$(_coog_code_st_fmt $origin)
-        fi
-        local master
-        if [ "$branch" = X ]
-        then
-                master=X
-        elif [ "$branch" = master ]
-        then
-                master=X
-        else
-                master=$(git diff --shortstat master "$branch") || master=NA
-                master=$(_coog_code_st_fmt $master)
-        fi
-        local stage
-        stage=$(git diff --shortstat --cached) || stage=NA
-        stage=$(_coog_code_st_fmt $stage)
-        local dirty
-        dirty=$(git diff --shortstat) || dirty=NA
-        dirty=$(_coog_code_st_fmt $dirty)
-        local untrack
-        untrack=$(git status --porcelain | grep -c "??")
-        echo "$repo $branch $mine $origin $stage $dirty $untrack $master"
+    local repo
+    repo=$(basename "$(pwd)")
+    local branch
+    branch=$(git rev-parse --abbrev-ref HEAD)
+    [ "$branch" = HEAD ] && branch=X
+    local mine
+    if [ "$branch" = X ]
+    then
+        mine=X
+    else
+        mine=$(git diff --shortstat "origin/$branch" "$branch" 2> /dev/null) || mine=NA
+        mine=$(_coog_code_st_fmt $mine)
+    fi
+    local origin
+    if [ "$branch" = X ]
+    then
+        origin=X
+    else
+        origin=$(git diff --shortstat "origin/$branch" "$branch" 2> /dev/null) || origin=NA
+        origin=$(_coog_code_st_fmt $origin)
+    fi
+    local master
+    if [ "$branch" = X ]
+    then
+        master=X
+    elif [ "$branch" = master ]
+    then
+        master=X
+    else
+        master=$(git diff --shortstat master "$branch") || master=NA
+        master=$(_coog_code_st_fmt $master)
+    fi
+    local stage
+    stage=$(git diff --shortstat --cached) || stage=NA
+    stage=$(_coog_code_st_fmt $stage)
+    local dirty
+    dirty=$(git diff --shortstat) || dirty=NA
+    dirty=$(_coog_code_st_fmt $dirty)
+    local untrack
+    untrack=$(git status --porcelain | grep -c "??")
+    echo "$repo $branch $mine $origin $stage $dirty $untrack $master"
 }
 
 _coog_code_status() {
-        echo "repo branch mine origin stage dirty untrack master"
-        echo "---- ------ ---- ------ ----- ----- ------- ------"
-        for folder in $COOG_ROOT/*
-        do
-                if [ ! -d "$folder" ] || [ ! -d "$folder/.git" ] || [ -e "$folder/.not-coog" ]
-                then
-                        continue
-                fi
-                (cd "$folder" && _coog_code_st_repo)
-        done
+    echo "repo branch mine origin stage dirty untrack master"
+    echo "---- ------ ---- ------ ----- ----- ------- ------"
+    for folder in $COOG_ROOT/*
+    do
+        if [ ! -d "$folder" ] || [ ! -d "$folder/.git" ] || [ -e "$folder/.not-coog" ]
+        then
+            continue
+        fi
+        (cd "$folder" && _coog_code_st_repo)
+    done
 }
 
 coog_code_status() { # status of all repos
-        _coog_code_status | column -t
+    _coog_code_status | column -t
 }
 
 coog_code_foreach() { # exec command on each repo <command>
-        local verbose; verbose=0
-        [ ! -z "$1" ] && [ "$1" = v ] && shift && verbose=1
-        for folder in $COOG_ROOT/*
-        do
-                if [ ! -d "$folder" ] || [ ! -d "$folder/.git" ] || [ -e "$folder/.not-coog" ]
-                then
-                        continue
-                fi
-                [ $verbose = 1 ] && echo "### $(basename "$folder")"
-                (cd "$folder" && "$@")
-                [ $verbose = 1 ] && echo "###"
-        done
+    local verbose; verbose=0
+    [ ! -z "$1" ] && [ "$1" = v ] && shift && verbose=1
+    for folder in $COOG_ROOT/*
+    do
+        if [ ! -d "$folder" ] || [ ! -d "$folder/.git" ] || [ -e "$folder/.not-coog" ]
+        then
+            continue
+        fi
+        [ $verbose = 1 ] && echo "### $(basename "$folder")"
+        (cd "$folder" && "$@")
+        [ $verbose = 1 ] && echo "###"
+    done
 }
 
 coog_code_fetch() { # fetch all repos
-        coog_code_foreach v git fetch -p origin
+    coog_code_foreach v git fetch -p origin
 }
 
 _coog_code_lines() {
-        find -name "*.$1" -exec wc -l {} \; | cut -d " " -f 1 | paste -s -d "+" | bc
+    find -name "*.$1" -exec wc -l {} \; | cut -d " " -f 1 | paste -s -d "+" | bc
 }
 
 _coog_code_stats() {
-        [ -z "$1" ] && echo need a repo to calculate stats && return 1
-        local modules
-        modules="$COOG_ROOT/$1/modules"
-        [ ! -d "$modules" ] && echo bad repo name && return 1
-        echo module python xml
-        for module in $modules/*
-        do
-                [ ! -d "$module" ] && continue
-                local py; py=$(cd "$module" && _coog_code_lines py)
-                local xml; xml=$(cd "$module" && _coog_code_lines xml)
-                echo "$(basename "$module") $py $xml"
-        done
+    [ -z "$1" ] && echo need a repo to calculate stats && return 1
+    local modules
+    modules="$COOG_ROOT/$1/modules"
+    [ ! -d "$modules" ] && echo bad repo name && return 1
+    echo module python xml
+    for module in $modules/*
+    do
+        [ ! -d "$module" ] && continue
+        local py; py=$(cd "$module" && _coog_code_lines py)
+        local xml; xml=$(cd "$module" && _coog_code_lines xml)
+        echo "$(basename "$module") $py $xml"
+    done
 }
 
 coog_code_stats() { # generate code stats - <repo>
-        _coog_code_stats "$@" | column -t
+    _coog_code_stats "$@" | column -t
 }
 
 coog_code_changelog() { # Generate changelog between two branches - <previous> <new>
-        [ $# -ne 2 ] && echo two branches are required to generate changelog && return 1
-        git diff "$1" "$2" -- "$COOG_ROOT/coog/modules/*/CHANGELOG" | \
-                grep -v "^ " | grep -v "^+$" | grep -v "^index" | \
-                grep -v "^new file" | grep -v "^@@" | grep -v "^---" | \
-                grep -v "^+++" | \
-                sed -e "s/^diff .* b\/modules\/\(.*\)\/CHANGELOG/\n\1/" | \
-                sed -e  "s/^+//"
+    [ $# -ne 2 ] && echo two branches are required to generate changelog && return 1
+    git diff "$1" "$2" -- "$COOG_ROOT/coog/modules/*/CHANGELOG" | \
+        grep -v "^ " | grep -v "^+$" | grep -v "^index" | \
+        grep -v "^new file" | grep -v "^@@" | grep -v "^---" | \
+        grep -v "^+++" | \
+        sed -e "s/^diff .* b\/modules\/\(.*\)\/CHANGELOG/\n\1/" | \
+        sed -e  "s/^+//"
+}
+
+_coog_code_grep() {
+    for branch in $(git branch -a --no-color | grep -v HEAD | sed 's/ //g' | sed 's/*//g' | sort -r)
+    do
+        echo "### branch: $branch ### (Y/n?)"
+        read n
+        [ "$n" = n ] && continue
+        local sha; sha=$(git rev-parse "$branch")
+        git grep --color=always "$@" "$sha" | tee
+    done
+}
+
+coog_code_grep() { # grep in repo <repo> <git-grep-greps>
+    local repo; repo="$1"; shift
+    (cd "$COOG_ROOT/$repo" && _coog_code_grep "$@")
 }
