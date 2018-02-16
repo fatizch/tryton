@@ -218,7 +218,8 @@ def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
     rule_field = fields.Many2One('rule_engine', field_string,
         ondelete='RESTRICT')
     rule_extra_data = fields.Dict('rule_engine.rule_parameter', extra_string,
-            states={'invisible': ~Eval(extra_name, False)})
+        domain=[('parent_rule', '=', Eval(field_name))], depends=[field_name],
+        states={'invisible': ~Eval(extra_name, False)})
     setattr(BaseRuleMixin, field_name, rule_field)
     setattr(BaseRuleMixin, extra_name, rule_extra_data)
     setattr(BaseRuleMixin, extra_name + '_string',

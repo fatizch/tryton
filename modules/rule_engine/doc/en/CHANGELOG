@@ -1,3 +1,4 @@
+* BUG#8326 To be able to retrieve the good value of field selection in rule parameters
 * FEA#8149 Add history on rules to consult different versions
 * FEA#8160 Function cache for rng (not serializable)
 * BUG#8093 Use a single shared rule engine instance across a transaction
