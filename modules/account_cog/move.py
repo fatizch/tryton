@@ -555,7 +555,12 @@ class Reconciliation:
                 reconciliations + all_reconciliations))
 
         for reconciliation in (all_reconciliations or reconciliations):
-            if any(line.move.cancel_move for line in reconciliation.lines):
+            moves = {x.move.id for x in reconciliation.lines}
+            cancel_moves = {x.move.cancel_move.id
+                for x in reconciliation.lines if x.move.cancel_move}
+            if cancel_moves & moves:
+                # The reconciliation contains lines from both a move and its
+                # cancellation, we should not unreconcile
                 cls.raise_user_error('unreconcile_cancel_move')
 
         # Prepare list of split moves which lines will be automatically
