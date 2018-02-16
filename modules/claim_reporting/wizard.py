@@ -62,7 +62,8 @@ class InsurerReportClaim(model.CoogWizard):
         with Transaction().set_context(
                 reporting_date=max_date):
             _, attachments = template.produce_reports(all_services,
-                {'origin': insurer, 'resource': insurer})
+                {'origin': insurer, 'resource': insurer,
+                    'reporting_date': max_date})
         return {
             'reports': [x.id for x in attachments],
             }
