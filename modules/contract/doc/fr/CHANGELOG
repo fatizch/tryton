@@ -1,3 +1,4 @@
+* BUG#8163 Pouvoir faire une recherche des contrats avec leurs dates d'effet initiales
 * BUG#8208 Empêcher la suppression d'un contrat ayant un numéro
 * BUG#8249 Vérifier qu'une nouvelle date de fin existe avant de nettoyer les versions
 * BUG#4856 Utilisation de seulement deux colonnes pour la vue formulaire des garanties

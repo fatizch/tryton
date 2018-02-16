@@ -443,6 +443,16 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     ])
             self.assertEqual(contracts[0], contract)
 
+        # test consultation on last day of periods
+        for y in years:
+            with Transaction().set_context(client_defined_date=datetime.date(
+                        y, 12, 31)):
+                contract = self.Contract(contract.id)
+                contracts = contract.__class__.search([
+                        ('initial_start_date', '=', datetime.date(2010, 1, 1)),
+                        ])
+                self.assertEqual(contracts[0], contract)
+
     @test_framework.prepare_test('contract.test0001_testPersonCreation')
     def test0060_get_contacts(self):
         party, = self.Party.search([('name', '=', 'DOE')])

@@ -715,7 +715,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         return [tables['activation_history'][None][0].min_start]
 
     @classmethod
-    def build_activation_history_query(cls, activation_history,
+    def build_activation_history_query(cls, activation_history, name=None,
             today=None, where_clause=None):
         today = today or utils.today()
         column_end = NullIf(Coalesce(activation_history.end_date,
@@ -731,21 +731,24 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             Max(activation_history.start_date,
                 window=contract_window).as_('max_start'),
             where=where_clause)
+        if name == 'initial_start_date':
+            the_clause = (win_query.start_date == win_query.min_start)
+        else:
+            # case 1: today is inside a period
+            the_clause = (((win_query.start_date <= today) &
+                            (Coalesce(win_query.end_date, max_date) >= today))
+                    # case 2: today is after last period
+                    | ((win_query.start_date <= today) &
+                        (win_query.start_date == win_query.max_start))
+                    # case 3: today is before first period
+                    | ((win_query.start_date > today) &
+                        (win_query.start_date == win_query.min_start)))
         query = win_query.select(win_query.id,
             win_query.start_date,
             win_query.end_date,
             win_query.min_start,
-            where=(
-                # case 1: today is inside a period
-                ((win_query.start_date <= today) &
-                    (Coalesce(win_query.end_date, max_date) >= today))
-                # case 2: today is after last period
-                | ((win_query.start_date <= today) &
-                    (win_query.start_date == win_query.max_start))
-                # case 3: today is before first period
-                | ((win_query.start_date > today) &
-                    (win_query.start_date == win_query.min_start))
-                ))
+            where=the_clause
+            )
         return query
 
     @classmethod
@@ -764,7 +767,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
                     [x.id for x in contract_slice]) &
                 (activation_history.active == Literal(True)))
             query = cls.build_activation_history_query(
-                activation_history, today, where_clause)
+                activation_history, today=today, where_clause=where_clause)
             cursor.execute(*query)
 
             for elem in cursor_dict(cursor):
@@ -861,11 +864,11 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         activation_history = ActivationHistory.__table__()
         if name != 'initial_start_date':
             query_table = cls.build_activation_history_query(activation_history,
-                today=None, where_clause=(
+                name=name, today=None, where_clause=(
                     activation_history.active != Literal(False)))
         else:
             query_table = cls.build_activation_history_query(activation_history,
-                today=None)
+                name=name, today=None)
 
         if name == 'end_date':
             column = NullIf(Max(Coalesce(
