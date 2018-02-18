@@ -1,3 +1,4 @@
+* Bug#7880 Modifier le calcul du taux moyen du prêt pour les garanties en prenant en compte uniquement les quotités actives sur ces garanties
 * Bug#7503 Ne pas prendre en compte les frais pour calculer le taux moyen du prêt pour les garanties
 
 Version 1.14 - 2017-11-09

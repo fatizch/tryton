@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:loan.average_premium_rate.display:"
+msgid "Fee"
+msgstr "Frais"
+
 msgctxt "field:loan,average_premium_rate:"
 msgid "Average Premium Rate"
 msgstr "Taux moyen prêt"

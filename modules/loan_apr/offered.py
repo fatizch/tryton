@@ -174,7 +174,8 @@ class LoanAveragePremiumRule(model.CoogSQL, model.CoogView):
             prorata_method=coog_date.prorata_exact)
         base_amount = loan_amount + fee_amount
         loan_average = base_amount * 100 / den if den else None
-        return base_amount, loan_average
+        fee_average = fee_amount * 100 / den if den else None
+        return base_amount, loan_average, fee_average, fee_average
 
     def calculate_average_premium_for_option(self, contract, share):
         if not self.use_default_rule:

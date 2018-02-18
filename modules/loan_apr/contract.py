@@ -8,7 +8,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, Button
 from trytond.pyson import Eval
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, utils
 
 __all__ = [
     'Contract',
@@ -85,6 +85,15 @@ class Contract:
     def button_loan_average_premium(cls, contracts):
         pass
 
+    def get_active_loan_share(self):
+        date = utils.today()
+        active_share = []
+        covered_elements_options = list(self.covered_element_options)
+        for option in covered_elements_options:
+            for share in option.get_shares_at_date(date, False):
+                active_share.append(share)
+        return active_share
+
 
 class LoanShare:
     __metaclass__ = PoolMeta
@@ -119,6 +128,13 @@ class DisplayLoanAveragePremium(Wizard):
         'loan_apr.display_average_premium_values_view_form', [
             Button('Cancel', 'end', 'tryton-cancel')])
 
+    @classmethod
+    def __setup__(cls):
+        super(DisplayLoanAveragePremium, cls).__setup__()
+        cls._error_messages.update({
+                'fee_label': 'Fee',
+                })
+
     def default_display_loans(self, name):
         if not Transaction().context.get('active_model') == 'contract':
             return {}
@@ -140,7 +156,18 @@ class DisplayLoanAveragePremium(Wizard):
                                 'currency_digits': x.currency_digits,
                                 'currency_symbol': x.currency_symbol,
                                 'current_loan_shares': [],
-                                } for y in x.current_loan_shares],
+                                } for y in contract.get_active_loan_share()
+                                if y.loan == x] + [{
+                                    'name': self.raise_user_error(
+                                        'fee_label', raise_exception=False),
+                                    'average_premium_rate': x.average_fee_rate,
+                                    'base_premium_amount':
+                                    x.base_fee_amount,
+                                    'currency_digits': x.currency_digits,
+                                    'currency_symbol': x.currency_symbol,
+                                    'current_loan_shares': [],
+                                }],
+
                         } for x in contract.used_loans],
                 }
 
