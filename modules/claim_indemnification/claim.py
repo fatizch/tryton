@@ -791,7 +791,10 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             'claim.indemnification.payback_reason').__table__()
         query = table.update(columns=[table.payback_reason],
             values=payback_reason_table.select(payback_reason_table.id,
-                where=(payback_reason_table.code == 'migration')))
+                where=(payback_reason_table.code == 'migration')
+                & (table.status.in_(
+                        ['cancelled', 'cancel_paid', 'cancel_scheduled',
+                            'cancel_validated', 'cancel_controlled']))))
         cursor.execute(*query)
 
     @classmethod

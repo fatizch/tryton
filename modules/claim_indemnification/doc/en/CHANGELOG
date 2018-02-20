@@ -1,3 +1,4 @@
+* OTH#0000 Only do payback reason migration for cancelled indemnifications
 * FEA#8166 Add a payback reason on claim indemnifications
 * FEA#8225 Allow to set tax_date at indemnification start
 * BUG#8241 The last paid indemnification date ignores deductible periods
