@@ -7,3 +7,6 @@
   makes it easier to trigger actions requiring custom views on certain events.
   It also allows to bypass the fact that contracts can only have one active
   process at a time
+
+- **Process selection :** Allows indicating which processes are attached to a
+  product.

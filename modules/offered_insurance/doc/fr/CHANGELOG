@@ -1,3 +1,5 @@
+* BUG#8356 Suppression de la dépendance avec process
+
 Version 1.14 - 2017-11-09
 * BUG#6788 La création des relances n'est plus permise sur des tiers de type assureur
 

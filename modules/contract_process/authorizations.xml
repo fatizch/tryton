@@ -3,10 +3,54 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- Product Consultation Group  -->
+        <!-- Processes -->
+        <record model="ir.ui.menu-res.group" id="process_menu_id_product_read">
+            <field name="menu" ref="process.process_menu_id"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_process_desc_product_read">
+            <field name="menu" ref="process.menu_process_desc"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_step_desc_product_read">
+            <field name="menu" ref="process.menu_step_desc"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_process_status_product_read">
+            <field name="menu" ref="process.menu_process_status"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_configuration_product_read">
+            <field name="menu" ref="process.menu_configuration"/>
+            <field name="group" ref="offered.group_product_read"/>
+        </record>
+        <!-- Product Management Group -->
+        <!-- Processes -->
+        <record model="ir.ui.menu-res.group" id="process_menu_id_group_product_manage">
+            <field name="menu" ref="process.process_menu_id"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_process_desc_product_manage">
+            <field name="menu" ref="process.menu_process_desc"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_step_desc_product_manage">
+            <field name="menu" ref="process.menu_step_desc"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_process_status_product_manage">
+            <field name="menu" ref="process.menu_process_status"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_configuration_product_manage">
+            <field name="menu" ref="process.menu_configuration"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
         <!-- Contract Management Group -->
         <!-- Contract -->
         <record model="ir.ui.menu-res.group" id="menu_start_subscription_contract_manage">
-            <field name="menu" ref="contract_process.menu_start_subscription"/>
+            <field name="menu" ref="menu_start_subscription"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
         <record model="ir.model.access" id="access_contract_subscribe_find_process">
@@ -19,6 +63,70 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.model.access" id="contract_subscribe_find_process_contract_management_group">
             <field name="model" search="[('model', '=', 'contract.subscribe.find_process')]"/>
             <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_process_log_product_manage_group">
+            <field name="model" search="[('model', '=', 'process.log')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+                <record model="ir.model.access" id="access_process_product_manage_group">
+            <field name="model" search="[('model', '=', 'process')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_process_action_product_manage_group">
+            <field name="model" search="[('model', '=', 'process.action')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_process_configuration_product_manage_group">
+            <field name="model" search="[('model', '=', 'process.configuration')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_process_status_product_manage_group">
+            <field name="model" search="[('model', '=', 'process.status')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_process_step_product_manage_group">
+            <field name="model" search="[('model', '=', 'process.step')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_process_transition_product_manage_group">
+            <field name="model" search="[('model', '=', 'process.transition')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_view_description_menu_group_product_manage">
+            <field name="model" search="[('model', '=', 'ir.ui.view.description')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>

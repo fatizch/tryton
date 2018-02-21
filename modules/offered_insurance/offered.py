@@ -27,8 +27,6 @@ class Product:
         fields.Many2Many('offered.item.description', None, None,
             'Item Descriptions'),
         'on_change_with_item_descriptors')
-    processes = fields.Many2Many('process-offered.product',
-        'product', 'process', 'Processes')
 
     @classmethod
     def kind_list_for_extra_data_domain(cls):
@@ -73,10 +71,6 @@ class Product:
         if 'elem' in args and args['level'] == 'option':
             return ''
         return super(Product, self).get_cmpl_data_looking_for_what(args)
-
-    @classmethod
-    def _export_light(cls):
-        return super(Product, cls)._export_light() | {'processes'}
 
 
 class ItemDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):

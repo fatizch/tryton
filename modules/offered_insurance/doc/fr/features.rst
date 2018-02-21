@@ -32,9 +32,6 @@
 
 - **Lien avec l'assureur :** Permet de rattacher une garantie à un assureur
 
-- **Sélection des processus :** Permet d'indiquer les processus (ajoutés par le
-  module ``process``) rattachés au produit.
-
 - **Délégation assureur** : Il est possible d'indiquer quels sont les niveaux
   de délégation qui ont été donnés par l'assureur en fonction de la ligne
   métier. Les niveaux disponibles dépendent des modules installés.

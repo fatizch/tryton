@@ -4,7 +4,6 @@ from trytond.pool import Pool
 import rule_engine
 import offered
 import coverage
-import process
 import test_case
 import batch
 import exclusion
@@ -30,8 +29,6 @@ def register():
         exclusion.ExclusionKind,
         extra_premium.ExtraPremiumKind,
         rule_engine.RuleEngineRuntime,
-        process.ProcessProductRelation,
-        process.Process,
         test_case.TestCaseModel,
         module='offered_insurance', type_='model')
     Pool.register(

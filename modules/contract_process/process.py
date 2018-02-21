@@ -4,12 +4,13 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields, utils
+from trytond.modules.coog_core import fields, utils, model
 from trytond.modules.process_cog.process import ProcessFinder, ProcessStart
 
 
 __all__ = [
     'Process',
+    'ProcessProductRelation',
     'ProcessAction',
     'ContractSubscribeFindProcess',
     'ContractSubscribe',
@@ -21,10 +22,28 @@ class Process:
     __metaclass__ = PoolMeta
     __name__ = 'process'
 
+    for_products = fields.Many2Many('process-offered.product',
+        'process', 'product', 'Products')
+
+    @classmethod
+    def _export_skips(cls):
+        return (super(Process, cls)._export_skips() | set(['for_products']))
+
     @classmethod
     def __setup__(cls):
         super(Process, cls).__setup__()
         cls.kind.selection.append(('subscription', 'Contract Subscription'))
+
+
+class ProcessProductRelation(model.CoogSQL):
+    'Process Product Relation'
+
+    __name__ = 'process-offered.product'
+
+    product = fields.Many2One('offered.product', 'Product',
+        ondelete='CASCADE')
+    process = fields.Many2One('process', 'Process',
+        ondelete='CASCADE')
 
 
 class ProcessAction:

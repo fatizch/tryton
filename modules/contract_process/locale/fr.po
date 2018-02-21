@@ -182,13 +182,61 @@ msgctxt "field:contract.subscribe.find_process,start_date_readonly:"
 msgid "Start Date Is Read Only"
 msgstr "La date d'effet est en lecture seule"
 
+msgctxt "field:offered.product,processes:"
+msgid "Processes"
+msgstr "Processus"
+
 msgctxt "field:process,display_steps_without_status:"
 msgid "Display Steps Without Status"
 msgstr "Afficher les Etapes sans Statut"
 
+msgctxt "field:process,for_products:"
+msgid "Products"
+msgstr "Produits"
+
 msgctxt "field:process,steps_to_display:"
 msgid "Steps"
 msgstr "Etapes"
+
+msgctxt "field:process-offered.product,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:process-offered.product,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:process-offered.product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process-offered.product,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process-offered.product,process:"
+msgid "Process"
+msgstr "Processus"
+
+msgctxt "field:process-offered.product,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:process-offered.product,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:process-offered.product,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process-offered.product,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:process-offered.product,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "model:contract.subscribe.find_process,name:"
 msgid "ContractSubscribe Find Process"
@@ -206,6 +254,10 @@ msgctxt "model:ir.ui.menu,name:menu_start_subscription"
 msgid "Start Subscription"
 msgstr "Souscription Contrat"
 
+msgctxt "model:process-offered.product,name:"
+msgid "Process Product Relation"
+msgstr "Relation Processus Produit"
+
 msgctxt "selection:document.description,when_received:"
 msgid "Start Subscription"
 msgstr "Démarrer une souscription"
@@ -221,6 +273,10 @@ msgstr "Garanties"
 msgctxt "view:contract:"
 msgid "Resume Current Process"
 msgstr "Relancer le processus courant"
+
+msgctxt "view:process:"
+msgid "Products"
+msgstr "Produits"
 
 msgctxt "wizard_button:contract.subscribe,process_parameters,action:"
 msgid "Start Process"

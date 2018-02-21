@@ -9,3 +9,6 @@
   nécessitant des vues particulières en fonction d'événements. Cela permet
   également de contourner le fait qu'un contrat ne puisse avoir qu'un seul
   processus à la fois
+
+- **Sélection des processus :** Permet d'indiquer les processus (ajoutés par le
+  module ``process``) rattachés au produit.

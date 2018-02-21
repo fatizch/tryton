@@ -1,3 +1,5 @@
+* BUG#8356 Break dependency with process
+
 Version 1.14 - 2017-11-09
 * BUG#6788 Dunning generation on insurers parties are not allowed
 

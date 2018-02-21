@@ -21,6 +21,3 @@
   insurance family (life, health, etc.)
 
 - **Relation with the insurer :** Allows attaching an option to an insurer
-
-- **Process selection :** Allows indicating which processes are attached to a
-  product.

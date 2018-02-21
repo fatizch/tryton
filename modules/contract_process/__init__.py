@@ -7,6 +7,7 @@ import contract
 import event
 import document
 import wizard
+import offered
 
 
 def register():
@@ -14,9 +15,11 @@ def register():
         contract.Contract,
         contract.ContractOption,
         contract.ContractNotification,
+        process.ProcessProductRelation,
         process.Process,
         process.ProcessAction,
         process.ContractSubscribeFindProcess,
+        offered.Product,
         event.EventTypeAction,
         document.DocumentDescription,
         wizard.ImportProcessSelect,
