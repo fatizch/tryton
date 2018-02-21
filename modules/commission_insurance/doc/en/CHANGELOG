@@ -1,8 +1,9 @@
+* OTH#0000 Merge with contract_process_commission
 * FEA#8274 Force commission line split according the computation dates defined
 * BUG#8321 Update 'change_broker' in order to update the agent value of validated invoices if we change broker contract
 * BUG#8189 Fix depends on contract broker
 * BUG#7914 Remove "agents" field from product / coverage form view and add relate instead
-* BUG#7875 Use initial_start_date instead of start_date in dates recalculation algorithm 
+* BUG#7875 Use initial_start_date instead of start_date in dates recalculation algorithm
 * FEA#0000 Add covered element on commission list
 * OTH#0000 Update on_change_with_agent following 7755
 * BUG#7755 Change the definition of the domain of 'agent' field by replacing 'start_date' by 'initial_start_date'

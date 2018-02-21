@@ -11,6 +11,7 @@ import account
 import batch
 import test_case
 import offered
+import process
 
 
 def register():
@@ -51,4 +52,5 @@ def register():
         commission.FilterCommissions,
         commission.OpenCommissionsSynthesis,
         commission.FilterAggregatedCommissions,
+        process.ContractSubscribe,
         module='commission_insurance', type_='wizard')
