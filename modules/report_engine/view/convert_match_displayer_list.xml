@@ -9,4 +9,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="match" expand="1"/>
     <field name="new_value" expand="1"/>
     <field name="template_id" tree_invisible="1"/>
+    <field name="section"/>
 </tree>

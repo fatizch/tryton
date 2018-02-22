@@ -154,6 +154,10 @@ msgctxt "field:report.convert.match,new_value:"
 msgid "New Value"
 msgstr "Nouvelle valeur"
 
+msgctxt "field:report.convert.match,section:"
+msgid "Section"
+msgstr "Section"
+
 msgctxt "field:report.convert.match,template_id:"
 msgid "Template Id"
 msgstr "Id du modèle"

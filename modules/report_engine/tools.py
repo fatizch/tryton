@@ -71,8 +71,8 @@ class ConvertTemplate(Wizard):
         per_template = defaultdict(list)
         for match in self.select_templates.matches:
             if match.to_update:
-                per_template[Version(match.template_id)].append((match.match,
-                        match.new_value))
+                per_template[Version(match.template_id)].append((match.section,
+                        match.match, match.new_value))
         for template, matches in per_template.iteritems():
             template.data = self.replace_in_file(StringIO(template.data),
                 matches)
@@ -83,6 +83,10 @@ class ConvertTemplate(Wizard):
         return 'end'
 
     @classmethod
+    def replacable_sections(cls):
+        return ['content.xml', 'styles.xml']
+
+    @classmethod
     def find_in_file(cls, data_in, search_for):
         '''
             Returns a list of placeholders matching search_for in data_in
@@ -91,17 +95,20 @@ class ConvertTemplate(Wizard):
         find_placeholders = re.compile('<text:placeholder ' +
             'text:placeholder-type="text">' +
             '&lt;(.*?)&gt;</text:placeholder>')
+        res = {}
         with zipfile.ZipFile(data_in, 'r') as zin:
             for item in zin.infolist():
-                if item.filename != 'content.xml':
+                if item.filename not in cls.replacable_sections():
                     continue
                 try:
-                    contents = zin.read('content.xml').decode('utf-8')
+                    contents = zin.read(item.filename).decode('utf-8')
                 except UnicodeDecodeError:
-                    contents = zin.read('content.xml')
-                return [x.replace('&quot;', '"').replace('&apos;', "'")
+                    contents = zin.read(item.filename)
+                res[item.filename] = [
+                    x.replace('&quot;', '"').replace('&apos;', "'")
                     for x in re.findall(find_placeholders, contents)
                     if search_for in x]
+        return res
 
     @classmethod
     def replace_in_file(cls, data_in, matches):
@@ -116,21 +123,24 @@ class ConvertTemplate(Wizard):
                 x + '&gt;</text:placeholder>'
 
         data_out = StringIO()
-        matches = [(prepare_match(x), prepare_match(y)) for x, y in matches]
+        matches = [(section, prepare_match(x), prepare_match(y))
+            for section, x, y in matches]
         with zipfile.ZipFile(data_in, 'r') as zin, \
                 zipfile.ZipFile(data_out, 'w') as zout:
             zout.comment = zin.comment  # Keep zip comment
             for item in zin.infolist():
-                if item.filename != 'content.xml':
+                if item.filename not in cls.replacable_sections():
                     zout.writestr(item, zin.read(item.filename))
                 else:
-                    data = zin.read('content.xml')
+                    data = zin.read(item.filename)
                     decoded = True
                     try:
                         data = data.decode('utf-8')
                     except UnicodeDecodeError:
                         decoded = False
-                    for search, replace in matches:
+                    for section, search, replace in matches:
+                        if section != item.filename:
+                            continue
                         data = data.replace(search, replace)
                     if decoded:
                         data = data.encode('utf-8')
@@ -174,15 +184,17 @@ class SelectTemplatesForConversion(model.CoogView):
                     continue
                 all_matches = Converter.find_in_file(StringIO(version.data),
                     self.search_for)
-                for match in set(all_matches):
-                    match = Displayer(to_update=bool(self.replace_with),
-                        model_name=template.on_model.name, name=template.name,
-                        language=version.language.name, match=match,
-                        new_value=match, template_id=version.id)
-                    if self.replace_with:
-                        match.new_value = match.match.replace(self.search_for,
-                            self.replace_with)
-                    new_matches.append(match)
+                for section, matches in all_matches.iteritems():
+                    for match in set(matches):
+                        match = Displayer(to_update=bool(self.replace_with),
+                            model_name=template.on_model.name,
+                            name=template.name, language=version.language.name,
+                            match=match, new_value=match,
+                            template_id=version.id, section=section)
+                        if self.replace_with:
+                            match.new_value = match.match.replace(
+                                self.search_for, self.replace_with)
+                        new_matches.append(match)
         self.matches = new_matches
         self.changes_calculated = True
 
@@ -204,6 +216,7 @@ class MatchDisplayer(model.CoogView):
     match = fields.Char('Match', readonly=True)
     new_value = fields.Char('New Value')
     template_id = fields.Integer('Template Id', readonly=True)
+    section = fields.Char('Section', readonly=True)
 
     @fields.depends('match', 'new_value')
     def on_change_with_to_update(self):
