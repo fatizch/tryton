@@ -8,6 +8,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="code"/>
     <label name="state"/>
     <field name="state"/>
+    <label name="sequence"/>
+    <field name="sequence"/>
     <separator name="description" colspan="4"/>
     <field name="description" colspan="4"/>
 </form>

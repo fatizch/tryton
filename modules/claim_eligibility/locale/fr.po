@@ -15,6 +15,9 @@ msgid ""
 "You can not schedule the indemnification %(indemnification)s because a "
 "scheduled period of %(missing_days)s day(s) should be ahead"
 msgstr ""
+"Vous ne pouvez pas ordonnancer l'indemnisation %(indemnification)s parce "
+"qu'une période précédente ordonnancée de %(missing_days)s jour(s) est "
+"manquante"
 
 msgctxt "error:claim.manual_rejection_eligibility:"
 msgid ""
@@ -93,7 +96,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:benefit-benefit.eligibility_decision,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit-benefit.eligibility_decision,write_date:"
@@ -116,6 +119,10 @@ msgctxt "field:benefit.eligibility.decision,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
 
+msgctxt "field:benefit.eligibility.decision,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
 msgctxt "field:benefit.eligibility.decision,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
@@ -133,8 +140,12 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.eligibility.decision,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
+
+msgctxt "field:benefit.eligibility.decision,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
 
 msgctxt "field:benefit.eligibility.decision,state:"
 msgid "State"
@@ -147,6 +158,10 @@ msgstr "Modifié le"
 msgctxt "field:benefit.eligibility.decision,write_uid:"
 msgid "Write User"
 msgstr "Modifié par"
+
+msgctxt "field:benefit.eligibility.decision,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit.eligibility.rule,benefit:"
 msgid "Benefit"
@@ -169,7 +184,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:benefit.eligibility.rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.eligibility.rule,rule:"

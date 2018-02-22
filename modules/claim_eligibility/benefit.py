@@ -125,11 +125,13 @@ class BenefitEligibilityDecision(model.CoogSQL, model.CoogView):
             ('refused', 'Refused'),
             ], 'State')
     state_string = state.translated('state')
+    sequence = fields.Integer('Sequence')
 
     @classmethod
     def __setup__(cls):
         super(BenefitEligibilityDecision, cls).__setup__()
         t = cls.__table__()
+        cls._order.insert(0, ('sequence', 'ASC'))
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!')]
 
