@@ -39,54 +39,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-        <record model="ir.model.access" id="access_process_log_contract_manage_group">
-            <field name="model" search="[('model', '=', 'process.log')]"/>
-            <field name="group" ref="contract.group_contract_manage"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
-        </record>
-        <record model="ir.model.access" id="access_process_status_contract_manage_group">
-            <field name="model" search="[('model', '=', 'process.status')]"/>
-            <field name="group" ref="contract.group_contract_manage"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="access_process_action_contract_manage_group">
-            <field name="model" search="[('model', '=', 'process.action')]"/>
-            <field name="group" ref="contract.group_contract_manage"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="access_process_contract_manage_group">
-            <field name="model" search="[('model', '=', 'process')]"/>
-            <field name="group" ref="contract.group_contract_manage"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="access_process_step_contract_manage_group">
-            <field name="model" search="[('model', '=', 'process.step')]"/>
-            <field name="group" ref="contract.group_contract_manage"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="access_process_transition_contract_manage_group">
-            <field name="model" search="[('model', '=', 'process.transition')]"/>
-            <field name="group" ref="contract.group_contract_manage"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
         <!-- Default Contract Insurance Access Rights -->
         <record model="ir.model.access" id="access_contract_covered_element">
             <field name="model" search="[('model', '=', 'contract.covered_element')]"/>
