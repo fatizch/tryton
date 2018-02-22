@@ -1,3 +1,4 @@
+* OTH#0000 Iteration on 8079. If service is eligibile set the eligibility status even if no default reason is set
 * FEA#8079 If no accepting eligibility reason or one accepting eligibility reason is defined, accepting a claim service does not require chosing a reason. Same goes when refusing a service if there is only one refusal reason defined
 * FEA#8076 UI enhancements on claim declaration process
 * FEA#7983 Eligibility decisions for delivered services now have their own configuration model instead of using extras datas

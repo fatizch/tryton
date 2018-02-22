@@ -1,3 +1,4 @@
+* OTH#0000 Iteration sur 8079. Si la prestation est éligible, définir le statut d'élgibilité à accepté même si aucune raison d'éligibilité par défaut n'est définie.
 * FEA#8079 Si aucune ou une seule raison d'acceptation est définie, l'acceptation d'un service ne nécessite pas de renseigner de raison. De la même manière, lorsqu'une seule raison de refus est définie, le refus d'un service ne nécessite pas de renseigner une raison de refus.
 * FEA#8076 Améliorations graphiques sur le processus de déclaration de sinistre
 * FEA#7983 Les décisions d'éligibilité pour les services délivrés ont leurs modèles de configuration plutôt que l'utilisation de données complémentaires
