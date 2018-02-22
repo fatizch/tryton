@@ -81,8 +81,7 @@ class ClaimIndemnification:
         claims = list(claims)
 
         where_clause = line.for_object.in_(
-            [str(x) for x in list(indemnifications) + claims]) & NotIn(
-            line.document_desc, [x.id for x in allowed_document_descs]) & (
+            [str(x) for x in list(indemnifications) + claims]) & (
             line.blocking == Literal(True)) & (
             line.reception_date == Null)
         if allowed_document_descs:
