@@ -22,9 +22,9 @@ Voici un tableau des processus par défaut disponible avec les modules requis as
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+
 | Nom du processus                                              | Module(s) requis                                                                                                                     |
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+
-| Processus standard de souscription de contract d'assurance    | contract_insurance_invoice, contract_process                                                                               |
+| Processus standard de souscription de contract d'assurance    | contract_insurance_invoice, contract_process                                                                                         |
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+
-| Processus de souscripteur assurance emprunteur                | contract_loan_invoice, contract_process                                                                                    |
+| Processus de souscripteur assurance emprunteur                | contract_loan_invoice, contract_process                                                                                              |
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+
 | Processus d'analyse médicale                                  | underwriting_process                                                                                                                 |
 +---------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------+

@@ -8,3 +8,4 @@ Gestion des sinistres
    forcer_validation_suite_decla_tardive_tuto
    underwriting_tuto
    parametrer_calcul_salaire_net_tuto
+   regularisation_tuto
