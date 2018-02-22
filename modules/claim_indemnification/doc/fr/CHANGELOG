@@ -1,3 +1,4 @@
+* OTH#0000 Iteration sur 7982. Initialiser le journal de paiment si possible sur une indemnisation
 * OTH#0000 Faire la migration de raison d'annulation uniquement pour les indemnisations annulées
 * FEA#8166 Ajout d'une raison de régularisation sur les indemnisations
 * FEA#8225 Permettre de régler la date de taxe sur la date d'indemnisation

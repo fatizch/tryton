@@ -494,8 +494,13 @@ class IndemnificationDefinition(model.CoogView):
                     x.id for x in benefit.payment_journals]
             else:
                 self.possible_journals = [x.id for x in Journal.search([])]
-            self.journal = self.possible_journals[0] \
-                if len(self.possible_journals) == 1 else None
+            if len(self.possible_journals) == 1:
+                self.journal = self.possible_journals[0]
+            else:
+                conf = Pool().get('claim.configuration').get_singleton()
+                self.journal = conf.payment_journal \
+                    if conf.payment_journal in self.possible_journals \
+                    else None
         self.update_product()
 
     @fields.depends('beneficiary', 'beneficiary_share', 'service',

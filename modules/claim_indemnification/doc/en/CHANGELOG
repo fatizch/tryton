@@ -1,3 +1,4 @@
+* OTH#0000 Iteration on 7982. Set default payment journal if possible on an indemnification
 * OTH#0000 Only do payback reason migration for cancelled indemnifications
 * FEA#8166 Add a payback reason on claim indemnifications
 * FEA#8225 Allow to set tax_date at indemnification start
