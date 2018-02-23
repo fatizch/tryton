@@ -29,6 +29,8 @@ class ContactMechanism(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(ContactMechanism, cls).__setup__()
+        cls.type_string = cls.type.translated('type')
+
         # TODO : Make it cleaner
         if ('skype', 'Skype') in cls.type.selection:
             cls.type.selection.remove(('skype', 'Skype'))
