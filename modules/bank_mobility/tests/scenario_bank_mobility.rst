@@ -5,11 +5,13 @@ Contract Start Date Endorsement Scenario
 Imports::
 
     >>> import sys
-    >>> from proteus import Model, Wizard
+    >>> from proteus import Model, Wizard, config
     >>> import datetime
     >>> from subprocess import check_output as qx
     >>> from subprocess import Popen as popen
-    >>> from trytond.modules.coog_core.test_framework import execute_test_case
+    >>> from trytond.tests.tools import activate_modules
+    >>> from trytond.modules.coog_core.test_framework import execute_test_case,\
+    ...     switch_user
     >>> from trytond.modules.currency.tests.tools import get_currency
     >>> from trytond.modules.country_cog.tests.tools import create_country
     >>> from trytond.modules.company.tests.tools import create_company, get_company
@@ -21,6 +23,10 @@ Imports::
     >>> from trytond.modules.premium.tests.tools import add_premium_rules
     >>> from trytond.modules.contract_insurance_invoice.tests.tools import \
     ...     add_invoice_configuration
+
+Install Modules::
+
+    >>> config = activate_modules('bank_mobility')
 
 Get Models::
 
@@ -58,6 +64,7 @@ Create Company::
 Reload the context::
 
     >>> execute_test_case('authorizations_test_case')
+    >>> config = switch_user('admin')
     >>> company = get_company()
 
 Create chart of accounts::
