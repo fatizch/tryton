@@ -33,17 +33,24 @@ class RuleEngineRuntime:
         return args['loss'].start_date
 
     @classmethod
+    @check_args('loss')
+    def _re_loss_end_date(cls, args):
+        return args['loss'].end_date
+
+    @classmethod
     @check_args('claim')
     def _re_first_loss_start_date(cls, args):
         if args['claim'].losses:
             return args['claim'].losses[0].start_date
 
     @classmethod
-    @check_args('claim')
+    @check_args('claim', 'loss')
     def _re_last_loss_end_date(cls, args):
         res = datetime.date.min
-        for loss in args['claim'].losses:
-            res = max(loss.end_date or datetime.date.min, res)
+        current_loss = args['loss']
+        for l in args['claim'].losses:
+            if current_loss.loss_desc == l.loss_desc and l != current_loss:
+                res = max(l.end_date or datetime.date.min, res)
         return res if res != datetime.date.min else None
 
     @classmethod
