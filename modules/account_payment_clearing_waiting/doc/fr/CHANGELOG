@@ -1,3 +1,5 @@
+* FEA#8410 Ne créer les mouvements d'attente que si le journal de paiement/relevé associé est paramétré pour.
+
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
 

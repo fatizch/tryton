@@ -18,6 +18,9 @@ class Move:
         Move = Pool().get('account.move')
         waiting_moves = []
         for move in moves:
+            if (not move.origin.journal.outstandings_journal or
+                    not move.origin.journal.outstandings_waiting_account):
+                continue
             default = move._cancel_default()
             default['origin'] = str(move.origin)
             default['journal'] = \
