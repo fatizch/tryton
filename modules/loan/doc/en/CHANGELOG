@@ -1,3 +1,4 @@
+* FEA#8338 Fill automatically the lender address if there is only one available address for the lender
 * BUG#7915 Modify the calculation of the insured outstanding loan balance by taking into account active and hold contracts
 
 Version 1.14 - 2017-11-09

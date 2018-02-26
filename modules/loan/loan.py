@@ -863,6 +863,12 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
         if self.lender_address:
             return self.lender_address.party.id
 
+    @fields.depends('lender')
+    def on_change_with_lender_address(self, name=None):
+        if self.lender and self.lender.addresses:
+            if len(self.lender.addresses) == 1:
+                return self.lender.addresses[0].id
+
     @fields.depends('lender_address', 'lender')
     def on_change_lender(self):
         if not self.lender or (self.lender_address and

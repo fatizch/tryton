@@ -1,3 +1,4 @@
+* FEA#8338 Initialisation de l'adresse de l'organisme prêteur si une seule adresse est disponible
 * BUG#7915 Modifier le calcul de l'encours assuré en prenant en compte les contrats actives et suspendus
 
 Version 1.14 - 2017-11-09
