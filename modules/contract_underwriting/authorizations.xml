@@ -129,6 +129,40 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="access_contract_contract_underwriting_group">
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_activation_history_contract_underwriting_group">
+            <field name="model" search="[('model', '=', 'contract.activation_history')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_contract_notification_group_contract_underwriting">
+            <field name="model" search="[('model', '=', 'contract.notification')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_report_production_request_group_contract_underwriting">
+            <field name="model" search="[('model', '=', 'report_production.request')]"/>
+            <field name="group" ref="group_contract_underwriting"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+    <data depends="process_cog">
         <record model="ir.model.access" id="access_process_log_contract_underwriting_group">
             <field name="model" search="[('model', '=', 'process.log')]"/>
             <field name="group" ref="group_contract_underwriting"/>
@@ -176,38 +210,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="access_contract_contract_underwriting_group">
-            <field name="model" search="[('model', '=', 'contract')]"/>
-            <field name="group" ref="group_contract_underwriting"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="access_contract_activation_history_contract_underwriting_group">
-            <field name="model" search="[('model', '=', 'contract.activation_history')]"/>
-            <field name="group" ref="group_contract_underwriting"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="access_contract_notification_group_contract_underwriting">
-            <field name="model" search="[('model', '=', 'contract.notification')]"/>
-            <field name="group" ref="group_contract_underwriting"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="access_report_production_request_group_contract_underwriting">
-            <field name="model" search="[('model', '=', 'report_production.request')]"/>
-            <field name="group" ref="group_contract_underwriting"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
         </record>
     </data>
 </tryton>
