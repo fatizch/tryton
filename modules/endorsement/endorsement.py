@@ -1728,18 +1728,21 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
         Endorsement = pool.get('endorsement')
         ContractEndorsement = pool.get('endorsement.contract')
         endorsements = []
+        effective_date = getattr(origin, 'effective_date', datetime.date.min)
         for contract in contracts:
-            date = max(getattr(origin, 'effective_date', datetime.date.min),
-                contract.start_date)
-            endorsement = Endorsement(definition=endorsement_definition,
-                effective_date=date)
-            endorsements.append(endorsement)
-            contract_endorsement = ContractEndorsement(
-                endorsement=endorsement, contract=contract)
-            endorsement.contract_endorsements = [contract_endorsement]
+            if (contract.is_active_at_date(effective_date) or
+                    contract.initial_start_date >= effective_date):
+                date = max(effective_date, contract.initial_start_date)
+                endorsement = Endorsement(definition=endorsement_definition,
+                    effective_date=date)
+                contract_endorsement = ContractEndorsement(
+                    endorsement=endorsement, contract=contract)
+                endorsement.contract_endorsements = [contract_endorsement]
+                endorsements.append(endorsement)
         for endorsement in endorsements:
             endorsement.generated_by = origin
-        cls.save(endorsements)
+        if endorsements:
+            cls.save(endorsements)
         return endorsements
 
     @classmethod

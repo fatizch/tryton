@@ -248,6 +248,7 @@ def get_cancelled():
     Endorsement.cancel([good_endorsement.id], config._context)
     return Contract(contract.id)
 
+
 start_plus_three = contract_start_date + relativedelta(months=3)
 contract = get_terminated(contract, start_plus_three)
 contract.start_date == contract_start_date
