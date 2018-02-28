@@ -1,3 +1,5 @@
+* BUG#8369 Correction de la surcharge de la méthode clone_last_indemnifications
+
 Version 1.14 - 2017-11-09
 # BUG#6357: Appliquer la réduction suite à l'analyse médicale sur le montant de base
 

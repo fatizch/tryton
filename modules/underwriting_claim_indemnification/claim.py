@@ -111,12 +111,14 @@ class Service:
             if decision.decision == 'block_indemnification':
                 return elem
 
-    def clone_last_indemnification(self, start, end):
-        indemnification = super(Service, self).clone_last_indemnification(
-            start, end)
-        indemnification.apply_underwriting_reduction = self.indemnifications[
-            -1].apply_underwriting_reduction
-        return indemnification
+    def clone_last_indemnifications(self, start, end):
+        res = []
+        for indemnification in super(Service, self).clone_last_indemnifications(
+                start, end):
+            indemnification.apply_underwriting_reduction = \
+                self.indemnifications[-1].apply_underwriting_reduction
+            res.append(indemnification)
+        return res
 
 
 class Indemnification:
