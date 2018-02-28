@@ -54,10 +54,6 @@ msgctxt "field:claim,delivered_services:"
 msgid "Claim Services"
 msgstr "Prestations Fournies"
 
-msgctxt "field:claim,doc_received:"
-msgid "All Documents Received"
-msgstr "Documents Reçus"
-
 msgctxt "field:claim,logs:"
 msgid "Task"
 msgstr "Tâche"
@@ -171,7 +167,7 @@ msgid "Process"
 msgstr "Traiter"
 
 msgctxt "field:process-benefit.loss.description,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:process-benefit.loss.description,write_date:"
@@ -220,7 +216,11 @@ msgstr "Nouvelle déclaration de sinistre"
 
 msgctxt "selection:process,kind:"
 msgid "Claim Declaration"
-msgstr "Claim Declaration"
+msgstr "Déclaration de sinistre"
+
+msgctxt "selection:process,kind:"
+msgid "Claim Declaration and Reopening"
+msgstr "Déclaration et réouverture de sinistre"
 
 msgctxt "selection:process,kind:"
 msgid "Claim Reopening"

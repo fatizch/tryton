@@ -136,6 +136,8 @@ class Process:
     def __setup__(cls):
         super(Process, cls).__setup__()
         cls.kind.selection.append(('claim_declaration', 'Claim Declaration'))
+        cls.kind.selection.append(('claim_declaration_and_reopening',
+            'Claim Declaration and Reopening'))
         cls.kind.selection.append(('claim_reopening', 'Claim Reopening'))
         cls.kind.selection[:] = list(set(cls.kind.selection))
 
@@ -210,7 +212,9 @@ class ClaimDeclareFindProcess(ProcessStart):
                 []),
             If(Eval('claim_current_process', 0) != 0,
                 [('id', '=', Eval('claim_current_process'))],
-                [('kind', '=', Eval('claim_process_type'))])]
+                ['OR', [('kind', '=', 'claim_declaration_and_reopening')],
+                    [('kind', '=', Eval('claim_process_type'))],
+                ])]
         return res
 
     @fields.depends('party', 'claims')
