@@ -1691,3 +1691,7 @@ class ClaimSubStatus:
     @classmethod
     def default_block_indemnifications(cls):
         return False
+
+    @classmethod
+    def default_active(cls):
+        return True

@@ -112,7 +112,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window.domain" id="act_indemnification_payback_reason_domain_inactive">
             <field name="name">Inactive</field>
             <field name="sequence" eval="20"/>
-            <field name="domain" eval="[('active', '=', False)]" pyson="1"/>
+            <field name="domain" eval="[('active', '!=', True)]" pyson="1"/>
             <field name="act_window" ref="act_indemnification_payback_reason_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_indemnification_payback_reason_view_list">
