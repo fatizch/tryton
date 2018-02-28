@@ -54,6 +54,7 @@ def register():
         batch.CreateClaimIndemnificationBatch,
         move.MoveLine,
         payment.Payment,
+        claim.ClaimSubStatus,
         module='claim_indemnification', type_='model')
     Pool.register(
         wizard.FillExtraData,

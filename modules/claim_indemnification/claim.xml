@@ -136,5 +136,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Erreur</field>
             <field name="active">True</field>
         </record>
+        <!--################# -->
+        <!-- Claim Sub Status -->
+        <!--################# -->
+        <record model="ir.ui.view" id="claim_sub_status_view_form">
+            <field name="model">claim.sub_status</field>
+            <field name="inherit" ref="claim.sub_status_view_form"/>
+            <field name="name">claim_sub_status_form</field>
+        </record>
+        <record model="ir.ui.view" id="claim_sub_status_view_list">
+            <field name="model">claim.sub_status</field>
+            <field name="inherit" ref="claim.sub_status_view_list"/>
+            <field name="name">claim_sub_status_list</field>
+        </record>
     </data>
 </tryton>

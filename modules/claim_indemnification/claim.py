@@ -39,6 +39,7 @@ __all__ = [
     'IndemnificationDetail',
     'IndemnificationControlRule',
     'IndemnificationPaybackReason',
+    'ClaimSubStatus',
     ]
 
 
@@ -766,6 +767,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'different indemnifications between %(period_start)s and '
                 '%(period_end)s so that no tax changes happen during a '
                 'given indemnification.',
+                'scheduling_blocked': 'Scheduling is blocked for '
+                'indemnification %(indemnification)s, claim\'s '
+                'sub status is %(sub_status)s',
                 })
         cls._order = [('start_date', 'ASC')]
 
@@ -1070,6 +1074,12 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             for i in cancel_indemnifications]
         to_schedule = []
         for indemnification in indemnifications:
+            if (indemnification.service.claim.sub_status and indemnification.
+                    service.claim.sub_status.block_indemnifications):
+                cls.append_functional_error('scheduling_blocked',
+                    {'indemnification': indemnification.rec_name,
+                        'sub_status': indemnification.service.claim.
+                            sub_status.name})
             if ('cancel' not in indemnification.status and
                     indemnification.service in service_to_not_schedule):
                 # Cancel indemnification must be schedule first
@@ -1666,3 +1676,18 @@ class IndemnificationPaybackReason(model.CoogSQL, model.CoogView,
         if self.code:
             return self.code
         return coog_string.slugify(self.name)
+
+
+class ClaimSubStatus:
+    __metaclass__ = PoolMeta
+    __name__ = 'claim.sub_status'
+
+    block_indemnifications = fields.Boolean('Block Indemnifications Scheduling',
+     states={'invisible': Eval('status') != 'open',
+            'readonly': Eval('status') != 'open'}, depends=['status'],
+        help='If true, all claim\'s indemnifications scheduling will be '
+        'blocked',)
+
+    @classmethod
+    def default_block_indemnifications(cls):
+        return False

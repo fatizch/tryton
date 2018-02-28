@@ -1,3 +1,4 @@
+* FEA#8159 Ajout du champ de configuration "Bloque l'ordonnancement des indemnisations" sur les sous statuts de sinistres permettant de bloquer l'ordonnancement des indemnisations sur les sinistres ouverts
 * OTH#0000 Iteration sur 7982. Initialiser le journal de paiment si possible sur une indemnisation
 * OTH#0000 Faire la migration de raison d'annulation uniquement pour les indemnisations annulées
 * FEA#8166 Ajout d'une raison de régularisation sur les indemnisations
