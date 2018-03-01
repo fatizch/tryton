@@ -114,8 +114,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-        <record model="ir.model.access" id="access_underwriting_decision_type_claim_underwriting_group">
+        <record model="ir.model.access" id="access_underwriting_decision_type_group_product_manage">
             <field name="model" search="[('model', '=', 'underwriting.decision.type')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_underwriting_document_rule_group_product_manage">
+            <field name="model" search="[('model', '=', 'underwriting.document_rule')]"/>
             <field name="group" ref="offered.group_product_manage"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>

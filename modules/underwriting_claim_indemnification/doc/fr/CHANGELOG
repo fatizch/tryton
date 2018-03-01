@@ -1,7 +1,8 @@
+* FEA#8158: Découpage automatique d'une période si elle est bloquée par une décision d'analyse de risque
 * BUG#8369 Correction de la surcharge de la méthode clone_last_indemnifications
 
 Version 1.14 - 2017-11-09
-# BUG#6357: Appliquer la réduction suite à l'analyse médicale sur le montant de base
+* BUG#6357: Appliquer la réduction suite à l'analyse médicale sur le montant de base
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Accès aux décisions applicables lors du calcul des indemnisations dans le moteur de règles

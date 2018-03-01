@@ -5,6 +5,7 @@
     >>> from decimal import Decimal
     >>> from proteus import Model, Wizard
     >>> from trytond.tests.tools import activate_modules
+    >>> from dateutil.relativedelta import relativedelta
     >>> from trytond.modules.contract.tests.tools import add_quote_number_generator
     >>> from trytond.modules.currency.tests.tools import get_currency
     >>> from trytond.modules.country_cog.tests.tools import create_country
@@ -17,7 +18,7 @@
     ...     set_fiscalyear_invoice_sequences)
     >>> from trytond.modules.coog_core.test_framework import execute_test_case, \
     ...     switch_user
-    >>> config = activate_modules('claim_indemnification')
+    >>> config = activate_modules('underwriting_claim_indemnification')
     >>> _ = create_country()
     >>> currency = get_currency(code='EUR')
     >>> _ = create_company(currency=currency)
@@ -160,6 +161,7 @@ Create Claim Configuration::
     >>> benefit.loss_descs.append(LossDesc(loss_desc.id))
     >>> benefit.benefit_rules.append(benefit_rule)
     >>> benefit.insurer = Insurer(insurer.id)
+    >>> benefit.automatically_deliver = True
     >>> benefit.save()
     >>> product.coverages[0].benefits.append(benefit)
     >>> product.save()
@@ -168,6 +170,60 @@ Create Claim Configuration::
     >>> payback_reason.code = 'payback_reason'
     >>> payback_reason.name = 'Payback Reason'
     >>> payback_reason.save()
+    >>> UnderwritingDecisionType = Model.get('underwriting.decision.type')
+    >>> block_decision = UnderwritingDecisionType()
+    >>> block_decision.name = 'block it'
+    >>> block_decision.code = 'block it'
+    >>> block_decision.decision = 'block_indemnification'
+    >>> block_decision.model = 'claim.service'
+    >>> block_decision.save()
+    >>> UnderwritingDecisionType = Model.get('underwriting.decision.type')
+    >>> reduce_decision = UnderwritingDecisionType()
+    >>> reduce_decision.name = 'reduce it'
+    >>> reduce_decision.code = 'reduce it'
+    >>> reduce_decision.decision = 'reduce_indemnification'
+    >>> reduce_decision.model = 'claim.service'
+    >>> reduce_decision.save()
+    >>> UnderwritingDecisionType = Model.get('underwriting.decision.type')
+    >>> nothing_decision = UnderwritingDecisionType()
+    >>> nothing_decision.name = 'nothing'
+    >>> nothing_decision.code = 'nothing'
+    >>> nothing_decision.decision = 'nothing'
+    >>> nothing_decision.model = 'claim.service'
+    >>> nothing_decision.save()
+    >>> UnderwritingType = Model.get('underwriting.type')
+    >>> test_underwriting_control = UnderwritingType(
+    ...     name='test_underwriting control',
+    ...     code='test_underwriting control',
+    ...     )
+    >>> test_underwriting_control.decisions.append(block_decision)
+    >>> test_underwriting_control.decisions.append(reduce_decision)
+    >>> test_underwriting_control.decisions.append(nothing_decision)
+    >>> test_underwriting_control.provisional_decision = UnderwritingDecisionType(
+    ...     block_decision.id)
+    >>> test_underwriting_control.final_decision = UnderwritingDecisionType(
+    ...     reduce_decision.id)
+    >>> test_underwriting_control.save()
+    >>> assert test_underwriting_control.provisional_decision.id == block_decision.id
+    >>> assert test_underwriting_control.final_decision.id == reduce_decision.id
+    >>> Rule = Model.get('rule_engine')
+    >>> RuleContext = Model.get('rule_engine.context')
+    >>> test_underwriting_rule = Rule()
+    >>> test_underwriting_rule.name = 'test_underwriting Rule'
+    >>> test_underwriting_rule.short_name = 'test_underwriting_rule'
+    >>> test_underwriting_rule.algorithm = '\n'.join([
+    ...     "date = date_de_debut_du_prejudice()",
+    ...     "date = ajouter_jours(date, 46)",
+    ...     "return 'test_underwriting control', date"])
+    >>> test_underwriting_rule.status = 'validated'
+    >>> test_underwriting_rule.type_ = 'underwriting_type'
+    >>> test_underwriting_rule.context, = RuleContext.find(
+    ...     [('name', '=', 'Context par défaut')])
+    >>> test_underwriting_rule.save()
+    >>> Benefit = Model.get('benefit')
+    >>> benefit = Benefit(benefit.id)
+    >>> benefit.underwriting_rule = test_underwriting_rule
+    >>> benefit.save()
     >>> config = switch_user('contract_user')
     >>> company = get_company()
     >>> accounts = get_accounts(company)
@@ -193,6 +249,9 @@ Create Claim Configuration::
     >>> contract.contract_number = '123456789'
     >>> contract.save()
     >>> Wizard('contract.activate', models=[contract]).execute('apply')
+
+Case 1 : the final decision is to reduce : we reject::
+
     >>> config = switch_user('claim_user')
     >>> company = get_company()
     >>> Claim = Model.get('claim')
@@ -209,8 +268,8 @@ Create Claim Configuration::
     >>> event_desc = EventDesc(event_desc.id)
     >>> loss_desc = LossDesc(loss_desc.id)
     >>> loss = claim.losses.new()
-    >>> loss.start_date = datetime.date(2016, 1, 1)
-    >>> loss.end_date = datetime.date(2017, 1, 1)
+    >>> loss.start_date = datetime.date(2016, 1, 01)
+    >>> loss.end_date = datetime.date(2017, 1, 01)
     >>> loss.loss_desc = loss_desc
     >>> loss.event_desc = event_desc
     >>> loss.save()
@@ -222,19 +281,8 @@ Create Claim Configuration::
     >>> Party = Model.get('party.party')
     >>> subscriber = Party(subscriber.id)
     >>> benefit = Benefit(benefit.id)
-    >>> Contract = Model.get('contract')
-    >>> service = ClaimService()
-    >>> service.contract = Contract(contract.id)
-    >>> service.option = Contract(contract.id).options[0]
-    >>> service.benefit = benefit
-    >>> service.loss = claim.losses[0]
-    >>> service.get_covered_person = subscriber
-    >>> service.save()
-    >>> ExtraData = Model.get('claim.service.extra_data')
-    >>> data = ExtraData()
-    >>> data.claim_service = service
-    >>> data.extra_data_values = {}
-    >>> data.save()
+    >>> Claim.ws_deliver_automatic_benefit([claim.id], config.context)
+    >>> service = Claim(claim.id).delivered_services[0]
     >>> Action = Model.get('ir.action')
     >>> action, = Action.find(['name', '=', 'Indemnification Validation Wizard'])
     >>> validate_action = Action.read([action.id], config.context)[0]
@@ -247,40 +295,15 @@ Create indemnifications::
     >>> Party = Model.get('party.party')
     >>> service = ClaimService(service.id)
     >>> subscriber = Party(subscriber.id)
+    >>> start = datetime.date(2016, 1, 1)
+    >>> end = datetime.date(2016, 8, 1)
     >>> create = Wizard('claim.create_indemnification', models=[service])
-    >>> create.form.start_date = datetime.date(2016, 1, 1)
-    >>> create.form.indemnification_date = datetime.date(2016, 1, 1)
-    >>> create.form.end_date = datetime.date(2016, 8, 1)
+    >>> create.form.start_date = start
+    >>> create.form.indemnification_date = start
+    >>> create.form.end_date = end
     >>> create.form.extra_data = {}
     >>> create.form.service = service
     >>> create.form.beneficiary = subscriber
-    >>> create.execute('calculate')
-    >>> indemnifications = service.indemnifications
-    >>> len(indemnifications) == 1
-    True
-    >>> indemnifications[0].amount == 8988
-    True
-    >>> indemnifications[0].journal == journal
-    True
-    >>> indemnifications[0].click('schedule')
-    >>> indemnifications[0].status == 'scheduled'
-    True
-    >>> controller = Wizard('claim.indemnification.assistant',
-    ...     models=indemnifications,
-    ...     action=control_action)
-
- Manually set wizard mode for apply_filters::
-
-    >>> controller.form.mode = 'control'
-    >>> controller.form.order_sort = 'ASC'
-    >>> controller.form.control[0].action = 'validate'
-    >>> controller.execute('control_state')
-    >>> indemnifications[0].status == 'controlled'
-    True
-    >>> validator = Wizard('claim.indemnification.assistant',
-    ...     models=indemnifications, action=validate_action)
-    >>> validator.form.validate[0].action = 'validate'
-    >>> validator.execute('validation_state')
 
 Create warning to simulate clicking yes::
 
@@ -290,64 +313,177 @@ Create warning to simulate clicking yes::
     >>> warning = Warning()
     >>> warning.always = False
     >>> warning.user = user
-    >>> warning.name = 'overlap_date'
+    >>> warning.name = 'must_activate_underwritings_%s' % str(claim.id)
     >>> warning.save()
-
-Generate Regularisation::
-
-    >>> create = Wizard('claim.create_indemnification', models=[service])
-    >>> create.form.start_date = datetime.date(2016, 1, 1)
-    >>> create.form.indemnification_date = datetime.date(2016, 1, 1)
-    >>> create.form.end_date = datetime.date(2016, 6, 1)
-    >>> create.form.extra_data = {}
-    >>> create.form.service = service
-    >>> create.form.beneficiary = subscriber
+    >>> User = Model.get('res.user')
+    >>> user, = User.find(['login', '=', 'claim_user'])
+    >>> Warning = Model.get('res.user.warning')
     >>> warning = Warning()
     >>> warning.always = False
     >>> warning.user = user
-    >>> warning.name = 'multiple_capital_indemnifications_[1]'
+    >>> warning.name = 'blocked_indemnification_split_warning_%s' % str(service.id)
     >>> warning.save()
     >>> create.execute('calculate')
-    >>> create.execute('regularisation')
-    >>> create.form.payback_method = 'planned'
-    >>> PaybackReason = Model.get('claim.indemnification.payback_reason')
-    >>> create.form.payback_reason = PaybackReason(payback_reason.id)
-    >>> create.execute('apply_regularisation')
-    >>> indemnifications = service.indemnifications
+    >>> indemnifications = sorted(service.indemnifications, key=lambda x: x.start_date)
     >>> len(indemnifications) == 2
     True
-
-Schedule the indemnification::
-
-    >>> indemnifications[1].click('schedule')
+    >>> assert indemnifications[0].start_date == start
+    >>> assert indemnifications[0].end_date == start + relativedelta(days=45)
+    >>> assert indemnifications[1].start_date == start + relativedelta(days=46)
+    >>> assert indemnifications[1].end_date == end
+    >>> indemnifications[0].journal == journal
+    True
     >>> indemnifications[0].click('schedule')
     >>> indemnifications[0].status == 'scheduled'
     True
-    >>> indemnifications[1].status == 'cancel_scheduled'
+    >>> indemnifications[1].click('schedule')  # doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+        ...
+    UserError: ...
+    >>> assert 'block it' in indemnifications[1].rec_name
+    >>> Underwriting = Model.get('underwriting')
+    >>> processing_underwriting = Underwriting.find([])[0]
+    >>> assert processing_underwriting.state == 'processing'
+    >>> result, = processing_underwriting.results
+    >>> UnderwritingDecisionType = Model.get('underwriting.decision.type')
+    >>> result.final_decision = UnderwritingDecisionType(reduce_decision.id)
+    >>> values, = result.click('finalize')
+    >>> for k, val in values.iteritems():
+    ...     setattr(result, k, val)
+
+Create warning to simulate clicking yes::
+
+    >>> User = Model.get('res.user')
+    >>> user, = User.find(['login', '=', 'claim_user'])
+    >>> Warning = Model.get('res.user.warning')
+    >>> warning = Warning()
+    >>> warning.always = False
+    >>> warning.user = user
+    >>> warning.name = 'will_reject_%s' % str(indemnifications[1].id)
+    >>> warning.save()
+    >>> result.save()
+    >>> assert result.state == 'finalized', result.state
+    >>> Indemnification = Model.get('claim.indemnification')
+    >>> indemnification = Indemnification(indemnifications[1].id)
+    >>> assert indemnification.status == 'rejected', indemnification.status
+    >>> processing_underwriting = Underwriting.find([])[0]
+    >>> processing_underwriting.click('complete')
+
+Case 2 : the final decision is to do nothing special:: we schedule::
+
+    >>> config = switch_user('claim_user')
+    >>> company = get_company()
+    >>> Claim = Model.get('claim')
+    >>> Contract = Model.get('contract')
+    >>> Party = Model.get('party.party')
+    >>> claim = Claim()
+    >>> claim.company = company
+    >>> claim.declaration_date = datetime.date.today()
+    >>> claim.claimant = Party(subscriber.id)
+    >>> claim.main_contract = Contract(contract.id)
+    >>> claim.save()
+    >>> EventDesc = Model.get('benefit.event.description')
+    >>> LossDesc = Model.get('benefit.loss.description')
+    >>> event_desc = EventDesc(event_desc.id)
+    >>> loss_desc = LossDesc(loss_desc.id)
+    >>> loss = claim.losses.new()
+    >>> loss.start_date = datetime.date(2016, 1, 01)
+    >>> loss.end_date = datetime.date(2017, 1, 01)
+    >>> loss.loss_desc = loss_desc
+    >>> loss.event_desc = event_desc
+    >>> loss.save()
+    >>> loss.click('activate')
+    >>> len(claim.losses) == 1
     True
-    >>> controller = Wizard('claim.indemnification.assistant',
-    ...     models=indemnifications, action=control_action)
-    >>> controller.form.mode = 'control'
-    >>> controller.form.order_sort = 'ASC'
-    >>> controller.form.control[0].action = 'validate'
-    >>> controller.form.control[1].action = 'validate'
-    >>> controller.execute('control_state')
-    >>> indemnifications[1].status == 'cancel_controlled'
+    >>> ClaimService = Model.get('claim.service')
+    >>> Benefit = Model.get('benefit')
+    >>> Party = Model.get('party.party')
+    >>> subscriber = Party(subscriber.id)
+    >>> benefit = Benefit(benefit.id)
+    >>> Claim.ws_deliver_automatic_benefit([claim.id], config.context)
+    >>> service = Claim(claim.id).delivered_services[0]
+    >>> Action = Model.get('ir.action')
+    >>> action, = Action.find(['name', '=', 'Indemnification Validation Wizard'])
+    >>> validate_action = Action.read([action.id], config.context)[0]
+    >>> action, = Action.find(['name', '=', 'Indemnification Control Wizard'])
+    >>> control_action = Action.read([action.id], config.context)[0]
+
+Create indemnifications::
+
+    >>> ClaimService = Model.get('claim.service')
+    >>> Party = Model.get('party.party')
+    >>> service = ClaimService(service.id)
+    >>> subscriber = Party(subscriber.id)
+    >>> start = datetime.date(2016, 1, 1)
+    >>> end = datetime.date(2016, 8, 1)
+    >>> create = Wizard('claim.create_indemnification', models=[service])
+    >>> create.form.start_date = start
+    >>> create.form.indemnification_date = start
+    >>> create.form.end_date = end
+    >>> create.form.extra_data = {}
+    >>> create.form.service = service
+    >>> create.form.beneficiary = subscriber
+
+Create warning to simulate clicking yes::
+
+    >>> User = Model.get('res.user')
+    >>> user, = User.find(['login', '=', 'claim_user'])
+    >>> Warning = Model.get('res.user.warning')
+    >>> warning = Warning()
+    >>> warning.always = False
+    >>> warning.user = user
+    >>> warning.name = 'must_activate_underwritings_%s' % str(claim.id)
+    >>> warning.save()
+    >>> User = Model.get('res.user')
+    >>> user, = User.find(['login', '=', 'claim_user'])
+    >>> Warning = Model.get('res.user.warning')
+    >>> warning = Warning()
+    >>> warning.always = False
+    >>> warning.user = user
+    >>> warning.name = 'blocked_indemnification_split_warning_%s' % str(service.id)
+    >>> warning.save()
+    >>> create.execute('calculate')
+    >>> indemnifications = sorted(service.indemnifications, key=lambda x: x.start_date)
+    >>> len(indemnifications) == 2
     True
-    >>> indemnifications[0].control_reason == control_reason
+    >>> assert indemnifications[0].start_date == start
+    >>> assert indemnifications[0].end_date == start + relativedelta(days=45)
+    >>> assert indemnifications[1].start_date == start + relativedelta(days=46)
+    >>> assert indemnifications[1].end_date == end
+    >>> indemnifications[0].journal == journal
     True
-    >>> indemnifications[0].status == 'controlled'
+    >>> indemnifications[0].click('schedule')
+    >>> indemnifications[0].status == 'scheduled'
     True
-    >>> validator = Wizard('claim.indemnification.assistant',
-    ...     models=indemnifications, action=validate_action)
-    >>> len(validator.form.validate) == 2
-    True
-    >>> validator.form.validate[0].action = 'validate'
-    >>> validator.form.validate[1].action = 'validate'
-    >>> validator.execute('validation_state')
-    >>> indemnifications[1].status == 'cancel_paid'
-    True
-    >>> indemnifications[0].status == 'paid'
-    True
-    >>> claim.invoices[0].total_amount < 0
-    True
+    >>> indemnifications[1].click('schedule')  # doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+        ...
+    UserError: ...
+    >>> assert 'block it' in indemnifications[1].rec_name
+    >>> Underwriting = Model.get('underwriting')
+    >>> processing_underwriting = Underwriting.find([])[1]
+    >>> assert processing_underwriting.state == 'processing'
+    >>> result, = processing_underwriting.results
+    >>> UnderwritingDecisionType = Model.get('underwriting.decision.type')
+    >>> result.final_decision = UnderwritingDecisionType(nothing_decision.id)
+    >>> values, = result.click('finalize')
+    >>> for k, val in values.iteritems():
+    ...     setattr(result, k, val)
+
+Create warning to simulate clicking yes::
+
+    >>> User = Model.get('res.user')
+    >>> user, = User.find(['login', '=', 'claim_user'])
+    >>> Warning = Model.get('res.user.warning')
+    >>> warning = Warning()
+    >>> warning.always = False
+    >>> warning.user = user
+    >>> warning.name = 'will_schedule_%s' % str(indemnifications[1].id)
+    >>> warning.save()
+    >>> result.save()
+    >>> assert result.state == 'finalized', result.state
+    >>> Indemnification = Model.get('claim.indemnification')
+    >>> indemnification = Indemnification(indemnifications[1].id)
+    >>> assert indemnification.status == 'scheduled', indemnification.status
+    >>> processing_underwriting = Underwriting.find([])[0]
+    >>> processing_underwriting.click('complete')

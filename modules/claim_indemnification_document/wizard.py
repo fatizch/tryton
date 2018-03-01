@@ -31,9 +31,9 @@ class CreateIndemnification:
         Indemnification = Pool().get('claim.indemnification')
         defaults = super(CreateIndemnification, self).default_result(name)
         if defaults['indemnification']:
-            indemnification = Indemnification(defaults['indemnification'][0])
             defaults['requested_documents'] = [r.id
-                for r in indemnification.document_request_lines]
+                for x in Indemnification.browse(defaults['indemnification'])
+                for r in x.document_request_lines]
         return defaults
 
     def transition_regularisation(self):

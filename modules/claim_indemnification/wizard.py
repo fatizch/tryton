@@ -2,6 +2,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 
+import datetime
 from dateutil.relativedelta import relativedelta
 
 from trytond.pool import Pool
@@ -537,6 +538,9 @@ class IndemnificationDefinition(model.CoogView):
     def get_extra_data_values(self):
         return self.extra_data
 
+    def period_definitions_dates(self):
+        return []
+
 
 class IndemnificationCalculationResult(model.CoogView):
     'Indemnification Calculation Result'
@@ -862,23 +866,37 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
             service.loss.start_date, values)
         service.save()
 
+    def split_period(self, start, end, split_dates=None):
+        if not split_dates:
+            split_dates = []
+        split_dates = [start] + sorted(
+            {x for x in split_dates if start < x < (end or datetime.date.max)}
+            ) + [end]
+        return ((x, end if y == end else
+                (y - relativedelta(days=1) if y else None))
+            for x, y in zip(split_dates, split_dates[1:]))
+
+    @property
+    def indemnification_definitions(self):
+        start = self.definition.start_date if self.definition.is_period else \
+            self.definition.indemnification_date
+        return [{'start': x[0], 'end': x[1]} for x in self.split_period(start,
+                self.definition.end_date,
+                split_dates=self.definition.period_definitions_dates())]
+
     def init_indemnifications(self):
         Indemnification = Pool().get('claim.indemnification')
         indemnifications = getattr(self.result, 'indemnification', None)
         if not indemnifications:
             indemnifications = [
-                Indemnification(service=self.definition.service)]
+                Indemnification(service=self.definition.service,
+                    start_date=x['start'], end_date=x['end'])
+                for x in self.indemnification_definitions]
         for indemnification in indemnifications:
             self.update_indemnification(indemnification)
         return indemnifications
 
     def update_indemnification(self, indemnification):
-        if self.definition.is_period:
-            input_start_date = self.definition.start_date
-        else:
-            input_start_date = self.definition.indemnification_date
-        indemnification.start_date = input_start_date
-        indemnification.end_date = self.definition.end_date
         indemnification.journal = self.definition.journal
         indemnification.amount = 0
         indemnification.total_amount = 0

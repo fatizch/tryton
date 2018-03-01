@@ -72,8 +72,8 @@ class EventTypeAction:
         if event_obj_name != process_model_name:
             if self.filter_on_event_object:
                 objects = super(EventTypeAction, self).filter_objects(objects)
-            process_objects = self.get_objects_for_process(objects,
-                process_model_name)
+            process_objects = list(set(self.get_objects_for_process(objects,
+                process_model_name)))
             if self.filter_on_event_object:
                 return process_objects
         else:

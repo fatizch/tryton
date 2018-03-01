@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import model, fields, coog_string, coog_date
+from trytond.modules.coog_core import model, fields, coog_string
 
 __all__ = [
     'BenefitRule',
@@ -72,8 +72,11 @@ class Service:
         super(Service, cls).__setup__()
         cls._error_messages.update({
                 'blocked_indemnifications': 'An underwriting decision '
-                'blocked indemnifications for this service starting '
-                '%(decision_date)s',
+                'blocks indemnifications for this service starting '
+                '%(decision_date)s.',
+                'blocked_indemnifications_split': 'An underwriting decision '
+                'blocks indemnifications for this service starting '
+                '%(decision_date)s. The period you entered will be split.',
                 })
 
     def underwritings_at_date(self, start, end):
@@ -135,6 +138,14 @@ class Indemnification:
             indemnification.service.check_underwritings(
                 indemnification.start_date, indemnification.end_date)
 
+    def _get_detailed_status(self):
+        status = super(Indemnification, self)._get_detailed_status()
+        blocking = self.service.get_underwriting_blocking_decision(
+            self.start_date, self.end_date)
+        if not blocking:
+            return status
+        return status + ' - ' + blocking.rec_name
+
 
 class IndemnificationDefinition:
     __metaclass__ = PoolMeta
@@ -164,6 +175,15 @@ class IndemnificationDefinition:
                     self.underwriting_reduction = True
                     self.accept_underwriting_reduction = True
 
+    def period_definitions_dates(self):
+        dates = super(IndemnificationDefinition,
+            self).period_definitions_dates()
+        blocking = self.service.get_underwriting_blocking_decision(
+            self.start_date, self.end_date)
+        if not blocking:
+            return dates
+        return dates + [blocking.effective_decision_date]
+
 
 class CreateIndemnification(model.FunctionalErrorMixIn):
     __metaclass__ = PoolMeta
@@ -183,14 +203,11 @@ class CreateIndemnification(model.FunctionalErrorMixIn):
                     input_start_date, input_end_date)
         # Exit the manager to raise other errors
         if to_warn:
-            service.raise_user_warning('blocked_indemnification_warning_%s' %
-                str(service.id), 'blocked_indemnifications', (
+            service.raise_user_warning(
+                'blocked_indemnification_split_warning_%s' %
+                str(service.id), 'blocked_indemnifications_split', (
                     {'decision_date': coog_string.translate_value(to_warn,
                             'effective_decision_date')}))
-            if self.definition.start_date < to_warn.effective_decision_date:
-                self.definition.end_date = coog_date.add_day(
-                    to_warn.effective_decision_date, -1)
-                return self.check_input()
         return result
 
     def update_indemnification(self, indemnification):

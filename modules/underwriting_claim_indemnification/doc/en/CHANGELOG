@@ -1,7 +1,8 @@
+* FEA#8158: Automatically split a period if it is blocked by an underwriting decision
 * BUG#8369 Properly overload clone_last_indemnifications function
 
 Version 1.14 - 2017-11-09
-# BUG#6357: Apply underwriting reduction on base_amount
+* BUG#6357: Apply underwriting reduction on base_amount
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Give access to indemnification decisions in the Rule Engine

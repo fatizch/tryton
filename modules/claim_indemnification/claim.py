@@ -1044,12 +1044,16 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             coog_string.translate_value(self, 'end_date')
             if self.end_date else '',
             self.get_currency().amount_as_string(self.amount),
-            coog_string.translate_value(self, 'status') if self.status else '',
+            self._get_detailed_status(),
             self.payback_reason.name if self.payback_reason else '',
             coog_string.translate_value(payment_line,
                 'invoice_line_reconciliation_date') if payment_line
                 and payment_line.invoice_line_reconciliation_date else '',
             )
+
+    def _get_detailed_status(self):
+        return coog_string.translate_value(self, 'status') \
+            if self.status else ''
 
     def is_pending(self):
         return self.amount > 0 and self.status not in ['paid', 'rejected']
@@ -1634,7 +1638,7 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
 
     def get_status_string(self, name):
         return '%s - [%s] %s' % (
-            self.kind_string, self.indemnification.status_string,
+            self.kind_string, self.indemnification._get_detailed_status(),
             self.indemnification.payback_reason.name
             if self.indemnification.payback_reason else '')
 
