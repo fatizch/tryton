@@ -1,5 +1,4 @@
 * BUG#7925 Correctif du calcul des dates de paiement sur les lignes taxes
-* BUG#7680 Vérifier que l'objet origin sur la ligne à payer est non nul dans la méthode 'transition_check'
 * FEA#7725 La séquence de mandat SEPA peut être configurée par produit
 * FEA#7662 Le mandat SEPA est désormais un champ calculé sur les quittances et sur les lignes à payer
 

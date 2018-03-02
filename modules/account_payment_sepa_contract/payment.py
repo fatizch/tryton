@@ -3,12 +3,9 @@
 from itertools import groupby
 
 from trytond.pool import PoolMeta, Pool
-from trytond.wizard import StateTransition, StateView, Button
 from trytond.transaction import Transaction
 
-from trytond.pyson import Eval
-
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields
 from trytond.modules.account_payment_sepa_cog.payment import \
     MergedBySepaPartyMixin
 
@@ -228,116 +225,3 @@ class PaymentCreationStart:
                         self.kind == 'payable'):
                     payers.append(mandate.party.id)
         return list(set(payers)) or default_payers
-
-
-class PaymentInformationUpdateSepaMandate(model.CoogView):
-    'Payment Information Update Sepa Mandate'
-    __name__ = 'account.payment.payment_information_update_sepa_mandate'
-
-    invoices_to_update = fields.One2Many('account.invoice',
-        None, 'Invoices To Update')
-    allowed_sepa_mandates = fields.Many2Many('account.payment.sepa.mandate',
-        None, None, 'Allowed Sepa Mandates')
-    payer = fields.Many2One('party.party', 'Payer', required=True,
-        readonly=True)
-    sepa_mandate = fields.Many2One('account.payment.sepa.mandate',
-        'Sepa Mandate', required=True,
-        domain=[('id', 'in', Eval('allowed_sepa_mandates'))],
-        depends=['allowed_sepa_mandates'])
-
-
-class PaymentInformationModification:
-    __metaclass__ = PoolMeta
-    __name__ = 'account.payment.payment_information_modification'
-
-    update_sepa_mandate = StateView(
-        'account.payment.payment_information_update_sepa_mandate',
-        'account_payment_sepa_contract.'
-        'payment_information_modification_sepa_mandate_view_form',
-        [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Next', 'process_update_mandate', 'tryton-go-next',
-                default=True),
-            ])
-    process_update_mandate = StateTransition()
-
-    @classmethod
-    def __setup__(cls):
-        super(PaymentInformationModification, cls).__setup__()
-        cls._error_messages.update({
-                'mix_invoice_without_sepa_mandate': 'Some of the selected '
-                'records are on invoices without sepa mandates and cannot '
-                'be modified at the same time. You must process theses '
-                'records separately (all records must have the same payer, '
-                'the same account in the billing information and the same kind'
-                ')'
-                })
-
-    def transition_process_update_mandate(self):
-        Pool().get('account.invoice').write(
-            list(self.update_sepa_mandate.invoices_to_update), {
-                'sepa_mandate': self.update_sepa_mandate.sepa_mandate.id
-                })
-        return 'finalize'
-
-    def default_update_sepa_mandate(self, fields):
-        allowed_mandate_ids = [x.id
-            for x in self.update_sepa_mandate.allowed_sepa_mandates]
-        return {
-            'invoices_to_update': [x.id
-                for x in self.update_sepa_mandate.invoices_to_update],
-            'allowed_sepa_mandates': allowed_mandate_ids,
-            'payer': self.update_sepa_mandate.payer.id,
-            'sepa_mandate': allowed_mandate_ids[0]
-            if len(allowed_mandate_ids) == 1 else None,
-            }
-
-    def transition_check(self):
-        invalid_records = []
-        previous_step = self.payment_information_selection
-        pool = Pool()
-        Mandate = pool.get('account.payment.sepa.mandate')
-        with Transaction().set_context(
-                contract_revision_date=previous_step.new_date):
-            for line in previous_step.move_lines:
-                    origin = line.origin
-                    payer = (origin.contract.payer
-                        if line.account.kind == 'receivable' and origin and
-                        getattr(origin, 'contract', None) and origin.contract
-                        else line.party)
-                    journal = line.get_payment_journal()
-                    if (origin and origin.__name__ == 'account.invoice'
-                            and journal.process_method == 'sepa'
-                            and origin.sepa_mandate is None):
-                        invalid_records.append((origin, payer, line))
-            if not invalid_records:
-                return super(
-                    PaymentInformationModification, self).transition_check()
-            payers = list({p for _, p, _ in invalid_records})
-            billing_infos = [i.contract.billing_information
-                for i, _, _ in invalid_records
-                if i.contract.billing_information.direct_debit]
-            billing_debit_accounts = list({x.direct_debit_account
-                    for x in billing_infos})
-            kinds = list({l.account.kind for _, _, l in invalid_records})
-            if not billing_debit_accounts:
-                return super(
-                    PaymentInformationModification, self).transition_check()
-        if (len(payers) != 1 or len(list(set(billing_debit_accounts))) != 1 or
-                len(kinds) != 1):
-            self.raise_user_error('mix_invoice_without_sepa_mandate')
-        if kinds[0] != 'receivable':
-            return super(
-                PaymentInformationModification, self).transition_check()
-        self.update_sepa_mandate.payer = payers[0].id
-        possible_mandates = Mandate.search([
-                ('party', '=', payers[0].id),
-                ('account_number.account', '=', billing_debit_accounts[0].id),
-                ('signature_date', '<=', previous_step.new_date),
-                ])
-        self.update_sepa_mandate.allowed_sepa_mandates = [x.id
-            for x in possible_mandates]
-        self.update_sepa_mandate.invoices_to_update = [i.id
-            for i, _, _ in invalid_records]
-        super(PaymentInformationModification, self).transition_check()
-        return 'update_sepa_mandate'
