@@ -1,3 +1,4 @@
+* Bug#8366 Correct a type problem on 'calculate_average_premium_for_option' method
 * Bug#7880 Modify the calculation of the average premium rate for options by taking into account only activate share option
 * Bug#7503 Ignore fees when calculating the average premium rate for options
 
