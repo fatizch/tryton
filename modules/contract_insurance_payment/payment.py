@@ -138,7 +138,7 @@ class Payment:
         ContractBillingInformation = pool.get('contract.billing_information')
         Date = pool.get('ir.date')
         today = Date.today()
-        if contract is None or contract.status != 'active':
+        if contract is None or contract.status not in ('active', 'terminated', 'hold'):
             return
         grouped_payments = list(payments)
         current_billing_mode = contract.billing_information.billing_mode

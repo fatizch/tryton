@@ -1,3 +1,4 @@
+* FEA#8449 Allow automatic billing information changes when contract is also in the hold or terminated status
 * FEA#8110 The payment creation wizard blocks the payment journal selection if a payment journal is already defined on the product related to the selection
 
 Version 1.14 - 2017-11-09
