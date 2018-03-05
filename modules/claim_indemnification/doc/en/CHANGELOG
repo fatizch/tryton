@@ -1,3 +1,4 @@
+* BUG#8371 Check indemnifications scheduling by service when running indemnification creation batch due to check on previous periods feature
 * FEA#8159 Add the configuration field "Block Indemnifications Scheduling" on claim sub status which allows blocking indemnifications scheduling on open claims
 * OTH#0000 Iteration on 7982. Set default payment journal if possible on an indemnification
 * BUG#8387 Add default value for active field on payback reason

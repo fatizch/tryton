@@ -2,7 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 import logging
 
+from collections import defaultdict
+
 from trytond.pool import Pool
+from trytond.error import UserError
 
 from trytond.modules.coog_core import batch
 
@@ -44,7 +47,25 @@ class CreateClaimIndemnificationBatch(batch.BatchRoot):
     def execute(cls, objects, ids, treatment_date):
         pool = Pool()
         Service = pool.get('claim.service')
-        Indemnification = pool.get('claim.indemnification')
         indemnifications = Service.create_indemnifications(objects,
             treatment_date)
-        Indemnification.schedule_indemnifications(indemnifications)
+        cls.schedule_indemnifications(indemnifications)
+
+    @classmethod
+    def schedule_indemnifications(cls, indemnifications):
+        if not indemnifications:
+            return
+        Indemnification = Pool().get('claim.indemnification')
+        indemnifications_to_schedule = []
+        indemn_by_service = defaultdict(list)
+        for indemnification in indemnifications:
+            indemn_by_service[indemnification.service].append(indemnification)
+        for service_indemnifications in indemn_by_service.values():
+            sorted_indemnifications = sorted(service_indemnifications,
+                key=lambda x: x.start_date)
+            try:
+                Indemnification.check_schedulability(sorted_indemnifications)
+                indemnifications_to_schedule.extend(sorted_indemnifications)
+            except UserError:
+                continue
+        Indemnification.do_schedule(indemnifications_to_schedule)

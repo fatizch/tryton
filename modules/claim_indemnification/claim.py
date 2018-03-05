@@ -15,7 +15,6 @@ from trytond.model import ModelView, Unique
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 from trytond.tools import grouped_slice
-from trytond.error import UserError
 
 from trytond.modules.coog_core import fields, model, coog_string, utils, \
     coog_date, export
@@ -1154,19 +1153,6 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             control, {'status': 'controlled'},
             control_cancel, {'status': 'cancel_controlled'})
         Event.notify_events(indemnifications, 'schedule_indemnification')
-
-    @classmethod
-    def schedule_indemnifications(cls, indemnifications):
-        if not indemnifications:
-            return
-        indemnifications_to_schedule = []
-        for indemnification in indemnifications:
-            try:
-                cls.check_schedulability([indemnification])
-                indemnifications_to_schedule.append(indemnification)
-            except UserError:
-                continue
-        cls.do_schedule(indemnifications_to_schedule)
 
     def get_claim_sub_status(self):
         if self.status == 'calculated':
