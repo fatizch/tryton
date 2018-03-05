@@ -67,7 +67,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
         depends=['for_object', 'document_desc'], ondelete='RESTRICT')
     attachment_name = fields.Function(fields.Char('Attachment Name',
             depends=['attachment']),
-        'get_attachment_info')
+        'get_attachment_info', 'set_attachment_data')
     attachment_data = fields.Function(
         fields.Binary('Data', filename='attachment_name',
             depends=['attachment']),
@@ -191,7 +191,6 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
             if not self.first_reception_date:
                 self.first_reception_date = self.reception_date
             if self.attachment:
-                self.attachment_name = self.attachment.name
                 self.attachment_data = self.attachment.data
         else:
             if self.allow_force_receive:
@@ -199,8 +198,8 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
                     self.first_reception_date = self.reception_date
             else:
                 self.reception_date = None
-                self.attachment_name = None
-                self.attachment_data = None
+                if self.attachment_data:
+                    self.attachment_data = None
 
     @fields.depends('attachment', 'attachment_data', 'reception_date',
         'first_reception_date', 'allow_force_receive', 'received')
@@ -285,20 +284,34 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
                 attachment = Attachment()
                 attachment.resource = request.for_object
                 attachment.document_desc = request.document_desc
-                attachment.data = value
-                attachment.name = request.document_desc.name
-                if request.matching_attachments:
-                    attachment.name += '_%s' % (
-                        len(request.matching_attachments) + 1)
+                if name == 'attachment_data':
+                    attachment.data = value
+                    attachment.name = 'tmp'
+                elif name == 'attachment_name':
+                    attachment.name = request.document_desc.name
+                    if request.matching_attachments:
+                        attachment.name += '_%s' % (
+                            len(request.matching_attachments) + 1)
+                    split_value = value.split('.')
+                    if len(split_value) > 1:
+                        attachment.name += '.' + split_value[-1]
+                    attachment.data = None
                 attachments.append(attachment)
                 request.attachment = attachment
-                request.received = True
-                request.on_change_received()
+                if name == 'attachment_data':
+                    request.received = True
+                    request.on_change_received()
                 to_save.append(request)
             elif request.attachment and value:
-                request.attachment.data = value
+                if name == 'attachment_data':
+                    request.attachment.data = value
+                elif name == 'attachment_name':
+                    request.attachment.name = request.document_desc.name
+                    split_value = value.split('.')
+                    if len(split_value) > 1:
+                        request.attachment.name += '.' + split_value[-1]
                 attachments.append(request.attachment)
-            elif request.attachment and not value:
+            elif request.attachment and not value and name == 'attachment_data':
                 request.received = False
                 request.on_change_received()
                 request.reception_date = None
