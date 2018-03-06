@@ -524,7 +524,7 @@ contract_2_invoice_2.invoice.sepa_mandate.id == mandate3.id
 
 future_billing_information = BillingInformation(
     date=contract_2_invoice_2.invoice.lines_to_pay[1].payment_date +
-    relativedelta(month=3),
+    relativedelta(months=3),
     billing_mode=monthly_percent,
     payment_term=monthly_percent.allowed_payment_terms[0],
     payer=subscriber2,
