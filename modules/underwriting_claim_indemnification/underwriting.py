@@ -125,4 +125,4 @@ class UnderwritingResult:
         cls.raise_user_warning('will_schedule_' + ','.join((str(x.id) for
                 x in indemnifications)), 'will_schedule',
                '\n'.join(x.rec_name for x in indemnifications))
-        Indemnification.schedule_indemnifications(indemnifications)
+        Indemnification.schedule(indemnifications)
