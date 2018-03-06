@@ -33,6 +33,22 @@ msgid "The previous std doesn't have an end date defined"
 msgstr ""
 "La date de fin d'arrêt de travail du précédent arrêt n'est pas définie"
 
+msgctxt "error:claim.loss:"
+msgid "LTD End Date:"
+msgstr "Date de fin de l'invalidité :"
+
+msgctxt "error:claim.loss:"
+msgid "LTD Start Date:"
+msgstr "Date de début de l'invalidité :"
+
+msgctxt "error:claim.loss:"
+msgid "STD End Date:"
+msgstr "Date de fin d'arrêt de travail :"
+
+msgctxt "error:claim.loss:"
+msgid "STD Start Date:"
+msgstr "Date d'arrêt de travail :"
+
 msgctxt "field:beneficiary-extra_data,benefit:"
 msgid "Benefit"
 msgstr "Prestation"
@@ -255,14 +271,6 @@ msgctxt "field:claim.loss,loss_kind:"
 msgid "Loss Kind"
 msgstr "Type d'évènement"
 
-msgctxt "field:claim.loss,ltd_end_date:"
-msgid "LTD End Date"
-msgstr "Date de fin de l'invalidité"
-
-msgctxt "field:claim.loss,ltd_start_date:"
-msgid "LTD Start Date"
-msgstr "Date de début de l'invalidité"
-
 msgctxt "field:claim.loss,possible_covered_persons:"
 msgid "Covered Persons"
 msgstr "Personnes assurées"
@@ -270,14 +278,6 @@ msgstr "Personnes assurées"
 msgctxt "field:claim.loss,return_to_work_date:"
 msgid "Return to Work"
 msgstr "Reprise d'activité"
-
-msgctxt "field:claim.loss,std_end_date:"
-msgid "STD End Date"
-msgstr "Date de fin d'arrêt de travail"
-
-msgctxt "field:claim.loss,std_start_date:"
-msgid "STD Start Date"
-msgstr "Date d'arrêt de travail"
 
 msgctxt "field:claim.loss,with_end_date:"
 msgid "With End Date"

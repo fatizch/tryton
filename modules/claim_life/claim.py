@@ -9,7 +9,7 @@ from sql.aggregate import Max
 from sql.conditionals import Coalesce
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If, Bool, In, And, Equal
+from trytond.pyson import Eval, If, Bool, And, Equal
 from trytond.transaction import Transaction
 from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.report_engine import Printable
@@ -91,33 +91,19 @@ class Loss:
                 ()
                 )
             ], depends=['possible_covered_persons'], ondelete='RESTRICT')
-    std_start_date = fields.Function(fields.Date('STD Start Date',
-            states={'invisible': Eval('loss_desc_kind') != 'std'},
+    start_date_string = fields.Function(
+        fields.Char('Start Date String',
             depends=['loss_desc_kind', 'loss_desc']),
-        'get_start_end_dates', setter='set_start_end_dates')
-    std_end_date = fields.Function(fields.Date('STD End Date',
-            states={
-                'invisible': Eval('loss_desc_kind') != ('std'),
-                'readonly': Eval('claim_status') == 'closed',
-                 }, depends=['loss_desc_kind', 'loss_desc', 'claim_status']),
-        'get_start_end_dates', setter='set_start_end_dates')
+        'on_change_with_date_string')
+    end_date_string = fields.Function(
+        fields.Char('End Date String', depends=['loss_desc_kind', 'loss_desc']),
+        'on_change_with_date_string')
     initial_std_start_date = fields.Date('Initial STD Start Date',
         states={'invisible': Eval('loss_desc_kind') != 'ltd',
             'readonly': Eval('state') != 'draft',
             'required': And(Eval('state') != 'draft',
                 Eval('loss_desc_kind') == 'ltd')},
         depends=['loss_desc_kind', 'loss_desc', 'state'])
-    ltd_start_date = fields.Function(fields.Date('LTD Start Date',
-            states={'invisible': Eval('loss_desc_kind') != 'ltd'},
-            depends=['loss_desc_kind', 'loss_desc']),
-        'get_start_end_dates', setter='set_start_end_dates')
-    ltd_end_date = fields.Function(fields.Date('LTD End Date',
-            states={
-                'invisible': Eval('loss_desc_kind') != 'ltd',
-                'readonly': Eval('claim_status') == 'closed',
-                },
-            depends=['loss_desc_kind', 'loss_desc']),
-        'get_start_end_dates', setter='set_start_end_dates')
     return_to_work_date = fields.Date('Return to Work',
         states={'invisible': Eval('loss_desc_kind') != 'std'},
         domain=[If(Bool(Eval('return_to_work_date')),
@@ -133,13 +119,7 @@ class Loss:
     @classmethod
     def __setup__(cls):
         super(Loss, cls).__setup__()
-        cls.start_date.states['invisible'] = cls.start_date.states.get(
-            'invisible', False) | In(Eval('loss_desc_kind', ''),
-            ['std', 'ltd'])
         cls.start_date.depends.append('loss_desc_kind')
-        cls.end_date.states['invisible'] = cls.end_date.states.get(
-            'invisible', False) | In(Eval('loss_desc_kind', ''),
-            ['std', 'ltd'])
         cls.end_date.depends.append('loss_desc_kind')
         cls._error_messages.update({
                 'relapse': 'Relapse',
@@ -148,20 +128,28 @@ class Loss:
                 'previous_loss_end_date_missing': "The previous std "
                 "doesn't have an end date defined",
                 'one_day_between_relapse_and_previous_loss': 'One day is '
-                'required between the relapse and the previous std'
+                'required between the relapse and the previous std',
+                'start_date': 'Start Date:',
+                'end_date': 'Start Date:',
+                'std_start_date': 'STD Start Date:',
+                'ltd_start_date': 'LTD Start Date:',
+                'std_end_date': 'STD End Date:',
+                'ltd_end_date': 'LTD End Date:',
                 })
         cls.closing_reason.states.update({
-                'required': If(Equal(Eval('loss_kind'), 'std'),
-                    Bool(Eval('std_end_date')),
-                    Bool(Eval('ltd_end_date')))
+                'required': Bool(Eval('end_date')),
                 })
-        cls.closing_reason.depends.extend(['std_end_date', 'ltd_end_date',
-                'loss_kind'])
+        cls.closing_reason.depends.extend(['loss_kind', 'end_date'])
 
-    @classmethod
-    def _get_skip_set_readonly_fields(cls):
-        return super(Loss, cls)._get_skip_set_readonly_fields() + [
-            'ltd_end_date', 'std_end_date']
+    @fields.depends('loss_desc', 'loss_desc_kind')
+    def on_change_with_date_string(self, name=None):
+        key = ''
+        prefix = self.loss_desc_kind if self.loss_desc_kind \
+            and self.loss_desc_kind in ('std', 'ltd') else ''
+        if prefix:
+            key += prefix + '_'
+        key += name[:-7]
+        return self.raise_user_error(key, raise_exception=False)
 
     @fields.depends('loss_kind')
     def on_change_with_possible_loss_descs(self, name=None):
@@ -170,24 +158,6 @@ class Loss:
     def get_loss_kind(self, name):
         if self.loss_desc:
             return self.loss_desc.loss_kind
-
-    def get_start_end_dates(self, name):
-        if 'start_date' in name:
-            date = 'start_date'
-        else:
-            date = 'end_date'
-        return getattr(self, date, None)
-
-    @classmethod
-    def set_start_end_dates(cls, losses, name, value):
-        losses_to_update = [l for l in losses
-            if l.loss_desc_kind in ('ltd', 'std')]
-        if 'start_date' in name:
-            date = 'start_date'
-        else:
-            date = 'end_date'
-        if losses_to_update:
-            cls.write(losses_to_update, {date: value})
 
     def close(self, sub_status, date=None):
         super(Loss, self).close(sub_status, date)
@@ -214,13 +184,13 @@ class Loss:
             res.extend(covered_element.get_covered_parties(self.start_date))
         return res
 
-    @fields.depends('std_end_date', 'ltd_end_date', 'available_closing_reasons')
+    @fields.depends('end_date', 'available_closing_reasons')
     def on_change_with_closing_reason(self, name=None):
         super(Loss, self).on_change_with_closing_reason(name)
-        if ((self.std_end_date or self.ltd_end_date) and
+        if (self.end_date and
                 len(self.available_closing_reasons) == 1):
             return self.available_closing_reasons[0].id
-        if not self.std_end_date and not self.ltd_end_date:
+        if not self.end_date:
             return None
 
     @fields.depends('claim', 'start_date')
