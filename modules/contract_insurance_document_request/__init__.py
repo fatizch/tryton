@@ -19,6 +19,7 @@ def register():
         document.DocumentRequest,
         document.DocumentReception,
         rule_engine.RuleEngine,
+        rule_engine.RuleEngineRuntime,
         document.DocumentRequestLine,
         module='contract_insurance_document_request', type_='model')
 

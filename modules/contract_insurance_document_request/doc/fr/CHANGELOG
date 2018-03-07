@@ -1,7 +1,8 @@
+* FEA#8447 Règle permettant de connaître la liste des documents reçus sur un contrat
 * OTH#0000 Ajout du contrat au contexte de calcul des documents requis
 * BUG#7834 check_required_documents sur contrat doit également vérifier les demandes cachées que l'utilisateur n'est pas habilité à voir
 * BUG#7796 Le calcul des documents requis ne doit pas planter si l'utilisateur n'est pas habilité à voir certains documents
-FEA#7638 Ajout de la configuration sur les règles de document du  produit pour désactiver la réception manuelle des lignes de demande de document
+* FEA#7638 Ajout de la configuration sur les règles de document du  produit pour désactiver la réception manuelle des lignes de demande de document
 
 Version 1.14 - 2017-11-09
 

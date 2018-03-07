@@ -17,7 +17,6 @@ __all__ = [
     ]
 
 
-
 class DocumentRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
         model.CoogSQL, model.CoogView):

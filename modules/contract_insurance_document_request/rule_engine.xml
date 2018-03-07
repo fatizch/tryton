@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="documents_received">
+            <field name="translated_technical_name">documents_recus</field>
+            <field name="description">Documents Reçus</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_documents_received</field>
+            <field name="long_description">Retourne les documents reçus sur le contrat et leur date de réception</field>
+            <field name="parent" ref="contract.te_contract"/>
+        </record>
+    </data>
+</tryton>
