@@ -34,11 +34,15 @@ class Address:
 
     @property
     def sepa_adrline_1(self):
-        return unicodedata.normalize('NFKD', ' '.join(
-                [x.strip() for x in self.street.splitlines() if x.strip()]
-                )).encode('ascii', 'replace')[:70]
+        address = []
+        if self.street:
+            address.extend(self.street.splitlines())
+        return unicodedata.normalize('NFKD', u' '.join(
+                [x.strip() for x in address if x.strip()])
+            ).encode('ascii', 'replace')[:70]
 
     @property
     def sepa_adrline_2(self):
-        return unicodedata.normalize('NFKD', ' '.join(
-                [self.zip, self.city])).encode('ascii', 'replace')[:70]
+        return unicodedata.normalize('NFKD', u' '.join(
+                [self.zip or '', self.city or ''])
+            ).encode('ascii', 'replace')[:70]
