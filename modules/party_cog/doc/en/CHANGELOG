@@ -1,3 +1,4 @@
+* BUG#8362 Remove now useless party configuration view override
 * BUG#8074 Return the most recent valid address in get_address
 * BUG#7630 Fix a bug where the custom party identifiers were no longer available
 
