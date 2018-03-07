@@ -1,3 +1,4 @@
+* BUG#8482 Use image instead of icon in form view
 * BUG#8163 Be able to search contracts using initial start date
 * BUG#8208 Forbid deletion of numbered contracts
 * BUG#8249 Check new end date exists before cleaning versions

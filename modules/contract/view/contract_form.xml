@@ -2,9 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <form col="6">
-    <group id="icon" string="" colspan="1" xexpand="0" xfill="1">
-        <field name="icon" widget="icon"/>
-    </group>
+    <image name="icon" xexpand="0"/>
     <group id="left" colspan="3">
         <label name="rec_name"/>
         <field name="rec_name"/>
