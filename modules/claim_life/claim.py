@@ -94,10 +94,10 @@ class Loss:
     start_date_string = fields.Function(
         fields.Char('Start Date String',
             depends=['loss_desc_kind', 'loss_desc']),
-        'on_change_with_date_string')
+        'on_change_with_start_date_string')
     end_date_string = fields.Function(
         fields.Char('End Date String', depends=['loss_desc_kind', 'loss_desc']),
-        'on_change_with_date_string')
+        'on_change_with_end_date_string')
     initial_std_start_date = fields.Date('Initial STD Start Date',
         states={'invisible': Eval('loss_desc_kind') != 'ltd',
             'readonly': Eval('state') != 'draft',
@@ -142,7 +142,16 @@ class Loss:
         cls.closing_reason.depends.extend(['loss_kind', 'end_date'])
 
     @fields.depends('loss_desc', 'loss_desc_kind')
-    def on_change_with_date_string(self, name=None):
+    def on_change_with_start_date_string(self, name=None):
+        return self.date_string(name)
+
+    @fields.depends('loss_desc', 'loss_desc_kind')
+    def on_change_with_end_date_string(self, name=None):
+        return self.date_string(name)
+
+    def date_string(self, name=None):
+        if not name:
+            return ''
         key = ''
         prefix = self.loss_desc_kind if self.loss_desc_kind \
             and self.loss_desc_kind in ('std', 'ltd') else ''

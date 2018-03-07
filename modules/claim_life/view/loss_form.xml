@@ -3,30 +3,15 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/label[@name='start_date']" position="replace">
-    </xpath>
-    <xpath expr="/form/field[@name='start_date']" position="replace">
+        <label name="start_date_string" string=""/>
     </xpath>
     <xpath expr="/form/label[@name='end_date']" position="replace">
+        <label name="end_date_string" string=""/>
     </xpath>
-    <xpath expr="/form/label[@name='closing_reason']" position="replace">
-    </xpath>
-    <xpath expr="/form/field[@name='closing_reason']" position="replace">
-    </xpath>
-    <xpath expr="/form/field[@name='end_date']" position="replace">
-        <label name="std_start_date"/>
-        <field name="std_start_date"/>
-        <label name="std_end_date"/>
-        <field name="std_end_date"/>
+    <xpath expr="/form/field[@name='end_date']" position="after">
         <newline/>
         <label name="initial_std_start_date"/>
         <field name="initial_std_start_date"/>
-        <label name="ltd_start_date"/>
-        <field name="ltd_start_date"/>
-        <label name="ltd_end_date"/>
-        <field name="ltd_end_date"/>
-        <newline/>
-        <label name="closing_reason" colspan="1"/>
-        <field name="closing_reason" widget="selection"/>
         <newline/>
         <label name="covered_person"/>
         <field name="covered_person"/>
