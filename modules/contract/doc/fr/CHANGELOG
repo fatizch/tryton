@@ -1,3 +1,4 @@
+* BUG#8491 Changer le statut de la garantie à None après réactivation
 * BUG#8482 Utilisation d'une image à la place d'une icône dans la vue forme
 * BUG#8163 Pouvoir faire une recherche des contrats avec leurs dates d'effet initiales
 * BUG#8208 Empêcher la suppression d'un contrat ayant un numéro
