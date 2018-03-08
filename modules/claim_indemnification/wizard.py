@@ -44,9 +44,7 @@ class IndemnificationElement(model.CoogView):
         'Action')
     start_date = fields.Date('Start Date', readonly=True)
     end_date = fields.Date('End Date', readonly=True)
-    note = fields.Char('Extra Information', states={
-            'required': Equal(Eval('action'), 'refuse')
-            }, depends=['action'])
+    note = fields.Char('Extra Information')
     currency_digits = fields.Integer(
         'Currency Digits', states={'invisible': True})
     amount = fields.Numeric(
@@ -228,8 +226,11 @@ class IndemnificationAssistant(Wizard, model.FunctionalErrorMixIn):
     def __setup__(cls):
         super(IndemnificationAssistant, cls).__setup__()
         cls._error_messages.update({
-            'cannot_refuse_cancel_indemnifications': "Cancelled "
-            "indemnification %(indemnification)s can't be refused"})
+                'cannot_refuse_cancel_indemnifications': "Cancelled "
+                "indemnification %(indemnification)s can't be refused",
+                'cannot_refuse_indemnifications_without_note': "Indemnification"
+                " %(indemnification)s must have a note to be canceled, "
+                "please write a note to motivate your refusal."})
 
     def transition_init_state(self):
         pool = Pool()
@@ -261,6 +262,11 @@ class IndemnificationAssistant(Wizard, model.FunctionalErrorMixIn):
                     'cancel' in element.indemnification.status):
                 self.append_functional_error(
                     'cannot_refuse_cancel_indemnifications',
+                    {'indemnification': element.indemnification.rec_name})
+            if (element.action == 'refuse' and
+                    not element.indemnification.note):
+                self.append_functional_error(
+                    'cannot_refuse_indemnifications_without_note',
                     {'indemnification': element.indemnification.rec_name})
 
     def check_control_state(self):

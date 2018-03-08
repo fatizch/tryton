@@ -1,3 +1,4 @@
+* BUG#8430 Ajouter un message d'erreur dans l'assistant de validation de prestation lorsque l'utilisateur ne commente pas son refus, le champs note n'étant plus requis
 * BUG#8371 Vérification de l'ordonnancement des indemnisations par service lors du batch de création d'indemnisations en raison de l'évolution vérifiant les périodes manquantes lors de l'ordonnancement
 * FEA#8159 Ajout du champ de configuration "Bloque l'ordonnancement des indemnisations" sur les sous statuts de sinistres permettant de bloquer l'ordonnancement des indemnisations sur les sinistres ouverts
 * OTH#0000 Iteration sur 7982. Initialiser le journal de paiment si possible sur une indemnisation
