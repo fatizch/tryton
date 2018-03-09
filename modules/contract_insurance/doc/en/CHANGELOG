@@ -1,3 +1,4 @@
+* FEA#8429 Add rule engine functions to identify subscribed coverages
 * FEA#8383 Use contact mechanisms and party identifiers in the brouillard
 * BUG#8027 Search for possible insured person should be based on anyone related to that person by a contract
 * BUG#7897 Better management of activatde modules for "brouillard" default template

@@ -47,5 +47,27 @@ courant pour la garantie courante à partir de 1.</field>
 ayant souscrit à la garantie indépendamment d'une date</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
+        <record model="rule_engine.function" id="other_coverage_subscribed">
+            <field name="translated_technical_name">autre_garantie_souscrite</field>
+            <field name="description">Autre garantie souscrite</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_is_other_coverage_subscribed</field>
+            <field name="long_description">Retourne 'Vrai' si la garantie passée en paramètre est souscrite</field>
+            <field name="fct_args">code_garantie</field>
+            <field name="parent" ref="offered_insurance.dossier_garantie"/>
+        </record>
+        <record model="rule_engine.function" id="all_subscribed_coverages">
+            <field name="translated_technical_name">garanties_souscrites</field>
+            <field name="description">Garanties souscrites</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_all_subscribed_coverages</field>
+            <field name="long_description">Retourne la liste des codes des garanties souscrites. Le paramètre "date", optionnel, permet d'indiquer la date à considérer</field>
+            <field name="fct_args">date</field>
+            <field name="parent" ref="offered_insurance.dossier_garantie"/>
+        </record>
     </data>
 </tryton>

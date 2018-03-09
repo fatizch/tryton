@@ -63,3 +63,20 @@ class RuleEngineRuntime:
                 if option.coverage == args['coverage']:
                     i += 1
         return i
+
+    @classmethod
+    @check_args('option')
+    def _re_is_other_coverage_subscribed(cls, args, coverage_code):
+        return bool(args['option'].get_sister_option(coverage_code))
+
+    @classmethod
+    @check_args('option', 'date',)
+    def _re_all_subscribed_coverages(cls, args, date=None):
+        option = args['option']
+        options = []
+        if option.covered_element:
+            options += [x for x in option.covered_element.options]
+        elif option.contract:
+            options += [x for x in option.contract.options]
+        return list({x.coverage.code for x in options
+                if x.is_active_at_date(date or args['date'])})
