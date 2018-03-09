@@ -3,7 +3,7 @@
 from collections import defaultdict
 import datetime
 
-from sql import Null, Literal
+from sql import Null, Literal, Query
 from sql.aggregate import Sum
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
@@ -226,7 +226,7 @@ class Invoice:
         query_table = invoice.join(contract_invoice, type_='LEFT',
             condition=(contract_invoice.invoice == invoice.id))
 
-        if not isinstance(value, list):
+        if not isinstance(value, list) and not isinstance(value, Query):
             value = getattr(cls, name).sql_format(value)
         if value != []:
             query = query_table.select(invoice.id,
