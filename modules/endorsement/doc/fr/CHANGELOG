@@ -1,3 +1,4 @@
+* FEA#2172 Ajout d'un raccourci vers Nouvel Avenant dans la barre d'outil sur les contrats
 * BUG#8280 Empêcher d'appliquer un avenant sur un contract inactif
 * BUG#8164 Correction de l'affichage des champs migrés dans les résumés d'avenants
 * BUG#8200 Pouvoir réactiver un contrat sans effet en utilisant l'avenant réactiver contrat

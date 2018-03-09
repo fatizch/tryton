@@ -1,3 +1,4 @@
+* FEA#2172 Add shortcut to Start Endorsement in toolbar on contracts
 * BUG#8280 Prevent from applying an endorsement on an inactive contract
 * BUG#8164 Fix display of migrated fields in endorsement summary
 * BUG#8200 Ability to reactivate void contract by using reactivate contract endorsement

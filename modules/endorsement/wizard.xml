@@ -107,6 +107,12 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.wizard" id="act_start_endorsement">
             <field name="name">Start Endorsement</field>
             <field name="wiz_name">endorsement.start</field>
+            <field name="icon" ref="coog_core.batch_icon"/>
+        </record>
+        <record model="ir.action.keyword" id="act_start_endorsement_shorcut_keyword">
+            <field name="keyword">form_toolbar</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_start_endorsement"/>
         </record>
         <!-- We need different actions because the name must be different -->
         <record model="ir.action.wizard" id="act_resume_endorsement">
