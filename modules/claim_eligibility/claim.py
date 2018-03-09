@@ -125,11 +125,15 @@ class ClaimService:
                 continue
             eligible, message = service.calculate_eligibility()
             service.eligibility_comment = message
-            if (eligible and not service.eligibility_decision and
-                    service.benefit.accept_decision_default):
-                service.eligibility_decision = \
-                    service.benefit.accept_decision_default
-                service.eligibility_status = service.eligibility_decision.state
+            if eligible:
+                if (service.eligibility_decision and
+                        service.eligibility_decision.state != 'accepted'):
+                    service.eligibility_decision = None
+                if (not service.eligibility_decision and
+                        service.benefit.accept_decision_default):
+                    service.eligibility_decision = \
+                        service.benefit.accept_decision_default
+                service.eligibility_status = 'accepted'
                 accepted.append(service)
             elif not eligible and service.benefit.refuse_from_rules and \
                     service.benefit.refuse_decision_default:

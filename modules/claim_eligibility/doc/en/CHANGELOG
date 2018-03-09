@@ -1,3 +1,4 @@
+* BUG#8515 Eligibile status is not set if claim is eligible and no default eligible reason is defined
 * BUG#8427 Fix crash when saving a service due to bad eligibility check
 * FEA#8086 The eligibility decisions on claim can be ordered, and displayed following this order.
 * OTH#0000 Iteration on 8079. If service is eligibile set the eligibility status even if no default reason is set

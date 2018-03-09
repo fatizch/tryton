@@ -1,3 +1,4 @@
+* BUG#8515 Le statut de l'éligibilité n'est pas défini si aucune raison d'éligibilité par défaut n'est définie
 * BUG#8427 Correction d'un plantage lors de la sauvegarde d'un service dû à une mauvaise vérification de l'éligibilité
 * FEA#8086 Possibilité de définir un ordre d'affichage des décisions d'éligibilité.
 * OTH#0000 Iteration sur 8079. Si la prestation est éligible, définir le statut d'élgibilité à accepté même si aucune raison d'éligibilité par défaut n'est définie.
