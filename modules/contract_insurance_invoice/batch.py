@@ -1,7 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import logging
+import datetime
+
 from sql import Null, Cast, Expression
+from sql.conditionals import Coalesce
 from sql.aggregate import Max
 from sql.functions import ToChar, CurrentTimestamp
 from sql.operators import Not, Concat
@@ -52,11 +55,11 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
         contract = tables['contract']
         contract_invoice = tables['contract_invoice']
         invoice = tables['invoice']
-        return contract.join(contract_invoice, 'LEFT OUTER', condition=(
-                contract.id == contract_invoice.contract)
-            ).join(invoice, 'LEFT OUTER', condition=(
+        return contract_invoice.join(invoice, condition=(
                 contract_invoice.invoice == invoice.id) &
-            (invoice.state != 'cancel'))
+            (invoice.state != 'cancel')
+            ).join(contract, 'RIGHT OUTER', condition=(
+                contract.id == contract_invoice.contract))
 
     @classmethod
     def _select_ids_columns(cls, tables, treatment_date):
@@ -72,8 +75,8 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
 
     @classmethod
     def _select_ids_having_clause(cls, tables, treatment_date):
-        return ((Max(tables['contract_invoice'].end) < treatment_date)
-            | (Max(tables['contract_invoice'].end) == Null))
+        return Coalesce(Max(tables['contract_invoice'].end),
+            datetime.date.min) < treatment_date
 
     @classmethod
     def select_ids(cls, treatment_date):

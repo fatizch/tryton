@@ -1,3 +1,4 @@
+* BUG#8461 Non prise en compte des quittances annulées dans le batch de quittancement
 * BUG#8119 Gestion des contrats sans date de fin dans "get_future_invoices"
 * BUG#7987 Suppression / Annulation des quittances suite à la déclinaison d'un devis
 * BUG#7879 Correction d'une anomalie où le blocage des quittancement pouvait causer la génération de plusieurs quittances sur la même période
