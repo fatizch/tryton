@@ -1473,7 +1473,15 @@ msgctxt "model:ir.action,name:"
 msgid "Claim Indemnification Validate"
 msgstr "Validation des Indemnisations"
 
+msgctxt "model:ir.action,name:act_all_claim_invoices"
+msgid "Claim Invoices"
+msgstr "Remboursements sinistre"
+
 msgctxt "model:ir.action,name:act_claim_invoice"
+msgid "Claim Invoices"
+msgstr "Remboursements sinistre"
+
+msgctxt "model:ir.action,name:act_claim_invoices"
 msgid "Claim Invoices"
 msgstr "Remboursements sinistre"
 
@@ -1518,6 +1526,10 @@ msgctxt ""
 "model:ir.action.act_window.domain,name:act_indemnification_payback_reason_domain_inactive"
 msgid "Inactive"
 msgstr "Inactives"
+
+msgctxt "model:ir.ui.menu,name:claim_invoices_form"
+msgid "Claim Invoices"
+msgstr "Remboursements sinistre"
 
 msgctxt "model:ir.ui.menu,name:menu_control_indemnification"
 msgid "Controler les Indemnifications"

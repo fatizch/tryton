@@ -149,5 +149,48 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="claim.sub_status_view_list"/>
             <field name="name">claim_sub_status_list</field>
         </record>
+        <!-- ######################## -->
+        <!-- # Claim Invoice Relate # -->
+        <!-- ######################## -->
+        <record model="ir.action.act_window" id="act_claim_invoices">
+            <field name="name">Claim Invoices</field>
+            <field name="res_model">account.invoice</field>
+            <field name="domain" eval="[('lines.claim_details.claim', 'in', Eval('active_ids'))]" pyson="1"/>
+            <field name="order" eval="[('invoice_date', 'DESC')]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_claim_invoice_window_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="account_invoice.invoice_view_form"/>
+            <field name="act_window" ref="act_claim_invoices"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_claim_invoice_window_view2">
+            <field name="sequence" eval="5"/>
+            <field name="view" ref="account_invoice.invoice_view_tree"/>
+            <field name="act_window" ref="act_claim_invoices"/>
+        </record>
+        <record model="ir.action.keyword" id="claim_invoice_relate">
+            <field name="keyword">form_relate</field>
+            <field name="model">claim,-1</field>
+            <field name="action" ref="act_claim_invoices"/>
+        </record>
+        <!-- ####################### -->
+        <!-- # Claim Invoices Menu # -->
+        <!-- ####################### -->
+        <record model="ir.action.act_window" id="act_all_claim_invoices">
+            <field name="name">Claim Invoices</field>
+            <field name="res_model">account.invoice</field>
+            <field name="domain" eval="[('business_kind', '=', 'claim_invoice')]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_claim_invoice_window2_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="account_invoice.invoice_view_form"/>
+            <field name="act_window" ref="act_all_claim_invoices"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_claim_invoice_window2_view2">
+            <field name="sequence" eval="5"/>
+            <field name="view" ref="account_invoice.invoice_view_tree"/>
+            <field name="act_window" ref="act_all_claim_invoices"/>
+        </record>
+        <menuitem parent="claim.menu_claim" id="claim_invoices_form" icon="invoice" action="act_all_claim_invoices"/>
     </data>
 </tryton>

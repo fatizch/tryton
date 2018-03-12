@@ -1,3 +1,4 @@
+* FEA#8284 Add "Claim Invoices" relate on claims, and "Claim Invoices" menu
 * BUG#8430 Take off 'note' required states on indemnification wizard and display an error message instead of a tryton domain error
 * BUG#8371 Check indemnifications scheduling by service when running indemnification creation batch due to check on previous periods feature
 * FEA#8159 Add the configuration field "Block Indemnifications Scheduling" on claim sub status which allows blocking indemnifications scheduling on open claims
