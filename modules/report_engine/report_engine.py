@@ -16,6 +16,7 @@ import subprocess
 import shutil
 import tempfile
 import lxml.etree
+import base64
 try:
     from relatorio.templates.opendocument import Manifest, MANIFEST
 except ImportError:
@@ -41,6 +42,7 @@ from trytond.model import DictSchemaMixin
 from trytond.server_context import ServerContext
 from trytond.filestore import filestore
 from trytond.tools import file_open
+from trytond.rpc import RPC
 
 from trytond.modules.coog_core import fields, model, utils, coog_string
 from trytond.modules.coog_core import wizard_context, coog_date
@@ -167,6 +169,12 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @classmethod
     def __setup__(cls):
         super(ReportTemplate, cls).__setup__()
+        cls.__rpc__.update({'produce_reports': RPC(instantiate=0,
+                    readonly=False, result=lambda res: (
+                        [{k: report[k] for k in ('data', 'report_name')}
+                            for report in res[0]],
+                        [attachment.id for attachment in res[1]])
+                    )})
         t = cls.__table__()
         cls._sql_constraints = [
             ('code_unique', Unique(t, t.code),
@@ -275,6 +283,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         cursor.execute(*to_update.update(columns=[to_update.kind],
                 values=[''],
                 where=to_update.kind == Null))
+
+    @property
+    def data_encoding_methods(self):
+        return {'base64': base64.b64encode}
 
     @classmethod
     def default_process_method(cls):
@@ -542,6 +554,12 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 objects_ids, reporting_data)
         extension, data = self.convert(orig_data,
             self.get_extension('output_format'), orig_ext)
+        encode_method = self.data_encoding_methods.get(
+            context_.get('data_encoding'))
+        if encode_method:
+            data = encode_method(data)
+            orig_data = encode_method(orig_data)
+
         return {
             'object': objects[0],
             'report_type': extension,
@@ -570,6 +588,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return reports
 
     def produce_reports(self, objects, context_=None):
+        objects = Pool().get(self.on_model.model).browse(objects)
         if context_ is None:
             context_ = {}
         reports = self._generate_reports(objects, context_)
@@ -679,6 +698,13 @@ class ReportTemplateVersion(model.CoogSQL, model.CoogView):
 
 class Printable(Model):
     'Base class for printable objects'
+
+    @classmethod
+    def __setup__(cls):
+        super(Printable, cls).__setup__()
+        cls.__rpc__.update({'get_available_doc_templates': RPC(
+                instantiate=0, result=lambda x: [y.id for y in x])})
+
     @classmethod
     def __register__(cls, module_name):
         # We need to store the fact that this class is a Printable class in the
@@ -1054,7 +1080,7 @@ class ReportGenerate(CoogReport):
         try:
             return super(ReportGenerate, cls).render(
                 report, report_context)
-        except Exception, exc:
+        except Exception as exc:
             # Try to extract the relevant information to display to the user.
             # That would be the part of the genshi template being evaluated and
             # the "final" error. In case anything goes wrong, raise the
