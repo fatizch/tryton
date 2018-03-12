@@ -6,6 +6,24 @@ msgctxt "error:benefit.loss.description.deduction_period_kind:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
 
+msgctxt "error:benefit.rule:"
+msgid "No indemnification rule defined"
+msgstr "Aucune règle d'indemnisation définie"
+
+msgctxt "error:claim.create_indemnification:"
+msgid ""
+"The deduction period which starts at %(start_date)s must have a non null "
+"amount"
+msgstr ""
+"La prestation annexe commençant le %(start_date)s doit avoir un montant "
+"différent de zéro"
+
+msgctxt "error:claim.create_indemnification:"
+msgid ""
+"The deduction period which starts at %(start_date)s must have an end date"
+msgstr ""
+"La prestation annexe commençant le %(start_date)s doit avoir une date de fin"
+
 msgctxt "field:benefit.loss.description,deduction_period_kinds:"
 msgid "Deduction Period Kinds"
 msgstr "Types de prestation annexe"
@@ -36,7 +54,7 @@ msgid "Loss Description"
 msgstr "Descripteur de préjudice"
 
 msgctxt "field:benefit.loss.description-deduction_period_kind,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.loss.description-deduction_period_kind,write_date:"
@@ -76,7 +94,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.loss.description.deduction_period_kind,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.loss.description.deduction_period_kind,write_date:"
@@ -90,6 +108,14 @@ msgstr "Modifié par"
 msgctxt "field:benefit.loss.description.deduction_period_kind,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:claim.indemnification_definition,deduction_period_kinds:"
+msgid "Deduction Kinds"
+msgstr "Types de prestation annexe"
+
+msgctxt "field:claim.indemnification_definition,deduction_periods:"
+msgid "Deduction Periods"
+msgstr "Prestations annexes"
 
 msgctxt "field:claim.loss,deduction_kinds:"
 msgid "Deduction Kinds"
@@ -152,7 +178,7 @@ msgid "Loss"
 msgstr "Evénement"
 
 msgctxt "field:claim.loss.deduction.period,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim.loss.deduction.period,start_date:"
@@ -232,7 +258,7 @@ msgid "Loss"
 msgstr "Préjudice"
 
 msgctxt "field:claim.loss.deduction.period.display,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim.loss.deduction.period.display,start_date:"

@@ -1,3 +1,4 @@
+* FEA#8161 Autorisation de la création de périodes de déduction sans date de fin ni montant
 * BUG#7606 Erreur dans la mise à jour des périodes de déduction après la création d'une période d'indemnisation
 
 Version 1.14 - 2017-11-09

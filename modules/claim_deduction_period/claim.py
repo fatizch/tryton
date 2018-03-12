@@ -29,6 +29,11 @@ class Loss:
         order=[('deduction_kind', 'ASC'), ('start_date', 'ASC')],
         depends=['deduction_kinds'])
 
+    @classmethod
+    def _get_skip_set_readonly_fields(cls):
+        return super(Loss, cls)._get_skip_set_readonly_fields() + \
+            ['deduction_periods']
+
     @fields.depends('loss_desc')
     def on_change_with_deduction_kinds(self, name=None):
         if self.loss_desc:

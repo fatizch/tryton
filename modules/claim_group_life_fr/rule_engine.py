@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from decimal import Decimal
 from trytond.pool import PoolMeta
 
 from trytond.modules.rule_engine import check_args
@@ -45,3 +46,4 @@ class RuleEngineRuntime:
         for date in dates:
             if not part_time_period_at_date(date):
                 return ijss[date]
+        return Decimal('0')

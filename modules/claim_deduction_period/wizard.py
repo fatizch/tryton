@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, coog_string
 from trytond.modules.claim_deduction_period.claim import DeductionPeriod
 
 __all__ = [
@@ -16,6 +16,16 @@ __all__ = [
 class CreateIndemnification:
     __metaclass__ = PoolMeta
     __name__ = 'claim.create_indemnification'
+
+    @classmethod
+    def __setup__(cls):
+        super(CreateIndemnification, cls).__setup__()
+        cls._error_messages.update({
+                'missing_deduction_period_end_date': 'The deduction period '
+                'which starts at %(start_date)s must have an end date',
+                'missing_deduction_period_amount': 'The deduction period '
+                'which starts at %(start_date)s must have a non null amount'
+                })
 
     def default_definition(self, name):
         defaults = super(CreateIndemnification, self).default_definition(name)
@@ -50,6 +60,18 @@ class CreateIndemnification:
                 new_deductions)
             loss.save()
         return super(CreateIndemnification, self).transition_calculate()
+
+    def check_input(self):
+        super(CreateIndemnification, self).check_input()
+        for deduction_period in self.definition.deduction_periods:
+            if deduction_period.end_date is None:
+                self.raise_user_error('missing_deduction_period_end_date',
+                    {'start_date': coog_string.translate_value(
+                        deduction_period, 'start_date')})
+            if not deduction_period.amount_received:
+                self.raise_user_error('missing_deduction_period_amount',
+                    {'start_date': coog_string.translate_value(
+                        deduction_period, 'start_date')})
 
 
 class IndemnificationDefinition:
