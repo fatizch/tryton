@@ -357,9 +357,10 @@ class Contract(Printable):
         Option = Pool().get('contract.option')
         for covered_element in getattr(self, 'covered_elements', []):
             for option in covered_element.options:
-                option.status = 'active'
-                option.sub_status = None
-                to_save.append(option)
+                if not option.manual_end_date:
+                    option.status = 'active'
+                    option.sub_status = None
+                    to_save.append(option)
 
         Option.save(to_save)
 

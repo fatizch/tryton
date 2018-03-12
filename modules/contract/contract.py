@@ -1212,8 +1212,9 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         self.status = 'active'
         options = list(self.options)
         for option in options:
-            option.status = 'active'
-            option.sub_status = None
+            if not option.manual_end_date:
+                option.status = 'active'
+                option.sub_status = None
         self.options = options
 
     def decline_options(self, reason):

@@ -1,3 +1,4 @@
+* BUG#8502 A terminated option must stay so after contract reactivation
 * BUG#8491 Change option status to None after reactivation
 * BUG#8482 Use image instead of icon in form view
 * BUG#8163 Be able to search contracts using initial start date
