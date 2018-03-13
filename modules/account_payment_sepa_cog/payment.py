@@ -495,6 +495,7 @@ class Payment:
                 ' %(bank_account)s is different than that of the SEPA mandate'
                 ' %(sepa_bank_account)s',
                 })
+        cls.sepa_mandate.select = True
         cls.sepa_mandate.states['invisible'] = Eval('kind') == 'payable'
         cls.sepa_mandate.states['readonly'] = Eval('state') != 'draft'
         cls.sepa_mandate.depends += ['kind', 'payer', 'state']
