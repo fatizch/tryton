@@ -3,6 +3,10 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.billing_information.change:"
+msgid "Be careful, posterior billing mode will be erased %s"
+msgstr "Faites attention, les futurs modes de quittancement seront effacés %s"
+
+msgctxt "error:contract.billing_information.change:"
 msgid "Payer does not own this account, do you want it to change ?"
 msgstr ""
 "Le payeur n'est pas propriétaire du compte, voulez-vous l'y rattacher ?"
@@ -22,6 +26,10 @@ msgstr ""
 msgctxt "error:contract.billing_information.change:"
 msgid "The date %s is not compatible with the billing mode %s."
 msgstr "La date %s n'est pas compatible avec le mode de quittancement %s."
+
+msgctxt "error:contract.direct_debit_account.change:"
+msgid "Be careful, posterior billing mode will be erased %s"
+msgstr "Faites attention, les futurs modes de quittancement seront effacés %s"
 
 msgctxt "error:contract.direct_debit_account.change:"
 msgid "Payer does not own this account, do you want it to change ?"
@@ -113,6 +121,10 @@ msgctxt "field:contract.billing_information.change,product:"
 msgid "Product"
 msgstr "Produit"
 
+msgctxt "field:contract.billing_information.change,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:contract.billing_information.change,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
@@ -187,6 +199,10 @@ msgctxt "field:contract.direct_debit_account.change,product:"
 msgid "Product"
 msgstr "Produit"
 
+msgctxt "field:contract.direct_debit_account.change,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:contract.direct_debit_account.change,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
@@ -248,7 +264,7 @@ msgid "Keep if Empty"
 msgstr "Conserver si vide"
 
 msgctxt "field:endorsement.contract.billing_information,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.billing_information,relation:"
@@ -305,7 +321,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.billing_information.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.billing_information.field,write_date:"
@@ -337,6 +353,10 @@ msgstr "Avenant unitaire"
 msgctxt "field:endorsement.contract.recalculate_and_reinvoice,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:endorsement.contract.recalculate_and_reinvoice,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:endorsement.part,billing_information_fields:"
 msgid "Billing Information Fields"

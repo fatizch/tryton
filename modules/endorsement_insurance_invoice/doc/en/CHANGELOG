@@ -1,3 +1,4 @@
+* BUG#8500 Add warning when endorsement have posterior billing
 * BUG#8168 Fix invoice periods calculation with rebill endorsements
 * BUG#7626 Fix the effective date check when starting a billing information endorsement
 * BUG#7815 A new mandate must be created when the payer changes

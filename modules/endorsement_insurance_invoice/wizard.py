@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Len, If
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import model, fields, utils
+from trytond.modules.coog_core import model, coog_string, fields, utils
 from trytond.modules.endorsement.wizard import EndorsementWizardStepMixin
 from trytond.modules.endorsement.wizard import EndorsementRecalculateMixin
 from trytond.modules.endorsement.wizard import add_endorsement_step
@@ -132,6 +132,8 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
                 'the billing mode %s.',
                 'direct_debit_account_required': 'Please set a  new direct '
                 'debit account !',
+                'billing_mode_existing': 'Be careful, posterior billing mode '
+                'will be erased %s',
                 'payer_not_account_owner': 'Payer does not own this '
                 'account, do you want it to change ?',
                 })
@@ -293,6 +295,17 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
         endorsement = self.wizard.select_endorsement.endorsement
         self.set_account_owner()
         self.do_update_endorsement(endorsement)
+        dates = []
+        for billing_information in self.contract.billing_informations:
+            if billing_information.date and \
+                    billing_information.date > self.effective_date:
+                dates.append('%s %s' % (
+                        billing_information.billing_mode.rec_name,
+                        coog_string.translate_value(
+                            billing_information, 'date')))
+        if len(dates):
+            self.raise_user_warning(str(self),
+                'billing_mode_existing', '\n' + '\n'.join(dates))
         endorsement.save()
 
     def add_owner_to_account(self, account, owner):
