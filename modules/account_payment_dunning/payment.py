@@ -83,7 +83,7 @@ class Payment:
         Dunning.save(dunnings)
 
     def _set_dunning(self, level):
-        if self.line.reconciliation:
+        if self.line.reconciliation or self.line.inactive_dunnings:
             return None
         if self.line.dunnings:
             dunning = self.line.dunnings[-1]

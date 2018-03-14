@@ -6,6 +6,7 @@ import batch
 import dunning
 import event
 import party
+import account
 
 
 def register():
@@ -19,4 +20,5 @@ def register():
         party.Party,
         party.PartyDunningProcedure,
         event.EventLog,
+        account.MoveLine,
         module='account_dunning_cog', type_='model')

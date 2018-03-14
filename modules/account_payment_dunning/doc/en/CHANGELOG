@@ -1,3 +1,4 @@
+* BUG#8514 Do not create a new dunning if there is already an inactive one (whish could be reactivated)
 * BUG#7537 Do not set dunning if payment line is already reconciled
 
 Version 1.14 - 2017-11-09
