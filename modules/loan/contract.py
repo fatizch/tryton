@@ -605,7 +605,12 @@ class LoanShare(model.CoogSQL, model.CoogView, model.ExpandTreeMixin):
             return min(self.option.end_date,
                 coog_date.add_day(share.start_date, -1))
         else:
-            return min(self.option.end_date, self.loan.end_date)
+            return min(self.option.end_date, self.get_insured_loan_end_date())
+
+    def get_insured_loan_end_date(self):
+        # Used for clients who want to override the default behaviour and want
+        # the contract to end the day before the last payment date
+        return self.loan.end_date
 
     @staticmethod
     def order_start_date(tables):
