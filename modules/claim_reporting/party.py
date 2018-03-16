@@ -13,6 +13,13 @@ class Insurer:
     __name__ = 'insurer'
     __metaclass__ = PoolMeta
 
-    claim_stock_reports = fields.Many2Many('insurer-report.template', 'insurer',
-        'report_template', 'Claim Stock Reports',
-        domain=[('kind', '=', 'claim_insurer_report')])
+    # Use function field for Export/import purpose as data are already included
+    # in stock_reports fields
+    claim_stock_reports = fields.Function(
+        fields.Many2Many('insurer-report.template', None,
+        None, 'Claim Stock Reports'),
+        'get_claim_stock_reports')
+
+    def get_claim_stock_reports(self, name):
+        return [x for x in self.stock_reports
+            if x.kind == 'claim_insurer_report']

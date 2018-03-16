@@ -384,6 +384,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             ]
 
     @classmethod
+    def is_master_object(cls):
+        return True
+
+    @classmethod
     def _export_light(cls):
         return super(ReportTemplate, cls)._export_light() | {'products',
             'document_desc', 'on_model'}

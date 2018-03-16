@@ -28,3 +28,7 @@ class Insurer:
     stock_reports = fields.Many2Many('insurer-report.template', 'insurer',
         'report_template', 'Stock Reports', domain=[
             ('kind', 'like', '%insurer_report%')])
+
+    @classmethod
+    def _export_light(cls):
+        return super(Insurer, cls)._export_light() | {'stock_reports'}

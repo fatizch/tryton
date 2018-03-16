@@ -115,6 +115,10 @@ class Insurer(model.CoogView, model.CoogSQL):
             cls.check_delegations(insurers)
 
     @classmethod
+    def _export_skips(cls):
+        return super(Insurer, cls)._export_skips() | {'options'}
+
+    @classmethod
     def check_delegations(cls, insurers):
         for insurer in insurers:
             if not any(x.insurance_kind == '' for x in insurer.delegations):

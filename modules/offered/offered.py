@@ -119,13 +119,7 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @classmethod
     def _export_light(cls):
         return super(Product, cls)._export_light() | {'contract_generator',
-            'company', 'currency'}
-
-    @classmethod
-    def _export_skips(cls):
-        result = super(Product, cls)._export_skips()
-        result.add('report_templates')
-        return result
+            'company', 'currency', 'report_templates'}
 
     @classmethod
     def validate(cls, instances):

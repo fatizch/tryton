@@ -50,6 +50,10 @@ class Insurer:
     benefits = fields.One2Many('benefit', 'insurer', 'Benefits',
         target_not_required=True, readonly=True)
 
+    @classmethod
+    def _export_skips(cls):
+        return super(Insurer, cls)._export_skips() | {'benefits'}
+
 
 class SynthesisMenuClaim(model.CoogSQL):
     'Party Synthesis Menu Claim'
