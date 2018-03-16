@@ -250,11 +250,11 @@ msgstr "Date de décision"
 
 msgctxt "field:underwriting.result,effective_decision_date:"
 msgid "Effective Decision Date"
-msgstr "Date de décision effective"
+msgstr "Date d'effet de la décision"
 
 msgctxt "field:underwriting.result,effective_decision_end:"
 msgid "Effective Decision End"
-msgstr "Fin de décision effective"
+msgstr "Fin d'effet de la décision"
 
 msgctxt "field:underwriting.result,end_date_required:"
 msgid "End Date Required"

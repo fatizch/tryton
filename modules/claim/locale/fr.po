@@ -1316,7 +1316,7 @@ msgstr "Sequence des numéros de sinistres"
 
 msgctxt "model:ir.sequence.type,name:sequence_type_claim_number"
 msgid "Claim Number"
-msgstr "Type de séquence"
+msgstr "Numéro de sinistre"
 
 msgctxt "model:ir.test_case.instance,name:document_desc_test_case"
 msgid "Document Desc Test Case"
