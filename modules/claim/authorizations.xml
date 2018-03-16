@@ -64,6 +64,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="claim.menu_claim_form"/>
             <field name="group" ref="group_claim_manage"/>
         </record>
+        <!-- Claim Super Manager Group -->
+        <record model="res.group" id="group_claim_super_manager">
+            <field name="name">Coog Claim Super Manager</field>
+        </record>
         <!-- Product Management Group  -->
         <!-- Claim / Configuration -->
         <record model="ir.ui.menu-res.group" id="menu_claim_product_manage">
@@ -107,6 +111,10 @@ this repository contains the full copyright notices and license terms. -->
         <record model="res.user-res.group" id="user_admin_group_claim_manage">
             <field name="user" ref="res.user_admin"/>
             <field name="group" ref="group_claim_manage"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_claim_super_manager">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_claim_super_manager"/>
         </record>
         <record model="ir.model.access" id="access_extra_data_group_claim_read">
             <field name="model" search="[('model', '=', 'extra_data')]"/>

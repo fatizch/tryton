@@ -180,9 +180,24 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.field.access" id="access_manual_indemnification">
+            <field name="field" search="[('model.model', '=', 'claim.indemnification'), ('name', '=', 'manual')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <!-- Admin Group -->
         <record model="ir.model.access" id="access_claim_indemnification_admin_group">
             <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.field.access" id="access_manual_indemnification_admin_group">
+            <field name="field" search="[('model.model', '=', 'claim.indemnification'), ('name', '=', 'manual')]"/>
             <field name="group" ref="res.group_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
@@ -199,9 +214,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_delete" eval="True"/>
         </record>
         <!-- Claim Management Group -->
-        <record model="ir.model.access" id="access_claim_indemnification_group_product_manage">
+        <record model="ir.model.access" id="access_claim_indemnification_group_claim_manage">
             <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
             <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Claim Super Manager Group -->
+        <record model="ir.model.field.access" id="access_manual_indemnification_claim super_group">
+            <field name="field" search="[('model.model', '=', 'claim.indemnification'), ('name', '=', 'manual')]"/>
+            <field name="group" ref="claim.group_claim_super_manager"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>

@@ -1398,6 +1398,10 @@ msgctxt "model:res.group,name:group_claim_manage"
 msgid "Coog Claim management"
 msgstr "Coog Gestion Sinistre"
 
+msgctxt "model:res.group,name:group_claim_super_manager"
+msgid "Coog Claim Super Manager"
+msgstr "Coog Super Gestionnaire Sinistre"
+
 msgctxt "model:res.group,name:group_claim_read"
 msgid "Coog Claim consultation"
 msgstr "Coog Consultation Sinistre"
