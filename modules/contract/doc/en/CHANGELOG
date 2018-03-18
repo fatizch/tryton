@@ -1,3 +1,4 @@
+* BUG#8547 The previous end date should stay None when we reactivate void contract
 * BUG#8502 A terminated option must stay so after contract reactivation
 * BUG#8491 Change option status to None after reactivation
 * BUG#8482 Use image instead of icon in form view

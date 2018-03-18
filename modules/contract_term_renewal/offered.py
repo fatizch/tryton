@@ -21,7 +21,8 @@ class Product:
 
     def get_contract_end_date(self, exec_context):
         if self.term_renewal_rule and not \
-                exec_context['contract'].finally_renewed():
+                exec_context['contract'].finally_renewed() and \
+                exec_context['contract'].status != 'void':
             return self.term_renewal_rule[0].calculate_rule(exec_context)
         elif self.term_renewal_rule:
             return exec_context['contract'].final_end_date

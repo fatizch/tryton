@@ -1172,7 +1172,11 @@ class Contract:
 
     @classmethod
     def reactivate(cls, contracts):
-        previous_dates = {x.id: x.end_date for x in contracts}
+        '''
+        we want to rebill void contract from its start date
+        '''
+        previous_dates = {x.id: x.end_date if x.status != 'void'
+            else x.start_date for x in contracts}
         super(Contract, cls).reactivate(contracts)
         for contract in contracts:
             cls.calculate_prices([contract], previous_dates[contract.id])

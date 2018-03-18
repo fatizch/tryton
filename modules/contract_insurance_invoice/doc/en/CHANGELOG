@@ -1,3 +1,4 @@
+* BUG#8547 Reactivate a void contract is based new on the contract start_date instead of its end_date
 * BUG#8490 Fix searcher of contract invoices
 * BUG#8461 Properly ignore cancelled invoices in contract invoicing batch
 * BUG#8119 Manage contract without end date in get_future_invoices

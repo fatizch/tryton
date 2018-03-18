@@ -477,7 +477,9 @@ class ContractReactivate(model.CoogWizard):
         new_end_date = contract.get_reactivation_end_date()
         result = {
             'contract': contract.id,
-            'previous_end_date': contract.end_date or new_end_date,
+            'previous_end_date': None
+            if contract.status == 'void'
+            else (contract.end_date or new_end_date),
             'new_end_date': new_end_date,
             'termination_reason': contract.sub_status.id,
             'will_be_terminated': ((new_end_date or datetime.date.max)

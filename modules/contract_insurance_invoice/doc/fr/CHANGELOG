@@ -1,3 +1,4 @@
+* BUG#8547 La réactivation d'un contrat sans effet se base sur la date début du contrat au lieu de sa date de fin
 * BUG#8490 Correctif du searcher des quittances de contrat
 * BUG#8461 Non prise en compte des quittances annulées dans le batch de quittancement
 * BUG#8119 Gestion des contrats sans date de fin dans "get_future_invoices"
