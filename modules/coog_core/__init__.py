@@ -99,7 +99,7 @@ def register():
         load_data.LanguageTranslatableSet,
         module='coog_core', type_='model')
 
-    if config.get('env', 'testing') == 'True':
+    if config.getboolean('env', 'testing') is True:
         Pool.register(
             models_for_tests.TestMethodDefinitions,
             models_for_tests.TestDictSchema,

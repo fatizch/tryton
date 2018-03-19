@@ -20,8 +20,14 @@ def test(module, options=None):
     result = unittest.TextTestRunner(
         verbosity=opts['verbosity'], failfast=opts['failfast']).run(suite)
     job = get_current_job(connection=broker.connection)
-    broker.log_result(job, {'total': result.testsRun, 'db': db_name,
-            'errors': len(result.errors), 'fails': len(result.failures),
-            'details': '\n\n'.join('%s\n%s' % (repr(x[0]), x[1])
-                for x in result.failures)})
+    broker.log_result(job, {
+            'db': db_name,
+            'total': result.testsRun,
+            'errors_nb': len(result.errors),
+            'errors': '\n\n'.join('%s\n%s' % (repr(x[0]), x[1])
+                for x in result.errors),
+            'fails_nb': len(result.failures),
+            'fails': '\n\n'.join('%s\n%s' % (repr(x[0]), x[1])
+                for x in result.failures)
+            })
     assert result.wasSuccessful()

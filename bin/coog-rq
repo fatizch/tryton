@@ -57,7 +57,7 @@ coog_rq_info() { # print workers infos
 
 coog_rq_queued() { # count queued jobs - <name>
         [ -z "$1" ] && >&2 echo missing queue name && return 1
-        local q; q=$(coog_rq_cli info -r -Q "$1" | grep -oP "\d+$")
+        local q; q=$(coog_rq_cli info -r -Q "$1" | cut -d " " -f 3)
         local wk; wk=$(coog_rq_cli info -r -W "$1" | grep -c "busy")
         echo $((q+wk))
 }

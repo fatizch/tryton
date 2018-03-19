@@ -35,7 +35,7 @@ def generate(output_doc_directory=None):
             ('none', None),
             ])
 
-    doc_path = '/tmp/'
+    doc_path = os.path.join('/tmp', os.environ['USER'])
     if output_doc_directory:
         final_html_path = os.path.join(output_doc_directory, 'html')
     else:

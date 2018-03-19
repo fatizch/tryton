@@ -34,7 +34,7 @@ coog_batch_join() { # wait for execution - <name>
         [ "$queued" -eq 0 ] && break
         echo "$1: wait @ $(date +'%H:%M:%S') - $queued"
     done
-    local failed; failed=$(coog_batch_query "fail" "$1" | grep -Pc "\w+")
+    local failed; failed=$(coog_batch_query "fail" "$1" | grep -c "\w")
     _coog_batch_ko="$failed"
     [ "$failed" -eq 0 ] && echo "$1: succeeded" && return 0
     echo "$1: failed" && return 1
@@ -100,7 +100,7 @@ coog_batch_reexec() { # execute batch (workers should be running) - name
 
 coog_batch_report() { # report batch execution - name
     local broker; broker=$(_coog_batch_broker) || return $?
-    local failed; failed=$(coog_batch_query "fail" "$1" | grep -Pc "\w+")
+    local failed; failed=$(coog_batch_query "fail" "$1" | grep -c "\w")
     if [ "$failed" -eq 0 ]
     then
         echo "$1 succeeded"

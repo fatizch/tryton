@@ -2,8 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 # #Title# #Contract Start Date Endorsement Scenario
 # #Comment# #Imports
+import os
 import sys
-from proteus import Model, Wizard, config
+from proteus import Model, Wizard
 
 import datetime
 from subprocess import check_output as qx
@@ -25,6 +26,7 @@ from trytond.modules.premium.tests.tools import add_premium_rules
 from trytond.modules.contract_insurance_invoice.tests.tools import \
     add_invoice_configuration
 
+import trytond.modules.bank_mobility as bank_mobility
 
 # #Comment# #Install Modules
 config = activate_modules('bank_mobility')
@@ -179,12 +181,10 @@ subscriber3, subscriber_account3 = create_party_and_bank_account(
         'Fillon', 'François', 'FR76 1131 5000 0112 3456 7890 138', bank3)
 
 
-my_env = qx("coog env".split())
-env_list = my_env.split()
-coog_root = env_list[env_list.index('COOG_ROOT') + 1]
-bank_mobility_batch, = IrModel.find([('model', '=', 'bank.mobility')])
+module_file = bank_mobility.__file__
+module_folder = os.path.dirname(module_file)
 
-base_file_path = coog_root + '/coog/modules/bank_mobility'
+bank_mobility_batch, = IrModel.find([('model', '=', 'bank.mobility')])
 
 
 def debug_print(to_print):
@@ -195,7 +195,7 @@ def import_flow_5(file_name):
     debug_print('testing %s' % file_name)
     launcher = Wizard('batch.launcher')
     launcher.form.batch = bank_mobility_batch
-    dir_ = base_file_path + '/tests_imports/'
+    dir_ = os.path.join(module_folder, 'tests_imports')
     file_path = dir_ + file_name
     for i in xrange(0, len(launcher.form.parameters)):
         if launcher.form.parameters[i].code == 'in_directory':

@@ -45,7 +45,7 @@ def register():
         wizard.ImportProcess,
         module='process_cog', type_='wizard')
 
-    if config.get('env', 'testing') == 'True':
+    if config.getboolean('env', 'testing') is True:
         Pool.register(
             models_for_test.ModelProcess,
             module='process_cog', type_='model')

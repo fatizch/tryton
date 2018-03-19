@@ -70,7 +70,7 @@ class MoveLine:
         # Migrate from 1.3 : second step
         if not do_migrate:
             return
-        if config.get('env', 'testing') == 'True':
+        if config.getboolean('env', 'testing') is True:
             # necessary because the migration script
             # uses Window function not supported by sqlite
             return

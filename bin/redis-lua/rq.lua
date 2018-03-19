@@ -73,7 +73,7 @@ end
 
 local function list_init()
     local header = {'date', 'queue', 'id', 'status', 'context', 'records',
-        'args', 'kwargs', 'result'}
+        'args', 'kwargs'}
     local result = {table.concat(header, '\t')}
     return header, result
 end
@@ -145,7 +145,6 @@ broker.fill = function(id, job)
     job.records = cjson.encode(args[2])
     job.args = cjson.encode(args[3])
     job.kwargs = cjson.encode(kwargs)
-    job.result = 'pickled!'
 end
 
 local parse_date = function(d)
