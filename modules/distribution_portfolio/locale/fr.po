@@ -94,10 +94,6 @@ msgctxt "field:party.party,portfolio:"
 msgid "Portfolio"
 msgstr "Portefeuille"
 
-msgctxt "field:res.user,dist_network:"
-msgid "Distribution Network"
-msgstr "Réseau de distribution"
-
 msgctxt "help:distribution.network,is_portfolio:"
 msgid ""
 "If checked, parties will be defined within this distribution network and can"

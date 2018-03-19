@@ -1,4 +1,5 @@
 * FEA#8549 Add unique constraint on distribution network code
+* FEA#8122 Make the user's distribution network available in preferences client side
 * BUG#8139 Add an example of distribution network codification in test case
 
 Version 1.14 - 2017-11-09

@@ -5,7 +5,6 @@ from trytond.pool import Pool
 import distribution
 import configuration
 import party
-import res
 import contract
 import process
 import rule_engine
@@ -17,7 +16,6 @@ def register():
         configuration.Configuration,
         configuration.ConfigurationDefaultPortfolio,
         party.Party,
-        res.User,
         contract.Contract,
         contract.CoveredElement,
         contract.Beneficiary,

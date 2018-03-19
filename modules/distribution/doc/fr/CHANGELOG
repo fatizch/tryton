@@ -1,4 +1,5 @@
 * FEA#8549 Ajout d'une contrainte d'unicité sur le code d'un réseau de distribution
+* FEA#8122 Le réseau de distribution de l'utilisateur est disponible dans les préférences côté client
 * BUG#8139 Ajout d'un exemple de codification de réseau de distribution dans le jeu d'essai
 
 Version 1.14 - 2017-11-09

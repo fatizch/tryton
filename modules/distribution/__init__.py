@@ -5,6 +5,7 @@ from trytond.pool import Pool
 import distribution
 import test_case
 import party
+import res
 
 
 def register():
@@ -12,6 +13,7 @@ def register():
         distribution.DistributionNetwork,
         distribution.DistributionNetworkContactMechanism,
         party.Party,
+        res.User,
         test_case.TestCaseModel,
         module='distribution', type_='model')
     Pool.register(
