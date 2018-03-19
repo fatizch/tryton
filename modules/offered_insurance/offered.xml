@@ -16,7 +16,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="offered.product_view_tree"/>
             <field name="arch" type="xml"/>
         </record>
-        <menuitem parent="offered.menu_product" sequence="3" id="offered.menu_product_form" icon="family" action="offered.act_product_form"/>
+        <menuitem parent="offered.menu_product" sequence="1" id="offered.menu_product_form" icon="family" action="offered.act_product_form"/>
         <menuitem parent="offered.menu_product" sequence="2" id="offered.menu_coverage_form" icon="umbrella-blue" action="offered.act_coverage_form"/>
         <!--################################################################ -->
         <!-- Item Description -->

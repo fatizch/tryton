@@ -43,7 +43,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="benefit_view_form"/>
             <field name="act_window" ref="act_benefit_form"/>
         </record>
-        <menuitem parent="offered.menu_product" sequence="1" id="menu_benefit_form" icon="tryton-list" action="act_benefit_form"/>
+        <menuitem parent="offered.menu_product" sequence="3" id="menu_benefit_form" icon="tryton-list" action="act_benefit_form"/>
         <!-- ############################################################ -->
         <!-- Event Description -->
         <!-- ############################################################ -->
