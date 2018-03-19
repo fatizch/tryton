@@ -415,7 +415,8 @@ class ClaimService:
                 if len(beneficiary) == 1 and beneficiary[0][1] == 1:
                     indemnification = Indemnification(
                         start_date=self.loss.start_date,
-                        end_date=self.loss.end_date
+                        end_date=self.loss.end_date,
+                        total_amount=Decimal(0)
                         )
                     indemnification.beneficiary = beneficiary[0][0]
                     indemnification.init_from_service(self)

@@ -73,6 +73,10 @@ class ClaimService:
                 'warning_refuse_service': 'Confirm service refusal'
                 })
 
+    @staticmethod
+    def default_eligibility_status():
+        return 'study_in_progress'
+
     def init_from_loss(self, loss, benefit):
         super(ClaimService, self).init_from_loss(loss, benefit)
         if benefit:

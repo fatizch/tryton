@@ -1,3 +1,4 @@
+* BUG#8523 Correction d'un crash lorsque l'on exerce une garantie sur un événement avec une date de fin dans le cas ou la période est une franchise.
 * FEA#8287 Ajout d'un groupe super gestionnaire sinistre qui est autorisé à définir les indemnités manuellement
 * FEA#8284 Ajout d'une relation "Remboursements sinistre" sur les sinistres, ainsi que d'un menu "Remboursements sinistre" listant l'ensemble des quittances liées à des remboursements sinistre.
 * BUG#8430 Ajouter un message d'erreur dans l'assistant de validation de prestation lorsque l'utilisateur ne commente pas son refus, le champs note n'étant plus requis
@@ -32,7 +33,7 @@ Version 1.14 - 2017-11-09
 * BUG#7044 Ne pas tenter d'annuler une indemnisation déjà annulée
 * BUG#6882 Des avertissements ou errors ne sont plus levés en cas de refus de service lors de la fermeture d'une prestation
 * FEA#5907 Gestion des indemnisations multiples sur une période
-* BUG#6632 Correction du crash sur le calcul des périodes manquantes survenant lors de la fermeture du sinistre
+* BUG#6632 Correction du crash sur le calcul des périodes manquantes survenant lors de la fermeture du sinistre 
 * BUG#6504 Avertir la validation d'indemnisations dont la somme serait négative si il y a un régularisation par compensation
 * OTH#0000 Correctifs des warnings sur la classe Configuration lors du lancement du serveur
 * BUG#6358 Utiliser la date du jour pour valider l'existence d'un compte bancaire à l'ordonnancement

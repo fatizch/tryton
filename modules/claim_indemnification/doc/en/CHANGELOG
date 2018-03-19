@@ -1,3 +1,4 @@
+* BUG#8523 Fix crash when delivering a benefit on a loss with an end_date in case the full period is a dedutible period
 * FEA#8287 Add a claim super manager group which is authorized to manually set the indemnifications
 * FEA#8284 Add "Claim Invoices" relate on claims, and "Claim Invoices" menu
 * BUG#8430 Take off 'note' required states on indemnification wizard and display an error message instead of a tryton domain error
