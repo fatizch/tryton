@@ -1,3 +1,4 @@
+* OTH#0000 Correction erreur Flake8
 * OTH#0000 Fusion avec contract_process_commission
 * FEA#8274 Forcer le découpage des lignes de commissions selon les dates de recalcul même si le taux ne change pas
 * BUG#8321 Modification de la méthode 'Change_broker' afin de pouvoir mettre à jour les quittances validées si il y a un changement d'apporteur

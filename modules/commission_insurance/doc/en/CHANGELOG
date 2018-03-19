@@ -1,3 +1,4 @@
+* OTH#0000 Fix flake 8
 * OTH#0000 Merge with contract_process_commission
 * FEA#8274 Force commission line split according the computation dates defined
 * BUG#8321 Update 'change_broker' in order to update the agent value of validated invoices if we change broker contract

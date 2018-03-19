@@ -10,7 +10,7 @@ from trytond.transaction import Transaction
 from trytond.model import ModelView, Workflow
 from trytond.tools import grouped_slice
 
-from trytond.modules.coog_core import utils, fields, coog_date, coog_sql
+from trytond.modules.coog_core import utils, fields, coog_sql
 from .commission import COMMISSION_AMOUNT_DIGITS, COMMISSION_RATE_DIGITS
 
 __all__ = [
