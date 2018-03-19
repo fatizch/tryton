@@ -1,3 +1,4 @@
+* OTH#0000 Encodage des documents seulement dans la réponse à l'appel RPC, itération sur #8401
 * FEA#8401 La production de documents peut se faire par appel RPC
 * BUG#8368 Gestion de différentes sections du document opendocument dans l'assistant de conversion des courriers
 * BUG#8192 Ajout de configuration pour attribuer les droits ACL sur le répertoire de sortie des courriers

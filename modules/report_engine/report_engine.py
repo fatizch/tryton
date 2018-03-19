@@ -22,7 +22,7 @@ try:
 except ImportError:
     Manifest, MANIFEST = None, None
 
-from itertools import groupby
+from itertools import groupby, chain
 from sql import Cast, Null, Literal
 from sql.functions import Substring, Position
 from datetime import datetime
@@ -171,7 +171,11 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         super(ReportTemplate, cls).__setup__()
         cls.__rpc__.update({'produce_reports': RPC(instantiate=0,
                     readonly=False, result=lambda res: (
-                        [{k: report[k] for k in ('data', 'report_name')}
+                        [{k: v for k, v in chain(
+                                {key: value for key, value in report.iteritems()
+                                    if key in ('report_name',)}.iteritems(),
+                                {'data': base64.b64encode(report['data'])
+                                    }.iteritems())}
                             for report in res[0]],
                         [attachment.id for attachment in res[1]])
                     )})
@@ -283,10 +287,6 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         cursor.execute(*to_update.update(columns=[to_update.kind],
                 values=[''],
                 where=to_update.kind == Null))
-
-    @property
-    def data_encoding_methods(self):
-        return {'base64': base64.b64encode}
 
     @classmethod
     def default_process_method(cls):
@@ -558,11 +558,6 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 objects_ids, reporting_data)
         extension, data = self.convert(orig_data,
             self.get_extension('output_format'), orig_ext)
-        encode_method = self.data_encoding_methods.get(
-            context_.get('data_encoding'))
-        if encode_method:
-            data = encode_method(data)
-            orig_data = encode_method(orig_data)
 
         return {
             'object': objects[0],

@@ -1,3 +1,4 @@
+* OTH#0000 Only encode documents in reponse to RPC call response, iteration on #8401
 * FEA#8401 Report production can be made via RPC call
 * BUG#8368 Handle different sections of the opendocument file in template conversion wizard
 * BUG#8192 Add configuration to set ACL rights on the report output folder
