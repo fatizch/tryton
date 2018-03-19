@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:distribution.network:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
 msgctxt "field:distribution.network,address:"
 msgid "Address"
 msgstr "Adresse"

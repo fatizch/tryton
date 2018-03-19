@@ -3,6 +3,7 @@
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import model, fields, coog_string
+from trytond.model import Unique
 
 __all__ = [
     'DistributionNetwork',
@@ -57,6 +58,9 @@ class DistributionNetwork(model.CoogSQL, model.CoogView):
     def __setup__(cls):
         super(DistributionNetwork, cls).__setup__()
         cls._order.insert(0, ('code', 'ASC'))
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_unique', Unique(t, t.code), 'The code must be unique')]
 
     @classmethod
     def _export_skips(cls):
