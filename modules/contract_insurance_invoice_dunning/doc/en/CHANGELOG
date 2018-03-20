@@ -1,3 +1,4 @@
+* FEA#8214 Default termination mode for contract in dunning level configuration is set to 'At dunning effective date'
 * FEA#7655 Improve performances of dunning treatment batch
 * BUG#6932 Keep initial maturity date if dunning procedure is based on payment date
 

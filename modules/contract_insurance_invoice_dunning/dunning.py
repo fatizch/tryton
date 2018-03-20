@@ -194,7 +194,7 @@ class Level:
 
     @staticmethod
     def default_termination_mode():
-        return 'at_last_posted_invoice'
+        return 'at_dunning_effective_date'
 
     @staticmethod
     def default_apply_for():

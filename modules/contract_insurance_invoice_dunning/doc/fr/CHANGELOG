@@ -1,3 +1,4 @@
+* FEA#8214 Le mode de résiliation par défaut d'un contract dans la configuration d'une procédure de relance est défini "A la date d'effet de la relance"
 * FEA#7655 Amélioration de performances pour le batch de traiment des relances
 * BUG#6932 Conservation de la date d'échéance initiale si la procédure de relance se base sur la date de paiement
 
