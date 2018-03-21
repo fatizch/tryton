@@ -1,7 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields
 
@@ -30,6 +31,12 @@ class ContractSubscribeFindProcess:
     def __setup__(cls):
         super(ContractSubscribeFindProcess, cls).__setup__()
         cls.product.states['invisible'] = True
+
+    @staticmethod
+    def default_distributor():
+        dist_network = Pool().get('res.user')(Transaction().user).dist_network
+        return dist_network.id if dist_network and dist_network.is_distributor \
+            else None
 
     @fields.depends('distributor', 'appliable_conditions_date')
     def on_change_with_authorized_commercial_products(self):
