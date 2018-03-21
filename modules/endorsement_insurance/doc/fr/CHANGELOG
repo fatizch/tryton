@@ -1,3 +1,5 @@
+* BUG#8576 Compare la date d'effet de l'avenant de suppression de bénéficiaire avec la date de début initiale de l'option.
+
 Version 1.14 - 2017-11-09
 * BUG#6483 Initialisation des options dans l'avenant de nouvel élément couvert
 * BUG#6644 Motif par défaut lors d'un ajout de surprime

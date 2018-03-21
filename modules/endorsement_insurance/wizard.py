@@ -335,7 +335,7 @@ class RemoveOption(EndorsementWizardStepMixin):
             if set(cov_options_per_contract[contract]) == set(options):
                 self.raise_user_error('cannot_end_all_covered_elements')
             for option in options:
-                if option.start_date > effective_date:
+                if option.initial_start_date > effective_date:
                     self.raise_user_error('end_date_anterior_to_start_date',
                         (option.rec_name))
 
