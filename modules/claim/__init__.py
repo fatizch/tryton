@@ -48,11 +48,15 @@ def register():
         event.EventLog,
         configuration.Configuration,
         wizard.ClaimCloseReasonView,
+        wizard.BenefitSelectExtraDataView,
+        wizard.LossSelectExtraDataView,
         global_search.GlobalSearchSet,
         module='claim', type_='model')
     Pool.register(
         wizard.CloseClaim,
         wizard.DeliverBenefits,
+        wizard.PropagateBenefitExtraData,
+        wizard.PropagateLossExtraData,
         party.SynthesisMenuOpen,
         party.PartyReplace,
         module='claim', type_='wizard')

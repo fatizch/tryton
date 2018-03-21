@@ -1,7 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import Pool
 
+from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.modules.coog_core import model, fields
 from trytond.wizard import Wizard, StateView, Button, StateTransition
@@ -13,6 +14,10 @@ __all__ = [
     'BenefitToDeliver',
     'SelectBenefits',
     'DeliverBenefits',
+    'BenefitSelectExtraDataView',
+    'PropagateBenefitExtraData',
+    'LossSelectExtraDataView',
+    'PropagateLossExtraData',
     ]
 
 
@@ -145,4 +150,114 @@ class CloseClaim(Wizard):
     def transition_apply_sub_status(self):
         Claim = Pool().get('claim')
         Claim.close(self.close_reason.claims, self.close_reason.sub_status)
+        return 'end'
+
+
+class BenefitSelectExtraDataView(model.CoogView):
+    'Select Extra Data'
+    __name__ = 'benefit.select_extra_data_view'
+
+    extra_data = fields.Dict('extra_data', 'Extra Data',
+        domain=[('id', 'in', Eval('available_extra_datas'))],
+        depends=['available_extra_datas'])
+    benefit = fields.Many2One('benefit', 'Benefit', readonly=True)
+    available_extra_datas = fields.Many2Many('extra_data', None, None,
+        'Possible Extra Datas', states={'invisible': True})
+
+
+class PropagateBenefitExtraData(Wizard):
+    'Propagate Extra Data On Claim Services'
+    __name__ = 'benefit.propagate_extra_data'
+
+    start_state = 'select_extra_data'
+    select_extra_data = StateView(
+        'benefit.select_extra_data_view',
+        'claim.service_select_extra_data_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Propagate', 'propagate_extra_data', 'tryton-go-next',
+                default=True)])
+    propagate_extra_data = StateTransition()
+
+    def default_select_extra_data(self, fields):
+        context = Transaction().context
+        assert context.get('active_model') == 'benefit'
+        benefit = Pool().get('benefit')(context.get('active_id'))
+        return {
+            'extra_data': {x.name: None for x in benefit.extra_data_def},
+            'benefit': benefit.id,
+            'available_extra_datas': [e.id for e in benefit.extra_data_def]
+            }
+
+    def transition_propagate_extra_data(self):
+        Service = Pool().get('claim.service')
+        affected_services = Service.search(
+            [('benefit', '=', self.select_extra_data.benefit)])
+        services_to_save = []
+        for service in affected_services:
+            if service.loss is None:
+                continue
+            for extra_data in service.extra_datas:
+                for key, value in self.select_extra_data.extra_data.iteritems():
+                    if key not in extra_data.extra_data_values.keys():
+                        extra_data.extra_data_values.update({key: value})
+                        extra_data.extra_data_values = \
+                            extra_data.extra_data_values
+            service.extra_datas = service.extra_datas
+            services_to_save.append(service)
+        if services_to_save:
+            Service.save(services_to_save)
+        return 'end'
+
+
+class LossSelectExtraDataView(model.CoogView):
+    'Select Extra Data'
+    __name__ = 'loss.select_extra_data_view'
+
+    extra_data = fields.Dict('extra_data', 'Extra Data',
+        domain=[('id', 'in', Eval('available_extra_datas'))],
+        depends=['available_extra_datas'])
+    loss = fields.Many2One('benefit.loss.description', 'Loss', readonly=True)
+    available_extra_datas = fields.Many2Many('extra_data', None, None,
+        'Possible Extra Datas', states={'invisible': True})
+
+
+class PropagateLossExtraData(Wizard):
+    'Propagate Extra Data On Claim Losses'
+    __name__ = 'loss.propagate_extra_data'
+
+    start_state = 'select_extra_data'
+    select_extra_data = StateView(
+        'loss.select_extra_data_view',
+        'claim.loss_select_extra_data_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Propagate', 'propagate_extra_data', 'tryton-go-next',
+                default=True)])
+    propagate_extra_data = StateTransition()
+
+    def default_select_extra_data(self, fields):
+        context = Transaction().context
+        assert context.get('active_model') == 'benefit.loss.description'
+        loss = Pool().get('benefit.loss.description')(
+            context.get('active_id'))
+        return {
+            'extra_data': {x.name: None for x in loss.extra_data_def},
+            'loss': loss.id,
+            'available_extra_datas': [e.id for e in loss.extra_data_def]
+            }
+
+    def transition_propagate_extra_data(self):
+        Loss = Pool().get('claim.loss')
+        affected_losses = Loss.search(
+            [('loss_desc', '=', self.select_extra_data.loss)])
+        extra_data_to_propagate = self.select_extra_data.extra_data
+        for loss in affected_losses:
+            new_extra_data = {}
+            for key, value in extra_data_to_propagate.iteritems():
+                if key not in loss.extra_data.keys():
+                    new_extra_data[key] = value
+            if new_extra_data:
+                loss.extra_data.update(new_extra_data)
+                loss.extra_data = loss.extra_data
+        if affected_losses:
+            Loss.save(affected_losses)
         return 'end'

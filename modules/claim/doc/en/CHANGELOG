@@ -1,3 +1,4 @@
+* FEA#8156 Add wizards that allow propagating extra data from a benefit to all services and from a loss description to all losses
 * BUG#8151 Change menu order
 * BUG#8385 Fix last loss end date rule engine function
 * OTH#0000 Icons for claims

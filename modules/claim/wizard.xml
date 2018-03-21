@@ -34,5 +34,39 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Close Claims</field>
             <field name="wiz_name">claim.close</field>
         </record>
+        <!-- ########################################################### -->
+        <!-- ########### Service propagate extra data wizard ########### -->
+        <!-- ########################################################### -->
+        <record model="ir.ui.view" id="service_select_extra_data_view_form">
+            <field name="model">benefit.select_extra_data_view</field>
+            <field name="type">form</field>
+            <field name="name">service_select_extra_data_form</field>
+        </record>
+        <record model="ir.action.wizard" id="act_service_propagate_extra_data_wizard">
+            <field name="name">Propagate Extra Data On Claim Services</field>
+            <field name="wiz_name">benefit.propagate_extra_data</field>
+        </record>
+        <record model="ir.action.keyword" id="act_service_propagate_extra_data_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">benefit,-1</field>
+            <field name="action" ref="act_service_propagate_extra_data_wizard"/>
+        </record>
+        <!-- ######################################################## -->
+        <!-- ########### Loss propagate extra data wizard ########### -->
+        <!-- ######################################################## -->
+        <record model="ir.ui.view" id="loss_select_extra_data_view_form">
+            <field name="model">loss.select_extra_data_view</field>
+            <field name="type">form</field>
+            <field name="name">loss_select_extra_data_form</field>
+        </record>
+        <record model="ir.action.wizard" id="act_loss_propagate_extra_data_wizard">
+            <field name="name">Propagate Extra Data On Claim Losses</field>
+            <field name="wiz_name">loss.propagate_extra_data</field>
+        </record>
+        <record model="ir.action.keyword" id="act_loss_propagate_extra_data_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">benefit.loss.description,-1</field>
+            <field name="action" ref="act_loss_propagate_extra_data_wizard"/>
+        </record>
     </data>
 </tryton>
