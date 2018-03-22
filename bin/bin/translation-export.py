@@ -46,6 +46,8 @@ if __name__ == '__main__':
     config.set_trytond(config_file=args.config)
     lang = get_lang(args.lang)
     for module in args.modules:
+        if module in ('ir', 'res'):
+            continue
         print('### start generating %s ###' % module)
         try:
             res = generate(lang, module)

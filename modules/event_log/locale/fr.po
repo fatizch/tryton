@@ -39,8 +39,8 @@ msgid "Object"
 msgstr "Objet"
 
 msgctxt "field:event.log,rec_name:"
-msgid "Name"
-msgstr "Numéro"
+msgid "Record Name"
+msgstr "Nom"
 
 msgctxt "field:event.log,user:"
 msgid "User"

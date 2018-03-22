@@ -89,7 +89,7 @@ msgid "On Model"
 msgstr "Modèle"
 
 msgctxt "field:process,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:process,step_button_group_position:"
@@ -157,7 +157,7 @@ msgid "Process"
 msgstr "Processus"
 
 msgctxt "field:process-process.step,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:process-process.step,status:"
@@ -229,7 +229,7 @@ msgid "Parent Transition"
 msgstr "Transition Parente"
 
 msgctxt "field:process.action,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:process.action,sequence:"
@@ -265,8 +265,8 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:process.configuration,rec_name:"
-msgid "Name"
-msgstr "Name"
+msgid "Record Name"
+msgstr "Nom"
 
 msgctxt "field:process.configuration,write_date:"
 msgid "Write Date"
@@ -297,7 +297,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:process.status,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:process.status,relations:"
@@ -357,7 +357,7 @@ msgid "Transitions"
 msgstr "Transitions"
 
 msgctxt "field:process.step,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:process.step,step_xml:"
@@ -401,7 +401,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:process.step-group,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:process.step-group,step_desc:"
@@ -481,7 +481,7 @@ msgid "Pyson Description"
 msgstr "Description Pyson"
 
 msgctxt "field:process.transition,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:process.transition,to_step:"
@@ -513,7 +513,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:process.transition-group,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:process.transition-group,transition:"

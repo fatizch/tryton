@@ -577,7 +577,6 @@ msgctxt "field:offered.item.description-sub_item.description,item_desc:"
 msgid "Item Desc"
 msgstr "Desc Risque"
 
-#, fuzzy
 msgctxt "field:offered.item.description-sub_item.description,rec_name:"
 msgid "Record Name"
 msgstr "Nom"

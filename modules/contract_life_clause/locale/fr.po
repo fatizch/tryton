@@ -67,7 +67,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:contract.option.beneficiary,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.option.beneficiary,reference:"

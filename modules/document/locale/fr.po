@@ -45,7 +45,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:document.description,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:document.description,when_received:"
@@ -89,7 +89,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:document.description-res.group,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:document.description-res.group,write_date:"
@@ -153,7 +153,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:document.reception,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:document.reception,reception_date:"

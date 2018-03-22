@@ -51,7 +51,7 @@ msgid "Number Of Working Days"
 msgstr "Nombre de jours ouvrés"
 
 msgctxt "field:work_days.configuration,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:work_days.configuration,shifted_day:"
@@ -107,7 +107,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:work_days.holiday,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:work_days.holiday,weekly_day:"

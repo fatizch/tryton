@@ -142,7 +142,7 @@ msgid "Number of columns"
 msgstr "Nombre de Colonnes"
 
 msgctxt "field:ir.ui.view.description,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:ir.ui.view.description,the_view:"
@@ -314,7 +314,7 @@ msgid "Process Start"
 msgstr "Paramètres du Processus"
 
 msgctxt "field:process.log,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:process.log,start_time:"

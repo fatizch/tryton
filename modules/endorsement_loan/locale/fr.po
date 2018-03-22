@@ -150,6 +150,11 @@ msgctxt ""
 msgid "Shares per loan"
 msgstr "Quotités par prêt"
 
+msgctxt ""
+"field:contract.covered_element.add_option.loan_shares,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:contract.covered_element.add_option.share_per_loan,id:"
 msgid "ID"
 msgstr "ID"
@@ -235,7 +240,7 @@ msgid "Loan"
 msgstr "Prêt"
 
 msgctxt "field:endorsement.contract.loan,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.loan,relation:"
@@ -291,7 +296,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.loan.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.loan.field,write_date:"
@@ -367,7 +372,7 @@ msgid "Loan"
 msgstr "Prêt"
 
 msgctxt "field:endorsement.loan,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.loan,state:"
@@ -418,6 +423,10 @@ msgctxt "field:endorsement.loan.add_remove,possible_contracts:"
 msgid "Possible Contracts"
 msgstr "Contrats disponibles"
 
+msgctxt "field:endorsement.loan.add_remove,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:endorsement.loan.add_remove.displayer,checked:"
 msgid "Checked"
 msgstr "Sélectionné"
@@ -465,6 +474,10 @@ msgstr "ID"
 msgctxt "field:endorsement.loan.change,loan_changes:"
 msgid "Loan Changes"
 msgstr "Modifications du prêt"
+
+msgctxt "field:endorsement.loan.change,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:endorsement.loan.change.displayer,current_values:"
 msgid "Current Values"
@@ -542,6 +555,10 @@ msgctxt "field:endorsement.loan.change_any_date,possible_loans:"
 msgid "Possible Loans"
 msgstr "Prêts possibles"
 
+msgctxt "field:endorsement.loan.change_any_date,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:endorsement.loan.display_updated_payments,id:"
 msgid "ID"
 msgstr "ID"
@@ -583,7 +600,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.loan.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.loan.field,write_date:"
@@ -643,7 +660,7 @@ msgid "Loan Endorsement"
 msgstr "Modification de quotité"
 
 msgctxt "field:endorsement.loan.increment,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.loan.increment,relation:"
@@ -699,7 +716,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.loan.increment.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.loan.increment.field,write_date:"
@@ -803,7 +820,7 @@ msgid "Option Endorsement"
 msgstr "Modification de garantie souscrite"
 
 msgctxt "field:endorsement.loan.share,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.loan.share,relation:"
@@ -867,7 +884,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.loan.share.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.loan.share.field,write_date:"

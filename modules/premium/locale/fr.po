@@ -75,7 +75,7 @@ msgid "Rate"
 msgstr "Taux"
 
 msgctxt "field:account.fee,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:account.fee,type:"
@@ -179,7 +179,7 @@ msgid "Premiums"
 msgstr "Primes"
 
 msgctxt "field:contract.fee,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.fee,used_fees:"
@@ -255,7 +255,7 @@ msgid "Rated Entity"
 msgstr "Elément tarifé"
 
 msgctxt "field:contract.premium,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.premium,start:"
@@ -347,7 +347,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:offered.option.description-account.fee,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.option.description-account.fee,write_date:"
@@ -383,7 +383,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:offered.option.description-account.tax,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.option.description-account.tax,tax:"
@@ -431,7 +431,7 @@ msgid "Premium Base"
 msgstr "Base de la prime"
 
 msgctxt "field:offered.option.description.premium_rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.option.description.premium_rule,rule:"
@@ -487,7 +487,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:offered.product-account.fee,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.product-account.fee,write_date:"
@@ -535,7 +535,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:offered.product.premium_date,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.product.premium_date,type_:"

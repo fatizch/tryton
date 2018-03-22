@@ -27,7 +27,7 @@ msgid "Commission Plan"
 msgstr "Plan de commissionnement"
 
 msgctxt "field:commission-plan-extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:commission-plan-extra_data,write_date:"

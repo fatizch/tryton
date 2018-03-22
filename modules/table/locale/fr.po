@@ -227,7 +227,7 @@ msgid "Number of dimension"
 msgstr "Nombre de dimension"
 
 msgctxt "field:table,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:table,tags:"
@@ -271,7 +271,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:table.2d,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:table.2d,row:"
@@ -423,7 +423,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:table.cell,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:table.cell,value:"
@@ -487,7 +487,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:table.dimension.value,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:table.dimension.value,sequence:"

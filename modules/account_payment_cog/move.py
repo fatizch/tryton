@@ -451,7 +451,7 @@ class PaymentCreation(model.CoogWizard):
                 'incompatible_lines_with_kind': 'Selected lines are '
                 'incompatible with selected kind',
                 'updating_payment_date': 'The payment date for all payments '
-                'will be update to %(date)s',
+                'will be updated to %(date)s',
                 'different_payment_journal': 'The allowed payment journals '
                 'for the selected lines are different and do not allow '
                 'them to be processed at the same time.'

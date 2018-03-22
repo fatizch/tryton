@@ -62,6 +62,10 @@ msgctxt "field:account.dunning.update,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt "field:account.move.line,inactive_dunnings:"
+msgid "Inactive Dunnings"
+msgstr "Relance inactives"
+
 msgctxt "field:party.party,dunning_allowed:"
 msgid "Dunning Allowed"
 msgstr "Relance autorisée"

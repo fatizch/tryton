@@ -43,7 +43,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:clause,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:clause,write_date:"

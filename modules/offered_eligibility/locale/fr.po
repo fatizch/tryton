@@ -35,7 +35,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:offered.option.description.eligibility_rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.option.description.eligibility_rule,rule:"

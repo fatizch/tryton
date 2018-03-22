@@ -128,7 +128,7 @@ msgid "Description"
 msgstr "Description"
 
 msgctxt "field:account.statement.journal.cancel_motive,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:account.statement.journal.cancel_motive,write_date:"
@@ -269,7 +269,7 @@ msgid "Cancel motive"
 msgstr "Motif d'annulation"
 
 msgctxt "field:statement.journal-statement.journal.cancel_motive,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:statement.journal-statement.journal.cancel_motive,write_date:"

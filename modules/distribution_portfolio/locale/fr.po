@@ -75,8 +75,8 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:party.configuration.default_portfolio,rec_name:"
-msgid "Name"
-msgstr "Numéro"
+msgid "Record Name"
+msgstr "Nom"
 
 msgctxt "field:party.configuration.default_portfolio,write_date:"
 msgid "Write Date"

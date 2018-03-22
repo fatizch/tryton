@@ -29,6 +29,10 @@ msgctxt "field:endorsement.contract.full_revision_start,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:endorsement.contract.full_revision_start,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:endorsement.contract.full_revision_start,start_date:"
 msgid "New Start Date"
 msgstr "Nouvelle date de début"

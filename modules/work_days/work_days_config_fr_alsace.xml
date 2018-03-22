@@ -50,7 +50,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="configuration" ref="work_days_config_fr_alsace"/>
         </record>
         <record model="work_days.holiday" id="ww1_armistice_holiday_alsace">
-            <field name="name">First World War Armisitice</field>
+            <field name="name">First World War Armistice</field>
             <field name="holiday_type">input</field>
             <field name="month">11</field>
             <field name="day">11</field>

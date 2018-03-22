@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.move:"
-msgid "You cannot cancel the move %(move)s more than once"
-msgstr "Vous ne pouvez pas annuler le mouvement %(move)s plusieurs fois"
-
 msgctxt "error:account.move.line:"
 msgid "Automatic Split Move"
 msgstr "Découpage automatique"
@@ -13,6 +9,10 @@ msgstr "Découpage automatique"
 msgctxt "error:account.move.reconciliation:"
 msgid "You cannot unreconcile lines which are part of a cancelled move"
 msgstr "Vous ne pouvez pas dé-réconcilier une ligne d'un mouvement annulé"
+
+msgctxt "error:account.move:"
+msgid "You cannot cancel the move %(move)s more than once"
+msgstr "Vous ne pouvez pas annuler le mouvement %(move)s plusieurs fois"
 
 msgctxt "error:fiscal_year.set.wizard:"
 msgid "Fiscal Year"
@@ -279,7 +279,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.move.line,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:party.synthesis.menu.move.line,write_date:"

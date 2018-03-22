@@ -39,7 +39,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:offered.option.description-beneficiary_clause,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.option.description-beneficiary_clause,write_date:"

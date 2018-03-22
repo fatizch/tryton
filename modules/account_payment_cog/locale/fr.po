@@ -16,16 +16,16 @@ msgstr ""
 "payer d'autres des lignes à recevoir"
 
 msgctxt "error:account.payment.creation:"
-msgid "The payment date for all payments will be update to %(date)s"
-msgstr "La date de tous les paiements sera mise à jour au %(date)s"
-
-msgctxt "error:account.payment.creation:"
 msgid ""
-"The allowed payment journals for the selected lines are different and do "
-"not allow them to be processed at the same time."
+"The allowed payment journals for the selected lines are different and do not"
+" allow them to be processed at the same time."
 msgstr ""
 "Les journaux de paiement autorisés pour les lignes selectionnées diffèrent "
 "et ne permettent pas leur traitement ensemble."
+
+msgctxt "error:account.payment.creation:"
+msgid "The payment date for all payments will be updated to %(date)s"
+msgstr "La date de tous les paiements sera mise à jour au %(date)s"
 
 msgctxt "error:account.payment.fail_information:"
 msgid "Trying to fail different payment kinds at the same time"
@@ -167,8 +167,8 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:account.configuration.direct_debit_journal,rec_name:"
-msgid "Name"
-msgstr "Numéro"
+msgid "Record Name"
+msgstr "Nom"
 
 msgctxt "field:account.configuration.direct_debit_journal,write_date:"
 msgid "Write Date"
@@ -207,8 +207,8 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:account.configuration.reject_fee_journal,rec_name:"
-msgid "Name"
-msgstr "Numéro"
+msgid "Record Name"
+msgstr "Nom"
 
 msgctxt "field:account.configuration.reject_fee_journal,reject_fee_journal:"
 msgid "Reject Fee Journal"
@@ -427,7 +427,7 @@ msgid "Payment Kind"
 msgstr "Type de paiement"
 
 msgctxt "field:account.payment.journal.failure_action,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:account.payment.journal.failure_action,reject_number:"
@@ -500,7 +500,7 @@ msgid "Process method"
 msgstr "Méthode de traitement"
 
 msgctxt "field:account.payment.journal.reject_reason,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:account.payment.journal.reject_reason,write_date:"
@@ -564,7 +564,7 @@ msgid "Payments"
 msgstr "Paiements"
 
 msgctxt "field:account.payment.merged,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:account.payment.merged,state:"
@@ -608,7 +608,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:account.payment.motive,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:account.payment.motive,write_date:"
@@ -676,6 +676,10 @@ msgctxt "field:account.payment.payment_creation.start,payment_date:"
 msgid "Payment Date"
 msgstr "Date de paiement"
 
+msgctxt "field:account.payment.payment_creation.start,possible_journals:"
+msgid "Possible Journals"
+msgstr "Journaux possibles"
+
 msgctxt "field:account.payment.payment_creation.start,process_method:"
 msgid "Process Method"
 msgstr "Méthode de traitement"
@@ -688,10 +692,6 @@ msgstr "Traiter et valider les paiements"
 msgctxt "field:account.payment.payment_creation.start,total_amount:"
 msgid "Total Amount"
 msgstr "Montant total"
-
-msgctxt "field:account.payment.payment_creation.start,possible_journals:"
-msgid "Possible Journals"
-msgstr "Journaux possibles"
 
 msgctxt "field:account.payment.payment_information_selection,id:"
 msgid "ID"
@@ -750,7 +750,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.payment,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:party.synthesis.menu.payment,write_date:"
@@ -1218,12 +1218,12 @@ msgstr "Traiter"
 # Custom translations below
 
 msgctxt "selection:account.move.line,payment_kind:account_payment."
-msgid "Payable"
-msgstr "À payer"
-
-msgctxt "selection:account.move.line,payment_kind:account_payment."
 msgid "Receivable"
 msgstr "À recevoir"
+
+msgctxt "selection:account.move.line,payment_kind:account_payment."
+msgid "Payable"
+msgstr "À payer"
 
 msgctxt "selection:account.payment.group,kind:account_payment."
 msgid "Payable"

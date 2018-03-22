@@ -6,9 +6,17 @@ msgctxt "error:loan.average_premium_rate.display:"
 msgid "Fee"
 msgstr "Frais"
 
+msgctxt "field:loan,average_fee_rate:"
+msgid "Average Fee Rate"
+msgstr "Taux moyen des frais"
+
 msgctxt "field:loan,average_premium_rate:"
 msgid "Average Premium Rate"
 msgstr "Taux moyen prêt"
+
+msgctxt "field:loan,base_fee_amount:"
+msgid "Base Fee Amount"
+msgstr "Montant des frais"
 
 msgctxt "field:loan,base_premium_amount:"
 msgid "Base Premium Amount"
@@ -91,7 +99,7 @@ msgid "Option rule"
 msgstr "Règle pour la garantie"
 
 msgctxt "field:loan.average_premium_rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:loan.average_premium_rule,use_default_rule:"
@@ -135,7 +143,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:loan.average_premium_rule.fee_rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:loan.average_premium_rule.fee_rule,rule:"

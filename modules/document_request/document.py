@@ -34,7 +34,7 @@ class DocumentDescription:
     __name__ = 'document.description'
 
     reception_requires_attachment = fields.Boolean(
-        'Reception Requires Attachment', help='If checked, the attachments'
+        'Reception Requires Attachment', help='If checked, the attachments '
         'will be required to mark the document request lines as "received"')
 
 
@@ -498,6 +498,7 @@ class RemindableInterface(object):
     def get_reminder_candidates_query(cls, tables):
         raise NotImplementedError
 
+    @classmethod
     def fill_to_remind(cls, doc_per_objects, t_remind, objects,
             force_remind, remind_if_false, treatment_date):
         raise NotImplementedError
@@ -732,7 +733,7 @@ class ReceiveDocumentLine(model.CoogView):
     was_selected = fields.Boolean('Was Selected')
 
     @classmethod
-    def get_models(self):
+    def get_models(cls):
         return utils.models_get()
 
 

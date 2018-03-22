@@ -77,7 +77,7 @@ msgid "Code"
 msgstr "Code"
 
 msgctxt "field:extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:extra_data,rule:"
@@ -153,7 +153,7 @@ msgid "Master"
 msgstr "Maître"
 
 msgctxt "field:extra_data-sub_extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:extra_data-sub_extra_data,select_value:"
@@ -193,12 +193,16 @@ msgid "Path"
 msgstr "Chemin"
 
 msgctxt "field:offered.configuration,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.configuration,style_template:"
 msgid "Default report style"
 msgstr "Style par défaut"
+
+msgctxt "field:offered.configuration,use_default_style:"
+msgid "Use Default Style"
+msgstr "Utiliser le style par défaut"
 
 msgctxt "field:offered.configuration,write_date:"
 msgid "Write Date"
@@ -285,7 +289,7 @@ msgid "Products"
 msgstr "Produits"
 
 msgctxt "field:offered.option.description,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.option.description,sequence:"
@@ -345,7 +349,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:offered.option.description-extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.option.description-extra_data,write_date:"
@@ -385,7 +389,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:offered.option.description.ending_rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.option.description.ending_rule,rule:"
@@ -429,7 +433,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:offered.option.description.excluded,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.option.description.excluded,to_option_desc:"
@@ -469,7 +473,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:offered.option.description.required,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.option.description.required,to_option_desc:"
@@ -521,7 +525,7 @@ msgid "Options"
 msgstr "Options"
 
 msgctxt "field:offered.package,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.package,write_date:"
@@ -561,7 +565,7 @@ msgid "Package"
 msgstr "Formule"
 
 msgctxt "field:offered.package-option.description,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.package-option.description,write_date:"
@@ -641,7 +645,7 @@ msgid "Packages"
 msgstr "Formules"
 
 msgctxt "field:offered.product,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.product,report_style_template:"
@@ -705,7 +709,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:offered.product-extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.product-extra_data,write_date:"
@@ -745,7 +749,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:offered.product-option.description,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.product-option.description,write_date:"
@@ -785,7 +789,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:offered.product-package,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.product-package,write_date:"
@@ -803,10 +807,6 @@ msgstr "Identifiant XML"
 msgctxt "field:report.template,products:"
 msgid "Products"
 msgstr "Produits"
-
-msgctxt "field:offered.configuration,use_default_style:"
-msgid "Use Default Style"
-msgstr "Utiliser le style par défaut"
 
 msgctxt "field:report.template-offered.product,create_date:"
 msgid "Create Date"
@@ -829,7 +829,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:report.template-offered.product,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:report.template-offered.product,report_template:"
@@ -858,8 +858,8 @@ msgstr "Si la sélection doit être triée par le libéllé"
 
 msgctxt "help:offered.configuration,use_default_style:"
 msgid ""
-"If checked, the templates will use Coog's default style if there is no style "
-"defined on the product"
+"If checked, the report templates will use Coog's default style if there is "
+"no style defined on the product"
 msgstr ""
 "Si coché, les modèles de courriers utiliseront le style par défaut de Coog "
 "s'il n'y a pas de style défini sur le produit"

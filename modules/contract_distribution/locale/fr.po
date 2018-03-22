@@ -88,7 +88,7 @@ msgid "Technical Product"
 msgstr "Produit technique"
 
 msgctxt "field:distribution.commercial_product,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:distribution.commercial_product,start_date:"
@@ -152,7 +152,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:distribution.network-commercial_product,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:distribution.network-commercial_product,write_date:"

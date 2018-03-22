@@ -210,10 +210,9 @@ msgctxt "field:commission.aggregated,party:"
 msgid "Party"
 msgstr "Tiers"
 
-#, fuzzy
 msgctxt "field:commission.aggregated,rec_name:"
 msgid "Record Name"
-msgstr "Nom de l'enregistrement"
+msgstr "Nom"
 
 msgctxt "field:commission.aggregated,start:"
 msgid "Start Date"
@@ -793,7 +792,7 @@ msgid "Commissions Synthesis"
 msgstr "Synthèse des commissions"
 
 msgctxt "model:ir.action,name:act_filter_commission"
-msgid "Commissions"
+msgid "Aggregated commissions"
 msgstr "Commissions agrégées"
 
 msgctxt "model:ir.action,name:act_invoice_broker_invoice_form"
@@ -859,7 +858,7 @@ msgid "Insurers"
 msgstr "Assureurs"
 
 msgctxt "model:ir.ui.menu,name:menu_commission_invoice"
-msgid "Bordereaux de commissions"
+msgid "Commission Invoices"
 msgstr "Bordereaux de commissions"
 
 msgctxt "model:ir.ui.menu,name:menu_commission_plans_general_configuration"

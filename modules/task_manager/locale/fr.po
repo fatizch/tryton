@@ -91,7 +91,7 @@ msgid "Priorities"
 msgstr "Priorités"
 
 msgctxt "field:res.team,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:res.team,tasks_team:"
@@ -139,7 +139,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:res.team-res.group,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:res.team-res.group,team:"
@@ -183,7 +183,7 @@ msgid "Process Step"
 msgstr "Etape"
 
 msgctxt "field:res.team.priority,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:res.team.priority,task_name:"
@@ -239,7 +239,7 @@ msgid "Number of Tasks"
 msgstr "Nombre de tâches"
 
 msgctxt "field:res.user-res.team,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:res.user-res.team,team:"

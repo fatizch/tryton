@@ -47,7 +47,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:commission.agent-agent,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:commission.agent-agent,to_second_level_agent:"
@@ -99,7 +99,7 @@ msgid "Plan"
 msgstr "Plan"
 
 msgctxt "field:commission_plan-agent,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:commission_plan-agent,write_date:"

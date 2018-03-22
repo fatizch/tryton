@@ -290,7 +290,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:contract.covered_element,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.covered_element,start_date:"
@@ -342,7 +342,7 @@ msgid "Party Relation"
 msgstr "Relation"
 
 msgctxt "field:contract.covered_element-party,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.covered_element-party,write_date:"
@@ -390,8 +390,8 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:contract.covered_element.version,rec_name:"
-msgid "Name"
-msgstr "Numéro"
+msgid "Record Name"
+msgstr "Nom"
 
 msgctxt "field:contract.covered_element.version,start:"
 msgid "Start"
@@ -658,7 +658,7 @@ msgid "Option"
 msgstr "Option"
 
 msgctxt "field:contract.option-exclusion.kind,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.option-exclusion.kind,write_date:"
@@ -766,7 +766,7 @@ msgid "Rate on Premium"
 msgstr "Taux sur prime"
 
 msgctxt "field:contract.option.extra_premium,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.option.extra_premium,start_date:"
@@ -853,6 +853,10 @@ msgstr "Risques Couverts"
 msgctxt "field:party.party,extra_data:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
+
+msgctxt "field:report_production.contract_request.create,id:"
+msgid "ID"
+msgstr "Identifiant"
 
 msgctxt "model:contract,name:"
 msgid "Contract"
@@ -953,6 +957,10 @@ msgstr "Courrier échéancier par défaut"
 msgctxt "model:report.template,name:default_synthesis_subscription_template"
 msgid "Letter of synthesis subscription"
 msgstr "Courrier certificat d'adhésion par défaut"
+
+msgctxt "model:report_production.contract_request.create,name:"
+msgid "Contract Document Request Creation Batch"
+msgstr "Batch de création des demandes de documents"
 
 msgctxt "selection:contract,status:"
 msgid "Active"

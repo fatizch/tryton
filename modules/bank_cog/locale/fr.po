@@ -127,7 +127,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.bank_account,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:party.synthesis.menu.bank_account,write_date:"

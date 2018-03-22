@@ -208,6 +208,10 @@ msgctxt "field:contract.covered_element.add_option,possible_covered_elements:"
 msgid "Possible Covered Elements"
 msgstr "Eléments couverts disponibles"
 
+msgctxt "field:contract.covered_element.add_option,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:contract.covered_element.modify,all_covered:"
 msgid "All Covered Elements"
 msgstr "Tous les risques couverts"
@@ -252,6 +256,10 @@ msgctxt "field:contract.covered_element.modify,possible_parents:"
 msgid "Possible Parents"
 msgstr "Parents possibles"
 
+msgctxt "field:contract.covered_element.modify,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:contract.covered_element.modify.displayer,action:"
 msgid "Action"
 msgstr "Action"
@@ -259,6 +267,10 @@ msgstr "Action"
 msgctxt "field:contract.covered_element.modify.displayer,applied:"
 msgid "Applied"
 msgstr "Appliqué"
+
+msgctxt "field:contract.covered_element.modify.displayer,contract:"
+msgid "Contract"
+msgstr "Contrat"
 
 msgctxt "field:contract.covered_element.modify.displayer,cur_covered_id:"
 msgid "Existing Covered Element"
@@ -357,6 +369,10 @@ msgctxt "field:contract.covered_element.new,product:"
 msgid "Product"
 msgstr "Produit"
 
+msgctxt "field:contract.covered_element.new,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:contract.covered_element.new,start_date:"
 msgid "Start Date"
 msgstr "Date d'Effet"
@@ -380,6 +396,10 @@ msgstr "ID"
 msgctxt "field:contract.covered_element.option.remove,options:"
 msgid "Options To Remove"
 msgstr "Garanties à résilier"
+
+msgctxt "field:contract.covered_element.option.remove,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:contract.covered_element.option.remove.option_selector,action:"
 msgid "Action"
@@ -469,6 +489,10 @@ msgstr "ID"
 msgctxt "field:contract.manage_exclusions,possible_contracts:"
 msgid "Possible Contracts"
 msgstr "Contrats disponibles"
+
+msgctxt "field:contract.manage_exclusions,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:contract.manage_exclusions.exclusion,action:"
 msgid "Action"
@@ -583,7 +607,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:endorsement.contract.covered_element,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.covered_element,relation:"
@@ -643,7 +667,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.covered_element.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.covered_element.field,write_date:"
@@ -724,7 +748,7 @@ msgid "Options"
 msgstr "Options"
 
 msgctxt "field:endorsement.contract.covered_element.option,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.covered_element.option,relation:"
@@ -804,7 +828,7 @@ msgid "Endorsement"
 msgstr "Modèle d'Avenant"
 
 msgctxt "field:endorsement.contract.covered_element.option.version,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.covered_element.option.version,relation:"
@@ -878,7 +902,7 @@ msgid "Keep if Empty"
 msgstr "Conserver si vide"
 
 msgctxt "field:endorsement.contract.covered_element.version,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.covered_element.version,relation:"
@@ -942,7 +966,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.covered_element.version.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.covered_element.version.field,write_date:"
@@ -1002,7 +1026,7 @@ msgid "Keep if Empty"
 msgstr "Conserver si vide"
 
 msgctxt "field:endorsement.contract.extra_premium,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.extra_premium,relation:"
@@ -1114,7 +1138,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.extra_premium.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.extra_premium.field,write_date:"
@@ -1149,6 +1173,10 @@ msgstr "Surprimes"
 msgctxt "field:endorsement.contract.manage_extra_premium,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:endorsement.contract.manage_extra_premium,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:endorsement.contract.new_extra_premium,covered_elements:"
 msgid "Covered Elements"
@@ -1216,7 +1244,7 @@ msgid "Exclusion"
 msgstr "Exclusion"
 
 msgctxt "field:endorsement.contract.option.exclusion,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.option.exclusion,relation:"
@@ -1272,7 +1300,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.option.exclusion.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.option.exclusion.field,write_date:"

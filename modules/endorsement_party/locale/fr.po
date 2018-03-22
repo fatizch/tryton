@@ -120,7 +120,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:endorsement.party,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.party,relations:"
@@ -192,7 +192,7 @@ msgid "Party Endorsement"
 msgstr "Avenant sur tiers"
 
 msgctxt "field:endorsement.party.address,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.party.address,relation:"
@@ -248,7 +248,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.party.address.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.party.address.field,write_date:"
@@ -286,6 +286,10 @@ msgstr "ID"
 msgctxt "field:endorsement.party.change_address,party_id:"
 msgid "party_id"
 msgstr "Id du tiers"
+
+msgctxt "field:endorsement.party.change_address,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt ""
 "field:endorsement.party.change_address_displayer,address_endorsement:"
@@ -344,6 +348,10 @@ msgctxt "field:endorsement.party.change_birth_date,new_birth_date:"
 msgid "New Birth Date"
 msgstr "Nouvelle date de naissance"
 
+msgctxt "field:endorsement.party.change_birth_date,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:endorsement.party.change_name,effective_date:"
 msgid "Effective Date"
 msgstr "Date d'effet"
@@ -363,6 +371,10 @@ msgstr "ID"
 msgctxt "field:endorsement.party.change_name,parties:"
 msgid "Parties"
 msgstr "Tiers"
+
+msgctxt "field:endorsement.party.change_name,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:endorsement.party.change_name.displayer,birth_name:"
 msgid "New Birth Name"
@@ -445,7 +457,7 @@ msgid "Current Relation"
 msgstr "Relations courantes"
 
 msgctxt "field:endorsement.party.change_relation_displayer,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt ""
@@ -505,6 +517,10 @@ msgctxt "field:endorsement.party.change_relations,party_id:"
 msgid "party_id"
 msgstr "Id du tiers"
 
+msgctxt "field:endorsement.party.change_relations,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:endorsement.party.change_ssn,current_ssn:"
 msgid "Current SSN"
 msgstr "Numéro de sécurité sociale actuel"
@@ -528,6 +544,10 @@ msgstr "ID"
 msgctxt "field:endorsement.party.change_ssn,new_ssn:"
 msgid "New SSN"
 msgstr "Nouveau numéro de sécurité sociale"
+
+msgctxt "field:endorsement.party.change_ssn,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:endorsement.party.field,create_date:"
 msgid "Create Date"
@@ -562,7 +582,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.party.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.party.field,write_date:"
@@ -618,7 +638,7 @@ msgid "Party Endorsement"
 msgstr "Avenant sur tiers"
 
 msgctxt "field:endorsement.party.relation,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.party.relation,relation:"
@@ -678,7 +698,7 @@ msgid "Name"
 msgstr "Numéro"
 
 msgctxt "field:endorsement.party.relation.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.party.relation.field,write_date:"

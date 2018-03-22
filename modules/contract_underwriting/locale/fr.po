@@ -83,7 +83,7 @@ msgid "Possible Decisions"
 msgstr "Décissions possibles"
 
 msgctxt "field:contract.underwriting,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.underwriting,subscriber_decision:"
@@ -159,7 +159,7 @@ msgid "Possible Decisions"
 msgstr "Décissions possibles"
 
 msgctxt "field:contract.underwriting.option,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.underwriting.option,underwriting:"
@@ -223,7 +223,7 @@ msgid "Ordered Contract Decisions"
 msgstr "Décisions ordonnés pour le niveau contrat"
 
 msgctxt "field:underwriting.decision,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:underwriting.decision,status:"
@@ -275,7 +275,7 @@ msgid "Order"
 msgstr "Ordre"
 
 msgctxt "field:underwriting.decision-underwriting.decision,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:underwriting.decision-underwriting.decision,write_date:"
@@ -323,7 +323,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:underwriting.rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:underwriting.rule,rule:"
@@ -367,7 +367,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:underwriting.rule-underwriting.decision,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:underwriting.rule-underwriting.decision,rule:"

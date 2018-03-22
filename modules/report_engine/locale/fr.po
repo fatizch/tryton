@@ -107,7 +107,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:event.type.action-report.template,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:event.type.action-report.template,report_template:"
@@ -351,7 +351,7 @@ msgid "Process Method"
 msgstr "Méthode de traitement"
 
 msgctxt "field:report.template,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:report.template,recipient_needed:"
@@ -407,7 +407,7 @@ msgid "Parameter"
 msgstr "Paramètre"
 
 msgctxt "field:report.template-report.template.parameter,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:report.template-report.template.parameter,report_template:"
@@ -447,7 +447,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:report.template-res.group,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:report.template-res.group,report_template:"
@@ -491,7 +491,7 @@ msgid "Name"
 msgstr "Code"
 
 msgctxt "field:report.template.parameter,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:report.template.parameter,selection:"
@@ -563,7 +563,7 @@ msgid "Path"
 msgstr "Chemin"
 
 msgctxt "field:report.template.version,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:report.template.version,start_date:"
@@ -611,7 +611,7 @@ msgid "Object To Report"
 msgstr "Objet"
 
 msgctxt "field:report_production.request,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:report_production.request,report_template:"

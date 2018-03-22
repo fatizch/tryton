@@ -253,7 +253,7 @@ msgid "Rated Entity"
 msgstr "Elément tarifé"
 
 msgctxt "field:account.invoice.line.detail,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:account.invoice.line.detail,taxes:"
@@ -461,7 +461,7 @@ msgid "Possible Payment Term"
 msgstr "Conditions de paiement offerts"
 
 msgctxt "field:contract.billing_information,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.billing_information,suspended:"
@@ -541,7 +541,7 @@ msgid "Planned Payment Date"
 msgstr "Date de paiement planifiée"
 
 msgctxt "field:contract.invoice,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.invoice,start:"
@@ -645,7 +645,7 @@ msgid "Payment Line"
 msgstr "Ligne de paiement"
 
 msgctxt "field:contract.payment_suspension,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.payment_suspension,use_force:"
@@ -820,7 +820,7 @@ msgid "Payment Term"
 msgstr "Conditions de paiement"
 
 msgctxt "field:offered.billing.mode-account.invoice.payment_term,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.billing.mode-account.invoice.payment_term,write_date:"
@@ -892,7 +892,7 @@ msgid "Products"
 msgstr "Produits"
 
 msgctxt "field:offered.billing_mode,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.billing_mode,sync_day:"
@@ -940,7 +940,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:offered.billing_mode-account.fee,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.billing_mode-account.fee,write_date:"
@@ -1029,7 +1029,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:offered.product-offered.billing_mode,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.product-offered.billing_mode,write_date:"
@@ -1069,7 +1069,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.invoice,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:party.synthesis.menu.invoice,write_date:"

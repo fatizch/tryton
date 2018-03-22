@@ -62,6 +62,10 @@ msgctxt "field:contract.manage_clauses,possible_contracts:"
 msgid "Possible Contracts"
 msgstr "Contrats disponibles"
 
+msgctxt "field:contract.manage_clauses,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:contract.manage_clauses.clause,action:"
 msgid "Action"
 msgstr "Action"
@@ -147,7 +151,7 @@ msgid "Keep if Empty"
 msgstr "Conserver si vide"
 
 msgctxt "field:endorsement.contract.clause,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.clause,relation:"
@@ -203,7 +207,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.clause.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.clause.field,write_date:"

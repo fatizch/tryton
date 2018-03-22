@@ -159,7 +159,7 @@ msgid "Number"
 msgstr "Numéro"
 
 msgctxt "field:contract-loan,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract-loan,write_date:"
@@ -243,7 +243,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:lender,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:lender,write_date:"
@@ -395,7 +395,7 @@ msgid "Annual Rate"
 msgstr "Taux Annuel"
 
 msgctxt "field:loan,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:loan,state:"
@@ -499,7 +499,7 @@ msgid "Annual Rate"
 msgstr "Taux Annuel"
 
 msgctxt "field:loan.increment,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:loan.increment,start_date:"
@@ -579,7 +579,7 @@ msgid "Principal"
 msgstr "Principal"
 
 msgctxt "field:loan.payment,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:loan.payment,start_date:"
@@ -647,7 +647,7 @@ msgid "Person"
 msgstr "Personne Physique"
 
 msgctxt "field:loan.share,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:loan.share,share:"
@@ -784,7 +784,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.loan,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:party.synthesis.menu.loan,write_date:"

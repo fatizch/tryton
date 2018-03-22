@@ -54,6 +54,10 @@ msgctxt "field:contract.manage_beneficiaries,possible_contracts:"
 msgid "Possible Contracts"
 msgstr "Contrats disponibles"
 
+msgctxt "field:contract.manage_beneficiaries,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:contract.manage_beneficiaries.beneficiary,action:"
 msgid "Action"
 msgstr "Action"
@@ -82,7 +86,8 @@ msgctxt "field:contract.manage_beneficiaries.option,beneficiary_clause:"
 msgid "Beneficiary Clause"
 msgstr "Clause bénéficiaire"
 
-msgctxt "field:contract.manage_beneficiaries.option,beneficiary_clause_customizable:"
+msgctxt ""
+"field:contract.manage_beneficiaries.option,beneficiary_clause_customizable:"
 msgid "Beneficiary Clause Customizable"
 msgstr "Clause bénéficiaire personnalisable"
 
@@ -164,7 +169,7 @@ msgid "Keep if Empty"
 msgstr "Conserver si vide"
 
 msgctxt "field:endorsement.contract.beneficiary,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.beneficiary,relation:"
@@ -220,7 +225,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.beneficiary.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.beneficiary.field,write_date:"

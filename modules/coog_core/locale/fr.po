@@ -35,8 +35,7 @@ msgctxt "error:export_not_unique:"
 msgid ""
 "Cannot import : the following objects:\\n%s\\n share the same functional "
 "key:\\n\"%s\"."
-msgstr ""
-"Import impossible: les objets suivants:\\n%s\\n partagent la même clé "
+msgstr "Import impossible: les objets suivants:\\n%s\\n partagent la même clé "
 "fonctionnelle:\\n\"%s\"."
 
 msgctxt "error:extra_details.configuration:"
@@ -92,6 +91,10 @@ msgstr ""
 msgctxt "error:missing_export_configuration:"
 msgid "Can't find configuration for code %s."
 msgstr "Aucun configuration trouvée pour le code %s."
+
+msgctxt "field:batch.data_update,id:"
+msgid "ID"
+msgstr "Identifiant"
 
 msgctxt "field:batch.params_config,id:"
 msgid "ID"
@@ -182,7 +185,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:event.type,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:event.type,write_date:"
@@ -250,7 +253,7 @@ msgid "Pyson Condition"
 msgstr "Condition Pyson"
 
 msgctxt "field:event.type.action,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:event.type.action,show_descriptor:"
@@ -298,7 +301,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:event.type.action-event.type,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:event.type.action-event.type,write_date:"
@@ -378,7 +381,7 @@ msgid "Model Name"
 msgstr "Nom du modèle"
 
 msgctxt "field:extra_details.configuration,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:extra_details.configuration,write_date:"
@@ -422,7 +425,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:extra_details.configuration.line,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:extra_details.configuration.line,selection:"
@@ -506,7 +509,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:ir.export.configuration,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:ir.export.configuration,write_date:"
@@ -554,7 +557,7 @@ msgid "Model Configuration"
 msgstr "Configuration de l'export des modèles"
 
 msgctxt "field:ir.export.configuration.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:ir.export.configuration.field,write_date:"
@@ -602,7 +605,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:ir.export.configuration.model,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:ir.export.configuration.model,write_date:"
@@ -638,7 +641,7 @@ msgid "Export Model"
 msgstr "Définition de l'export des modèles"
 
 msgctxt "field:ir.export_configuration-export_model,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:ir.export_configuration-export_model,write_date:"
@@ -674,7 +677,7 @@ msgid "Package Name"
 msgstr "Nom du Groupe"
 
 msgctxt "field:ir.export_package,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:ir.export_package,write_date:"
@@ -714,7 +717,7 @@ msgid "Package"
 msgstr "Formule"
 
 msgctxt "field:ir.export_package.item,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:ir.export_package.item,to_export:"
@@ -882,7 +885,7 @@ msgid "Priority"
 msgstr "Priorité"
 
 msgctxt "field:ir.model.method,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:ir.model.method,write_date:"
@@ -958,7 +961,7 @@ msgid "Test Case Language"
 msgstr "Langue des jeux d'essai"
 
 msgctxt "field:ir.test_case,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:ir.test_case,test_cases:"
@@ -1014,7 +1017,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:ir.test_case.instance,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:ir.test_case.instance,requirements:"
@@ -1062,7 +1065,7 @@ msgid "Parent"
 msgstr "Parent"
 
 msgctxt "field:ir.test_case.instance-ir.test_case.instance,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:ir.test_case.instance-ir.test_case.instance,write_date:"
@@ -1230,7 +1233,7 @@ msgid "Parent"
 msgstr "Parent"
 
 msgctxt "field:tag,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:tag,tagged_objects:"
@@ -1270,7 +1273,7 @@ msgid "Object"
 msgstr "Objet"
 
 msgctxt "field:tag-object,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:tag-object,tag:"
@@ -1319,6 +1322,10 @@ msgid ""
 "should be run or not"
 msgstr ""
 "Le nom de la méthode utilisé pour décider si le jeux d'essai doit être lancé"
+
+msgctxt "model:batch.data_update,name:"
+msgid "Data Update Batch"
+msgstr "Batch générique de mise à jour de données"
 
 msgctxt "model:batch.params_config,name:"
 msgid "Batch Parameters Configuration"

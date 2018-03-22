@@ -137,7 +137,7 @@ msgid "Image"
 msgstr "Image"
 
 msgctxt "field:report.template-report.template.image_attachment,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:report.template-report.template.image_attachment,template:"
@@ -181,7 +181,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:report.template.image_attachment,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:report.template.image_attachment,write_date:"
@@ -221,7 +221,7 @@ msgid "Template"
 msgstr "Modèle"
 
 msgctxt "field:report.template.report.template.relation,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:report.template.report.template.relation,write_date:"

@@ -385,7 +385,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:contract.activation_history,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.activation_history,start_date:"
@@ -449,7 +449,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:contract.contact,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.contact,type:"
@@ -497,7 +497,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:contract.contact.type,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.contact.type,write_date:"
@@ -533,7 +533,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:contract.data.rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.data.rule,rule:"
@@ -605,7 +605,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:contract.extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.extra_data,write_date:"
@@ -657,7 +657,7 @@ msgid "Planned Treatment Date"
 msgstr "Date de traitement planifiée"
 
 msgctxt "field:contract.notification,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.notification,subscriber:"
@@ -789,7 +789,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:contract.option,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.option,start_date:"
@@ -853,7 +853,7 @@ msgid "Option"
 msgstr "Garantie souscrite"
 
 msgctxt "field:contract.option.version,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.option.version,start:"
@@ -957,7 +957,7 @@ msgid "Coverage"
 msgstr "Garantie"
 
 msgctxt "field:contract.service,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.service,status:"
@@ -1025,7 +1025,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:contract.sub_status,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.sub_status,status:"
@@ -1134,6 +1134,10 @@ msgctxt ""
 msgid "Possible Packages"
 msgstr "Formules possibles"
 
+msgctxt "field:event.log,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
 msgctxt "field:event.type.action,notification_delay:"
 msgid "Notification Delay (in days)"
 msgstr "Délai avant notifications (en jours)"
@@ -1184,7 +1188,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:offered.configuration.default_quote_number_sequence,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt ""
@@ -1237,7 +1241,7 @@ msgid "Quote Number Sequence"
 msgstr "Numéro de séquence de devis"
 
 msgctxt "field:offered.product.quote_number_sequence,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.product.quote_number_sequence,write_date:"
@@ -1293,8 +1297,8 @@ msgid "Contracts"
 msgstr "Contrats"
 
 msgctxt "field:party.synthesis.menu.contract,rec_name:"
-msgid "Name"
-msgstr "Numéro"
+msgid "Record Name"
+msgstr "Nom"
 
 msgctxt "field:party.synthesis.menu.contract,subscriber:"
 msgid "Subscriber"
@@ -1531,6 +1535,10 @@ msgstr "Contrats"
 msgctxt "model:ir.action,name:act_decline"
 msgid "Decline"
 msgstr "Décliner"
+
+msgctxt "model:ir.action,name:act_event_log_relate_form"
+msgid "Event Logs"
+msgstr "Logs d'événements"
 
 msgctxt "model:ir.action,name:act_hold_contract"
 msgid "Hold Contract"

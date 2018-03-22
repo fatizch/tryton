@@ -116,7 +116,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:functional_error,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:functional_error,write_date:"
@@ -196,7 +196,7 @@ msgid "Test Cases OK"
 msgstr "Cas de tests OK"
 
 msgctxt "field:rule_engine,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine,result_type:"
@@ -268,7 +268,7 @@ msgid "Parent Rule"
 msgstr "Règle parent"
 
 msgctxt "field:rule_engine-rule_engine,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine-rule_engine,rule:"
@@ -308,7 +308,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:rule_engine-rule_function,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine-rule_function,rule:"
@@ -348,7 +348,7 @@ msgid "Parent Rule"
 msgstr "Règle parent"
 
 msgctxt "field:rule_engine-table,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine-table,table:"
@@ -392,7 +392,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine.context,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine.context,tags:"
@@ -436,7 +436,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:rule_engine.context-function,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine.context-function,tree_element:"
@@ -508,7 +508,7 @@ msgid "Parent"
 msgstr "Parent"
 
 msgctxt "field:rule_engine.function,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine.function,rule:"
@@ -584,7 +584,7 @@ msgid "Execution Trace"
 msgstr "Trace d'exécution"
 
 msgctxt "field:rule_engine.log,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine.log,result:"
@@ -648,7 +648,7 @@ msgid "Parent Rule"
 msgstr "Règle parent"
 
 msgctxt "field:rule_engine.rule_parameter,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine.rule_parameter,selection:"
@@ -736,7 +736,7 @@ msgid "Low Level Debug Info"
 msgstr "Niveau bas de debug"
 
 msgctxt "field:rule_engine.test_case,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine.test_case,result_errors:"
@@ -804,7 +804,7 @@ msgid "Override Value"
 msgstr "Valeur surchargée"
 
 msgctxt "field:rule_engine.test_case.value,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine.test_case.value,rule:"
@@ -1218,12 +1218,3 @@ msgstr "Arbre"
 msgctxt "wizard_button:rule_engine.run_tests,report,end:"
 msgid "OK"
 msgstr "OK"
-
-msgctxt ""
-"wizard_button:rule_engine.test_case.init,select_values,create_test_case:"
-msgid "Accept"
-msgstr "Accepter"
-
-msgctxt "wizard_button:rule_engine.test_case.init,select_values,end:"
-msgid "Cancel"
-msgstr "Annuler"
