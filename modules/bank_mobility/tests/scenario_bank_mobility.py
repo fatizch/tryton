@@ -7,7 +7,6 @@ import sys
 from proteus import Model, Wizard
 
 import datetime
-from subprocess import check_output as qx
 from subprocess import Popen as popen
 
 
@@ -26,7 +25,7 @@ from trytond.modules.premium.tests.tools import add_premium_rules
 from trytond.modules.contract_insurance_invoice.tests.tools import \
     add_invoice_configuration
 
-import trytond.modules.bank_mobility as bank_mobility
+from trytond.modules.bank_mobility import batch as bank_mobility
 
 # #Comment# #Install Modules
 config = activate_modules('bank_mobility')
@@ -195,7 +194,7 @@ def import_flow_5(file_name):
     debug_print('testing %s' % file_name)
     launcher = Wizard('batch.launcher')
     launcher.form.batch = bank_mobility_batch
-    dir_ = os.path.join(module_folder, 'tests_imports')
+    dir_ = os.path.join(module_folder, 'tests_imports/')
     file_path = dir_ + file_name
     for i in xrange(0, len(launcher.form.parameters)):
         if launcher.form.parameters[i].code == 'in_directory':

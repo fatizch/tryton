@@ -8,7 +8,6 @@ Imports::
     >>> import sys
     >>> from proteus import Model, Wizard
     >>> import datetime
-    >>> from subprocess import check_output as qx
     >>> from subprocess import Popen as popen
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.coog_core.test_framework import execute_test_case,\
@@ -24,7 +23,7 @@ Imports::
     >>> from trytond.modules.premium.tests.tools import add_premium_rules
     >>> from trytond.modules.contract_insurance_invoice.tests.tools import \
     ...     add_invoice_configuration
-    >>> import bank_mobility
+    >>> from trytond.modules.bank_mobility import batch as bank_mobility
 
 Install Modules::
 
@@ -198,7 +197,7 @@ Create Subscriber 3::
     ...     debug_print('testing %s' % file_name)
     ...     launcher = Wizard('batch.launcher')
     ...     launcher.form.batch = bank_mobility_batch
-    ...     dir_ = module_folder + '/tests_imports/'
+    ...     dir_ = os.path.join(module_folder, 'tests_imports/')
     ...     file_path = dir_ + file_name
     ...     for i in xrange(0, len(launcher.form.parameters)):
     ...         if launcher.form.parameters[i].code == 'in_directory':
