@@ -30,7 +30,7 @@ def migrate_1_10_include_line3_in_street(pool, update):
 
     from trytond import backend
     from trytond.transaction import Transaction
-    from trytond.modules.party import Address
+    from trytond.modules.party.address import Address
 
     logging.getLogger('modules').info('Running post init hook %s' %
         'migrate_1_10_include_line3_in_street')

@@ -10,6 +10,7 @@ from sql.aggregate import Max
 from sql import Literal, Cast
 from sql.operators import Concat
 from sql.conditionals import Coalesce
+from sql.functions import Function
 
 from trytond import backend
 from trytond.model import Unique
@@ -43,6 +44,7 @@ __all__ = [
     'SynthesisMenuRelationship',
     'PartyReplace',
     'PartyReplaceAsk',
+    'PartyErase',
     ]
 
 GENDER = [
@@ -1308,3 +1310,31 @@ class PartyReplaceAsk:
         super(PartyReplaceAsk, self).on_change_source()
         if not self.source and self.destination:
             self.destination = None
+
+
+class PartyErase:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.erase'
+
+    def get_transform(self, fname):
+
+        class Transform(Function):
+            __slots__ = ()
+            _function = fname
+
+        return Transform
+
+    def to_erase(self, party_id):
+        to_erase = super(PartyErase, self).to_erase(party_id)
+        md5hash = self.get_transform('MD5')
+        res = []
+        for Model, domain, resource, columns, values in to_erase:
+            updated_values = []
+            for col, value in zip(columns, values):
+                f = Model._fields.get(col)
+                if f and f._type in ('char', 'text') and f.required \
+                        and value is None:
+                    value = md5hash
+                updated_values.append(value)
+            res.append((Model, domain, resource, columns, updated_values))
+        return res
