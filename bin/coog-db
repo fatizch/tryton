@@ -1,0 +1,64 @@
+# vim: set ft=sh:
+# base management - anonymize, etc
+
+_get_anon_queries() {
+    [ -z "$1" ] && echo -e "please provide an anonymization level: 1, 2, or 3" && return 1
+    level=$1
+    script_path="$COOG_ROOT/coog/modules/coog_core/scripts/"
+    scripts_files="$script_path""anonymize_procedures.sql"
+    scripts_files="$scripts_files"" $script_path""anonymize_level_2.sql"
+    [ $level -lt 2 ] && scripts_files="$scripts_files"" $script_path""anonymize_level_1.sql"
+    [ $level -lt 1 ] && scripts_files="$scripts_files"" $script_path""anonymize_level_0.sql"
+    scripts_files="$scripts_files"" $script_path""anonymize_remove_procedures.sql"
+    cat $scripts_files
+}
+
+_check_anon_args() {
+    anon_help="
+    Please provide an anonymization level:
+
+    2 : personal data are anonymized
+    1 : structuring business data are also anonymized
+    0 : business identifiers are also anonymized
+    "
+
+    [ -z "$1" ] && echo -e "$anon_help" && return 1
+    [ -z "$DB_NAME" ] && echo no database defined && return 1
+    [ -z "$PGUSER" ] && echo no pg user defined && return 1
+    return 0
+}
+
+coog_db_anondump() { # Creates an anonymized dump of database DB_NAME - <level> [dump path]
+
+    _check_anon_args $@ || return 1
+    [ -z "$2" ] && dump_path="/tmp" || dump_path=$(readlink -f $2)
+    level=$1
+    stamp=$(date +%Y-%m-%d_%Hh%M)
+    copy_name=anon_"$DB_NAME"_"$stamp"
+    queries=$(_get_anon_queries $level) || return 1
+
+    createdb -e -U $PGUSER $copy_name -T $DB_NAME || return 1
+
+    echo "Anonymizing $copy_name"
+    psql -U $PGUSER -d $copy_name 2>&1 > /dev/null << EOF
+    $queries
+EOF
+
+    echo "Dumping $copy_name"
+    full_path="$dump_path/""$copy_name"".dump"
+    pg_dump -U $PGUSER -d $copy_name -Fc > $full_path
+    dropdb -e -U $PGUSER $copy_name
+    echo "Anonymized database dumped to $full_path"
+}
+
+coog_db_anonbase() { # Anonymize database DB_NAME - <level>
+    _check_anon_args $@ || return 1
+    level=$1
+    queries=$(_get_anon_queries $level) || return 1
+
+    psql -U $PGUSER -d $DB_NAME << EOF
+    $queries
+EOF
+
+    echo "anonymized database $DB_NAME at level $level"
+}

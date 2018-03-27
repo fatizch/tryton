@@ -1,3 +1,4 @@
+* FEA#8448 Add data anonymization scripts
 * FEA#8160 Function cache for rng (not serializable)
 * BUG#8091 Use "Decimal" in the "convert_frequency" function
 * FEA#8095 Add a search and stream feature to optimize reportings
