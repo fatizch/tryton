@@ -603,10 +603,7 @@ class IndemnificationRegularisation(model.CoogView):
     currency_digits = fields.Integer(
         'Currency Digits', states={'invisible': True})
     payback_reason = fields.Many2One('claim.indemnification.payback_reason',
-        'Payback Reason', states={
-            'invisible': ~Eval('payback_required'),
-            'required': Bool(Eval('payback_required'))},
-        depends=['payback_required'])
+        'Payback Reason', required=True)
 
     @fields.depends('remaining_amount')
     def on_change_with_payback_required(self):
