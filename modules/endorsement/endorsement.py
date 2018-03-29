@@ -1499,6 +1499,8 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
     @model.CoogView.button_action('endorsement.act_open_generated')
     @Workflow.transition('applied')
     def apply(cls, endorsements):
+        import time
+        time.sleep(1000)
         pool = Pool()
         Event = pool.get('event')
         endorsements_per_model = cls.group_per_model(endorsements)

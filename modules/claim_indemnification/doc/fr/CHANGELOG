@@ -1,3 +1,4 @@
+* FEA#8269 Ajout de l'annulation d'une indemnisation avec avertissement.
 * BUG#8595 Toujours afficher la raison de régularisation à l'étape de régularisation dans le processus de création d'une indemnisation
 * BUG#8523 Correction d'un crash lorsque l'on exerce une garantie sur un événement avec une date de fin dans le cas ou la période est une franchise.
 * FEA#8287 Ajout d'un groupe super gestionnaire sinistre qui est autorisé à définir les indemnités manuellement

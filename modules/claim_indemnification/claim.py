@@ -736,13 +736,14 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                     'invisible': Eval('status') != 'calculated'},
                 'reject_indemnification': {
                     'invisible': Eval('status') != 'calculated'},
-                'cancel_indemnification': {
-                    'invisible': Eval('status') != 'paid'},
                 'modify_indemnification': {
                     'invisible': Eval('status') != 'calculated'},
                 'schedule': {
                     'invisible': Not(In(Eval('status'),
                             ['calculated', 'cancelled']))},
+                'cancel_payment': {
+                    'invisible': Not(In(Eval('status'),
+                            ['paid', 'validated']))},
                 })
         cls._error_messages.update({
                 'cannot_create_indemnifications': 'The insurer %(insurer)s '
@@ -770,6 +771,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'scheduling_blocked': 'Scheduling is blocked for '
                 'indemnification %(indemnification)s, claim\'s '
                 'sub status is %(sub_status)s',
+                'cancel_indemnification': 'You are about to cancel the payment of this'
+                ' indemnification. %s',
                 })
         cls._order = [('start_date', 'ASC')]
 
@@ -848,6 +851,15 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                             'period_start': Date.date_as_string(
                                 indemn.start_date),
                             'period_end': Date.date_as_string(indemn.end_date)})
+
+    @classmethod
+    @model.CoogView.button_action(
+            'claim_indemnification.act_cancel_indemnification_wizard')
+    def cancel_payment(cls, indemnifications):
+        txt = [x.rec_name for x in indemnifications]
+        cls.raise_user_warning(str(indemnifications), 'cancel_indemnification',
+                '\n' + '\n'.join(txt))
+        pass
 
     def _get_applied_product_supplier_taxes(self):
         taxes = self.product.supplier_taxes
@@ -1245,7 +1257,6 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             'reject_indemnification')
 
     @classmethod
-    @ModelView.button
     def cancel_indemnification(cls, indemnifications):
         if not indemnifications:
             return

@@ -29,6 +29,7 @@ __all__ = [
     'IndemnificationAssistantView',
     'IndemnificationAssistant',
     'DeleteIndemnification',
+    'CancelIndemnification',
     ]
 
 
@@ -996,6 +997,25 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
                 'payback_reason': payback_reason,
                 'payment_term': payment_term.id if payment_term else None,
                 })
+        return 'end'
+
+
+class CancelIndemnification(Wizard):
+    'Cancel Indemnification'
+
+    __name__ = 'claim.indemnification.cancel'
+
+    start_state = 'cancel_selection'
+    cancel_selection = StateTransition()
+
+    def transition_cancel_selection(self):
+        ids = Transaction().context.get('active_ids')
+        model = Transaction().context.get('active_model')
+        assert model == 'claim.indemnification'
+        Indemnification = Pool().get('claim.indemnification')
+        indemnifications = Indemnification.browse(ids)
+        Indemnification.cancel_indemnification(indemnifications)
+        Indemnification.schedule(indemnifications)
         return 'end'
 
 
