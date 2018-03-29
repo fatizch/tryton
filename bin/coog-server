@@ -8,7 +8,7 @@ _coog_server_file() {
 coog_server_clearcache() { # clear redis cache
         coog_redis_exec cache flushdb &> /dev/null
         [ $? -eq 0 ] && echo redis cache cleared
-        find "$COOG_ROOT" -name "*.pyc" -delete
+        find "$COOG_ROOT" -name "*.pyc" -delete 2> /dev/null
         [ $? -eq 0 ] && echo pyc files cleared
         for repo in $(coog_repo_main)
         do
