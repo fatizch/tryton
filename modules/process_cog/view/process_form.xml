@@ -15,7 +15,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/group[@id='global_part']/field[@name='on_model']" position="replace_attributes">
         <field name="on_model" colspan="1"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='xml']/group[@id='form_customization']/group[@id='customization_data']/field[@name='step_button_group_position']" position="after">
+    <xpath expr="//group[@id='customization_data']/field[@name='step_button_group_position']" position="after">
         <label name="with_prev_next"/>
         <field name="with_prev_next"/>
         <label name="close_tab_on_completion"/>

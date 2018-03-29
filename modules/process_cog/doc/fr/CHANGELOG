@@ -1,3 +1,4 @@
+* FEA#8411 Fusion des onglets présentant les vues XML dans un seul onglet
 * BUG#8020 Correction d'une erreur à l'export de wizards
 * FEA7773 Ajout d'une méthode RPC pour attacher un objet métier à un processus et faire "avance-rapide"
 

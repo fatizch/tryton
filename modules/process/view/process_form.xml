@@ -23,32 +23,38 @@ this repository contains the full copyright notices and license terms. -->
             </group>
             <field name="transitions" yfill="1" colspan="2"/>
         </page>
+        <page string="Views" id="views">
+            <button string="Update Menu" icon="tryton-refresh" name="update_view" colspan="4"/>
+            <notebook>
+                <page string="View Description" id="main">
+                    <group id="form_customization" col="2" yexpand="1" yfill="1">
+                        <group id="customization_data" col="2" yexpand="1" yfill="1">
+                            <label name="menu_icon"/>
+                            <field name="menu_icon"/>
+                            <label name="menu_name"/>
+                            <field name="menu_name"/>
+                            <label name="step_button_group_position"/>
+                            <field name="step_button_group_position"/>
+                            <label name="end_step_name"/>
+                            <field name="end_step_name"/>
+                        </group>
+                    </group>
+                </page>
+                <page name="xml_header">
+                    <field name="xml_header"/>
+                </page>
+                <page name="xml_footer">
+                    <field name="xml_footer"/>
+                </page>
+                <page name="xml_tree">
+                    <field name="xml_tree"/>
+                </page>
+            </notebook>
+        </page>>
+        <page string="Filters" id="filters">
+        </page>
         <page name="tags">
             <field name="tags" colspan="4"/>
         </page>
-        <page string="XML" id="xml">
-            <group id="form_customization" col="2" yexpand="1" yfill="1">
-                <group id="customization_data" col="2" yexpand="1" yfill="1">
-                    <label name="menu_icon"/>
-                    <field name="menu_icon"/>
-                    <label name="menu_name"/>
-                    <field name="menu_name"/>
-                    <label name="step_button_group_position"/>
-                    <field name="step_button_group_position"/>
-                    <label name="end_step_name"/>
-                    <field name="end_step_name"/>
-                </group>
-            </group>
-        </page>
-        <page name="xml_header">
-            <field name="xml_header"/>
-        </page>
-        <page name="xml_footer">
-            <field name="xml_footer"/>
-        </page>
-        <page name="xml_tree">
-            <field name="xml_tree"/>
-        </page>
     </notebook>
-    <button string="Update Menu" name="update_view"/>
 </form>

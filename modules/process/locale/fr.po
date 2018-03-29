@@ -722,5 +722,13 @@ msgid "Update Menu"
 msgstr "Recharger le Menu"
 
 msgctxt "view:process:"
-msgid "XML"
+msgid "Filters"
+msgstr "Filtres"
+
+msgctxt "view:process:"
+msgid "View Description"
 msgstr "Description de la Vue"
+
+msgctxt "view:process:"
+msgid "Views"
+msgstr "Vues"

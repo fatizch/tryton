@@ -2,9 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page[@id='steps']" position="after">
-        <page string="Products" id="products">
-            <field name="for_products" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
-        </page>
+    <xpath expr="/form/notebook/page[@id='filters']" position="inside">
+        <field name="for_products" colspan="4"/>
     </xpath>
 </data>

@@ -3,21 +3,22 @@
 from trytond.pool import Pool
 
 import claim
+import process
 import document
 
 
 def register():
     Pool.register(
         claim.Claim,
-        claim.Process,
-        claim.ClaimDeclarationElement,
-        claim.ProcessLossDescRelation,
-        claim.ClaimDeclareFindProcess,
+        process.Process,
+        process.ClaimDeclarationElement,
+        process.ProcessLossDescRelation,
+        process.ClaimDeclareFindProcess,
         document.DocumentDescription,
         module='claim_process', type_='model')
 
     Pool.register(
-        claim.CloseClaim,
-        claim.ClaimDeclare,
+        process.CloseClaim,
+        process.ClaimDeclare,
         document.ReceiveDocument,
         module='claim_process', type_='wizard')
