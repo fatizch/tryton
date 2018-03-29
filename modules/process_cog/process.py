@@ -1314,6 +1314,9 @@ class ProcessFinder(Wizard):
         cls.process_parameters.model_name = cls.get_parameters_model()
         cls.process_parameters.view = cls.get_parameters_view()
 
+    def default_process_parameters(self, name):
+        return {}
+
     def do_action(self, action):
         process_obj = self.get_or_create_object()
         if ((hasattr(process_obj, 'current_state') and

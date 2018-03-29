@@ -32,8 +32,8 @@ msgid "Authorized Commercial Products"
 msgstr "Produits commerciaux autorisés"
 
 msgctxt "field:contract.subscribe.find_process,authorized_distributors:"
-msgid "Authorized Distributors for party"
-msgstr "Distributeurs autorisés pour le tiers"
+msgid "Authorized distributors"
+msgstr "Distributeurs autorisés"
 
 msgctxt "field:contract.subscribe.find_process,commercial_product:"
 msgid "Product"

@@ -18,14 +18,6 @@ msgctxt "field:contract.option.beneficiary,allowed_portfolios:"
 msgid "Allowed Portfolios"
 msgstr "Portefeuilles autorisés"
 
-msgctxt "field:contract.subscribe.find_process,authorized_distributors:"
-msgid "Authorized Distributors for party"
-msgstr "Distributeurs autorisés pour le tiers"
-
-msgctxt "field:contract.subscribe.find_process,party_portfolio:"
-msgid "Party Portfolio"
-msgstr "Portefeuille du tiers"
-
 msgctxt "field:distribution.network,is_portfolio:"
 msgid "Client Portfolio"
 msgstr "Portefeuille Client"

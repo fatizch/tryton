@@ -1,3 +1,4 @@
+* BUG#8148 The authorized distributors should take into account the user's distribution network
 * FEA#8550 Initialize distribution network during contract subscription process if current user has one defined
 * OTH#0000 Rename module from offered_distribution to contract_distribution and merge with contract_process_distribution
 

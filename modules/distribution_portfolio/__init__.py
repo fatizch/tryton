@@ -20,6 +20,9 @@ def register():
         contract.CoveredElement,
         contract.Beneficiary,
         contract.ContractBillingInformation,
-        process.ContractSubscribeFindProcess,
         rule_engine.RuleEngineRuntime,
         module='distribution_portfolio', type_='model')
+
+    Pool.register(
+        process.ContractSubscribe,
+        module='distribution_portfolio', type_='wizard')

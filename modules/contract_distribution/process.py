@@ -17,15 +17,20 @@ class ContractSubscribeFindProcess:
     __metaclass__ = PoolMeta
     __name__ = 'contract.subscribe.find_process'
 
-    distributor = fields.Many2One('distribution.network', 'Distributor',
-        required=True, domain=[('is_distributor', '=', True)])
+    authorized_distributors = fields.Many2Many(
+        'distribution.network', None, None, 'Authorized distributors',
+        states={'invisible': True})
+    distributor = fields.Many2One(
+        'distribution.network', 'Distributor', required=True,
+        domain=[('id', 'in', Eval('authorized_distributors'))],
+        depends=['authorized_distributors'])
     authorized_commercial_products = fields.Many2Many(
         'distribution.commercial_product', None, None,
         'Authorized Commercial Products', states={'invisible': False})
-    commercial_product = fields.Many2One('distribution.commercial_product',
-        'Product', domain=[
-            ('id', 'in', Eval('authorized_commercial_products'))],
-        depends=['authorized_commercial_products'], required=True)
+    commercial_product = fields.Many2One(
+        'distribution.commercial_product', 'Product', required=True,
+        domain=[('id', 'in', Eval('authorized_commercial_products'))],
+        depends=['authorized_commercial_products'])
 
     @classmethod
     def __setup__(cls):
@@ -34,11 +39,12 @@ class ContractSubscribeFindProcess:
 
     @staticmethod
     def default_distributor():
-        dist_network = Pool().get('res.user')(Transaction().user).dist_network
-        return dist_network.id if dist_network and dist_network.is_distributor \
-            else None
+        candidates = Pool().get(
+            'res.user')(Transaction().user).network_distributors
+        return candidates[0] if len(candidates) == 1 else None
 
-    @fields.depends('distributor', 'appliable_conditions_date')
+    @fields.depends('distributor', 'appliable_conditions_date',
+        'signature_date', 'start_date')
     def on_change_with_authorized_commercial_products(self):
         if self.distributor and self.appliable_conditions_date is not None:
             return [x.id for x in self.distributor.all_com_products
@@ -82,3 +88,13 @@ class ContractSubscribe:
         if res:
             obj.dist_network = process_param.distributor
         return res, errs
+
+    def default_process_parameters(self, name):
+        defaults = super(
+            ContractSubscribe, self).default_process_parameters(name)
+        candidates = Pool().get(
+            'res.user')(Transaction().user).network_distributors
+        defaults.update({
+            'authorized_distributors': candidates,
+            })
+        return defaults
