@@ -91,8 +91,8 @@ class Contract:
             return 'contract_red'
         return super(Contract, self).get_icon(name)
 
-    def get_invoice_periods(self, up_to_date, from_date=None):
+    def can_be_invoiced(self):
         if self.current_dunning:
             if self.current_dunning.level.contract_action == 'hold_invoicing':
-                return []
-        return super(Contract, self).get_invoice_periods(up_to_date, from_date)
+                return False
+        return super(Contract, self).can_be_invoiced()

@@ -7,6 +7,7 @@ from sql.operators import Or
 from sql.aggregate import Sum
 from sql.conditionals import Case, Coalesce
 
+from trytond import backend
 from trytond.tools import decistmt
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -93,6 +94,16 @@ class Commission(WithExtraDetails):
         if self.redeemed_prepayment and self.commission_rate:
             base_amount += self.redeemed_prepayment / self.commission_rate
         return base_amount.quantize(Decimal(10) ** -COMMISSION_AMOUNT_DIGITS)
+
+    def update_new_commission_after_cancel(self):
+        super(Commission, self).update_new_commission_after_cancel()
+        if self.redeemed_prepayment:
+            self.redeemed_prepayment *= -1
+
+    def update_cancel_copy(self):
+        super(Commission, self).update_cancel_copy()
+        if self.redeemed_prepayment:
+            self.redeemed_prepayment *= -1
 
 
 class PlanLines:

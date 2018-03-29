@@ -791,15 +791,20 @@ class Contract:
     def first_invoice_and_post(cls, contracts):
         cls._first_invoice(contracts, and_post=True)
 
+    def can_be_invoiced(self):
+        if self.status not in ('active', 'quote', 'terminated'):
+            if not (self.status == 'hold' and self.sub_status and
+                    not self.sub_status.hold_billing):
+                return False
+        return True
+
     @classmethod
     def invoice(cls, contracts, up_to_date):
         'Invoice contracts up to the date'
         periods = defaultdict(list)
         for contract in contracts:
-            if contract.status not in ('active', 'quote', 'terminated'):
-                if not (contract.status == 'hold' and contract.sub_status and
-                        not contract.sub_status.hold_billing):
-                    continue
+            if not contract.can_be_invoiced():
+                continue
             cls._invoices_cache.set(contract.id, None)
             for period in contract.get_invoice_periods(min(up_to_date,
                         contract.activation_history[-1].end_date or

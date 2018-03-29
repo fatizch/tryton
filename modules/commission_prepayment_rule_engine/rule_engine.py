@@ -17,6 +17,9 @@ class RuleEngineRuntime:
     @check_args('option')
     def _re_option_first_year_premium(cls, args):
         option = args['option']
+        first_year_premium = args.get('first_year_premium', None)
+        if first_year_premium is not None:
+            return first_year_premium
         if option:
             return option.first_year_premium
 

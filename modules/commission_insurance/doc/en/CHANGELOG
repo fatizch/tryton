@@ -1,3 +1,4 @@
+* OTH#0000 Various fixes for commissions
 * OTH#0000 Fix flake 8
 * OTH#0000 Merge with contract_process_commission
 * FEA#8274 Force commission line split according the computation dates defined

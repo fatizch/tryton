@@ -310,8 +310,8 @@ class Invoice:
         # Make another copy which will be available to be paid, once the
         # client invoice is re-paid.
         new_commissions = Commission.copy(cancel_commissions, {'date': None})
-        for com in new_commissions:
-            com.amount *= -1
+        for new_com in new_commissions:
+            new_com.update_new_commission_after_cancel()
         Commission.save(new_commissions)
 
     @classmethod

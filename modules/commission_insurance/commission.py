@@ -270,6 +270,9 @@ class Commission:
             cls.write(to_write, {'date': utils.today()})
         return super(Commission, cls).cancel(commissions)
 
+    def update_new_commission_after_cancel(self):
+        self.amount *= -1
+
     def update_cancel_copy(self):
         super(Commission, self).update_cancel_copy()
         self.date = utils.today()

@@ -148,12 +148,17 @@ class ContractOption:
             used.append((insurer, insurer.plan))
         return used
 
-    def get_first_year_premium(self, name):
+    def get_first_year_premium(self, name, limit_to_paid_invoice=False):
         if not self.start_date:
             # when a contract is void for example
             return 0
         contract_start_date = self.parent_contract.initial_start_date
-        end_first_year = contract_start_date + relativedelta(years=1, days=-1)
+        end_first_year = contract_start_date + relativedelta(years=1,days=-1)
+        if (limit_to_paid_invoice and
+                self.parent_contract.status == 'terminated'):
+            if not self.parent_contract.last_paid_invoice_end:
+                return 0
+            end_first_year = self.parent_contract.last_paid_invoice_end
         lines = []
         periods = self.parent_contract.get_invoice_periods(end_first_year,
             contract_start_date)
@@ -170,7 +175,7 @@ class ContractOption:
         return first_year_premium
 
     def _get_prepayment_amount_and_rate(self, agent, plan, pattern=None):
-        pattern = {
+        pattern = pattern or {
             'first_year_premium': self.first_year_premium,
             'coverage': self.coverage,
             'agent': agent,

@@ -122,6 +122,7 @@ class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule')):
         if 'option' in context['names']:
             context['names']['option'].init_dict_for_rule_engine(args)
             args['date'] = context['names']['option'].initial_start_date
+            args['first_year_premium'] = context['names']['first_year_premium']
         return self.calculate_prepayment_rule(args)
 
     @fields.depends('prepayment_rule', 'prepayment_rule_extra_data')
