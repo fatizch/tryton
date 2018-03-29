@@ -4,10 +4,10 @@ this repository contains the full copyright notices and license terms. -->
 <tree>
     <field name="from_date"/>
     <field name="to_date"/>
-    <field name="gross_salary" sum="Total Gross Salary"/>
-    <field name="salary_bonus" sum="Total Bonus Salary"/>
-    <field name="net_salary" sum="Total Net Salary"/>
-    <field name="net_salary_bonus" sum="Total Net Salary Bonuses"/>
+    <field name="gross_salary" sum="Total Gross Salary" highlight_sum="1"/>
+    <field name="salary_bonus" sum="Total Bonus Salary" highlight_sum="1"/>
+    <field name="net_salary" sum="Total Net Salary" highlight_sum="1"/>
+    <field name="net_salary_bonus" sum="Total Net Salary Bonuses" highlight_sum="1"/>
     <field name="net_limit_mode" tree_invisible="1"/>
     <field name="is_readonly" tree_invisible="1"/>
     <field name="color" tree_invisible="1"/>

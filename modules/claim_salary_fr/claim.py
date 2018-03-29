@@ -261,7 +261,7 @@ class ClaimService:
     __name__ = 'claim.service'
 
     salary = fields.One2Many('claim.salary', 'delivered_service', 'Salary',
-        order=[('from_date', 'DESC')], delete_missing=True, readonly=True)
+        order=[('from_date', 'ASC')], delete_missing=True, readonly=True)
     gross_salary = fields.Function(
         fields.Numeric('Gross Salary', digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),

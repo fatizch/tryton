@@ -47,7 +47,10 @@ class StartSetContributions(model.CoogView):
     rule = fields.Many2One('rule_engine', 'Rule', states={
            'invisible': True})
     periods = fields.One2Many('claim.salary', None, 'Periods',
+        readonly=True,
         order=[('from_date', 'ASC')])
+    from_date = fields.Date('Computation Period Start Date')
+    to_date = fields.Date('Computation Period End Date')
 
 
 class SalariesComputation(Wizard):
@@ -57,13 +60,15 @@ class SalariesComputation(Wizard):
     start = StateView('claim.start_set_salaries',
         'claim_salary_fr.start_set_salaries_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Save', 'set_salaries_suspend', 'tryton-save'),
             Button('Next', 'process', 'tryton-go-next', default=True)])
     process = StateTransition()
+    set_salaries_suspend = StateTransition()
     net_salary = StateView('claim.start_set_contributions',
         'claim_salary_fr.start_set_contributions_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Previous', 'start', 'tryton-go-previous'),
-            Button('Compute net salaries', 'set_contributions',
+            Button('Apply rates on period', 'set_contributions',
                 'tryton-go-next'),
             Button('Compute and finish', 'compute', 'tryton-go-next',
                 default=True)])
@@ -79,7 +84,12 @@ class SalariesComputation(Wizard):
                 'no_rule': 'No net salary computation rule has been defined',
                 'indemnifications': 'This claim has indemnification periods, '
                 'you may have to cancel them or recompute if salaries are '
-                'modifed'
+                'modifed',
+                'wrong_computation_date_1': 'The computation date must be equal'
+                ' to salary periods dates',
+                'wrong_computation_date_2': 'The computation start set date is '
+                'is after the computation end date!',
+                'missing_rates': 'A rate is missing',
                 })
 
     def get_rule_service(self):
@@ -146,7 +156,9 @@ class SalariesComputation(Wizard):
             'rates': salaries[0].get_rates_per_range(
                 net_salary_rule=rule),
             'fixed_amounts': salaries[0].get_rates_per_range(fixed=True,
-                net_salary_rule=rule)
+                net_salary_rule=rule),
+            'from_date': min(s.from_date for s in salaries),
+            'to_date': max(s.to_date for s in salaries),
             }
 
     def update_salary(self):
@@ -164,7 +176,9 @@ class SalariesComputation(Wizard):
             for rate in self.net_salary.fixed_amounts:
                 salary.fixed_contributions[rate.extra_data.name] = \
                     rate.fixed_amount
-            to_calculate.append(salary)
+            if salary.from_date >= self.net_salary.from_date and \
+                    salary.to_date <= self.net_salary.to_date:
+                to_calculate.append(salary)
         for salary in to_calculate:
             salary.ta_contributions = salary.ta_contributions
             salary.tb_contributions = salary.tb_contributions
@@ -176,9 +190,42 @@ class SalariesComputation(Wizard):
             Salary.write(to_empty, {'net_salary': None})
 
     def transition_set_contributions(self):
+        delivered_rule = self.get_rule_service()
+        if not delivered_rule:
+            self.raise_user_error('no_delivered_services')
+        rule = delivered_rule['rule']
+        if not rule:
+            self.raise_user_error('no_rule')
+        self.check_computation_date()
         self.update_salary()
         return 'net_salary'
 
     def transition_compute(self):
+        display_warning = True
+        self.check_computation_date()
+        for rate in self.net_salary.rates:
+            if any([rate.ta, rate.tb, rate.tc]) != 0:
+                display_warning = False
+                break
+        if display_warning:
+            self.raise_user_warning('missing_rates', 'missing_rates')
         self.update_salary()
         return 'end'
+
+    def transition_set_salaries_suspend(self):
+        pool = Pool()
+        Salary = pool.get('claim.salary')
+        Salary.save(self.start.periods)
+        return 'end'
+    
+    def check_computation_date(self):
+        delivered_rule = self.get_rule_service()
+        delivered_service = delivered_rule['delivered_service']
+        salaries = delivered_service.salary
+        if self.net_salary.from_date > self.net_salary.to_date:
+            self.raise_user_error('wrong_computation_date_2')
+        if self.net_salary.from_date not in (
+                s.from_date for s in salaries) or \
+                self.net_salary.to_date not in (
+                s.to_date for s in salaries):
+            self.raise_user_error('wrong_computation_date_1')

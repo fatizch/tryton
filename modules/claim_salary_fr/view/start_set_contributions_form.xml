@@ -2,9 +2,13 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <form>
+    <label name="from_date"/>
+    <field name="from_date"/>
+    <label name="to_date"/>
+    <field name="to_date"/>
     <field name="rates" colspan="3" view_ids="claim_salary_fr.contributions_view_list"/>
     <field name="fixed_amounts" colspan="1" view_ids="claim_salary_fr.fixed_contributions_view_list"/>
     <newline/>
-    <field name="periods" colspan="4" view_ids="claim_salary_fr.salary_no_button_view_list"/>
+    <field name="periods" colspan="4" readonly="1"/>
     <field name="rule" invisible="1"/>
 </form>

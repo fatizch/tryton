@@ -7,12 +7,24 @@ msgid "The name must be unique!"
 msgstr "Le nom doit être unique!"
 
 msgctxt "error:claim.salaries_computation:"
+msgid "A rate is missing"
+msgstr "Les taux ne sont pas définis pour une ou plusieurs périodes"
+
+msgctxt "error:claim.salaries_computation:"
 msgid "No net salary computation rule has been defined"
 msgstr "Aucune règle de calcul de salaire net n'a été définie"
 
 msgctxt "error:claim.salaries_computation:"
 msgid "No service can be delivered for this claim"
 msgstr "Aucune garantie pour ce sinistre"
+
+msgctxt "error:claim.salaries_computation:"
+msgid "The computation date must be equal to salary periods dates"
+msgstr "Les dates de calcul doivent être égales aux périodes des salaires"
+
+msgctxt "error:claim.salaries_computation:"
+msgid "The computation start set date is is after the computation end date!"
+msgstr "La date de début de calcul doit être antérieure à la date de fin!"
 
 msgctxt "error:claim.salaries_computation:"
 msgid ""
@@ -75,7 +87,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:claim.net_calculation_rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim.net_calculation_rule,rule:"
@@ -167,7 +179,7 @@ msgid "Net Salary Bonus"
 msgstr "Prime (net)"
 
 msgctxt "field:claim.salary,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim.salary,salary_bonus:"
@@ -242,6 +254,10 @@ msgctxt "field:claim.start_set_contributions,fixed_amounts:"
 msgid "Fixed Amounts"
 msgstr "Montants fixes"
 
+msgctxt "field:claim.start_set_contributions,from_date:"
+msgid "Computation Period Start Date"
+msgstr "Date de début de calcul"
+
 msgctxt "field:claim.start_set_contributions,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -257,6 +273,10 @@ msgstr "Taux"
 msgctxt "field:claim.start_set_contributions,rule:"
 msgid "Rule"
 msgstr "Règle"
+
+msgctxt "field:claim.start_set_contributions,to_date:"
+msgid "Computation Period End Date"
+msgstr "Date de fin de calcul"
 
 msgctxt "field:claim.start_set_salaries,id:"
 msgid "ID"
@@ -307,7 +327,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:net_calculation_rule-extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:net_calculation_rule-extra_data,write_date:"
@@ -347,7 +367,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:net_calculation_rule-fix_extra_data,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:net_calculation_rule-fix_extra_data,write_date:"
@@ -507,8 +527,8 @@ msgstr "Annuler"
 
 msgctxt ""
 "wizard_button:claim.salaries_computation,net_salary,set_contributions:"
-msgid "Compute net salaries"
-msgstr "Calculer les salaires nets"
+msgid "Apply rates on period"
+msgstr "Appliquer les taux sur la période"
 
 msgctxt "wizard_button:claim.salaries_computation,net_salary,start:"
 msgid "Previous"
@@ -521,3 +541,7 @@ msgstr "Annuler"
 msgctxt "wizard_button:claim.salaries_computation,start,process:"
 msgid "Next"
 msgstr "Suivant"
+
+msgctxt "wizard_button:claim.salaries_computation,start,set_salaries_suspend:"
+msgid "Save"
+msgstr "Sauvegarder"
