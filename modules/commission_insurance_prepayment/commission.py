@@ -126,6 +126,8 @@ class Plan:
     __metaclass__ = PoolMeta
     __name__ = 'commission.plan'
 
+    is_prepayment = fields.Function(fields.Boolean('Is Prepayment'),
+        'getter_is_prepayment', searcher='search_is_prepayment')
     adjust_prepayment = fields.Boolean('Adjust Prepayment')
     delete_unpaid_prepayment = fields.Boolean('Delete Unpaid Prepayment',
         help='Redeemed of unpaid invoices will be deleted once contracts '
@@ -154,6 +156,23 @@ class Plan:
         today = utils.today()
         payment_date = option.parent_contract.signature_date or today
         return [(max(payment_date, today), 1)]
+
+    def getter_is_prepayment(self, name):
+        return bool(self.prepayment_payment_rule)
+
+    @classmethod
+    def search_is_prepayment(cls, name, clause):
+        reverse = {
+            '=': '!=',
+            '!=': '=',
+            }
+        if clause[1] in reverse:
+            if clause[2]:
+                return [('prepayment_payment_rule', reverse[clause[1]], None)]
+            else:
+                return [('prepayment_payment_rule', clause[1], None)]
+        else:
+            return []
 
 
 class Agent:

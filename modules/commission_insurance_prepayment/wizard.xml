@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- ########## Wizard for prepayment synchronisation ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="prepayment_sync_show_displayer_view_list">
+            <field name="model">prepayment.sync.show.displayer</field>
+            <field name="type">tree</field>
+            <field name="name">prepayment_sync_show_displayer_list</field>
+        </record>
+        <record model="ir.ui.view" id="prepayment_sync_show_view_form">
+            <field name="model">prepayment.sync.show_prepayment</field>
+            <field name="type">form</field>
+            <field name="name">prepayment_sync_show_form</field>
+        </record>
+        <record model="ir.ui.view" id="prepayment_sync_result_view_form">
+            <field name="model">prepayment.sync.show_result</field>
+            <field name="type">form</field>
+            <field name="name">prepayment_sync_result_form</field>
+        </record>
+        <record model="ir.action.wizard" id="sync_prepayments_wizard">
+            <field name="name">Synchronise Prepayments</field>
+            <field name="wiz_name">prepayment.sync</field>
+            <field name="window" eval="True"/>
+        </record>
+    </data>
+</tryton>

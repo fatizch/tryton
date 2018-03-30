@@ -1,3 +1,4 @@
+* FEA#8440 Add wizard and batch to identify prepayment desynchronization
 * OTH#0000 Various fixes for prepayment commissions
 * BUG#7583 Generate an adjustment line instead of a prepayment line when reactivating a contract
 

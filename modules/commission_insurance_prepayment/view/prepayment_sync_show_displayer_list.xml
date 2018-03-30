@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tree>
+    <field name="party"/>
+    <field name="agent"/>
+    <field name="paid_amount"/>
+    <field name="generated_amount"/>
+    <field name="actual_amount"/>
+    <field name="theoretical_amount"/>
+    <field name="deviation_amount" sum="Total Deviation Amount"/>
+    <field name="number_of_date"/>
+    <field name="dates"/>
+    <field name="description"/>
+    <field name="codes"/>
+    <field name="contract" tree_invisible="1"/>
+</tree>

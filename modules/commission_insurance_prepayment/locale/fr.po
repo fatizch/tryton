@@ -38,13 +38,25 @@ msgctxt "field:commission.plan,delete_unpaid_prepayment:"
 msgid "Delete Unpaid Prepayment"
 msgstr "Supprimer les précomptes non payés"
 
+msgctxt "field:commission.plan,is_prepayment:"
+msgid "Is Prepayment"
+msgstr "Précompte"
+
 msgctxt "field:commission.plan.line,prepayment_formula:"
 msgid "Prepayment Formula"
 msgstr "Formule de calcul du précompte"
 
+msgctxt "field:contract,with_prepayment:"
+msgid "With Prepayment"
+msgstr "Précompte"
+
 msgctxt "field:contract.option,first_year_premium:"
 msgid "Premium"
 msgstr "Prime"
+
+msgctxt "field:desynchronized.prepayment.report,id:"
+msgid "ID"
+msgstr "Identifiant"
 
 msgctxt "field:offered.configuration,remove_commission_for_sub_status:"
 msgid "Termination Sub Status That Remove Unpaid Prepayment"
@@ -72,8 +84,8 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:offered.configuration-contract.sub_status,rec_name:"
-msgid "Name"
-msgstr "Nom"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:offered.configuration-contract.sub_status,sub_status:"
 msgid "Sub Status"
@@ -91,6 +103,74 @@ msgctxt "field:offered.configuration-contract.sub_status,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:prepayment.sync.show.displayer,actual_amount:"
+msgid "Total Amount"
+msgstr "Montant total"
+
+msgctxt "field:prepayment.sync.show.displayer,agent:"
+msgid "Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "field:prepayment.sync.show.displayer,codes:"
+msgid "Codes"
+msgstr "Codes"
+
+msgctxt "field:prepayment.sync.show.displayer,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:prepayment.sync.show.displayer,dates:"
+msgid "Date(s)"
+msgstr "Date(s)"
+
+msgctxt "field:prepayment.sync.show.displayer,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:prepayment.sync.show.displayer,deviation_amount:"
+msgid "Deviation Amount"
+msgstr "Ecart de montant"
+
+msgctxt "field:prepayment.sync.show.displayer,generated_amount:"
+msgid "Remaining Amount"
+msgstr "Montant restant"
+
+msgctxt "field:prepayment.sync.show.displayer,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:prepayment.sync.show.displayer,number_of_date:"
+msgid "Number Of Date(s)"
+msgstr "Nombre de dates différentes"
+
+msgctxt "field:prepayment.sync.show.displayer,paid_amount:"
+msgid "Amount Attached To An Invoice"
+msgstr "Montant rattaché à un bordereau"
+
+msgctxt "field:prepayment.sync.show.displayer,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:prepayment.sync.show.displayer,theoretical_amount:"
+msgid "Recalculated Amount"
+msgstr "Montant recalculé"
+
+msgctxt "field:prepayment.sync.show_prepayment,commissions:"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "field:prepayment.sync.show_prepayment,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:prepayment.sync.show_result,commissions:"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "field:prepayment.sync.show_result,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "help:commission.plan,delete_unpaid_prepayment:"
 msgid ""
 "Redeemed of unpaid invoices will be deleted once contracts are terminated"
@@ -102,6 +182,10 @@ msgid ""
 "Python expression that will be evaluated with:\n"
 "- amount: the original amount"
 msgstr "Expression python qui va être évalué avec :"
+
+msgctxt "model:desynchronized.prepayment.report,name:"
+msgid "Prepayment Synchronization Batch"
+msgstr "Batch de synchronisation du précompte"
 
 msgctxt "model:extra_details.configuration.line,string:commission_adjustment"
 msgid "Is adjustment"
@@ -131,6 +215,42 @@ msgctxt ""
 msgid "Sum of redeemed prepayments"
 msgstr "Somme des amortissements"
 
+msgctxt "model:ir.action,name:sync_prepayments_wizard"
+msgid "Synchronise Prepayments"
+msgstr "Synchroniser les précomptes"
+
 msgctxt "model:offered.configuration-contract.sub_status,name:"
 msgid "Configuration to Termination Reason"
 msgstr "Relation configuration - motif de résiliation"
+
+msgctxt "model:prepayment.sync.show.displayer,name:"
+msgid "Prepayment Sync Show Displayer"
+msgstr "Objet d'affichage de synchronisation du précompte"
+
+msgctxt "model:prepayment.sync.show_prepayment,name:"
+msgid "Prepayment Sync Show"
+msgstr "Affichage de synchronisation du précompte"
+
+msgctxt "model:prepayment.sync.show_result,name:"
+msgid "Prepayment Sync Result"
+msgstr "Résultat de la synchronisation des précomptes"
+
+msgctxt "view:contract:"
+msgid "Synchronize Prepayment"
+msgstr "Synchroniser le précompte"
+
+msgctxt "view:prepayment.sync.show.displayer:"
+msgid "Total Deviation Amount"
+msgstr "Montant total de l'écart"
+
+msgctxt "wizard_button:prepayment.sync,prepayment_view,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:prepayment.sync,prepayment_view,synchronize:"
+msgid "Synchronize"
+msgstr "Synchroniser"
+
+msgctxt "wizard_button:prepayment.sync,result,end:"
+msgid "End"
+msgstr "Terminer"

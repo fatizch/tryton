@@ -1,3 +1,4 @@
+* FEA#8440 Ajout d'un assistant et d'un traitement automatique pour identifier la désynchronisation du précompte
 * OTH#0000 Correctifs divers pour les commissions de précompte
 * BUG#7583 Générer une ligne d'ajustement au lieu d'une ligne de précompte lors de la réactivation d'un contrat
 
