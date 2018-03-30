@@ -50,7 +50,7 @@ this repository contains the full copyright notices and license terms. -->
                     <field name="xml_tree"/>
                 </page>
             </notebook>
-        </page>>
+        </page>
         <page string="Filters" id="filters">
         </page>
         <page name="tags">
