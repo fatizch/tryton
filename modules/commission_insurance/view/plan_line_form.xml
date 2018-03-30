@@ -4,6 +4,8 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/label[@name='product']" position="replace"/>
     <xpath expr="/form/field[@name='product']" position="replace"/>
+    <xpath expr="/form/label[@name='category']" position="replace"/>
+    <xpath expr="/form/field[@name='category']" position="replace"/>
     <xpath expr="/form/label[@name='sequence']" position="replace"/>
     <xpath expr="/form/field[@name='sequence']" position="replace"/>
     <xpath expr="/form/field[@name='formula']" position="after">
