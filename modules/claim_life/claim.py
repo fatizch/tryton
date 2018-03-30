@@ -606,6 +606,14 @@ class Indemnification:
             res.update(beneficiary.extra_data_values)
         return res
 
+    @classmethod
+    def _group_by_duplicate(cls, indemnification):
+        return indemnification.service.loss.covered_person
+
+    @classmethod
+    def _get_covered_domain(cls, party):
+        return [('loss.covered_person', '=', party)]
+
 
 class ClaimServiceExtraDataRevision:
     __metaclass__ = PoolMeta

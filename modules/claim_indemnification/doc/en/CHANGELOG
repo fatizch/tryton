@@ -1,3 +1,4 @@
+* FEA#8537 Display a warning when scheduling an indemnification period if there is an overlap with another periods
 * FEA#8269 Add the possibility to cancel an indemnification payment, and warning when doing it.
 * BUG#8595 Always display the payback reason in the payback step in the new indemnification wizard
 * BUG#8523 Fix crash when delivering a benefit on a loss with an end_date in case the full period is a dedutible period

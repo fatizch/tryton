@@ -7,6 +7,7 @@ from decimal import Decimal
 from sql.aggregate import Max
 from dateutil.relativedelta import relativedelta
 from itertools import groupby
+from collections import defaultdict
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
@@ -768,6 +769,20 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'different indemnifications between %(period_start)s and '
                 '%(period_end)s so that no tax changes happen during a '
                 'given indemnification.',
+                'overlapping_indemnification': 'The indemnification to '
+                'schedule duplicates exisiting one(s): %s',
+                'same_benefit_same_service': 'The following indemnification '
+                'period(s) duplicates the period to schedule (same benefit, '
+                'loss and option):',
+                'period_duplicate_data': '%(covered)s: with the contract '
+                'number: %(ctr)s, claim: %(number)s, period: %(period)s '
+                '(%(overlap)s day(s) of overlap)',
+                'other_loss_same_covered': 'The following indemnification '
+                'period(s) duplicates the period to schedule (with another '
+                'loss):',
+                'period_duplicate_data': '%(covered)s: with the contract '
+                'number: %(ctr)s, claim: %(number)s, period: %(period)s '
+                '(%(overlap)s day(s) of overlap)',
                 'scheduling_blocked': 'Scheduling is blocked for '
                 'indemnification %(indemnification)s, claim\'s '
                 'sub status is %(sub_status)s',
@@ -1130,10 +1145,94 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             to_schedule.append(indemnification)
 
     @classmethod
+    def _group_by_duplicate(cls, indemnification):
+        return indemnification.service.claim.claimant
+
+    @classmethod
+    def _check_indemnifications_periods_for_covered(cls, covered, claim,
+            services, indemnifications):
+        to_check = sum([list(x.indemnifications) for x in services], [])
+        to_check = [x for x in to_check if x.status in ('scheduled',
+                'controlled', 'validated', 'paid') and x not in
+            indemnifications]
+        overlapping = []
+        for indemn in indemnifications:
+            for existing_indemn in to_check:
+                overlap = (min(indemn.end_date, existing_indemn.end_date) -
+                    max(indemn.start_date,
+                        existing_indemn.start_date)).days + 1
+                if overlap > 0:
+                    overlapping.append({
+                            'covered': covered,
+                            'existing': existing_indemn,
+                            'to_sched': indemn,
+                            'overlap': overlap,
+                            'claim': claim,
+                            })
+        return overlapping
+
+    @classmethod
+    def _get_covered_domain(cls, party):
+        return [('claim.claimant', '=', party)]
+
+    @classmethod
+    def check_for_duplicate_periods(cls, indemnifications):
+        indemnifications = sorted(indemnifications,
+            key=cls._group_by_duplicate)
+        pool = Pool()
+        for covered, cov_indemnifications in groupby(indemnifications,
+                key=cls._group_by_duplicate):
+            if not covered:
+                continue
+            cov_indemnifications = list(cov_indemnifications)
+            cov_services = pool.get('claim.service').search(
+                cls._get_covered_domain(covered))
+            services_per_claim = defaultdict(list)
+            for cov_service in cov_services:
+                services_per_claim[cov_service.claim].append(cov_service)
+            overlapping = []
+            for claim, services in services_per_claim.items():
+                overlapping += cls._check_indemnifications_periods_for_covered(
+                    covered, claim, services, cov_indemnifications)
+        with_different_loss = [x for x in overlapping if
+            x['existing'].service.loss != x['to_sched'].service.loss]
+        same_benefit_option = [x for x in overlapping if
+            x['existing'].service.loss == x['to_sched'].service.loss and
+            x['existing'].service.benefit ==
+            x['to_sched'].service.benefit and
+            x['existing'].service.option == x['to_sched'].service.option]
+
+        if with_different_loss:
+            warning_msg = cls.raise_user_error('other_loss_same_covered',
+            raise_exception=False) + '\n'.join(
+                [cls.raise_user_error('period_duplicate_data', {
+                            'covered': x['covered'].rec_name,
+                            'number': x['claim'].name,
+                            'ctr': x['claim'].main_contract.contract_number,
+                            'period': x['existing'].rec_name,
+                            'overlap': x['overlap'],
+                            }, raise_exception=False)
+                   for x in with_different_loss])
+            cls.raise_user_warning(warning_msg, warning_msg)
+        if same_benefit_option:
+            warning_msg = cls.raise_user_error('same_benefit_same_service',
+            raise_exception=False) + '\n'.join(
+                [cls.raise_user_error('period_duplicate_data', {
+                            'covered': x['covered'].rec_name,
+                            'number': x['claim'].name,
+                            'ctr': x['claim'].main_contract.contract_number,
+                            'period': x['existing'].rec_name,
+                            'overlap': x['overlap'],
+                            }, raise_exception=False)
+                    for x in same_benefit_option])
+            cls.raise_user_warning(warning_msg, warning_msg)
+
+    @classmethod
     @ModelView.button
     def schedule(cls, indemnifications):
         with model.error_manager():
             cls.check_schedulability(indemnifications)
+        cls.check_for_duplicate_periods(indemnifications)
         cls.do_schedule(indemnifications)
 
     @classmethod
