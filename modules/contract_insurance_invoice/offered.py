@@ -453,14 +453,15 @@ class OptionDescription:
         return (super(OptionDescription, cls)._export_light() |
             set(['account_for_billing']))
 
-    def get_account_for_billing(self, line):
-        return self.account_for_billing
+    @classmethod
+    def default_tax_rounding(cls):
+        return Pool().get('account.configuration')(1).tax_rounding
 
     def get_tax_rounding(self, name):
-        pool = Pool()
-        Configuration = pool.get('account.configuration')
-        config = Configuration(1)
-        return config.tax_rounding
+        return self.default_tax_rounding()
+
+    def get_account_for_billing(self, line):
+        return self.account_for_billing
 
 
 class OptionDescriptionPremiumRule:
