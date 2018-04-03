@@ -786,8 +786,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'scheduling_blocked': 'Scheduling is blocked for '
                 'indemnification %(indemnification)s, claim\'s '
                 'sub status is %(sub_status)s',
-                'cancel_indemnification': 'You are about to cancel the payment of this'
-                ' indemnification. %s',
+                'cancel_indemnification': 'You are about to cancel the payment'
+                ' of this indemnification. %s',
                 })
         cls._order = [('start_date', 'ASC')]
 

@@ -20,7 +20,9 @@ this repository contains the full copyright notices and license terms. -->
         <field name="product"/>
         <label name="manual"/>
         <field name="manual"/>
-        <button string="Cancel payment" name="cancel_payment" xexpand="0"/>
+        <group id="cancel_payment" colspan="1" col="1" xexpand="0">
+            <button string="Cancel payment" name="cancel_payment" />
+        </group>
     </group>
     <group id="right" colspan="2" col="3">
         <label name="amount"/>
