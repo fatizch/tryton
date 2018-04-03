@@ -39,8 +39,8 @@ class ContractSubscribeFindProcess:
 
     @staticmethod
     def default_distributor():
-        candidates = Pool().get(
-            'res.user')(Transaction().user).network_distributors
+        candidates = [x.id for x in
+            Pool().get('res.user')(Transaction().user).network_distributors]
         return candidates[0] if len(candidates) == 1 else None
 
     @fields.depends('distributor', 'appliable_conditions_date',
@@ -92,8 +92,8 @@ class ContractSubscribe:
     def default_process_parameters(self, name):
         defaults = super(
             ContractSubscribe, self).default_process_parameters(name)
-        candidates = Pool().get(
-            'res.user')(Transaction().user).network_distributors
+        candidates = [x.id for x in
+            Pool().get('res.user')(Transaction().user).network_distributors]
         defaults.update({
             'authorized_distributors': candidates,
             })
