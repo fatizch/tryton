@@ -25,6 +25,10 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="is_a_relapse"/>
         <field name="is_a_relapse"/>
+        <newline/>
+        <label name="relapse_initial_loss"/>
+        <field name="relapse_initial_loss" widget="selection"/>
+        <field name="possible_relapse_losses" invisible="1"/>
         <field name="loss_kind" invisible="1"/>
     </xpath>
 </data>

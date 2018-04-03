@@ -3,13 +3,16 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 from decimal import Decimal
+from sql.aggregate import Min
 
 from sql import Literal
 from sql.aggregate import Max
 from sql.conditionals import Coalesce
 
+from trytond import backend
+
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If, Bool, And, Equal
+from trytond.pyson import Eval, If, Bool, And
 from trytond.transaction import Transaction
 from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.report_engine import Printable
@@ -115,6 +118,40 @@ class Loss:
     loss_kind = fields.Function(
         fields.Char('Loss Kind'),
         'get_loss_kind')
+    relapse_initial_loss = fields.Many2One('claim.loss', 'Relapse Initial Loss',
+        ondelete='RESTRICT', domain=[
+            ('id', 'in', Eval('possible_relapse_losses'))],
+        states={'invisible': ~Bool(Eval('is_a_relapse')),
+            'required': And(Bool(Eval('is_a_relapse')),
+                Eval('state') == 'active')},
+        depends=['is_a_relapse', 'possible_relapse_losses', 'state'])
+    possible_relapse_losses = fields.Function(
+        fields.Many2Many('claim.loss', None, None, 'Possible Relapse Losses'),
+        'on_change_with_possible_relapse_losses')
+
+    @classmethod
+    def __register__(cls, module):
+        TableHandler = backend.get('TableHandler')
+        handler = TableHandler(cls, module)
+        # Migrate from 1.12: add relapse loss for already existing relapses
+        # and set it to the claim's first loss in order to keep previous
+        # behaviour
+        cursor = Transaction().connection.cursor()
+        do_migrate = not handler.column_exist('relapse_initial_loss')
+        super(Loss, cls).__register__(module)
+        if not do_migrate:
+            return
+        loss = cls.__table__()
+        loss2 = cls.__table__()
+
+        query = loss.update(columns=[loss.relapse_initial_loss],
+            values=loss2.select(Min(loss2.id),
+                where=(loss2.claim == loss.claim)
+                & (loss2.is_a_relapse == Literal(False))
+                & (loss2.start_date < loss.start_date)
+                & (loss2.loss_desc == loss.loss_desc)),
+            where=(loss.is_a_relapse == Literal(True)))
+        cursor.execute(*query)
 
     @classmethod
     def __setup__(cls):
@@ -123,8 +160,6 @@ class Loss:
         cls.end_date.depends.append('loss_desc_kind')
         cls._error_messages.update({
                 'relapse': 'Relapse',
-                'missing_previous_loss': 'An inital std must be created in '
-                'order to declare a relapse',
                 'previous_loss_end_date_missing': "The previous std "
                 "doesn't have an end date defined",
                 'one_day_between_relapse_and_previous_loss': 'One day is '
@@ -135,6 +170,8 @@ class Loss:
                 'ltd_start_date': 'LTD Start Date:',
                 'std_end_date': 'STD End Date:',
                 'ltd_end_date': 'LTD End Date:',
+                'missing_relapse_initial_loss': 'The initial loss is missing on'
+                ' the relapse: %(loss)s'
                 })
         cls.closing_reason.states.update({
                 'required': Bool(Eval('end_date')),
@@ -266,12 +303,12 @@ class Loss:
         super(Loss, self).check_activation()
         if not self.is_a_relapse:
             return
-        if self.claim.losses.index(self) == 0:
-            self.append_functional_error('missing_previous_loss')
         if not self.start_date:
             return
-        previous_loss = self.claim.losses[
-            self.claim.losses.index(self) - 1]
+        previous_loss = self.relapse_initial_loss
+        if not previous_loss:
+            self.append_functional_error('missing_relapse_initial_loss',
+                {'loss': self.rec_name})
         if not previous_loss.end_date:
             self.append_functional_error('previous_loss_end_date_missing')
         if (self.start_date - previous_loss.end_date).days <= 1:
@@ -305,6 +342,17 @@ class Loss:
         valid, total_share = super(Loss, self).total_share_valid(service)
         return service.benefit.ignore_shares or valid, total_share
 
+    @fields.depends('covered_person', 'loss_desc', 'start_date')
+    def on_change_with_possible_relapse_losses(self, name=None):
+        Loss = Pool().get('claim.loss')
+        domain = [('covered_person', '=', self.covered_person),
+                ('loss_desc', '=', self.loss_desc)]
+        if self.start_date:
+            domain.extend([('start_date', '!=', None),
+                    ('start_date', '<', self.start_date)])
+        possible_relapse_losses = Loss.search(domain)
+        return [l.id for l in possible_relapse_losses if l.id != self.id]
+
 
 class ClaimService:
     __metaclass__ = PoolMeta
@@ -332,8 +380,8 @@ class ClaimService:
         if not loss.is_a_relapse:
             return
         values = self.extra_datas[-1].extra_data_values
-        old_values = self.loss.claim.delivered_services[0].extra_datas[-1].\
-            extra_data_values
+        old_values = self.loss.relapse_initial_loss.claim. \
+            delivered_services[0].extra_datas[-1].extra_data_values
         for key, value in old_values.iteritems():
             if key in values:
                 values[key] = value

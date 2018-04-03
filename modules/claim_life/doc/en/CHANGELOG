@@ -1,3 +1,4 @@
+* FEA#8525 Enable declaring a relapse as a separate claim
 * BUG#8403 Fix display of loss dates
 * BUG#8202 Be able to declare a relapse on a generic loss kind
 * BUG#8140 Be able to set a company as a beneficiary

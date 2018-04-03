@@ -1,3 +1,4 @@
+* FEA#8525 Permettre la déclaration de rechute dans d'autres sinistres que celui du préjudice lié à la rechute
 * BUG#8403 Correction de l'affichage des dates des préjudices
 * BUG#8202 Permettre de déclarer une rechute sur un préjudice de type générique
 * BUG#8140 Permettre de renseigner une personne morale en tant que bénéficiaire

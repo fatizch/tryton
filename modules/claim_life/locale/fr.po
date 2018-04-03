@@ -11,12 +11,16 @@ msgid "Manual List"
 msgstr "Liste manuelle de bénéficiaires"
 
 msgctxt "error:claim.loss:"
-msgid "An inital std must be created in order to declare a relapse"
-msgstr "Un arrêt initial est requis avant de pouvoir créer une rechute"
-
-msgctxt "error:claim.loss:"
 msgid "End Date is smaller than start date"
 msgstr "La date de fin est antérieure à la date de début"
+
+msgctxt "error:claim.loss:"
+msgid "LTD End Date:"
+msgstr "Date de fin de l'invalidité :"
+
+msgctxt "error:claim.loss:"
+msgid "LTD Start Date:"
+msgstr "Date de début de l'invalidité :"
 
 msgctxt "error:claim.loss:"
 msgid "One day is required between the relapse and the previous std"
@@ -29,25 +33,25 @@ msgid "Relapse"
 msgstr "Rechute"
 
 msgctxt "error:claim.loss:"
-msgid "The previous std doesn't have an end date defined"
-msgstr ""
-"La date de fin d'arrêt de travail du précédent arrêt n'est pas définie"
-
-msgctxt "error:claim.loss:"
-msgid "LTD End Date:"
-msgstr "Date de fin de l'invalidité :"
-
-msgctxt "error:claim.loss:"
-msgid "LTD Start Date:"
-msgstr "Date de début de l'invalidité :"
-
-msgctxt "error:claim.loss:"
 msgid "STD End Date:"
 msgstr "Date de fin d'arrêt de travail :"
 
 msgctxt "error:claim.loss:"
 msgid "STD Start Date:"
 msgstr "Date d'arrêt de travail :"
+
+msgctxt "error:claim.loss:"
+msgid "Start Date:"
+msgstr "Date de début:"
+
+msgctxt "error:claim.loss:"
+msgid "The initial loss is missing on the relapse: %(loss)s"
+msgstr "Le préjudice initial n'est pas renseigné pour la rechute: %(loss)s"
+
+msgctxt "error:claim.loss:"
+msgid "The previous std doesn't have an end date defined"
+msgstr ""
+"La date de fin d'arrêt de travail du précédent arrêt n'est pas définie"
 
 msgctxt "field:beneficiary-extra_data,benefit:"
 msgid "Benefit"
@@ -74,8 +78,8 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:beneficiary-extra_data,rec_name:"
-msgid "Name"
-msgstr "Nom"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:beneficiary-extra_data,write_date:"
 msgid "Write Date"
@@ -130,8 +134,8 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:benefit-beneficiary_document,rec_name:"
-msgid "Name"
-msgstr "Nom"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:benefit-beneficiary_document,write_date:"
 msgid "Write Date"
@@ -185,10 +189,6 @@ msgctxt "field:claim.beneficiary,extra_data_values:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:claim.beneficiary,ignore_share:"
-msgid "Ignore Share"
-msgstr "Ignorer la part bénéficiaire"
-
 msgctxt "field:claim.beneficiary,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -197,13 +197,17 @@ msgctxt "field:claim.beneficiary,identified:"
 msgid "Identified Party"
 msgstr "Tiers identifié"
 
+msgctxt "field:claim.beneficiary,ignore_share:"
+msgid "Ignore Share"
+msgstr "Ignorer la part bénéficiaire"
+
 msgctxt "field:claim.beneficiary,party:"
 msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:claim.beneficiary,rec_name:"
-msgid "Name"
-msgstr "Nom"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:claim.beneficiary,service:"
 msgid "Service"
@@ -247,10 +251,6 @@ msgctxt "field:claim.indemnification_definition,beneficiary_extra_data:"
 msgid "Beneficiary Extra Data"
 msgstr "Données complémentaires du bénéficiaire"
 
-msgctxt "field:claim.select_service,covered_person:"
-msgid "Covered Person"
-msgstr "Personne assurée"
-
 msgctxt "field:claim.loss,covered_person:"
 msgid "Covered Person"
 msgstr "Personne assurée"
@@ -258,6 +258,10 @@ msgstr "Personne assurée"
 msgctxt "field:claim.loss,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
+
+msgctxt "field:claim.loss,end_date_string:"
+msgid "End Date String"
+msgstr "Date de fin"
 
 msgctxt "field:claim.loss,initial_std_start_date:"
 msgid "Initial STD Start Date"
@@ -275,13 +279,29 @@ msgctxt "field:claim.loss,possible_covered_persons:"
 msgid "Covered Persons"
 msgstr "Personnes assurées"
 
+msgctxt "field:claim.loss,possible_relapse_losses:"
+msgid "Possible Relapse Losses"
+msgstr "Préjudices possiblement liés à la rechute"
+
+msgctxt "field:claim.loss,relapse_initial_loss:"
+msgid "Relapse Initial Loss"
+msgstr "Préjudice initial en cas de rechute"
+
 msgctxt "field:claim.loss,return_to_work_date:"
 msgid "Return to Work"
 msgstr "Reprise d'activité"
 
+msgctxt "field:claim.loss,start_date_string:"
+msgid "Start Date String"
+msgstr "Date de début"
+
 msgctxt "field:claim.loss,with_end_date:"
 msgid "With End Date"
 msgstr "Avec Date de Fin"
+
+msgctxt "field:claim.select_service,covered_person:"
+msgid "Covered Person"
+msgstr "Personne assurée"
 
 msgctxt "field:claim.service,beneficiaries:"
 msgid "Beneficiaries"
