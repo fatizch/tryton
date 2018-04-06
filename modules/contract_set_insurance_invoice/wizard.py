@@ -32,6 +32,8 @@ class Renew:
                 active_contracts = [c for c in contract.contract_set.contracts
                     if c.status in ['active', 'hold'] and c.activation_history
                     and not c.activation_history[-1].final_renewal]
+                if not active_contracts:
+                    continue
                 max_end_date = max([x.end_date or datetime.date.min
                         for x in active_contracts])
                 if not set(active_contracts).issubset(
