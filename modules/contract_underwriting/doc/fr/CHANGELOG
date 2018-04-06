@@ -1,3 +1,4 @@
+* FEA#8687 Afficher le risque couvert lors de l'analayse des risques des garanties
 * FEA#7615 Ajout d'un RPC pour calculer l'analyse de risque
 * BUG#7751 Ajout des autorisations en création, modification et en lecture sur les garanties du dossier d'analyse de risque
 

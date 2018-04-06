@@ -122,6 +122,10 @@ msgctxt "field:contract.underwriting.option,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:contract.underwriting.option,contract:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
 msgctxt "field:contract.underwriting.option,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"

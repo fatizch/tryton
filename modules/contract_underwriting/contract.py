@@ -283,6 +283,10 @@ class ContractUnderwritingOption(model.CoogSQL, model.CoogView):
     contract = fields.Function(
         fields.Many2One('contract', 'Contract', states={'invisible': True}),
         'on_change_with_contract')
+    covered = fields.Function(
+            fields.Many2One('contract.covered_element', 'Covered Element',
+                readonly=True, states={'invisible': ~Eval('covered')}),
+            'get_covered')
 
     @classmethod
     def _export_light(cls):
@@ -311,6 +315,11 @@ class ContractUnderwritingOption(model.CoogSQL, model.CoogView):
     @fields.depends('decision')
     def on_change_decision(self):
         self.automatic_decision = False
+
+    @fields.depends('option')
+    def get_covered(self, name=None):
+        return self.option.covered_element.id if (self.option and
+                self.option.covered_element) else None
 
     def update_extra_data(self):
         if not self.option:
