@@ -6,6 +6,7 @@ import re
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 from trytond.modules.coog_core import utils, fields
+from trytond.modules.party_cog.party import STATES_PERSON, STATES_ACTIVE
 
 SSN_LENGTH = 15
 
@@ -18,9 +19,15 @@ class Party:
     __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
-    ssn_no_key = fields.Function(fields.Char('SSN', size=13),
+    ssn_no_key = fields.Function(fields.Char('SSN', size=13, states={
+                'invisible': ~STATES_PERSON,
+                'readonly': STATES_ACTIVE,
+                }, depends=['active', 'is_person']),
         'get_ssn', setter='set_ssn')
-    ssn_key = fields.Function(fields.Char('SSN Key', size=2),
+    ssn_key = fields.Function(fields.Char('SSN Key', size=2, states={
+                'invisible': ~STATES_PERSON,
+                'readonly': STATES_ACTIVE,
+                }, depends=['active', 'is_person']),
         'get_ssn', setter='set_ssn')
 
     @classmethod

@@ -321,9 +321,17 @@ msgctxt "field:party.party,commercial_name:"
 msgid "Commercial Name"
 msgstr "Nom commercial"
 
+msgctxt "field:party.party,company_name:"
+msgid "Company Name"
+msgstr "Nom"
+
 msgctxt "field:party.party,first_name:"
 msgid "First Name"
 msgstr "Prénom"
+
+msgctxt "field:party.party,last_name:"
+msgid "Last Name"
+msgstr "Nom"
 
 msgctxt "field:party.party,gender:"
 msgid "Gender"

@@ -1,3 +1,4 @@
+* FEA#8644 Vertical realignment of the fields on the party view form header
 * BUG#8362 Remove now useless party configuration view override
 * BUG#8074 Return the most recent valid address in get_address
 * BUG#7630 Fix a bug where the custom party identifiers were no longer available
@@ -14,7 +15,7 @@ Version 1.14 - 2017-11-09
 * FIX#0000 Fix 'all_addresses' field in party form view
 * FEA#6130 Improve "REFLEX" flag by using the  active/inactive field on addresses
 * BUG#6423 Display : full address field holds in one line
-* BUG#6366 Add control on party birth date 
+* BUG#6366 Add control on party birth date
 * FEA#6310 Improve the return to sender flag using active/inactive field on addresses
 
 Version 1.12 - 2017-04-28

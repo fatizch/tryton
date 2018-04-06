@@ -2,22 +2,21 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <!-- form header -->
-    <xpath expr="/form/group[@id='checkboxes']" position="replace_attributes">
-        <group id="checkboxes" colspan="5"/>
+    <xpath expr="/form" position="replace_attributes">
+        <form col="4"/>
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']/label[@name='active']" position="before">
-        <label name="code"/>
-        <field name="code" xexpand="0"/>
         <label name="is_person"/>
         <field name="is_person" xexpand="0"/>
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']" position="after">
-        <group id="person" colspan="6" col="6">
+            <newline/>
             <label name="gender"/>
-            <field name="gender" widget="selection" xexpand="0"/>
-            <label name="name"/>
-            <field name="name"/>
+            <group id="last_name" col="-1">
+                <field name="gender" widget="selection"/>
+                <label name="last_name"/>
+                <field name="last_name" colspan="100"/>
+            </group>
             <label name="first_name"/>
             <field name="first_name"/>
             <label name="birth_date"/>
@@ -26,25 +25,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="birth_name"/>
             <label name="ssn"/>
             <field name="ssn"/>
-        </group>
-    </xpath>
-    <xpath expr="/form/group[@id='checkboxes']" position="after">
-        <group id="company" colspan="6" col="6">
-            <label name="name"/>
-            <field name="name"/>
+            <newline/>
+            <label name="company_name"/>
+            <field name="company_name"/>
             <label name="commercial_name"/>
             <field name="commercial_name"/>
-        </group>
-    </xpath>
-    <xpath expr="/form/group[@id='checkboxes']" position="after">
-        <group id="button" xexpand="0">
-            <button name="button_start_synthesis_menu" string="Synthesis"/>
-        </group>
     </xpath>
     <xpath expr="/form/field[@name='name']" position="replace"/>
     <xpath expr="/form/label[@name='name']" position="replace"/>
-    <xpath expr="/form/field[@name='code']" position="replace"/>
-    <xpath expr="/form/label[@name='code']" position="replace"/>
     <!-- Remove accounting, relations, bank page -->
     <xpath expr="/form/notebook/page[@id='relations']" position="replace"/>
     <!-- General page modification -->
@@ -88,5 +76,10 @@ this repository contains the full copyright notices and license terms. -->
             </group>
             <notebook/>
         </page>
+    </xpath>
+    <xpath expr="/form" position="inside">
+        <group id="button" colspan="4">
+            <button name="button_start_synthesis_menu" string="Synthesis"/>
+        </group>
     </xpath>
 </data>

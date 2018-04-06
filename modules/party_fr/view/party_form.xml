@@ -2,14 +2,14 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/group/field[@name='ssn']" position="before">
-        <group id="ssn" colspan="1">
-            <field name="ssn_no_key" xexpand="0"/>
-            <field name="ssn_key" xexpand="0"/>
+    <xpath expr="/form/label[@name='ssn']" position="after">
+        <group id="ssn" col="-1" xexpand="1" xfill="1">
+            <field name="ssn_no_key" colspan="100" xexpand="0" xfill="0"/>
+            <field name="ssn_key" xalign="0.0" xexpand="0" xfill="0"/>
         </group>
     </xpath>
-    <xpath expr="/form/group/field[@name='ssn']" position="replace"/>
-    <xpath expr="/form/group[@id='company']" position="inside">
+    <xpath expr="/form/field[@name='ssn']" position="replace"/>
+    <xpath expr="//page[@name='identifiers']/field[@name='identifiers']" position="before">
         <label name="siren"/>
         <field name="siren"/>
     </xpath>

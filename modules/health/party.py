@@ -4,6 +4,7 @@ from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import model, fields, utils
+from trytond.modules.party_cog.party import STATES_PERSON, STATES_ACTIVE
 
 __all__ = [
     'Party',
@@ -18,13 +19,15 @@ class Party:
 
     health_complement = fields.One2Many('health.party_complement', 'party',
         'Health Complement', delete_missing=True,
-        states={'invisible': ~Eval('is_person')},
-        depends=['is_person'])
+        states={'invisible': ~STATES_PERSON, 'readonly': STATES_ACTIVE},
+        depends=['is_person', 'active'])
     health_contract = fields.Function(
         fields.Many2One('contract', 'Health Contract', states={
                 'invisible': Eval('context', {}).get('synthesis') != 'health',
                 }), 'get_health_contract_id')
-    birth_order = fields.Integer('Birth Order')
+    birth_order = fields.Integer('Birth Order',
+        states={'invisible': ~STATES_PERSON, 'readonly': STATES_ACTIVE},
+        depends=['is_person', 'active'])
 
     def get_health_contract_id(self, name):
         for contract in self.contracts:
