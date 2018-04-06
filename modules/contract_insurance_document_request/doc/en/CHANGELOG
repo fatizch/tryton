@@ -1,3 +1,4 @@
+* FEA#8686 Make it possible to check required and authorized documents from processes
 * FEA#8447 Rule returning the received documents codes for a contract
 * OTH#0000 Initialize rule_engine with the contract when computing document requests
 * BUG#7834 check_required_documents on contract should also check for hidden requested document

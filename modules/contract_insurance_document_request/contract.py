@@ -205,11 +205,24 @@ class Contract(RemindableInterface):
             contract.init_subscription_document_request()
             contract.link_attachments_to_requests()
 
-    def check_required_documents(self, only_blocking=False):
+    def check_required_documents(self, only_blocking=False,
+            only_authorized=False):
         missing = False
         non_conform = False
         request_lines = (self.document_request_lines
             + self.hidden_waiting_request_lines)
+        if only_authorized:
+            user = Transaction().user
+            filtered_lines = []
+            for line in request_lines:
+                if not line.document_desc or not line.document_desc.groups:
+                    filtered_lines.append(line)
+                    continue
+                for group in line.document_desc.groups:
+                    if user in group.users:
+                        filtered_lines.append(line)
+                        break
+            request_lines = filtered_lines
         if not only_blocking and not self.doc_received:
             missing = True
         elif not all((x.received for x in request_lines
