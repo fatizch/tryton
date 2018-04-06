@@ -169,7 +169,7 @@ class BenefitRule(
                 })
         cls.indemnification_rule.domain = [('type_', '=', 'benefit')]
         cls.deductible_rule.domain = [('type_', '=', 'benefit_deductible')]
-        cls.revaluation_rule.domain = [('type_', '=', 'revaluation_rule')]
+        cls.revaluation_rule.domain = [('type_', '=', 'benefit_revaluation')]
 
     @classmethod
     def __register__(cls, module):
