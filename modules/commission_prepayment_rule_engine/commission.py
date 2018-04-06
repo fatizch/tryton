@@ -33,6 +33,23 @@ class Plan:
                 'not matching the expected format [(date, percentage)]',
                 })
 
+    def getter_is_prepayment(self, name):
+        return bool(self.prepayment_payment_rule)
+
+    @classmethod
+    def search_is_prepayment(cls, name, clause):
+        reverse = {
+            '=': '!=',
+            '!=': '=',
+            }
+        if clause[1] in reverse:
+            if clause[2]:
+                return [('prepayment_payment_rule', reverse[clause[1]], None)]
+            else:
+                return [('prepayment_payment_rule', clause[1], None)]
+        else:
+            return super(Plan, cls).search_is_prepayment(name, clause)
+
     def compute_prepayment_schedule(self, option, agent):
         if self.prepayment_payment_rule and option:
             args = {

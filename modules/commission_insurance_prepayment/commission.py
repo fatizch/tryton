@@ -7,7 +7,6 @@ from sql.operators import Or
 from sql.aggregate import Sum
 from sql.conditionals import Case, Coalesce
 
-from trytond import backend
 from trytond.tools import decistmt
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -78,17 +77,6 @@ class Commission(WithExtraDetails):
         return (('agent', self.agent), ('option',
                 getattr(self, 'commissioned_option', None)))
 
-    @classmethod
-    def copy(cls, commissions, default=None):
-        clones = super(Commission, cls).copy(commissions, default=default)
-        if not Transaction().context.get('cancel_invoices', False):
-            return clones
-        for commission in clones:
-            if commission.redeemed_prepayment:
-                commission.redeemed_prepayment = \
-                    -commission.redeemed_prepayment
-        return clones
-
     def get_base_amount(self, name):
         base_amount = super(Commission, self).get_base_amount(name)
         if self.redeemed_prepayment and self.commission_rate:
@@ -158,22 +146,17 @@ class Plan:
         return [(max(payment_date, today), 1)]
 
     def getter_is_prepayment(self, name):
-        return bool(self.prepayment_payment_rule)
+        # TODO: Merge module with commission_insurance_prepayment_rule_engine
+        # This method is overrided into the module
+        # commission_insurance_prepayment_rule_engine
+        return False
 
     @classmethod
     def search_is_prepayment(cls, name, clause):
-        reverse = {
-            '=': '!=',
-            '!=': '=',
-            }
-        if clause[1] in reverse:
-            if clause[2]:
-                return [('prepayment_payment_rule', reverse[clause[1]], None)]
-            else:
-                return [('prepayment_payment_rule', clause[1], None)]
-        else:
-            return []
-
+        # TODO: Merge module with commission_insurance_prepayment_rule_engine
+        # This method is overrided into the module
+        # commission_insurance_prepayment_rule_engine
+        return []
 
 class Agent:
     __metaclass__ = PoolMeta
