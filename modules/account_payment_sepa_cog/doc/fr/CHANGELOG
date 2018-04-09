@@ -1,3 +1,4 @@
+* FEA#8521 Ajout d'un index dans la base de donnée sur le champ mandat sepa sur un paiement (amélioration des performances su batch de traitement des paiements)
 * BUG#8319 Réparer 7981, vérifier si l'utilisateur a entré un chemin pour le paramètre in_directory du batch account.payment.fail (même si ce chemin n'existe pas), sinon le paramètre déclaré dans batch.conf sera utilisé par défaut
 * BUG#7981 Vérifier si l'utilisateur a entré un chemin pour le paramètre in_directory du batch account.payment.fail (même si ce chemin n'existe pas), sinon le paramètre déclaré dans batch.conf sera utilisé par défaut
 * BUG#7646 Vérifier que le compte bancaire est en accord avec le mandat SEPA avant d'approuver un paiement créé manuellement
