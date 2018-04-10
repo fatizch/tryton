@@ -6,6 +6,9 @@ this repository contains the full copyright notices and license terms. -->
         <label name="distributor"/>
         <field name="distributor"/>
         <newline/>
+        <label name="authorized_commercial_products"/>
+        <field name="authorized_commercial_products"/>
+        <newline/>
         <label name="commercial_product"/>
         <field name="commercial_product"/>
         <newline/>

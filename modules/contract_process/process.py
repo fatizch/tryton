@@ -111,18 +111,15 @@ class ContractSubscribeFindProcess(ProcessStart):
     def on_change_signature_date(self):
         self.simulate_init()
 
-    @fields.depends('product', 'start_date', 'signature_date',
-        'appliable_conditions_date', 'free_conditions_date')
+    @fields.depends('start_date', methods=['signature_date'])
     def on_change_start_date(self):
         self.simulate_init()
 
-    @fields.depends('product', 'start_date', 'signature_date',
-        'appliable_conditions_date', 'free_conditions_date')
+    @fields.depends('appliable_conditions_date', methods=['signature_date'])
     def on_change_appliable_conditions_date(self):
         self.simulate_init()
 
-    @fields.depends('product', 'start_date', 'signature_date',
-        'appliable_conditions_date', 'free_conditions_date')
+    @fields.depends('product', methods=['signature_date'])
     def on_change_product(self):
         self.simulate_init()
 

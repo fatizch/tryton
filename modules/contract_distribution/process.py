@@ -26,7 +26,7 @@ class ContractSubscribeFindProcess:
         depends=['authorized_distributors'])
     authorized_commercial_products = fields.Many2Many(
         'distribution.commercial_product', None, None,
-        'Authorized Commercial Products', states={'invisible': False})
+        'Authorized Commercial Products', states={'invisible': True})
     commercial_product = fields.Many2One(
         'distribution.commercial_product', 'Product', required=True,
         domain=[('id', 'in', Eval('authorized_commercial_products'))],
@@ -43,19 +43,26 @@ class ContractSubscribeFindProcess:
             Pool().get('res.user')(Transaction().user).network_distributors]
         return candidates[0] if len(candidates) == 1 else None
 
-    @fields.depends('distributor', 'appliable_conditions_date',
-        'signature_date', 'start_date')
-    def on_change_with_authorized_commercial_products(self):
+    @fields.depends('product', 'start_date', 'signature_date',
+        'appliable_conditions_date', 'free_conditions_date',
+        'distributor', 'authorized_commercial_products')
+    def on_change_signature_date(self):
+        super(ContractSubscribeFindProcess,
+            self).on_change_signature_date()
+
+    def simulate_init(self):
+        res = super(ContractSubscribeFindProcess, self).simulate_init()
         if self.distributor and self.appliable_conditions_date is not None:
-            return [x.id for x in self.distributor.all_com_products
+            self.authorized_commercial_products = [
+                x.id for x in self.distributor.all_com_products
                 if (not x.start_date or
                     (x.start_date <= self.appliable_conditions_date)) and
                 (not x.end_date or (
                         self.appliable_conditions_date <= x.end_date))]
-        else:
-            return []
+        return res
 
-    @fields.depends('commercial_product', methods=['product'])
+
+    @fields.depends('commercial_product', methods=['product', 'signature_date'])
     def on_change_commercial_product(self):
         if self.commercial_product is not None:
             self.product = self.commercial_product.product.id

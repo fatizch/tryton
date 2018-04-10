@@ -1,3 +1,4 @@
+* BUG#8698 Facilitate overloading of depends in subscription wizard
 * OTH#0000 Set initial start date when creating the contract
 
 Version 1.14 - 2017-11-09
