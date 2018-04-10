@@ -1,3 +1,4 @@
+* BUG#8645 Normaliser les champs représentant l'adresse dans le fichier SEPA/Cfonb afin de ne plus avoir de caractères spéciaux
 * FEA#8521 Ajout d'un index dans la base de donnée sur le champ mandat sepa sur un paiement (amélioration des performances su batch de traitement des paiements)
 * BUG#8319 Réparer 7981, vérifier si l'utilisateur a entré un chemin pour le paramètre in_directory du batch account.payment.fail (même si ce chemin n'existe pas), sinon le paramètre déclaré dans batch.conf sera utilisé par défaut
 * BUG#7981 Vérifier si l'utilisateur a entré un chemin pour le paramètre in_directory du batch account.payment.fail (même si ce chemin n'existe pas), sinon le paramètre déclaré dans batch.conf sera utilisé par défaut
