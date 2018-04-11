@@ -17,7 +17,7 @@ class ContractSubscribe:
     def init_main_object_from_process(self, contract, process_param):
         res, errs = super(ContractSubscribe,
             self).init_main_object_from_process(contract, process_param)
-        if res:
+        if res and getattr(process_param, 'distributor', None):
             contract.broker_party = process_param.distributor.parent_party
             contract.agent = utils.auto_complete_with_domain(contract, 'agent')
             if contract.agent:
