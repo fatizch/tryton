@@ -1,7 +1,7 @@
 #!/bin/sh
 
 main(){
-    rm -rf doc/dist && mkdir -p doc/dist
+    rm -rf "/tmp/$USER/coog_doc" && rm -rf doc/dist && mkdir -p doc/dist
     export PYTHONPATH="$(pwd)/bin/lib:${PYTHONPATH:-}"
     python bin/bin/generate_doc.py --output_doc_directory="./doc/dist"
 }
