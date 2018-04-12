@@ -158,6 +158,7 @@ class Plan:
         # commission_insurance_prepayment_rule_engine
         return []
 
+
 class Agent:
     __metaclass__ = PoolMeta
     __name__ = 'commission.agent'

@@ -25,8 +25,8 @@ class DesynchronizedPrepaymentReport(batch.BatchRoot):
     def _get_fields_name(cls):
         return ('contract', 'party', 'agent', 'paid_amount',
             'generated_amount', 'actual_amount', 'theoretical_amount',
-            'deviation_amount', 'number_of_date', 'dates', 'description',
-            'codes')
+            'theoretical_amount_today', 'deviation_amount', 'number_of_date',
+            'dates', 'description', 'codes')
 
     @classmethod
     def write_headers(cls, filename):
@@ -53,7 +53,7 @@ class DesynchronizedPrepaymentReport(batch.BatchRoot):
             cls.write_headers(filename)
             if auto_adjust:
                 splitted_fname = os.path.splitext(filename)
-                filename = '%s%s' % (splitted_fname[0] + '_auto_adjsut',
+                filename = '%s%s' % (splitted_fname[0] + '_auto_adjust',
                     splitted_fname[1] or '')
                 cls.write_headers(filename)
             return ids
@@ -85,7 +85,8 @@ class DesynchronizedPrepaymentReport(batch.BatchRoot):
             per_contracts = Contract.get_prepayment_deviations(sliced_objects)
             for contract, deviations in per_contracts.items():
                 if auto_adjust:
-                    contract.try_adjust_prepayments(deviations)
+                    _, _, deviations = contract.try_adjust_prepayments(
+                        deviations)
                 Contract._add_prepayment_deviations_description(deviations)
                 lines_to_write += (deviations)
             for obj in lines_to_write:

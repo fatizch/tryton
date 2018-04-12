@@ -30,6 +30,8 @@ class PrepaymentSyncShowDisplayer(model.CoogView):
         digits=(16, 2), readonly=True)
     theoretical_amount = fields.Numeric('Recalculated Amount',
         digits=(16, 2), readonly=True)
+    theoretical_amount_today = fields.Numeric('Real Recalculated Amount Based',
+        digits=(16, 2), readonly=True)
     deviation_amount = fields.Numeric('Deviation Amount',
         digits=(16, 2), readonly=True)
     number_of_date = fields.Integer('Number Of Date(s)', readonly=True)
@@ -46,6 +48,7 @@ class PrepaymentSyncShowDisplayer(model.CoogView):
             'generated_amount': self.generated_amount,
             'actual_amount': self.actual_amount,
             'theoretical_amount': self.theoretical_amount,
+            'theoretical_amount_today': self.theoretical_amount_today,
             'deviation_amount': self.deviation_amount,
             'number_of_date': self.number_of_date,
             'dates': self.dates,
@@ -58,8 +61,10 @@ class PrepaymentSyncResult(model.CoogView):
     'Prepayment Sync Result'
     __name__ = 'prepayment.sync.show_result'
 
-    commissions = fields.One2Many('prepayment.sync.show.displayer',
-        None, 'Commissions')
+    adjusted = fields.One2Many('prepayment.sync.show.displayer',
+        None, 'Adjusted')
+    non_adjusted = fields.One2Many('prepayment.sync.show.displayer',
+        None, 'Non Adjusted')
 
 
 class PrepaymentSyncShow(model.CoogView):
@@ -77,14 +82,14 @@ class PrepaymentSync(model.CoogWizard):
     start = StateTransition()
     prepayment_view = StateView('prepayment.sync.show_prepayment',
         'commission_insurance_prepayment.prepayment_sync_show_view_form', [
-        Button('Cancel', 'end', 'tryton-cancel'),
-        Button('Synchronize', 'synchronize', 'tryton-next', default=True)
-        ])
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Synchronize', 'synchronize', 'tryton-next', default=True)
+            ])
     synchronize = StateTransition()
     result = StateView('prepayment.sync.show_result',
         'commission_insurance_prepayment.prepayment_sync_result_view_form', [
-        Button('End', 'end', 'tryton-ok', default=True)
-        ])
+            Button('End', 'end', 'tryton-ok', default=True)
+            ])
 
     def transition_start(self):
         active_id = Transaction().context.get('active_id')
@@ -107,11 +112,24 @@ class PrepaymentSync(model.CoogWizard):
 
     def transition_synchronize(self):
         deviations = [x.as_dict() for x in self.prepayment_view.commissions]
+        Contract = Pool().get('contract')
         for deviation in deviations:
-            deviation['codes'] = [{'code': x} for x in
-                deviation['codes'].split('\n')]
-        Pool().get('contract').try_adjust_prepayments(deviations)
-        return 'end'
+            deviation['codes'] = [{'code': x, 'description': desc or ''}
+                for x, desc in zip(
+                    deviation['codes'].split('\n'),
+                    deviation['description'].split('\n'))]
+            deviation['contract'] = Contract(deviation['contract'])
+        adjusted, non_adjusted, _ = Pool().get('contract'
+            ).try_adjust_prepayments(deviations)
+        Contract = Pool().get('contract')
+        Contract._add_prepayment_deviations_description(adjusted)
+        Contract._add_prepayment_deviations_description(non_adjusted)
+        self.result.adjusted = adjusted
+        self.result.non_adjusted = non_adjusted
+        return 'result'
 
-    def default_result(self):
-        return {}
+    def default_result(self, values):
+        return {
+            'adjusted': [x.as_dict() for x in self.result.adjusted],
+            'non_adjusted': [x.as_dict() for x in self.result.non_adjusted],
+            }

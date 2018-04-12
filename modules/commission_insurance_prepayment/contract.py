@@ -190,13 +190,12 @@ class Contract:
                     'is different from the total amount.'
                     })
         if linear_err:
-            # Action: Move amount to prepayment amount ?
             codes.append({
                 'code': 'LIN_ERR',
                 'description': 'There is linear commissions on '
                 'prepayment plan.',
                 })
-        if abs(deviation_amount) <= Decimal('0.001') and not linear_err:
+        if not linear_err and abs(deviation_amount) <= Decimal('0.001'):
             # Everything all right
             codes.append({'code': 'OK', 'description': ''})
         else:
@@ -219,12 +218,11 @@ class Contract:
                 deviation_redeemed_amount = self._compute_redeemed_values(
                     redeemed_coms, generated_amount, paid_amount)
                 if abs(deviation_redeemed_amount) <= Decimal('0.001'):
-                    # Action: delete the other commissions ?
                     codes.append({
                             'code': 'CNT_REE',
                             'description': 'The total amount '
                             'matches with the sum of the paid '
-                            'redeemed amount (contract is terminated).'
+                            'redeemed amount (contract is terminated)'
                             })
                     return codes
                 all_redeemed_coms = self._get_redeemed_commissions(
@@ -232,31 +230,56 @@ class Contract:
                 deviation_all_redeemed_amount = self._compute_redeemed_values(
                     all_redeemed_coms, generated_amount, paid_amount)
                 if abs(deviation_all_redeemed_amount) <= Decimal('0.001'):
-                    # Action: Create adjustement line ?
                     codes.append({
                             'code': 'CNT_REE_UNPAID',
                             'description': 'The recalculated amount '
                             'matches the total amount when using the '
                             'redeemed amount (contract is terminated and '
-                            'has propably unpaid posted invoices).',
+                            'probably has unpaid posted invoices)',
                             })
+                    return codes
+                codes.append({
+                    'code': 'CNT_FORCE_ADJ',
+                    'description': 'The computed recalculated amount '
+                    'does not match the total amount. The contract is '
+                    'terminated, We should adjust according to the '
+                    'recalculated amount'
+                    })
+            elif deviation_amount and self.status != 'terminated':
+                codes.append({
+                        'code': 'CNT_ACT_ADJ',
+                        'description': 'The actual amount is different '
+                        'from the computed amount on this active contract.'
+                        'We should adjust according to the recalculated '
+                        'amount',
+                        })
+                return codes
         return codes
 
-    def _get_computed_amount(self, agent):
-        computed_amount = Decimal('0')
+    def _get_computed_amount(self, agent, per_option=False,
+            paid_invoices_only=False):
+        if not per_option:
+            computed_amount = Decimal('0')
+        else:
+            computed_amount = defaultdict(lambda: Decimal(0))
         for option in self.covered_element_options:
             for agt, plan in option.agent_plans_used():
                 if agent != agt:
                     continue
                 pattern = {
                     'first_year_premium': option.get_first_year_premium(
-                        None, limit_to_paid_invoice=True),
+                        None, limit_to_paid_invoice=True,
+                        limit_for_terminated=not paid_invoices_only),
                     'coverage': option.coverage,
                     'agent': agent,
                     'option': option,
                     }
-                computed_amount += option._get_prepayment_amount_and_rate(
+                prepayment_amount = option._get_prepayment_amount_and_rate(
                     agent, plan, pattern)[0]
+                if per_option is False:
+                    computed_amount += prepayment_amount
+                else:
+                    computed_amount[option.id] += prepayment_amount
         return computed_amount
 
     @classmethod
@@ -275,6 +298,8 @@ class Contract:
                 key=lambda x: x.date or datetime.date.max)
             contract = key[0]
             computed_amount = contract._get_computed_amount(key[2])
+            computed_amount_today = contract._get_computed_amount(key[2],
+                paid_invoices_only=True)
             generated_amount = sum([x.amount for x in grouped_commissions
                     if not x.invoice_state])
             paid_amount = sum([x.amount for x in grouped_commissions
@@ -294,6 +319,7 @@ class Contract:
                     'paid_amount': paid_amount,
                     'actual_amount': generated_amount + paid_amount,
                     'theoretical_amount': computed_amount,
+                    'theoretical_amount_today': computed_amount_today,
                     'deviation_amount': deviation_amount,
                     'number_of_date': len(dates),
                     'dates': dates,
@@ -310,16 +336,18 @@ class Contract:
             ('amount', '!=', 0),
             ])
         for com in commissions:
-            new_amount = com.redeemed_prepayment or Decimal('0') + \
+            new_amount = (com.redeemed_prepayment or Decimal('0')) + \
                 com.amount
-            com.redeemed_prepayment  = new_amount
+            com.redeemed_prepayment = new_amount
             com.amount = Decimal('0')
         if commissions:
             Commission.save(commissions)
 
-    def _create_deviation_adjustement_line(self, party, agent):
+    def _create_deviation_adjustement_line(self, party, agent, deviation,
+            err_code):
         Commission = Pool().get('commission')
         adjustements = []
+        contract = deviation['contract']
         with ServerContext().set_context(prepayment_adjustment=True):
             options = list(self.covered_element_options)
             for option in options:
@@ -341,32 +369,78 @@ class Contract:
                 actual_amount = generated_amount + paid_amount
                 _, rate = option._get_prepayment_amount_and_rate(agent,
                     agent.plan)
+                if err_code not in ('CNT_REE', 'CNT_FORCE_ADJ', 'CNT_ACT_ADJ'):
+                    adjustement_amount = redeemed_amount - actual_amount
+                else:
+                    computed_amount = contract._get_computed_amount(agent,
+                        per_option=True)[option.id]
+                    deviation_amount = computed_amount - (
+                        generated_amount + paid_amount)
+                    adjustement_amount = deviation_amount
                 adjustements.extend(
                     option.compute_commission_with_prepayment_schedule(
                         agent, agent.plan, rate,
-                        redeemed_amount - actual_amount,
+                        adjustement_amount,
                         self.last_paid_invoice_end, self.final_end_date, {}))
             if adjustements:
                 Commission.save(adjustements)
 
     @classmethod
-    def try_adjust_prepayments(cls, deviations, codes=None):
+    def try_adjust_prepayments(cls, deviations, codes=None, adjusted=None,
+            updating=False):
         pool = Pool()
+        adjusted = adjusted if adjusted is not None else []
+
         for deviation in deviations:
+            agent = pool.get('commission.agent')(deviation['agent'])
+            party = pool.get('party.party')(deviation['party'])
             contract = cls(deviation['contract'])
             working_codes = codes if codes is not None else [
                 x['code'] for x in deviation['codes']]
             if 'LIN_ERR' in working_codes:
                 contract._move_linear_amount_to_prepayment()
                 working_codes.remove('LIN_ERR')
-                cls.try_adjust_prepayments([deviation], working_codes)
-            if 'CNT_ADJ' in working_codes:
-                agent = pool.get('commission.agent')(deviation['agent'])
-                party = pool.get('party.party')(deviation['party'])
+                adjusted.append(deviation)
+                cls.try_adjust_prepayments([deviation], working_codes,
+                    adjusted, True)
+            codes_adj = (set(['CNT_ADJ', 'CNT_REE_UNPAID', 'CNT_REE',
+                    'CNT_FORCE_ADJ', 'CNT_ACT_ADJ']) &
+                set(working_codes))
+            if codes_adj:
+                code = next(iter(codes_adj))
                 contract._create_deviation_adjustement_line(party,
-                    agent)
-                working_codes.remove('CNT_ADJ')
-                cls.try_adjust_prepayments([deviation], working_codes)
+                    agent, deviation, err_code=code)
+                working_codes.remove(code)
+                adjusted.append(deviation)
+                cls.try_adjust_prepayments([deviation], working_codes,
+                    adjusted, True)
+
+        def _freeze(deviation):
+            deviation['codes'] = frozenset([frozenset(c.items()) for c in
+                    deviation['codes']])
+            if isinstance(deviation['dates'], list):
+                deviation['dates'] = frozenset(deviation['dates'])
+            return frozenset(deviation.items())
+
+        def _unfreeze(deviation):
+            deviation = dict(deviation)
+            deviation['codes'] = [dict(x) for x in deviation['codes']]
+            dates = deviation['dates']
+            deviation['dates'] = [x for x in dates] \
+                if isinstance(dates, frozenset) else deviation['dates']
+            return deviation
+
+        if updating:
+            return
+
+        frozen_deviations = set(_freeze(dev) for dev in deviations)
+        frozen_adjusted = set(frozenset(a.items()) for a in adjusted)
+        adjusted_set = [_unfreeze(s) for s in frozen_adjusted]
+        non_adjusted_set = [_unfreeze(s) for s in
+            set(dev for dev in frozen_deviations
+                if dev not in frozen_adjusted)]
+        deviations = [_unfreeze(dev) for dev in deviations]
+        return list(adjusted_set), list(non_adjusted_set), list(deviations)
 
     @classmethod
     def _add_prepayment_deviations_description(cls, deviations):
@@ -397,14 +471,16 @@ class ContractOption:
             used.append((insurer, insurer.plan))
         return used
 
-    def get_first_year_premium(self, name, limit_to_paid_invoice=False):
+    def get_first_year_premium(self, name, limit_to_paid_invoice=False,
+            limit_for_terminated=True):
         if not self.start_date:
             # when a contract is void for example
             return 0
         contract_start_date = self.parent_contract.initial_start_date
-        end_first_year = contract_start_date + relativedelta(years=1,days=-1)
-        if (limit_to_paid_invoice and
-                self.parent_contract.status == 'terminated'):
+        end_first_year = contract_start_date + relativedelta(years=1, days=-1)
+        if ((limit_to_paid_invoice and
+                   self.parent_contract.status == 'terminated') or
+                (limit_to_paid_invoice and not limit_for_terminated)):
             if not self.parent_contract.last_paid_invoice_end:
                 return 0
             end_first_year = self.parent_contract.last_paid_invoice_end
