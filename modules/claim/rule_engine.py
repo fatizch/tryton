@@ -48,9 +48,10 @@ class RuleEngineRuntime:
     def _re_last_loss_end_date(cls, args):
         res = datetime.date.min
         current_loss = args['loss']
-        for l in args['claim'].losses:
-            if current_loss.loss_desc == l.loss_desc and l != current_loss:
-                res = max(l.end_date or datetime.date.min, res)
+        for loss in args['claim'].losses:
+            if (current_loss.loss_desc == loss.loss_desc and
+                    loss != current_loss):
+                res = max(loss.end_date or datetime.date.min, res)
         return res if res != datetime.date.min else None
 
     @classmethod

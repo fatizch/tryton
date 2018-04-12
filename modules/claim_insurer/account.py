@@ -7,8 +7,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, In, Not, Or
 
-from trytond.modules.coog_core import fields
-
 
 __all__ = [
     'Invoice',

@@ -487,7 +487,7 @@ sepa mandate on the line and the invoice:::
     >>> contract_invoice_2.invoice.lines_to_pay[0].reload()
     >>> contract_invoice_2.invoice.reload()
     >>> contract_invoice_2.invoice.lines_to_pay[0].sepa_mandate == \
-    ...     contract_invoice_2.invoice.sepa_mandate == None
+    ...     contract_invoice_2.invoice.sepa_mandate is None
     True
 
 Restore the payment date::

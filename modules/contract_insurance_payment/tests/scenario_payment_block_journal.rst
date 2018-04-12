@@ -242,7 +242,8 @@ Create invoices::
 
 Generate payment (error should be raised) because product journals::
 
-    >>> create_payment = Wizard('account.payment.creation', lines_to_pay)  # doctest: +IGNORE_EXCEPTION_DETAIL
+    >>> create_payment = Wizard('account.payment.creation',
+    ...     lines_to_pay)  # doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
         ...
     UserError: ...

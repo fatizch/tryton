@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 from trytond import backend
 from trytond.model import Unique
-from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 
 from sql import Literal, Null

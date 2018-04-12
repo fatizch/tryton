@@ -249,7 +249,8 @@ lines_to_pay = contract_invoice.invoice.lines_to_pay + \
 
 # #Comment# #Generate payment (error should be raised) because product journals
 # are differents
-create_payment = Wizard('account.payment.creation', lines_to_pay)  # doctest: +IGNORE_EXCEPTION_DETAIL
+create_payment = Wizard('account.payment.creation',
+    lines_to_pay)  # doctest: +IGNORE_EXCEPTION_DETAIL
 # #Hard# #Traceback (most recent call last):
 # #Hard# #    ...
 # #Hard# #UserError: ...

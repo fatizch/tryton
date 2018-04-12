@@ -4,7 +4,6 @@
 import copy
 
 from trytond import backend
-from trytond.pool import PoolMeta
 from trytond.cache import Cache
 from trytond.rpc import RPC
 from trytond.model import DictSchemaMixin, Unique

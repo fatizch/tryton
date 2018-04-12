@@ -83,12 +83,12 @@ class PrepaymentSync(model.CoogWizard):
     prepayment_view = StateView('prepayment.sync.show_prepayment',
         'commission_insurance_prepayment.prepayment_sync_show_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Synchronize', 'synchronize', 'tryton-next', default=True)
+            Button('Synchronize', 'synchronize', 'tryton-next', default=True),
             ])
     synchronize = StateTransition()
     result = StateView('prepayment.sync.show_result',
         'commission_insurance_prepayment.prepayment_sync_result_view_form', [
-            Button('End', 'end', 'tryton-ok', default=True)
+            Button('End', 'end', 'tryton-ok', default=True),
             ])
 
     def transition_start(self):

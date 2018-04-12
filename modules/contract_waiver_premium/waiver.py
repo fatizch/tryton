@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import Pool
 from trytond import backend
 from trytond.pyson import Bool, Eval, Or
 from trytond.transaction import Transaction

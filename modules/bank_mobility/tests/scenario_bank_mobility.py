@@ -77,6 +77,8 @@ def create_bank(bank_name, bank_bic):
     bank.bic = bank_bic
     bank.save()
     return bank
+
+
 bank = create_bank('BNP-Paribas SA', 'BNPAFRPPXXX')
 bank2 = create_bank('AXA Banque SA', 'AXABFRPPXXX')
 bank3 = create_bank('Caisse d\'Epargne CEPAC', 'CEPAFRPP131')
@@ -149,6 +151,7 @@ def create_contract(subscriber, start_date, mandate, contract_number,
     Wizard('contract.activate', models=[contract]).execute('apply')
     return contract
 
+
 # #Comment# #Create Subscriber 1
 subscriber, subscriber_account = create_party_and_bank_account(
     'Martin', 'Jean', 'FR76 3000 4000 0312 3456 7890 143', bank)
@@ -208,9 +211,10 @@ def import_flow_5(file_name):
         archived = dir_ + 'treated_%s_%s' % (str(today),
             file_name)
         cmd = 'mv %s %s' % (archived, file_path)
-        __ = popen(cmd.split())
+        __ = popen(cmd.split())  # NOQA
 
-__ = import_flow_5('flow_5_test.xml')
+
+__ = import_flow_5('flow_5_test.xml')  # NOQA
 
 
 # #Comment# #Test on bank accounts

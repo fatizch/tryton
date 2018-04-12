@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from decimal import ROUND_HALF_UP
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import Pool
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import export, utils

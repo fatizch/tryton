@@ -217,7 +217,7 @@ class SalariesComputation(Wizard):
         Salary = pool.get('claim.salary')
         Salary.save(self.start.periods)
         return 'end'
-    
+
     def check_computation_date(self):
         delivered_rule = self.get_rule_service()
         delivered_service = delivered_rule['delivered_service']

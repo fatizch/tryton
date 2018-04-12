@@ -4,7 +4,7 @@ import datetime
 
 from trytond.rpc import RPC
 from trytond.pyson import Eval, Bool, Or
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.model import Unique
 from trytond.cache import Cache

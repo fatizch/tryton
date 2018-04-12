@@ -383,7 +383,8 @@ Create Test Contract::
     >>> BillingMode = Model.get('offered.billing_mode')
     >>> PaymentTerm = Model.get('account.invoice.payment_term')
     >>> contract.billing_informations.append(BillingInformation(date=None,
-    ...         billing_mode=BillingMode(freq_yearly.id), payment_term=PaymentTerm(payment_term.id)))
+    ...         billing_mode=BillingMode(freq_yearly.id),
+    ...         payment_term=PaymentTerm(payment_term.id)))
     >>> contract.contract_number = '123456789'
     >>> contract.status = 'active'
     >>> contract.save()

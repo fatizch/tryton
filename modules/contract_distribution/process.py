@@ -61,7 +61,6 @@ class ContractSubscribeFindProcess:
                         self.appliable_conditions_date <= x.end_date))]
         return res
 
-
     @fields.depends('commercial_product', methods=['product', 'signature_date'])
     def on_change_commercial_product(self):
         if self.commercial_product is not None:

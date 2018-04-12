@@ -465,7 +465,7 @@ contract_invoice_2.invoice.lines_to_pay[0].save()
 contract_invoice_2.invoice.lines_to_pay[0].reload()
 contract_invoice_2.invoice.reload()
 contract_invoice_2.invoice.lines_to_pay[0].sepa_mandate == \
-    contract_invoice_2.invoice.sepa_mandate == None
+    contract_invoice_2.invoice.sepa_mandate is None
 # #Res# #True
 # #Comment# #Restore the payment date
 contract_invoice_2.invoice.lines_to_pay[0].payment_date = save_payment_date

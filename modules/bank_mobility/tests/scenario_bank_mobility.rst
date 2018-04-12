@@ -211,8 +211,8 @@ Create Subscriber 3::
     ...         archived = dir_ + 'treated_%s_%s' % (str(today),
     ...             file_name)
     ...         cmd = 'mv %s %s' % (archived, file_path)
-    ...         __ = popen(cmd.split())
-    >>> __ = import_flow_5('flow_5_test.xml')
+    ...         __ = popen(cmd.split())  # NOQA
+    >>> __ = import_flow_5('flow_5_test.xml')  # NOQA
 
 Test on bank accounts::
 

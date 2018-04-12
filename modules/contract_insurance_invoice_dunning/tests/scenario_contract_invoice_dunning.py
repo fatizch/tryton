@@ -379,6 +379,7 @@ first_cancelled = ContractInvoice.find([('contract', '=', contract.id),
 def key(line):
     return line.maturity_date
 
+
 cancelled_lines_to_pay = sorted(first_cancelled.invoice.lines_to_pay, key=key)
 new_lines_to_pay = sorted(first_rebilled.invoice.lines_to_pay, key=key)
 

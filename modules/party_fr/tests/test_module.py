@@ -37,7 +37,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 'addresses': []
             }])
             res = person.id > 0
-        except:
+        except Exception:
             res = False
         self.assertEqual(res, expected_return)
 

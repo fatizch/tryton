@@ -6,7 +6,7 @@ from operator import attrgetter
 from itertools import groupby
 
 from trytond.model import Unique
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import Pool
 
 from trytond.modules.coog_core import fields, utils, export, coog_string
 

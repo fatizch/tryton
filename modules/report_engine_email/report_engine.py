@@ -20,7 +20,6 @@ from trytond.wizard import Button, StateAction
 from trytond.modules.coog_core import fields, model
 
 
-
 __all__ = [
     'ReportGenerate',
     'ReportGenerateEmail',

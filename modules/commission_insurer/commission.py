@@ -191,11 +191,11 @@ class Commission:
             invoice_lines.append(cls.create_empty_invoice_line(
                     cls.get_insurer_account_description_line('positive',
                         waiting_account), waiting_account, invoice,
-                party=insurer.party))
+                    party=insurer.party))
             invoice_lines.append(cls.create_empty_invoice_line(
                     cls.get_insurer_account_description_line('negative',
                         waiting_account), waiting_account, invoice,
-                party=insurer.party))
+                    party=insurer.party))
             invoice.lines = list(invoice_lines)
             invoice.save()
 
@@ -331,7 +331,6 @@ class Commission:
             else:
                 to_ignore[insurer_account].append(invoice_id)
 
-
         for insurer_account, value in to_sum.iteritems():
             for invoice_id, commissions in value.iteritems():
                 if invoice_id not in to_ignore[insurer_account]:
@@ -376,7 +375,7 @@ class Commission:
 
         # Retrieve values for each insurers
         for insurer_account in per_insurer.keys():
-            commission_invoice, commission_invoice_line, _, _= \
+            commission_invoice, commission_invoice_line, _, _ = \
                 get_insurer_empty_data(insurer_account,
                     insurers_invoices)
             if (not per_insurer[insurer_account][0] and not
