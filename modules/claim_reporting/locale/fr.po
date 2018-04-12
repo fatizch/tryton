@@ -49,7 +49,7 @@ msgstr "Résultat du rapport assureur sinistres"
 
 msgctxt "model:insurer_reporting.claim.generate,name:"
 msgid "Insurer Report Claim Batch"
-msgstr ""
+msgstr "Batch de reporting sinistre assureur"
 
 msgctxt "model:ir.action,name:act_insurer_report_claim"
 msgid "Insurer Report Claim"

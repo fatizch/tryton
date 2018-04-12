@@ -30,6 +30,10 @@ msgctxt "field:contract.option,with_waiver_of_premium:"
 msgid "With Waiver Of Premium"
 msgstr "Avec exonération"
 
+msgctxt "field:contract.waiver.create,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:contract.waiver_premium,automatic:"
 msgid "Automatic"
 msgstr "Automatique"
@@ -67,7 +71,7 @@ msgid "Options Names"
 msgstr "Garanties"
 
 msgctxt "field:contract.waiver_premium,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.waiver_premium,start_date:"
@@ -115,7 +119,7 @@ msgid "Option"
 msgstr "Garantie"
 
 msgctxt "field:contract.waiver_premium-contract.option,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.waiver_premium-contract.option,start_date:"
@@ -240,7 +244,7 @@ msgid "Rate"
 msgstr "Taux"
 
 msgctxt "field:waiver_premium.rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:waiver_premium.rule,taxes:"
@@ -276,7 +280,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:waiver_premium.rule-account.tax,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:waiver_premium.rule-account.tax,tax:"
@@ -320,6 +324,10 @@ msgstr ""
 "dans la période de l'exonération, Prorata permet d'exonérer de façon "
 "proportionnelle au ratio entre la période d'exonération et la période de "
 "quittancement."
+
+msgctxt "model:contract.waiver.create,name:"
+msgid "Waiver Periods Creation Batch"
+msgstr "Batch de création des périodes d'exonération"
 
 msgctxt "model:contract.waiver_premium,name:"
 msgid "Waiver Premium"

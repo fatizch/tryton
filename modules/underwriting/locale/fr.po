@@ -73,7 +73,7 @@ msgid "Possible Decision Types"
 msgstr "Types de décision possible"
 
 msgctxt "field:underwriting,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:underwriting,requested_documents:"
@@ -149,7 +149,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:underwriting.decision.type,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "nom"
 
 msgctxt "field:underwriting.decision.type,write_date:"
@@ -181,7 +181,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:underwriting.document_rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:underwriting.document_rule,reminder_delay:"
@@ -273,7 +273,7 @@ msgid "Provisional Decision"
 msgstr "Décision provisionnelle"
 
 msgctxt "field:underwriting.result,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:underwriting.result,state:"
@@ -357,7 +357,7 @@ msgid "Next Underwriting"
 msgstr "Prochaine demande de décision "
 
 msgctxt "field:underwriting.type,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:underwriting.type,waiting_decision:"
@@ -397,7 +397,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:underwriting.type-decision,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:underwriting.type-decision,underwriting_type:"

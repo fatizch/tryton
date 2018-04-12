@@ -23,7 +23,7 @@ msgid "Inactivity Limit Before Logging"
 msgstr "Limit d'inactivité"
 
 msgctxt "field:res.user.analytics.configuration,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:res.user.analytics.configuration,write_date:"
@@ -79,7 +79,7 @@ msgid "Last Action Date"
 msgstr "Date de dernière action"
 
 msgctxt "field:res.user.connection,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:res.user.connection,terminated_reason:"
@@ -143,7 +143,7 @@ msgid "Average Inactivity"
 msgstr "Moyenne des temps d'inactivité"
 
 msgctxt "field:res.user.connection.daily,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:res.user.connection.daily,user:"
@@ -227,7 +227,7 @@ msgid "Average Inactivity"
 msgstr "Moyenne d'inactivité"
 
 msgctxt "field:res.user.connection.global.daily,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:res.user.connection.global.daily,user:"
@@ -299,7 +299,7 @@ msgid "Month"
 msgstr "Mois"
 
 msgctxt "field:res.user.connection.global.monthly,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:res.user.connection.global.monthly,user:"

@@ -31,7 +31,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:commission.agent-account.fee,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:commission.agent-account.fee,write_date:"
@@ -79,7 +79,7 @@ msgid "Plan"
 msgstr "Plan"
 
 msgctxt "field:commission.plan-account.fee,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:commission.plan-account.fee,write_date:"

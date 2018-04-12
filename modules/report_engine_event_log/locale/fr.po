@@ -1,0 +1,12 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:report.template,generate_event:"
+msgid "Generate Event"
+msgstr "Générer un événement"
+
+msgctxt "help:report.template,generate_event:"
+msgid "If true, an event will be generated each time the report is generated."
+msgstr ""
+"Si coché, un événement sera généré chaque fois que le courrier sera généré."

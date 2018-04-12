@@ -58,6 +58,10 @@ msgctxt ""
 msgid "New Health Complement"
 msgstr "Nouvelle information santé"
 
+msgctxt "field:endorsement.party.change_health_complement,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:endorsement.party.health_complement,action:"
 msgid "Action"
 msgstr "Action"
@@ -103,7 +107,7 @@ msgid "Party Endorsement"
 msgstr "Avenant sur tiers"
 
 msgctxt "field:endorsement.party.health_complement,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.party.health_complement,relation:"
@@ -159,7 +163,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.party.health_complement.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.party.health_complement.field,write_date:"

@@ -14,9 +14,18 @@ msgstr ""
 "Ce processus permet aux gestionnaires de lancer une souscription d'assurance"
 " de groupe"
 
-msgctxt "field:contract_group.subscribe.find_process,effective_date:"
-msgid "Effective Date"
-msgstr "Date effective"
+msgctxt ""
+"field:contract_group.subscribe.find_process,appliable_conditions_date:"
+msgid "Appliable Conditions Date"
+msgstr "Date de Conditions"
+
+msgctxt "field:contract_group.subscribe.find_process,errors:"
+msgid "Errors"
+msgstr "Erreurs"
+
+msgctxt "field:contract_group.subscribe.find_process,free_conditions_date:"
+msgid "Free Conditions Date"
+msgstr "Date de conditions libre"
 
 msgctxt "field:contract_group.subscribe.find_process,good_process:"
 msgid "Good Process"
@@ -37,6 +46,18 @@ msgstr "Tiers"
 msgctxt "field:contract_group.subscribe.find_process,product:"
 msgid "Product"
 msgstr "Produit"
+
+msgctxt "field:contract_group.subscribe.find_process,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
+msgctxt "field:contract_group.subscribe.find_process,start_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:contract_group.subscribe.find_process,start_date_readonly:"
+msgid "Start Date Is Read Only"
+msgstr "La date d'effet est en lecture seule"
 
 msgctxt "model:contract_group.subscribe.find_process,name:"
 msgid "Contract Group Subscribe Find Process"

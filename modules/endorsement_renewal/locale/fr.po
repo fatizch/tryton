@@ -42,6 +42,10 @@ msgctxt "field:endorsement.contract.renew,new_period_start_date:"
 msgid "New Period Start Date"
 msgstr "Date de début de la nouvelle période"
 
+msgctxt "field:endorsement.contract.renew,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "model:endorsement.contract.renew,name:"
 msgid "Renew Contract"
 msgstr "Renouveler le contrat"

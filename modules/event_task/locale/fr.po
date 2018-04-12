@@ -47,7 +47,7 @@ msgid "Parameters"
 msgstr "Paramètres"
 
 msgctxt "field:task.queue.definition,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:task.queue.definition,task_queue_model:"
@@ -95,7 +95,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:task.queue.definition.parameter,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:task.queue.definition.parameter,value:"

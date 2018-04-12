@@ -35,7 +35,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:invoice.report.definition,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:invoice.report.definition,report_template:"

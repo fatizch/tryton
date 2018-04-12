@@ -122,7 +122,7 @@ msgctxt "field:contract.underwriting.option,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:contract.underwriting.option,contract:"
+msgctxt "field:contract.underwriting.option,covered:"
 msgid "Covered Element"
 msgstr "Risque Couvert"
 

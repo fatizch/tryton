@@ -69,7 +69,7 @@ msgid "Products"
 msgstr "Produits"
 
 msgctxt "field:contract.set,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.set,status:"
@@ -141,7 +141,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:offered.configuration.contract_set_number_sequence,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.configuration.contract_set_number_sequence,write_date:"

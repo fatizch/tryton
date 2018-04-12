@@ -97,7 +97,7 @@ msgid "Order"
 msgstr "Ordre"
 
 msgctxt "field:report.flow.variable,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:report.flow.variable,separator:"
@@ -185,7 +185,7 @@ msgid "Order"
 msgstr "Ordre"
 
 msgctxt "field:report.template.flow_variable.relation,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:report.template.flow_variable.relation,template:"
@@ -295,7 +295,6 @@ msgctxt "wizard_button:report.create,flow_succeed_generated,end:"
 msgid "OK"
 msgstr "OK"
 
-#, fuzzy
 msgctxt "wizard_button:report.create,flow_succeed_generated,end:"
 msgid "Ok"
 msgstr "Ok"

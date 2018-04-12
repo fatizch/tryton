@@ -85,7 +85,7 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:offered.product.term_renewal_rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.product.term_renewal_rule,rule:"

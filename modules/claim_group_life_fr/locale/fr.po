@@ -43,7 +43,7 @@ msgid "Loss"
 msgstr "Evénement"
 
 msgctxt "field:claim.loss.hospitalisation.period,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim.loss.hospitalisation.period,start_date:"

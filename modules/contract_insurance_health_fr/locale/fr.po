@@ -57,7 +57,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:health.care_system,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:health.care_system,short_name:"
@@ -109,7 +109,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:health.insurance_fund,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:health.insurance_fund,write_date:"

@@ -39,7 +39,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:account.configuration.snapshot_sequence,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:account.configuration.snapshot_sequence,snapshot_sequence:"
@@ -135,7 +135,7 @@ msgid "Post Date"
 msgstr "Date de lettrage"
 
 msgctxt "field:account.move.line.aggregated,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:account.move.line.aggregated,snapshot:"
@@ -179,7 +179,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:account.move.snapshot,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:account.move.snapshot,write_date:"

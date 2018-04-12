@@ -55,7 +55,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:commission.plan.prepayment.payment_rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:commission.plan.prepayment.payment_rule,rule:"

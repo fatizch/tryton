@@ -43,10 +43,6 @@ msgctxt "field:contract.subscribe.find_process,distributor:"
 msgid "Distributor"
 msgstr "Distributeur"
 
-msgctxt "field:contract.subscribe.find_process,party_portfolio:"
-msgid "Party Portfolio"
-msgstr "Portefeuille du tiers"
-
 msgctxt "field:distribution.commercial_product,code:"
 msgid "Code"
 msgstr "Code"

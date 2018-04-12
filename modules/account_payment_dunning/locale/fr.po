@@ -41,7 +41,7 @@ msgid "Procedure"
 msgstr "Procédure"
 
 msgctxt "field:account.payment.journal.failure_action.dunning,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:account.payment.journal.failure_action.dunning,write_date:"

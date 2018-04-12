@@ -64,7 +64,7 @@ msgid "Process"
 msgstr "Processus"
 
 msgctxt "field:process-underwriting.type,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:process-underwriting.type,underwriting_type:"

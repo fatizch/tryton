@@ -23,7 +23,7 @@ msgid "Lines"
 msgstr "Lignes"
 
 msgctxt "field:table.commutation_manager,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:table.commutation_manager,write_date:"
@@ -75,7 +75,7 @@ msgid "Rate"
 msgstr "Taux"
 
 msgctxt "field:table.commutation_manager.line,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:table.commutation_manager.line,write_date:"

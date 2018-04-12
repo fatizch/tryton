@@ -55,7 +55,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:contract.right_suspension,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.right_suspension,start_date:"

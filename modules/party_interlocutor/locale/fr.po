@@ -51,7 +51,7 @@ msgid "Phone"
 msgstr "Téléphone"
 
 msgctxt "field:party.interlocutor,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:party.interlocutor,write_date:"
@@ -91,7 +91,7 @@ msgid "Contact Interlocutor"
 msgstr "Interlocuteur"
 
 msgctxt "field:party.interlocutor-party.contact_mechanism,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:party.interlocutor-party.contact_mechanism,write_date:"

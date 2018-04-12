@@ -54,6 +54,10 @@ msgctxt "field:contract.manage_option_benefits,possible_contracts:"
 msgid "Possible Contracts"
 msgstr "Contrats disponibles"
 
+msgctxt "field:contract.manage_option_benefits,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:contract.manage_option_benefits.option,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -135,7 +139,7 @@ msgid "Option Version Endorsement"
 msgstr "Avenant pour la version de garantie"
 
 msgctxt "field:endorsement.contract.benefit,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.benefit,relation:"
@@ -195,7 +199,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.benefit.field,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.contract.benefit.field,write_date:"

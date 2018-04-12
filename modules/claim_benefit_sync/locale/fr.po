@@ -31,7 +31,7 @@ msgid "Master"
 msgstr "Base"
 
 msgctxt "field:benefit-benefit,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit-benefit,slave:"

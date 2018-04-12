@@ -54,6 +54,10 @@ msgctxt "field:endorsement.contract.change_broker,product:"
 msgid "Product"
 msgstr "Produit"
 
+msgctxt "field:endorsement.contract.change_broker,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
 msgctxt "field:endorsement.contract.change_commission,agency:"
 msgid "Agency"
 msgstr "Agence"
@@ -101,6 +105,10 @@ msgstr "ID"
 msgctxt "field:endorsement.contract.change_commission,product:"
 msgid "Product"
 msgstr "Produit"
+
+msgctxt "field:endorsement.contract.change_commission,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "model:endorsement.contract.change_broker,name:"
 msgid "Change Contract Broker"

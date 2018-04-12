@@ -43,8 +43,8 @@ msgid "Name"
 msgstr "Numéro"
 
 msgctxt "field:commission.plan.recovery_rule,rec_name:"
-msgid "Name"
-msgstr "Numéro"
+msgid "Record Name"
+msgstr "Nom"
 
 msgctxt "field:commission.plan.recovery_rule,rule:"
 msgid "Rule Engine"

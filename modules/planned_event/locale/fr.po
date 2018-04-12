@@ -43,7 +43,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:event.type.action-planned_event.type,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:event.type.action-planned_event.type,write_date:"
@@ -95,7 +95,7 @@ msgid "Processed"
 msgstr "Traité"
 
 msgctxt "field:planned.event,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:planned.event,write_date:"

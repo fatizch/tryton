@@ -544,6 +544,10 @@ msgctxt "field:claim,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:claim,icon:"
+msgid "Icon"
+msgstr "Icône"
+
 msgctxt "field:claim,id:"
 msgid "ID"
 msgstr "ID"
@@ -1028,6 +1032,10 @@ msgctxt "field:contract.option,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
 
+msgctxt "field:event.log,claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
 msgctxt "field:insurer,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
@@ -1447,13 +1455,13 @@ msgctxt "model:res.group,name:group_claim_manage"
 msgid "Coog Claim management"
 msgstr "Coog Gestion Sinistre"
 
-msgctxt "model:res.group,name:group_claim_super_manager"
-msgid "Coog Claim Super Manager"
-msgstr "Coog Super Gestionnaire Sinistre"
-
 msgctxt "model:res.group,name:group_claim_read"
 msgid "Coog Claim consultation"
 msgstr "Coog Consultation Sinistre"
+
+msgctxt "model:res.group,name:group_claim_super_manager"
+msgid "Coog Claim Super Manager"
+msgstr "Coog Super Gestionnaire Sinistre"
 
 msgctxt "model:tag,name:tag_claim"
 msgid "Claim"

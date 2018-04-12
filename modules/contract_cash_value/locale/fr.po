@@ -59,7 +59,7 @@ msgid "Invoice"
 msgstr "Quittance"
 
 msgctxt "field:contract.deposit,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:contract.deposit,state:"

@@ -88,7 +88,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.part.union,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:endorsement.part.union,subscribers_name:"

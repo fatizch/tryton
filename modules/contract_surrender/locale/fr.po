@@ -25,6 +25,14 @@ msgid "Contract %(contract)s cannot be surrendered"
 msgstr "Le contrat %(contract)s ne peut pas être racheté"
 
 msgctxt "error:contract:"
+msgid ""
+"Contract %(contract)s is not surrendered. Therefore, it cannot be "
+"reactivated."
+msgstr ""
+"Le contrat %(contract)s n'est pas racheté, il ne peut donc pas être "
+"réactivé."
+
+msgctxt "error:contract:"
 msgid "Contracts surrender will be cancelled"
 msgstr "Le rachat du contrat sera annulé"
 
@@ -43,14 +51,6 @@ msgid ""
 msgstr ""
 "La suppression n'est pas autorisée car les contrats %(contract)s ne sont pas"
 " des devis ou déclinés"
-
-msgctxt "error:contract:"
-msgid ""
-"Le contrat %(contract)s n'est pas un rachat. En conséquent, il ne peut être "
-"réactivé."
-msgstr ""
-"Le contrat %(contract)s n'est pas un rachat. En conséquent, il ne peut être "
-"réactivé."
 
 msgctxt "error:contract:"
 msgid ""
@@ -183,7 +183,7 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:offered.option.description.surrender_rule,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:offered.option.description.surrender_rule,rule:"

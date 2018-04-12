@@ -43,7 +43,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:health.party_complement,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:health.party_complement,write_date:"

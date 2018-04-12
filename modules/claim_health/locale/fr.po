@@ -46,7 +46,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.act.description,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.act.description,write_date:"
@@ -90,7 +90,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.act.family,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:benefit.act.family,write_date:"
@@ -166,7 +166,7 @@ msgid "Quantity"
 msgstr "Quantité"
 
 msgctxt "field:claim.loss.health,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:claim.loss.health,total_charges:"

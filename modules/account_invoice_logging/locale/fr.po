@@ -23,7 +23,7 @@ msgid "Invoice"
 msgstr "Quittance"
 
 msgctxt "field:account.invoice.logging,rec_name:"
-msgid "Name"
+msgid "Record Name"
 msgstr "Nom"
 
 msgctxt "field:account.invoice.logging,state:"
