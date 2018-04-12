@@ -67,5 +67,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">shuffle</field>
             <field name="path">icons/shuffle.svg</field>
         </record>
+        <record model="ir.ui.icon" id="pencil_blue_icon">
+            <field name="name">pencil_blue</field>
+            <field name="path">icons/pencil-blue.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="pencil_black_icon">
+            <field name="name">pencil_black</field>
+            <field name="path">icons/pencil-black.svg</field>
+        </record>
     </data>
 </tryton>

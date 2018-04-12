@@ -107,7 +107,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.wizard" id="act_start_endorsement">
             <field name="name">Start Endorsement</field>
             <field name="wiz_name">endorsement.start</field>
-            <field name="icon" ref="coog_core.batch_icon"/>
+            <field name="icon" ref="coog_core.pencil_blue_icon"/>
         </record>
         <record model="ir.action.keyword" id="act_start_endorsement_shorcut_keyword">
             <field name="keyword">form_toolbar</field>
