@@ -6,6 +6,7 @@ import document
 import benefit
 import rule_engine
 import report_engine
+import wizard
 
 
 def register():
@@ -25,4 +26,5 @@ def register():
     Pool.register(
         report_engine.DocumentRequestReport,
         document.ReceiveDocument,
+        wizard.PartyErase,
         module='claim_document', type_='wizard')

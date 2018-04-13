@@ -3,6 +3,7 @@
 from trytond.pool import Pool
 import contract
 import party
+import wizard
 
 
 def register():
@@ -13,4 +14,5 @@ def register():
         module='contract_life_clause', type_='model')
     Pool.register(
         party.PartyReplace,
+        wizard.PartyErase,
         module='contract_life_clause', type_='wizard')

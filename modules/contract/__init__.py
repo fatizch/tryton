@@ -78,4 +78,5 @@ def register():
         wizard.RelatedAttachments,
         wizard.ChangeSubStatus,
         party.PartyReplace,
+        wizard.PartyErase,
         module='contract', type_='wizard')

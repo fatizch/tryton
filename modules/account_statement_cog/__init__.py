@@ -29,4 +29,5 @@ def register():
         statement.CancelLineGroup,
         wizard.CreateStatement,
         party.PartyReplace,
+        wizard.PartyErase,
         module='account_statement_cog', type_='wizard')

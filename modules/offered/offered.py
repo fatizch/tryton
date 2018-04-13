@@ -80,6 +80,12 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
     report_templates = fields.Many2Many('report.template-offered.product',
         'product', 'report_template', 'Report Templates')
     report_style_template = fields.Binary('Report Style')
+    data_shelf_life = fields.Integer('Data Shelf Life',
+        domain=['OR',
+            [('data_shelf_life', '=', None)],
+            [('data_shelf_life', '>=', 0)]],
+        help='The number of years contract\'s data related to this product '
+        'can be kept after the contract\'s termination.')
 
     @classmethod
     def __setup__(cls):

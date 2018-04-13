@@ -345,6 +345,10 @@ msgctxt "field:party.party,identifiers:"
 msgid "Identifiers"
 msgstr "Identifiants"
 
+msgctxt "field:party.party,is_anonymized:"
+msgid "Is Anonymized"
+msgstr "Est anonymisé"
+
 msgctxt "field:party.party,is_person:"
 msgid "Person"
 msgstr "Personne physique"

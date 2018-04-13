@@ -77,4 +77,5 @@ def register():
         move.Reconcile,
         party.SynthesisMenuOpen,
         party.PartyReplace,
+        wizard.PartyErase,
         module='contract_insurance_invoice', type_='wizard')

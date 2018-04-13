@@ -41,6 +41,10 @@ this repository contains the full copyright notices and license terms. -->
                     <newline/>
                     <field name="report_templates" colspan="4"/>
                 </page>
+                <page string="Data Retention" id="data_retention">
+                    <label name="data_shelf_life"/>
+                    <field name="data_shelf_life"/>
+                </page>
             </notebook>
         </page>
         <page string="Administration" id="admin">

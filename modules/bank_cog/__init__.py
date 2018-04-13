@@ -6,6 +6,7 @@ import party
 import bank
 import load_data
 import test_case
+import wizard
 
 
 def register():
@@ -23,4 +24,5 @@ def register():
     Pool.register(
         party.SynthesisMenuOpen,
         load_data.BankDataSetWizard,
+        wizard.PartyErase,
         module='bank_cog', type_='wizard')

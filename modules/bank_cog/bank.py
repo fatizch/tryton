@@ -152,6 +152,8 @@ class BankAccount(export.ExportImportMixin):
         return ', '.join([x.rec_name for x in self.numbers])
 
     def get_main_bank_account_number(self, name):
+        if all([o.is_anonymized for o in self.owners]):
+            return 'XXXX'
         ibans = [x for x in self.numbers if x.type == 'iban']
         if ibans:
             return ibans[-1].number

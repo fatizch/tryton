@@ -21,4 +21,5 @@ def register():
 
     Pool.register(
         wizard.StartEndorsement,
+        wizard.PartyErase,
         module='endorsement_life', type_='wizard')

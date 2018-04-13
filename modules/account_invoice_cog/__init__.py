@@ -35,5 +35,6 @@ def register():
 
     Pool.register(
         wizard.ChangePaymentTerm,
+        wizard.PartyErase,
         load_data.FiscalYearSetWizard,
         module='account_invoice_cog', type_='wizard')

@@ -9,6 +9,7 @@ import test_case
 import account
 import party
 import move
+import wizard
 
 
 def register():
@@ -39,4 +40,5 @@ def register():
         module='account_payment_sepa_cog', type_='model')
     Pool.register(
         payment.PaymentCreation,
+        wizard.PartyErase,
         module='account_payment_sepa_cog', type_='wizard')

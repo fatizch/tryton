@@ -2,7 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
-from trytond.pool import Pool
+from dateutil.relativedelta import relativedelta
+from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Len, If, PYSONEncoder
 from trytond.wizard import StateTransition, StateView, Button, StateAction
 from trytond.transaction import Transaction
@@ -26,6 +27,7 @@ __all__ = [
     'RelatedAttachments',
     'ChangeSubStatus',
     'SelectSubStatus',
+    'PartyErase',
     ]
 
 
@@ -569,3 +571,78 @@ class SelectSubStatus(model.CoogView):
         'Current Sub Status', readonly=True)
     new_sub_status = fields.Many2One('contract.sub_status',
         'New Sub Status', domain=[('status', '=', 'active')])
+
+
+class PartyErase:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.erase'
+
+    @classmethod
+    def __setup__(cls):
+        super(PartyErase, cls).__setup__()
+        cls._error_messages.update({
+                'party_has_contract': 'The party %(party)s can not be erased '
+                'because it is on the following active contracts: \n'
+                '%(contracts)s',
+                'party_has_quote': 'The party %(party)s can not be erased '
+                'because it is on the following quotes: \n%(quotes)s',
+                'party_unreached_shelf_life': 'The party %(party)s can not be '
+                'erased because its following terminated contracts have not '
+                'exceeded their shelf life: \n%(contracts)s '
+                })
+
+    def check_erase(self, party):
+        super(PartyErase, self).check_erase(party)
+        active_subscribed_contracts = [c for c in party.contracts
+            if c.status in ['active', 'hold']]
+        if active_subscribed_contracts:
+            self.raise_user_error('party_has_contract', {
+                    'party': party.rec_name,
+                    'contracts': ', '.join(
+                        [c.contract_number for c in active_subscribed_contracts]
+                        )})
+        Contract = Pool().get('contract')
+        quote_contracts = Contract.search([
+                ('subscriber', '=', party),
+                ('status', '=', 'quote')
+                ])
+        if quote_contracts:
+            self.raise_user_error('party_has_quote', {
+                    'party': party.rec_name,
+                    'quotes': ', '.join(
+                        [c.rec_name for c in quote_contracts])})
+        terminated_contracts = Contract.search([
+                ('subscriber', '=', party),
+                ('status', 'in', ('terminated', 'void'))
+                ])
+        terminated_unreached_shelf = [c for c in terminated_contracts
+            if not c.product.data_shelf_life
+            or (utils.today() < (c.end_date or
+                    c.initial_start_date) + relativedelta(
+                    years=c.product.data_shelf_life))]
+        if terminated_unreached_shelf:
+            self.raise_user_error('party_unreached_shelf_life', {
+                    'party': party.rec_name,
+                    'contracts': ', '.join(
+                        [c.contract_number for c in terminated_unreached_shelf])
+                    })
+
+    def contracts_to_erase(self, party_id):
+        Contract = Pool().get('contract')
+        return Contract.search([('subscriber', '=', party_id)])
+
+    def to_erase(self, party_id):
+        to_erase = super(PartyErase, self).to_erase(party_id)
+        pool = Pool()
+        EventLog = pool.get('event.log')
+        Contract = pool.get('contract')
+        contracts_to_erase = [c.id
+            for c in self.contracts_to_erase(party_id)]
+        to_erase.extend([
+                (EventLog, [('contract', 'in', contracts_to_erase)], True,
+                    ['description'],
+                    [None]),
+                (Contract, [('id', 'in', contracts_to_erase)], True,
+                    [],
+                    [])])
+        return to_erase

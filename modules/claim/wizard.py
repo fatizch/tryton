@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
@@ -18,6 +18,7 @@ __all__ = [
     'PropagateBenefitExtraData',
     'LossSelectExtraDataView',
     'PropagateLossExtraData',
+    'PartyErase',
     ]
 
 
@@ -261,3 +262,50 @@ class PropagateLossExtraData(Wizard):
         if affected_losses:
             Loss.save(affected_losses)
         return 'end'
+
+
+class PartyErase:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.erase'
+
+    @classmethod
+    def __setup__(cls):
+        super(PartyErase, cls).__setup__()
+        cls._error_messages.update({
+                'party_has_open_claim': 'The party %(party)s can not be '
+                'erased because it is a claimant on the following claims: \n'
+                '%(claims)s',
+                })
+
+    def check_erase(self, party):
+        super(PartyErase, self).check_erase(party)
+        Claim = Pool().get('claim')
+        open_claims = Claim.search([
+                ('claimant', '=', party),
+                ('status', 'in', ['open', 'reopened'])
+                ])
+        if open_claims:
+            self.raise_user_error('party_has_open_claim', {
+                    'party': party.rec_name,
+                    'claims': ', '.join(
+                        [c.rec_name for c in open_claims])
+                    })
+
+    def claims_to_erase(self, party_id):
+        Claim = Pool().get('claim')
+        return Claim.search([('claimant', '=', party_id)])
+
+    def to_erase(self, party_id):
+        to_erase = super(PartyErase, self).to_erase(party_id)
+        pool = Pool()
+        EventLog = pool.get('event.log')
+        Claim = pool.get('claim')
+        claims_to_erase = [c.id for c in self.claims_to_erase(party_id)]
+        to_erase.extend([
+                (EventLog, [('claim', 'in', claims_to_erase)], True,
+                    ['description'],
+                    [None]),
+                (Claim, [('id', 'in', claims_to_erase)], True,
+                    [],
+                    [])])
+        return to_erase

@@ -6,6 +6,7 @@ import contract
 import document
 import report_engine
 import rule_engine
+import wizard
 
 
 def register():
@@ -25,4 +26,5 @@ def register():
 
     Pool.register(
         document.ReceiveDocument,
+        wizard.PartyErase,
         module='contract_insurance_document_request', type_='wizard')

@@ -50,4 +50,5 @@ def register():
         wizard.ManageExclusion,
         wizard.CreateExtraPremium,
         party.PartyReplace,
+        wizard.PartyErase,
         module='contract_insurance', type_='wizard')

@@ -1,7 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 
-from trytond.pool import PoolMeta
+from trytond.pool import Pool, PoolMeta
+
+__all__ = [
+    'PartyErase',
+    ]
 
 
 class CreateStatement:
@@ -33,3 +37,25 @@ class CreateStatement:
                 self.__class__.raise_user_error('too_many_parties')
             values['party'] = instances[0].subscriber.id
         return values
+
+
+class PartyErase:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.erase'
+
+    def to_erase(self, party_id):
+        to_erase = super(PartyErase, self).to_erase(party_id)
+        InvoiceLine = Pool().get('account.invoice.line')
+        InvoiceLineDetail = Pool().get('account.invoice.line.detail')
+        details_to_erase = InvoiceLineDetail.search([
+                ('covered_element.party', '=', party_id)])
+        lines_to_erase = [d.invoice_line.id for d in details_to_erase]
+        to_erase.extend([
+                (InvoiceLine, [('id', 'in', lines_to_erase)], True,
+                    ['description'],
+                    [None]),
+                (InvoiceLine, [('party', '=', party_id)], True,
+                    ['description'],
+                    [None])
+                ])
+        return to_erase

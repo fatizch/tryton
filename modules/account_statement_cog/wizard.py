@@ -8,7 +8,7 @@ from sql import Null
 from sql.operators import Like
 from decimal import Decimal
 
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.wizard import StateAction
@@ -21,6 +21,7 @@ __all__ = [
     'PaymentInformations',
     'StartCreateStatement',
     'CreateStatement',
+    'PartyErase',
     ]
 
 
@@ -359,3 +360,21 @@ class CreateStatement(Wizard):
                 )]
         action.update({'pyson_domain': PYSONEncoder().encode(domain)})
         return action, {}
+
+
+class PartyErase:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.erase'
+
+    def to_erase(self, party_id):
+        to_erase = super(PartyErase, self).to_erase(party_id)
+        StatementLine = Pool().get('account.statement.line')
+        to_erase.extend([
+                (StatementLine, [('party', '=', party_id)], True,
+                    ['description'],
+                    [None]),
+                (StatementLine, [('party_payer', '=', party_id)], True,
+                    ['description'],
+                    [None]),
+                ])
+        return to_erase

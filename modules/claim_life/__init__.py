@@ -36,4 +36,5 @@ def register():
     Pool.register(
         party.PartyReplace,
         wizard.CreateIndemnification,
+        wizard.PartyErase,
         module='claim_life', type_='wizard')

@@ -57,6 +57,7 @@ def register():
         wizard.DeliverBenefits,
         wizard.PropagateBenefitExtraData,
         wizard.PropagateLossExtraData,
+        wizard.PartyErase,
         party.SynthesisMenuOpen,
         party.PartyReplace,
         module='claim', type_='wizard')

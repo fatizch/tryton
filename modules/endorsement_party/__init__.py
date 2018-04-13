@@ -37,4 +37,5 @@ def register():
     Pool.register(
         wizard.StartEndorsement,
         party.PartyReplace,
+        wizard.PartyErase,
         module='endorsement_party', type_='wizard')

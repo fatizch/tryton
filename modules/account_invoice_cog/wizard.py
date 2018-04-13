@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -10,6 +10,7 @@ from trytond.modules.coog_core import model, fields
 __all__ = [
     'ChangePaymentTerm',
     'SelectTerm',
+    'PartyErase',
     ]
 
 
@@ -64,3 +65,17 @@ class SelectTerm(model.CoogView):
         required=True, depends=['current_term'])
     new_invoice_date = fields.Date('New Invoice Date', required=True)
     current_invoice_date = fields.Date('Current Invoice Date', readonly=True)
+
+
+class PartyErase:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.erase'
+
+    def to_erase(self, party_id):
+        to_erase = super(PartyErase, self).to_erase(party_id)
+        Invoice = Pool().get('account.invoice')
+        to_erase.append(
+            (Invoice, [('party', '=', party_id)], True,
+                ['description', 'comment'],
+                [None, None]))
+        return to_erase

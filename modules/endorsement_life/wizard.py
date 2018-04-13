@@ -4,6 +4,7 @@ from collections import defaultdict
 
 from trytond.pyson import Eval, Len, If
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import model, fields, utils
 from trytond.modules.endorsement.wizard import (EndorsementWizardStepMixin,
@@ -15,6 +16,7 @@ __all__ = [
     'ManageBeneficiariesOptionDisplayer',
     'ManageBeneficiariesDisplayer',
     'StartEndorsement',
+    'PartyErase',
     ]
 
 
@@ -369,3 +371,41 @@ class StartEndorsement:
 
 add_endorsement_step(StartEndorsement, ManageBeneficiaries,
     'manage_beneficiaries')
+
+
+class PartyErase:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.erase'
+
+    def transition_erase(self):
+        pool = Pool()
+        Party = pool.get('party.party')
+        parties = replacing = [self.ask.party]
+        with Transaction().set_context(active_test=False):
+            while replacing:
+                replacing = Party.search([
+                        ('replaced_by', 'in', map(int, replacing))
+                        ])
+                parties += replacing
+        for party in parties:
+            self.check_erase(party)
+            self.erase_beneficiary_endorsement_values(party.id)
+        return super(PartyErase, self).transition_erase()
+
+    def erase_beneficiary_endorsement_values(self, party_id):
+        pool = Pool()
+        EndorsementCoveredOption = pool.get(
+            'endorsement.contract.covered_element.option')
+        CoveredElement = pool.get('contract.covered_element')
+        covered_elements_to_erase = [cov.id for cov in CoveredElement.search([
+                    ('party', '=', party_id)])]
+        endorsements_to_erase = EndorsementCoveredOption.search([
+                ('covered_element_endorsement.relation',
+                    'in', covered_elements_to_erase)])
+        for endorsement in endorsements_to_erase:
+            values = endorsement.values
+            erased_values = endorsement.values
+            if values.get('customized_beneficiary_clause', None):
+                erased_values['customized_beneficiary_clause'] = None
+            endorsement.values = erased_values
+            endorsement.save()

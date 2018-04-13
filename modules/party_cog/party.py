@@ -148,6 +148,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         fields.Char('Name'), 'get_synthesis_rec_name')
     last_modification = fields.Function(fields.DateTime('Last Modification'),
         'get_last_modification')
+    is_anonymized = fields.Boolean('Is Anonymized', readonly=True)
 
     @classmethod
     def __register__(cls, module_name):
@@ -1346,6 +1347,18 @@ class PartyErase:
 
     def to_erase(self, party_id):
         to_erase = super(PartyErase, self).to_erase(party_id)
+        pool = Pool()
+        Party = pool.get('party.party')
+        ContactHistory = pool.get('party.interaction')
+        to_erase.extend([
+                (Party, [('id', '=', party_id)], True,
+                    ['first_name', 'ssn', 'birth_name', 'birth_date',
+                    'extra_data'],
+                    [None, None, None, None, None]),
+                (ContactHistory, [('party', '=', party_id)], True,
+                    ['address', 'comment', 'attachment', 'for_object_ref'],
+                    [None, None, None, None])
+                ])
         md5hash = self.get_transform('MD5')
         res = []
         for Model, domain, resource, columns, values in to_erase:
@@ -1358,3 +1371,18 @@ class PartyErase:
                 updated_values.append(value)
             res.append((Model, domain, resource, columns, updated_values))
         return res
+
+    def transition_erase(self):
+        pool = Pool()
+        Party = pool.get('party.party')
+        parties = replacing = [self.ask.party]
+        with Transaction().set_context(active_test=False):
+            while replacing:
+                replacing = Party.search([
+                        ('replaced_by', 'in', map(int, replacing))])
+                parties += replacing
+        for party in parties:
+            self.check_erase(party)
+            party.is_anonymized = True
+        Party.save(parties)
+        return super(PartyErase, self).transition_erase()

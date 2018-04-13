@@ -9,6 +9,7 @@ import move
 import report
 import invoice
 import payment
+import wizard
 
 
 def register():
@@ -51,4 +52,5 @@ def register():
         payment.ManualPaymentFail,
         payment.ProcessManualFailPament,
         payment.ProcessPayment,
+        wizard.PartyErase,
         module='account_payment_cog', type_='wizard')

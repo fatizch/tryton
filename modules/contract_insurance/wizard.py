@@ -2,13 +2,14 @@
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
 
+from dateutil.relativedelta import relativedelta
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button, \
     StateAction
 from trytond.pyson import Eval, Bool, Len
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, utils
 
 __all__ = [
     'OptionSubscription',
@@ -24,6 +25,7 @@ __all__ = [
     'ManageExclusion',
     'WizardOption',
     'ExclusionOptionSelector',
+    'PartyErase',
     ]
 
 
@@ -662,3 +664,60 @@ class ExclusionOptionSelector(model.CoogView):
 
     option = fields.Many2One('contract.option', 'Option', readonly=True)
     selected = fields.Boolean('Selected')
+
+
+class PartyErase:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.erase'
+
+    @classmethod
+    def __setup__(cls):
+        super(PartyErase, cls).__setup__()
+        cls._error_messages.update({
+                'party_covered_active': 'The party %(party)s can not be '
+                'erased because it is covered by the following active '
+                'contracts: \n%(contracts)s',
+                'party_covered_quote': 'The party %(party)s can not be '
+                'erased because it is covered by the following quotes: \n'
+                '%(quotes)s',
+                'party_covered_unreached_shelf_life': 'The party %(party)s can'
+                'not be erased because it is covered by the following '
+                'contracts which have not exceeded their shelf life: \n'
+                '%(contracts)s'
+                })
+
+    def check_erase(self, party):
+        super(PartyErase, self).check_erase(party)
+        CoveredElement = Pool().get('contract.covered_element')
+        covered_elements = CoveredElement.search([
+                ('party', '=', party.id)])
+        active_contracts = list(set([ce.contract for ce in covered_elements
+                    if ce.contract.status == 'active']))
+        if active_contracts:
+            self.raise_user_error('party_covered_active', {
+                    'party': party.rec_name,
+                    'contracts': ', '.join(
+                        [c.contract_number for c in active_contracts])
+                    })
+        quotes = list(set([ce.contract for ce in covered_elements
+                    if ce.contract.status == 'quote']))
+        if quotes:
+            self.raise_user_error('party_covered_quote', {
+                    'party': party.rec_name,
+                    'quotes': ', '.join(
+                        [c.contract_number for c in quotes])
+                    })
+        terminated_unreached_shelf = list(set([ce.contract
+                    for ce in covered_elements
+                    if ce.contract.status == 'terminated'
+                    and ce.contract.product.data_shelf_life
+                    and (utils.today() < ce.contract.end_date +
+                        relativedelta(
+                            years=ce.contract.product.data_shelf_life))
+                    ]))
+        if terminated_unreached_shelf:
+            self.raise_user_error('party_covered_unreached_shelf_life', {
+                    'party': party.rec_name,
+                    'contracts': ', '.join(
+                        [c.contract_number for c in terminated_unreached_shelf])
+                    })

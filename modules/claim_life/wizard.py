@@ -11,6 +11,7 @@ __all__ = [
     'IndemnificationDefinition',
     'CreateIndemnification',
     'SelectService',
+    'PartyErase',
     ]
 
 
@@ -126,3 +127,31 @@ class SelectService:
             self.covered_person = self.selected_service.loss.covered_person
         else:
             self.covered_person = None
+
+
+class PartyErase:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.erase'
+
+    @classmethod
+    def __setup__(cls):
+        super(PartyErase, cls).__setup__()
+        cls._error_messages.update({
+                'party_is_on_claim': 'The party %(party)s can not be erased '
+                'because it is covered on the following open claims: \n'
+                '%(claims)s'
+                })
+
+    def check_erase(self, party):
+        super(PartyErase, self).check_erase(party)
+        Loss = Pool().get('claim.loss')
+        party_losses = Loss.search([
+                ('covered_person', '=', party),
+                ('claim.status', 'in', ['open', 'reopened'])
+                ])
+        if party_losses:
+            party_claims = list(set([l.claim for l in party_losses]))
+            self.raise_user_error('party_is_on_claim', {
+                    'party': party.rec_name,
+                    'claims': ', '.join([c.rec_name for c in party_claims])
+                    })

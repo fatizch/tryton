@@ -24,6 +24,7 @@ __all__ = [
     'SelectEndorsement',
     'RelationDisplayer',
     'ChangePartyRelationship',
+    'PartyErase',
     ]
 
 
@@ -711,3 +712,39 @@ add_endorsement_step(StartEndorsement, ChangePartyName,
 
 add_endorsement_step(StartEndorsement, ChangePartyRelationship,
     'change_party_relationship')
+
+
+class PartyErase:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.erase'
+
+    def transition_erase(self):
+        pool = Pool()
+        Party = pool.get('party.party')
+        parties = replacing = [self.ask.party]
+        with Transaction().set_context(active_test=False):
+            while replacing:
+                replacing = Party.search([
+                        ('replaced_by', 'in', map(int, replacing))
+                        ])
+                parties += replacing
+        for party in parties:
+            self.check_erase(party)
+            self.erase_endorsement_values(party.id)
+        return super(PartyErase, self).transition_erase()
+
+    def erase_endorsement_values(self, party_id):
+        pool = Pool()
+        EndorsementParty = pool.get('endorsement.party')
+        endorsements_to_erase = EndorsementParty.search([
+                ('party', '=', party_id)])
+        keys_to_erase = ['name', 'first_name', 'ssn', 'birth_name',
+            'birth_date']
+        for endorsement in endorsements_to_erase:
+            values = endorsement.values
+            erased_values = endorsement.values
+            for key in keys_to_erase:
+                if values.get(key, None):
+                    erased_values[key] = None
+            endorsement.values = erased_values
+        EndorsementParty.save(endorsements_to_erase)
