@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * OTH#0000 Correctif pour ne plus bloquer le calcul des périodes dans le calcul des précomptes
 * FEA#8214 Le mode de résiliation par défaut d'un contract dans la configuration d'une procédure de relance est défini "A la date d'effet de la relance"
 * FEA#7655 Amélioration de performances pour le batch de traiment des relances

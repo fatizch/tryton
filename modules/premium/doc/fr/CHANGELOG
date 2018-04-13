@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * Bug#7788 Ne pas générer des primes temporaires à zéro pendant le calcul des primes apériodiques
 * BUG#7677 Erreur lors du recalcul des primes après une réactivation: les primes antérieures au dernier renouvellement sont supprimées
 

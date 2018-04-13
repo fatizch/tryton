@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
 * FEA#7111 Add default snapshot sequence in account configuration
 * BUG#6578 Add output_dir argument and generate output filename for snapshot output batch

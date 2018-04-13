@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * FEA#7073 Add a message informing the user that the flow report was generated successfully
 * FEA#7558 Allow to override the end of line separator when using the BaseMassFlowBatch
 

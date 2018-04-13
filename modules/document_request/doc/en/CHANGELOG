@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#8414 Add setter for attachment name on document request lines in order to keep file extension
 * BUG#7931 Fix behaviour when setting an attachment and its reception date at the same time
 * BUG#7801 Refactoring of the automatic changes on document request lines fields and move configuration of manual document line request reception into the document description for a better granularity

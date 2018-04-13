@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#8685 Correction du type des régles de revalorisation
 * FEA#8537 Ajout d'un avertissement lors de l'ordonnancement des périodes d'indémnisation si il y a chevauchement avec d'autres périodes.
 * FEA#8269 Ajout de l'annulation d'une indemnisation avec avertissement.

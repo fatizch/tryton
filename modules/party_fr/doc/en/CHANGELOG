@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
 * BUG#7335 Zip code matching is done with the line 5 if such a zip code exists, else it is done with a zip code with no line 5, else it is done with a zip code having any other line 5
 * BUG#6879 Changed default address format for France

@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#7876 Modify the method that calculates the end date of the contracts in order to be able to reactivate void contract
 * OTH#0000 Fix typo from commit 941d5db2
 

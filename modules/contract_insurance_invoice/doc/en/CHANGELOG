@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#8646 Fix "Taxes included" boolean default visibility behaviour at coverage creation
 * BUG#8547 Reactivate a void contract is based new on the contract start_date instead of its end_date
 * BUG#8490 Fix searcher of contract invoices

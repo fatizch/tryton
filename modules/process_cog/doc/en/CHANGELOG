@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * FEA#8411 Merge xml view pages into one page
 * BUG#8020 Fix error in export with wizards
 * FEA7773 Add an RPC method to attach a business object to a process and fast forward it

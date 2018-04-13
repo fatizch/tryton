@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * FEA#8161 Allow to create claim deduction period without end date and amount
 * BUG#7606 Wrong update of deduction period after creating a new indemnification period
 

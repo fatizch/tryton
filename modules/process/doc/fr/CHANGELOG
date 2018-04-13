@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
 * BUG#6995 Correction d'un crash technique sur l'appel parent de la méthode __getattr__ du mixin ClassAttr
 * OTH#0000 Correction de la migration de #6394

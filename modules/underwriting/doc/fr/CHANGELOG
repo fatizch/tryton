@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
 * FEA#0000 Ajout du champ 'Sous-statut' permettant de déterminer si tous les résultats d'une analyse sont terminés, abandonnés ou un mélange des deux.

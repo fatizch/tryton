@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * FEA#8162 Calcul de la date après N jours ouvrés depuis l'application en utilisant le même calcul que celui utilisé pour le batch (utile pour anticiper la date qui va être utilisée dans le prochain plan batch)
 
 Version 1.14 - 2017-11-09

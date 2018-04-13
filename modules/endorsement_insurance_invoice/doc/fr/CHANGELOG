@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#8500 Ajout d'un message d'avertissement indiquant l'existance de futurs modes de quittancement
 * BUG#8168 Correction d'une anomalie lors du calcul des périodes de quittancement avec des dates d'avenant tarifant
 * BUG#7626 Correction de la vérification de la date d'effet autorisée lors du lancement d'avenant de modification des paramètres de quittancement

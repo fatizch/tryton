@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#8645 Normalize addresses fields in SEPA/Cfonb files in order to no longer have special characters
 * FEA#8521 Add index on sepa mandate field of payments (improve batch process)
 * BUG#8319 Really fix 7981, check if the user set the in_directory parameter of the account.payment.fail batch (even if it is a wrong path), if not use the default parameter set in batch.conf

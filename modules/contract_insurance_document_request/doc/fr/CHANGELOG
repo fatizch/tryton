@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * FEA#8686 Possibilité depuis les processus de ne vérifier que les documents requis et autorisés
 * FEA#8447 Règle permettant de connaître la liste des documents reçus sur un contrat
 * OTH#0000 Ajout du contrat au contexte de calcul des documents requis

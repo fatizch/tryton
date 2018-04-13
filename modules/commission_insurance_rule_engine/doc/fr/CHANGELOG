@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#7714 Initialisation de la date avec de la date de début de la ligne de commission au lieu de la date de début de la ligne de facturation lors de l'appel au moteur de règle
 
 Version 1.14 - 2017-11-09

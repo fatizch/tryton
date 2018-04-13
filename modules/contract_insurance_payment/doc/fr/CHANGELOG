@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * FEA#8449 Déblocage des changements de mode de quittancement automatiques lorsque le contrat est dans le statut "résilié" ou "suspendu"
 * FEA#8110 L'assistant de création de paiement bloque désormais la selection du journal si un journal est déja défini sur le produit associé à la selection
 

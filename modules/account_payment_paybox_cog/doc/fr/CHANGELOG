@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#7837 L'évènement de création du group de paiement n'est plus levée avant l'attribution de l'url de paiement sur le groupe
 
 Version 1.14 - 2017-11-09

@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#8527 Add Hook to allow to change behaviour to calculate end of contract from loan
 * FEA#8338 Fill automatically the lender address if there is only one available address for the lender
 * BUG#7915 Modify the calculation of the insured outstanding loan balance by taking into account active and hold contracts

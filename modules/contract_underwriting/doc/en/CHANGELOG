@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * FEA#7615 Expose an RPC call to calculate underwriting
 * BUG#7751 Add authorizations : 'creation, modification ,reading' on underwriting options in order to be able to make decision on it
 

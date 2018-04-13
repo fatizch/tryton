@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * Bug#8366 Correction d'un problème de typo au niveaude la méthode 'calculate_average_premium_for_option'
 * Bug#7880 Modifier le calcul du taux moyen du prêt pour les garanties en prenant en compte uniquement les quotités actives sur ces garanties
 * Bug#7503 Ne pas prendre en compte les frais pour calculer le taux moyen du prêt pour les garanties

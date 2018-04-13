@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * FEA#8644 Réalignement vertical des champs dans l'entête de la vue formulaire d'un tiers
 * BUG#8362 Suppression des fichiers maintenant inutile de surcharge de configuration de tiers
 * BUG#8074 Renvoyer l'adresse valide en date d'aujourd'hui la plus récente

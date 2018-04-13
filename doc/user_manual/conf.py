@@ -29,7 +29,7 @@ copyright = u'Coopengo'
 # built documents.
 #
 # The short X.Y version.
-version = '1.15'
+version = '2.0'
 # The full version, including alpha/beta/rc tags.
 release = version
 

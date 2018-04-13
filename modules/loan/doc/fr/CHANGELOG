@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#8527 Ajout d'un hook pour permettre la surcharge du calcul de la date de fin du contrat apartir de la date de fin du prêt
 * FEA#8338 Initialisation de l'adresse de l'organisme prêteur si une seule adresse est disponible
 * BUG#7915 Modifier le calcul de l'encours assuré en prenant en compte les contrats actives et suspendus

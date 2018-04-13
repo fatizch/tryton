@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#8514 Ne pas générer de relance si il en existe déjà une inactive (qui pourrait être réactivée)
 * BUG#7537 Ne pas générer de relance si la ligne d'un paiement est déjà réconciliée
 

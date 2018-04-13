@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#7591 Le champ famille n'est pas requis dans la description d'un acte médical car certains actes médicaux n'appartiennent à aucune famille spécifique
 
 Version 1.14 - 2017-11-09

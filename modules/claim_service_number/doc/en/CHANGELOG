@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
 * BUG#7325 Fix crash on claim creation when no sequence defined on benefit
 * OTH#0000 Add 'on_delete' flag on sequences fields of Benefits

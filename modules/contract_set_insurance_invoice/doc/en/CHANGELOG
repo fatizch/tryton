@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#8666 Fix crash during renewal on contract set with terminated contract 
 * BUG#8253 Add possibility to renew only one contract of a contract set
 * BUG#7542 In a contract set if a contract has already a planned termination date Coog must not prevent to renew 

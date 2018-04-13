@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#8414 Ajout d'un setter pour le nom de la pièce jointe sur les lignes de demandes de documents afin de garder l'extension du fichier
 * BUG#7931 Correction du comportement lors de la saisie simultané d'une pièce jointe et d'une date de réception
 * BUG#7801 Réusinage du code des changements automatiques sur les champs des lignes de documents et paramétrage de bloquage de la récéption manuelle de ligne de document déplacée sur les modèles de document pour une meilleur granularité

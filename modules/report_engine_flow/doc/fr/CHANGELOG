@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * FEA#7073 Afficher un message informant l'utilisateur que la création du flux de courrier a réussi
 * FEA#7558 Permettre de surcharger facilement le separateur de fin de ligne lors de la génération d'un fichier avec l'outil BaseMassFlowBatch
 

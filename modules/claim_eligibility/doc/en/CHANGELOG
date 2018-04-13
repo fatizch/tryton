@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * BUG#8515 Eligibile status is not set if claim is eligible and no default eligible reason is defined
 * BUG#8427 Fix crash when saving a service due to bad eligibility check
 * FEA#8086 The eligibility decisions on claim can be ordered, and displayed following this order.

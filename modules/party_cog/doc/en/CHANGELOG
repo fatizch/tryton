@@ -1,3 +1,4 @@
+Version 2.0 - 2018-04-13
 * FEA#8644 Vertical realignment of the fields on the party view form header
 * BUG#8362 Remove now useless party configuration view override
 * BUG#8074 Return the most recent valid address in get_address
