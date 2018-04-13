@@ -1,3 +1,4 @@
+* OTH#0000 Correction des incohérences dans les définitions de champs
 * FEA#8448 Ajout de scripts pour l'anonymisation des données
 * FEA#8160 Cache fonction pour les rng (pas serialisable)
 * BUG#8091 Utilisation de "Decimal" dans la fonction "convert_frequency"

@@ -48,7 +48,7 @@ class Insurer:
     __name__ = 'insurer'
 
     benefits = fields.One2Many('benefit', 'insurer', 'Benefits',
-        target_not_required=True, readonly=True)
+        readonly=True, delete_missing=True)
 
     @classmethod
     def _export_skips(cls):

@@ -34,7 +34,7 @@ class Sequence(model.CoogSQL):
             ('type', '=', 'incremental'),
             ('code', '=', Eval('code'))
             ],
-        depends=['parent', 'code'],
+        depends=['parent', 'code'], target_not_required=True,
         order=[('start_date', 'ASC'), ('sub_order', 'ASC')])
     parent = fields.Many2One('ir.sequence', 'Parent',
         states={

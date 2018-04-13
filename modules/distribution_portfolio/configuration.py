@@ -33,7 +33,8 @@ class ConfigurationDefaultPortfolio(model.CoogSQL, CompanyValueMixin):
     default_portfolio = fields.Many2One('distribution.network',
         'Default Portfolio', domain=[('is_portfolio', '=', True)],
         help='This is the default portfolio if the user is not assigned to'
-        ' any distribution network belonging to a portfolio.')
+        ' any distribution network belonging to a portfolio.',
+        ondelete='RESTRICT')
 
     @classmethod
     def __register__(cls, module_name):

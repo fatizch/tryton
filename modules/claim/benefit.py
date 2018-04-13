@@ -244,7 +244,7 @@ class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
         help='If True the benefit will automatically be delivered after loss '
         'declaration')
     insurer = fields.Many2One('insurer', 'Insurer', ondelete='RESTRICT',
-        required=True)
+        required=True, select=True)
     options = fields.Many2Many('option.description-benefit', 'benefit',
         'coverage', 'Options', readonly=True)
 

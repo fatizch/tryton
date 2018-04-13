@@ -40,7 +40,7 @@ class ConfigurationEndorsementSetSequence(model.CoogSQL, CompanyValueMixin):
     configuration = fields.Many2One('account.configuration', 'Configuration',
         ondelete='CASCADE', select=True)
     endorsement_set_sequence = fields.Many2One('ir.sequence',
-        'Endorsement Set Number Sequence')
+        'Endorsement Set Number Sequence', ondelete='RESTRICT')
 
     @classmethod
     def __register__(cls, module_name):

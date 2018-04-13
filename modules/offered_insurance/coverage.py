@@ -26,7 +26,7 @@ class OptionDescription:
     insurance_kind_string = insurance_kind.translated('insurance_kind')
     insurer = fields.Many2One('insurer', 'Insurer',
         states={'required': ~Eval('is_service')}, ondelete='RESTRICT',
-        depends=['is_service'])
+        depends=['is_service'], select=True)
     family = fields.Selection([('generic', 'Generic')], 'Family')
     with_extra_premiums = fields.Boolean('Extra Premium Management',
         help='If True, it is be possible to add extra premiums to subscribed'

@@ -164,7 +164,7 @@ class ContractOption:
     __name__ = 'contract.option'
 
     waivers = fields.One2Many('contract.waiver_premium-contract.option',
-        'option', 'Waivers')
+        'option', 'Waivers', delete_missing=True)
     with_waiver_of_premium = fields.Function(
         fields.Boolean('With Waiver Of Premium'),
         'get_with_waiver_of_premium')

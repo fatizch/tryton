@@ -51,7 +51,8 @@ class ConfigurationContractSetNumberSequence(model.CoogSQL, CompanyValueMixin):
         ondelete='CASCADE', select=True)
     contract_set_number_sequence = fields.Many2One('ir.sequence',
         'Contract Set Number Sequence',
-        domain=[('code', '=', 'contract_set_number')])
+        domain=[('code', '=', 'contract_set_number')],
+        ondelete='RESTRICT')
 
     @classmethod
     def __register__(cls, module_name):
