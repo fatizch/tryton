@@ -1,3 +1,5 @@
+* OTH#0000 Stop the server if field definitions are inconsistent
+
 Version 2.0 - 2018-04-13
 * OTH#0000 Fix inconsistencies in field definitions
 * FEA#8448 Add data anonymization scripts

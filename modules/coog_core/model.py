@@ -6,6 +6,7 @@ import logging
 import datetime
 import json
 import types
+import sys
 
 from functools import wraps
 from genshi.template import NewTextTemplate
@@ -423,42 +424,51 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
             logging.getLogger(__name__).warning('Length of table_name' +
                 ' > 64 => ' + cls._table)
         pool = Pool()
+        do_exit = False
         for field_name, field in cls._fields.iteritems():
             if isinstance(field, fields.Many2One):
                 if getattr(field, '_on_delete_not_set', None):
-                    logging.getLogger('fields').warning('Ondelete not set for'
+                    logging.getLogger('fields').critical('Ondelete not set for'
                         ' field %s on model %s' % (field_name, cls.__name__))
+                    do_exit = True
             elif isinstance(field, fields.One2Many):
                 target_model = pool.get(field.model_name)
                 target_field = getattr(target_model, field.field)
                 if target_field.required and not field._delete_missing:
-                    logging.getLogger('fields').warning(
+                    logging.getLogger('fields').critical(
                         'Field %s of %s ' % (field_name, cls.__name__) +
                         'should probably have "delete_missing" set since ' +
                         'target field is required')
+                    do_exit = True
                 if isinstance(target_field, tryton_fields.Function):
                     continue
                 if target_model.table_query != ModelSQL.table_query:
                     continue
                 if (not target_field.required and not
                         field._target_not_required):
-                    logging.getLogger('fields').warning(
+                    logging.getLogger('fields').critical(
                         'Field %s of %s ' % (field.field, field.model_name) +
                         'should be required since it is used as a reverse ' +
                         'field for field %s of %s' % (
                             field_name, cls.__name__))
+                    do_exit = True
                 if not target_field.select and not field._target_not_indexed:
-                    logging.getLogger('fields').warning(
+                    logging.getLogger('fields').critical(
                         'Field %s of %s ' % (field.field, field.model_name) +
                         'should be selected since it is used as a reverse ' +
                         'field for field %s of %s' % (
                             field_name, cls.__name__))
+                    do_exit = True
             elif isinstance(field, tryton_fields.MultiValue):
                 if getattr(cls, 'default_' + field_name, None) is not None:
-                    logging.getLogger('fields').warning(
+                    logging.getLogger('fields').critical(
                         'Field %s of %s ' % (field_name, field.model_name) +
                         'has a default method but it is useless since '
                         'Property fields ignore defaults')
+                    do_exit = True
+        if do_exit:
+            logging.getLogger('coog').critical('Stopping the server')
+            sys.exit(1)
 
     @property
     def _save_values(self):
