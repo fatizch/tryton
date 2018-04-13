@@ -99,13 +99,14 @@ class ExportTest(model.CoogSQL, export.ExportImportMixin,
             ('select2', 'Select 2'),
             ], 'Selection')
     many2one = fields.Many2One('coog_core.export_test_target',
-            'Many2One')
+            'Many2One', ondelete='RESTRICT')
     many2many = fields.Many2Many('coog_core.export_test_relation',
             'many2many', 'target', 'Many2Many')
     one2many = fields.One2Many('coog_core.export_test_target', 'one2many',
-            'One2Many')
+            'One2Many', delete_missing=True, target_not_required=True)
     valid_one2many = fields.One2Many('coog_core.export_test_target_slave',
-        'one2many', 'Valid One2Many')
+        'one2many', 'Valid One2Many', delete_missing=True,
+        target_not_required=True)
     reference = fields.Reference('Reference', [
             (None, ''),
             ('coog_core.export_test_target', 'Target'),
@@ -134,7 +135,8 @@ class ExportTestM2O(model.CoogSQL, CompanyValueMixin):
     export_test = fields.Many2One('coog_core.export_test', 'Configuration',
         ondelete='CASCADE', select=True)
     multivalue_m2o = fields.Many2One('coog_core.export_test_target',
-        'Property Many2One', domain=[('char', '=', 'key')])
+        'Property Many2One', domain=[('char', '=', 'key')], ondelete='CASCADE',
+        select=True)
 
 
 class ExportTestNumeric(model.CoogSQL, CompanyValueMixin):
@@ -170,8 +172,10 @@ class ExportTestTarget2(model.CoogSQL):
     _func_key = 'char'
     char = fields.Char('My field')
     integer = fields.Integer('Integer')
-    one2many = fields.Many2One('coog_core.export_test', 'Export Data')
-    many2one = fields.Many2One('coog_core.export_test', 'Export Data')
+    one2many = fields.Many2One('coog_core.export_test', 'Export Data',
+        ondelete='CASCADE', required=False, select=True)
+    many2one = fields.Many2One('coog_core.export_test', 'Export Data',
+        ondelete='CASCADE')
 
     @classmethod
     def is_master_object(cls):
@@ -187,14 +191,17 @@ class ExportTestTargetSlave2(model.CoogSQL):
     __name__ = 'coog_core.export_test_target_slave'
     _func_key = 'char'
     char = fields.Char('My field')
-    one2many = fields.Many2One('coog_core.export_test', 'Export Data')
+    one2many = fields.Many2One('coog_core.export_test', 'Export Data',
+        ondelete='CASCADE', select=True)
 
 
 class ExportTestRelation(model.CoogSQL, export.ExportImportMixin):
     "Export Data Many2Many"
     __name__ = 'coog_core.export_test_relation'
-    many2many = fields.Many2One('coog_core.export_test', 'Export Data')
-    target = fields.Many2One('coog_core.export_test_target', 'Target')
+    many2many = fields.Many2One('coog_core.export_test', 'Export Data',
+        ondelete='CASCADE', required=True, select=True)
+    target = fields.Many2One('coog_core.export_test_target', 'Target',
+        ondelete='RESTRICT', required=True, select=True)
 
 
 class O2MDeletionMaster(model.CoogSQL):
@@ -211,7 +218,8 @@ class O2MDeletionChild(model.CoogSQL):
 
     __name__ = 'coog_core.o2m_deletion_child_test'
 
-    master = fields.Many2One('coog_core.o2m_deletion_master_test', 'Master')
+    master = fields.Many2One('coog_core.o2m_deletion_master_test', 'Master',
+        required=True, ondelete='CASCADE', select=True)
 
 
 class TestHistoryTable(model.CoogSQL):
