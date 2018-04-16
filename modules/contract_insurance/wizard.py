@@ -711,7 +711,8 @@ class PartyErase:
                     for ce in covered_elements
                     if ce.contract.status == 'terminated'
                     and ce.contract.product.data_shelf_life
-                    and (utils.today() < ce.contract.end_date +
+                    and (utils.today() <= (ce.contract.end_date or
+                            ce.contract.initial_start_date) +
                         relativedelta(
                             years=ce.contract.product.data_shelf_life))
                     ]))

@@ -617,7 +617,7 @@ class PartyErase:
                 ])
         terminated_unreached_shelf = [c for c in terminated_contracts
             if not c.product.data_shelf_life
-            or (utils.today() < (c.end_date or
+            or (utils.today() <= (c.end_date or
                     c.initial_start_date) + relativedelta(
                     years=c.product.data_shelf_life))]
         if terminated_unreached_shelf:
