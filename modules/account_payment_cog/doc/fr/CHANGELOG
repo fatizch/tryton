@@ -1,3 +1,5 @@
+* BUG#8417 Modifier la valeur de la date de paiement uniquement lorsqu'on reçoit un rejet de payment de type SEPA
+
 Version 2.0 - 2018-04-13
 * BUG#8351 Erreur dans le calcul du montant d'un paiement lors de sa génération si un paiement à l'état approuvé existe déjà
 * OTH#0000 Correctif du message d'erreur lors de la création d'un paiement à partir de lignes n'ayant pas la même configuration de journaux de paiement

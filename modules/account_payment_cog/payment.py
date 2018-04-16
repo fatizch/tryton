@@ -653,12 +653,27 @@ class Payment(export.ExportImportMixin, Printable,
         return self.manual_reject_code
 
     @classmethod
+    def get_journal_method_to_reset_date(cls):
+        return []
+
+    def needs_to_clear_payment_date_after_failure(self):
+        """
+        As default do not reset the payment_date
+        unless the journal.process_method is included
+        into the list of journal method for which we want
+        to reset payment_date
+        """
+        return (self.journal and self.journal.process_method in
+                self.get_journal_method_to_reset_date())
+
+    @classmethod
     @ModelView.button
     @Workflow.transition('failed')
     def fail(cls, payments):
+        lines = []
         pool = Pool()
-        Line = pool.get('account.move.line')
         Event = pool.get('event')
+        Line = pool.get('account.move.line')
         FailureAction = pool.get('account.payment.journal.failure_action')
         payments = [pm for pm in payments if pm.state != 'failed']
 
@@ -666,9 +681,11 @@ class Payment(export.ExportImportMixin, Printable,
         Event.notify_events(payments, 'fail_payment')
 
         # Remove payment_date on payment line
-        lines = [payment.line for payment in payments
-            if payment.line is not None]
-        Line.write(lines, {'payment_date': None})
+        for payment in payments:
+            if payment.needs_to_clear_payment_date_after_failure():
+                lines.append(payment.line)
+        if lines:
+            Line.write(lines, {'payment_date': None})
 
         actions = defaultdict(list)
         payments_keys = [(x._get_transaction_key(), x) for x in payments]

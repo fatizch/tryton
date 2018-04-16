@@ -685,6 +685,10 @@ class Payment:
                 account=account_for_billing,
                 )]
 
+    @classmethod
+    def get_journal_method_to_reset_date(cls):
+        return super(Payment, cls).get_journal_method_to_reset_date() + ['sepa']
+
 
 class InvoiceLine:
     __metaclass__ = PoolMeta

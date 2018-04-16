@@ -1,3 +1,5 @@
+* BUG#8417 Set the payment date to none only when receiving SEPA payment fail
+
 Version 2.0 - 2018-04-13
 * BUG#8351 Wrong payment amount computation during payment creation when an approved payment is already created
 * OTH#0000 Fix the error message when creating a payment from lines which do not have the same payment journals configuration
