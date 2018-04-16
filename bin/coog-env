@@ -2,145 +2,147 @@
 # environment informations
 
 _coog_env_python() { # set python vars
-        export PYTHONUNBUFFERED=1
+    export PYTHONUNBUFFERED=1
 }
 
 _coog_env_files() { # set file names
-        COOG_FILE_API=coog-api-$USER
-        COOG_FILE_CLI=coog-cli-$USER
-        COOG_FILE_SRV=coog-srv-$USER
-        COOG_FILE_WRK=coog-wrk-$USER
-        COOG_FILE_UNO=coog-uno-$USER
-        COOG_FILE_RQ=coog-rq-$USER
-        COOG_FILE_CEL=coog-cel-$USER
-        COOG_FILE_BAT=coog-bat-$USER
-        COOG_FILE_TEST=coog-test-$USER
-        COOG_FILE_WATCH=coog-watch-$USER
-        if [ ! -z $VIRTUAL_ENV ]
-        then
-                local venv
-                venv=`basename $VIRTUAL_ENV`
-                COOG_FILE_CLI=$COOG_FILE_CLI-$venv
-                COOG_FILE_SRV=$COOG_FILE_SRV-$venv
-                COOG_FILE_WRK=$COOG_FILE_WRK-$venv
-                COOG_FILE_UNO=$COOG_FILE_UNO-$venv
-                COOG_FILE_RQ=$COOG_FILE_RQ-$venv
-                COOG_FILE_CEL=$COOG_FILE_CEL-$venv
-                COOG_FILE_BAT=$COOG_FILE_BAT-$venv
-                COOG_FILE_TEST=$COOG_FILE_TEST-$venv
-                COOG_FILE_WATCH=$COOG_FILE_WATCH-$venv
-        else
-                echo warn: running outside a virtual env
-        fi
+    COOG_FILE_CLI="coog-cli-$USER"
+    COOG_FILE_SRV="coog-srv-$USER"
+    COOG_FILE_WRK="coog-wrk-$USER"
+    COOG_FILE_API="coog-api-$USER"
+    COOG_FILE_UNO="coog-uno-$USER"
+    COOG_FILE_RQ="coog-rq-$USER"
+    COOG_FILE_CEL="coog-cel-$USER"
+    COOG_FILE_BAT="coog-bat-$USER"
+    COOG_FILE_TEST="coog-test-$USER"
+    COOG_FILE_WATCH="coog-watch-$USER"
+    if [ ! -z "$VIRTUAL_ENV" ]
+    then
+        local venv
+        venv=$(basename "$VIRTUAL_ENV")
+        COOG_FILE_CLI=$COOG_FILE_CLI-$venv
+        COOG_FILE_SRV=$COOG_FILE_SRV-$venv
+        COOG_FILE_WRK=$COOG_FILE_WRK-$venv
+        COOG_FILE_API=$COOG_FILE_API-$venv
+        COOG_FILE_UNO=$COOG_FILE_UNO-$venv
+        COOG_FILE_RQ=$COOG_FILE_RQ-$venv
+        COOG_FILE_CEL=$COOG_FILE_CEL-$venv
+        COOG_FILE_BAT=$COOG_FILE_BAT-$venv
+        COOG_FILE_TEST=$COOG_FILE_TEST-$venv
+        COOG_FILE_WATCH=$COOG_FILE_WATCH-$venv
+    else
+        echo warn: running outside a virtual env
+    fi
 }
 
 _coog_env_paths() { # set paths
-        COOG_TMP=${COOG_TMP:-/tmp}
-        [ ! -d $COOG_TEMP ] && unset COOG_TEMP
-        [ -z "$COOG_ROOT" ] && COOG_ROOT=$(readlink -f ../..)
-        [ -d $COOG_ROOT/tryton ] && COOG_TRYTON=$COOG_ROOT/tryton
-        [ -d $COOG_ROOT/trytond ] && COOG_TRYTOND=$COOG_ROOT/trytond
-        [ -d $COOG_ROOT/proteus ] && COOG_PROTEUS=$COOG_ROOT/proteus
-        [ -d $COOG_ROOT/sao ] && COOG_SAO=$COOG_ROOT/sao
-        [ -d $COOG_ROOT/api ] && COOG_API=$COOG_ROOT/api
-        [ -d $COOG_ROOT/coog-bench ] && COOG_BENCH=$COOG_ROOT/coog-bench/dist
-        [ -d $COOG_ROOT/conf ] && COOG_CONF=$COOG_ROOT/conf
-        COOG_COOG="$COOG_ROOT/coog"
-        COOG_BIN="$COOG_COOG/bin/bin"
-        COOG_LIB="$COOG_COOG/bin/lib"
-        return 0
+    COOG_TMP=${COOG_TMP:-/tmp}
+    [ ! -d "$COOG_TMP" ] && unset COOG_TMP
+    [ -z "$COOG_ROOT" ] && COOG_ROOT=$(readlink -f ../..)
+    [ -d "$COOG_ROOT/tryton" ] && COOG_TRYTON="$COOG_ROOT/tryton"
+    [ -d "$COOG_ROOT/trytond" ] && COOG_TRYTOND="$COOG_ROOT/trytond"
+    [ -d "$COOG_ROOT/proteus" ] && COOG_PROTEUS="$COOG_ROOT/proteus"
+    [ -d "$COOG_ROOT/sao" ] && COOG_SAO="$COOG_ROOT/sao"
+    [ -d "$COOG_ROOT/api" ] && COOG_API="$COOG_ROOT/api"
+    [ -d "$COOG_ROOT/coog-api" ] && COOG_API="$COOG_ROOT/coog-api"
+    [ -d "$COOG_ROOT/bench" ] && COOG_BENCH="$COOG_ROOT/bench/dist"
+    [ -d "$COOG_ROOT/coog-bench" ] && COOG_BENCH="$COOG_ROOT/coog-bench/dist"
+    [ -d "$COOG_ROOT/conf" ] && COOG_CONF="$COOG_ROOT/conf"
+    COOG_COOG="$COOG_ROOT/coog"
+    COOG_BIN="$COOG_COOG/bin/bin"
+    COOG_LIB="$COOG_COOG/bin/lib"
+    return 0
 }
 
 _coog_env_conf() { # set conf vars
-        [ -z $COOG_CONF ] && echo no conf folder && return 1
-        [ -f $COOG_CONF/tryton.conf ] && COOG_CONF_CLI="$COOG_CONF/tryton.conf"
-        [ -f $COOG_CONF/trytond.conf ] && COOG_CONF_SRV="$COOG_CONF/trytond.conf"
-        [ -f $COOG_CONF/batch.conf ] && COOG_CONF_BAT="$COOG_CONF/batch.conf"
-        [ -f $COOG_CONF/test.conf ] && COOG_CONF_TEST="$COOG_CONF/test.conf"
-        [ -f $COOG_CONF/logging.conf ] && COOG_CONF_LOG="$COOG_CONF/logging.conf"
-        return 0
+    [ -z "$COOG_CONF" ] && echo no conf folder && return 1
+    [ -f "$COOG_CONF/tryton.conf" ] && COOG_CONF_CLI="$COOG_CONF/tryton.conf"
+    [ -f "$COOG_CONF/trytond.conf" ] && COOG_CONF_SRV="$COOG_CONF/trytond.conf"
+    [ -f "$COOG_CONF/batch.conf" ] && COOG_CONF_BAT="$COOG_CONF/batch.conf"
+    [ -f "$COOG_CONF/test.conf" ] && COOG_CONF_TEST="$COOG_CONF/test.conf"
+    [ -f "$COOG_CONF/logging.conf" ] && COOG_CONF_LOG="$COOG_CONF/logging.conf"
+    return 0
 }
 
 _coog_env_postgres() { # set postgres vars
-        [ -z $COOG_BIN ] && echo no bin folder && return 1
-        [ -z $COOG_CONF_SRV ] && echo no server conf && return 1
-        local db_conf
-        db_conf=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_SRV | python $COOG_BIN/parse-url.py` || return $?
-        PGHOST=`echo "$db_conf" | sed -n 2p`
-        [ ! -z $PGHOST ] && export PGHOST
-        PGPORT=`echo "$db_conf" | sed -n 3p`
-        [ ! -z $PGPORT ] && export PGPORT
-        PGUSER=`echo "$db_conf" | sed -n 4p`
-        [ ! -z $PGUSER ] && export PGUSER
-        PGPASSWORD=`echo "$db_conf" | sed -n 5p`
-        [ ! -z $PGPASSWORD ] && export PGPASSWORD
-        if [ ! -z "$DB_NAME" ]
-        then
-                PGDATABASE="$DB_NAME"
-        else
-
-                PGDATABASE=`echo "$db_conf" | sed -n 6p`
-        fi
-        [ ! -z $PGDATABASE ] && export PGDATABASE
-        return 0
+    [ -z "$COOG_BIN" ] && echo no bin folder && return 1
+    [ -z "$COOG_CONF_SRV" ] && echo no server conf && return 1
+    local db_conf
+    db_conf=$(python "$COOG_BIN/parse-config.py" database uri < "$COOG_CONF_SRV" | python "$COOG_BIN/parse-url.py") || return $?
+    PGHOST=$(echo "$db_conf" | sed -n 2p)
+    [ ! -z "$PGHOST" ] && export PGHOST
+    PGPORT=$(echo "$db_conf" | sed -n 3p)
+    [ ! -z "$PGPORT" ] && export PGPORT
+    PGUSER=$(echo "$db_conf" | sed -n 4p)
+    [ ! -z "$PGUSER" ] && export PGUSER
+    PGPASSWORD=$(echo "$db_conf" | sed -n 5p)
+    [ ! -z "$PGPASSWORD" ] && export PGPASSWORD
+    if [ ! -z "$DB_NAME" ]
+    then
+        PGDATABASE="$DB_NAME"
+    else
+        PGDATABASE=$(echo "$db_conf" | sed -n 6p)
+    fi
+    [ ! -z "$PGDATABASE" ] && export PGDATABASE
+    return 0
 }
 
 _coog_env_common() { # set common vars
-        if [ -z $LOG_LEVEL ]
+    if [ -z "$LOG_LEVEL" ]
+    then
+        if [ -z "$COOG_CONF_LOG" ]
         then
-                if [ -z $COOG_CONF_LOG ]
-                then
-                        LOG_LEVEL=WARNING
-                else
-                        LOG_LEVEL=`python $COOG_BIN/parse-config.py logger_root level < $COOG_CONF_LOG` || return $?
-                fi
-                export LOG_LEVEL
+            LOG_LEVEL=WARNING
+        else
+            LOG_LEVEL=$(python "$COOG_BIN/parse-config.py" logger_root level < "$COOG_CONF_LOG") || return $?
         fi
-        return 0
+        export LOG_LEVEL
+    fi
+    return 0
 }
 
 _coog_env_client() { # set client vars
-        export PYTHONPATH="$COOG_TRYTON:${PYTHONPATH:-}"
+    export PYTHONPATH="$COOG_TRYTON:${PYTHONPATH:-}"
 }
 
 _coog_env_server() { # set server vars
-        [ -z $COOG_BIN ] && echo no bin folder && return 1
-        [ -z $COOG_CONF_SRV ] && echo no server conf && return 1
-        export PYTHONPATH="$COOG_LIB:$COOG_TRYTOND:$COOG_PROTEUS:$PYTHONPATH"
-        TRYTOND_CONFIG="$COOG_CONF_SRV"
-        [ ! -z $TRYTOND_CONFIG ] && export TRYTOND_CONFIG
-        TRYTOND_WEB_ROOT="$COOG_SAO"
-        [ ! -z $TRYTOND_WEB_ROOT ] && export TRYTOND_WEB_ROOT
-        TRYTOND_WEB_BENCH="$COOG_BENCH"
-        [ ! -z $TRYTOND_WEB_BENCH ] && export TRYTOND_WEB_BENCH
-        if [ -z "$DB_NAME" ]
-        then
-                DB_NAME=`python $COOG_BIN/parse-config.py database uri < $COOG_CONF_SRV | python $COOG_BIN/parse-url.py | sed -n 6p` || return $?
-        fi
-        [ ! -z $DB_NAME ] && export DB_NAME
-        TRYTOND_CACHE_CLASS=`python $COOG_BIN/parse-config.py cache class < $COOG_CONF_SRV 2> /dev/null`
-        [ ! -z $TRYTOND_CACHE_CLASS ] && export TRYTOND_CACHE_CLASS
-        TRYTOND_CACHE_URI=`python $COOG_BIN/parse-config.py cache uri < $COOG_CONF_SRV 2> /dev/null`
-        [ ! -z $TRYTOND_CACHE_URI ] && export TRYTOND_CACHE_URI
-        if [ -z "$TRYTOND_ASYNC_RQ" ]
-        then
-                TRYTOND_ASYNC_RQ=`python $COOG_BIN/parse-config.py async rq < $COOG_CONF_SRV 2> /dev/null`
-                [ ! -z $TRYTOND_ASYNC_RQ ] && export TRYTOND_ASYNC_RQ
-        fi
-        if [ -z "$TRYTOND_ASYNC_CELERY" ]
-        then
-                TRYTOND_ASYNC_CELERY=`python $COOG_BIN/parse-config.py async celery < $COOG_CONF_SRV 2> /dev/null`
-                [ ! -z $TRYTOND_ASYNC_CELERY ] && export TRYTOND_ASYNC_CELERY
-        fi
-        TRYTOND_PERF_BROKER=`python $COOG_BIN/parse-config.py perf broker < $COOG_CONF_SRV 2> /dev/null`
-        [ ! -z $TRYTOND_PERF_BROKER ] && export TRYTOND_PERF_BROKER
-        TRYTOND_SERVER_NAME=$(python $COOG_BIN/parse-config.py web listen < $COOG_CONF_SRV | sed -e "s/:.*//" 2> /dev/null)
-        TRYTOND_SERVER_PORT=$(python $COOG_BIN/parse-config.py web listen < $COOG_CONF_SRV | sed -e "s/.*://" 2> /dev/null)
-        [ ! -z $TRYTOND_SERVER_NAME ] && export TRYTOND_SERVER_NAME
-        [ ! -z $TRYTOND_SERVER_PORT ] && export TRYTOND_SERVER_PORT
-        export COOG_FILE_WATCH
-        export COOG_TMP
-        return 0
+    [ -z "$COOG_BIN" ] && echo no bin folder && return 1
+    [ -z "$COOG_CONF_SRV" ] && echo no server conf && return 1
+    export PYTHONPATH="$COOG_LIB:$COOG_TRYTOND:$COOG_PROTEUS:$PYTHONPATH"
+    TRYTOND_CONFIG="$COOG_CONF_SRV"
+    [ ! -z "$TRYTOND_CONFIG" ] && export TRYTOND_CONFIG
+    TRYTOND_WEB_ROOT="$COOG_SAO"
+    [ ! -z "$TRYTOND_WEB_ROOT" ] && export TRYTOND_WEB_ROOT
+    TRYTOND_WEB_BENCH="$COOG_BENCH"
+    [ ! -z "$TRYTOND_WEB_BENCH" ] && export TRYTOND_WEB_BENCH
+    if [ -z "$DB_NAME" ]
+    then
+        DB_NAME=$(python "$COOG_BIN/parse-config.py" database uri < "$COOG_CONF_SRV" | python "$COOG_BIN/parse-url.py" | sed -n 6p) || return $?
+    fi
+    [ ! -z "$DB_NAME" ] && export DB_NAME
+    TRYTOND_CACHE_CLASS=$(python "$COOG_BIN/parse-config.py" cache class < "$COOG_CONF_SRV" 2> /dev/null)
+    [ ! -z "$TRYTOND_CACHE_CLASS" ] && export TRYTOND_CACHE_CLASS
+    TRYTOND_CACHE_URI=$(python "$COOG_BIN/parse-config.py" cache uri < "$COOG_CONF_SRV" 2> /dev/null)
+    [ ! -z "$TRYTOND_CACHE_URI" ] && export TRYTOND_CACHE_URI
+    if [ -z "$TRYTOND_ASYNC_RQ" ]
+    then
+        TRYTOND_ASYNC_RQ=$(python "$COOG_BIN/parse-config.py" async rq < "$COOG_CONF_SRV" 2> /dev/null)
+        [ ! -z "$TRYTOND_ASYNC_RQ" ] && export TRYTOND_ASYNC_RQ
+    fi
+    if [ -z "$TRYTOND_ASYNC_CELERY" ]
+    then
+        TRYTOND_ASYNC_CELERY=$(python "$COOG_BIN/parse-config.py" async celery < "$COOG_CONF_SRV" 2> /dev/null)
+        [ ! -z "$TRYTOND_ASYNC_CELERY" ] && export TRYTOND_ASYNC_CELERY
+    fi
+    TRYTOND_PERF_BROKER=$(python "$COOG_BIN/parse-config.py" perf broker < "$COOG_CONF_SRV" 2> /dev/null)
+    [ ! -z "$TRYTOND_PERF_BROKER" ] && export TRYTOND_PERF_BROKER
+    TRYTOND_SERVER_NAME=$(python "$COOG_BIN/parse-config.py" web listen < "$COOG_CONF_SRV" | sed -e "s/:.*//" 2> /dev/null)
+    TRYTOND_SERVER_PORT=$(python "$COOG_BIN/parse-config.py" web listen < "$COOG_CONF_SRV" | sed -e "s/.*://" 2> /dev/null)
+    [ ! -z "$TRYTOND_SERVER_NAME" ] && export TRYTOND_SERVER_NAME
+    [ ! -z "$TRYTOND_SERVER_PORT" ] && export TRYTOND_SERVER_PORT
+    export COOG_FILE_WATCH
+    export COOG_TMP
+    return 0
 }
 
 _coog_env_api() { # set api vars
@@ -150,173 +152,177 @@ _coog_env_api() { # set api vars
 }
 
 _coog_env_batch() { # set batch vars
-        TRYTOND_BATCH_CONFIG="$COOG_CONF_BAT"
-        [ ! -z $TRYTOND_BATCH_CONFIG ] && export TRYTOND_BATCH_CONFIG
-        return 0
+    TRYTOND_BATCH_CONFIG="$COOG_CONF_BAT"
+    [ ! -z "$TRYTOND_BATCH_CONFIG" ] && export TRYTOND_BATCH_CONFIG
+    return 0
 }
 
 coog_env_bootstrap() { # set coog vars on bootstrap
-        _coog_env_files &&
-                _coog_env_paths &&
-                _coog_env_conf
+    _coog_env_files &&
+        _coog_env_paths &&
+        _coog_env_conf
 }
 
 coog_env_init() { # set coog vars
-        _coog_env_python &&
-                _coog_env_files &&
-                _coog_env_paths &&
-                _coog_env_conf &&
-                _coog_env_postgres &&
-                _coog_env_common &&
-                _coog_env_client &&
-                _coog_env_server &&
-                _coog_env_api &&
-                _coog_env_batch
+    _coog_env_python &&
+        _coog_env_files &&
+        _coog_env_paths &&
+        _coog_env_conf &&
+        _coog_env_postgres &&
+        _coog_env_common &&
+        _coog_env_client &&
+        _coog_env_server &&
+        _coog_env_api &&
+        _coog_env_batch
 }
 
 coog_env_main() { # print meaningful vars for coog execution
-        echo Environment variables:
-        echo
-        echo "  Local variables"
-        echo "    COOG_FILE_CLI          "$COOG_FILE_CLI
-        echo "    COOG_FILE_SRV          "$COOG_FILE_SRV
-        echo "    COOG_FILE_WRK          "$COOG_FILE_WRK
-        echo "    COOG_FILE_RQ           "$COOG_FILE_RQ
-        echo "    COOG_FILE_CEL          "$COOG_FILE_CEL
-        echo "    COOG_FILE_BAT          "$COOG_FILE_BAT
-        echo "    COOG_FILE_TEST         "$COOG_FILE_TEST
-        echo "    COOG_ROOT              "$COOG_ROOT
-        echo "    COOG_TRYTON            "$COOG_TRYTON
-        echo "    COOG_TRYTOND           "$COOG_TRYTOND
-        echo "    COOG_PROTEUS           "$COOG_PROTEUS
-        echo "    COOG_SAO               "$COOG_SAO
-        echo "    COOG_API               "$COOG_API
-        echo "    COOG_BENCH             "$COOG_BENCH
-        echo "    COOG_CONF              "$COOG_CONF
-        echo "    COOG_COOG              "$COOG_COOG
-        echo "    COOG_BIN               "$COOG_BIN
-        echo "    COOG_LIB               "$COOG_LIB
-        echo "    COOG_CONF_CLI          "$COOG_CONF_CLI
-        echo "    COOG_CONF_SRV          "$COOG_CONF_SRV
-        echo "    COOG_CONF_BAT          "$COOG_CONF_BAT
-        echo "    COOG_CONF_TEST         "$COOG_CONF_TEST
-        echo "    COOG_CONF_LOG          "$COOG_CONF_LOG
-        echo "    COOG_API_COOG_URL      "$COOG_API_COOG_URL
-        echo "    COOG_API_COOG_DB       "$COOG_API_COOG_DB
-        echo
-        echo "  Exported variables"
-        echo "    PYTHONUNBUFFERED       "$PYTHONUNBUFFERED
-        echo "    PYTHONPATH             "$PYTHONPATH
-        echo "    PGHOST                 "$PGHOST
-        echo "    PGPORT                 "$PGPORT
-        echo "    PGUSER                 "$PGUSER
-        echo "    PGPASSWORD             "$PGPASSWORD
-        echo "    PGDATABASE             "$PGDATABASE
-        echo "    LOG_LEVEL              "$LOG_LEVEL
-        echo "    TRYTOND_CONFIG         "$TRYTOND_CONFIG
-        echo "    TRYTOND_WEB_ROOT       "$TRYTOND_WEB_ROOT
-        echo "    TRYTOND_WEB_BENCH      "$TRYTOND_WEB_BENCH
-        echo "    DB_NAME                "$DB_NAME
-        echo "    TRYTOND_CACHE_CLASS    "$TRYTOND_CACHE_CLASS
-        echo "    TRYTOND_CACHE_URI      "$TRYTOND_CACHE_URI
-        echo "    TRYTOND_ASYNC_RQ       "$TRYTOND_ASYNC_RQ
-        echo "    TRYTOND_ASYNC_CELERY   "$TRYTOND_ASYNC_CELERY
-        echo "    TRYTOND_PERF_BROKER    "$TRYTOND_PERF_BROKER
-        echo "    TRYTOND_BATCH_CONFIG   "$TRYTOND_BATCH_CONFIG
-        echo "    TRYTOND_SERVER_NAME    "$TRYTOND_SERVER_NAME
-        echo "    TRYTOND_SERVER_PORT    "$TRYTOND_SERVER_PORT
-        echo "    COOG_FILE_WATCH        "$COOG_FILE_WATCH
-        echo "    COOG_TMP               "$COOG_TMP
+    echo Environment variables:
+    echo
+    echo "  Local variables"
+    echo "    COOG_FILE_CLI          $COOG_FILE_CLI"
+    echo "    COOG_FILE_SRV          $COOG_FILE_SRV"
+    echo "    COOG_FILE_WRK          $COOG_FILE_WRK"
+    echo "    COOG_FILE_API          $COOG_FILE_API"
+    echo "    COOG_FILE_RQ           $COOG_FILE_RQ"
+    echo "    COOG_FILE_CEL          $COOG_FILE_CEL"
+    echo "    COOG_FILE_BAT          $COOG_FILE_BAT"
+    echo "    COOG_FILE_TEST         $COOG_FILE_TEST"
+    echo "    COOG_ROOT              $COOG_ROOT"
+    echo "    COOG_TRYTON            $COOG_TRYTON"
+    echo "    COOG_TRYTOND           $COOG_TRYTOND"
+    echo "    COOG_PROTEUS           $COOG_PROTEUS"
+    echo "    COOG_SAO               $COOG_SAO"
+    echo "    COOG_API               $COOG_API"
+    echo "    COOG_BENCH             $COOG_BENCH"
+    echo "    COOG_CONF              $COOG_CONF"
+    echo "    COOG_COOG              $COOG_COOG"
+    echo "    COOG_BIN               $COOG_BIN"
+    echo "    COOG_LIB               $COOG_LIB"
+    echo "    COOG_CONF_CLI          $COOG_CONF_CLI"
+    echo "    COOG_CONF_SRV          $COOG_CONF_SRV"
+    echo "    COOG_CONF_BAT          $COOG_CONF_BAT"
+    echo "    COOG_CONF_TEST         $COOG_CONF_TEST"
+    echo "    COOG_CONF_LOG          $COOG_CONF_LOG"
+    echo "    COOG_API_COOG_URL      $COOG_API_COOG_URL"
+    echo "    COOG_API_COOG_DB       $COOG_API_COOG_DB"
+    echo
+    echo "  Exported variables"
+    echo "    PYTHONUNBUFFERED       $PYTHONUNBUFFERED"
+    echo "    PYTHONPATH             $PYTHONPATH"
+    echo "    PGHOST                 $PGHOST"
+    echo "    PGPORT                 $PGPORT"
+    echo "    PGUSER                 $PGUSER"
+    echo "    PGPASSWORD             $PGPASSWORD"
+    echo "    PGDATABASE             $PGDATABASE"
+    echo "    LOG_LEVEL              $LOG_LEVEL"
+    echo "    TRYTOND_CONFIG         $TRYTOND_CONFIG"
+    echo "    TRYTOND_WEB_ROOT       $TRYTOND_WEB_ROOT"
+    echo "    TRYTOND_WEB_BENCH      $TRYTOND_WEB_BENCH"
+    echo "    DB_NAME                $DB_NAME"
+    echo "    TRYTOND_CACHE_CLASS    $TRYTOND_CACHE_CLASS"
+    echo "    TRYTOND_CACHE_URI      $TRYTOND_CACHE_URI"
+    echo "    TRYTOND_ASYNC_RQ       $TRYTOND_ASYNC_RQ"
+    echo "    TRYTOND_ASYNC_CELERY   $TRYTOND_ASYNC_CELERY"
+    echo "    TRYTOND_PERF_BROKER    $TRYTOND_PERF_BROKER"
+    echo "    TRYTOND_BATCH_CONFIG   $TRYTOND_BATCH_CONFIG"
+    echo "    TRYTOND_SERVER_NAME    $TRYTOND_SERVER_NAME"
+    echo "    TRYTOND_SERVER_PORT    $TRYTOND_SERVER_PORT"
+    echo "    COOG_FILE_WATCH        $COOG_FILE_WATCH"
+    echo "    COOG_TMP               $COOG_TMP"
 }
 
 coog_env_config() { # print or edit conf file <client|server|batch|test|log> [edit]
-        [ -z $1 ] && echo missing requested conf && return 1
-        local command_
-        command_="cat"
-        [ $2  = "edit" ] && command_=$EDITOR
-        [ -z $command_ ] && echo "Please set the EDITOR environment variable" \
-                && return 1
-        if [ $1 = client ]
-        then
-                echo '# '"conf file: $COOG_CONF_CLI"
-                echo
-                $command_ $COOG_CONF_CLI
-                return
-        fi
-        if [ $1 = server ]
-        then
-                echo '# '"conf file: $COOG_CONF_SRV"
-                echo
-                $command_ $COOG_CONF_SRV
-                return
-        fi
-        if [ $1 = batch ]
-        then
-                echo '# '"conf file: $COOG_CONF_BAT"
-                echo
-                $command_ $COOG_CONF_BAT
-                return
-        fi
-        if [ $1 = test ]
-        then
-                echo '# '"conf file: $COOG_CONF_TEST"
-                echo
-                $command_ $COOG_CONF_TEST
-                return
-        fi
-        if [ $1 = log ]
-        then
-                [ -z $COOG_CONF_LOG ] && echo no conf log && return 1
-                echo '# '"conf file: $COOG_CONF_LOG"
-                echo
-                $command_ $COOG_CONF_LOG
-                return
-        fi
-        echo unknown conf: $1 && return 1
+    [ -z "$1" ] && echo missing requested conf && return 1
+    local command_
+    command_="cat"
+    [ "$2"  = "edit" ] && command_=$EDITOR
+    [ -z "$command_" ] \
+        && echo "Please set the EDITOR environment variable" \
+        && return 1
+    if [ "$1" = client ]
+    then
+        echo "conf file: $COOG_CONF_CLI"
+        echo
+        "$command_" "$COOG_CONF_CLI"
+        return
+    fi
+    if [ "$1" = server ]
+    then
+        echo "conf file: $COOG_CONF_SRV"
+        echo
+        "$command_" "$COOG_CONF_SRV"
+        return
+    fi
+    if [ "$1" = batch ]
+    then
+        echo "conf file: $COOG_CONF_BAT"
+        echo
+        "$command_" "$COOG_CONF_BAT"
+        return
+    fi
+    if [ "$1" = test ]
+    then
+        echo "conf file: $COOG_CONF_TEST"
+        echo
+        "$command_" "$COOG_CONF_TEST"
+        return
+    fi
+    if [ "$1" = log ]
+    then
+        [ -z "$COOG_CONF_LOG" ] \
+            && echo "no conf log" \
+            && return 1
+        echo "conf file: $COOG_CONF_LOG"
+        echo
+        "$command_" "$COOG_CONF_LOG"
+        return
+    fi
+    echo "unknown conf: $1" && return 1
 }
 
 coog_env_wait() { # wait for process to die - <pid>
-        [ -z "$1" ] && >&2 echo missing arguments && return 1
-        while true
-        do
-                [ ! -e /proc/"$1" ] && break
-                sleep 0.5
-        done
+    [ -z "$1" ] && >&2 echo missing arguments && return 1
+    while true
+    do
+        [ ! -e /proc/"$1" ] && break
+        sleep 0.5
+    done
 }
 
 coog_env_pid() { # pid from file - <file>
-        [ -z "$1" ] && >&2 echo missing arguments && return 1
-        [ ! -e "$1" ] && >&2 echo no pid file && return 1
-        local pid; pid=$(cat "$1");
-        [ -z "$pid" ] && >&2 echo no pid && return 1
-        echo "$pid"
-        [ ! -e "/proc/$pid" ] && rm -f "$1" && >&2 echo no running pid && return 1
-        return 0
+    [ -z "$1" ] && >&2 echo missing arguments && return 1
+    [ ! -e "$1" ] && >&2 echo no pid file && return 1
+    local pid; pid=$(cat "$1");
+    [ -z "$pid" ] && >&2 echo no pid && return 1
+    echo "$pid"
+    [ ! -e "/proc/$pid" ] && rm -f "$1" && >&2 echo no running pid && return 1
+    return 0
 }
 
 coog_env_term() { # terminate process - <file>
-        local pid; pid=$(coog_env_pid "$@") || return $?
-        kill -TERM "$pid"
-        coog_env_wait "$pid"
-        rm -f "$1"
-        echo "$pid"
+    local pid; pid=$(coog_env_pid "$@") || return $?
+    kill -TERM "$pid"
+    coog_env_wait "$pid"
+    rm -f "$1"
+    echo "$pid"
 }
 
 coog_env_int() { # interrupt process - <file>
-        local pid; pid=$(coog_env_pid "$@") || return $?
-        kill -INT "$pid"
-        coog_env_wait "$pid"
-        rm -f "$1"
-        echo "$pid"
+    local pid; pid=$(coog_env_pid "$@") || return $?
+    kill -INT "$pid"
+    coog_env_wait "$pid"
+    rm -f "$1"
+    echo "$pid"
 }
 
 coog_env_bak() { # backup out file - <file> <pid>
-        [ -z "$1" ] && >&2 echo missing arguments && return 1
-        [ ! -e "$1" ] && return 0
-        [ -z "$2" ] && mv "$1" "$1.bak" && return 0
-        mv "$1" "$1.$2"
+    [ -z "$1" ] && >&2 echo missing arguments && return 1
+    [ ! -e "$1" ] && return 0
+    [ -z "$2" ] && mv "$1" "$1.bak" && return 0
+    mv "$1" "$1.$2"
 }
 
 coog_env_run() { # execute command in coog context
-        "$@"
+    "$@"
 }
