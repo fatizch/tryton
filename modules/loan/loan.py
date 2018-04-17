@@ -202,7 +202,8 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
         cls._error_messages.update({
-                'no_sequence': 'No loan sequence defined',
+                'missing_loan_sequence_config': 'No sequence defined for loan '
+                'numbers in offered configuration',
                 'used_on_non_project_contract': (
                     'The loan "%(loan)s" is used on '
                     'the contract(s) "%(contract)s". '
@@ -233,20 +234,20 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
 
     @classmethod
     def create(cls, vlist):
-        Sequence = Pool().get('ir.sequence')
-        default_company = cls.default_company()
-        with Transaction().set_user(0):
-            loan_sequences = Sequence.search([('code', '=', 'loan')])
-        sequences_dict = dict(
-            [(x.company.id if x.company else default_company, x)
-                for x in loan_sequences])
+        pool = Pool()
+        Sequence = pool.get('ir.sequence')
+        configuration = pool.get('offered.configuration').get_singleton()
+        if configuration is not None and configuration.loan_number_sequence:
+            sequence = configuration.loan_number_sequence
+        else:
+            sequences = Sequence.search([('code', '=', 'loan')])
+            if len(sequences) == 1:
+                sequence, = sequences
+            else:
+                cls.raise_user_error('missing_loan_sequence_config')
         vlist = [x.copy() for x in vlist]
         for vals in vlist:
             if not vals.get('number'):
-                sequence = sequences_dict.get(vals.get('company',
-                        default_company))
-                if not sequence:
-                    cls.raise_user_error('no_sequence')
                 vals['number'] = Sequence.get_id(sequence.id)
         return super(Loan, cls).create(vlist)
 

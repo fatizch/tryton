@@ -15,6 +15,7 @@ LoanShareTreeExpansion = model.expand_tree('loan.share')
 
 def register():
     Pool.register(
+        offered.ProductConfiguration,
         offered.Product,
         offered.OptionDescription,
         rule_engine.RuleEngineRuntime,

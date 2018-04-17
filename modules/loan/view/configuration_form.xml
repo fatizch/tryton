@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='style_template']" position="after">
+        <newline/>
+        <label name="loan_number_sequence"/>
+        <field name="loan_number_sequence"/>
+        <newline/>
+    </xpath>
+</data>

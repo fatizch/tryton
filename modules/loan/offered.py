@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from sql import Literal
+from sql import Literal, Table
 
 from trytond import backend
 from trytond.pool import PoolMeta
@@ -10,9 +10,49 @@ from trytond.modules.coog_core import fields
 
 
 __all__ = [
+    'ProductConfiguration',
     'Product',
     'OptionDescription',
     ]
+
+
+class ProductConfiguration:
+    __metaclass__ = PoolMeta
+    __name__ = 'offered.configuration'
+
+    loan_number_sequence = fields.Many2One('ir.sequence',
+        'Loan Number Sequence', domain=[('code', '=', 'loan')],
+         help='The sequence that will be used to generate numbers for '
+        'validated loans')
+
+    @classmethod
+    def __register__(cls, module):
+        TableHandler = backend.get('TableHandler')
+
+        # Migration from 1.12 : Set the loan number sequence to use in
+        # configuration
+        to_migrate = False
+        if TableHandler.table_exist('offered_configuration'):
+            table = TableHandler(cls, module)
+            to_migrate = not table.column_exist('loan_number_sequence')
+
+        super(ProductConfiguration, cls).__register__(module)
+
+        if not to_migrate:
+            return
+
+        cursor = Transaction().connection.cursor()
+        sequence = Table('ir_sequence')
+        cursor.execute(*sequence.select(sequence.id,
+                where=sequence.code == 'loan', limit=1))
+        matches = cursor.fetchall()
+        if not matches:
+            return
+
+        table = Table('offered_configuration')
+        cursor.execute(*table.update(
+                columns=[table.loan_number_sequence],
+                values=[Literal(matches[0][0])]))
 
 
 class Product:
