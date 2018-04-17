@@ -113,12 +113,6 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
             table.drop_column('template_behaviour')
 
     @classmethod
-    def copy(cls, products, default=None):
-        default = {} if default is None else default.copy()
-        default.setdefault('coverages', None)
-        return super(Product, cls).copy(products, default=default)
-
-    @classmethod
     def is_master_object(cls):
         return True
 
