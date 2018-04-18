@@ -181,7 +181,7 @@ coog_module_optimize() {
     local src; src=/tmp/coog-src.lst
     find "$COOG_TRYTOND/trytond/modules" -type l -printf '%f\n' | sort > "$src"
     local ins; ins=/tmp/coog-ins.lst
-    coog_module_list | sort > "$ins"
+    coog_module_list | sort > "$ins" || return 1
     for i in $(diff "$src" "$ins" | grep "<" | cut -d " " -f 2)
     do
         echo "rm $i"
