@@ -1,3 +1,4 @@
+* BUG#8837 Fix crash when reading the related invoice on payment if the invoice field is empty on the move line.
 * BUG#8417 Set the payment date to none only when receiving SEPA payment fail
 
 Version 2.0 - 2018-04-13

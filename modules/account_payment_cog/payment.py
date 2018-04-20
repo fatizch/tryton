@@ -641,7 +641,7 @@ class Payment(export.ExportImportMixin, Printable,
         pass
 
     def get_related_invoice(self, name=None):
-        if self.line:
+        if self.line and self.line.move.invoice:
             return self.line.move.invoice.id
 
     def get_related_invoice_business_kind(self, name=None):
