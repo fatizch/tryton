@@ -98,11 +98,10 @@ class ReportGenerate:
                 attachments += generated_reports
             if attachments or selected_letter.images:
                 if selected_letter.html_body:
-                    msg = MIMEMultipart('related')
+                    msg = MIMEMultipart('mixed')
                     msg.attach(MIMEText(
-                            selected_letter.genshi_evaluated_email_body.encode(
-                                'utf-8'),
-                            'html'))
+                            selected_letter.genshi_evaluated_email_body,
+                            'html', 'UTF-8'))
                 else:
                     msg = MIMEMultipart(
                         selected_letter.genshi_evaluated_email_body.encode(
@@ -119,11 +118,10 @@ class ReportGenerate:
                     msg.attach(img)
         else:
             if selected_letter.html_body:
-                msg = MIMEMultipart('related')
+                msg = MIMEMultipart('mixed')
                 msg.attach(MIMEText(
-                        selected_letter.genshi_evaluated_email_body.encode(
-                            'utf-8'),
-                        'html'))
+                        selected_letter.genshi_evaluated_email_body,
+                        'html', 'UTF-8'))
             else:
                 msg = MIMEText(
                     selected_letter.genshi_evaluated_email_body.encode(
@@ -131,10 +129,11 @@ class ReportGenerate:
         msg['From'] = selected_letter.genshi_evaluated_email_sender
         msg['To'] = selected_letter.genshi_evaluated_email_dest
         msg['Cc'] = selected_letter.genshi_evaluated_email_cc
+        msg['Charset'] = 'UTF-8'
+        msg['Content-Type'] = 'text/plain; charset=UTF-8'
         # We must not set BCC header. Bcc is implicit because the mail is sent
         # to recipients + cc + others which will be implicitly hidden.
-        msg['Subject'] = selected_letter.genshi_evaluated_email_subject.encode(
-            'utf-8')
+        msg['Subject'] = selected_letter.genshi_evaluated_email_subject
         return {
             'message': msg,
             'attachments': attachments,
