@@ -266,6 +266,7 @@ class Loss:
     def init_loss(self, loss_desc_code=None, **kwargs):
         self.return_to_work_date = None
         self.end_date = None
+        self.is_a_relapse = False
         super(Loss, self).init_loss(loss_desc_code, **kwargs)
         self.covered_person = self.claim.claimant \
             if self.claim.claimant.is_person else None

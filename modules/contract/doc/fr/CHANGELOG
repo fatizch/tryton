@@ -1,3 +1,5 @@
+* OTH#0000 Initialiser la donnée est_une_rechute lors de l'initialisation d'un préjudice
+
 Version 2.0 - 2018-04-13
 * BUG#8547 L'ancienne date de fin pour les contrats sans effet doit rester nul lors de process de réactivation
 * BUG#8502 Une garantie résiliée doit le rester après réactivation du contrat
