@@ -1,3 +1,5 @@
+* OTH#0000 Ajout d'un contrôle d'existance d'informations de quittancement sur le contrat avant de procéder à l'initialisation
+
 Version 2.0 - 2018-04-13
 * BUG#8646 Correction du comportement par défaut de la visibilité du booléen "Taxes incluses" à la création d'une garantie
 * BUG#8547 La réactivation d'un contrat sans effet se base sur la date début du contrat au lieu de sa date de fin

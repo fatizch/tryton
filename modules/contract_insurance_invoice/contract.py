@@ -1107,6 +1107,8 @@ class Contract:
         self.init_billing_information()
 
     def init_billing_information(self):
+        if getattr(self, 'billing_informations', None):
+            return
         BillingInformation = Pool().get('contract.billing_information')
         default_billing_mode = self.product.billing_modes[0]
         if default_billing_mode.direct_debit:
