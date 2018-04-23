@@ -1,3 +1,5 @@
+* BUG#8691 Correction d'une erreur lorsque l'on calcule TA TB TC sur un service sans périodes de salaire
+
 Version 2.0 - 2018-04-13
 * FEA#8374 Amélioration du wizard de saisie des salaires
 * BUG#7792 Autoriser la suppression de périodes dans l'assistant des salaires

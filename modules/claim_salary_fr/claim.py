@@ -416,7 +416,7 @@ class ClaimService:
         periods = \
             self.claim.delivered_services[0].calculate_salaries_period_dates()
         if not periods:
-            return
+            return salary_range
         min_date = min([period[0] for period in periods if period[2]])
         max_date = max([period[1] for period in periods if period[2]])
         sum_prorata = Decimal(0)

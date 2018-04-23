@@ -1,3 +1,5 @@
+* BUG#8691 Fix crash when calculating TA TB TC range if no salary period are entered
+
 Version 2.0 - 2018-04-13
 * FEA#8374 Claim salaries data input improvement
 * BUG#7792 Allow deleting periods in claim salary wizard
