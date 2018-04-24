@@ -1107,6 +1107,10 @@ def search_and_stream(klass, domain, offset=0, order=None, batch_size=None):
     '''
     batch_size = batch_size or config.getint('cache', 'record')
     cur_offset = offset
+
+    # Force order on id at the end to make sure there are no missing values
+    # due to the db reordering the rows
+    order = (order or []) + [('id', 'ASC')]
     while True:
         records = klass.search(domain, offset=cur_offset, limit=batch_size,
             order=order)

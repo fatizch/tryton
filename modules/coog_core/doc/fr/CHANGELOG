@@ -1,3 +1,4 @@
+* BUG#8843 Forçage de l'ordre dans la fonction search_and_stream
 * FEA#8621 RGPD: Application de l'évolution tryton RGPD à Coog
 * OTH#0000 Arrêt du serveur si les définitions de champs sont incohérentes
 
