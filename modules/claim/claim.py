@@ -295,7 +295,8 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
 
     def get_possible_contracts(self, at_date=None):
         if not at_date:
-            at_date = self.declaration_date
+            at_date = min([l.start_date for l in self.losses if l.start_date] or
+                [self.declaration_date])
         Contract = Pool().get('contract')
         return Contract.get_covered_contracts_from_party(self.claimant,
             at_date)

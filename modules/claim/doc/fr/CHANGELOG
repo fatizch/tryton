@@ -1,3 +1,5 @@
+* BUG#8802 Utiliser la date de début de prestation plutôt que la date de déclaration du sinistre pour trouver les contrats possibles du sinistre
+
 Version 2.0 - 2018-04-13
 * FEA#8156 Ajout d'assistants permettant de propager des données complémentaires sur l'ensemble des services à partir d'une prestation, et sur l'ensemble des préjudices de sinistres à partir d'un préjudice
 * BUG#8151 Changement dans l'ordre des menus
