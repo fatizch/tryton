@@ -1318,9 +1318,8 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             the_result.low_level_debug.append(stack_info)
 
         # Override context just in case it changed
-        the_result.context = self.format_context(evaluation_context)
         self.add_debug_log(the_result,
-            evaluation_context.get('date', None), exc)
+            evaluation_context.get('date', None), evaluation_context, exc)
         if self.debug_mode:
             the_result.result = str(exc)
             if not err_msg:
@@ -1467,9 +1466,10 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def default_algorithm(cls):
         return 'return'
 
-    def add_debug_log(self, result, date, exc=None):
+    def add_debug_log(self, result, date, context, exc=None):
         if not self.id or not getattr(self, 'debug_mode', None):
             return result
+        result.context = self.format_context(context)
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
         with Transaction().new_transaction() as transaction, \
                 ServerContext().set_context(readonly_transaction=False):
@@ -1506,8 +1506,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         for k, v in (parameters or {}).iteritems():
             parameters_as_func[k] = v if callable(v) else kwarg_function(v)
         result = rule.compute(arguments, parameters_as_func)
-        result.context = rule.format_context(arguments)
-        rule.add_debug_log(result, arguments.get('date', None))
+        rule.add_debug_log(result, arguments.get('date', None), arguments)
         return result
 
     @staticmethod

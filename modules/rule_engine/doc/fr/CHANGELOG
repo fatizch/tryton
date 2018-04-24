@@ -1,3 +1,5 @@
+* BUG#8842 Ne pas stocker le contexte d'exécution de la règle si le mode de debug n'est pas actif
+
 Version 2.0 - 2018-04-13
 * BUG#8326 Pouvoir récuperer la bonne valeur d'un champ 'paramètre' d'une régle de paramètrage lorsque ce dernier est modifier
 * FEA#8149 Ajout de l'historique sur les règles afin de pouvoir consulter les différentes versions
