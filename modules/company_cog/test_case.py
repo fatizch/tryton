@@ -37,7 +37,7 @@ class TestCaseModel:
         Configuration = cls.get_instance()
         User = Pool().get('res.user')
         company_party = cls.create_party(name=Configuration.main_company_name,
-            short_name=Configuration.main_company_name)
+            commercial_name=Configuration.main_company_name)
         company = cls.create_company(party=company_party,
             currency=Configuration.currency)
         company.save()

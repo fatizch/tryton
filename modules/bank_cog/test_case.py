@@ -47,9 +47,9 @@ class TestCaseModel:
         bank.addresses = [address]
 
     @classmethod
-    def new_company(cls, name, short_name='', child_level=None,
+    def new_company(cls, name, commercial_name='', child_level=None,
             cur_depth=None):
-        result = super(TestCaseModel, cls).new_company(name, short_name,
+        result = super(TestCaseModel, cls).new_company(name, commercial_name,
             child_level, cur_depth)
         result.currency = cls.get_instance().currency
         return result

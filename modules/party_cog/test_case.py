@@ -295,10 +295,10 @@ class TestCaseModel:
         Relation.create([x._save_values for x in relations])
 
     @classmethod
-    def new_company(cls, name, short_name='', child_level=None,
+    def new_company(cls, name, commercial_name='', child_level=None,
             cur_depth=None):
         translater = cls.get_translater(MODULE_NAME)
-        company = cls.create_party(name=name, commercial_name=short_name)
+        company = cls.create_party(name=name, commercial_name=commercial_name)
         result = []
         if cur_depth and cur_depth > 0:
             for i in range(1, 3):
