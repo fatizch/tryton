@@ -14,7 +14,7 @@ from sql.functions import Function
 
 from trytond import backend
 from trytond.model import Unique
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Or
 from trytond.pool import PoolMeta, Pool
 from trytond.tools import grouped_slice, cursor_dict
 from trytond.cache import Cache
@@ -83,8 +83,11 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         'on_change_with_has_multiple_addresses')
     ####################################
     # Person information
-    is_person = fields.Boolean('Person', states={'readonly': STATES_ACTIVE},
-        depends=['active'])
+    is_person = fields.Boolean('Person', states={'readonly': Or(
+                STATES_ACTIVE,
+                Bool(Eval('birth_date')),
+                Bool(Eval('first_name')))},
+        depends=['active', 'birth_date', 'first_name'])
     gender = fields.Selection(GENDER, 'Gender', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,

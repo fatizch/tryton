@@ -1,3 +1,5 @@
+* BUG#8859 Modification of the is_person information is possible if and only if there is no personal data set like the first name or the birth date
+
 Version 2.0 - 2018-04-13
 * FEA#8644 Vertical realignment of the fields on the party view form header
 * BUG#8362 Remove now useless party configuration view override

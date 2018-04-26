@@ -1,3 +1,5 @@
+* BUG#8859 La modification de la données "Personne physique" n'est possible que si et seulement si aucune information personnelle n'a déjà été saisie comme la date de naissance ou le prénom
+
 Version 2.0 - 2018-04-13
 * FEA#8644 Réalignement vertical des champs dans l'entête de la vue formulaire d'un tiers
 * BUG#8362 Suppression des fichiers maintenant inutile de surcharge de configuration de tiers
