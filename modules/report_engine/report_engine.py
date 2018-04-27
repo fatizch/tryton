@@ -1478,8 +1478,6 @@ class ReportCreate(wizard_context.PersistentContextWizard):
 
     def transition_open_document(self):
         if not self._line_to_display():
-            if not self.select_template.template.format_for_internal_edm:
-                return 'end'
             return 'post_generation'
         return 'open_document'
 
@@ -1500,6 +1498,9 @@ class ReportCreate(wizard_context.PersistentContextWizard):
         return action, {'output_report_filepath': filename}
 
     def transition_post_generation(self):
+        self.wizard_context['attachments'] = []
+        if not self.select_template.template.format_for_internal_edm:
+            return 'end'
         pool = Pool()
         ContactHistory = pool.get('party.interaction')
         Attachment = pool.get('ir.attachment')
@@ -1509,7 +1510,6 @@ class ReportCreate(wizard_context.PersistentContextWizard):
         reports = {cur_id: report
             for ids, report in self.wizard_context['reports']
             for cur_id in ids}
-        self.wizard_context['attachments'] = []
         contacts, attachments = [], []
         for instance in instances:
             contact = self.set_contact(instance)

@@ -1,3 +1,4 @@
+* BUG#8870 Fix on printing wizard, alway step into the post generation step of the print wizard 
 * BUG#8824 Fix template parameters for batch generated reports
 
 Version 2.0 - 2018-04-13

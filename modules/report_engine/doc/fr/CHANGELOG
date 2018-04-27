@@ -1,3 +1,4 @@
+* BUG#8870 Correctif sur l'assistant d'impression, toujours passer dans l'étape de post génération de l'assistant d'impression
 * BUG#8824 Correctif des paramètres de modèle de courrier lors de la génération par batch
 
 Version 2.0 - 2018-04-13
