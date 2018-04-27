@@ -5,6 +5,7 @@ import json
 from sql import Null, Window, Literal
 from sql.conditionals import NullIf, Coalesce
 from sql.aggregate import Max, Min
+from sql.operators import Not
 
 from trytond import backend
 from trytond.tools import grouped_slice, cursor_dict
@@ -975,7 +976,7 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         return None
 
     def is_active_at_date(self, at_date):
-        if self.status in ('draft', 'void'):
+        if self.status in ('quote', 'void', 'declined'):
             return False
         for activation_line in self.activation_history:
             if ((activation_line.start_date or datetime.date.min) <= at_date
@@ -2159,9 +2160,10 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         self.sub_status = reason
 
     def is_active_at_date(self, at_date):
-        return self.status not in ['void', 'declined'] and (
-            at_date >= (self.initial_start_date or datetime.date.min) and
-            at_date <= (self.final_end_date or datetime.date.max))
+        return self.status not in ['void', 'declined'] and \
+            self.parent_contract.is_active_at_date(at_date) and \
+            (at_date >= (self.initial_start_date or datetime.date.min) and
+                at_date <= (self.final_end_date or datetime.date.max))
 
     @classmethod
     def get_covered_options_from_party(cls, party, at_date):
@@ -2175,6 +2177,7 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
 
         query_table = contract.join(history, condition=(
                 (contract.id == history.contract)
+                & Not(contract.status.in_(['void', 'quote', 'declined']))
                 & (contract.subscriber == party.id)
                 & (history.start_date <= at_date)
                 & (
