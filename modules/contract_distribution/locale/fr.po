@@ -167,6 +167,10 @@ msgctxt "field:offered.product,com_products:"
 msgid "Commercial Products"
 msgstr "Produits Commerciaux"
 
+msgctxt "field:res.user,network_distributors:"
+msgid "User Network Distributors"
+msgstr "Réseau de distribution de l'utilisateur"
+
 msgctxt "help:distribution.network,is_distributor:"
 msgid ""
 "If not checked, this distribution network will not be selectable during "

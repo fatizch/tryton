@@ -107,7 +107,7 @@ class ContractSubscribeFindProcess(ProcessStart):
         return configuration.free_conditions_date if configuration else False
 
     @fields.depends('product', 'start_date', 'signature_date',
-        'appliable_conditions_date', 'free_conditions_date')
+        'appliable_conditions_date', 'free_conditions_date', 'model')
     def on_change_signature_date(self):
         self.simulate_init()
 

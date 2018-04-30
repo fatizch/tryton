@@ -1,3 +1,5 @@
+* FEA#8845 Initialisation du produit commercial durant le processus de souscription si il n'y en a qu'un seul d'autorisé
+
 Version 2.0 - 2018-04-13
 * BUG#8148 La liste des distributeurs autorisés doit prendre en compte le réseau de distribution de l'utilisateur
 * FEA#8550 Initialisation du réseau de distribution durant le processus de souscription si un réseau est défini sur l'utilisateur connecté

@@ -180,10 +180,6 @@ msgctxt "field:res.user,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
 
-msgctxt "field:res.user,network_distributors:"
-msgid "User Network Distributors"
-msgstr "Réseau de distribution de l'utilisateur"
-
 msgctxt "model:distribution.network,name:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"

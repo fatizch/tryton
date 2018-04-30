@@ -59,6 +59,10 @@ class ContractSubscribeFindProcess:
                     (x.start_date <= self.appliable_conditions_date)) and
                 (not x.end_date or (
                         self.appliable_conditions_date <= x.end_date))]
+            if len(self.authorized_commercial_products) == 1:
+                self.commercial_product = \
+                    self.authorized_commercial_products[0]
+                self.good_process = self.on_change_with_good_process()
         return res
 
     @fields.depends('commercial_product', methods=['product', 'signature_date'])

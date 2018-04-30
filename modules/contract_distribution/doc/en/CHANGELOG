@@ -1,3 +1,5 @@
+* FEA#8845 Initialize commercial product during contract subscription process if there is only one authorized
+
 Version 2.0 - 2018-04-13
 * BUG#8148 The authorized distributors should take into account the user's distribution network
 * FEA#8550 Initialize distribution network during contract subscription process if current user has one defined
