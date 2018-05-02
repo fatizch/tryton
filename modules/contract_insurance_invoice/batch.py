@@ -117,19 +117,32 @@ class PostInvoiceContractBatch(batch.BatchRoot):
         pool = Pool()
 
         account_invoice = pool.get('account.invoice').__table__()
+        activation_history = Pool().get(
+                'contract.activation_history').__table__()
         contract_invoice = pool.get('contract.invoice').__table__()
         contract = pool.get('contract').__table__()
+
+        sub_query = activation_history.select(
+            activation_history.contract.as_('id'),
+            Max(Coalesce(activation_history.end_date,
+                    datetime.date.max)).as_('max_date'),
+            where=activation_history.active,
+            group_by=activation_history.contract
+            )
 
         query_table = contract_invoice.join(account_invoice, 'LEFT',
             condition=(account_invoice.id == contract_invoice.invoice)
             ).join(contract,
                 condition=(Not(contract.status.in_(
                             ['hold', 'quote', 'declined'])) &
-                    (contract.id == contract_invoice.contract)))
+                    (contract.id == contract_invoice.contract))
+                ).join(sub_query,
+                    condition=(contract.id == sub_query.id))
 
         cursor.execute(*query_table.select(account_invoice.id,
                 where=((contract_invoice.start <= treatment_date) &
-                    (account_invoice.state == 'validated')),
+                    (account_invoice.state == 'validated') &
+                    (sub_query.max_date >= contract_invoice.start)),
                     order_by=contract_invoice.start.asc))
 
         return cursor.fetchall()

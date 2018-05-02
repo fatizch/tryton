@@ -1,3 +1,4 @@
+* BUG#8673 Ne pas sélectionner une quittance avec une date d'effet postérieur à la date de résiliation du contract dans le batch d'émission des quittances
 * OTH#0000 Ajout d'un contrôle d'existance d'informations de quittancement sur le contrat avant de procéder à l'initialisation
 
 Version 2.0 - 2018-04-13
