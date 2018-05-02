@@ -282,7 +282,7 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
             self.end_date = None
 
     @fields.depends('claimant', 'declaration_date', 'main_contract',
-        'possible_contracts')
+        'possible_contracts', 'losses')
     def on_change_claimant(self):
         if self.claimant is None:
             self.possible_contracts = []

@@ -1,3 +1,4 @@
+* OTH#0000 Add missing depends on losses for on_change_claimant due to #8802
 * BUG#8802 Use the loss start date instead of the claim declaration date to find the possible contracts
 
 Version 2.0 - 2018-04-13
