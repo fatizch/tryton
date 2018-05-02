@@ -1,3 +1,4 @@
+* BUG#8818 Suppression de la barre d'outils dans l'arborescence des préjudices sur le sinistre
 * OTH#0000 Ajout du depends manquant sur le champ losses pour on_change_claimant dû à #8802
 * BUG#8802 Utiliser la date de début de prestation plutôt que la date de déclaration du sinistre pour trouver les contrats possibles du sinistre
 
