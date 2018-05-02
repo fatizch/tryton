@@ -101,6 +101,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             covered_element.item_desc = item_desc
             covered_element.main_contract = contract
             covered_element.options[0].main_contract = contract
+            for option in covered_element.options:
+                option.parent_contract = contract
         args = {'contract': contract, 'person': party_child1,
             'date': datetime.date(2014, 1, 1)}
         # test _re_relation_number
