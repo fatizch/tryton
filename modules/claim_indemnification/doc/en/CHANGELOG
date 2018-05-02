@@ -1,3 +1,5 @@
+* BUG#8808 Allow mid-day indemnification period cuts when checking schedulability
+
 Version 2.0 - 2018-04-13
 * BUG#8685 Fix benefit revaluation rule type
 * FEA#8537 Display a warning when scheduling an indemnification period if there is an overlap with another periods

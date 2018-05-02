@@ -1,3 +1,5 @@
+* BUG#8808 Autoriser les découpages en milieu de journée des périodes d'indemnisation lors de la vérification pour ordonnancement
+
 Version 2.0 - 2018-04-13
 * BUG#8685 Correction du type des régles de revalorisation
 * FEA#8537 Ajout d'un avertissement lors de l'ordonnancement des périodes d'indémnisation si il y a chevauchement avec d'autres périodes.
@@ -38,7 +40,7 @@ Version 1.14 - 2017-11-09
 * BUG#7044 Ne pas tenter d'annuler une indemnisation déjà annulée
 * BUG#6882 Des avertissements ou errors ne sont plus levés en cas de refus de service lors de la fermeture d'une prestation
 * FEA#5907 Gestion des indemnisations multiples sur une période
-* BUG#6632 Correction du crash sur le calcul des périodes manquantes survenant lors de la fermeture du sinistre 
+* BUG#6632 Correction du crash sur le calcul des périodes manquantes survenant lors de la fermeture du sinistre
 * BUG#6504 Avertir la validation d'indemnisations dont la somme serait négative si il y a un régularisation par compensation
 * OTH#0000 Correctifs des warnings sur la classe Configuration lors du lancement du serveur
 * BUG#6358 Utiliser la date du jour pour valider l'existence d'un compte bancaire à l'ordonnancement

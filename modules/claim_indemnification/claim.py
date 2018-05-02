@@ -1086,8 +1086,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         return self.amount > 0 and self.status not in ['paid', 'rejected']
 
     def previous_indemnification(self, filter_status=None):
-        indemnifications = [x for x in self.service.indemnifications if
-            x.end_date and x.end_date < self.start_date
+        indemnifications = [x for x in self.service.indemnifications
+            if x.end_date and x.end_date <= self.start_date and x.id != self.id
             and (not filter_status or x.status in filter_status)]
         if not indemnifications:
             return
