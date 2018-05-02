@@ -106,6 +106,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                             }],
                     'sub_covered_elements': [],
                     }])
+
         contract_set = self.ContractSet()
         contract_set.contracts = [contract1, contract2]
 
@@ -114,10 +115,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
         for covered_element in contract1.covered_elements:
             covered_element.item_desc = item_desc
             covered_element.main_contract = contract1
-
+            for option in covered_element.options:
+                option.parent_contract = contract1
         for covered_element in contract2.covered_elements:
             covered_element.item_desc = item_desc
             covered_element.main_contract = contract2
+            for option in covered_element.options:
+                option.parent_contract = contract2
 
         args = {'contract': contract1, 'contract_set': contract_set,
             'person': party_child1, 'date': datetime.date(2014, 1, 1)}
