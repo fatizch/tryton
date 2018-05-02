@@ -697,6 +697,12 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
     def button_start_synthesis_menu(cls, parties):
         pass
 
+    @classmethod
+    def _import_json(cls, values, main_object=None):
+        if 'all_addresses' not in values and 'addresses' in values:
+            values['all_addresses'] = []
+        return super(Party, cls)._import_json(values, main_object)
+
 
 class PartyLang(export.ExportImportMixin):
     __metaclass__ = PoolMeta
