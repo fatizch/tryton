@@ -56,7 +56,7 @@ _coog_repo_linkp() {
         then
             for p in $(ls -1 "$COOG_ROOT/$repo/plugins")
             do
-                [ -f "$COOG_ROOT/$repo/modules/$p/__init__.py" ] && ln -s "$COOG_ROOT/$repo/plugins/$p" .
+                [ -f "$COOG_ROOT/$repo/plugins/$p/__init__.py" ] && ln -s "$COOG_ROOT/$repo/plugins/$p" .
             done
         fi
     done

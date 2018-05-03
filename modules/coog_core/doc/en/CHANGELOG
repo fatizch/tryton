@@ -1,3 +1,4 @@
+* OTH#0000 Fix client plugin linking in coog repo link
 * BUG#8683 RGPD: Remove anonymization of banks
 * BUG#8843 Force order in search_and_stream method
 * FEA#8621 RGPD: Apply RGPD tryton evolution to Coog

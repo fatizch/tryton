@@ -1,3 +1,4 @@
+* OTH#0000 Restauration de l'ajout des plugins client lors du coog repo link
 * BUG#8683 RGPD: Suppression de l'anonymisation des banques
 * BUG#8843 Forçage de l'ordre dans la fonction search_and_stream
 * FEA#8621 RGPD: Application de l'évolution tryton RGPD à Coog
