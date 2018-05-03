@@ -44,5 +44,5 @@ class Address:
     @property
     def sepa_adrline_2(self):
         return unicodedata.normalize('NFKD', u' '.join(
-                [self.zip or '', self.city or ''])
+                [self.zip or '', self.city or '']).strip()
             ).encode('ascii', 'replace')[:70]
