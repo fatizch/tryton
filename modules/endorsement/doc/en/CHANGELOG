@@ -1,3 +1,5 @@
+* BUG#8822 Modify the getter of contract initial start date in order to get right date value after an endorsement
+
 Version 2.0 - 2018-04-13
 * FEA#2172 Add shortcut to Start Endorsement in toolbar on contracts
 * BUG#8280 Prevent from applying an endorsement on an inactive contract

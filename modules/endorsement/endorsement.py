@@ -906,6 +906,20 @@ class Contract(CoogProcessFramework):
             names)
 
     @classmethod
+    def get_initial_start_date(cls, contracts, name):
+
+        if Transaction().context.get('_datetime', None):
+            # TODO: handle __history__ with sql
+            res = {x.id: None for x in contracts}
+            for contract in contracts:
+                if contract.activation_history:
+                    start = contract.activation_history[0].start_date
+                    res[contract.id] = start
+            return res
+        return super(Contract, cls).get_initial_start_date(contracts,
+            name)
+
+    @classmethod
     def view_attributes(cls):
         return super(Contract, cls).view_attributes() + [(
                 '/form/group[@id="endorsement_buttons"]',
