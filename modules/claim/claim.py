@@ -28,6 +28,9 @@ CLAIMSTATUSES = [
     ('reopened', 'Reopened'),
     ]
 
+CLAIM_READONLY = Bool(Eval('claim_status')) & (
+            Eval('claim_status') == 'closed')
+
 
 class Claim(model.CoogSQL, model.CoogView, Printable):
     'Claim'
@@ -393,9 +396,10 @@ class Loss(model.CoogSQL, model.CoogView):
     loss_desc = fields.Many2One('benefit.loss.description', 'Loss Descriptor',
         ondelete='RESTRICT', states={
             'required': Eval('state') != 'draft',
+            'readonly': CLAIM_READONLY,
             },
         domain=[('id', 'in', Eval('possible_loss_descs'))],
-        depends=['possible_loss_descs', 'state'])
+        depends=['possible_loss_descs', 'state', 'claim_status'])
     possible_loss_descs = fields.Function(
         fields.Many2Many('benefit.loss.description', None, None,
             'Possible Loss Descs', ),
@@ -403,9 +407,10 @@ class Loss(model.CoogSQL, model.CoogView):
     event_desc = fields.Many2One('benefit.event.description', 'Event',
         states={
             'required': Eval('state') != 'draft',
+            'readonly': CLAIM_READONLY,
             },
         domain=[('loss_descs', '=', Eval('loss_desc'))],
-        depends=['loss_desc', 'state'], ondelete='RESTRICT')
+        depends=['loss_desc', 'state', 'claim_status'], ondelete='RESTRICT')
     services = fields.One2Many(
         'claim.service', 'loss', 'Claim Services', delete_missing=True,
         target_not_required=True, domain=[
@@ -420,7 +425,8 @@ class Loss(model.CoogSQL, model.CoogView):
             'invisible': ~Eval('extra_data'),
             }, depends=['extra_data'])
     start_date = fields.Date('Loss Date',
-        help='Date of the event, or start date of a period')
+        help='Date of the event, or start date of a period',
+        states={'readonly': CLAIM_READONLY, }, depends=['claim_status'])
     with_end_date = fields.Function(
         fields.Boolean('With End Date'), 'get_with_end_date')
     end_date = fields.Date('End Date',
@@ -468,8 +474,8 @@ class Loss(model.CoogSQL, model.CoogView):
         cls._buttons.update({
                 'draft': {
                     'readonly': Or(
-                        Eval('state') == 'draft',
-                        Eval('claim_status') == 'closed'),
+                        CLAIM_READONLY,
+                        Eval('state') == 'draft'),
                     'invisible': Or(
                         Eval('state') == 'draft',
                         Eval('claim_status') == 'closed'),
@@ -479,6 +485,7 @@ class Loss(model.CoogSQL, model.CoogView):
                         Eval('state') == 'active',
                         ~Eval('loss_desc')),
                     'readonly': Or(
+                        CLAIM_READONLY,
                         Eval('state') == 'active',
                         ~Eval('loss_desc')),
                     },

@@ -1,5 +1,6 @@
+* BUG#8786 Les sinistres fermés ne doivent pas être modifiable
 * BUG#8818 Suppression de la barre d'outils dans l'arborescence des préjudices sur le sinistre
-* OTH#0000 Ajout du depends manquant sur le champ losses pour on_change_claimant dû à #8802
+* OTH#0000 Ajout du depends manquant sur le champ losses pour on_change_claimant dû à
 * BUG#8802 Utiliser la date de début de prestation plutôt que la date de déclaration du sinistre pour trouver les contrats possibles du sinistre
 
 Version 2.0 - 2018-04-13

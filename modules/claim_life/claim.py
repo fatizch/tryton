@@ -16,6 +16,7 @@ from trytond.pyson import Eval, If, Bool, And
 from trytond.transaction import Transaction
 from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.report_engine import Printable
+from trytond.modules.claim.claim import CLAIM_READONLY
 
 from datetime import timedelta
 
@@ -88,12 +89,15 @@ class Loss:
     covered_person = fields.Many2One('party.party', 'Covered Person',
         # TODO: Temporary hack, the function field is not calculated
         # when storing the object
+        states={'readonly': CLAIM_READONLY},
         domain=[If(
                 Bool(Eval('possible_covered_persons')),
                 ('id', 'in', Eval('possible_covered_persons')),
                 ()
                 )
-            ], depends=['possible_covered_persons'], ondelete='RESTRICT')
+            ],
+        depends=['possible_covered_persons', 'claim_status'],
+        ondelete='RESTRICT')
     start_date_string = fields.Function(
         fields.Char('Start Date String',
             depends=['loss_desc_kind', 'loss_desc']),
@@ -114,7 +118,10 @@ class Loss:
                 ())
             ], depends=['end_date'])
     is_a_relapse = fields.Boolean('Is A Relapse',
-        states={'invisible': ~Eval('with_end_date')}, depends=['with_end_date'])
+        states={
+            'invisible': ~Eval('with_end_date'),
+            'readonly': CLAIM_READONLY, },
+        depends=['with_end_date', 'claim_status'])
     loss_kind = fields.Function(
         fields.Char('Loss Kind'),
         'get_loss_kind')
