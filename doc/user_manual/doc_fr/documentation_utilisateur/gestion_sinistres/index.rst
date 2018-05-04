@@ -10,3 +10,4 @@ Gestion des sinistres
    parametrer_calcul_salaire_net_tuto
    regularisation_tuto
    mise_a_jour_parametrage_donnee_complementaire
+   eligibilite_prestation

@@ -676,7 +676,7 @@ Pour utiliser le module sur une entité (par exemple un contrat), il faut :
     .. image:: images/editique_debug_logs.png
         :align: center
 
-    .. image:: images/editique_debug_id.pngj
+    .. image:: images/editique_debug_id.png
         :align: center
 
   Ici l'*id* du contrat est ``6694``, et son *modèle* est ``contract``. Le
