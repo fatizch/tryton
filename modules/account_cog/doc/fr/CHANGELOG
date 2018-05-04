@@ -1,3 +1,5 @@
+* BUG#8866 Rendre l'extension du rapport de balance agée dynamique et ne sélectionner que les tiers nonn-balancés
+
 Version 2.0 - 2018-04-13
 * BUG#7838 Empêcher l'annulation multiple d'un mouvement comptable
 

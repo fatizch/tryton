@@ -16,11 +16,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">aged_balance_list</field>
         </record>
         <record model="ir.action.report" id="report_aged_balance_ods">
-            <field name="name">Aged Balance ODS</field>
+            <field name="name">Aged Balance Spreadsheet</field>
             <field name="model">account.aged_balance</field>
             <field name="report_name">account.aged_balance</field>
             <field name="report">account_cog/aged_balance.ods</field>
             <field name="template_extension">ods</field>
+            <field name="extension">xlsx</field>
         </record>
         <record model="ir.action.keyword" id="report_aged_balance_ods_keyword">
             <field name="keyword">form_print</field>

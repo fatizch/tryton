@@ -1,3 +1,5 @@
+* BUG#8866 Make aged balance report extension dynamic and select only unbalanced parties
+
 Version 2.0 - 2018-04-13
 * BUG#7838 Forbid multiple cancellation of a given move
 

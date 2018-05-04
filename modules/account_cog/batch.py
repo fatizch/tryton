@@ -62,7 +62,13 @@ class GenerateAgedBalance(batch.BatchRootNoSelect):
 
     @classmethod
     def get_filename(cls, treatment_date, **kwargs):
-        return 'aged_balance-%s.ods' % treatment_date.strftime('%Y-%m-%d')
+        ActionReport = Pool().get('ir.action.report')
+        report_, = ActionReport.search([
+                ('report', '=', 'account_cog/aged_balance.ods'),
+                ('report_name', '=', 'account.aged_balance'),
+                ])
+        return 'aged_balance-%s.%s' % (treatment_date.strftime('%Y-%m-%d'),
+                report_.extension)
 
     @classmethod
     def get_output_dir(cls, treatment_date, **kwargs):
@@ -86,7 +92,8 @@ class GenerateAgedBalance(batch.BatchRootNoSelect):
         cls.check_context(context_)
         with Transaction().set_context(**context_):
             type_, report, print_, name = AgedBalanceReport.execute(
-                [x.id for x in AgedBalance.search([])], context_)
+                [x.id for x in AgedBalance.search([('balance', '!=', 0)])],
+                context_)
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         with open(os.path.join(output_dir, filename), 'wb') as f_:

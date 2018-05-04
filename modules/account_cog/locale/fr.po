@@ -323,8 +323,8 @@ msgid "Set Fiscal Years"
 msgstr "Création des années fiscales"
 
 msgctxt "model:ir.action,name:report_aged_balance_ods"
-msgid "Aged Balance ODS"
-msgstr "Balance agée ODS"
+msgid "Aged Balance Spreadsheet"
+msgstr "Balance âgée"
 
 msgctxt "model:ir.test_case.instance,name:account_kind_test_case"
 msgid "Account Kind Test Case"
