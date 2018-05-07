@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from sql import Literal
 from sql.operators import Mul
+from sql.conditionals import Coalesce
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog.process import CoogProcessFramework
@@ -115,6 +116,9 @@ class EndorsementPartUnion(model.CoogSQL, model.CoogView):
         endorsement_part = pool.get('endorsement.part').__table__()
         endorsement_def_part_rel = pool.get(
             'endorsement.definition-endorsement.part').__table__()
+        lang = pool.get('res.user')(Transaction().user).language
+        translation = pool.get('ir.translation').__table__()
+        model_data = pool.get('ir.model.data').__table__()
 
         good_endorsements = None
         active_ids = Transaction().context.get('active_ids')
@@ -135,6 +139,16 @@ class EndorsementPartUnion(model.CoogSQL, model.CoogView):
             ).join(endorsement, condition=(
                 (endorsement.definition == endorsement_def_part_rel.definition)
                 & join_condition)
+            ).join(model_data, 'LEFT OUTER', condition=(
+                (model_data.db_id == endorsement_part.id) &
+                (model_data.model == 'endorsement.part'))
+            ).join(translation, 'LEFT OUTER', condition=(
+                (translation.lang == (lang.code if lang else 'en_US')) &
+                (translation.src == endorsement_part.name) &
+                (translation.fuzzy == Literal(False)) &
+                (translation.name == 'endorsement.part,name') &
+                (translation.module == model_data.module)
+            )
             ).select(
                 (endorsement_part.id + Mul(100,
                         endorsement.id)).as_('id'),
@@ -142,7 +156,7 @@ class EndorsementPartUnion(model.CoogSQL, model.CoogView):
                 Literal(0).as_('create_date'),
                 Literal(0).as_('write_uid'),
                 Literal(0).as_('write_date'),
-                endorsement_part.name.as_('name'),
+                Coalesce(translation.value, endorsement_part.name).as_('name'),
                 endorsement_part.code.as_('code'),
                 endorsement.id.as_('endorsement'))
 
