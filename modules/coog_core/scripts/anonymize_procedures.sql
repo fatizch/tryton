@@ -75,8 +75,8 @@ BEGIN
             col_test := col_exist(table_name, where_values[1]);
             if col_test > 0 then
                 if char_length(where_statement) > 0 then
-                    where_statement := where_statement || ' and '
-                end if
+                    where_statement := where_statement || ' and ';
+                end if;
                 where_statement := where_statement || where_values[1] || where_values[2] || where_values[3];
             end if;
             k := k+1;
