@@ -192,7 +192,7 @@ New Endorsement::
     True
     >>> contract.options[0].start_date == contract_start_date
     True
-    >>> _ = Endorsement.apply([good_endorsement.id], config._context)
+    >>> _ = Endorsement.apply_synchronous([good_endorsement.id], config._context)
     >>> contract = Contract(contract.id)
     >>> contract.start_date == new_contract_start_date
     True
@@ -209,7 +209,7 @@ Test options restauration::
 
     >>> good_endorsement.state = 'draft'
     >>> good_endorsement.save()
-    >>> _ = Endorsement.apply([good_endorsement.id], config._context)
+    >>> _ = Endorsement.apply_synchronous([good_endorsement.id], config._context)
     >>> config = switch_user('admin')
     >>> Option = Model.get('contract.option')
     >>> Contract = Model.get('contract')

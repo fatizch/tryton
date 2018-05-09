@@ -167,6 +167,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="access_async_task_group_contract_manage">
+            <field name="model" search="[('model', '=', 'async.task')]"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <!-- ################################### -->
         <!-- # Endorsement Contract extra_data # -->
         <!-- ################################### -->
@@ -372,7 +380,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.model.button-res.group"
             id="endorsement_apply_button_group_contract_manage">
-            <field name="button" ref="endorsement.endorsement_apply_button"/>
+            <field name="button" ref="endorsement.endorsement_apply_synchronous_button"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
     </data>

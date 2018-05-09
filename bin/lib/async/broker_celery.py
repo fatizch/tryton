@@ -8,7 +8,8 @@ from celery import Celery
 from celery import Task
 
 import async.config as config
-from async.tasks import tasks
+from async.tasks import tasks as batch_tasks
+from async.tasks import _execute
 
 
 broker_url = os.environ.get('TRYTOND_ASYNC_CELERY')
@@ -30,6 +31,9 @@ connection = redis.StrictRedis(host=broker_host, port=broker_port,
 
 class CoogTask(Task):
     abstract = True
+
+
+class CoogBatchTask(Task):
 
     def batch_trigger_event(self, method, task_id, batch_name, ids,
             *args, **kwargs):
@@ -70,8 +74,12 @@ class CoogTask(Task):
             retval, **extra_args)
 
 
-for name, func in tasks.iteritems():
-    app.task(func, base=CoogTask, name=name, serializer='json')
+for name, func in batch_tasks.iteritems():
+    app.task(func, base=CoogBatchTask, name=name, serializer='json')
+
+
+app.task(_execute, base=CoogTask, name='async_method_execution',
+    serializer='json')
 
 
 def log_job(job, queue, fname, args, kwargs):

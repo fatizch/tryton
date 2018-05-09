@@ -153,8 +153,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="user" ref="res.user_admin"/>
             <field name="group" ref="group_endorsement_admin"/>
         </record>
-        <record model="ir.model.button" id="endorsement_apply_button">
-            <field name="name">apply</field>
+        <record model="ir.model.button" id="endorsement_apply_synchronous_button">
+            <field name="name">apply_synchronous</field>
             <field name="model" search="[('model', '=', 'endorsement')]"/>
         </record>
         <record model="ir.model.button" id="endorsement_start_button">

@@ -30,6 +30,7 @@ from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog.process import CoogProcessFramework
 from trytond.modules.report_engine import Printable
 from trytond.modules.coog_core import history_tools
+from trytond.modules.coog_core.queue import QueueMixin
 from trytond.tools.multivalue import migrate_property
 from trytond.modules.company.model import (CompanyMultiValueMixin,
     CompanyValueMixin)
@@ -1150,7 +1151,8 @@ class ContractContact(object):
     __name__ = 'contract.contact'
 
 
-class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
+class Endorsement(QueueMixin, Workflow, model.CoogSQL, model.CoogView,
+        Printable):
     'Endorsement'
 
     __metaclass__ = PoolMeta
@@ -1247,7 +1249,7 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
                 'draft': {
                     'invisible': ~Eval('state').in_(['in_progress']),
                     },
-                'apply': {
+                'apply_synchronous': {
                     'invisible': ~Eval('state').in_(['draft']),
                     },
                 'cancel': {
@@ -1509,8 +1511,19 @@ class Endorsement(Workflow, model.CoogSQL, model.CoogView, Printable):
     def pre_apply_hook(cls, endorsements_per_model):
         pass
 
+    @staticmethod
+    def async_apply_condition(endorsements):
+        return endorsements and all([x.definition.async_application
+                for x in endorsements])
+
     @classmethod
     @model.CoogView.button_action('endorsement.act_open_generated')
+    def apply_synchronous(cls, endorsements):
+        with Transaction().set_context(force_synchronous=True):
+            cls.apply(endorsements)
+
+    @classmethod
+    @QueueMixin.async_method('async_apply_condition')
     @Workflow.transition('applied')
     def apply(cls, endorsements):
         pool = Pool()

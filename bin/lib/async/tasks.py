@@ -1,6 +1,7 @@
 import logging
 import datetime
 import async.broker as async_broker
+from psycopg2 import OperationalError as DatabaseOperationalError
 
 
 def split_batch(l, n):
@@ -79,7 +80,7 @@ def batch_generate(name, params):
                         broker.enqueue(name, 'batch_exec',
                             (name, l, job_params), database=database)
                         res.append(len(l))
-            except:
+            except Exception:
                 logger.critical('Job generation crashed')
                 raise
             finally:
@@ -128,7 +129,7 @@ def batch_exec(name, ids, params, **kwargs):
         connection_date = batch_params.pop('connection_date')
         job_size = batch_params.pop('job_size')
         transaction_size = batch_params.pop('transaction_size')
-        split = batch_params.pop('split')
+        batch_params.pop('split')
 
     res = []
     with Transaction().start(database, admin.id):
@@ -145,12 +146,43 @@ def batch_exec(name, ids, params, **kwargs):
                             **batch_params)
                         res.append(r or len(l))
                         Transaction().commit()
-            except:
+            except Exception:
                 logger.critical('Job execution crashed')
                 Transaction().rollback()
                 raise
             finally:
                 Cache.resets(database)
+    return res
+
+
+def _execute(ids, *args, **kwargs):
+    from trytond.pool import Pool
+    from trytond.transaction import Transaction
+    from trytond.config import config
+    model_name = kwargs.pop('model_name')
+    method_name = kwargs.pop('method_name')
+    database = kwargs.pop('database')
+    user = kwargs.pop('user', 0)
+    res = None
+
+    for count in range(config.getint('database', 'retry'), -1, -1):
+        with Transaction().start(database, user) as transaction:
+            Pool(database).init()
+            User = Pool().get('res.user')
+            with transaction.set_context(User.get_preferences(
+                        context_only=True),
+                    async_worker=True) as transaction:
+                try:
+                    model = Pool().get(model_name)
+                    method = getattr(model, method_name)
+                    records = model.browse(ids)
+                    res = method(records, *args, **kwargs)
+                    break
+                except DatabaseOperationalError:
+                    if count:
+                        transaction.rollback()
+                        continue
+                    raise
     return res
 
 

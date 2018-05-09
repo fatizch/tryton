@@ -6,7 +6,7 @@ from trytond.model import Unique
 from trytond.wizard import StateView
 from trytond.transaction import Transaction
 from trytond.cache import Cache
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
@@ -72,6 +72,14 @@ class EndorsementDefinition(model.CoogSQL, model.CoogView):
         "an endorsement. You can add user errors and warnings. "
         "The endorsement creation will only be allowed if the rule returns "
         "the value True")
+    async_application = fields.Boolean('Asynchronous Application',
+        domain=[If(Bool(Eval('next_endorsement')),
+                ('async_application', '=', False),
+                (),
+                )],
+        depends=['next_endorsement'],
+        help="If checked, the application will be handled by a background  "
+        "process. The user can then come back later and check the result")
 
     _endorsement_by_code_cache = Cache('endorsement_definition_by_code')
 

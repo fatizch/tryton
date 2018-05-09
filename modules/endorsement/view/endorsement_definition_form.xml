@@ -10,6 +10,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="preview_state"/>
     <label name="active"/>
     <field name="active"/>
+    <label name="async_application"/>
+    <field name="async_application"/>
     <newline/>
     <notebook>
         <page name="ordered_endorsement_parts">

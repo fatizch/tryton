@@ -2,6 +2,14 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <form>
+    <group id="async_info" colspan="4">
+        <field name="current_async_task" invisible="1"/>
+        <field name="async_task_state" invisible="1"/>
+        <newline/>
+        <field name="async_task_message" colspan="4"/>
+        <field name="current_async_task" invisible="1"/>
+    </group>
+    <newline/>
     <label name="effective_date"/>
     <field name="effective_date"/>
     <label name="number"/>
@@ -26,7 +34,7 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <group id="application" colspan="4">
         <group id="application_buttons" yfill="1">
-            <button string="Apply" name="apply"/>
+            <button string="Apply Synchronous" name="apply_synchronous"/>
             <button string="Resume" name="start_endorsement"/>
         </group>
     </group>

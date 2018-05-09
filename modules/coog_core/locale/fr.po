@@ -28,16 +28,16 @@ msgstr ""
 msgctxt "error:export_not_found:"
 msgid "Cannot import : no object %s with functionnal key : \"%s\" were found."
 msgstr ""
-"Impossible d'importer : Aucun objet %s avec la clé fonctionnelle \"%s\" n'a "
-"été trouvé"
+"Impossible d'importer: aucun objet %s trouvé avec la clé fonctionnel: : "
+"\"%s\" "
 
 msgctxt "error:export_not_unique:"
 msgid ""
 "Cannot import : the following objects:\\n%s\\n share the same functional "
 "key:\\n\"%s\"."
 msgstr ""
-"Impossible d'importer : Les objets :\\n%s\\n partagent la même clé "
-"fonctionnelle :\\n\"%s\"."
+"Impossible d'importer  : les objets suivants:\\n%s\\n ont la même clé "
+"fonctionnel :\\n\"%s\"."
 
 msgctxt "error:extra_details.configuration:"
 msgid "The model must be unique!"
@@ -91,7 +91,47 @@ msgstr ""
 
 msgctxt "error:missing_export_configuration:"
 msgid "Can't find configuration for code %s."
-msgstr "Impossible de trouver la configuration avec le code %s."
+msgstr "Impossible de trouver la clé de configuration pour le code  %s."
+
+msgctxt "field:async.task,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:async.task,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:async.task,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:async.task,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:async.task,origin:"
+msgid "Origin"
+msgstr "Origine"
+
+msgctxt "field:async.task,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l' enregistrement"
+
+msgctxt "field:async.task,task_id:"
+msgid "Task Id"
+msgstr "Identifiant de la tâche"
+
+msgctxt "field:async.task,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:async.task,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:async.task,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:batch.data_update,id:"
 msgid "ID"
@@ -1323,6 +1363,10 @@ msgid ""
 "should be run or not"
 msgstr ""
 "Le nom de la méthode utilisé pour décider si le jeux d'essai doit être lancé"
+
+msgctxt "model:async.task,name:"
+msgid "Coog Async Task"
+msgstr "Tâche de fond Coog"
 
 msgctxt "model:batch.data_update,name:"
 msgid "Data Update Batch"

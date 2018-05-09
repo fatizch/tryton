@@ -23,6 +23,7 @@ import extra_details
 import wizard_context
 import test_case
 import load_data
+import queue
 
 from model import UnionMixin, expand_tree
 
@@ -97,6 +98,7 @@ def register():
         test_case.TestCaseModel,
         load_data.GlobalSearchSet,
         load_data.LanguageTranslatableSet,
+        queue.CoogAsyncTask,
         module='coog_core', type_='model')
 
     if config.getboolean('env', 'testing') is True:

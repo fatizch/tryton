@@ -201,6 +201,10 @@ class EndorsementWizardStepMixin(model.CoogView):
             contracts = [select_screen.contract]
         else:
             contracts = []
+        drafts = Endorsement.search([('contracts', 'in',
+                    [x.id for x in contracts])])
+        if drafts:
+            Endorsement.check_pending_task(drafts)
         if (not error_manager or 'effective_date_before_start_date'
                 not in [x[0] for x in error_manager._errors]):
             if (not cls.allow_effective_date_before_contract(select_screen) and

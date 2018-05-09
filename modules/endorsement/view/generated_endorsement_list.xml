@@ -9,6 +9,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="generated_by"/>
     <field name="contracts_name"/>
     <field name="subscribers_name"/>
-    <button string="Apply" name="apply"/>
+    <button string="Apply" name="apply_synchronous"/>
     <button string="Delete" name="button_delete"/>
 </tree>

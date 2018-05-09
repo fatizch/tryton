@@ -12,7 +12,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="applied_by"/>
     <field name="application_date" widget="date"/>
     <button string="Cancel" name="cancel" tree_invisible="1"/>
-    <button string="Apply" name="apply" tree_invisible="1"/>
+    <button string="Apply" name="apply_synchronous" tree_invisible="1"/>
     <button string="Resume" name="start_endorsement" tree_invisible="1"/>
     <button string="Open Contract" name="open_contract" tree_invisible="1"/>
     <button name="start_endorsement" string="Resume Endorsement" tree_invisible="1"/>
