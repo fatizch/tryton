@@ -1,3 +1,5 @@
+* OTH#0000 Correction de l'affichage des champs de configuration des journaux de paiement
+
 Version 2.0 - 2018-04-13
 * FEA#8410 Ne créer les mouvements d'attente que si le journal de paiement/relevé associé est paramétré pour.
 
