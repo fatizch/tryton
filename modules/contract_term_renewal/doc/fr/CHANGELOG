@@ -1,3 +1,5 @@
+* BUG#8924 Correction de la requête du batch pour éviter les renouvellements multiples
+
 Version 2.0 - 2018-04-13
 * BUG#7876 Ajout du support de la réactivation des contrats sans effet
 * OTH#0000 Correctif erreur sur commit 941d5db2
