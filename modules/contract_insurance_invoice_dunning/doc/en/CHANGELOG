@@ -1,3 +1,5 @@
+* BUG#8912 Error when processing dunning termination before initial start date if dunning configured with termination at_dunning_effective_date
+
 Version 2.0 - 2018-04-13
 * OTH#0000 Fix to unblock the period computation for the prepayment computation
 * FEA#8214 Default termination mode for contract in dunning level configuration is set to 'At dunning effective date'

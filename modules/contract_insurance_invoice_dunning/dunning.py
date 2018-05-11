@@ -238,7 +238,7 @@ class Level:
                     dunning.contract.termination_reason == termination_reason
                     or dunning.contract.final_end_date <= date):
                 continue
-            if not date:
+            if not date or date < dunning.contract.initial_start_date:
                 to_void.append(dunning.contract)
             else:
                 to_terminate[date].append(dunning.contract)
