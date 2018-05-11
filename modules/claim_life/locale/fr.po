@@ -42,11 +42,11 @@ msgstr "Date d'arrêt de travail :"
 
 msgctxt "error:claim.loss:"
 msgid "Start Date:"
-msgstr "Date de début:"
+msgstr "Date de début :"
 
 msgctxt "error:claim.loss:"
 msgid "The initial loss is missing on the relapse: %(loss)s"
-msgstr "Le préjudice initial n'est pas renseigné pour la rechute: %(loss)s"
+msgstr "Le préjudice initial n'est pas renseigné pour la rechute : %(loss)s"
 
 msgctxt "error:claim.loss:"
 msgid "The previous std doesn't have an end date defined"

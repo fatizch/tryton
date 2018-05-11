@@ -1,3 +1,5 @@
+* BUG#8926 Fix display of loss dates label in claim declaration
+
 Version 2.0 - 2018-04-13
 * FEA#8525 Enable declaring a relapse as a separate claim
 * BUG#8403 Fix display of loss dates

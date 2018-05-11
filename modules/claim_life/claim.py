@@ -102,8 +102,9 @@ class Loss:
         fields.Char('Start Date String',
             depends=['loss_desc_kind', 'loss_desc']),
         'on_change_with_start_date_string')
-    end_date_string = fields.Function(
-        fields.Char('End Date String', depends=['loss_desc_kind', 'loss_desc']),
+    end_date_string = fields.Function(fields.Char('End Date String',
+        states={'invisible': Bool(~Eval('with_end_date'))},
+        depends=['loss_desc_kind', 'loss_desc', 'with_end_date']),
         'on_change_with_end_date_string')
     initial_std_start_date = fields.Date('Initial STD Start Date',
         states={'invisible': Eval('loss_desc_kind') != 'ltd',
@@ -187,11 +188,11 @@ class Loss:
 
     @fields.depends('loss_desc', 'loss_desc_kind')
     def on_change_with_start_date_string(self, name=None):
-        return self.date_string(name)
+        return self.date_string('start_date_string')
 
     @fields.depends('loss_desc', 'loss_desc_kind')
     def on_change_with_end_date_string(self, name=None):
-        return self.date_string(name)
+        return self.date_string('end_date_string')
 
     def date_string(self, name=None):
         if not name:
