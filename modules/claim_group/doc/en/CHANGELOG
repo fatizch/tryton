@@ -1,3 +1,5 @@
+* OTH#0000 Fix domain of "Post termination claim beahviour" field of contracts
+
 Version 2.0 - 2018-04-13
 * BUG#8102 The companies on parties are sorted by affiliation start date (descending)
 * FEA#7681 Add management start date and management end date to claims

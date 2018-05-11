@@ -29,7 +29,7 @@ class Contract:
             'required':
             Eval('is_group') & (Eval('status', '') == 'terminated'),
             }, domain=[If(~Eval('is_group'),
-                [('post_termination_claim_behaviour', '=', '')],
+                [('post_termination_claim_behaviour', 'in', (None, ''))],
                 [])],
         depends=['is_group', 'status'])
 
