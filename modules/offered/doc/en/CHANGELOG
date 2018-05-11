@@ -1,3 +1,4 @@
+* BUG#8918 Fix missing reset of default_value in extra data if type_ is not selection or boolean
 * BUG#8800 Fix product duplicate
 
 Version 2.0 - 2018-04-13

@@ -87,6 +87,7 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
         # Migration from 1.3: Drop start_date, end_date column
         TableHandler = backend.get('TableHandler')
         extra_data = TableHandler(cls)
+        cursor = Transaction().connection.cursor()
         if extra_data.column_exist('start_date'):
             extra_data.drop_column('start_date')
         if extra_data.column_exist('end_date'):
@@ -101,6 +102,9 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
             extra_data.column_rename('with_default_value',
             'has_default_value')
         super(ExtraData, cls).__register__(module_name)
+        # migration from a fix in 2.0 due to missing reset of default_value
+        cursor.execute("update extra_data set default_value = Null "
+            "where type_ not in ('boolean', 'selection')")
 
     @classmethod
     def create(cls, vlist):
@@ -159,8 +163,7 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
             self.default_selection = ''
         elif self.type_ == 'boolean':
             self.default_boolean = False
-        else:
-            self.default = ''
+        self.default_value = ''
 
     @fields.depends('name', 'string')
     def on_change_with_name(self):
