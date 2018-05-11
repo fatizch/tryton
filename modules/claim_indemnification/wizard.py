@@ -264,8 +264,7 @@ class IndemnificationAssistant(Wizard, model.FunctionalErrorMixIn):
                 self.append_functional_error(
                     'cannot_refuse_cancel_indemnifications',
                     {'indemnification': element.indemnification.rec_name})
-            if (element.action == 'refuse' and
-                    not element.indemnification.note):
+            if (element.action == 'refuse' and not element.note):
                 self.append_functional_error(
                     'cannot_refuse_indemnifications_without_note',
                     {'indemnification': element.indemnification.rec_name})

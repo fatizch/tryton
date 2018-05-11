@@ -1,3 +1,4 @@
+* BUG#8916 Impossible de refuser une indemnisation depuis l'assistant de validation: l'alerte sur le champ note manquant est toujours affichée
 * BUG#8808 Autoriser les découpages en milieu de journée des périodes d'indemnisation lors de la vérification pour ordonnancement
 
 Version 2.0 - 2018-04-13
