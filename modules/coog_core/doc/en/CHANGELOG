@@ -1,3 +1,4 @@
+* OTH#0000 Add user's groups and party's bank account among historizable models by configuration
 * FEA#8212 Execution of heavy business treatment in asynchronous mode
 * OTH#0000 Fix client plugin linking in coog repo link
 * BUG#8683 RGPD: Remove anonymization of banks

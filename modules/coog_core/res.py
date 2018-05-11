@@ -12,6 +12,7 @@ from export import ExportImportMixin
 __all__ = [
     'Group',
     'User',
+    'UserGroup',
     'ResUserWarning',
     ]
 
@@ -75,6 +76,10 @@ class User(ExportImportMixin):
     @classmethod
     def _export_light(cls):
         return super(User, cls)._export_light() | {'groups', 'rule_groups'}
+
+
+class UserGroup(ExportImportMixin):
+    __name__ = 'res.user-res.group'
 
 
 class ResUserWarning(ExportImportMixin):

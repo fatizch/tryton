@@ -7,7 +7,6 @@ from trytond.pyson import Eval
 from trytond.modules.coog_core import utils, fields, export
 from trytond.modules.coog_core import coog_string
 
-
 __all__ = [
     'Bank',
     'BankAccount',
@@ -259,7 +258,7 @@ class BankAccountNumber(export.ExportImportMixin):
         return None
 
 
-class BankAccountParty:
+class BankAccountParty(export.ExportImportMixin):
     'Bank Account - Party'
     __metaclass__ = PoolMeta
     __name__ = 'bank.account-party.party'

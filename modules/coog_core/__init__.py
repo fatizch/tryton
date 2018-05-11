@@ -62,6 +62,7 @@ def register():
         ir.Icon,
         res.Group,
         res.User,
+        res.UserGroup,
         res.ResUserWarning,
         export.FileSelector,
         batch.ViewValidationBatch,
