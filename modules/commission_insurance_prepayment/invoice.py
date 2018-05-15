@@ -76,6 +76,16 @@ class Invoice:
                 prepayment_used = min(outstanding_prepayment_per_contract[key],
                     commission.amount).quantize(
                     Decimal(10) ** -COMMISSION_AMOUNT_DIGITS)
+                # Do not change the commission amount if the difference between
+                # redeemed prepayment and commission amount is less than
+                # 0.01 cents.
+                # When the last invoice is generated, the sum of
+                # redeemed prepayment
+                # is lower than the expected commissions amount. This is due to
+                # a rounding problem
+                dif_between_com_prepayment = commission.amount - prepayment_used
+                if ((abs(dif_between_com_prepayment)) < (Decimal('0.01'))):
+                    prepayment_used = commission.amount
                 commission.amount -= prepayment_used
                 commission.redeemed_prepayment = prepayment_used
                 outstanding_prepayment_per_contract[key] -= prepayment_used
