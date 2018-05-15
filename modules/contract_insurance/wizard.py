@@ -705,7 +705,7 @@ class PartyErase:
             self.raise_user_error('party_covered_quote', {
                     'party': party.rec_name,
                     'quotes': ', '.join(
-                        [c.contract_number for c in quotes])
+                        [c.quote_number for c in quotes])
                     })
         terminated_unreached_shelf = list(set([ce.contract
                     for ce in covered_elements
