@@ -30,6 +30,7 @@ __all__ = [
     'IndemnificationAssistant',
     'DeleteIndemnification',
     'CancelIndemnification',
+    'CancelIndemnificationReason',
     ]
 
 
@@ -999,12 +1000,26 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
         return 'end'
 
 
+class CancelIndemnificationReason(model.CoogView):
+    'Cancel Indemnification Reason'
+
+    __name__ = 'claim.indemnification.select_cancel_reason'
+
+    cancel_reason = fields.Many2One('claim.indemnification.payback_reason',
+        'Cancel Reason', required=True)
+
+
 class CancelIndemnification(Wizard):
     'Cancel Indemnification'
 
     __name__ = 'claim.indemnification.cancel'
 
-    start_state = 'cancel_selection'
+    start_state = 'cancel_reason'
+    cancel_reason = StateView('claim.indemnification.select_cancel_reason',
+        'claim_indemnification.select_cancel_reason_view_form', [
+            Button('Cancel', 'cancel', 'tryton-cancel'),
+            Button('Apply', 'cancel_selection', 'tryton-go-next',
+                default=True)])
     cancel_selection = StateTransition()
 
     def transition_cancel_selection(self):
@@ -1013,7 +1028,8 @@ class CancelIndemnification(Wizard):
         assert model == 'claim.indemnification'
         Indemnification = Pool().get('claim.indemnification')
         indemnifications = Indemnification.browse(ids)
-        Indemnification.cancel_indemnification(indemnifications)
+        Indemnification.cancel_indemnification(indemnifications,
+            self.cancel_reason.cancel_reason)
         Indemnification.schedule(indemnifications)
         return 'end'
 

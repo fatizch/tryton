@@ -133,6 +133,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">claim.indemnification.detail,-1</field>
             <field name="action" ref="act_delete_indemnification_wizard"/>
         </record>
+        <record model="ir.ui.view" id="select_cancel_reason_view_form">
+            <field name="model">claim.indemnification.select_cancel_reason</field>
+            <field name="type">form</field>
+            <field name="name">select_cancel_reason_form</field>
+        </record>
         <record model="ir.action.wizard" id="act_cancel_indemnification_wizard">
             <field name="name">Cancel Associated Indemnification(s)</field>
             <field name="wiz_name">claim.indemnification.cancel</field>

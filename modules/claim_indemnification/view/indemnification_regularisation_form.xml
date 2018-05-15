@@ -11,7 +11,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="remaining_amount"/>
         <newline/>
         <label name="payback_reason"/>
-        <field name="payback_reason" xexpand="1"/>
+        <field name="payback_reason" widget="selection" xexpand="1"/>
         <newline/>
         <label name="payback_method"/>
         <field name="payback_method" xexpand="1"/>

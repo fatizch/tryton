@@ -48,6 +48,7 @@ def register():
         wizard.IndemnificationAssistantView,
         wizard.IndemnificationValidateElement,
         wizard.IndemnificationControlElement,
+        wizard.CancelIndemnificationReason,
         claim.IndemnificationControlRule,
         configuration.Configuration,
         event.EventTypeAction,

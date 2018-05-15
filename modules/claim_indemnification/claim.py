@@ -786,8 +786,6 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'scheduling_blocked': 'Scheduling is blocked for '
                 'indemnification %(indemnification)s, claim\'s '
                 'sub status is %(sub_status)s',
-                'cancel_indemnification': 'You are about to cancel the payment'
-                ' of this indemnification. %s',
                 })
         cls._order = [('start_date', 'ASC')]
 
@@ -871,9 +869,6 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     @model.CoogView.button_action(
             'claim_indemnification.act_cancel_indemnification_wizard')
     def cancel_payment(cls, indemnifications):
-        txt = [x.rec_name for x in indemnifications]
-        cls.raise_user_warning(str(indemnifications), 'cancel_indemnification',
-                '\n' + '\n'.join(txt))
         pass
 
     def _get_applied_product_supplier_taxes(self):
@@ -1356,11 +1351,14 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             'reject_indemnification')
 
     @classmethod
-    def cancel_indemnification(cls, indemnifications):
+    def cancel_indemnification(cls, indemnifications, payback_reason=None):
         if not indemnifications:
             return
         pool = Pool()
-        cls.write(indemnifications, {'status': 'cancelled'})
+        to_update = {'status': 'cancelled'}
+        if payback_reason:
+            to_update['payback_reason'] = payback_reason.id
+        cls.write(indemnifications, to_update)
         Event = pool.get('event')
         Event.notify_events(indemnifications, 'cancel_indemnification')
 
