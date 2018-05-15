@@ -183,7 +183,11 @@ class Contract:
             paid_amount, generated_amount, computed_amount):
         codes = []
         linear_err = any((not x.is_prepayment and x.amount != 0
-                for x in commissions))
+                and not x.invoice_line for x in commissions))
+        paid_linear_amount = sum(x.amount for x in commissions if
+            not x.is_prepayment and x.amount != 0 and x.invoice_line)
+        paid_linear_err = paid_linear_amount and \
+            abs(deviation_amount) > Decimal('0.001')
         if abs(deviation_amount) > Decimal('0.001'):
             codes.append({
                     'code': 'KO', 'description': 'The recalculated amount '
@@ -195,7 +199,15 @@ class Contract:
                 'description': 'There is linear commissions on '
                 'prepayment plan.',
                 })
-        if not linear_err and abs(deviation_amount) <= Decimal('0.001'):
+        if paid_linear_err:
+            codes.append({
+                'code': 'PAID_LIN_ERR',
+                'description': 'There is unbalanced paid linear commissions '
+                'on prepayment plan. (%s)' % paid_linear_amount,
+                })
+
+        if (not linear_err and not paid_linear_err
+                and abs(deviation_amount) <= Decimal('0.001')):
             # Everything all right
             codes.append({'code': 'OK', 'description': ''})
         else:
@@ -369,7 +381,8 @@ class Contract:
                 actual_amount = generated_amount + paid_amount
                 _, rate = option._get_prepayment_amount_and_rate(agent,
                     agent.plan)
-                if err_code not in ('CNT_REE', 'CNT_FORCE_ADJ', 'CNT_ACT_ADJ'):
+                if err_code not in ('CNT_REE', 'CNT_FORCE_ADJ',
+                        'CNT_ACT_ADJ'):
                     adjustement_amount = redeemed_amount - actual_amount
                 else:
                     computed_amount = contract._get_computed_amount(agent,
@@ -379,8 +392,7 @@ class Contract:
                     adjustement_amount = deviation_amount
                 adjustements.extend(
                     option.compute_commission_with_prepayment_schedule(
-                        agent, agent.plan, rate,
-                        adjustement_amount,
+                        agent, agent.plan, rate, adjustement_amount,
                         self.last_paid_invoice_end, self.final_end_date, {}))
             if adjustements:
                 Commission.save(adjustements)
