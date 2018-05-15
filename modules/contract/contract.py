@@ -805,30 +805,41 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         else:
             return self.product.subscriber_kind
 
+    def can_change_start_date(self):
+        if self.activation_history and \
+                len(self.activation_history) > 1:
+            self.append_functional_error(
+                'start_date_multiple_activation_history')
+            return False
+        return True
+
+    def _update_activation_history_start_date(self, value):
+        existing = self.activation_history[0]
+        if existing.start_date != value:
+            if existing.end_date and existing.end_date < value:
+                existing.end_date = None
+            existing.start_date = value
+            self.activation_history = [existing]
+
     @classmethod
     def setter_start_date(cls, contracts, name, value):
         pool = Pool()
         ActivationHistory = pool.get('contract.activation_history')
 
-        for contract_slice in grouped_slice(contracts):
-            to_save = []
-            for contract in contract_slice:
-                to_save.append(contract)
-                contract.notify_start_date_change(value)
-                if not contract.activation_history:
-                    contract.activation_history = [ActivationHistory(
-                            contract=contract, start_date=value)]
-                elif len(contract.activation_history) > 1:
-                    cls.raise_user_error(
-                        'start_date_multiple_activation_history')
-                else:
-                    existing = contract.activation_history[0]
-                    if existing.start_date != value:
-                        if existing.end_date and existing.end_date < value:
-                            existing.end_date = None
-                        existing.start_date = value
-                        contract.activation_history = [existing]
-            cls.save(to_save)
+        with model.error_manager():
+            for contract_slice in grouped_slice(contracts):
+                to_save = []
+                for contract in contract_slice:
+                    to_save.append(contract)
+                    contract.notify_start_date_change(value)
+                    if not contract.can_change_start_date():
+                        continue
+                    if not contract.activation_history:
+                        contract.activation_history = [ActivationHistory(
+                                contract=contract, start_date=value)]
+                    else:
+                        contract._update_activation_history_start_date(value)
+        cls.save(to_save)
 
     @classmethod
     def setter_end_date(cls, contracts, name, value):

@@ -4,7 +4,7 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
         <page string="Term - Renewal" id="term_renewal_rule">
-            <field name="term_renewal_rule" mode="form"/>
+            <field name="term_renewal_rule" mode="form" colspan="4"/>
         </page>
     </xpath>
 </data>

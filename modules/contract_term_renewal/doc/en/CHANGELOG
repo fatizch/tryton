@@ -1,3 +1,4 @@
+* FEA#8878 Add configuration to allow contracts deferments, even if contracts has already been renewed
 * BUG#8924 Fix the batch query to avoid multiple renewals
 
 Version 2.0 - 2018-04-13

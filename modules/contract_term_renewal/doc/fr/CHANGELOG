@@ -1,3 +1,4 @@
+* FEA#8878 Ajout de paramétrage sur le produit afin d'autoriser les reports sur les contrats qui ont déja subi un renouvellement
 * BUG#8924 Correction de la requête du batch pour éviter les renouvellements multiples
 
 Version 2.0 - 2018-04-13

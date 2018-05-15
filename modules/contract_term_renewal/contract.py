@@ -7,6 +7,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
 from trytond.pyson import Eval, And, Or
 from trytond.transaction import Transaction
+
 from trytond.modules.coog_core import fields, model, utils
 
 __all__ = [
@@ -61,9 +62,22 @@ class Contract:
                 'already_renewed': 'Contract %(contract_number)s has already'
                 ' been renewed, with new start date at %(start_date)s . Are '
                 'you sure you want to prevent renewal after %(end_date)s ?',
-                'renew_impossible': "Contract %(contract_number)s has already "
-                "a planned termination. It can't be renewed",
+                'renew_impossible': 'Contract %(contract_number)s has already '
+                'a planned termination. It can\'t be renewed',
+                'deferment_after_renew': 'The contract %(contract)s has been '
+                'renewed, the deferment will override the contract start date',
                 })
+
+    def update_start_date(self, caller=None):
+        with model.error_manager():
+            res = self.can_change_start_date()
+        if res:
+            if len(self.activation_history) > 1 and \
+                    self.product.term_renewal_rule:
+                self.raise_user_warning('deferment_after_renew_%s' %
+                    str(self.contract_number),
+                    'deferment_after_renew', {'contract': self.contract_number})
+            super(Contract, self).update_start_date(caller)
 
     def finally_renewed(self):
         return (self.activation_history and
@@ -92,6 +106,43 @@ class Contract:
             return date
         else:
             return rule_date
+
+    def _update_activation_history_start_date(self, value):
+        if self.is_renewable and len(self.activation_history) > 1:
+            less_act_hist = [x for x in self.activation_history
+                if x.start_date <= value]
+            if less_act_hist:
+                to_modify = less_act_hist[-1]
+                to_remove = None
+                # Delete previous activation history
+                if len(less_act_hist) > 1:
+                    to_remove = less_act_hist[:-1]
+                if to_remove:
+                    self.activation_history = list(set(self.activation_history)
+                        - set(to_remove))
+                if to_modify.start_date != value:
+                    if to_modify.end_date and to_modify.end_date < value:
+                        to_modify.end_date = None
+                    to_modify.start_date = value
+                    self.activation_history = list(self.activation_history)
+                    return
+        super(Contract, self)._update_activation_history_start_date(value)
+
+    def can_change_start_date(self):
+        res = super(Contract, self).can_change_start_date()
+        if not self._error_manager:
+            return res
+        multiple_history = self.pop_functional_error(
+            'start_date_multiple_activation_history')
+        if not multiple_history:
+            return res
+        elif multiple_history and self.product.term_renewal_rule:
+            res = not self._error_manager.has_errors
+        else:
+            self.append_functional_error(
+                'start_date_multiple_activation_history')
+            res = False
+        return res
 
     @classmethod
     def terminate(cls, contracts, at_date, termination_reason):

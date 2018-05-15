@@ -12,6 +12,14 @@ msgstr ""
 
 msgctxt "error:contract:"
 msgid ""
+"The contract %(contract)s has been renewed, the deferment will override "
+"the contract start date"
+msgstr ""
+"Le contrat %(contract)s à été renouvellé, le report va écraser la date "
+"de début du contrat"
+
+msgctxt "error:contract:"
+msgid ""
 "Contract %(contract_number)s has already been renewed, with new start date "
 "at %(start_date)s . Are you sure you want to prevent renewal after "
 "%(end_date)s ?"
@@ -86,7 +94,7 @@ msgstr "Produit"
 
 msgctxt "field:offered.product.term_renewal_rule,rec_name:"
 msgid "Record Name"
-msgstr "Nom"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:offered.product.term_renewal_rule,rule:"
 msgid "Rule Engine"
