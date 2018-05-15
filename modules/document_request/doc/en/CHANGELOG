@@ -1,3 +1,5 @@
+* BUG#8961 Set reception date to null when attachment is removed from a document request
+
 Version 2.0 - 2018-04-13
 * BUG#8414 Add setter for attachment name on document request lines in order to keep file extension
 * BUG#7931 Fix behaviour when setting an attachment and its reception date at the same time

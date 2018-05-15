@@ -1,3 +1,5 @@
+* BUG#8961 Réinitialiser la date de réception à nul lorsque la pièce jointe associée à une demande de document est supprimée
+
 Version 2.0 - 2018-04-13
 * BUG#8414 Ajout d'un setter pour le nom de la pièce jointe sur les lignes de demandes de documents afin de garder l'extension du fichier
 * BUG#7931 Correction du comportement lors de la saisie simultané d'une pièce jointe et d'une date de réception

@@ -235,6 +235,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     def on_change_attachment(self):
         if not self.attachment:
             self.attachment_data = None
+            self.reception_date = None
         self.update_lines_fields()
 
     @fields.depends('attachment', 'reception_date', 'first_reception_date',
