@@ -1,3 +1,5 @@
+* BUG#8828 Add a new mandate update method from contract data
+
 Version 2.0 - 2018-04-13
 * OTH#0000 Remove inappropriate 1.8 migration
 * BUG#7925 Fix the payment date calculation on fee lines

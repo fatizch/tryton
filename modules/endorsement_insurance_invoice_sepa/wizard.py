@@ -171,6 +171,7 @@ class ChangeBillingInformation:
         super(ChangeBillingInformation, self).set_account_owner()
         pool = Pool()
         Mandate = pool.get('account.payment.sepa.mandate')
+        Billing_Information = pool.get('contract.billing_information')
         if self.mandate_needed:
             new_info = self.new_billing_information[0]
             account = (new_info.direct_debit_account or
@@ -205,6 +206,8 @@ class ChangeBillingInformation:
                     self.previous_mandate.signature_date
                 new_mandate.amendment_of = self.previous_mandate
                 new_mandate.start_date = self.effective_date
+            Billing_Information.update_mandate_from_contract(
+                new_mandate, self.contract)
             new_mandate.save()
             new_info.sepa_mandate = new_mandate
 

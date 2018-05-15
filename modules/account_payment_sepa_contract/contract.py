@@ -98,6 +98,11 @@ class ContractBillingInformation:
         depends=['direct_debit', 'direct_debit_account', 'contract_status'],
         ondelete='RESTRICT')
 
+    # this method is overload in the specific code for santiane
+    @classmethod
+    def update_mandate_from_contract(cls, mandate, contract):
+        pass
+
     @classmethod
     def _export_light(cls):
         return (super(ContractBillingInformation, cls)._export_light() |
@@ -111,7 +116,7 @@ class ContractBillingInformation:
         product_mandate_sequence = self.contract.product.sepa_mandate_sequence
         if product_mandate_sequence:
             identification = Sequence.get_id(product_mandate_sequence.id)
-        return Mandate(
+        mandate = Mandate(
             party=self.contract.payer,
             account_number=self.direct_debit_account.numbers[0],
             type=type_,
@@ -121,6 +126,8 @@ class ContractBillingInformation:
                 self.contract.start_date),
             company=self.contract.company,
             state=state)
+        self.update_mandate_from_contract(mandate, self.contract)
+        return mandate
 
     def unicity_key_for_mandate(self, numbers_id):
         return [
