@@ -1191,7 +1191,7 @@ msgstr "Brouillon"
 
 msgctxt "view:account.invoice:"
 msgid "Post"
-msgstr "Poster"
+msgstr "Émettre"
 
 msgctxt "view:account.invoice:"
 msgid "Validate"
