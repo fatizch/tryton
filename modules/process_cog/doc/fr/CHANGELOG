@@ -1,3 +1,5 @@
+* FEA#8975 Amélioration de la gestion de l'étape d'activation sur un devis
+
 Version 2.0 - 2018-04-13
 * FEA#8411 Fusion des onglets présentant les vues XML dans un seul onglet
 * BUG#8020 Correction d'une erreur à l'export de wizards

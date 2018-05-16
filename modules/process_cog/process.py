@@ -309,6 +309,7 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
                 'button_delete_task': RPC(instantiate=0, readonly=0),
                 'button_hold_task': RPC(instantiate=0, readonly=0),
                 'button_postpone': RPC(instantiate=0, readonly=0),
+                'fast_forward_process': RPC(readonly=False, instantiate=0),
                 'attach_to_process': RPC(readonly=False, instantiate=0),
                 })
 
@@ -344,9 +345,9 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
         current_state = process.first_step()
         self.current_state = current_state
         self.save()
-        self.fast_forward_process()
+        self.fast_forward_process(False)
 
-    def fast_forward_process(self):
+    def fast_forward_process(self, raise_error=True):
         Transaction().commit()
         visited = set([])
 
@@ -364,6 +365,8 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
                 Transaction().commit()
             except Exception:
                 Transaction().rollback()
+                if raise_error:
+                    raise
                 break
 
     @classmethod
