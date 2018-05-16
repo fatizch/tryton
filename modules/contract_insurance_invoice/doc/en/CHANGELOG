@@ -1,3 +1,4 @@
+* BUG#8962 Initialize new future invoice amount with decimal
 * BUG#8673 Do not select invoice with start date posterior to contract termination date in contract invoice post batch
 * OTH#0000 Add check for existing billing informations on contract before proceeding with the initialization
 

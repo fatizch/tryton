@@ -1310,10 +1310,10 @@ class Contract:
             'currency_digits': invoice.currency.digits,
             'currency_symbol': invoice.currency.symbol,
             'premium': None,
-            'amount': 0,
-            'tax_amount': 0,
-            'fee': 0,
-            'total_amount': 0,
+            'amount': Decimal(0),
+            'tax_amount': Decimal(0),
+            'fee': Decimal(0),
+            'total_amount': Decimal(0),
             'details': [],
             }
 
