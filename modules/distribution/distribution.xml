@@ -27,11 +27,21 @@ this repository contains the full copyright notices and license terms. -->
             <field name="field_childs">childs</field>
             <field name="name">distribution_network_list_with_contacts</field>
         </record>
+        <!-- Read / Write rule -->
+        <record model="ir.rule.group" id="rule_group_dist_network">
+            <field name="model" search="[('model', '=', 'distribution.network')]"/>
+            <field name="global_p" eval="True"/>
+        </record>
+        <record model="ir.rule" id="rule_dist_network_1">
+            <field name="domain"
+                 eval="[('company', 'in', Eval('user', {}).get('companies', []))]" pyson="1"/>
+            <field name="rule_group" ref="rule_group_dist_network"/>
+        </record>
         <!--Entry Point-->
         <record model="ir.action.act_window" id="act_dist_network_form">
             <field name="name">Distribution Networks</field>
             <field name="res_model">distribution.network</field>
-            <field name="domain" eval="None"/>
+            <field name="domain" eval="[('parent', '=', None), ('company', '=', Eval('context', {}).get('company', None))]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.domain" id="act_dist_network_domain_parent">
             <field name="name">Tree</field>

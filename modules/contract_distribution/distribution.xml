@@ -21,20 +21,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="distribution.dist_network_view_list_with_contacts"/>
             <field name="name">distribution_network_list_with_contacts</field>
         </record>
-        <!-- Read / Write rule -->
-        <record model="ir.rule.group" id="rule_group_dist_network">
-            <field name="model" search="[('model', '=', 'distribution.network')]"/>
-            <field name="global_p" eval="True"/>
-        </record>
-        <record model="ir.rule" id="rule_dist_network_1">
-            <field name="domain"
-                 eval="[('company', 'in', Eval('user', {}).get('companies', []))]" pyson="1"/>
-            <field name="rule_group" ref="rule_group_dist_network"/>
-        </record>
-        <!-- Entry Point -->
-        <record model="ir.action.act_window" id="distribution.act_dist_network_form">
-            <field name="domain" eval="[('parent', '=', None), ('company', '=', Eval('context', {}).get('company', None))]" pyson="1"/>
-        </record>
         <!-- ############################################################ -->
         <!-- Product -->
         <!-- ############################################################ -->

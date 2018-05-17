@@ -22,6 +22,8 @@ class TestCaseModel:
         if 'code' not in kwargs:
             kwargs['code'] = coog_string.slugify(
                 kwargs['name'])
+        if 'company' not in kwargs:
+            kwargs['company'] = cls.get_company()
         return DistributionNetwork(**kwargs)
 
     @classmethod

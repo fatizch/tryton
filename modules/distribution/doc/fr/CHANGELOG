@@ -1,3 +1,5 @@
+* BUG#8918 Définition d'une société par défaut pour migrer les réseaux de distribution existants en base à l'installation du module
+
 Version 2.0 - 2018-04-13
 * FEA#8549 Ajout d'une contrainte d'unicité sur le code d'un réseau de distribution
 * FEA#8122 Le réseau de distribution de l'utilisateur est disponible dans les préférences côté client

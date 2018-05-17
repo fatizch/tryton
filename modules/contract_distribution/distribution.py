@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If
-from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import model, fields, utils, coog_string
 
@@ -32,8 +31,6 @@ class DistributionNetwork:
         fields.Many2Many('distribution.commercial_product', None, None,
             'All Commercial Products'),
         'get_all_commercial_products_id')
-    company = fields.Many2One('company.company', 'Company',
-        ondelete='RESTRICT', depends=['commercial_products'])
 
     def get_parent_com_products_id(self, name):
         ComProduct = Pool().get('distribution.commercial_product')
@@ -45,10 +42,6 @@ class DistributionNetwork:
     def get_all_commercial_products_id(self, name):
         return [x.id for x in set(
                 self.commercial_products + self.parent_com_products)]
-
-    @classmethod
-    def default_company(cls):
-        return Transaction().context.get('company') or None
 
     @classmethod
     def _export_skips(cls):

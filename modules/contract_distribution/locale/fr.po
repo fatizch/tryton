@@ -111,10 +111,6 @@ msgctxt "field:distribution.network,commercial_products:"
 msgid "Commercial Products"
 msgstr "Produits Commerciaux"
 
-msgctxt "field:distribution.network,company:"
-msgid "Company"
-msgstr "Société"
-
 msgctxt "field:distribution.network,is_distributor:"
 msgid "Distributor"
 msgstr "Distributeur"

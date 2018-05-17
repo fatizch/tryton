@@ -6,7 +6,6 @@ import res
 import distribution
 import offered
 import contract
-import test_case
 import process
 
 
@@ -18,7 +17,6 @@ def register():
         distribution.DistributionNetworkComProductRelation,
         offered.Product,
         contract.Contract,
-        test_case.TestCaseModel,
         process.ContractSubscribeFindProcess,
         module='contract_distribution', type_='model')
     Pool.register(

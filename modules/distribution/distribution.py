@@ -1,9 +1,14 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import logging
+
+from trytond import backend
+from trytond.pool import Pool
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
+from trytond.model import Unique
 
 from trytond.modules.coog_core import model, fields, coog_string
-from trytond.model import Unique
 
 __all__ = [
     'DistributionNetwork',
@@ -24,6 +29,8 @@ class DistributionNetwork(model.CoogSQL, model.CoogView):
     full_name = fields.Function(
         fields.Char('Name'),
         'get_full_name', searcher='search_full_name')
+    company = fields.Many2One('company.company', 'Company',
+        ondelete='RESTRICT')
     parent = fields.Many2One('distribution.network', 'Top Level', select=True,
         left='left', right='right', ondelete='CASCADE')
     childs = fields.One2Many('distribution.network', 'parent', 'Sub Levels',
@@ -63,6 +70,28 @@ class DistributionNetwork(model.CoogSQL, model.CoogView):
             ('code_unique', Unique(t, t.code), 'The code must be unique')]
 
     @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        table = TableHandler(cls, module_name)
+        company_exists = table.column_exist('company')
+        super(DistributionNetwork, cls).__register__(module_name)
+
+        # Migration from 1.14
+        if not company_exists:
+            cursor = Transaction().connection.cursor()
+            company = Pool().get('company.company').__table__()
+            cursor.execute(*company.select(company.id))
+            company_ids = cursor.fetchall()
+            if len(company_ids) > 1:
+                logging.getLogger(__name__).warning('Initializing table with' +
+                    ' first company found')
+            if company_ids and company_ids[0]:
+                dist_network = cls.__table__()
+                cursor.execute(*dist_network.update(
+                        columns=[dist_network.company],
+                        values=[company_ids[0]]))
+
+    @classmethod
     def _export_skips(cls):
         return super(DistributionNetwork, cls)._export_skips() | {'left',
             'right', 'childs'}
@@ -74,6 +103,10 @@ class DistributionNetwork(model.CoogSQL, model.CoogView):
     @classmethod
     def is_master_object(cls):
         return True
+
+    @classmethod
+    def default_company(cls):
+        return Transaction().context.get('company') or None
 
     @staticmethod
     def default_left():
