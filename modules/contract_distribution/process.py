@@ -43,6 +43,10 @@ class ContractSubscribeFindProcess:
             Pool().get('res.user')(Transaction().user).network_distributors]
         return candidates[0] if len(candidates) == 1 else None
 
+    @fields.depends('distributor', methods=['signature_date'])
+    def on_change_distributor(self):
+        self.simulate_init()
+
     @fields.depends('product', 'start_date', 'signature_date',
         'appliable_conditions_date', 'free_conditions_date',
         'distributor', 'authorized_commercial_products')
@@ -63,6 +67,8 @@ class ContractSubscribeFindProcess:
                 self.commercial_product = \
                     self.authorized_commercial_products[0]
                 self.good_process = self.on_change_with_good_process()
+            elif not self.authorized_commercial_products:
+                self.unset_product()
         return res
 
     @fields.depends('commercial_product', methods=['product', 'signature_date'])

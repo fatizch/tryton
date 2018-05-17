@@ -1,3 +1,4 @@
+* BUG#8938 Recalculer la liste des produits commerciaux autorisés suite à un changement dans la sélection du distributeur dans le processus de souscription
 * FEA#8845 Initialisation du produit commercial durant le processus de souscription si il n'y en a qu'un seul d'autorisé
 
 Version 2.0 - 2018-04-13
