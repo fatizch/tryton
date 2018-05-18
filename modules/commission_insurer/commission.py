@@ -97,6 +97,7 @@ class Commission:
         Invoice = Pool().get('account.invoice')
         date = utils.today() if date is None else date
         type_ = cls.get_insurer_invoice_type(notice_kind)
+        business_kind = cls.get_insurer_business_kind(notice_kind),
         matchs = Invoice.search([
                 ('company', '=', company),
                 ('journal', '=', journal),
@@ -104,6 +105,7 @@ class Commission:
                 ('insurer_role', '=', insurer),
                 ('invoice_date', '=', date),
                 ('type', '=', type_),
+                ('business_kind', '=', business_kind),
                 ('state', '=', 'draft'),
                 ], limit=2)
         if matchs:
@@ -122,7 +124,7 @@ class Commission:
             else insurer.party.account_receivable_used,
             payment_term=insurer.party.supplier_payment_term,
             invoice_date=date,
-            business_kind=cls.get_insurer_business_kind(notice_kind),
+            business_kind=business_kind,
             lines=[],
             )
 
