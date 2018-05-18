@@ -1,3 +1,4 @@
+* FEA#8932 Limiter la recherche des contrats par rapport au réseau de distribution de l'utilisateur
 * BUG#8938 Recalculer la liste des produits commerciaux autorisés suite à un changement dans la sélection du distributeur dans le processus de souscription
 * FEA#8845 Initialisation du produit commercial durant le processus de souscription si il n'y en a qu'un seul d'autorisé
 

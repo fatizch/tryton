@@ -1,3 +1,4 @@
+* FEA#8932 Limit contracts search according to the user's distribution network
 * BUG#8938 Recalculate the authorized commercial products list following a change in the distributor selection in the contract subscription process
 * FEA#8845 Initialize commercial product during contract subscription process if there is only one authorized
 

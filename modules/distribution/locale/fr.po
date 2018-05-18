@@ -24,7 +24,7 @@ msgstr "Code"
 
 msgctxt "field:distribution.network,company:"
 msgid "Company"
-msgstr "Société"s
+msgstr "Société"
 
 msgctxt "field:distribution.network,contact_mechanisms:"
 msgid "Contact Mechanisms"
