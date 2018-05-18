@@ -1,3 +1,7 @@
+* FEA#8849 UI enhancements on commission plan, plan lines and agents views
+* FEA#8849 Allow to search commission plan from coverages
+* FEA#8849 Allow to deactivate a commission plan
+
 Version 2.0 - 2018-04-13
 * OTH#0000 Various fixes for commissions
 * OTH#0000 Fix flake 8

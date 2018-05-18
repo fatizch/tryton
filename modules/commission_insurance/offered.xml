@@ -23,5 +23,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">offered.product,-1</field>
             <field name="action" ref="act_product_agents_relate_form"/>
         </record>
+        <!-- ###################### -->
+        <!-- # Option Description # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="option_description_view_form">
+            <field name="model">offered.option.description</field>
+            <field name="inherit" ref="offered.coverage_view_form"/>
+            <field name="name">option_description_form</field>
+        </record>
     </data>
 </tryton>

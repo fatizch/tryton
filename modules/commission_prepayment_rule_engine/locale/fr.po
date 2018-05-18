@@ -14,13 +14,17 @@ msgstr ""
 "Le résultat de la règle d'échéancier de versement du précompte ne correspond"
 " pas au format attendu [(date, pourcentage)]"
 
+msgctxt "error:commission.plan.line:"
+msgid "Linear"
+msgstr "Linéaire"
+
+msgctxt "error:commission.plan.line:"
+msgid "Prepayment"
+msgstr "Précompte"
+
 msgctxt "field:commission.plan,prepayment_payment_rule:"
 msgid "Payment Date Rule for Prepayment"
 msgstr "Règle de calcul de la date de paiement du précompte"
-
-msgctxt "field:commission.plan.line,prepayment_formula_description:"
-msgid "Prepayment"
-msgstr "Précompte"
 
 msgctxt "field:commission.plan.line,prepayment_rule:"
 msgid "Prepayment Rule"

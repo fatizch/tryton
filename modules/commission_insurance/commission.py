@@ -497,6 +497,7 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
     _func_key = 'code'
 
     code = fields.Char('Code', required=True)
+    active = fields.Boolean('Active')
     type_ = fields.Selection([
             ('agent', 'Broker'),
             ('principal', 'Insurer'),
@@ -556,6 +557,14 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
     def default_type_():
         return 'agent'
 
+    @staticmethod
+    def default_lines():
+        return [{}]
+
+    @staticmethod
+    def default_active():
+        return True
+
     def get_context_formula(self, amount, product, pattern=None):
         context = super(Plan, self).get_context_formula(amount, product)
         context['names']['nb_years'] = (pattern or {}).get('nb_years', 0)
@@ -595,7 +604,7 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
         return list(set(products))
 
     def get_commissioned_products_name(self, name):
-        return ', '.join([x.name for x in self.commissioned_products])
+        return ', '.join([x.rec_name for x in self.commissioned_products])
 
     @classmethod
     def search_commissioned_products(cls, name, clause):
@@ -631,6 +640,8 @@ class PlanLines(export.ExportImportMixin):
     options_extract = fields.Function(fields.Text('Options'),
         'get_options_extract')
     _get_matching_cache = Cache('get_matching_cache')
+    formula_description = fields.Function(fields.Text('Formula'),
+        'get_formula_description')
 
     @classmethod
     def create(cls, vlist):
@@ -665,7 +676,19 @@ class PlanLines(export.ExportImportMixin):
         return coverage_id in option_ids
 
     def get_options_extract(self, name):
-        return ' \n'.join((option.name for option in self.options))
+        products = []
+        for o in self.options:
+            products += o.products
+        lines = []
+        for product in list(set(products)):
+            lines.append('%s (%s)' % (
+                    product.rec_name,
+                    ', '.join([option.name for option in product.coverages
+                            if option in self.options])))
+        return ' \n'.join(lines)
+
+    def get_formula_description(self, name):
+        return self.formula if self.formula else ''
 
     @classmethod
     def _export_light(cls):
@@ -820,6 +843,8 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
+    active = fields.Function(fields.Boolean('Active'), 'get_active',
+        searcher='search_active')
     agent_payment_term = fields.Many2One(
         'account.invoice.payment_term', 'Commission Agent Payment Term',
         ondelete='RESTRICT', help='If defined, this payment term has priority '
@@ -834,6 +859,7 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
         fields.Char('Commissioned Products'),
         'get_commissioned_products_name',
         searcher='search_commissioned_products')
+    icon = fields.Function(fields.Char('Icon'), 'on_change_with_icon')
 
     @classmethod
     def __setup__(cls):
@@ -868,6 +894,13 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
         return (super(Agent, cls)._export_light() |
             set(['company', 'currency', 'plan']))
 
+    @fields.depends('type_')
+    def on_change_with_icon(self, name=None):
+        return {
+            'agent': 'cash-out',
+            'principal': 'cash-in',
+            }[self.type_] if self.type_ else ''
+
     def get_payment_term_from_party(self, type_):
         AccountConfiguration = Pool().get('account.configuration')
         if self.agent_payment_term:
@@ -892,7 +925,10 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
             ] if self.plan else []
 
     def get_commissioned_products_name(self, name):
-        return ', '.join([x.name for x in self.commissioned_products])
+        return ', '.join([x.rec_name for x in self.commissioned_products])
+
+    def get_active(self, name):
+        return not self.plan.active
 
     @classmethod
     def search_commissioned_products(cls, name, clause):
@@ -925,6 +961,20 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
                 [('party.code',) + tuple(clause[1:])],
                 [('plan.code',) + tuple(clause[1:])],
                 ]
+
+    @classmethod
+    def search_active(cls, name, clause):
+        reverse = {
+            '=': '!=',
+            '!=': '=',
+            }
+        if clause[1] in reverse:
+            if clause[2]:
+                return [('plan.active', clause[1], True)]
+            else:
+                return [('plan.active', reverse[clause[1]], True)]
+        else:
+            return []
 
     @classmethod
     def find_matches(cls, agents, target_broker):

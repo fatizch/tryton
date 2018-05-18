@@ -2,8 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/field[@name='insurer_plan']" position="after">
-        <newline/>
+    <xpath expr="/form/notebook/page[@name='is_prepayment']" position="inside">
         <label name="commission_recovery"/>
         <field name="commission_recovery"/>
     </xpath>

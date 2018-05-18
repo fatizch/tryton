@@ -2,9 +2,9 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page[@id='data']" position="inside">
-        <page name="fees">
-            <field name="fees" colspan="4"/>
+    <xpath expr="/form/notebook/page[@id='managers']" position="after">
+        <page id="commission" string="Commission">
+            <field name="commission_plan_lines" colspan="4"/>
         </page>
     </xpath>
 </data>

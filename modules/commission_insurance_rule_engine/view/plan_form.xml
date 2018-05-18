@@ -2,11 +2,10 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/field[@name='type_']" position="after">
+    <xpath expr="/form/notebook/page[@id='data']/field[@name='computation_dates']" position="before">
         <label name="rule_engine_key"/>
         <field name="rule_engine_key"/>
-    </xpath>
-    <xpath expr="/form/notebook/page[@name='lines']" position="inside">
+        <newline/>
         <field name="extra_data_def" colspan="2"/>
     </xpath>
 </data>

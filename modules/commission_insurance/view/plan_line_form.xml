@@ -9,8 +9,8 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/label[@name='sequence']" position="replace"/>
     <xpath expr="/form/field[@name='sequence']" position="replace"/>
     <xpath expr="/form/field[@name='formula']" position="after">
-        <field name="options" colspan="4"/>
         <label name="product"/>
         <field name="product"/>
+        <field name="options" colspan="4"/>
     </xpath>
 </data>

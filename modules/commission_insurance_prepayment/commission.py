@@ -109,6 +109,12 @@ class PlanLines:
         context.setdefault('functions', {})['Decimal'] = Decimal
         return simple_eval(decistmt(self.prepayment_formula), **context)
 
+    def get_formula_description(self, name):
+        lines = [super(PlanLines, self).get_formula_description(name)]
+        if self.prepayment_formula:
+            lines.append(self.prepayment_formula)
+        return ' \n'.join(lines)
+
 
 class Plan:
     __metaclass__ = PoolMeta
@@ -120,6 +126,16 @@ class Plan:
     delete_unpaid_prepayment = fields.Boolean('Delete Unpaid Prepayment',
         help='Redeemed of unpaid invoices will be deleted once contracts '
         'are terminated')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(Plan, cls).view_attributes() + [
+            (
+                "/form/notebook/page[@name='is_prepayment']",
+                'states',
+                {'invisible': ~Eval('is_prepayment')}
+                ),
+            ]
 
     def get_context_formula(self, amount, product, pattern=None):
         context = super(Plan, self).get_context_formula(amount, product,

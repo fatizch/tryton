@@ -44,8 +44,6 @@ class PlanLines(
     __name__ = 'commission.plan.line'
 
     use_rule_engine = fields.Boolean('Use Rule Engine')
-    formula_description = fields.Function(fields.Char('Formula'),
-        'get_formula_description')
 
     @classmethod
     def __setup__(cls):
@@ -63,10 +61,10 @@ class PlanLines(
         cls.formula.depends.append('use_rule_engine')
 
     def get_formula_description(self, name):
-        if self.use_rule_engine:
-            return self.rule.name
+        if self.rule:
+            return self.get_rule_extract()
         else:
-            return self.formula
+            return super(PlanLines, self).get_formula_description(name)
 
     def get_amount(self, **context):
         if not self.use_rule_engine:

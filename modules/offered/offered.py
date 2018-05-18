@@ -430,7 +430,7 @@ class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
     @fields.depends('products')
     def on_change_with_products_name(self, name=None):
-        return ', '.join([x.name for x in self.products])
+        return ', '.join([x.rec_name for x in self.products])
 
     @fields.depends('currency')
     def on_change_with_currency_digits(self, name=None):

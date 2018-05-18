@@ -7,4 +7,12 @@ this repository contains the full copyright notices and license terms. -->
         <field name="start_date"/>
         <field name="end_date"/>
     </xpath>
+    <xpath expr="/tree/field[@name='company']" position="replace"/>
+    <xpath expr="/tree/field[@name='pending_amount']" position="replace"/>
+    <xpath expr="/tree/field[@name='party']" position="replace_attributes">
+        <field name="party" icon="icon"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='type_']" position="replace_attributes">
+        <field name="type_" tree_invisible="1"/>
+    </xpath>
 </data>

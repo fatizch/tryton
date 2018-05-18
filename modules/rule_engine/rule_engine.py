@@ -249,6 +249,18 @@ def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
     setattr(BaseRuleMixin, 'on_change_with_' + extra_name,
         on_change_with_rule_extra_data)
 
+    def get_extract(self):
+        ExtraData = Pool().get('extra_data')
+        rule = getattr(self, field_name, None)
+        extract = rule.name if rule else ''
+        for line in ExtraData.get_extra_data_summary([
+                self], extra_name)[self.id].split('\n'):
+            if line:
+                extract += '\n  %s' % line
+        return extract
+
+    setattr(BaseRuleMixin, 'get_' + field_name + '_extract', get_extract)
+
     return BaseRuleMixin
 
 

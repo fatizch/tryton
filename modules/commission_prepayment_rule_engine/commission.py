@@ -107,9 +107,6 @@ class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule')):
     __metaclass__ = PoolMeta
     __name__ = 'commission.plan.line'
 
-    prepayment_formula_description = fields.Function(fields.Char('Prepayment'),
-        'get_formula_description')
-
     @classmethod
     def __setup__(cls):
         super(PlanLines, cls).__setup__()
@@ -122,13 +119,22 @@ class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule')):
         cls.prepayment_formula.depends.append('use_rule_engine')
         cls.prepayment_rule.help = (
             'Returns a tuple with the prepayment commission amount and rate')
+        cls._error_messages.update({
+                'linear': 'Linear',
+                'prepayment': 'Prepayment',
+                })
 
     def get_formula_description(self, name):
-        if self.use_rule_engine:
-            if self.prepayment_rule:
-                return self.prepayment_rule.name
-        else:
-            return self.prepayment_formula
+        lines = [super(PlanLines, self).get_formula_description(name)]
+        if self.prepayment_rule:
+            if lines:
+                lines[0] = '%s : %s' % (
+                    self.raise_user_error('linear', raise_exception=False),
+                    lines[0])
+            lines.append('%s : %s' % (
+                    self.raise_user_error('prepayment', raise_exception=False),
+                    self.get_prepayment_rule_extract()))
+        return ' \n'.join(lines)
 
     def get_prepayment_amount(self, **context):
         if not self.use_rule_engine:

@@ -422,6 +422,10 @@ msgctxt "field:commission.plan.date,year:"
 msgid "Year"
 msgstr "Année"
 
+msgctxt "field:commission.plan.line,formula_description:"
+msgid "Formula"
+msgstr "Formule"
+
 msgctxt "field:commission.plan.line,options:"
 msgid "Options"
 msgstr "Options"
@@ -1240,6 +1244,10 @@ msgstr "%"
 msgctxt "view:commission:"
 msgid "Amount"
 msgstr "Montant"
+
+msgctxt "view:commission.plan:"
+msgid "Data"
+msgstr "Données"
 
 msgctxt "view:party.party:"
 msgid "Broker"

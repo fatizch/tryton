@@ -32,7 +32,7 @@ class OptionDescription:
 
     commission_plan_lines = fields.Many2Many(
         'commission.plan.lines-offered.option.description', 'option',
-        'plan_line', 'Commission Plan Lines', readonly=True)
+        'plan_line', 'Commission Plan Lines')
     agents = fields.Function(
         fields.Many2Many('commission.agent', None, None, 'Agents'),
         'get_agents')

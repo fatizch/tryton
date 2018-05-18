@@ -62,10 +62,6 @@ msgctxt "field:commission.plan.line,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
 
-msgctxt "field:commission.plan.line,formula_description:"
-msgid "Formula"
-msgstr "Formule"
-
 msgctxt "field:commission.plan.line,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"

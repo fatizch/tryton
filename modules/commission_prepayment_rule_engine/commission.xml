@@ -16,11 +16,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="commission.plan_line_view_form"/>
             <field name="name">plan_line_form</field>
         </record>
-        <record model="ir.ui.view" id="plan_line_view_list">
-            <field name="model">commission.plan.line</field>
-            <field name="inherit" ref="commission.plan_line_view_list"/>
-            <field name="name">plan_line_list</field>
-        </record>
         <!-- ############################################################ -->
         <!-- ########### Payment Rule view ########### -->
         <!-- ############################################################ -->

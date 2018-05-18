@@ -7,5 +7,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">coopengo-reconciliation</field>
             <field name="path">icons/coopengo-reconciliation.svg</field>
         </record>
+        <record model="ir.ui.icon" id="cash-in_icon">
+            <field name="name">cash-in</field>
+            <field name="path">icons/cash-in.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="cash-out_icon">
+            <field name="name">cash-out</field>
+            <field name="path">icons/cash-out.svg</field>
+        </record>
     </data>
 </tryton>
