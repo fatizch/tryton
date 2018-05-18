@@ -344,8 +344,10 @@ class Contract:
         commissions = Commission.search([
             ('commissioned_contract', '=', self.id),
             ('is_prepayment', '=', False),
+            ('agent.plan.is_prepayment', '=', True),
             ('amount', '!=', None),
             ('amount', '!=', 0),
+            ('invoice_line', '=', None),
             ])
         for com in commissions:
             new_amount = (com.redeemed_prepayment or Decimal('0')) + \
