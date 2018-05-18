@@ -48,3 +48,34 @@ validées dont la date de début est inférieure ou égale à la date de traitem
 
 - *Fréquence suggérée:* quotidienne
 - *Date de traitement à fournir:* date du jour
+
+Batch de requittancement manuel de contrats [``contract.rebill.batch``]
+=======================================================================
+
+Ce batch est essentiellement destiné à la reprise de contrats suite à des
+erreurs de gestion, des données incomplètes ou erronnées en entrée d'une
+migration, ou d'une évolution rétroactive du paramétrage.
+
+**Ce batch a un déclenchement manuel, et ne dépend pas d'autres batchs**
+
+- *Fréquence suggérée* : quand nécessaire
+- *Paramètres* :
+
+  - *filepath* : le chemin vers le fichier csv contenant la liste des contrats
+    à traiter, ainsi que les dates de début du requittancement. Le format
+    attendu pour les dates est ``YYYY-mm-dd``. Ex :
+
+    .. code-block::
+
+        CTR000001;2020-04-10
+        CTR000009;2019-06-25
+
+  - *post* / *no-post* : permet de déclencher l'émission automatique (ou pas)
+    des quittances concernées
+  - *reconcile* / *no-reconcile* : dans le cas où l'émission automatique est
+    activée, permet d'effectuer une réconciliation sur les contrats
+
+:Attention: **Si le batch est lancé avec *post*, il n'est pas possible de le
+            paralléliser. En cas de gros volumes, il est recommandé de lancer
+            avec *no-post*, et de laisser passer le batch d'émission du plan
+            batch pour émettre les quittances passées**

@@ -24,6 +24,7 @@ __all__ = [
     'InvoiceAgainstBalanceBatch',
     'SetNumberInvoiceAgainstBalanceBatch',
     'PostInvoiceAgainstBalanceBatch',
+    'RebillBatch',
     ]
 
 
@@ -436,3 +437,56 @@ class BulkSetNumberInvoiceContractBatch(batch.BatchRoot):
         res = cls.bulk_set_number(ids)
         cls.logger.info('%d invoices numbers set' % len(ids))
         return res
+
+
+class RebillBatch(batch.BatchRoot):
+    'Rebill Contracts'
+
+    __name__ = 'contract.rebill.batch'
+
+    @classmethod
+    def convert_to_instances(cls, ids, *args, **kwargs):
+        return ids[:]
+
+    @classmethod
+    def select_ids(cls, filepath, post=False, reconcile=False):
+        assert not reconcile or post, 'Impossible to reconcile without posting'
+        cursor = Transaction().connection.cursor()
+        contract = Pool().get('contract').__table__()
+        res = {}
+        with open(filepath, 'r') as f:
+            for line in f.readlines():
+                line = line.strip()
+                if not line:
+                    continue
+                number, date = line.split(';')
+                number = number.strip()
+                date = date.strip()
+                try:
+                    datetime.datetime.strptime(date, '%Y-%m-%d')
+                except ValueError:
+                    raise Exception('Invalid date %s' % date)
+                res[number] = date
+        cursor.execute(*contract.select(contract.id, contract.contract_number,
+                where=contract.contract_number.in_(res.keys())))
+        result = []
+        for contract_id, contract_number in cursor.fetchall():
+            result.append((contract_id, res.pop(contract_number)))
+        if res:
+            raise Exception('Could not found contracts ' +
+                ', '.join(res.keys()))
+        return result
+
+    @classmethod
+    def execute(cls, objects, ids, filepath, post=False, reconcile=False):
+        Contract = Pool().get('contract')
+
+        # Set post_end to min date in order to avoid post
+        post_end = None if post else datetime.date.min
+
+        for (contract_id, date) in objects:
+            date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+            Contract(contract_id).rebill(date, post_end=post_end)
+
+        if post and reconcile:
+            Contract.reconcile(Contract.browse([x[0] for x in objects]))
