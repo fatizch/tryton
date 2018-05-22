@@ -1,3 +1,4 @@
+* BUG#8934 Suppression des champs nom de personne et de société et remplacement par des groupes entourant les champs
 * BUG#8858 Forçage de all_addresse à être une liste vide quand un tiers est importé et créé avec une adresse
 * BUG#8859 La modification de la données "Personne physique" n'est possible que si et seulement si aucune information personnelle n'a déjà été saisie comme la date de naissance ou le prénom
 

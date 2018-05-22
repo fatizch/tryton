@@ -104,13 +104,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             'required': STATES_PERSON,
             'readonly': STATES_ACTIVE,
             }, depends=['is_person', 'active'])
-    last_name = fields.Function(
-        fields.Char('Last Name', states={
-                'invisible': ~STATES_PERSON,
-                'required': STATES_PERSON,
-                'readonly': STATES_ACTIVE,
-                }, depends=['is_person', 'active', 'name']),
-        'get_name', 'set_name')
     birth_name = fields.Char('Birth Name', states={
             'invisible': ~STATES_PERSON,
             'readonly': STATES_ACTIVE,
@@ -129,13 +122,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         'get_SSN_required')
     ####################################
     # Company information
-    company_name = fields.Function(
-        fields.Char('Name', states={
-                'required': ~STATES_PERSON,
-                'invisible': ~STATES_COMPANY,
-                'readonly': STATES_ACTIVE,
-                }, depends=['is_person', 'active', 'name']),
-        'get_name', 'set_name')
     commercial_name = fields.Char('Commercial Name', states={
             'invisible': ~STATES_COMPANY,
             'readonly': STATES_ACTIVE,
@@ -216,6 +202,12 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
     @classmethod
     def view_attributes(cls):
         return super(Party, cls).view_attributes() + [
+            ("/form/group[@id='last_name']", 'states',
+                {'invisible': ~STATES_PERSON}),
+            ("/form//group[@id='label_company_name']", 'states',
+                {'invisible': STATES_PERSON}),
+            ("/form//group[@id='field_company_name']", 'states',
+                {'invisible': STATES_PERSON}),
             ("/form/notebook/page/group[@id='several_addresses']", 'states', {
                     'invisible': ~Eval('has_multiple_addresses', False)}),
             ("/form/notebook/page/group[@id='one_address']", 'states', {
@@ -249,9 +241,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
                 values['first_name'], values['birth_date'])
         else:
             super(Party, cls).add_func_key(values)
-
-    def get_name(self, name):
-        return self.name
 
     def get_func_key(self, name):
         if not self.is_person:
@@ -430,14 +419,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             field = getattr(cls, field_name)
             Role = Pool().get(field.model_name)
             Role.delete(roles)
-
-    @classmethod
-    def set_name(cls, parties, name, value):
-        if name == 'last_name':
-            parties = [p for p in parties if p.is_person]
-        elif name == 'company_name':
-            parties = [p for p in parties if not p.is_person]
-        cls.write(parties, {'name': value})
 
     def get_full_name(self, name):
         if self.is_person:

@@ -14,8 +14,8 @@ this repository contains the full copyright notices and license terms. -->
             <label name="gender"/>
             <group id="last_name" col="-1">
                 <field name="gender" widget="selection"/>
-                <label name="last_name"/>
-                <field name="last_name" colspan="100"/>
+                <label name="name"/>
+                <field name="name" colspan="100"/>
             </group>
             <label name="first_name"/>
             <field name="first_name"/>
@@ -26,8 +26,12 @@ this repository contains the full copyright notices and license terms. -->
             <label name="ssn"/>
             <field name="ssn"/>
             <newline/>
-            <label name="company_name"/>
-            <field name="company_name"/>
+            <group id="label_company_name" xfill="1" xexpand="0">
+                <label name="name" xfill="1" xexpand="1" xalign="1"/>
+            </group>
+            <group id="field_company_name">
+                <field name="name"/>
+            </group>
             <label name="commercial_name"/>
             <field name="commercial_name"/>
     </xpath>
