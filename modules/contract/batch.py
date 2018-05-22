@@ -33,7 +33,7 @@ class ContractEndDateTerminationBatch(batch.BatchRoot):
                 ('status', '=', 'active'),
                 ('status', '=', 'hold')],
             ('end_date', '!=', None),
-            ('end_date', '<=', treatment_date)]
+            ('end_date', '<', treatment_date)]
 
     @classmethod
     def execute(cls, objects, ids, treatment_date):

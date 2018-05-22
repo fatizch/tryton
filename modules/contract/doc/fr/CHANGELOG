@@ -1,3 +1,4 @@
+* BUG#8996 Contournement pour ne plus résilier les contrats
 * BUG#8692 Utilisation du statut du contrat dans le calcul de is_active_at_date sur les garanties
 * OTH#0000 Initialiser la donnée est_une_rechute lors de l'initialisation d'un préjudice
 
@@ -12,7 +13,7 @@ Version 2.0 - 2018-04-13
 * BUG#4856 Utilisation de seulement deux colonnes pour la vue formulaire des garanties
 * BUG#7979 Autoriser/Réactiver la suppression de devis et de contrats déclinés
 * BUG#7876 Support de la réactivation des contrats sans effet
-* BUG#7951 Correction des surcharges de la méthode execute de event type action 
+* BUG#7951 Correction des surcharges de la méthode execute de event type action
 * BUG#7885 Correction du comportement de la résiliation avec plusieurs périodes d'activation futures
 * BUG#7783 La date de fin de la garantie est limitée par la date de fin définitive du contrat plutôt que la date de fin courante
 * FEA#7737 Ajout de l'assistant 'Changer les détails du statut' sur les contrats actifs
