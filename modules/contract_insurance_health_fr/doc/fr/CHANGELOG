@@ -1,3 +1,5 @@
+* BUG#8993 Restauration de l'appel au super sur le write de party
+
 Version 2.0 - 2018-04-13
 * BUG#7692 Correction de l'affichage du complément santé principal
 

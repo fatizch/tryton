@@ -68,6 +68,7 @@ class Party:
                             'dependent_party': [p.name
                                 for p in ss_dependent_parties]
                         })
+        super(Party, cls).write(*args)
 
     def get_main_health_complement(self, name):
         complement = self.get_health_complement_at_date()
