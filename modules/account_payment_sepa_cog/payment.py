@@ -191,8 +191,8 @@ class Mandate(model.CoogSQL, model.CoogView):
         pool = Pool()
         Party = pool.get('party.party')
         Sequence = pool.get('ir.sequence')
-        suffix_and_prefix = sepa_sequence.prefix or '' \
-            + sepa_sequence.suffix or ''
+        suffix_and_prefix = (sepa_sequence.prefix or '') + (
+            sepa_sequence.suffix or '')
         matches = PARTY_PLACEHOLDER.findall(suffix_and_prefix)
         if not matches:
             return
