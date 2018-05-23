@@ -1,3 +1,4 @@
+* OTH#0000 Déplacement de la déclaration de méthode pour supprimer la double déclaration et simplifier la surcharge
 * BUG#8851 Selection de la raison d'annulation lorsque l'on réalise l'action d'annuler une indemnisation
 * BUG#8916 Impossible de refuser une indemnisation depuis l'assistant de validation: l'alerte sur le champ note manquant est toujours affichée
 * BUG#8808 Autoriser les découpages en milieu de journée des périodes d'indemnisation lors de la vérification pour ordonnancement

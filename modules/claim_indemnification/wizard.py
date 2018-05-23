@@ -509,7 +509,7 @@ class IndemnificationDefinition(model.CoogView):
                 self.journal = conf.payment_journal \
                     if conf.payment_journal in self.possible_journals \
                     else None
-        self.update_product()
+        Pool().get('claim.indemnification').update_product(self)
 
     @fields.depends('beneficiary', 'beneficiary_share', 'service',
         'start_date')
@@ -524,23 +524,6 @@ class IndemnificationDefinition(model.CoogView):
             if party == self.beneficiary:
                 self.beneficiary_share = share
                 return
-
-    def get_possible_products(self, name):
-        if not self.service:
-            return []
-        return [x.id for x in self.service.benefit.products]
-
-    def update_product(self):
-        Product = Pool().get('product.product')
-        products = self.get_possible_products(None)
-        if self.product and self.product.id not in products:
-            self.product = None
-        if len(products) == 1:
-            self.product = Product(products[0])
-        if products:
-            self.possible_products = Product.browse(products)
-        else:
-            self.possible_products = []
 
     def get_extra_data_values(self):
         return self.extra_data

@@ -390,6 +390,9 @@ class ClaimService:
             args['date'] = self.loss.start_date
         return self.benefit.calculate_deductible(args)
 
+    def get_possible_products(self):
+        return self.benefit.products
+
     def is_deductible(self):
         details = [x for indemn in self.indemnifications for x
             in indemn.details]
@@ -625,7 +628,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         ondelete='RESTRICT', depends=['possible_products', 'status'])
     possible_products = fields.Function(
         fields.Many2Many('product.product', None, None, 'Possible Products'),
-        'get_possible_products')
+        'get_possible_products_id')
     taxes_included = fields.Function(
         fields.Boolean('Taxes included'),
         'on_change_with_taxes_included')
@@ -924,30 +927,33 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             return self.service.benefit.rec_name
         return ''
 
-    def get_possible_products(self, name):
-        return [x.id for x in self.service.benefit.products]
+    def get_possible_products_id(self, name):
+        return [x.id for x in self.service.get_possible_products()]
 
-    def update_product(self):
-        Product = Pool().get('product.product')
-        products = self.get_possible_products(None)
-        self.product = getattr(self, 'product', None)
-        if self.product and self.product.id not in products:
-            self.product = None
+    @classmethod
+    def update_product(cls, indemnification):
+        # Class method because also called from the wizard with
+        # a fake indeminication (modelview)
+        products = indemnification.service.get_possible_products()
+        indemnification.product = getattr(indemnification, 'product', None)
+        if indemnification.product and indemnification.product not in products:
+            indemnification.product = None
         if len(products) == 1:
-            self.product = Product(products[0])
+            indemnification.product = products[0]
         if products:
-            self.possible_products = Product.browse(products)
+            indemnification.possible_products = products
         else:
-            self.possible_products = []
-        if self.product:
-            self.taxes_included = self.product.taxes_included
+            indemnification.possible_products = []
+        if indemnification.product:
+            indemnification.taxes_included = \
+                indemnification.product.taxes_included
         else:
-            self.taxes_included = False
+            indemnification.taxes_included = False
 
     def init_from_service(self, service):
         self.status = 'calculated'
         self.service = service
-        self.update_product()
+        self.__class__.update_product(self)
 
     def get_kind(self, name=None):
         if self.service:
