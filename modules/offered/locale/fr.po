@@ -70,7 +70,7 @@ msgstr "ID"
 
 msgctxt "field:extra_data,kind:"
 msgid "Kind"
-msgstr "Type"
+msgstr "Type métier"
 
 msgctxt "field:extra_data,name:"
 msgid "Code"
@@ -114,7 +114,7 @@ msgstr "Labels"
 
 msgctxt "field:extra_data,type_:"
 msgid "Type"
-msgstr "Type"
+msgstr "Type technique"
 
 msgctxt "field:extra_data,write_date:"
 msgid "Write Date"

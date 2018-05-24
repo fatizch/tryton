@@ -1,3 +1,4 @@
+* BUG#8960 Fix kind and type french translation on extra data
 * BUG#8918 Fix missing reset of default_value in extra data if type_ is not selection or boolean
 * BUG#8800 Fix product duplicate
 
