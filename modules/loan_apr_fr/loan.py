@@ -32,6 +32,7 @@ def find_dec_root(func, x, step, tol):
         while True:
             x += step
             fx = func(x)
+            assert fx <= fx_min
             if fx > 0:
                 x_min, fx_min = x, fx
             elif fx == 0:
@@ -40,13 +41,12 @@ def find_dec_root(func, x, step, tol):
             else:
                 x_max, fx_max = x, fx
                 break
-    elif fx == 0:
-        x_min, x_max, fx_min, fx_max = x, x, fx, fx
-    else:
+    else:  # fx assumed to be < 0 since |fx| > tol
         x_max, fx_max = x, fx
         while True:
             x -= step
             fx = func(x)
+            assert fx >= fx_max
             if fx < 0:
                 x_max, fx_max = x, fx
             elif fx == 0:

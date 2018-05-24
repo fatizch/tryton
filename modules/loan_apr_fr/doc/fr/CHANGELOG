@@ -1,3 +1,5 @@
+* BUG#9002 plus de robustesse sur le calcul du TAEA
+
 Version 2.0 - 2018-04-13
 * FEA#8267 enlever la dépendance scipy
 
