@@ -1152,7 +1152,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     @classmethod
     def _check_indemnifications_periods_for_covered(cls, covered, claim,
             services, indemnifications):
-        to_check = sum([list(x.indemnifications) for x in services], [])
+        to_check = sum([[i for i in x.indemnifications if i.kind == 'period']
+                for x in services], [])
         to_check = [x for x in to_check if x.status in ('scheduled',
                 'controlled', 'validated', 'paid') and x not in
             indemnifications]
@@ -1185,7 +1186,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 key=cls._group_by_duplicate):
             if not covered:
                 continue
-            cov_indemnifications = list(cov_indemnifications)
+            cov_indemnifications = [x for x in cov_indemnifications
+                if x.kind == 'period']
             cov_services = pool.get('claim.service').search(
                 cls._get_covered_domain(covered))
             services_per_claim = defaultdict(list)

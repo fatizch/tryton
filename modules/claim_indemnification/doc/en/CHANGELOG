@@ -1,3 +1,4 @@
+* BUG#9006 Filter indemnifications for the period overlap check
 * OTH#0000 Move method declaration to remove duplicate declaration and ease override
 * BUG#8851 Allow to select the cancel reason when cancelling an indemnification
 * BUG#8916 Can't refuse an indemnification : alert on note missing is always displayed
