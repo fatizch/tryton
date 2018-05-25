@@ -33,6 +33,11 @@ class Invoice:
         return ['claim_insurer_invoice']
 
     @classmethod
+    def get_commission_insurer_invoice_types(cls):
+        return super(Invoice, cls).get_commission_insurer_invoice_types() + [
+            'claim_insurer_invoice']
+
+    @classmethod
     def get_invoice_lines_for_reporting(cls, invoice_id):
         cursor = Transaction().connection.cursor()
         pool = Pool()

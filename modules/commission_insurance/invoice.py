@@ -150,6 +150,10 @@ class Invoice:
     __metaclass__ = PoolMeta
     __name__ = 'account.invoice'
 
+    is_insurer_invoice = fields.Function(fields.Boolean('Is insurer commission \
+        invoice'), 'get_is_insurer_invoice',
+        searcher='search_is_insurer_invoice')
+
     @classmethod
     def __setup__(cls):
         super(Invoice, cls).__setup__()
@@ -200,6 +204,22 @@ class Invoice:
     @classmethod
     def get_commission_invoice_types(cls):
         return ['insurer_invoice', 'broker_invoice']
+
+    @classmethod
+    def get_commission_insurer_invoice_types(cls):
+        return ['insurer_invoice']
+
+    def get_is_insurer_invoice(self, name):
+        return self.business_kind in self.get_commission_insurer_invoice_types()
+
+    @classmethod
+    def search_is_insurer_invoice(cls, name, domain):
+        pool = Pool()
+        invoice = pool.get('account.invoice').__table__()
+        query = invoice.select(invoice.id,
+            where=(invoice.business_kind.in_(
+                cls.get_commission_insurer_invoice_types())))
+        return ['id', 'in', query]
 
     @classmethod
     def view_attributes(cls):

@@ -54,7 +54,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_invoice_insurer_invoice_form">
             <field name="name">Insurer Invoices</field>
             <field name="res_model">account.invoice</field>
-            <field name="domain" eval="[('business_kind', '=', 'insurer_invoice')]" pyson="1"/>
+            <field name="domain" eval="[('is_insurer_invoice', '=', 'True')]" pyson="1"/>
             <field name="search_value"></field>
         </record>
         <record model="ir.action.act_window.view" id="act_invoice_insurer_invoice_form_view1">

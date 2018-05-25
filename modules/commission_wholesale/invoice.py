@@ -45,3 +45,8 @@ class Invoice:
     def get_commission_invoice_types(cls):
         return super(Invoice, cls).get_commission_invoice_types() + [
             'wholesale_invoice']
+
+    @classmethod
+    def get_commission_insurer_invoice_types(cls):
+        return super(Invoice, cls).get_commission_insurer_invoice_types() + [
+            'wholesale_invoice']
