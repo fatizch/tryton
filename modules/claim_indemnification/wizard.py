@@ -526,7 +526,7 @@ class IndemnificationDefinition(model.CoogView):
                 return
 
     def get_possible_products(self):
-        return self.service.benefit.products if self.service else []
+        return self.service.get_possible_products() if self.service else []
 
     def get_extra_data_values(self):
         return self.extra_data
