@@ -1,3 +1,4 @@
+* BUG#9046 Ne pas copier les données complémentaires des éléments couverts sur les tiers si elles sont non renseignées
 * BUG#8956 Afficher le numéro de devis au lieu du numéro de contrat pour les devis dans le message d'erreur d'effacement de tiers
 
 Version 2.0 - 2018-04-13

@@ -1168,7 +1168,8 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             if not covered.party:
                 continue
             covered.party.extra_data = covered.party.extra_data or {}
-            covered.party.extra_data.update(vals)
+            covered.party.extra_data.update({
+                    k: v for k, v in vals.iteritems() if v})
             to_save.append(covered.party)
         if to_save:
             Party.save(to_save)
