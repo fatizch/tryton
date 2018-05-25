@@ -1,3 +1,4 @@
+* FEA#7941 Ajout de l'attribut keyword sur les boutons
 * OTH#0000 Ajout de goupes des utilisateurs et de comptes bancaires de tiers parmi les modèles historisables par configuration
 * FEA#8212 Exécution de traitements métier lourds en mode asynchrone
 * OTH#0000 Restauration de l'ajout des plugins client lors du coog repo link

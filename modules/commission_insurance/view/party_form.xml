@@ -7,7 +7,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="is_broker" xexpand="0" width="25"/>
         <group id="invisible" string="">
             <button name="button_commissions_synthesis" string="Show commissions synthesis"/>
-            <button name="button_party_invoices" string="Commission Invoices" keywords="relate"/>
+            <button name="button_party_invoices" string="Commission Invoices" keyword="relate"/>
         </group>
     </xpath>
     <xpath expr="/form/notebook/page[@id='role']/notebook" position="inside">

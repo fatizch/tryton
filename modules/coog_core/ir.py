@@ -94,11 +94,6 @@ FORM_ATTRIBUTES = """
             </attribute>
         </optional>
     </define>
-    <define name="attlist.button" combine="interleave">
-        <optional>
-            <attribute name="keywords"/>
-        </optional>
-    </define>
 </grammar>
 """
 
@@ -128,11 +123,6 @@ TREE_ATTRIBUTES = """
     <define name="attlist.tree" combine="interleave">
         <optional>
             <attribute name="colors"/>
-        </optional>
-    </define>
-    <define name="attlist.button" combine="interleave">
-        <optional>
-            <attribute name="keywords"/>
         </optional>
     </define>
 </grammar>
