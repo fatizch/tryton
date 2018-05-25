@@ -1,3 +1,4 @@
+* BUG#8679 Make sure waterfall reconciliation does not change the party
 * BUG#8866 Make aged balance report extension dynamic and select only unbalanced parties
 
 Version 2.0 - 2018-04-13

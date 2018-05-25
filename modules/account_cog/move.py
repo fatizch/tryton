@@ -359,6 +359,7 @@ class Line(export.ExportImportMixin):
                 line.reconciliation != self.reconciliation and
                 line.reconciliation not in additionnal_reconciliations and
                 line.journal.code == journal_code and
+                self.party == line.party and
                 line.reconciliation.create_date >
                 self.reconciliation.create_date):
             return True
