@@ -34,15 +34,13 @@ class IndemnificationDefinition:
     @fields.depends('beneficiary', 'possible_products', 'product', 'service')
     def on_change_beneficiary(self):
         super(IndemnificationDefinition, self).on_change_beneficiary()
-        self.update_product()
+        Pool().get('claim.indemnification').update_product(self)
 
-    def get_possible_products(self, name):
+    def get_possible_products(self):
         if not self.beneficiary or self.beneficiary.is_person:
-            return super(IndemnificationDefinition,
-                self).get_possible_products(name)
-        if self.service:
-            return [x.id for x in self.service.benefit.company_products]
-        return []
+            return super(IndemnificationDefinition, self).get_possible_products(
+                )
+        return self.service.benefit.company_products if self.service else []
 
 
 class CreateIndemnification:

@@ -927,14 +927,17 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             return self.service.benefit.rec_name
         return ''
 
+    def get_possible_products(self):
+        return self.service.get_possible_products()
+
     def get_possible_products_id(self, name):
-        return [x.id for x in self.service.get_possible_products()]
+        return [x.id for x in self.get_possible_products()]
 
     @classmethod
     def update_product(cls, indemnification):
         # Class method because also called from the wizard with
         # a fake indeminication (modelview)
-        products = indemnification.service.get_possible_products()
+        products = indemnification.get_possible_products()
         indemnification.product = getattr(indemnification, 'product', None)
         if indemnification.product and indemnification.product not in products:
             indemnification.product = None

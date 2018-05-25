@@ -74,16 +74,16 @@ class Indemnification:
                 '%(management_end)s).',
                 })
 
-    def get_possible_products(self, name):
+    def get_possible_products(self):
         if not self.beneficiary or self.beneficiary.is_person:
-            return super(Indemnification, self).get_possible_products(name)
-        return [x.id for x in self.service.benefit.company_products]
+            return super(Indemnification, self).get_possible_products()
+        return self.service.benefit.company_products if self.service else []
 
     @fields.depends('beneficiary', 'possible_products', 'product', 'service')
     def on_change_beneficiary(self):
         if not self.service and not self.beneficiary:
             return
-        self.update_product()
+        self.__class__.update_product(self)
 
     @classmethod
     def covered_elements_per_party_contract(cls, indemnifications):
