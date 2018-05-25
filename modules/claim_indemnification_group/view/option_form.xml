@@ -4,7 +4,9 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page/field[@name='current_extra_data']" position="after">
         <newline/>
-        <field name="versions" mode="form" view_ids="claim_indemnification_group.option_version_rules_view_form" expand_toolbar="0" colspan="4"/>
-        <field name="is_group" invisible="1"/>
+        <group id="claim_rules" colspan="4">
+            <field name="versions" mode="form" view_ids="claim_indemnification_group.option_version_rules_view_form" expand_toolbar="0" colspan="4"/>
+            <field name="is_group" invisible="1"/>
+        </group>
     </xpath>
 </data>

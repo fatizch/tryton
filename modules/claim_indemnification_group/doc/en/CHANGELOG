@@ -1,3 +1,5 @@
+* BUG#9007 Remove benefit related data of options view for non-group products
+
 Version 2.0 - 2018-04-13
 * BUG#8331 Fix crash on save of benefit
 * OTH#0000 Code fix following 5d5a04299c: missing kwargs in method

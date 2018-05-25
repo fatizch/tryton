@@ -23,7 +23,10 @@ class Option:
     def view_attributes(cls):
         return super(Option, cls).view_attributes() + [
             ("/form/notebook/page[@id='rules']", 'states', {
-                    'invisible': ~Eval('is_group', False)})]
+                    'invisible': ~Eval('is_group', False)}),
+            ("/form/notebook/page/group[@id='claim_rules']", 'states', {
+                    'invisible': ~Eval('is_group', False)})
+            ]
 
     @classmethod
     def new_option_from_coverage(cls, coverage, *args, **kwargs):
