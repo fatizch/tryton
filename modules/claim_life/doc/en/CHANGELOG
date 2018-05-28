@@ -1,3 +1,4 @@
+* FEA#9053 Initialize beneficiaries in claim declaration with those defined on the option
 * BUG#8926 Fix display of loss dates label in claim declaration
 
 Version 2.0 - 2018-04-13

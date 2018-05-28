@@ -408,6 +408,9 @@ class ClaimService:
         self.beneficiaries = self.init_beneficiaries()
 
     def init_beneficiaries(self):
+        if self.option and getattr(self.option, 'beneficiaries', None):
+            return [Pool().get('claim.beneficiary')(party=x.party,
+                share=x.share) for x in self.option.beneficiaries if x.party]
         return []
 
     def get_manual_beneficiaries(self, name):
