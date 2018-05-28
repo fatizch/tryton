@@ -1,3 +1,4 @@
+* BUG#9037 Correction du libellé de la date selon si le descripteur de préjudice est défini avec ou sans date de fin
 * FEA#9053 Initialisation des beneficiaires lors de la déclaration de sinistre avec ceux définis sur la garantie
 * BUG#8926 Correction de l'affichage du libellé des dates de préjudice dans la déclaration d'un sinistre
 

@@ -172,10 +172,11 @@ class Loss:
                 "doesn't have an end date defined",
                 'one_day_between_relapse_and_previous_loss': 'One day is '
                 'required between the relapse and the previous std',
+                'loss_date': 'Loss Date:',
                 'start_date': 'Start Date:',
-                'end_date': 'Start Date:',
                 'std_start_date': 'STD Start Date:',
                 'ltd_start_date': 'LTD Start Date:',
+                'end_date': 'End Date:',
                 'std_end_date': 'STD End Date:',
                 'ltd_end_date': 'LTD End Date:',
                 'missing_relapse_initial_loss': 'The initial loss is missing on'
@@ -188,7 +189,10 @@ class Loss:
 
     @fields.depends('loss_desc', 'loss_desc_kind')
     def on_change_with_start_date_string(self, name=None):
-        return self.date_string('start_date_string')
+        if self.loss_desc and self.loss_desc.with_end_date:
+            return self.date_string('start_date_string')
+        else:
+            return self.date_string('loss_date_string')
 
     @fields.depends('loss_desc', 'loss_desc_kind')
     def on_change_with_end_date_string(self, name=None):
@@ -197,11 +201,9 @@ class Loss:
     def date_string(self, name=None):
         if not name:
             return ''
-        key = ''
-        prefix = self.loss_desc_kind if self.loss_desc_kind \
-            and self.loss_desc_kind in ('std', 'ltd') else ''
-        if prefix:
-            key += prefix + '_'
+        key = (self.loss_desc_kind + '_') \
+            if self.loss_desc_kind and self.loss_desc_kind in ('std', 'ltd') \
+                and self.loss_desc and self.loss_desc.with_end_date else ''
         key += name[:-7]
         return self.raise_user_error(key, raise_exception=False)
 

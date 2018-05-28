@@ -45,6 +45,14 @@ msgid "Start Date:"
 msgstr "Date de début :"
 
 msgctxt "error:claim.loss:"
+msgid "End Date:"
+msgstr "Date de fin :"
+
+msgctxt "error:claim.loss:"
+msgid "Loss Date:"
+msgstr "Date de survenance :"
+
+msgctxt "error:claim.loss:"
 msgid "The initial loss is missing on the relapse: %(loss)s"
 msgstr "Le préjudice initial n'est pas renseigné pour la rechute : %(loss)s"
 

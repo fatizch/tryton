@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool, Or
+from trytond.pyson import Eval, Bool, Or, In, If
 
 from trytond.modules.coog_core import fields, model
 
@@ -100,6 +100,13 @@ class LossDescription:
         cls.loss_kind.selection.append(('std', 'Short Term'))
         cls.loss_kind.selection.append(('ltd', 'Long term'))
         cls.loss_kind.selection.append(('death', 'Death'))
+        cls.with_end_date.domain.append(
+            If(In(Eval('loss_kind', ''), ['std', 'ltd']),
+                [('with_end_date', '=', True)],
+                If(Eval('loss_kind') == 'death',
+                    [('with_end_date', '=', False)],
+                    [])))
+        cls.with_end_date.depends.append('loss_kind')
 
 
 class BeneficiaryExtraDataRelation(model.CoogSQL):
