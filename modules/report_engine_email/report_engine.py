@@ -84,8 +84,9 @@ class ReportGenerate:
         return context_
 
     @classmethod
-    def generate_email(self, selected_letter, cur_objects, report_context):
+    def generate_email(cls, selected_letter, cur_objects, report_context):
         attachments = []
+        msg = None
         if selected_letter.attachments or selected_letter.images:
             fake_event_action = Pool().get('event.type.action')()
             for tmpl in selected_letter.attachments:
