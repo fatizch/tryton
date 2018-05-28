@@ -1,3 +1,4 @@
+* FEA#8226 Adaptation de la réconciliation à l'amélioration de la méthode tryton reconcile
 * BUG#8679 S'assurer que la réconciliation en cascade ne sélectionne pas un tiers différent
 * BUG#8866 Rendre l'extension du rapport de balance agée dynamique et ne sélectionner que les tiers nonn-balancés
 

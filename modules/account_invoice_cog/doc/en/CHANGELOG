@@ -1,3 +1,5 @@
+* FEA#8226 Adapt reconciliation to tryton's improvement on reconcile method
+
 Version 2.0 - 2018-04-13
 * BUG#7584 Properly recalculate taxes amounts on invoice lines
 * BUG#7961 Fix possible holes in invoice numbering if an error is raised during the processing

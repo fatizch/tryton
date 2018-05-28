@@ -141,8 +141,7 @@ class Move(export.ExportImportMixin):
         for line in self.lines + cancel_move.lines:
             if line.account.reconcile:
                 to_reconcile[(line.account, line.party)].append(line)
-        for lines in to_reconcile.itervalues():
-            Line.reconcile(lines)
+        Line.reconcile(*to_reconcile.itervalues())
 
     def cancel(self, default=None):
         if self.cancel_move:
@@ -579,8 +578,8 @@ class Reconciliation:
             Line = Pool().get('account.move.line')
             today = utils.today()
             # Reconcile each lines of the split move together
-            for move in split_moves:
-                Line.reconcile(move.lines, journal=None, date=today)
+            split_lines = [list(m.lines) for m in split_moves]
+            Line.reconcile(*split_lines, date=today)
 
 
 class Reconcile:

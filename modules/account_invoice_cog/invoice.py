@@ -416,8 +416,7 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
                     if reconciliation:
                         to_reconcile.append(reconciliation)
         Move.post(new_moves + to_post)
-        for lines in to_reconcile:
-            Line.reconcile(lines)
+        Line.reconcile(*to_reconcile)
         Event.notify_events(invoices, 'change_payment_term')
 
     @classmethod

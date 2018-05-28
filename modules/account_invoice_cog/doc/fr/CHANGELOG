@@ -1,3 +1,5 @@
+* FEA#8226 Adaptation de la réconciliation à l'amélioration de la méthode tryton reconcile
+
 Version 2.0 - 2018-04-13
 * BUG#7584 Ajout de la possibilité de consulter les montants de taxe par ligne de quittance
 * BUG#7961 Correctif des trous possibles dans la numérotation de quittances si une erreur est levée au milieu du traitement
