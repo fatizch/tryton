@@ -21,6 +21,9 @@ class StartEndorsement:
         cls._error_messages.update({
                 'reduced_contract': 'Contract %(contract)s has been reduced '
                 'since %(date)s, you cannot perform any endorsements on it',
+                'terminate_reduced_contract': 'Contract %(contract)s has been '
+                'reduced since %(date)s, do you want to apply this endorsement '
+                'on it',
                 })
 
     def check_before_start(self):
@@ -28,11 +31,26 @@ class StartEndorsement:
         if not self.select_endorsement.contract:
             return
         if self.select_endorsement.contract.reduction_date:
-            self.raise_user_error('reduced_contract', {
-                    'contract': self.select_endorsement.contract.rec_name,
-                    'date': str(
-                        self.select_endorsement.contract.reduction_date),
-                    })
+            endorsement_def = self.select_endorsement.endorsement_definition
+            # In the case where the endorsement we want to apply is
+            # a terminate contract, we will authorize it by displaying
+            # a warning message otherwise we block others endorsements
+            if len(endorsement_def.endorsement_parts) == 1:
+                endorsement_part = endorsement_def.endorsement_parts[0]
+                if endorsement_part.view == 'terminate_contract':
+                    self.raise_user_warning('terminate_reduced_contract',
+                        'terminate_reduced_contract', {
+                            'contract':
+                            self.select_endorsement.contract.rec_name,
+                            'date': str(
+                                self.select_endorsement.contract.reduction_date),
+                            })
+            else:
+                self.raise_user_error('reduced_contract', {
+                        'contract': self.select_endorsement.contract.rec_name,
+                        'date': str(
+                            self.select_endorsement.contract.reduction_date),
+                        })
 
 
 class Endorsement:
