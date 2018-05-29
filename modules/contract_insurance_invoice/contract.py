@@ -863,6 +863,12 @@ class Contract:
                     contract_invoice.contract.get_contract_address(
                         max(contract_invoice.start or datetime.date.min,
                             utils.today()))
+                if (invoice.invoice_address.party != invoice.party):
+                    invoice.invoice_address = \
+                        contract_invoice.contract.get_contract_address(
+                            (contract_invoice.end + relativedelta(days=1)))
+                    if (invoice.invoice_address.party != invoice.party):
+                        invoice.invoice_address = invoice.party.main_address()
 
     @classmethod
     def premium_intervals_cache(cls):

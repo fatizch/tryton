@@ -1,3 +1,4 @@
+* BUG#9016 Modifier la valeur de l'adresse de quittancement si le tiers rattaché à cette dernière est différent de celui présent sur la quittance
 * FEA#8940 Ajout d'un batch de requittancement des contrats à partir d'un fichier csv
 * BUG#8962 Initialiser les montants des nouvelles quittances futures avec des décimales
 * BUG#8673 Ne pas sélectionner une quittance avec une date d'effet postérieur à la date de résiliation du contract dans le batch d'émission des quittances
