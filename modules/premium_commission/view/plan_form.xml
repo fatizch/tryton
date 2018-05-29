@@ -3,8 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='data']" position="inside">
-        <page name="fees">
-            <field name="fees" colspan="4"/>
-        </page>
+        <field name="fees" colspan="4"/>
     </xpath>
 </data>
