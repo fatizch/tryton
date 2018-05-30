@@ -471,7 +471,8 @@
                 "code": "arret_de_travail",
                 "name": "Arrêt de travail",
                 "loss_kind": "std",
-                "item_kind": "person"
+                "item_kind": "person",
+                "with_end_date": true
             },
             {
                 "_func_key": "DC",
@@ -485,7 +486,8 @@
                 "code": "invalidite",
                 "name": "Invalidité",
                 "loss_kind": "ltd",
-                "item_kind": "person"
+                "item_kind": "person",
+                "with_end_date": true
             }
         ],
         "hide_main_menu": false,

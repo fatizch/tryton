@@ -433,7 +433,8 @@
                 "code": "arret_de_travail",
                 "name": "Arrêt de travail",
                 "loss_kind": "std",
-                "item_kind": "person"
+                "item_kind": "person",
+                "with_end_date": true
             }
         ],
         "hide_main_menu": false,

@@ -289,7 +289,8 @@
                 "code": "suite_nouvelle_periode",
                 "name": "Suite / Nouvelle période",
                 "loss_kind": "std",
-                "item_kind": "person"
+                "item_kind": "person",
+                "with_end_date": true
             }
         ],
         "hide_main_menu": false,
