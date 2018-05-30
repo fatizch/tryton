@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="date"/>
+    <field name="date"/>
+    <newline/>
+    <label name="state"/>
+    <field name="state"/>
+    <label name="operation"/>
+    <field name="operation"/>
+    <newline/>
+    <group id="footer" colspan="4" col="6">
+        <group id="footer_left_pad" colspan="2"/>
+        <group id="footer_center" colspan="2">
+        </group>
+        <group id="footer_right_pad" colspan="2"/>
+    </group>
+</form>

@@ -1,0 +1,51 @@
+<?xml version = '1.0' encoding = 'ISO-8859-1'?>
+<ARL xmlns="urn:cnamts:tlsemp:ARLGESTIP" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Profil="ARLGESTIP" Version="01.01">
+    <Identification>20161219114743701</Identification>
+    <Temps>2016-12-19T11:47:43</Temps>
+    <Fonction>9</Fonction>
+    <Emetteur><Identite R="ORGIR">010000000</Identite>
+        <Qualite>ACNAM</Qualite>
+    </Emetteur>
+    <Recepteur><Identite R="SIRET">99900212800000</Identite>
+        <Qualite>OPEDI</Qualite>
+    </Recepteur>
+    <DiagEntete>
+        <Profil>ENTGESTIP</Profil>
+        <Identification>AXXXX-E20161219101446210</Identification>
+        <Temps>2016-12-19T10:14:46Z</Temps>
+        <Fonction>9</Fonction>
+        <Diagnostic><Activite>CTRENV</Activite>
+            <Etat>A</Etat> <!-- Valeur = "A" pour En-tête Accepté  Valeur = "R" pour En-tête Rejeté-->
+            <!-- <Cause> SEH-CAU-003</Cause> -->
+            <Libelle>Controle Entete - Presence Documents OK</Libelle>
+        </Diagnostic>
+        <DiagDocument> <!-- IL y aura autant de balise <DiagDocument> que de flux GESTIP dans l’archive. -->
+            <Mindex>
+                <Profil>GESTIP</Profil>
+                <Identification>AXXXX-D20161219101446210</Identification>
+                <Temps>2016-12-19T10:14:46Z</Temps>
+                <Fonction>9</Fonction>
+            </Mindex>
+            <Diagnostic>
+                <Activite>CTRDOC</Activite>
+                <Etat>R</Etat>
+                <Cause>example_doc_cause</Cause>
+                <Libelle>example_doc_erreur</Libelle>
+            </Diagnostic>
+        </DiagDocument>
+        <DiagDocument> <!-- IL y aura autant de balise <DiagDocument> que de flux GESTIP dans l’archive. -->
+            <Mindex>
+                <Profil>GESTIP</Profil>
+                <Identification>deuxieme doc</Identification>
+                <Temps>2016-12-19T10:14:46Z</Temps>
+                <Fonction>9</Fonction>
+            </Mindex>
+            <Diagnostic>
+                <Activite>CTRDOC</Activite>
+                <Etat>R</Etat>
+                <Cause>example_doc_cause</Cause>
+                <Libelle>example_doc_erreur</Libelle>
+            </Diagnostic>
+        </DiagDocument>
+    </DiagEntete>
+</ARL>

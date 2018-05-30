@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CR xmlns="urn:cnamts:tlsemp:CRGESTIP" xmlns:ns2="urn:cnamts:tlsemp:ENTCRGESTIP" Version="01.00" Nature="CRGESTIP">
+    <Identification>AXXXX-D20161219101446210</Identification>
+    <Temps>2016-12-19T16:49:02.199+01:00</Temps>
+    <Fonction>9</Fonction>
+    <DiagDocument>
+        <Mindex>
+            <Profil>GESTIP</Profil>
+            <Fonction>9</Fonction>
+            <Identification>AXXXX-D20161219101446210</Identification>
+            <Temps>2016-12-19T16:47:23.000+01:00</Temps>
+            <Origine>
+                <Identite>AXXXX</Identite>
+            </Origine>
+        </Mindex>
+        <Diagnostic>
+            <Activite>CRE</Activite>
+            <Etat>A</Etat>
+            <Libelle></Libelle>
+        </Diagnostic>
+        <Diagnostic>
+            <Activite>CRE</Activite>
+            <Etat>R</Etat>
+            <Cause>ERR_SUPCRE02</Cause>
+            <Libelle></Libelle>
+            <Entreprise Operation="CRE">
+                <Identite>99999999999999</Identite>
+            </Entreprise>
+        </Diagnostic>
+        <Diagnostic>
+            <Activite>CRE</Activite>
+            <Etat>A</Etat>
+            <Cause>ERR_SUPCRE04</Cause>
+            <Libelle></Libelle>
+            <Entreprise Operation="CRE">
+                <Identite>888888</Identite>
+            </Entreprise>
+        </Diagnostic>
+    </DiagDocument>
+</CR>

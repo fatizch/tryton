@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ################## -->
+        <!-- # IJ Subscription # -->
+        <!-- ################## -->
+        <record model="ir.action.wizard" id="act_consult_ij_subscription">
+            <field name="name">Consult Ij Subscription</field>
+            <field name="wiz_name">party_subscription.find</field>
+        </record>
+        <!-- ############################ -->
+        <!-- # Relaunch IJ Subscription # -->
+        <!-- ############################ -->
+        <record model="ir.action.wizard" id="act_relaunch_ij_subscription">
+            <field name="name">Relaunch Prest Ij Subscription</field>
+            <field name="wiz_name">party_subscription.relaunch</field>
+        </record>
+    </data>
+</tryton>

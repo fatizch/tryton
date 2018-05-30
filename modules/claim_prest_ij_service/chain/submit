@@ -1,0 +1,34 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=submit
+
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'OUTPUT_DIR')
+CHAIN_REQUIRED=('TREATMENT_DATE')
+
+chain_params "$@"
+chain_begin
+
+chain_step prest_ij.subscription.create --treatment_date="$TREATMENT_DATE"
+chain_wait prest_ij.subscription.create || chain_end
+
+chain_step chain_step prest_ij.subscription.submit \
+    --treatment_date="$TREATMENT_DATE" \
+    --operation="cre"
+chain_wait prest_ij.subscription.submit || chain_end
+
+chain_step chain_step prest_ij.subscription.submit \
+    --treatment_date="$TREATMENT_DATE" \
+    --operation="sup"
+chain_wait prest_ij.subscription.submit || chain_end
+
+
+[[ -z  $OUTPUT_DIR ]] && chain_step prest_ij.subscription.process \
+    --treatment_date="$TREATMENT_DATE"
+[[ ! -z  $OUTPUT_DIR ]] && chain_step chain_step prest_ij.subscription.process \
+    --treatment_date="$TREATMENT_DATE" \
+    --output_dir="$OUTPUT_DIR"
+
+chain_wait prest_ij.subscription.process
+
+chain_end

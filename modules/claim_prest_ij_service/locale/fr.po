@@ -1,0 +1,403 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:claim.ij.subscription:"
+msgid "There must be only one IJ subscription per party"
+msgstr "Il ne doit y avoir qu'une seule inscription Prest'IJ par tiers"
+
+msgctxt "error:claim.ij.subscription_request.group:"
+msgid "The identification must be unique"
+msgstr "L'identification doit être unique"
+
+msgctxt "error:party_subscription.find:"
+msgid ""
+"The benefit(s) configuration(s) associated to the party \"%(party)s\" does "
+"not handle IJ service"
+msgstr ""
+"Les configurations des prestations associées au tiers \"%(party)s\" ne "
+"comprennent pas le service Prest'IJ"
+
+msgctxt "field:benefit,prest_ij:"
+msgid "Handle Prest IJ System"
+msgstr "Gestion du système Prest'IJ"
+
+msgctxt "field:benefit,prestation_ij:"
+msgid "Handle IJ Prestation System"
+msgstr "Gestion du système Prest'IJ"
+
+msgctxt "field:claim.configuration,prest_ij_sequence:"
+msgid "IJ Flow Sequence"
+msgstr "Séquence du flux Prest'IJ"
+
+msgctxt "field:claim.ij.subscription,activated:"
+msgid "Activated"
+msgstr "Activée"
+
+msgctxt "field:claim.ij.subscription,confirmation_date:"
+msgid "Confirmation Date"
+msgstr "Date de confirmation"
+
+msgctxt "field:claim.ij.subscription,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:claim.ij.subscription,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:claim.ij.subscription,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.ij.subscription,date:"
+msgid "Declaration Or Deletion Date"
+msgstr "Date de déclaration ou de suppression"
+
+msgctxt "field:claim.ij.subscription,error_code:"
+msgid "Error Code"
+msgstr "Code d'erreur"
+
+msgctxt "field:claim.ij.subscription,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:claim.ij.subscription,ij_activation:"
+msgid "IJ Activation"
+msgstr "Activation de Prest'IJ"
+
+msgctxt "field:claim.ij.subscription,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:claim.ij.subscription,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:claim.ij.subscription,requests:"
+msgid "Requests"
+msgstr "Demandes"
+
+msgctxt "field:claim.ij.subscription,requests_event_logs:"
+msgid "Requests Event Logs"
+msgstr "Logs d'évènements des demandes"
+
+msgctxt "field:claim.ij.subscription,siren:"
+msgid "Siren"
+msgstr "Siren"
+
+msgctxt "field:claim.ij.subscription,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:claim.ij.subscription,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:claim.ij.subscription,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.ij.subscription,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:claim.ij.subscription_request,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:claim.ij.subscription_request,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:claim.ij.subscription_request,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.ij.subscription_request,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:claim.ij.subscription_request,error_code:"
+msgid "Error Code"
+msgstr "Code d'erreur"
+
+msgctxt "field:claim.ij.subscription_request,error_message:"
+msgid "Error Message"
+msgstr "Message d'erreur"
+
+msgctxt "field:claim.ij.subscription_request,group:"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "field:claim.ij.subscription_request,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:claim.ij.subscription_request,operation:"
+msgid "Operation"
+msgstr "Opération"
+
+msgctxt "field:claim.ij.subscription_request,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:claim.ij.subscription_request,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:claim.ij.subscription_request,siren:"
+msgid "Siren"
+msgstr "Siren"
+
+msgctxt "field:claim.ij.subscription_request,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:claim.ij.subscription_request,subscription:"
+msgid "Subscription"
+msgstr "Inscription"
+
+msgctxt "field:claim.ij.subscription_request,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:claim.ij.subscription_request,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.ij.subscription_request,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:claim.ij.subscription_request.group,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:claim.ij.subscription_request.group,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:claim.ij.subscription_request.group,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.ij.subscription_request.group,error_code:"
+msgid "Error Code"
+msgstr "Code d'erreur"
+
+msgctxt "field:claim.ij.subscription_request.group,error_message:"
+msgid "Error Message"
+msgstr "Message d'erreur"
+
+msgctxt "field:claim.ij.subscription_request.group,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:claim.ij.subscription_request.group,identification:"
+msgid "Identification"
+msgstr "Identification"
+
+msgctxt "field:claim.ij.subscription_request.group,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:claim.ij.subscription_request.group,requests:"
+msgid "Requests"
+msgstr "Demandes"
+
+msgctxt "field:claim.ij.subscription_request.group,return_date:"
+msgid "Return Date"
+msgstr "Date de retour"
+
+msgctxt "field:claim.ij.subscription_request.group,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:claim.ij.subscription_request.group,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:claim.ij.subscription_request.group,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.ij.subscription_request.group,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:gestip.flux.process,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.party,prest_ij_subscription:"
+msgid "Prest IJ Subscription"
+msgstr "Inscription Prest'IJ"
+
+msgctxt "field:party.party,subscription:"
+msgid "Subscription"
+msgstr "Inscription"
+
+msgctxt "field:prest_ij.subscription.create,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:prest_ij.subscription.process,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:prest_ij.subscription.submit,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "help:benefit,prest_ij:"
+msgid ""
+"If set, the claims declared using this benefit will be handled by the Prest "
+"IJ system"
+msgstr ""
+"Si vrai, les sinistres déclarés pour cette prestation seront gérés par le "
+"système Prest'IJ"
+
+msgctxt "help:benefit,prestation_ij:"
+msgid ""
+"If set, the claims declared using this benefit will be handled by the ij "
+"prestation system"
+msgstr ""
+"Si vrai, les sinistres déclarés pour cette prestation seront gérés par le "
+"système Prest'IJ"
+
+msgctxt "model:claim.ij.subscription,name:"
+msgid "Claim IJ Subscription"
+msgstr "Inscription Prest'IJ"
+
+msgctxt "model:claim.ij.subscription_request,name:"
+msgid "Claim IJ Subscription Request"
+msgstr "Demande d'inscription Prest'IJ"
+
+msgctxt "model:claim.ij.subscription_request.group,name:"
+msgid "Claim IJ Subscription Request Group"
+msgstr "Groupe de demandes d'inscription Prest'IJ"
+
+msgctxt "model:event.type,name:event_prest_ij_arl_ok"
+msgid "Prest IJ Request ARL OK"
+msgstr "Demande Prest'IJ ARL OK"
+
+msgctxt "model:event.type,name:event_prest_ij_request_acknowledged"
+msgid "Prest IJ Request Acknowledged"
+msgstr "Demande Prest'IJ reçue"
+
+msgctxt "model:event.type,name:event_prest_ij_request_failed"
+msgid "Prest IJ Request Failed"
+msgstr "Demande Prest'IJ en échec"
+
+msgctxt "model:event.type,name:event_prest_ij_request_sent"
+msgid "Prest IJ Request Sent"
+msgstr "Demande Prest'IJ envoyée"
+
+msgctxt "model:gestip.flux.process,name:"
+msgid "Process Gestip Flux Batch"
+msgstr "Batch de traitement du flux Gestip"
+
+msgctxt "model:ir.action,name:act_claim_ij_subscription_relate_form"
+msgid "Subscriptions IJ"
+msgstr "Inscriptions Prest'IJ"
+
+msgctxt "model:ir.action,name:act_consult_ij_subscription"
+msgid "Consult Ij Subscription"
+msgstr "Consulter l'inscription Prest'IJ"
+
+msgctxt "model:ir.action,name:act_erroneous_requests_prest_ij"
+msgid "Erroneous Requests"
+msgstr "Demandes en erreur"
+
+msgctxt "model:ir.action,name:act_relaunch_ij_subscription"
+msgid "Relaunch Ij Subscription"
+msgstr "Relancer une inscription Prest'IJ"
+
+msgctxt "model:ir.ui.menu,name:menu_erroneous_requests_prest_ij"
+msgid "Erroneous Requests"
+msgstr "Demandes en erreur"
+
+msgctxt "model:ir.ui.menu,name:menu_prest_ij"
+msgid "Prest'IJ"
+msgstr "Prest'IJ"
+
+msgctxt "model:prest_ij.subscription.create,name:"
+msgid "Create Prest Ij Susbscription"
+msgstr "Création des inscriptions Prest'IJ"
+
+msgctxt "model:prest_ij.subscription.process,name:"
+msgid "Process Prest Ij Subscription"
+msgstr "Traitement des inscriptions Prest'IJ"
+
+msgctxt "model:prest_ij.subscription.submit,name:"
+msgid "Submit Prest Ij Susbscription"
+msgstr "Envoi des inscriptions Prest'IJ"
+
+msgctxt "selection:claim.ij.subscription,state:"
+msgid "Declaration Confirmed"
+msgstr "Déclaration confirmée"
+
+msgctxt "selection:claim.ij.subscription,state:"
+msgid "Declared"
+msgstr "Déclarée"
+
+msgctxt "selection:claim.ij.subscription,state:"
+msgid "Deleted"
+msgstr "Supprimée"
+
+msgctxt "selection:claim.ij.subscription,state:"
+msgid "Deletion Confirmed"
+msgstr "Suppression confirmée"
+
+msgctxt "selection:claim.ij.subscription,state:"
+msgid "In Error"
+msgstr "En erreur"
+
+msgctxt "selection:claim.ij.subscription,state:"
+msgid "Undeclared"
+msgstr "Non déclarée"
+
+msgctxt "selection:claim.ij.subscription_request,operation:"
+msgid "CRE"
+msgstr "CRE"
+
+msgctxt "selection:claim.ij.subscription_request,operation:"
+msgid "SUP"
+msgstr "SUP"
+
+msgctxt "selection:claim.ij.subscription_request,state:"
+msgid "Confirmed"
+msgstr "Confirmée"
+
+msgctxt "selection:claim.ij.subscription_request,state:"
+msgid "Failed"
+msgstr "Échouée"
+
+msgctxt "selection:claim.ij.subscription_request,state:"
+msgid "Processing"
+msgstr "En cours de traitement"
+
+msgctxt "selection:claim.ij.subscription_request,state:"
+msgid "Unprocessed"
+msgstr "Non traitée"
+
+msgctxt "selection:claim.ij.subscription_request.group,state:"
+msgid "Acknowledged"
+msgstr "Reçu"
+
+msgctxt "selection:claim.ij.subscription_request.group,state:"
+msgid "Failed"
+msgstr "Échouée"
+
+msgctxt "selection:claim.ij.subscription_request.group,state:"
+msgid "Processing"
+msgstr "En cours de traitement"
+
+msgctxt "view:claim.configuration:"
+msgid "Prest IJ"
+msgstr "Prest'IJ"
+
+msgctxt "view:claim.ij.subscription:"
+msgid "Relaunch Subscription Process"
+msgstr "Relancer le processus d'inscription"

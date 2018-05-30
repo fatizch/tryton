@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="event.type" id="event_prest_ij_request_sent">
+            <field name="name">Prest IJ Request Sent</field>
+            <field name="code">prest_ij_request_sent</field>
+        </record>
+        <record model="event.type" id="event_prest_ij_request_failed">
+            <field name="name">Prest IJ Request Failed</field>
+            <field name="code">prest_ij_request_failed</field>
+        </record>
+        <record model="event.type" id="event_prest_ij_request_acknowledged">
+            <field name="name">Prest IJ Request Acknowledged</field>
+            <field name="code">prest_ij_request_acknowledged</field>
+        </record>
+        <record model="event.type" id="event_prest_ij_arl_ok">
+            <field name="name">Prest IJ Request ARL OK</field>
+            <field name="code">prest_ij_request_arl_ok</field>
+        </record>
+    </data>
+</tryton>

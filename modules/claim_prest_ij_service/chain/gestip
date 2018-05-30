@@ -1,0 +1,18 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=gestip
+
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'DIRECTORY')
+CHAIN_REQUIRED=('TREATMENT_DATE')
+
+chain_params "$@"
+chain_begin
+
+chain_step gestip.flux.process --kind='arl' ${GIVEN_PARAMETERS[@]}
+chain_wait gestip.flux.process || chain_end
+
+chain_step gestip.flux.process --kind='cr' ${GIVEN_PARAMETERS[@]}
+chain_wait gestip.flux.process
+
+chain_end

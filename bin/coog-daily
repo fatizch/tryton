@@ -246,6 +246,16 @@ coog_daily_main() {
             coog_chain_main report_engine produce_request
         )
         [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
+
+        (
+        _coog_daily_check_modules "claim_prest_ij_service" || return 0 &&  \
+            coog_chain_main claim_prest_ij_service submit     \
+            --treatment_date="$TODAY_DATE"
+            coog_chain_main claim_prest_ij_service gestip     \
+            --treatment_date="$TODAY_DATE"
+        )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
+
     fi
     return $GLOBAL_SUCCESS
 }

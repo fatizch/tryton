@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="identification"/>
+    <field name="identification"/>
+    <label name="state"/>
+    <field name="state"/>
+    <label name="create_date_"/>
+    <field name="create_date_"/>
+    <label name="return_date"/>
+    <field name="return_date"/>
+    <field name="requests" view_ids="claim_prest_ij_service.claim_ij_subscription_request_full_view_list" colspan="4"/>
+</form>

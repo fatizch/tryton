@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+
+        <record model="ir.ui.view" id="claim_ij_subscription_request_view_list">
+            <field name="model">claim.ij.subscription_request</field>
+            <field name="type">tree</field>
+            <field name="name">claim_ij_subscription_request_list</field>
+        </record>
+        <record model="ir.ui.view" id="claim_ij_subscription_request_view_form">
+            <field name="model">claim.ij.subscription_request</field>
+            <field name="type">form</field>
+            <field name="name">claim_ij_subscription_request_form</field>
+        </record>
+        <record model="ir.ui.view" id="claim_ij_subscription_request_group_view_form">
+            <field name="model">claim.ij.subscription_request.group</field>
+            <field name="type">form</field>
+            <field name="name">claim_ij_subscription_request_group_form</field>
+        </record>
+        <record model="ir.ui.view" id="claim_ij_subscription_request_full_view_list">
+            <field name="model">claim.ij.subscription_request</field>
+            <field name="type">tree</field>
+            <field name="name">claim_ij_subscription_request_full_list</field>
+        </record>
+        <record model="ir.ui.view" id="claim_ij_subscription_view_list">
+            <field name="model">claim.ij.subscription</field>
+            <field name="type">tree</field>
+            <field name="name">claim_ij_subscription_list</field>
+        </record>
+        <record model="ir.ui.view" id="claim_ij_subscription_view_form">
+            <field name="model">claim.ij.subscription</field>
+            <field name="type">form</field>
+            <field name="name">claim_ij_subscription_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_claim_ij_subscription_relate_form">
+            <field name="name">Subscriptions IJ</field>
+            <field name="res_model">claim.ij.subscription</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_claim_ij_subscription_form_view1">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="claim_ij_subscription_view_form"/>
+            <field name="act_window" ref="act_claim_ij_subscription_relate_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_claim_ij_subscription_list_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="claim_ij_subscription_view_form"/>
+            <field name="act_window" ref="act_claim_ij_subscription_relate_form"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ############### Prest'IJ Erroneous Requests ################ -->
+        <!-- ############################################################ -->
+        <record model="ir.action.act_window" id="act_erroneous_requests_prest_ij">
+            <field name="name">Erroneous Requests</field>
+            <field name="res_model">claim.ij.subscription</field>
+            <field name="domain" eval="[('state', '=', 'in_error')]" pyson="1"/>
+        </record>
+        <record model="ir.ui.view" id="claim_ij_relaunch_subscription_view_list">
+            <field name="model">claim.ij.subscription</field>
+            <field name="inherit" ref="claim_ij_subscription_view_list"/>
+            <field name="name">claim_ij_relaunch_subscription_list</field>
+        </record>
+        <record model="ir.ui.view" id="claim_ij_relaunch_subscription_view_form">
+            <field name="model">claim.ij.subscription</field>
+            <field name="inherit" ref="claim_ij_subscription_view_form"/>
+            <field name="name">claim_ij_relaunch_subscription_form</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_erroneous_requests_prest_ij_list_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="claim_ij_relaunch_subscription_view_list"/>
+            <field name="act_window" ref="act_erroneous_requests_prest_ij"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_erroneous_requests_prest_ij_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="claim_ij_relaunch_subscription_view_form"/>
+            <field name="act_window" ref="act_erroneous_requests_prest_ij"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ###################### Prest'IJ Menu ####################### -->
+        <!-- ############################################################ -->
+        <menuitem name="Prest'IJ" id="menu_prest_ij" sequence="16" icon="batch"/>
+        <menuitem name="Erroneous Requests" parent="menu_prest_ij" sequence="10" id="menu_erroneous_requests_prest_ij" action="act_erroneous_requests_prest_ij"/>
+    </data>
+</tryton>
