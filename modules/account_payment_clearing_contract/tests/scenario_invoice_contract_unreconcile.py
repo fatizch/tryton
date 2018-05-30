@@ -23,6 +23,7 @@ from trytond.modules.party_cog.tests.tools import create_party_person
 from trytond.modules.contract.tests.tools import add_quote_number_generator
 from trytond.modules.country_cog.tests.tools import create_country
 from trytond.modules.premium.tests.tools import add_premium_rules
+from trytond.modules.coog_core import coog_date
 
 from trytond.modules.coog_core.test_framework import execute_test_case, \
     switch_user
@@ -190,7 +191,8 @@ contract.billing_information.direct_debit is False
 
 # #Comment# #Create two invoices of 100.00
 invoice_wizard = Wizard('contract.do_invoice', models=[contract])
-invoice_wizard.form.up_to_date = contract_start_date + relativedelta(months=1)
+invoice_wizard.form.up_to_date = coog_date.add_month(contract_start_date,
+        1, stick_to_end_of_month=True)
 invoice_wizard.execute('invoice')
 
 ContractInvoice = Model.get('contract.invoice')
