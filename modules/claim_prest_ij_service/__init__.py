@@ -3,7 +3,6 @@
 from trytond.pool import Pool
 import claim
 import benefit
-import party
 import wizard
 import batch
 import configuration
@@ -15,7 +14,6 @@ def register():
         claim.ClaimIjSubscriptionRequest,
         claim.ClaimIjSubscription,
         benefit.Benefit,
-        party.Party,
         configuration.ClaimConfiguration,
         batch.CreatePrestIjSubscription,
         batch.SubmitPrestIjSubscription,

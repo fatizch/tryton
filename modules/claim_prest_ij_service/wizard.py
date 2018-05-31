@@ -51,10 +51,11 @@ class FindPartySubscription(Wizard):
         party_id = Transaction().context.get('active_id')
         party = Party(party_id)
         Subscription = pool.get('claim.ij.subscription')
-        subscription = Subscription.search([('party', '=', party_id)], limit=1)
+        subscription = Subscription.search([('siren', '=', party.siren)],
+            limit=1)
         if not subscription:
             if self._benefit_handle_prest_ij(party):
-                subscription, = Subscription.create([{'party': party_id}])
+                subscription, = Subscription.create([{'siren': party.siren}])
             else:
                 self.raise_user_error('benefit_no_ij_service', {
                         'party': party.full_name

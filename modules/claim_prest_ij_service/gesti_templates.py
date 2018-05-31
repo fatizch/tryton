@@ -99,6 +99,6 @@ class GestipDocument(GestipTemplate):
         for req in data['requests']:
             self.xml[3].append(self.M.Entreprise(
                 self.M.Identite(req.subscription.siren),
-                self.M.RaisonSociale(req.subscription.party.name),
+                self.M.RaisonSociale(req.subscription.parties[0].name),
                 Operation=req.operation.upper()
                 ))

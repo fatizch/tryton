@@ -278,8 +278,6 @@ class ClaimIjSubscriptionRequestGroup(Workflow, model.CoogSQL, model.CoogView):
         doc_id = doc.xpath("//n:DiagDocument/n:Mindex/n:Identification/text()",
                 namespaces=ns_arg)[0]
         group = cls.search_from_file_identification(doc_id, 'document')
-        if not group:
-            return
         group = group[0]
         doc_diags = doc.xpath("//n:DiagDocument/n:Diagnostic",
             namespaces=ns_arg)
@@ -291,18 +289,25 @@ class ClaimIjSubscriptionRequestGroup(Workflow, model.CoogSQL, model.CoogView):
                     encoding='utf8')
             siren = siren[0]
             requests = group.get_requests_from_diagnostic_data(siren)
+            assert requests, 'No IJ requests found for siren %s for document '
+            'id %s' % (siren, doc_id)
             op_state = doc_diag.xpath('n:Etat/text()', namespaces=ns_arg)[0]
             if op_state == 'R':
                 op_reject_cause = doc_diag.xpath('n:Cause/text()',
                         namespaces=ns_arg)[0]
-                Request.fail(requests, op_reject_cause)
+                op_reject_label = doc_diag.xpath('n:Libelle/text()',
+                        namespaces=ns_arg)[0]
+                Request.fail(requests, cause=op_reject_cause,
+                    label=op_reject_label)
             else:
                 Request.acknowledge(requests)
 
     @classmethod
     def search_from_file_identification(cls, identification, kind):
         search_id = cls.get_unprefixed_id(identification, kind)
-        return cls.search([('identification', '=', search_id)])
+        res = cls.search([('identification', '=', search_id)])
+        assert res, 'No IJ request group found with id %s' % identification
+        return res
 
     def get_requests_from_diagnostic_data(self, siren):
         return [x for x in self.requests if x.subscription.siren == siren]
@@ -323,9 +328,6 @@ class ClaimIjSubscriptionRequest(Workflow, model.CoogSQL, model.CoogView):
     siren = fields.Function(
         fields.Char('Siren'),
         'on_change_with_siren')
-    party = fields.Function(
-        fields.Many2One('party.party', 'Party'),
-        'on_change_with_party')
     group = fields.Many2One('claim.ij.subscription_request.group', 'Group',
         readonly=True, ondelete='RESTRICT', select=True,
         states={
@@ -360,10 +362,6 @@ class ClaimIjSubscriptionRequest(Workflow, model.CoogSQL, model.CoogView):
     @fields.depends('subscription')
     def on_change_with_siren(self, name=None):
         return self.subscription.siren if self.subscription else ''
-
-    @fields.depends('subscription')
-    def on_change_with_party(self, name=None):
-        return self.subscription.party.id if self.subscription else ''
 
     def get_rec_name(self, name):
         return self.operation.upper() if self.operation else self.id
@@ -429,10 +427,10 @@ class ClaimIjSubscription(model.CoogSQL, model.CoogView):
 
     __name__ = 'claim.ij.subscription'
 
-    party = fields.Many2One('party.party', 'Party',
-        readonly=True, required=True, ondelete='RESTRICT', select=True)
-    siren = fields.Function(fields.Char('Siren'),
-        'on_change_with_siren')
+    parties = fields.Function(
+        fields.Many2Many('party.party', None, None, 'Parties'),
+        'getter_parties')
+    siren = fields.Char('Siren', readonly=True)
     state = fields.Selection(SUBSCRIPTION_STATES, 'State', readonly=True)
     error_code = fields.Function(
         fields.Char('Error Code'),
@@ -460,25 +458,28 @@ class ClaimIjSubscription(model.CoogSQL, model.CoogView):
         super(ClaimIjSubscription, cls).__setup__()
         t = cls.__table__()
         cls._sql_constraints += [('unique_subscription',
-                Unique(t, t.party), 'There must be only one IJ subscription '
-                'per party')]
+                Unique(t, t.siren), 'There must be only one IJ subscription '
+                'per siren')]
         cls._buttons.update({
                 'button_relaunch_process': {
                     'readonly': (Eval('state') != 'in_error')},
                 })
 
     @classmethod
-    def default_party(cls):
-        return Transaction().context.get('active_id')
+    def default_siren(cls):
+        active_id = Transaction().context.get('active_id')
+        if active_id:
+            return Pool().get('party.party')(active_id).siren
 
     @classmethod
     def default_state(cls):
         return 'undeclared'
 
-    @fields.depends('party')
-    def on_change_with_siren(self, name=None):
-        if self.party:
-            return self.party.siren
+    def getter_parties(self, name):
+        if not self.siren:
+            return []
+        return sorted([x.id for x in Pool().get('party.party').search(
+                    [('siren', '=', self.siren)])], key=lambda x: x.id)
 
     def get_requests_event_logs(self, name):
         EventLog = Pool().get('event.log')

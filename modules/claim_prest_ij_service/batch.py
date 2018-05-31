@@ -3,6 +3,7 @@
 import os
 import logging
 import zipfile
+import shutil
 
 from sql import Literal, Null
 from sql.aggregate import Sum
@@ -80,8 +81,8 @@ class BaseSelectPrestIj(batch.BatchRoot):
         operation = kwargs.get('operation', 'cre')
         Operator = fields.SQL_OPERATORS['=' if operation == 'cre' else '!=']
         sub_query = subscription.join(party, 'RIGHT OUTER', condition=(
-                subscription.party == party.id)).select(party.id,
-            where=Operator(subscription.party, Null))
+                subscription.siren == party.siren)).select(party.id,
+            where=Operator(subscription.id, Null))
         return party.id.in_(sub_query)
 
     @classmethod
@@ -105,7 +106,9 @@ class CreatePrestIjSubscription(BaseSelectPrestIj):
     def execute(cls, objects, ids, treatment_date):
         Subscription = Pool().get('claim.ij.subscription')
         for sliced_objects in grouped_slice(objects):
-            Subscription.create([{'party': id_} for id_ in ids])
+            Subscription.create(
+                [{'siren': siren}
+                    for siren in list({x.siren for x in sliced_objects})])
 
 
 class SubmitPrestIjSubscription(BaseSelectPrestIj):
@@ -141,14 +144,17 @@ class SubmitPrestIjSubscription(BaseSelectPrestIj):
         subscription = tables['claim.ij.subscription']
         request = tables['claim.ij.subscription_request']
         contract = tables['contract']
+        party = tables['party.party']
         if kwargs['operation'] == 'cre':
-            query_table = subscription.join(contract,
-                condition=(contract.subscriber == subscription.party))
+            query_table = party.join(contract,
+                condition=(contract.subscriber == party.id)
+                ).join(subscription,
+                    condition=(party.siren == subscription.siren))
         else:
             query_table = super(SubmitPrestIjSubscription, cls
                 ).get_query_table(tables, **kwargs
                 ).join(subscription,
-                    condition=(subscription.party == contract.subscriber))
+                    condition=(party.siren == subscription.siren))
         return query_table.join(request, 'LEFT OUTER', condition=(
                 request.subscription == subscription.id))
 
@@ -282,6 +288,9 @@ class ProcessGestipFluxBatch(batch.BatchRoot):
     @classmethod
     def execute(cls, objects, ids, treatment_date, directory, kind):
         Group = Pool().get('claim.ij.subscription_request.group')
+        archive_dir = os.path.join(directory, 'archive')
+        if not os.path.exists(archive_dir):
+            os.makedirs(archive_dir)
         for filepath in ids:
             zip_file = zipfile.ZipFile(filepath)
             for data_file in zip_file.namelist():
@@ -292,3 +301,4 @@ class ProcessGestipFluxBatch(batch.BatchRoot):
                         continue
                     process_method = getattr(Group, 'process_%s_data' % kind)
                     process_method(data)
+            shutil.move(filepath, archive_dir)

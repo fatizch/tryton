@@ -32,8 +32,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 return ''.join(random.choice(string.digits) for x in range(9))
 
             @property
-            def party(self):
-                return Party()
+            def parties(self):
+                return [Party()]
 
         class Req(object):
             operation = 'cre'

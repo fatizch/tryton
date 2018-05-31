@@ -4,7 +4,6 @@ this repository contains the full copyright notices and license terms. -->
 <tree>
     <field name="date"/>
     <field name="siren"/>
-    <field name="party"/>
     <field name="operation"/>
     <field name="state"/>
     <field name="error_code"/>

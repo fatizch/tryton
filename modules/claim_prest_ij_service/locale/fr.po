@@ -3,8 +3,8 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:claim.ij.subscription:"
-msgid "There must be only one IJ subscription per party"
-msgstr "Il ne doit y avoir qu'une seule inscription Prest'IJ par tiers"
+msgid "There must be only one IJ subscription per siren"
+msgstr "Il ne doit y avoir qu'une seule inscription Prest'IJ par siren"
 
 msgctxt "error:claim.ij.subscription_request.group:"
 msgid "The identification must be unique"
@@ -66,8 +66,8 @@ msgctxt "field:claim.ij.subscription,ij_activation:"
 msgid "IJ Activation"
 msgstr "Activation de Prest'IJ"
 
-msgctxt "field:claim.ij.subscription,party:"
-msgid "Party"
+msgctxt "field:claim.ij.subscription,parties:"
+msgid "Parties"
 msgstr "Tiers"
 
 msgctxt "field:claim.ij.subscription,rec_name:"
