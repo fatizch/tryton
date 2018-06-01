@@ -94,6 +94,7 @@ class QueueMixin(object):
                 'failed_task': ('The last background task failed. See below '
                     'for technical details:\n%(details)s'),
                 })
+        cls._async_methods = []
 
     @classmethod
     def check_pending_task(cls, records):
@@ -152,7 +153,7 @@ class QueueMixin(object):
         return ''
 
     @staticmethod
-    def async_method(condition=None):
+    def async_method(method_name, condition=None):
         """
         This decorator can be applied to classmethods on models
         who inherit from QueueMixin, so that the classmethod
@@ -204,7 +205,7 @@ class QueueMixin(object):
                 kwargs.update({
                         'user': Transaction().user,
                         'model_name': cls.__name__,
-                        'method_name': func.__name__,
+                        'method_name': method_name,
                         'database': pool.database_name})
                 # TODO: manage this post transaction
                 task_id = broker.enqueue(cls.__name__, 'async_method_execution',
@@ -219,3 +220,21 @@ class QueueMixin(object):
                 return [x.id for x in instances]
             return wrapper
         return build_async_function
+
+
+def async_methods_hook(pool, update):
+
+    for model_name in [x[0] for x in pool.iterobject()]:
+        klass = pool._pool[pool.database_name].get('model').get(model_name)
+        if not klass or not hasattr(klass, '_async_methods'):
+            continue
+        for meth, async_cond in klass._async_methods:
+            @classmethod
+            @QueueMixin.async_method(meth, async_cond)
+            def async_meth_wrap(cls, instances, *args, **kwargs):
+                fct = getattr(cls, '__%s_orig' % meth)
+                fct(instances, *args, **kwargs)
+
+            if not hasattr(klass, '__%s_orig' % meth):
+                setattr(klass, '__%s_orig' % meth, getattr(klass, meth))
+                setattr(klass, meth, async_meth_wrap)

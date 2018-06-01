@@ -141,6 +141,7 @@ def register():
     Pool.register_post_init_hooks(add_global_search_limit, module='coog_core')
     Pool.register_post_init_hooks(add_readonly_transaction_model,
         module='coog_core')
+    Pool.register_post_init_hooks(queue.async_methods_hook, module='coog_core')
 
 
 def cache_fields_get(pool, update):

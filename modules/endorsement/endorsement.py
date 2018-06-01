@@ -1293,6 +1293,9 @@ class Endorsement(QueueMixin, Workflow, model.CoogSQL, model.CoogView,
             ('number_uniq', Unique(t, t.number),
                 'The endorsement number must be unique.')
         ]
+        cls._async_methods.append(
+            ('apply', 'async_apply_condition'),
+            )
 
     @classmethod
     def view_attributes(cls):
@@ -1523,7 +1526,6 @@ class Endorsement(QueueMixin, Workflow, model.CoogSQL, model.CoogView,
             cls.apply(endorsements)
 
     @classmethod
-    @QueueMixin.async_method('async_apply_condition')
     @Workflow.transition('applied')
     def apply(cls, endorsements):
         pool = Pool()

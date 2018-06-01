@@ -1,3 +1,4 @@
+* BUG#9032 Fix to handle asynchronous endorsement application override
 * BUG#8822 Modify the getter of contract initial start date in order to get right date value after an endorsement
 
 Version 2.0 - 2018-04-13

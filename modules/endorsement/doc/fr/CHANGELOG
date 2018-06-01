@@ -1,3 +1,4 @@
+* BUG#9032 Correctif pour supporter la surcharge d'application d'avenant en asynchrone
 * BUG#8822 Pouvoir récuperer la date d'effet initiale d'un contrat suite à l'application d'un avenant
 
 Version 2.0 - 2018-04-13
