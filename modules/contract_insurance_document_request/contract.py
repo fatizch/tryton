@@ -160,12 +160,12 @@ class Contract(RemindableInterface):
         DocumentRequestLine = pool.get('document.request.line')
         DocumentDesc = pool.get('document.description')
         documents = self.get_calculated_required_documents([self])[self]
-
-        existing_document_desc_code = [request.document_desc.code
-            for request in self.document_request_lines]
         with Transaction().set_context(remove_document_desc_filter=True):
             rule_doc_descs_by_code = {x.code: x for x in
                 DocumentDesc.search([('code', 'in', documents.keys())])}
+            existing_document_desc_code = [request.document_desc.code
+                for request in DocumentRequestLine.search([
+                    ('for_object', '=', str(self))])]
         to_save = []
         for code, rule_result_values in documents.iteritems():
             if code in existing_document_desc_code:

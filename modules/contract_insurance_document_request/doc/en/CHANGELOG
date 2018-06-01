@@ -1,3 +1,5 @@
+* BUG#7841 Fix duplicate medical documents on quotation creation by a user whom is not authorized to see those documents
+
 Version 2.0 - 2018-04-13
 * FEA#8686 Make it possible to check required and authorized documents from processes
 * FEA#8447 Rule returning the received documents codes for a contract
