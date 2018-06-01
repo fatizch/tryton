@@ -1,3 +1,4 @@
+* BUG#8936 Correctif sur la création imcomplète du bordereau assureur
 * BUG#8829 Utilisation du type métier pour rechercher le bordereau assureur généré auparavant pour prevenir la fusion entre les bordereaux de primes et de prestations
 
 Version 2.0 - 2018-04-13

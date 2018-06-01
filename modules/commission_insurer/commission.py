@@ -341,7 +341,7 @@ class Commission:
                     for line, account in invoices_data[invoice_id]:
                         per_insurer[account][1].append(line)
                 else:
-                    break
+                    continue
 
         # Some invoices does not have any commissions
         # But we have to retrieve associated moves line
