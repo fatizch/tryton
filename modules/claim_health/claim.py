@@ -22,7 +22,7 @@ class HealthLoss(model.CoogSQL, model.CoogView):
     loss = fields.Many2One('claim.loss', 'Loss', required=True,
         ondelete='CASCADE', select=True)
     covered_person = fields.Many2One('party.party', 'Covered Person',
-        ondelete='RESTRICT', required=True)
+        ondelete='RESTRICT', required=True, select=True)
     act_description = fields.Many2One('benefit.act.description',
         'Medical Act Description', ondelete='RESTRICT', required=True,
         select=True)

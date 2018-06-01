@@ -97,7 +97,7 @@ class Loss:
                 )
             ],
         depends=['possible_covered_persons', 'claim_status'],
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', select=True)
     start_date_string = fields.Function(
         fields.Char('Start Date String',
             depends=['loss_desc_kind', 'loss_desc']),
@@ -355,6 +355,8 @@ class Loss:
 
     @fields.depends('covered_person', 'loss_desc', 'start_date')
     def on_change_with_possible_relapse_losses(self, name=None):
+        if not self.covered_person:
+            return []
         Loss = Pool().get('claim.loss')
         domain = [('covered_person', '=', self.covered_person),
                 ('loss_desc', '=', self.loss_desc)]
