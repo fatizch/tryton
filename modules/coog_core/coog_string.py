@@ -116,7 +116,10 @@ def translate_value(instance, var_name, lang=None):
     if (hasattr(field, 'translate') and field.translate
             or (hasattr(field, 'translate_selection')
                 and field.translate_selection)):
-        return translate_field(instance, var_name, res, ttype, lang=lang)
+        try:
+            return translate_field(instance, var_name, res, ttype, lang=lang)
+        except KeyError:
+            return getattr(instance, var_name)
     return res
 
 

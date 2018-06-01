@@ -1,3 +1,4 @@
+* BUG#8983 Correction d'un problème lors de l'alimentation de la liste des types d'identifiants de tiers
 * FEA#7941 Ajout de l'attribut keyword sur les boutons
 * OTH#0000 Ajout de goupes des utilisateurs et de comptes bancaires de tiers parmi les modèles historisables par configuration
 * FEA#8212 Exécution de traitements métier lourds en mode asynchrone
