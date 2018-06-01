@@ -1,15 +1,12 @@
 Architecture de Coog
 ====================
 
-:version: 0.0.1
-:author: Jean Cavallo
-
 Philosophie
 -----------
 
 **Coog** fonctionne selon une approche modulaire. Les différents domaines
 fonctionnels sont ainsi installables à la demande. Cela permet de limiter la
-pollution d'une installation avec des points d'entrées et comportement non
+pollution d'une installation avec des points d'entrées et comportements non
 indispensables. L'intérêt est, par exemple, de ne pas avoir la complexité de la
 configuration des contrats collectifs pour une installation où ce besoin n'est
 pas présent.
@@ -114,7 +111,7 @@ Il est indispensable de comprendre ce fonctionnement, afin d'éviter les
 incompréhensions lors du paramétrage. Concrètement, cela signifie :
 
 * Qu'il est relativement simple de faire un nouveau paramétrage global. Par
-  exemple, si l'on cré un nouveau modèle de courrier sans le rattacher
+  exemple, si l'on créé un nouveau modèle de courrier sans le rattacher
   explicitement à un produit, il est automatiquement disponible sur tous les
   produits
 * À l'inverse, il est relativement fastidieux de travailler avec des

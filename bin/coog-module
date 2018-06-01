@@ -162,13 +162,6 @@ coog_module_create() { # creates a new module in the modules folder - <module_na
             fi
             echo "" >> "$module_folder"/doc/"$lang"/index.rst
             echo ".. include:: features.rst" >> "$module_folder"/doc/"$lang"/index.rst
-            echo "" >> "$module_folder"/doc/"$lang"/index.rst
-            echo "" >> "$module_folder"/doc/"$lang"/index.rst
-            echo ".. toctree::" >> "$module_folder"/doc/"$lang"/index.rst
-            echo "    :hidden:" >> "$module_folder"/doc/"$lang"/index.rst
-            echo "" >> "$module_folder"/doc/"$lang"/index.rst
-            echo "    summary.rst" >> "$module_folder"/doc/"$lang"/index.rst
-            echo "    features.rst" >> "$module_folder"/doc/"$lang"/index.rst
         done
 
         # Init translation file

@@ -1,22 +1,6 @@
 Formation - Administration
 ==========================
 
-:version: 0.0.1
-:author: Jean Cavallo
-
-
-.. toctree::
-    :titlesonly:
-    :maxdepth: 2
-
-    architecture
-    ergonomie
-    elements_cles
-    configuration_generale
-    moteur_de_regles
-    editique
-
-
 Objectifs de la formation
 -------------------------
 
@@ -64,3 +48,20 @@ Cette formation s'adresse à des personnes :
 * Maîtrisant un minimum d'algorithmique, niveau (par exemple) macros MS Excel
 * Connaissant les différents modules utilisés lors de la formation (paramétrage
   produit, commissions, comptabilité, etc.)
+
+
+.. toctree::
+    :titlesonly:
+    :maxdepth: 2
+
+    architecture
+    ergonomie
+    elements_cles
+    configuration_generale
+    donnees_complementaires
+    moteur_de_regles
+    produit/index
+    reseau_distribution
+    commissionnement
+    editique
+    actions_evenements

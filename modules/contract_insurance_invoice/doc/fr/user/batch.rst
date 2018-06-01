@@ -65,7 +65,7 @@ migration, ou d'une évolution rétroactive du paramétrage.
     à traiter, ainsi que les dates de début du requittancement. Le format
     attendu pour les dates est ``YYYY-mm-dd``. Ex :
 
-    .. code-block::
+    .. code::
 
         CTR000001;2020-04-10
         CTR000009;2019-06-25

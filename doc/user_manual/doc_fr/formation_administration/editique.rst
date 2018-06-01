@@ -434,6 +434,28 @@ Il est également possible de combiner des conditions à l'aide des opérateurs
 
 ``if test="((a < b) and (c < d)) or (d >= a)"``
 
+Choix
+"""""
+
+Pour les cas où le même test peut donner lieu à des décisions différentes dans
+le document, il est possible d'utiliser la directive ``choose``. Contrairement
+au ``if`` qui n'associe qu'un seul comportement possible à une condition,
+``choose`` permet de tester plusieurs cas à la suite. La logique est que l'on
+s'arrête dès que l'un des cas est *Vrai*.
+
+Si aucun des cas, spécifiés par la directive ``when`` (*Quand*), ne correpond,
+on applique le contenu du bloc ``otherwise`` (*Autrement*).
+
+.. image:: images/editique_choix.png
+    :align: center
+
+Ici, le comportement sera d'afficher :
+
+* "très âgé" si la personne est âgée de plus de 100 ans
+* "âgé" si la personne est âgée de plus de 80 ans mais de moins de 100 ans
+* "mature" si la personne est âgée de plus de 35 ans mais de moins de 80 ans
+* "jeune" dans tous les autres cas
+
 Boucles
 """""""
 
@@ -544,6 +566,37 @@ du moteur de templating utilisé par **Coog**).
 Pour des raisons de lisibilité, il est recommandé de renseigner le champ
 *Texte* avec le contenu de l'*URL* (sans le préfixe), mais cela n'est pas
 obligatoire pour le bon fonctionnement du template.
+
+Images
+""""""
+
+Il est possible d'insérer des images « dynamiques » (dépendant du contexte)
+dans un document. Par exemple, pour récupérer le logo associé à un contrat (il
+peut s'agir de celui de l'assureur, du courtier, etc.) il faut passer par le
+menu « Insertion > Cadre ». Ensuite, dans l'onglet « Options », dans le champ
+*Nom*, ajouter le texte suivant :
+
+.. code::
+
+    image: (contract.format_logo(), 'image/jpeg')
+
+Une fois le cadre créé, il est possible de le déplacer / redimensionner comme
+souhaité. Lors de la génération du document, le cadre sera remplacé par l'image
+correspondante.
+
+Ici, le texte ``(contract.format_logo(), 'image/jpeg')`` est séparé en deux
+parties :
+
+- ``contract.format_logo()`` resprésente le contenu de l'image. Dans **Coog**,
+  il peut s'agir d'une fonction (comme c'est le cas ici) qui calcule et
+  retourne l'image correspondant à un contexte donné, mais également d'un champ
+  *Binaire*, qui peut contenir n'importe quel type de fichier. Dans ce second
+  cas, le paramétreur doit s'assurer que le fichier en question est bien une
+  image afin d'éviter les erreurs
+- ``'image/jpeg'`` est le type de donnée, et est nécessaire pour que la
+  génération fonctionne correctement. Pour les images, il s'agira ou bien de
+  ``'image/jpeg'``, ou bien de ``'image/png'`` en fonction du type de données
+  attendu
 
 Autres
 """"""
