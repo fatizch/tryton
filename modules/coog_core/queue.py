@@ -177,19 +177,20 @@ class QueueMixin(object):
 
                 pool = Pool()
                 AsyncTask = pool.get('async.task')
+                context = Transaction().context
                 if condition:
                     async_allowed = getattr(cls, condition)(instances)
                 else:
                     async_allowed = True
-                context = Transaction().context
                 from_async_worker = context.get('async_worker', False)
                 from_batch = context.get('from_batch', False)
                 force_synchronous = context.get('force_synchronous', False)
+                rollback = context.get('will_be_rollbacked', False)
 
                 cls.check_pending_task(instances)
 
                 if from_async_worker or from_batch or force_synchronous or \
-                        not async_allowed:
+                        not async_allowed or rollback:
                     res = func(instances, *args, **kwargs)
                     # Although we checked for pending tasks,
                     # we still have to remove the potential failed

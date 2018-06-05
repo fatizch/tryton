@@ -1,3 +1,4 @@
+* BUG#9028 Forcer l'exécution synchrone en cas de transaction marquée pour rollback
 * OTH#0000 Correction de l'héritage pour les méthodes asynchrones
 * BUG#8983 Correction d'un problème lors de l'alimentation de la liste des types d'identifiants de tiers
 * FEA#7941 Ajout de l'attribut keyword sur les boutons
