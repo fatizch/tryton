@@ -1,3 +1,4 @@
+* OTH#0000 Fix async method inheritance
 * BUG#8983 Fix party identifier dynamic types fetching
 * FEA#7941 Add keyword attribute to button tag
 * OTH#0000 Add user's groups and party's bank account among historizable models by configuration

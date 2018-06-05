@@ -190,7 +190,7 @@ class QueueMixin(object):
 
                 if from_async_worker or from_batch or force_synchronous or \
                         not async_allowed:
-                    res = func(cls, instances, *args, **kwargs)
+                    res = func(instances, *args, **kwargs)
                     # Although we checked for pending tasks,
                     # we still have to remove the potential failed
                     # or succeeded tasks
@@ -223,18 +223,13 @@ class QueueMixin(object):
 
 
 def async_methods_hook(pool, update):
+    if update:
+        return
 
-    for model_name in [x[0] for x in pool.iterobject()]:
-        klass = pool._pool[pool.database_name].get('model').get(model_name)
+    for klass in [x[1] for x in pool.iterobject()]:
         if not klass or not hasattr(klass, '_async_methods'):
             continue
         for meth, async_cond in klass._async_methods:
-            @classmethod
-            @QueueMixin.async_method(meth, async_cond)
-            def async_meth_wrap(cls, instances, *args, **kwargs):
-                fct = getattr(cls, '__%s_orig' % meth)
-                fct(instances, *args, **kwargs)
-
-            if not hasattr(klass, '__%s_orig' % meth):
-                setattr(klass, '__%s_orig' % meth, getattr(klass, meth))
-                setattr(klass, meth, async_meth_wrap)
+            original = getattr(klass, meth)
+            setattr(klass, meth, classmethod(QueueMixin.async_method(
+                        meth, async_cond)(original)))
