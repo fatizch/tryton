@@ -9,6 +9,7 @@ import event
 import tools
 import batch
 import res
+import party
 
 
 def register():
@@ -31,6 +32,7 @@ def register():
         tools.MatchDisplayer,
         batch.ReportProductionRequestTreatmentBatch,
         res.Group,
+        party.Party,
         module='report_engine', type_='model')
 
     Pool.register(
