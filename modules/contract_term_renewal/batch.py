@@ -42,7 +42,7 @@ class RenewContracts(batch.BatchRoot):
                 datetime.date.max).as_('end_date'),
             Max(Coalesce(activation_history.end_date, datetime.date.max),
                 window=Window([activation_history.contract])).as_('max_end'),
-            )
+            where=(activation_history.active == Literal(True)))
         cursor.execute(*contract.join(win_query,
                 condition=win_query.contract == contract.id
                 ).select(contract.id, where=(contract.status == 'active')
