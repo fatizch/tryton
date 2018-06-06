@@ -4,15 +4,13 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='options']" position="before">
         <page string="Covered Elements" id="cov_elements">
-            <hpaned id="covered_element" position="-1">
-                <child id="tree">
-                    <field name="multi_mixed_view" group="multi_mixed_view" mode="tree" view_ids="contract_insurance.covered_elements_clean_tree" expand_toolbar="0"/>
-                </child>
-                <child id="form">
-                    <field name="multi_mixed_view" group="multi_mixed_view" mode="form" relation="contract.covered_element" relation_field="contract" view_ids="contract_insurance.covered_element_simple_view_form" expand_toolbar="0"/>
-                    <field name="multi_mixed_view" group="multi_mixed_view" mode="form" relation="contract.option" relation_field="covered_element" view_ids="contract.option_view_form" expand_toolbar="0"/>
-                </child>
-            </hpaned>
+            <group id="covered_element_clean_tree" yexpand="1" yfill="1">
+                <field name="multi_mixed_view" group="multi_mixed_view" mode="tree" view_ids="contract_insurance.covered_elements_clean_tree" expand_toolbar="0"/>
+            </group>
+            <group id ="covered_element" yexpand="1" yfill="1">
+                <field name="multi_mixed_view" group="multi_mixed_view" mode="form" relation="contract.covered_element" relation_field="contract" view_ids="contract_insurance.covered_element_simple_view_form" expand_toolbar="0"/>
+                <field name="multi_mixed_view" group="multi_mixed_view" mode="form" relation="contract.option" relation_field="covered_element" view_ids="contract.option_view_form" expand_toolbar="0"/>
+            </group>
         </page>
     </xpath>
 </data>

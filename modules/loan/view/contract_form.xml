@@ -9,7 +9,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="loans" colspan="4" mode="tree,form" view_ids="loan.ordered_loan_view_list,loan.loan_no_button_view_form"/>
         <field name="ordered_loans" colspan="4"/>
     </xpath>
-    <xpath expr="//page[@id='cov_elements']/hpaned/child[@id='form']" position="inside">
+    <xpath expr="//page[@id='cov_elements']/group[@id='covered_element']" position="inside">
         <field name="multi_mixed_view" group="multi_mixed_view" mode="form" relation="loan.share" relation_field="option" view_ids="loan.loan_share_view_form" expand_toolbar="0"/>
     </xpath>
     <xpath expr="/form">

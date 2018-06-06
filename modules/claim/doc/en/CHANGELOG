@@ -1,3 +1,4 @@
+* FEA#8832 Replace 'hpaned' position attribute with 'group'
 * BUG#8786 Set claim readonly when closed
 * BUG#8818 Remove toolbar in losses tree on claim
 * OTH#0000 Add missing depends on losses for on_change_claimant due to #8802

@@ -2,7 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page[@id='losses']/hpaned[@id='losses']/child[@id='form']/field[@relation='claim.service']" position="after">
+    <xpath expr="/form/notebook/page[@id='losses']/group[@id='losses']/field[@relation='claim.service']" position="after">
             <field name="losses" group="multi_losses" mode="form" relation="claim.indemnification" relation_field="service" view_ids="claim_indemnification.indemnification_view_form" expand_toolbar="0"/>
     </xpath>
 </data>

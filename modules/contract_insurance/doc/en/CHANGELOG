@@ -1,3 +1,4 @@
+* FEA#8832 Replace 'hpaned' position attribute with 'group'
 * BUG#9046 Do not copy covered element extra datas on parties if they are empy
 * BUG#8956 Display quote number instead of contract number in error message of party erase wizard
 

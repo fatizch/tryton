@@ -23,15 +23,13 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <notebook>
         <page string="Losses" id="losses">
-            <hpaned id="losses" position="15">
-                <child id="tree">
+            <group id="losses_list" yexpand="1" yfill="1" colspan="1">
                     <field name="losses" group="multi_losses" mode="tree" view_ids="claim.loss_simple_list" expand_toolbar="0"/>
-                </child>
-                <child id="form">
+            </group>
+             <group id="losses" yexpand="1" yfill="1" colspan="3">
                     <field name="losses" group="multi_losses" mode="form" relation="claim.loss" relation_field="claim" view_ids="claim.loss_without_service_view_form" expand_toolbar="0"/>
                     <field name="losses" group="multi_losses" mode="form" relation="claim.service" relation_field="loss" view_ids="claim.claim_service_view_form" expand_toolbar="0"/>
-                </child>
-            </hpaned>
+            </group>
         </page>
     </notebook>
     <group id="contracts">
