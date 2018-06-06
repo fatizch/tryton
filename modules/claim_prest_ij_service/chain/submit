@@ -12,12 +12,12 @@ chain_begin
 chain_step prest_ij.subscription.create --treatment_date="$TREATMENT_DATE"
 chain_wait prest_ij.subscription.create || chain_end
 
-chain_step chain_step prest_ij.subscription.submit \
+chain_step prest_ij.subscription.submit \
     --treatment_date="$TREATMENT_DATE" \
     --operation="cre"
 chain_wait prest_ij.subscription.submit || chain_end
 
-chain_step chain_step prest_ij.subscription.submit \
+chain_step prest_ij.subscription.submit \
     --treatment_date="$TREATMENT_DATE" \
     --operation="sup"
 chain_wait prest_ij.subscription.submit || chain_end
@@ -25,7 +25,7 @@ chain_wait prest_ij.subscription.submit || chain_end
 
 [[ -z  $OUTPUT_DIR ]] && chain_step prest_ij.subscription.process \
     --treatment_date="$TREATMENT_DATE"
-[[ ! -z  $OUTPUT_DIR ]] && chain_step chain_step prest_ij.subscription.process \
+[[ ! -z  $OUTPUT_DIR ]] && chain_step prest_ij.subscription.process \
     --treatment_date="$TREATMENT_DATE" \
     --output_dir="$OUTPUT_DIR"
 

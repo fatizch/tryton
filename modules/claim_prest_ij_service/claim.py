@@ -289,8 +289,8 @@ class ClaimIjSubscriptionRequestGroup(Workflow, model.CoogSQL, model.CoogView):
                     encoding='utf8')
             siren = siren[0]
             requests = group.get_requests_from_diagnostic_data(siren)
-            assert requests, 'No IJ requests found for siren %s for document '
-            'id %s' % (siren, doc_id)
+            assert requests, 'No IJ requests found for siren %s for document ' \
+                'id %s' % (siren, doc_id)
             op_state = doc_diag.xpath('n:Etat/text()', namespaces=ns_arg)[0]
             if op_state == 'R':
                 op_reject_cause = doc_diag.xpath('n:Cause/text()',
@@ -479,7 +479,7 @@ class ClaimIjSubscription(model.CoogSQL, model.CoogView):
         if not self.siren:
             return []
         return sorted([x.id for x in Pool().get('party.party').search(
-                    [('siren', '=', self.siren)])], key=lambda x: x.id)
+                    [('siren', '=', self.siren)])])
 
     def get_requests_event_logs(self, name):
         EventLog = Pool().get('event.log')

@@ -231,6 +231,7 @@ class ProcessPrestIjRequest(batch.BatchRoot):
         super(ProcessPrestIjRequest, cls).__setup__()
         cls._default_config_items.update({
                 'job_size': 0,
+                'split': False,
                 })
 
     @classmethod
@@ -292,6 +293,7 @@ class ProcessGestipFluxBatch(batch.BatchRoot):
         if not os.path.exists(archive_dir):
             os.makedirs(archive_dir)
         for filepath in ids:
+            to_archive = False
             zip_file = zipfile.ZipFile(filepath)
             for data_file in zip_file.namelist():
                 with zip_file.open(data_file, 'r') as fd_:
@@ -301,4 +303,6 @@ class ProcessGestipFluxBatch(batch.BatchRoot):
                         continue
                     process_method = getattr(Group, 'process_%s_data' % kind)
                     process_method(data)
-            shutil.move(filepath, archive_dir)
+                    to_archive = True
+            if to_archive:
+                shutil.move(filepath, archive_dir)
