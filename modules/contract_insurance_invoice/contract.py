@@ -670,6 +670,8 @@ class Contract:
         return (invoice_rrule, until_date, billing_information)
 
     def get_invoice_periods(self, up_to_date, from_date=None):
+        if not self.billing_informations:
+            return []
         contract_end_date = self.activation_history[-1].end_date
         if from_date:
             start = max(from_date, self.start_date)
