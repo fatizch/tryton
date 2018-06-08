@@ -1,3 +1,4 @@
+* BUG#9000 Ajout d'un paramétrage par défaut des habilitations
 * BUG#8918 Définition d'une société par défaut pour migrer les réseaux de distribution existants en base à l'installation du module
 
 Version 2.0 - 2018-04-13

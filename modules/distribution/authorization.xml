@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Menu -->
+        <record model="ir.ui.menu-res.group" id="menu_distribution_admin">
+            <field name="menu" ref="distribution.menu_distribution"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_distribution_network_admin">
+            <field name="menu" ref="distribution.menu_dist_network_form"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <!-- Model -->
+        <record model="ir.model.access" id="access_distribution_network_default">
+            <field name="model" search="[('model', '=', 'distribution.network')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
+</tryton>

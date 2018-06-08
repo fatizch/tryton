@@ -1,3 +1,4 @@
+* BUG#9000 Add default authorization
 * BUG#8918 Set default company to migrate existing distribution networks in database when installing the module
 
 Version 2.0 - 2018-04-13

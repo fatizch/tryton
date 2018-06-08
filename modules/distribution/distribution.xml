@@ -65,29 +65,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_dist_network_form"/>
         </record>
         <menuitem parent="menu_distribution" sequence="2" id="menu_dist_network_form" icon="tryton-list" action="act_dist_network_form"/>
-        <!--Rights-->
-        <record model='res.group' id="group_distribution">
-            <field name="name">Distribution Administration</field>
-        </record>
-        <record model="ir.model.access" id="access_distribution_network_admin">
-            <field name="model" search="[('model', '=', 'distribution.network')]"/>
-            <field name="group" ref="group_distribution"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
-        </record>
-        <record model="ir.model.access" id="access_distribution_network_user">
-            <field name="model" search="[('model', '=', 'distribution.network')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="res.user-res.group" id="user_admin_group_distribution">
-            <field name="user" ref="res.user_admin"/>
-            <field name="group" ref="group_distribution"/>
-        </record>
         <record model="ir.action.act_window" id="act_distribution_network_relate_form">
             <field name="name">Childs</field>
             <field name="res_model">distribution.network</field>
