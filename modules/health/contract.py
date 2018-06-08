@@ -70,7 +70,8 @@ class CoveredElement:
                 contract = CovElement(cov_dict['parent']).main_contract
             elif 'contract' in cov_dict and cov_dict['contract']:
                 contract = Contract(cov_dict['contract'])
-            if not contract.is_health or 'party' not in cov_dict:
+            if (not getattr(contract, 'is_health', None) or
+                    'party' not in cov_dict):
                 continue
             if not cov_dict['party']:
                 continue

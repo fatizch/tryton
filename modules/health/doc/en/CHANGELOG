@@ -1,3 +1,4 @@
+* BUG#9125 Properly manage the case where the contract does not yet exists in when creating a covered element
 * OTH#0000 Fix test
 
 Version 2.0 - 2018-04-13

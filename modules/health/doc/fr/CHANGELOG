@@ -1,3 +1,4 @@
+* BUG#9125 Gestion du cas où le contrat n'existe pas encore lors de la création des éléments couverts
 * OTH#0000 Correction des tests
 
 Version 2.0 - 2018-04-13
