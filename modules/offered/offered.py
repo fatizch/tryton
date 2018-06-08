@@ -69,6 +69,9 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
     currency_digits = fields.Function(
         fields.Integer('Currency Digits'),
         'on_change_with_currency_digits')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'on_change_with_currency_symbol')
     contract_generator = fields.Many2One('ir.sequence',
         'Contract Number Generator', context={'code': 'offered.product'},
         ondelete='RESTRICT', required=True,
@@ -239,6 +242,10 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def on_change_with_currency_digits(self, name=None):
         return self.currency.digits if self.currency else 2
 
+    @fields.depends('currency')
+    def on_change_with_currency_symbol(self, name=None):
+        return self.currency.symbol if self.currency else ''
+
 
 class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
     'OptionDescription'
@@ -262,6 +269,9 @@ class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
     currency_digits = fields.Function(
         fields.Integer('Currency Digits'),
         'on_change_with_currency_digits')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'on_change_with_currency_symbol')
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
         'Subscription Behaviour', sort=False)
     extra_data_def = fields.Many2Many(
@@ -435,6 +445,10 @@ class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @fields.depends('currency')
     def on_change_with_currency_digits(self, name=None):
         return self.currency.digits if self.currency else 2
+
+    @fields.depends('currency')
+    def on_change_with_currency_symbol(self, name=None):
+        return self.currency.symbol if self.currency else ''
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):

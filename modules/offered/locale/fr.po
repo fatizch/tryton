@@ -240,6 +240,10 @@ msgctxt "field:offered.option.description,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
+msgctxt "field:offered.option.description,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole"
+
 msgctxt "field:offered.option.description,description:"
 msgid "Description"
 msgstr "Description"
@@ -615,6 +619,10 @@ msgstr "Devises"
 msgctxt "field:offered.product,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
+
+msgctxt "field:offered.product,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole"
 
 msgctxt "field:offered.product,data_shelf_life:"
 msgid "Data Shelf Life"
