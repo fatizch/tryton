@@ -19,9 +19,24 @@ _coog_daily_check_modules() {
     return 1
 }
 
+coog_daily_report() { # batches execution report generation
+    local template=$(python "$COOG_BIN/parse-config.py" batch_report fromemail < "$COOG_CONF_SRV" | sed -e "s/.*://" 2> /dev/null)
+    [[ -z "$template" ]] & template="$COOG_BIN/template/default_batch_template.html"
+    coog_celery_report "$@" | python "$COOG_BIN/batch_report_generate.py" "$template"
+}
 
-coog_daily_main() {
+coog_daily_mail() { # batches execution mail report
+    local dates="$(date -d "$(date --iso) -1 day" +%Y-%m-%d)T12:00:00~$(date +%Y-%m-%d)T23:59:59"
+    [ $# -ne 0 ] && dates=$1 && shift 1
+    local fromemail=$(python "$COOG_BIN/parse-config.py" batch_report fromemail < "$COOG_CONF_SRV" | sed -e "s/.*://" 2> /dev/null)
+    local toemail=$(python "$COOG_BIN/parse-config.py" batch_report toemail < "$COOG_CONF_SRV" | sed -e "s/.*://" 2> /dev/null)
+    local body=$(coog_daily_report "$dates")
+    local subject=$(sed -n -e 's/.*<title>\(.*\)<\/title>.*/\1/p' <<< $body)
+    echo "$body" | python "$COOG_BIN/mail.py" --fromemail "$fromemail" --toemail "$toemail" --subject "$subject" 
+}
+title=
 
+coog_daily_main() { # launches daily chain 
     if [[ "$#" -lt 2 ]]; then
         echo 'Usage: daily_chains WORKING_DAYS WORKING_DAYS_CONF [ DATE ]' 2>&1
         exit 1

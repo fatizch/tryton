@@ -62,7 +62,7 @@ chain_params() {
 
 chain_step() {
     echo '=>=>=>=>=>'
-    coog_batch_exec "$@" 2>&1 &
+    coog_batch_exec "$@" --chain_name="$CHAIN_NAME" 2>&1 &
 }
 
 chain_wait() {

@@ -57,6 +57,7 @@ def batch_generate(name, params):
         job_size = int(batch_params.pop('job_size'))
         transaction_size = int(batch_params.pop('transaction_size', 0))
         split = batch_params.pop('split', True)
+        chain_name = batch_params.pop('chain_name')
 
         # Prepare serialized params (to be saved on redis)
         job_params = batch_params.copy()
@@ -64,6 +65,7 @@ def batch_generate(name, params):
         job_params['job_size'] = job_size
         job_params['transaction_size'] = transaction_size
         job_params['split'] = split
+        job_params['chain_name'] = chain_name or 'unknown'
         job_params = BatchModel.serializable_params(job_params)
 
         with Transaction().set_context(
@@ -130,6 +132,7 @@ def batch_exec(name, ids, params, **kwargs):
         job_size = batch_params.pop('job_size')
         transaction_size = batch_params.pop('transaction_size')
         batch_params.pop('split')
+        batch_params.pop('chain_name')
 
     res = []
     with Transaction().start(database, admin.id):

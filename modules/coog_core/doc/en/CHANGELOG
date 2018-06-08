@@ -1,3 +1,4 @@
+* FEA#8534 Add batch report command line
 * BUG#9028 Force synchronous execution on planned rollbacked transaction
 * OTH#0000 Fix async method inheritance
 * BUG#8983 Fix party identifier dynamic types fetching

@@ -79,3 +79,8 @@ coog_celery_tail() { # tail logs [tail args]
     local out_file; out_file=$(_coog_celery_file out)
     tail "$@" "$out_file"
 }
+
+coog_celery_report() { # return reports data as json
+    [ -z "$1" ] >&2 && echo missing from~to argument
+    coog_redis_eval report report "$@"
+}

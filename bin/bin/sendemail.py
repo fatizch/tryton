@@ -6,6 +6,23 @@ import sendgrid
 from sendgrid.helpers.mail import *
 
 
+
+def sendmail(from_addr, to_addrs, msg, server=None):
+    if server is None:
+        server = get_smtp_server()
+        quit = True
+    else:
+        quit = False
+    try:
+        senderrs = server.sendmail(from_addr, to_addrs, msg.as_string())
+    except smtplib.SMTPException:
+        logger.error('fail to send email', exc_info=True)
+    else:
+        if senderrs:
+            logger.warn('fail to send email to %s', senderrs)
+    if quit:
+        server.quit()
+
 def main():
     parser = argparse.ArgumentParser(description='Coog utils to send mail')
     parser.add_argument('--fromemail', '-fe', required=True, help='From email')

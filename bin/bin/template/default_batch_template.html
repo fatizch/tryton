@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:py="http://genshi.edgewall.org/">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>[${env_name}][${'KO' if sum([q['failed']['nb_jobs'] for c in data['summary'].values() for q in c.values()]) else 'OK'}]: Rapport des batchs du ${datetime.strptime(data['from'], '%Y-%m-%dT%H:%M:%S').strftime('%d/%m/%Y %H:%M:%S')} au ${datetime.strptime(data['to'], '%Y-%m-%dT%H:%M:%S').strftime('%d/%m/%Y %H:%M:%S')}</title>
+    <style type="text/css">
+    body {font-family: Century-Gothic-Regular;color: #46423D;margin: 0; padding: 0; min-width: 100%!important;}
+    @media only screen and (min-device-width: 601px) {.content {width: 1000px !important;}}
+    .content {width: 100%; max-width: 1000px;}
+    .header {padding: 40px 30px 20px 30px;}
+    .col825 {width: 825px!important;}
+    .subhead {font-size: 20px; color: #dedede; font-family: sans-serif; letter-spacing: 10px;}
+    .h1 {font-size: 15px; line-height: 38px; font-weight: bold;}
+    .h1, .h2, .bodycopy {color: #46423D; font-family: sans-serif;}
+    .innerpadding {padding: 30px 30px 30px 30px;}
+    .borderbottom {border-bottom: 1px solid #f2eeed;}
+    .h2 {padding: 0 0 15px 0; font-size: 24px; line-height: 28px; font-weight: bold;}
+    .bodycopy {font-size: 16px; line-height: 22px;}
+    .footer {padding: 20px 30px 15px 30px;}
+    .footercopy {font-family: sans-serif; font-size: 14px; color: #46423D;}
+    .footercopy a {color: #46423D; text-decoration: underline;}
+    .center {text-align: center;}
+    .reportheader {border-bottom-style: solid; border-bottom-color: #ababab;}
+    .pending {background-color:#dac292;}
+    .failed {background-color:#eca1a6;}
+    .success {background-color:#b5e7a0;}
+    .table th {border-bottom-style: solid; border-bottom-color: #868686;}
+    .left {text-align: left;}
+    </style>
+  </head>
+  <body bgcolor="#dedede">
+    <!--[if (gte mso 9)|(IE)]><table width="1000" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+      <table class="content" align="center" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="header" bgcolor="#0094D2">
+            <table width="70" align="left" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td height="70" style="padding: 0 20px 20px 0;" align="center">
+                  [${env_name}]
+                </td>
+                <td class="header" bgcolor="#0094D2">
+                  <!--[if (gte mso 9)|(IE)]><table width="825" align="left" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+                  <table class="col825" align="left" border="0" cellpadding="0" cellspacing="0" style="width: 100%; max-width: 825px;">
+                    <tr>
+                      <td height="70">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <td class="subhead" style="padding: 0 0 0 3px;">
+                              Rapport des batchs
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="h1" style="padding: 5px 0 0 0;"> du ${datetime.strptime(data['from'], '%Y-%m-%dT%H:%M:%S').strftime('%d/%m/%Y %H:%M:%S')} au ${datetime.strptime(data['to'], '%Y-%m-%dT%H:%M:%S').strftime('%d/%m/%Y %H:%M:%S')}</td>
+                          </tr>
+                        </table>
+                      </td></tr></table>
+                      <!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->
+                    </td>
+                  </tr>
+                </table>
+              </td></tr>
+              <tr>
+                <td class="innerpadding borderbottom" width="100%">
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td class="h2">Rapport d&#x27;exécution</td>
+                    </tr>
+                    <tr>
+                      <td class="bodycopy">
+                        <table class="summary" style="width: 100%">
+                          <tr>
+                            <th class="reportheader left">Chaine</th>
+                            <th class="reportheader left">Batch</th>
+                            <th class="reportheader center">1ère exécution</th>
+                            <th class="reportheader center">En attente</th>
+                            <th class="reportheader center">En erreur</th>
+                            <th class="reportheader center">Traités</th>
+                            <th class="reportheader center">Archivés</th>
+                            <th class="reportheader center">Total</th>
+                            <th class="reportheader center">Durée</th>
+                            <th class="reportheader center">Statut</th>
+                          </tr>
+                          <py:for each="chain_name, chain_summary in data['summary'].items()">
+                          <tr py:for="batch_name, summary in sorted(chain_summary.items(), key=lambda x:x[1].first_launch_date)">
+                            <!-- <td py:if="summary == chain_summary[0]" class="cell left" colspan="${len(chain_summary)}">${chain_name}</td> -->
+                            <td class="cell left">${chain_name}</td>
+                            <td class="cell left">${batch_name}</td>
+                            <td class="cell center">${datetime.strptime(summary.first_launch_date, '%Y-%m-%dT%H:%M:%S').strftime('%d/%m/%Y %H:%M:%S')}</td>
+                            <td class="cell center ${'pending' if summary['pending']['nb_jobs'] else 'neutral'}">${summary['pending']['nb_jobs']} / ${summary['pending']['nb_records']}</td>
+                            <td class="cell center ${'failed' if summary['failed']['nb_jobs'] else 'neutral'}">${summary['failed']['nb_jobs']} / ${summary['failed']['nb_records']}</td>
+                            <td class="cell center ${'success' if summary['success']['nb_jobs'] else 'neutral'}">${summary['success']['nb_jobs']} / ${summary['success']['nb_records']}</td>
+                            <td class="cell center ${'archive' if summary['archive']['nb_jobs'] else 'neutral'}">${summary['archive']['nb_jobs']} / ${summary['archive']['nb_records']}</td>
+                            <td class="cell center">${summary['pending']['nb_jobs']+summary['failed']['nb_jobs']+summary['success']['nb_jobs']} / ${summary['pending']['nb_records']+summary['failed']['nb_records']+summary['success']['nb_records']}</td>
+                            <td class="cell center">${"%d:%02d:%02d" % (summary['duration_in_sec']/3600, (summary['duration_in_sec']%3600)/60, summary['duration_in_sec']%60)}</td>
+                            <td class="cell center ${'failed' if summary['failed']['nb_jobs'] else ('success' if summary['success']['nb_jobs'] else 'neutral')}">${'KO' if summary['failed']['nb_jobs'] else 'OK'}</td>
+                          </tr>
+                          </py:for>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            <tr>
+              <td class="footer" bgcolor="#0094D2">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td align="center" class="footercopy">
+                      <a href="http://www.coopengo.com/#contact"><font color="#ffffff">Contactez Nous</font></a> <br/> ${datetime.today().strftime('%d/%m/%Y %H:%M:%S')}
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          <!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->
+        </body>
+      </html>

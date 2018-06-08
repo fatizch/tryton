@@ -14,6 +14,7 @@ _coog_redis_uri() {
         [ -z "$1" ] && >&2 echo missing args && return 1
         [ "$1" = rq ] && [ ! -z "$TRYTOND_ASYNC_RQ" ] && echo "$TRYTOND_ASYNC_RQ" && return
         [ "$1" = celery ] && [ ! -z "$TRYTOND_ASYNC_CELERY" ] && echo "$TRYTOND_ASYNC_CELERY" && return
+        [ "$1" = report ] && [ ! -z "$TRYTOND_ASYNC_CELERY" ] && echo "$TRYTOND_ASYNC_CELERY" && return
         [ "$1" = cache ] && [ ! -z "$TRYTOND_CACHE_URI" ] && echo "$TRYTOND_CACHE_URI" && return
         [ "$1" = perf ] && [ ! -z "$TRYTOND_PERF_BROKER" ] && echo "$TRYTOND_PERF_BROKER" && return
         >&2 echo "no redis config for $1" && return 1
