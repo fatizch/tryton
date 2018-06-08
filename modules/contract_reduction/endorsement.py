@@ -43,7 +43,8 @@ class StartEndorsement:
                             'contract':
                             self.select_endorsement.contract.rec_name,
                             'date': str(
-                                self.select_endorsement.contract.reduction_date),
+                                self.select_endorsement.contract.reduction_date
+                                ),
                             })
             else:
                 self.raise_user_error('reduced_contract', {

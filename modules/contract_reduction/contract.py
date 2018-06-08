@@ -6,7 +6,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.server_context import ServerContext
 
-from trytond.modules.coog_core import model, fields, utils
+from trytond.modules.coog_core import model, fields, utils, coog_date
 
 __all__ = [
     'Contract',
@@ -94,6 +94,7 @@ class Contract:
         if utils.is_module_installed('contract_insurance_invoice'):
             for contract in contracts:
                 contract.rebill(reduction_date)
+                contract.reconcile()
         Event.notify_events(contracts, 'contract_reduction')
 
     @classmethod
@@ -138,10 +139,23 @@ class Contract:
                 (option, option.calculate_reduction(reduction_date)))
         return reductions
 
+    def _get_invoice_rrule_and_billing_information(self, start):
+        invoice_rrule = super(Contract,
+            self)._get_invoice_rrule_and_billing_information(start)
+        if not self.reduction_date:
+            return invoice_rrule
+        if invoice_rrule[1]:
+            until = min([self.reduction_date, invoice_rrule[1]])
+        else:
+            until = self.reduction_date
+        invoice_rrule[0].rrule([datetime.datetime.combine(
+                    self.reduction_date, datetime.time())])
+        return (invoice_rrule[0], until) + tuple(invoice_rrule[2:])
+
     def get_invoice_periods(self, up_to_date, from_date=None):
         if self.reduction_date:
             up_to_date = min(up_to_date or datetime.date.max,
-                self.reduction_date)
+                coog_date.add_day(self.reduction_date, -1))
         return super(Contract, self).get_invoice_periods(up_to_date, from_date)
 
     @classmethod
@@ -184,13 +198,15 @@ class Contract:
                 if not contract.reduction_date:
                     cls.append_functional_error('contract_not_reduced', {
                         'contract': contract.rec_name})
+                reduction_date = contract.reduction_date
                 contract._cancel_reduction_remove_date()
                 contract._cancel_options_reduction()
                 if contract.sub_status == reduced_active:
                     contract.sub_status = None
                 cls.save([contract])
                 if utils.is_module_installed('contract_insurance_invoice'):
-                    contract.rebill(utils.today())
+                    contract.rebill(coog_date.add_day(reduction_date, -1))
+                    contract.reconcile()
             Event.notify_events(contracts, 'contract_reduction_cancelling')
 
     def _cancel_reduction_remove_date(self):

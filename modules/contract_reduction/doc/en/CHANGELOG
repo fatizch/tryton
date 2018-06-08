@@ -1,3 +1,4 @@
+* BUG#9029 Use reduction date as an invoicing period date
 * BUG#9043 Ability to apply terminate endorsement on reduced contracts
 
 Version 2.0 - 2018-04-13
