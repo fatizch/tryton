@@ -1,3 +1,5 @@
+* BUG#8725 Simplify depends management in subscription wizard
+
 Version 2.0 - 2018-04-13
 * BUG#8698 Facilitate overloading of depends in subscription wizard
 * OTH#0000 Set initial start date when creating the contract

@@ -37,14 +37,14 @@ class OptionDisplayer:
                 self.effective_date).coverage_amount
             self.coverage_amount_selection = str(self.coverage_amount or '')
 
-    @fields.depends('coverage_amount_selection', methods=['action'])
+    @fields.depends('coverage_amount_selection', methods=['on_change_action'])
     def on_change_coverage_amount_selection(self):
         if not self.cur_option_id:
             return
         self.coverage_amount = Decimal(self.coverage_amount_selection or 0)
         self.update_action()
 
-    @fields.depends('coverage_amount', methods=['action'])
+    @fields.depends(methods=['on_change_action'])
     def on_change_coverage_amount(self):
         if not self.cur_option_id:
             return

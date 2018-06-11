@@ -43,17 +43,13 @@ class ContractSubscribeFindProcess:
             Pool().get('res.user')(Transaction().user).network_distributors]
         return candidates[0] if len(candidates) == 1 else None
 
-    @fields.depends('distributor', methods=['signature_date'])
+    @fields.depends(methods=['simulate_init'])
     def on_change_distributor(self):
         self.simulate_init()
 
     @fields.depends('product', 'start_date', 'signature_date',
         'appliable_conditions_date', 'free_conditions_date',
-        'distributor', 'authorized_commercial_products')
-    def on_change_signature_date(self):
-        super(ContractSubscribeFindProcess,
-            self).on_change_signature_date()
-
+        'distributor', 'authorized_commercial_products', 'commercial_product')
     def simulate_init(self):
         res = super(ContractSubscribeFindProcess, self).simulate_init()
         if self.distributor and self.appliable_conditions_date is not None:
@@ -71,7 +67,7 @@ class ContractSubscribeFindProcess:
                 self.unset_product()
         return res
 
-    @fields.depends('commercial_product', methods=['product', 'signature_date'])
+    @fields.depends(methods=['simulate_init'])
     def on_change_commercial_product(self):
         if self.commercial_product is not None:
             self.product = self.commercial_product.product.id

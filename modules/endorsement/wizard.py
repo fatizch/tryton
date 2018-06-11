@@ -1169,7 +1169,7 @@ class OptionDisplayer(model.CoogView):
 
     @fields.depends('action', 'cur_option_id', 'effective_date', 'extra_data',
         'extra_data_as_string', 'parent', 'coverage_id',
-        methods=['action'])
+        methods=['on_change_action'])
     def on_change_extra_data(self):
         if not self.extra_data and self.action is None:
             self.extra_data_as_string = ''
