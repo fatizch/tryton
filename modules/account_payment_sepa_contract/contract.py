@@ -33,8 +33,9 @@ class Contract:
     def init_sepa_mandate(cls, contracts):
         # Force refresh of link as contract version could be outdated
         for contract in contracts:
-            contract.billing_information.contract = contract
-            contract.billing_information.init_sepa_mandate()
+            if contract.billing_information:
+                contract.billing_information.contract = contract
+                contract.billing_information.init_sepa_mandate()
 
     def after_activate(self):
         super(Contract, self).after_activate()

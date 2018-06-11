@@ -1,4 +1,6 @@
+* BUG#9120 Fix mandate initialization when activating non-billed contracts
 * BUG#8828 Ajouter une nouvelle méthode d'initialisation d'un nouveau mandat à partir de données du contrat
+
 Version 2.0 - 2018-04-13
 * OTH#0000 Suppression de la migration 1.8
 * BUG#7925 Correctif du calcul des dates de paiement sur les lignes taxes
