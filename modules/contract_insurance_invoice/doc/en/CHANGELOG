@@ -1,3 +1,4 @@
+* BUG#9094 Allow the rebill of a previous period
 * BUG#9126 Do not try to invoice a contract without any billing informations
 * BUG#9016 Change the value of the invoice address if the party attached to it is different to the invoice party 
 * FEA#8940 Add a batch to rebill contracts from a csv file

@@ -674,11 +674,11 @@ class Contract:
             return []
         contract_end_date = self.activation_history[-1].end_date
         if from_date:
-            start = max(from_date, self.start_date)
+            start = max(from_date, self.initial_start_date)
         elif self.last_invoice_end:
             start = self.last_invoice_end + relativedelta(days=+1)
         else:
-            start = self.start_date
+            start = self.initial_start_date
         if self.block_invoicing_until:
             start = max(start, self.block_invoicing_until)
         if up_to_date and start > up_to_date:
