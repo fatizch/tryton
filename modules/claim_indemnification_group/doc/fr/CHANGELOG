@@ -1,3 +1,4 @@
+* BUG#9123 Correction de la saisie de contrats collectifs si les règles paramétrées sur la prestation ne sont pas dans benefit.rule
 * BUG#9124 Correction de la vue des prestations sur les garanties
 * BUG#9007 Suppression des données de prestations sur la vue garantie des contrats non groupe
 

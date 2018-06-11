@@ -1,3 +1,4 @@
+* BUG#9123 Fix creation of group contracts if rules are directly on the benefit
 * BUG#9124 Fix option benefit view
 * BUG#9007 Remove benefit related data of options view for non-group products
 

@@ -161,7 +161,10 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         if not self.benefit:
             return []
         benefit_rule = self.benefit.benefit_rules[0]
-        force = getattr(benefit_rule, 'force_' + name[10:-1])
+        force = getattr(benefit_rule, 'force_' + name[10:-1], -1)
+        if force == -1:
+            # In some cases, the configuration may be directly on the benefit
+            benefit_rule = self.benefit
         if force:
             rule = getattr(benefit_rule, name[10:-1])
             return [rule.id] if rule else []
