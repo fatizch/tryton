@@ -8,6 +8,7 @@ from trytond.modules.coog_core import model, fields
 
 __all__ = [
     'Claim',
+    'ClaimLoss',
     'ClaimService',
     'ExtraData',
     'ClaimIndemnification',
@@ -29,6 +30,21 @@ class Claim:
     def get_all_services_refused(self, name=None):
         return all(x.eligibility_status == 'refused'
             for x in self.delivered_services)
+
+
+class ClaimLoss:
+    __metaclass__ = PoolMeta
+    __name__ = 'claim.loss'
+
+    @classmethod
+    @model.CoogView.button
+    def draft(cls, losses):
+        super(ClaimLoss, cls).draft(losses)
+        services = sum([list(x.services) for x in losses], [])
+        if services:
+            Pool().get('claim.service').write(services, {
+                    'eligibility_status': 'study_in_progress',
+                    'eligibility_decision': None})
 
 
 class ClaimService:

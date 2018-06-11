@@ -15,6 +15,7 @@ def register():
         benefit.BenefitEligibilityDecision,
         benefit.BenefitBenefitEligibility,
         claim.Claim,
+        claim.ClaimLoss,
         claim.ClaimService,
         claim.ExtraData,
         claim.ClaimIndemnification,
