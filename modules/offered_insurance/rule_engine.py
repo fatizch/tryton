@@ -5,7 +5,6 @@ import functools
 import datetime
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Or
 from trytond.modules.coog_core import model, coog_string
 from trytond.modules.coog_core import fields
 from trytond import backend
@@ -70,19 +69,7 @@ class RuleEngine:
 
     extra_data_used = fields.Many2Many(
         'rule_engine-extra_data', 'parent_rule',
-        'extra_data', 'Extra Data', states={
-            'invisible': Or(
-                Eval('extra_data_kind') != 'extra_data',
-                ~Eval('extra_data'),
-                )
-            }, depends=['extra_data_kind', 'extra_data'])
-
-    @classmethod
-    def __setup__(cls):
-        super(RuleEngine, cls).__setup__()
-        cls.extra_data_kind.selection.extend([('extra_data', 'Extra Data')])
-        cls.extra_data_kind.selection = list(set(
-                cls.extra_data_kind.selection))
+        'extra_data', 'Extra Data')
 
     @classmethod
     def fill_empty_data_tree(cls):

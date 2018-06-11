@@ -34,7 +34,7 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.tools import memoize
 from trytond.tools import cursor_dict
-from trytond.pyson import Eval, Or, Bool, If, PYSONEncoder
+from trytond.pyson import Eval, Bool, If, PYSONEncoder
 from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import (coog_date, coog_string, fields,
@@ -803,38 +803,13 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     execution_code = fields.Function(fields.Text('Execution Code'),
         'on_change_with_execution_code')
     parameters = fields.One2Many('rule_engine.rule_parameter', 'parent_rule',
-        'Parameters', delete_missing=True, states={'invisible': Or(
-                Eval('extra_data_kind') != 'parameter',
-                ~Eval('extra_data'),
-                )
-            }, depends=['extra_data_kind', 'extra_data'])
+        'Parameters', delete_missing=True)
     rules_used = fields.Many2Many(
-        'rule_engine-rule_engine', 'parent_rule', 'rule', 'Rules',
-        states={'invisible': Or(
-                Eval('extra_data_kind') != 'rule',
-                ~Eval('extra_data'),
-                )
-            }, depends=['extra_data_kind', 'extra_data'])
+        'rule_engine-rule_engine', 'parent_rule', 'rule', 'Rules')
     tables_used = fields.Many2Many(
-        'rule_engine-table', 'parent_rule', 'table', 'Tables',
-        states={'invisible': Or(
-                Eval('extra_data_kind') != 'table',
-                ~Eval('extra_data'),
-                )
-            }, depends=['extra_data_kind', 'extra_data'])
+        'rule_engine-table', 'parent_rule', 'table', 'Tables')
     functions_used = fields.Many2Many('rule_engine-rule_function', 'rule',
         'function', 'Used Functions', readonly=True)
-    extra_data = fields.Function(fields.Boolean('Display Extra Data'),
-        'get_extra_data', 'setter_void')
-    extra_data_kind = fields.Function(
-        fields.Selection([
-                ('', ''),
-                ('parameter', 'Parameter'),
-                ('rule', 'Rule'),
-                ('table', 'Table')],
-            'Kind', states={'invisible': ~Eval('extra_data')}),
-        'get_extra_data_kind', 'setter_void')
-    extra_data_kind_string = extra_data_kind.translated('extra_data_kind')
     passing_test_cases = fields.Function(
         fields.Boolean('Test Cases OK'),
         'get_passing_test_cases', searcher='search_passing_test_cases')
@@ -1467,12 +1442,6 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
     def get_rec_name(self, name):
         return self.name
-
-    def get_extra_data(self, name):
-        return False
-
-    def get_extra_data_kind(self, name):
-        return ''
 
     @classmethod
     def default_algorithm(cls):

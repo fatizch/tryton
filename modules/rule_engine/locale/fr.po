@@ -1196,6 +1196,10 @@ msgid "Result"
 msgstr "Résultat"
 
 msgctxt "view:rule_engine:"
+msgid "Display More Data"
+msgstr "Afficher plus de données"
+
+msgctxt "view:rule_engine:"
 msgid "Rule"
 msgstr "Règle"
 

@@ -18,14 +18,20 @@ this repository contains the full copyright notices and license terms. -->
     <field name="debug_mode"/>
     <notebook>
         <page name="algorithm">
-            <field name="algorithm" widget="source" context_tree="data_tree" colspan="4" xexpand="1" xfill="1"/>
-            <label name="extra_data"/>
-            <field name="extra_data" xalign="0" colspan="1"/>
-            <label name="extra_data_kind"/>
-            <field name="extra_data_kind" xexpand="1"/>
-            <field name="rules_used" colspan="4"/>
-            <field name="tables_used" colspan="4"/>
-            <field name="parameters" view_ids="rule_engine.parameter_tree,rule_engine.parameter_form" colspan="4"/>
+            <field name="algorithm" widget="source" context_tree="data_tree" colspan="4"/>
+            <group id="extra_data_group" expandable="0" string="Display More Data" yfill="1">
+                <notebook height="250">
+                    <page name="rules_used">
+                        <field name="rules_used" colspan="4"/>
+                    </page>
+                    <page name="tables_used">
+                        <field name="tables_used" colspan="4"/>
+                    </page>
+                    <page name="parameters">
+                        <field name="parameters" view_ids="rule_engine.parameter_tree,rule_engine.parameter_form" colspan="4"/>
+                    </page>
+                </notebook>
+            </group>
         </page>
         <page name="tags">
             <field name="tags" colspan="4"/>

@@ -1,3 +1,4 @@
+* FEA#8271 Simplification de la vue du moteur de règle en utilisant un groupe dépliable
 * BUG#8842 Ne pas stocker le contexte d'exécution de la règle si le mode de debug n'est pas actif
 
 Version 2.0 - 2018-04-13
