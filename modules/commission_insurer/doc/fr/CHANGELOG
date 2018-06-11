@@ -1,4 +1,3 @@
-* BUG#9090 Correction d'un crash lors de la génération des bordereaux assureurs dans le cas où aucune quittance n'a été générée sur certains des comptes
 * BUG#8936 Correctif sur la création imcomplète du bordereau assureur
 * BUG#8829 Utilisation du type métier pour rechercher le bordereau assureur généré auparavant pour prevenir la fusion entre les bordereaux de primes et de prestations
 

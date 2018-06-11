@@ -1,4 +1,3 @@
-* BUG#9090 Fix a crash when generating insurer invoices if no invoices where paid on some accounts
 * BUG#8936 Fix imcomplete insurer notice creation
 * BUG#8829 Use business kind to search previously generated insurer invoice to prevent mix between insurer invoices and claim insurer invoices
 

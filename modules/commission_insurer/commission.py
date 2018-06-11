@@ -380,7 +380,7 @@ class Commission:
             commission_invoice, commission_invoice_line, _, _ = \
                 get_insurer_empty_data(insurer_account,
                     insurers_invoices)
-            if (not per_insurer[insurer_account][0] or not
+            if (not per_insurer[insurer_account][0] and not
                     per_insurer[insurer_account][1]):
                 continue
 
