@@ -26,6 +26,8 @@ from trytond.modules.report_engine import Printable
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
 IS_READ_ONLY = Bool(Eval('contract_status')) & (
     Eval('contract_status') != 'quote')
+COVERED_READ_ONLY = IS_READ_ONLY & ~Eval('parent')
+COVERED_STATUS_DEPENDS = _CONTRACT_STATUS_DEPENDS + ['parent']
 
 POSSIBLE_EXTRA_PREMIUM_RULES = [
     ('flat', 'Montant Fixe'),
@@ -814,8 +816,8 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         'on_change_with_contract_status')
     versions = fields.One2Many('contract.covered_element.version',
         'covered_element', 'Versions', delete_missing=True,
-        order=[('start', 'ASC')], states={'readonly': IS_READ_ONLY},
-        depends=_CONTRACT_STATUS_DEPENDS)
+        order=[('start', 'ASC')], states={'readonly': COVERED_READ_ONLY},
+        depends=COVERED_STATUS_DEPENDS)
     covered_relations = fields.Many2Many('contract.covered_element-party',
         'covered_element', 'party_relation', 'Covered Relations', domain=[
             'OR',
@@ -835,19 +837,20 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
     current_extra_data_string = current_extra_data.translated(
         'current_extra_data')
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
-        ondelete='RESTRICT', required=True, states={'readonly': IS_READ_ONLY},
-        depends=_CONTRACT_STATUS_DEPENDS)
+        ondelete='RESTRICT', required=True, states={
+            'readonly': COVERED_READ_ONLY},
+        depends=COVERED_STATUS_DEPENDS)
     name = fields.Char('Name', states={
             'invisible': IS_PARTY,
-            'readonly': IS_READ_ONLY,
-            }, depends=['party', 'item_kind', 'contract_status'])
+            'readonly': COVERED_READ_ONLY,
+            }, depends=['party', 'item_kind', 'contract_status', 'parent'])
     options = fields.One2ManyDomain('contract.option', 'covered_element',
         'Options', domain=[
             ('coverage.products', '=', Eval('product')),
             ('coverage.item_desc', '=', Eval('item_desc')),
             ('status', '!=', 'declined'),
-            ], states={'readonly': IS_READ_ONLY},
-        depends=['item_desc', 'product', 'contract_status'],
+            ], states={'readonly': COVERED_READ_ONLY},
+        depends=['item_desc', 'product', 'contract_status', 'parent'],
         target_not_required=True,
         order=[('coverage.sequence', 'ASC NULLS LAST'), ('start_date', 'ASC')])
     declined_options = fields.One2ManyDomain('contract.option',
@@ -860,7 +863,9 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         order=[('coverage.sequence', 'ASC NULLS LAST'), ('start_date', 'ASC')],
         readonly=True)
     parent = fields.Many2One('contract.covered_element', 'Parent',
-        ondelete='CASCADE', select=True, readonly=True)
+        ondelete='CASCADE', select=True, states={
+            'readonly': Bool(Eval('contract', False))},
+        depends=['contract'])
     party = fields.Many2One('party.party', 'Actor', domain=[
             If(
                 Eval('item_kind') == 'person',
@@ -873,9 +878,9 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         states={
             'invisible': ~IS_PARTY,
             'required': IS_PARTY,
-            'readonly': IS_READ_ONLY,
+            'readonly': COVERED_READ_ONLY,
             }, ondelete='RESTRICT',
-        depends=['item_kind', 'contract_status'], select=True)
+        depends=['item_kind', 'contract_status', 'parent'], select=True)
     sub_covered_elements = fields.One2Many('contract.covered_element',
         'parent', 'Sub Covered Elements',
         # TODO : invisibility should depend on a function field checking the
@@ -891,18 +896,18 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
     manual_start_date = fields.Date('Start Date', states={
             'invisible': ~Eval('parent'),
             'required': Bool(Eval('parent', False)),
-            'readonly': IS_READ_ONLY,
+            'readonly': COVERED_READ_ONLY,
             }, depends=['parent', 'contract_status'])
     manual_end_date = fields.Date('End Date', states={
             'invisible': ~Eval('parent'),
-            'readonly': IS_READ_ONLY,
+            'readonly': COVERED_READ_ONLY,
             }, depends=['parent', 'contract_status'])
     end_reason = fields.Many2One('covered_element.end_reason', 'End Reason',
         ondelete='RESTRICT', domain=[If(~Eval('parent'), [],
             [('item_descs', '=', Eval('item_desc'))])], states={
             'invisible': ~Eval('manual_end_date'),
             'required': Bool(Eval('manual_end_date', False)),
-            'readonly': IS_READ_ONLY,
+            'readonly': COVERED_READ_ONLY,
             }, depends=['item_desc', 'manual_end_date', 'parent',
                 'contract_status'])
     current_version = fields.Function(
@@ -1026,14 +1031,14 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
 
     @fields.depends('contract', 'item_desc', 'item_kind', 'main_contract',
         'options', 'parent', 'party', 'party_extra_data', 'product',
-        'versions')
+        'versions', 'contract_status')
     def on_change_contract(self):
         self.main_contract = self.contract
         if self.main_contract:
             self.recalculate()
 
     @fields.depends('current_extra_data', 'item_desc', 'main_contract',
-        'party', 'party_extra_data', 'product', 'versions')
+        'party', 'party_extra_data', 'product', 'versions', 'contract_status')
     def on_change_current_extra_data(self):
         if not self.versions:
             return
@@ -1049,23 +1054,23 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
 
     @fields.depends('contract', 'current_extra_data', 'item_desc',
         'item_kind', 'main_contract', 'options', 'parent', 'party',
-        'party_extra_data', 'product', 'versions')
+        'party_extra_data', 'product', 'versions', 'contract_status')
     def on_change_item_desc(self):
         self.recalculate()
 
     @fields.depends('contract', 'current_extra_data', 'item_desc', 'item_kind',
         'main_contract', 'options', 'parent', 'party', 'party_extra_data',
-        'product', 'versions')
+        'product', 'versions', 'contract_status')
     def on_change_parent(self):
         self.recalculate()
 
     @fields.depends('contract', 'current_extra_data', 'item_desc', 'item_kind',
         'main_contract', 'options', 'parent', 'party', 'party_extra_data',
-        'product', 'versions')
+        'product', 'versions', 'contract_status')
     def on_change_party(self):
         self.recalculate()
 
-    @fields.depends('versions')
+    @fields.depends('versions', 'contract_status')
     def on_change_versions(self):
         if len(self.versions) <= 1:
             return
@@ -1220,6 +1225,7 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         if not self.main_contract:
             self.product = None
             return
+        self.contract_status = self.main_contract.status
         self.product = self.main_contract.product
 
     def update_item_desc(self):
@@ -1253,6 +1259,8 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         self.update_extra_data(current_version)
         self.versions = list(self.versions)
         self.current_extra_data = current_version.extra_data
+        current_version.contract_status = self.contract_status
+        current_version.covered_parent = self.parent
         return current_version
 
     def update_default_options(self):
@@ -1529,6 +1537,9 @@ class CoveredElementVersion(model.CoogSQL, model.CoogView):
     contract_status = fields.Function(
         fields.Char('Contract Status'),
         'on_change_with_contract_status')
+    covered_parent = fields.Function(
+        fields.Many2One('contract.covered_element', 'Covered Parent'),
+        'on_change_with_covered_parent')
     start = fields.Date('Start', readonly=True)
     extra_data = fields.Dict('extra_data', 'Extra Data',
         states={
@@ -1585,9 +1596,23 @@ class CoveredElementVersion(model.CoogSQL, model.CoogView):
             'extra_data')[self.id]
 
     @fields.depends('covered_element')
+    def on_change_covered_element(self):
+        if not self.covered_element:
+            self.covered_parent = None
+            self.contract_status = None
+            return
+        self.contract_status = self.on_change_with_contract_status()
+        self.covered_parent = self.on_change_with_covered_parent()
+
+    @fields.depends('covered_element')
     def on_change_with_contract_status(self, name=None):
         return (self.covered_element.contract_status
             if self.covered_element else '')
+
+    @fields.depends('covered_element')
+    def on_change_with_covered_parent(self, name=None):
+        return (self.covered_element.parent.id
+            if self.covered_element and self.covered_element.parent else None)
 
     @classmethod
     def order_start(cls, tables):
