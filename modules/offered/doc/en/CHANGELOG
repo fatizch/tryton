@@ -1,3 +1,4 @@
+* FEA#9151 Refactor extra_data code
 * BUG#9117 Add missing currency symbol field in product and offered option
 * BUG#8960 Fix kind and type french translation on extra data
 * BUG#8918 Fix missing reset of default_value in extra data if type_ is not selection or boolean
