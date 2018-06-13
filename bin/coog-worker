@@ -9,6 +9,7 @@ coog_worker_start() { # start - <nb>
     [ -z "$WSGI_LOG_FORMAT" ] &&
         WSGI_LOG_FORMAT="%(wid) %(ltime) %(rpc) %(status) %(rsize)B %(msecs)ms"
     [ -z "$1" ] && echo missing workers number && return 1
+    [ -z "$COOG_TIMEOUT" ] && COOG_TIMEOUT=600
     local pid_file; pid_file=$(_coog_worker_file pid)
     local out_file; out_file=$(_coog_worker_file out)
     local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
@@ -16,7 +17,7 @@ coog_worker_start() { # start - <nb>
     coog_env_bak "$out_file" "$pid" || return $?
     WSGI_LOG_FILE=$out_file uwsgi -M -T \
         --module trytond.application:app \
-        --http :8000 --http-timeout 600 \
+        --http :8000 --http-timeout "$COOG_TIMEOUT" \
         --logformat "$WSGI_LOG_FORMAT" \
         --processes "$1" \
         --pidfile "$pid_file" &> "$out_file" &
