@@ -1456,7 +1456,8 @@ class StartEndorsement:
                     })
             if not possible_contracts:
                 continue
-            possible_contracts.remove(contract)
+            if contract in possible_contracts:
+                possible_contracts.remove(contract)
         for contract in possible_contracts:
             contract_displayers.append({
                     'contract': contract.id,
