@@ -1,3 +1,4 @@
+* BUG#9153 Correction du signe du montant du bordereau assureur de prestation
 * BUG#8936 Correctif sur la création imcomplète du bordereau assureur
 * BUG#8829 Utilisation du type métier pour rechercher le bordereau assureur généré auparavant pour prevenir la fusion entre les bordereaux de primes et de prestations
 

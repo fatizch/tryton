@@ -566,9 +566,10 @@ class CreateInvoicePrincipal(Wizard):
             result = cursor.fetchone()
             if result and result != [[0, 0]]:
                 total_credit, total_debit = result
-                # Maybe we should change something here according to the
-                # invoice type ? (Invert the amount substraction)
-                amount = total_credit - total_debit
+                if commission_invoice.type == 'in':
+                    amount = total_credit - total_debit
+                elif commission_invoice.type == 'out':
+                    amount = total_debit - total_credit
                 invoice_line.unit_price = amount
                 to_save.append(invoice_line)
             else:

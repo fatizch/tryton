@@ -1,3 +1,4 @@
+* BUG#9153 Fix claim insurer invoice amount sign
 * BUG#8936 Fix imcomplete insurer notice creation
 * BUG#8829 Use business kind to search previously generated insurer invoice to prevent mix between insurer invoices and claim insurer invoices
 
