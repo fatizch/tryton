@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name='subscription'/>
+    <field name='subscription'/>
+    <newline/>
+    <label name='period_start'/>
+    <field name='period_start'/>
+    <label name='period_end'/>
+    <field name='period_end'/>
+    <label name='retro_date'/>
+    <field name='retro_date'/>
+</form>

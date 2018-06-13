@@ -4,15 +4,16 @@
 import os
 import datetime
 from zipfile import ZipFile
+from itertools import groupby
 from lxml import etree
 from io import BytesIO
 
 from trytond.model import Unique
 from trytond.config import config
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Equal, Or, In
 from trytond.transaction import Transaction
 from trytond.model import Workflow, dualmethod
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.tools import memoize
 
 from trytond.modules.coog_core import model, fields, utils
@@ -24,6 +25,7 @@ __all__ = [
     'ClaimIjSubscriptionRequestGroup',
     'ClaimIjSubscriptionRequest',
     'ClaimIjSubscription',
+    'ClaimService',
     ]
 
 
@@ -123,12 +125,16 @@ class ClaimIjSubscriptionRequestGroup(Workflow, model.CoogSQL, model.CoogView):
         return super(ClaimIjSubscriptionRequestGroup, cls).create(vlist)
 
     @classmethod
-    def generate_identification(cls):
+    def generate_identification(cls, kind='group'):
         pool = Pool()
         Sequence = pool.get('ir.sequence')
         ClaimConfiguration = pool.get('claim.configuration')
         claim_config = ClaimConfiguration.get_singleton()
-        sequence = claim_config.prest_ij_sequence
+        assert kind in ('period', 'group'), 'Unknown kind %s' % kind
+        if kind == 'period':
+            sequence = claim_config.prest_ij_period_sequence
+        else:
+            sequence = claim_config.prest_ij_sequence
         assert sequence
         return Sequence.get_id(sequence.id)
 
@@ -283,23 +289,22 @@ class ClaimIjSubscriptionRequestGroup(Workflow, model.CoogSQL, model.CoogView):
                 namespaces=ns_arg)[0]
         group = cls.search_from_file_identification(doc_id, 'document')
         group = group[0]
-        doc_diags = doc.xpath("//n:DiagDocument/n:Diagnostic",
+        diags = doc.xpath("//n:DiagDocument/n:Diagnostic",
             namespaces=ns_arg)
-        for doc_diag in doc_diags:
-            siren = doc_diag.xpath('n:Entreprise/n:Identite/text()',
-                    namespaces=ns_arg)
-            assert siren, 'No identity for diagnostic element %s' \
-                % etree.tostring(doc_diag, pretty_print=True,
-                    encoding='utf8')
-            siren = siren[0]
-            requests = group.get_requests_from_diagnostic_data(siren)
-            assert requests, 'No IJ requests found for siren %s for document ' \
-                'id %s' % (siren, doc_id)
-            op_state = doc_diag.xpath('n:Etat/text()', namespaces=ns_arg)[0]
+        for diag in diags:
+            siren = cls.get_siren_from_diag_element(diag, ns_arg)
+            ssn = cls.get_ssn_from_diag_element(diag, ns_arg)
+            requests = group.get_requests_from_diagnostic_data(siren,
+                ssn)
+            assert requests, 'No requests found for diagnostic element %s' \
+                ' in document %s' % (
+                    etree.tostring(diag, pretty_print=True, encoding='utf8'),
+                    doc_id)
+            op_state = diag.xpath('n:Etat/text()', namespaces=ns_arg)[0]
             if op_state == 'R':
-                op_reject_cause = doc_diag.xpath('n:Cause/text()',
+                op_reject_cause = diag.xpath('n:Cause/text()',
                         namespaces=ns_arg)[0]
-                op_reject_label = doc_diag.xpath('n:Libelle/text()',
+                op_reject_label = diag.xpath('n:Libelle/text()',
                         namespaces=ns_arg)[0]
                 Request.fail(requests, cause=op_reject_cause,
                     label=op_reject_label)
@@ -313,8 +318,31 @@ class ClaimIjSubscriptionRequestGroup(Workflow, model.CoogSQL, model.CoogView):
         assert res, 'No IJ request group found with id %s' % identification
         return res
 
-    def get_requests_from_diagnostic_data(self, siren):
-        return [x for x in self.requests if x.subscription.siren == siren]
+    @staticmethod
+    def get_siren_from_diag_element(diag, ns_arg):
+        siren = diag.xpath('n:Entreprise/n:Identite/text()',
+                namespaces=ns_arg)
+        assert siren, 'No identity for diagnostic element %s' \
+            % etree.tostring(diag, pretty_print=True,
+                encoding='utf8')
+        siren = siren[0]
+        return siren
+
+    @staticmethod
+    def get_ssn_from_diag_element(diag, ns_arg):
+        nir = diag.xpath(
+            'n:Entreprise/n:Salarie/n:NIR/text()',
+            namespaces=ns_arg)
+        if not nir:
+            return None
+        assert len(nir) == 1
+        return nir[0]
+
+    def get_requests_from_diagnostic_data(self, siren, ssn):
+        def match(x):
+            return (x.subscription.siren == siren) and (
+                (not ssn) or (x.ssn and x.ssn[:-2] == ssn))
+        return [x for x in self.requests if match(x)]
 
 
 class ClaimIjSubscriptionRequest(Workflow, model.CoogSQL, model.CoogView):
@@ -323,6 +351,22 @@ class ClaimIjSubscriptionRequest(Workflow, model.CoogSQL, model.CoogView):
     __name__ = 'claim.ij.subscription_request'
 
     date = fields.Date('Date', readonly=True, required=True)
+    period_start = fields.Date('Period Start', readonly=True, states={
+            'invisible': ~Eval('ssn'),
+            'required': Bool(Eval('ssn') & Equal(Eval('operation'), 'cre')),
+            }, depends=['ssn', 'operation'])
+    period_end = fields.Date('Period End', readonly=True, states={
+            'invisible': ~Eval('ssn')
+            }, depends=['ssn', 'operation'])
+    retro_date = fields.Date('Retroactive Date', readonly=True, states={
+            'invisible': ~Eval('ssn'),
+            'required': Bool(Eval('ssn') & Equal(Eval('operation'), 'cre')),
+            }, depends=['ssn', 'operation'])
+    period_identification = fields.Char('Period Identification', readonly=True,
+        states={
+            'invisible': ~Eval('ssn'),
+            'required': Bool(Eval('ssn')) & Bool(Eval('operation') == 'cre'),
+            }, depends=['ssn', 'operation'])
     state = fields.Selection(SUBSCRIPTION_REQUEST_STATES, 'State',
         required=True, readonly=True, select=True)
     operation = fields.Selection([('cre', 'CRE'), ('sup', 'SUP')],
@@ -332,6 +376,9 @@ class ClaimIjSubscriptionRequest(Workflow, model.CoogSQL, model.CoogView):
     siren = fields.Function(
         fields.Char('Siren'),
         'on_change_with_siren')
+    ssn = fields.Function(
+        fields.Char('SSN'),
+        'on_change_with_ssn')
     group = fields.Many2One('claim.ij.subscription_request.group', 'Group',
         readonly=True, ondelete='RESTRICT', select=True,
         states={
@@ -349,10 +396,18 @@ class ClaimIjSubscriptionRequest(Workflow, model.CoogSQL, model.CoogView):
             'invisible': (~Eval('error_message') & (Eval('state') != 'failed')),
             },
         depends=['state'])
+    method = fields.Selection([
+            ('manual', 'Manual'),
+            ('automatic', 'Automatic')],
+        'Method', required=True, readonly=True, select=True)
 
     @classmethod
     def __setup__(cls):
         super(ClaimIjSubscriptionRequest, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [('unique_period_identification',
+                Unique(t, t.period_identification),
+                'The period identification must be unique')]
         cls._transitions |= set((
                 ('unprocessed', 'processing'),
                 ('processing', 'failed'),
@@ -363,9 +418,17 @@ class ClaimIjSubscriptionRequest(Workflow, model.CoogSQL, model.CoogView):
     def default_state(cls):
         return 'unprocessed'
 
+    @classmethod
+    def default_method(cls):
+        return 'automatic'
+
     @fields.depends('subscription')
     def on_change_with_siren(self, name=None):
         return self.subscription.siren if self.subscription else ''
+
+    @fields.depends('subscription')
+    def on_change_with_ssn(self, name=None):
+        return self.subscription.ssn if self.subscription else ''
 
     def get_rec_name(self, name):
         return self.operation.upper() if self.operation else self.id
@@ -434,7 +497,12 @@ class ClaimIjSubscription(model.CoogSQL, model.CoogView):
     parties = fields.Function(
         fields.Many2Many('party.party', None, None, 'Parties'),
         'getter_parties')
-    siren = fields.Char('Siren', readonly=True)
+    siren = fields.Char('Siren', readonly=True, required=True)
+    ssn = fields.Char('SSN', readonly=True,
+        states={
+            'invisible': ~Eval('ssn'),
+            'required': Bool(Eval('ssn')),
+            }, depends=['ssn'])
     state = fields.Selection(SUBSCRIPTION_STATES, 'State', readonly=True)
     error_code = fields.Function(
         fields.Char('Error Code'),
@@ -454,20 +522,39 @@ class ClaimIjSubscription(model.CoogSQL, model.CoogView):
     activated = fields.Boolean('Activated', readonly=True)
     ij_activation = fields.Function(fields.Boolean('IJ Activation', states={
                 'readonly': Bool(Eval('activated')),
-                }, depends=['activated']),
+                'invisible': Bool(Eval('ssn')),
+                }, depends=['activated', 'ssn']),
         'on_change_with_ij_activation', setter='setter_ij_activation')
+    method = fields.Function(
+        fields.Selection([
+            ('manual', 'Manual'),
+            ('automatic', 'Automatic')], 'Method',
+            states={
+                'invisible': Or(~Eval('ssn'), ~Eval('requests')),
+                'required': Bool(Eval('ssn')),
+                }, depends=['ssn', 'requests']),
+        'getter_method')
 
     @classmethod
     def __setup__(cls):
         super(ClaimIjSubscription, cls).__setup__()
         t = cls.__table__()
         cls._sql_constraints += [('unique_subscription',
-                Unique(t, t.siren), 'There must be only one IJ subscription '
-                'per siren')]
+                Unique(t, t.siren, t.ssn), 'There must be only one IJ '
+                'subscription per siren / ssn')]
         cls._buttons.update({
                 'button_relaunch_process': {
                     'readonly': (Eval('state') != 'in_error')},
+                'button_create_ij_subscription_request': {
+                    'invisible': ~Eval('ssn') | ~In(Eval('state'),
+                        ['undeclared', 'deletion_confirmed'])},
                 })
+
+    @classmethod
+    @model.ModelView.button_action(
+        'claim_prest_ij_service.act_manual_ij_subscription_request')
+    def button_create_ij_subscription_request(cls, instances):
+        pass
 
     @classmethod
     def default_siren(cls):
@@ -476,14 +563,28 @@ class ClaimIjSubscription(model.CoogSQL, model.CoogView):
             return Pool().get('party.party')(active_id).siren
 
     @classmethod
+    def default_ssn(cls):
+        active_id = Transaction().context.get('active_id')
+        if active_id:
+            return Pool().get('party.party')(active_id).ssn
+
+    @classmethod
     def default_state(cls):
         return 'undeclared'
 
+    def get_rec_name(self, name):
+        return self.parties[0].rec_name
+
+    def getter_method(self, name):
+        requests = self.requests
+        return requests[0].method if requests else 'automatic'
+
     def getter_parties(self, name):
-        if not self.siren:
+        if not self.siren and not self.ssn:
             return []
+        search_field = 'ssn' if self.ssn else 'siren'
         return sorted([x.id for x in Pool().get('party.party').search(
-                    [('siren', '=', self.siren)])])
+                    [(search_field, '=', getattr(self, search_field))])])
 
     def get_requests_event_logs(self, name):
         EventLog = Pool().get('event.log')
@@ -520,15 +621,68 @@ class ClaimIjSubscription(model.CoogSQL, model.CoogView):
         cls.write(instances, {'activated': value})
 
     @classmethod
-    def create_subcription_requests(cls, subscriptions, operation, date):
-        return Pool().get('claim.ij.subscription_request').create([{
-                    'date': date,
-                    'subscription': sub,
-                    'operation': operation
-                    } for sub in subscriptions])
+    def create_subscription_requests(cls, objects, operation, date,
+            kind):
+        to_create = []
+        Request = Pool().get('claim.ij.subscription_request')
+        Group = Pool().get('claim.ij.subscription_request.group')
+        if kind == 'company':
+            for sub in objects:
+                to_create.append({
+                        'date': date,
+                        'subscription': sub,
+                        'operation': operation,
+                        })
+        elif kind == 'person':
+            for key, services in groupby(objects, key=lambda x: (
+                        x.loss.covered_person, x.contract.subscriber)):
+                services = list(services)
+                covered, subscriber = key
+                sub, = Pool().get('claim.ij.subscription').search([
+                        ('ssn', '=', covered.ssn),
+                        ('siren', '=', subscriber.siren),
+                        ])
+                min_start_date = min(
+                    [x.prest_ij_start_date() for x in services])
+                max_end_date = max(
+                    [(x.prest_ij_end_date() or datetime.date.min)
+                        for x in services])
+                if (min_start_date < date) or (operation == 'sup'):
+                    values = {
+                        'date': date,
+                        'subscription': sub,
+                        'operation': operation,
+                        'period_start':
+                            min_start_date if operation != 'sup' else None,
+                        'retro_date': min_start_date if operation != 'sup'
+                            else None,
+                        'period_end': max_end_date
+                            if max_end_date != datetime.date.min else None
+                        }
+                    if operation == 'cre':
+                        values['period_identification'] = \
+                            Group.generate_identification(kind='period')
+                    to_create.append(values)
+
+        if to_create:
+            return Request.create(to_create)
 
     @classmethod
     @model.CoogView.button_action(
         'claim_prest_ij_service.act_relaunch_ij_subscription')
     def button_relaunch_process(cls, subscriptions):
         pass
+
+
+class ClaimService:
+    __metaclass__ = PoolMeta
+    __name__ = 'claim.service'
+
+    def prest_ij_start_date(self):
+        return self.loss.start_date
+
+    def prest_ij_end_date(self):
+        return None
+
+    def prest_ij_retro_start_date(self):
+        return None

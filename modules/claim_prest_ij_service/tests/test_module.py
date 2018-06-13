@@ -7,6 +7,7 @@ import string
 from lxml.etree import XMLSyntaxError
 
 import trytond.tests.test_tryton
+from trytond.pool import Pool
 from trytond.modules.coog_core import test_framework
 from trytond.modules.claim_prest_ij_service import gesti_templates
 
@@ -16,31 +17,47 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     module = 'claim_prest_ij_service'
 
+    @classmethod
+    def get_models(cls):
+        return {
+            'Party': 'party.party',
+            'Subscription': 'claim.ij.subscription',
+            }
+
     def test0001_test_gesti_templates(self):
         import datetime
         n = datetime.datetime.utcnow()
         n = n.strftime('%Y-%m-%dT%H:%M:%SZ')
 
-        class Party(object):
-            @property
-            def name(self):
-                return u'é hé'
+        siren = '379158322'
+        ssn = '180104161674907'
+        ssn2 = '180106741921625'
+        ssn3 = '180104807063318'
 
-        class Sub(object):
-            @property
-            def siren(self):
-                return ''.join(random.choice(string.digits) for x in range(9))
+        Party = self.Party
+        Subscription = self.Subscription
 
-            @property
-            def parties(self):
-                return [Party()]
+        company = Party(name='Company', siren=siren)
+        company.save()
+        person = Party(name=u'ééé', first_name='joe', ssn=ssn)
+        person.save()
+        person = Party(name=u'doe', first_name='jane', ssn=ssn2)
+        person.save()
+        person = Party(name=u'dane', first_name='jane', ssn=ssn3)
+        person.save()
 
         class Req(object):
-            operation = 'cre'
 
-            @property
-            def subscription(self):
-                return Sub()
+            def __init__(self, ssn='', period_end=False, operation='cre'):
+                sub_args = {'siren': siren, 'ssn': ssn}
+                self.subscription = Subscription(**sub_args)
+                self.subscription.save()
+                self.period_end = None if not period_end \
+                    else datetime.date.today()
+                self.period_start = datetime.date.today()
+                self.retro_date = datetime.date.today()
+                self.period_identification = '001'
+                self.operation = operation
 
         data = dict(
             timestamp=n,
@@ -54,7 +71,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             identification='an id again',
             code_ga='XXXXX',
             opedi_name='example opedi name',
-            requests=[Req() for x in range(5)],
+            requests=[Req(), Req(ssn=ssn, period_end=True),
+                Req(ssn=ssn2), Req(ssn=ssn3, operation='sup')]
         )
         str(gesti_templates.GestipHeader(data))
         str(gesti_templates.GestipDocument(data))

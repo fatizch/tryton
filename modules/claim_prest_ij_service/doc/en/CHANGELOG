@@ -1,3 +1,4 @@
+* FEA#9011: Handle covered subscriptions to the french prest IJ service
 * OTH#0000: Encoding in iso-8859-1 rather than utf8
 * FEA#9049: Add archiving, fixes and use siren (multiple companies per subscription)
 * FEA#8862: Register legal entity to the prest ij service

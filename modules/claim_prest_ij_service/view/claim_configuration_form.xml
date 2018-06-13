@@ -6,5 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <separator id="prest_ij" string="Prest IJ" colspan="4"/>
         <label name="prest_ij_sequence"/>
         <field name="prest_ij_sequence"/>
+        <label name="prest_ij_period_sequence"/>
+        <field name="prest_ij_period_sequence"/>
     </xpath>
 </data>

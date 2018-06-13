@@ -9,6 +9,15 @@ this repository contains the full copyright notices and license terms. -->
     <field name="state"/>
     <label name="operation"/>
     <field name="operation"/>
+    <label name="ssn"/>
+    <field name="ssn"/>
+    <newline/>
+    <label name="period_start"/>
+    <field name="period_start"/>
+    <label name="period_end"/>
+    <field name="period_end"/>
+    <label name="retro_date"/>
+    <field name="retro_date"/>
     <newline/>
     <group id="footer" colspan="4" col="6">
         <group id="footer_left_pad" colspan="2"/>

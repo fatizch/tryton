@@ -270,7 +270,11 @@ coog_daily_main() { # launches daily chain
             --treatment_date="$TODAY_DATE"
         )
         [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
-
+    else
+        _coog_daily_check_modules "claim_prest_ij_service" || return 0 &&  \
+            coog_chain_main claim_prest_ij_service submit_sup     \
+            --treatment_date="$TODAY_DATE"
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
     fi
     return $GLOBAL_SUCCESS
 }

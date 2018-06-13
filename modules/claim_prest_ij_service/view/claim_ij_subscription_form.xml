@@ -5,12 +5,16 @@ this repository contains the full copyright notices and license terms. -->
     <group id="left" col="2" colspan="2">
         <label name="siren"/>
         <field name="siren"/>
+        <label name="ssn"/>
+        <field name="ssn"/>
         <label name="state"/>
         <field name="state"/>
         <label name="date"/>
         <field name="date"/>
         <label name="ij_activation"/>
         <field name="ij_activation"/>
+        <label name="method"/>
+        <field name="method"/>
     </group>
     <group id="bottom" col="4" colspan="4" yexpand="1" yfill="1">
         <field name="requests" mode="tree" no_command="1" yexpand="1" yfill="1" colspan="4"/>
@@ -19,4 +23,5 @@ this repository contains the full copyright notices and license terms. -->
     <group id="invisible" col="4" colspan="4">
         <field name="activated" invisible="1"/>
     </group>
+    <button string="Manually Create IJ Subscription" name="button_create_ij_subscription_request"/>
 </form>

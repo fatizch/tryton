@@ -16,3 +16,5 @@ class ClaimConfiguration:
 
     prest_ij_sequence = fields.Many2One('ir.sequence', 'IJ Flow Sequence',
         required=True, ondelete='RESTRICT')
+    prest_ij_period_sequence = fields.Many2One('ir.sequence',
+        'IJ Period Sequence', required=True, ondelete='RESTRICT')

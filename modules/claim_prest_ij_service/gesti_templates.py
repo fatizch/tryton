@@ -1,9 +1,12 @@
-# -*- coding:utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import os
+
 from lxml import etree
 from lxml.builder import ElementMaker
-import os
+from itertools import groupby
+
+from trytond.pool import Pool
 
 
 class GestipTemplate(object):
@@ -89,7 +92,7 @@ class GestipDocument(GestipTemplate):
             self.M.Identification(data['gesti_document_identification']),
             self.M.Temps(data['timestamp']),
             self.M.Fonction("9"),
-            self.M.IP(  # should there be an operation at this level ?
+            self.M.IP(
                 self.M.Identite(data['code_ga']),
                 self.M.Denomination(data['opedi_name'])
                 ),
@@ -97,9 +100,56 @@ class GestipDocument(GestipTemplate):
             Version="02.00",
         )
 
-        for req in data['requests']:
-            self.xml[3].append(self.M.Entreprise(
-                self.M.Identite(req.subscription.siren),
-                self.M.RaisonSociale(req.subscription.parties[0].name),
-                Operation=req.operation.upper()
-                ))
+        def keyfunc(x):
+            return x.subscription.siren
+
+        reqs = sorted(data['requests'], key=keyfunc)
+
+        for siren, requests in groupby(reqs, key=keyfunc):
+            requests = list(requests)
+            company_requests, person_requests = [], []
+            [person_requests.append(x) if x.subscription.ssn
+                else company_requests.append(x) for x in requests]
+            for company_request in company_requests:
+                to_append = self.M.Entreprise(
+                    self.M.Identite(siren),
+                    self.M.RaisonSociale(
+                        company_request.subscription.parties[0].name),
+                    Operation=company_request.operation.upper()
+                )
+                self.xml[3].append(to_append)
+            if person_requests:
+                company = Pool().get('party.party').search(
+                        [('siren', '=', siren)])[0]
+                to_append = self.M.Entreprise(
+                    self.M.Identite(siren),
+                    self.M.RaisonSociale(company.name),
+                    *[self.person_element(r) for r in person_requests]
+                    )
+                self.xml[3].append(to_append)
+
+    def person_element(self, request):
+        data = [
+            self.M.NIR(request.subscription.ssn[:-2]),
+            self.M.Nom(request.subscription.parties[0].name),
+            self.M.Prenom(request.subscription.parties[0].first_name),
+        ]
+        if request.operation == 'cre':
+            if request.period_end:
+                data.append(self.M.Prevoyance(
+                    self.M.DateDebut(request.period_start.isoformat()),
+                    self.M.DateFin(request.period_end.isoformat()),
+                    self.M.DateDebutRetro(request.retro_date.isoformat()),
+                    self.M.TypePE('IJ'),
+                    IdCouverture=request.period_identification,
+                    Operation=request.operation.upper()
+                    ))
+            else:
+                data.append(self.M.Prevoyance(
+                    self.M.DateDebut(request.period_start.isoformat()),
+                    self.M.DateDebutRetro(request.retro_date.isoformat()),
+                    self.M.TypePE('IJ'),
+                    IdCouverture=request.period_identification,
+                    Operation=request.operation.upper()
+                    ))
+        return self.M.Salarie(*data, Operation=request.operation.upper())

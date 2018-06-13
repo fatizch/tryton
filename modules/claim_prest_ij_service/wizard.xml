@@ -3,9 +3,9 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <!-- ################## -->
+        <!-- ################### -->
         <!-- # IJ Subscription # -->
-        <!-- ################## -->
+        <!-- ################### -->
         <record model="ir.action.wizard" id="act_consult_ij_subscription">
             <field name="name">Consult Ij Subscription</field>
             <field name="wiz_name">party_subscription.find</field>
@@ -16,6 +16,21 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.wizard" id="act_relaunch_ij_subscription">
             <field name="name">Relaunch Prest Ij Subscription</field>
             <field name="wiz_name">party_subscription.relaunch</field>
+        </record>
+        <!-- ################################## -->
+        <!-- # Manual IJ Subscription Request # -->
+        <!-- ################################## -->
+        <record model="ir.action.wizard" id="act_manual_ij_subscription_request">
+            <field name="name">Manual Prest Ij Subscription</field>
+            <field name="wiz_name">covered_person.subscription.create_request</field>
+        </record>
+        <!-- ######## -->
+        <!-- # View # -->
+        <!-- ######## -->
+        <record model="ir.ui.view" id="create_subscription_select_date_view_form">
+            <field name="model">covered_person.ij_subscription_create.select_date</field>
+            <field name="type">form</field>
+            <field name="name">manual_subscription_create_form</field>
         </record>
     </data>
 </tryton>
