@@ -4,6 +4,7 @@
 
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
+from trytond.model import Unique
 
 from trytond.modules.coog_core import model, fields
 from .benefit import SEQUENCE_REFERENCE
@@ -25,6 +26,13 @@ class ClaimService:
     benefit_sequence = fields.Function(fields.Reference(
             'Benefit Sequence', SEQUENCE_REFERENCE),
         'get_benefit_sequence')
+
+    @classmethod
+    def ___setup__(cls):
+        super(ClaimService, cls).__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [('claim_uniq_number', Unique(t, t.number),
+                'The claim number must be unique')]
 
     @classmethod
     def create(cls, vlist):

@@ -12,7 +12,7 @@ from trytond.rpc import RPC
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool, If, Not
-from trytond.model import Workflow
+from trytond.model import Workflow, Unique
 from trytond.tools import grouped_slice
 
 from trytond.modules.coog_core import utils, coog_date, fields, model
@@ -231,6 +231,10 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
                     'invisible': Eval('state') != 'draft',
                     },
                 })
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('loan_uniq_number', Unique(t, t.number),
+                'The number must be unique')]
 
     @classmethod
     def create(cls, vlist):

@@ -5,6 +5,7 @@ from sql.aggregate import Max, Sum
 from trytond.transaction import Transaction
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
+from trytond.model import Unique
 from trytond.pyson import Eval, Bool, If
 from trytond.wizard import Wizard, StateView, Button, StateAction
 from trytond.model import ModelView
@@ -121,6 +122,10 @@ class Statement(export.ExportImportMixin):
         cls._error_messages.update({
                 'empty_lines': 'No lines associated to the statement(s) %s',
                 })
+        t = cls.__table__()
+        cls._sql_constraints += [('statement_uniq_name',
+                Unique(t, t.name, t.company),
+                'The name on statement must be unique per company')]
 
     @classmethod
     def create(cls, vlist):

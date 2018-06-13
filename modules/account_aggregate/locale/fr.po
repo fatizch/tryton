@@ -3,6 +3,10 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:account.move.snapshot:"
+msgid "The name on shapshot must be unique"
+msgstr "Le nom de l'instantané doit être unique"
+
+msgctxt "error:account.move.snapshot:"
 msgid "No fiscal year defined with the Export Moves option"
 msgstr "Pas d'année fiscale avec l'option Exporter les mouvements comptables"
 

@@ -37,6 +37,10 @@ msgctxt "error:contract:"
 msgid "There must be at least one loan"
 msgstr "Il doit y avoir au moins un prêt"
 
+msgctxt "error:loan:"
+msgid "The number must be unique"
+msgstr "Le numéro sur prêt doit être unique"
+
 msgctxt "error:loan.increment:"
 msgid ""
 "Incoherent begin balance (%(begin)s) and end balance (%(end)s) regarding "

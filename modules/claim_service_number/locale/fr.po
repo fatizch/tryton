@@ -22,6 +22,10 @@ msgctxt "field:claim,delivered_services_numbers:"
 msgid "Delivered Services Numbers"
 msgstr "Numéros de service délivrés"
 
+msgctxt "error:claim.service:"
+msgid "The claim number must be unique"
+msgstr "Le numéro de sinistre doit être unique"
+
 msgctxt "field:claim.service,benefit_sequence:"
 msgid "Benefit Sequence"
 msgstr "Séquence de prestation"

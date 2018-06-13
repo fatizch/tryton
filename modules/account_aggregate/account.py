@@ -10,6 +10,7 @@ from sql.operators import Concat
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
+from trytond.model import Unique
 from trytond.pyson import Eval, PYSONEncoder
 from trytond.wizard import Wizard, StateView, StateTransition, StateAction, \
     Button
@@ -257,6 +258,9 @@ class Snapshot(model.CoogSQL, model.CoogView):
             'no_fiscal_year': 'No fiscal year defined with the Export Moves'
             ' option',
             })
+        t = cls.__table__()
+        cls._sql_constraints += [('snapshot_uniq_name', Unique(t, t.name),
+                'The name on shapshot must be unique')]
 
     @classmethod
     def create(cls, vlist):

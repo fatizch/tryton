@@ -6,6 +6,10 @@ msgctxt "error:account.move:"
 msgid "The statement is already cancelled"
 msgstr "Le relevé est déja annulé"
 
+msgctxt "error:account.statement:"
+msgid "The name on statement must be unique"
+msgstr "Le nom sur relevé doit être unique"
+
 msgctxt "error:account.statement.create:"
 msgid "All selected records are not receivable"
 msgstr "Tous les enregistrements ne sont pas à recevoir"
