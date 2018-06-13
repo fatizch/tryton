@@ -177,7 +177,7 @@ class CreatePrestIjSubscription(BaseSelectPrestIj):
     def get_query_table(cls, tables, **kwargs):
         if kwargs.get('kind') == 'company':
             return super(CreatePrestIjSubscription, cls).get_query_table(
-                **kwargs)
+                tables, **kwargs)
         else:
             subscription = tables['claim.ij.subscription']
             company = tables['party.party.company']

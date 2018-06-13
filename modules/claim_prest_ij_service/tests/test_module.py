@@ -2,12 +2,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import unittest
-import random
-import string
 from lxml.etree import XMLSyntaxError
 
 import trytond.tests.test_tryton
-from trytond.pool import Pool
 from trytond.modules.coog_core import test_framework
 from trytond.modules.claim_prest_ij_service import gesti_templates
 
