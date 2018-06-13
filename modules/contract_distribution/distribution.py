@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.cache import Cache
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If
 
@@ -32,6 +33,24 @@ class DistributionNetwork:
             'All Commercial Products'),
         'get_all_commercial_products_id')
 
+    _get_all_distributors_cache = Cache('get_all_distributors')
+
+    @classmethod
+    def create(cls, vlist):
+        created = super(DistributionNetwork, cls).create(vlist)
+        cls._get_all_distributors_cache.clear()
+        return created
+
+    @classmethod
+    def delete(cls, ids):
+        super(DistributionNetwork, cls).delete(ids)
+        cls._get_all_distributors_cache.clear()
+
+    @classmethod
+    def write(cls, *args):
+        super(DistributionNetwork, cls).write(*args)
+        cls._get_all_distributors_cache.clear()
+
     def get_parent_com_products_id(self, name):
         ComProduct = Pool().get('distribution.commercial_product')
         return [x.id for x in ComProduct.search([
@@ -48,6 +67,14 @@ class DistributionNetwork:
         result = super(DistributionNetwork, cls)._export_skips()
         result.add('commercial_products')
         return result
+
+    @classmethod
+    def get_all_distributors(cls):
+        res = cls._get_all_distributors_cache.get('all_distributors', None)
+        if res is None:
+            res = [x.id for x in cls.search([('is_distributor', '=', True)])]
+            cls._get_all_distributors_cache.set('all_distributors', res)
+        return res
 
 
 class CommercialProduct(model.CoogSQL, model.CoogView):

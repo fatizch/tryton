@@ -18,17 +18,14 @@ class User:
             'User Network Distributors'), 'get_network_distributors')
 
     @classmethod
-    def get_network_distributors(cls, records, name):
-        res = {}
-        defaults = None
-        for record in records:
-            if record.dist_network:
-                res[record.id] = [x.id for x in record.dist_network.all_children
-                    if x.is_distributor]
-            else:
-                if defaults is None:
-                    defaults = [x.id for x in Pool().get(
-                            'distribution.network').search(
-                            [('is_distributor', '=', True)])]
-                res[record.id] = defaults
+    def __setup__(cls):
+        super(User, cls).__setup__()
+        cls._context_fields.append('network_distributors')
+
+    def get_network_distributors(self, name):
+        if self.dist_network:
+            res = [x.id for x in self.dist_network.all_children
+                if x.is_distributor]
+        else:
+            res = Pool().get('distribution.network').get_all_distributors()
         return res

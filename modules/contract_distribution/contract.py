@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
-from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, utils
 
@@ -49,12 +48,3 @@ class Contract:
     @classmethod
     def _export_light(cls):
         return super(Contract, cls)._export_light() | set(['dist_network'])
-
-    @classmethod
-    def search(cls, domain, *args, **kwargs):
-        dist_network = Pool().get('res.user')(Transaction().user).dist_network
-        if dist_network:
-            domain = ['AND', domain,
-                [('dist_network', 'in',
-                    [x.id for x in dist_network.all_children])]]
-        return super(Contract, cls).search(domain, *args, **kwargs)
