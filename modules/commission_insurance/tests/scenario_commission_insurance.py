@@ -181,7 +181,8 @@ broker_party = Party(name='Broker')
 broker_party.supplier_payment_term, = PaymentTerm.find([])
 broker_party.save()
 DistributionNetwork = Model.get('distribution.network')
-broker = DistributionNetwork(name='Broker', code='broker', party=broker_party)
+broker = DistributionNetwork(name='Broker', code='broker', party=broker_party,
+    is_broker=True)
 broker.save()
 agent_broker = Agent(party=broker_party)
 agent_broker.type_ = 'agent'

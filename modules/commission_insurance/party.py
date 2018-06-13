@@ -104,12 +104,17 @@ class Party:
 
     @classmethod
     def search_is_broker(cls, name, clause):
-        clause = list(clause)
-        if clause[2] is True:
-            clause[1], clause[2] = ('!=', None)
-        elif clause[2] is False:
-            clause[2] = None
-        return [('network', ) + tuple(clause[1:])]
+        if (clause[1] == '=' and clause[2]
+                or clause[1] == '!=' and not clause[2]):
+            res = [('network.is_broker',) + tuple(clause[1:])]
+        elif (clause[1] == '=' and not clause[2]
+                or clause[1] == '!=' and clause[2]):
+            res = ['OR',
+                [('network', '=', None)],
+                [('network.is_broker', '=', False)]]
+        else:
+            raise NotImplementedError
+        return res
 
     @classmethod
     def _export_skips(cls):
@@ -128,14 +133,14 @@ class Party:
         values['is_broker'] = {x.id: False for x in parties}
         select = party.join(network, 'LEFT OUTER',
             condition=party.id == network.party,
-            ).select(party.id, network.id, network.code,
+            ).select(party.id, network.id, network.code, network.is_broker,
             where=(party.id.in_([x.id for x in parties]))
             )
         cursor.execute(*select)
-        for party_id, network_id, code in cursor.fetchall():
-            values['broker'][party_id] = network_id
-            values['broker_code'][party_id] = code
-            values['is_broker'][party_id] = network_id is not None
+        for party_id, network_id, code, is_broker in cursor.fetchall():
+            values['broker'][party_id] = network_id if is_broker else None
+            values['broker_code'][party_id] = code if is_broker else None
+            values['is_broker'][party_id] = network_id is not None and is_broker
         return values
 
     def get_rec_name(self, name):

@@ -12,10 +12,12 @@ import batch
 import test_case
 import offered
 import process
+import distribution
 
 
 def register():
     Pool.register(
+        distribution.DistributionNetwork,
         contract.Contract,
         contract.ContractOption,
         commission.AggregatedCommission,

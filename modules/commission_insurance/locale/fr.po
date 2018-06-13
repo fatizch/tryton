@@ -74,6 +74,14 @@ msgctxt "field:commission,broker:"
 msgid "Broker"
 msgstr "Courtier"
 
+msgctxt "field:distribution.network,is_broker:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "field:distribution.network,broker_party:"
+msgid "Broker Party"
+msgstr "Tiers courtier"
+
 msgctxt "field:commission,commission_rate:"
 msgid "Commission Rate"
 msgstr "Taux de commissions"

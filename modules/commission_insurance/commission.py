@@ -209,7 +209,7 @@ class Commission:
 
     def get_broker(self, name):
         return (self.agent.party.network[0].id
-            if self.agent and self.agent.party.network else None)
+            if self.agent and self.agent.party.is_broker else None)
 
     @classmethod
     def _get_invoice(cls, key):
@@ -305,7 +305,9 @@ class Commission:
 
     @classmethod
     def search_broker(cls, name, clause):
-        return [('agent.party.network',) + tuple(clause[1:])],
+        return ['AND',
+            [('agent.party.network',) + tuple(clause[1:])],
+            [('agent.party.network.is_broker', '=', True)]]
 
     @classmethod
     def modify_agent(cls, commissions, new_agent):
@@ -402,11 +404,13 @@ class AggregatedCommission(model.CoogSQL, model.CoogView):
 
     def get_broker(self, name):
         return (self.agent.party.network[0].id
-            if self.agent and self.agent.party.network else None)
+            if self.agent and self.agent.party.is_broker else None)
 
     @classmethod
     def search_broker(cls, name, clause):
-        return [('agent.party.network',) + tuple(clause[1:])],
+        return ['AND',
+            [('agent.party.network',) + tuple(clause[1:])],
+            [('agent.party.network.is_broker', '=', True)]]
 
     def get_subscriber(self, name):
         if self.contract:
@@ -1137,7 +1141,7 @@ class CreateAgentsAsk(model.CoogView):
 
     company = fields.Many2One('company.company', 'Company', required=True)
     brokers = fields.Many2Many('distribution.network', None, None, 'Brokers',
-        domain=[('party', '!=', None)], required=True)
+        domain=[('is_broker', '=', True)], required=True)
     plans = fields.Many2Many('commission.plan', None, None, 'Plans',
         domain=[('type_', '=', 'agent')], required=True)
 
@@ -1504,8 +1508,9 @@ class ChangeBroker(Wizard):
             if party.is_broker:
                 defaults['from_broker'] = party.id
         elif cur_model == 'distribution.network':
-            party = pool.get(cur_model)(cur_id).party
-            defaults['from_broker'] = party.id
+            dist_network = pool.get(cur_model)(cur_id)
+            if dist_network.is_broker:
+                defaults['from_broker'] = dist_network.party.id
         return defaults
 
     def transition_change(self):
