@@ -56,8 +56,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             opedi_name='example opedi name',
             requests=[Req() for x in range(5)],
         )
-        gesti_templates.GestipHeader(data)
-        gesti_templates.GestipDocument(data)
+        str(gesti_templates.GestipHeader(data))
+        str(gesti_templates.GestipDocument(data))
 
         data['timestamp'] = 'very invalid timestamp'
 

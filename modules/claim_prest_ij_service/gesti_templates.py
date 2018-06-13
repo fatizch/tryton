@@ -11,6 +11,7 @@ class GestipTemplate(object):
     schemaLocation = None
     schema_filename = None
     namespace = None
+    encoding = 'iso-8859-1'
 
     def __init__(self, data):
         self.M = ElementMaker(
@@ -34,7 +35,7 @@ class GestipTemplate(object):
         return etree.tostring(self.xml,
             pretty_print=True,
             xml_declaration=True,
-            encoding='utf8')
+            encoding=self.encoding)
 
     def validate(self):
         return etree.fromstring(str(self), self.parser)

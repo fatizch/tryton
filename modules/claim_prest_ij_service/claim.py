@@ -147,11 +147,15 @@ class ClaimIjSubscriptionRequestGroup(Workflow, model.CoogSQL, model.CoogView):
 
     @classmethod
     def get_prefix(cls, kind):
-        # Should this be AXXXX as in publifux doc ?
-        if kind == 'header':
-            return 'E-GESTIP'
-        elif kind == 'document':
-            return 'D-GESTIP'
+        # if kind == 'header':
+        #     return 'E-GESTIP'
+        # elif kind == 'document':
+        #     return 'D-GESTIP'
+        # this code above is according to CNAM
+
+        # below is the publiflux implementation
+        code_ga = cls.get_ij_conf_item('code_ga')
+        return code_ga
 
     def generate_header_xml(self, common_data):
         header = gesti_templates.GestipHeader(common_data)
