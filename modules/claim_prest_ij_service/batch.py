@@ -4,10 +4,11 @@ import os
 import logging
 import zipfile
 import shutil
+import datetime
 
 from sql import Literal, Null
-from sql.aggregate import Sum
-from sql.conditionals import Case
+from sql.aggregate import Sum, Max
+from sql.conditionals import Case, Coalesce
 from itertools import groupby
 
 from trytond.pool import Pool
@@ -250,38 +251,22 @@ class SubmitPersonPrestIjSubscription(BaseSelectPrestIj):
     @classmethod
     def get_query_table(cls, tables, **kwargs):
         party = tables['party.party']
-        claim = tables['claim']
-        service = tables['claim.service']
-        loss = tables['claim.loss']
         subscription = tables['claim.ij.subscription']
         request = tables['claim.ij.subscription_request']
-        contract = tables['contract']
         company = tables['party.party.company']
         company_sub = tables['claim.ij.subscription.company']
+        query_table = super(SubmitPersonPrestIjSubscription, cls
+            ).get_query_table(tables, kind='person', **kwargs
+            ).join(subscription,
+                condition=(party.ssn == subscription.ssn) &
+                (company.siren == subscription.siren))
         if kwargs['operation'] == 'cre':
-            query_table = loss.join(party, condition=(
-                    loss.covered_person == party.id)
-                ).join(claim, condition=(
-                    loss.claim == claim.id)
-                ).join(service, condition=(
-                    service.loss == loss.id)
-                ).join(subscription,
-                    condition=(party.ssn == subscription.ssn)
-                ).join(contract,
-                    condition=(service.contract == contract.id)
-                ).join(company,
-                    condition=(contract.subscriber == company.id)
-                ).join(company_sub,
+            query_table = query_table.join(company_sub,
                     condition=(company.siren == company_sub.siren) &
                     (company_sub.ssn == Null) &
                     (company_sub.activated == Literal(True)) &
                     (company_sub.state == 'declaration_confirmed'))
-        else:
-            query_table = super(SubmitPersonPrestIjSubscription, cls
-                ).get_query_table(tables, kind='person', **kwargs
-                ).join(subscription,
-                    condition=(party.ssn == subscription.ssn) &
-                    (company.siren == subscription.siren))
+
         return query_table.join(request, 'LEFT OUTER', condition=(
             request.subscription == subscription.id))
 
@@ -289,60 +274,77 @@ class SubmitPersonPrestIjSubscription(BaseSelectPrestIj):
     def get_where_clause(cls, tables, **kwargs):
         operation = kwargs.get('operation')
         subscription = tables['claim.ij.subscription']
-        loss = tables['claim.loss']
         claim = tables['claim']
         if operation == 'cre':
             claim = tables['claim']
-            where_clause = (subscription.state == 'undeclared')
+            where_clause = (
+                subscription.state.in_(['undeclared', 'deletion_confirmed']))
             where_clause &= (claim.status != 'closed')
         else:
             where_clause = super(SubmitPersonPrestIjSubscription, cls
                 ).get_where_clause(tables, kind='person', **kwargs)
             where_clause &= (subscription.state == 'declaration_confirmed')
-            where_clause &= (loss.end_date != Null)
-            where_clause &= (claim.status != 'open')
         return where_clause
 
     @classmethod
     def get_having_clause(cls, tables, **kwargs):
+        treatment_date = kwargs.get('treatment_date')
+        operation = kwargs.get('operation')
+        min_end_date = coog_date.add_month(treatment_date, -2)
         request = tables['claim.ij.subscription_request']
+        loss = tables['claim.loss']
         operation = kwargs['operation']
         having_clause = Sum(Case((
                         (request.state == 'unprocessed') &
                         (request.operation == operation), 1), else_=0)
                 ) == 0
+        if operation == 'sup':
+            # dont generate request if there are losses without end date and
+            # wait for 2 months before sending SUP request
+            having_clause &= (Max(Coalesce(loss.end_date, datetime.date.max)) <
+                min_end_date)
         return having_clause
 
     @classmethod
     def select_ids(cls, treatment_date, operation):
+        '''
+        when operation is cre, ids returned are services
+        when operation is sup, ids returned are subscription
+        '''
         cursor = Transaction().connection.cursor()
         tables = cls.get_tables(treatment_date=treatment_date,
             operation=operation)
         service = tables['claim.service']
         party = tables['party.party']
         company = tables['party.party.company']
+        subscription = tables['claim.ij.subscription']
+        if operation == 'cre':
+            fields_to_select = [service.id]
+            groupby = [party.id, company.id, service.id]
+        else:
+            fields_to_select = [subscription.id]
+            groupby = [party.id, company.id, subscription.id]
+
         query_table = cls.get_query_table(tables,
             treatment_date=treatment_date, operation=operation)
         where_clause = cls.get_where_clause(tables,
             treatment_date=treatment_date, operation=operation)
-        cursor.execute(*query_table.select(service.id,
+        cursor.execute(*query_table.select(*fields_to_select,
                 where=where_clause,
                 having=cls.get_having_clause(tables,
                     treatment_date=treatment_date, operation=operation),
-                group_by=[party.id, company.id, service.id],
+                group_by=groupby,
                 order_by=[party.id, company.id]))
-
-        for service, in cursor.fetchall():
+        for object_id, in cursor.fetchall():
             if operation == 'cre':
-                yield (service, )
+                service = Pool().get('claim.service')(object_id)
+                # generate subscription only if deductible is outdated
+                if (treatment_date > service.deductible_end_date and
+                        (not service.loss.end_date or
+                            service.loss.end_date > treatment_date)):
+                    yield (object_id, )
             else:
-                service = Pool().get('claim.service')(service)
-                if service.loss.end_date < coog_date.add_month(
-                        treatment_date, -2) and not any(x.status == 'open'
-                        for x in service.loss.covered_person.claims):
-                    yield (service.id, )
-                else:
-                    continue
+                yield (object_id, )
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, operation):
@@ -376,7 +378,6 @@ class SubmitCompanyPrestIjSubscription(BaseSelectPrestIj):
         pool = Pool()
         tables = super(SubmitCompanyPrestIjSubscription, cls).get_tables(
             **kwargs)
-
         if 'claim.ij.subscription' not in tables:
             tables['claim.ij.subscription'] = pool.get(
                     'claim.ij.subscription').__table__()
@@ -409,7 +410,8 @@ class SubmitCompanyPrestIjSubscription(BaseSelectPrestIj):
         subscription = tables['claim.ij.subscription']
         contract = tables['contract']
         if operation == 'cre':
-            where_clause = (subscription.state == 'undeclared')
+            where_clause = (
+                subscription.state.in_(['undeclared', 'deletion_confirmed']))
             where_clause &= (subscription.ssn == Null)
         else:
             where_clause = super(SubmitCompanyPrestIjSubscription, cls

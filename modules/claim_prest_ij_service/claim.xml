@@ -4,14 +4,8 @@ this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
        <!-- ******************************************* -->
-       <!-- ***************** Relates ***************** -->
+       <!-- ***************** Request ***************** -->
        <!-- ******************************************* -->
-        <record model="ir.action.keyword" id="act_consult_ij_claim_subscription_keyword">
-            <field name="keyword">form_relate</field>
-            <field name="model">claim,-1</field>
-            <field name="action" ref="act_consult_ij_subscription"/>
-        </record>
-
         <record model="ir.ui.view" id="claim_ij_subscription_request_view_list">
             <field name="model">claim.ij.subscription_request</field>
             <field name="type">tree</field>
@@ -22,16 +16,43 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">claim_ij_subscription_request_form</field>
         </record>
-        <record model="ir.ui.view" id="claim_ij_subscription_request_group_view_form">
-            <field name="model">claim.ij.subscription_request.group</field>
-            <field name="type">form</field>
-            <field name="name">claim_ij_subscription_request_group_form</field>
-        </record>
         <record model="ir.ui.view" id="claim_ij_subscription_request_full_view_list">
             <field name="model">claim.ij.subscription_request</field>
             <field name="type">tree</field>
             <field name="name">claim_ij_subscription_request_full_list</field>
         </record>
+       <!-- ************************************************* -->
+       <!-- ***************** Request group ***************** -->
+       <!-- ************************************************* -->
+        <record model="ir.ui.view" id="claim_ij_subscription_request_group_view_form">
+            <field name="model">claim.ij.subscription_request.group</field>
+            <field name="type">form</field>
+            <field name="name">claim_ij_subscription_request_group_form</field>
+        </record>
+        <record model="ir.ui.view" id="claim_ij_subscription_request_group_view_list">
+            <field name="model">claim.ij.subscription_request.group</field>
+            <field name="type">tree</field>
+            <field name="name">claim_ij_subscription_request_group_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_claim_ij_subscription_request_group_action">
+            <field name="name">Prest IJ Requests Group</field>
+            <field name="res_model">claim.ij.subscription_request.group</field>
+            <field name="search_value" eval="[('state', '=', 'processing')]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_claim_ij_subscription_request_group_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="claim_ij_subscription_request_group_view_form"/>
+            <field name="act_window" ref="act_claim_ij_subscription_request_group_action"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_claim_ij_subscription_request_group_list_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="claim_ij_subscription_request_group_view_list"/>
+            <field name="act_window" ref="act_claim_ij_subscription_request_group_action"/>
+        </record>
+
+       <!-- ************************************************* -->
+       <!-- ***************** Subscription ****************** -->
+       <!-- ************************************************* -->
         <record model="ir.ui.view" id="claim_ij_subscription_view_list">
             <field name="model">claim.ij.subscription</field>
             <field name="type">tree</field>
@@ -55,6 +76,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="sequence" eval="10"/>
             <field name="view" ref="claim_ij_subscription_view_list"/>
             <field name="act_window" ref="act_claim_ij_subscription_relate_form"/>
+        </record>
+        <record model="ir.action.keyword" id="act_consult_ij_claim_subscription_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">claim,-1</field>
+            <field name="action" ref="act_consult_ij_subscription"/>
         </record>
         <!-- ############################################################ -->
         <!-- ############### Prest'IJ Erroneous Requests ################ -->
@@ -89,5 +115,6 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ############################################################ -->
         <menuitem name="Prest'IJ" id="menu_prest_ij" sequence="16" icon="batch"/>
         <menuitem name="Erroneous Requests" parent="menu_prest_ij" sequence="10" id="menu_erroneous_requests_prest_ij" action="act_erroneous_requests_prest_ij"/>
+        <menuitem name="Prest IJ Requests Groups" parent="menu_prest_ij" sequence="20" id="menu_group_requests_prest_ij" action="act_claim_ij_subscription_request_group_action"/>
     </data>
 </tryton>

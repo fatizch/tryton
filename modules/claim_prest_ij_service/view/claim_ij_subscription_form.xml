@@ -7,6 +7,8 @@ this repository contains the full copyright notices and license terms. -->
         <field name="siren"/>
         <label name="ssn"/>
         <field name="ssn"/>
+        <label name="party"/>
+        <field name="party"/>
         <label name="state"/>
         <field name="state"/>
         <label name="date"/>
@@ -17,7 +19,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="method"/>
     </group>
     <group id="bottom" col="4" colspan="4" yexpand="1" yfill="1">
-        <field name="requests" mode="tree" no_command="1" yexpand="1" yfill="1" colspan="4"/>
+        <field name="requests" no_command="1" yexpand="1" yfill="1" colspan="4"/>
         <field name="requests_event_logs" mode="tree" no_command="1" yexpand="1" yfill="1" colspan="4"/>
     </group>
     <group id="invisible" col="4" colspan="4">

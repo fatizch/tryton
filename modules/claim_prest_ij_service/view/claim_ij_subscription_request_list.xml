@@ -6,5 +6,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="operation"/>
     <field name="state"/>
     <field name="error_code"/>
+    <field name="error_message"/>
     <field name="group"/>
 </tree>

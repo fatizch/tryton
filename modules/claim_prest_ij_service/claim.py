@@ -375,6 +375,11 @@ class ClaimIjSubscriptionRequest(Workflow, model.CoogSQL, model.CoogView):
     ssn = fields.Function(
         fields.Char('SSN'),
         'on_change_with_ssn')
+    party = fields.Function(
+        fields.Many2One('party.party', 'Party', states={
+            'invisible': ~Eval('ssn'),
+            }, depends=['ssn']),
+        'on_change_with_party')
     group = fields.Many2One('claim.ij.subscription_request.group', 'Group',
         readonly=True, ondelete='RESTRICT', select=True,
         states={
@@ -425,6 +430,11 @@ class ClaimIjSubscriptionRequest(Workflow, model.CoogSQL, model.CoogView):
     @fields.depends('subscription')
     def on_change_with_ssn(self, name=None):
         return self.subscription.ssn if self.subscription else ''
+
+    @fields.depends('subscription')
+    def on_change_with_party(self, name=None):
+        return self.subscription.party.id \
+            if self.subscription and self.subscription.party else ''
 
     def get_rec_name(self, name):
         return self.operation.upper() if self.operation else self.id
@@ -493,6 +503,11 @@ class ClaimIjSubscription(model.CoogSQL, model.CoogView):
     parties = fields.Function(
         fields.Many2Many('party.party', None, None, 'Parties'),
         'getter_parties')
+    party = fields.Function(
+        fields.Many2One('party.party', 'Party', states={
+            'invisible': ~Eval('ssn'),
+            }, depends=['ssn']),
+        'getter_party')
     siren = fields.Char('Siren', readonly=True, required=True)
     ssn = fields.Char('SSN', readonly=True,
         states={
@@ -582,6 +597,10 @@ class ClaimIjSubscription(model.CoogSQL, model.CoogView):
         return sorted([x.id for x in Pool().get('party.party').search(
                     [(search_field, '=', getattr(self, search_field))])])
 
+    def getter_party(self, name):
+        if self.parties:
+            return self.parties[0].id
+
     def get_requests_event_logs(self, name):
         EventLog = Pool().get('event.log')
         return [x.id for x in EventLog.search([
@@ -620,8 +639,10 @@ class ClaimIjSubscription(model.CoogSQL, model.CoogView):
     def create_subscription_requests(cls, objects, operation, date,
             kind):
         to_create = []
-        Request = Pool().get('claim.ij.subscription_request')
-        Group = Pool().get('claim.ij.subscription_request.group')
+        pool = Pool()
+        Request = pool.get('claim.ij.subscription_request')
+        Group = pool.get('claim.ij.subscription_request.group')
+        Subscription = pool.get('claim.ij.subscription')
         if kind == 'company':
             for sub in objects:
                 to_create.append({
@@ -630,35 +651,46 @@ class ClaimIjSubscription(model.CoogSQL, model.CoogView):
                         'operation': operation,
                         })
         elif kind == 'person':
-            for key, services in groupby(objects, key=lambda x: (
-                        x.loss.covered_person, x.contract.subscriber)):
-                services = list(services)
-                covered, subscriber = key
-                sub, = Pool().get('claim.ij.subscription').search([
-                        ('ssn', '=', covered.ssn),
-                        ('siren', '=', subscriber.siren),
-                        ])
-                min_start_date = min(
-                    [x.prest_ij_start_date() for x in services])
-                max_end_date = max(
-                    [(x.prest_ij_end_date() or datetime.date.min)
-                        for x in services])
-                if (min_start_date < date) or (operation == 'sup'):
+            if operation == 'sup':
+                subscriptions = Subscription.browse(objects)
+                for subscription in subscriptions:
                     values = {
                         'date': date,
-                        'subscription': sub,
+                        'subscription': subscription,
                         'operation': operation,
-                        'period_start':
-                            min_start_date if operation != 'sup' else None,
-                        'retro_date': min_start_date if operation != 'sup'
-                            else None,
-                        'period_end': max_end_date
-                            if max_end_date != datetime.date.min else None
+                        'period_start': None,
+                        'retro_date': None,
+                        'period_end': None,
                         }
-                    if operation == 'cre':
-                        values['period_identification'] = \
-                            Group.generate_identification(kind='period')
                     to_create.append(values)
+            else:
+                for key, services in groupby(objects, key=lambda x: (
+                            x.loss.covered_person, x.contract.subscriber)):
+                    services = list(services)
+                    covered, subscriber = key
+                    sub, = Pool().get('claim.ij.subscription').search([
+                            ('ssn', '=', covered.ssn),
+                            ('siren', '=', subscriber.siren),
+                            ])
+                    min_start_date = min(
+                        [x.prest_ij_start_date() for x in services])
+                    max_end_date = max(
+                        [(x.prest_ij_end_date() or datetime.date.min)
+                            for x in services])
+                    if (min_start_date < date):
+                        values = {
+                            'date': date,
+                            'subscription': sub,
+                            'operation': operation,
+                            'period_start': min_start_date,
+                            'retro_date': min_start_date,
+                            'period_end': max_end_date
+                            if max_end_date != datetime.date.min else None,
+                            }
+                        if operation == 'cre':
+                            values['period_identification'] = \
+                                Group.generate_identification(kind='period')
+                        to_create.append(values)
 
         if to_create:
             return Request.create(to_create)

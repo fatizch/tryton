@@ -370,6 +370,10 @@ msgctxt "model:ir.action,name:act_claim_ij_subscription_relate_form"
 msgid "Subscriptions IJ"
 msgstr "Inscriptions Prest'IJ"
 
+msgctxt "model:ir.action,name:act_claim_ij_subscription_request_group_action"
+msgid "Prest IJ Requests Group"
+msgstr "Groupe d'inscription prestIJ"
+
 msgctxt "model:ir.action,name:act_consult_ij_subscription"
 msgid "Consult Ij Subscription"
 msgstr "Consulter l'inscription Prest'IJ"
@@ -389,6 +393,10 @@ msgstr "Relancer une inscription Prest'IJ"
 msgctxt "model:ir.ui.menu,name:menu_erroneous_requests_prest_ij"
 msgid "Erroneous Requests"
 msgstr "Demandes en erreur"
+
+msgctxt "model:ir.ui.menu,name:menu_group_requests_prest_ij"
+msgid "Prest IJ Requests Groups"
+msgstr "Groupes d'inscription prestIJ"
 
 msgctxt "model:ir.ui.menu,name:menu_prest_ij"
 msgid "Prest'IJ"
