@@ -1,3 +1,4 @@
+* OTH#0000: Correction de la génération des identifiants de fichiers
 * FEA#9011: Gestion des inscriptions des assurés auprès du service prest IJ 
 * OTH#0000: Encodage en iso-8859-1 plutôt qu'en utf8
 * FEA#9049: Ajout de l'archivage, corrections et utilisation du siren (plusieurs sociétés par fiches d'inscription)
