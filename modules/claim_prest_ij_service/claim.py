@@ -526,7 +526,7 @@ class ClaimIjSubscription(model.CoogSQL, model.CoogView):
         loader='on_change_with_confirmation_date')
     requests = fields.One2Many('claim.ij.subscription_request', 'subscription',
         'Requests', readonly=True, delete_missing=True,
-        order=[('date', 'DESC')])
+        order=[('date', 'DESC'), ('id', 'DESC')])
     requests_event_logs = fields.Function(
         fields.Many2Many('event.log', None, None, 'Requests Event Logs'),
         'get_requests_event_logs')
