@@ -873,6 +873,11 @@ class Contract:
                         invoice.invoice_address = invoice.party.main_address()
 
     @classmethod
+    def prorate_premiums(cls):
+        return Pool().get(
+            'offered.configuration').get_cached_prorate_premiums()
+
+    @classmethod
     def premium_intervals_cache(cls):
         cache_holder = get_cache_holder()
         interval_cache = cache_holder.get('premium_intervals_cache')
@@ -893,8 +898,12 @@ class Contract:
                     for idx, p in enumerate(contract.all_premiums)))
             cache[contract.id] = tree
         if tree is not None:
-            return [contract.all_premiums[x.data]
-                for x in tree.search(start, coog_date.add_day(end, 1))]
+            if cls.prorate_premiums():
+                return [contract.all_premiums[x.data]
+                    for x in tree.search(start, coog_date.add_day(end, 1))]
+            else:
+                return [contract.all_premiums[x.data]
+                    for x in tree.search(start, coog_date.add_day(start, 1))]
 
     @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
@@ -1848,6 +1857,7 @@ class Premium:
         InvoiceLine = pool.get('account.invoice.line')
         InvoiceLineDetail = pool.get('account.invoice.line.detail')
         Tax = pool.get('account.tax')
+        invoice_end = end
         if start is not None and end is not None:
             if ((self.start or datetime.date.min) > end
                     or (self.end or datetime.date.max) < start):
@@ -1878,7 +1888,7 @@ class Premium:
                 invoice_type='out',
                 account=self.account,
                 coverage_start=start,
-                coverage_end=end,
+                coverage_end=end if self.prorate_premiums else invoice_end,
                 details=[InvoiceLineDetail.new_detail_from_premium(self)],
                 )]
 

@@ -1,3 +1,4 @@
+* BUG#9103 Filtre des lignes de tarifs des quittances si le prorata n'est pas activé
 * BUG#9094 Autoriser la re-génération de quittances d'une période passée
 * BUG#9126 Ne pas essayer de quittancer un contrat sans informations de quittancement
 * BUG#9016 Modifier la valeur de l'adresse de quittancement si le tiers rattaché à cette dernière est différent de celui présent sur la quittance
