@@ -339,7 +339,10 @@ class SubmitPersonPrestIjSubscription(BaseSelectPrestIj):
             if operation == 'cre':
                 service = Pool().get('claim.service')(object_id)
                 # generate subscription only if deductible is outdated
-                if (treatment_date > service.deductible_end_date and
+                end_deductible = service.deductible_end_date or \
+                    service.loss.start_date
+                if (end_deductible and
+                        treatment_date > end_deductible and
                         (not service.loss.end_date or
                             service.loss.end_date > treatment_date)):
                     yield (object_id, )

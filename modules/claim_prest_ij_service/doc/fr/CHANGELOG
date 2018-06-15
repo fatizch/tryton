@@ -1,3 +1,4 @@
+* OTH#0000: Correction d'un crash dans le batch d'inscription lorsqu'aucune franchise n'est définie
 * OTH#0000: Ajout de traductions manquantes et correction de l'icone de l'assitant de création des périodes de souscription
 * OTH#0000: Ajout de l'ID pour ordonner les demandes prestIJ
 * FEA#9172: Ajout d'un point d'entrée sur les groupes de demandes et corrections sur les batchs
