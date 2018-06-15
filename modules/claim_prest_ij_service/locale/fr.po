@@ -96,6 +96,10 @@ msgctxt "field:claim.ij.subscription,parties:"
 msgid "Parties"
 msgstr "Tiers"
 
+msgctxt "field:claim.ij.subscription,party:"
+msgid "Party"
+msgstr "Assuré"
+
 msgctxt "field:claim.ij.subscription,rec_name:"
 msgid "Record Name"
 msgstr "Nom de l'enregistrement"
@@ -171,6 +175,10 @@ msgstr "Méthode"
 msgctxt "field:claim.ij.subscription_request,operation:"
 msgid "Operation"
 msgstr "Opération"
+
+msgctxt "field:claim.ij.subscription_request,party:"
+msgid "Party"
+msgstr "Assuré"
 
 msgctxt "field:claim.ij.subscription_request,period_end:"
 msgid "Period End"

@@ -102,7 +102,7 @@ class CreateCoveredPersonIjSubscription(Wizard):
         'covered_person.ij_subscription_create.select_date',
         'claim_prest_ij_service.create_subscription_select_date_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Create', 'create_request', 'tryton-next', default=True),
+            Button('Create', 'create_request', 'tryton-go-next', default=True),
             ])
     create_request = StateTransition()
 

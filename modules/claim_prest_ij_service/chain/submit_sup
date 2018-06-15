@@ -6,6 +6,9 @@ CHAIN_NAME=submit_sup
 CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'OUTPUT_DIR')
 CHAIN_REQUIRED=('TREATMENT_DATE')
 
+chain_params "$@"
+chain_begin
+
 chain_step prest_ij.subscription.submit_company \
     --treatment_date="$TREATMENT_DATE" \
     --operation="sup"
