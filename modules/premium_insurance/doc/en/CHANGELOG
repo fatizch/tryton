@@ -1,3 +1,5 @@
+* BUG#9149 Check for a date in the rule engine when filtering extra premiums
+
 Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28

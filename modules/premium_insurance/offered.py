@@ -56,6 +56,9 @@ class OptionDescriptionPremiumRule:
 
     @classmethod
     def get_appliable_extra_premiums(cls, rule_dict):
+        if not rule_dict.get('date', None):
+            # Typical case : non periodic prices
+            return []
         return [extra for extra in rule_dict['option'].extra_premiums
             if ((extra.start_date or datetime.date.min) <= rule_dict['date'] <=
                 (extra.end_date or datetime.date.max))]
