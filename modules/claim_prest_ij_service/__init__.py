@@ -11,9 +11,9 @@ import configuration
 
 def register():
     Pool.register(
+        claim.ClaimIjSubscription,
         claim.ClaimIjSubscriptionRequestGroup,
         claim.ClaimIjSubscriptionRequest,
-        claim.ClaimIjSubscription,
         claim.ClaimService,
         benefit.Benefit,
         wizard.CoveredPersonIjSubscriptionSelectDate,

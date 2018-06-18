@@ -1,3 +1,4 @@
+* OTH#0000: Fix wrong declaration order of claimIJSubscription
 * OTH#0000: Fix submit batch when no deductible are defined
 * OTH#0000: Add missing translations and fix manual registration creation icon
 * OTH#0000: Add ID in prestIJ request order
