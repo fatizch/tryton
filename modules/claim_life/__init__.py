@@ -23,7 +23,6 @@ def register():
         claim.Loss,
         claim.ClaimService,
         claim.ClaimBeneficiary,
-        claim.ClaimServiceExtraDataRevision,
         claim.Indemnification,
         claim.DocumentRequestLine,
         rule_engine.RuleEngineRuntime,

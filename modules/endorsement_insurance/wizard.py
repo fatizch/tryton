@@ -1424,20 +1424,6 @@ class ManageOptions:
             return super(ManageOptions, self).get_parent_endorsed(parent,
                 contract_endorsements)
 
-    def get_default_extra_data(self, coverage):
-        pool = Pool()
-        base_extra_data = super(ManageOptions, self).get_default_extra_data(
-            coverage)
-        parent = self._parent
-        if isinstance(parent, (pool.get('contract.covered_element'),
-                    pool.get('endorsement.contract.covered_element'))):
-            item_desc = parent.item_desc
-        else:
-            return base_extra_data
-        return self.contract.product.get_extra_data_def('option',
-            base_extra_data, self.effective_date, coverage=coverage,
-            item_desc=item_desc)
-
 
 class OptionDisplayer:
     __metaclass__ = PoolMeta
@@ -1462,13 +1448,6 @@ class OptionDisplayer:
         if self._parent.__name__ in ('contract.covered_element',
                 'endorsement.contract.covered_element'):
             return self._parent.item_desc
-
-    def refresh_extra_data(self):
-        if not self.item_desc:
-            return super(OptionDisplayer, self).refresh_extra_data()
-        self.extra_data = self.product.get_extra_data_def('option',
-            self.extra_data, self.effective_date, coverage=self.coverage,
-            item_desc=self.item_desc)
 
     @classmethod
     def _option_fields_to_extract(cls):

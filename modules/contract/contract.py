@@ -11,6 +11,7 @@ from trytond import backend
 from trytond.tools import grouped_slice, cursor_dict
 from trytond.rpc import RPC
 from trytond.cache import Cache
+from trytond.error import UserError
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, Bool, And, Or
 from trytond.protocols.jsonrpc import JSONDecoder
@@ -22,7 +23,7 @@ from trytond.modules.coog_core import utils, model, fields, coog_date
 from trytond.modules.coog_core import coog_string, export
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.offered import offered
-from trytond.error import UserError
+from trytond.modules.offered.extra_data import with_extra_data
 
 
 CONTRACTSTATUSES = [
@@ -137,7 +138,10 @@ class ActivationHistory(model.CoogSQL, model.CoogView):
         return self.contract.status if self.contract else ''
 
 
-class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
+class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
+            schema='product', field_name='extra_data_values',
+            getter_name='get_extra_data', setter_name='setter_void'),
+        ModelCurrency):
     'Contract'
 
     __name__ = 'contract'
@@ -259,11 +263,6 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     is_sub_status_required = fields.Function(
         fields.Boolean('Is Sub Status Required', depends=['status']),
         'on_change_with_is_sub_status_required')
-    extra_data_values = fields.Function(
-        fields.Dict('extra_data', 'Extra Data'),
-        'get_extra_data')
-    extra_data_values_string = extra_data_values.translated(
-        'extra_data_values')
     product_subscriber_kind = fields.Function(
         fields.Selection(offered.SUBSCRIBER_KIND, 'Product Subscriber Kind'),
         'get_product_subscriber_kind')
@@ -296,6 +295,9 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls.rec_name.string = 'Number'
+        cls.extra_data_values.states['readonly'] = _STATES['readonly']
+        cls.extra_data_values.depends.append('status')
+        cls.extra_data_values.depends.append('extra_datas')
         cls.__rpc__.update({
                 'ws_subscribe_contracts': RPC(readonly=False),
                 'calculate': RPC(readonly=False, instantiate=0),
@@ -379,6 +381,12 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
             TableHandler.drop_table('contract.address',
                 'contract_address')
         super(Contract, cls).__register__(module_name)
+
+    @classmethod
+    def __post_setup__(cls):
+        super(Contract, cls).__post_setup__()
+        Pool().get('extra_data')._register_extra_data_provider(cls,
+            'find_extra_data_value', ['contract'])
 
     @classmethod
     def view_attributes(cls):
@@ -805,6 +813,18 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         else:
             return self.product.subscriber_kind
 
+    @fields.depends('extra_datas')
+    def on_change_extra_data_values(self):
+        super(Contract, self).on_change_extra_data_values()
+        current_version = utils.get_good_version_at_date(self, 'extra_datas',
+            start_var_name='date')
+        if current_version is None:
+            self.extra_datas = [Pool().get('contract.extra_data')(
+                    extra_data_values={}, date=None)]
+            current_version = self.extra_datas[-1]
+        self.extra_datas = list(self.extra_datas)
+        current_version.extra_data_values = self.extra_data_values
+
     def can_change_start_date(self):
         if self.activation_history and \
                 len(self.activation_history) > 1:
@@ -1164,9 +1184,8 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         if not getattr(self, 'extra_datas', None):
             self.extra_datas = [
                 ExtraData(extra_data_values={}, date=None)]
-        data_values = self.product.get_extra_data_def('contract',
-            self.extra_datas[-1].extra_data_values,
-            self.appliable_conditions_date)
+        data_values = self.product.refresh_extra_data(
+            self.extra_datas[-1].extra_data_values)
         self.extra_datas[-1].extra_data_values = data_values
         self.extra_data_values = data_values
 
@@ -1497,25 +1516,16 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
     def get_all_options(self):
         return self.options
 
-    def get_all_extra_data(self, at_date):
-        res = self.product.get_all_extra_data(at_date)
-        if not at_date:
-            return res
-        extra_data = utils.get_value_at_date(self.extra_datas, at_date)
-        res.update(extra_data.extra_data_values if extra_data else {})
-        package = self.get_package(at_date)
-        if package:
-            res.update(package.get_all_extra_data(at_date))
-        return res
+    def find_extra_data_value(self, name, **kwargs):
+        extra_data = utils.get_value_at_date(self.extra_datas, kwargs.get(
+                'date', utils.today()))
+        return extra_data.extra_data_values[name]
 
-    def get_extra_data_values(self, at_date=None, translated=False):
-        at_date = at_date or utils.today()
-        extra_data = utils.get_value_at_date(self.extra_datas, at_date)
-        if extra_data:
-            if translated:
-                return extra_data.extra_data_values_translated
-            return extra_data.extra_data_values
-        return {}
+    def find_package_extra_data_value(self, name, **kwargs):
+        package = self.get_package(kwargs.get('date', utils.today()))
+        if package:
+            return package.find_extra_data_value(name, **kwargs)
+        raise KeyError
 
     def get_product_subscriber_kind(self, name):
         return self.product.subscriber_kind if self.product else ''
@@ -1666,8 +1676,11 @@ class Contract(model.CoogSQL, model.CoogView, ModelCurrency):
         super(Contract, cls).delete(active_contracts)
 
 
-class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
-        ModelCurrency):
+class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
+            schema='coverage', field_name='current_extra_data',
+            field_string='Current Extra Data',
+            getter_name='get_current_version', setter_name='setter_void'),
+        model.ExpandTreeMixin, ModelCurrency):
     'Contract Option'
 
     __name__ = 'contract.option'
@@ -1746,18 +1759,13 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         fields.Char('Full Name'), 'get_full_name')
     initial_start_date = fields.Function(fields.Date('Initial Start Date'),
         'get_initial_start_date')
-    current_extra_data = fields.Function(
-        fields.Dict('extra_data', 'Current Extra Data', states={
-                'readonly': Eval('contract_status') != 'quote',
-                'invisible': ~Eval('current_extra_data')},
-            depends=['current_extra_data', 'contract_status']),
-        'get_current_version', setter='setter_void')
-    current_extra_data_string = current_extra_data.translated(
-        'current_extra_data')
 
     @classmethod
     def __setup__(cls):
         super(ContractOption, cls).__setup__()
+        cls.current_extra_data.states['readonly'] = (
+            Eval('contract_status') != 'quote')
+        cls.current_extra_data.depends.append('contract_status')
         cls._error_messages.update({
                 'inactive_coverage_at_date':
                 'Coverage %s is inactive at date %s',
@@ -1776,6 +1784,12 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
                 'anterior to contract initial start date %(start_date)s in '
                 'contract %(contract)s'
                 })
+
+    @classmethod
+    def __post_setup__(cls):
+        super(ContractOption, cls).__post_setup__()
+        Pool().get('extra_data')._register_extra_data_provider(cls,
+            'find_extra_data_value', ['option'])
 
     @classmethod
     def functional_skips_for_duplicate(cls):
@@ -2155,16 +2169,12 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
     def recalculate_extra_data(self, extra_data):
         if not self.coverage or not self.product:
             return {}
-        return self.product.get_extra_data_def('option', extra_data.copy(),
-            self.appliable_conditions_date, coverage=self.coverage)
+        return self.coverage.refresh_extra_data(extra_data)
 
-    def get_all_extra_data(self, at_date):
-        current_version = self.get_version_at_date(at_date)
-        res = current_version.extra_data if current_version else {}
-        if self.contract:
-            res.update(self.contract.get_all_extra_data(at_date))
-        res.update(self.coverage.get_all_extra_data(at_date))
-        return res
+    def find_extra_data_value(self, name, **kwargs):
+        current_version = self.get_version_at_date(kwargs.get('date',
+                utils.today()))
+        return current_version.find_extra_data_value(name, **kwargs)
 
     def decline_option(self, reason):
         self.status = 'declined'
@@ -2204,7 +2214,8 @@ class ContractOption(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         return [o for o in options if o.is_active_at_date(at_date)]
 
 
-class ContractOptionVersion(model.CoogSQL, model.CoogView):
+class ContractOptionVersion(model.CoogSQL, model.CoogView,
+        with_extra_data(['option'], create_summary='extra_data_as_string')):
     'Contract Option Version'
 
     __name__ = 'contract.option.version'
@@ -2215,19 +2226,15 @@ class ContractOptionVersion(model.CoogSQL, model.CoogView):
         fields.Char('Contract Status'),
         'on_change_with_contract_status')
     start = fields.Date('Start', readonly=True)
-    extra_data = fields.Dict('extra_data', 'Extra Data',
-        states={
-            'invisible': ~Eval('extra_data'),
-            'readonly': Eval('contract_status') != 'quote',
-            },
-        depends=['extra_data', 'contract_status'])
-    extra_data_as_string = fields.Function(
-        fields.Char('Extra Data'),
-        'on_change_with_extra_data_as_string')
-    extra_data_string = extra_data.translated('extra_data')
     start_date = fields.Function(
         fields.Date('Start Date'),
         'on_change_with_start_date')
+
+    @classmethod
+    def __setup__(cls):
+        super(ContractOptionVersion, cls).__setup__()
+        cls.extra_data.states['readonly'] = Eval('contract_status') != 'quote'
+        cls.extra_data.depends.append('contract_status')
 
     @classmethod
     def __register__(cls, module):
@@ -2267,13 +2274,6 @@ class ContractOptionVersion(model.CoogSQL, model.CoogView):
     def on_change_option(self):
         self.start = self.on_change_with_start_date()
 
-    @fields.depends('extra_data')
-    def on_change_with_extra_data_as_string(self, name=None):
-        if not self.extra_data:
-            return ''
-        return Pool().get('extra_data').get_extra_data_summary([self],
-            'extra_data')[self.id]
-
     @fields.depends('option', 'start')
     def on_change_with_start_date(self, name=None):
         if not self.option:
@@ -2301,8 +2301,11 @@ class ContractOptionVersion(model.CoogSQL, model.CoogView):
         self.option.init_dict_for_rule_engine(cur_dict)
 
 
-class ContractExtraDataRevision(model._RevisionMixin, model.CoogSQL,
-        model.CoogView, export.ExportImportMixin):
+class ContractExtraDataRevision(model.CoogSQL, model.CoogView,
+        with_extra_data(['contract'], field_name='extra_data_values',
+            create_string='extra_data_values_translated',
+            create_summary='extra_data_summary'),
+        model._RevisionMixin, export.ExportImportMixin):
     'Contract Extra Data'
 
     __name__ = 'contract.extra_data'
@@ -2314,19 +2317,15 @@ class ContractExtraDataRevision(model._RevisionMixin, model.CoogSQL,
     contract_status = fields.Function(
         fields.Char('Contract Status'),
         'on_change_with_contract_status')
-    extra_data_values = fields.Dict('extra_data', 'Extra Data',
-        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
-    extra_data_values_translated = extra_data_values.translated(
-        'extra_data_values')
-    extra_data_summary = fields.Function(
-        fields.Text('Extra Data Summary'),
-        'get_extra_data_summary')
 
     @classmethod
     def __setup__(cls):
         super(ContractExtraDataRevision, cls).__setup__()
         cls.date.states = _CONTRACT_STATUS_STATES
         cls.date.depends = _CONTRACT_STATUS_DEPENDS
+        cls.extra_data_values.states['readonly'] = \
+            _CONTRACT_STATUS_STATES['readonly']
+        cls.extra_data_values.depends.append('contract_status')
 
     @staticmethod
     def revision_columns():
@@ -2335,11 +2334,6 @@ class ContractExtraDataRevision(model._RevisionMixin, model.CoogSQL,
     @classmethod
     def get_reverse_field_name(cls):
         return 'extra_data'
-
-    @classmethod
-    def get_extra_data_summary(cls, extra_datas, name):
-        return Pool().get('extra_data').get_extra_data_summary(extra_datas,
-            'extra_data_values')
 
     @classmethod
     def add_func_key(cls, values):

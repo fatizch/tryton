@@ -2,11 +2,13 @@
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
 
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Not, Or
 
 from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
+from trytond.modules.offered.extra_data import with_extra_data
+from trytond.modules.offered.extra_data import with_extra_data_def
 
 __all__ = [
     'Plan',
@@ -15,7 +17,7 @@ __all__ = [
     ]
 
 
-class Plan:
+class Plan(with_extra_data_def('commission-plan-extra_data', 'plan', 'agent')):
     __metaclass__ = PoolMeta
     __name__ = 'commission.plan'
 
@@ -23,9 +25,6 @@ class Plan:
         states={'invisible': Eval('type_') != 'agent'},
         help='key to retrieve the commission plan in rule engine algorithm',
         depends=['type_'])
-    extra_data_def = fields.Many2Many('commission-plan-extra_data',
-        'plan', 'extra_data_def', 'Extra Data',
-        domain=[('kind', '=', 'agent')])
 
     def get_context_formula(self, amount, product, pattern=None):
         context = super(Plan, self).get_context_formula(amount, product,
@@ -41,6 +40,7 @@ class Plan:
 class PlanLines(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
         model.CoogSQL, model.CoogView):
+    __metaclass__ = PoolMeta
     __name__ = 'commission.plan.line'
 
     use_rule_engine = fields.Boolean('Use Rule Engine')
@@ -88,37 +88,9 @@ class PlanLines(
         return self.options_extract
 
 
-class Agent:
+class Agent(with_extra_data(['agent'], schema='plan')):
     __metaclass__ = PoolMeta
     __name__ = 'commission.agent'
-
-    extra_data = fields.Dict('extra_data', 'Extra Data')
-    extra_data_string = extra_data.translated('extra_data')
-    extra_data_summary = fields.Function(
-        fields.Text('Extra Data Summary'),
-        'get_extra_data_summary')
-
-    @fields.depends('plan')
-    def on_change_with_extra_data(self):
-        res = {}
-        if not self.plan:
-            return res
-        self.extra_data = getattr(self, 'extra_data', {}) or {}
-        for extra_data_def in self.plan.extra_data_def:
-            if extra_data_def.name in self.extra_data:
-                res[extra_data_def.name] = self.extra_data[extra_data_def.name]
-            else:
-                res[extra_data_def.name] = extra_data_def.get_default_value(
-                    None)
-        return res
-
-    def get_all_extra_data(self, at_date):
-        return self.extra_data if getattr(self, 'extra_data', None) else {}
-
-    @classmethod
-    def get_extra_data_summary(cls, agents, name):
-        return Pool().get('extra_data').get_extra_data_summary(agents,
-            'extra_data')
 
     @classmethod
     def format_hash(cls, hash_dict):

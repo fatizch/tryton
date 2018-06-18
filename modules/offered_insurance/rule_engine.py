@@ -115,27 +115,18 @@ class RuleEngine:
         return res
 
     @staticmethod
-    def get_external_extra_data_def(elem_id, args):
-        pool = Pool()
-        OfferedSet = pool.get('rule_engine.runtime')
-        ExtraData = pool.get('extra_data')
-        extra_data = ExtraData(elem_id)
-        if extra_data.name in args.get('extra_data', {}):
-            # If extra_data are set in args, it means we can't find the
-            # value from the key as several objects could have the same key
-            # so the value is set directly in the args
-            return args['extra_data'][extra_data.name]
-        from_object = OfferedSet.get_lowest_level_object(args)
-        res = ExtraData.get_extra_data_value(from_object,
-            extra_data.name, args['date'])
-        return res
+    def get_external_extra_data_def(key, args):
+        ExtraData = Pool().get('extra_data')
+        if key in args.get('extra_data', {}):
+            return args['extra_data'][key]
+        return ExtraData._extra_data_value_for_rule(key, args)
 
     def as_context(self, elem, kind, base_context):
         super(RuleEngine, self).as_context(elem, kind, base_context)
         if kind != 'compl':
             return
         technical_name = self.get_translated_name(elem, kind)
-        base_context[technical_name] = ('compl', elem.id)
+        base_context[technical_name] = ('compl', elem.name)
 
     def deflat_element(self, element):
         if element[0] == 'compl':

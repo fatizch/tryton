@@ -15,6 +15,8 @@ from trytond.modules.coog_core import model, utils, fields
 from trytond.modules.coog_core import coog_string
 from trytond.modules.currency_cog import ModelCurrency
 
+from .extra_data import with_extra_data_def, with_extra_data
+
 __all__ = [
     'Product',
     'OptionDescription',
@@ -38,7 +40,11 @@ SUBSCRIPTION_BEHAVIOUR = [
     ]
 
 
-class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
+class Product(model.CoogSQL, model.CoogView,
+        with_extra_data_def('offered.product-extra_data', 'product',
+            'contract'),
+        with_extra_data(['product'], field_string='Offered Kind'),
+        model.TaggedMixin):
     'Product'
 
     __name__ = 'offered.product'
@@ -51,10 +57,6 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     description = fields.Text('Description', translate=True)
-    extra_data = fields.Dict('extra_data', 'Offered Kind',
-        context={'extra_data_kind': 'product'},
-        domain=[('kind', '=', 'product')])
-    extra_data_string = extra_data.translated('extra_data')
     coverages = fields.Many2Many('offered.product-option.description',
         'product', 'coverage', 'Option Descriptions', domain=[
             ('currency', '=', Eval('currency')),
@@ -76,9 +78,6 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
         'Contract Number Generator', context={'code': 'offered.product'},
         ondelete='RESTRICT', required=True,
         domain=[('code', '=', 'contract')])
-    extra_data_def = fields.Many2Many('offered.product-extra_data',
-        'product', 'extra_data_def', 'Extra Data',
-        domain=[('kind', 'in', ['contract', 'option'])])
     subscriber_kind = fields.Selection(SUBSCRIBER_KIND, 'Subscriber Kind')
     report_templates = fields.Many2Many('report.template-offered.product',
         'product', 'report_template', 'Report Templates')
@@ -164,13 +163,6 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def default_company(cls):
         return Transaction().context.get('company', None)
 
-    @staticmethod
-    def default_extra_data():
-        res = {}
-        for e_d in Pool().get('extra_data').search([('kind', '=', 'product')]):
-            res[e_d.name] = e_d.get_default_value(None)
-        return res
-
     def get_valid_coverages(self):
         for coverage in self.coverages:
             if coverage.is_valid():
@@ -179,28 +171,6 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def init_dict_for_rule_engine(self, args):
         if 'product' not in args:
             args['product'] = self
-
-    def get_all_extra_data(self, at_date):
-        return dict(getattr(self, 'extra_data', {}))
-
-    def get_extra_data_def(self, type_, existing_data, condition_date,
-            item_desc=None, coverage=None):
-        ExtraData = Pool().get('extra_data')
-        all_schemas, possible_schemas = ExtraData.get_extra_data_definitions(
-            self, 'extra_data_def', type_, condition_date)
-        if item_desc:
-            tmp_all, tmp_possible = ExtraData.get_extra_data_definitions(
-                item_desc, 'extra_data_def', type_, condition_date)
-            all_schemas |= tmp_all
-            possible_schemas |= tmp_possible
-        if coverage:
-            tmp_all, tmp_possible = ExtraData.get_extra_data_definitions(
-                coverage, 'extra_data_def', type_, condition_date)
-            all_schemas |= tmp_all
-            possible_schemas |= tmp_possible
-        result = ExtraData.calculate_value_set(possible_schemas, all_schemas,
-            existing_data)
-        return result
 
     def new_contract_number(self):
         return (self.contract_generator.get_id(self.contract_generator.id)
@@ -247,7 +217,11 @@ class Product(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return self.currency.symbol if self.currency else ''
 
 
-class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
+class OptionDescription(model.CoogSQL, model.CoogView,
+        with_extra_data_def('offered.option.description-extra_data',
+            'coverage', 'option'),
+        with_extra_data(['product'], field_string='Offered Kind'),
+        model.TaggedMixin):
     'OptionDescription'
 
     __name__ = 'offered.option.description'
@@ -260,10 +234,6 @@ class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     description = fields.Text('Description', translate=True)
-    extra_data = fields.Dict('extra_data', 'Offered Kind',
-        context={'extra_data_kind': 'product'},
-        domain=[('kind', '=', 'product')])
-    extra_data_string = extra_data.translated('extra_data')
     currency = fields.Many2One('currency.currency', 'Currency', required=True,
         ondelete='RESTRICT')
     currency_digits = fields.Function(
@@ -274,10 +244,6 @@ class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
         'on_change_with_currency_symbol')
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
         'Subscription Behaviour', sort=False)
-    extra_data_def = fields.Many2Many(
-        'offered.option.description-extra_data',
-        'coverage', 'extra_data_def', 'Extra Data',
-        domain=[('kind', 'in', ['contract', 'option'])])
     options_required = fields.Many2Many('offered.option.description.required',
         'from_option_desc', 'to_option_desc', 'Options Required', domain=[
             ('id', '!=', Eval('id')),
@@ -385,13 +351,6 @@ class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def default_company(cls):
         return Transaction().context.get('company', None)
 
-    @staticmethod
-    def default_extra_data():
-        res = {}
-        for e_d in Pool().get('extra_data').search([('kind', '=', 'product')]):
-            res[e_d.name] = e_d.get_default_value(None)
-        return res
-
     @classmethod
     def get_possible_coverages_clause(cls, instance, at_date):
         date_clause = [['OR',
@@ -406,9 +365,6 @@ class OptionDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
     def get_currency(self):
         return self.currency
-
-    def get_all_extra_data(self, at_date):
-        return dict(getattr(self, 'extra_data', {}))
 
     def get_publishing_values(self):
         result = super(OptionDescription, self).get_publishing_values()

@@ -5,6 +5,7 @@ from trytond.pyson import Eval, Len, Bool
 
 from trytond.modules.coog_core import fields, model
 from trytond.modules.rule_engine import get_rule_mixin
+from trytond.modules.offered.extra_data import with_extra_data_def
 from trytond.modules.claim_indemnification.benefit import ANNUITY_FREQUENCIES
 
 
@@ -69,7 +70,8 @@ class OptionVersion:
 class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         get_rule_mixin('indemnification_rule', 'Indemnification Rule'),
         get_rule_mixin('revaluation_rule', 'Revaluation Rule'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView,
+        with_extra_data_def(None, None, 'benefit', 'getter_rules_extra_data')):
     'Option Benefit'
 
     __name__ = 'contract.option.benefit'
@@ -146,6 +148,14 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         if self.annuity_frequency_forced:
             self.annuity_frequency = \
                 self.benefit.benefit_rules[0].annuity_frequency
+
+    def getter_rules_extra_data(self, name):
+        used = []
+        for rule_name in self.rule_fields():
+            if getattr(self, rule_name):
+                used += [x.id for x in getattr(self, rule_name).extra_data_used
+                    if x.kind == 'benefit']
+        return used
 
     def get_annuity_frequency_forced(self, name):
         if not self.benefit:

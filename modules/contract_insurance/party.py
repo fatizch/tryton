@@ -4,6 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 
 from trytond.modules.coog_core import fields, model
+from trytond.modules.offered.extra_data import with_extra_data
 
 
 _all_ = [
@@ -12,13 +13,10 @@ _all_ = [
     ]
 
 
-class Party:
+class Party(with_extra_data(['covered_element'])):
     __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
-    extra_data = fields.Dict('extra_data', 'Extra Data',
-        domain=[('kind', '=', 'covered_element')])
-    extra_data_string = extra_data.translated('extra_data')
     covered_elements = fields.One2Many('contract.covered_element', 'party',
         'Covered Elements')
 
@@ -49,6 +47,10 @@ class Party:
         cls.check_extra_data(parties)
 
     @classmethod
+    def default_extra_data(cls):
+        return {}
+
+    @classmethod
     def check_extra_data(cls, parties):
         ExtraData = Pool().get('extra_data')
         with model.error_manager():
@@ -65,10 +67,6 @@ class Party:
                 ['OR',
                     ('subscriber', '=', self),
                     ('covered_elements.party', '=', self)]])
-
-    @staticmethod
-    def default_extra_data():
-        return {}
 
     @classmethod
     def _export_skips(cls):

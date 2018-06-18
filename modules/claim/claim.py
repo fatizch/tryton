@@ -8,10 +8,12 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.model import Unique
 from trytond.cache import Cache
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import model, utils, fields, export, coog_string
 from trytond.modules.report_engine import Printable
 from trytond.modules.currency_cog import ModelCurrency
+from trytond.modules.offered.extra_data import with_extra_data
 
 
 __all__ = [
@@ -381,7 +383,8 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
         return ' - '.join([loss.rec_name for loss in self.losses])
 
 
-class Loss(model.CoogSQL, model.CoogView):
+class Loss(model.CoogSQL, model.CoogView,
+        with_extra_data(['loss'], schema='loss_desc')):
     'Loss'
 
     __name__ = 'claim.loss'
@@ -421,9 +424,6 @@ class Loss(model.CoogSQL, model.CoogView):
     multi_level_view = fields.One2Many('claim.service',
         'loss', 'Claim Services', target_not_required=True,
         delete_missing=True)
-    extra_data = fields.Dict('extra_data', 'Extra Data', states={
-            'invisible': ~Eval('extra_data'),
-            }, depends=['extra_data'])
     start_date = fields.Date('Loss Date',
         help='Date of the event, or start date of a period',
         states={'readonly': CLAIM_READONLY, }, depends=['claim_status'])
@@ -530,13 +530,6 @@ class Loss(model.CoogSQL, model.CoogView):
                 self):
             res.extend(benefit.loss_descs)
         return [x.id for x in set(res)]
-
-    @fields.depends('loss_desc')
-    def on_change_with_extra_data(self):
-        res = {}
-        if self.loss_desc:
-            res = utils.init_extra_data(self.loss_desc.extra_data_def)
-        return res
 
     def get_func_key(self, name):
         if self.loss_desc:
@@ -654,8 +647,7 @@ class Loss(model.CoogSQL, model.CoogView):
             LossDesc = pool.get('benefit.loss.description')
             self.loss_desc, = LossDesc.search([('code', '=', loss_desc_code)])
             self.event_desc = self.loss_desc.event_descs[0]
-            self.extra_data = utils.init_extra_data(
-                self.loss_desc.extra_data_def)
+            self.extra_data = self.loss_desc.refresh_extra_data({})
         else:
             self.loss_desc = None
         if not kwargs:
@@ -673,9 +665,6 @@ class Loss(model.CoogSQL, model.CoogView):
     def loss(self):
         if self.loss_desc:
             return getattr(self, self.loss_desc.loss_kind + '_loss')
-
-    def get_all_extra_data(self, at_date):
-        return self.extra_data or {}
 
     def get_date(self):
         return self.start_date if hasattr(self, 'start_date') else None
@@ -777,7 +766,12 @@ class Loss(model.CoogSQL, model.CoogView):
             Pool().get('event').notify_events(to_write, 'activate_loss')
 
 
-class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
+class ClaimService(model.CoogSQL, model.CoogView,
+        with_extra_data(['service'], schema='benefit',
+            field_name='current_extra_data',
+            getter_name='getter_current_extra_data',
+            setter_name='setter_void'),
+        ModelCurrency):
     'Claim Service'
     __name__ = 'claim.service'
 
@@ -826,9 +820,14 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
         super(ClaimService, cls).__post_setup__()
         cls.set_fields_readonly_condition(Eval('claim_status') == 'closed',
             ['claim_status'], cls._get_skip_set_readonly_fields())
+        Pool().get('extra_data')._register_extra_data_provider(cls,
+            'find_extra_data_value', ['benefit'])
 
     def get_theoretical_covered_element(self, name):
         return None
+
+    def getter_current_extra_data(self, name):
+        return self.get_service_extra_data(utils.today())
 
     @classmethod
     def _get_skip_set_readonly_fields(cls):
@@ -870,7 +869,8 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
         else:
             self.extra_datas = self.extra_datas
 
-        data_values = self.benefit.get_extra_data_def(self)
+        data_values = self.benefit.refresh_extra_data(
+            self.extra_datas[-1].extra_data_values)
 
         self.extra_datas[-1].extra_data_values = data_values
 
@@ -963,17 +963,6 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
         extra_data = utils.get_value_at_date(self.extra_datas, at_date)
         return extra_data.extra_data_values if extra_data else {}
 
-    def get_all_extra_data(self, at_date):
-        res = {}
-        res.update(self.get_service_extra_data(at_date))
-        res.update(self.loss.get_all_extra_data(at_date))
-        if self.option:
-            res.update(self.option.get_all_extra_data(at_date))
-        elif self.contract:
-            res.update(self.contract.get_all_extra_data(at_date))
-        res.update(self.benefit.get_all_extra_data(at_date))
-        return res
-
     def get_beneficiaries_data(self, at_date):
         # Returns a list of beneficiaries with their associated share
         if self.benefit.beneficiary_kind == 'other':
@@ -984,7 +973,9 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
     def update_extra_data(self, at_date, base_values):
         ExtraData = Pool().get('claim.service.extra_data')
         extra_data = utils.get_value_at_date(self.extra_datas, at_date)
-        new_data = self.benefit.get_extra_data_def(self)
+        with ServerContext().set_context(service=self):
+            new_data = self.benefit.refresh_extra_data(
+                extra_data.extra_data_values)
 
         # Only use matching extra_data
         values = {x: base_values.get(x, None)
@@ -1007,6 +998,11 @@ class ClaimService(model.CoogView, model.CoogSQL, ModelCurrency):
 
     def get_object_for_contact(self):
         return None
+
+    def find_extra_data_value(self, name, **kwargs):
+        extra_data = utils.get_value_at_date(self.extra_datas, kwargs.get(
+                'date', utils.today()))
+        return extra_data.find_extra_data_values_value(name, **kwargs)
 
 
 class ClaimSubStatus(model.CoogSQL, model.CoogView):
@@ -1073,8 +1069,12 @@ class ClaimSubStatus(model.CoogSQL, model.CoogView):
         return instances[0]
 
 
-class ClaimServiceExtraDataRevision(model._RevisionMixin, model.CoogSQL,
-        model.CoogView, export.ExportImportMixin):
+class ClaimServiceExtraDataRevision(model.CoogSQL, model.CoogView,
+        with_extra_data(['service'], schema='benefit',
+            field_name='extra_data_values',
+            create_string='extra_data_values_translated',
+            create_summary='extra_data_summary'),
+        model._RevisionMixin, export.ExportImportMixin):
     'Claim Service Extra Data'
 
     __name__ = 'claim.service.extra_data'
@@ -1083,14 +1083,11 @@ class ClaimServiceExtraDataRevision(model._RevisionMixin, model.CoogSQL,
 
     claim_service = fields.Many2One('claim.service', 'Claim Service',
         required=True, select=True, ondelete='CASCADE')
-    extra_data_values = fields.Dict('extra_data', 'Extra Data')
-    extra_data_values_translated = extra_data_values.translated(
-        'extra_data_values')
-    extra_data_summary = fields.Function(
-        fields.Text('Extra Data Summary', depends=['extra_data_values']),
-        'get_extra_data_summary')
     claim_status = fields.Function(fields.Char('Claim Status'),
         'get_claim_status')
+    benefit = fields.Function(
+        fields.Many2One('benefit', 'Benefit'),
+        'getter_benefit')
 
     @classmethod
     def __post_setup__(cls):
@@ -1111,16 +1108,21 @@ class ClaimServiceExtraDataRevision(model._RevisionMixin, model.CoogSQL,
         return 'extra_data'
 
     @classmethod
-    def get_extra_data_summary(cls, extra_datas, name):
-        return Pool().get('extra_data').get_extra_data_summary(extra_datas,
-            'extra_data_values')
-
-    @classmethod
     def add_func_key(cls, values):
         if 'date' in values:
             values['_func_key'] = values['date']
         else:
             values['_func_key'] = None
+
+    @fields.depends('claim_service')
+    def on_change_claim_service(self):
+        if self.claim_service:
+            self.benefit = self.claim_service.benefit
+        else:
+            self.benefit = None
+
+    def getter_benefit(self, name):
+        return self.service.benefit.id
 
     def get_claim_status(self, name):
         if self.claim_service and self.claim_service.claim:

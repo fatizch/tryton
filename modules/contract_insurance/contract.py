@@ -21,6 +21,7 @@ from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.contract import _CONTRACT_STATUS_STATES
 from trytond.modules.contract import _CONTRACT_STATUS_DEPENDS
 from trytond.modules.report_engine import Printable
+from trytond.modules.offered.extra_data import with_extra_data
 
 
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
@@ -432,9 +433,6 @@ class ContractOption(Printable):
     exclusion_list = fields.One2Many('contract.option-exclusion.kind',
         'option', 'Exclusion List', delete_missing=True,
         order=[('exclusion', 'ASC')])
-    extra_data_summary = fields.Function(
-        fields.Text('Extra Data Summary'),
-        'get_extra_data_summary')
     extra_premiums = fields.One2Many('contract.option.extra_premium',
         'option', 'Extra Premiums',
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS,
@@ -496,11 +494,6 @@ class ContractOption(Printable):
 
     def get_full_name(self, name):
         return super(ContractOption, self).get_full_name(name)
-
-    @classmethod
-    def get_extra_data_summary(cls, extra_datas, name):
-        return Pool().get('extra_data').get_extra_data_summary(extra_datas,
-            'current_extra_data')
 
     def get_initial_start_date(self, name):
         if (not self.manual_start_date and self.covered_element
@@ -647,10 +640,6 @@ class ContractOption(Printable):
     def propagate_exclusions(cls, options):
         pass
 
-    def get_extra_data_def(self):
-        return self.coverage.get_extra_data_def(
-            ['elem'])
-
     @classmethod
     def new_option_from_coverage(cls, coverage, product,
             start_date, end_date=None, item_desc=None):
@@ -711,20 +700,6 @@ class ContractOption(Printable):
         for extra_prem in self.extra_premiums:
             extra_prem.notify_contract_start_date_change(new_start_date)
         self.extra_premiums = self.extra_premiums
-
-    def recalculate_extra_data(self, extra_data):
-        if not self.item_desc or not self.product or not self.coverage:
-            return super(ContractOption, self).recalculate_extra_data(
-                extra_data)
-        return self.product.get_extra_data_def('option', extra_data.copy(),
-            self.appliable_conditions_date, coverage=self.coverage,
-            item_desc=self.item_desc)
-
-    def get_all_extra_data(self, at_date):
-        res = super(ContractOption, self).get_all_extra_data(at_date)
-        if self.covered_element:
-            res.update(self.covered_element.get_all_extra_data(at_date))
-        return res
 
     def get_contact(self):
         return self.covered_element.party or self.main_contract.get_contact()
@@ -794,8 +769,11 @@ class ContractOptionVersion:
             option_h.drop_column('extra_data')
 
 
-class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
-        ModelCurrency):
+class CoveredElement(model.CoogSQL, model.CoogView,
+        with_extra_data(['covered_element'], schema='item_desc',
+            field_name='current_extra_data', field_string='Current Extra Data',
+            getter_name='get_current_version', setter_name='setter_void'),
+        model.ExpandTreeMixin, ModelCurrency):
     'Covered Element'
     '''
         Covered elements represents anything which is covered by at least one
@@ -828,14 +806,6 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             'invisible': ~IS_PARTY,
             'readonly': IS_READ_ONLY,
             }, depends=['party', 'contract_status', 'item_kind'])
-    current_extra_data = fields.Function(
-        fields.Dict('extra_data', 'Current Extra Data', states={
-                'invisible': ~Eval('current_extra_data'),
-                'readonly': IS_READ_ONLY,
-                }, depends=['current_extra_data', 'contract_status']),
-        'get_current_version', setter='setter_void')
-    current_extra_data_string = current_extra_data.translated(
-        'current_extra_data')
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
         ondelete='RESTRICT', required=True, states={
             'readonly': COVERED_READ_ONLY},
@@ -952,6 +922,17 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         cls._sql_constraints += [
             ('party_unique', Unique(t, t.party, t.contract), 'The party '
                 'cannot be added more than once on the same contract')]
+        cls.current_extra_data.states['readonly'] = COVERED_READ_ONLY
+        cls.current_extra_data.depends += ['contract_status', 'versions',
+            'parent']
+
+    @classmethod
+    def __post_setup__(cls):
+        super(CoveredElement, cls).__post_setup__()
+        Pool().get('extra_data')._register_extra_data_provider(cls,
+            'find_extra_data_value', ['covered_element'])
+        Pool().get('extra_data')._register_extra_data_provider(cls,
+            'find_package_extra_data_value', ['package'])
 
     @classmethod
     def search_rec_name(cls, name, clause):
@@ -1292,9 +1273,8 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
         for k, v in self.party_extra_data.iteritems():
             if k not in version.extra_data:
                 version.extra_data[k] = v
-        version.extra_data = self.product.get_extra_data_def('covered_element',
-            version.extra_data, self.main_contract.start_date,
-            item_desc=self.item_desc)
+        version.extra_data = self.item_desc.refresh_extra_data(
+            version.extra_data)
         if self.party:
             self.party_extra_data = {k: v
                 for k, v in version.extra_data.iteritems()}
@@ -1334,14 +1314,6 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             if option.status == 'active':
                 return True
         return False
-
-    def get_extra_data_def(self, at_date=None):
-        res = []
-        if (self.item_desc and self.item_desc.kind not in
-                ['party', 'person', 'company']):
-            res.extend(self.item_desc.extra_data_def)
-        res.extend(self.product.get_extra_data_def(['elem'], at_date=at_date))
-        return res
 
     def get_party_extra_data_def(self):
         if (self.item_desc and self.item_desc.kind in
@@ -1472,15 +1444,15 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             if sub_element.match_key(from_name, party):
                 return sub_element
 
-    def get_all_extra_data(self, at_date):
-        current_version = self.get_version_at_date(at_date)
-        res = current_version.extra_data if current_version else {}
-        if self.contract:
-            res.update(self.contract.get_all_extra_data(at_date))
-        package = self.get_package(at_date)
+    def find_extra_data_value(self, name, **kwargs):
+        version = self.get_version_at_date(kwargs.get('date', utils.today()))
+        return version.find_extra_data_value(name, **kwargs)
+
+    def find_package_extra_data_value(self, name, **kwargs):
+        package = self.get_package(kwargs.get('date', utils.today()))
         if package:
-            res.update(package.get_all_extra_data(at_date))
-        return res
+            return package.find_extra_data_value(name, **kwargs)
+        raise KeyError
 
     def init_dict_for_rule_engine(self, args):
         args = args if args else {}
@@ -1526,7 +1498,9 @@ class CoveredElement(model.CoogSQL, model.CoogView, model.ExpandTreeMixin,
             self.versions = to_date_versions
 
 
-class CoveredElementVersion(model.CoogSQL, model.CoogView):
+class CoveredElementVersion(model.CoogSQL, model.CoogView,
+        with_extra_data(['covered_element'],
+            create_summary='extra_data_as_string')):
     'Contract Covered Element Version'
 
     __name__ = 'contract.covered_element.version'
@@ -1541,16 +1515,13 @@ class CoveredElementVersion(model.CoogSQL, model.CoogView):
         fields.Many2One('contract.covered_element', 'Covered Parent'),
         'on_change_with_covered_parent')
     start = fields.Date('Start', readonly=True)
-    extra_data = fields.Dict('extra_data', 'Extra Data',
-        states={
-            'invisible': ~Eval('extra_data'),
-            'readonly': Eval('contract_status') != 'quote',
-            },
-        depends=['extra_data', 'contract_status'])
-    extra_data_as_string = fields.Function(
-        fields.Text('Extra Data'),
-        'on_change_with_extra_data_as_string')
-    extra_data_string = extra_data.translated('extra_data')
+
+    @classmethod
+    def __setup__(cls):
+        super(CoveredElementVersion, cls).__setup__()
+        cls.extra_data.states['readonly'] = (Eval('contract_status') != 'quote'
+            ) & ~Eval('covered_parent')
+        cls.extra_data.depends += ['contract_status', 'covered_parent']
 
     @classmethod
     def __register__(cls, module):
@@ -1587,13 +1558,6 @@ class CoveredElementVersion(model.CoogSQL, model.CoogView):
                 version_h.table_name, cursor.fetchone()[0] or 0 + 1)
             covered_h = TableHandler(CoveredElement, module)
             covered_h.drop_column('extra_data')
-
-    @fields.depends('extra_data')
-    def on_change_with_extra_data_as_string(self, name=None):
-        if not self.extra_data:
-            return ''
-        return Pool().get('extra_data').get_extra_data_summary([self],
-            'extra_data')[self.id]
 
     @fields.depends('covered_element')
     def on_change_covered_element(self):

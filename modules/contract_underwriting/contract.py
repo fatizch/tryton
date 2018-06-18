@@ -6,7 +6,8 @@ from trytond.pyson import Eval, Bool, If
 from trytond.model import dualmethod
 from trytond.rpc import RPC
 
-from trytond.modules.coog_core import model, fields, utils
+from trytond.modules.coog_core import fields, utils, model
+from trytond.modules.offered.extra_data import with_extra_data
 from trytond.modules.contract import _STATES as CONTRACT_STATES
 
 __all__ = [
@@ -16,7 +17,8 @@ __all__ = [
     ]
 
 
-class ContractUnderwriting(model.CoogSQL, model.CoogView):
+class ContractUnderwriting(model.CoogSQL, model.CoogView,
+        with_extra_data(['contract_underwriting'])):
     'Contract Underwriting'
 
     __name__ = 'contract.underwriting'
@@ -66,18 +68,13 @@ class ContractUnderwriting(model.CoogSQL, model.CoogView):
     hide_underwriting_options = fields.Function(
         fields.Boolean('Hide Underwriting Options'),
         'on_change_with_hide_underwriting_options')
-    extra_data = fields.Dict('extra_data', 'Extra Data',
-        states={'invisible': ~Eval('decision_with_extra_data')},
-        domain=[('kind', '=', 'contract_underwriting')],
-        depends=['decision_with_extra_data'])
-    extra_data_summary = fields.Function(
-        fields.Text('Extra Data Summary'),
-        'get_extra_data_summary')
     underwriting_submission_date = fields.Date('Underwriting Submission Date')
 
     @classmethod
     def __setup__(cls):
         super(ContractUnderwriting, cls).__setup__()
+        cls.extra_data.states['invisible'] = ~Eval('decision_with_extra_data')
+        cls.extra_data.depends.append('decision_with_extra_data')
         cls._error_messages.update({
                 'underwriting_still_in_progress': 'The underwriting '
                 'process is still in progress',
@@ -87,6 +84,12 @@ class ContractUnderwriting(model.CoogSQL, model.CoogView):
                 'the insurer',
                 'postponed': 'The underwriting decision is postponed',
                 })
+
+    @classmethod
+    def __post_setup__(cls):
+        super(ContractUnderwriting, cls).__post_setup__()
+        Pool().get('extra_data')._register_extra_data_provider(cls,
+            'find_extra_data_value', ['contract_underwriting'])
 
     def get_rec_name(self, name):
         if self.decision:
@@ -153,11 +156,6 @@ class ContractUnderwriting(model.CoogSQL, model.CoogView):
                     uw_option.decision.contract_decisions)
 
         return list(decisions) if decisions is not None else []
-
-    @classmethod
-    def get_extra_data_summary(cls, extra_datas, name):
-        return Pool().get('extra_data').get_extra_data_summary(extra_datas,
-            'extra_data')
 
     @dualmethod
     def update_extra_data(cls, instances):
@@ -254,16 +252,12 @@ class ContractUnderwriting(model.CoogSQL, model.CoogView):
         args['underwriting'] = self
 
 
-class ContractUnderwritingOption(model.CoogSQL, model.CoogView):
+class ContractUnderwritingOption(model.CoogSQL, model.CoogView,
+        with_extra_data(['option_underwriting'])):
     'Contract Option Underwriting'
 
     __name__ = 'contract.underwriting.option'
 
-    extra_data = fields.Dict('extra_data', 'Extra Data',
-        domain=[('kind', '=', 'option_underwriting')])
-    extra_data_summary = fields.Function(
-        fields.Text('Extra Data Summary'),
-        'on_change_with_extra_data_summary')
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
         required=True, domain=[('parent_contract', '=', Eval('contract'))],
         depends=['contract', 'underwriting'], readonly=True)
@@ -289,6 +283,12 @@ class ContractUnderwritingOption(model.CoogSQL, model.CoogView):
             'get_covered')
 
     @classmethod
+    def __post_setup__(cls):
+        super(ContractUnderwritingOption, cls).__post_setup__()
+        Pool().get('extra_data')._register_extra_data_provider(cls,
+            'extra_data', ['option_underwriting'])
+
+    @classmethod
     def _export_light(cls):
         return super(ContractUnderwritingOption, cls)._export_light() \
             | {'option'}
@@ -297,13 +297,6 @@ class ContractUnderwritingOption(model.CoogSQL, model.CoogView):
     def on_change_with_contract(self, name=None):
         if self.underwriting and self.underwriting.contract:
             return self.underwriting.contract.id
-
-    @fields.depends('extra_data')
-    def on_change_with_extra_data_summary(self, name=None):
-        if not self.extra_data:
-            return ''
-        return Pool().get('extra_data').get_extra_data_summary([self],
-            'extra_data').values()[0]
 
     @fields.depends('option')
     def on_change_with_possible_decisions(self, name=None):

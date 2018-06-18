@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool, Or, In, If
 
 from trytond.modules.coog_core import fields, model
@@ -68,15 +68,6 @@ class Benefit:
         if self.beneficiary_kind != 'manual_list':
             return []
         return [x.id for x in self.beneficiary_extra_data_def]
-
-    def get_beneficiary_extra_data_def(self, beneficiary):
-        ExtraData = Pool().get('extra_data')
-        existing_data = beneficiary.extra_data_values
-        condition_date = beneficiary.service.loss.get_date()
-        all_schemas, possible_schemas = ExtraData.get_extra_data_definitions(
-            self, 'beneficiary_extra_data_def', 'beneficiary', condition_date)
-        return ExtraData.calculate_value_set(possible_schemas, all_schemas,
-            existing_data)
 
 
 class BenefitBeneficiaryDocument(model.CoogSQL):

@@ -18,6 +18,7 @@ from trytond.tools import grouped_slice
 from trytond.modules.coog_core import utils, coog_date, fields, model
 from trytond.modules.coog_core import coog_string
 from trytond.modules.currency_cog import ModelCurrency
+from trytond.modules.offered.extra_data import with_extra_data
 
 __all__ = [
     'Loan',
@@ -47,7 +48,7 @@ LOAN_FIELDS_FOR_INCREMENTS = ['kind', 'deferral', 'duration', 'duration_unit',
     'first_payment_date', 'funds_release_date']
 
 
-class Loan(Workflow, model.CoogSQL, model.CoogView):
+class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
     'Loan'
 
     __name__ = 'loan'
@@ -182,10 +183,6 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
             ('calculated', 'Calculated'),
             ], 'State', readonly=True)
     state_string = state.translated('state')
-    extra_data = fields.Dict('extra_data', 'Extra Data',
-        states={'readonly': Eval('state') != 'draft'}, depends=['state'],
-        domain=[('kind', '=', 'loan')])
-    extra_data_string = extra_data.translated('extra_data')
     contracts = fields.Many2Many('contract-loan', 'loan', 'contract',
         'Contracts')
     display_warning = fields.Function(
@@ -197,6 +194,8 @@ class Loan(Workflow, model.CoogSQL, model.CoogView):
     @classmethod
     def __setup__(cls):
         super(Loan, cls).__setup__()
+        cls.extra_data.states['readonly'] = Eval('state') != 'draft'
+        cls.extra_data.depends.append('state')
         cls.__rpc__.update({
                 'ws_calculate': RPC(instantiate=0),
                 })

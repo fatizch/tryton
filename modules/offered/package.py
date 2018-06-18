@@ -3,6 +3,7 @@
 from trytond.model import Unique
 
 from trytond.modules.coog_core import model, fields, coog_string
+from trytond.modules.offered.extra_data import with_extra_data
 
 __all__ = [
     'Package',
@@ -11,7 +12,7 @@ __all__ = [
     ]
 
 
-class Package(model.CoogSQL, model.CoogView):
+class Package(model.CoogSQL, model.CoogView, with_extra_data(['package'])):
     'Package'
 
     __name__ = 'offered.package'
@@ -21,9 +22,6 @@ class Package(model.CoogSQL, model.CoogView):
     name = fields.Char('Name', required=True, translate=True)
     options = fields.Many2Many('offered.package-option.description',
         'package', 'option', 'Options')
-    extra_data = fields.Dict('extra_data', 'Extra Data',
-        domain=[('kind', '=', 'package')])
-    extra_data_string = extra_data.translated('extra_data')
 
     @classmethod
     def __setup__(cls):
@@ -42,9 +40,6 @@ class Package(model.CoogSQL, model.CoogView):
         if self.code:
             return self.code
         return coog_string.slugify(self.name)
-
-    def get_all_extra_data(self, at_date):
-        return dict(getattr(self, 'extra_data', {}))
 
 
 class PackageOptionDescriptionRelation(model.CoogSQL):

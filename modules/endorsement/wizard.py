@@ -1071,8 +1071,7 @@ class ManageOptions(EndorsementWizardStepMixin):
         return new_option
 
     def get_default_extra_data(self, coverage):
-        return self.contract.product.get_extra_data_def('option', {},
-            self.effective_date, coverage=coverage)
+        return coverage.refresh_extra_data({})
 
 
 class OptionDisplayer(model.CoogView):
@@ -1204,10 +1203,9 @@ class OptionDisplayer(model.CoogView):
             self.icon = 'shuffle'
 
     def refresh_extra_data(self):
-        if not self.product:
+        if not self.coverage:
             return
-        self.extra_data = self.product.get_extra_data_def('option',
-            self.extra_data, self.effective_date, coverage=self.coverage)
+        self.extra_data = self.coverage.refresh_extra_data(self.extra_data)
 
     def update_extra_data_string(self):
         self.extra_data_as_string = Pool().get(

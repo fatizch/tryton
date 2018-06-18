@@ -9,6 +9,7 @@ from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Equal, Bool, Len, If, Or
+from trytond.server_context import ServerContext
 
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 from trytond.modules.coog_core import fields, model, utils, wizard_context
@@ -525,6 +526,14 @@ class IndemnificationDefinition(model.CoogView):
                 self.beneficiary_share = share
                 return
 
+    @fields.depends('service', 'extra_data')
+    def on_change_extra_data(self):
+        if not self.service:
+            return
+        with ServerContext().set_context(service=self.service):
+            self.extra_data = self.service.benefit.refresh_extra_data(
+                self.extra_data)
+
     def get_possible_products(self):
         return self.service.get_possible_products() if self.service else []
 
@@ -792,7 +801,8 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
         extra_data = utils.get_value_at_date(service.extra_datas,
             start_date).extra_data_values
         # Update initial extra_data with the current version if necessary
-        new_data = service.benefit.get_extra_data_def(service)
+        with ServerContext().set_context(service=service):
+            new_data = service.benefit.refresh_extra_data(extra_data)
         for k, v in new_data.items():
             if k not in extra_data:
                 extra_data[k] = v

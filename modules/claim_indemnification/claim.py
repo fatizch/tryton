@@ -1282,10 +1282,6 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         else:
             return 'instruction'
 
-    def get_all_extra_data(self, at_date):
-        if self.service:
-            return self.service.get_all_extra_data(at_date)
-
     @classmethod
     @ModelView.button
     def calculate(cls, indemnifications):

@@ -4,6 +4,7 @@ import datetime
 
 from trytond.pool import PoolMeta
 from trytond.pyson import And, Eval, Or, Bool
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields, model
 from trytond.modules.claim_indemnification \
@@ -27,19 +28,15 @@ class Benefit:
         'product', 'Company Products', help='Products available when '
         'paying a company')
 
-    def required_extra_data(self, service, date):
-        if self.benefit_rules and service:
-            return self.benefit_rules[0].required_extra_data(service, date)
-        return []
-
-    def get_extra_data_def(self, service):
-        values = super(Benefit, self).get_extra_data_def(service)
-        if not self.benefit_rules or not service:
-            return values
-        required = [e.name
-            for e in self.required_extra_data(service,
-                service.loss.get_date())]
-        return {k: v for k, v in values.iteritems() if k in required}
+    def _extra_data_structure(self):
+        base = super(Benefit, self)._extra_data_structure()
+        service = ServerContext().get('service', None)
+        if not service or not service.benefit.is_group:
+            return base
+        version = service.option.get_version_at_date(service.loss.get_date())
+        option_benefit = version.get_benefit(service.benefit)
+        base.update(option_benefit._extra_data_structure())
+        return base
 
     def get_benefit_accounts(self):
         accounts = super(Benefit, self).get_benefit_accounts()
@@ -222,25 +219,6 @@ class BenefitRule:
 
     def calculate_revaluation_rule(self, args, **kwargs):
         return self._calculate_rule('revaluation_rule', args, [], **kwargs)
-
-    def required_extra_data_for_rule(self, rule_name, date, option):
-        if getattr(self, 'force_' + rule_name):
-            return getattr(self, rule_name).extra_data_used
-        # Use option defined rule
-        version = option.get_version_at_date(date)
-        option_benefit = version.get_benefit(self.benefit)
-        rule = getattr(option_benefit, rule_name)
-        if not rule:
-            return []
-        return rule.extra_data_used
-
-    def required_extra_data(self, service, date):
-        res = []
-        for rule_name in ('deductible_rule', 'indemnification_rule',
-                'revaluation_rule'):
-            res.extend(self.required_extra_data_for_rule(rule_name, date,
-                    service.option))
-        return res
 
     def must_revaluate(self):
         if self.force_indemnification_rule:

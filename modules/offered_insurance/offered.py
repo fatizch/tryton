@@ -7,6 +7,7 @@ from trytond.cache import Cache
 
 from trytond.modules.coog_core import model, fields
 from trytond.modules.coog_core import coog_string
+from trytond.modules.offered.extra_data import with_extra_data_def
 
 
 __all__ = [
@@ -16,6 +17,7 @@ __all__ = [
     'ItemDescriptionExtraDataRelation',
     'CoveredElementEndReason',
     'ItemDescriptionEndReasonRelation',
+    'ExtraData',
     ]
 
 
@@ -67,13 +69,10 @@ class Product:
                 res.add(coverage.item_desc.id)
         return list(res)
 
-    def get_cmpl_data_looking_for_what(self, args):
-        if 'elem' in args and args['level'] == 'option':
-            return ''
-        return super(Product, self).get_cmpl_data_looking_for_what(args)
 
-
-class ItemDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
+class ItemDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
+            'offered.item.description-extra_data', 'item_desc',
+            'covered_element'), model.TaggedMixin):
     'Item Description'
 
     __name__ = 'offered.item.description'
@@ -81,10 +80,6 @@ class ItemDescription(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
-    extra_data_def = fields.Many2Many(
-        'offered.item.description-extra_data',
-        'item_desc', 'extra_data_def', 'Extra Data',
-        domain=[('kind', '=', 'covered_element')], )
     kind = fields.Selection([
             ('', ''),
             ('party', 'Party'),
@@ -197,3 +192,37 @@ class ItemDescriptionEndReasonRelation(model.CoogSQL):
         ondelete='CASCADE', select=True, required=True)
     reason = fields.Many2One('covered_element.end_reason', 'End Reason',
         ondelete='RESTRICT', select=True, required=True)
+
+
+class ExtraData:
+    __metaclass__ = PoolMeta
+    __name__ = 'extra_data'
+
+    @classmethod
+    def __setup__(cls):
+        super(ExtraData, cls).__setup__()
+        cls._hardcoded_rule_context_matches = {}
+
+    @classmethod
+    def _extra_data_value_for_rule(cls, name, context):
+        if 'extra_data' in context and name in context['extra_data']:
+            return context['extra_data'][name]
+        data = cls._extra_data_struct(name)
+        targets = []
+        if data['kind'] in cls._hardcoded_rule_context_matches:
+            for match in cls._hardcoded_rule_context_matches[data['kind']]:
+                if match in context:
+                    targets.append(context[match])
+        if not targets:
+            providers = cls._extra_data_providers[data['kind']]
+            for k, v in context.iteritems():
+                if getattr(v, '__name__', None) in providers:
+                    targets.append((v, providers[v.__name__]))
+        for target, finders in targets:
+            for finder in finders:
+                try:
+                    return getattr(target, finder)(name,
+                        date=context.get('date', None))
+                except KeyError:
+                    pass
+        raise KeyError('Extra data %s not found' % name)

@@ -4,13 +4,14 @@
 import logging
 
 from trytond.pyson import Eval
-from trytond.pool import Pool
 from trytond.model import Unique
 from trytond.transaction import Transaction
 from trytond import backend
 from trytond.cache import Cache
 
 from trytond.modules.coog_core import model, fields, coog_string, utils
+from trytond.modules.offered.extra_data import with_extra_data
+from trytond.modules.offered.extra_data import with_extra_data_def
 
 __all__ = [
     'ClosingReason',
@@ -110,7 +111,8 @@ class EventDescription(model.CoogSQL, model.CoogView):
         return coog_string.slugify(self.name)
 
 
-class LossDescription(model.CoogSQL, model.CoogView):
+class LossDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
+            'benefit.loss.description-extra_data', 'loss_desc', 'loss')):
     'Loss Description'
 
     __name__ = 'benefit.loss.description'
@@ -125,10 +127,6 @@ class LossDescription(model.CoogSQL, model.CoogView):
         domain=[('company', '=', Eval('company'))], depends=['company'])
     item_kind = fields.Selection([('', '')], 'Kind')
     item_kind_string = item_kind.translated('item_kind')
-    extra_data_def = fields.Many2Many(
-        'benefit.loss.description-extra_data',
-        'loss_desc', 'extra_data_def', 'Extra Data',
-        domain=[('kind', '=', 'loss')], )
     with_end_date = fields.Boolean('With End Date')
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
@@ -211,7 +209,10 @@ class EventDescriptionLossDescriptionRelation(model.CoogSQL):
         ondelete='RESTRICT')
 
 
-class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
+class Benefit(model.CoogSQL, model.CoogView,
+        with_extra_data_def('benefit-extra_data', 'benefit', 'benefit'),
+        with_extra_data(['product'], field_string='Offered Kind'),
+        model.TaggedMixin):
     'Benefit'
 
     __name__ = 'benefit'
@@ -226,17 +227,10 @@ class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     description = fields.Text('Description', translate=True)
-    extra_data = fields.Dict('extra_data', 'Offered Kind',
-        context={'extra_data_kind': 'product'},
-        domain=[('kind', '=', 'product')])
-    extra_data_string = extra_data.translated('extra_data')
     loss_descs = fields.Many2Many('benefit-loss.description', 'benefit',
         'loss_desc', 'Loss Descriptions',
         domain=[('company', '=', Eval('company'))], depends=['company'],
         required=True)
-    extra_data_def = fields.Many2Many('benefit-extra_data',
-        'benefit', 'extra_data_def', 'Extra Data',
-        domain=[('kind', '=', 'benefit')])
     beneficiary_kind = fields.Selection('get_beneficiary_kind',
         'Beneficiary Kind', required=True, sort=False)
     beneficiary_kind_string = beneficiary_kind.translated('beneficiary_kind')
@@ -322,18 +316,6 @@ class Benefit(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
     def init_dict_for_rule_engine(self, args):
         args['benefit'] = self
-
-    def get_extra_data_def(self, service):
-        ExtraData = Pool().get('extra_data')
-        existing_data = service.extra_datas[-1].extra_data_values
-        condition_date = service.loss.get_date()
-        all_schemas, possible_schemas = ExtraData.get_extra_data_definitions(
-            self, 'extra_data_def', 'benefit', condition_date)
-        return ExtraData.calculate_value_set(possible_schemas, all_schemas,
-            existing_data)
-
-    def get_all_extra_data(self, at_date):
-        return dict(getattr(self, 'extra_data', {}))
 
     @classmethod
     def is_master_object(cls):

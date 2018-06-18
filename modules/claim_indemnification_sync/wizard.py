@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
+from trytond.server_context import ServerContext
+
 from trytond.modules.coog_core import utils
 
 
@@ -36,7 +38,8 @@ class CreateIndemnification:
         for sub_service in main_service.sub_services:
             extra_data = utils.get_value_at_date(sub_service.extra_datas,
                 values['start_date']).extra_data_values
-            new_data = sub_service.benefit.get_extra_data_def(sub_service)
+            with ServerContext().set_context(service=sub_service):
+                new_data = sub_service.benefit.refresh_extra_data(extra_data)
             for k, v in new_data.items():
                 if k not in extra_data:
                     extra_data[k] = v

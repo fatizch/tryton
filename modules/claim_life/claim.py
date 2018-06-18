@@ -2,7 +2,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
-from decimal import Decimal
 from sql.aggregate import Min
 
 from sql import Literal
@@ -16,6 +15,7 @@ from trytond.pyson import Eval, If, Bool, And
 from trytond.transaction import Transaction
 from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.report_engine import Printable
+from trytond.modules.offered.extra_data import with_extra_data
 from trytond.modules.claim.claim import CLAIM_READONLY
 
 from datetime import timedelta
@@ -25,7 +25,6 @@ __all__ = [
     'ClaimBeneficiary',
     'Loss',
     'ClaimService',
-    'ClaimServiceExtraDataRevision',
     'Indemnification',
     'DocumentRequestLine',
     ]
@@ -187,6 +186,12 @@ class Loss:
                 })
         cls.closing_reason.depends.extend(['loss_kind', 'end_date'])
 
+    @classmethod
+    def __post_setup__(cls):
+        super(Loss, cls).__post_setup__()
+        Pool().get('extra_data')._register_extra_data_provider(cls,
+            'find_extra_data_value', ['covered_element'])
+
     @fields.depends('loss_desc', 'loss_desc_kind')
     def on_change_with_start_date_string(self, name=None):
         if self.loss_desc and self.loss_desc.with_end_date:
@@ -289,18 +294,16 @@ class Loss:
     def get_covered_person(self):
         return getattr(self, 'covered_person', None)
 
-    def get_all_extra_data(self, at_date):
+    def find_covered_person_extra_data_value(self, name, **kwargs):
         CoveredElement = Pool().get('contract.covered_element')
-        res = super(Loss, self).get_all_extra_data(at_date)
         if not self.claim:
-            return res
+            raise KeyError
         for covered_element in CoveredElement.get_possible_covered_elements(
                 self.covered_person, self.start_date):
             if (covered_element.party and
                     covered_element.party == self.covered_person and
                     covered_element.main_contract == self.claim.main_contract):
-                res.update(covered_element.get_all_extra_data(self.start_date))
-        return res
+                return covered_element.find_extra_data_value(name, **kwargs)
 
     def covered_options(self):
         Option = Pool().get('contract.option')
@@ -433,17 +436,6 @@ class ClaimService:
             return [(self.loss.covered_person, 1)]
         return super(ClaimService, self).get_beneficiaries_data(at_date)
 
-    def get_all_extra_data(self, at_date):
-        res = super(ClaimService, self).get_all_extra_data(at_date)
-        res.update(self.get_service_extra_data(at_date))
-        res.update(self.loss.get_all_extra_data(at_date))
-        if self.option:
-            res.update(self.option.get_all_extra_data(at_date))
-        elif self.contract:
-            res.update(self.contract.get_all_extra_data(at_date))
-        res.update(self.benefit.get_all_extra_data(at_date))
-        return res
-
     def get_beneficiary_definition_from_party(self, party):
         if not self.manual_beneficiaries:
             return None
@@ -452,7 +444,9 @@ class ClaimService:
                 return beneficiary
 
 
-class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
+class ClaimBeneficiary(model.CoogSQL, model.CoogView,
+        with_extra_data(['beneficiary'], field_name='extra_data_values'),
+        Printable):
     'Claim Beneficiary'
 
     __name__ = 'claim.beneficiary'
@@ -494,7 +488,6 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
             'are not received yet',
             states={'invisible': ~Eval('identified')}, depends=['identified']),
         'getter_documents_reception_date')
-    extra_data_values = fields.Dict('extra_data', 'Extra Data')
     ignore_share = fields.Function(fields.Boolean('Ignore Share'),
         'on_change_with_ignore_share')
 
@@ -546,14 +539,6 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView, Printable):
     def on_change_document_request_lines(self):
         self.documents_reception_date = \
             self.on_change_with_documents_reception_date()
-
-    @fields.depends('service', 'extra_data_values')
-    def on_change_with_extra_data_values(self):
-        if not self.service:
-            return []
-        if not self.extra_data_values:
-            return self.service.benefit.get_beneficiary_extra_data_def(self)
-        return self.extra_data_values
 
     @classmethod
     def getter_documents_reception_date(cls, beneficiaries, name):
@@ -663,13 +648,6 @@ class Indemnification:
         if beneficiary:
             cur_dict['beneficiary_definition'] = beneficiary
 
-    def get_all_extra_data(self, at_date):
-        res = super(Indemnification, self).get_all_extra_data(at_date)
-        beneficiary = self.get_beneficiary_definition(None)
-        if beneficiary:
-            res.update(beneficiary.extra_data_values)
-        return res
-
     @classmethod
     def _group_by_duplicate(cls, indemnification):
         return indemnification.service.loss.covered_person
@@ -677,33 +655,6 @@ class Indemnification:
     @classmethod
     def _get_covered_domain(cls, party):
         return [('loss.covered_person', '=', party)]
-
-
-class ClaimServiceExtraDataRevision:
-    __metaclass__ = PoolMeta
-    __name__ = 'claim.service.extra_data'
-
-    @classmethod
-    def get_extra_data_summary(cls, extra_datas, name):
-        res = super(ClaimServiceExtraDataRevision, cls).get_extra_data_summary(
-            extra_datas, name)
-        for instance, desc in res.iteritems():
-            new_data = {}
-            for line in desc.splitlines():
-                key, value = line.split(' : ')
-                if ' M-' in key:
-                    new_key = key.split(' M-')[0]
-                    if new_key not in new_data:
-                        new_data[new_key] = Decimal(value) \
-                            if value != 'None' else 0
-                    else:
-                        new_data[new_key] += Decimal(value) \
-                            if value != 'None' else 0
-                else:
-                    new_data[key] = value
-            res[instance] = '\n'.join(('%s : %s' % (k, v) for k, v in
-                    new_data.iteritems()))
-        return res
 
 
 class DocumentRequestLine:

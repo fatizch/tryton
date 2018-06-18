@@ -23,6 +23,7 @@ def register():
         offered.ItemDescriptionExtraDataRelation,
         offered.CoveredElementEndReason,
         offered.ItemDescriptionEndReasonRelation,
+        offered.ExtraData,
         batch.ProductValidationBatch,
         rule_engine.RuleEngineExtraData,
         rule_engine.RuleEngine,
