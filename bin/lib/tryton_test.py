@@ -14,7 +14,9 @@ def test(module, options=None):
         db_name = ':memory:'
     else:
         db_name = 'test_' + str(uuid.uuid4().int)
-    os.environ.setdefault('DB_NAME', db_name)
+    assert not os.environ.get('DB_NAME', None), 'DB_NAME is set to %s , '\
+        'setting DB_NAME in tests is not supported' % os.environ['DB_NAME']
+    os.environ['DB_NAME'] = db_name
     from trytond.tests.test_tryton import modules_suite
     suite = modules_suite([module], doc=opts['doc'])
     result = unittest.TextTestRunner(
