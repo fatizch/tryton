@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form>
-    <field name="benefits" mode="form" view_ids="claim_indemnification_group.option_benefit_view_form" colspan="4"/>
-</form>
+<tree>
+    <field name="start_date"/>
+    <field name="benefits_description" expand="1"/>
+</tree>

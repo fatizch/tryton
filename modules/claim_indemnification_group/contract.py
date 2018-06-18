@@ -45,6 +45,9 @@ class OptionVersion:
 
     benefits = fields.One2Many('contract.option.benefit', 'version',
         'Benefits', delete_missing=True)
+    benefits_description = fields.Function(
+        fields.Char('Benefits Description'),
+        'get_benefits_description')
 
     @classmethod
     def view_attributes(cls):
@@ -65,6 +68,9 @@ class OptionVersion:
         for option_benefit in self.benefits:
             if option_benefit.benefit == benefit:
                 return option_benefit
+
+    def get_benefits_description(self, name):
+        return ' - '.join([b.benefit.name for b in self.benefits])
 
 
 class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),

@@ -426,6 +426,10 @@ msgctxt "field:contract.option.version,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
 
+msgctxt "field:contract.option.version,benefits_description:"
+msgid "Benefits Description"
+msgstr "Prestations"
+
 msgctxt "help:benefit,company_products:"
 msgid "Products available when paying a company"
 msgstr "Produits disponible en cas de paiement direct à la société"
@@ -523,8 +527,8 @@ msgid "Invisible Benefit"
 msgstr "Prestation invisible"
 
 msgctxt "view:contract.option:"
-msgid "Rules"
-msgstr "Règles"
+msgid "Benefits"
+msgstr "Prestations"
 
 msgctxt "wizard_button:claim.transfer_services,benefits,end:"
 msgid "Cancel"

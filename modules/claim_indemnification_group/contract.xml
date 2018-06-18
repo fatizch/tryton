@@ -19,6 +19,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">option_version_rules_form</field>
         </record>
+        <record model="ir.ui.view" id="option_version_rules_view_list">
+            <field name="model">contract.option.version</field>
+            <field name="type">tree</field>
+            <field name="name">option_version_rules_list</field>
+        </record>
         <!-- ################## -->
         <!-- # Option Benefit # -->
         <!-- ################## -->
