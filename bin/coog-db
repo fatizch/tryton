@@ -62,3 +62,47 @@ EOF
 
     echo "anonymized database $DB_NAME at level $level"
 }
+
+coog_db_demo() { # Create a demo database
+    demo_help="
+    Creates a demo database from the new_db script located in
+    modules/global_tests/tests.
+
+    Configuration can be controlled with the following env variables :
+
+    - GEN_COOG_USER : User name to connect to (in the case of an existing
+        database)
+    - GEN_COOG_PASSWORD : User password to use for connection, or password for
+        the admin user for a new database, default 'admin'
+
+    - GEN_DB_NAME : The name of the database to work on, default 'generated'
+
+    - GEN_CREATE_NEW_DB : If True, the database will be dropped if it exists,
+        then recreated from scratch
+    - GEN_RESTORE_DB : If True, the database will be restored from an existing
+        template, useful when working on the script
+    - GEN_RESTORE_FROM : The name of the database to restore from
+
+    - GEN_BASIC_INIT : If True, basic initialization of the database will be
+        done
+    - GEN_LOAD_ZIP_CODES : If True, zip codes will be loaded from the
+        associated test cases
+    - GEN_LOAD_BANKS : If True, banks will be created from the test case
+        referential
+    - GEN_LOAD_ACCOUNTING : If True, a default accounting will be created
+    - GEN_CREATE_PROCESSES : If True, processes will be created from scratch
+    - GEN_CREATE_ACTORS : If True, actors (insurer, brokers, etc) will be
+        created
+    - GEN_CREATE_PRODUCTS : If True, some default products will be created
+    - GEN_CREATE_COMMISSION_CONFIG' : If True, commission plans for insurer /
+        brokers will be generated
+    - GEN_CREATE_CONTRACTS : If True, contracts will be subscribed on all
+        available products
+    - GEN_BILL_CONTRACTS : If True, contracts will be billed, paid, and
+        commissionned
+    "
+    if [ "$1" = "help" ]; then
+        echo -e "$demo_help" && return 1
+    fi
+    coog env run python "$COOG_COOG"/modules/global_tests/tests/new_db.py
+}
