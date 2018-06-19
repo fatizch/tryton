@@ -14,8 +14,8 @@ class Contract:
 
     @classmethod
     def _calculate_methods(cls, product):
-        return super(Contract, cls)._calculate_methods(product) + [
-            ('options', 'check_eligibility')]
+        return [('options', 'check_eligibility')] + \
+            super(Contract, cls)._calculate_methods(product)
 
     @classmethod
     def _calculate_methods_after_endorsement(cls):
