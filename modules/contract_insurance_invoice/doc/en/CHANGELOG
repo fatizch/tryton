@@ -1,3 +1,4 @@
+* BUG#8880 Recalculate premiums one day after termination
 * BUG#9103 Filter premium lines when creating invoices if prorata is deactivated
 * BUG#9094 Allow the rebill of a previous period
 * BUG#9126 Do not try to invoice a contract without any billing informations

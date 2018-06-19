@@ -1189,7 +1189,7 @@ class Contract:
     @classmethod
     def terminate(cls, contracts, at_date, termination_reason):
         super(Contract, cls).terminate(contracts, at_date, termination_reason)
-        cls.calculate_prices(contracts, at_date)
+        cls.calculate_prices(contracts, coog_date.add_day(at_date, 1))
         for contract in contracts:
             contract.rebill(at_date)
         cls.reconcile(contracts)
