@@ -1,5 +1,5 @@
+* FEA#9104 Ajout de modèles de courriers par défaut pour les bordereaux assureur / courtier
 * BUG#9143 Remplacement de report_commissions par insurer_reporting_lines pour améliorer les performances
-* BUG#9104 Ajout de modèles de courriers par défaut pour les bordereaux assureur / courtier
 
 Version 2.0 - 2018-04-13
 * BUG#8545 Correction de l'import JSON

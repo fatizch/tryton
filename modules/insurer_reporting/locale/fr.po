@@ -178,6 +178,14 @@ msgctxt "model:ir.ui.menu,name:menu_report_insurer_contract"
 msgid "Insurer Report Contract"
 msgstr "Rapport assureur : contrats"
 
+msgctxt "model:report.template,name:default_commission_reporting_template"
+msgid "Commission Reporting"
+msgstr "Bordereau Apporteur"
+
+msgctxt "model:report.template,name:default_insurer_reporting_template"
+msgid "Insurer Reporting"
+msgstr "Bordereau Assureur"
+
 msgctxt "view:insurer_reporting.contract.configure:"
 msgid "Configure Contract Reporting"
 msgstr "Configurer le rapport de contrat"

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data noupdate="1">
+        <record model="report.template" id="default_commission_reporting_template">
+            <field name="name">Commission Reporting</field>
+            <field name="code">commission_reporting</field>
+            <field name="on_model" search="[('model', '=', 'account.invoice')]"/>
+            <field name="kind">broker_invoice</field>
+            <field name="input_kind">libre_office_ods</field>
+            <field name="process_method">libre_office</field>
+            <field name="output_format">libre_office</field>
+            <field name="modifiable_before_printing">False</field>
+            <field name="split_reports">False</field>
+            <field name="recipient_needed">True</field>
+        </record>
+        <record model="report.template.version" id="default_commission_reporting_fr_version">
+            <field name="template" ref="insurer_reporting.default_commission_reporting_template"/>
+            <field name="name">template_commission_reporting_fr.fods</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="path">insurer_reporting/reports/template_commission_reporting_fr.fods</field>
+        </record>
+        <record model="report.template.version" id="default_commission_reporting_en_version">
+            <field name="template" ref="insurer_reporting.default_commission_reporting_template"/>
+            <field name="name">template_commission_reporting_en.fods</field>
+            <field name="language" ref="ir.lang_en"/>
+            <field name="path">insurer_reporting/reports/template_commission_reporting_en.fods</field>
+        </record>
+        <record model="report.template" id="default_insurer_reporting_template">
+            <field name="name">Insurer Reporting</field>
+            <field name="code">insurer_reporting</field>
+            <field name="on_model" search="[('model', '=', 'account.invoice')]"/>
+            <field name="kind">insurer_invoice</field>
+            <field name="input_kind">libre_office_ods</field>
+            <field name="process_method">libre_office</field>
+            <field name="output_format">libre_office</field>
+            <field name="modifiable_before_printing">False</field>
+            <field name="split_reports">False</field>
+            <field name="recipient_needed">True</field>
+        </record>
+        <record model="report.template.version" id="default_insurer_reporting_fr_version">
+            <field name="template" ref="insurer_reporting.default_insurer_reporting_template"/>
+            <field name="name">template_insurer_reporting_fr.fods</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="path">insurer_reporting/reports/template_insurer_reporting_fr.fods</field>
+        </record>
+        <record model="report.template.version" id="default_insurer_reporting_en_version">
+            <field name="template" ref="insurer_reporting.default_insurer_reporting_template"/>
+            <field name="name">template_insurer_reporting_en.fods</field>
+            <field name="language" ref="ir.lang_en"/>
+            <field name="path">insurer_reporting/reports/template_insurer_reporting_en.fods</field>
+        </record>
+    </data>
+</tryton>
