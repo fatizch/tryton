@@ -1,4 +1,5 @@
-* BUG#9168 Correctif d'un crash lors du changement de date d'effet d'un contrat dans le passé 
+* BUG#8404 Blocage de la possibilité d'ajouter par erreur des lignes dans l'avenant de changement de quotité
+* BUG#9168 Correctif d'un crash lors du changement de date d'effet d'un contrat dans le passé
 
 Version 2.0 - 2018-04-13
 * BUG#8053 Pas de prise en compte des contrats sans effet dans les avenants d'ajout / suppression de prêts

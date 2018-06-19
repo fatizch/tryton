@@ -894,10 +894,10 @@ class SelectLoanShares(EndorsementWizardStepMixin):
 
     loan_share_selectors = fields.One2Many(
         'contract.covered_element.add_option.loan_share_selector', None,
-        'New Loan Shares')
+        'New Loan Shares', readonly=True)
     shares_per_loan = fields.One2Many(
         'contract.covered_element.add_option.share_per_loan', None,
-        'Shares per loan')
+        'Shares per loan', readonly=True)
 
     @classmethod
     def __setup__(cls):

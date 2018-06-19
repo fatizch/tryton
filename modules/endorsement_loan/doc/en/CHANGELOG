@@ -1,3 +1,4 @@
+* BUG#8404 Block the possibility to add new lines in the loan share endorsement
 * BUG#9168 Fix crash when changing the contract start date in the past
 
 Version 2.0 - 2018-04-13
