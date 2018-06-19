@@ -18,10 +18,6 @@ msgctxt "error:report.template:"
 msgid "Insurer Report Covered"
 msgstr "Rapport assureur bénéficiaire"
 
-msgctxt "field:account.invoice,report_commissions:"
-msgid "Commissions To Report"
-msgstr "Commissions incluses dans le rapport"
-
 msgctxt "field:commission,commission_rate:"
 msgid "Commission Rate"
 msgstr "Taux de commission"
