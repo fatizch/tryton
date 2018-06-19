@@ -1,3 +1,5 @@
+* BUG#8746 Make sure we do not rebill a loan contract until its end when it's reactivated
+
 Version 2.0 - 2018-04-13
 * BUG#7704 Make payments schedule fields readonly
 

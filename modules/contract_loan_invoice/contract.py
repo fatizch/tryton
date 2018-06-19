@@ -1,9 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, And, Or, Not, In
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, utils
 
 
 __all__ = [
@@ -23,6 +25,13 @@ class Contract:
         cls._buttons.update({
                 'button_show_all_invoices': {},
                 })
+
+    def get_rebill_end_date(self):
+        date = super(Contract, self).get_rebill_end_date()
+        if self.is_loan:
+            date = max(min(date or datetime.date.max, utils.today()),
+                self.last_posted_invoice_end or datetime.date.min)
+        return date
 
     @classmethod
     def load_from_cached_invoices(cls, cache):
