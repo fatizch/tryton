@@ -1,3 +1,6 @@
+* BUG#9143 Replace report_commissions with insurer_reporting_lines for performances purposes
+* BUG#9104 Add default templates for insurer / broker reportings
+
 Version 2.0 - 2018-04-13
 * BUG#8545 Fix JSON Import
 * OTH#0000 Fix batch parameters handling inherited from 1.12

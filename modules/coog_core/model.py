@@ -381,7 +381,7 @@ def error_manager():
     with ServerContext().set_context(error_manager=manager):
         try:
             yield
-        except UserError, exc:
+        except UserError as exc:
             manager.add_error(exc.message)
         finally:
             manager.raise_errors()
@@ -1119,6 +1119,42 @@ def search_and_stream(klass, domain, offset=0, order=None, batch_size=None):
         for record in records:
             yield record
         cur_offset += batch_size
+
+
+def order_data_stream(iterable, key_func, batch_size=None):
+    '''
+        Orders the iterable (assumed to hold instances of a given model)
+        according to key_func, then return another iterable on instances.
+
+        Meant to be used with search_and_stream to order a stream on a function
+        that is not sql compatible (or hard to write)
+
+        ex:
+
+        order_data_stream(
+            search_and_stream(Contract, [('product', '=', 10)]),
+            lambda x: x.balance if x.subscriber.is_person else x.balance * 2)
+    '''
+    klass = None
+    full_list = []
+    for elem in iterable:
+        full_list.append((elem.id, key_func(elem)))
+        if klass is None:
+            klass = elem.__class__
+
+    if not full_list:
+        raise StopIteration
+
+    batch_size = batch_size or config.getint('cache', 'record')
+    full_list.sort(key=lambda x: x[1])
+
+    for i in range(len(full_list) / batch_size + 1):
+        ids = [x[0] for x in full_list[i * batch_size:(i + 1) * batch_size]]
+        if not ids:
+            raise StopIteration
+        instances = klass.browse(ids)
+        for x in instances:
+            yield x
 
 
 def is_class_or_dual_method(method):
