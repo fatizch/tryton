@@ -384,9 +384,10 @@ class Commission:
                     per_insurer[insurer_account][1]):
                 continue
 
-            update_columns(line, [line.principal_invoice_line],
-                [commission_invoice_line.id],
-                where=(line.id.in_(per_insurer[insurer_account][1])))
+            if per_insurer[insurer_account][1]:
+                update_columns(line, [line.principal_invoice_line],
+                    [commission_invoice_line.id],
+                    where=(line.id.in_(per_insurer[insurer_account][1])))
 
             positive_desc = cls.get_insurer_account_description_line(
                 'positive', Account(insurer_account))
