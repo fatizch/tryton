@@ -91,7 +91,7 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
                 'parents with the current configuration',
                 })
         cls._order = [('kind', 'ASC'), ('string', 'ASC')]
-        cls._extra_data_providers = {}
+        cls._extra_data_providers = getattr(cls, '_extra_data_providers', {})
 
     @classmethod
     def __register__(cls, module_name):

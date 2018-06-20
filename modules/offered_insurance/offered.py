@@ -201,7 +201,8 @@ class ExtraData:
     @classmethod
     def __setup__(cls):
         super(ExtraData, cls).__setup__()
-        cls._hardcoded_rule_context_matches = {}
+        cls._hardcoded_rule_context_matches = getattr(cls,
+            '_hardcoded_rule_context_matches', {})
 
     @classmethod
     def _extra_data_value_for_rule(cls, name, context):
