@@ -16,7 +16,7 @@ class Insurer:
     # Use function field for Export/import purpose as data are already included
     # in stock_reports fields
     claim_stock_reports = fields.Function(
-        fields.Many2Many('insurer-report.template', None,
+        fields.Many2Many('report.template', None,
         None, 'Claim Stock Reports'),
         'get_claim_stock_reports', searcher='search_claim_stock_reports')
 
