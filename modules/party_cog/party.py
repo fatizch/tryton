@@ -680,7 +680,8 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
 
     @classmethod
     def _import_json(cls, values, main_object=None):
-        if 'all_addresses' not in values and 'addresses' in values:
+        if (not main_object and 'all_addresses' not in values
+                and 'addresses' in values):
             values['all_addresses'] = []
         return super(Party, cls)._import_json(values, main_object)
 

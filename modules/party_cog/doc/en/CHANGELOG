@@ -1,3 +1,4 @@
+* BUG#9200 Fix crash following update with JSON import (regression following #8858)
 * BUG#8934 Remove last_name and company_name and use group around field instead
 * BUG#8858 Force all_addresses to empty list when importing and creating a party with addresses
 * BUG#8859 Modification of the is_person information is possible if and only if there is no personal data set like the first name or the birth date
