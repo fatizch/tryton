@@ -1,3 +1,5 @@
+* FEA#9186 Cloisonnement des données par portefeuille
+
 Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
 * BUG #7110 Typo dans le __name__ de la valeur multiple du portefuille par défaut de distribution

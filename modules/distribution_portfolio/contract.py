@@ -1,7 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields
 
@@ -21,6 +22,9 @@ class Contract:
         fields.Many2Many('distribution.network', None, None,
             'Allowed Portfolios'),
         'on_change_with_allowed_portfolios')
+    portfolio = fields.Function(
+        fields.Many2One('distribution.network', 'Portfolio'),
+        'get_portfolio', searcher='search_portfolio')
 
     @classmethod
     def __setup__(cls):
@@ -35,6 +39,35 @@ class Contract:
         if not self.dist_network:
             return []
         return [x.id for x in self.dist_network.visible_portfolios]
+
+    @fields.depends('subscriber')
+    def on_change_with_portfolio(self, name=None):
+        return self.subscriber.portfolio.id if self.subscriber and \
+            self.subscriber.portfolio else None
+
+    @classmethod
+    def get_portfolio(cls, instances, name):
+        res = {}
+        cursor = Transaction().connection.cursor()
+        party = Pool().get('party.party').__table__()
+        contract = cls.__table__()
+
+        cursor.execute(*
+            contract.join(party, 'LEFT OUTER',
+                condition=(contract.subscriber == party.id)).select(
+                contract.id, party.portfolio,
+                where=(contract.id.in_([x.id for x in instances]))))
+        for invoice_id, value in cursor.fetchall():
+            res[invoice_id] = value
+        return res
+
+    @classmethod
+    def search_portfolio(cls, name, clause):
+        if clause[1] == '=' and not clause[2]:
+            return['OR',
+                [('subscriber.portfolio', '=', None)],
+                [('subscriber', '=', None)]]
+        return [('subscriber.portfolio',) + tuple(clause[1:])]
 
 
 class CoveredElement:

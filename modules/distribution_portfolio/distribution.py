@@ -3,6 +3,7 @@
 from collections import defaultdict
 from sql.aggregate import Count
 
+from trytond.cache import Cache
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 from trytond.pool import Pool
@@ -34,6 +35,25 @@ class DistributionNetwork:
         fields.Many2Many('distribution.network', None, None,
             'Visible Portfolios'),
         'get_visible_portfolios', searcher='search_visible_portfolios')
+    _get_all_portfolios_cache = Cache('get_all_portfolios')
+
+    @classmethod
+    def create(cls, vlist):
+        res = super(DistributionNetwork, cls).create(vlist)
+        cls._get_all_portfolios_cache.clear()
+        return res
+
+    @classmethod
+    def delete(cls, ids):
+        res = super(DistributionNetwork, cls).delete(ids)
+        cls._get_all_portfolios_cache.clear()
+        return res
+
+    @classmethod
+    def write(cls, *args):
+        res = super(DistributionNetwork, cls).write(*args)
+        cls._get_all_portfolios_cache.clear()
+        return res
 
     def get_visible_portfolios(self, name):
         return [x.id for x in self.search([
@@ -85,3 +105,11 @@ class DistributionNetwork:
             return clause
         else:
             raise NotImplementedError
+
+    @classmethod
+    def get_all_portfolios(cls):
+        res = cls._get_all_portfolios_cache.get('all_portfolios', None)
+        if res is None:
+            res = [x.id for x in cls.search([('is_portfolio', '=', True)])]
+            cls._get_all_portfolios_cache.set('all_portfolios', res)
+        return res

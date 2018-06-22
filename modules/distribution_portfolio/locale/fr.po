@@ -2,9 +2,61 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:account.invoice,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
+msgctxt "field:account.move.line,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
+msgctxt "field:account.payment,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
+msgctxt "field:account.payment.merged,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
+msgctxt "field:account.payment.sepa.mandate,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
+msgctxt "field:account.statement.line.group,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
+msgctxt "field:claim,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
+msgctxt "field:claim.loss,extra_data_summary:"
+msgid "Extra Data Summary"
+msgstr "Résumé des données complémentaires"
+
+msgctxt "field:claim.loss,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
+msgctxt "field:commission,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
+msgctxt "field:commission.aggregated,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
 msgctxt "field:contract,allowed_portfolios:"
 msgid "Allowed Portfolios"
 msgstr "Portefeuilles autorisés"
+
+msgctxt "field:contract,extra_data_values_summary:"
+msgid "Extra Data Summary"
+msgstr "Résumé des données complémentaires"
+
+msgctxt "field:contract,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
 
 msgctxt "field:contract.billing_information,allowed_portfolios:"
 msgid "Allowed Portfolios"
@@ -14,9 +66,17 @@ msgctxt "field:contract.covered_element,allowed_portfolios:"
 msgid "Allowed Portfolios"
 msgstr "Portefeuilles autorisés"
 
+msgctxt "field:contract.covered_element,current_extra_data_summary:"
+msgid "Current Extra Data Summary"
+msgstr "Résumé des données complémentaires"
+
 msgctxt "field:contract.option.beneficiary,allowed_portfolios:"
 msgid "Allowed Portfolios"
 msgstr "Portefeuilles autorisés"
+
+msgctxt "field:contract.subscribe.find_process,authorized_distributors:"
+msgid "Authorized distributors"
+msgstr "Distributeurs autorisés"
 
 msgctxt "field:distribution.network,is_portfolio:"
 msgid "Client Portfolio"
@@ -82,9 +142,25 @@ msgctxt "field:party.configuration.default_portfolio,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:party.contact_mechanism,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
+msgctxt "field:party.party,extra_data_summary:"
+msgid "Extra Data Summary"
+msgstr "Résumé des données complémentaires"
+
 msgctxt "field:party.party,portfolio:"
 msgid "Portfolio"
 msgstr "Portefeuille"
+
+msgctxt "field:party.relation.all,portfolio:"
+msgid "Portfolio"
+msgstr "Portefeuille"
+
+msgctxt "field:res.user,network_portfolios:"
+msgid "User Portfolios"
+msgstr "Portefeuilles de l'utilisateur"
 
 msgctxt "help:distribution.network,is_portfolio:"
 msgid ""

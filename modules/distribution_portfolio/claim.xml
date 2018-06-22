@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="claim">
+        <!-- Rule access to handle partitioning by portfolio -->
+        <!-- ######### Claims  -->
+        <record model="ir.rule.group" id="rule_group_portfolio_claim">
+            <field name="model" search="[('model', '=', 'claim')]"/>
+            <field name="global_p" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.rule" id="rule_portfolio_claim_1">
+            <field name="domain"
+                 eval="[[u'portfolio', u'in', Get(Eval(u'user', {}), u'network_portfolios', [])]]" pyson="1"/>
+            <field name="rule_group" ref="rule_group_portfolio_claim"/>
+        </record>
+        <record model="ir.rule" id="rule_portfolio_claim_2">
+            <field name="domain" eval="[[u'portfolio', u'=', None]]" pyson="1"/>
+            <field name="rule_group" ref="rule_group_portfolio_claim"/>
+        </record>
+        <!-- ######### Losses  -->
+        <record model="ir.rule.group" id="rule_group_portfolio_loss">
+            <field name="model" search="[('model', '=', 'claim.loss')]"/>
+            <field name="global_p" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.rule" id="rule_portfolio_loss_1">
+            <field name="domain"
+                 eval="[[u'portfolio', u'in', Get(Eval(u'user', {}), u'network_portfolios', [])]]" pyson="1"/>
+            <field name="rule_group" ref="rule_group_portfolio_loss"/>
+        </record>
+        <record model="ir.rule" id="rule_portfolio_loss_2">
+            <field name="domain" eval="[[u'portfolio', u'=', None]]" pyson="1"/>
+            <field name="rule_group" ref="rule_group_portfolio_loss"/>
+        </record>
+    </data>
+</tryton>

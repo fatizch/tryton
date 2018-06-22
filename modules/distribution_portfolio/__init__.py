@@ -8,6 +8,13 @@ import party
 import contract
 import process
 import rule_engine
+import res
+import invoice
+import move
+import payment
+import claim
+import commission
+import statement
 
 
 def register():
@@ -16,11 +23,24 @@ def register():
         configuration.Configuration,
         configuration.ConfigurationDefaultPortfolio,
         party.Party,
+        party.ContactMechanism,
+        party.PartyRelationAll,
         contract.Contract,
         contract.CoveredElement,
         contract.Beneficiary,
         contract.ContractBillingInformation,
         rule_engine.RuleEngineRuntime,
+        res.User,
+        invoice.Invoice,
+        move.Line,
+        statement.LineGroup,
+        payment.Payment,
+        payment.Mandate,
+        payment.MergedPayment,
+        claim.Claim,
+        claim.Loss,
+        commission.Commission,
+        commission.AggregatedCommission,
         module='distribution_portfolio', type_='model')
 
     Pool.register(
