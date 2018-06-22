@@ -114,6 +114,45 @@ this repository contains the full copyright notices and license terms. -->
             <field name="domain" eval="['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]" pyson="1"/>
             <field name="act_window" ref="act_quote_form"/>
         </record>
+        <!-- ####################### -->
+        <!-- # Contract Buttons    # -->
+        <!-- ####################### -->
+        <record model="ir.model.button" id="change_active_sub_status">
+            <field name="name">change_active_sub_status</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_decline">
+            <field name="name">button_decline</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_activate">
+            <field name="name">button_activate</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_hold">
+            <field name="name">button_hold</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_stop">
+            <field name="name">button_stop</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_reactivate">
+            <field name="name">button_reactivate</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_change_start_date">
+            <field name="name">button_change_start_date</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_calculate">
+            <field name="name">button_calculate</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_option_subscription">
+            <field name="name">option_subscription</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
         <!-- ############################ -->
         <!-- # Hold contract            # -->
         <!-- ############################ -->
@@ -263,10 +302,6 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.ui.menu-res.group" id="group_contract_admin_menu_contract_configuration">
             <field name="group" ref="group_contract_admin"/>
             <field name="menu" ref="offered.menu_contract_configuration"/>
-        </record>
-        <record model="ir.model.button" id="change_active_sub_status">
-            <field name="name">change_active_sub_status</field>
-            <field name="model" search="[('model', '=', 'contract')]"/>
         </record>
     </data>
 </tryton>

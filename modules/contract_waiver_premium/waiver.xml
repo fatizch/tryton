@@ -23,5 +23,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">premium_waiver_option_form</field>
         </record>
+        <record model="ir.model.button" id="button_contract_waiver_premium_end_waiver">
+            <field name="name">end_waiver</field>
+            <field name="model" search="[('model', '=', 'contract.waiver_premium')]"/>
+        </record>
     </data>
 </tryton>

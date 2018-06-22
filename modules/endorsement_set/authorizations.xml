@@ -31,6 +31,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <!-- Buttons -->
+        <record model="ir.model.button-res.group" id="button_endorsement_set_button_decline_set_contract_manage">
+            <field name="button" ref="button_endorsement_set_button_decline_set"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_endorsement_set_reset_contract_manage">
+            <field name="button" ref="button_endorsement_set_reset"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
         <!-- Default Endorsement Set Access Rights -->
         <record model="ir.model.access" id="access_endorsement_configuration_number_sequence">
             <field name="model" search="[('model', '=', 'endorsement.configuration.endorsement_set_sequence')]"/>

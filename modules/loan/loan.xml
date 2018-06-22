@@ -100,6 +100,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">loan,-1</field>
             <field name="action" ref="act_contract_relate_form"/>
         </record>
+        <record model="ir.model.button" id="button_loan_draft">
+            <field name="name">draft</field>
+            <field name="model" search="[('model', '=', 'loan')]"/>
+        </record>
+        <record model="ir.model.button" id="button_loan_calculate_loan">
+            <field name="name">calculate_loan</field>
+            <field name="model" search="[('model', '=', 'loan')]"/>
+        </record>
+        <record model="ir.model.button" id="button_loan_add_manual_increment">
+            <field name="name">add_manual_increment</field>
+            <field name="model" search="[('model', '=', 'loan')]"/>
+        </record>
         <!-- ############################################################ -->
         <!-- ########### Loan Share ########### -->
         <!-- ############################################################ -->

@@ -39,6 +39,13 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <menuitem parent="document.menu_document" sequence="25" id="menu_document_request_line_form"
             icon="document_request" action="act_document_request_line_form"/>
+        <!-- ############################### -->
+        <!-- # Document Request Buttons    # -->
+        <!-- ############################### -->
+        <record model="ir.model.button" id="button_generic_send_letter">
+            <field name="name">generic_send_letter</field>
+            <field name="model" search="[('model', '=', 'document.request')]"/>
+        </record>
         <!-- #################### -->
         <!-- # Document Request # -->
         <!-- #################### -->

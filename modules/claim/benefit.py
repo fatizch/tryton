@@ -9,7 +9,7 @@ from trytond.transaction import Transaction
 from trytond import backend
 from trytond.cache import Cache
 
-from trytond.modules.coog_core import model, fields, coog_string, utils
+from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.offered.extra_data import with_extra_data
 from trytond.modules.offered.extra_data import with_extra_data_def
 
@@ -305,10 +305,6 @@ class Benefit(model.CoogSQL, model.CoogView,
     @staticmethod
     def default_beneficiary_kind():
         return 'subscriber'
-
-    @staticmethod
-    def default_start_date():
-        return Transaction().context.get('start_date', None) or utils.today()
 
     @classmethod
     def default_company(cls):

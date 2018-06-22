@@ -10,3 +10,8 @@ __all__ = [
 class ModelProcess(CoogProcessFramework):
     'Test Model Process'
     __name__ = 'process.test.model'
+
+    @classmethod
+    def __setup__(cls):
+        super(ModelProcess, cls).__setup__()
+        cls._buttons.pop('button_resume')

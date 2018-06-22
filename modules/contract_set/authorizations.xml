@@ -32,5 +32,9 @@ this repository contains the full copyright notices and license terms. -->
                 <field name="perm_create" eval="False"/>
                 <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.button-res.group" id="decline_set_button_group_contract_manage">
+            <field name="button" ref="decline_set_button"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
     </data>
 </tryton>

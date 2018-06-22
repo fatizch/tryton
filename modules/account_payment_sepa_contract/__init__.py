@@ -21,7 +21,10 @@ def register():
         payment.Journal,
         payment.JournalFailureAction,
         payment.PaymentCreationStart,
-        event.EventLog,
         payment.MergedPaymentsByContracts,
         offered.Product,
         module='account_payment_sepa_contract', type_='model')
+    Pool.register(
+        event.EventLog,
+        module='account_payment_sepa_contract', type_='model',
+        depends=['event_log'])

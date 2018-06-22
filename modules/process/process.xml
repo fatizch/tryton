@@ -176,5 +176,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">action_list</field>
         </record>
+        <record model="ir.model.button" id="update_view_button">
+            <field name="name">update_view</field>
+            <field name="model" search="[('model', '=', 'process')]"/>
+        </record>
     </data>
 </tryton>

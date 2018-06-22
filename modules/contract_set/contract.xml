@@ -42,6 +42,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">select_decline_reason_form</field>
         </record>
+        <record model="ir.model.button" id="decline_set_button">
+            <field name="name">button_decline_set</field>
+            <field name="model" search="[('model', '=', 'contract.set')]"/>
+        </record>
         <!-- ################# -->
         <!-- # Configuration # -->
         <!-- ################# -->

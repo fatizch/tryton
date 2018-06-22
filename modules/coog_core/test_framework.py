@@ -97,7 +97,8 @@ class CoogTestCase(ModuleTestCase):
                 'test_field_methods', 'test_rpc_callable',
                 'test_ir_action_window', 'test_selection_fields',
                 'test_wizards', 'test_modelsingleton_inherit_order',
-                'test_function_fields'):
+                'test_function_fields', 'test_depends_parent',
+                'test_buttons_registered'):
             good_function = functools.partial(
                 prepare_test()(test_function, True), self)
             setattr(self, self._testMethodName, good_function)

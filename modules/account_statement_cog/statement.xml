@@ -101,5 +101,9 @@ this repository contains the full copyright notices and license terms. -->
 	    <field name="type">form</field>
 	    <field name="name">line_group_cancel_start_view_form</field>
 	</record>
+        <record model="ir.model.button" id="button_account_statement_line_group_start_cancel">
+        <field name="name">start_cancel</field>
+        <field name="model" search="[('model', '=', 'account.statement.line.group')]"/>
+    </record>
     </data>
 </tryton>

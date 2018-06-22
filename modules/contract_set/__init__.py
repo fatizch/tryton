@@ -16,8 +16,12 @@ def register():
         contract.Configuration,
         contract.ConfigurationContractSetNumberSequence,
         event.EventTypeAction,
-        event.EventLog,
         module='contract_set', type_='model')
     Pool.register(
         contract.ContractSetDecline,
         module='contract_set', type_='wizard')
+
+    Pool.register(
+        event.EventLog,
+        module='contract_set', type_='model',
+        depends=['event_log'])

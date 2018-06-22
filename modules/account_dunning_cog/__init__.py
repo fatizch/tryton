@@ -19,6 +19,9 @@ def register():
         batch.DunningTreatmentBatch,
         party.Party,
         party.PartyDunningProcedure,
-        event.EventLog,
         account.MoveLine,
         module='account_dunning_cog', type_='model')
+    Pool.register(
+        event.EventLog,
+        module='account_dunning_cog', type_='model',
+        depends=['event_log'])

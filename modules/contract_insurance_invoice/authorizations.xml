@@ -320,6 +320,30 @@ this repository contains the full copyright notices and license terms. -->
             <field name="button" ref="account_invoice.invoice_pay_button"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
+        <record model="ir.model.button-res.group" id="button_suspend_payments_group_contract_manage">
+            <field name="button" ref="button_suspend_payments"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_unsuspend_payments_group_contract_manage">
+            <field name="button" ref="button_unsuspend_payments"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="contract_invoice_cancel_button_group_contract_manage">
+            <field name="button" ref="contract_invoice_cancel_button"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="contract_invoice_reinvoice_button_group_contract_manage">
+            <field name="button" ref="contract_invoice_reinvoice_button"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="payment_suspension_activate_button_group_contract_manage">
+            <field name="button" ref="payment_suspension_activate_button"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="payment_suspension_deactivate_button_group_contract_manage">
+            <field name="button" ref="payment_suspension_deactivate_button"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
     </data>
     <data depends="account_invoice_logging">
         <record model="ir.model.access" id="access_account_invoice_logging_group_contract_manage">

@@ -111,12 +111,36 @@ this repository contains the full copyright notices and license terms. -->
             <field name="button" ref="account_payment_cog.button_action_process_payment"/>
             <field name="group" ref="account_cog.group_financial_manage"/>
         </record>
+        <record model="ir.model.button-res.group" id="button_process_fail_payments_group_financial_manage">
+            <field name="button" ref="button_process_fail_payments"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_fail_payments_group_financial_manage">
+            <field name="button" ref="button_fail_payments"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
         <record model="ir.model.button-res.group" id="payment_succeed_button_group_financial_manage">
             <field name="button" ref="account_payment.payment_succeed_button"/>
             <field name="group" ref="account_cog.group_financial_manage"/>
         </record>
         <record model="ir.model.button-res.group" id="payment_fail_button_group_financial_manage">
             <field name="button" ref="account_payment.payment_fail_button"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_to_acknowledge_group_financial_manage">
+            <field name="button" ref="button_to_acknowledge"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_fail_group_group_financial_manage">
+            <field name="button" ref="button_fail_group"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_acknowledge_group_group_financial_manage">
+            <field name="button" ref="button_acknowledge_group"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_fail_merged_payments_group_financial_manage">
+            <field name="button" ref="button_fail_merged_payments"/>
             <field name="group" ref="account_cog.group_financial_manage"/>
         </record>
         <record model="ir.model.access" id="access_account_configuration_direct_debit_journal_group_financial_manage">

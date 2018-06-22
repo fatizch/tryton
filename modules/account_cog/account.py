@@ -5,7 +5,6 @@ from sql import Null
 from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
 from trytond.transaction import Transaction
-from trytond.pyson import Eval
 
 from trytond.modules.coog_core import export, fields, utils
 
@@ -20,8 +19,6 @@ __all__ = [
     'Period',
     'Configuration',
     'ThirdPartyBalance',
-    'OpenThirdPartyBalance',
-    'OpenThirdPartyBalanceStart',
     'MoveTemplate',
     'MoveTemplateKeyword',
     'MoveLineTemplate',
@@ -194,63 +191,6 @@ class Configuration(export.ExportImportMixin):
             values[fname] = account.id
 
         return super(Configuration, cls)._import_json(values, main_object)
-
-
-class OpenThirdPartyBalanceStart:
-    __metaclass__ = PoolMeta
-    __name__ = 'account.open_third_party_balance.start'
-    third_party_balance_option = fields.Selection([
-            ('all', 'All'),
-            ('only_unbalanced', 'Only Unbalanced Party')], 'Balance Option',
-        required=True)
-    third_party_balance_option_string = third_party_balance_option.translated(
-        'third_party_balance_option')
-    account = fields.Many2One('account.account', 'Account',
-        domain=[('company', '=', Eval('company'))],
-        depends=['company'])
-    at_date = fields.Date('At date', required=True)
-
-    @classmethod
-    def __setup__(cls):
-        super(OpenThirdPartyBalanceStart, cls).__setup__()
-        cls.fiscalyear.required = False
-        # We force to use posted moves only
-        cls.posted.states.update({'invisible': True})
-
-    @staticmethod
-    def default_posted():
-        return True
-
-    @staticmethod
-    def default_at_date():
-        return utils.today()
-
-    @staticmethod
-    def default_third_party_balance_option():
-        return 'only_unbalanced'
-
-    @staticmethod
-    def default_fiscalyear():
-        return None
-
-
-class OpenThirdPartyBalance:
-    __metaclass__ = PoolMeta
-    __name__ = 'account.open_third_party_balance'
-
-    def do_print_(self, action):
-        # Do not call super to avoid trying to set fiscalyear
-        data = {
-            'company': self.start.company.id,
-            'posted': True,
-            'fiscalyear':
-                self.start.fiscalyear.id if self.start.fiscalyear else None,
-            }
-        data['third_party_balance_option'] = \
-            self.start.third_party_balance_option
-        data['account'] = self.start.account.id if self.start.account else None
-        data['at_date'] = self.start.at_date
-        return action, data
 
 
 class ThirdPartyBalance:

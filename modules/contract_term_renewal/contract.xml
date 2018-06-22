@@ -36,5 +36,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">confirm_contract_renewal_form</field>
         </record>
+        <!-- Contract Buttons -->
+        <record model="ir.model.button" id="button_contract_button_renew">
+            <field name="name">button_renew</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_contract_button_decline_renewal">
+            <field name="name">button_decline_renewal</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
     </data>
 </tryton>

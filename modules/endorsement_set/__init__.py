@@ -12,9 +12,13 @@ def register():
         endorsement.EndorsementSet,
         endorsement.Endorsement,
         endorsement.EndorsementSetSelectDeclineReason,
-        event.EventLog,
         event.EventTypeAction,
         module='endorsement_set', type_='model')
     Pool.register(
         endorsement.EndorsementSetDecline,
         module='endorsement_set', type_='wizard')
+    Pool.register(
+        event.EventLog,
+        module='endorsement_set', type_='model',
+        depends=['event_log'])
+

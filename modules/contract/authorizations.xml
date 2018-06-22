@@ -326,9 +326,56 @@ this repository contains the full copyright notices and license terms. -->
             <field name="action" ref="act_change_sub_status"/>
             <field name="group" ref="group_contract_super_group"/>
         </record>
+        <!-- ############################ -->
+        <!-- # Contract Buttons Rights  # -->
+        <!-- ############################ -->
         <record model="ir.model.button-res.group" id="change_active_sub_status_group_contract_super_group">
             <field name="button" ref="change_active_sub_status"/>
             <field name="group" ref="group_contract_super_group"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_decline_group_contract_manage">
+            <field name="button" ref="button_decline"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_activate_group_contract_manage">
+            <field name="button" ref="button_activate"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_hold_group_contract_manage">
+            <field name="button" ref="button_hold"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_stop_group_contract_manage">
+            <field name="button" ref="button_stop"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_reactivate_group_contract_manage">
+            <field name="button" ref="button_reactivate"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_change_start_date_group_contract_manage">
+            <field name="button" ref="button_change_start_date"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_calculate_group_contract_manage">
+            <field name="button" ref="button_calculate"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_option_subscription_group_contract_manage">
+            <field name="button" ref="button_option_subscription"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_open_contracts_group_contract_manage">
+            <field name="button" ref="button_open_contracts"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_open_quotes_group_contract_manage">
+            <field name="button" ref="button_open_quotes"/>
+            <field name="group" ref="group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_notification_treat_group_contract_manage">
+            <field name="button" ref="button_notification_treat"/>
+            <field name="group" ref="group_contract_manage"/>
         </record>
     </data>
     <data depends="event_log">

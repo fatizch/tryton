@@ -3,6 +3,13 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- #################### -->
+        <!-- # Contract Buttons # -->
+        <!-- #################### -->
+        <record model="ir.model.button" id="contract_button_start_endorsement_process">
+            <field name="name">button_start_endorsement_process</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
         <!-- ############ -->
         <!-- # Contract # -->
         <!-- ############ -->

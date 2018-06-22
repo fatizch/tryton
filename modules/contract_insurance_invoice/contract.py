@@ -938,8 +938,8 @@ class Contract:
             accounting_date=None,
             description='%s (%s - %s)' % (
                 self.rec_name,
-                lang.strftime(start, lang.code, lang.date) if start else '',
-                lang.strftime(end, lang.code, lang.date) if end else '',
+                lang.strftime(start, lang.date) if start else '',
+                lang.strftime(end, lang.date) if end else '',
                 ),
             )
 

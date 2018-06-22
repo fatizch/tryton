@@ -51,7 +51,6 @@ def register():
         contract.InvoiceContractStart,
         contract.Premium,
         event.Event,
-        event.EventLog,
         event.EventTypeAction,
         invoice.Invoice,
         invoice.InvoiceLine,
@@ -80,3 +79,7 @@ def register():
         party.PartyReplace,
         wizard.PartyErase,
         module='contract_insurance_invoice', type_='wizard')
+    Pool.register(
+        event.EventLog,
+        module='contract_insurance_invoice', type_='model',
+        depends=['event_log'])

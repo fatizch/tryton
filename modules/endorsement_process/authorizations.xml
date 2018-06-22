@@ -9,5 +9,24 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="endorsement_process.menu_start_endorsement_process"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
+        <!-- Buttons -->
+        <record model="ir.model.button-res.group" id="button_contract_button_start_endorsement_process_contract_manage">
+            <field name="button" ref="contract_button_start_endorsement_process"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <!-- Endorsement -->
+        <!-- Buttons -->
+        <record model="ir.model.button-res.group" id="button_endorsement_button_preview_changes_contract_manage">
+            <field name="button" ref="button_endorsement_button_preview_changes"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_endorsement_button_resume_contract_manage">
+            <field name="button" ref="button_endorsement_button_resume"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_endorsement_party_union_button_modify_contract_manage">
+            <field name="button" ref="button_endorsement_part_union_button_modify"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
     </data>
 </tryton>

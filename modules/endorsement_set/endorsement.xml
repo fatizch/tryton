@@ -70,6 +70,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="endorsement.endorsement_configuration_view_form"/>
             <field name="name">configuration_form</field>
         </record>
+        <record model="ir.model.button" id="button_endorsement_set_button_decline_set">
+            <field name="name">button_decline_set</field>
+            <field name="model" search="[('model', '=', 'endorsement.set')]"/>
+        </record>
+        <record model="ir.model.button" id="button_endorsement_set_reset">
+            <field name="name">reset</field>
+            <field name="model" search="[('model', '=', 'endorsement.set')]"/>
+        </record>
         <!-- ################# -->
         <!-- # Access Rights # -->
         <!-- ################# -->

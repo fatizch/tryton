@@ -383,5 +383,25 @@ this repository contains the full copyright notices and license terms. -->
             <field name="button" ref="endorsement.endorsement_apply_synchronous_button"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
+        <record model="ir.model.button-res.group" id="button_revert_current_endorsement_group_contract_manage">
+            <field name="button" ref="button_revert_current_endorsement"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="endorsement_decline_endorsement_button_group_contract_manage">
+            <field name="button" ref="endorsement_decline_endorsement_button"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="endorsement_reset_button_group_contract_manage">
+            <field name="button" ref="endorsement_reset_button"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="endorsement_open_contract_button_group_contract_manage">
+            <field name="button" ref="endorsement_open_contract_button"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="endorsement_delete_button_group_contract_manage">
+            <field name="button" ref="endorsement_delete_button"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
     </data>
 </tryton>

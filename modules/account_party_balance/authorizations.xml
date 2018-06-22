@@ -4,6 +4,11 @@ this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
         <!-- Financial Management Group -->
+        <!-- Button -->
+        <record model="ir.model.button-res.group" id="button_account_party_balance_refresh_financial_manage_group">
+            <field name="button" ref="button_account_party_balance_refresh"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
         <record model="ir.model.access" id="access_account_party_balance_financial_manage_group">
             <field name="model" search="[('model', '=', 'account.party_balance')]"/>
             <field name="group" ref="account_cog.group_financial_manage"/>

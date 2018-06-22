@@ -19,10 +19,13 @@ def register():
         contract.SelectDeclineRenewalReason,
         batch.RenewContracts,
         report_engine.ReportTemplate,
-        wizard.TerminateContract,
         contract.ConfirmRenew,
         module='contract_term_renewal', type_='model')
     Pool.register(
         contract.DeclineRenewal,
         contract.Renew,
         module='contract_term_renewal', type_='wizard')
+    Pool.register(
+        wizard.TerminateContract,
+        module='contract_term_renewal', type_='model',
+        depends=['endorsement'])

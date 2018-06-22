@@ -110,6 +110,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="claim_ij_relaunch_subscription_view_form"/>
             <field name="act_window" ref="act_erroneous_requests_prest_ij"/>
         </record>
+        <!-- ####################################################### -->
+        <!-- ###################### Buttons  ####################### -->
+        <!-- ####################################################### -->
+        <record model="ir.model.button" id="subscription_relaunch_process_button">
+            <field name="name">button_relaunch_process</field>
+            <field name="model" search="[('model', '=', 'claim.ij.subscription')]"/>
+        </record>
+        <record model="ir.model.button" id="create_ij_subscription_request_button">
+            <field name="name">button_create_ij_subscription_request</field>
+            <field name="model" search="[('model', '=', 'claim.ij.subscription')]"/>
+        </record>
         <!-- ############################################################ -->
         <!-- ###################### Prest'IJ Menu ####################### -->
         <!-- ############################################################ -->

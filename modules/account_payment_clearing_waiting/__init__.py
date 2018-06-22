@@ -12,9 +12,14 @@ def register():
         payment.Payment,
         payment.Journal,
         move.Move,
-        statement.StatementJournal,
         module='account_payment_clearing_waiting', type_='model')
 
     Pool.register(
         statement.CancelLineGroup,
-        module='account_payment_clearing_waiting', type_='wizard')
+        module='account_payment_clearing_waiting', type_='wizard',
+        depends=['account_statement_cog'])
+
+    Pool.register(
+        statement.StatementJournal,
+        module='account_payment_clearing_waiting', type_='model',
+        depends=['account_statement_cog'])

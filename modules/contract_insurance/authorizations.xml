@@ -14,6 +14,48 @@ this repository contains the full copyright notices and license terms. -->
         </record>
     </data>
     <data>
+        <!-- Buttons -->
+        <record model="ir.model.button-res.group" id="button_propagate_exclusions_contract_manage">
+            <field name="button" ref="button_propagate_exclusions"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_manage_extra_premium_contract_manage">
+            <field name="button" ref="button_manage_extra_premium"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_create_extra_premium_contract_manage">
+            <field name="button" ref="button_create_extra_premium"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_generic_send_letter_contract_manage">
+            <field name="button" ref="button_generic_send_letter"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_option_propagate_exclusions_contract_manage">
+            <field name="button" ref="button_option_propagate_exclusions"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_propagate_extra_premiums_contract_manage">
+            <field name="button" ref="button_propagate_extra_premiums"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_propagate_contract_manage">
+            <field name="button" ref="button_propagate"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_button_clear_all_contract_manage">
+            <field name="button" ref="button_button_clear_all"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_button_check_all_contract_manage">
+            <field name="button" ref="button_button_check_all"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_button_propagate_selected_contract_manage">
+            <field name="button" ref="button_button_propagate_selected"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+
         <!-- Contract Manage Group -->
         <record model="ir.model.access" id="access_contract_covered_element_group_contract_manage">
             <field name="model" search="[('model', '=', 'contract.covered_element')]"/>

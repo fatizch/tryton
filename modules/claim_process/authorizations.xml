@@ -64,5 +64,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.button-res.group" id="claim_process_resume_button_group_claim_manage">
+            <field name="button" ref="claim_process_resume_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
     </data>
 </tryton>

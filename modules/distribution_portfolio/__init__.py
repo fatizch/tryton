@@ -26,9 +26,6 @@ def register():
         party.ContactMechanism,
         party.PartyRelationAll,
         contract.Contract,
-        contract.CoveredElement,
-        contract.Beneficiary,
-        contract.ContractBillingInformation,
         rule_engine.RuleEngineRuntime,
         res.User,
         invoice.Invoice,
@@ -37,12 +34,32 @@ def register():
         payment.Payment,
         payment.Mandate,
         payment.MergedPayment,
-        claim.Claim,
-        claim.Loss,
         commission.Commission,
         commission.AggregatedCommission,
         module='distribution_portfolio', type_='model')
 
     Pool.register(
         process.ContractSubscribe,
-        module='distribution_portfolio', type_='wizard')
+        module='distribution_portfolio', type_='wizard',
+        depends=['contract_process'])
+
+    Pool.register(
+        contract.CoveredElement,
+        module='distribution_portfolio', type_='model',
+        depends=['contract_insurance'])
+
+    Pool.register(
+        contract.Beneficiary,
+        module='distribution_portfolio', type_='model',
+        depends=['contract_life_clause'])
+
+    Pool.register(
+        contract.ContractBillingInformation,
+        module='distribution_portfolio', type_='model',
+        depends=['contract_insurance_invoice'])
+
+    Pool.register(
+        claim.Claim,
+        claim.Loss,
+        module='distribution_portfolio', type_='model',
+        depends=['claim'])

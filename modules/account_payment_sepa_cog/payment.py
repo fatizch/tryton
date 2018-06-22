@@ -637,7 +637,7 @@ class Payment:
         elif self.kind == 'receivable':
             descriptions.append(self.raise_user_error(
                     'direct_debit_payment', raise_exception=False))
-        descriptions.append(lang.strftime(self.date, lang.code, lang.date)
+        descriptions.append(lang.strftime(self.date, lang.date)
             if self.date else '')
         return ' '.join(descriptions)
 

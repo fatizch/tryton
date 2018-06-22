@@ -154,6 +154,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="template_parameter_view_form"/>
             <field name="act_window" ref="act_report_template_parameter_form"/>
         </record>
+        <!-- ########################### -->
+        <!-- # Select Template Buttons # -->
+        <!-- ########################### -->
+        <record model="ir.model.button" id="button_report_convert_select_templates_recalculate_matches">
+            <field name="name">recalculate_matches</field>
+            <field name="model" search="[('model', '=', 'report.convert.select_templates')]"/>
+        </record>
         <menuitem parent="menu_report" sequence="50" action="act_report_template_parameter_form" id="menu_template_parameter"/>
     </data>
 </tryton>

@@ -23,5 +23,20 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="endorsement.endorsement_view_list"/>
             <field name="name">endorsement_list</field>
         </record>
+        <!-- ####################### -->
+        <!-- # Endorsement Buttons # -->
+        <!-- ####################### -->
+        <record model="ir.model.button" id="button_endorsement_button_preview_changes">
+            <field name="name">button_preview_changes</field>
+            <field name="model" search="[('model', '=', 'endorsement')]"/>
+        </record>
+        <record model="ir.model.button" id="button_endorsement_button_resume">
+            <field name="name">button_resume</field>
+            <field name="model" search="[('model', '=', 'endorsement')]"/>
+        </record>
+        <record model="ir.model.button" id="button_endorsement_part_union_button_modify">
+            <field name="name">button_modify</field>
+            <field name="model" search="[('model', '=', 'endorsement.part.union')]"/>
+        </record>
     </data>
 </tryton>

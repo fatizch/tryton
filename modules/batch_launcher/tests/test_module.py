@@ -4,20 +4,19 @@
 import unittest
 
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import ModuleTestCase, with_transaction
+from trytond.modules.coog_core import test_framework
 
 from trytond.pool import Pool
-from trytond.modules.coog_core import BatchRoot
+from trytond.modules.coog_core.batch import BatchRoot
 
 
-class BatchLauncherTestCase(ModuleTestCase):
+class ModuleTestCase(test_framework.CoogTestCase):
     'Batch Launcher Test Case'
     '''
     Test Coog batch launcher.
     '''
     module = 'batch_launcher'
 
-    @with_transaction()
     def test_check_required_params(self):
         class TestClassNoRequiredParams(BatchRoot):
             def execute(cls, objects, ids, crash=None):
@@ -48,5 +47,5 @@ class BatchLauncherTestCase(ModuleTestCase):
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        BatchLauncherTestCase))
+        ModuleTestCase))
     return suite

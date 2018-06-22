@@ -113,5 +113,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="sequence_type" ref="sequence_type_loan"/>
             <field name="group" ref="offered.group_product_manage"/>
         </record>
+        <record model="ir.model.button-res.group" id="button_loan_draft_group_contract_manage">
+            <field name="button" ref="button_loan_draft"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_loan_calculate_loan_group_contract_manage">
+            <field name="button" ref="button_loan_calculate_loan"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_loan_add_manual_increment_group_contract_manage">
+            <field name="button" ref="button_loan_add_manual_increment"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
     </data>
 </tryton>

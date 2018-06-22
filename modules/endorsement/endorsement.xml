@@ -177,6 +177,22 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">decline</field>
             <field name="model" search="[('model', '=', 'endorsement')]"/>
         </record>
+        <record model="ir.model.button" id="endorsement_decline_endorsement_button">
+            <field name="name">button_decline_endorsement</field>
+            <field name="model" search="[('model', '=', 'endorsement')]"/>
+        </record>
+        <record model="ir.model.button" id="endorsement_reset_button">
+            <field name="name">reset</field>
+            <field name="model" search="[('model', '=', 'endorsement')]"/>
+        </record>
+        <record model="ir.model.button" id="endorsement_open_contract_button">
+            <field name="name">open_contract</field>
+            <field name="model" search="[('model', '=', 'endorsement')]"/>
+        </record>
+        <record model="ir.model.button" id="endorsement_delete_button">
+            <field name="name">button_delete</field>
+            <field name="model" search="[('model', '=', 'endorsement')]"/>
+        </record>
         <record model="ir.model.button-res.group" id="endorsement_draft_button_group_endorsement_super_user">
             <field name="button" ref="endorsement_draft_button"/>
             <field name="group" ref="group_endorsement_super_user"/>

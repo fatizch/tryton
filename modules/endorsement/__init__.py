@@ -61,7 +61,6 @@ def register():
         event.EndorsementDefinitionReportTemplate,
         endorsement.ReportTemplate,
         event.EventTypeAction,
-        event.EventLog,
         document.DocumentDescription,
         group.Group,
         rule_engine.RuleEngine,
@@ -76,3 +75,8 @@ def register():
         document.ReceiveDocument,
         party.PartyReplace,
         module='endorsement', type_='wizard')
+
+    Pool.register(
+        event.EventLog,
+        module='endorsement', type_='model',
+        depends=['event_log'])

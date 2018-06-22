@@ -40,7 +40,6 @@ def register():
         party.PartyAccount,
         party.SynthesisMenuMoveLine,
         party.SynthesisMenu,
-        account.OpenThirdPartyBalanceStart,
         account.MoveTemplate,
         account.MoveTemplateKeyword,
         account.MoveLineTemplate,
@@ -51,10 +50,9 @@ def register():
         move.Reconcile,
         move.ReconcileLines,
         party.SynthesisMenuOpen,
-        account.OpenThirdPartyBalance,
         move.CreateMove,
         load_data.FiscalYearSetWizard,
         module='account_cog', type_='wizard')
     Pool.register(
         account.ThirdPartyBalance,
-        module='account', type_='report')
+        module='account_cog', type_='report')

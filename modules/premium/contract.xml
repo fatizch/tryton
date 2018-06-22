@@ -34,5 +34,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">premium_list</field>
         </record>
+        <record model="ir.model.button" id="calculate_prices_button">
+            <field name="name">button_calculate_prices</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="display_premium_button">
+            <field name="name">button_display_premium</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
     </data>
 </tryton>

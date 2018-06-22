@@ -9,10 +9,20 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="loan.menu_loan_form"/>
             <field name="group" ref="contract.group_contract_read"/>
         </record>
+        <!-- Buttons  -->
+        <record model="ir.model.button-res.group" id="button_contract_button_show_all_invoices_contract_read">
+            <field name="button" ref="contract_button_show_all_invoices"/>
+            <field name="group" ref="contract.group_contract_read"/>
+        </record>
         <!-- Contract Management Group -->
         <!-- Loan  -->
         <record model="ir.ui.menu-res.group" id="menu_loan_form_contract_manage">
             <field name="menu" ref="loan.menu_loan_form"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <!-- Buttons  -->
+        <record model="ir.model.button-res.group" id="button_contract_button_show_all_invoices_contract_manage">
+            <field name="button" ref="contract_button_show_all_invoices"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
     </data>

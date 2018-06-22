@@ -42,7 +42,6 @@ def register():
         party.PartyPaymentDirectDebit,
         move.PaymentCreationStart,
         report.ReportTemplate,
-        invoice.Invoice,
         module='account_payment_cog', type_='model')
     Pool.register(
         party.SynthesisMenuOpen,
@@ -54,3 +53,7 @@ def register():
         payment.ProcessPayment,
         wizard.PartyErase,
         module='account_payment_cog', type_='wizard')
+    Pool.register(
+        invoice.Invoice,
+        module='account_payment_cog', type_='model',
+        depends=['account_invoice'])

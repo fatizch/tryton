@@ -459,7 +459,7 @@ if LOAD_ACCOUNTING:  # {{{
     loss_account.type = loss_root.type
     loss_account.deferral = True
     loss_account.general_ledger_balance = False
-    loss_account.party_required = True
+    loss_account.party_required = False
     loss_account.reconcile = False
     loss_account.save()
 
@@ -474,7 +474,7 @@ if LOAD_ACCOUNTING:  # {{{
         [('code', '=', '622')])[0].type
     exceptional_loss_account.deferral = True
     exceptional_loss_account.general_ledger_balance = False
-    exceptional_loss_account.party_required = True
+    exceptional_loss_account.party_required = False
     exceptional_loss_account.reconcile = False
     exceptional_loss_account.save()
 
@@ -490,7 +490,7 @@ if LOAD_ACCOUNTING:  # {{{
     exceptional_revenue_account.kind = 'revenue'
     exceptional_revenue_account.deferral = True
     exceptional_revenue_account.general_ledger_balance = False
-    exceptional_revenue_account.party_required = True
+    exceptional_revenue_account.party_required = False
     exceptional_revenue_account.reconcile = False
     exceptional_revenue_account.save()
     # }}}
@@ -592,15 +592,15 @@ if LOAD_ACCOUNTING:  # {{{
     payment_sepa.sepa_bank_account_number = company.party.bank_accounts[0]
     payment_sepa.sepa_receivable_flavor = 'pain.008.001.02'
     payment_sepa.sepa_payable_flavor = 'pain.001.001.03'
-    payment_sepa.failure_actions.append(
-        PaymentJournalFailureAction(
-            reject_reason=sepa_reject_reasons['AC01'], action='suspend'))
-    payment_sepa.failure_actions.append(
-        PaymentJournalFailureAction(
-            reject_reason=sepa_reject_reasons['AC06'], action='manual'))
-    payment_sepa.failure_actions.append(
-        PaymentJournalFailureAction(
-            reject_reason=sepa_reject_reasons['AM04'], action='retry'))
+    action = payment_sepa.failure_actions.new()
+    action.reject_reason = sepa_reject_reasons['AC01']
+    action.action = 'suspend'
+    action = payment_sepa.failure_actions.new()
+    action.reject_reason = sepa_reject_reasons['AC06']
+    action.action = 'manual'
+    action = payment_sepa.failure_actions.new()
+    action.reject_reason = sepa_reject_reasons['AM04']
+    action.action = 'retry'
     payment_sepa.save()
     # }}}
 

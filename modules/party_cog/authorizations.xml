@@ -61,6 +61,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="party_relationship.menu_relation_all"/>
             <field name="group" ref="group_party_manage"/>
         </record>
+        <record model="ir.model.button-res.group" id="start_synthesis_menu_party_manage">
+            <field name="button" ref="party_cog.button_start_synthesis_menu"/>
+            <field name="group" ref="group_party_manage"/>
+        </record>
         <!-- Global Configuration Group -->
         <!-- Party / Configuration -->
         <record model="ir.ui.menu-res.group" id="menu_party_global_config">

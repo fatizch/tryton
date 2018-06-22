@@ -20,9 +20,12 @@ def register():
         contract.Contract,
         offered.Product,
         account.MoveLine,
-        event.EventLog,
         invoice.Invoice,
         payment.Payment,
         batch.DunningTreatmentBatch,
         batch.DunningCreationBatch,
         module='contract_insurance_invoice_dunning', type_='model')
+    Pool.register(
+        event.EventLog,
+        module='contract_insurance_invoice_dunning', type_='model',
+        depends=['event_log'])

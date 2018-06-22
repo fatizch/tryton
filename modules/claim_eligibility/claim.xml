@@ -11,6 +11,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="claim.claim_service_view_form"/>
             <field name="name">claim_service_form</field>
         </record>
+        <record model="ir.model.button" id="button_claim_service_validate_services">
+            <field name="name">validate_services</field>
+            <field name="model" search="[('model', '=', 'claim.service')]"/>
+        </record>
+        <record model="ir.model.button" id="button_claim_service_check_eligibility">
+            <field name="name">check_eligibility</field>
+            <field name="model" search="[('model', '=', 'claim.service')]"/>
+        </record>
+        <record model="ir.model.button" id="button_claim_service_reject_services">
+            <field name="name">reject_services</field>
+            <field name="model" search="[('model', '=', 'claim.service')]"/>
+        </record>
         <!-- ########################## -->
         <!-- # Claim Service Decision # -->
         <!-- ########################## -->

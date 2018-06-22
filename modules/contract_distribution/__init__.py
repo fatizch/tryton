@@ -17,8 +17,12 @@ def register():
         distribution.DistributionNetworkComProductRelation,
         offered.Product,
         contract.Contract,
-        process.ContractSubscribeFindProcess,
         module='contract_distribution', type_='model')
     Pool.register(
+        process.ContractSubscribeFindProcess,
+        module='contract_distribution', type_='model',
+        depends=['contract_process'])
+    Pool.register(
         process.ContractSubscribe,
-        module='contract_distribution', type_='wizard')
+        module='contract_distribution', type_='wizard',
+        depends=['contract_process'])

@@ -16,5 +16,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="account_payment_sepa.menu_message_form"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
+        <record model="ir.model.button-res.group" id="init_sepa_mandate_button_group_contract_manage">
+            <field name="button" ref="init_sepa_mandate"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
     </data>
 </tryton>

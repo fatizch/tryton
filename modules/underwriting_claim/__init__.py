@@ -17,12 +17,21 @@ def register():
         claim.Benefit,
         claim.Claim,
         claim.ClaimService,
-        event.EventLog,
         rule_engine.RuleEngine,
         rule_engine.RuleEngineRuntime,
-        process.UnderwritingStartFindProcess,
         module='underwriting_claim', type_='model')
     Pool.register(
         claim.DeliverBenefit,
-        process.UnderwritingStart,
         module='underwriting_claim', type_='wizard')
+    Pool.register(
+        event.EventLog,
+        module='underwriting_claim', type_='model',
+        depends=['event_log'])
+    Pool.register(
+        process.UnderwritingStartFindProcess,
+        module='underwriting_claim', type_='model',
+        depends=['underwriting_process'])
+    Pool.register(
+        process.UnderwritingStart,
+        module='underwriting_claim', type_='wizard',
+        depends=['underwriting_process'])

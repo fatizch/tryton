@@ -46,5 +46,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">future_blue</field>
             <field name="path">icons/future_blue.svg</field>
         </record>
+        <!-- ################## -->
+        <!-- # Account Button # -->
+        <!-- ##################  -->
+        <record model="ir.model.button" id="button_account_party_balance_refresh">
+            <field name="name">refresh</field>
+            <field name="model" search="[('model', '=', 'account.party_balance')]"/>
+        </record>
     </data>
 </tryton>

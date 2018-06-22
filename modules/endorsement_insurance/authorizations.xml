@@ -155,5 +155,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.button-res.group" id="button_contract_covered_element_modify_add_covered_element_group_contract_manage">
+            <field name="button" ref="button_contract_covered_element_modify_add_covered_element"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_contract_covered_element_modify_displayer_unterminate_group_contract_manage">
+            <field name="button" ref="button_contract_covered_element_modify_displayer_unterminate"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_contract_covered_element_modify_displayer_terminate_group_contract_manage">
+            <field name="button" ref="button_contract_covered_element_modify_displayer_terminate"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
     </data>
 </tryton>

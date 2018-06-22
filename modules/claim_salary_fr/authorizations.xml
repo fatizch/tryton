@@ -3,6 +3,12 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- Access Rights for Claim Management Group -->
+        <!-- Buttons -->
+        <record model="ir.model.button-res.group" id="button_launch_salaries_wizard_claim_manage">
+            <field name="button" ref="button_launch_salaries_wizard"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
         <!-- Product Consultation Group  -->
         <!-- Laboratory -->
         <record model="ir.ui.menu-res.group" id="menu_net_calculation_rule_product_read">

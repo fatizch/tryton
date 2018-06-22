@@ -27,8 +27,12 @@ def register():
         wizard.StartSetContributions,
         wizard.StartSetSalaries,
         wizard.ContributionsView,
-        benefit.ManageOptionBenefitsDisplayer,
         module='claim_salary_fr', type_='model')
     Pool.register(
         wizard.SalariesComputation,
         module='claim_salary_fr', type_='wizard')
+    Pool.register(
+        benefit.ManageOptionBenefitsDisplayer,
+        module='claim_salary_fr', type_='model',
+        depends=['endorsement_option_benefit'])
+

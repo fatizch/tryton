@@ -22,10 +22,13 @@ def register():
         offered.Product,
         offered.BillingMode,
         move.MoveLine,
-        event.EventLog,
         contract.Contract,
         report.ReportTemplate,
         module='contract_insurance_payment', type_='model')
     Pool.register(
         payment.PaymentCreation,
         module='contract_insurance_payment', type_='wizard')
+    Pool.register(
+        event.EventLog,
+        module='contract_insurance_payment', type_='model',
+        depends=['event_log'])

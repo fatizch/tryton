@@ -12,20 +12,28 @@ import endorsement
 
 def register():
     Pool.register(
-        endorsement.Endorsement,
         rule_engine.RuleEngine,
         rule_engine.RuleRuntime,
         offered.OptionDescription,
         offered.OptionDescriptionReductionRule,
         contract.Contract,
         contract.Option,
-        batch.CreateInvoiceContractBatch,
         wizard.ReduceParameters,
         wizard.ReducePreview,
         module='contract_reduction', type_='model')
-
     Pool.register(
         wizard.Reduce,
-        endorsement.StartEndorsement,
         wizard.CancelReduction,
         module='contract_reduction', type_='wizard')
+    Pool.register(
+        endorsement.Endorsement,
+        module='contract_reduction', type_='model',
+        depends=['endorsement'])
+    Pool.register(
+        batch.CreateInvoiceContractBatch,
+        module='contract_reduction', type_='model',
+        depends=['contract_insurance_invoice'])
+    Pool.register(
+        endorsement.StartEndorsement,
+        module='contract_reduction', type_='wizard',
+        depends=['endorsement'])

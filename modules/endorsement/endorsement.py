@@ -874,8 +874,8 @@ def relation_mixin(value_model, field, model, name):
     return Mixin
 
 
-class Contract(CoogProcessFramework):
-    __metaclass__ = ClassAttr
+class Contract:
+    __metaclass__ = PoolMeta
     _history = True
     __name__ = 'contract'
 

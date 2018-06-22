@@ -121,6 +121,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="button" ref="account_statement.statement_post_button"/>
             <field name="group" ref="account_cog.group_financial_manage"/>
         </record>
+        <record model="ir.model.button-res.group" id="button_account_statement_line_group_start_cancel_group_financial_manage">
+            <field name="button" ref="button_account_statement_line_group_start_cancel"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
         <!-- Default Account Statement Access Rights -->
         <record model="ir.model.access" id="access_account_statement">
             <field name="model" search="[('model', '=', 'account.statement')]"/>

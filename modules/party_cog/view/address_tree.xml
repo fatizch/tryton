@@ -22,7 +22,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="city" tree_invisible="1"/>
     </xpath>
     <xpath expr="/tree/field[@name='name']" position="replace"/>
-    <xpath expr="/tree/field[@name='active']" position="before">
+    <xpath expr="/tree/field[@name='subdivision']" position="after">
         <field name="return_to_sender" tree_invisible="1"/>
         <field name="color" tree_invisible="1"/>
     </xpath>

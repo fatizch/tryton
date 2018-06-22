@@ -3,6 +3,38 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- ####################### -->
+        <!-- # Contract Buttons    # -->
+        <!-- ####################### -->
+        <record model="ir.model.button" id="button_propagate_exclusions">
+            <field name="name">propagate_exclusions</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_manage_extra_premium">
+            <field name="name">manage_extra_premium</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_create_extra_premium">
+            <field name="name">create_extra_premium</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_generic_send_letter">
+            <field name="name">generic_send_letter</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_option_propagate_exclusions">
+            <field name="name">propagate_exclusions</field>
+            <field name="model" search="[('model', '=', 'contract.option')]"/>
+        </record>
+        <record model="ir.model.button" id="button_propagate_extra_premiums">
+            <field name="name">propagate_extra_premiums</field>
+            <field name="model" search="[('model', '=', 'contract.option')]"/>
+        </record>
+       <record model="ir.model.button" id="button_propagate">
+            <field name="name">propagate</field>
+            <field name="model" search="[('model', '=', 'contract.option.extra_premium')]"/>
+        </record>
+
         <!--################################################################ -->
         <!-- Contract Screens -->
         <!--################################################################ -->

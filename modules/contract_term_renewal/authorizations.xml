@@ -3,6 +3,15 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- Buttons -->
+        <record model="ir.model.button-res.group" id="button_contract_button_renew_contract_manage">
+            <field name="button" ref="button_contract_button_renew"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_contract_button_decline_renewal_contract_manage">
+            <field name="button" ref="button_contract_button_decline_renewal"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
         <!-- Product Management Group -->
         <record model="ir.model.access" id="offered_product_term_renewal_rule_product_management_group">
             <field name="model" search="[('model', '=', 'offered.product.term_renewal_rule')]"/>

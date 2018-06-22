@@ -50,5 +50,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.button-res.group" id="subscription_relaunch_process_button_group_claim_manage">
+            <field name="button" ref="subscription_relaunch_process_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="create_ij_subscription_request_button_group_claim_manage">
+            <field name="button" ref="create_ij_subscription_request_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
     </data>
 </tryton>

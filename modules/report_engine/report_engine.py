@@ -842,11 +842,10 @@ class CoogReport(Report):
         Lang = pool.get('ir.lang')
         Config = pool.get('ir.configuration')
 
-        if lang:
-            code = lang.code
-        else:
+        if not lang:
             code = Config.get_language()
-        return Lang.strftime(value, code, format)
+            lang = Lang.get(code)
+        return lang.strftime(value, format)
 
     @classmethod
     def get_context(cls, records, data):
@@ -1022,8 +1021,7 @@ class ReportGenerate(CoogReport):
         def format_date(value, lang=None, format_=None):
             if lang is None:
                 lang = report_context['Lang']
-            return pool.get('ir.lang').strftime(value, lang.code,
-                format_ or lang.date)
+            return lang.strftime(value, format_ or lang.date)
 
         report_context['_stored_variables'] = {}
 

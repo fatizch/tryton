@@ -18,7 +18,6 @@ OptionTreeExpansion = expand_tree('contract.option')
 def register():
     Pool.register(
         event.EventTypeAction,
-        event.EventLog,
         party.Party,
         contract.Contract,
         contract.CoveredElement,
@@ -52,3 +51,8 @@ def register():
         party.PartyReplace,
         wizard.PartyErase,
         module='contract_insurance', type_='wizard')
+
+    Pool.register(
+        event.EventLog,
+        module='contract_insurance', type_='model',
+        depends=['event_log'])

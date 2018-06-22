@@ -25,7 +25,6 @@ def register():
         process_timings.ProcessTimingDisplayer,
         process_timings.ProcessTimingSelectDates,
         event.EventTypeAction,
-        document.ReattachDocument,
         wizard.ImportProcessDisplayer,
         wizard.ImportProcessSelect,
         module='process_cog', type_='model')
@@ -41,9 +40,18 @@ def register():
         process.PostponeTask,
         process_timings.GetDatesForProcessTimings,
         process_timings.ProcessTimings,
-        document.ReceiveDocument,
         wizard.ImportProcess,
         module='process_cog', type_='wizard')
+
+    Pool.register(
+        document.ReattachDocument,
+        module='process_cog', type_='model',
+        depends=['document_request'])
+
+    Pool.register(
+        document.ReceiveDocument,
+        module='process_cog', type_='wizard',
+        depends=['document_request'])
 
     if config.getboolean('env', 'testing') is True:
         Pool.register(

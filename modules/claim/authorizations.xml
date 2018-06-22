@@ -64,9 +64,42 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="claim.menu_claim_form"/>
             <field name="group" ref="group_claim_manage"/>
         </record>
+        <!-- Buttons -->
+        <record model="ir.ui.menu-res.group" id="button_close_claim_manage">
+            <field name="menu" ref="button_close"/>
+            <field name="group" ref="group_claim_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="button_deliver_claim_manage">
+            <field name="menu" ref="button_deliver"/>
+            <field name="group" ref="group_claim_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="button_loss_activate_claim_manage">
+            <field name="menu" ref="button_loss_activate"/>
+            <field name="group" ref="group_claim_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="button_loss_draft_claim_manage">
+            <field name="menu" ref="button_loss_draft"/>
+            <field name="group" ref="group_claim_manage"/>
+        </record>
         <!-- Claim Super Manager Group -->
         <record model="res.group" id="group_claim_super_manager">
             <field name="name">Coog Claim Super Manager</field>
+        </record>
+        <record model="ir.ui.menu-res.group" id="button_close_claim_super_manager">
+            <field name="menu" ref="button_close"/>
+            <field name="group" ref="group_claim_super_manager"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="button_deliver_super_claim_manager">
+            <field name="menu" ref="button_deliver"/>
+            <field name="group" ref="group_claim_super_manager"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="button_loss_activate_claim_super_manager">
+            <field name="menu" ref="button_loss_activate"/>
+            <field name="group" ref="group_claim_super_manager"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="button_loss_draft_super_claim_manager">
+            <field name="menu" ref="button_loss_draft"/>
+            <field name="group" ref="group_claim_super_manager"/>
         </record>
         <!-- Product Management Group  -->
         <!-- Claim / Configuration -->

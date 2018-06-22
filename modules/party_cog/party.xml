@@ -236,5 +236,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="active" eval="False"/>
         </record>
         <menuitem parent="party.menu_configuration" id="menu_zipcode_form" action="country_cog.act_zip_form"/>
+        <record model="ir.model.button" id="button_start_synthesis_menu">
+            <field name="name">button_start_synthesis_menu</field>
+            <field name="model" search="[('model', '=', 'party.party')]"/>
+        </record>
     </data>
 </tryton>

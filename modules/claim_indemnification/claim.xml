@@ -48,6 +48,30 @@ this repository contains the full copyright notices and license terms. -->
         <menuitem name="Indemnification Control Rule" parent="claim.menu_claim_configuration"
               id="menu_indemnification_control_rule" action="act_indemnification_control_rule"
               icon="tryton-preferences"/>
+        <record model="ir.model.button" id="claim_indemnification_modify_indemnification_button">
+            <field name="name">modify_indemnification</field>
+            <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
+        </record>
+        <record model="ir.model.button" id="claim_indemnification_validate_indemnification_button">
+            <field name="name">validate_indemnification</field>
+            <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
+        </record>
+        <record model="ir.model.button" id="claim_indemnification_calculate_button">
+            <field name="name">calculate</field>
+            <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
+        </record>
+        <record model="ir.model.button" id="claim_indemnification_schedule_button">
+            <field name="name">schedule</field>
+            <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
+        </record>
+        <record model="ir.model.button" id="claim_indemnification_cancel_payment_button">
+            <field name="name">cancel_payment</field>
+            <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
+        </record>
+        <record model="ir.model.button" id="claim_indemnification_reject_indemnification_button">
+            <field name="name">reject_indemnification</field>
+            <field name="model" search="[('model', '=', 'claim.indemnification')]"/>
+        </record>
         <!--################################################################ -->
         <!-- Indemnification Detail -->
         <!--################################################################ -->
@@ -72,6 +96,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">claim</field>
             <field name="inherit" ref="claim.claim_view_form"/>
             <field name="name">claim_form</field>
+        </record>
+        <record model="ir.model.button" id="claim_calculate_button">
+            <field name="name">button_calculate</field>
+            <field name="model" search="[('model', '=', 'claim')]"/>
+        </record>
+        <record model="ir.model.button" id="claim_schedule_all_button">
+            <field name="name">schedule_all</field>
+            <field name="model" search="[('model', '=', 'claim')]"/>
         </record>
         <!--################################################################ -->
         <!-- Claim Service -->

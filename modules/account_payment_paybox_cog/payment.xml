@@ -38,6 +38,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="domain" eval="[('journal_method', '=', 'paybox')]" pyson="1"/>
             <field name="act_window" ref="account_payment.act_payment_group_form"/>
         </record>
-
+        <record model="ir.model.button" id="button_generate_paybox">
+            <field name="name">generate_paybox</field>
+            <field name="model" search="[('model', '=', 'account.payment')]"/>
+        </record>
     </data>
 </tryton>

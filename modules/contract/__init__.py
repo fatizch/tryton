@@ -62,10 +62,13 @@ def register():
         wizard.ContractReactivateCheck,
         notification.ContractNotification,
         event.EventTypeAction,
-        event.EventLog,
         test_case.TestCaseModel,
         wizard.SelectSubStatus,
         module='contract', type_='model')
+    Pool.register(
+        event.EventLog,
+        module='contract', type_='model',
+        depends=['event_log'])
     Pool.register(
         wizard.OptionSubscription,
         party.SynthesisMenuOpen,

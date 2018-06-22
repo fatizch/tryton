@@ -16,6 +16,7 @@ from trytond.modules.contract import _STATES, _DEPENDS
 from trytond.modules.contract.contract import CONTRACTSTATUSES
 from trytond.wizard import StateTransition, StateView, Button
 from trytond.modules.report_engine import Printable
+from trytond.model.multivalue import filter_pattern
 
 __all__ = [
     'ContractSet',
@@ -75,11 +76,12 @@ class ConfigurationContractSetNumberSequence(model.CoogSQL, CompanyValueMixin):
 
     @classmethod
     def default_contract_set_number_sequence(cls, **pattern):
+        Sequence = Pool().get('ir.sequence')
+        pattern = filter_pattern(pattern, Sequence)
         domain = [('code', '=', 'contract_set_number')]
-        if pattern:
-            for key, value in pattern['pattern'].iteritems():
-                domain.append((str(key), '=', value))
-        sequences = Pool().get('ir.sequence').search(domain)
+        for key, value in pattern.iteritems():
+            domain.append((str(key), '=', value))
+        sequences = Sequence.search(domain)
         if len(sequences) == 1:
             return sequences[0].id
 

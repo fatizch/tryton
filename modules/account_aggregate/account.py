@@ -21,6 +21,7 @@ from trytond.modules.company.model import (CompanyValueMixin,
     CompanyMultiValueMixin)
 
 from trytond.modules.coog_core import fields, model, utils
+from trytond.model.multivalue import filter_pattern
 
 __all__ = [
     'FiscalYear',
@@ -201,10 +202,11 @@ class ConfigurationSnapshotSequence(model.CoogSQL, CompanyValueMixin):
 
     @classmethod
     def default_snapshot_sequence(cls, **pattern):
+        Sequence = Pool().get('ir.sequence')
+        pattern = filter_pattern(pattern, Sequence)
         domain = [('code', '=', 'account.move.snapshot')]
-        if pattern:
-            for key, value in pattern['pattern'].iteritems():
-                domain.append((str(key), '=', value))
+        for key, value in pattern.iteritems():
+            domain.append((str(key), '=', value))
         sequences = Pool().get('ir.sequence').search(domain)
         if len(sequences) == 1:
             return sequences[0].id

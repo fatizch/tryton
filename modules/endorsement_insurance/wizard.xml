@@ -135,5 +135,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">endorsement_manage_exclusions_exclusion_list</field>
         </record>
+        <record model="ir.model.button" id="button_contract_covered_element_modify_add_covered_element">
+            <field name="name">add_covered_element</field>
+            <field name="model" search="[('model', '=', 'contract.covered_element.modify')]"/>
+        </record>
+
+        <record model="ir.model.button" id="button_contract_covered_element_modify_displayer_unterminate">
+            <field name="name">unterminate</field>
+            <field name="model" search="[('model', '=', 'contract.covered_element.modify.displayer')]"/>
+        </record>
+        <record model="ir.model.button" id="button_contract_covered_element_modify_displayer_terminate">
+            <field name="name">terminate</field>
+            <field name="model" search="[('model', '=', 'contract.covered_element.modify.displayer')]"/>
+        </record>
     </data>
 </tryton>

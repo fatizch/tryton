@@ -292,8 +292,10 @@ Create Test Contract::
     >>> loan_share_2 = option.loan_shares.new()
     >>> loan_share_2.loan = loan_2
     >>> loan_share_2.share = Decimal('0.9')
-    >>> contract.loans.append(loan_1)
-    >>> contract.loans.append(loan_2)
+    >>> first = contract.ordered_loans.new()
+    >>> first.loan = loan_1
+    >>> second = contract.ordered_loans.new()
+    >>> second.loan = loan_2
     >>> contract.save()
     >>> Contract.button_calculate([contract.id], {})
     >>> contract = Contract(contract.id)

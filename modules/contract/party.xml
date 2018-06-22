@@ -28,5 +28,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">party.party,-1</field>
             <field name="action" ref="act_related_parties_relate_form"/>
         </record>
+        <record model="ir.model.button" id="button_open_contracts">
+            <field name="name">open_contracts</field>
+            <field name="model" search="[('model', '=', 'party.party')]"/>
+        </record>
+        <record model="ir.model.button" id="button_open_quotes">
+            <field name="name">open_quotes</field>
+            <field name="model" search="[('model', '=', 'party.party')]"/>
+        </record>
     </data>
 </tryton>

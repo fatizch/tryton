@@ -87,7 +87,7 @@ banks = Bank.find([])
 Account = Model.get('bank.account')
 company_account = Account()
 company_account.bank = bank
-company_account.owners.append(company.party)
+company_account.owners.append(Party(company.party.id))
 company_account.currency = currency
 company_account.number = 'ES8200000000000000000000'
 company_account.save()

@@ -210,5 +210,40 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">underwriting_plan_date_form</field>
         </record>
+        <!-- ########################### -->
+        <!-- # Underwriting Buttons    # -->
+        <!-- ########################### -->
+        <record model="ir.model.button" id="button_abandon">
+            <field name="name">abandon</field>
+            <field name="model" search="[('model', '=', 'underwriting.result')]"/>
+        </record>
+        <record model="ir.model.button" id="button_finalize">
+            <field name="name">finalize</field>
+            <field name="model" search="[('model', '=', 'underwriting.result')]"/>
+        </record>
+        <record model="ir.model.button" id="button_draft">
+            <field name="name">draft</field>
+            <field name="model" search="[('model', '=', 'underwriting')]"/>
+        </record>
+        <record model="ir.model.button" id="button_process">
+            <field name="name">process</field>
+            <field name="model" search="[('model', '=', 'underwriting')]"/>
+        </record>
+        <record model="ir.model.button" id="button_complete">
+            <field name="name">complete</field>
+            <field name="model" search="[('model', '=', 'underwriting')]"/>
+        </record>
+        <record model="ir.model.button" id="button_plan_button">
+            <field name="name">plan_button</field>
+            <field name="model" search="[('model', '=', 'underwriting')]"/>
+        </record>
+        <record model="ir.model.button" id="button_generic_send_letter">
+            <field name="name">generic_send_letter</field>
+            <field name="model" search="[('model', '=', 'underwriting')]"/>
+        </record>
+        <record model="ir.model.button" id="button_add_new_result">
+            <field name="name">add_new_result</field>
+            <field name="model" search="[('model', '=', 'underwriting')]"/>
+        </record>
     </data>
 </tryton>

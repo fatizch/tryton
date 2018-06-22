@@ -11,8 +11,8 @@ def eval_today(fmt=None):
     lang, = Lang.search([('code', '=', lang)], limit=1)
     if fmt:
         return datetime.datetime.now().strftime(fmt)
-    return Lang.strftime(datetime.datetime.now(),
-        lang.code, lang.date)
+    return lang.strftime(datetime.datetime.now(),
+        lang.date)
 
 
 EVAL_METHODS = [

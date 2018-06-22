@@ -556,18 +556,18 @@ class Loss(model.CoogSQL, model.CoogView,
         self.end_date = self.end_date if self.end_date else None
 
     def get_rec_name(self, name):
-        pool = Pool()
-        Lang = pool.get('ir.lang')
         lang = Transaction().language
+        Lang = Pool().get('ir.lang')
+        lang = Lang.get(lang)
         res = ''
         if self.loss_desc:
             res = self.loss_desc.rec_name
         if self.start_date and not self.end_date:
-            res += ' [%s]' % Lang.strftime(self.start_date, lang, '%d/%m/%Y')
+            res += ' [%s]' % lang.strftime(self.start_date, '%d/%m/%Y')
         elif self.start_date and self.end_date:
             res += ' [%s - %s]' % (
-                Lang.strftime(self.start_date, lang, '%d/%m/%Y'),
-                Lang.strftime(self.end_date, lang, '%d/%m/%Y'))
+                lang.strftime(self.start_date, '%d/%m/%Y'),
+                lang.strftime(self.end_date, '%d/%m/%Y'))
         return res
 
     def get_summary(self):
@@ -731,6 +731,7 @@ class Loss(model.CoogSQL, model.CoogView,
 
     def check_activation(self):
         claim = self.claim
+        Lang = Pool().get('ir.lang')
         if claim.losses:
             start_dates = [x.start_date for x in claim.losses
                 if x.start_date]
@@ -738,14 +739,14 @@ class Loss(model.CoogSQL, model.CoogView,
             if start_dates and start_dates[0] > claim.declaration_date:
                 lang = Transaction().context.get('language')
                 Lang = Pool().get('ir.lang')
-                lang, = Lang.search([('code', '=', lang)], limit=1)
+                lang = Lang.get(lang)
                 self.raise_user_warning('prior_declaration_date_%s' %
                     str(self.id), 'prior_declaration_date', {
-                        'declaration_date': Lang.strftime(
-                            claim.declaration_date, lang.code,
+                        'declaration_date': lang.strftime(
+                            claim.declaration_date,
                             lang.date),
-                        'start_date': Lang.strftime(start_dates[0],
-                            lang.code, lang.date),
+                        'start_date': lang.strftime(start_dates[0],
+                            lang.date),
                         })
         duplicates = self.get_possible_duplicates()
         if not duplicates:

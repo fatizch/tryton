@@ -21,7 +21,6 @@ def register():
         future_payments.ShowAllInvoicesMain,
         future_payments.ShowAllInvoicesLine,
         module='contract_loan_invoice', type_='model')
-
     Pool.register(
         future_payments.ShowAllInvoices,
         module='contract_loan_invoice', type_='wizard')

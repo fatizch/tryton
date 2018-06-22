@@ -45,7 +45,6 @@ def register():
         party.SynthesisMenu,
         party.InsurerDelegation,
         report_engine.ReportTemplate,
-        event.EventLog,
         configuration.Configuration,
         wizard.ClaimCloseReasonView,
         wizard.BenefitSelectExtraDataView,
@@ -61,3 +60,7 @@ def register():
         party.SynthesisMenuOpen,
         party.PartyReplace,
         module='claim', type_='wizard')
+    Pool.register(
+        event.EventLog,
+        module='claim', type_='model',
+        depends=['event_log'])

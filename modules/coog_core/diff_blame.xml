@@ -13,5 +13,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="wiz_name">diff_blame.revision_blame_wizard</field>
             <field name="window">True</field>
         </record>
+        <record model="ir.model.button" id="button_diff_blame_revision_blame_prev_revisions">
+            <field name="name">prev_revisions</field>
+            <field name="model" search="[('model', '=', 'diff_blame.revision_blame')]"/>
+        </record>
+        <record model="ir.model.button" id="button_diff_blame_revision_blame_next_revisions">
+            <field name="name">next_revisions</field>
+            <field name="model" search="[('model', '=', 'diff_blame.revision_blame')]"/>
+        </record>
     </data>
 </tryton>

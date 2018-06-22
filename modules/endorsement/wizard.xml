@@ -43,6 +43,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">contract_manage_options_form</field>
         </record>
+        <record model="ir.model.button" id="add_option_button">
+            <field name="name">add_option</field>
+            <field name="model" search="[('model', '=', 'contract.manage_options')]"/>
+        </record>
         <!-- #################### -->
         <!-- # Option Displayer # -->
         <!-- #################### -->

@@ -16,5 +16,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="contract.contract_view_tree"/>
             <field name="name">contract_list</field>
         </record>
+        <record model="ir.model.button" id="button_revert_current_endorsement">
+            <field name="name">revert_current_endorsement</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
     </data>
 </tryton>

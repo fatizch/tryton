@@ -17,5 +17,20 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">claim,-1</field>
             <field name="action" ref="report_engine.letter_generation_wizard"/>
         </record>
+        <!-- #################### -->
+        <!-- # Claim Buttons    # -->
+        <!-- #################### -->
+        <record model="ir.model.button" id="button_launch_report_wizard">
+            <field name="name">launch_report_wizard</field>
+            <field name="model" search="[('model', '=', 'claim')]"/>
+        </record>
+        <record model="ir.model.button" id="button_generate_reminds_documents">
+            <field name="name">generate_reminds_documents</field>
+            <field name="model" search="[('model', '=', 'claim')]"/>
+        </record>
+        <record model="ir.model.button" id="button_generate_document_request">
+            <field name="name">button_generate_document_request</field>
+            <field name="model" search="[('model', '=', 'claim')]"/>
+        </record>
     </data>
 </tryton>

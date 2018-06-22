@@ -54,5 +54,8 @@ def register():
         commission.FilterCommissions,
         commission.OpenCommissionsSynthesis,
         commission.FilterAggregatedCommissions,
-        process.ContractSubscribe,
         module='commission_insurance', type_='wizard')
+    Pool.register(
+        process.ContractSubscribe,
+        module='commission_insurance', type_='wizard',
+        depends=['contract_process'])

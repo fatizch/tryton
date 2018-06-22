@@ -91,6 +91,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_claim_form"/>
         </record>
         <menuitem parent="menu_claim" sequence="4" id="menu_claim_form" icon="claim" action="act_claim_form"/>
+        <!-- #################### -->
+        <!-- # Claim Buttons    # -->
+        <!-- #################### -->
+        <record model="ir.model.button" id="button_close">
+            <field name="name">button_close</field>
+            <field name="model" search="[('model', '=', 'claim')]"/>
+        </record>
+        <record model="ir.model.button" id="button_deliver">
+            <field name="name">deliver</field>
+            <field name="model" search="[('model', '=', 'claim')]"/>
+        </record>
         <!-- ############################################################ -->
         <!-- Claim Substatus -->
         <!-- ############################################################ -->
@@ -143,6 +154,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="field_childs">multi_level_view</field>
             <field name="name">loss_simple_list</field>
+        </record>
+        <!-- ################# -->
+        <!-- # Claim Loss    # -->
+        <!-- ################# -->
+        <record model="ir.model.button" id="button_loss_activate">
+            <field name="name">activate</field>
+            <field name="model" search="[('model', '=', 'claim.loss')]"/>
+        </record>
+        <record model="ir.model.button" id="button_loss_draft">
+            <field name="name">draft</field>
+            <field name="model" search="[('model', '=', 'claim.loss')]"/>
         </record>
         <!--################################################################ -->
         <!-- Claim Service -->

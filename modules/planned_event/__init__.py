@@ -10,7 +10,6 @@ import event
 
 def register():
     Pool.register(
-        planned_event.EventPlanningConfigurationMixin,
         planned_event.PlannedEvent,
         event.EventTypeActionPlannedEventType,
         event.EventTypeAction,

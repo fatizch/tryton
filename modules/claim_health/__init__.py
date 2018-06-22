@@ -18,10 +18,13 @@ def register():
         claim.Claim,
         claim.ClaimService,
         contract.CoveredElement,
-        wizard.ModifyCoveredElement,
-        wizard.CoveredElementDisplayer,
-        wizard.ChangeContractSubscriber,
         module='claim_health', type_='model')
     Pool.register(
         party.PartyReplace,
         module='claim_health', type_='wizard')
+    Pool.register(
+        wizard.ModifyCoveredElement,
+        wizard.CoveredElementDisplayer,
+        wizard.ChangeContractSubscriber,
+        module='claim_health', type_='model',
+        depends=['endorsement_insurance'])

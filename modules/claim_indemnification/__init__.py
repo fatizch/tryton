@@ -38,7 +38,6 @@ def register():
         invoice.ClaimInvoiceLineDetail,
         rule_engine.RuleEngine,
         rule_engine.RuleEngineRuntime,
-        event.EventLog,
         wizard.ExtraDataValueDisplayer,
         wizard.ExtraDatasDisplayers,
         wizard.SelectService,
@@ -66,3 +65,7 @@ def register():
         party.PartyReplace,
         payment.PaymentCreation,
         module='claim_indemnification', type_='wizard')
+    Pool.register(
+        event.EventLog,
+        module='claim_indemnification', type_='model',
+        depends=['event_log'])

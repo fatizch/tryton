@@ -16,6 +16,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">premium_notice_view_list</field>
         </record>
+        <record model="ir.model.button" id="contract_invoice_cancel_button">
+            <field name="name">cancel</field>
+            <field name="model" search="[('model', '=', 'contract.invoice')]"/>
+        </record>
+        <record model="ir.model.button" id="contract_invoice_reinvoice_button">
+            <field name="name">button_reinvoice</field>
+            <field name="model" search="[('model', '=', 'contract.invoice')]"/>
+        </record>
         <!-- ################ -->
         <!-- # Invoice Line # -->
         <!-- ################ -->

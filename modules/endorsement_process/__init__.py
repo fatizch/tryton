@@ -15,7 +15,6 @@ def register():
         wizard.EndorsementFindProcess,
         endorsement.EndorsementPartUnion,
         process.Contract,
-        document.DocumentDescription,
         module='endorsement_process', type_='model')
     Pool.register(
         wizard.StartEndorsement,
@@ -23,3 +22,7 @@ def register():
         wizard.PreviewChangesWizard,
         document.ReceiveDocument,
         module='endorsement_process', type_='wizard')
+    Pool.register(
+        document.DocumentDescription,
+        module='endorsement_process', type_='model',
+        depends=['document'])

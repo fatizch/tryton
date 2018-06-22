@@ -82,5 +82,10 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <!-- Menu Entry -->
         <menuitem id="menu_contract_notification" name="Notifications" parent="contract.menu_contract" sequence="100" action="act_contract_notification_view" icon="tryton-list"/>
+        <!-- Buttons -->
+        <record model="ir.model.button" id="button_notification_treat">
+            <field name="name">treat</field>
+            <field name="model" search="[('model', '=', 'contract.notification')]"/>
+        </record>
     </data>
 </tryton>

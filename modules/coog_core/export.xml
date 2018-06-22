@@ -193,5 +193,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="module">coog_core</field>
             <field name="fuzzy" eval="False"/>
         </record>
+        <record model="ir.model.button" id="button_ir_export_configuration_model_button_select_fields">
+            <field name="name">button_select_fields</field>
+            <field name="model" search="[('model', '=', 'ir.export.configuration.model')]"/>
+        </record>
     </data>
 </tryton>

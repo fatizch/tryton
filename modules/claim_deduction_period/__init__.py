@@ -13,13 +13,17 @@ def register():
         benefit.LossDescription,
         benefit.DeductionPeriodKind,
         benefit.LossDescriptionDeductionPeriodKindRelation,
-        benefit.BenefitRule,
         claim.Loss,
         claim.DeductionPeriod,
         wizard.DeductionPeriodDisplay,
-        wizard.IndemnificationDefinition,
         rule_engine.RuleEngineRuntime,
         module='claim_deduction_period', type_='model')
     Pool.register(
+        benefit.BenefitRule,
+        wizard.IndemnificationDefinition,
+        module='claim_deduction_period', type_='model',
+        depends=['claim_indemnification'])
+    Pool.register(
         wizard.CreateIndemnification,
-        module='claim_deduction_period', type_='wizard')
+        module='claim_deduction_period', type_='wizard',
+        depends=['claim_indemnification'])

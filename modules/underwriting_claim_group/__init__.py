@@ -12,6 +12,9 @@ def register():
         claim.Benefit,
         claim.BenefitUnderwritingRule,
         contract.OptionBenefit,
+        module='underwriting_claim_group', type_='model')
+    Pool.register(
         endorsement.ManageOptionBenefits,
         endorsement.ManageOptionBenefitsDisplayer,
-        module='underwriting_claim_group', type_='model')
+        module='underwriting_claim_group', type_='model',
+        depends=['endorsement_option_benefit'])

@@ -40,5 +40,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">contract.notification,-1</field>
             <field name="action" ref="process_cog.act_resume_process"/>
         </record>
+        <record model="ir.model.button" id="contract_process_resume_button">
+            <field name="name">button_resume</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="contract_notification_process_resume_button">
+            <field name="name">button_resume</field>
+            <field name="model" search="[('model', '=', 'contract.notification')]"/>
+        </record>
     </data>
 </tryton>

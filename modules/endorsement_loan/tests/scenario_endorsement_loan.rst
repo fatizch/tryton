@@ -352,7 +352,8 @@ Create Test Contract::
     >>> loan_share.loan = loan
     >>> loan_share.share = Decimal('0.95')
     >>> contract.end_date = datetime.date(2030, 12, 1)
-    >>> contract.loans.append(loan)
+    >>> first = contract.ordered_loans.new()
+    >>> first.loan = loan
     >>> contract.billing_informations.append(BillingInformation(
     ...         billing_mode=freq_monthly, payment_term=payment_term))
     >>> contract.save()
@@ -466,7 +467,8 @@ Create Test Contract::
     >>> loan_share = option.loan_shares.new()
     >>> loan_share.loan = loan
     >>> loan_share.share = Decimal('1.0')
-    >>> contract.loans.append(loan)
+    >>> first = contract.ordered_loans.new()
+    >>> first.loan = loan
     >>> contract.billing_informations.append(BillingInformation(
     ...         billing_mode=freq_monthly, payment_term=payment_term))
     >>> contract.save()

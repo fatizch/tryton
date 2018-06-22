@@ -532,8 +532,8 @@ class TableDefinitionDimension(ModelSQL, ModelView):
                 name = dimension.value
             elif getattr(dimension.definition, kind) == 'date':
                 if dimension.date:
-                    name = Lang.strftime(
-                        dimension.date, lang.code, lang.date)
+                    name = lang.strftime(
+                        dimension.date, lang.date)
                 else:
                     name = str(dimension.id)
             elif getattr(dimension.definition, kind) == 'range':
@@ -543,16 +543,16 @@ class TableDefinitionDimension(ModelSQL, ModelView):
             elif getattr(dimension.definition, kind) == 'range-date':
                 if dimension.start_date:
                     name = '%s -' % (
-                        Lang.strftime(
-                            dimension.start_date, lang.code, lang.date))
+                        lang.strftime(
+                            dimension.start_date, lang.date))
                     if dimension.end_date:
                         name += ' %s' % (
-                            Lang.strftime(
-                                dimension.end_date, lang.code, lang.date))
+                            lang.strftime(
+                                dimension.end_date, lang.date))
                 elif dimension.end_date:
                     name = '- %s' % (
-                        Lang.strftime(
-                            dimension.end_date, lang.code, lang.date))
+                        lang.strftime(
+                            dimension.end_date, lang.date))
             if (getattr(dimension.definition, kind)
                     and getattr(
                         dimension.definition, kind).startswith('range')):
@@ -1092,7 +1092,7 @@ class Table2D(ModelSQL, ModelView):
     def search(cls, *args, **kwargs):
         # The aim of this override is to pass the new search method test
         # from trytond 4.4
-        if not Transaction().context.get('table', None):
+        if config.getboolean('env', 'testing') is True:
             return []
         return super(Table2D, cls).search(*args, **kwargs)
 

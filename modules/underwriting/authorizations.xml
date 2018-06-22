@@ -48,5 +48,40 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <!-- Buttons -->
+        <record model="ir.model.button-res.group" id="button_finalize_claim_underwriting">
+            <field name="button" ref="button_finalize"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_abandon_claim_underwriting">
+            <field name="button" ref="button_abandon"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+
+        <record model="ir.model.button-res.group" id="button_draft_claim_underwriting">
+            <field name="button" ref="button_draft"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_process_claim_underwriting">
+            <field name="button" ref="button_process"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_complete_claim_underwriting">
+            <field name="button" ref="button_complete"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_plan_button_claim_underwriting">
+            <field name="button" ref="button_plan_button"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_generic_send_letter_claim_underwriting">
+            <field name="button" ref="button_generic_send_letter"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_add_new_result_claim_underwriting">
+            <field name="button" ref="button_add_new_result"/>
+            <field name="group" ref="underwriting.group_claim_underwriting"/>
+        </record>
+
     </data>
 </tryton>

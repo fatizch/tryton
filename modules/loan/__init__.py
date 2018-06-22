@@ -41,9 +41,12 @@ def register():
         module='loan', type_='model')
     Pool.register(
         contract.OptionSubscription,
-        contract.DisplayContractPremium,
         wizard.CreateExtraPremium,
         party.SynthesisMenuOpen,
         party.DisplayInsuredOutstandingLoanBalance,
         party.PartyReplace,
         module='loan', type_='wizard')
+    Pool.register(
+        contract.DisplayContractPremium,
+        module='loan', type_='wizard',
+        depends=['premium'])

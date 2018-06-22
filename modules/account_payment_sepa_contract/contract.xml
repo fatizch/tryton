@@ -21,5 +21,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="contract_insurance_invoice.contract_billing_information_without_date_view_form"/>
             <field name="name">contract_billing_information_without_date_form</field>
         </record>
+        <record model="ir.model.button" id="init_sepa_mandate_button">
+            <field name="name">init_sepa_mandate</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
     </data>
 </tryton>

@@ -74,16 +74,17 @@ class Reference(tryton_fields.Reference):
 class Many2One(tryton_fields.Many2One):
     def __init__(self, model_name, string='', left=None, right=None,
             ondelete=None, datetime_field=None, target_search='join',
-            help='', required=False, readonly=False, domain=None, states=None,
-            select=False, on_change=None, on_change_with=None, depends=None,
-            context=None, loading='eager'):
+            search_order=None, search_context=None, help='', required=False,
+            readonly=False, domain=None, states=None, select=False,
+            on_change=None, on_change_with=None, depends=None, context=None,
+            loading='eager'):
         if ondelete is None:
             self._on_delete_not_set = True
             ondelete = 'SET NULL'
         super(Many2One, self).__init__(model_name, string, left, right,
-            ondelete, datetime_field, target_search, help, required, readonly,
-            domain, states, select, on_change, on_change_with, depends,
-            context, loading)
+            ondelete, datetime_field, target_search, search_order,
+            search_context, help, required, readonly, domain, states,
+            select, on_change, on_change_with, depends, context, loading)
 
 
 class One2Many(tryton_fields.One2Many):

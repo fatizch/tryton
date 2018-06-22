@@ -15,12 +15,27 @@ def register():
         contract.Contract,
         contract.ContractSet,
         account.Fee,
-        dunning.Level,
-        move.PartyBalance,
-        payment.Payment,
-        batch.RenewContracts,
         module='contract_set_insurance_invoice', type_='model')
     Pool.register(
         contract.DisplayContractSetPremium,
-        wizard.Renew,
         module='contract_set_insurance_invoice', type_='wizard')
+    Pool.register(
+        dunning.Level,
+        module='contract_set_insurance_invoice', type_='model',
+        depends=['contract_insurance_invoice_dunning'])
+    Pool.register(
+        move.PartyBalance,
+        module='contract_set_insurance_invoice', type_='model',
+        depends=['account_party_balance'])
+    Pool.register(
+        batch.RenewContracts,
+        module='contract_set_insurance_invoice', type_='model',
+        depends=['contract_term_renewal'])
+    Pool.register(
+        payment.Payment,
+        module='contract_set_insurance_invoice', type_='model',
+        depends=['contract_term_renewal'])
+    Pool.register(
+        wizard.Renew,
+        module='contract_set_insurance_invoice', type_='wizard',
+        depends=['contract_term_renewal'])

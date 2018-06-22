@@ -54,6 +54,30 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">contract.billing_information,-1</field>
             <field name="action" ref="act_suspensions_relate_form"/>
         </record>
+        <record model="ir.model.button" id="first_invoice_button">
+            <field name="name">first_invoice</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="rebill_contracts_button">
+            <field name="name">rebill_contracts</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="button_unsuspend_payments">
+            <field name="name">unsuspend_payments</field>
+            <field name="model" search="[('model', '=', 'contract.billing_information')]"/>
+        </record>
+        <record model="ir.model.button" id="button_suspend_payments">
+            <field name="name">suspend_payments</field>
+            <field name="model" search="[('model', '=', 'contract.billing_information')]"/>
+        </record>
+        <record model="ir.model.button" id="payment_suspension_activate_button">
+            <field name="name">activate</field>
+            <field name="model" search="[('model', '=', 'contract.payment_suspension')]"/>
+        </record>
+        <record model="ir.model.button" id="payment_suspension_deactivate_button">
+            <field name="name">deactivate</field>
+            <field name="model" search="[('model', '=', 'contract.payment_suspension')]"/>
+        </record>
         <!-- ########### -->
         <!-- # Premium # -->
         <!-- ########### -->

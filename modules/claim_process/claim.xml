@@ -48,5 +48,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">claim,-1</field>
             <field name="action" ref="act_claim_logs"/>
         </record>
+        <record model="ir.model.button" id="claim_process_resume_button">
+            <field name="name">button_resume</field>
+            <field name="model" search="[('model', '=', 'claim')]"/>
+        </record>
     </data>
 </tryton>

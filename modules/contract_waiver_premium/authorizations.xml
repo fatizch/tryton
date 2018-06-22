@@ -12,6 +12,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_delete" eval="False"/>
         </record>
         <!-- Admin Group -->
+        <!-- Buttons -->
+        <record model="ir.model.button-res.group" id="button_contract_waiver_premium_end_waiver_admin">
+            <field name="button" ref="button_contract_waiver_premium_end_waiver"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_contract_create_waiver_admin">
+            <field name="button" ref="button_contract_create_waiver"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
         <record model="ir.model.access" id="access_offered_waiver_rule_admin_group">
             <field name="model" search="[('model', '=', 'waiver_premium.rule')]"/>
             <field name="group" ref="res.group_admin"/>
@@ -30,6 +39,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_delete" eval="True"/>
         </record>
         <!-- Contract Management Group -->
+        <!-- Buttons -->
+        <record model="ir.model.button-res.group" id="button_contract_waiver_premium_end_waiver_contract_manage">
+            <field name="button" ref="button_contract_waiver_premium_end_waiver"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_contract_create_waiver_contract_manage">
+            <field name="button" ref="button_contract_create_waiver"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
         <record model="ir.model.access" id="access_contract_waiver_premium_contract_manage_group">
             <field name="model" search="[('model', '=', 'contract.waiver_premium')]"/>
             <field name="group" ref="contract.group_contract_manage"/>

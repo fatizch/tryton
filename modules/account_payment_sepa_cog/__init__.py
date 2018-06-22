@@ -26,7 +26,6 @@ def register():
         bank.Bank,
         bank.BankAccount,
         bank.BankAccountNumber,
-        payment.InvoiceLine,
         payment.Journal,
         test_case.TestCaseModel,
         account.Configuration,
@@ -42,3 +41,7 @@ def register():
         payment.PaymentCreation,
         wizard.PartyErase,
         module='account_payment_sepa_cog', type_='wizard')
+    Pool.register(
+        payment.InvoiceLine,
+        module='account_payment_sepa_cog', type_='model',
+        depends=['account_invoice'])

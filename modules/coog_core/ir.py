@@ -206,17 +206,15 @@ class DateClass:
     def date_as_string(date, lang=None):
         if not date:
             return ''
-        Lang = Pool().get('ir.lang')
         if not lang:
             lang = utils.get_user_language()
-        return Lang.strftime(date, lang.code, lang.date)
+        return lang.strftime(date, lang.date)
 
     @staticmethod
     def datetime_as_string(date, lang=None):
-        Lang = Pool().get('ir.lang')
         if lang is None:
             lang = utils.get_user_language()
-        return Lang.strftime(date, lang.code, lang.date + ' %H:%M:%S')
+        return lang.strftime(date, lang.date + ' %H:%M:%S')
 
 
 class View(ExportImportMixin):

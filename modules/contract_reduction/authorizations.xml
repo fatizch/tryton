@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Access Rights for Contract Management Group -->
+        <!-- Buttons -->
+        <record model="ir.model.button-res.group" id="button_contract_reduce_contract_manage">
+            <field name="button" ref="button_contract_reduce"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_contract_cancel_reduction_contract_manage">
+            <field name="button" ref="button_contract_cancel_reduction"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+    </data>
+</tryton>

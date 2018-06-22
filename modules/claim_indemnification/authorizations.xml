@@ -348,6 +348,38 @@ this repository contains the full copyright notices and license terms. -->
             <field name="button" ref="claim_indemnification.claim_fill_extra_datas_button"/>
             <field name="group" ref="claim.group_claim_manage"/>
         </record>
+        <record model="ir.model.button-res.group" id="claim_calculate_button_group_claim_manage">
+            <field name="button" ref="claim_calculate_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="claim_schedule_all_button_group_claim_manage">
+            <field name="button" ref="claim_schedule_all_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="claim_indemnification_modify_indemnification_button_group_claim_manage">
+            <field name="button" ref="claim_indemnification_modify_indemnification_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="claim_indemnification_validate_indemnification_button_group_claim_manage">
+            <field name="button" ref="claim_indemnification_validate_indemnification_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="claim_indemnification_calculate_button_group_claim_manage">
+            <field name="button" ref="claim_indemnification_calculate_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="claim_indemnification_schedule_button_group_claim_manage">
+            <field name="button" ref="claim_indemnification_schedule_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="claim_indemnification_cancel_payment_button_group_claim_manage">
+            <field name="button" ref="claim_indemnification_cancel_payment_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="claim_indemnification_reject_indemnification_button_group_claim_manage">
+            <field name="button" ref="claim_indemnification_reject_indemnification_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
         <record model="ir.model.access" id="access_account_invoice_payment_term_group_product_manage">
             <field name="model" search="[('model', '=', 'account.invoice.payment_term')]"/>
             <field name="group" ref="offered.group_product_manage"/>

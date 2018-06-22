@@ -15,13 +15,10 @@ class OptionDescription:
     __name__ = 'offered.option.description'
 
     benefits = fields.Many2Many('option.description-benefit', 'coverage',
-        'benefit', 'Benefits', context={
-            'start_date': Eval('start_date'),
-            'currency_digits': Eval('currency_digits'),
-            }, states={
+        'benefit', 'Benefits', states={
             'readonly': ~Eval('start_date'),
             }, domain=[('insurer', '=', Eval('insurer'))],
-            depends=['currency_digits', 'start_date', 'insurer'])
+        depends=['insurer'])
 
     def get_possible_benefits(self, loss_desc=None, event_desc=None,
             at_date=None):

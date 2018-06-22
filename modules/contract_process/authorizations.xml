@@ -125,7 +125,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-                <record model="ir.model.access" id="access_process_product_manage_group">
+        <record model="ir.model.access" id="access_process_product_manage_group">
             <field name="model" search="[('model', '=', 'process')]"/>
             <field name="group" ref="offered.group_product_manage"/>
             <field name="perm_read" eval="True"/>
@@ -180,6 +180,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.button-res.group" id="contract_process_resume_button_group_contract_manage">
+            <field name="button" ref="contract_process_resume_button"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="contract_notification_process_resume_button_group_contract_manage">
+            <field name="button" ref="contract_notification_process_resume_button"/>
+            <field name="group" ref="contract.group_contract_manage"/>
         </record>
     </data>
 </tryton>

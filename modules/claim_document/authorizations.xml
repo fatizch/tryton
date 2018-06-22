@@ -18,6 +18,20 @@ this repository contains the full copyright notices and license terms. -->
             <field name="group" ref="claim.group_claim_read"/>
         </record>
         <!-- Access Rights for Claim Management Group -->
+        <!-- Buttons -->
+        <record model="ir.model.button-res.group" id="button_launch_report_wizard_claim_manage">
+            <field name="button" ref="button_launch_report_wizard"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_generate_reminds_documents_claim_manage">
+            <field name="button" ref="button_generate_reminds_documents"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_generate_document_request_claim_manage">
+            <field name="button" ref="button_generate_document_request"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+
         <!-- Document -->
         <record model="ir.ui.menu-res.group" id="menu_document_claim_manage">
             <field name="menu" ref="document.menu_document"/>

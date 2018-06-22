@@ -3,6 +3,24 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- ############################# -->
+        <!-- # Exclusion Display Buttons # -->
+        <!-- ############################# -->
+        <record model="ir.model.button" id="button_button_propagate_selected">
+            <field name="name">button_propagate_selected</field>
+            <field name="model" search="[('model', '=', 'contract.manage_exclusion.select')]"/>
+        </record>
+        <!-- ############################## -->
+        <!-- # Exclusion Selector Buttons # -->
+        <!-- ############################## -->
+        <record model="ir.model.button" id="button_button_clear_all">
+            <field name="name">button_clear_all</field>
+            <field name="model" search="[('model', '=', 'contract.manage_exclusion.select.exclusion')]"/>
+        </record>
+        <record model="ir.model.button" id="button_button_check_all">
+            <field name="name">button_check_all</field>
+            <field name="model" search="[('model', '=', 'contract.manage_exclusion.select.exclusion')]"/>
+        </record>
         <!-- ######################### -->
         <!-- # Option Displayer Form # -->
         <!-- ######################### -->

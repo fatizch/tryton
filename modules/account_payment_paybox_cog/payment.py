@@ -99,9 +99,9 @@ class PaymentCreationStart:
     __name__ = 'account.payment.payment_creation.start'
 
     payment_url = fields.Char('Payment URL',
-        states={'invisible': ~Eval('is_paybox'),
-            'required': Bool(Eval('is_paybox'))},
-        depends=['is_paybox'])
+        states={'invisible': ~(Eval('process_method') == 'paybox'),
+            'required': Eval('process_method') == 'paybox'},
+        depends=['process_method'])
 
     @classmethod
     def __setup__(cls):

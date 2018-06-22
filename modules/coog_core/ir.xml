@@ -29,5 +29,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="ir.sequence_view_tree"/>
             <field name="name">sequence_list</field>
         </record>
+        <record model="ir.model.button" id="button_ir_model_force_set_history">
+            <field name="name">force_set_history</field>
+            <field name="model" search="[('model', '=', 'ir.model')]"/>
+        </record>
+        <record model="ir.model.button" id="button_ir_model_force_unset_history">
+            <field name="name">force_unset_history</field>
+            <field name="model" search="[('model', '=', 'ir.model')]"/>
+        </record>
     </data>
 </tryton>

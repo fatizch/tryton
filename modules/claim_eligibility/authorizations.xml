@@ -36,5 +36,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.button-res.group" id="service_validate_button_group_claim_manage">
+            <field name="button" ref="button_claim_service_validate_services"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="service_reject_button_group_claim_manage">
+            <field name="button" ref="button_claim_service_reject_services"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="service_eligibility_button_group_claim_manage">
+            <field name="button" ref="button_claim_service_check_eligibility"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
     </data>
 </tryton>

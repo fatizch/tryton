@@ -19,8 +19,11 @@ def register():
         contract.Contract,
         contract.Option,
         contract.CoveredElement,
-        contract.TerminateContract,
         module='claim_group', type_='model')
     Pool.register(
         party.PartyReplace,
         module='claim_group', type_='wizard')
+    Pool.register(
+        contract.TerminateContract,
+        module='claim_group', type_='model',
+        depends=['endorsement'])

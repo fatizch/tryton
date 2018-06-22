@@ -10,11 +10,18 @@ def register():
     Pool.register(
         process.ContractSubscribeFindProcess,
         wizard.ContractGroupSubscribeFindProcess,
-        document.DocumentDescription,
         wizard.ImportProcessSelect,
         module='contract_group_process', type_='model')
     Pool.register(
         process.ContractSubscribe,
         wizard.ContractGroupSubscribe,
-        document.ReceiveDocument,
         module='contract_group_process', type_='wizard')
+    Pool.register(
+        document.ReceiveDocument,
+        module='contract_group_process', type_='wizard',
+        depends=['document'])
+    Pool.register(
+        document.DocumentDescription,
+        module='contract_group_process', type_='model',
+        depends=['document'])
+
