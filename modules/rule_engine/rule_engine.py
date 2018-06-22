@@ -585,7 +585,7 @@ class RuleTools(ModelView):
 
     @classmethod
     def _re_debug(cls, args, the_message):
-        cls.get_result(args).debug.append(str(the_message))
+        cls.get_result(args).debug.append(the_message)
 
     @classmethod
     def _re_calculation_date(cls, args):
