@@ -12,6 +12,10 @@ msgstr ""
 "Pas de courtier défini sur le contrat %s pour facturer le frais d'apporteur "
 "%s"
 
+msgctxt "error:commission:"
+msgid "Cannot delete an already invoiced commission"
+msgstr "Impossible de supprimer une commission faisant partie d'un bordereau"
+
 msgctxt "error:commission.agent:"
 msgid ""
 "Cannot find matching agent for %s :\n"

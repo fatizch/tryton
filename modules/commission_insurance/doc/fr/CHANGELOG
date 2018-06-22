@@ -1,3 +1,4 @@
+* BUG#7515 Blocage de la création / modification manuelle des commissions
 * FEA#9133 Définition explicite des courtiers
 * FEA#9044 Ajout des bordereaux assureurs prestation au niveau du point d'entrée bordereaux assureurs
 * FEA#8849 Améliorations graphiques sur l'affichage des plans de commission, des lignes de plan et des protocoles de commissionnement

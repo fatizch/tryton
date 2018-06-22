@@ -156,6 +156,17 @@ class Commission:
         cls.agent.readonly = True
         cls.product.readonly = True
         cls.amount.readonly = True
+        cls._error_messages.update({
+                'no_delete_invoiced_commission': 'Cannot delete an already '
+                'invoiced commission',
+                })
+
+    @classmethod
+    def delete(cls, instances):
+        for commission in instances:
+            if commission.invoice_line:
+                cls.raise_user_error('no_delete_invoiced_commission')
+        super(Commission, cls).delete(instances)
 
     def get_origin_invoice_line_field(self, name):
         if getattr(self.origin, '__name__', '') != 'account.invoice.line':

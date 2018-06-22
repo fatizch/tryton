@@ -209,14 +209,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-        <record model="ir.model.access" id="access_commission_contract_manage_group">
-            <field name="model" search="[('model', '=', 'commission')]"/>
-            <field name="group" ref="contract.group_contract_manage"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
-        </record>
         <record model="ir.model.access" id="access_commission_plan_contract_manage_group">
             <field name="model" search="[('model', '=', 'commission.plan')]"/>
             <field name="group" ref="group_commission_manage"/>
@@ -308,6 +300,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Override default access rights to never ever write / create instances manually -->
+        <record model="ir.model.access" id="commission.access_commission_commission">
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
         </record>
         <record model="ir.model.access" id="access_commission_agent">
             <field name="model" search="[('model', '=', 'commission.agent')]"/>
