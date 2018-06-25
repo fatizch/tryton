@@ -2911,7 +2911,7 @@ return [{
         ClaimClosingReason(invalidity_reason.id))
     work_interruption.save()
 
-    claim_std_process.for_loss_descs.append(LossDesc(work_interruption))
+    claim_std_process.for_loss_descs.append(LossDesc(work_interruption.id))
     claim_std_process.save()
 
     validity_loss = LossDesc()
