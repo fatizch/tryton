@@ -26,7 +26,7 @@ coog_dep_main() { # install base deps
                 "intervaltree==2.1.0" \
                 "filelock==2.0.12" \
                 "wrapt==1.10.11" \
-                "ipaddress=1.0.22" \
+                "ipaddress==1.0.22" \
                 "werkzeug==0.12.2" \
                 "Mock==2.0.0" \
                 "simpleeval==0.9.5" \
