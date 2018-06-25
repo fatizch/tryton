@@ -7,12 +7,10 @@ _coog_repo_rm() { # remove all links from wd
 
 _coog_repo_list() { # list repositories
     local f
-    for f in $(ls -1 "$COOG_ROOT")
+    for f in $COOG_ROOT/*
     do
-        f="$COOG_ROOT/$f"
         [ "$f" != "$COOG_ROOT/coog-doc" ] \
             && [ -d "$f" ] \
-            && [ -d "$f/modules" ] \
             && basename "$f"
     done
 }
@@ -35,18 +33,23 @@ _coog_repo_linkm() {
     do
         if [ -d "$COOG_ROOT/$repo/modules" ]
         then
-            for m in $(ls -1 "$COOG_ROOT/$repo/modules")
+            for m in $COOG_ROOT/$repo/modules/*
             do
-                [ -f "$COOG_ROOT/$repo/modules/$m/tryton.cfg" ] && ln -s "$COOG_ROOT/$repo/modules/$m" .
+                [ -f "$m/tryton.cfg" ] && ln -s "$m" .
             done
         fi
     done
 }
 
 coog_repo_linkm() { # link repos modules - <repos> - default: all
-    ( cd "$COOG_TRYTOND/trytond/modules" \
+    (cd "$COOG_TRYTOND/trytond/modules" \
         && _coog_repo_rm \
         && _coog_repo_linkm "$@")
+}
+
+coog_repo_unlinkm() { # unlink all repos modules
+    (cd "$COOG_TRYTOND/trytond/modules" \
+        && _coog_repo_rm)
 }
 
 _coog_repo_linkp() {
@@ -54,36 +57,91 @@ _coog_repo_linkp() {
     do
         if [ -d "$COOG_ROOT/$repo/plugins" ]
         then
-            for p in $(ls -1 "$COOG_ROOT/$repo/plugins")
+            for p in $COOG_ROOT/$repo/plugins/*
             do
-                [ -f "$COOG_ROOT/$repo/plugins/$p/__init__.py" ] && ln -s "$COOG_ROOT/$repo/plugins/$p" .
+                [ -f "$p/__init__.py" ] && ln -s "$p" .
             done
         fi
     done
 }
 
 coog_repo_linkp() { # link repos plugins - <repos> - default: all
-    ( cd "$COOG_TRYTON/tryton/plugins" \
+    (cd "$COOG_TRYTON/tryton/plugins" \
         && _coog_repo_rm \
         && _coog_repo_linkp "$@")
 }
 
-coog_repo_unlinkm() { # unlink all repos modules
-    ( cd "$COOG_TRYTOND/trytond/modules" \
-        &&_coog_repo_rm)
+coog_repo_unlinkp() { # unlink all repos plugins
+    (cd "$COOG_TRYTON/tryton/plugins" \
+        && _coog_repo_rm)
 }
 
-coog_repo_unlinkp() { # unlink all repos plugins
-    ( cd "$COOG_TRYTON/tryton/plugins" \
-        &&_coog_repo_rm)
+_coog_repo_link_api() {
+    for repo in $(_coog_repo_list_repos "$@")
+    do
+        if [ -d "$COOG_ROOT/$repo/api-modules" ]
+        then
+            for p in $COOG_ROOT/$repo/api-modules/*
+            do
+                [ -d "$p" ] \
+                    && [ $(basename $p) != "node_modules" ] && ln -s "$p" .
+            done
+            ln -nsf "$COOG_API/node_modules" "$COOG_ROOT/$repo/api-modules/node_modules"
+        fi
+    done
+}
+
+coog_repo_link_api() { # link repos modules - <repos> - default: all
+    ([ -d "$COOG_API" ] \
+        && mkdir -p "$COOG_API/api/custom" \
+        && cd "$COOG_API/api/custom" \
+        && _coog_repo_rm \
+        && _coog_repo_link_api "$@")
+}
+
+coog_repo_unlink_api() { # unlink all repos modules
+    ([ -d "$COOG_API/api/custom" ] \
+        && _coog_repo_rm)
+}
+
+_coog_repo_link_app() {
+    for repo in $(_coog_repo_list_repos "$@")
+    do
+        if [ -d "$COOG_ROOT/$repo/app-modules" ]
+        then
+            for p in $COOG_ROOT/$repo/app-modules/*
+            do
+                [ -d "$p" ] \
+                    && [ $(basename $p) != "node_modules" ] && ln -s "$p" .
+            done
+            ln -nsf "$COOG_APP/node_modules" "$COOG_ROOT/$repo/app-modules/node_modules"
+        fi
+    done
+}
+
+coog_repo_link_app() { # link repos modules - <repos> - default: all
+    ([ -d "$COOG_API" ] \
+        && mkdir -p "$COOG_APP/src/custom" \
+        && cd "$COOG_APP/src/custom" \
+        && _coog_repo_rm \
+        && _coog_repo_link_app "$@")
+}
+
+coog_repo_unlink_app() { # unlink all repos modules
+    ([ -d "$COOG_APP/src/custom" ] \
+        && _coog_repo_rm)
 }
 
 coog_repo_link() { # link repos - <repos> - default: all
     coog_repo_linkm "$@"
     coog_repo_linkp "$@"
+    coog_repo_link_api "$@"
+    coog_repo_link_app "$@"
 }
 
 coog_repo_unlink() { # unlink all repos
     coog_repo_unlinkm
     coog_repo_unlinkp
+    coog_repo_unlink_api
+    coog_repo_unlink_app
 }
