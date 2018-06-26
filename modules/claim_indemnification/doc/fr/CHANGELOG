@@ -1,3 +1,4 @@
+* BUG#9201 Afficher les alertes de doublon de périodes d'indemnisation avant les autres alertes
 * BUG#9006 Filtre sur les indemnisations à vérifier pour le chevauchement de périodes
 * OTH#0000 Déplacement de la déclaration de méthode pour supprimer la double déclaration et simplifier la surcharge
 * BUG#8851 Selection de la raison d'annulation lorsque l'on réalise l'action d'annuler une indemnisation

@@ -1236,9 +1236,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     @classmethod
     @ModelView.button
     def schedule(cls, indemnifications):
+        cls.check_for_duplicate_periods(indemnifications)
         with model.error_manager():
             cls.check_schedulability(indemnifications)
-        cls.check_for_duplicate_periods(indemnifications)
         cls.do_schedule(indemnifications)
 
     @classmethod
