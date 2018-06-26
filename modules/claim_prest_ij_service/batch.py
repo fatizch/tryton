@@ -416,6 +416,7 @@ class SubmitCompanyPrestIjSubscription(BaseSelectPrestIj):
         if operation == 'cre':
             where_clause = (
                 subscription.state.in_(['undeclared', 'deletion_confirmed']))
+            where_clause &= (contract.status == 'active')
             where_clause &= (subscription.ssn == Null)
         else:
             where_clause = super(SubmitCompanyPrestIjSubscription, cls
