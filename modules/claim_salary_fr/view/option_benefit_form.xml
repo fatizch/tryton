@@ -11,4 +11,8 @@ this repository contains the full copyright notices and license terms. -->
         <label name="net_calculation_rule"/>
         <field name="net_calculation_rule" widget="selection"/>
     </xpath>
+    <xpath expr="/form/label[@name='revaluation_rule']" position="before">
+        <label name="revaluation_on_basic_salary"/>
+        <field name="revaluation_on_basic_salary"/>
+    </xpath>
 </data>

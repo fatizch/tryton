@@ -382,13 +382,16 @@ class ClaimService:
         self.salary_mode = self.get_salary_mode()
         self.init_salaries()
 
-    def calculate_basic_salary(self, salaries_def, current_salary=None):
+    def calculate_basic_salary(self, salaries_def, current_salary=None,
+            args=None):
         """
             This method returns the TA, TB, TC range based on basic salary
             Basic salary is always an annual salary. The calculation is the sum
             of salaries according salary_mode definition.
             Bonus salaries is always the sum of all bonus during the year. No
             proration required
+            If revaluation is defined on basic salary and if args is
+            defined basic salary will be revaluated
         """
         pool = Pool()
 
@@ -466,12 +469,26 @@ class ClaimService:
         salary_to_use = salary_to_use.quantize(Decimal(1) /
             10 ** self.currency_digits)
 
+        salary_to_use = self.apply_revaluation_if_needed(salary_to_use, args)
+
         year_range = calculate_salary_range(salary_to_use, pmss)
         salary_range['TA'] = year_range['TA']
         salary_range['TB'] = year_range['TB']
         salary_range['TC'] = year_range['TC']
 
         return salary_range
+
+    def apply_revaluation_if_needed(self, salary, args):
+        if (not args or
+                not self.benefit.benefit_rules or
+                not self.benefit.benefit_rules[
+                    0].process_revaluation_on_basic_salary(self)):
+            return salary
+        cur_args = args.copy()
+        cur_args['base_amount'] = salary
+        cur_args['description'] = ''
+        res = self.benefit.benefit_rules[0].calculate_revaluation_rule(cur_args)
+        return res[0]['amount_per_unit']
 
     @classmethod
     def get_salary_range(cls, services, names):

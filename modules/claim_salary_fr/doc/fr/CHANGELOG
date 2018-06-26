@@ -1,3 +1,4 @@
+* FEA#9265 Gestion de la revalorisation sur le traitement de base
 * BUG#8691 Correction d'une erreur lorsque l'on calcule TA TB TC sur un service sans périodes de salaire
 
 Version 2.0 - 2018-04-13

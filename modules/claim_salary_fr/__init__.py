@@ -35,4 +35,3 @@ def register():
         benefit.ManageOptionBenefitsDisplayer,
         module='claim_salary_fr', type_='model',
         depends=['endorsement_option_benefit'])
-

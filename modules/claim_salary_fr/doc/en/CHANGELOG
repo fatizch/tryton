@@ -1,3 +1,4 @@
+* FEA#9265 Handle revaluation on basic salary for group life insurance
 * BUG#8691 Fix crash when calculating TA TB TC range if no salary period are entered
 
 Version 2.0 - 2018-04-13

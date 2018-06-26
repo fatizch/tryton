@@ -33,7 +33,22 @@ class OptionBenefit:
             'required': Bool(Eval('net_salary_mode')),
             'invisible': ~Bool(Eval('net_salary_mode')),
             }, depends=['net_salary_mode'])
+    revaluation_on_basic_salary = fields.Boolean('Revaluation on basic salary',
+        states={'invisible': Bool(Eval('revaluation_on_basic_salary_forced'))},
+        depends=['revaluation_on_basic_salary_forced'])
+    revaluation_on_basic_salary_forced = fields.Function(
+        fields.Boolean('Revaluation on basic salary forced'),
+        'get_revaluation_forced')
 
     @staticmethod
     def default_net_salary_mode():
         return False
+
+    @staticmethod
+    def default_revaluation_on_basic_salary():
+        return False
+
+    def get_revaluation_forced(self, name):
+        if not self.benefit:
+            return False
+        return self.benefit.benefit_rules[0].force_revaluation_on_basic_salary

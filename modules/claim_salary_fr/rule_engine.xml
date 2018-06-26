@@ -10,12 +10,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_basic_salary</field>
-            <field name="fct_args">liste_des_type_de_salaire</field>
+            <field name="fct_args">liste_des_type_de_salaire, avec_revalorisation</field>
             <field name="long_description">Retourne un dictionnaire avec les 
 clés 'TA', TB', 'TC' pour les différentes tranches de salaire. Cette donnée 
 prend en paramètre une liste de définition des salaires parmi 
 'gross_salary' (salaire brut), 'net_salary' (salaire net), 'salary_bonus' 
-(prime brutte), 'net_salary_bonus' (prime nette)</field>
+(prime brutte), 'net_salary_bonus' (prime nette). Si le paramètre avec_revalorisation 
+est à vrai alors Coog va appliquer la revalorisation au traitement de base si 
+elle est définie sur le traitement de base (par défaut cette donnée est à vrai)</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
         <record model="rule_engine.function" id="salary_range_rate">
@@ -63,6 +65,16 @@ dans ce cas l'ensemble des contributions est sommée)</field>
             <field name="name">_re_is_net_limite</field>
             <field name="long_description">Retourne vrai si la garantie 
 prévoit une limitation au salaire net</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="revaluation_on_basic_salary">
+            <field name="translated_technical_name">revalorisation_sur_traitement_de_base</field>
+            <field name="description">Revalorisation sur le traitement de base</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_revaluation_on_basic_salary</field>
+            <field name="long_description">Vrai si la revalorisation s'effectue sur le traitement de base</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
     </data>

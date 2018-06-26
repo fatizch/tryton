@@ -48,10 +48,11 @@ class RuleEngineRuntime:
 
     @classmethod
     @check_args('service')
-    def _re_basic_salary(cls, args, salaries_def):
+    def _re_basic_salary(cls, args, salaries_def, with_revaluation=True):
         current_salary = args.get('curr_salary', None)
         return args['service'].calculate_basic_salary(salaries_def,
-            current_salary=current_salary)
+            current_salary=current_salary,
+            args=args if with_revaluation else None)
 
     @classmethod
     @check_args('service')
@@ -59,3 +60,9 @@ class RuleEngineRuntime:
         return args['service'].benefit.benefit_rules[0]. \
             option_benefit_at_date(args['service'].option,
                 args['service'].loss.start_date).net_salary_mode
+
+    @classmethod
+    @check_args('service')
+    def _re_revaluation_on_basic_salary(cls, args):
+        return args['service'].benefit.benefit_rules[
+            0].process_revaluation_on_basic_salary(args['service'])
