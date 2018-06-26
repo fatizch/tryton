@@ -25,7 +25,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_claim_underwritings">
             <field name="name">Underwritings</field>
             <field name="res_model">underwriting</field>
-            <field name="domain" eval="[['on_object', '=', ['claim', Eval('active_id')]]]" pyson="1"/>
+            <field name="domain" eval="[('on_object.id', 'in', Eval('active_ids'), 'claim')]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_claim_underwritings_view1">
             <field name="sequence" eval="10"/>
