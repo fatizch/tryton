@@ -1,3 +1,4 @@
+* OTH#0000: Change BPIJ order and fix crash in BPIJ treatement
 * OTH#0000: Wrong creation of company suscription request once contract is terminated
 * FEA#9010: Create periods from received files
 * OTH#0000: Fix wrong declaration order of claimIJSubscription

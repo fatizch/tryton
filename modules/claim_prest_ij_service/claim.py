@@ -970,7 +970,7 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
     @classmethod
     def __setup__(cls):
         super(ClaimIjPeriod, cls).__setup__()
-        cls._order = [('start_date', 'DESC'), ('create_date', 'DESC'),
+        cls._order = [('id', 'DESC'), ('start_date', 'DESC'),
             ('sign', 'DESC')]
 
     @classmethod

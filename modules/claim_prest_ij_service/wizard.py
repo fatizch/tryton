@@ -362,7 +362,8 @@ class TreatIjPeriod(Wizard):
         service = selected[0].service
 
         date = min(x.start_date for x in selected)
-        if coog_date.add_day(service.paid_until_date, 1) < date:
+        if (service.paid_until_date and
+                coog_date.add_day(service.paid_until_date, 1) < date):
             self.raise_user_error('period_hole', {
                     'last_end': coog_string.translate_value(service,
                         'paid_until_date'),
