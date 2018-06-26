@@ -27,5 +27,6 @@ def register():
         module='contract_insurance_invoice_dunning', type_='model')
     Pool.register(
         event.EventLog,
+        event.EventTypeAction,
         module='contract_insurance_invoice_dunning', type_='model',
         depends=['event_log'])

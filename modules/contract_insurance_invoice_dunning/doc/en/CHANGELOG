@@ -1,3 +1,4 @@
+* FEA#9255 Allow to generate contract notification from dunning event
 * OTH#0000 Fix test scenario following merge 4.8
 * BUG#8912 Error when processing dunning termination before initial start date if dunning configured with termination at_dunning_effective_date
 
