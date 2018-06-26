@@ -106,7 +106,8 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
 
         # migration from a fix in 2.0 due to missing reset of default_value
         cursor = Transaction().connection.cursor()
-        cursor.execute("update extra_data set default_value = Null "
+        cursor.execute("update extra_data "
+            "set default_value = Null, selection = Null "
             "where type_ not in ('boolean', 'selection')")
 
     @classmethod
@@ -162,11 +163,11 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
         if not hasattr(self, 'type_'):
             return
         if self.type_ == 'selection':
-            self.selection = ''
             self.default_selection = ''
         elif self.type_ == 'boolean':
             self.default_boolean = False
         self.default_value = ''
+        self.selection = ''
 
     @fields.depends('name', 'string')
     def on_change_with_name(self):
