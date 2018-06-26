@@ -352,12 +352,15 @@ Create Payment Journal::
     True
     >>> ContractInvoice = Model.get('contract.invoice')
     >>> Contract.first_invoice([contract.id], config.context)
+    >>> config._context['client_defined_date'] = two_months_ago
     >>> first_invoice = ContractInvoice.find(
     ...     [('contract', '=', contract.id)],
     ...     order=[('start', 'ASC')])[0]
-    >>> config._context['client_defined_date'] = two_months_ago
     >>> first_invoice.invoice.click('post')
     >>> config._context['client_defined_date'] = today
+    >>> first_invoice = ContractInvoice.find(
+    ...     [('contract', '=', contract.id)],
+    ...     order=[('start', 'ASC')])[0]
     >>> assert all(x.maturity_date == x.payment_date
     ...     for x in first_invoice.invoice.lines_to_pay)
     >>> Contract.rebill_contracts([contract.id], contract.start_date, config.context)
