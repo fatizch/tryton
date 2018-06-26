@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################ -->
+        <!-- # Default Prest IJ Process # -->
+        <!-- ############################ -->
+        <record model="process.step" id="prest_ij_process_step">
+            <field name="technical_name">periods_to_treat</field>
+            <field name="fancy_name">Periods to Treat</field>
+            <field name="colspan" eval="4"/>
+            <field name="main_model" search="[('model', '=', 'claim.ij.subscription')]"/>
+            <field name="button_domain">[('periods_to_treat', '=', None)]</field>
+            <field name="step_xml">
+                <![CDATA[
+                <group string="" id="parties" colspan="4">
+                    <label name="subscriber"/>
+                    <field name="subscriber" colspan="3"/>
+                    <label name="party"/>
+                    <field name="party" colspan="3"/>
+                </group>
+                <separator name="periods_to_treat" colspan="4"/>
+                <field name="periods_to_treat" colspan="4" expand_toolbar="0"/>
+                <separator name="claims" colspan="4"/>
+                <field name="claims" colspan="4" expand_toolbar="0"/>
+                <button name="button_start_period_treatment" string="Traiter" colspan="4"/>
+                ]]>
+            </field>
+        </record>
+        <record model="process.action" id="prest_ij_process_completion_code">
+            <field name="content">method</field>
+            <field name="technical_kind">step_after</field>
+            <field name="method_name">end_process</field>
+            <field name="parent_step" ref="claim_prest_ij_service.prest_ij_process_step"/>
+        </record>
+        <record model="process" id="prest_ij_process">
+            <field name="technical_name">prestij_periods_treatment</field>
+            <field name="fancy_name">PrestIJ Periods Treatment</field>
+            <field name="on_model" search="[('model', '=', 'claim.ij.subscription')]"/>
+            <field name="step_button_group_position">right</field>
+            <field name="steps_implicitly_available" eval="False"/>
+            <field name="with_prev_next" eval="False"/>
+            <field name="end_step_name">Terminer</field>
+            <field name="hold_button">Mettre en attente</field>
+            <field name="kind">prest_ij_treatment</field>
+        </record>
+        <record model="process-process.step" id="prest_ij_process_step_relation">
+            <field name="process" ref="claim_prest_ij_service.prest_ij_process"/>
+            <field name="step" ref="claim_prest_ij_service.prest_ij_process_step"/>
+        </record>
+    </data>
+</tryton>

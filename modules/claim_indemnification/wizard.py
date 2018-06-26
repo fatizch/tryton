@@ -32,6 +32,7 @@ __all__ = [
     'DeleteIndemnification',
     'CancelIndemnification',
     'CancelIndemnificationReason',
+    'ScheduleIndemnifications',
     ]
 
 
@@ -643,6 +644,12 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
             Button('Valider', 'apply_regularisation', 'tryton-go-next',
                 default=True)])
     apply_regularisation = StateTransition()
+    schedule = StateView('claim.create_indemnification.schedule',
+        'claim_indemnification.schedule_created_ask_view_form', [
+            Button('No', 'end', 'tryton-list-remove'),
+            Button('Yes', 'validate_scheduling', 'tryton-go-next',
+                default=True)])
+    validate_scheduling = StateTransition()
 
     @classmethod
     def __setup__(cls):
@@ -955,15 +962,15 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
             self.result.indemnification[0].service)
         if cancelled:
             self.select_regularisation.indemnification = \
-                [self.result.indemnification[0].id]
+                [x.id for x in self.result.indemnification]
             self.select_regularisation.cancelled = cancelled
             return 'select_regularisation'
-        return 'end'
+        return 'schedule'
 
     def default_select_regularisation(self, name):
         indemnification = self.select_regularisation.indemnification[0]
-        new_indemnification_amount = \
-            self.result.indemnification[0].total_amount
+        new_indemnification_amount = sum(x.total_amount
+            for x in self.result.indemnification)
         cancelled_amount = 0
         for cur_indemn in self.get_cancelled_indemnification(
                 self.result.indemnification[0].service):
@@ -973,7 +980,7 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
             'remaining_amount': remaining_amount,
             'new_indemnification_amount': new_indemnification_amount,
             'cancelled_amount': cancelled_amount,
-            'indemnification': [indemnification.id],
+            'indemnification': [x.id for x in self.result.indemnification],
             'cancelled': [x.id for x in self.select_regularisation.cancelled],
             'currency_digits': indemnification.currency_digits
             }
@@ -993,6 +1000,23 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
                 'payback_reason': payback_reason,
                 'payment_term': payment_term.id if payment_term else None,
                 })
+        return 'schedule'
+
+    def default_schedule(self, name):
+        indemnifications = list(self.result.indemnification)
+        try:
+            indemnifications += list(
+                self.select_regularisation.indemnification)
+            indemnifications += list(self.select_regularisation.cancelled)
+        except AttributeError:
+            pass
+        return {
+            'to_schedule': [x.id for x in indemnifications if x.id],
+            }
+
+    def transition_validate_scheduling(self):
+        Indemnification = Pool().get('claim.indemnification')
+        Indemnification.schedule(self.schedule.to_schedule)
         return 'end'
 
 
@@ -1003,6 +1027,15 @@ class CancelIndemnificationReason(model.CoogView):
 
     cancel_reason = fields.Many2One('claim.indemnification.payback_reason',
         'Cancel Reason', required=True)
+
+
+class ScheduleIndemnifications(model.CoogView):
+    'Schedule Indemnifications'
+
+    __name__ = 'claim.create_indemnification.schedule'
+
+    to_schedule = fields.Many2Many('claim.indemnification', None, None,
+        'Indemnifications', readonly=True)
 
 
 class CancelIndemnification(Wizard):

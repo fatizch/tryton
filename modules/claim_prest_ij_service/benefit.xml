@@ -11,5 +11,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="claim.benefit_view_form"/>
             <field name="name">benefit_form</field>
         </record>
+        <!-- ############## -->
+        <!-- # Event Desc # -->
+        <!-- ############## -->
+        <record model="ir.ui.view" id="event_description_view_form">
+            <field name="model">benefit.event.description</field>
+            <field name="inherit" ref="claim.event_desc_view_form"/>
+            <field name="name">event_description_form</field>
+        </record>
     </data>
 </tryton>

@@ -2,6 +2,57 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:claim.ij.period.treat:"
+msgid "All periods are already treated, nothing to do"
+msgstr "Toutes les périodes sont traitées, plus rien à faire"
+
+msgctxt "error:claim.ij.period.treat:"
+msgid "Cannot treat periods for different services"
+msgstr ""
+"Il n'est pas possible de traiter simultanément des BPIJs portant sur des "
+"prestations différentes"
+
+msgctxt "error:claim.ij.period.treat:"
+msgid "Could not find a matching claim, one may have to be created"
+msgstr ""
+"Impossible de retrouver un sinistre, veuillez le déclarer avant de continuer"
+
+msgctxt "error:claim.ij.period.treat:"
+msgid "Daily amount is changing, going from %(prev)s to %(new)s"
+msgstr "Le montant journalier évolue, il passe de %(prev)s à %(new)s"
+
+msgctxt "error:claim.ij.period.treat:"
+msgid "Multiple types found when trying to treat: %(type1)s and %(type2)s"
+msgstr "Plusieurs types différents détectés : %(type1)s et %(type2)s"
+
+msgctxt "error:claim.ij.period.treat:"
+msgid "No indemnification found between %(last_end)s  and %(new_start)s"
+msgstr "Aucune indemnisation trouvée entre %(last_end)s et %(new_start)s"
+
+msgctxt "error:claim.ij.period.treat:"
+msgid "Selected periods have different daily amounts"
+msgstr "Les périodes sélectionnées ont des montants journaliers différents"
+
+msgctxt "error:claim.ij.subscription:"
+msgid "%(number)s periods must be treated before going on"
+msgstr "Il reste %(number)s périodes à traiter avant de continuer"
+
+msgctxt "error:claim.ij.subscription:"
+msgid "Enter a value for field '%s' of '%s'"
+msgstr "Entrez une valeur pour le champ '%s' de '%s'"
+
+msgctxt "error:claim.ij.subscription:"
+msgid "Enter a value for field(s): %s"
+msgstr "Entrez une valeur pour le(s) champs(s) : %s"
+
+msgctxt "error:claim.ij.subscription:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:claim.ij.subscription:"
+msgid "Select a date that is not in the future for field(s): %s"
+msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
+
 msgctxt "error:claim.ij.subscription:"
 msgid "There must be only one IJ subscription per siren / ssn"
 msgstr "Il ne doit y avoir qu'une seule inscription Prest'IJ par siren / ssn"
@@ -44,6 +95,10 @@ msgctxt "field:benefit,prest_ij:"
 msgid "Handle Prest IJ System"
 msgstr "Gestion du système Prest'IJ"
 
+msgctxt "field:benefit.event.description,prest_ij_type:"
+msgid "Prest IJ Associated Type"
+msgstr "Type BPIJ associé"
+
 msgctxt "field:claim.configuration,prest_ij_period_sequence:"
 msgid "IJ Period Sequence"
 msgstr "Séquence de période IJ"
@@ -52,9 +107,414 @@ msgctxt "field:claim.configuration,prest_ij_sequence:"
 msgid "IJ Flow Sequence"
 msgstr "Séquence du flux Prest'IJ"
 
+msgctxt "field:claim.ij.period,accounting_date:"
+msgid "Accounting Date"
+msgstr "Date comptable"
+
+msgctxt "field:claim.ij.period,automatic_action:"
+msgid "Automatic Action"
+msgstr "Action proposée"
+
+msgctxt "field:claim.ij.period,beneficiary_kind:"
+msgid "Beneficiary Kind"
+msgstr "Type de bénéficiaire"
+
+msgctxt "field:claim.ij.period,claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "field:claim.ij.period,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.ij.period,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.ij.period,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.ij.period,currency:"
+msgid "Currency"
+msgstr "Devise"
+
+msgctxt "field:claim.ij.period,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision de la devise"
+
+msgctxt "field:claim.ij.period,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:claim.ij.period,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:claim.ij.period,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.ij.period,indemnification:"
+msgid "Indemnification"
+msgstr "Prestations"
+
+msgctxt "field:claim.ij.period,indemnification_amount:"
+msgid "Indemnification Amount"
+msgstr "Montant indemnisé"
+
+msgctxt "field:claim.ij.period,indemnification_beneficiary:"
+msgid "Beneficiary"
+msgstr "Destinataire du paiement"
+
+msgctxt "field:claim.ij.period,indemnification_status:"
+msgid "Indemnification Status"
+msgstr "Statut de l'indemnisation"
+
+msgctxt "field:claim.ij.period,indemnification_total_amount:"
+msgid "Indemnification Total Amount"
+msgstr "Total indemnisé"
+
+msgctxt "field:claim.ij.period,lines:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "field:claim.ij.period,main_kind:"
+msgid "Main Kind"
+msgstr "Type principal"
+
+msgctxt "field:claim.ij.period,number_of_days:"
+msgid "Number of days"
+msgstr "Nombre de jours"
+
+msgctxt "field:claim.ij.period,other_periods:"
+msgid "Other Periods"
+msgstr "Autres périodes"
+
+msgctxt "field:claim.ij.period,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:claim.ij.period,period_kind:"
+msgid "Kind"
+msgstr "Nature"
+
+msgctxt "field:claim.ij.period,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:claim.ij.period,reception_date:"
+msgid "Reception Date"
+msgstr "Date de réception"
+
+msgctxt "field:claim.ij.period,same_periods:"
+msgid "Same Periods"
+msgstr "Périodes identiques"
+
+msgctxt "field:claim.ij.period,service:"
+msgid "Service"
+msgstr "Prestation"
+
+msgctxt "field:claim.ij.period,sign:"
+msgid "Sign"
+msgstr "Sens"
+
+msgctxt "field:claim.ij.period,start_date:"
+msgid "Start Date"
+msgstr "Date de début"
+
+msgctxt "field:claim.ij.period,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:claim.ij.period,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:claim.ij.period,subscription:"
+msgid "subscription"
+msgstr "Souscription"
+
+msgctxt "field:claim.ij.period,taxes_amount:"
+msgid "Taxes Amount"
+msgstr "Taxes"
+
+msgctxt "field:claim.ij.period,total_amount:"
+msgid "Total Amount"
+msgstr "Montant Total"
+
+msgctxt "field:claim.ij.period,total_per_day_amount:"
+msgid "Total per day Amount"
+msgstr "Montant total journalier"
+
+msgctxt "field:claim.ij.period,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:claim.ij.period,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.ij.period,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:claim.ij.period.line,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:claim.ij.period.line,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.ij.period.line,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.ij.period.line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.ij.period.line,currency:"
+msgid "Currency"
+msgstr "Devise"
+
+msgctxt "field:claim.ij.period.line,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision de la devise"
+
+msgctxt "field:claim.ij.period.line,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:claim.ij.period.line,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.ij.period.line,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:claim.ij.period.line,number_of_days:"
+msgid "Number of Days"
+msgstr "Nombre de jours"
+
+msgctxt "field:claim.ij.period.line,period:"
+msgid "Period"
+msgstr "Période"
+
+msgctxt "field:claim.ij.period.line,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:claim.ij.period.line,total_amount:"
+msgid "Total Amount"
+msgstr "Montant Total"
+
+msgctxt "field:claim.ij.period.line,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:claim.ij.period.line,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.ij.period.line,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:claim.ij.period.treat.select,automatic_treatment:"
+msgid "Automatic Treatment"
+msgstr "Traitement automatique"
+
+msgctxt "field:claim.ij.period.treat.select,cancellation:"
+msgid "Cancellation"
+msgstr "Annulation"
+
+msgctxt "field:claim.ij.period.treat.select,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.ij.period.treat.select,manual_treatment:"
+msgid "Manual Treatment"
+msgstr "Traitement manuel"
+
+msgctxt "field:claim.ij.period.treat.select,values:"
+msgid "Periods to treat"
+msgstr "Périodes à traiter"
+
+msgctxt "field:claim.ij.period.treat.select.line,accounting_date:"
+msgid "Accounting Date"
+msgstr "Date comptable"
+
+msgctxt "field:claim.ij.period.treat.select.line,automatic_action:"
+msgid "Automatic Action"
+msgstr "Action proposée"
+
+msgctxt "field:claim.ij.period.treat.select.line,beneficiary_kind:"
+msgid "Beneficiary Kind"
+msgstr "Type de bénéficiaire"
+
+msgctxt "field:claim.ij.period.treat.select.line,claim:"
+msgid "Claim"
+msgstr "Sinistre"
+
+msgctxt "field:claim.ij.period.treat.select.line,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.ij.period.treat.select.line,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.ij.period.treat.select.line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.ij.period.treat.select.line,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:claim.ij.period.treat.select.line,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision de la devise"
+
+msgctxt "field:claim.ij.period.treat.select.line,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:claim.ij.period.treat.select.line,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:claim.ij.period.treat.select.line,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.ij.period.treat.select.line,indemnification:"
+msgid "Indemnification"
+msgstr "Prestations"
+
+msgctxt "field:claim.ij.period.treat.select.line,indemnification_amount:"
+msgid "Indemnification Amount"
+msgstr "Montant indemnisé"
+
+msgctxt "field:claim.ij.period.treat.select.line,indemnification_beneficiary:"
+msgid "Beneficiary"
+msgstr "Destinataire du paiement"
+
+msgctxt "field:claim.ij.period.treat.select.line,indemnification_status:"
+msgid "Indemnification Status"
+msgstr "Statut de l'indemnisation"
+
+msgctxt ""
+"field:claim.ij.period.treat.select.line,indemnification_total_amount:"
+msgid "Indemnification Total Amount"
+msgstr "Total indemnisé"
+
+msgctxt "field:claim.ij.period.treat.select.line,lines:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "field:claim.ij.period.treat.select.line,main_kind:"
+msgid "Main Kind"
+msgstr "Type principal"
+
+msgctxt "field:claim.ij.period.treat.select.line,number_of_days:"
+msgid "Number of days"
+msgstr "Nombre de jours"
+
+msgctxt "field:claim.ij.period.treat.select.line,other_periods:"
+msgid "Other Periods"
+msgstr "Autres périodes"
+
+msgctxt "field:claim.ij.period.treat.select.line,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:claim.ij.period.treat.select.line,period_id:"
+msgid "Period Id"
+msgstr "Id de la période"
+
+msgctxt "field:claim.ij.period.treat.select.line,period_kind:"
+msgid "Kind"
+msgstr "Type de période"
+
+msgctxt "field:claim.ij.period.treat.select.line,prev_selected:"
+msgid "Previously Selected"
+msgstr "Précédemment sélectionné"
+
+msgctxt "field:claim.ij.period.treat.select.line,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:claim.ij.period.treat.select.line,reception_date:"
+msgid "Reception Date"
+msgstr "Date de réception"
+
+msgctxt "field:claim.ij.period.treat.select.line,same_periods:"
+msgid "Same Periods"
+msgstr "Périodes identiques"
+
+msgctxt "field:claim.ij.period.treat.select.line,selected:"
+msgid "Selected"
+msgstr "Sélectionné"
+
+msgctxt "field:claim.ij.period.treat.select.line,service:"
+msgid "Service"
+msgstr "Prestation"
+
+msgctxt "field:claim.ij.period.treat.select.line,sign:"
+msgid "Sign"
+msgstr "Sens"
+
+msgctxt "field:claim.ij.period.treat.select.line,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:claim.ij.period.treat.select.line,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:claim.ij.period.treat.select.line,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:claim.ij.period.treat.select.line,subscription:"
+msgid "subscription"
+msgstr "Souscription"
+
+msgctxt "field:claim.ij.period.treat.select.line,taxes_amount:"
+msgid "Taxes Amount"
+msgstr "Taxes"
+
+msgctxt "field:claim.ij.period.treat.select.line,total_amount:"
+msgid "Total Amount"
+msgstr "Montant Total"
+
+msgctxt "field:claim.ij.period.treat.select.line,total_per_day_amount:"
+msgid "Total per day Amount"
+msgstr "Montant total journalier"
+
+msgctxt "field:claim.ij.period.treat.select.line,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:claim.ij.period.treat.select.line,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.ij.period.treat.select.line,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:claim.ij.subscription,activated:"
 msgid "Activated"
 msgstr "Activée"
+
+msgctxt "field:claim.ij.subscription,claims:"
+msgid "Claims"
+msgstr "Sinistres"
 
 msgctxt "field:claim.ij.subscription,confirmation_date:"
 msgid "Confirmation Date"
@@ -72,6 +532,18 @@ msgctxt "field:claim.ij.subscription,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:claim.ij.subscription,current_log:"
+msgid "Current Log"
+msgstr "Trace Courante"
+
+msgctxt "field:claim.ij.subscription,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
+msgctxt "field:claim.ij.subscription,current_state_name:"
+msgid "Current State In Process"
+msgstr "Etat courant au sein du processus"
+
 msgctxt "field:claim.ij.subscription,date:"
 msgid "Declaration Or Deletion Date"
 msgstr "Date de déclaration ou de suppression"
@@ -88,6 +560,10 @@ msgctxt "field:claim.ij.subscription,ij_activation:"
 msgid "IJ Activation"
 msgstr "Activation de Prest'IJ"
 
+msgctxt "field:claim.ij.subscription,logs:"
+msgid "Task"
+msgstr "Tâche"
+
 msgctxt "field:claim.ij.subscription,method:"
 msgid "Method"
 msgstr "Méthode"
@@ -99,6 +575,10 @@ msgstr "Tiers"
 msgctxt "field:claim.ij.subscription,party:"
 msgid "Party"
 msgstr "Assuré"
+
+msgctxt "field:claim.ij.subscription,periods_to_treat:"
+msgid "Periods to Treat"
+msgstr "Périodes à traiter"
 
 msgctxt "field:claim.ij.subscription,rec_name:"
 msgid "Record Name"
@@ -123,6 +603,18 @@ msgstr "Numéro de sécurité sociale"
 msgctxt "field:claim.ij.subscription,state:"
 msgid "State"
 msgstr "État"
+
+msgctxt "field:claim.ij.subscription,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:claim.ij.subscription,task_name:"
+msgid "Task Name"
+msgstr "Nom de la tâche"
+
+msgctxt "field:claim.ij.subscription,task_status:"
+msgid "Task Status"
+msgstr "Statut du processus"
 
 msgctxt "field:claim.ij.subscription,write_date:"
 msgid "Write Date"
@@ -284,6 +776,18 @@ msgctxt "field:claim.ij.subscription_request.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:claim.indemnification,has_prestij_periods:"
+msgid "Has PrestIJ Periods"
+msgstr "Avec BPIJs"
+
+msgctxt "field:claim.indemnification,prestij_periods:"
+msgid "PrestIJ Periods"
+msgstr "BPIJs"
+
+msgctxt "field:claim.indemnification_definition,prestij_periods:"
+msgid "Prest IJ Periods"
+msgstr "BPIJs"
+
 msgctxt "field:covered_person.ij_subscription_create.select_date,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -314,6 +818,10 @@ msgctxt "field:party.party,ij_subscriptions:"
 msgid "Ij Subscription"
 msgstr "Fiche de Souscription Ij"
 
+msgctxt "field:prest_ij.periods.batch,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:prest_ij.subscription.create,id:"
 msgid "ID"
 msgstr "ID"
@@ -338,6 +846,22 @@ msgstr ""
 "Si vrai, les sinistres déclarés pour cette prestation seront gérés par le "
 "système Prest'IJ"
 
+msgctxt "model:claim.ij.period,name:"
+msgid "Claim Ij Period"
+msgstr "BPIJs"
+
+msgctxt "model:claim.ij.period.line,name:"
+msgid "Claim Ij Period Line"
+msgstr "Détail de BPIJ"
+
+msgctxt "model:claim.ij.period.treat.select,name:"
+msgid "Treat Ij Period Select"
+msgstr "Sélection des périodes"
+
+msgctxt "model:claim.ij.period.treat.select.line,name:"
+msgid "Treat Ij Period Lines"
+msgstr "Traiter les BPIJs"
+
 msgctxt "model:claim.ij.subscription,name:"
 msgid "Claim IJ Subscription"
 msgstr "Inscription Prest'IJ"
@@ -359,8 +883,8 @@ msgid "Prest IJ Request ARL OK"
 msgstr "Demande Prest'IJ ARL OK"
 
 msgctxt "model:event.type,name:event_prest_ij_request_acknowledged"
-msgid "Prest IJ Request Acknowledged"
-msgstr "Demande Prest'IJ reçue"
+msgid "Prest IJ Request Failed"
+msgstr "Échec de la requête PrestIJ"
 
 msgctxt "model:event.type,name:event_prest_ij_request_failed"
 msgid "Prest IJ Request Failed"
@@ -394,9 +918,21 @@ msgctxt "model:ir.action,name:act_manual_ij_subscription_request"
 msgid "Manual Prest Ij Subscription"
 msgstr "Souscription manuelle à Prest IJ"
 
+msgctxt "model:ir.action,name:act_open_all_claim_ij_period"
+msgid "PrestIJ Period"
+msgstr "BPIJs"
+
+msgctxt "model:ir.action,name:act_open_claim_ij_period"
+msgid "PrestIJ Period"
+msgstr "BPIJs"
+
 msgctxt "model:ir.action,name:act_relaunch_ij_subscription"
-msgid "Relaunch Prest Ij Subscription"
+msgid "Relaunch Ij Subscription"
 msgstr "Relancer une inscription Prest'IJ"
+
+msgctxt "model:ir.action,name:act_start_period_treatment"
+msgid "Treat Prest IJ Periods"
+msgstr "Traiter les BPIJs"
 
 msgctxt "model:ir.ui.menu,name:menu_erroneous_requests_prest_ij"
 msgid "Erroneous Requests"
@@ -409,6 +945,14 @@ msgstr "Groupes d'inscription prestIJ"
 msgctxt "model:ir.ui.menu,name:menu_prest_ij"
 msgid "Prest'IJ"
 msgstr "Prest'IJ"
+
+msgctxt "model:ir.ui.menu,name:menu_prest_ij_periods"
+msgid "Prest'IJ Periods"
+msgstr "BPIJs"
+
+msgctxt "model:prest_ij.periods.batch,name:"
+msgid "Create PrestIj Periods batch"
+msgstr "Batch de création des BPIJs"
 
 msgctxt "model:prest_ij.subscription.create,name:"
 msgid "Create Prest Ij Susbscription"
@@ -425,6 +969,762 @@ msgstr "Envoi de la souscription d'entreprise à Prest IJ"
 msgctxt "model:prest_ij.subscription.submit_person,name:"
 msgid "Submit Person Prest Ij Susbscription"
 msgstr "Envoi de la souscription d'assuré à Prest IJ"
+
+msgctxt "model:process,fancy_name:prest_ij_process"
+msgid "PrestIJ Periods Treatment"
+msgstr "Traitement des BPIJs"
+
+msgctxt "model:process.step,fancy_name:prest_ij_process_step"
+msgid "Periods to Treat"
+msgstr "Périodes à traiter"
+
+msgctxt "selection:benefit.event.description,prest_ij_type:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:benefit.event.description,prest_ij_type:"
+msgid "Illness"
+msgstr "Maladie"
+
+msgctxt "selection:benefit.event.description,prest_ij_type:"
+msgid "Pregnancy"
+msgstr "Maternité"
+
+msgctxt "selection:benefit.event.description,prest_ij_type:"
+msgid "Work Accident"
+msgstr "Accident du travail"
+
+msgctxt "selection:claim.ij.period,automatic_action:"
+msgid "Cancel period"
+msgstr "Annuler la période"
+
+msgctxt "selection:claim.ij.period,automatic_action:"
+msgid "Cancellation of (non-paid) period"
+msgstr "Annulation de périodes non réglées"
+
+msgctxt "selection:claim.ij.period,automatic_action:"
+msgid "Cancelled (non-paid) period"
+msgstr "Période non réglée à annuler"
+
+msgctxt "selection:claim.ij.period,automatic_action:"
+msgid "Cannot determine course of action"
+msgstr "Impossible de déterminer un comportement"
+
+msgctxt "selection:claim.ij.period,automatic_action:"
+msgid "Manually Treated"
+msgstr "Traité manuellement"
+
+msgctxt "selection:claim.ij.period,automatic_action:"
+msgid "Missing Claim"
+msgstr "Sinistre non trouvé"
+
+msgctxt "selection:claim.ij.period,automatic_action:"
+msgid "New Period"
+msgstr "Nouvelle période"
+
+msgctxt "selection:claim.ij.period,automatic_action:"
+msgid "Treated"
+msgstr "Traitée"
+
+msgctxt "selection:claim.ij.period,automatic_action:"
+msgid "Waiting Previous Period"
+msgstr "En attente du traitement des périodes précédentes"
+
+msgctxt "selection:claim.ij.period,beneficiary_kind:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "selection:claim.ij.period,beneficiary_kind:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "ALLOCATION EXPOSITION ARRET + 6 MOIS"
+msgstr "ALLOCATION EXPOSITION ARRET + 6 MOIS"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "ALLOCATION EXPOSITION ARRET + 6 MOIS ET 3 ENFANTS"
+msgstr "ALLOCATION EXPOSITION ARRET + 6 MOIS ET 3 ENFANTS"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "ALLOCATION EXPOSITION MAJOREE 3 ENFANTS"
+msgstr "ALLOCATION EXPOSITION MAJOREE 3 ENFANTS"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "ALLOCATION EXPOSITION NORMALE"
+msgstr "ALLOCATION EXPOSITION NORMALE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "ALLOCATION NUIT MAJOREE  3 ENFANTS"
+msgstr "ALLOCATION NUIT MAJOREE  3 ENFANTS"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "ALLOCATION NUIT MAJOREE ARRET + 6 MOIS"
+msgstr "ALLOCATION NUIT MAJOREE ARRET + 6 MOIS"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "ALLOCATION NUIT MAJOREE ARRET + 6 MOIS ET 3 ENFANTS"
+msgstr "ALLOCATION NUIT MAJOREE ARRET + 6 MOIS ET 3 ENFANTS"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "ALLOCATION NUIT NORMALE"
+msgstr "ALLOCATION NUIT NORMALE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "Alloc. Accomp. fin de Vie cessation act. Red."
+msgstr "Alloc. Accomp. fin de Vie cessation act. Red."
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "Alloc. accomp. fin de Vie cessa. act. temps Pl."
+msgstr "Alloc. accomp. fin de Vie cessa. act. temps Pl."
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "Allocation forfaitaire repos maternel"
+msgstr "Allocation forfaitaire repos maternel"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "Allocation maternite reduite pour adoption"
+msgstr "Allocation maternite reduite pour adoption"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "CARENCE"
+msgstr "CARENCE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "COMPLEMENT IJ > PLAFOND -CRPCEN-"
+msgstr "COMPLEMENT IJ > PLAFOND -CRPCEN-"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "CONSTAT D'INDU"
+msgstr "CONSTAT D'INDU"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "FORF.24H>DUREE>12"
+msgstr "FORF.24H>DUREE>12"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J MALADIE MAJOREE + 6 MOIS"
+msgstr "I.J MALADIE MAJOREE + 6 MOIS"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J MALADIE NORMALE + 6 MOIS"
+msgstr "I.J MALADIE NORMALE + 6 MOIS"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J. ADOPTION"
+msgstr "I.J. ADOPTION"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J. MAJOREES"
+msgstr "I.J. MAJOREES"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J. MI-TEMPS"
+msgstr "I.J. MI-TEMPS"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J. MINIMUM  MAJOREE"
+msgstr "I.J. MINIMUM  MAJOREE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J. MINIMUM  NORMALE"
+msgstr "I.J. MINIMUM  NORMALE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J. NORMALES"
+msgstr "I.J. NORMALES"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J. NORMALES CURE"
+msgstr "I.J. NORMALES CURE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J. PATERNITE"
+msgstr "I.J. PATERNITE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J. POSNATALES"
+msgstr "I.J. POSNATALES"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J. PRENATALES"
+msgstr "I.J. PRENATALES"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J. REDUITES POUR RENTE"
+msgstr "I.J. REDUITES POUR RENTE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J.MAJOREES CURE"
+msgstr "I.J.MAJOREES CURE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "I.J.REDUITES CURE (RENTE)"
+msgstr "I.J.REDUITES CURE (RENTE)"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "IJ SUPPLEMENTAIRE MATERNITE"
+msgstr "IJ SUPPLEMENTAIRE MATERNITE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "INDEM. DE REMPL.CJTES.COLLABORATRICES"
+msgstr "INDEM. DE REMPL.CJTES.COLLABORATRICES"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "INDEM.REMPL.MATER REDUITE(ADOPTION)"
+msgstr "INDEM.REMPL.MATER REDUITE(ADOPTION)"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "INDEMN.REMPLACEMENT MATER NORMALE"
+msgstr "INDEMN.REMPLACEMENT MATER NORMALE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "INDEMNITE PATERNITE CONJOINT INFIRMIER"
+msgstr "INDEMNITE PATERNITE CONJOINT INFIRMIER"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "INDEMNITE PATERNITE CONJOINT PAMC"
+msgstr "INDEMNITE PATERNITE CONJOINT PAMC"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "INDEMNITE PATERNITE PAMC"
+msgstr "INDEMNITE PATERNITE PAMC"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "INDEMNITE TEMPORAIRE D'INAPTITUDE"
+msgstr "INDEMNITE TEMPORAIRE D'INAPTITUDE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "MAJOR.INDEM.REMPL.MATER(A.GEMELL.)"
+msgstr "MAJOR.INDEM.REMPL.MATER(A.GEMELL.)"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "MAJOR.INDEM.REMPL.MATER(ET PATHOL)"
+msgstr "MAJOR.INDEM.REMPL.MATER(ET PATHOL)"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "PERTE DE SALAIRE"
+msgstr "PERTE DE SALAIRE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "RECUPERATION INDU"
+msgstr "RECUPERATION INDU"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "REGULARISATION REGUL. REMBOURSEMENT DETTE SOCIALE"
+msgstr "REGULARISATION REGUL. REMBOURSEMENT DETTE SOCIALE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "REGULARISATION REGUL.CONTRIB. SOCIALE GENERALISEE"
+msgstr "REGULARISATION REGUL.CONTRIB. SOCIALE GENERALISEE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "RETENUE C.S.G."
+msgstr "RETENUE C.S.G."
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "RETENUE R.D.S."
+msgstr "RETENUE R.D.S."
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "RETENUE REGUL. REMBOURSEMENT DETTE SOCIALE"
+msgstr "RETENUE REGUL. REMBOURSEMENT DETTE SOCIALE"
+
+msgctxt "selection:claim.ij.period,main_kind:"
+msgid "RETENUE REGUL.CONTRIB. SOCIALE GENERALISEE"
+msgstr "RETENUE REGUL.CONTRIB. SOCIALE GENERALISEE"
+
+msgctxt "selection:claim.ij.period,period_kind:"
+msgid "Illness"
+msgstr "Maladie"
+
+msgctxt "selection:claim.ij.period,period_kind:"
+msgid "Pregnancy"
+msgstr "Maternité"
+
+msgctxt "selection:claim.ij.period,period_kind:"
+msgid "Work Accident"
+msgstr "Accident du travail"
+
+msgctxt "selection:claim.ij.period,sign:"
+msgid "Cancellation"
+msgstr "Annulation"
+
+msgctxt "selection:claim.ij.period,sign:"
+msgid "Payment"
+msgstr "Paiement"
+
+msgctxt "selection:claim.ij.period,state:"
+msgid "Received"
+msgstr "Reçu"
+
+msgctxt "selection:claim.ij.period,state:"
+msgid "Treated"
+msgstr "Traitée"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "ALLOCATION EXPOSITION ARRET + 6 MOIS"
+msgstr "ALLOCATION EXPOSITION ARRET + 6 MOIS"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "ALLOCATION EXPOSITION ARRET + 6 MOIS ET 3 ENFANTS"
+msgstr "ALLOCATION EXPOSITION ARRET + 6 MOIS ET 3 ENFANTS"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "ALLOCATION EXPOSITION MAJOREE 3 ENFANTS"
+msgstr "ALLOCATION EXPOSITION MAJOREE 3 ENFANTS"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "ALLOCATION EXPOSITION NORMALE"
+msgstr "ALLOCATION EXPOSITION NORMALE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "ALLOCATION NUIT MAJOREE  3 ENFANTS"
+msgstr "ALLOCATION NUIT MAJOREE  3 ENFANTS"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "ALLOCATION NUIT MAJOREE ARRET + 6 MOIS"
+msgstr "ALLOCATION NUIT MAJOREE ARRET + 6 MOIS"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "ALLOCATION NUIT MAJOREE ARRET + 6 MOIS ET 3 ENFANTS"
+msgstr "ALLOCATION NUIT MAJOREE ARRET + 6 MOIS ET 3 ENFANTS"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "ALLOCATION NUIT NORMALE"
+msgstr "ALLOCATION NUIT NORMALE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "Alloc. Accomp. fin de Vie cessation act. Red."
+msgstr "Alloc. Accomp. fin de Vie cessation act. Red."
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "Alloc. accomp. fin de Vie cessa. act. temps Pl."
+msgstr "Alloc. accomp. fin de Vie cessa. act. temps Pl."
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "Allocation forfaitaire repos maternel"
+msgstr "Allocation forfaitaire repos maternel"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "Allocation maternite reduite pour adoption"
+msgstr "Allocation maternite reduite pour adoption"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "CARENCE"
+msgstr "CARENCE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "COMPLEMENT IJ > PLAFOND -CRPCEN-"
+msgstr "COMPLEMENT IJ > PLAFOND -CRPCEN-"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "CONSTAT D'INDU"
+msgstr "CONSTAT D'INDU"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "FORF.24H>DUREE>12"
+msgstr "FORF.24H>DUREE>12"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J MALADIE MAJOREE + 6 MOIS"
+msgstr "I.J MALADIE MAJOREE + 6 MOIS"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J MALADIE NORMALE + 6 MOIS"
+msgstr "I.J MALADIE NORMALE + 6 MOIS"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J. ADOPTION"
+msgstr "I.J. ADOPTION"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J. MAJOREES"
+msgstr "I.J. MAJOREES"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J. MI-TEMPS"
+msgstr "I.J. MI-TEMPS"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J. MINIMUM  MAJOREE"
+msgstr "I.J. MINIMUM  MAJOREE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J. MINIMUM  NORMALE"
+msgstr "I.J. MINIMUM  NORMALE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J. NORMALES"
+msgstr "I.J. NORMALES"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J. NORMALES CURE"
+msgstr "I.J. NORMALES CURE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J. PATERNITE"
+msgstr "I.J. PATERNITE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J. POSNATALES"
+msgstr "I.J. POSNATALES"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J. PRENATALES"
+msgstr "I.J. PRENATALES"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J. REDUITES POUR RENTE"
+msgstr "I.J. REDUITES POUR RENTE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J.MAJOREES CURE"
+msgstr "I.J.MAJOREES CURE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "I.J.REDUITES CURE (RENTE)"
+msgstr "I.J.REDUITES CURE (RENTE)"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "IJ SUPPLEMENTAIRE MATERNITE"
+msgstr "IJ SUPPLEMENTAIRE MATERNITE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "INDEM. DE REMPL.CJTES.COLLABORATRICES"
+msgstr "INDEM. DE REMPL.CJTES.COLLABORATRICES"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "INDEM.REMPL.MATER REDUITE(ADOPTION)"
+msgstr "INDEM.REMPL.MATER REDUITE(ADOPTION)"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "INDEMN.REMPLACEMENT MATER NORMALE"
+msgstr "INDEMN.REMPLACEMENT MATER NORMALE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "INDEMNITE PATERNITE CONJOINT INFIRMIER"
+msgstr "INDEMNITE PATERNITE CONJOINT INFIRMIER"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "INDEMNITE PATERNITE CONJOINT PAMC"
+msgstr "INDEMNITE PATERNITE CONJOINT PAMC"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "INDEMNITE PATERNITE PAMC"
+msgstr "INDEMNITE PATERNITE PAMC"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "INDEMNITE TEMPORAIRE D'INAPTITUDE"
+msgstr "INDEMNITE TEMPORAIRE D'INAPTITUDE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "MAJOR.INDEM.REMPL.MATER(A.GEMELL.)"
+msgstr "MAJOR.INDEM.REMPL.MATER(A.GEMELL.)"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "MAJOR.INDEM.REMPL.MATER(ET PATHOL)"
+msgstr "MAJOR.INDEM.REMPL.MATER(ET PATHOL)"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "PERTE DE SALAIRE"
+msgstr "PERTE DE SALAIRE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "RECUPERATION INDU"
+msgstr "RECUPERATION INDU"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "REGULARISATION REGUL. REMBOURSEMENT DETTE SOCIALE"
+msgstr "REGULARISATION REGUL. REMBOURSEMENT DETTE SOCIALE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "REGULARISATION REGUL.CONTRIB. SOCIALE GENERALISEE"
+msgstr "REGULARISATION REGUL.CONTRIB. SOCIALE GENERALISEE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "RETENUE C.S.G."
+msgstr "RETENUE C.S.G."
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "RETENUE R.D.S."
+msgstr "RETENUE R.D.S."
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "RETENUE REGUL. REMBOURSEMENT DETTE SOCIALE"
+msgstr "RETENUE REGUL. REMBOURSEMENT DETTE SOCIALE"
+
+msgctxt "selection:claim.ij.period.line,kind:"
+msgid "RETENUE REGUL.CONTRIB. SOCIALE GENERALISEE"
+msgstr "RETENUE REGUL.CONTRIB. SOCIALE GENERALISEE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,automatic_action:"
+msgid "Cancel period"
+msgstr "Annuler la période"
+
+msgctxt "selection:claim.ij.period.treat.select.line,automatic_action:"
+msgid "Cancellation of (non-paid) period"
+msgstr "Annulation de périodes non réglées"
+
+msgctxt "selection:claim.ij.period.treat.select.line,automatic_action:"
+msgid "Cancelled (non-paid) period"
+msgstr "Période non réglée à annuler"
+
+msgctxt "selection:claim.ij.period.treat.select.line,automatic_action:"
+msgid "Cannot determine course of action"
+msgstr "Impossible de déterminer un comportement"
+
+msgctxt "selection:claim.ij.period.treat.select.line,automatic_action:"
+msgid "Manually Treated"
+msgstr "Traité manuellement"
+
+msgctxt "selection:claim.ij.period.treat.select.line,automatic_action:"
+msgid "Missing Claim"
+msgstr "Sinistre non trouvé"
+
+msgctxt "selection:claim.ij.period.treat.select.line,automatic_action:"
+msgid "New Period"
+msgstr "Nouvelle période"
+
+msgctxt "selection:claim.ij.period.treat.select.line,automatic_action:"
+msgid "Treated"
+msgstr "Traitée"
+
+msgctxt "selection:claim.ij.period.treat.select.line,automatic_action:"
+msgid "Waiting Previous Period"
+msgstr "En attente du traitement des périodes précédentes"
+
+msgctxt "selection:claim.ij.period.treat.select.line,beneficiary_kind:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "selection:claim.ij.period.treat.select.line,beneficiary_kind:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "ALLOCATION EXPOSITION ARRET + 6 MOIS"
+msgstr "ALLOCATION EXPOSITION ARRET + 6 MOIS"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "ALLOCATION EXPOSITION ARRET + 6 MOIS ET 3 ENFANTS"
+msgstr "ALLOCATION EXPOSITION ARRET + 6 MOIS ET 3 ENFANTS"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "ALLOCATION EXPOSITION MAJOREE 3 ENFANTS"
+msgstr "ALLOCATION EXPOSITION MAJOREE 3 ENFANTS"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "ALLOCATION EXPOSITION NORMALE"
+msgstr "ALLOCATION EXPOSITION NORMALE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "ALLOCATION NUIT MAJOREE  3 ENFANTS"
+msgstr "ALLOCATION NUIT MAJOREE  3 ENFANTS"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "ALLOCATION NUIT MAJOREE ARRET + 6 MOIS"
+msgstr "ALLOCATION NUIT MAJOREE ARRET + 6 MOIS"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "ALLOCATION NUIT MAJOREE ARRET + 6 MOIS ET 3 ENFANTS"
+msgstr "ALLOCATION NUIT MAJOREE ARRET + 6 MOIS ET 3 ENFANTS"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "ALLOCATION NUIT NORMALE"
+msgstr "ALLOCATION NUIT NORMALE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "Alloc. Accomp. fin de Vie cessation act. Red."
+msgstr "Alloc. Accomp. fin de Vie cessation act. Red."
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "Alloc. accomp. fin de Vie cessa. act. temps Pl."
+msgstr "Alloc. accomp. fin de Vie cessa. act. temps Pl."
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "Allocation forfaitaire repos maternel"
+msgstr "Allocation forfaitaire repos maternel"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "Allocation maternite reduite pour adoption"
+msgstr "Allocation maternite reduite pour adoption"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "CARENCE"
+msgstr "CARENCE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "COMPLEMENT IJ > PLAFOND -CRPCEN-"
+msgstr "COMPLEMENT IJ > PLAFOND -CRPCEN-"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "CONSTAT D'INDU"
+msgstr "CONSTAT D'INDU"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "FORF.24H>DUREE>12"
+msgstr "FORF.24H>DUREE>12"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J MALADIE MAJOREE + 6 MOIS"
+msgstr "I.J MALADIE MAJOREE + 6 MOIS"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J MALADIE NORMALE + 6 MOIS"
+msgstr "I.J MALADIE NORMALE + 6 MOIS"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J. ADOPTION"
+msgstr "I.J. ADOPTION"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J. MAJOREES"
+msgstr "I.J. MAJOREES"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J. MI-TEMPS"
+msgstr "I.J. MI-TEMPS"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J. MINIMUM  MAJOREE"
+msgstr "I.J. MINIMUM  MAJOREE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J. MINIMUM  NORMALE"
+msgstr "I.J. MINIMUM  NORMALE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J. NORMALES"
+msgstr "I.J. NORMALES"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J. NORMALES CURE"
+msgstr "I.J. NORMALES CURE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J. PATERNITE"
+msgstr "I.J. PATERNITE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J. POSNATALES"
+msgstr "I.J. POSNATALES"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J. PRENATALES"
+msgstr "I.J. PRENATALES"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J. REDUITES POUR RENTE"
+msgstr "I.J. REDUITES POUR RENTE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J.MAJOREES CURE"
+msgstr "I.J.MAJOREES CURE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "I.J.REDUITES CURE (RENTE)"
+msgstr "I.J.REDUITES CURE (RENTE)"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "IJ SUPPLEMENTAIRE MATERNITE"
+msgstr "IJ SUPPLEMENTAIRE MATERNITE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "INDEM. DE REMPL.CJTES.COLLABORATRICES"
+msgstr "INDEM. DE REMPL.CJTES.COLLABORATRICES"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "INDEM.REMPL.MATER REDUITE(ADOPTION)"
+msgstr "INDEM.REMPL.MATER REDUITE(ADOPTION)"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "INDEMN.REMPLACEMENT MATER NORMALE"
+msgstr "INDEMN.REMPLACEMENT MATER NORMALE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "INDEMNITE PATERNITE CONJOINT INFIRMIER"
+msgstr "INDEMNITE PATERNITE CONJOINT INFIRMIER"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "INDEMNITE PATERNITE CONJOINT PAMC"
+msgstr "INDEMNITE PATERNITE CONJOINT PAMC"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "INDEMNITE PATERNITE PAMC"
+msgstr "INDEMNITE PATERNITE PAMC"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "INDEMNITE TEMPORAIRE D'INAPTITUDE"
+msgstr "INDEMNITE TEMPORAIRE D'INAPTITUDE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "MAJOR.INDEM.REMPL.MATER(A.GEMELL.)"
+msgstr "MAJOR.INDEM.REMPL.MATER(A.GEMELL.)"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "MAJOR.INDEM.REMPL.MATER(ET PATHOL)"
+msgstr "MAJOR.INDEM.REMPL.MATER(ET PATHOL)"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "PERTE DE SALAIRE"
+msgstr "PERTE DE SALAIRE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "RECUPERATION INDU"
+msgstr "RECUPERATION INDU"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "REGULARISATION REGUL. REMBOURSEMENT DETTE SOCIALE"
+msgstr "REGULARISATION REGUL. REMBOURSEMENT DETTE SOCIALE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "REGULARISATION REGUL.CONTRIB. SOCIALE GENERALISEE"
+msgstr "REGULARISATION REGUL.CONTRIB. SOCIALE GENERALISEE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "RETENUE C.S.G."
+msgstr "RETENUE C.S.G."
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "RETENUE R.D.S."
+msgstr "RETENUE R.D.S."
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "RETENUE REGUL. REMBOURSEMENT DETTE SOCIALE"
+msgstr "RETENUE REGUL. REMBOURSEMENT DETTE SOCIALE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,main_kind:"
+msgid "RETENUE REGUL.CONTRIB. SOCIALE GENERALISEE"
+msgstr "RETENUE REGUL.CONTRIB. SOCIALE GENERALISEE"
+
+msgctxt "selection:claim.ij.period.treat.select.line,period_kind:"
+msgid "Illness"
+msgstr "Maladie"
+
+msgctxt "selection:claim.ij.period.treat.select.line,period_kind:"
+msgid "Pregnancy"
+msgstr "Maternité"
+
+msgctxt "selection:claim.ij.period.treat.select.line,period_kind:"
+msgid "Work Accident"
+msgstr "Accident du travail"
+
+msgctxt "selection:claim.ij.period.treat.select.line,sign:"
+msgid "Cancellation"
+msgstr "Annulation"
+
+msgctxt "selection:claim.ij.period.treat.select.line,sign:"
+msgid "Payment"
+msgstr "Paiement"
+
+msgctxt "selection:claim.ij.period.treat.select.line,state:"
+msgid "Received"
+msgstr "Reçu"
+
+msgctxt "selection:claim.ij.period.treat.select.line,state:"
+msgid "Treated"
+msgstr "Traitée"
 
 msgctxt "selection:claim.ij.subscription,method:"
 msgid "Automatic"
@@ -502,6 +1802,10 @@ msgctxt "selection:claim.ij.subscription_request.group,state:"
 msgid "Processing"
 msgstr "En cours de traitement"
 
+msgctxt "selection:process,kind:"
+msgid "PrestIJ Period Treatment"
+msgstr "Traitement des BPIJs"
+
 msgctxt "view:claim.configuration:"
 msgid "Prest IJ"
 msgstr "Prest'IJ"
@@ -517,6 +1821,26 @@ msgstr "Relancer le processus d'inscription"
 msgctxt "view:party.party:"
 msgid "Manually Create IJ Subscription"
 msgstr "Création manuelle d'une souscription Prest IJ"
+
+msgctxt "wizard_button:claim.ij.period.treat,to_treat,automatic:"
+msgid "Treat"
+msgstr "Traiter"
+
+msgctxt "wizard_button:claim.ij.period.treat,to_treat,cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:claim.ij.period.treat,to_treat,cancel:"
+msgid "Cancel Indemnifications"
+msgstr "Annuler les indemnisations"
+
+msgctxt "wizard_button:claim.ij.period.treat,to_treat,end:"
+msgid "Exit"
+msgstr "Terminer"
+
+msgctxt "wizard_button:claim.ij.period.treat,to_treat,manual:"
+msgid "Treat Manually"
+msgstr "Traiter manuellement"
 
 msgctxt ""
 "wizard_button:covered_person.subscription.create_request,select_date,create_request:"

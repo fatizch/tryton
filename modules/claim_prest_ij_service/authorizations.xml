@@ -25,6 +25,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_claim_ij_period_read_only">
+            <field name="model" search="[('model', '=', 'claim.ij.period')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <!-- Claim Management Group Rights For Prest IJ Models-->
         <record model="ir.model.access" id="access_claim_ij_subscription_request_group_group_claim_manage">
             <field name="model" search="[('model', '=', 'claim.ij.subscription_request.group')]"/>
@@ -50,12 +57,28 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="access_claim_ij_period_group_claim_manage">
+            <field name="model" search="[('model', '=', 'claim.ij.period')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>}
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <record model="ir.model.button-res.group" id="subscription_relaunch_process_button_group_claim_manage">
             <field name="button" ref="subscription_relaunch_process_button"/>
             <field name="group" ref="claim.group_claim_manage"/>
         </record>
         <record model="ir.model.button-res.group" id="create_ij_subscription_request_button_group_claim_manage">
             <field name="button" ref="create_ij_subscription_request_button"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="resume_process_button_group_claim_manage">
+            <field name="button" ref="button_resume_process"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="start_period_treatment_button_group_claim_manage">
+            <field name="button" ref="button_start_period_treatment"/>
             <field name="group" ref="claim.group_claim_manage"/>
         </record>
     </data>

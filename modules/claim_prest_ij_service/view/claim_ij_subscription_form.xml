@@ -19,8 +19,10 @@ this repository contains the full copyright notices and license terms. -->
         <field name="method"/>
     </group>
     <group id="bottom" col="4" colspan="4" yexpand="1" yfill="1">
-        <field name="requests" no_command="1" yexpand="1" yfill="1" colspan="4"/>
-        <field name="requests_event_logs" mode="tree" no_command="1" yexpand="1" yfill="1" colspan="4"/>
+        <separator name="requests" colspan="4"/>
+        <field name="requests" mode="tree" expand_toolbar="0" yexpand="1" yfill="1" colspan="4"/>
+        <separator name="requests_event_logs" colspan="4"/>
+        <field name="requests_event_logs" mode="tree" expand_toolbar="0" yexpand="1" yfill="1" colspan="4"/>
     </group>
     <group id="invisible" col="4" colspan="4">
         <field name="activated" invisible="1"/>

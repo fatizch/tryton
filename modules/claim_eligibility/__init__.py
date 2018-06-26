@@ -17,7 +17,6 @@ def register():
         claim.Claim,
         claim.ClaimLoss,
         claim.ClaimService,
-        claim.ExtraData,
         claim.ClaimIndemnification,
         rule_engine.RuleEngineRuntime,
         wizard.ClaimServiceManualDisplay,

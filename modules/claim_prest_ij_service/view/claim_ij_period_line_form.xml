@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="kind"/>
+    <field name="kind"/>
+    <label name="number_of_days"/>
+    <field name="number_of_days"/>
+    <label name="amount"/>
+    <group id="amount">
+        <field name="amount" xexpand="0" factor="-1"/>
+        <label name="currency_symbol" string="" xexpand="1" xalign="0"/>
+    </group>
+    <label name="total_amount"/>
+    <group id="total_amount">
+        <field name="total_amount" xexpand="0" factor="-1"/>
+        <label name="currency_symbol" string="" xexpand="1" xalign="0"/>
+    </group>
+</form>

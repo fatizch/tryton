@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="state"/>
+    <field name="state"/>
+    <newline/>
+    <label name="subscriber"/>
+    <field name="subscriber"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="claim"/>
+    <field name="claim"/>
+    <label name="service"/>
+    <field name="service"/>
+    <label name="indemnification"/>
+    <field name="indemnification"/>
+    <newline/>
+    <label name="reception_date"/>
+    <field name="reception_date"/>
+    <label name="accounting_date"/>
+    <field name="accounting_date"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <label name="period_kind"/>
+    <field name="period_kind"/>
+    <label name="sign"/>
+    <field name="sign"/>
+    <label name="main_kind"/>
+    <field name="main_kind"/>
+    <label name="beneficiary_kind"/>
+    <field name="beneficiary_kind"/>
+    <group id="amounts" colspan="4" col="6">
+        <label name="indemnification_amount"/>
+        <group id="indemnification_amount_group">
+            <field name="indemnification_amount" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="1" xalign="0"/>
+        </group>
+        <label name="taxes_amount"/>
+        <group id="taxes_amount_group">
+            <field name="taxes_amount" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="1" xalign="0"/>
+        </group>
+        <label name="total_amount"/>
+        <group id="total_amount_group">
+            <field name="total_amount" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="1" xalign="0"/>
+        </group>
+    </group>
+    <separator name="lines" colspan="4"/>
+    <field name="lines" colspan="4" expand_toolbar="0"/>
+</form>

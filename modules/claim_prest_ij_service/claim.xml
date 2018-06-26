@@ -49,7 +49,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="claim_ij_subscription_request_group_view_list"/>
             <field name="act_window" ref="act_claim_ij_subscription_request_group_action"/>
         </record>
-
        <!-- ************************************************* -->
        <!-- ***************** Subscription ****************** -->
        <!-- ************************************************* -->
@@ -81,6 +80,74 @@ this repository contains the full copyright notices and license terms. -->
             <field name="keyword">form_relate</field>
             <field name="model">claim,-1</field>
             <field name="action" ref="act_consult_ij_subscription"/>
+        </record>
+        <!-- ################### -->
+        <!-- # Prest'IJ Period # -->
+        <!-- ################### -->
+        <record model="ir.ui.view" id="claim_ij_period_view_form">
+            <field name="model">claim.ij.period</field>
+            <field name="type">form</field>
+            <field name="name">claim_ij_period_form</field>
+        </record>
+        <record model="ir.ui.view" id="claim_ij_period_view_list">
+            <field name="model">claim.ij.period</field>
+            <field name="type">tree</field>
+            <field name="name">claim_ij_period_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_open_claim_ij_period">
+            <field name="name">PrestIJ Period</field>
+            <field name="res_model">claim.ij.period</field>
+            <field name="domain" eval="[('party', 'in', Eval('active_ids'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_open_claim_ij_period_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="claim_ij_period_view_list"/>
+            <field name="act_window" ref="act_open_claim_ij_period"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_open_claim_ij_period_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="claim_ij_period_view_form"/>
+            <field name="act_window" ref="act_open_claim_ij_period"/>
+        </record>
+        <record model="ir.action.act_window" id="act_open_all_claim_ij_period">
+            <field name="name">PrestIJ Period</field>
+            <field name="res_model">claim.ij.period</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_open_all_claim_ij_period_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="claim_ij_period_view_list"/>
+            <field name="act_window" ref="act_open_all_claim_ij_period"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_open_all_claim_ij_period_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="claim_ij_period_view_form"/>
+            <field name="act_window" ref="act_open_all_claim_ij_period"/>
+        </record>
+        <!-- ################### -->
+        <!-- # Indemnification # -->
+        <!-- ################### -->
+        <record model="ir.ui.view" id="indemnification_view_form">
+            <field name="model">claim.indemnification</field>
+            <field name="inherit" ref="claim_indemnification.indemnification_view_form"/>
+            <field name="name">indemnification_form</field>
+        </record>
+        <record model="ir.ui.view" id="indemnification_view_list">
+            <field name="model">claim.indemnification</field>
+            <field name="inherit" ref="claim_indemnification.indemnification_view_list"/>
+            <field name="name">indemnification_list</field>
+        </record>
+        <!-- ######################## -->
+        <!-- # Prest'IJ Period Line # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="claim_ij_period_line_view_form">
+            <field name="model">claim.ij.period.line</field>
+            <field name="type">form</field>
+            <field name="name">claim_ij_period_line_form</field>
+        </record>
+        <record model="ir.ui.view" id="claim_ij_period_line_view_list">
+            <field name="model">claim.ij.period.line</field>
+            <field name="type">tree</field>
+            <field name="name">claim_ij_period_line_list</field>
         </record>
         <!-- ############################################################ -->
         <!-- ############### Prest'IJ Erroneous Requests ################ -->
@@ -121,11 +188,20 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">button_create_ij_subscription_request</field>
             <field name="model" search="[('model', '=', 'claim.ij.subscription')]"/>
         </record>
+        <record model="ir.model.button" id="button_start_period_treatment">
+            <field name="name">button_start_period_treatment</field>
+            <field name="model" search="[('model', '=', 'claim.ij.subscription')]"/>
+        </record>
+        <record model="ir.model.button" id="button_resume_process">
+            <field name="name">button_resume</field>
+            <field name="model" search="[('model', '=', 'claim.ij.subscription')]"/>
+        </record>
         <!-- ############################################################ -->
         <!-- ###################### Prest'IJ Menu ####################### -->
         <!-- ############################################################ -->
         <menuitem name="Prest'IJ" id="menu_prest_ij" sequence="16" icon="batch"/>
         <menuitem name="Erroneous Requests" parent="menu_prest_ij" sequence="10" id="menu_erroneous_requests_prest_ij" action="act_erroneous_requests_prest_ij"/>
         <menuitem name="Prest IJ Requests Groups" parent="menu_prest_ij" sequence="20" id="menu_group_requests_prest_ij" action="act_claim_ij_subscription_request_group_action"/>
+        <menuitem name="Prest'IJ Periods" id="menu_prest_ij_periods" parent="menu_prest_ij" sequence="30" icon="batch" action="act_open_all_claim_ij_period"/>
     </data>
 </tryton>

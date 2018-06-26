@@ -121,6 +121,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="button" ref="claim_create_claim_indemnification_button"/>
             <field name="group" ref="res.group_admin"/>
         </record>
+        <!-- ######################################## -->
+        <!-- # Indemnification wizard Schedule View # -->
+        <!-- ######################################## -->
+        <record model="ir.ui.view" id="schedule_created_ask_view_form">
+            <field name="model">claim.create_indemnification.schedule</field>
+            <field name="type">form</field>
+            <field name="name">schedule_created_ask_form</field>
+        </record>
         <!-- ############################################################ -->
         <!-- ############## Indemnification Deletion Wizard ############# -->
         <!-- ############################################################ -->

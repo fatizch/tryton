@@ -1161,3 +1161,83 @@ def is_class_or_dual_method(method):
     return hasattr(method, '_dualmethod') or (
         isinstance(method, types.MethodType) and
         isinstance(method.__self__, PoolMeta))
+
+
+class Saver(object):
+    def __init__(self, model, threshold=None):
+        self.model = model
+        self.threshold = threshold or config.getint('cache', 'record')
+        self._cur_batch = []
+
+    def save(self):
+        if self._cur_batch:
+            self.model.save(self._cur_batch)
+
+    def append(self, elem):
+        self._cur_batch.append(elem)
+        self.check_save()
+
+    def extend(self, data):
+        self._cur_batch += data
+        self.check_save()
+
+    def check_save(self, force=False):
+        if force or len(self._cur_batch) > self.threshold:
+            self.model.save(self._cur_batch)
+            self._cur_batch = []
+
+    def finish(self):
+        self.check_save(force=True)
+
+
+def view_only(model_name):
+
+    def field_copy(base_klass, fname, target_klass):
+        field = getattr(base_klass, fname)
+        if isinstance(field, tryton_fields.Function):
+            field = field._field
+
+        if isinstance(field, tryton_fields.Many2One):
+            copy = field.__class__(string=field.string,
+                model_name=field.model_name, readonly=True)
+        elif isinstance(field, tryton_fields.One2Many):
+            copy = field.__class__(string=field.string,
+                model_name=field.model_name, field=None, readonly=True)
+        elif isinstance(field, tryton_fields.Many2Many):
+            target = getattr(Pool().get(field.relation_name),
+                field.target).model_name \
+                if field.target else field.relation_name
+            copy = field.__class__(string=field.string,
+                relation_name=model_name, origin=None, target=None,
+                readonly=True)
+        elif isinstance(field, tryton_fields.Selection):
+            if isinstance(field.selection, basestring):
+
+                @classmethod
+                def selector(cls):
+                    return getattr(base_klass, field.selection)()
+
+                setattr(target_klass, 'selector_%s' % fname, selector)
+
+            copy = field.__class__(string=field.string,
+                selection=field.selection, readonly=True)
+        elif isinstance(field, tryton_fields.Numeric):
+            copy = field.__class__(string=field.string,
+                digits=field.digits, readonly=True)
+        else:
+            copy = field.__class__(string=field.string, readonly=True)
+
+        setattr(target_klass, fname, copy)
+
+    class ReadOnly(CoogView):
+        @classmethod
+        def __post_setup__(cls):
+            Model = Pool().get(model_name)
+            for fname in dir(Model):
+                field = getattr(Model, fname, None)
+                if not issubclass(field.__class__, tryton_fields.Field):
+                    continue
+                field_copy(Model, fname, cls)
+            super(ReadOnly, cls).__post_setup__()
+
+    return ReadOnly

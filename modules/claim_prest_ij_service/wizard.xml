@@ -24,6 +24,49 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Manual Prest Ij Subscription</field>
             <field name="wiz_name">covered_person.subscription.create_request</field>
         </record>
+        <!-- ########################## -->
+        <!-- # Treat Prest IJ Periods # -->
+        <!-- ########################## -->
+        <record model="ir.action.wizard" id="act_start_period_treatment">
+            <field name="name">Treat Prest IJ Periods</field>
+            <field name="wiz_name">claim.ij.period.treat</field>
+        </record>
+        <record model="ir.action.keyword" id="act_start_period_treatment_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">claim.ij.period,-1</field>
+            <field name="action" ref="act_start_period_treatment"/>
+        </record>
+        <!-- ################################ -->
+        <!-- # Treat PrestIJ Periods Select # -->
+        <!-- ################################ -->
+        <record model="ir.ui.view" id="period_to_treat_select_view_form">
+            <field name="model">claim.ij.period.treat.select</field>
+            <field name="type">form</field>
+            <field name="name">period_to_treat_select_form</field>
+        </record>
+        <!-- ################################ -->
+        <!-- # PrestIJ Periods Select lines # -->
+        <!-- ################################ -->
+        <record model="ir.ui.view" id="period_treat_select_line_view_form">
+            <field name="model">claim.ij.period.treat.select.line</field>
+            <field name="type">form</field>
+            <!-- Reuse line view, duplicate in case of problems -->
+            <field name="name">claim_ij_period_form</field>
+        </record>
+        <record model="ir.ui.view" id="period_treat_select_line_view_list">
+            <field name="model">claim.ij.period.treat.select.line</field>
+            <field name="type">tree</field>
+            <!-- Not here, we must add the select fields -->
+            <field name="name">period_treat_select_line_list</field>
+        </record>
+        <!-- ############################## -->
+        <!-- # Indemnification Definition # -->
+        <!-- ############################## -->
+        <record model="ir.ui.view" id="indemnification_definition_view_form">
+            <field name="model">claim.indemnification_definition</field>
+            <field name="inherit" ref="claim_indemnification.indemnification_definition_view_form"/>
+            <field name="name">indemnification_definition_form</field>
+        </record>
         <!-- ######## -->
         <!-- # View # -->
         <!-- ######## -->

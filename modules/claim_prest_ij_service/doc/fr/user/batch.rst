@@ -211,12 +211,12 @@ Exemple (Depuis coog-admin) :
 ``./coog batch prest_ij.subscription.process --treatment_date=$(date --iso) --output_dir=/chemin/absolu/vers/le/répetoire/de/sortie/``
 
 
- Batch d'intégration des retours du service "Prest Ij" (gestip) [``gestip.flux.process``]
+Batch d'intégration des retours du service "Prest Ij" (gestip) [``gestip.flux.process``]
 =========================================================================================
 Description :
 -------------
 
-Récupère toutes les archives présentes dans le répetoire donné au batch, puis intègre les données dans coog.
+Récupère toutes les archives présentes dans le répertoire donné au batch, puis intègre les données dans coog.
 
 Dépendances :
 -------------
@@ -250,3 +250,40 @@ Exemple :
 ``coog batch gestip.flux.process --treatment_date=$(date --iso) --directory=/chemin/absolu/vers/repertoire/intégration/ --kind='arl'``
 [Type cr]:
 ``coog batch gestip.flux.process --treatment_date=$(date --iso) --directory=/chemin/absolu/vers/repertoire/intégration/ --kind='cr'``
+
+Batch d'intégration des bordereaux de prestation "BPIJ" [``pres_ij.periods.batch``]
+===================================================================================
+
+Description :
+-------------
+
+Récupère toutes les archives présentes dans le répertoire de données du batch,
+puis les intègre dans Coog.
+
+Dépendances :
+-------------
+Aucune
+
+Fréquence :
+-----------
+
+Quotidienne pour étaler la charge de traitement des retours pour et s'assurer
+d'un traitement rapide des prestations.
+
+Paramètres d'entrée :
+---------------------
+- ``directory``
+    Chemin absolu vers le répertoire ou se trouvent les archives à intégrer
+
+Filtres :
+---------
+Aucun
+
+Parallélisation:
+----------------
+Non supportée
+
+Exemple :
+---------
+
+``coog batch prest_ij.periods.batch --directory=/chemin/absolu/vers/repertoire/intégration/``

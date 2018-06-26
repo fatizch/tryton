@@ -10,7 +10,6 @@ __all__ = [
     'Claim',
     'ClaimLoss',
     'ClaimService',
-    'ExtraData',
     'ClaimIndemnification',
     ]
 
@@ -230,16 +229,3 @@ class ClaimIndemnification:
         for i in indemnifications:
             if i.service.eligibility_status != 'accepted':
                 cls.append_functional_error('ineligible')
-
-
-class ExtraData:
-    __metaclass__ = PoolMeta
-    __name__ = 'extra_data'
-
-    @classmethod
-    def __setup__(cls):
-        super(ExtraData, cls).__setup__()
-        cls.kind.selection.append(('manual_eligibility_reason',
-                'Claim: Manual Eligibility Reason'))
-        cls.kind.selection.append(('manual_rejection_reason',
-                'Claim: Manual Rejection Reason'))

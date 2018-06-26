@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="avec_bpij">
+            <field name="translated_technical_name">avec_bpij</field>
+            <field name="description">Rattaché à un BPIJ</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_has_prest_ij_period</field>
+            <field name="long_description">Permet d'identifier si la période
+indemnisée est rattachée à une BPIJ</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+    </data>
+</tryton>

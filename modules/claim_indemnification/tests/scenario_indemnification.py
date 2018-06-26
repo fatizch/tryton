@@ -347,6 +347,7 @@ PaybackReason = Model.get('claim.indemnification.payback_reason')
 create.form.payback_reason = PaybackReason(payback_reason.id)
 create.execute('apply_regularisation')
 
+service.reload()
 indemnifications = service.indemnifications
 
 len(indemnifications) == 2

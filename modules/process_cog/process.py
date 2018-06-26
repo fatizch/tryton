@@ -9,6 +9,7 @@ from sql.aggregate import Avg, Sum, Min, Max
 from sql.conditionals import Coalesce
 
 from trytond import backend
+from trytond.cache import Cache
 from trytond.model import fields as tryton_fields, Unique
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
@@ -659,6 +660,8 @@ class Process(model.CoogSQL, model.TaggedMixin):
         'get_average_run_time')
     sequence = fields.Integer('Sequence')
 
+    _per_kind_process_cache = Cache('per_kind_process')
+
     @classmethod
     def __setup__(cls):
         super(Process, cls).__setup__()
@@ -686,6 +689,22 @@ class Process(model.CoogSQL, model.TaggedMixin):
     @classmethod
     def _post_import(cls, processes):
         cls.update_view(processes)
+
+    @classmethod
+    def create(cls, vlist):
+        created = super(Process, cls).create(vlist)
+        cls._per_kind_process_cache.clear()
+        return created
+
+    @classmethod
+    def delete(cls, ids):
+        super(Process, cls).delete(ids)
+        cls._per_kind_process_cache.clear()
+
+    @classmethod
+    def write(cls, *args):
+        super(Process, cls).write(*args)
+        cls._per_kind_process_cache.clear()
 
     def get_action_context(self):
         context = super(Process, self).get_action_context()
@@ -747,6 +766,15 @@ class Process(model.CoogSQL, model.TaggedMixin):
             average -= datetime.timedelta(microseconds=average.microseconds)
             values[process_id] = average
         return values
+
+    @classmethod
+    def process_from_kind(cls, kind):
+        cached = cls._per_kind_process_cache.get(kind, -1)
+        if cached != -1:
+            return cls.browse(cached)
+        matches = cls.search([('kind', '=', kind)])
+        cls._per_kind_process_cache.set(kind, [x.id for x in matches])
+        return matches
 
     def get_next_execution(self, from_step, for_task):
         from_step.execute_after(for_task)

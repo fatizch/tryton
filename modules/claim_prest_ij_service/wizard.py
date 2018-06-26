@@ -4,18 +4,27 @@ import datetime
 
 from collections import defaultdict
 
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
+from trytond.pyson import Eval
+from trytond.server_context import ServerContext
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateTransition, StateView, \
     Button
 
-from trytond.modules.coog_core import model, fields, utils
+from trytond.modules.coog_core import model, fields, utils, coog_string, \
+    coog_date
+
 
 __all__ = [
     'FindPartySubscription',
     'CoveredPersonIjSubscriptionSelectDate',
     'CreateCoveredPersonIjSubscription',
     'RelaunchPartySubscription',
+    'TreatIjPeriod',
+    'TreatIjPeriodSelect',
+    'TreatIjPeriodSelectLine',
+    'CreateIndemnification',
+    'IndemnificationDefinition',
     ]
 
 
@@ -224,3 +233,359 @@ class RelaunchPartySubscription(Wizard):
         if to_write:
             Subscription.write(*to_write)
         return 'end'
+
+
+class TreatIjPeriod(Wizard):
+    'Treat IJ Period'
+
+    __name__ = 'claim.ij.period.treat'
+
+    start_state = 'check_context'
+
+    check_context = StateTransition()
+    to_treat = StateView('claim.ij.period.treat.select',
+        'claim_prest_ij_service.period_to_treat_select_view_form', [
+            Button('Exit', 'end', 'tryton-cancel'),
+            Button('Treat Manually', 'manual', 'tryton-refresh',
+                states={'readonly': ~Eval('manual_treatment')}),
+            Button('Treat', 'automatic', 'tryton-go-next',
+                states={'readonly': ~Eval('automatic_treatment')}),
+            Button('Cancel Indemnifications', 'cancel', 'tryton-delete',
+                states={'readonly': ~Eval('cancellation')}),
+            ])
+    manual = StateTransition()
+    automatic = StateAction(
+        'claim_indemnification.act_create_indemnification_wizard')
+    cancel = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(TreatIjPeriod, cls).__setup__()
+        cls._error_messages.update({
+                'nothing_to_do': 'All periods are already treated, '
+                'nothing to do',
+                'inconsistent_daily_amount': 'Selected periods have different '
+                'daily amounts',
+                'changing_daily_amount': 'Daily amount is changing, going '
+                'from %(prev)s to %(new)s',
+                'no_claim_found': 'Could not find a matching claim, one may '
+                'have to be created',
+                'no_service_mixin': 'Cannot treat periods for different '
+                'services',
+                'period_hole': 'No indemnification found between %(last_end)s '
+                ' and %(new_start)s',
+                'non_matching_types': 'Multiple types found when trying to '
+                'treat: %(type1)s and %(type2)s',
+                })
+
+    def transition_check_context(self):
+        pool = Pool()
+        context = Transaction().context
+        if context.get('active_model') == 'claim.ij.subscription':
+            instance = pool.get('claim.ij.subscription')(context['active_id'])
+            if not instance.periods_to_treat:
+                self.raise_user_error('nothing_to_do')
+            if all(not x.claim for x in instance.periods_to_treat):
+                self.raise_user_error('no_claim_found')
+        elif context.get('active_model') == 'claim.ij.period':
+            instances = pool.get('claim.ij.period').browse(
+                context['active_ids'])
+            if not any(x for x in instances if x.state != 'treated'):
+                self.raise_user_error('nothing_to_do')
+            if all(not x.claim for x in instances):
+                self.raise_user_error('no_claim_found')
+        else:
+            raise NotImplementedError
+
+        return 'to_treat'
+
+    def default_to_treat(self, name):
+        pool = Pool()
+        context = Transaction().context
+        if context['active_model'] == 'claim.ij.subscription':
+            periods = pool.get('claim.ij.subscription')(
+                Transaction().context['active_id']).periods_to_treat
+        elif context['active_model'] == 'claim.ij.period':
+            periods = pool.get('claim.ij.period').browse(
+                context['active_ids'])
+        else:
+            raise NotImplementedError
+
+        dictionarize_fields = {
+            'claim.ij.period': [
+                'sign', 'period_kind', 'start_date', 'end_date', 'main_kind',
+                'number_of_days', 'indemnification_amount', 'taxes_amount',
+                'total_amount', 'beneficiary_kind', 'accounting_date', 'state',
+                'automatic_action', 'lines', 'currency_symbol', 'id',
+                'total_per_day_amount'],
+            'claim.ij.period.line': ['kind', 'number_of_days', 'amount',
+                'total_amount', 'currency_symbol'],
+            }
+
+        values = [model.dictionarize(x, dictionarize_fields,
+                set_rec_names=True) for x in periods]
+
+        for value in values:
+            value['selected'] = False
+            value['prev_selected'] = False
+            value['period_id'] = value.pop('id')
+
+        return {'values': values, 'manual_treatment': False}
+
+    def transition_manual(self):
+        assert self.to_treat.manual_treatment
+
+        Period = Pool().get('claim.ij.period')
+        selected = Period.browse(
+            [x.period_id for x in self.to_treat.values if x.selected])
+
+        Period.mark_as_treated(selected)
+        if len(selected) == len(self.to_treat.values):
+            return 'end'
+        return 'to_treat'
+
+    def do_automatic(self, action):
+        assert self.to_treat.manual_treatment
+        Period = Pool().get('claim.ij.period')
+        selected = Period.browse(
+            [x.period_id for x in self.to_treat.values if x.selected])
+
+        assert all(x.state != 'treated' and x.service for x in selected)
+        amounts = {x.total_per_day_amount
+            for x in selected if x.total_per_day_amount}
+        if len(amounts) > 1:
+            self.raise_user_warning('inconsistent_daily_amount',
+                'inconsistent_daily_amount')
+
+        if len({x.service.id for x in selected}) != 1:
+            self.raise_user_error('no_service_mixin')
+        service = selected[0].service
+
+        date = min(x.start_date for x in selected)
+        if coog_date.add_day(service.paid_until_date, 1) < date:
+            self.raise_user_error('period_hole', {
+                    'last_end': coog_string.translate_value(service,
+                        'paid_until_date'),
+                    'new_start': coog_string.translate_value(selected[-1],
+                        'start_date'),
+                    })
+        try:
+            cur_ijss_value = service.find_extra_data_value('ijss', date=date)
+        except KeyError:
+            cur_ijss_value = None
+
+        new_ijss_value = max([x for x in amounts if x] or [None])
+        if (new_ijss_value and cur_ijss_value and
+                cur_ijss_value != new_ijss_value):
+            self.raise_user_warning('changing_daily_amount_%s' % str(date),
+                'changing_daily_amount', {
+                    'prev': str(cur_ijss_value), 'new': str(new_ijss_value),
+                    })
+
+        if service.loss.event_desc:
+            event_desc = service.loss.event_desc
+            types = {event_desc.prest_ij_type} | {
+                x.period_kind for x in selected}
+            if len(types) > 1:
+                self.raise_user_error('non_matching_types', {
+                        'type1': coog_string.translate_value(event_desc,
+                            'prest_ij_type'),
+                        'type2': coog_string.translate_value(
+                            [x for x in selected if x.period_kind !=
+                                event_desc.prest_ij_type][0], 'period_kind'),
+                        })
+
+        prev_end = None
+        for start, end in sorted(
+                {(x.start_date, x.end_date) for x in selected}):
+            if prev_end is not None:
+                if not end:
+                    continue
+                if start < prev_end:
+                    continue
+                if start > coog_date.add_day(prev_end, 1):
+                    self.raise_user_error('period_hole', {
+                            'last_end': coog_string.translate_value(
+                                [x for x in selected if x.end_date ==
+                                    prev_end][0], 'end_date'),
+                            'new_start': coog_string.translate_value(
+                                [x for x in selected if x.start_date ==
+                                    start][0], 'end_date'),
+                            })
+                prev_end = end if not prev_end else max(end, prev_end)
+            else:
+                prev_end = end
+        return action, {
+            'extra_context': {
+                'prestij_periods': [x.id for x in selected],
+                }}
+
+    def transition_cancel(self):
+        pool = Pool()
+        Service = pool.get('claim.service')
+        Indemnification = pool.get('claim.indemnification')
+        Period = pool.get('claim.ij.period')
+        periods = Period.browse(
+            [x.period_id for x in self.to_treat.values if x.selected])
+        assert all(x.automatic_action == 'cancel_period' for x in periods)
+        assert len({x.service.id for x in periods}) == 1
+
+        service = periods[0].service
+        indemnifications = list(service.indemnifications)
+        Period.add_to_indemnifications(periods, indemnifications)
+        Indemnification.save(indemnifications)
+
+        Service.cancel_indemnification([service],
+            min(x.start_date for x in periods),
+            max(x.end_date for x in periods))
+
+        return 'end'
+
+
+class TreatIjPeriodSelect(model.CoogView):
+    'Treat Ij Period Select'
+
+    __name__ = 'claim.ij.period.treat.select'
+
+    values = fields.One2Many('claim.ij.period.treat.select.line', None,
+        'Periods to treat', readonly=True)
+    manual_treatment = fields.Boolean('Manual Treatment')
+    automatic_treatment = fields.Boolean('Automatic Treatment')
+    cancellation = fields.Boolean('Cancellation')
+
+    @fields.depends('values')
+    def on_change_values(self):
+        lines, changed, selected = [], None, []
+        for idx, line in enumerate(self.values):
+            if line.selected != line.prev_selected:
+                changed = idx
+                break
+
+        for idx, line in enumerate(self.values):
+            if changed is not None and idx > changed:
+                line.selected = True
+            elif changed is not None and idx < changed:
+                line.selected = False
+            lines.append(line)
+            line.prev_selected = line.selected
+            if line.selected:
+                selected.append(line)
+        self.values = lines
+        self.manual_treatment = bool(selected)
+        self.cancellation = bool(all(x.automatic_action == 'cancel_period'
+                for x in selected) and selected)
+        self.automatic_treatment = bool(any(x.automatic_action == 'new_period')
+                for x in selected)
+
+
+class TreatIjPeriodSelectLine(model.view_only('claim.ij.period')):
+    'Treat Ij Period Lines'
+
+    __name__ = 'claim.ij.period.treat.select.line'
+
+    selected = fields.Boolean('Selected')
+    prev_selected = fields.Boolean('Previously Selected')
+    period_id = fields.Integer('Period Id')
+
+
+class CreateIndemnification:
+    __metaclass__ = PoolMeta
+    __name__ = 'claim.create_indemnification'
+
+    @classmethod
+    def __setup__(cls):
+        super(CreateIndemnification, cls).__setup__()
+        states = cls.select_service.buttons[-1].states
+        new_invisible = ~Eval('prestij_periods')
+        if 'invisible' in states:
+            states &= new_invisible
+        else:
+            states['invisible'] = new_invisible
+
+    def transition_select_service_needed(self):
+        if 'prestij_periods' not in Transaction().context:
+            return super(CreateIndemnification,
+                self).transition_select_service_needed()
+
+        periods = Pool().get('claim.ij.period').browse(
+            Transaction().context.get('prestij_periods'))
+
+        assert periods[0].service
+
+        service = periods[0].service
+        self.definition.service = service
+        self.definition.start_date = min(x.start_date for x in periods)
+        self.definition.end_date = max(x.end_date for x in periods)
+        possible_beneficiaries = [x[0] for x in service.get_beneficiaries_data(
+                self.definition.start_date)]
+        is_person = periods[0].beneficiary_kind == 'party'
+        self.definition.beneficiary = [x for x in possible_beneficiaries
+            if x.is_person == is_person][0]
+        return 'definition'
+
+    def transition_calculate(self):
+        # We need to create this list to hold the periods linked to deleted
+        # indemnifications, so that they can be linked to other created periods
+        cancelled = []
+        with ServerContext().set_context(deleted_prestij_periods=cancelled):
+            return super(CreateIndemnification, self).transition_calculate()
+
+    def init_indemnifications(self):
+        indemnifications = super(CreateIndemnification,
+            self).init_indemnifications()
+
+        Period = Pool().get('claim.ij.period')
+        periods = {}
+        if 'prestij_periods' in Transaction().context:
+            periods.update({x.id: x
+                    for x in Period.browse(Transaction().context.get(
+                        'prestij_periods'))})
+        cancelled = ServerContext().get('deleted_prestij_periods', None)
+        if cancelled is not None:
+            periods.update({x.id: x for x in cancelled})
+
+        Period.add_to_indemnifications(periods.values(), indemnifications)
+
+        return indemnifications
+
+
+class IndemnificationDefinition:
+    __metaclass__ = PoolMeta
+    __name__ = 'claim.indemnification_definition'
+
+    prestij_periods = fields.Many2Many('claim.ij.period', None, None,
+        'Prest IJ Periods', states={'invisible': ~Eval('prestij_periods')})
+
+    @fields.depends('extra_data', 'prestij_periods')
+    def on_change_service(self):
+        super(IndemnificationDefinition, self).on_change_service()
+        if 'prestij_periods' not in Transaction().context:
+            return
+
+        periods = Pool().get('claim.ij.period').browse(
+            Transaction().context.get('prestij_periods'))
+
+        assert periods[0].service and (periods[0].state != 'treated'
+            or all(x.indemnification and x.indemnification.status ==
+                'calculated' for x in periods))
+
+        service = periods[0].service
+        self.start_date = min(x.start_date for x in periods)
+        self.end_date = max(x.end_date for x in periods)
+        possible_beneficiaries = [x[0] for x in service.get_beneficiaries_data(
+                self.start_date)]
+        is_person = periods[0].beneficiary_kind == 'party'
+        self.beneficiary = [x for x in possible_beneficiaries
+            if x.is_person == is_person][0]
+        if 'ijss' in self.extra_data:
+            new_data = dict(self.extra_data)
+            new_data['ijss'] = periods[0].total_per_day_amount
+            self.extra_data = new_data
+        self.prestij_periods = periods
+
+    def period_definitions_dates(self):
+        result = super(IndemnificationDefinition,
+            self).period_definitions_dates()
+        if self.prestij_periods:
+            result += [x.start_date for x in self.prestij_periods[:-1]]
+        return result

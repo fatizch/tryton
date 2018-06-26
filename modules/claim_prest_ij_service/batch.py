@@ -24,6 +24,7 @@ __all__ = [
     'SubmitCompanyPrestIjSubscription',
     'ProcessPrestIjRequest',
     'ProcessGestipFluxBatch',
+    'CreatePrestIjPeriodsBatch',
     ]
 
 
@@ -557,4 +558,40 @@ class ProcessGestipFluxBatch(batch.BatchRoot):
                     process_method(data)
                     to_archive = True
             if to_archive:
+                shutil.move(filepath, archive_dir)
+
+
+class CreatePrestIjPeriodsBatch(batch.BatchRoot):
+    'Create PrestIj Periods batch'
+
+    __name__ = 'prest_ij.periods.batch'
+
+    logger = logging.getLogger(__name__)
+
+    @classmethod
+    def __setup__(cls):
+        super(CreatePrestIjPeriodsBatch, cls).__setup__()
+        cls._default_config_items.update({
+                'job_size': 1,
+                'split': False,
+                })
+
+    @classmethod
+    def convert_to_instances(cls, ids, *args, **kwargs):
+        return ids[:]
+
+    @classmethod
+    def select_ids(cls, directory):
+        for file_ in os.listdir(directory):
+            if file_.endswith('.zip'):
+                yield (os.path.join(directory, file_), )
+
+    @classmethod
+    def execute(cls, objects, ids, directory):
+        Period = Pool().get('claim.ij.period')
+        archive_dir = os.path.join(directory, 'archive')
+        if not os.path.exists(archive_dir):
+            os.makedirs(archive_dir)
+        for filepath in ids:
+            if Period.process_zip_file(filepath):
                 shutil.move(filepath, archive_dir)

@@ -122,6 +122,20 @@ class ProcessStepRelation(export.ExportImportMixin, ModelSQL, ModelView):
         View.delete(views)
         super(ProcessStepRelation, cls).delete(relations)
 
+    @classmethod
+    def create(cls, values):
+        instances = super(ProcessStepRelation, cls).create(values)
+        for process in list({x.process for x in instances}):
+            process.refresh_views()
+        return instances
+
+    @classmethod
+    def write(cls, *args):
+        # Each time we write the process, we update the view
+        super(ProcessStepRelation, cls).write(*args)
+        for process in list({x.process for x in sum(args[::2], [])}):
+            process.refresh_views()
+
 
 class Process(ModelSQL, ModelView, model.TaggedMixin):
     'Process'

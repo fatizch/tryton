@@ -1,0 +1,15 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=bpij
+
+CHAIN_PARAMETERS=('DIRECTORY')
+CHAIN_REQUIRED=()
+
+chain_params "$@"
+chain_begin
+
+chain_step prest_ij.periods.batch
+chain_wait prest_ij.periods.batch || chain_end
+
+chain_end

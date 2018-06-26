@@ -568,6 +568,14 @@ msgctxt "field:claim.configuration,tax_at_indemnification_date:"
 msgid "Tax At Indemnification Date"
 msgstr "Taxe à la date d'indemnisation"
 
+msgctxt "field:claim.create_indemnification.schedule,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.create_indemnification.schedule,to_schedule:"
+msgid "Indemnifications"
+msgstr "Indemnisations"
+
 msgctxt "field:claim.extra_data_value_displayer,id:"
 msgid "ID"
 msgstr "ID"
@@ -1435,6 +1443,10 @@ msgctxt "model:claim.configuration,name:"
 msgid "Claim Configuration"
 msgstr "Configuration"
 
+msgctxt "model:claim.create_indemnification.schedule,name:"
+msgid "Schedule Indemnifications"
+msgstr "Ordonnancer les périodes"
+
 msgctxt "model:claim.extra_data_value_displayer,name:"
 msgid "Extra Data Value Displayer"
 msgstr "Données complémentaires"
@@ -1897,6 +1909,10 @@ msgctxt "view:claim.configuration:"
 msgid "Claim Configuration"
 msgstr "Configuration"
 
+msgctxt "view:claim.create_indemnification.schedule:"
+msgid "Schedule indemnifications?"
+msgstr "Ordonnancer les périodes ?"
+
 msgctxt "view:claim.extra_data_value_displayer:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
@@ -1985,6 +2001,15 @@ msgstr "Précédent"
 msgctxt "wizard_button:claim.create_indemnification,result,regularisation:"
 msgid "Validate"
 msgstr "Valider"
+
+msgctxt "wizard_button:claim.create_indemnification,schedule,end:"
+msgid "No"
+msgstr "Non"
+
+msgctxt ""
+"wizard_button:claim.create_indemnification,schedule,validate_scheduling:"
+msgid "Yes"
+msgstr "Oui"
 
 msgctxt ""
 "wizard_button:claim.create_indemnification,select_regularisation,apply_regularisation:"
