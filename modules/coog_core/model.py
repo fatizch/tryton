@@ -1208,7 +1208,7 @@ def view_only(model_name):
                 field.target).model_name \
                 if field.target else field.relation_name
             copy = field.__class__(string=field.string,
-                relation_name=model_name, origin=None, target=None,
+                relation_name=target, origin=None, target=None,
                 readonly=True)
         elif isinstance(field, tryton_fields.Selection):
             if isinstance(field.selection, basestring):
