@@ -9,7 +9,7 @@ CHAIN_REQUIRED=()
 chain_params "$@"
 chain_begin
 
-chain_step prest_ij.periods.batch
+chain_step prest_ij.periods.batch ${GIVEN_PARAMETERS[@]}
 chain_wait prest_ij.periods.batch || chain_end
 
 chain_end

@@ -1,3 +1,4 @@
+* OTH#0000: Passer les paramètres de la chaine BPIJ au batch
 * OTH#0000: Modification de l'ordre d'affichage des BPIJ et correction d'un crash lors du traitement des BPIJ
 * OTH#0000: Ne pas créer des demandes d'inscription pour les sociétés si l'ensemble des contrats sont résiliés
 * FEA#9010: Intégration des périodes depuis un fichier
