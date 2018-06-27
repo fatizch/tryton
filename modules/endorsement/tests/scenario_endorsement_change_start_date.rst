@@ -287,6 +287,7 @@ Case 0 : today is in second term, we end in second term::
 
     >>> first_month_second_term = datetime.date(2015, 4, 20)
     >>> config._context['client_defined_date'] = first_month_second_term
+    >>> contract._context['client_defined_date'] = first_month_second_term
     >>> contract.reload()
     >>> second_term_end = contract.activation_history[1].end_date
     >>> assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
@@ -305,6 +306,7 @@ Case 0 : today is in second term, we end in second term::
 Case 1 : today is in first term, we end before first_term_end::
 
     >>> config._context['client_defined_date'] = first_term_end
+    >>> contract._context['client_defined_date'] = first_term_end
     >>> contract.reload()
     >>> assert len(contract.activation_history) == 3, [(x.start_date, x.end_date,
     ...     x.termination_reason) for x in contract.activation_history]
@@ -337,6 +339,7 @@ Case 1b : today is in first term, we end at first_term_end::
 Case 2: today is in second term, we terminate before first_term_end::
 
     >>> config._context['client_defined_date'] = datetime.date(2015, 4, 10)
+    >>> contract._context['client_defined_date'] = datetime.date(2015, 4, 10)
     >>> contract.reload()
     >>> assert contract.end_date == second_term_end
     >>> User = Model.get('res.user')
@@ -361,6 +364,7 @@ Case 2: today is in second term, we terminate before first_term_end::
 Case 2b: today is in second term, we terminate at first_term_end::
 
     >>> config._context['client_defined_date'] = datetime.date(2015, 4, 10)
+    >>> contract._context['client_defined_date'] = datetime.date(2015, 4, 10)
     >>> contract.reload()
     >>> second_term_end = contract.activation_history[1].end_date
     >>> assert contract.end_date == second_term_end
@@ -386,6 +390,7 @@ Case 2b: today is in second term, we terminate at first_term_end::
 Test Void Endorsement::
 
     >>> config._context['client_defined_date'] = first_term_end
+    >>> contract._context['client_defined_date'] = first_term_end
     >>> contract.reload()
     >>> User = Model.get('res.user')
     >>> user, = User.find(['login', '=', 'contract_user'])

@@ -312,13 +312,21 @@ Reactivate Contract::
 Add new premium version::
 
     >>> new_premium_date = contract_start_date + relativedelta(months=9, days=-1)
+    >>> Account = Model.get('account.account')
+    >>> ContractPremium = Model.get('contract.premium')
+    >>> ContractOption = Model.get('contract.option')
+    >>> Coverage = Model.get('offered.option.description')
+    >>> contract = Contract(contract.id)
     >>> contract.options[0].premiums[0].end = contract_start_date + \
     ...     relativedelta(months=9, days=-1)
     >>> contract.options[0].premiums[0].save()
-    >>> contract.options[0].premiums.append(ContractPremium(
+    >>> option = ContractOption(contract.options[0].id)
+    >>> option.premiums.append(ContractPremium(
     ...         start=contract_start_date + relativedelta(months=9),
     ...         amount=Decimal('110'), frequency='monthly',
-    ...         account=accounts['revenue'], rated_entity=Coverage(coverage)))
+    ...         account=Account(accounts['revenue'].id),
+    ...         rated_entity=Coverage(coverage)))
+    >>> option.save()
     >>> contract.save()
     >>> contract.options[0].coverage.premium_rules[0].rule_extra_data = \
     ...     {'premium_amount': Decimal(110)}

@@ -47,8 +47,7 @@ Create or fetch Currency::
     >>> currencies = Currency.find([('code', '=', 'USD')])
     >>> if not currencies:
     ...     currency = Currency(name='US Dollar', symbol=u'$', code='USD',
-    ...         rounding=Decimal('0.01'), mon_grouping='[]',
-    ...         mon_decimal_point='.')
+    ...         rounding=Decimal('0.01'))
     ...     currency.save()
     ...     CurrencyRate(date=today + relativedelta(month=1, day=1),
     ...         rate=Decimal('1.0'), currency=currency).save()

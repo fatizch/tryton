@@ -309,9 +309,9 @@ Create Test Contract::
     ...             ('invoice.state', '=', 'validated')]), key=lambda x: x.start)[0]
     >>> first_invoice.invoice.total_amount
     Decimal('330.00')
-    >>> [(x.rec_name, x.unit_price, x.coverage_start, x.coverage_end)
+    >>> [(x.unit_price, x.coverage_start, x.coverage_end)
     ...     for x in sorted(first_invoice.invoice.lines, key=lambda x: x.unit_price)
-    ...     ] == [(u'Test Coverage', Decimal('300.00'),
+    ...     ] == [(Decimal('300.00'),
     ...         datetime.date(2014, 4, 1), datetime.date(2014, 6, 30))]
     True
     >>> len(first_invoice.invoice.taxes) == 1

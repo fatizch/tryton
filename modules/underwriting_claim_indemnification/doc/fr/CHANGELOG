@@ -1,3 +1,5 @@
+* BUG#0000 Changement d'utilisateur avant action
+
 Version 2.0 - 2018-04-13
 * FEA#8158: Découpage automatique d'une période si elle est bloquée par une décision d'analyse de risque
 * BUG#8369 Correction de la surcharge de la méthode clone_last_indemnifications

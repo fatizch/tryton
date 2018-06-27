@@ -103,7 +103,7 @@ Create chart of accounts::
     >>> Account = Model.get('bank.account')
     >>> company_account = Account()
     >>> company_account.bank = bank
-    >>> company_account.owners.append(company.party)
+    >>> company_account.owners.append(Party(company.party.id))
     >>> company_account.currency = currency
     >>> company_account.number = 'ES8200000000000000000000'
     >>> company_account.save()
@@ -290,6 +290,7 @@ Add billing information with monthly billing monde and mandate2::
 
  as sepa mandate::
 
+    >>> monthly_percent = BillingMode(monthly_percent.id)
     >>> contract2.billing_informations.append(BillingInformation(date=None,
     ...         billing_mode=monthly_percent,
     ...         payment_term=monthly_percent.allowed_payment_terms[0],
@@ -420,12 +421,13 @@ payment)::
     ...     contract_invoice_2.invoice.lines_to_pay[0].payment_date
     >>> create_payment.form.free_motive = True
     >>> create_payment.form.journal = journal
+    >>> MoveLine = Model.get('account.move.line')
     >>> for line in [x for x in contract_invoice_2.invoice.move.lines
     ...         if x.account.kind == 'receivable']:
     ...     line._parent = None
     ...     line._parent_field_name = None
     ...     line._parent_name = None
-    ...     create_payment.form.lines_to_pay.append(line)
+    ...     create_payment.form.lines_to_pay.append(MoveLine(line.id))
     >>> create_payment.form.description = "test"
     >>> create_payment.form.bank_account = mandate.account_number.account
 
@@ -551,15 +553,19 @@ with no sepa mandate::
     True
     >>> config._context['client_defined_date'] = \
     ...     contract_2_invoice_2.invoice.lines_to_pay[1].payment_date
-    >>> contract_2_invoice_2.reload()
+    >>> ContractInvoice = Model.get('contract.invoice')
+    >>> contract_2_invoice_2 = ContractInvoice(contract_2_invoice_2.id)
     >>> contract_2_invoice_2.invoice.sepa_mandate.id == mandate3.id
     True
+    >>> contract2 = Contract(contract2.id)
+    >>> monthly_percent = BillingMode(monthly_percent.id)
+    >>> mandate4 = Mandate(mandate4.id)
     >>> future_billing_information = BillingInformation(
     ...     date=contract_2_invoice_2.invoice.lines_to_pay[1].payment_date +
     ...     relativedelta(months=3),
     ...     billing_mode=monthly_percent,
     ...     payment_term=monthly_percent.allowed_payment_terms[0],
-    ...     payer=subscriber2,
+    ...     payer=Party(subscriber2.id),
     ...     direct_debit_day=5,
     ...     sepa_mandate=mandate4)
     >>> contract2.billing_informations.append(future_billing_information)

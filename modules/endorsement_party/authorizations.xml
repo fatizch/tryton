@@ -144,5 +144,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <!-- Buttons -->
+        <record model="ir.model.button-res.group" id="button_start_party_endorsement_manage">
+            <field name="button" ref="button_start_party_endorsement"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+        </record>
     </data>
 </tryton>

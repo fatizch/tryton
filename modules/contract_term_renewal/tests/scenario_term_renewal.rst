@@ -310,6 +310,7 @@ Check that new period is correctly created::
 
 Test activation history getter::
 
+    >>> contract = Contract(contract.id)
     >>> contract.start_date == contract_start_date
     True
     >>> contract.end_date
@@ -322,6 +323,7 @@ Clean Cache::
 
     >>> contract.save()
     >>> config._context['client_defined_date'] = datetime.date(2014, 12, 25)
+    >>> contract = Contract(contract.id)
     >>> contract.start_date
     datetime.date(2014, 4, 10)
     >>> contract.end_date
@@ -334,6 +336,7 @@ Clean Cache::
 
     >>> contract.save()
     >>> config._context['client_defined_date'] = datetime.date(2018, 12, 25)
+    >>> contract = Contract(contract.id)
     >>> contract.start_date
     datetime.date(2014, 4, 10)
     >>> contract.end_date
@@ -346,6 +349,7 @@ Clean Cache::
 
     >>> contract.save()
     >>> config._context['client_defined_date'] = datetime.date(2001, 12, 25)
+    >>> contract = Contract(contract.id)
     >>> contract.start_date == contract_start_date
     True
     >>> contract.end_date

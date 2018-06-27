@@ -11,7 +11,6 @@ def register():
     Pool.register(
         contract.Contract,
         contract.ContractRightSuspension,
-        event.EventLog,
         wizard.ContractSelectHoldReason,
         wizard.ContractActivateConfirm,
         module='contract_insurance_suspension', type_='model')
@@ -19,3 +18,7 @@ def register():
         wizard.ContractHold,
         wizard.ContractActivate,
         module='contract_insurance_suspension', type_='wizard')
+    Pool.register(
+        event.EventLog,
+        module='contract_insurance_suspension', type_='model',
+        depends=['event_log'])

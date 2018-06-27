@@ -366,6 +366,8 @@ Create warning to simulate clicking yes::
     >>> Indemnification = Model.get('claim.indemnification')
     >>> indemnification = Indemnification(indemnifications[1].id)
     >>> assert indemnification.status == 'rejected', indemnification.status
+    >>> config = switch_user('underwriting_user')
+    >>> Underwriting = Model.get('underwriting')
     >>> processing_underwriting = Underwriting.find([])[0]
     >>> processing_underwriting.click('complete')
 
@@ -485,5 +487,7 @@ Create warning to simulate clicking yes::
     >>> Indemnification = Model.get('claim.indemnification')
     >>> indemnification = Indemnification(indemnifications[1].id)
     >>> assert indemnification.status == 'scheduled', indemnification.status
+    >>> config = switch_user('underwriting_user')
+    >>> Underwriting = Model.get('underwriting')
     >>> processing_underwriting = Underwriting.find([])[0]
     >>> processing_underwriting.click('complete')

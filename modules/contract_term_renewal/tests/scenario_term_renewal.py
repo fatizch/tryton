@@ -306,6 +306,7 @@ contract.activation_history[1].end_date
 
 config._context['client_defined_date'] = datetime.date(2013, 12, 25)
 # #Comment# #Test activation history getter
+contract = Contract(contract.id)
 contract.start_date == contract_start_date
 # #Res# #True
 contract.end_date
@@ -316,6 +317,7 @@ contract.end_date
 # #Comment# #Clean Cache
 contract.save()
 config._context['client_defined_date'] = datetime.date(2014, 12, 25)
+contract = Contract(contract.id)
 contract.start_date
 # #Res# #datetime.date(2014, 4, 10)
 contract.end_date
@@ -326,6 +328,7 @@ contract.end_date
 # #Comment# #Clean Cache
 contract.save()
 config._context['client_defined_date'] = datetime.date(2018, 12, 25)
+contract = Contract(contract.id)
 contract.start_date
 # #Res# #datetime.date(2014, 4, 10)
 contract.end_date
@@ -335,6 +338,7 @@ contract.end_date
 # #Comment# #Clean Cache
 contract.save()
 config._context['client_defined_date'] = datetime.date(2001, 12, 25)
+contract = Contract(contract.id)
 contract.start_date == contract_start_date
 # #Res# #True
 contract.end_date

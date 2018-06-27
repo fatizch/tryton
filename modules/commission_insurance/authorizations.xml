@@ -44,6 +44,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="commission_insurance.menu_commission_aggregated_commissions"/>
             <field name="group" ref="group_commission_read"/>
         </record>
+        <!-- Party-->
+        <record model="ir.model.button-res.group" id="party_button_commissions_synthesis_read">
+            <field name="button" ref="commission_insurance.party_button_commissions_synthesis"/>
+            <field name="group" ref="group_commission_read"/>
+        </record>
+        <record model="ir.model.button-res.group" id="party_button_party_invoices_read">
+            <field name="button" ref="commission_insurance.party_button_party_invoices"/>
+            <field name="group" ref="group_commission_read"/>
+        </record>
         <!-- Distribution -->
         <record model="ir.ui.menu-res.group" id="menu_distribution_commission_read">
             <field name="menu" ref="distribution.menu_distribution"/>
@@ -108,6 +117,15 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.ui.menu-res.group" id="menu_commission_create_invoice_commission_manage">
             <field name="menu" ref="commission.menu_commission_create_invoice"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <!-- Party-->
+        <record model="ir.model.button-res.group" id="party_button_commissions_synthesis_manage">
+            <field name="button" ref="commission_insurance.party_button_commissions_synthesis"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="party_button_party_invoices_manage">
+            <field name="button" ref="commission_insurance.party_button_party_invoices"/>
             <field name="group" ref="group_commission_manage"/>
         </record>
         <!-- Distribution -->

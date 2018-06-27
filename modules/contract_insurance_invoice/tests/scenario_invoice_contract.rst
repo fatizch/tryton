@@ -81,6 +81,7 @@ Create Fiscal Year::
     >>> invoice_sequence.save()
     >>> fiscalyear.reload()
     >>> FiscalYear.create_period([fiscalyear.id], config.context)
+    >>> _ = create_chart(company)
 
 Create Account Kind::
 
@@ -121,7 +122,6 @@ Create Account::
     >>> payable_account.type = payable_account_kind
     >>> payable_account.company = company
     >>> payable_account.save()
-    >>> _ = create_chart(company)
     >>> config = switch_user('product_user')
     >>> company = get_company()
     >>> currency = get_currency(code='EUR')
@@ -269,9 +269,12 @@ Create Test Contract::
     >>> product_account, = Account.find([('code', '=', 'product_account')])
     >>> coverage = OptionDescription(coverage.id)
     >>> Wizard('contract.activate', models=[contract]).execute('apply')
-    >>> contract.options[0].premiums.append(ContractPremium(start=contract_start_date,
+    >>> ContractOption = Model.get('contract.option')
+    >>> option = ContractOption(contract.options[0].id)
+    >>> option.premiums.append(ContractPremium(start=contract_start_date,
     ...         amount=Decimal('100'), frequency='once_per_contract',
     ...         account=product_account, rated_entity=coverage))
+    >>> option.save()
     >>> contract.premiums.append(ContractPremium(start=contract_start_date,
     ...         amount=Decimal('15'), frequency='monthly', account=product_account,
     ...         rated_entity=product))
@@ -297,17 +300,18 @@ Test invoicing::
     ...             ('invoice.state', '=', 'validated')]), key=lambda x: x.start)[0]
     >>> first_invoice.invoice.total_amount
     Decimal('297.81')
-    >>> [(x.rec_name, x.unit_price, x.coverage_start, x.coverage_end)
-    ...     for x in sorted(first_invoice.invoice.lines, key=lambda x: x.unit_price)
-    ...     ] == [
-    ...     (u'1', Decimal('17.81'),
+    >>> expected = [
+    ...     (Decimal('17.81'),
     ...         datetime.date(2014, 5, 20), datetime.date(2015, 4, 9)),
-    ...     (u'Test Coverage', Decimal('100.00'),
+    ...     (Decimal('100.00'),
     ...         datetime.date(2014, 4, 10), datetime.date(2015, 4, 9)),
-    ...     (u'1', Decimal('180.00'),
+    ...     (Decimal('180.00'),
     ...         datetime.date(2014, 4, 10), datetime.date(2015, 4, 9)),
     ...     ]
-    True
+    >>> data = [(x.unit_price, x.coverage_start, x.coverage_end)
+    ...     for x in sorted(first_invoice.invoice.lines, key=lambda x: x.unit_price)
+    ...     ]
+    >>> assert data == expected, ('wrong values', expected)
     >>> Contract.first_invoice([contract.id], config.context)
     >>> all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
     ...             ('invoice.state', '=', 'validated')]),

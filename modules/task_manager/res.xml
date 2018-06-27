@@ -187,5 +187,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="group" ref="team_management_admin"/>
             <field name="menu" ref="menu_management_team"/>
         </record>
+        <!-- ############### -->
+        <!-- # Res Buttons # -->
+        <!-- ############### -->
+        <record model="ir.model.button" id="add_user_button">
+            <field name="name">add_user_button</field>
+            <field name="model" search="[('model', '=', 'res.team')]"/>
+        </record>
     </data>
 </tryton>

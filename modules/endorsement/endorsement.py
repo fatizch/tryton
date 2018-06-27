@@ -26,8 +26,6 @@ from trytond.wizard import Wizard, StateAction, StateTransition
 
 from trytond.modules.coog_core import model, fields, coog_string, utils, \
     coog_date
-from trytond.modules.process import ClassAttr
-from trytond.modules.process_cog.process import CoogProcessFramework
 from trytond.modules.report_engine import Printable
 from trytond.modules.coog_core import history_tools
 from trytond.modules.coog_core.queue import QueueMixin

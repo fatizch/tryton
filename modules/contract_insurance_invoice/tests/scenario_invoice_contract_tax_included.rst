@@ -328,18 +328,21 @@ Create Test Contract::
     ...         billing_mode=freq_monthly, payment_term=payment_term))
     >>> contract.save()
     >>> Wizard('contract.activate', models=[contract]).execute('apply')
-    >>> contract.options[0].premiums.append(ContractPremium(start=contract_start_date,
+    >>> ContractOption = Model.get('contract.option')
+    >>> option = ContractOption(contract.options[0].id)
+    >>> option.premiums.append(ContractPremium(start=contract_start_date,
     ...         amount=Decimal('2'), frequency='monthly',
     ...         account=product_account, rated_entity=coverage,
     ...         ))
-    >>> contract.options[0].premiums.append(ContractPremium(start=contract_start_date,
+    >>> option.premiums.append(ContractPremium(start=contract_start_date,
     ...         amount=Decimal('2'), frequency='monthly',
     ...         account=product_account, rated_entity=coverage_1,
     ...         ))
-    >>> contract.options[0].premiums.append(ContractPremium(start=contract_start_date,
+    >>> option.premiums.append(ContractPremium(start=contract_start_date,
     ...         amount=Decimal('2'), frequency='monthly',
     ...         account=product_account, rated_entity=coverage_2,
     ...         ))
+    >>> option.save()
     >>> contract.save()
     >>> Contract.first_invoice([contract.id], config.context)
     >>> contract_invoice, = ContractInvoice.find([('contract', '=', contract.id)],

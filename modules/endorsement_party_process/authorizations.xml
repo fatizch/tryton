@@ -9,5 +9,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="endorsement_party_process.menu_start_party_endorsement_process"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
+        <record model="ir.model.button-res.group" id="party_button_start_endorsement_process_group_contract_manage">
+            <field name="button" ref="party_button_start_endorsement_process"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
     </data>
 </tryton>

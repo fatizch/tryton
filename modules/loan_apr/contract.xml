@@ -41,5 +41,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="contract.contract_view_tree"/>
             <field name="name">contract_list</field>
         </record>
+        <record model="ir.model.button" id="button_loan_average_premium">
+            <field name="name">button_loan_average_premium</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
     </data>
 </tryton>

@@ -2,6 +2,8 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tryton>
+    <data>
+    </data>
     <data depends="offered">
         <record model="ir.model.access" id="access_commutation_manager_read_only">
             <field name="model" search="[('model', '=', 'table.commutation_manager')]"/>
@@ -32,6 +34,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_refresh_manage">
+            <field name="button" ref="button_refresh_commutations"/>
+            <field name="group" ref="offered.group_product_manage"/>
         </record>
     </data>
 </tryton>

@@ -24,6 +24,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="res_model">contract</field>
             <field name="domain" eval="[('agent.party.network', '=', Eval('active_id'))]" pyson="1"/>
         </record>
+        <record model="ir.model.button" id="party_button_commissions_synthesis">
+            <field name="name">button_commissions_synthesis</field>
+            <field name="model" search="[('model', '=', 'party.party')]"/>
+        </record>
+        <record model="ir.model.button" id="party_button_party_invoices">
+            <field name="name">button_party_invoices</field>
+            <field name="model" search="[('model', '=', 'party.party')]"/>
+        </record>
         <record model="ir.action.keyword" id="act_broker_commissioned_contract_relate_keyword">
             <field name="keyword">form_relate</field>
             <field name="model">distribution.network,-1</field>

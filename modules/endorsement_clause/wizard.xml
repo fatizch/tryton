@@ -24,5 +24,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">contract_manage_clauses_form</field>
         </record>
+        <record model="ir.model.button" id="contract_manage_clauses_add_clause">
+            <field name="name">add_clause</field>
+            <field name="model" search="[('model', '=', 'contract.manage_clauses')]"/>
+        </record>
+        <record model="ir.model.button" id="contract_manage_clauses_add_text_clause">
+            <field name="name">add_text_clause</field>
+            <field name="model" search="[('model', '=', 'contract.manage_clauses')]"/>
+        </record>
     </data>
 </tryton>

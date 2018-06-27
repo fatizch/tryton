@@ -76,7 +76,7 @@ banks = Bank.find([])
 Account = Model.get('bank.account')
 company_account = Account()
 company_account.bank = bank
-company_account.owners.append(company.party)
+company_account.owners.append(Party(company.party.id))
 company_account.currency = currency
 company_account.number = 'ES8200000000000000000000'
 company_account.save()
@@ -225,12 +225,13 @@ create_payment.form.kind = 'receivable'
 create_payment.form.free_motive = True
 create_payment.form.payment_date = until_date
 create_payment.form.journal = journal
+MoveLine = Model.get('account.move.line')
 for line in [x for x in invoice.invoice.move.lines if x.account.kind ==
         'receivable']:
     line._parent = None
     line._parent_field_name = None
     line._parent_name = None
-    create_payment.form.lines_to_pay.append(line)
+    create_payment.form.lines_to_pay.append(MoveLine(line.id))
 create_payment.form.description = "test"
 
 # #Comment# #Create warning to simulate clicking yes
@@ -260,12 +261,13 @@ create_payment.form.payment_date = until_date
 create_payment.form.free_motive = True
 create_payment.form.description = "test"
 create_payment.form.journal = journal
+MoveLine = Model.get('account.move.line')
 for line in [x for x in invoice.invoice.move.lines if x.account.kind ==
         'receivable']:
     line._parent = None
     line._parent_field_name = None
     line._parent_name = None
-    create_payment.form.lines_to_pay.append(line)
+    create_payment.form.lines_to_pay.append(MoveLine(line.id))
 
 create_payment.form.description = "test"
 

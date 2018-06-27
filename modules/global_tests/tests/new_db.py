@@ -3802,8 +3802,10 @@ if CREATE_CONTRACTS:  # {{{
         'job_category': 'csp2',
         'co_borrower_relation': 'pacs',
         }
-    loan_contract.loans.append(Loan(loan_1.id))
-    loan_contract.loans.append(Loan(loan_2.id))
+    ordered_loan = loan_contract.ordered_loans.new()
+    ordered_loan.loan = loan_1
+    ordered_loan = loan_contract.ordered_loans.new()
+    ordered_loan.loan = loan_2
     process_next(loan_contract)
 
     SubscriptionWizard = Wizard(

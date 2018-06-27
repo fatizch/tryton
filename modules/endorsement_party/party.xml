@@ -21,5 +21,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="party_cog.person_view_tree"/>
             <field name="name">party_list</field>
         </record>
+        <!-- Button -->
+        <record model="ir.model.button" id="button_start_party_endorsement">
+            <field name="name">start_endorsement</field>
+            <field name="model" search="[('model', '=', 'party.party')]"/>
+        </record>
     </data>
 </tryton>

@@ -13,5 +13,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="party.party_view_tree"/>
             <field name="name">party_list</field>
         </record>
+        <record model="ir.model.button" id="party_button_start_endorsement_process">
+            <field name="name">button_start_endorsement_process</field>
+            <field name="model" search="[('model', '=', 'party.party')]"/>
+        </record>
     </data>
 </tryton>
