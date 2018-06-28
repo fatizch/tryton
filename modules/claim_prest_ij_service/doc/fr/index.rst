@@ -1,4 +1,4 @@
-.. Claim
+.. claim
 
 Sinistre - Prest IJ
 ===================
@@ -7,7 +7,6 @@ Résumé
 ------
 
 .. include:: summary.rst
-
 
 Fonctionnalités
 ---------------
@@ -19,4 +18,3 @@ Aide utilisateur
 
 .. toctree::
     user/batch.rst
-

@@ -1,13 +1,12 @@
-.. Claim
+.. claim
 
-Claim - Prest Ij
-=========================
+Claim - Prest IJ
+================
 
 Summary
 -------
 
 .. include:: summary.rst
-
 
 Features
 --------
