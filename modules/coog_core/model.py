@@ -299,7 +299,9 @@ def dictionarize(instance, field_names=None, set_rec_names=False):
         return instance.id
     res = {fname: getattr(instance, fname, None)
         for fname in field_names[instance.__name__]}
-    for k, v in res.iteritems():
+    # Do NOT use iteritems, since if set_rec_names is True the dictionary size
+    # will change during iteration
+    for k, v in res.items():
         if isinstance(v, Model):
             res[k] = v.id
             if isinstance(instance._fields[k], tryton_fields.Reference):

@@ -1,3 +1,4 @@
+* OTH#0000 Correction de l'itération dans dictionarize
 * BUG#9180 Correction du crash sur chain_name au lancement des batchs
 * FEA#8534 Ajout de la commande de génération de rapport de batchs
 * BUG#9028 Forcer l'exécution synchrone en cas de transaction marquée pour rollback
