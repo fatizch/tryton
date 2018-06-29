@@ -724,6 +724,9 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
                 if new_covered_element.match_values(old.values):
                     old_values = old.apply_values()[1][0].get('options', None)
                     if old_values:
+                        # Clean up options that were automatically added, and
+                        # replace them with the previously selected options
+                        parent.covered_elements[-1].options = []
                         utils.apply_dict(parent.covered_elements[-1],
                             {'options': old_values})
                     break

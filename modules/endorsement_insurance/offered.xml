@@ -40,7 +40,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ############################### -->
         <!-- # Endorsement Exclusion Field # -->
         <!-- ############################### -->
-         <record model="ir.ui.view" id="endorsement_exclusion_field_view_form">
+        <record model="ir.ui.view" id="endorsement_exclusion_field_view_form">
             <field name="model">endorsement.contract.option.exclusion.field</field>
             <field name="type">form</field>
             <field name="name">endorsement_field_form</field>

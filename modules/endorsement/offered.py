@@ -354,7 +354,7 @@ class EndorsementDefinitionPartRelation(model.CoogSQL, model.CoogView):
     @classmethod
     def __setup__(cls):
         super(EndorsementDefinitionPartRelation, cls).__setup__()
-        cls._order.append(('order', 'ASC'))
+        cls._order = [('order', 'ASC')]
 
 
 class EndorsementContractField(field_mixin('contract'), model.CoogSQL,
