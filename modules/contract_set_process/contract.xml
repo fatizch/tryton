@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.model.button" id="button_contract_set_button_resume">
+            <field name="name">button_resume</field>
+            <field name="model" search="[('model', '=', 'contract.set')]"/>
+        </record>
+    </data>
+</tryton>

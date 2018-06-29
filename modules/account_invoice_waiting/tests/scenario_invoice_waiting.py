@@ -11,7 +11,7 @@ from trytond.modules.coog_core.test_framework import execute_test_case, \
 from trytond.modules.company.tests.tools import get_company
 from trytond.modules.company_cog.tests.tools import create_company
 from trytond.modules.account.tests.tools import create_fiscalyear, \
-    create_chart, get_accounts, create_tax, set_tax_code
+    create_chart, get_accounts, create_tax, create_tax_code
 from trytond.modules.account_invoice.tests.tools import \
     set_fiscalyear_invoice_sequences
 
@@ -46,6 +46,8 @@ period = fiscalyear.periods[0]
 
 # #Comment# #Create waiting account
 
+_ = create_chart(company)
+
 WaitingAccount = Model.get('account.account')
 WaitingAccountKind = Model.get('account.account.type')
 waiting_account_kind = WaitingAccountKind()
@@ -78,7 +80,6 @@ base_account.save()
 
 # #Comment# #Create chart of accounts
 
-_ = create_chart(company)
 accounts = get_accounts(company)
 receivable = accounts['receivable']
 waiting_account.waiting_for_account = accounts['revenue']
@@ -90,13 +91,17 @@ account_cash = accounts['cash']
 
 # #Comment# #Create tax
 
-tax = set_tax_code(create_tax(Decimal('.10')))
+tax = create_tax(Decimal('.10'))
 tax.save()
-invoice_base_code = tax.invoice_base_code
-invoice_tax_code = tax.invoice_tax_code
-credit_note_base_code = tax.credit_note_base_code
-credit_note_tax_code = tax.credit_note_tax_code
 
+invoice_base_code = create_tax_code(tax, 'base', 'invoice')
+invoice_base_code.save()
+invoice_tax_code = create_tax_code(tax, 'tax', 'invoice')
+invoice_tax_code.save()
+credit_note_base_code = create_tax_code(tax, 'base', 'credit')
+credit_note_base_code.save()
+credit_note_tax_code = create_tax_code(tax, 'tax', 'credit')
+credit_note_tax_code.save()
 # #Comment# #Set Cash journal
 
 Journal = Model.get('account.journal')

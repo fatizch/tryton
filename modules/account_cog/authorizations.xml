@@ -801,8 +801,23 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_account_tax_code_line">
+            <field name="model" search="[('model', '=', 'account.tax.code.line')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <record model="ir.model.access" id="access_account_tax_code_group_financial_manage">
             <field name="model" search="[('model', '=', 'account.tax.code')]"/>
+            <field name="group" ref="group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_tax_code_line_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.tax.code.line')]"/>
             <field name="group" ref="group_financial_manage"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>

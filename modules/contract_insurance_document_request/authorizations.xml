@@ -89,5 +89,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.button-res.group" id="button_contract_generate_reminds_documents_group_contract_manage">
+            <field name="button" ref="button_contract_generate_reminds_documents"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
     </data>
 </tryton>

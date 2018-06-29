@@ -9,4 +9,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">contract_form</field>
         </record>
     </data>
+    <record model="ir.model.button" id="button_contract_generate_reminds_documents">
+        <field name="name">generate_reminds_documents</field>
+        <field name="model" search="[('model', '=', 'contract')]"/>
+    </record>
 </tryton>

@@ -51,5 +51,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">contract,-1</field>
             <field name="action" ref="act_open_deposits"/>
         </record>
+        <record model="ir.model.button" id="button_contract_open_deposits">
+            <field name="name">open_deposits</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
     </data>
 </tryton>
