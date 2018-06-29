@@ -226,4 +226,4 @@ class ExtraData:
                         date=context.get('date', None))
                 except KeyError:
                     pass
-        raise KeyError('Extra data %s not found' % name)
+        return None

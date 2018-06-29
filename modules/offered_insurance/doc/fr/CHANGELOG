@@ -1,3 +1,5 @@
+* OTH#0000 Le fait qu'une donnée complémentaire n'existe pas dans les règles ne doit pas être une erreur
+
 Version 2.0 - 2018-04-13
 * BUG#8356 Suppression de la dépendance avec process
 
