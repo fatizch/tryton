@@ -2,7 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
-from trytond.wizard import Button, Wizard, StateAction, StateView
+from trytond.pyson import Bool, Eval
+from trytond.wizard import Wizard, StateAction
 
 from trytond.modules.process_cog.process import ProcessFinder, ProcessStart
 from trytond.modules.coog_core import fields, model
@@ -109,19 +110,20 @@ class StartEndorsement:
     @classmethod
     def __setup__(cls):
         super(StartEndorsement, cls).__setup__()
-        for attribute in dir(cls):
-            if not isinstance(getattr(cls, attribute), StateView):
+        for button in cls.summary.buttons:
+            if button.state == 'apply_endorsement':
                 continue
-            for button in getattr(cls, attribute).buttons:
-                if 'preview' in attribute:
-                    getattr(cls, attribute).buttons = [Button(string='Ok',
-                            state='end', icon='tryton-ok', default=True)]
-                else:
-                    getattr(cls, attribute).buttons = [x for x in
-                        getattr(cls, attribute).buttons if x.string !=
-                        'Apply']
+            states = button.states.get('invisible', None)
+            if states is None:
+                button.states['invisible'] = Bool(Eval('context',
+                    {}).get('running_process', False))
+            else:
+                button.states['invisible'] |= Bool(Eval('context',
+                    {}).get('running_process', False))
 
     def get_next_state(self, current_state):
+        if not self.endorsement or not self.endorsement.current_state:
+            return super(StartEndorsement, self).get_next_state(current_state)
         found = False
         for part in self.definition.endorsement_parts:
             if part.view == current_state:

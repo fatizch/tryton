@@ -9,7 +9,7 @@ from trytond.modules.process_cog.process import CoogProcessFramework
 from trytond.modules.coog_core import model, fields
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 
 __all__ = [
     'Endorsement',
@@ -37,6 +37,8 @@ class Endorsement(CoogProcessFramework):
         cls._buttons.update({
                 'button_preview_changes': {},
                 })
+        cls._buttons['apply_synchronous']['invisible'] |= \
+            Bool(Eval('current_state', False))
 
     @classmethod
     def _export_skips(cls):
