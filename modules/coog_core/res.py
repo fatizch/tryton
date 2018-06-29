@@ -2,9 +2,11 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.config import config
 from trytond.transaction import Transaction
-from trytond.modules.coog_core import fields
-from trytond.modules import get_module_info
 from trytond.cache import Cache
+from trytond.server_context import ServerContext
+from trytond.modules import get_module_info
+
+from trytond.modules.coog_core import fields
 
 from export import ExportImportMixin
 
@@ -84,3 +86,9 @@ class UserGroup(ExportImportMixin):
 
 class ResUserWarning(ExportImportMixin):
     __name__ = 'res.user.warning'
+
+    @classmethod
+    def check(cls, warning_name):
+        if ServerContext().get('auto_accept_warnings', False):
+            return False
+        return super(ResUserWarning, cls).check(warning_name)

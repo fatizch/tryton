@@ -1,3 +1,4 @@
+* BUG#9251 Automatic bypass of User Warnings when executing a batch
 * OTH#0000 Fix iteration in dictionarize
 * BUG#9180 Fix crash on chain_name when launching batch
 * FEA#8534 Add batch report command line

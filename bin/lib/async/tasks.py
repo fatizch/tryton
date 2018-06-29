@@ -141,7 +141,8 @@ def batch_exec(name, ids, params, **kwargs):
             Cache.clean(database)
             try:
                 with ServerContext().set_context(from_batch=True,
-                        job_size=job_size, transaction_size=transaction_size):
+                        job_size=job_size, transaction_size=transaction_size,
+                        auto_accept_warnings=True):
                     for l in split_job(ids, transaction_size):
                         to_treat = BatchModel.convert_to_instances(l,
                             **batch_params)
