@@ -238,6 +238,7 @@ class Level:
                     dunning.contract.termination_reason == termination_reason
                     or dunning.contract.final_end_date <= date):
                 continue
+            date = date or dunning.contract.block_invoicing_until
             if not date or date < dunning.contract.initial_start_date:
                 to_void.append(dunning.contract)
             else:

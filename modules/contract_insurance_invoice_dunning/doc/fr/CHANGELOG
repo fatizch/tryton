@@ -1,3 +1,4 @@
+* BUG#9271 Ne jamais passer un contrat avec une date de blocage de quittancement en sans-effet
 * FEA#9255 Permettre de générer une notification sur un contrat lors du traitement du processus d'impayé
 * OTH#0000 Correction du scenario de test suite au merge 4.8
 * BUG#8912 Crash lorsque l'on résilie pour contentieux alors que le contrat n'a pas pris effet si l'option "résilié à la date de traitement" est définie dans le paramétrage du schéma de relance.
