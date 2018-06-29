@@ -1,3 +1,4 @@
+* BUG#8953 Add a warning when creating multiple insurers on the same party
 * OTH#0000 A non-existing extra data in a rule should not cause a crash
 
 Version 2.0 - 2018-04-13

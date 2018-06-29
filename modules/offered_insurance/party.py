@@ -107,7 +107,25 @@ class Insurer(model.CoogView, model.CoogSQL):
         cls._error_messages.update({
                 'missing_default_delegation': 'There must be at least one '
                 '"generic" delegation rule for %s.',
+                'possible_insurer_duplicate': 'There are already existing '
+                'insurer instances for parties:\n\n%(names)s',
                 })
+
+    @classmethod
+    def create(cls, values):
+        # party is required, so it has to be in there
+        parties = [x['party'] for x in values]
+        existing = cls.search([('party', 'in', parties)])
+        if existing and cls._should_raise_warning_if_possible_duplicate():
+            cls.raise_user_warning('possible_insurer_duplicate_%s' % '_'.join(
+                    str(x.id) for x in existing[:10]),
+                'possible_insurer_duplicate', {
+                    'names': '\n'.join({x.party.name for x in existing[:10]})})
+        return super(Insurer, cls).create(values)
+
+    @classmethod
+    def _should_raise_warning_if_possible_duplicate(cls):
+        return True
 
     @classmethod
     def validate(cls, insurers):

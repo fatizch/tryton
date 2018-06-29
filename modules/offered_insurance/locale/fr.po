@@ -10,6 +10,10 @@ msgctxt "error:extra_premium.kind:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
+msgctxt "error:insurer:"
+msgid "There are already existing insurer instances for parties:\n\n%(names)s"
+msgstr "Des assureurs existent déjà pour les tiers :\n\n%(names)s"
+
 msgctxt "error:insurer.delegation:"
 msgid "There can be only one delegation per insurance kind."
 msgstr "Il ne peut y avoir qu'une délégation par type d'assurance"
