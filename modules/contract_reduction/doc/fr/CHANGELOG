@@ -1,3 +1,4 @@
+* BUG#9272 Passage du statut du contrat à actif lors de la mise en réduction d'un contrat suspendu
 * BUG#9029 Prise en compte de la date de réduction dans les dates de quittancement
 * BUG#9043 Pouvoir appliquer un avenant de résiliation sur des contrats réduits
 

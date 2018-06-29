@@ -130,6 +130,11 @@ class Contract:
         reduced_active = SubStatus.get_sub_status('contract_active_reduced')
         self.sub_status = reduced_active
 
+        # When automatically terminating a suspended contract, we want to set
+        # the status back to active for consistency
+        if self.status == 'hold':
+            self.status = 'active'
+
     def calculate_reductions(self, reduction_date):
         reductions = []
         options = [x for x in (self.options + self.covered_element_options)
