@@ -31,7 +31,7 @@ CREATE_NEW_DB = parse_environ('GEN_CREATE_NEW_DB', False)
 
 # If RESTORE_DB is True, the database DB_NAME will be dropped, then re-created
 # using RESTOR_FROM as a template
-RESTORE_DB = parse_environ('GEN_RESTORE_DB', True)
+RESTORE_DB = parse_environ('GEN_RESTORE_DB', False)
 RESTORE_FROM = parse_environ('GEN_RESTORE_FROM', None)
 
 BASIC_INIT = parse_environ('GEN_BASIC_INIT', True)
