@@ -1,3 +1,5 @@
+* BUG#9259 Gestion de la création de nouvelles garanties avec montant de couverture par avenants
+
 Version 2.0 - 2018-04-13
 * FEA#7605 Fonctions du moteur de règle pour accéder aux dates de modification et valeurs du montant de couverture à des dates données
 * BUG#7436 Gestion des montants de couverture dans l'avenant de modification des garanties

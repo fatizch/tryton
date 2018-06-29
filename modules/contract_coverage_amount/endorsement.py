@@ -39,28 +39,30 @@ class OptionDisplayer:
 
     @fields.depends('coverage_amount_selection', methods=['on_change_action'])
     def on_change_coverage_amount_selection(self):
-        if not self.cur_option_id:
-            return
         self.coverage_amount = Decimal(self.coverage_amount_selection or 0)
         self.update_action()
 
     @fields.depends(methods=['on_change_action'])
     def on_change_coverage_amount(self):
-        if not self.cur_option_id:
-            return
         self.coverage_amount_selection = str(self.coverage_amount or '')
         self.update_action()
 
     @fields.depends('has_coverage_amount', 'free_coverage_amount',
-        'coverage_amount', 'cur_option_id', 'effective_date', 'manager')
+        'coverage_amount', 'cur_option_id', 'effective_date', 'manager',
+        'coverage_id')
     def select_coverage_amounts(self):
-        RuleEngine = Pool().get('rule_engine')
+        pool = Pool()
+        Option = pool.get('contract.option')
+        RuleEngine = pool.get('rule_engine')
         selection, values = [('', '')], []
         if not self.has_coverage_amount:
             return selection
-        # TODO : Manage new options...
-        assert self.cur_option_id
-        option = Pool().get('contract.option')(self.cur_option_id)
+        if self.cur_option_id:
+            option = Option(self.cur_option_id)
+        else:
+            option = Option(coverage=self.coverage,
+                currency=self.coverage.currency,
+                has_coverage_amount=self.has_coverage_amount)
         if not self.free_coverage_amount:
             with ServerContext().set_context(
                     endorsement_context=RuleEngine.build_endorsement_context(
@@ -100,13 +102,16 @@ class OptionDisplayer:
         if displayer.has_coverage_amount:
             displayer.free_coverage_amount = \
                 option.coverage.coverage_amount_rules[0].free_input
-        displayer.coverage_amount_selection = str(option.get_version_at_date(
-                effective_date).coverage_amount)
+        displayer.coverage_amount = getattr(
+            option.get_version_at_date(effective_date), 'coverage_amount',
+            None)
+        displayer.coverage_amount_selection = str(displayer.coverage_amount
+             or '')
         return displayer
 
     def to_version(self, previous_version=None):
         version = super(OptionDisplayer, self).to_version(previous_version)
-        version.coverage_amount = self.coverage_amount
+        version.coverage_amount = getattr(self, 'coverage_amount', None)
         return version
 
     def update_from_new_option(self, new_option):
