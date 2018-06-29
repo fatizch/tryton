@@ -14,6 +14,7 @@ from trytond.modules.endorsement.wizard import (EndorsementWizardStepMixin,
 __all__ = [
     'ManageBeneficiaries',
     'ManageBeneficiariesOptionDisplayer',
+    'ManageBeneficiariesOptionDisplayerPortfolio',
     'ManageBeneficiariesDisplayer',
     'StartEndorsement',
     'PartyErase',
@@ -88,7 +89,9 @@ class ManageBeneficiaries(EndorsementWizardStepMixin):
         all_options = []
         for contract, options in per_contract.iteritems():
             all_options += self.generate_displayers(contract, options)
-        defaults['all_options'] = [model.dictionarize(x) for x in all_options]
+        defaults['all_options'] = [model.dictionarize(x,
+                field_names=self._fields_to_extract(), set_rec_names=True)
+            for x in all_options]
         if defaults['possible_contracts']:
             defaults['contract'] = defaults['possible_contracts'][0]
         return defaults
@@ -169,13 +172,24 @@ class ManageBeneficiaries(EndorsementWizardStepMixin):
         Option = pool.get('contract.manage_beneficiaries.option')
         all_options = []
         for option in options:
-            if (not option.coverage.beneficiaries_clauses and
-                    not option.beneficiaries):
+            if not option.coverage.beneficiaries_clauses:
                 continue
             displayer = Option.new_displayer(option)
             displayer.contract = contract_endorsement.id
             all_options.append(displayer)
         return all_options
+
+    @classmethod
+    def _fields_to_extract(cls):
+        return {'contract.manage_beneficiaries.option': ['parent_name',
+                'display_name', 'parent', 'option_id',
+                'customized_beneficiary_clause', 'contract', 'beneficiaries',
+                'beneficiary_clause_customizable', 'coverage', 'id',
+                'beneficiary_clause'],
+            'contract.manage_beneficiaries.beneficiary': ['action',
+                'beneficiary', 'beneficiary_id', 'id', 'name'],
+            'contract.option.beneficiary': ['reference', 'share', 'party',
+                'address', 'accepting', 'id']}
 
 
 class ManageBeneficiariesOptionDisplayer(model.CoogView):
@@ -207,6 +221,15 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
     beneficiaries = fields.One2Many(
         'contract.manage_beneficiaries.beneficiary', None, 'Beneficiaries')
 
+    @property
+    def _parent(self):
+        if hasattr(self, '__parent'):
+            return self.__parent
+        if not getattr(self, 'parent', None):
+            return None
+        parent_model, parent_id = self.parent.split(',')
+        return Pool().get(parent_model)(int(parent_id))
+
     @fields.depends('beneficiary_clause', 'customized_beneficiary_clause')
     def on_change_beneficiary_clause(self):
         self.customized_beneficiary_clause = self.beneficiary_clause.content \
@@ -214,26 +237,14 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
         self.beneficiary_clause_customizable = bool(self.beneficiary_clause and
             self.beneficiary_clause.customizable)
 
-    @fields.depends('beneficiaries', 'option_id')
-    def on_change_beneficiaries(self):
-        if not self.option_id:
-            return
-        option = Pool().get('contract.option')(self.option_id)
-        for beneficiary in self.beneficiaries:
-            if beneficiary.beneficiary:
-                beneficiary.beneficiary[0].option = option
-                beneficiary.beneficiary = list(beneficiary.beneficiary)
-        self.beneficiaries = list(self.beneficiaries)
-
     @classmethod
     def new_displayer(cls, option):
         pool = Pool()
         Option = pool.get('contract.option')
         Beneficiary = pool.get('contract.manage_beneficiaries.beneficiary')
         displayer = cls()
-        displayer.parent_name = (option.covered_element
-            or option.contract).rec_name
         displayer.parent = cls.get_parent_key(option)
+        displayer.parent_name = displayer._parent.rec_name
         displayer.option_id = getattr(option, 'id', None)
         displayer.display_name = option.get_rec_name(None)
         displayer.coverage = option.coverage
@@ -277,6 +288,25 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
     @classmethod
     def get_beneficiary_fields(cls):
         return ('accepting', 'address', 'party', 'reference', 'share')
+
+
+class ManageBeneficiariesOptionDisplayerPortfolio:
+    __metaclass__ = PoolMeta
+    __name__ = 'contract.manage_beneficiaries.option'
+
+    # Override installed if distribution_portfolio is activated, to pass the
+    # allowed_portfolio information down to the new beneficiaries
+    @fields.depends('beneficiaries', 'contract')
+    def on_change_beneficiaries(self):
+        if not self.contract:
+            return
+        contract = Pool().get('contract')(self.contract)
+        for beneficiary in self.beneficiaries:
+            if beneficiary.beneficiary:
+                beneficiary.beneficiary[0].allowed_portfolios = \
+                    contract.allowed_portfolios
+                beneficiary.beneficiary = list(beneficiary.beneficiary)
+        self.beneficiaries = list(self.beneficiaries)
 
 
 class ManageBeneficiariesDisplayer(model.CoogView):

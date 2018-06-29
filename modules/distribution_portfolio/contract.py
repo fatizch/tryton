@@ -112,7 +112,7 @@ class Beneficiary:
     allowed_portfolios = fields.Function(
         fields.Many2Many('distribution.network', None, None,
         'Allowed Portfolios'),
-        'get_allowed_portfolios')
+        'getter_allowed_portfolios')
 
     @classmethod
     def __setup__(cls):
@@ -122,8 +122,7 @@ class Beneficiary:
                 ('portfolio', 'in', Eval('allowed_portfolios')),
                 ('portfolio', '=', None)]]
 
-    @fields.depends('option')
-    def get_allowed_portfolios(self, name=None):
+    def getter_allowed_portfolios(self, name=None):
         if not self.option.covered_element.contract.dist_network:
             return []
         return [x.id for x in
@@ -132,7 +131,8 @@ class Beneficiary:
 
     @fields.depends('allowed_portfolios', 'option')
     def on_change_option(self):
-        self.allowed_portfolios = self.get_allowed_portfolios()
+        if self.option:
+            self.allowed_portfolios = self.getter_allowed_portfolios()
 
 
 class ContractBillingInformation:

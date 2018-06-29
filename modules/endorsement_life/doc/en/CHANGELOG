@@ -1,3 +1,5 @@
+* BUG#6419 Allow to create new option with beneficiary clauses via endorsements
+
 Version 2.0 - 2018-04-13
 * BUG#7696 : Check for customizable clause in beneficiary endorsement
 

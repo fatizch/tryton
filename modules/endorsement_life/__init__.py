@@ -23,3 +23,8 @@ def register():
         wizard.StartEndorsement,
         wizard.PartyErase,
         module='endorsement_life', type_='wizard')
+
+    Pool.register(
+        wizard.ManageBeneficiariesOptionDisplayerPortfolio,
+        module='endorsement_life', type_='model',
+        depends=['distribution_portfolio'])
