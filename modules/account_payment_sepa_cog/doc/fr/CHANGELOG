@@ -1,3 +1,4 @@
+* BUG#9249 Corretif appel au super sur le batch de création des messages SEPA en échec
 * BUG#9008 Correction du calcul de la numérotation des mandats sepa
 * BUG#8909 Suppression des espaces seuls dans les AdrLine
 

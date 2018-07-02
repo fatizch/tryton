@@ -1,3 +1,4 @@
+* BUG#9249 Fix super call on the sepa payment fail message create (batch)
 * BUG#9008 Fix sepa mandate numbers computation
 * BUG#8909 Strop spaces from AdrLine fields
 

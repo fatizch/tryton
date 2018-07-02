@@ -128,7 +128,8 @@ class PaymentFailMessageCreationBatch(batch.BatchRootNoSelect):
 
     @classmethod
     def parse_params(cls, params):
-        params = super(PaymentFailBatch, cls).parse_params(params)
+        params = super(PaymentFailMessageCreationBatch, cls).parse_params(
+            params)
         assert params.get('job_size') == 0
         return params
 
