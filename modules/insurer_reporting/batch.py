@@ -31,7 +31,7 @@ class InsurerReportContractBatch(batch.BatchRoot):
     @classmethod
     def parse_params(cls, params):
         params = super(InsurerReportContractBatch, cls).parse_params(params)
-        assert params.get('job_size', cls.get_conf_item('job_size')) == 1, \
+        assert params.get('job_size', None) == 1, \
             'Job size for this batch must be 1'
         return params
 
