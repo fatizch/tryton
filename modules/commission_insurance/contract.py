@@ -91,7 +91,7 @@ class Contract:
         return domain
 
     def get_insurer_pattern(self, coverage=None, line=None):
-        pattern = {}
+        pattern = {'agent': self.agent}
         if self.agent and self.agent.plan.insurer_plan:
             pattern['plan'] = self.agent.plan.insurer_plan
         if not coverage and line:
