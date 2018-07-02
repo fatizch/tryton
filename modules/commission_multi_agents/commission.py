@@ -132,7 +132,9 @@ class Plan:
         depends=['type_'])
     commissioned_agents = fields.Many2Many('commission_plan-agent', 'plan',
         'agent', 'Commissioned Agents',
-        domain=[('second_level_commission', '=', True)],
+        domain=[('OR',
+                ('second_level_commission', '=', True),
+                ('type_', '!=', 'agent'))],
         states={'invisible': Eval('type_') != 'agent'},
         depends=['type_'])
 
