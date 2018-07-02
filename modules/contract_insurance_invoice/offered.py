@@ -175,7 +175,7 @@ class BillingMode(model.CoogSQL, model.CoogView):
             if billing_info.date:
                 base_date = billing_info.date
             else:
-                base_date = billing_info.contract.start_date
+                base_date = billing_info.contract.get_field_value_at_date(start)
         return utils.CustomRrule(start, interval, end=end, base_date=base_date)
 
     def get_rrule(self, start, until=None):
