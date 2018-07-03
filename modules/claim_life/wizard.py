@@ -81,6 +81,14 @@ class IndemnificationDefinition:
             self.beneficiary_extra_data = beneficiary_def.extra_data_values
             self.beneficiary_def = beneficiary_def
 
+    @fields.depends('beneficiary', 'service', 'beneficiary_def',
+        'beneficiary_extra_data')
+    def on_change_service(self):
+        super(IndemnificationDefinition, self).on_change_service()
+
+        # Update beneficiary related fields
+        self.on_change_beneficiary()
+
 
 class CreateIndemnification:
     __metaclass__ = PoolMeta
@@ -103,14 +111,14 @@ class CreateIndemnification:
         res['beneficiary_def'] = beneficiary_def.id if beneficiary_def else None
         return res
 
-    def init_indemnification(self, indemnification):
-        super(CreateIndemnification, self).init_indemnification(
-            indemnification)
-        if not self.definition.beneficiary_extra_data:
-            return
-        self.definition.beneficiary_def.extra_data_values = \
-            self.definition.beneficiary_extra_data
-        self.definition.beneficiary_def.save()
+    def init_indemnifications(self):
+        indemnifications = super(CreateIndemnification,
+            self).init_indemnifications()
+        if self.definition.beneficiary_extra_data:
+            self.definition.beneficiary_def.extra_data_values = \
+                self.definition.beneficiary_extra_data
+            self.definition.beneficiary_def.save()
+        return indemnifications
 
 
 class SelectService:

@@ -1,3 +1,4 @@
+* BUG#9277 Correction de l'initialisation / sauvegarde des données complémentaires des bénéficiaires
 * BUG#9074 Correction des performances sur la sauvegarde d'un dossier de prestation
 * BUG#9037 Correction du libellé de la date selon si le descripteur de préjudice est défini avec ou sans date de fin
 * FEA#9053 Initialisation des beneficiaires lors de la déclaration de sinistre avec ceux définis sur la garantie

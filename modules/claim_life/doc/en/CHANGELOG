@@ -1,4 +1,5 @@
-* BUG#9074 Fix claim saving performances issues 
+* BUG#9277 Fix initialization / storage of beneficiary extra data
+* BUG#9074 Fix claim saving performances issues
 * BUG#9037 Fix date label according to whether the loss descriptor has been defined with an end date or not
 * FEA#9053 Initialize beneficiaries in claim declaration with those defined on the option
 * BUG#8926 Fix display of loss dates label in claim declaration
