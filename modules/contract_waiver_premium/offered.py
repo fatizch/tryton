@@ -57,7 +57,8 @@ class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
     taxes = fields.Many2Many('waiver_premium.rule-account.tax',
         'waiver_rule', 'tax', 'Taxes')
     account_for_waiver = fields.Many2One('account.account',
-        'Account to compensate the Waiver', ondelete='RESTRICT')
+        'Account to compensate the Waiver', ondelete='RESTRICT',
+        domain=[('kind', 'not in', ['payable', 'receivable'])])
     invoice_line_period_behaviour = fields.Selection([
             ('one_day_overlap', 'One Day Overlap'),
             ('total_overlap', 'Total Overlap'),
@@ -141,7 +142,7 @@ class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
 
     def get_account_for_waiver_line(self):
         return (self.account_for_waiver if self.account_for_waiver
-            else self.coverage.insurer.party.account_payable_used)
+            else self.coverage.account_for_billing)
 
     def init_waiver_line(self, line, waiver_option):
         InvoiceLine = Pool().get('account.invoice.line')

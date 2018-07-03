@@ -1,3 +1,5 @@
+* BUG#8879 Ajout d'un domain sur le compte des exonérations (pas à payer ni à recevoir) et changement de la valeur par défault
+
 Version 2.0 - 2018-04-13
 * FEA#8101 Ajout d'un batch de création en masse de périodes d'exonération
 * FEA#7672 Ajout de la gestion du prorata sur les exonérations de primes. Lorsque ce comportement est selectionné, ce comportement permet de faire un prorata sur la fréquence de niveau inférieur afin d'obtenir une seule quittance avec le montant à payer. Par exemple, si la fréquence de quittancement est trimestrielle et que nous avons une quittance dont deux des trois mois sont exonérés, alors la quittance affichera le montant à payer pour un seul mois.

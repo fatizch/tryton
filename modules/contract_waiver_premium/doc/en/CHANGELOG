@@ -1,3 +1,5 @@
+* BUG#8879 Add a domain on account (not payable nor receivable) for waiver and change default value
+
 Version 2.0 - 2018-04-13
 * FEA#8101 Add a batch for mass creating waiver periods
 * FEA#7672 Allow a new behaviour for waiver of premiums: proportion. When selected, this behaviour allows making a proportion on the lower level frequency in order to have one contract invoice with the right amount to pay. For example, if the billing frequency is quarterly, and two on three months of a billing period are a waiver of premium, then the invoice will only charge one month.
