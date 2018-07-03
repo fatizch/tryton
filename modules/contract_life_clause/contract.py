@@ -45,7 +45,8 @@ class ContractOption:
         domain=[('coverages', '=', Eval('coverage'))], states={
             'invisible': ~Eval('has_beneficiary_clause'),
             'required': (Bool(Eval('has_beneficiary_clause'))
-                & ~Eval('customized_beneficiary_clause')),
+                & ~Eval('customized_beneficiary_clause')
+                & (Eval('contract_status') != 'quote')),
             'readonly': Eval('contract_status') != 'quote',
             },
         depends=['coverage', 'has_beneficiary_clause', 'contract_status',
@@ -61,7 +62,8 @@ class ContractOption:
                 | (~Eval('customized_beneficiary_clause')
                     & (Eval('contract_status') != 'quote'))),
             'required': (Eval('has_beneficiary_clause')
-                & ~Eval('beneficiary_clause')),
+                & ~Eval('beneficiary_clause')
+                & (Eval('contract_status') != 'quote')),
             'readonly': (Eval('contract_status') != 'quote') | (
                 ~Eval('customized_text')),
             },

@@ -1,3 +1,5 @@
+* BUG#8709 Make the beneficiary clauses and customized beneficiary clauses not required if contract is quote
+
 Version 2.0 - 2018-04-13
 * BUG#7529 Add options beneficiary access rights to contract management group
 

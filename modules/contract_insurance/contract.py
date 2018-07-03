@@ -354,18 +354,16 @@ class Contract(Printable):
         parties += [x.party.id for x in self.covered_elements if x.party]
         return parties
 
-    def activate_contract(self):
-        super(Contract, self).activate_contract()
-        to_save = []
-        Option = Pool().get('contract.option')
-        for covered_element in getattr(self, 'covered_elements', []):
+    def do_activate(self):
+        super(Contract, self).do_activate()
+        covered_elements = getattr(self, 'covered_elements', [])
+        for covered_element in covered_elements:
             for option in covered_element.options:
                 if not option.manual_end_date:
                     option.status = 'active'
                     option.sub_status = None
-                    to_save.append(option)
-
-        Option.save(to_save)
+            covered_element.options = covered_element.options
+        self.covered_elements = list(covered_elements)
 
     def init_contract(self, product, party, contract_dict=None):
         CoveredElement = Pool().get('contract.covered_element')
