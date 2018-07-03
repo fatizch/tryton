@@ -20,5 +20,5 @@ class Invoice:
         return model.order_data_stream(
             model.search_and_stream(Pool().get('commission'), domain,
                 **kwargs),
-            lambda x: x.commissioned_contract.id if x.commissioned_contract
-            else None)
+            lambda x: ((x.commissioned_contract.id if x.commissioned_contract
+                else None), str(x.origin)))
