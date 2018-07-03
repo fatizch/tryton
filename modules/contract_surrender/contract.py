@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or, In
 from trytond.server_context import ServerContext
 
-from trytond.modules.coog_core import model, fields, utils
+from trytond.modules.coog_core import model, fields, utils, coog_date
 
 __all__ = [
     'Contract',
@@ -264,13 +264,18 @@ class Contract:
                     cls.append_functional_error('contract_not_surrendered', {
                             'contract': contract.rec_name})
         if contracts:
+            surrender_dates = {x.id: x.final_end_date for x in contracts}
             cls._cancel_surrender_invoices(contracts)
             for contract in contracts:
                 contract._clean_contract_sub_status()
                 contract.activate_contract()
             cls.save(contracts)
             for contract in contracts:
-                contract.rebill(utils.today())
+                # Rebill one day before, in order to make sure we cancel /
+                # recreate the full period invoice
+                contract.rebill(
+                    min(coog_date.add_day(surrender_dates[contract.id], -1),
+                        utils.today()))
             Event.notify_events(contracts, 'contract_surrender_cancelling')
 
     @classmethod

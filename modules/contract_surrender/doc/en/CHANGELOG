@@ -1,3 +1,5 @@
+* BUG#9302 Fix rebill date when cancelling a surrender
+
 Version 2.0 - 2018-04-13
 * FEA#8106 Add new surrenders entry point in contracts
 * FEA#7995 Allow a double validation for surrenders
