@@ -1,3 +1,4 @@
+* BUG#6767 Afficher uniquement le champ all_addresses dans la vue des tiers
 * BUG#9200 Correction d'un crash lors de la mise à jour via import d'une même personne (regression suite à #8858)
 * BUG#8934 Suppression des champs nom de personne et de société et remplacement par des groupes entourant les champs
 * BUG#8858 Forçage de all_addresse à être une liste vide quand un tiers est importé et créé avec une adresse
