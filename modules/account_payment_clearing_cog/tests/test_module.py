@@ -4,7 +4,7 @@ import unittest
 import doctest
 
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import doctest_setup, doctest_teardown
+from trytond.tests.test_tryton import doctest_teardown
 
 from trytond.modules.coog_core import test_framework
 
@@ -22,6 +22,6 @@ def suite():
         ModuleTestCase))
     suite.addTests(doctest.DocFileSuite(
             'scenario_account_payment_clearing_cog.rst',
-            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

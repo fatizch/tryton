@@ -7,7 +7,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import doctest_setup, doctest_teardown
+from trytond.tests.test_tryton import doctest_teardown
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 
@@ -487,10 +487,10 @@ def suite():
         ModuleTestCase))
     suite.addTests(doctest.DocFileSuite(
             'scenario_endorsement_change_start_date.rst',
-            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     suite.addTests(doctest.DocFileSuite(
             'scenario_endorsement_change_extra_data.rst',
-            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

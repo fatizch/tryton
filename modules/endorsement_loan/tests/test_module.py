@@ -7,7 +7,7 @@ import doctest
 import datetime
 
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import doctest_setup, doctest_teardown
+from trytond.tests.test_tryton import doctest_teardown
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import test_framework
@@ -195,6 +195,6 @@ def suite():
         ModuleTestCase))
     suite.addTests(doctest.DocFileSuite(
             'scenario_endorsement_loan.rst',
-            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

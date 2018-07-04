@@ -12,7 +12,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.transaction import Transaction
 
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import doctest_setup, doctest_teardown
+from trytond.tests.test_tryton import doctest_teardown
 
 from trytond.modules.coog_core import test_framework
 
@@ -783,10 +783,10 @@ def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(ModuleTestCase))
     suite.addTests(doctest.DocFileSuite('scenario_invoice_contract.rst',
-            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     suite.addTests(doctest.DocFileSuite(
             'scenario_invoice_contract_tax_included.rst',
-            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

@@ -5,7 +5,7 @@ import doctest
 
 import trytond.tests.test_tryton
 from trytond.modules.coog_core import test_framework
-from trytond.tests.test_tryton import doctest_setup, doctest_teardown
+from trytond.tests.test_tryton import doctest_teardown
 
 
 class ModuleTestCase(test_framework.CoogTestCase):
@@ -20,10 +20,10 @@ def suite():
         ModuleTestCase))
     suite.addTests(doctest.DocFileSuite(
             'scenario_waiver_of_premium.rst',
-            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     suite.addTests(doctest.DocFileSuite(
             'scenario_waiver_of_premium_proportion.rst',
-            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

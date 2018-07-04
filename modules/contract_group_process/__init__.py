@@ -24,4 +24,3 @@ def register():
         document.DocumentDescription,
         module='contract_group_process', type_='model',
         depends=['document'])
-
