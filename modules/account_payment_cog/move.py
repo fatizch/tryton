@@ -6,7 +6,6 @@ from sql.aggregate import Sum
 from sql.conditionals import Coalesce
 from sql.operators import Not
 from decimal import Decimal
-from collections import defaultdict
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool, PYSONEncoder, Date, If
@@ -184,7 +183,18 @@ class MoveLine:
         '''
         unpaid_amount = cls.unpaid_outstanding_amount(lines)
         processing_amount = cls.processing_payments_outstanding_amount(lines)
-        return unpaid_amount - processing_amount
+        kind = lines[0].account.kind
+        inverted_lines = []
+        for line in lines:
+            if (
+                ((line.debit > 0) or (line.credit < 0)) and (kind == 'payable')
+                ) or (
+                ((line.debit < 0) or (line.credit > 0))
+                    and (kind == 'receivable')):
+                unpaid_amount += line.debit - line.credit
+                inverted_lines.append(line)
+        return ([l for l in lines if l not in inverted_lines],
+            unpaid_amount - processing_amount)
 
     def new_payment(self, journal, kind, amount):
         return {
@@ -203,7 +213,9 @@ class MoveLine:
         if not lines:
             return []
         payments = []
-        outstanding = cls.get_outstanding_amount(lines)
+        lines, outstanding = cls.get_outstanding_amount(lines)
+        if not lines:
+            return []
         if lines[0].account.kind == 'receivable' and outstanding > 0:
             outstanding = 0
         elif lines[0].account.kind == 'payable' and outstanding < 0:
@@ -459,15 +471,11 @@ class PaymentCreation(model.CoogWizard):
 
     def get_lines_amount_per_kind(self, lines):
         # lines must be same type
-        res = defaultdict(lambda: 0)
-        for line in lines:
-            if (line.debit > 0) or (line.credit < 0):
-                res['receivable'] += line.debit - line.credit
-            else:
-                res['payable'] += line.debit - line.credit
-        if len(res) != 1:
+        if len({l.account for l in lines}) != 1:
             self.raise_user_error('incompatible_lines')
-        return res
+        total = sum([l.debit - l.credit for l in lines])
+        key = 'receivable' if total > 0 else 'payable'
+        return {key: total}
 
     @classmethod
     def get_possible_journals(cls, lines, kind=None):

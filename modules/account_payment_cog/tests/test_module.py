@@ -176,13 +176,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
             move_line_receivable.save()
             lines_to_pay.append(move_line_receivable)
             payments = self.MoveLine.create_payments(lines_to_pay)
-            self.assertTrue(len(payments) == 2)
-            self.assertTrue(payments[0].amount == Decimal(50))
+            self.assertTrue(len(payments) == 1)
+            self.assertTrue(payments[0].amount == Decimal(30))
             self.assertTrue(payments[0].kind == 'receivable')
-            self.assertTrue(payments[1].amount == Decimal(20))
-            self.assertTrue(payments[1].kind == 'payable')
-            for payment in payments:
-                payment.state = 'draft'
+            payments[0].state = 'draft'
             self.Payment.delete(payments)
 
             # create payable move
@@ -228,13 +225,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
             move_line_payable.get_payment_journal = Mock(
                 return_value=payment_journal)
             payments = self.MoveLine.create_payments(lines_to_pay)
-            self.assertTrue(len(payments) == 3)
+            self.assertTrue(len(payments) == 2)
             self.assertTrue(payments[0].amount == Decimal(40))
             self.assertTrue(payments[0].kind == 'payable')
-            self.assertTrue(payments[1].amount == Decimal(50))
+            self.assertTrue(payments[1].amount == Decimal(30))
             self.assertTrue(payments[1].kind == 'receivable')
-            self.assertTrue(payments[2].amount == Decimal(20))
-            self.assertTrue(payments[2].kind == 'payable')
 
 
 def suite():
