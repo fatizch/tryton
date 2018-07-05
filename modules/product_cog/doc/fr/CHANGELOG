@@ -1,3 +1,5 @@
+* BUG#7445 Ajout d'une contrainte d'unicité sur les clés fonctionnelles des produits et modèles
+
 Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28

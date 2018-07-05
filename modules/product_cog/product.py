@@ -1,6 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from sql import Null
 from trytond.pool import PoolMeta, Pool
+from trytond.model import Unique
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import export, fields
 
@@ -20,6 +23,17 @@ class Template(export.ExportImportMixin):
     taxes_included = fields.Boolean('Taxes Included')
 
     @classmethod
+    def __register__(cls, module_name):
+        super(Template, cls).__register__(module_name)
+        table = cls.__table__()
+        # Migration from 1.14
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*table.update(
+                columns=[table.name],
+                values=[table.id],
+                where=table.name == Null))
+
+    @classmethod
     def __setup__(cls):
         super(Template, cls).__setup__()
         cls.account_expense.domain = cls.account_expense.domain[1:] + [[
@@ -32,6 +46,11 @@ class Template(export.ExportImportMixin):
                 [('kind', '=', 'revenue')],
                 [('kind', '=', 'other')],
                 ]]
+        cls.name.required = True
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('name_uniq', Unique(t, t.name), 'The name must be unique.'),
+            ]
 
     @classmethod
     def _export_light(cls):
@@ -75,6 +94,26 @@ class TemplateAccount:
 class Product(export.ExportImportMixin):
     __name__ = 'product.product'
     _func_key = 'code'
+
+    @classmethod
+    def __register__(cls, module_name):
+        table = cls.__table__()
+        # Migration from 1.14
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*table.update(
+                columns=[table.code],
+                values=[table.id],
+                where=(table.code == Null) | (table.code == '')))
+        super(Product, cls).__register__(module_name)
+
+    @classmethod
+    def __setup__(cls):
+        super(Product, cls).__setup__()
+        cls.code.required = True
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_uniq', Unique(t, t.code), 'The code must be unique.'),
+            ]
 
     def get_rec_name(self, name):
         return self.name
