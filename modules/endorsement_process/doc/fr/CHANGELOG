@@ -1,3 +1,4 @@
+* BUG#9331 Correction de l'affichage des boutons dans les parties d'avenants
 * BUG#9261 Correction du comportement si l'avenant est exécuté hors process
 * BUG#8919 Correctif sur les traductions des avenants unitaires dans le processus d'avenant
 

@@ -1,3 +1,4 @@
+* BUG#9331 Fix display of buttons in endorsement parts
 * BUG#9261 Fix behavior if not in a process
 * BUG#8919 Fix translations of endorsement parts in the endorsement process
 

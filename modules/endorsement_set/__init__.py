@@ -21,4 +21,3 @@ def register():
         event.EventLog,
         module='endorsement_set', type_='model',
         depends=['event_log'])
-

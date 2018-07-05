@@ -3,7 +3,7 @@
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Bool, Eval
-from trytond.wizard import Wizard, StateAction
+from trytond.wizard import Wizard, StateAction, StateView, Button
 
 from trytond.modules.process_cog.process import ProcessFinder, ProcessStart
 from trytond.modules.coog_core import fields, model
@@ -110,20 +110,33 @@ class StartEndorsement:
     @classmethod
     def __setup__(cls):
         super(StartEndorsement, cls).__setup__()
-        for button in cls.summary.buttons:
-            if button.state == 'apply_endorsement':
+        for attribute in dir(cls):
+            if not isinstance(getattr(cls, attribute), StateView):
                 continue
-            states = button.states.get('invisible', None)
-            if states is None:
-                button.states['invisible'] = Bool(Eval('context',
-                    {}).get('running_process', False))
-            else:
-                button.states['invisible'] |= Bool(Eval('context',
-                    {}).get('running_process', False))
+            for button in getattr(cls, attribute).buttons:
+                states = button.states.get('invisible', None)
+                if button.state.endswith('_next'):
+                    continue
+                if button.state.endswith('_suspend'):
+                    continue
+                if states is None:
+                    button.states['invisible'] = Bool(Eval('context',
+                        {}).get('only_preview', False))
+                else:
+                    button.states['invisible'] |= Bool(Eval('context',
+                        {}).get('only_preview', False))
+            if 'preview' in attribute:
+                getattr(cls, attribute).buttons.append(Button(string='Ok',
+                        state='end', icon='tryton-ok', default=True,
+                        states={'invisible': ~Bool(Eval('context',
+                            {}).get('only_preview', False))}))
 
     def get_next_state(self, current_state):
         if not self.endorsement or not self.endorsement.current_state:
             return super(StartEndorsement, self).get_next_state(current_state)
+        return self.get_next_view_or_end(self, current_state)
+
+    def get_next_view_or_end(self, current_state):
         found = False
         for part in self.definition.endorsement_parts:
             if part.view == current_state:

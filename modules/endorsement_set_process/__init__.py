@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 import process
 import endorsement
+import wizard
 
 
 def register():
@@ -17,4 +18,5 @@ def register():
 
     Pool.register(
         process.EndorsementStartProcess,
+        wizard.StartEndorsement,
         module='endorsement_set_process', type_='wizard')

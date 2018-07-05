@@ -297,7 +297,8 @@ class Endorsement:
     def apply_for_preview(cls, endorsements):
         to_apply = []
         for endorsement in endorsements:
-            to_apply.extend(endorsement.endorsement_set.endorsements)
+            if endorsement.endorsement_set:
+                to_apply.extend(endorsement.endorsement_set.endorsements)
         super(Endorsement, cls).apply_for_preview(list(set(to_apply)))
 
     @classmethod
