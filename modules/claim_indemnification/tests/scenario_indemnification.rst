@@ -55,9 +55,9 @@ Create benefit account product::
     >>> template.cost_price = Decimal(0)
     >>> template.account_expense = accounts['expense']
     >>> template.account_revenue = accounts['revenue']
+    >>> template.products[0].code = 'benefit_product'
     >>> template.save()
-    >>> account_product.template = template
-    >>> account_product.save()
+    >>> account_product = template.products[0]
 
 Create Payment Journal::
 

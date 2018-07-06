@@ -102,11 +102,9 @@ Create Broker Fee::
     >>> template.list_price = Decimal(0)
     >>> template.cost_price = Decimal(0)
     >>> template.default_uom = unit
+    >>> template.products[0].code = 'broker_fee_product'
     >>> template.save()
-    >>> product = Product()
-    >>> product.name = 'Broker Fee Product'
-    >>> product.template = template
-    >>> product.save()
+    >>> product = template.products[0]
     >>> Fee = Model.get('account.fee')
     >>> broker_fee = Fee()
     >>> broker_fee.name = 'Broker Fee'
@@ -147,9 +145,9 @@ Create commission product::
     >>> templateComission.cost_price = Decimal(0)
     >>> templateComission.account_expense = accounts['expense']
     >>> templateComission.account_revenue = accounts['revenue']
+    >>> templateComission.products[0].code = 'commission_product'
     >>> templateComission.save()
-    >>> commission_product.template = templateComission
-    >>> commission_product.save()
+    >>> commission_product = templateComission.products[0]
 
 Create broker commission plan::
 

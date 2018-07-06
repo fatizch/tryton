@@ -161,12 +161,9 @@ product_template.list_price = Decimal(1)
 product_template.cost_price = Decimal(0)
 product_template.account_expense = product_account
 product_template.account_revenue = product_account
+product_template.products[0].code = 'free_product'
 product_template.save()
-fee_product = AccountProduct()
-fee_product.template = product_template
-fee_product.type = 'service'
-fee_product.default_uom = product_template.default_uom
-fee_product.save()
+fee_product = product_template.products[0]
 fee = Fee()
 fee.name = 'Test Fee'
 fee.code = 'test_fee'

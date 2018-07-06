@@ -505,7 +505,9 @@ if LOAD_ACCOUNTING:  # {{{
         [('code', '=', '622')])
     insurer_account_product_template.account_revenue, = Account.find(
         [('code', '=', '706')])
+    insurer_account_product_template.products[0].code = 'chargement_produit'
     insurer_account_product_template.save()
+    insurer_account_product = insurer_account_product_template.products[0]
 
     broker_account_product_template = AccountProductTemplate()
     broker_account_product_template.name = 'Commissions Courtier'
@@ -516,21 +518,9 @@ if LOAD_ACCOUNTING:  # {{{
         [('code', '=', '622')])
     broker_account_product_template.account_revenue, = Account.find(
         [('code', '=', '706')])
+    broker_account_product_template.products[0].code = 'commission_courtier'
     broker_account_product_template.save()
-    # }}}
-
-    do_print('    Creating Accounting products')  # {{{
-    insurer_account_product = AccountProduct()
-    insurer_account_product.name = 'Chargement Produit'
-    insurer_account_product.type = 'service'
-    insurer_account_product.template = insurer_account_product_template
-    insurer_account_product.save()
-
-    broker_account_product = AccountProduct()
-    broker_account_product.name = 'Commissions Courtier'
-    broker_account_product.type = 'service'
-    broker_account_product.template = broker_account_product_template
-    broker_account_product.save()
+    broker_account_product = broker_account_product_template.products[0]
     # }}}
 
     do_print('    Creating Journals')  # {{{

@@ -87,13 +87,9 @@ Create Fee::
     >>> template.list_price = Decimal(0)
     >>> template.cost_price = Decimal(0)
     >>> template.account_revenue = dunning_fee_account
+    >>> template.products[0].code = 'dunning_fee_product'
     >>> template.save()
-    >>> product_product = Product()
-    >>> product_product.name = 'Dunning Fee Product'
-    >>> product_product.template = template
-    >>> product_product.default_uom = template.default_uom
-    >>> product_product.type = 'service'
-    >>> product_product.save()
+    >>> product_product = template.products[0]
     >>> Fee = Model.get('account.fee')
     >>> fee = Fee()
     >>> fee.name = 'Test Fee'

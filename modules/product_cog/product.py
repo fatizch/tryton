@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import export, fields
+from trytond.modules.coog_core import export, fields, coog_string
 
 __all__ = [
     'Template',
@@ -94,6 +94,13 @@ class TemplateAccount:
 class Product(export.ExportImportMixin):
     __name__ = 'product.product'
     _func_key = 'code'
+
+    @fields.depends('name', 'code')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        elif self.name:
+            return coog_string.slugify(self.name)
 
     @classmethod
     def __register__(cls, module_name):

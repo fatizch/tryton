@@ -77,7 +77,6 @@ Create commission product::
     >>> Template = Model.get('product.template')
     >>> Product = Model.get('product.product')
     >>> unit, = Uom.find([('name', '=', 'Unit')])
-    >>> commission_product = Product()
     >>> template = Template()
     >>> template.name = 'Commission'
     >>> template.default_uom = unit
@@ -86,9 +85,10 @@ Create commission product::
     >>> template.cost_price = Decimal(0)
     >>> template.account_expense = accounts['expense']
     >>> template.account_revenue = accounts['revenue']
+    >>> template.products[0].code = 'commission_product'
     >>> template.save()
-    >>> commission_product.template = template
-    >>> commission_product.save()
+    >>> commission_product = template.products[0]
+    >>> products = Product.find([])
 
 Create broker commission plan::
 

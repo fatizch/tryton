@@ -100,9 +100,9 @@ Create commission product::
     >>> template.cost_price = Decimal(0)
     >>> template.account_expense = accounts['expense']
     >>> template.account_revenue = accounts['revenue']
+    >>> template.products[0].code = 'commission_product'
     >>> template.save()
-    >>> commission_product.template = template
-    >>> commission_product.save()
+    >>> commission_product = template.products[0]
 
 Create insurer commission plan::
 

@@ -187,12 +187,9 @@ Create Fee::
     >>> product_template.default_uom = Uom(1)
     >>> product_template.list_price = Decimal(1)
     >>> product_template.cost_price = Decimal(0)
+    >>> product_template.products[0].code = 'free_product'
     >>> product_template.save()
-    >>> product = AccountProduct()
-    >>> product.template = product_template
-    >>> product.type = 'service'
-    >>> product.default_uom = product_template.default_uom
-    >>> product.save()
+    >>> product = product_template.products[0]
     >>> fee = Fee()
     >>> fee.name = 'Test Fee'
     >>> fee.code = 'test_fee'

@@ -91,18 +91,11 @@ Template = Model.get('product.template')
 template = Template()
 template.name = 'product template'
 template.type = 'service'
+template.products[0].code = 'product_product'
 template.list_price = Decimal(0)
 template.cost_price = Decimal(0)
 template.save()
-Uom = Model.get('product.uom')
-unit, = Uom.find([('name', '=', 'Unit')])
-product_product = Product()
-product_product.name = 'Product'
-product_product.template = template
-product_product.default_uom = template.default_uom
-product_product.payment_journal = payment_journal
-product_product.type = 'service'
-product_product.save()
+product_product = template.products[0]
 Fee = Model.get('account.fee')
 fee = Fee()
 fee.name = 'Test Fee'

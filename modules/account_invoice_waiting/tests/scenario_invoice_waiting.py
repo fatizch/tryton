@@ -145,24 +145,23 @@ template.cost_price = Decimal('25')
 template.account_expense = expense
 template.account_revenue = waiting_account
 template.customer_taxes.append(tax)
+template.products[0].code = 'waiting_product'
 template.save()
-product.template = template
-product.save()
+product = template.products[0]
 
 # #Comment# #Create product without waiting account
 
-product_without_waiting = Product()
 template_without_waiting = ProductTemplate()
-template_without_waiting.name = 'product'
+template_without_waiting.name = 'Without Waiting Template'
 template_without_waiting.default_uom = unit
 template_without_waiting.type = 'service'
 template_without_waiting.list_price = Decimal('40')
 template_without_waiting.cost_price = Decimal('25')
 template_without_waiting.account_expense = expense
 template_without_waiting.account_revenue = revenue_without_waiting
+template_without_waiting.products[0].code = 'without_waiting'
 template_without_waiting.save()
-product_without_waiting.template = template_without_waiting
-product_without_waiting.save()
+product_without_waiting = template_without_waiting.products[0]
 
 # #Comment# #Create payment term
 

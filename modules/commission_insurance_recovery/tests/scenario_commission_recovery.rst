@@ -84,11 +84,9 @@ Create Broker Fee::
     >>> template.account_expense = broker_fee_account
     >>> template.list_price = Decimal(0)
     >>> template.cost_price = Decimal(0)
+    >>> template.products[0].code = 'broker_fee_product'
     >>> template.save()
-    >>> product = Product()
-    >>> product.name = 'Broker Fee Product'
-    >>> product.template = template
-    >>> product.save()
+    >>> product = template.products[0]
     >>> Fee = Model.get('account.fee')
     >>> broker_fee = Fee()
     >>> broker_fee.name = 'Broker Fee'
@@ -123,9 +121,9 @@ Create commission product::
     >>> template.cost_price = Decimal(0)
     >>> template.account_expense = accounts['expense']
     >>> template.account_revenue = accounts['revenue']
+    >>> template.products[0].code = 'commission_product'
     >>> template.save()
-    >>> commission_product.template = template
-    >>> commission_product.save()
+    >>> commission_product = template.products[0]
 
 Create recovery rule::
 
