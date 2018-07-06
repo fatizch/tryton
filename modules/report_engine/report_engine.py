@@ -705,7 +705,7 @@ class ReportData(object):
     def instantiate(self, data):
         Report = Pool().get('report.generate', type='report')
         if isinstance(data, list):
-            return [ReportData(x) for x in data]
+            return [self.instantiate(x) for x in data]
         elif isinstance(data, dict) and '__name__' in data:
             assert set(data.keys()) == {'__name__', 'id'}
             return Report._get_records(
