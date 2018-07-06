@@ -29,7 +29,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from trytond import backend
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.config import config
 from trytond.model import Model, Unique
 from trytond.wizard import StateAction, StateView, Button
@@ -53,6 +53,7 @@ __all__ = [
     'TemplateParameter',
     'TemplateTemplateParameterRelation',
     'ReportTemplate',
+    'ReportLightTemplate',
     'ReportTemplateVersion',
     'ReportTemplateGroupRelation',
     'Printable',
@@ -110,7 +111,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
     name = fields.Char('Name', required=True, translate=True)
     on_model = fields.Many2One('ir.model', 'Model',
-        domain=[('printable', '=', True)], required=True, ondelete='RESTRICT')
+        domain=[('printable', '=', True)], ondelete='RESTRICT')
     code = fields.Char('Code', required=True)
     versions = fields.One2Many('report.template.version', 'template',
         'Versions', delete_missing=True)
@@ -169,7 +170,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     @classmethod
     def __setup__(cls):
         super(ReportTemplate, cls).__setup__()
-        cls.__rpc__.update({'produce_reports': RPC(instantiate=0,
+        cls.__rpc__.update({
+                'produce_reports': RPC(instantiate=0,
                     readonly=False, result=lambda res: (
                         [{k: v for k, v in chain(
                                 {key: value for key, value in report.iteritems()
@@ -178,7 +180,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                                     }.iteritems())}
                             for report in res[0]],
                         [attachment.id for attachment in res[1]])
-                    )})
+                    ),
+                })
         t = cls.__table__()
         cls._sql_constraints = [
             ('code_unique', Unique(t, t.code),
@@ -541,6 +544,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             'sender': objects[0].get_sender(),
             'sender_address': objects[0].get_sender_address(),
             'origin': None,
+            'objects': objects,
             }
         reporting_data.update(context_)
         context_['reporting_data'] = reporting_data
@@ -588,6 +592,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return reports
 
     def produce_reports(self, objects, context_=None):
+        assert self.on_model
         objects = Pool().get(self.on_model.model).browse(objects)
         if context_ is None:
             context_ = {}
@@ -616,6 +621,114 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         style_method = getattr(_object, 'get_report_style_content', None)
         if style_method:
             return style_method(at_date, self)
+
+
+class ReportLightTemplate:
+    __metaclass__ = PoolMeta
+    __name__ = 'report.template'
+
+    @classmethod
+    def __setup__(cls):
+        super(ReportLightTemplate, cls).__setup__()
+        cls.__rpc__.update({
+                'light_report': RPC(),
+                })
+
+    @classmethod
+    def light_report(cls, template, data):
+        template = cls(template)
+        target = cls._instantiate_from_data(data)
+        result = template._generate_report(
+            [target], {'resource': target})['data']
+        if isinstance(result, basestring):
+            return base64.b64encode(result)
+        return result
+
+    @classmethod
+    def _instantiate_from_data(cls, data):
+        return ReportData(data)
+
+
+class ReportData(object):
+    '''
+        This class is used when printing json documents.
+
+        Its goal is to convert the JSON data to an object that can be used to
+        access the dictionnary data as attributes, and also convert special
+        objects to translated tryton records :
+
+        {"__name__": "offered.product", "id": 1}
+            => TranslateModel(Pool().get('offered.product')(1))
+    '''
+    __name__ = 'report.data'
+
+    def __init__(self, data):
+        self.__data = data
+        self.__parsed = {}
+
+    def __contains__(self, item):
+        return self.__data.__contains__(item)
+
+    def keys(self):
+        return list(self.iterkeys())
+
+    def iterkeys(self):
+        return self.__data.iterkeys()
+
+    def values(self):
+        return list(self.itervalues())
+
+    def itervalues(self):
+        return (getattr(self, k) for k in self.__data)
+
+    def items(self):
+        return list(self.iteritems())
+
+    def iteritems(self):
+        return ((k, getattr(self, k)) for k in self.__data.iterkeys())
+
+    def __iter__(self):
+        return self.__data.__iter__()
+
+    def __getattr__(self, name):
+        if name in self.__parsed:
+            return self.__parsed[name]
+        if name in self.__data:
+            self.__parsed[name] = self.instantiate(self.__data[name])
+            return self.__parsed[name]
+        if name == 'id':
+            return None
+        if name == 'rec_name':
+            return ''
+        raise AttributeError
+
+    def instantiate(self, data):
+        Report = Pool().get('report.generate', type='report')
+        if isinstance(data, list):
+            return [ReportData(x) for x in data]
+        elif isinstance(data, dict) and '__name__' in data:
+            assert set(data.keys()) == {'__name__', 'id'}
+            return Report._get_records(
+                [data['id']], data['__name__'], {})[0]
+        elif isinstance(data, dict):
+            return ReportData(data)
+        else:
+            return data
+
+    def get_contact(self):
+        return None
+
+    def get_address(self):
+        return None
+
+    def get_sender(self):
+        return None
+
+    def get_sender_address(self):
+        return None
+
+    def get_lang(self):
+        return None
 
 
 class ReportTemplateVersion(model.CoogSQL, model.CoogView):
@@ -860,6 +973,8 @@ class ReportGenerate(CoogReport):
 
     @classmethod
     def _get_records(cls, ids, model, data):
+        if model == 'report.data':
+            return ids
         translated = super(ReportGenerate, cls)._get_records(ids, model,
             data)
         if not translated:
@@ -1049,25 +1164,35 @@ class ReportGenerate(CoogReport):
         report_context['ConvertFrequency'] = coog_date.convert_frequency
         report_context['Company'] = pool.get('party.party')(
             Transaction().context.get('company'))
-        SelectedModel = pool.get(data['model'])
 
         def search_and_stream(*args, **kwargs):
             model_name = kwargs.pop('model_name', data['model'])
+            assert model_name != 'report.data'
             Target = pool.get(model_name)
-            return model.search_and_stream(Target, *args, **kwargs)
+            order_func = kwargs.pop('order_func', None)
+            if order_func:
+                return model.order_data_stream(
+                    model.search_and_stream(Target, *args, **kwargs),
+                    key_func=order_func,
+                    batch_size=kwargs.pop('batch_size', None))
+            else:
+                return model.search_and_stream(Target, *args, **kwargs)
 
         report_context['Search'] = search_and_stream
 
-        selected_obj = SelectedModel(data['id'])
-        report_context.update(selected_obj.get_publishing_context(
-                report_context))
+        if data['model'] != 'report.data':
+            SelectedModel = pool.get(data['model'])
+            selected_obj = SelectedModel(data['id'])
+            report_context.update(selected_obj.get_publishing_context(
+                    report_context))
+        else:
+            report_context['target'] = data['id']
         return report_context
 
     @classmethod
     def render(cls, report, report_context):
         pool = Pool()
-        SelectedModel = pool.get(report_context['data']['model'])
-        selected_obj = SelectedModel(report_context['data']['id'])
+        selected_obj = report_context['objects'][0]
         selected_letter = Pool().get('report.template')(
             report_context['data']['doc_template'][0])
         report.report_content = selected_letter.get_selected_version(
@@ -1371,6 +1496,7 @@ class ReportCreate(wizard_context.PersistentContextWizard):
             'sender': sender.id if sender else None,
             'sender_address': sender_address.id if sender_address else None,
             'origin': None,
+            'objects': instances,
             }
 
     def transition_generate(self):

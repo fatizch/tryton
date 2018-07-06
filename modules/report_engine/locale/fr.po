@@ -526,6 +526,26 @@ msgctxt "field:report.template.parameter,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:report.template.print_unbound.start,data_file:"
+msgid "Data file"
+msgstr "Fichier de données"
+
+msgctxt "field:report.template.print_unbound.start,file_path:"
+msgid "File Path"
+msgstr "Chemin"
+
+msgctxt "field:report.template.print_unbound.start,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:report.template.print_unbound.start,parameters:"
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgctxt "field:report.template.print_unbound.start,template:"
+msgid "Template"
+msgstr "Modèle"
+
 msgctxt "field:report.template.version,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -740,6 +760,10 @@ msgctxt "model:ir.action,name:act_report_template_parameter_form"
 msgid "Template Parameters"
 msgstr "Paramètres de courrier"
 
+msgctxt "model:ir.action,name:act_report_template_print_unbound"
+msgid "Print Unbound Report"
+msgstr "Imprimer un document global"
+
 msgctxt "model:ir.action,name:act_treat_report_production_request"
 msgid "Treat Report Production Request"
 msgstr "Traiter les demandes de production de document"
@@ -763,6 +787,10 @@ msgstr "Convertir des modèles"
 msgctxt "model:ir.ui.menu,name:menu_doc_template"
 msgid "Document Templates"
 msgstr "Modèles de courrier"
+
+msgctxt "model:ir.ui.menu,name:menu_print_unbound_report"
+msgid "Print Unbound Report"
+msgstr "Imprimer un document global"
 
 msgctxt "model:ir.ui.menu,name:menu_report"
 msgid "Report"
@@ -811,6 +839,10 @@ msgstr "Relation modèle de courrier groupe"
 msgctxt "model:report.template.parameter,name:"
 msgid "Template Parameter"
 msgstr "Paramètre de courrier"
+
+msgctxt "model:report.template.print_unbound.start,name:"
+msgid "Print Unbound Report Start"
+msgstr "Imprimer un document global"
 
 msgctxt "model:report.template.version,name:"
 msgid "Report Template Version"

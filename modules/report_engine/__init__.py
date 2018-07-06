@@ -10,11 +10,13 @@ import tools
 import batch
 import res
 import party
+import wizard
 
 
 def register():
     Pool.register(
         report_engine.ReportTemplate,
+        report_engine.ReportLightTemplate,
         report_engine.TemplateParameter,
         report_engine.TemplateTemplateParameterRelation,
         report_engine.ReportTemplateVersion,
@@ -33,6 +35,7 @@ def register():
         batch.ReportProductionRequestTreatmentBatch,
         res.Group,
         party.Party,
+        wizard.PrintUnboundReportStart,
         module='report_engine', type_='model')
 
     Pool.register(
@@ -45,4 +48,5 @@ def register():
         report_engine.ReportCreate,
         tools.ConvertTemplate,
         event.TreatReportProductionRequest,
+        wizard.PrintUnboundReport,
         module='report_engine', type_='wizard')

@@ -22,6 +22,8 @@ class ReportTemplate:
 
     @classmethod
     def do_generate_event(cls, data):
+        if data['model'] == 'report.data':
+            return
         pool = Pool()
         Event = pool.get('event')
         model = pool.get(data['model'])

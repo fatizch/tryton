@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################### -->
+        <!-- # Print Unbound Report Wizard # -->
+        <!-- ############################### -->
+        <record model="ir.action.wizard" id="act_report_template_print_unbound">
+            <field name="name">Print Unbound Report</field>
+            <field name="wiz_name">report.template.print_unbound</field>
+        </record>
+        <menuitem name="Print Unbound Report" id="menu_print_unbound_report" parent="menu_report" sequence="30" icon="printer" action="act_report_template_print_unbound"/>
+        <!-- ##################################### -->
+        <!-- # Print Unbound Report Wizard Start # -->
+        <!-- ##################################### -->
+        <record model="ir.ui.view" id="print_unbound_template_start_view_form">
+            <field name="model">report.template.print_unbound.start</field>
+            <field name="type">form</field>
+            <field name="name">print_unbound_template_start_form</field>
+        </record>
+    </data>
+</tryton>

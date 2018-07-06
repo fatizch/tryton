@@ -75,7 +75,7 @@ class ReportGenerate:
     @classmethod
     def get_context(cls, records, data):
         context_ = super(ReportGenerate, cls).get_context(records, data)
-        context_['record'] = records[0]
+        context_['record'] = context_.get('objects', records)[0]
         template = Pool().get('report.template')(data['doc_template'][0])
         context_['images'] = {}
         for image in template.images:
