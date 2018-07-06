@@ -479,8 +479,7 @@ class ContractOption:
         if self.parent_contract.agent:
             used.append((self.parent_contract.agent,
                 self.parent_contract.agent.plan))
-        insurer = self.parent_contract.find_insurer_agent(
-            coverage=self.coverage)
+        insurer = self.parent_contract.find_insurer_agent(option=self)
         if insurer:
             used.append((insurer, insurer.plan))
         return used

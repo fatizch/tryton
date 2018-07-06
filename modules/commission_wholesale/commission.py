@@ -49,7 +49,8 @@ class Commission:
         key = super(Commission, self)._group_to_invoice_key()
         if self.agent.wholesale_broker and self.commissioned_option:
             return key + (
-                ('insurer', self.commissioned_option.coverage.insurer),
+                ('insurer', self.commissioned_option.coverage.get_insurer(
+                    self.start)),
                 ('delegation_of_payment', self.agent.delegation_of_payment)
                 )
         return key

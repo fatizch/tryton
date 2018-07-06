@@ -439,7 +439,8 @@ class OptionDescription:
         'Account for billing', depends=['company'],
         domain=[['OR', [('kind', '=', 'revenue')], [('kind', '=', 'other')]],
             ('company', '=', Eval('company'))],
-        required=True, ondelete='RESTRICT')
+        states={'required': True},
+        ondelete='RESTRICT')
     taxes_included_in_premium = fields.Boolean('Taxes Included',
         help='Taxes Included In Premium',
         states={'invisible': Eval('tax_rounding') == 'document'},

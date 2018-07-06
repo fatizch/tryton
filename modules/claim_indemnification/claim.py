@@ -219,7 +219,7 @@ class Loss:
             if (service.benefit.indemnification_kind != 'capital' or
                     service.eligibility_status == 'refused'):
                 continue
-            service_delegation = service.option.coverage.insurer. \
+            service_delegation = service.get_insurer(). \
                 get_delegation(service.option.coverage.insurance_kind)
             if not service_delegation:
                 continue

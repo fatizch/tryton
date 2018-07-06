@@ -377,9 +377,10 @@ class ContractOption:
             return Decimal(0)
         party = self.covered_element.party
         return party.get_insured_outstanding_loan_balances(date,
-            self.coverage.currency, self.coverage.insurer,
+            self.coverage.currency, self.coverage.get_insurer(date),
             self.coverage.insurance_kind
-            )[self.coverage.insurer.id][self.coverage.insurance_kind][0]
+            )[self.coverage.get_insurer(date).id][
+                self.coverage.insurance_kind][0]
 
     def get_option_loan_balance(self, date):
         # Total loan insured on this option

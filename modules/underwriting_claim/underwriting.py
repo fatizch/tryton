@@ -45,8 +45,11 @@ class Underwriting:
         return [x for l in self.on_object.losses for x in l.services]
 
     def get_insurers(self, name):
-        return list(set([x.service.option.coverage.insurer.id
-                    for x in self.results if x.service and x.service.option]))
+        if self.on_object.__name__ != 'claim':
+            return
+        return list({x.service.option.coverage.get_insurer(
+                    self.effective_date).id
+                for x in self.results if x.service and x.service.option})
 
     def get_insurers_names(self, name):
         return ', '.join(x.rec_name for x in self.insurers)

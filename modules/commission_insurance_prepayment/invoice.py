@@ -55,7 +55,9 @@ class Invoice:
                 continue
             agent_options[(key['agent'].id, key['option'].id)] = list(comms)
             all_options[(key['option'].id, key['agent'].id)] = (key['agent'],
-                key['option'].parent_contract, key['option'].coverage.insurer)
+                key['option'].parent_contract,
+                key['option'].coverage.get_insurer(
+                    key['option'].initial_start_date))
 
         if not agent_options:
             return commissions

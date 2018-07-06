@@ -133,3 +133,6 @@ class OptionDescription:
             cached = {x: True for x in flags}
         cls._insurer_flags_cache.set(coverage.id, cached)
         return cached[flag_name]
+
+    def get_insurer(self, at_date=None):
+        return self.insurer

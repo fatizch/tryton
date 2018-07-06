@@ -875,20 +875,25 @@ class ClaimService(model.CoogSQL, model.CoogView,
 
         self.extra_datas[-1].extra_data_values = data_values
 
-    @fields.depends('option')
+    def get_insurer(self):
+        date = self.loss.get_date() if self.loss else None
+        return self.option.coverage.get_insurer(date) if self.option else None
+
+    @fields.depends('option', 'loss')
     def on_change_with_insurer_delegations(self, name=None):
         '''
             Returns a string with the translated name of all granted claim
             related delegations
         '''
-        if not self.option or not self.option.coverage.insurer:
+        insurer = self.get_insurer()
+        if not insurer:
             return ''
         pool = Pool()
         InsurerDelegation = pool.get('insurer.delegation')
         Translation = pool.get('ir.translation')
         fnames = [x for x in InsurerDelegation._delegation_flags
             if x.startswith('claim_')]
-        delegation = self.option.coverage.insurer.get_delegation(
+        delegation = insurer.get_delegation(
             self.option.coverage.insurance_kind)
         values = [Translation.get_source('insurer.delegation,' + x,
                 'field', Transaction().language, None)
@@ -908,17 +913,16 @@ class ClaimService(model.CoogSQL, model.CoogView,
         res = ''
         if self.contract.subscriber != self.claim.claimant:
             res = '%s - ' % self.contract.subscriber.rec_name
-        if self.option and self.option.coverage.insurer:
+        if self.option and self.get_insurer():
             res += '%s [%s] - %s' % (self.contract.rec_name,
-                self.contract.product.rec_name,
-                self.option.coverage.insurer.rec_name)
+                self.contract.product.rec_name, self.get_insurer())
         else:
             res += self.contract.get_synthesis_rec_name()
         return res
 
     def get_benefit_summary(self, name):
         return '%s (%s)' % (self.benefit.rec_name,
-            self.option.coverage.insurer.rec_name)
+            self.get_insurer().rec_name)
 
     def get_loss_summary(self, name=None):
         if self.loss:

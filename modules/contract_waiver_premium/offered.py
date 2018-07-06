@@ -140,14 +140,16 @@ class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
                 [('duration_rule.short_name',) + tuple(clause[1:])],
                 ]
 
-    def get_account_for_waiver_line(self):
-        return (self.account_for_waiver if self.account_for_waiver
-            else self.coverage.account_for_billing)
+    def get_account_for_waiver_line(self, line):
+        if self.account_for_waiver:
+            return self.account_for_waiver
+        else:
+            return self.coverage.get_account_for_billing(line)
 
     def init_waiver_line(self, line, waiver_option):
         InvoiceLine = Pool().get('account.invoice.line')
         line.taxes = [x.id for x in self.taxes]
-        line.account = self.get_account_for_waiver_line()
+        line.account = self.get_account_for_waiver_line(line)
         if self.invoice_line_period_behaviour == 'proportion':
             assert line.details
             premium = getattr(line.details[0], 'premium', None)

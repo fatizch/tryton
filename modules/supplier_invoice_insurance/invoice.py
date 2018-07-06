@@ -89,11 +89,11 @@ class Invoice:
             return [x.id for x in self.related_party.get_all_contracts()]
         return []
 
-    @fields.depends('related_contract', 'insurer')
+    @fields.depends('related_contract', 'insurer', 'invoice_date')
     def on_change_with_insurer(self):
         if not self.related_contract:
             return self.insurer.id if self.insurer else None
-        insurers = list(set([x.coverage.insurer for x in
+        insurers = list(set([x.coverage.get_insurer(self.invoice_date) for x in
                     (self.related_contract.options
                         + self.related_contract.covered_element_options)]))
         if len(insurers) == 1:

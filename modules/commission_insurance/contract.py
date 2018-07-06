@@ -78,38 +78,52 @@ class Contract:
         invoice.agent = self.agent
         return invoice
 
-    def find_insurer_agent_domain(self, coverage=None, line=None):
+    def find_insurer_agent_domain(self, option=None, line=None):
         domain = [('type_', '=', 'principal')]
+        coverage = None
+        date = None
         if self.agent and self.agent.plan.insurer_plan:
             domain.append(('plan', '=', self.agent.plan.insurer_plan))
-        if not coverage and line and getattr(line, 'details', None):
+        if not option and line and getattr(line, 'details', None):
             coverage = getattr(line.details[0], 'rated_entity', None)
-        if coverage and getattr(coverage, 'insurer', None):
-            domain.append(('party', '=', coverage.insurer.party))
+            date = line.coverage_start
+        if option:
+            coverage = option.coverage
+            date = option.initial_start_date
+        if (coverage and hasattr(coverage, 'get_insurer') and
+                coverage.get_insurer(date)):
+            domain.append(('party', '=', coverage.get_insurer(date).party))
         else:
             return None
         return domain
 
-    def get_insurer_pattern(self, coverage=None, line=None):
+    def get_insurer_pattern(self, option=None, line=None):
         pattern = {'agent': self.agent}
         if self.agent and self.agent.plan.insurer_plan:
             pattern['plan'] = self.agent.plan.insurer_plan
-        if not coverage and line:
+        coverage = None
+        date = None
+        if not option and line:
             coverage = getattr(line.details[0], 'rated_entity', None)
+            date = line.coverage_start
+        if option:
+            coverage = option.coverage
+            date = option.initial_start_date
         if coverage:
             pattern['coverage'] = coverage
-            if coverage.insurer:
-                pattern['party'] = coverage.insurer.party
+            insurer = coverage.get_insurer(date)
+            if insurer:
+                pattern['party'] = insurer.party
         return pattern
 
-    def find_insurer_agent(self, coverage=None, line=None):
+    def find_insurer_agent(self, option=None, line=None):
         pool = Pool()
         Agent = pool.get('commission.agent')
-        domain = self.find_insurer_agent_domain(coverage, line)
+        domain = self.find_insurer_agent_domain(option, line)
         if not domain:
             return
         agents = Agent.search(domain)
-        pattern = self.get_insurer_pattern(coverage, line)
+        pattern = self.get_insurer_pattern(option, line)
         key = freeze((pattern, self.id))
         cached = self.insurer_agent_cache.get(key, default=False)
         if cached is not False:
