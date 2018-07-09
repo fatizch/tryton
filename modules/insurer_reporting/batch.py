@@ -37,7 +37,6 @@ class InsurerReportContractBatch(batch.BatchRoot):
 
     @classmethod
     def select_ids(cls, treatment_date, **kwargs):
-        cls.parse_params(kwargs)
         possible_days = kwargs['possible_days']
         products = kwargs.get('products', None)
         possible_days = possible_days.split(',') if possible_days else []
