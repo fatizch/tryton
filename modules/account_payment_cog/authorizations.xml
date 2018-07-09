@@ -231,6 +231,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.model.access" id="access_party_payment_direct_debit_group_party_manage">
+            <field name="model" search="[('model', '=', 'party.party.payment_direct_debit')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <record model="ir.model.button-res.group"
             id="payment_succeed_button_group_contract_manage">
             <field name="button" ref="account_payment.payment_succeed_button"/>
