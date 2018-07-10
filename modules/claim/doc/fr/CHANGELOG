@@ -1,3 +1,4 @@
+* BUG#9377 Mise à jour des données complémentaires lors du changement de préjudice
 * FEA#8832 Remplacer l'attribut position 'hpaned' par 'group'
 * BUG#8786 Les sinistres fermés ne doivent pas être modifiable
 * BUG#8818 Suppression de la barre d'outils dans l'arborescence des préjudices sur le sinistre

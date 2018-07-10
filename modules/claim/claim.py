@@ -548,6 +548,7 @@ class Loss(model.CoogSQL, model.CoogView,
 
     @fields.depends('event_desc', 'loss_desc', 'with_end_date', 'end_date')
     def on_change_loss_desc(self):
+        super(Loss, self).on_change_loss_desc()
         self.with_end_date = self.get_with_end_date('')
         self.loss_desc_code = self.loss_desc.code if self.loss_desc else ''
         if (self.loss_desc and self.event_desc
