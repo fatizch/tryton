@@ -69,3 +69,15 @@ class Invoice:
                 if sepa_mandate:
                     mandate_per_invoices[invoice.id] = sepa_mandate.id
         return mandate_per_invoices
+
+    @classmethod
+    def search_sepa_mandate(cls, name, clause):
+        assert clause[1] == '='
+        return [('move.lines', 'where', [
+                    [('payment_date', '!=', None)],
+                    ['AND',
+                        [('payments.state', 'in',
+                                ['approved', 'processing', 'succeeded'])],
+                        [('payments.sepa_mandate',) + tuple(clause[1:])],
+                        [('contract.billing_informations.sepa_mandate',) +
+                            tuple(clause[1:])]]])]

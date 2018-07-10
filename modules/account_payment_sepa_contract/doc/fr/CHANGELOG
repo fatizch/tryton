@@ -1,3 +1,4 @@
+* BUG#9171 Ajout d'un searcher sur le champ sepa mandate des invoices
 * BUG#9120 Fix mandate initialization when activating non-billed contracts
 * BUG#8828 Ajouter une nouvelle méthode d'initialisation d'un nouveau mandat à partir de données du contrat
 
