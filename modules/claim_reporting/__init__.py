@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
+import claim
 import wizard
 import report_engine
 import batch
@@ -10,6 +11,7 @@ import party
 
 def register():
     Pool.register(
+        claim.ClaimService,
         wizard.InsurerReportClaimConfigure,
         wizard.InsurerReportClaimResult,
         report_engine.ReportTemplate,

@@ -1,3 +1,4 @@
+* BUG#9290 Rendre les prestations imprimables
 * BUG#9019 Correction du commit d5f56ad: mauvaise cible sur le champ Many2Many claim_stock_reports
 * BUG#9019 Ajouter un searcher sur le champ claim_stock_reports
 

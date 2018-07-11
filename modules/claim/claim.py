@@ -996,15 +996,6 @@ class ClaimService(model.CoogSQL, model.CoogView,
                 self.extra_datas = [x for x in self.extra_datas
                     if not x.date or x.date < at_date] + [extra_data]
 
-    def get_contact(self):
-        return self.claim.claimant if self.claim else None
-
-    def get_sender(self):
-        return None
-
-    def get_object_for_contact(self):
-        return None
-
     def find_extra_data_value(self, name, **kwargs):
         extra_data = utils.get_value_at_date(self.extra_datas, kwargs.get(
                 'date', utils.today()))
