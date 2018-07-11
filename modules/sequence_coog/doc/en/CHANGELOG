@@ -1,3 +1,5 @@
+* BUG#9338 Update of the sequence view list following the merge of tryton 4.8
+
 Version 2.0 - 2018-04-13
 * BUG#7958 Block the number next update on sequences with sub sequences
 * BUG#7912 The error is no more raised in the sequence form if there is no matching sub sequence at the current date
