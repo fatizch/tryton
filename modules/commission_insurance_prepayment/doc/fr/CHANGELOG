@@ -1,3 +1,4 @@
+* BUG#9262 Ajout du rattrapage d'amortissement dans le traitement de synchronisation du précompte 
 * OTH#0000 Correctif du batch de synchronisation du précompte
 * BUG#8871 Traitement différent pour les commission linéaires payées: création d'une ligne d'ajustement
 * BUG#8836 Ne pas générer de lignes d'ajustements de prècompte si la différence entre les commissions payées et le total de l'amortissement de précompte est de l'ordre de quelques millièmes de centimes

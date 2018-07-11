@@ -8,11 +8,41 @@ from trytond.modules.coog_core import model, fields
 
 
 __all__ = [
+    'PrepaymentSyncShowRedeemedInconsistency',
     'PrepaymentSyncShowDisplayer',
     'PrepaymentSyncResult',
     'PrepaymentSyncShow',
     'PrepaymentSync'
     ]
+
+
+class PrepaymentSyncShowRedeemedInconsistency(model.CoogView):
+    'Prepayment Sync Show Reedemed Inconsistency'
+    __name__ = 'prepayment.sync.show.redeemed'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    agent = fields.Many2One('commission.agent', 'Agent', readonly=True)
+    commissions = fields.Many2Many('commission', None, None, 'Commissions',
+        readonly=True)
+    consistency = fields.Integer('Consistency', readonly=True)
+    line = fields.Many2One('account.invoice.line', 'Line', readonly=True)
+    start = fields.Date('Start', readonly=True)
+    end = fields.Date('End', readonly=True)
+    description = fields.Text('Description', readonly=True)
+    code = fields.Text('Codes', readonly=True)
+
+    def as_dict(self):
+        return {
+            'contract': self.contract.id,
+            'agent': self.agent.id,
+            'commissions': [x.id for x in self.commissions],
+            'consistency': self.consistency,
+            'line': self.line.id,
+            'start': self.start,
+            'end': self.end,
+            'description': self.description,
+            'code': self.code,
+            }
 
 
 class PrepaymentSyncShowDisplayer(model.CoogView):
@@ -38,6 +68,8 @@ class PrepaymentSyncShowDisplayer(model.CoogView):
     dates = fields.Char('Date(s)', readonly=True)
     description = fields.Text('Description', readonly=True)
     codes = fields.Text('Codes', readonly=True)
+    commissions = fields.Many2Many('commission', None, None, 'Commissions',
+        readonly=True)
 
     def as_dict(self):
         return {
@@ -54,6 +86,7 @@ class PrepaymentSyncShowDisplayer(model.CoogView):
             'dates': self.dates,
             'description': self.description,
             'codes': self.codes,
+            'commissions': [x.id for x in self.commissions],
             }
 
 
@@ -73,6 +106,8 @@ class PrepaymentSyncShow(model.CoogView):
 
     commissions = fields.One2Many('prepayment.sync.show.displayer',
         None, 'Commissions', readonly=True)
+    inconsistencies = fields.One2Many('prepayment.sync.show.redeemed',
+        None, 'Inconsistencies', readonly=True)
 
 
 class PrepaymentSync(model.CoogWizard):
@@ -102,28 +137,42 @@ class PrepaymentSync(model.CoogWizard):
         for deviation in deviations:
             deviation['dates'] = ', '.join(deviation['dates'])
         self.prepayment_view.commissions = deviations
+        inconsistencies = contract.check_for_redeemned_inconsistencies(
+            deviations)
+        self.prepayment_view.inconsistencies = inconsistencies
         return 'prepayment_view'
 
     def default_prepayment_view(self, values):
         return {
             'commissions': [x.as_dict()
                 for x in self.prepayment_view.commissions],
+            'inconsistencies': [x.as_dict()
+                for x in self.prepayment_view.inconsistencies],
             }
 
     def transition_synchronize(self):
         deviations = [x.as_dict() for x in self.prepayment_view.commissions]
-        Contract = Pool().get('contract')
+        pool = Pool()
+        Contract = pool.get('contract')
+        Commission = pool.get('commission')
         for deviation in deviations:
             deviation['codes'] = [{'code': x, 'description': desc or ''}
                 for x, desc in zip(
                     deviation['codes'].split('\n'),
                     deviation['description'].split('\n'))]
             deviation['contract'] = Contract(deviation['contract'])
+            deviation['commissions'] = tuple(Commission.browse(
+                    deviation['commissions']))
         adjusted, non_adjusted, _ = Pool().get('contract'
             ).try_adjust_prepayments(deviations)
         Contract = Pool().get('contract')
         Contract._add_prepayment_deviations_description(adjusted)
         Contract._add_prepayment_deviations_description(non_adjusted)
+        inconsistencies = [x.as_dict()
+            for x in self.prepayment_view.inconsistencies]
+        for obj in inconsistencies:
+            obj['commissions'] = tuple(Commission.browse(obj['commissions']))
+        Contract.resolve_redeemed_inconsistencies(inconsistencies)
         self.result.adjusted = adjusted
         self.result.non_adjusted = non_adjusted
         return 'result'

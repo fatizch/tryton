@@ -5,6 +5,7 @@ from itertools import groupby
 from collections import defaultdict
 
 from decimal import Decimal
+from decimal import ROUND_UP
 from dateutil.relativedelta import relativedelta
 
 from trytond.pool import PoolMeta, Pool
@@ -295,6 +296,42 @@ class Contract:
         return computed_amount
 
     @classmethod
+    def _group_origin_and_protocol(cls, com):
+        return (com.agent, com.origin, com.start, com.end)
+
+    def check_for_redeemned_inconsistencies(self, deviations):
+        inconsistencies = []
+        commissions = sum([x['commissions'] for x in deviations], [])
+        commissions = [x for x in commissions
+            if x.origin and x.origin.__name__ == 'account.invoice.line' and
+            x.redeemed_prepayment]
+        commissions = sorted(commissions, key=self._group_origin_and_protocol)
+        for key, grouped_coms in groupby(commissions,
+                key=self._group_origin_and_protocol):
+            consistency = 0
+            agent, origin, start, end = key
+            grouped_coms = list(grouped_coms)
+            consistency = sum([1 if x.redeemed_prepayment > 0 else -1 for x in
+                    grouped_coms])
+            if consistency not in (0, 1):
+                if consistency > 1:
+                    description = 'Too much redeemed'
+                else:
+                    description = 'Too few redeemed'
+                inconsistencies.append({
+                        'contract': self,
+                        'commissions': grouped_coms,
+                        'consistency': consistency,
+                        'line': origin,
+                        'agent': agent,
+                        'start': start,
+                        'end': end,
+                        'description': description,
+                        'code': 'KO',
+                        })
+        return inconsistencies
+
+    @classmethod
     def get_prepayment_deviations(cls, contracts):
         Commission = Pool().get('commission')
         commissions = Commission.search([
@@ -336,6 +373,7 @@ class Contract:
                     'number_of_date': len(dates),
                     'dates': dates,
                     'codes': codes,
+                    'commissions': grouped_commissions,
                     })
         return per_contracts
 
@@ -455,6 +493,63 @@ class Contract:
                 if dev not in frozen_adjusted)]
         deviations = [_unfreeze(dev) for dev in deviations]
         return list(adjusted_set), list(non_adjusted_set), list(deviations)
+
+    @classmethod
+    def resolve_redeemed_inconsistencies(cls, inconsistencies):
+        Commission = Pool().get('commission')
+        per_obj = {}
+
+        def _freeze(inconsistency):
+            inconsistency['commissions'] = frozenset(
+                inconsistency['commissions'])
+            inconsistency = frozenset(inconsistency.items())
+            return inconsistency
+
+        def _unfreeze(inconsistency):
+            inconsistency = dict(inconsistency)
+            inconsistency['commissions'] = [x for x in
+                inconsistency['commissions']]
+            return inconsistency
+
+        for obj in inconsistencies:
+            commissions = iter(sorted(obj['commissions'],
+                key=lambda x: x.create_date))
+            key = _freeze(obj)
+            per_obj[key] = []
+            # commissions is an iterator so this zip allow us to iterate over
+            # commissions two by two in a sexy way
+            for com1, com2 in zip(commissions, commissions):
+                if (abs(com1.redeemed_prepayment) !=
+                        abs(com2.redeemed_prepayment)):
+                    obj['description'] = 'Manual action required (could not '\
+                        'automatically cancel redeemed together)'
+                    # Ignore all the line commissions
+                    per_obj[key] = []
+                    break
+                if (com1.amount.quantize(Decimal('.0001'),
+                            rounding=ROUND_UP) != Decimal(0) or
+                        com2.amount.quantize(Decimal('.0001'),
+                            rounding=ROUND_UP) != Decimal(0)):
+                    obj['description'] = 'Manual action required (redeemed '\
+                        ' with commission amount)'
+                    # Ignore all the line commissions
+                    per_obj[key] = []
+                    break
+                if com1.redeemed_prepayment + com2.redeemed_prepayment == 0:
+                    continue
+                else:
+                    com1.redeemed_prepayment = abs(com1.redeemed_prepayment)
+                    com2.redeemed_prepayment = (com2.redeemed_prepayment * -1
+                        if com2.redeemed_prepayment > 0
+                        else com2.redeemed_prepayment)
+                per_obj[key].extend([com1, com2])
+        to_save = sum(per_obj.values(), [])
+        if to_save:
+            Commission.save(to_save)
+
+        return [_unfreeze(k) for k, v in per_obj.items() if v], [
+            _unfreeze(k) for k, v in per_obj.items() if not v], [
+            _unfreeze(x) for x in per_obj.keys()]
 
     @classmethod
     def _add_prepayment_deviations_description(cls, deviations):

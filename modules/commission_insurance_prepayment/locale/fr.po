@@ -115,6 +115,10 @@ msgctxt "field:prepayment.sync.show.displayer,codes:"
 msgid "Codes"
 msgstr "Codes"
 
+msgctxt "field:prepayment.sync.show.displayer,commissions:"
+msgid "Commissions"
+msgstr "Commissions"
+
 msgctxt "field:prepayment.sync.show.displayer,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -159,6 +163,30 @@ msgctxt "field:prepayment.sync.show.displayer,theoretical_amount_today:"
 msgid "Real Recalculated Amount Based"
 msgstr "Montant réel recalculé"
 
+msgctxt "field:prepayment.sync.show.redeemed,agent:"
+msgid "Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "field:prepayment.sync.show.redeemed,commissions:"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "field:prepayment.sync.show.redeemed,consistency:"
+msgid "Consistency"
+msgstr "Consistance"
+
+msgctxt "field:prepayment.sync.show.redeemed,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:prepayment.sync.show.redeemed,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:prepayment.sync.show.redeemed,line:"
+msgid "Line"
+msgstr "Ligne"
+
 msgctxt "field:prepayment.sync.show_prepayment,commissions:"
 msgid "Commissions"
 msgstr "Commissions"
@@ -166,6 +194,10 @@ msgstr "Commissions"
 msgctxt "field:prepayment.sync.show_prepayment,id:"
 msgid "ID"
 msgstr "Identifiant"
+
+msgctxt "field:prepayment.sync.show_prepayment,inconsistencies:"
+msgid "Inconsistencies"
+msgstr "Inconsistances"
 
 msgctxt "field:prepayment.sync.show_result,adjusted:"
 msgid "Adjusted"
@@ -234,6 +266,10 @@ msgstr "Relation configuration - motif de résiliation"
 msgctxt "model:prepayment.sync.show.displayer,name:"
 msgid "Prepayment Sync Show Displayer"
 msgstr "Objet d'affichage de synchronisation du précompte"
+
+msgctxt "model:prepayment.sync.show.redeemed,name:"
+msgid "Prepayment Sync Show Reedemed Inconsistency"
+msgstr "Syncronisation des inconsistances de l'amortissement du précompte"
 
 msgctxt "model:prepayment.sync.show_prepayment,name:"
 msgid "Prepayment Sync Show"

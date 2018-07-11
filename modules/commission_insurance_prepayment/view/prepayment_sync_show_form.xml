@@ -3,4 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <form>
     <field name="commissions" colspan="4" mode="tree" expand_toolbar="0"/>
+    <label name="inconsistencies"/>
+    <field name="inconsistencies" colspan="4" mode="tree" expand_toolbar="0"/>
 </form>

@@ -25,10 +25,12 @@ def register():
         invoice.Invoice,
         event.Event,
         rule_engine.RuleEngineRuntime,
+        wizard.PrepaymentSyncShowRedeemedInconsistency,
         wizard.PrepaymentSyncShowDisplayer,
         wizard.PrepaymentSyncResult,
         wizard.PrepaymentSyncShow,
         batch.DesynchronizedPrepaymentReport,
+        batch.DesynchronizedRedeemedReport,
         module='commission_insurance_prepayment', type_='model')
     Pool.register(
         commission.FilterCommissions,

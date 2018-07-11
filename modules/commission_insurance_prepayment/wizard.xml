@@ -11,6 +11,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">prepayment_sync_show_displayer_list</field>
         </record>
+        <record model="ir.ui.view" id="prepayment_sync_show_redeemed_view_list">
+            <field name="model">prepayment.sync.show.redeemed</field>
+            <field name="type">tree</field>
+            <field name="name">prepayment_sync_show_redeemed_list</field>
+        </record>
         <record model="ir.ui.view" id="prepayment_sync_show_view_form">
             <field name="model">prepayment.sync.show_prepayment</field>
             <field name="type">form</field>
