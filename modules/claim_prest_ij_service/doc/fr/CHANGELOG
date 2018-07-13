@@ -1,3 +1,4 @@
+* BUG#9381 Suppression d'un code obsolète: ij_subscriptions sur un tiers
 * BUG#9381 Correction de l'ordre de traitement des BPIJ dans l'assistant engendrant une mauvais initialisation des périodes d'indemnisation.
 * BUG#9409 Correction du bouton de création de nouvelle période d'indemnisation
 * BUG#9279 Correction des warnings lors du build de coog

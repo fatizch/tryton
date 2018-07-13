@@ -4,7 +4,6 @@ from trytond.pool import Pool
 import claim
 import benefit
 import wizard
-import party
 import batch
 import process
 import rule_engine
@@ -28,7 +27,6 @@ def register():
         wizard.TreatIjPeriodSelectLine,
         wizard.IndemnificationDefinition,
         configuration.ClaimConfiguration,
-        party.Party,
         rule_engine.RuleRuntime,
         batch.CreatePrestIjSubscription,
         batch.SubmitPersonPrestIjSubscription,
