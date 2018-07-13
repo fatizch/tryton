@@ -18,7 +18,7 @@ class Party:
             'Ij Subscription'), 'getter_claim_ij_subscription')
 
     def getter_claim_ij_subscription(self, name=None):
-        if not self.ssn and not self.ssn:
+        if not self.ssn and not self.siren:
             return None
         return [x.id for x in Pool().get('claim.ij.subscription').search(
                 [

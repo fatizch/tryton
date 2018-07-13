@@ -310,7 +310,9 @@ class TreatIjPeriod(Wizard):
                 context['active_ids'])
         else:
             raise NotImplementedError
-
+        # order based on start_date else automatic algorithme will not work
+        periods = sorted(periods, key=lambda x: (x.start_date, x.create_date),
+            reverse=True)
         dictionarize_fields = {
             'claim.ij.period': [
                 'sign', 'period_kind', 'start_date', 'end_date', 'main_kind',
