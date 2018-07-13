@@ -5,7 +5,7 @@ import datetime
 from collections import defaultdict
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 from trytond.server_context import ServerContext
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateTransition, StateView, \
@@ -496,12 +496,18 @@ class CreateIndemnification:
     @classmethod
     def __setup__(cls):
         super(CreateIndemnification, cls).__setup__()
-        states = cls.select_service.buttons[-1].states
-        new_invisible = ~Eval('prestij_periods')
-        if 'invisible' in states:
-            states &= new_invisible
-        else:
-            states['invisible'] = new_invisible
+        button = None
+        for btn in cls.definition.buttons:
+            if btn.state == 'select_service':
+                button = btn
+                break
+        if button:
+            states = button.states
+            new_invisible = Bool(Eval('prestij_periods'))
+            if 'invisible' in states:
+                states &= new_invisible
+            else:
+                states['invisible'] = new_invisible
 
     def transition_select_service_needed(self):
         if 'prestij_periods' not in Transaction().context:

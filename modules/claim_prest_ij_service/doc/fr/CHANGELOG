@@ -1,16 +1,17 @@
-* BUG#9279: Correction des warnings lors du build de coog
-* OTH#0000: Passer les paramètres de la chaine BPIJ au batch
-* OTH#0000: Modification de l'ordre d'affichage des BPIJ et correction d'un crash lors du traitement des BPIJ
-* OTH#0000: Ne pas créer des demandes d'inscription pour les sociétés si l'ensemble des contrats sont résiliés
-* FEA#9010: Intégration des périodes depuis un fichier
-* OTH#0000: Correction de l'ordre de déclaration de claimIJSubscription dans __init__
-* OTH#0000: Correction d'un crash dans le batch d'inscription lorsqu'aucune franchise n'est définie
-* OTH#0000: Ajout de traductions manquantes et correction de l'icone de l'assitant de création des périodes de souscription
-* OTH#0000: Ajout de l'ID pour ordonner les demandes prestIJ
-* FEA#9172: Ajout d'un point d'entrée sur les groupes de demandes et corrections sur les batchs
-* OTH#0000: Correction de la génération des identifiants de fichiers
-* FEA#9011: Gestion des inscriptions des assurés auprès du service prest IJ
-* OTH#0000: Encodage en iso-8859-1 plutôt qu'en utf8
-* FEA#9049: Ajout de l'archivage, corrections et utilisation du siren (plusieurs sociétés par fiches d'inscription)
-* FEA#8862: Inscription des sociétés au service prest IJ
+* BUG#9409 Correction du bouton de création de nouvelle période d'indemnisation
+* BUG#9279 Correction des warnings lors du build de coog
+* OTH#0000 Passer les paramètres de la chaine BPIJ au batch
+* OTH#0000 Modification de l'ordre d'affichage des BPIJ et correction d'un crash lors du traitement des BPIJ
+* OTH#0000 Ne pas créer des demandes d'inscription pour les sociétés si l'ensemble des contrats sont résiliés
+* FEA#9010 Intégration des périodes depuis un fichier
+* OTH#0000 Correction de l'ordre de déclaration de claimIJSubscription dans __init__
+* OTH#0000 Correction d'un crash dans le batch d'inscription lorsqu'aucune franchise n'est définie
+* OTH#0000 Ajout de traductions manquantes et correction de l'icone de l'assitant de création des périodes de souscription
+* OTH#0000 Ajout de l'ID pour ordonner les demandes prestIJ
+* FEA#9172 Ajout d'un point d'entrée sur les groupes de demandes et corrections sur les batchs
+* OTH#0000 Correction de la génération des identifiants de fichiers
+* FEA#9011 Gestion des inscriptions des assurés auprès du service prest IJ
+* OTH#0000 Encodage en iso-8859-1 plutôt qu'en utf8
+* FEA#9049 Ajout de l'archivage, corrections et utilisation du siren (plusieurs sociétés par fiches d'inscription)
+* FEA#8862 Inscription des sociétés au service prest IJ
 * Creation du module

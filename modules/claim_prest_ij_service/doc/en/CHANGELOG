@@ -1,16 +1,17 @@
-* BUG#9279: Fix coog build warnings
-* OTH#0000: Send BPIJ chain parameter to batch
-* OTH#0000: Change BPIJ order and fix crash in BPIJ treatement
-* OTH#0000: Wrong creation of company suscription request once contract is terminated
-* FEA#9010: Create periods from received files
-* OTH#0000: Fix wrong declaration order of claimIJSubscription
-* OTH#0000: Fix submit batch when no deductible are defined
-* OTH#0000: Add missing translations and fix manual registration creation icon
-* OTH#0000: Add ID in prestIJ request order
-* FEA#9172: Add request group entry point and fix batchs
-* OTH#0000: Fix file identifier computation
-* FEA#9011: Handle covered subscriptions to the french prest IJ service
-* OTH#0000: Encoding in iso-8859-1 rather than utf8
-* FEA#9049: Add archiving, fixes and use siren (multiple companies per subscription)
-* FEA#8862: Register legal entity to the prest ij service
+* BUG#9409 Fix new indemnification period button 
+* BUG#9279 Fix coog build warnings
+* OTH#0000 Send BPIJ chain parameter to batch
+* OTH#0000 Change BPIJ order and fix crash in BPIJ treatement
+* OTH#0000 Wrong creation of company suscription request once contract is terminated
+* FEA#9010 Create periods from received files
+* OTH#0000 Fix wrong declaration order of claimIJSubscription
+* OTH#0000 Fix submit batch when no deductible are defined
+* OTH#0000 Add missing translations and fix manual registration creation icon
+* OTH#0000 Add ID in prestIJ request order
+* FEA#9172 Add request group entry point and fix batchs
+* OTH#0000 Fix file identifier computation
+* FEA#9011 Handle covered subscriptions to the french prest IJ service
+* OTH#0000 Encoding in iso-8859-1 rather than utf8
+* FEA#9049 Add archiving, fixes and use siren (multiple companies per subscription)
+* FEA#8862 Register legal entity to the prest ij service
 * Module creation
