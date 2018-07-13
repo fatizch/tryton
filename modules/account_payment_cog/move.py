@@ -183,7 +183,8 @@ class MoveLine:
         '''
         unpaid_amount = cls.unpaid_outstanding_amount(lines)
         processing_amount = cls.processing_payments_outstanding_amount(lines)
-        kind = lines[0].account.kind
+        kind = ('receivable' if sum([l.debit - l.credit for l in lines]) > 0
+            else 'payable')
         inverted_lines = []
         for line in lines:
             if (
