@@ -1,3 +1,4 @@
+* BUG#9407 Fix periods to avoid scheduling with a gap between the loss start date and the first indemnification period
 * BUG#9201 Display duplicates alert on indemnification before any other alert
 * BUG#9006 Filter indemnifications for the period overlap check
 * OTH#0000 Move method declaration to remove duplicate declaration and ease override
