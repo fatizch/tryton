@@ -66,7 +66,8 @@ class BenefitRule:
         dates = super(BenefitRule, cls).calculation_dates(indemnification,
             start_date, end_date)
         benefit_rule = indemnification.service.benefit.benefit_rules[0]
-        if not benefit_rule.process_revaluation_on_basic_salary:
+        if not benefit_rule.process_revaluation_on_basic_salary(
+                indemnification.service):
             return dates
         args = {
             'indemnification_detail_start_date': start_date,
