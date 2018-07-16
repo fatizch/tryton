@@ -23,6 +23,8 @@ this repository contains the full copyright notices and license terms. -->
         <field name="requests" mode="tree" expand_toolbar="0" yexpand="1" yfill="1" colspan="4"/>
         <separator name="requests_event_logs" colspan="4"/>
         <field name="requests_event_logs" mode="tree" expand_toolbar="0" yexpand="1" yfill="1" colspan="4"/>
+        <separator name="parties" colspan="4"/>
+        <field name="parties" expand_toolbar="0" yexpand="1" yfill="1" colspan="4"/>
     </group>
     <group id="invisible" col="4" colspan="4">
         <field name="activated" invisible="1"/>

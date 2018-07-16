@@ -577,7 +577,9 @@ class ClaimIjSubscription(CoogProcessFramework, model.CoogView):
     __name__ = 'claim.ij.subscription'
 
     parties = fields.Function(
-        fields.Many2Many('party.party', None, None, 'Parties'),
+        fields.Many2Many('party.party', None, None, 'Parties', states={
+            'invisible': Bool(Eval('ssn')),
+            }, depends=['ssn']),
         'getter_parties')
     party = fields.Function(
         fields.Many2One('party.party', 'Party', states={

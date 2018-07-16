@@ -4,6 +4,7 @@
 
 from trytond.pool import PoolMeta
 from trytond.cache import Cache
+from trytond.pyson import Eval
 
 from trytond.modules.coog_core import fields
 
@@ -25,7 +26,8 @@ class Benefit:
 
     prest_ij = fields.Boolean('Handle Prest IJ System',
         help='If set, the claims declared using this benefit will be handled '
-        'by the Prest IJ system')
+        'by the Prest IJ system',
+        states={'invisible': ~Eval('is_group')}, depends=['is_group'])
 
     _prest_ij_benefits_cache = Cache('prest_ij_benefits')
 

@@ -94,6 +94,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">claim_ij_period_list</field>
         </record>
+        <record model="ir.ui.view" id="claim_ij_period_with_party_view_list">
+            <field name="model">claim.ij.period</field>
+            <field name="type">tree</field>
+            <field name="name">claim_ij_period_with_party_list</field>
+        </record>
         <record model="ir.action.act_window" id="act_open_claim_ij_period">
             <field name="name">PrestIJ Period</field>
             <field name="res_model">claim.ij.period</field>
@@ -115,7 +120,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.action.act_window.view" id="act_open_all_claim_ij_period_view_list">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="claim_ij_period_view_list"/>
+            <field name="view" ref="claim_ij_period_with_party_view_list"/>
             <field name="act_window" ref="act_open_all_claim_ij_period"/>
         </record>
         <record model="ir.action.act_window.view" id="act_open_all_claim_ij_period_view_form">

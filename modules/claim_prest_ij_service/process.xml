@@ -43,6 +43,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="with_prev_next" eval="False"/>
             <field name="end_step_name">Terminer</field>
             <field name="hold_button">Mettre en attente</field>
+            <field name="postpone_button">Reporter</field>
             <field name="kind">prest_ij_treatment</field>
         </record>
         <record model="process-process.step" id="prest_ij_process_step_relation">
