@@ -3,11 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <record model="ir.ui.view" id="claim_process_tree_view">
-            <field name="model">claim</field>
-            <field name="name">claim_list</field>
-            <field name="inherit" ref="claim.claim_view_list"/>
-        </record>
         <record model="ir.ui.view" id="loss_services_view_form">
             <field name="model">claim.loss</field>
             <field name="type">form</field>

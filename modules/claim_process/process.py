@@ -157,6 +157,9 @@ class ClaimDeclareFindProcess(ProcessStart):
             return
 
         force_claim = Transaction().context.get('force_claim', None)
+        if (not force_claim and
+                Transaction().context.get('active_model', None) == 'claim'):
+            force_claim = Transaction().context.get('active_id', None)
         available_claims = Claim.search([
                 ('claimant', '=', self.party)],
             order=[('declaration_date', 'DESC')])
@@ -237,6 +240,13 @@ class ClaimDeclare(ProcessFinder):
                 return {
                     'party': contract.subscriber.id,
                     }
+        elif active_model == 'claim':
+            claim_id = Transaction().context.get('active_id', None)
+            claim = Pool().get('claim')(claim_id)
+            return {
+                'party': claim.claimant.id,
+                }
+
         return {}
 
     def transition_confirm_declaration(self):

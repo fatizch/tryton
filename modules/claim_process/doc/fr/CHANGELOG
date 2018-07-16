@@ -1,3 +1,5 @@
+* FEA#9423 Lancer un processus depuis un sinistre
+
 Version 2.0 - 2018-04-13
 * FEA#8126 Ajout d'un nouveau processus de sinistre pour déclaration et réouverture
 * FEA#8116 Ajout de la colonne nom du sinistre dans la vue liste des sinistres au début du processus de déclaration
