@@ -1,3 +1,5 @@
+* BUG#9278 Ajout d'un searcher sur le rec_name de process-process-step
+
 Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
 * BUG#6995 Correction d'un crash technique sur l'appel parent de la méthode __getattr__ du mixin ClassAttr

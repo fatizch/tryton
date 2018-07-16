@@ -101,6 +101,16 @@ class ProcessStepRelation(export.ExportImportMixin, ModelSQL, ModelView):
         return res
 
     @classmethod
+    def search_rec_name(cls, name, clause):
+        assert clause[1] in ('=', 'like', 'ilike')
+        return ['OR',
+                [('step.fancy_name',) + tuple(clause[1:])],
+                [('status', '!=', None),
+                    ('status.name',) + tuple(clause[1:])],
+                [('process.fancy_name',) + tuple(clause[1:])],
+                ]
+
+    @classmethod
     def delete(cls, relations):
         pool = Pool()
         Lang = pool.get('ir.lang')
