@@ -787,7 +787,10 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
     def get_field_value_at_date(self, at_date, name='start_date'):
         version = utils.get_good_version_at_date(self, 'activation_history',
             at_date)
-        return getattr(version, name)
+        if version:
+            return getattr(version, name)
+        elif name == 'start_date':
+            return self.initial_start_date
 
     @fields.depends('product', 'options', 'start_date', 'extra_datas',
         'signature_date', 'appliable_conditions_date')
