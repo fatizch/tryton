@@ -1,6 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
+from trytond.model import Workflow
+
+from trytond.modules.coog_core import model
 
 
 __all__ = [
@@ -14,6 +17,8 @@ class Payment:
     __name__ = 'account.payment'
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('succeeded')
     def succeed(cls, payments):
         super(Payment, cls).succeed(payments)
         parties = list({x.party for x in payments if not x.line.reconciliation

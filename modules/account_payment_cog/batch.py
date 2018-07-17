@@ -501,6 +501,7 @@ class PaymentSucceedBatch(PaymentValidationBatchBase):
         super(PaymentSucceedBatch, cls).__setup__()
         cls._default_config_items.update({
                 'payment_kind': '',
+                'job_size': '100',
                 })
 
     @classmethod
@@ -526,21 +527,17 @@ class PaymentSucceedBatch(PaymentValidationBatchBase):
         Payment = pool.get('account.payment')
         cursor = Transaction().connection.cursor()
         payment = Payment.__table__()
-        payments_per_group = defaultdict(list)
 
         group_ids = [x[0] for x in
             super(PaymentSucceedBatch, cls).select_ids(**kwargs)]
 
         if group_ids:
-            cursor.execute(*payment.select(payment.group, payment.id,
+            cursor.execute(*payment.select(payment.id,
                     where=payment.group.in_(group_ids) &
                     (payment.state == 'processing')))
-            for group, payment in cursor.fetchall():
-                payments_per_group[group].append(payment)
-            for group, payments in payments_per_group.iteritems():
-                yield [(x,) for x in payments]
+            return cursor.fetchall()
         if not group_ids:
-            yield []
+            return []
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, group_reference=None,

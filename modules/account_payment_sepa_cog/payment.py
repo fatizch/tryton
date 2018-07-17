@@ -16,6 +16,7 @@ import genshi
 import genshi.template
 
 from trytond import backend
+from trytond.model import Workflow
 from trytond.config import config
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or, Bool, If
@@ -582,6 +583,8 @@ class Payment:
         return code
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('succeeded')
     def succeed(cls, payments):
         super(Payment, cls).succeed(payments)
         to_update = [p for p in payments

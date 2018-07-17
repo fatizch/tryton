@@ -1,10 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.model import ModelView, Workflow
+from trytond.model import Workflow
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, model
 
 
 __all__ = [
@@ -56,6 +56,8 @@ class Payment:
         return move
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('succeeded')
     def succeed(cls, payments):
         pool = Pool()
         Move = pool.get('account.move')
@@ -86,7 +88,7 @@ class Payment:
             Move.post(to_post)
 
     @classmethod
-    @ModelView.button
+    @model.CoogView.button
     @Workflow.transition('failed')
     def fail(cls, payments):
         pool = Pool()
