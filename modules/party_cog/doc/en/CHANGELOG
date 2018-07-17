@@ -1,3 +1,4 @@
+* BUG#8587 Order contact mechanisms by descending ids
 * BUG#6767 Only display field all_addresses in party form
 * BUG#9200 Fix crash following update with JSON import (regression following #8858)
 * BUG#8934 Remove last_name and company_name and use group around field instead

@@ -31,6 +31,9 @@ class ContactMechanism(export.ExportImportMixin):
         super(ContactMechanism, cls).__setup__()
         cls.type_string = cls.type.translated('type')
 
+        # The most recent value should appear first
+        cls._order.insert(1, ('id', 'DESC'))
+
         # TODO : Make it cleaner
         if ('skype', 'Skype') in cls.type.selection:
             cls.type.selection.remove(('skype', 'Skype'))
