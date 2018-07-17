@@ -532,6 +532,7 @@ class Reconciliation:
                 'unreconcile_cancel_move': 'You cannot unreconcile lines '
                 'which are part of a cancelled move',
                 })
+        cls._order = [('id', 'DESC')]
 
     @classmethod
     def create_reconciliations_from_lines(cls, packet_lines):
