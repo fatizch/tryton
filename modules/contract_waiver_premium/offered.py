@@ -9,16 +9,80 @@ from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Bool, Eval
 from trytond.transaction import Transaction
+from trytond.cache import Cache
 
 from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.rule_engine import get_rule_mixin
 
 
 __all__ = [
+    'Product',
     'OptionDescription',
     'WaiverPremiumRule',
     'WaiverPremiumRuleTaxRelation',
     ]
+
+
+class Product:
+    __metaclass__ = PoolMeta
+    __name__ = 'offered.product'
+
+    _must_invoice_after_contract_end_cache = Cache(
+        '_must_invoice_after_contract')
+
+    @property
+    def _must_invoice_after_contract(self):
+        '''
+            The goal of this method is to detect a specific configuration case,
+            in order to behave properly when the associated contracts are
+            terminated.
+
+            The case is as follow:
+                - The global configuration for prorating premiums is
+                  deactivated
+                - There are waivers configured on the coverages that must be
+                  prorated
+
+            The edge case we want to fix is:
+                - A 300 $ invoice paid quarterly is due from the 01-01 to the
+                  03-31
+                - There is a prorated waiver on this invoice from the 02-01 to
+                  the 03-31
+            The expected amount is 300 * (1 - 2/3) == 100 $, which is indeed
+            the case.
+
+            The problem occurs if the contract is terminated for instance the
+            01-15. The invoice is then calculated from the 01-01 to the 01-15,
+            and is worth 300 $ since the premium is not prorated. However,
+            because the invoice ends on the 01-15, the waiver is not used, so
+            the user have to actually pay 300 $ for a 15 days invoice.
+
+            The proposed solution is, in this specific case, to ignore the
+            contract end date when calculating the last invoice period, and use
+            the full calculated period. So in the previous example, the invoice
+            period would actually be 01-01 to 03-31, even though the contract
+            terminates on the 01-15. Doing so will make it be calculated as
+            expected.
+        '''
+        value = self.__class__._must_invoice_after_contract_end_cache.get(
+            self.id, -1)
+        if value != -1:
+            return value
+        if Pool().get('offered.configuration').get_cached_prorate_premiums():
+            self.__class__._must_invoice_after_contract_end_cache.set(
+                self.id, False)
+            return False
+        for coverage in self.coverages:
+            if not coverage.with_waiver_of_premium:
+                continue
+            if (coverage.waiver_premium_rule[0].invoice_line_period_behaviour ==
+                    'proportion'):
+                self.__class__._must_invoice_after_contract_end_cache.set(
+                    self.id, True)
+                return True
+        self.__class__._must_invoice_after_contract_end_cache.set(
+            self.id, False)
+        return False
 
 
 class OptionDescription:

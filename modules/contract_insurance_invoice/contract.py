@@ -672,7 +672,7 @@ class Contract:
     def get_invoice_periods(self, up_to_date, from_date=None):
         if not self.billing_informations:
             return []
-        contract_end_date = self.activation_history[-1].end_date
+        final_date = self._calculate_final_invoice_end_date()
         if from_date:
             start = max(from_date, self.initial_start_date)
         elif self.last_invoice_end:
@@ -694,15 +694,15 @@ class Contract:
                 if date <= start:
                     continue
                 end = date + relativedelta(days=-1)
-                periods.append((start, min(end, contract_end_date or
+                periods.append((start, min(end, final_date or
                             datetime.date.max), billing_information))
                 start = date
                 if not up_to_date or start > up_to_date:
                     break
             if until and (up_to_date and until < up_to_date):
-                if contract_end_date and contract_end_date < up_to_date:
-                    if until > contract_end_date:
-                        until = contract_end_date
+                if final_date and final_date < up_to_date:
+                    if until > final_date:
+                        until = final_date
                 if start != until:
                     end = until + relativedelta(days=-1)
                     periods.append((start, end, billing_information))
@@ -716,6 +716,9 @@ class Contract:
                 else:
                     raise NotImplementedError
         return periods
+
+    def _calculate_final_invoice_end_date(self):
+        return self.activation_history[-1].end_date
 
     @classmethod
     def clean_up_contract_invoices(cls, contracts, from_date=None,
@@ -1253,6 +1256,10 @@ class Contract:
     def do_decline(cls, contracts, reason):
         super(Contract, cls).do_decline(contracts, reason)
         cls.clean_up_contract_invoices(contracts, from_date=datetime.date.min)
+
+    def _billing_information_at_date(self, date):
+        return utils.get_good_version_at_date(self, 'billing_informations',
+            at_date=date, start_var_name='date')
 
     ###########################################################################
     # Cached invoices calculation to speed up future payments wizard,         #

@@ -15,6 +15,7 @@ def register():
     Pool.register(
         waiver.WaiverPremium,
         waiver.WaiverPremiumOption,
+        offered.Product,
         offered.OptionDescription,
         offered.WaiverPremiumRule,
         offered.WaiverPremiumRuleTaxRelation,
