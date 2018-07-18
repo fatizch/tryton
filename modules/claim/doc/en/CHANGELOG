@@ -1,3 +1,4 @@
+* FEA#9439 Sort claims by last modified first
 * BUG#9377 Update extra data when switching loss description
 * FEA#8832 Replace 'hpaned' position attribute with 'group'
 * BUG#8786 Set claim readonly when closed

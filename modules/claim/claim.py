@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
+from sql.conditionals import Coalesce
 
 from trytond.rpc import RPC
 from trytond.pyson import Eval, Bool, Or
@@ -84,6 +85,8 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
     losses_description = fields.Function(
         fields.Char('Losses Description'), 'get_losses_description')
     icon = fields.Function(fields.Char('Icon'), 'get_icon')
+    last_modification = fields.Function(fields.DateTime('Last Modification'),
+        'get_last_modification')
 
     @classmethod
     def __setup__(cls):
@@ -96,6 +99,7 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
                 'loss_desc_mixin': 'You can not close multiple claims '
                 'with different loss descriptions at the same time',
                 })
+        cls._order.insert(0, ('last_modification', 'DESC'))
         t = cls.__table__()
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.name), 'The number must be unique!'),
@@ -165,6 +169,15 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
         if 'open' in self.status:
             return 'flash_blue'
         return 'claim'
+
+    def get_last_modification(self, name):
+        return (self.write_date if self.write_date else self.create_date
+            ).replace(microsecond=0)
+
+    @staticmethod
+    def order_last_modification(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.write_date, table.create_date)]
 
     @classmethod
     def validate(cls, claims):
