@@ -900,7 +900,7 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
     # The "required" on end_date is not in the specification, but we do not
     # handle this case for now
     end_date = fields.Date('End Date', required=True, domain=[
-            ('end_date', '>', Eval('start_date'))], depends=['start_date'],
+            ('end_date', '>=', Eval('start_date'))], depends=['start_date'],
         readonly=True)
     beneficiary_kind = fields.Selection([
             ('party', 'Party'), ('company', 'Company')], 'Beneficiary Kind',

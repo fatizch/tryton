@@ -1,3 +1,4 @@
+* BUG#9461 Permettre de recevoir une BPIJ d'une journée
 * OTH#0000 Amélioration affichage
 * BUG#9381 Suppression d'un code obsolète: ij_subscriptions sur un tiers
 * BUG#9381 Correction de l'ordre de traitement des BPIJ dans l'assistant engendrant une mauvais initialisation des périodes d'indemnisation.

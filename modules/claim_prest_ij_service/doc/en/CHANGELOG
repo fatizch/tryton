@@ -1,3 +1,4 @@
+* BUG#9461 Allow one day BPIJ period
 * OTH#0000 Improve UI
 * BUG#9381 Remove unused code: ij_subscriptions on party
 * BUG#9381 Fix claim_ij_period order in wizard resulting in indemnification period initialization error
