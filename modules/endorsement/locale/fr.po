@@ -191,6 +191,10 @@ msgstr ""
 "La règle %s définie sur l'avenant %s ne vous permet pas de créer un avenant "
 "avec ces paramètres."
 
+msgctxt "error:endorsement.start:"
+msgid "You are not allowed to apply endorsements"
+msgstr "Vous n'êtes pas autorisé à appliquer des avenants"
+
 msgctxt "error:endorsement.sub_state:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"

@@ -2103,7 +2103,9 @@ class StartEndorsement(Wizard):
                 'endorsement definition',
                 'creation_not_allowed': 'The rule %s defined on endorsement %s '
                 'does not allow you to create an endorsement '
-                'with these parameters.'
+                'with these parameters.',
+                'apply_button_access_right': 'You are not allowed to apply '
+                'endorsements',
                 })
 
     @property
@@ -2224,8 +2226,12 @@ class StartEndorsement(Wizard):
 
     def transition_apply_endorsement(self):
         Endorsement = Pool().get('endorsement')
-        with Transaction().set_context(_check_access=True):
-            Endorsement.apply([self.endorsement])
+        # this method is called on asynchronous endorsements too,
+        # the button is called apply_synchronous instead of apply but is
+        # called on both ways
+        if not utils.check_button_access('endorsement', 'apply_synchronous'):
+            self.raise_user_error('apply_button_access_right')
+        Endorsement.apply([self.endorsement])
         # Look for possibly created endorsements
         next_endorsements = Endorsement.search([
                 ('generated_by', '=', self.endorsement)])

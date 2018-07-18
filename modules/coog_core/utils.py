@@ -797,3 +797,21 @@ def get_prorated_amount_on_period(start, end, frequency, value, sync_date,
         elif (end - last_date).days + 1 != 0:
             return_value += value
     return return_value
+
+
+def check_button_access(model_name, button_name):
+    '''
+    This method raises an error if the current user has no access for the button
+    button_name on the model model_name
+    '''
+    pool = Pool()
+    User = pool.get('res.user')
+    Button = pool.get('ir.model.button')
+    transaction = Transaction()
+    if (transaction.user != 0):
+        groups = set(User.get_groups())
+        button_groups = Button.get_groups(model_name, button_name)
+        if button_groups:
+            if not groups & button_groups:
+                return False
+    return True
