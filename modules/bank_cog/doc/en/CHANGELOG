@@ -1,3 +1,6 @@
+* BUG#9441 Bank should not be a person
+* BUG#9441 Sort banks by last modified first
+
 Version 2.0 - 2018-04-13
 * BUG#7978 Fix crash when deleting a bank account used in other objects
 

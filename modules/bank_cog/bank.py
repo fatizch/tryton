@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from sql.conditionals import Coalesce
+
 from trytond.pool import Pool, PoolMeta
 from trytond.model import fields as tryton_fields, Unique
 from trytond.pyson import Eval
@@ -23,6 +25,8 @@ class Bank(export.ExportImportMixin):
     address = fields.Many2One('party.address', 'Address',
         domain=[('party', '=', Eval('party'))], depends=['party'],
         ondelete='RESTRICT')
+    last_modification = fields.Function(fields.DateTime('Last Modification'),
+        'get_last_modification')
 
     @classmethod
     def __setup__(cls):
@@ -35,6 +39,8 @@ class Bank(export.ExportImportMixin):
                 'invalid_bic': ('Invalid BIC : %s'),
                 })
         cls.bic.select = True
+        cls._order.insert(0, ('last_modification', 'DESC'))
+        cls.party.domain += [('is_person', '=', False)]
 
     @classmethod
     def create(cls, vlist):
@@ -62,6 +68,15 @@ class Bank(export.ExportImportMixin):
     def get_rec_name(self, name):
         res = '[%s] %s' % (self.bic, self.party.name if self.party else '')
         return res
+
+    def get_last_modification(self, name):
+        return (self.write_date if self.write_date else self.create_date
+            ).replace(microsecond=0)
+
+    @staticmethod
+    def order_last_modification(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.write_date, table.create_date)]
 
     @classmethod
     def search_rec_name(cls, name, clause):
