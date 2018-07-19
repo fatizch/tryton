@@ -72,9 +72,10 @@ class Contract:
     __name__ = 'contract'
 
     @classmethod
-    def _future_invoices_cache_key(cls):
-        return super(Contract, cls)._future_invoices_cache_key() + (
-            Transaction().context.get('will_be_rollbacked', False),)
+    def _future_invoices_cache_key(cls, from_date, to_date):
+        return super(Contract, cls)._future_invoices_cache_key(
+            from_date, to_date) + (Transaction().context.get(
+                'will_be_rollbacked', False),)
 
     def rebill_endorsement_dates(self):
         pool = Pool()

@@ -1,3 +1,4 @@
+* BUG#9433 Correction de la mise en cache des quittances pré calculées
 * BUG#9296 Retrouve la bonne période lors du recalcul de la prime de la période précédente
 * BUG#8880 Recalculer les primes un jour après la date de résiliation
 * BUG#9103 Filtre des lignes de tarifs des quittances si le prorata n'est pas activé

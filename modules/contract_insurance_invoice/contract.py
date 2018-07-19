@@ -1270,7 +1270,7 @@ class Contract:
         if isinstance(contract, int):
             contract = cls(contract)
         cached = cls._future_invoices_cache.get(contract.id, {}) or {}
-        sub_key = hash(cls._future_invoices_cache_key())
+        sub_key = hash(cls._future_invoices_cache_key(from_date, to_date))
         if sub_key in cached:
             invoices = cls.load_from_cached_invoices(cached[sub_key])
         else:
@@ -1286,9 +1286,10 @@ class Contract:
             and x['start'] <= (to_date or datetime.date.max)]
 
     @classmethod
-    def _future_invoices_cache_key(cls):
+    def _future_invoices_cache_key(cls, from_date, to_date):
         context = Transaction().context
-        return (context.get('company', ''), context.get('language', ''))
+        return (context.get('company', ''), context.get('language', ''),
+            from_date, to_date)
 
     @classmethod
     def load_from_cached_invoices(cls, cache):

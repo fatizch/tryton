@@ -1,3 +1,4 @@
+* BUG#9433 Fix cache setting / retrieval for future invoices
 * BUG#9296 Retrieve the good period when recalculating the previous year premium
 * BUG#8880 Recalculate premiums one day after termination
 * BUG#9103 Filter premium lines when creating invoices if prorata is deactivated
