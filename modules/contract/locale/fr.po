@@ -296,6 +296,10 @@ msgctxt "field:contract,product:"
 msgid "Product"
 msgstr "Produit"
 
+msgctxt "field:contract,product_icon:"
+msgid "Product Icon"
+msgstr "Icône du produit"
+
 msgctxt "field:contract,product_subscriber_kind:"
 msgid "Product Subscriber Kind"
 msgstr "Type de souscripteur"

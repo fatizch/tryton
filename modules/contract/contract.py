@@ -290,6 +290,9 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
     icon = fields.Function(fields.Char('Icon'), 'get_icon')
     color = fields.Function(fields.Char('Color'), 'get_color')
     form_color = fields.Function(fields.Char('Form color'), 'get_form_color')
+    product_icon = fields.Function(
+        fields.Char('Product Icon'),
+        'getter_product_icon')
 
     @classmethod
     def __setup__(cls):
@@ -625,6 +628,11 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         if self.status == 'active':
             return 'contract_green'
         return 'contract'
+
+    def getter_product_icon(self, name):
+        if not self.product:
+            return ''
+        return self.product.icon_name
 
     @classmethod
     def default_company(cls):

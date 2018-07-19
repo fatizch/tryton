@@ -88,6 +88,11 @@ class Product(model.CoogSQL, model.CoogView,
             [('data_shelf_life', '>=', 0)]],
         help='The number of years contract\'s data related to this product '
         'can be kept after the contract\'s termination.')
+    icon = fields.Many2One('ir.ui.icon', 'Icon', ondelete='RESTRICT',
+        help='This icon will be used to quickly identify the product')
+    icon_name = fields.Function(
+        fields.Char('Icon Name'),
+        'getter_icon_name')
 
     @classmethod
     def __setup__(cls):
@@ -139,6 +144,11 @@ class Product(model.CoogSQL, model.CoogView,
                 instance.raise_user_error('missing_contract_extra_data',
                     (', '.join((extra_data.string
                                 for extra_data in remaining))))
+
+    def getter_icon_name(self, name):
+        if self.icon:
+            return self.icon.name
+        return ''
 
     @classmethod
     def search_rec_name(cls, name, clause):

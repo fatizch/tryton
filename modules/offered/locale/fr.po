@@ -644,6 +644,14 @@ msgctxt "field:offered.product,extra_data_def:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
+msgctxt "field:offered.product,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:offered.product,icon_name:"
+msgid "Icon Name"
+msgstr "Nom de l'icône"
+
 msgctxt "field:offered.product,id:"
 msgid "ID"
 msgstr "ID"

@@ -48,6 +48,8 @@ this repository contains the full copyright notices and license terms. -->
             </notebook>
         </page>
         <page string="Administration" id="admin">
+            <label name="icon"/>
+            <field name="icon"/>
             <field name="tags" colspan="4"/>
         </page>
     </notebook>
