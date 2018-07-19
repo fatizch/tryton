@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
+from itertools import groupby
 from sql.conditionals import Coalesce
 
 from trytond.rpc import RPC
@@ -98,6 +99,9 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
                 'posterior to today\'s date',
                 'loss_desc_mixin': 'You can not close multiple claims '
                 'with different loss descriptions at the same time',
+                'contract_will_be_held': 'The contract %(contract)s will be '
+                'held with the sub-status %(substatus)s for the payer '
+                '%(payer)s.'
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
         t = cls.__table__()
@@ -264,6 +268,24 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
             elif isinstance(i, cls):
                 if not i.name:
                     i.name = Generator.get_id(gen_id)
+
+    @classmethod
+    def hold_contracts(cls, payers, sub_status):
+        pool = Pool()
+        Contract = pool.get('contract')
+        Party = pool.get('party.party')
+        to_suspend = Party.get_depending_contracts(payers)
+        # Warn user that the contract will be held
+        for contract in to_suspend:
+            cls.raise_user_warning(
+                'contract_will_be_held_%s' % str(contract),
+                'contract_will_be_held', {
+                    'contract': contract.rec_name,
+                    'payer': contract.payer.rec_name,
+                    'substatus': sub_status.rec_name,
+                    })
+        if to_suspend:
+            Contract.hold(to_suspend, sub_status)
 
     def get_contact(self):
         return self.claimant
@@ -772,13 +794,30 @@ class Loss(model.CoogSQL, model.CoogView,
     @classmethod
     @model.CoogView.button
     def activate(cls, losses):
+        pool = Pool()
         to_write = [x for x in losses if x.state != 'active']
         if to_write:
             with model.error_manager():
                 for loss in to_write:
                     loss.check_activation()
             cls.write(to_write, {'state': 'active'})
-            Pool().get('event').notify_events(to_write, 'activate_loss')
+            covered_to_hold_contracts = list({
+                    (x.covered_person, x.event_desc.contract_hold_sub_status)
+                    for x in losses if x.event_desc.contract_hold_sub_status
+                    and x.covered_person
+                    })
+
+            def _group_by_sub_status(obj):
+                return obj[1]
+
+            if covered_to_hold_contracts:
+                Claim = pool.get('claim')
+                covered_to_hold_contracts = sorted(covered_to_hold_contracts,
+                    key=_group_by_sub_status)
+                for sub_status, payers in groupby(covered_to_hold_contracts,
+                        key=_group_by_sub_status):
+                    Claim.hold_contracts([x[0] for x in payers], sub_status)
+            pool.get('event').notify_events(to_write, 'activate_loss')
 
 
 class ClaimService(model.CoogSQL, model.CoogView,

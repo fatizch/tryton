@@ -78,6 +78,11 @@ class EventDescription(model.CoogSQL, model.CoogView):
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
     sequence = fields.Integer('Sequence')
+    contract_hold_sub_status = fields.Many2One('contract.sub_status',
+        'Contract Hold Sub Status', ondelete='RESTRICT',
+        domain=[('status', '=', 'hold')], help='If set, a claim declared with '
+        'this event will hold the contracts of the covered person with this '
+        'sub status.')
 
     @classmethod
     def __setup__(cls):

@@ -86,6 +86,13 @@ class Party:
     def open_quotes(cls, objs):
         pass
 
+    @classmethod
+    def get_depending_contracts(cls, parties, date=None):
+        return Pool().get('contract').search([
+                ('subscriber', 'in', parties),
+                ('status', '=', 'active'),
+                ])
+
     def get_summary_content(self, label, at_date=None, lang=None):
         res = super(Party, self).get_summary_content(label, at_date, lang)
         if self.contracts:

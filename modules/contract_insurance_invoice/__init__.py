@@ -63,6 +63,7 @@ def register():
         move.ReconcileShow,
         party.SynthesisMenu,
         party.SynthesisMenuInvoice,
+        party.Party,
         payment.JournalFailureAction,
         payment.Payment,
         payment.PaymentSuspension,

@@ -1,19 +1,22 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import copy
+import datetime
+from itertools import groupby
 from sql.aggregate import Max
 from sql import Literal
 
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
-from trytond.modules.coog_core import model, fields, coog_string
+from trytond.modules.coog_core import model, fields, coog_string, utils
 
 __all__ = [
     'SynthesisMenuInvoice',
     'SynthesisMenu',
     'SynthesisMenuOpen',
     'PartyReplace',
+    'Party',
     ]
 
 
@@ -125,3 +128,44 @@ class PartyReplace:
         return super(PartyReplace, cls).fields_to_replace() + [
             ('contract.billing_information', 'payer'),
             ]
+
+
+class Party:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.party'
+
+    @classmethod
+    def _group_billing_per_contract(cls, billing_info):
+        return billing_info.contract
+
+    @classmethod
+    def get_depending_contracts(cls, parties, date=None):
+        to_suspend = super(Party, cls).get_depending_contracts(parties,
+            date=date)
+        BillingInformation = Pool().get('contract.billing_information')
+        date = date or utils.today()
+        billing_infos = [x
+            for x in BillingInformation.search(['AND',
+                [
+                    ('payer', 'in', parties),
+                    ('direct_debit', '=', True),
+                    ], ['OR',
+                        [('date', '<=', date)], ['date', '=', None]]
+                    ]) if not x.suspended and x.contract_status == 'active']
+        billing_infos = sorted(
+            billing_infos, key=cls._group_billing_per_contract)
+        to_suspend_payers = []
+        # Find contracts where the payer or the future payer is in the given
+        # payers
+        for contract, billing_infos in groupby(billing_infos,
+                key=cls._group_billing_per_contract):
+            billing_infos = sorted(billing_infos, lambda x: x.date
+                or datetime.date.min)
+            billing_info = billing_infos[-1]
+            all_billing = sorted(contract.billing_informations,
+                lambda x: x.date)
+            today_and_future_billings = all_billing[
+                all_billing.index(contract.billing_information):]
+            if billing_info in today_and_future_billings:
+                to_suspend_payers.append(contract)
+        return list(set(to_suspend) | set(to_suspend_payers))
