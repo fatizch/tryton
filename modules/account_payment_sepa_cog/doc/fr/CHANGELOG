@@ -1,3 +1,4 @@
+* BUG#8968 Ne pas ecraser la valeur de la RUM par la configuration par défaut si elle existe déjà
 * BUG#9368 Ne pas remplacer les paramètres de la configuration par des paramètres vides
 * BUG#9249 Corretif appel au super sur le batch de création des messages SEPA en échec
 * BUG#9008 Correction du calcul de la numérotation des mandats sepa

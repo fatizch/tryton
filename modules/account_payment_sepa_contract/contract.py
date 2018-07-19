@@ -102,7 +102,11 @@ class ContractBillingInformation:
     # this method is overload in the specific code for santiane
     @classmethod
     def update_mandate_from_contract(cls, mandate, contract):
-        pass
+        pool = Pool()
+        Seq = pool.get('ir.sequence')
+        product_mandate_sequence = contract.product.sepa_mandate_sequence
+        if product_mandate_sequence:
+            mandate.identification = Seq.get_id(product_mandate_sequence.id)
 
     @classmethod
     def _export_light(cls):
@@ -111,18 +115,12 @@ class ContractBillingInformation:
 
     def new_mandate(self, type_, scheme, state):
         pool = Pool()
-        Sequence = pool.get('ir.sequence')
         Mandate = pool.get('account.payment.sepa.mandate')
-        identification = None  # will be set at creation if None below
-        product_mandate_sequence = self.contract.product.sepa_mandate_sequence
-        if product_mandate_sequence:
-            identification = Sequence.get_id(product_mandate_sequence.id)
         mandate = Mandate(
             party=self.contract.payer,
             account_number=self.direct_debit_account.numbers[0],
             type=type_,
             scheme=scheme,
-            identification=identification,
             signature_date=(self.contract.signature_date or
                 self.contract.start_date),
             company=self.contract.company,

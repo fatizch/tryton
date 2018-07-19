@@ -1,3 +1,4 @@
+* BUG#8968 Do not set the RUM value with the default configuration if it already exists
 * BUG#9368 Do not override conf parameters by empty ones
 * BUG#9249 Fix super call on the sepa payment fail message create (batch)
 * BUG#9008 Fix sepa mandate numbers computation
