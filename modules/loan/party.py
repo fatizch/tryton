@@ -55,6 +55,11 @@ class Party:
         'get_is_lender', setter='setter_void', searcher='search_is_lender')
 
     @classmethod
+    def __setup__(cls):
+        super(Party, cls).__setup__()
+        cls._role_fields.append('is_lender')
+
+    @classmethod
     def view_attributes(cls):
         return super(Party, cls).view_attributes() + [
             ('/form/notebook/page[@id="role"]/notebook/page[@id="lender"]',

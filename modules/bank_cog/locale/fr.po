@@ -62,6 +62,10 @@ msgctxt "field:bank.account,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:bank.account-party.party,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:bank.account.number,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -145,6 +149,10 @@ msgstr "Identifiant XML"
 msgctxt "model:bank_cog.data.set,name:"
 msgid "Bank Data Set"
 msgstr "Mise à jour des banques"
+
+msgctxt "model:ir.action,name:act_bank_form"
+msgid "Banks"
+msgstr "Banques"
 
 msgctxt "model:ir.action,name:bank_cog_data_set_wizard"
 msgid "Set Bank Data"

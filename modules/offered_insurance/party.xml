@@ -11,6 +11,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="party.party_view_form"/>
             <field name="name">party_form</field>
         </record>
+        <record model="ir.ui.view" id="party_view_tree">
+            <field name="model">party.party</field>
+            <field name="inherit" ref="party.party_view_tree"/>
+            <field name="name">party_tree</field>
+        </record>
         <!-- ########### -->
         <!-- # Insurer # -->
         <!-- ########### -->
@@ -26,16 +31,17 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.action.act_window" id="act_insurer_form">
             <field name="name">Insurers</field>
-            <field name="res_model">insurer</field>
+            <field name="res_model">party.party</field>
+            <field name="domain" eval="[('is_insurer', '=', True)]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_insurer_form_view_tree">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="insurer_view_tree"/>
+            <field name="view" ref="party_view_tree"/>
             <field name="act_window" ref="act_insurer_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_insurer_form_view_form">
             <field name="sequence" eval="20"/>
-            <field name="view" ref="insurer_view_form"/>
+            <field name="view" ref="party_view_form"/>
             <field name="act_window" ref="act_insurer_form"/>
         </record>
         <menuitem parent="party.menu_configuration" id="menu_insurer_form" icon="insurer" action="act_insurer_form"/>

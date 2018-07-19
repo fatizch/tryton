@@ -72,6 +72,7 @@ class Party:
                     'readonly': (~Eval('is_broker') & ~Eval('is_insurer'))
                     }
                 })
+        cls._role_fields.append('is_broker')
 
     @classmethod
     def __register__(cls, module_name):

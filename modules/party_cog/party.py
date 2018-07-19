@@ -138,6 +138,9 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
     last_modification = fields.Function(fields.DateTime('Last Modification'),
         'get_last_modification')
     is_anonymized = fields.Boolean('Is Anonymized', readonly=True)
+    has_role = fields.Function(
+        fields.Boolean('has_role'),
+        'getter_has_role', searcher='searcher_has_role')
 
     @classmethod
     def __register__(cls, module_name):
@@ -198,6 +201,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         cls.email.depends += ['active']
         cls.website.states['readonly'] = STATES_ACTIVE
         cls.website.depends += ['active']
+        cls._role_fields = []
 
     @classmethod
     def view_attributes(cls):
@@ -387,6 +391,18 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             field = getattr(self, field_name)
             return len(field) > 0
         return False
+
+    def getter_has_role(self, name):
+        return any(
+            getattr(self, fname, None) for fname in self.__class__._role_fields)
+
+    @classmethod
+    def searcher_has_role(cls, name, clause):
+        role_fields_domains = [[tuple((x,)) + tuple(clause[1:])]
+                for x in cls._role_fields]
+        if clause[2] is True:
+            return ['OR'] + role_fields_domains
+        return ['AND'] + role_fields_domains
 
     def get_SSN_required(self, name):
         return False

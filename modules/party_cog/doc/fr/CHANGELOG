@@ -1,3 +1,4 @@
+* FEA#9350 Afficher uniquement les tiers qui n'ont pas de rôle dans le point d'entrée Tiers, les tiers avec rôle seront affichés dans les points d'entrée dédiés
 * BUG#8587 Ordonnancement des moyens de contacts par ids descendants
 * BUG#6767 Afficher uniquement le champ all_addresses dans la vue des tiers
 * BUG#9200 Correction d'un crash lors de la mise à jour via import d'une même personne (regression suite à #8858)

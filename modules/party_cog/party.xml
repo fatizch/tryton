@@ -63,7 +63,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_person_form">
             <field name="name">Persons</field>
             <field name="res_model">party.party</field>
-            <field name="domain" eval="[('is_person', '=', True)]" pyson="1"/>
+            <field name="domain" eval="[('is_person', '=', True), ('has_role', '=', False)]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_person_tree_view">
             <field name="sequence" eval="10"/>
@@ -103,7 +103,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.act_window" id="act_company_form">
             <field name="name">Companies</field>
             <field name="res_model">party.party</field>
-            <field name="domain" eval="[('is_person', '=', False)]" pyson="1"/>
+            <field name="domain" eval="[('is_person', '=', False), ('has_role', '=', False)]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_company_tree_view">
             <field name="sequence" eval="10"/>
