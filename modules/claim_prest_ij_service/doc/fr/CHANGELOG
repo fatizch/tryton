@@ -1,3 +1,4 @@
+* BUG#9451 Affichage d'une erreur explicite lorsqu'une combinaison de SIREN et numéro de sécurtié sociale ne correspond à aucune inscription
 * BUG#9461 Permettre de recevoir une BPIJ d'une journée
 * OTH#0000 Amélioration affichage
 * BUG#9381 Suppression d'un code obsolète: ij_subscriptions sur un tiers

@@ -974,6 +974,12 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
         super(ClaimIjPeriod, cls).__setup__()
         cls._order = [('id', 'DESC'), ('start_date', 'DESC'),
             ('sign', 'DESC')]
+        cls._error_messages.update({
+                'no_subscription_found': ('No IJ subscription found for SIREN '
+                    '%(siren)s and SSN %(ssn)s'),
+                'many_subscriptions': ('More than one IJ subscription found for'
+                    ' SIREN %(siren)s and SSN %(ssn)s'),
+                })
 
     @classmethod
     def default_state(cls):
@@ -1259,9 +1265,18 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
                         '%Y-%m-%d+%H:%M').date()
                     for party in node_func(sub_instit, 'Assure'):
                         ssn = node_func(party, 'NIR', True)
-                        subscription, = Subscription.search(
+                        subscriptions = Subscription.search(
                             [('ssn', 'like', '%s%%' % ssn),
                                 ('siren', '=', siren)])
+                        if not subscriptions:
+                            cls.raise_user_error('no_subscription_found', {
+                                    'siren': siren,
+                                    'ssn': ssn})
+                        elif len(subscriptions) > 1:
+                            cls.raise_user_error('many_subscriptions', {
+                                'siren': siren,
+                                'ssn': ssn})
+                        subscription, = subscriptions
                         periods, total = cls._process_periods(subscription,
                             party, node_func)
                         for period in periods:
