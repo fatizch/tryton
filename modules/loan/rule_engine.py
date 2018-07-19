@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond.modules.coog_core import coog_date
+
 from trytond.pool import PoolMeta
 
 from trytond.modules.rule_engine import check_args
@@ -63,6 +65,15 @@ class RuleEngineRuntime:
         if not date:
             date = args['date']
         return args['loan'].get_outstanding_loan_balance(at_date=date)
+
+    @classmethod
+    @check_args('contract', 'loan')
+    def _re_get_outstanding_loan_balance_previous_anniversary_date(cls, args):
+        calculation_date = cls._re_calculation_date(args)
+        start_date = args['contract'].initial_start_date
+        return args['loan'].get_outstanding_loan_balance(
+            at_date=coog_date.get_latest_anniversary(start_date,
+                calculation_date))
 
     @classmethod
     @check_args('share')

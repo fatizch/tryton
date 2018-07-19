@@ -1426,6 +1426,39 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     interval_start=interval_start, proportion=proportion,
                     recursion=recursion), res_value)
 
+    def test0200_get_latest_anniversary(self):
+        # case of 02/29 as original date evaluated on a non leap year
+        original_date = datetime.date(2012, 2, 29)
+        date = datetime.date(2018, 7, 11)
+        self.assertEqual(coog_date.get_latest_anniversary(
+                original_date, date), datetime.date(2018, 2, 28))
+
+        # case of 02/28 as original date evaluated on a non leap year
+        original_date = datetime.date(2013, 2, 28)
+        self.assertEqual(coog_date.get_latest_anniversary(
+                original_date, date), datetime.date(2018, 2, 28))
+
+        # case of 02/28 as original date evaluated on a leap year
+        date = datetime.date(2016, 7, 11)
+        self.assertEqual(coog_date.get_latest_anniversary(
+                original_date, date), datetime.date(2016, 2, 29))
+
+        # case of 02/29 as original date evaluated on a leap year
+        original_date = datetime.date(2012, 2, 29)
+        self.assertEqual(coog_date.get_latest_anniversary(
+                original_date, date), datetime.date(2016, 2, 29))
+
+        # case of original date coming after date in the same year
+        original_date = datetime.date(2012, 3, 13)
+        date = datetime.date(2012, 1, 1)
+        self.assertEqual(coog_date.get_latest_anniversary(
+                original_date, date), datetime.date(2011, 3, 13))
+
+        # case of original date coming before date in the same year
+        date = datetime.date(2012, 5, 4)
+        self.assertEqual(coog_date.get_latest_anniversary(
+                original_date, date), datetime.date(2012, 3, 13))
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()

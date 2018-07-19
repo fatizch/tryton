@@ -229,3 +229,20 @@ def get_next_date_in_sync_with(date, day):
     if res < date:
         res = add_month(res, 1)
     return res
+
+
+def get_latest_anniversary(original_date, date):
+    '''
+    This function returns the latest anniversary of original_date compared to
+    date
+    '''
+    # the year 2016 is chosen to compare the two dates on the same leap year
+    compare_date = date.replace(year=2016)
+    compare_original_date = original_date.replace(year=2016)
+    if compare_date < compare_original_date:
+        calc_date = date.replace(year=(date.year - 1))
+    else:
+        calc_date = date
+    nb_of_years_between = number_of_years_between(original_date, calc_date)
+    return add_year(original_date, nb_of_years_between,
+        stick_to_end_of_month=True)

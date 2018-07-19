@@ -117,6 +117,17 @@ dû à la date passée en paramètre. Si aucune date n'est passée en paramètre
 d'exécution de la règle est utilisée</field>
             <field name="parent" ref="pret"/>
         </record>
+        <record model="rule_engine.function" id="capital_restant_derniere_date_anniversaire">
+            <field name="translated_technical_name">capital_restant_derniere_date_anniversaire</field>
+            <field name="description">Capital restant dû à la date du dernier anniversaire</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_outstanding_loan_balance_previous_anniversary_date</field>
+            <field name="long_description">Retourne le montant du capital restant 
+dû à la dernière date anniversaire.</field>
+            <field name="parent" ref="pret"/>
+        </record>
         <record model="rule_engine.function" id="quotite">
             <field name="translated_technical_name">quotite</field>
             <field name="description">Quotité</field>
