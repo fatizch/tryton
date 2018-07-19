@@ -1,3 +1,4 @@
+* BUG#9466 Handle SIRET with 99999999999999 in BPIJ file
 * BUG#9451 Display explicit error when there is no subscription for a siren and ssn combination
 * BUG#9461 Allow one day BPIJ period
 * OTH#0000 Improve UI

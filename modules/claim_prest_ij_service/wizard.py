@@ -525,11 +525,6 @@ class CreateIndemnification:
         self.definition.service = service
         self.definition.start_date = min(x.start_date for x in periods)
         self.definition.end_date = max(x.end_date for x in periods)
-        possible_beneficiaries = [x[0] for x in service.get_beneficiaries_data(
-                self.definition.start_date)]
-        is_person = periods[0].beneficiary_kind == 'party'
-        self.definition.beneficiary = [x for x in possible_beneficiaries
-            if x.is_person == is_person][0]
         return 'definition'
 
     def transition_calculate(self):
@@ -578,14 +573,8 @@ class IndemnificationDefinition:
             or all(x.indemnification and x.indemnification.status ==
                 'calculated' for x in periods))
 
-        service = periods[0].service
         self.start_date = min(x.start_date for x in periods)
         self.end_date = max(x.end_date for x in periods)
-        possible_beneficiaries = [x[0] for x in service.get_beneficiaries_data(
-                self.start_date)]
-        is_person = periods[0].beneficiary_kind == 'party'
-        self.beneficiary = [x for x in possible_beneficiaries
-            if x.is_person == is_person][0]
         if 'ijss' in self.extra_data:
             new_data = dict(self.extra_data)
             new_data['ijss'] = periods[0].total_per_day_amount

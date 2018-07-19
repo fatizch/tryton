@@ -1265,9 +1265,14 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
                         '%Y-%m-%d+%H:%M').date()
                     for party in node_func(sub_instit, 'Assure'):
                         ssn = node_func(party, 'NIR', True)
-                        subscriptions = Subscription.search(
-                            [('ssn', 'like', '%s%%' % ssn),
-                                ('siren', '=', siren)])
+                        domain = [('ssn', 'like', '%s%%' % ssn),
+                            ('state', '!=', 'deletion_confirmed')]
+                        if siren != '999999999':
+                            # SIRET 9999999999 means payment to the person
+                            # instead of the legal entity or
+                            # multiple employer
+                            domain.append(('siren', '=', siren))
+                        subscriptions = Subscription.search(domain)
                         if not subscriptions:
                             cls.raise_user_error('no_subscription_found', {
                                     'siren': siren,
