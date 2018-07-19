@@ -1,3 +1,4 @@
+* BUG#9412 Gestion des données complémentaires liées de type booléen
 * FEA#9151 Refactorisation du code des données complémentaires
 * BUG#9117 Ajout du champs symbole de devise sur les produits et les garanties
 * BUG#8960 Correction des traduction des données complémentaires

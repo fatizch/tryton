@@ -7,7 +7,7 @@ from trytond.cache import Cache
 from trytond.rpc import RPC
 from trytond.model import DictSchemaMixin, Unique, Model
 from trytond.model.fields.dict import TranslatedDict
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, In
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, model, coog_string
@@ -58,8 +58,9 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
             ('benefit', 'Benefit'),
             ], 'Kind', required=True)
     sub_datas = fields.One2Many('extra_data-sub_extra_data', 'master',
-        'Sub Data', context={'kind': Eval('kind')},
-        target_not_required=True)
+        'Sub Data', domain=[('child.kind', '=', Eval('kind'))],
+        states={'invisible': ~In(Eval('type_'), ['selection', 'boolean'])},
+        depends=['kind', 'type_'], target_not_required=True)
     parents = fields.Many2Many('extra_data-sub_extra_data', 'child', 'master',
         'Parents', states={'readonly': True})
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT')
@@ -111,6 +112,10 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
             "where type_ not in ('boolean', 'selection')")
 
     @classmethod
+    def _export_skips(cls):
+        return super(ExtraData, cls)._export_skips() | {'parents'}
+
+    @classmethod
     def create(cls, vlist):
         created = super(ExtraData, cls).create(vlist)
         cls._extra_data_cache.clear()
@@ -130,17 +135,17 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
         cls._translation_cache.clear()
 
     @classmethod
+    def copy(cls, instances, default=None):
+        default = default or {}
+        default['parents'] = []
+        return super(ExtraData, cls).copy(instances, default)
+
+    @classmethod
     def is_master_object(cls):
         return True
 
     @staticmethod
     def default_type_():
-        return ''
-
-    @staticmethod
-    def default_kind():
-        if 'extra_data_kind' in Transaction().context:
-            return Transaction().context['extra_data_kind']
         return ''
 
     @fields.depends('default_value_selection', 'type_', 'selection',
@@ -168,6 +173,7 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
             self.default_boolean = False
         self.default_value = ''
         self.selection = ''
+        self.sub_datas = []
 
     @fields.depends('name', 'string')
     def on_change_with_name(self):
@@ -342,7 +348,10 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
 
         res['sub_data'] = []
         for sub_data in self.sub_datas:
-            res['sub_data'].append(('=', sub_data.select_value,
+            value = sub_data.select_value
+            if self.type_ == 'boolean':
+                value = value == 'True'
+            res['sub_data'].append(('=', value,
                     sub_data.child._get_structure()))
 
         return res
@@ -375,7 +384,10 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
     @classmethod
     def _sub_data_matches(cls, match_value, operator, value):
         if operator == '=':
-            return match_value == value
+            if isinstance(match_value, bool):
+                return match_value == bool(value)
+            else:
+                return match_value == value
         raise NotImplementedError
 
     @classmethod

@@ -1,3 +1,4 @@
+* BUG#9412 Properly handle boolean sub extra data
 * FEA#9151 Refactor extra_data code
 * BUG#9117 Add missing currency symbol field in product and offered option
 * BUG#8960 Fix kind and type french translation on extra data
