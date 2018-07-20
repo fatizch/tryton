@@ -179,6 +179,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
                     '\n%(name)s - %(birthdate)s'),
                 })
         cls.__rpc__.update({'ws_create_person': RPC(readonly=False)})
+        cls.__rpc__.update({'anonymize': RPC(readonly=False)})
         cls._buttons.update({
                 'button_start_synthesis_menu': {'readonly': STATES_ACTIVE},
                 })
@@ -700,6 +701,19 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
                 and 'addresses' in values):
             values['all_addresses'] = []
         return super(Party, cls)._import_json(values, main_object)
+
+    @classmethod
+    def anonymize(cls, party_id):
+        pool = Pool()
+        PartyErase = pool.get('party.erase', type='wizard')
+        with Transaction().set_context(active_model='party.party',
+                active_id=party_id):
+            wizard_id, _, _ = PartyErase.create()
+            wizard = PartyErase(wizard_id)
+            wizard._execute('ask')
+            wizard.ask.party = cls(party_id)
+            wizard.ask.default_party()
+            wizard._execute('erase')
 
 
 class PartyLang(export.ExportImportMixin):

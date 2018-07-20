@@ -1,3 +1,4 @@
+* FEA#8739 Add the possibility to call the anonymization wizard from party
 * FEA#9350 Only display parties with no role in party entry point, parties with roles will be displayed in dedicated entry points
 * BUG#8587 Order contact mechanisms by descending ids
 * BUG#6767 Only display field all_addresses in party form

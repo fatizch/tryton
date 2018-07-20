@@ -1,3 +1,4 @@
+* FEA#8739 Ajouter la possibilité d'appeler le wizard anonymisation depuis un tiers
 * FEA#9350 Afficher uniquement les tiers qui n'ont pas de rôle dans le point d'entrée Tiers, les tiers avec rôle seront affichés dans les points d'entrée dédiés
 * BUG#8587 Ordonnancement des moyens de contacts par ids descendants
 * BUG#6767 Afficher uniquement le champ all_addresses dans la vue des tiers
