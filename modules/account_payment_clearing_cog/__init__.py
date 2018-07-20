@@ -3,10 +3,12 @@
 from trytond.pool import Pool
 
 import payment
+import move
 
 
 def register():
     Pool.register(
         payment.Payment,
         payment.Journal,
+        move.MoveLine,
         module='account_payment_clearing_cog', type_='model')

@@ -3,8 +3,9 @@
 from itertools import groupby
 from sql import Null
 from sql.aggregate import Sum
-from sql.conditionals import Coalesce
+from sql.conditionals import Coalesce, Case
 from sql.operators import Not
+from sql.functions import Abs
 from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
@@ -118,6 +119,93 @@ class MoveLine:
     def __setup__(cls):
         super(MoveLine, cls).__setup__()
         cls._check_modify_exclude.add('payment_date')
+
+        # Change methods in order to avoid tryton overrides
+        cls.payment_amount.getter = 'getter_payment_amount'
+        cls.payment_amount.searcher = 'searcher_payment_amount'
+
+    # Full override of payment_amount methods in order to fix #7873
+    @classmethod
+    def getter_payment_amount(cls, instances, clause):
+        cursor = Transaction().connection.cursor()
+
+        tables = cls._search_payment_amount_tables()
+        join = cls._search_payment_amount_join(tables)
+        group_expr = cls._search_payment_amount_group_by(tables)
+        amount_expr = cls._search_payment_amount_amount(tables)
+
+        move_line = tables['move_line']
+        account = tables['account']
+
+        result = {x.id: Decimal(0) for x in instances}
+        cursor.execute(*join.select(move_line.id, amount_expr,
+                where=account.kind.in_(['payable', 'receivable'])
+                & move_line.id.in_([x.id for x in instances]),
+                group_by=group_expr))
+
+        for line, amount in cursor.fetchall():
+            result[line] = amount
+        return result
+
+    @classmethod
+    def searcher_payment_amount(cls, name, clause):
+        _, operator, value = clause
+        Operator = fields.SQL_OPERATORS[operator]
+        value = cls.payment_amount.sql_format(value)
+
+        tables = cls._search_payment_amount_tables()
+        join = cls._search_payment_amount_join(tables)
+        group_expr = cls._search_payment_amount_group_by(tables)
+        amount_expr = cls._search_payment_amount_amount(tables)
+
+        move_line = tables['move_line']
+        account = tables['account']
+        query = join.select(move_line.id,
+            where=account.kind.in_(['payable', 'receivable']),
+            group_by=group_expr,
+            having=Operator(amount_expr, value))
+        return [('id', 'in', query)]
+
+    @classmethod
+    def _search_payment_amount_tables(cls):
+        pool = Pool()
+        return {
+            'move_line': cls.__table__(),
+            'payment': pool.get('account.payment').__table__(),
+            'account': pool.get('account.account').__table__(),
+            }
+
+    @classmethod
+    def _search_payment_amount_join(cls, tables):
+        move_line = tables['move_line']
+        payment = tables['payment']
+        account = tables['account']
+
+        return move_line.join(payment, type_='LEFT',
+            condition=((move_line.id == payment.line)
+                & (payment.state != 'failed'))
+            ).join(account, condition=move_line.account == account.id)
+
+    @classmethod
+    def _search_payment_amount_group_by(cls, tables):
+        move_line = tables['move_line']
+
+        return (move_line.id, move_line.second_currency)
+
+    @classmethod
+    def _search_payment_amount_amount(cls, tables):
+        move_line = tables['move_line']
+        payment = tables['payment']
+
+        payment_amount = Sum(Coalesce(payment.amount, 0))
+        main_amount = Abs(move_line.credit - move_line.debit) - payment_amount
+        second_amount = Abs(move_line.amount_second_currency) - payment_amount
+        amount = Case((move_line.reconciliation != Null, 0),
+            (move_line.second_currency == Null, main_amount),
+            else_=second_amount)
+
+        return amount
+    # End of override
 
     @classmethod
     def payment_outstanding_group_clause(cls, lines, line_table):

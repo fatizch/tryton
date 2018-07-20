@@ -201,7 +201,7 @@ Create Contract Fee::
     >>> template.list_price = Decimal(0)
     >>> template.cost_price = Decimal(0)
     >>> template.products[0].code = 'contract Fee product'
-    >>> template.save() 
+    >>> template.save()
     >>> fee_product = template.products[0]
     >>> Fee = Model.get('account.fee')
     >>> contract_fee = Fee()

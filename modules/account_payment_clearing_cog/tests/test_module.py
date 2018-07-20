@@ -24,4 +24,8 @@ def suite():
             'scenario_account_payment_clearing_cog.rst',
             tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
+    suite.addTests(doctest.DocFileSuite(
+            'scenario_account_payment_clearing_payment_amount.rst',
+            tearDown=doctest_teardown, encoding='utf-8',
+            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite
