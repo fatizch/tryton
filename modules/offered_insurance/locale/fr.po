@@ -891,6 +891,10 @@ msgctxt "field:offered.validate,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:party.party,has_role:"
+msgid "has_role"
+msgstr "A un rôle"
+
 msgctxt "field:party.party,insurer_role:"
 msgid "Insurer"
 msgstr "Assureur"
@@ -993,13 +997,13 @@ msgctxt "model:ir.action,name:act_extra_premium_kind"
 msgid "Extra Premium Kind"
 msgstr "Type de surprime"
 
-msgctxt "model:ir.action,name:act_insurer_form"
-msgid "Insurers"
-msgstr "Assureurs"
-
 msgctxt "model:ir.action,name:act_item_desc_form"
 msgid "Item Descriptions"
 msgstr "Descriptions des Risques"
+
+msgctxt "model:ir.action,name:act_party_insurer_form"
+msgid "Insurers"
+msgstr "Assureurs"
 
 msgctxt "model:ir.test_case.instance,name:extra_premium_kind_test_case"
 msgid "Extra Premium Kind Test Case"

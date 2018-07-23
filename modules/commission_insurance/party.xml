@@ -18,7 +18,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">broker_list</field>
         </record>
-        <menuitem parent="commission.menu_commission" sequence="20" id="menu_commission_insurer_form" icon="insurer" action="offered_insurance.act_insurer_form"/>
+        <menuitem parent="commission.menu_commission" sequence="20" id="menu_commission_insurer_form" icon="insurer" action="offered_insurance.act_party_insurer_form"/>
         <record model="ir.action.act_window" id="act_broker_commissioned_contract_relate_form">
             <field name="name">Commissioned Contracts</field>
             <field name="res_model">contract</field>

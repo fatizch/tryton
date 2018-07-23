@@ -3,6 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <menuitem name="Lenders" parent="coog_core.general_configuration_menu" action="act_lender_form" id="menu_lenders_general_configuration" sequence="50" icon="tryton-list"/>
+        <menuitem name="Lenders" parent="coog_core.general_configuration_menu" action="act_party_lender_form" id="menu_lenders_general_configuration" sequence="50" icon="tryton-list"/>
     </data>
 </tryton>

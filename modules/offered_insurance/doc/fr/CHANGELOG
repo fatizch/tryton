@@ -1,3 +1,4 @@
+* BUG#9483 Modification d'ids xml pour mise à jour
 * BUG#8953 Ajout d'un avertissement lors de la création de plusieurs assureurs sur le même tiers
 * OTH#0000 Le fait qu'une donnée complémentaire n'existe pas dans les règles ne doit pas être une erreur
 
