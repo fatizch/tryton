@@ -573,7 +573,7 @@ class CreatePrestIjPeriodsBatch(batch.BatchRoot):
     def __setup__(cls):
         super(CreatePrestIjPeriodsBatch, cls).__setup__()
         cls._default_config_items.update({
-                'job_size': 1,
+                'job_size': 0,
                 'split': False,
                 })
 

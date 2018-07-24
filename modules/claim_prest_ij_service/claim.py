@@ -832,8 +832,9 @@ class ClaimIjSubscription(CoogProcessFramework, model.CoogView):
     def finalize_add_periods(cls, instances):
         process, = Pool().get('process').process_from_kind(
             'prest_ij_treatment') or [None]
-        if process and instances:
-            cls.write(instances,
+        to_update = list(set([i for i in instances if not i.current_state]))
+        if process and to_update:
+            cls.write(to_update,
                 {'current_state': process.first_step()})
 
 
