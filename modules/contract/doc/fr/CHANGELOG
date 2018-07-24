@@ -1,5 +1,6 @@
+* BUG#9498 Le gestionnaire de contrat devrait être capable de supprimer un devis
 * BUG#9490 Correction de l'appel au super lors de la suppression d'un devis
-* BUG#9296 Itération après 29893e0, meilleure calcul de la date du début pour les contrats sans effet
+* BUG#9296 Itération après 29893e0, meilleur calcul de la date du début pour les contrats sans effet
 * BUG#8996 Correction de la sélection des contrats pour résiliation en cas de renouvellement
 * BUG#8996 Contournement pour ne plus résilier les contrats
 * BUG#8692 Utilisation du statut du contrat dans le calcul de is_active_at_date sur les garanties
