@@ -1689,7 +1689,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             cls.raise_user_error('delete_not_allowed', {
                     'contracts': ', '.join(active_contracts),
                     })
-        super(Contract, cls).delete(active_contracts)
+        super(Contract, cls).delete(contracts)
 
 
 class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],

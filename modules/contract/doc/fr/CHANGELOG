@@ -1,3 +1,4 @@
+* BUG#9490 Correction de l'appel au super lors de la suppression d'un devis
 * BUG#9296 Itération après 29893e0, meilleure calcul de la date du début pour les contrats sans effet
 * BUG#8996 Correction de la sélection des contrats pour résiliation en cas de renouvellement
 * BUG#8996 Contournement pour ne plus résilier les contrats
