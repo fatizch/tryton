@@ -11,3 +11,4 @@ Gestion des sinistres
    regularisation_tuto
    mise_a_jour_parametrage_donnee_complementaire
    eligibilite_prestation
+   prest_IJ_tuto
