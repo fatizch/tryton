@@ -19,7 +19,7 @@ from trytond.config import config
 from trytond.server_context import ServerContext
 from trytond.pyson import Eval, Bool, Equal, Or, In
 from trytond.transaction import Transaction
-from trytond.model import Workflow, dualmethod, fields as tryton_fields
+from trytond.model import Workflow, dualmethod
 from trytond.pool import Pool, PoolMeta
 from trytond.tools import memoize
 
@@ -1193,14 +1193,27 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
 
     @classmethod
     def search_party(cls, name, clause):
-        _, operator, value = clause
+        pool = Pool()
+        Party = pool.get('party.party')
+        name, operator, value = clause
 
         if operator == 'in' and not value:
             return [('id', '<', 0)]
 
-        Operator = tryton_fields.SQL_OPERATORS[operator]
+        def get_column(value):
+            if type(value) == int:
+                return 'id'
+            else:
+                return 'rec_name'
 
-        pool = Pool()
+        if type(value) == list:
+            column = get_column(value[0])
+        else:
+            column = get_column(value)
+
+        parties = Party.search([(column, operator, value)])
+        if not parties:
+            return [('id', '<', 0)]
 
         period = cls.__table__()
         subscription = pool.get('claim.ij.subscription').__table__()
@@ -1209,7 +1222,7 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
         query = period.join(subscription, condition=(
                 period.subscription == subscription.id)
             ).join(party, condition=subscription.ssn == party.ssn
-            ).select(period.id, where=Operator(party.id, value))
+            ).select(period.id, where=party.id.in_([p.id for p in parties]))
 
         return [('id', 'in', query)]
 
