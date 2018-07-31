@@ -273,7 +273,8 @@ class Endorsement:
                 })
 
     def get_contract_set(self, name):
-        return self.endorsement_set.contract_set.id
+        if self.endorsement_set:
+            return self.endorsement_set.contract_set.id
 
     def get_generated_endorsement_sets(self, name):
         pool = Pool()
@@ -343,6 +344,8 @@ class Endorsement:
     def get_contact(self):
         if self.contract_set:
             return self.contract_set.get_contact()
+        else:
+            return super(Endorsement, self).get_contact()
 
 
 class EndorsementSetSelectDeclineReason(model.CoogView):
