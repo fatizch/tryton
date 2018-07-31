@@ -1,3 +1,4 @@
+* FEA#9485 Move suspension configuration on loss desc
 * FEA#9063 Add configuration on benefit events to hold contracts
 * FEA#9439 Sort claims by last modified first
 * BUG#9377 Update extra data when switching loss description

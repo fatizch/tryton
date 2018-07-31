@@ -1745,7 +1745,7 @@ msgstr "Décliné"
 
 msgctxt "selection:contract,status:"
 msgid "Hold"
-msgstr "Suspendre"
+msgstr "Suspendu"
 
 msgctxt "selection:contract,status:"
 msgid "Quote"
@@ -1777,7 +1777,7 @@ msgstr "Décliné"
 
 msgctxt "selection:contract.option,status:"
 msgid "Hold"
-msgstr "Suspendre"
+msgstr "Suspendu"
 
 msgctxt "selection:contract.option,status:"
 msgid "Quote"
@@ -1829,7 +1829,7 @@ msgstr "Décliné"
 
 msgctxt "selection:contract.sub_status,status:"
 msgid "Hold"
-msgstr "Suspendre"
+msgstr "Suspendu"
 
 msgctxt "selection:contract.sub_status,status:"
 msgid "Quote"

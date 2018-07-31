@@ -78,11 +78,6 @@ class EventDescription(model.CoogSQL, model.CoogView):
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
     sequence = fields.Integer('Sequence')
-    contract_hold_sub_status = fields.Many2One('contract.sub_status',
-        'Contract Hold Sub Status', ondelete='RESTRICT',
-        domain=[('status', '=', 'hold')], help='If set, a claim declared with '
-        'this event will hold the contracts of the covered person with this '
-        'sub status.')
 
     @classmethod
     def __setup__(cls):
@@ -138,6 +133,11 @@ class LossDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
     loss_kind = fields.Selection([('generic', 'Generic')], 'Loss Kind')
     closing_reasons = fields.Many2Many('loss.description-claim.closing_reason',
         'loss_description', 'closing_reason', 'Closing Reasons')
+    contract_hold_sub_status = fields.Many2One('contract.sub_status',
+        'Contract Hold Sub Status', ondelete='RESTRICT',
+        domain=[('status', '=', 'hold')], help='If set, a claim declared with '
+        'this loss will hold the contracts of the covered person with this '
+        'sub status.')
 
     _get_loss_description_cache = Cache('get_loss_description')
 

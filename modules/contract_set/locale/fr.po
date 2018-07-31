@@ -202,7 +202,7 @@ msgstr "Décliné"
 
 msgctxt "selection:contract.set,status:"
 msgid "Hold"
-msgstr "Suspendre"
+msgstr "Suspendu"
 
 msgctxt "selection:contract.set,status:"
 msgid "Quote"

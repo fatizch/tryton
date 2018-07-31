@@ -996,7 +996,7 @@ msgstr "Actif"
 
 msgctxt "selection:contract,status:"
 msgid "Hold"
-msgstr "Suspendre"
+msgstr "Suspendu"
 
 msgctxt "selection:contract,status:"
 msgid "Quote"
@@ -1024,7 +1024,7 @@ msgstr "Actif"
 
 msgctxt "selection:contract.option,status:"
 msgid "Hold"
-msgstr "Suspendre"
+msgstr "Suspendu"
 
 msgctxt "selection:contract.option,status:"
 msgid "Quote"

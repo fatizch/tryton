@@ -6,6 +6,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="name"/>
     <label name="code"/>
     <field name="code"/>
+    <label name="contract_hold_sub_status"/>
+    <field name="contract_hold_sub_status" widget="selection"/>
     <label name="company"/>
     <field name="company"/>
     <label name="item_kind"/>

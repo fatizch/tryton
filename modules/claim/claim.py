@@ -802,8 +802,8 @@ class Loss(model.CoogSQL, model.CoogView,
                     loss.check_activation()
             cls.write(to_write, {'state': 'active'})
             covered_to_hold_contracts = list({
-                    (x.covered_person, x.event_desc.contract_hold_sub_status)
-                    for x in losses if x.event_desc.contract_hold_sub_status
+                    (x.covered_person, x.loss_desc.contract_hold_sub_status)
+                    for x in losses if x.loss_desc.contract_hold_sub_status
                     and x.covered_person
                     })
 
