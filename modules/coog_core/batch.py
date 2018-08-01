@@ -46,13 +46,14 @@ def analyze(meth):
         m = meth
         try:
             p = PerfLog()
-            p.on_enter(Transaction().user,
-                uuid.uuid4().hex, cls.__name__, [], {})
+            p.on_enter()
             wrapped_meth = profile(m)
         except Exception:
             perf_logger.exception('batch: error on enter')
         else:
             m = wrapped_meth
+        p.on_execute(Transaction().user,
+            uuid.uuid4().hex, m, args, kwargs)
         ret = m(cls, *args, **kwargs)
         try:
             PerfLog().on_leave(unicode(

@@ -1,3 +1,4 @@
+* BUG#7679 Prevent splitting of a batch tasks when the transaction size is defined
 * BUG#9355 Only check access for apply button when applying endorsements
 * FEA#9342 Add function get_latest_anniversary to coog_date which computes the latest anniversary of a certain date before another date
 * BUG#9251 Automatic bypass of User Warnings when executing a batch

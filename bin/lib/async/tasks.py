@@ -59,6 +59,11 @@ def batch_generate(name, params):
         split = batch_params.pop('split', True)
         chain_name = batch_params.pop('chain_name', None)
 
+        if transaction_size > 0 and transaction_size < job_size:
+            assert not split, "Jobs with a transaction_size cannot be " \
+                "splitted. Please set split to False in this batch " \
+                "configuration or add --no-split option to your command line"
+
         # Prepare serialized params (to be saved on redis)
         job_params = batch_params.copy()
         job_params['connection_date'] = connection_date
