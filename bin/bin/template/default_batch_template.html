@@ -80,17 +80,17 @@
                             <th class="reportheader center">Durée</th>
                             <th class="reportheader center">Statut</th>
                           </tr>
-                          <py:for each="chain_name, chain_summary in data['summary'].items()">
+                          <py:for each="chain_name, chain_summary in sorted(data['summary'].items(), key=lambda x:min([j.first_launch_date for j in x[1].values()]))">
                           <tr py:for="batch_name, summary in sorted(chain_summary.items(), key=lambda x:x[1].first_launch_date)">
                             <!-- <td py:if="summary == chain_summary[0]" class="cell left" colspan="${len(chain_summary)}">${chain_name}</td> -->
                             <td class="cell left">${chain_name}</td>
                             <td class="cell left">${batch_name}</td>
                             <td class="cell center">${datetime.strptime(summary.first_launch_date, '%Y-%m-%dT%H:%M:%S').strftime('%d/%m/%Y %H:%M:%S')}</td>
-                            <td class="cell center ${'pending' if summary['pending']['nb_jobs'] else 'neutral'}">${summary['pending']['nb_jobs']} / ${summary['pending']['nb_records']}</td>
-                            <td class="cell center ${'failed' if summary['failed']['nb_jobs'] else 'neutral'}">${summary['failed']['nb_jobs']} / ${summary['failed']['nb_records']}</td>
-                            <td class="cell center ${'success' if summary['success']['nb_jobs'] else 'neutral'}">${summary['success']['nb_jobs']} / ${summary['success']['nb_records']}</td>
-                            <td class="cell center ${'archive' if summary['archive']['nb_jobs'] else 'neutral'}">${summary['archive']['nb_jobs']} / ${summary['archive']['nb_records']}</td>
-                            <td class="cell center">${summary['pending']['nb_jobs']+summary['failed']['nb_jobs']+summary['success']['nb_jobs']} / ${summary['pending']['nb_records']+summary['failed']['nb_records']+summary['success']['nb_records']}</td>
+                            <td class="cell center ${'pending' if summary['pending']['nb_jobs'] else 'neutral'}">${summary['pending']['nb_jobs']} j - ${summary['pending']['nb_records']} r</td>
+                            <td class="cell center ${'failed' if summary['failed']['nb_jobs'] else 'neutral'}">${summary['failed']['nb_jobs']} j - ${summary['failed']['nb_records']} r</td>
+                            <td class="cell center ${'success' if summary['success']['nb_jobs'] else 'neutral'}">${summary['success']['nb_jobs']} j - ${summary['success']['nb_records']} r</td>
+                            <td class="cell center ${'archive' if summary['archive']['nb_jobs'] else 'neutral'}">${summary['archive']['nb_jobs']} j - ${summary['archive']['nb_records']} r</td>
+                            <td class="cell center">${summary['pending']['nb_jobs']+summary['failed']['nb_jobs']+summary['success']['nb_jobs']} j - ${summary['pending']['nb_records']+summary['failed']['nb_records']+summary['success']['nb_records']} r</td>
                             <td class="cell center">${"%d:%02d:%02d" % (summary['duration_in_sec']/3600, (summary['duration_in_sec']%3600)/60, summary['duration_in_sec']%60)}</td>
                             <td class="cell center ${'failed' if summary['failed']['nb_jobs'] else ('success' if summary['success']['nb_jobs'] else 'neutral')}">${'KO' if summary['failed']['nb_jobs'] else 'OK'}</td>
                           </tr>

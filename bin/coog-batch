@@ -24,6 +24,12 @@ coog_batch_generate() { # generate jobs - <name> [args*]
     echo "$name: generated $msg"
 }
 
+
+coog_batch_info() { # insert additional information for batch report -c [chain] -q [queue] -nj [nb_jobs] -nr [nb_records] -s [start] -d [duration]
+    local broker; broker=$(_coog_batch_broker) || return $?
+    local msg; msg=$(python -W ignore "$COOG_BIN/redis_insert_extra_info.py" "$@") || return $?
+}
+
 coog_batch_join() { # wait for execution - <name>
     [ $# -lt 1 ] && >&2 echo missing batch name && return 1
     local broker; broker=$(_coog_batch_broker) || return $?

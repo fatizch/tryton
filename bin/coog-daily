@@ -20,8 +20,8 @@ _coog_daily_check_modules() {
 }
 
 coog_daily_report() { # batches execution report generation
-    local template=$(python "$COOG_BIN/parse-config.py" batch_report fromemail < "$COOG_CONF_SRV" | sed -e "s/.*://" 2> /dev/null)
-    [[ -z "$template" ]] & template="$COOG_BIN/template/default_batch_template.html"
+    local template=$(python "$COOG_BIN/parse-config.py" batch_report template < "$COOG_CONF_SRV" | sed -e "s/.*://" 2> /dev/null)
+    [[ -z "$template" ]] && template="$COOG_BIN/template/default_batch_template.html"
     coog_celery_report "$@" | python "$COOG_BIN/batch_report_generate.py" "$template"
 }
 
@@ -30,11 +30,10 @@ coog_daily_mail() { # batches execution mail report
     [ $# -ne 0 ] && dates=$1 && shift 1
     local fromemail=$(python "$COOG_BIN/parse-config.py" batch_report fromemail < "$COOG_CONF_SRV" | sed -e "s/.*://" 2> /dev/null)
     local toemail=$(python "$COOG_BIN/parse-config.py" batch_report toemail < "$COOG_CONF_SRV" | sed -e "s/.*://" 2> /dev/null)
-    local body=$(coog_daily_report "$dates")
+    local body=$(coog_daily_report "$dates" "$@")
     local subject=$(sed -n -e 's/.*<title>\(.*\)<\/title>.*/\1/p' <<< $body)
     echo "$body" | python "$COOG_BIN/mail.py" --fromemail "$fromemail" --toemail "$toemail" --subject "$subject" 
 }
-title=
 
 coog_daily_main() { # launches daily chain 
     if [[ "$#" -lt 2 ]]; then

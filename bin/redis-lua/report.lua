@@ -62,6 +62,7 @@ end
 
 local broker = {}
 broker.patterns = {'coog:job:', 'celery-task-meta-'}
+broker.extra_pattern = {'coog:extra:'}
 broker.queue_pattern = ''
 
 broker.prepare = function(id)
@@ -113,9 +114,21 @@ broker.fill = function(id, job)
     end
 end
 
+broker.get_extra = function(id)
+    local job = redis.call('GET', broker.extra_pattern[1] .. id)
+    if not job then
+        return nil
+    end
+    job = cjson.decode(job)
+    job.id = id
+    job.first_launch_date = job.first_launch_date or '2000-01-01T00:00:00'
+    return job
+end
 -- api
 
 local api = {}
+
+
 
 local function get_details(from, to, extract_failed, extract_success, extract_pending, extract_archive)
     local summary, failed, success, pending, archive = {}, {}, {}, {}, {}
@@ -167,6 +180,36 @@ local function get_details(from, to, extract_failed, extract_success, extract_pe
                 archive[job.chain_name] = archive[job.chain_name] or {}
                 archive[job.chain_name][job.queue] = archive[job.chain_name][job.queue] or {}
                 archive[job.chain_name][job.queue][job.id] = job
+            end
+        end
+    end
+    local extra_pattern = broker.extra_pattern[1]
+    local keys = redis.call('KEYS', extra_pattern .. '*')
+    for _, key in ipairs(keys) do
+        local id = key:sub(#extra_pattern+1)
+        local job = broker.get_extra(id)
+        if (not from or job.first_launch_date >= from) and (not to or job.first_launch_date <= to .. '~') then
+            summary[job.chain_name] = summary[job.chain_name] or {}
+            summary[job.chain_name][job.queue] = summary[job.chain_name][job.queue] or {
+                failed={
+                    nb_jobs=0,
+                    nb_records=0},
+                success={
+                    nb_jobs=0,
+                    nb_records=0},
+                pending={
+                    nb_jobs=0,
+                    nb_records=0},
+                archive={
+                    nb_jobs=0,
+                    nb_records=0},
+                duration_in_sec=0,
+                first_launch_date='9999-01-01T00:00:00'}
+            summary[job.chain_name][job.queue][job.status].nb_jobs = summary[job.chain_name][job.queue][job.status].nb_jobs + job.nb_jobs
+            summary[job.chain_name][job.queue][job.status].nb_records = summary[job.chain_name][job.queue][job.status].nb_records + job.nb_records
+            summary[job.chain_name][job.queue].duration_in_sec = math.max(summary[job.chain_name][job.queue].duration_in_sec, job.duration_in_sec)
+            if summary[job.chain_name][job.queue].first_launch_date > job.first_launch_date then
+                summary[job.chain_name][job.queue].first_launch_date = job.first_launch_date
             end
         end
     end

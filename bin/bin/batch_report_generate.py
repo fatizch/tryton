@@ -5,6 +5,7 @@
 from os import path
 import sys
 import json
+import itertools
 from genshi.template import TemplateLoader
 from datetime import datetime
 
@@ -23,7 +24,8 @@ def generate_report(obj, template_path):
     if not tmpl:
         raise IOError('File is no valid')
     env = config.get('batch_report', 'env_name')
-    message = tmpl.generate(data=obj, datetime=datetime, env_name=env).render()
+    message = tmpl.generate(data=obj, datetime=datetime, env_name=env,
+        itertools=itertools).render()
     return message
 
 
