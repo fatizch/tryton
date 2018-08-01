@@ -53,6 +53,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         invoice.currency = None
         invoice.currency_date = None
         invoice.type = 'in'
+        invoice.contract = None
 
         invoice_line = self.InvoiceLine()
         invoice_line.invoice = invoice

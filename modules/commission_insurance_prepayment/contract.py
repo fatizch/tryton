@@ -650,6 +650,7 @@ class ContractOption:
             commission.amount = (percentage * amount).quantize(
                 Decimal(10) ** -COMMISSION_AMOUNT_DIGITS)
             commission.commissioned_option = self
+            commission.commissioned_contract = self.parent_contract
             commission.extra_details = details
             commission.extra_details.update({
                 'first_year_premium': self.first_year_premium,

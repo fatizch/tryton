@@ -106,6 +106,7 @@ class InvoiceLine:
             commission.amount = commission_amount
             commission.commission_rate = commission_rate
             commission.commissioned_option = self.details[0].get_option()
+            commission.commissioned_contract = self.invoice.contract
             commissions.append(commission)
         return commissions
 

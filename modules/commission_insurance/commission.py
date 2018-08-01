@@ -4,7 +4,7 @@ import datetime
 from dateutil import rrule
 from decimal import Decimal
 
-from sql import Cast, Literal
+from sql import Cast, Literal, Null
 from sql.operators import Concat
 from sql.aggregate import Sum, Max, Min
 from sql.functions import ToChar
@@ -55,9 +55,9 @@ class Commission:
     __metaclass__ = PoolMeta
     __name__ = 'commission'
 
-    commissioned_contract = fields.Function(
-        fields.Many2One('contract', 'Commissioned Contract'),
-        'get_commissioned_contract', searcher='search_commissioned_contract')
+    commissioned_contract = fields.Many2One('contract',
+        'Commissioned Contract', required=True, ondelete='CASCADE',
+        select=True)
     commissioned_option = fields.Many2One('contract.option',
         'Commissioned Option', select=True, ondelete='RESTRICT', readonly=True)
     party = fields.Function(
@@ -103,48 +103,6 @@ class Commission:
         'get_currency_digits')
 
     @classmethod
-    def __register__(cls, module_name):
-        # Migration from 1.4: add commissioned_option, start, end
-        TableHandler = backend.get('TableHandler')
-        cursor = Transaction().connection.cursor()
-        commission = TableHandler(cls)
-        has_option_column = commission.column_exist('commissioned_option')
-        has_start_column = commission.column_exist('start')
-
-        super(Commission, cls).__register__(module_name)
-        if not has_option_column:
-            cursor.execute("UPDATE commission "
-                "SET commissioned_option = Cast(substring(origin,17) as int) "
-                "WHERE origin LIKE 'contract.option,%'")
-            cursor.execute("UPDATE commission c "
-                "SET commissioned_option = d.option "
-                "FROM account_invoice_line_detail d "
-                "WHERE Cast(substring(c.origin,22) as int) = d.invoice_line "
-                "AND d.option is not NULL "
-                "AND c.origin LIKE 'account.invoice.line,%'")
-            cursor.execute("UPDATE commission c "
-                "SET commissioned_option = e.option "
-                "FROM contract_option_extra_premium e INNER JOIN "
-                "account_invoice_line_detail d on d.extra_premium = e.id "
-                "WHERE Cast(substring(c.origin,22) as int) = d.invoice_line "
-                "AND d.extra_premium is not NULL "
-                "AND c.origin LIKE 'account.invoice.line,%'")
-        if not has_start_column:
-            commission = cls.__table__()
-            line = Pool().get('account.invoice.line').__table__()
-            update_table = commission.join(line,
-                condition=(Concat('account.invoice.line,', Cast(line.id,
-                            'VARCHAR')) == commission.origin)
-                ).select(commission.id, line.coverage_start.as_('start'),
-                    line.coverage_end.as_('end'))
-            commission_up = cls.__table__()
-            cursor.execute(*commission_up.update(
-                    columns=[commission_up.start, commission_up.end],
-                    values=[update_table.start, update_table.end],
-                    from_=[update_table],
-                    where=(commission_up.id == update_table.id)))
-
-    @classmethod
     def __setup__(cls):
         super(Commission, cls).__setup__()
         cls.amount.digits = (16, COMMISSION_AMOUNT_DIGITS)
@@ -162,6 +120,72 @@ class Commission:
                 })
 
     @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().connection.cursor()
+        commission = TableHandler(cls)
+
+        # Migration from 2.0 : Use real field for contract
+        has_contract_column = commission.column_exist('commissioned_contract')
+
+        super(Commission, cls).__register__(module_name)
+
+        if not has_contract_column:
+            pool = Pool()
+
+            # Find contract from contract options
+            commission = cls.__table__()
+            option = pool.get('contract.option').__table__()
+            update_table = commission.join(option,
+                condition=(commission.commissioned_option == option.id)
+                ).select(commission.id, option.contract,
+                where=option.contract != Null)
+
+            commission_up = cls.__table__()
+            cursor.execute(*commission_up.update(
+                    columns=[commission_up.commissioned_contract],
+                    values=[update_table.contract],
+                    from_=[update_table],
+                    where=(commission_up.id == update_table.id)))
+
+            # Find contract from covered element options
+            commission = cls.__table__()
+            covered = pool.get('contract.covered_element').__table__()
+            option = pool.get('contract.option').__table__()
+            update_table = commission.join(option,
+                condition=(commission.commissioned_option == option.id)
+                ).join(covered, condition=(
+                    option.covered_element == covered.id)
+                ).select(commission.id, covered.contract, where=(
+                    option.covered_element != Null))
+
+            commission_up = cls.__table__()
+            cursor.execute(*commission_up.update(
+                    columns=[commission_up.commissioned_contract],
+                    values=[update_table.contract],
+                    from_=[update_table],
+                    where=(commission_up.id == update_table.id)
+                    & (commission_up.commissioned_contract == Null)))
+
+            # Find contract from invoice lines
+            commission = cls.__table__()
+            invoice_line = pool.get('account.invoice.line').__table__()
+            contract_invoice = pool.get('contract.invoice').__table__()
+            update_table = commission.join(invoice_line,
+                condition=(Concat('account.invoice.line,',
+                        Cast(invoice_line.id, 'VARCHAR')) == commission.origin)
+                ).join(contract_invoice, condition=(
+                    invoice_line.invoice == contract_invoice.invoice)
+                ).select(commission.id, contract_invoice.contract)
+            commission_up = cls.__table__()
+            cursor.execute(*commission_up.update(
+                    columns=[commission_up.commissioned_contract],
+                    values=[update_table.contract],
+                    from_=[update_table],
+                    where=(commission_up.id == update_table.id)
+                    & (commission_up.commissioned_contract == Null)))
+
+    @classmethod
     def delete(cls, instances):
         for commission in instances:
             if commission.invoice_line:
@@ -173,13 +197,6 @@ class Commission:
             return
         return abs(getattr(self.origin, name[5:], None) or 0)
 
-    def get_commissioned_contract(self, name):
-        if self.commissioned_option:
-            return self.commissioned_option.parent_contract.id
-        elif self.origin and self.origin.__name__ == 'account.invoice.line':
-            if self.origin.invoice.contract:
-                return self.origin.invoice.contract.id
-
     def get_currency_digits(self, name):
         return self.currency.digits if self.currency else 2
 
@@ -188,18 +205,8 @@ class Commission:
             return self.amount / self.commission_rate
         return Decimal(0)
 
-    @classmethod
-    def search_commissioned_contract(cls, name, clause):
-        return ['OR',
-            [('commissioned_option.parent_contract',) +
-            tuple(clause[1:])],
-            [('origin.invoice.contract',) +
-            tuple(clause[1:]) + ('account.invoice.line',)],
-            ]
-
     def get_commissioned_subscriber(self, name):
-        if self.commissioned_contract:
-            return self.commissioned_contract.subscriber.id
+        return self.commissioned_contract.subscriber.id
 
     def get_commissioned_covered_element(self, name):
         if (self.commissioned_option
@@ -208,12 +215,7 @@ class Commission:
 
     @classmethod
     def search_commissioned_subscriber(cls, name, clause):
-        return ['OR',
-            [('commissioned_option.parent_contract.subscriber',) +
-            tuple(clause[1:])],
-            [('origin.invoice.contract.subscriber',) +
-            tuple(clause[1:]) + ('account.invoice.line',)],
-            ]
+        return [('commissioned_contract.subscriber',) + tuple(clause[1:])]
 
     def get_party(self, name):
         return self.agent.party.id if self.agent else None
@@ -351,9 +353,7 @@ class AggregatedCommission(model.CoogSQL, model.CoogView):
     party = fields.Many2One('party.party', 'Party', readonly=True)
     invoice = fields.Many2One('account.invoice', 'Invoice', readonly=True)
     date = fields.Date('Date', readonly=True)
-    contract = fields.Function(
-        fields.Many2One('contract', 'Contract', readonly=True),
-        'get_commissioned_contract', searcher='search_commissioned_contract')
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
     commissioned_option = fields.Many2One('contract.option',
         'Commissioned Option', readonly=True, states={'invisible': True})
     broker = fields.Function(
@@ -379,16 +379,6 @@ class AggregatedCommission(model.CoogSQL, model.CoogView):
                 ('cancel', 'Canceled'),
                 ], 'Client Invoice State', readonly=True),
         'get_invoice_state')
-
-    def get_commissioned_contract(self, name=None):
-        if self.commissioned_option:
-            return self.commissioned_option.parent_contract.id
-        return None
-
-    @classmethod
-    def search_commissioned_contract(cls, name, clause):
-        return [('commissioned_option.parent_contract',) +
-            tuple(clause[1:])]
 
     def get_currency_digits(self, name):
         return self.invoice.currency_digits if self.invoice else 2
@@ -483,6 +473,7 @@ class AggregatedCommission(model.CoogSQL, model.CoogView):
             Literal(0).as_('write_uid'),
             Literal(0).as_('write_date'),
             commission.agent.as_('agent'),
+            Max(commission.commissioned_contract).as_('contract'),
             Max(commission.commissioned_option).as_('commissioned_option'),
             Min(commission.start).as_('start'),
             Max(commission.end).as_('end'),
