@@ -1,3 +1,5 @@
+* FEA#9492 Stocker le contrat sur les commissions
+
 Version 2.0 - 2018-04-13
 * BUG#7707 Ne rechercher les commissions de reprises que si nécessaire
 
