@@ -1,3 +1,4 @@
+* FEA#9379 Ajout de phonenumbers dans coog-dep
 * BUG#7679 Empêcher le découpage d'une tâche de batch lorsque la taille de la transaction est définie
 * FEA#9342 Ajout de la fonction get_latest_anniversary calculant la dernière date anniversaire d'une date donnée avant une autre date à coog_date
 * BUG#9355 Vérifier l'accès uniquement pour le bouton appliquer lors de l'application d'avenants

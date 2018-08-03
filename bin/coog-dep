@@ -46,5 +46,6 @@ coog_dep_main() { # install base deps
                 "sphinxprettysearchresults==0.3.2" \
                 "sphinx-rtd-theme==0.2.4" \
                 "pytest==3.2.2"\
-                "python-magic==0.4.15"
+                "python-magic==0.4.15" \
+                "phonenumbers==8.9.10"
 }
