@@ -15,7 +15,9 @@ class CoveredElement:
     __name__ = 'contract.covered_element'
 
     claim_bank_account = fields.Function(
-        fields.Many2One('bank.account', 'Claim Bank Account'),
+        fields.Many2One('bank.account', 'Claim Bank Account',
+            states={'invisible': ~Eval('has_health_related_option')},
+            depends=['has_health_related_option']),
         'get_claim_bank_account')
     claim_default_bank_account = fields.Function(
         fields.Many2One('bank.account', 'Claim Default Bank Account'),
@@ -28,6 +30,10 @@ class CoveredElement:
         fields.Many2Many('bank.account', None, None,
             'Possible Claim Bank Account'),
         'get_possible_claim_bank_accounts')
+    has_health_related_option = fields.Function(
+        fields.Boolean('Has Health Related Option',
+            states={'invisible': True}),
+        'get_has_health_related_option')
 
     def get_claim_bank_account(self, name=None):
         if self.claim_specific_bank_account:
@@ -49,3 +55,9 @@ class CoveredElement:
             billing_info = self.contract.billing_information
             if billing_info and billing_info.direct_debit_account:
                 return billing_info.direct_debit_account
+
+    def get_has_health_related_option(self, name=None):
+        for option in self.options:
+            if option.is_health:
+                return True
+        return False

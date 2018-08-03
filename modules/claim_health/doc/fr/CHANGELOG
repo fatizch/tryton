@@ -1,3 +1,5 @@
+* BUG#8957 Rendre le champ compte bancaire visible sur les élements couverts seulement s'ils ont une option santé
+
 Version 2.0 - 2018-04-13
 * BUG#7591 Le champ famille n'est pas requis dans la description d'un acte médical car certains actes médicaux n'appartiennent à aucune famille spécifique
 

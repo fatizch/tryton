@@ -6,5 +6,6 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="claim_bank_account"/>
         <field name="claim_bank_account"/>
+        <field name="has_health_related_option"/>
     </xpath>
 </data>

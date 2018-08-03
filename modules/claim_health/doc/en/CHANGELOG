@@ -1,3 +1,5 @@
+* BUG#8957 Make claim_bank_account field visible on covered elements only if it has a health related option
+
 Version 2.0 - 2018-04-13
 * BUG#7591 The field family is not required in a medical act description as some medical acts do not belong to any specific family
 
