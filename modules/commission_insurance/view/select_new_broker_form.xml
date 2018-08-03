@@ -7,8 +7,8 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <label name="to_broker"/>
     <field name="to_broker"/>
-    <label name="new_agency"/>
-    <field name="new_agency"/>
+    <label name="new_dist_network"/>
+    <field name="new_dist_network"/>
     <newline/>
     <label name="at_date"/>
     <field name="at_date"/>

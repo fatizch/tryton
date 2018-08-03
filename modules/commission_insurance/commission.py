@@ -875,6 +875,9 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
         cls.plan.required = True
         cls.plan.select = True
         cls.party.select = True
+        cls.party.domain = ['OR', ('is_broker', '=', True),
+                ('is_insurer', '=', True),
+                ]
         cls._error_messages.update({
                 'agent_not_found': 'Cannot find matching agent for %s :\n\n%s',
                 })
@@ -1031,7 +1034,7 @@ class CreateAgents(Wizard):
         payment_terms = PaymentTerm.search([])
         if self.parties.parties:
             Party.write(list(self.parties.parties), {
-                    'account_payable': self.parties.account_payable_used.id,
+                    'account_payable': self.parties.account_payable.id,
                     'supplier_payment_term': payment_terms[0].id,
                     })
 
@@ -1526,12 +1529,12 @@ class ChangeBroker(Wizard):
         else:
             contracts = self.select_new_broker.contracts
 
-        agency_id = None
-        if self.select_new_broker.new_agency:
-            agency_id = self.select_new_broker.new_agency.id
+        dist_network_id = None
+        if self.select_new_broker.new_dist_network:
+            dist_network_id = self.select_new_broker.new_dist_network.id
         Contract.change_broker(contracts, self.select_new_broker.to_broker,
             self.select_new_broker.at_date, update_contracts=True,
-            agency=agency_id,
+            dist_network=dist_network_id,
             create_missing=self.select_new_broker.auto_create_agents)
         return 'end'
 
@@ -1553,7 +1556,8 @@ class SelectNewBroker(model.CoogView):
         states={'invisible': Eval('all_contracts', False),
             'required': ~Eval('all_contracts')},
         depends=['all_contracts', 'from_broker'])
-    new_agency = fields.Many2One('distribution.network', 'New Agency',
+    new_dist_network = fields.Many2One('distribution.network',
+        'New Distribution Network',
         domain=[('party', '=', None),
             ('parent_party', '=', Eval('to_broker'))],
         states={'readonly': ~Eval('to_broker')}, depends=['to_broker'],)
@@ -1564,13 +1568,14 @@ class SelectNewBroker(model.CoogView):
         if self.all_contracts:
             self.contracts = []
 
-    @fields.depends('all_contracts', 'from_broker', 'new_agency', 'to_broker')
+    @fields.depends('all_contracts', 'from_broker', 'new_dist_network',
+        'to_broker')
     def on_change_from_broker(self):
         self.contracts = []
         if self.from_broker == self.to_broker:
             self.to_broker = None
-            self.new_agency = None
+            self.new_dist_network = None
 
-    @fields.depends('new_agency')
+    @fields.depends('new_dist_network')
     def on_change_to_broker(self):
-        self.new_agency = None
+        self.new_dist_network = None

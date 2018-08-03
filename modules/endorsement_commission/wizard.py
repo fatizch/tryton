@@ -30,19 +30,22 @@ class ChangeContractCommission(EndorsementWizardStepMixin):
             ],
         depends=['broker_party', 'product'])
     broker = fields.Many2One('distribution.network', 'New Broker',
-        domain=[('party.agents', '!=', None)])
-    agency = fields.Many2One('distribution.network', 'Agency',
-        domain=[If(Bool(Eval('broker', False)),
-                   ('parents', '=', Eval('broker')),
-                   ('parent', '=', None))],
-        depends=['broker'])
+        domain=[If(Bool(Eval('dist_network', False)),
+                ['OR', ('id', '=', Eval('dist_network')),
+                    ('childs', '=', Eval('dist_network'))],
+                [('parent', '=', None)]),
+                ('party.agents', '!=', None)],
+        depends=['dist_network'])
+    dist_network = fields.Many2One('distribution.network',
+        'New Distribution Network')
     broker_party = fields.Many2One('party.party', 'New Broker Party',
         states={'invisible': True})
     current_broker = fields.Many2One('distribution.network', 'Current Broker',
         readonly=True)
     current_agent = fields.Many2One('commission.agent', 'Current Agent',
         readonly=True)
-    current_agency = fields.Many2One('distribution.network', 'Current Agency',
+    current_dist_network = fields.Many2One('distribution.network',
+        'Current Distribution Network',
         readonly=True)
     product = fields.Many2One('offered.product', 'Product', readonly=True,
         states={'invisible': True})
@@ -51,10 +54,10 @@ class ChangeContractCommission(EndorsementWizardStepMixin):
     def is_multi_instance(cls):
         return False
 
-    @fields.depends('agency', 'agent', 'broker')
+    @fields.depends('dist_network', 'agent', 'broker')
     def on_change_broker(self):
         if not self.broker:
-            self.agency = None
+            self.dist_network = None
             self.agent = None
 
     @fields.depends('broker')
@@ -84,7 +87,7 @@ class ChangeContractCommission(EndorsementWizardStepMixin):
     @classmethod
     def _contract_fields_to_extract(cls):
         return {
-            'contract': ['agency', 'agent', 'broker'],
+            'contract': ['dist_network', 'agent', 'broker'],
             }
 
     @classmethod

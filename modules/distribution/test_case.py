@@ -56,7 +56,8 @@ class TestCaseModel:
             for i in range(1, random.randint(1, 3)):
                 name = '%s : %s %s' % (region.name, translater('Dept'), i)
                 department = cls.new_distribution_network(name, '%s %s' %
-                    (name, translater('Agency')), random.randint(1, 5))
+                    (name, translater('Distribution Network')),
+                    random.randint(1, 5))
                 department.code = region.code + str(i).zfill(2)
                 for child in department.childs:
                     child.code = department.code + child.code
@@ -74,7 +75,7 @@ class TestCaseModel:
             for i in range(1, random.randint(2, 3)):
                 if sub_partner == partner.childs[0]:
                     name = '%s : %s %s' % (sub_partner.name,
-                        translater('Agency'), i)
+                        translater('Distribution Network'), i)
                     department = cls.new_distribution_network(name,
                         '%s %s' % (name, translater('Commercial')),
                         random.randint(2, 10))

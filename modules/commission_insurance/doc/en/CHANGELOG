@@ -1,3 +1,4 @@
+* FEA#9349 Remove the field agency and replace it with the distribution network
 * FEA#9492 Add a stored field for the commissioned contract
 * BUG#7515 Block manual creation / modification of commissions
 * FEA#9133 Explicit broker definition in distribution network

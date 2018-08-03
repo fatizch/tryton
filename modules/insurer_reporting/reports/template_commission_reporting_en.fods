@@ -1518,7 +1518,7 @@
       <text:p>Commission Amount</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Agency</text:p>
+      <text:p>Distribution Network</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Invoice Date</text:p>
@@ -1636,7 +1636,7 @@
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string"><text:p><text:a xlink:href="relatorio://com.amount" xlink:type="simple">com.amount</text:a></text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p><text:a xlink:href="relatorio://com.commissioned_contract.agency.rec_name" xlink:type="simple">com.commissioned_contract.agency.rec_name</text:a></text:p>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p><text:a xlink:href="relatorio://com.commissioned_contract.dist_network.rec_name" xlink:type="simple">com.commissioned_contract.dist_network.rec_name</text:a></text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce74" office:value-type="string" calcext:value-type="string"><text:p><text:a xlink:href="relatorio://format_date(invoice.invoice_date,%20Party.lang)" xlink:type="simple">format_date(invoice.invoice_date, Party.lang)</text:a></text:p>
      </table:table-cell>

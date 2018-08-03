@@ -762,8 +762,6 @@ if not champs_technique('loss.covered_person.id'):
     <field name="broker"/>
     <label name="agent"/>
     <field name="agent" widget="selection"/>
-    <label name="agency"/>
-    <field name="agency"/>
 </group>
 <field name="subscriber_desc" widget="richtext" colspan="4"/>
 <field name="billing_informations" invisible="1" colspan="4"/>
@@ -789,8 +787,6 @@ if not champs_technique('loss.covered_person.id'):
     <field name="broker"/>
     <label name="agent"/>
     <field name="agent" widget="selection"/>
-    <label name="agency"/>
-    <field name="agency"/>
 </group>
 <field name="subscriber_desc" widget="richtext" colspan="4"/>
 <field name="billing_informations" invisible="1" colspan="4"/>

@@ -274,9 +274,9 @@ msgctxt "field:commission.change_broker.select_new_broker,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:commission.change_broker.select_new_broker,new_agency:"
-msgid "New Agency"
-msgstr "Nouvelle agence"
+msgctxt "field:commission.change_broker.select_new_broker,new_dist_network:"
+msgid "New Distribution Network"
+msgstr "Nouveau réseau de distribution"
 
 msgctxt "field:commission.change_broker.select_new_broker,to_broker:"
 msgid "To Broker"
@@ -601,10 +601,6 @@ msgstr "Mis à jour par"
 msgctxt "field:commission_plan-commission_plan,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
-
-msgctxt "field:contract,agency:"
-msgid "Agency"
-msgstr "Agence"
 
 msgctxt "field:contract,agent:"
 msgid "Agent"

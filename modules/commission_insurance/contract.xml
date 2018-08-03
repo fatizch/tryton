@@ -45,4 +45,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_commission_contract_relate_form"/>
         </record>
     </data>
+    <data depends="contract_distribution">
+        <!-- Contract -->
+        <record model="ir.ui.view" id="contract_distribution_view_form">
+            <field name="model">contract</field>
+            <field name="inherit" ref="contract.contract_view_form"/>
+            <field name="name">contract_form_distribution</field>
+        </record>
+    </data>
 </tryton>

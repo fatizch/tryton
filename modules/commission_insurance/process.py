@@ -21,5 +21,5 @@ class ContractSubscribe:
             contract.broker_party = process_param.distributor.broker_party
             contract.agent = utils.auto_complete_with_domain(contract, 'agent')
             if contract.agent:
-                contract.agency = process_param.distributor
+                contract.dist_network = process_param.distributor
         return res, errs

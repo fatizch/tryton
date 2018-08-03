@@ -34,21 +34,16 @@ class Contract:
 
     broker = fields.Function(
         fields.Many2One('distribution.network', 'Broker',
-            domain=[('party.agents', '!=', None)], states=_STATES,
-            depends=_DEPENDS),
+            domain=[If(Bool(Eval('dist_network', False)),
+                ['OR', ('id', '=', Eval('dist_network')),
+                    ('childs', '=', Eval('dist_network'))],
+                [('parent', '=', None)]),
+                ('party.agents', '!=', None)], states=_STATES,
+            depends=_DEPENDS + ['dist_network']),
         'on_change_with_broker', 'setter_void')
     broker_party = fields.Function(
         fields.Many2One('party.party', 'Broker'),
         'on_change_with_broker_party', searcher='search_broker_party')
-    agency = fields.Many2One('distribution.network', 'Agency',
-        domain=[If(Bool(Eval('broker', False)),
-                ['OR', ('id', '=', Eval('broker')),
-                    ('parents', '=', Eval('broker'))],
-                [('parent', '=', None)])],
-        states={
-            'readonly': ((Eval('status') != 'quote') | ~Eval('broker', None)),
-            },
-        depends=_DEPENDS + ['broker'], ondelete='RESTRICT')
     agent = fields.Many2One('commission.agent', 'Agent', ondelete='RESTRICT',
         domain=[
             ('type_', '=', 'agent'),
@@ -69,8 +64,7 @@ class Contract:
 
     @classmethod
     def _export_light(cls):
-        return (super(Contract, cls)._export_light() |
-            set(['agency', 'agent']))
+        return (super(Contract, cls)._export_light() | {'agent'})
 
     def get_invoice(self, start, end, billing_information):
         invoice = super(Contract, self).get_invoice(start, end,
@@ -152,7 +146,7 @@ class Contract:
     def on_change_with_broker_party(self, name=None):
         return self.broker.party.id if self.broker else None
 
-    @fields.depends('broker', 'agent', 'agency', 'product',
+    @fields.depends('broker', 'agent', 'product',
         'initial_start_date')
     def on_change_broker(self):
         # Careful with depends, some clients are depending on the current
@@ -160,8 +154,6 @@ class Contract:
         self.broker_party = self.on_change_with_broker_party()
         if self.broker_party:
             self.agent = self.on_change_with_agent()
-        if not self.broker:
-            self.agency = None
 
     @fields.depends('broker_party', 'product', 'initial_start_date')
     def on_change_with_agent(self):
@@ -170,7 +162,7 @@ class Contract:
 
     @classmethod
     def change_broker(cls, contracts, new_broker, at_date,
-            update_contracts=False, agency=None, create_missing=False):
+            update_contracts=False, dist_network=None, create_missing=False):
         pool = Pool()
         Commission = pool.get('commission')
         Agent = pool.get('commission.agent')
@@ -200,7 +192,7 @@ class Contract:
         for from_agent, to_agent in agent_matches.iteritems():
             if update_contracts:
                 cls.write(per_agent[from_agent], {'agent': to_agent.id,
-                        'agency': agency})
+                    'dist_network': dist_network})
             Commission.modify_agent(Commission.search([
                         ('commissioned_contract', 'in',
                             [x.id for x in per_agent[from_agent]]),

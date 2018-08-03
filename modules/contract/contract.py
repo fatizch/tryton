@@ -367,6 +367,9 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                 '%s address is defined',
                 'delete_not_allowed': 'Deletion not allowed because the '
                 'contracts %(contracts)s are not quote or declined.',
+                'no_dist_network': 'Contract %(contracts)s must have a'
+                'distribution network, Please enter it',
+
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
         # if issue with following code, apply SQL script from Github PR #815
@@ -555,10 +558,16 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             option.notify_contract_start_date_change(value)
         self.options = self.options
 
+    def check_existence_dist_network(self):
+        if not getattr(self, 'dist_network', None):
+                self.raise_user_error('no_dist_network', {
+                    'contract': self.rec_name})
+
     @classmethod
     def _calculate_methods(cls, product):
         return [('options', 'set_automatic_end_date'),
             ('contract', 'calculate_activation_dates'),
+            ('contract', 'check_existence_dist_network'),
             ]
 
     @dualmethod

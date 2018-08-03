@@ -6,15 +6,15 @@ this repository contains the full copyright notices and license terms. -->
     <field name="current_broker" colspan="3"/>
     <label name="current_agent"/>
     <field name="current_agent" colspan="3"/>
-    <label name="current_agency"/>
-    <field name="current_agency" colspan="3"/>
+    <label name="current_dist_network"/>
+    <field name="current_dist_network" colspan="3"/>
     <newline/>
     <label name="broker"/>
     <field name="broker" colspan="3"/>
     <label name="agent"/>
     <field name="agent" colspan="3"/>
-    <label name="agency"/>
-    <field name="agency" colspan="3"/>
+    <label name="dist_network"/>
+    <field name="dist_network" colspan="3"/>
     <newline/>
     <field name="product"/>
     <field name="endorsement_part"/>
