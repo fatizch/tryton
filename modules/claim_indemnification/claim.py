@@ -1127,7 +1127,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 indemnification.previous_indemnification(['calculated',
                         'scheduled', 'controlled', 'validated', 'paid'])
             delta = 0
-            if not previous_indemnification:
+            if (not previous_indemnification and
+                    indemnification.service.loss.with_end_date):
                 delta = (indemnification.start_date -
                     indemnification.service.loss.start_date).days + 1
             if (previous_indemnification and

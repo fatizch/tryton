@@ -1,3 +1,4 @@
+* BUG#9528 Autoriser l'ordennacement des indemnisations de types capitaux lors de la vérification pour ordonnancement 
 * BUG#9407 Correctif sur les périodes pour ne plus pouvoir ordonnancer en ayant un trou entre la date de début de préjudice et la première période d'indemnisation
 * BUG#9201 Afficher les alertes de doublon de périodes d'indemnisation avant les autres alertes
 * BUG#9006 Filtre sur les indemnisations à vérifier pour le chevauchement de périodes
