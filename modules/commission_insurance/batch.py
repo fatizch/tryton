@@ -51,25 +51,18 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
         return cursor.fetchall()
 
     @classmethod
-    def commission_domain(cls, treatment_date, parties):
-        domain = [
-            ('invoice_line', '=', None),
-            ('date', '<=', treatment_date),
-            ('agent.party', 'in', parties)]
-        return domain
-
-    @classmethod
     def execute(cls, objects, ids, treatment_date, agent_type):
         pool = Pool()
         Commission = pool.get('commission')
         Invoice = pool.get('account.invoice')
+        CreateInvoiceWizard = pool.get('commission.create_invoice',
+            type='wizard')
         if not agent_type:
             cls.logger.warning('No agent_type defined. '
                 'Batch execution aborted')
             return
-        commissions = Commission.search(cls.commission_domain(
-            treatment_date, ids),
-            order=[('agent', 'DESC'), ('date', 'DESC')])
+        commissions = CreateInvoiceWizard.fetch_commmissions_to_invoice(
+            to=treatment_date, agent_party_ids=ids)
         invoices = Commission.invoice(commissions)
         Invoice.write(invoices, {'invoice_date': treatment_date})
         cls.logger.info('Commissions invoices created for %s' %

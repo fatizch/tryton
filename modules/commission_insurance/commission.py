@@ -209,8 +209,8 @@ class Commission:
         return self.commissioned_contract.subscriber.id
 
     def get_commissioned_covered_element(self, name):
-        if (self.commissioned_option
-                and self.commissioned_option.covered_element):
+        if (self.commissioned_option and
+                self.commissioned_option.covered_element):
             return self.commissioned_option.covered_element.id
 
     @classmethod
@@ -825,8 +825,8 @@ class PlanCalculationDate(model.CoogSQL, model.CoogView):
             return set()
         if self.first_match_only:
             values = [values[0]]
-        return {x for x in values if x > invoice_line.coverage_start
-            and x < invoice_line.coverage_end}
+        return {x for x in values if x > invoice_line.coverage_start and
+            x < invoice_line.coverage_end}
 
     def get_rrule_frequency(self):
         if self.frequency == 'yearly':
@@ -1163,23 +1163,57 @@ class CreateInvoice:
         pool = Pool()
         Invoice = pool.get('account.invoice')
         Commission = pool.get('commission')
-        commissions = Commission.search(self.get_domain(),
-            order=[('agent', 'DESC'), ('date', 'DESC')])
+
+        agent_type = None
+        if self.ask.type_ == 'in':
+            agent_type = 'principal'
+        elif self.ask.type_ == 'out':
+            agent_type = 'agent'
+
+        broker_ids = [x.id for x in self.ask.brokers] if not \
+            self.ask.all_brokers else None
+
+        commissions = self.fetch_commmissions_to_invoice(
+            self.ask.from_, self.ask.to, agent_type,
+            broker_ids)
         invoices = Commission.invoice(commissions)
         Invoice.write(invoices, {'invoice_date': self.ask.to})
         if self.ask.post_invoices:
             Invoice.post(invoices)
         encoder = PYSONEncoder()
         action['pyson_domain'] = encoder.encode(
-            [('id', 'in', [i.id for i in invoices])])
+               [('id', 'in', [i.id for i in invoices])])
         action['pyson_search_value'] = encoder.encode([])
         return action, {}
 
-    def get_domain(self):
-        domain = super(CreateInvoice, self).get_domain()
-        if not self.ask.all_brokers:
-            domain.append(('agent.party', 'in', self.ask.brokers))
-        return domain
+    @classmethod
+    def fetch_commmissions_to_invoice(cls, from_=None, to=None, agent_type=None,
+            agent_party_ids=None):
+        pool = Pool()
+        agent = pool.get('commission.agent').__table__()
+        commission = pool.get('commission').__table__()
+
+        query_table = agent.join(commission, condition=(
+                commission.agent == agent.id))
+
+        where_clause = ((commission.invoice_line == Null) &
+            (commission.date != Null))
+
+        if agent_type:
+            where_clause &= (agent.type_ == agent_type)
+        if from_:
+            where_clause &= (commission.date >= from_)
+        if to:
+            where_clause &= (commission.date <= to)
+        if agent_party_ids:
+            where_clause &= (agent.party.in_(agent_party_ids))
+
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*query_table.select(commission.id,
+                where=where_clause,
+                order_by=[commission.agent.desc, commission.date.desc]))
+
+        return pool.get('commission').browse([x for x, in cursor.fetchall()])
 
 
 class CreateInvoiceAsk:
@@ -1290,8 +1324,8 @@ class OpenCommissionsSynthesis(Wizard):
             ).select(
                 ToChar(invoice.invoice_date, 'YYYY').as_('year'),
                 Sum(commission.amount),
-                where=((invoice.state == 'paid')
-                    & (agent.party == broker_party.id)),
+                where=((invoice.state == 'paid') &
+                    (agent.party == broker_party.id)),
                 group_by=[ToChar(invoice.invoice_date, 'YYYY')],
                 order_by=[ToChar(invoice.invoice_date, 'YYYY').desc])
         cursor.execute(*query)

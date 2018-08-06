@@ -126,6 +126,11 @@ class Plan:
     delete_unpaid_prepayment = fields.Boolean('Delete Unpaid Prepayment',
         help='Redeemed of unpaid invoices will be deleted once contracts '
         'are terminated')
+    prepayment_due_at_first_paid_invoice = fields.Boolean('Prepayment Due'
+        ' At First Paid Invoice', help='The prepayment is due only when'
+        ' a contract has at least one paid invoice',
+        states={'invisible': ~Eval('is_prepayment')},
+        depends=['is_prepayment'])
 
     @classmethod
     def view_attributes(cls):

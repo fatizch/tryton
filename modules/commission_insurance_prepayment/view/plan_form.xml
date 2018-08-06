@@ -8,6 +8,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="adjust_prepayment"/>
             <label name="delete_unpaid_prepayment"/>
             <field name="delete_unpaid_prepayment"/>
+            <label name="prepayment_due_at_first_paid_invoice"/>
+            <field name="prepayment_due_at_first_paid_invoice"/>
         </page>
     </xpath>
 </data>

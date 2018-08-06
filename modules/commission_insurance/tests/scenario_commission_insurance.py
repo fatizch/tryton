@@ -259,6 +259,7 @@ pay.execute('choice')
 
 # #Comment# #Create commission invoice
 Invoice = Model.get('account.invoice')
+
 create_invoice = Wizard('commission.create_invoice')
 create_invoice.form.from_ = None
 create_invoice.form.to = None

@@ -660,6 +660,9 @@ class ContractOption:
                 'monthly_premium_excl_tax': self.monthly_premium_excl_tax,
                 })
             commissions.append(commission)
+        if commissions and agent.plan.prepayment_due_at_first_paid_invoice:
+            first_date_com = sorted(commissions, key=lambda x: x.date)[0]
+            first_date_com.date = None
         return commissions
 
     def compute_prepayment(self, adjustment, start_date, end_date):
