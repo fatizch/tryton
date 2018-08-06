@@ -558,16 +558,10 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             option.notify_contract_start_date_change(value)
         self.options = self.options
 
-    def check_existence_dist_network(self):
-        if not getattr(self, 'dist_network', None):
-                self.raise_user_error('no_dist_network', {
-                    'contract': self.rec_name})
-
     @classmethod
     def _calculate_methods(cls, product):
         return [('options', 'set_automatic_end_date'),
             ('contract', 'calculate_activation_dates'),
-            ('contract', 'check_existence_dist_network'),
             ]
 
     @dualmethod

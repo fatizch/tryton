@@ -8,6 +8,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="broker"/>
             <label name="agent"/>
             <field name="agent"/>
+            <label name="dist_network"/>
+            <field name="dist_network"/>
         </page>
     </xpath>
 </data>

@@ -49,3 +49,13 @@ class Contract:
     @classmethod
     def _export_light(cls):
         return super(Contract, cls)._export_light() | set(['dist_network'])
+
+    def check_existence_dist_network(self):
+        if not getattr(self, 'dist_network', None):
+                self.raise_user_error('no_dist_network', {
+                    'contract': self.rec_name})
+
+    @classmethod
+    def _calculate_methods(cls, product):
+        return super(Contract, cls)._calculate_methods(product) + [
+            ('contract', 'check_existence_dist_network')]
