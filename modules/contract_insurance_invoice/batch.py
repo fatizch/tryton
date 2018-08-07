@@ -10,7 +10,7 @@ from sql.functions import ToChar, CurrentTimestamp
 from sql.operators import Not, Concat
 from itertools import groupby
 
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 
@@ -490,3 +490,40 @@ class RebillBatch(batch.BatchRoot):
 
         if post and reconcile:
             Contract.reconcile(Contract.browse([x[0] for x in objects]))
+
+
+class RenewContracts:
+    __metaclass__ = PoolMeta
+    __name__ = 'contract.renew'
+
+    @classmethod
+    def get_tables(cls):
+        pool = Pool()
+        tables = super(RenewContracts, cls).get_tables()
+        tables['account_invoice'] = pool.get('account.invoice').__table__()
+        tables['contract_invoice'] = pool.get('contract.invoice').__table__()
+        return tables
+
+    @classmethod
+    def get_where_clause(cls, tables, window_query, treatment_date):
+        clause = super(RenewContracts, cls).get_where_clause(tables,
+            window_query, treatment_date)
+        contract = tables['contract']
+        activation_history = tables['activation_history']
+        contract_invoice = tables['contract_invoice']
+        account_invoice = tables['account_invoice']
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*contract.join(contract_invoice,
+                    condition=(contract.id == contract_invoice.contract)
+                ).join(account_invoice,
+                    condition=(account_invoice.id == contract_invoice.invoice)
+                ).join(activation_history,
+                    condition=(activation_history.contract == contract.id)
+                ).select(contract.id,
+                    where=(account_invoice.state.in_(['posted', 'paid'])),
+                    group_by=contract.id,
+                    having=(
+                        Max(contract_invoice.end) ==
+                        Max(activation_history.end_date))))
+        last_term_invoiced = [x for x, in cursor.fetchall()]
+        return clause & (contract.id.in_(last_term_invoiced))

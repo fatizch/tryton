@@ -84,3 +84,7 @@ def register():
         event.EventLog,
         module='contract_insurance_invoice', type_='model',
         depends=['event_log'])
+    Pool.register(
+        batch.RenewContracts,
+        module='contract_insurance_invoice', type_='model',
+        depends=['contract_term_renewal'])

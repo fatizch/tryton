@@ -25,15 +25,33 @@ class RenewContracts(batch.BatchRoot):
         return 'contract'
 
     @classmethod
-    def select_ids(cls, treatment_date):
+    def get_where_clause(cls, tables, window_query, treatment_date):
         pool = Pool()
-        cursor = Transaction().connection.cursor()
         Product = pool.get('offered.product')
         renewable_products = [x.id for x in Product.search([
                     ('term_renewal_rule.allow_renewal', '=', True)])]
-        contract = pool.get('contract').__table__()
-        activation_history = pool.get('contract.activation_history'
-            ).__table__()
+        contract = tables['contract']
+        return ((contract.status == 'active') &
+            (contract.product.in_(renewable_products)) &
+            (window_query.end_date == window_query.max_end) &
+            (window_query.end_date <= treatment_date) &
+            (window_query.final_renewal == Literal(False)))
+
+    @classmethod
+    def get_tables(cls):
+        pool = Pool()
+        return {
+            'contract': pool.get('contract').__table__(),
+            'activation_history': pool.get(
+                'contract.activation_history').__table__()
+            }
+
+    @classmethod
+    def select_ids(cls, treatment_date):
+        cursor = Transaction().connection.cursor()
+        tables = cls.get_tables()
+        activation_history = tables['activation_history']
+        contract = tables['contract']
         win_query = activation_history.select(
             activation_history.contract,
             activation_history.active,
@@ -45,12 +63,9 @@ class RenewContracts(batch.BatchRoot):
             where=(activation_history.active == Literal(True)))
         cursor.execute(*contract.join(win_query,
                 condition=win_query.contract == contract.id
-                ).select(contract.id, where=(contract.status == 'active')
-                & contract.product.in_(renewable_products)
-                & (win_query.end_date == win_query.max_end)
-                & (win_query.end_date <= treatment_date)
-                & (win_query.final_renewal == Literal(False))))
-        return [x for x in cursor.fetchall()]
+                ).select(contract.id,
+                where=cls.get_where_clause(tables, win_query, treatment_date)))
+        return list(cursor.fetchall())
 
     @classmethod
     def execute(cls, objects, ids, treatment_date):
