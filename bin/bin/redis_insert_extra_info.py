@@ -1,35 +1,8 @@
 #!/usr/bin/env python
-import os
-import redis
 import argparse
 import sys
-import json
 
-from urlparse import urlparse
-
-broker_url = os.environ.get('TRYTOND_ASYNC_CELERY')
-assert broker_url, 'TRYTOND_ASYNC_CELERY should be set'
-broker_url = urlparse(broker_url)
-broker_host = broker_url.hostname
-broker_port = broker_url.port
-broker_db = broker_url.path.strip('/')
-
-
-def insert_into_redis(chain, queue, nb_jobs, nb_records, start_time,
-        duration, status):
-    connection = redis.StrictRedis(host=broker_host, port=broker_port,
-        db=broker_db)
-    info = {
-        "chain_name": chain,
-        "queue": queue,
-        "nb_jobs": nb_jobs,
-        "nb_records": nb_records,
-        "first_launch_date": start_time,
-        "duration_in_sec": duration,
-        "status": status
-    }
-    info_s = json.dumps(info)
-    connection.set("coog:extra:" + chain + queue + start_time, info_s)
+import async.broker as async_broker
 
 
 def check_integer(string):
@@ -70,9 +43,11 @@ def main():
     arguments = parser.parse_args()
     if not check_arguments_format(arguments):
         exit(1)
-    insert_into_redis(arguments.chain, arguments.queue, arguments.nb_jobs,
-        arguments.nb_records, arguments.start_time, arguments.duration,
-        arguments.status)
+    async_broker.set_module('celery')
+    broker = async_broker.get_module()
+    broker.insert_into_redis(arguments.chain, arguments.queue,
+        arguments.nb_jobs, arguments.nb_records, arguments.start_time,
+        arguments.duration, arguments.status)
 
 
 main()

@@ -87,6 +87,12 @@ def batch_generate(name, params):
                         broker.enqueue(name, 'batch_exec',
                             (name, l, job_params), database=database)
                         res.append(len(l))
+                    if not len(res):
+                        broker.insert_into_redis(
+                            chain=job_params['chain_name'], queue=name,
+                            nb_jobs=0, nb_records=0,
+                            start_time=job_params['connection_date'],
+                            duration=0, status='sucess')
             except Exception:
                 logger.critical('Job generation crashed')
                 raise

@@ -47,6 +47,21 @@ def enqueue(queue, fname, args, **kwargs):
     log_job(job, queue, fname, args, kwargs)
 
 
+def insert_into_redis(chain, queue, nb_jobs, nb_records, start_time,
+    duration, status):
+    info = {
+        "chain_name": chain,
+        "queue": queue,
+        "nb_jobs": nb_jobs,
+        "nb_records": nb_records,
+        "first_launch_date": start_time,
+        "duration_in_sec": duration,
+        "status": status
+    }
+    info_s = json.dumps(info)
+    connection.set("coog:extra:" + chain + queue + start_time, info_s)
+
+
 def split(job_key):
     job = connection.hget('rq:job:%s' % job_key, 'coog')
     if not job:
