@@ -157,7 +157,8 @@ class EndorsementSet(model.CoogSQL, model.CoogView, Printable):
                     '\n'.join([x.contract_number + ' - ' + x.product.rec_name
                             + ', ' + x.subscriber.full_name
                             for x in endorsement.contracts]) + \
-                    "</b> </span> </p>\n\n" + endorsement.endorsement_summary
+                    "</b> </span> </p>\n\n" + (
+                        endorsement.endorsement_summary or '')
             summaries.append(summary)
 
         return ('\n\n' + "<p align='center'>" + ' - ' * 30 + '</p>' +
