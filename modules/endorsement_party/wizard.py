@@ -561,7 +561,8 @@ class ChangePartyRelationship(EndorsementWizardStepMixin):
                         x.action == 'add']
             for displayer in self.displayers:
                 prev_relation = displayer.previous_relation[0] if\
-                    displayer.previous_relation else None
+                    (getattr(displayer, 'previous_relation', None) and
+                        displayer.previous_relation) else None
                 if displayer.to_remove and prev_relation:
                     relation_endorsement = EndorsementRelation(
                         action='remove',
