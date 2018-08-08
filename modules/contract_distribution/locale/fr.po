@@ -11,8 +11,8 @@ msgid "Commercial Product"
 msgstr "Produit commercial"
 
 msgctxt "field:contract,dist_network:"
-msgid "Distribution Network"
-msgstr "Réseau de Distribution"
+msgid "Distributor"
+msgstr "Distributeur"
 
 msgctxt "field:contract.billing_information,allowed_portfolios:"
 msgid "Allowed Portfolios"

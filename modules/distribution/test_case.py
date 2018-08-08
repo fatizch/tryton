@@ -75,7 +75,7 @@ class TestCaseModel:
             for i in range(1, random.randint(2, 3)):
                 if sub_partner == partner.childs[0]:
                     name = '%s : %s %s' % (sub_partner.name,
-                        translater('Distribution Network'), i)
+                        translater('Distributor'), i)
                     department = cls.new_distribution_network(name,
                         '%s %s' % (name, translater('Commercial')),
                         random.randint(2, 10))

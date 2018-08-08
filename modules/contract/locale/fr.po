@@ -116,6 +116,12 @@ msgstr ""
 " déclinés ou en cours de souscription"
 
 msgctxt "error:contract:"
+msgid ""
+"Contract %(contracts)s must have a distributor, please enter it"
+msgstr ""
+"Le contrat %(contracts)s doit avoir un distributeur, veuillez le renseigner"
+
+msgctxt "error:contract:"
 msgid "Invalid end date for last %s contact"
 msgstr "Date de fin invalide pour la dernière adresse du %s"
 

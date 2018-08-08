@@ -367,8 +367,8 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                 '%s address is defined',
                 'delete_not_allowed': 'Deletion not allowed because the '
                 'contracts %(contracts)s are not quote or declined.',
-                'no_dist_network': 'Contract %(contracts)s must have a'
-                'distribution network, Please enter it',
+                'no_dist_network': 'Contract %(contracts)s must have a '
+                'distributor, please enter it',
 
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))

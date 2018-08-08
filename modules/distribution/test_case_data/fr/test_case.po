@@ -10,8 +10,8 @@ msgstr "Région"
 msgid "Dept"
 msgstr "Dept"
 
-msgid "Distribution Network"
-msgstr "Réseau de distribution"
+msgid "Distributor"
+msgstr "Distributeur"
 
 msgid "Commercial"
 msgstr "Commercial"

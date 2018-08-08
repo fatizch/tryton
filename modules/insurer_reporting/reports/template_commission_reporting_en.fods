@@ -1518,7 +1518,7 @@
       <text:p>Commission Amount</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Distribution Network</text:p>
+      <text:p>Distributor</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Invoice Date</text:p>

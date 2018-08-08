@@ -3,8 +3,8 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:endorsement.contract.change_broker,dist_network:"
-msgid "New Distribution Network"
-msgstr "Nouveau réseau de distribution"
+msgid "New Distributor"
+msgstr "Nouveau distributeur"
 
 msgctxt "field:endorsement.contract.change_broker,agent:"
 msgid "New Agent"
@@ -19,8 +19,8 @@ msgid "New Broker Party"
 msgstr "Nouveau courtier"
 
 msgctxt "field:endorsement.contract.change_broker,current_dist_network:"
-msgid "Current Distribution Network"
-msgstr "Réseau de distribution actuel"
+msgid "Current Distributor"
+msgstr "Distributeur actuel"
 
 msgctxt "field:endorsement.contract.change_broker,current_agent:"
 msgid "Current Agent"
@@ -59,8 +59,8 @@ msgid "Signature Date"
 msgstr "Date de signature"
 
 msgctxt "field:endorsement.contract.change_commission,dist_network:"
-msgid "Distribution Network"
-msgstr "Réseau de distribution"
+msgid "Distributor"
+msgstr "Distributeur"
 
 msgctxt "field:endorsement.contract.change_commission,agent:"
 msgid "New Agent"
@@ -75,8 +75,8 @@ msgid "New Broker Party"
 msgstr "Nouveau courtier"
 
 msgctxt "field:endorsement.contract.change_commission,current_dist_network:"
-msgid "Current Distribution Network"
-msgstr "Réseau de distribution actuel"
+msgid "Current Distributor"
+msgstr "Distributeur actuel"
 
 msgctxt "field:endorsement.contract.change_commission,current_agent:"
 msgid "Current Agent"

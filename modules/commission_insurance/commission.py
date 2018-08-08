@@ -1034,7 +1034,7 @@ class CreateAgents(Wizard):
         payment_terms = PaymentTerm.search([])
         if self.parties.parties:
             Party.write(list(self.parties.parties), {
-                    'account_payable': self.parties.account_payable.id,
+                    'account_payable': self.parties.account_payable_used.id,
                     'supplier_payment_term': payment_terms[0].id,
                     })
 
@@ -1591,7 +1591,7 @@ class SelectNewBroker(model.CoogView):
             'required': ~Eval('all_contracts')},
         depends=['all_contracts', 'from_broker'])
     new_dist_network = fields.Many2One('distribution.network',
-        'New Distribution Network',
+        'New Distributor',
         domain=[('party', '=', None),
             ('parent_party', '=', Eval('to_broker'))],
         states={'readonly': ~Eval('to_broker')}, depends=['to_broker'],)

@@ -275,8 +275,8 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:commission.change_broker.select_new_broker,new_dist_network:"
-msgid "New Distribution Network"
-msgstr "Nouveau réseau de distribution"
+msgid "New Distributor"
+msgstr "Nouveau distributeur"
 
 msgctxt "field:commission.change_broker.select_new_broker,to_broker:"
 msgid "To Broker"

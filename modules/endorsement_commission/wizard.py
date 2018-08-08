@@ -37,7 +37,7 @@ class ChangeContractCommission(EndorsementWizardStepMixin):
                 ('party.agents', '!=', None)],
         depends=['dist_network'])
     dist_network = fields.Many2One('distribution.network',
-        'New Distribution Network')
+        'New Distributor')
     broker_party = fields.Many2One('party.party', 'New Broker Party',
         states={'invisible': True})
     current_broker = fields.Many2One('distribution.network', 'Current Broker',
@@ -45,7 +45,7 @@ class ChangeContractCommission(EndorsementWizardStepMixin):
     current_agent = fields.Many2One('commission.agent', 'Current Agent',
         readonly=True)
     current_dist_network = fields.Many2One('distribution.network',
-        'Current Distribution Network',
+        'Current Distributor',
         readonly=True)
     product = fields.Many2One('offered.product', 'Product', readonly=True,
         states={'invisible': True})

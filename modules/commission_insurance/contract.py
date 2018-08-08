@@ -35,9 +35,8 @@ class Contract:
     broker = fields.Function(
         fields.Many2One('distribution.network', 'Broker',
             domain=[If(Bool(Eval('dist_network', False)),
-                ['OR', ('id', '=', Eval('dist_network')),
-                    ('childs', '=', Eval('dist_network'))],
-                [('parent', '=', None)]),
+                [('all_children', '=', Eval('dist_network'))],
+                [('id', '=', None)]),
                 ('party.agents', '!=', None)], states=_STATES,
             depends=_DEPENDS + ['dist_network']),
         'on_change_with_broker', 'setter_void')

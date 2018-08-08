@@ -16,7 +16,7 @@ class Contract:
     __name__ = 'contract'
 
     dist_network = fields.Many2One('distribution.network',
-        'Distribution Network',
+        'Distributor',
         domain=[('company', '=', Eval('company'))],
         states={'readonly': Eval('status') != 'quote'},
         depends=['company', 'status'], ondelete='RESTRICT')

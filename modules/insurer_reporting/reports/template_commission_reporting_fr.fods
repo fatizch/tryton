@@ -1506,7 +1506,7 @@
       <text:p>Montant de commission</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Réseau de Distribution</text:p>
+      <text:p>Distributeur</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Date du bordereau</text:p>
