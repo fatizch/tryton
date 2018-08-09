@@ -337,7 +337,7 @@ class Commission:
         if to_cancel:
             to_save = []
             for line in cls.copy(to_cancel):
-                line.amount *= -1
+                line.update_new_commission_after_cancel()
                 to_save.append(line)
             for line in cls.copy(to_cancel):
                 line.agent = new_agent

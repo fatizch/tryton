@@ -472,14 +472,19 @@ class Contract:
                     deviation['codes']])
             if isinstance(deviation['dates'], list):
                 deviation['dates'] = frozenset(deviation['dates'])
+            deviation['commissions'] = tuple(
+                [x.id for x in deviation['commissions']])
             return frozenset(deviation.items())
 
         def _unfreeze(deviation):
+            Commission = Pool().get('commission')
             deviation = dict(deviation)
             deviation['codes'] = [dict(x) for x in deviation['codes']]
             dates = deviation['dates']
             deviation['dates'] = [x for x in dates] \
                 if isinstance(dates, frozenset) else deviation['dates']
+            deviation['commissions'] = Commission.browse(
+                list(deviation['commissions']))
             return deviation
 
         if updating:
@@ -559,6 +564,15 @@ class Contract:
             deviation['codes'] = '\n'.join([x['code']
                     for x in deviation['codes']])
 
+    @classmethod
+    def update_commissions_after_endorsement(cls, contracts, endorsements,
+            kind):
+        super(Contract, cls).update_commissions_after_endorsement(
+            contracts, endorsements, kind)
+        per_contracts = Contract.get_prepayment_deviations(contracts)
+        for contract, deviations in per_contracts.items():
+            contract.try_adjust_prepayments(deviations)
+
 
 class ContractOption:
     __metaclass__ = PoolMeta
@@ -636,6 +650,7 @@ class ContractOption:
         if amount is None or not amount.quantize(
                 Decimal(10) ** -COMMISSION_AMOUNT_DIGITS):
             return commissions
+        is_adjustment = ServerContext().get('prepayment_adjustment', False)
         for (date, percentage) in plan.compute_prepayment_schedule(self, agent):
             commission = Commission()
             commission.start = start_date
@@ -654,15 +669,31 @@ class ContractOption:
             commission.extra_details = details
             commission.extra_details.update({
                 'first_year_premium': self.first_year_premium,
-                'is_adjustment': ServerContext().get('prepayment_adjustment',
-                    False),
+                'is_adjustment': is_adjustment,
                 'monthly_premium_incl_tax': self.monthly_premium_incl_tax,
                 'monthly_premium_excl_tax': self.monthly_premium_excl_tax,
                 })
             commissions.append(commission)
-        if commissions and agent.plan.prepayment_due_at_first_paid_invoice:
+
+        if commissions and \
+                agent.plan.prepayment_due_at_first_paid_invoice:
             first_date_com = sorted(commissions, key=lambda x: x.date)[0]
-            first_date_com.date = None
+            if not is_adjustment:
+                first_date_com.date = None
+            else:
+                contract_prepayments = Commission.search([
+                        ('commissioned_contract', '=', self.parent_contract.id),
+                        ('is_prepayment', '=', True),
+                        ('agent', '=', agent.id)
+                        ])
+                prepayment_dates = [x.date or datetime.date.min
+                    for x in contract_prepayments]
+                if not prepayment_dates or any(
+                        x == datetime.date.min for x in prepayment_dates):
+                    first_date_com.date = None
+                else:
+                    first_date_com.date = min(prepayment_dates)
+
         return commissions
 
     def compute_prepayment(self, adjustment, start_date, end_date):
