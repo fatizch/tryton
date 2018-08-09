@@ -225,6 +225,7 @@ Create Test Contract::
     ...         billing_mode=product.billing_modes[0],
     ...         payment_term=product.billing_modes[0].allowed_payment_terms[0]))
     >>> contract.contract_number = '123456789'
+    >>> contract.dist_network = DistributionNetwork(broker.id)
     >>> contract.agent = agent_broker
     >>> contract.save()
     >>> Wizard('contract.activate', models=[contract]).execute('apply')

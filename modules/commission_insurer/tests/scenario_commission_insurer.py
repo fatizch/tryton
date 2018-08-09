@@ -136,7 +136,16 @@ contract.product = product
 contract.billing_informations.append(BillingInformation(date=None,
         billing_mode=product.billing_modes[0],
         payment_term=product.billing_modes[0].allowed_payment_terms[0]))
+Party = Model.get('party.party')
+broker_party = Party(name='Broker')
+broker_party.supplier_payment_term, = PaymentTerm.find([])
+broker_party.save()
 contract.contract_number = '123456789'
+DistributionNetwork = Model.get('distribution.network')
+broker = DistributionNetwork(name='Broker', code='broker', party=broker_party,
+    is_broker=True)
+broker.save()
+contract.dist_network = DistributionNetwork(broker.id)
 contract.save()
 Wizard('contract.activate', models=[contract]).execute('apply')
 

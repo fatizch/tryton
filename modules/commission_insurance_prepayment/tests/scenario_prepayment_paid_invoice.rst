@@ -288,7 +288,10 @@ Validate first invoice of next year commissions::
     >>> prepayment_coms = Commission.find([('is_prepayment', '=', True)])
     >>> assert all(com.date for com in prepayment_coms)
 
-Pay and then cancel another invoice, make sure the date of commission is untouched::
+Pay and then cancel another invoice,::
+
+
+make sure the date of commission is untouched::
 
     >>> second_invoice = contract_invoices[1]
     >>> second_account_invoice = second_invoice.invoice
