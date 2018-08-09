@@ -13,6 +13,7 @@ import test_case
 import offered
 import process
 import distribution
+import res
 
 
 def register():
@@ -21,6 +22,7 @@ def register():
         contract.Contract,
         contract.ContractOption,
         commission.AggregatedCommission,
+        commission.AggregatedCommissionByAgent,
         commission.Commission,
         commission.PlanLines,
         commission.Plan,
@@ -46,6 +48,7 @@ def register():
         batch.CreateCommissionInvoiceBatch,
         batch.PostCommissionInvoiceBatch,
         test_case.TestCaseModel,
+        res.User,
         module='commission_insurance', type_='model')
     Pool.register(
         commission.CreateInvoice,

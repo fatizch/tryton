@@ -1,6 +1,7 @@
 * FEA#9476 Iteration on remove of agency field and replace it by distributor
 * FEA#9349 Remove the field agency and replace it with the distribution network
 * FEA#9492 Add a stored field for the commissioned contract
+* FEA#9541 Commissions aggregated by agent and by date
 * BUG#7515 Block manual creation / modification of commissions
 * FEA#9133 Explicit broker definition in distribution network
 * FEA#9044 Add the claim insurer invoice at the comission insurer entry point

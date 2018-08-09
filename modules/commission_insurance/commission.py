@@ -28,6 +28,7 @@ __all__ = [
     'PlanLinesCoverageRelation',
     'Commission',
     'AggregatedCommission',
+    'AggregatedCommissionByAgent',
     'Plan',
     'PlanRelation',
     'PlanCalculationDate',
@@ -469,9 +470,9 @@ class AggregatedCommission(model.CoogSQL, model.CoogView):
             agent.party.as_('party'),
             invoice_line.invoice.as_('invoice'),
             Literal(0).as_('create_uid'),
-            Literal(0).as_('create_date'),
+            Min(commission.create_date).as_('create_date'),
             Literal(0).as_('write_uid'),
-            Literal(0).as_('write_date'),
+            Max(commission.write_date).as_('write_date'),
             commission.agent.as_('agent'),
             Max(commission.commissioned_contract).as_('contract'),
             Max(commission.commissioned_option).as_('commissioned_option'),
@@ -1613,3 +1614,101 @@ class SelectNewBroker(model.CoogView):
     @fields.depends('new_dist_network')
     def on_change_to_broker(self):
         self.new_dist_network = None
+
+
+class AggregatedCommissionByAgent(model.CoogSQL, model.CoogView):
+    'Commission Aggregated By Agent'
+
+    __name__ = 'commission.aggregated.agent'
+
+    agent = fields.Many2One('commission.agent', 'Agent', readonly=True)
+    agent_name = fields.Function(
+        fields.Char('Agent Name'),
+        'get_agent_name', searcher='search_agent')
+    party = fields.Many2One('party.party', 'Party', readonly=True)
+    date = fields.Date('Date', readonly=True)
+    broker = fields.Function(
+        fields.Many2One('distribution.network', 'Broker', readonly=True),
+        'get_broker', searcher='search_broker')
+    amount = fields.Numeric('Amount', readonly=True,
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'get_currency_digits')
+
+    @classmethod
+    def __setup__(cls):
+        super(AggregatedCommissionByAgent, cls).__setup__()
+        cls._order = [('agent', 'DESC'), ('date', 'ASC')]
+
+    def get_agent_name(self, name):
+        return self.agent.rec_name
+
+    @classmethod
+    def search_agent(cls, name, clause):
+        return [('agent',) + tuple(clause[1:])]
+
+    def get_broker(self, name):
+        return (self.agent.party.network[0].id
+            if self.agent and self.agent.party.is_broker else None)
+
+    def get_currency_digits(self, name):
+        return 2
+
+    @classmethod
+    def search_broker(cls, name, clause):
+        return ['AND',
+            [('agent.party.network',) + tuple(clause[1:])],
+            [('agent.party.network.is_broker', '=', True)]]
+
+    @classmethod
+    def get_tables(cls):
+        pool = Pool()
+        commission = pool.get('commission').__table__()
+        agent = pool.get('commission.agent').__table__()
+        return {
+            'commission': commission,
+            'commission.agent': agent,
+            }
+
+    @classmethod
+    def get_query_table(cls, tables):
+        commission = tables['commission']
+        agent = tables['commission.agent']
+        return commission.join(agent, condition=commission.agent == agent.id)
+
+    @classmethod
+    def get_where_clause(cls, tables):
+        return None
+
+    @classmethod
+    def get_fields_to_select(cls, tables):
+        commission = tables['commission']
+        agent = tables['commission.agent']
+
+        return (
+            Max(commission.id).as_('id'),
+            agent.party.as_('party'),
+            Literal(0).as_('create_uid'),
+            Min(commission.create_date).as_('create_date'),
+            Literal(0).as_('write_uid'),
+            Max(commission.write_date).as_('write_date'),
+            commission.agent.as_('agent'),
+            commission.date.as_('date'),
+            Sum(commission.amount).as_('amount'))
+
+    @classmethod
+    def get_group_by(cls, tables):
+        commission = tables['commission']
+        agent = tables['commission.agent']
+        return [commission.agent, agent.party, commission.date]
+
+    @staticmethod
+    def table_query():
+        klass = Pool().get('commission.aggregated.agent')
+        tables = klass.get_tables()
+        query_table = klass.get_query_table(tables)
+
+        return query_table.select(*klass.get_fields_to_select(tables),
+            where=klass.get_where_clause(tables),
+            group_by=klass.get_group_by(tables))
