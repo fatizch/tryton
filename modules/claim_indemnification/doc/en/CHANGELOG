@@ -1,3 +1,4 @@
+* BUG#9434 Fix: The required documents of a loss does not block the period schedulability of another loss
 * BUG#9528 Do not check scheduling ability for capital indemnification
 * BUG#9407 Fix periods to avoid scheduling with a gap between the loss start date and the first indemnification period
 * BUG#9201 Display duplicates alert on indemnification before any other alert

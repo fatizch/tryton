@@ -79,9 +79,10 @@ class ClaimIndemnification:
             per_claim[indemnification.service.claim.id].append(indemnification)
             claims.add(indemnification.service.claim)
         claims = list(claims)
+        losses = list({x.service.loss for x in indemnifications})
 
         where_clause = line.for_object.in_(
-            [str(x) for x in list(indemnifications) + claims]) & (
+            [str(x) for x in list(indemnifications) + claims + losses]) & (
             line.blocking == Literal(True)) & (
             line.reception_date == Null)
         if allowed_document_descs:
@@ -111,12 +112,14 @@ class ClaimIndemnification:
     @classmethod
     def get_missing_documents(cls, indemnifications):
         DocumentRequests = Pool().get('document.request.line')
-        claims = set([i.service.claim for i in indemnifications])
+        claims = {i.service.claim for i in indemnifications}
+        losses = {i.service.loss for i in indemnifications}
         document_requests = DocumentRequests.search([
                 ('blocking', '=', True),
                 ('received', '=', False),
                 ('for_object', 'in',
-                    [str(i) for i in list(indemnifications) + list(claims)]),
+                    [str(x) for x in (list(indemnifications) +
+                        list(claims) + list(losses))]),
                 ])
         return document_requests
 

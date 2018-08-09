@@ -81,7 +81,7 @@ class DocumentRequestLine:
     @classmethod
     def for_object_models(cls):
         return super(DocumentRequestLine, cls).for_object_models() + \
-            ['claim']
+            ['claim', 'claim.loss']
 
 
 class DocumentRequest:

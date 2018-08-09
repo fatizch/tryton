@@ -1,7 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import Pool
+from collections import defaultdict
 
+from trytond.pool import Pool
 from trytond.modules.process import ClassAttr
 from trytond.modules.coog_core import utils, fields
 from trytond.modules.process_cog.process import CoogProcessFramework
@@ -53,38 +54,44 @@ class Claim(CoogProcessFramework):
         pool = Pool()
         DocumentRequestLine = pool.get('document.request.line')
         DocumentDescription = pool.get('document.description')
-        documents = []
-        default_docs = {}
+        documents = defaultdict(set)
+        default_docs_per_loss = defaultdict(dict)
         for loss in self.losses:
             if not loss.loss_desc:
                 continue
-            loss_docs = loss.loss_desc.get_documents()
-            documents.extend(loss_docs)
+            documents[loss] |= set(loss.loss_desc.get_documents())
 
             for delivered in loss.services:
                 if not (hasattr(delivered, 'benefit') and delivered.benefit):
                     continue
                 args = {}
                 delivered.init_dict_for_rule_engine(args)
-                default_docs.update(
+                default_docs_per_loss[loss].update(
                     delivered.benefit.calculate_required_documents(args))
-        if default_docs:
-            documents += DocumentDescription.search(
-                [('code', 'in', default_docs.keys())])
-        existing_document_desc = [request.document_desc
-            for request in self.document_request_lines]
+            for loss, default_docs in default_docs_per_loss.items():
+                if not default_docs:
+                    continue
+                descs = {x for x in [DocumentDescription.get_document_per_code(
+                        c) for c in default_docs.keys()]}
+                documents[loss] |= descs
+        existing_document_desc = defaultdict(list)
+        for line in self.document_request_lines:
+            existing_document_desc[line.for_object].append(line.document_desc)
         to_save = []
-        documents = list(set(documents))
-        for desc in documents:
-            if desc in existing_document_desc:
-                existing_document_desc.remove(desc)
-                continue
-            params = default_docs.get(desc.code, {})
-            line = DocumentRequestLine(**params)
-            line.document_desc = desc
-            line.for_object = '%s,%s' % (self.__name__, self.id)
-            line.claim = self
-            to_save.append(line)
+        for loss, docs in documents.items():
+            for desc in docs:
+                if desc in existing_document_desc[loss]:
+                    existing_document_desc[loss].remove(desc)
+                    continue
+                params = default_docs.get(desc.code, {})
+                line = DocumentRequestLine(**params)
+                line.document_desc = desc
+                if loss:
+                    line.for_object = '%s,%s' % (loss.__name__, loss.id)
+                else:
+                    line.for_object = '%s,%s' % (self.__name__, self.id)
+                line.claim = self
+                to_save.append(line)
         if to_save:
             DocumentRequestLine.save(to_save)
 
