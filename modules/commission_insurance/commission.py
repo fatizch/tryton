@@ -22,6 +22,7 @@ from trytond.cache import Cache
 from trytond.modules.coog_core import (fields, model, export, coog_string,
     coog_date, utils, coog_sql)
 from trytond.modules.currency_cog import ModelCurrency
+from trytond.modules.product import price_digits
 
 __all__ = [
     'PlanLines',
@@ -1630,11 +1631,7 @@ class AggregatedCommissionByAgent(model.CoogSQL, model.CoogView):
     broker = fields.Function(
         fields.Many2One('distribution.network', 'Broker', readonly=True),
         'get_broker', searcher='search_broker')
-    amount = fields.Numeric('Amount', readonly=True,
-        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
-    currency_digits = fields.Function(
-        fields.Integer('Currency Digits'),
-        'get_currency_digits')
+    amount = fields.Numeric('Amount', readonly=True, digits=price_digits)
 
     @classmethod
     def __setup__(cls):
@@ -1652,9 +1649,6 @@ class AggregatedCommissionByAgent(model.CoogSQL, model.CoogView):
         return (self.agent.party.network[0].id
             if self.agent and self.agent.party.is_broker else None)
 
-    def get_currency_digits(self, name):
-        return 2
-
     @classmethod
     def search_broker(cls, name, clause):
         return ['AND',
@@ -1668,7 +1662,7 @@ class AggregatedCommissionByAgent(model.CoogSQL, model.CoogView):
         agent = pool.get('commission.agent').__table__()
         return {
             'commission': commission,
-            'commission.agent': agent,
+            'commission.agent': agent
             }
 
     @classmethod
