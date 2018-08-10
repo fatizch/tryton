@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="prest_ij_request_sent_icon">
+            <field name="name">prest_ij_request_sent</field>
+            <field name="path">icons/document.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="prest_ij_request_failed_icon">
+            <field name="name">prest_ij_request_failed</field>
+            <field name="path">icons/rounded_warning.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="prest_ij_request_acknowledged_icon">
+            <field name="name">prest_ij_request_acknowledged</field>
+            <field name="path">icons/tryton-clock.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="prest_ij_request_arl_ok_icon">
+            <field name="name">prest_ij_request_arl_ok</field>
+            <field name="path">icons/check.svg</field>
+        </record>
+    </data>
+</tryton>

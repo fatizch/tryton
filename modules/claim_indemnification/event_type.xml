@@ -6,18 +6,22 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_post_invoice">
             <field name="name">Validate Indemnification</field>
             <field name="code">validate_indemnification</field>
+            <field name="icon" ref="account_invoice_cog.invoice_post_icon"/>
         </record>
         <record model="event.type" id="event_cancel_invoice">
             <field name="name">Reject Indemnification</field>
             <field name="code">reject_indemnification</field>
+            <field name="icon" ref="account_invoice_cog.invoice_cancel_icon"/>
         </record>
         <record model="event.type" id="event_pay_invoice">
             <field name="name">Schedule Indemnification</field>
             <field name="code">schedule_indemnification</field>
+            <field name="icon" ref="account_invoice_cog.invoice_icon"/>
         </record>
         <record model="event.type" id="event_cancel_indemnification">
             <field name="name">Cancel Indemnification</field>
             <field name="code">cancel_indemnification</field>
+            <field name="icon" ref="claim_indemnification.cancel_indemnification_icon"/>
         </record>
     </data>
 </tryton>

@@ -6,38 +6,47 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_create_quote">
             <field name="name">Create Quote</field>
             <field name="code">create_quote</field>
+            <field name="icon" ref="contract.quote_icon"/>
         </record>
         <record model="event.type" id="event_activate_contract">
             <field name="name">Activate Contract</field>
             <field name="code">activate_contract</field>
+            <field name="icon" ref="contract.contract_green_icon"/>
         </record>
         <record model="event.type" id="event_reactivate_contract">
             <field name="name">Reactivate Contract</field>
             <field name="code">reactivate_contract</field>
+            <field name="icon" ref="contract.contract_icon"/>
         </record>
         <record model="event.type" id="event_decline_contract">
             <field name="name">Decline Contract</field>
             <field name="code">decline_contract</field>
+            <field name="icon" ref="contract.contract_red_icon"/>
         </record>
         <record model="event.type" id="event_plan_contract_termination">
             <field name="name">Plan Contract Termination</field>
             <field name="code">plan_contract_termination</field>
+            <field name="icon" ref="contract.plan_termination_contract_icon"/>
         </record>
         <record model="event.type" id="event_terminate_contract">
             <field name="name">Terminate Contract</field>
             <field name="code">terminate_contract</field>
+            <field name="icon" ref="contract.contract_red_icon"/>
         </record>
         <record model="event.type" id="event_void_contract">
             <field name="name">Void Contract</field>
             <field name="code">void_contract</field>
+            <field name="icon" ref="contract.contract_red_icon"/>
         </record>
         <record model="event.type" id="event_hold_contract">
             <field name="name">Hold Contract</field>
             <field name="code">hold_contract</field>
+            <field name="icon" ref="contract.contract_red_icon"/>
         </record>
         <record model="event.type" id="event_unhold_contract">
             <field name="name">Unhold Contract</field>
             <field name="code">unhold_contract</field>
+            <field name="icon" ref="contract.contract_icon"/>
         </record>
     </data>
     <data depends="event_log">
@@ -45,6 +54,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Event Logs</field>
             <field name="res_model">event.log</field>
             <field name="domain" eval="[('contract', 'in', Eval('active_ids'))]" pyson="1"/>
+            <field name="search_value" eval="[('in_user_filter', '=', True)]" pyson="1"/>
         </record>
         <record model="ir.action.keyword" id="act_event_log_relate_keyword">
             <field name="keyword">form_relate</field>

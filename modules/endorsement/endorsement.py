@@ -1344,7 +1344,7 @@ class Endorsement(QueueMixin, Workflow, model.CoogSQL, model.CoogView,
     def get_definition_code(self, name):
         return '%s' % self.definition.code
 
-    def get_rec_name(self, name):
+    def get_synthesis_rec_name(self, name):
         return '%s' % self.definition.name
 
     def get_contracts_name(self, name):

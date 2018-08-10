@@ -451,6 +451,7 @@ class MergedPayments(MergedPaymentsMixin):
 class Payment(export.ExportImportMixin, Printable,
         model.FunctionalErrorMixIn):
     __name__ = 'account.payment'
+    _rec_name = 'merged_id'
     _func_key = 'id'
 
     manual_reject_code = fields.Char('Manual Reject Code')

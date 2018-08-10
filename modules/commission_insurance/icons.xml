@@ -7,5 +7,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">coog-broker</field>
             <field name="path">icons/coog-broker.svg</field>
         </record>
+        <record model="ir.ui.icon" id="broker_changed_icon">
+            <field name="name">broker_changed</field>
+            <field name="path">icons/coog-broker.svg</field>
+        </record>
     </data>
 </tryton>

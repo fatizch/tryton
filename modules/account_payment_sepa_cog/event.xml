@@ -6,6 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_send_sepa_message">
             <field name="name">Send Sepa Message</field>
             <field name="code">send_sepa_message</field>
+            <field name="icon" ref="account_payment_cog.payment_auto_in_icon"/>
         </record>
         <record model="event.type" id="event_parse_sepa_message">
             <field name="name">Process Incoming Sepa Message</field>

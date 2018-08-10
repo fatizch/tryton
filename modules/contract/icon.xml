@@ -19,5 +19,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">contract_red</field>
             <field name="path">icons/contract_red.svg</field>
         </record>
+        <record model="ir.ui.icon" id="plan_termination_contract_icon">
+            <field name="name">plan_termination_contract</field>
+            <field name="path">icons/contract_red.svg</field>
+        </record>
     </data>
 </tryton>

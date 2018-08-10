@@ -16,6 +16,7 @@ __all__ = [
     'EventType',
     'EventTypeAction',
     'ActionEventTypeRelation',
+    'EventTypeGroupRelation',
     ]
 
 
@@ -111,6 +112,15 @@ class EventType(model.CoogSQL, model.CoogView):
     name = fields.Char('Name', required=True, translate=True)
     actions = fields.Many2Many('event.type.action-event.type', 'event_type',
         'action', 'Actions')
+    icon = fields.Many2One('ir.ui.icon', 'Icon', ondelete='RESTRICT')
+    icon_name = fields.Function(
+            fields.Char('Icon Name'),
+            'get_icon_name')
+    groups = fields.Many2Many(
+        'event.type-res.group', 'event_type',
+        'group', 'Groups', help='If the user belongs to one of the groups '
+        'linked to the event type, he can see it by default in the event '
+        'log.')
 
     @classmethod
     def __setup__(cls):
@@ -151,6 +161,11 @@ class EventType(model.CoogSQL, model.CoogView):
         if self.code:
             return self.code
         return coog_string.slugify(self.name)
+
+    def get_icon_name(self, name):
+        if self.icon:
+            return self.icon.name
+        return ''
 
 
 class ActionEventTypeRelation(model.CoogSQL, model.CoogView):
@@ -277,3 +292,14 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
 
     def cache_data(self):
         return {'id': self.id, 'action': self.action}
+
+
+class EventTypeGroupRelation(model.CoogSQL, model.CoogView):
+    'Event Type Group Relation'
+
+    __name__ = 'event.type-res.group'
+
+    event_type = fields.Many2One('event.type', 'Event Type',
+        required=True, ondelete='CASCADE', select=True)
+    group = fields.Many2One('res.group', 'Group',
+        required=True, ondelete='CASCADE', select=True)

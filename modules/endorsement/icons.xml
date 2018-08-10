@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="apply_endorsement_icon">
+            <field name="name">apply_endorsement</field>
+            <field name="path">icons/check.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="decline_endorsement_icon">
+            <field name="name">decline_endorsement</field>
+            <field name="path">icons/void.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="cancel_endorsement_icon">
+            <field name="name">cancel_endorsement</field>
+            <field name="path">icons/cancel-list.svg</field>
+        </record>
+    </data>
+</tryton>

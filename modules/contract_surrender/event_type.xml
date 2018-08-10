@@ -6,14 +6,17 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_surrender_contract">
             <field name="name">Contract Surrender</field>
             <field name="code">surrender_contract</field>
+            <field name="icon" ref="contract_surrender.surrender_contract_icon"/>
         </record>
         <record model="event.type" id="event_plan_surrender_contract">
             <field name="name">Plan Contract Surrender</field>
             <field name="code">plan_surrender_contract</field>
+            <field name="icon" ref="contract_surrender.plan_surrender_contract_icon"/>
         </record>
         <record model="event.type" id="event_cancel_contract_surrender">
             <field name="name">Contract Surrender Cancelling</field>
             <field name="code">contract_surrender_cancelling</field>
+            <field name="icon" ref="contract_surrender.contract_surrender_cancelling_icon"/>
         </record>
     </data>
 </tryton>

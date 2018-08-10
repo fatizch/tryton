@@ -807,6 +807,9 @@ class Message:
             names.append(payment_dates[0].strftime('%Y%m%d'))
         return coog_string.slugify('_'.join(names)) + '.xml'
 
+    def get_rec_name(self, name):
+        return str(self.id)
+
 
 class MergedBySepaPartyMixin(object):
     __metaclass__ = PoolMeta

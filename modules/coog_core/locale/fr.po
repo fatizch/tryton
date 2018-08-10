@@ -217,6 +217,14 @@ msgctxt "field:event.type,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:event.type,groups:"
+msgid "Groups"
+msgstr "Groupes"
+
+msgctxt "field:event.type,icon:"
+msgid "Icon"
+msgstr "Icône"
+
 msgctxt "field:event.type,id:"
 msgid "ID"
 msgstr "ID"
@@ -238,6 +246,46 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:event.type,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:event.type-res.group,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:event.type-res.group,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:event.type-res.group,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:event.type-res.group,event_type:"
+msgid "Event Type"
+msgstr "Type d'événement"
+
+msgctxt "field:event.type-res.group,group:"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "field:event.type-res.group,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:event.type-res.group,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l' enregistrement"
+
+msgctxt "field:event.type-res.group,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:event.type-res.group,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:event.type-res.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -1225,6 +1273,10 @@ msgctxt "field:res.group,actions:"
 msgid "Actions"
 msgstr "Actions"
 
+msgctxt "field:res.group,event_types:"
+msgid "Event Types"
+msgstr "Types d'événement"
+
 msgctxt "field:res.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -1234,6 +1286,10 @@ msgid "Background Color"
 msgstr "Couleur de fond"
 
 msgctxt "field:res.user,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:res.user-res.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -1341,6 +1397,12 @@ msgctxt "field:wizard.persistent_data.view,json_context:"
 msgid "JSON Context"
 msgstr "Contexte JSON"
 
+msgctxt "help:event.type,groups:"
+msgid ""
+"If the user belongs to one of the groups linked to the event type, he can "
+"see it in the event log."
+msgstr ""
+
 msgctxt "help:event.type.action,pyson_condition:"
 msgid ""
 "A Pyson expression to filter the objects of the event. If not set, no filter will be applied. If the expression evaluates to True for an object, the action will be taken on it. Otherwise, it will be ignored. Example expression :\n"
@@ -1411,6 +1473,10 @@ msgstr "Echec de tâche asynchrone"
 msgctxt "model:event.type,name:event_async_task_success"
 msgid "Asynchronous Task Success"
 msgstr "Succès de tâche asynchrone"
+
+msgctxt "model:event.type-res.group,name:"
+msgid "Event Type Group Relation"
+msgstr ""
 
 msgctxt "model:event.type.action,name:"
 msgid "Event Type Action"
@@ -1973,6 +2039,10 @@ msgstr "Appliquer la configuration des langues"
 msgctxt "view:res.group:"
 msgid "Actions"
 msgstr "Actions"
+
+msgctxt "view:res.group:"
+msgid "Event Types"
+msgstr "Types d'événement"
 
 msgctxt "view:tag-object:"
 msgid "Tagged Object"

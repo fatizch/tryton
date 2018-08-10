@@ -6,18 +6,22 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_post_invoice">
             <field name="name">Post Invoice</field>
             <field name="code">post_invoice</field>
+            <field name="icon" ref="account_invoice_cog.invoice_post_icon"/>
         </record>
         <record model="event.type" id="event_cancel_invoice">
             <field name="name">Cancel Invoice</field>
             <field name="code">cancel_invoice</field>
+            <field name="icon" ref="account_invoice_cog.invoice_cancel_icon"/>
         </record>
         <record model="event.type" id="event_pay_invoice">
             <field name="name">Pay Invoice</field>
             <field name="code">pay_invoice</field>
+            <field name="icon" ref="account_invoice_cog.invoice_icon"/>
         </record>
         <record model="event.type" id="event_change_invoice_term">
             <field name="name">Change Payment Term</field>
             <field name="code">change_payment_term</field>
+            <field name="icon" ref="account_invoice_cog.change_payment_term_icon"/>
         </record>
     </data>
 </tryton>

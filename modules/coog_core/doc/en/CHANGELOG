@@ -1,3 +1,4 @@
+* FEA#8852 Improve event logs look and feel: filtering on groups and adding icons
 * FEA#9379 Add phone numbers in coog-dep
 * BUG#7679 Prevent splitting of a batch tasks when the transaction size is defined
 * BUG#9355 Only check access for apply button when applying endorsements

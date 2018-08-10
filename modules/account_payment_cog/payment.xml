@@ -151,14 +151,17 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_fail_payment">
             <field name="name">Fail Payment</field>
             <field name="code">fail_payment</field>
+            <field name="icon" ref="account_payment_cog.payment_cancel_icon"/>
         </record>
         <record model="event.type" id="event_succeed_payment">
             <field name="name">Succeed payment</field>
             <field name="code">succeed_payment</field>
+            <field name="icon" ref="account_payment_cog.succeed_payment_icon"/>
         </record>
         <record model="event.type" id="event_group_acknowledge_planned">
             <field name="name">Payment Group Acknowledge Planned</field>
             <field name="code">group_acknowledge_planned</field>
+            <field name="icon" ref="account_payment_cog.succeed_payment_icon"/>
         </record>
         <!-- ########################################### -->
         <!-- ########### Payment Fail Wizard ########### -->

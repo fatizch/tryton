@@ -6,14 +6,17 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="contract_right_suspension_creation">
             <field name="name">Contract Right Suspension Creation</field>
             <field name="code">contract_right_suspension_creation</field>
+            <field name="icon" ref="contract_insurance_suspension.contract_right_suspension_creation_icon"/>
         </record>
         <record model="event.type" id="contract_disable_right_suspension">
             <field name="name">Contract Disable Right Suspension</field>
             <field name="code">contract_disable_right_suspension</field>
+            <field name="icon" ref="contract_insurance_suspension.contract_disable_right_suspension_icon"/>
         </record>
         <record model="event.type" id="contract_disable_temporary_right_suspension">
             <field name="name">Contract Disable Temporary Right Suspension</field>
             <field name="code">contract_disable_temporary_right_suspension</field>
+            <field name="icon" ref="contract_insurance_suspension.contract_disable_temporary_right_suspension_icon"/>
         </record>
     </data>
 </tryton>

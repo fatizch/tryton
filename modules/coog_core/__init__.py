@@ -81,6 +81,7 @@ def register():
         event.EventType,
         event.EventTypeAction,
         event.ActionEventTypeRelation,
+        event.EventTypeGroupRelation,
         export.ExportSummary,
         export.ExportConfigurationSelection,
         ir.Translation,

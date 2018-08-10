@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="contract_right_suspension_creation_icon">
+            <field name="name">contract_right_suspension_creation</field>
+            <field name="path">icons/pause.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="contract_disable_right_suspension_icon">
+            <field name="name">contract_disable_right_suspension</field>
+            <field name="path">icons/play.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="contract_disable_temporary_right_suspension_icon">
+            <field name="name">contract_disable_temporary_right_suspension</field>
+            <field name="path">icons/play.svg</field>
+        </record>
+    </data>
+</tryton>

@@ -6,10 +6,12 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_renew_contract">
             <field name="name">Renew Contract</field>
             <field name="code">renew_contract</field>
+            <field name="icon" ref="contract_term_renewal.renew_contract_icon"/>
         </record>
         <record model="event.type" id="event_decline_contract_renewal">
             <field name="name">Decline Contract Renewal</field>
             <field name="code">decline_contract_renewal</field>
+            <field name="icon" ref="contract_term_renewal.decline_contract_renewal_icon"/>
         </record>
     </data>
 </tryton>

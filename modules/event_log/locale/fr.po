@@ -30,9 +30,17 @@ msgctxt "field:event.log,event_type:"
 msgid "Event Type"
 msgstr "Type d'événement"
 
+msgctxt "field:event.log,icon:"
+msgid "Icon"
+msgstr "Icône"
+
 msgctxt "field:event.log,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:event.log,in_user_filter:"
+msgid "My events"
+msgstr "Mes événements"
 
 msgctxt "field:event.log,object_:"
 msgid "Object"

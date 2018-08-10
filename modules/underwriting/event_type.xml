@@ -6,18 +6,22 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_underwriting_validated">
             <field name="name">Underwriting Validated</field>
             <field name="code">underwriting_validated</field>
+            <field name="icon" ref="underwriting.event_underwriting_validated_icon"/>
         </record>
         <record model="event.type" id="event_underwriting_completed">
             <field name="name">Underwriting Completed</field>
             <field name="code">underwriting_completed</field>
+            <field name="icon" ref="underwriting.underwriting_completed_icon"/>
         </record>
         <record model="event.type" id="event_underwriting_result_finalized">
             <field name="name">Underwriting Result Finalized</field>
             <field name="code">underwriting_result_finalized</field>
+            <field name="icon" ref="underwriting.underwriting_result_finalized_icon"/>
         </record>
         <record model="event.type" id="event_underwriting_result_abandoned">
             <field name="name">Underwriting Result Abandoned</field>
             <field name="code">underwriting_result_abandoned</field>
+            <field name="icon" ref="underwriting.underwriting_result_abandoned_icon"/>
         </record>
     </data>
 </tryton>

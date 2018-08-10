@@ -6,10 +6,12 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_accept_service">
             <field name="name">Accept Claim Service</field>
             <field name="code">accept_claim_service</field>
+            <field name="icon" ref="claim_eligibility.event_accept_service_icon"/>
         </record>
         <record model="event.type" id="event_reactivate_contract">
             <field name="name">Refuse Claim Service</field>
             <field name="code">refuse_claim_service</field>
+            <field name="icon" ref="claim_eligibility.event_reactivate_contract_icon"/>
         </record>
     </data>
 </tryton>

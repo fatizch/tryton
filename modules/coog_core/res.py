@@ -25,6 +25,8 @@ class Group(ExportImportMixin):
 
     actions = fields.Many2Many('ir.action-res.group', 'group',
        'action', 'Actions')
+    event_types = fields.Many2Many('event.type-res.group', 'group',
+       'event_type', 'Event Types')
 
     @classmethod
     def _export_skips(cls):

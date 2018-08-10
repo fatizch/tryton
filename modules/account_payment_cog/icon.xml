@@ -35,5 +35,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">payment_manual_cancel</field>
             <field name="path">icons/cheque_cancel.svg</field>
         </record>
+        <record model="ir.ui.icon" id="succeed_payment_icon">
+            <field name="name">succeed_payment</field>
+            <field name="path">icons/check.svg</field>
+        </record>
     </data>
 </tryton>

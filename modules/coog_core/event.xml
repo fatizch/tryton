@@ -59,6 +59,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_async_task_success">
             <field name="name">Asynchronous Task Success</field>
             <field name="code">asynchronous_task_success</field>
+            <field name="icon" ref="coog_core.check_icon"/>
         </record>
         <!-- Tabs -->
         <record model="ir.action.act_window.domain" id="act_event_type_action_domain_active">

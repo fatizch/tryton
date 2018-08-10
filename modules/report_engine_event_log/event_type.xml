@@ -6,6 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_report_generation">
             <field name="name">Generate Report</field>
             <field name="code">generate_report</field>
+            <field name="icon" ref="report_engine_event_log.generate_report_icon"/>
         </record>
     </data>
 </tryton>

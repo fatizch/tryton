@@ -6,10 +6,12 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_contract_reduction">
             <field name="name">Contract Reduction</field>
             <field name="code">contract_reduction</field>
+            <field name="icon" ref="contract_reduction.contract_reduction_icon"/>
         </record>
         <record model="event.type" id="event_cancel_contract_reduction">
             <field name="name">Contract Reduction Cancelling</field>
             <field name="code">contract_reduction_cancelling</field>
+            <field name="icon" ref="contract_reduction.contract_reduction_cancelling_icon"/>
         </record>
     </data>
 </tryton>

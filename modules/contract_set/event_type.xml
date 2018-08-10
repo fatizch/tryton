@@ -6,6 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_activate_contract_set">
             <field name="name">Activate Contract Set</field>
             <field name="code">activate_contract_set</field>
+            <field name="icon" ref="contract_set.activate_contract_set_icon"/>
         </record>
     </data>
 </tryton>

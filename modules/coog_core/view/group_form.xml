@@ -6,5 +6,8 @@ this repository contains the full copyright notices and license terms. -->
       <page string="Actions" col="2" id="action">
          <field name="actions" yexpand="1" colspan="4"/>
       </page>
+      <page string="Event Types" col="2" id="event_types">
+         <field name="event_types" yexpand="1" colspan="4"/>
+      </page>
    </xpath>
 </data>

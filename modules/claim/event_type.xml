@@ -6,10 +6,12 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_draft_loss">
             <field name="name">Draft Loss</field>
             <field name="code">draft_loss</field>
+            <field name="icon" ref="claim.draft_loss_icon"/>
         </record>
         <record model="event.type" id="event_activate_loss">
             <field name="name">Activate Loss</field>
             <field name="code">activate_loss</field>
+            <field name="icon" ref="claim.activate_loss_icon"/>
         </record>
     </data>
 </tryton>

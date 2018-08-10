@@ -30,11 +30,19 @@ class EventLog(model.CoogSQL, model.CoogView):
         ondelete='RESTRICT')
     event_type = fields.Many2One('event.type', 'Event Type', required=True,
         ondelete='RESTRICT', readonly=True)
+    icon = fields.Function(fields.Char('Icon'),
+        'get_icon')
+    in_user_filter = fields.Function(fields.Boolean('My events'),
+        'get_in_user_filter', searcher='search_in_user_filter')
 
     @classmethod
     def __setup__(cls):
         super(EventLog, cls).__setup__()
         cls._order.insert(0, ('date', 'DESC'))
+
+    def get_icon(self, name):
+        if self.event_type and self.event_type.icon:
+            return self.event_type.icon_name
 
     @fields.depends('object_', 'description')
     def on_change_with_description_str(self, name=None):
@@ -92,6 +100,20 @@ class EventLog(model.CoogSQL, model.CoogView):
         # importing an event log will always create a new one
         # override add_func_key since it's required during import
         values['_func_key'] = 0
+
+    def get_in_user_filter(self, name):
+        return False
+
+    @classmethod
+    def search_in_user_filter(cls, name, clause):
+        assert clause[1] == '='
+        user = Pool().get('res.user')(Transaction().user)
+        if clause[2] is True:
+            return ['OR',
+                ('event_type.groups', '=', None),
+                ('event_type.groups', 'in', [x.id for x in user.groups])]
+        else:
+            return []
 
 
 class Event:

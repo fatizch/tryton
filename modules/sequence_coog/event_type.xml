@@ -6,6 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="sequence_limit_notification">
             <field name="name">Sequence Limit Notification</field>
             <field name="code">sequence_limit_notification</field>
+            <field name="icon" ref="sequence_coog.sequence_limit_notification_icon"/>
         </record>
     </data>
 </tryton>

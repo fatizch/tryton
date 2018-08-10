@@ -27,5 +27,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">invoice_unpaid</field>
             <field name="path">icons/invoice_unpaid.svg</field>
         </record>
+        <record model="ir.ui.icon" id="change_payment_term_icon">
+            <field name="name">change_payment_term</field>
+            <field name="path">icons/invoice_unpaid.svg</field>
+        </record>
     </data>
 </tryton>

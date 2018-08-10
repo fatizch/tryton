@@ -4,6 +4,7 @@
         <record model="event.type" id="sent_document_requests">
             <field name="name">Document Requests Sent</field>
             <field name="code">sent_document_requests</field>
+            <field name="icon" ref="claim_document.sent_document_requests_icon"/>
         </record>
     </data>
 </tryton>

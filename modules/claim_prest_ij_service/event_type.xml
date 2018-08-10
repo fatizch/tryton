@@ -6,18 +6,22 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_prest_ij_request_sent">
             <field name="name">Prest IJ Request Sent</field>
             <field name="code">prest_ij_request_sent</field>
+            <field name="icon" ref="claim_prest_ij_service.prest_ij_request_sent_icon"/>
         </record>
         <record model="event.type" id="event_prest_ij_request_failed">
             <field name="name">Prest IJ Request Failed</field>
             <field name="code">prest_ij_request_failed</field>
+            <field name="icon" ref="claim_prest_ij_service.prest_ij_request_failed_icon"/>
         </record>
         <record model="event.type" id="event_prest_ij_request_acknowledged">
             <field name="name">Prest IJ Request Acknowledged</field>
             <field name="code">prest_ij_request_acknowledged</field>
+            <field name="icon" ref="claim_prest_ij_service.prest_ij_request_acknowledged_icon"/>
         </record>
         <record model="event.type" id="event_prest_ij_arl_ok">
             <field name="name">Prest IJ Request ARL OK</field>
             <field name="code">prest_ij_request_arl_ok</field>
+            <field name="icon" ref="claim_prest_ij_service.prest_ij_request_arl_ok_icon"/>
         </record>
     </data>
 </tryton>

@@ -4,10 +4,12 @@
         <record model="event.type" id="event_apply_endorsement_set">
             <field name="name">Apply Endorsement Set</field>
             <field name="code">apply_endorsement_set</field>
+            <field name="icon" ref="endorsement_set.apply_endorsement_set_icon"/>
         </record>
         <record model="event.type" id="event_decline_endorsement_set">
             <field name="name">Decline Endorsement Set</field>
             <field name="code">decline_endorsement_set</field>
+            <field name="icon" ref="endorsement_set.event_decline_endorsement_set_icon"/>
         </record>
     </data>
 </tryton>

@@ -6,14 +6,17 @@ this repository contains the full copyright notices and license terms. -->
         <record model="event.type" id="event_apply_endorsement">
             <field name="name">Apply Endorsement</field>
             <field name="code">apply_endorsement</field>
+            <field name="icon" ref="endorsement.apply_endorsement_icon"/>
         </record>
         <record model="event.type" id="event_decline_endorsement">
             <field name="name">Decline Endorsement</field>
             <field name="code">decline_endorsement</field>
+            <field name="icon" ref="endorsement.decline_endorsement_icon"/>
         </record>
         <record model="event.type" id="event_cancel_endorsement">
             <field name="name">Cancel Endorsement</field>
             <field name="code">cancel_endorsement</field>
+            <field name="icon" ref="endorsement.cancel_endorsement_icon"/>
         </record>
     </data>
 </tryton>
