@@ -88,7 +88,19 @@ class Mandate(model.CoogSQL, model.CoogView):
                 "Please check the sequence's prefix and suffix.",
                 'origin_must_be_same': ('All SEPA mandates with identification '
                     '"%(identification)s" must have the same origin'),
+                'payment_with_mandate': 'Cancelling mandate is not allowed '
+                'because there is the payment %(payment)s which needs it'
                 })
+
+    @classmethod
+    def cancel(cls, mandates):
+        with model.error_manager():
+            for payment in sum([list(mandate.payments)
+                    for mandate in mandates], []):
+                if payment.state not in ('failed', 'succeeded'):
+                    cls.append_functional_error('payment_with_mandate', {
+                        'payment': payment.rec_name})
+        super(Mandate, cls).cancel(mandates)
 
     @classmethod
     def __register__(cls, module_name):
@@ -364,7 +376,19 @@ class Group:
         keyfunc = cls().merge_payment_key
         sorted_payments = sorted(payments, key=keyfunc)
         if kind == 'receivable':
-            all_mandates = Payment.get_sepa_mandates(payments)
+            # We must check the sepa mandate before getting the initial
+            # sequence to avoid a dirty crash.
+            # If we want to know wich payment has no mandate, we also must
+            # get the sepa mandate one by one:
+            all_mandates = []
+            with model.error_manager():
+                for payment in payments:
+                    payment_mandate, = Payment.get_sepa_mandates([payment])
+                    if not payment_mandate:
+                        cls.append_functional_error('no_mandate',
+                            payment.rec_name)
+                    else:
+                        all_mandates.append(payment_mandate)
             mandate_type = Mandate.get_initial_sequence_type_per_mandates(
                 set(all_mandates))
         for key, payments in groupby(sorted_payments, key=keyfunc):
@@ -380,11 +404,6 @@ class Group:
                         values['bank_account'] = bank_account
             elif kind == 'receivable':
                 mandate = [x[1] for x in key if x[0] == 'sepa_mandate'][0]
-                if not mandate:
-                    with model.error_manager():
-                        for payment in payments:
-                            cls.append_functional_error('no_mandate',
-                                payment.rec_name)
                 values['sepa_mandate'] = mandate
                 values['sepa_mandate_sequence_type'] = mandate_type[mandate.id]
             values['merged_id'] = Sequence.get('account.payment.merged')

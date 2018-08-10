@@ -1,3 +1,4 @@
+* BUG#9619 Check billing informations related to a sepa mandate before cancelling it
 * BUG#9171 Add missing searcher definition
 * BUG#9171 Add searcher on invoice sepa mandate
 * BUG#9120 Correction de l'initialisation du mandat sepa lors de l'activation de contrats non quittancés
