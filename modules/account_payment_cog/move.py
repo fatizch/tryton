@@ -327,7 +327,8 @@ class MoveLine:
             else:
                 # Can't reduce amount if kind are different
                 amount = line.payment_amount
-            payments.append(line.new_payment(journal, kind, amount))
+            if amount:
+                payments.append(line.new_payment(journal, kind, amount))
         return payments
 
     def get_payment_journal(self):

@@ -12,7 +12,7 @@ from trytond.model import Workflow, ModelView, Unique
 from trytond.wizard import StateView, Button, StateTransition, Wizard
 from trytond.wizard import StateAction
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Not, In, Bool, PYSONEncoder, And
+from trytond.pyson import Eval, Not, In, Bool, PYSONEncoder, And, If
 from trytond.server_context import ServerContext
 
 from trytond.modules.account_payment.payment import KINDS
@@ -531,6 +531,11 @@ class Payment(export.ExportImportMixin, Printable,
         cls._transitions |= set((
                 ('processing', 'approved'),
                 ))
+
+        amount_domain = cls.amount.domain or []
+        cls.amount.domain = [amount_domain, If(Eval('state') != 'draft',
+                [('amount', '!=', 0)], [])]
+        cls.amount.depends += ['amount', 'state']
 
     @classmethod
     def view_attributes(cls):
