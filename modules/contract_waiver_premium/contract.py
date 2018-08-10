@@ -158,12 +158,13 @@ class Contract:
             waivers.append(waiver)
         self.waivers = waivers
 
-    def get_invoice_periods(self, up_to_date, from_date=None):
+    def get_invoice_periods(self, up_to_date, from_date=None,
+            ignore_invoices=False):
         if (self.final_end_date and up_to_date and
                 self.product._must_invoice_after_contract):
             up_to_date = min(up_to_date, self.final_end_date)
         return super(Contract, self).get_invoice_periods(up_to_date,
-            from_date)
+            from_date, ignore_invoices)
 
     def _calculate_final_invoice_end_date(self):
         if self.product._must_invoice_after_contract:

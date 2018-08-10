@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/notebook/page[@id='invoice']/label[@name='payment_term']" position="replace">
+        <group id='payment_term_group'>
+            <label name="payment_term"/>
+            <field name="payment_term"/>
+            <label name="instalment_plan"/>
+            <field name="instalment_plan"/>
+        </group>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='invoice']/field[@name='payment_term']" position="replace"/>
+</data>

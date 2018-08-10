@@ -1,0 +1,1 @@
+Ce module permet de gérer des échelonnements de paiements pour des quittances de contrat d'assurance.

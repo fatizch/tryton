@@ -1,0 +1,1 @@
+This modules handles instalment plans for contract invoices.

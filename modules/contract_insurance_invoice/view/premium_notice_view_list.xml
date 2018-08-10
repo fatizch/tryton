@@ -9,7 +9,9 @@ this repository contains the full copyright notices and license terms. -->
     <field name="total_amount" sum="Total Amount">
         <suffix name="currency_symbol"/>
     </field>
-    <field name="amount_to_pay_today"/>
+    <field name="amount_to_pay_today">
+        <suffix name="currency_symbol"/>
+    </field>
     <field name="contract"/>
     <field name="reconciliation_date"/>
     <field name="color" tree_invisible="1"/>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form col="4">
+    <label name="contract"/>
+    <field name="contract" colspan="3"/>
+    <label name="invoice_period_start"/>
+    <field name="invoice_period_start"/>
+    <label name="invoice_period_end"/>
+    <field name="invoice_period_end"/>
+    <label name="total_amount"/>
+    <group id="total_amount" colspan="3">
+        <field name="total_amount" xexpand="0"/> 
+        <label name="currency_symbol" string="" xalign="0" xexpand="0"/>
+    </group>
+    <separator id="calculate_params_separator" string="Instalment Parameters" colspan="4"/>
+    <group id="calculate_params" colspan="4">
+        <label name="calculation_method"/>
+        <field name="calculation_method"/>
+        <button name="calculate" string="Calculate Plan"/>
+        <group id="calculate_params_based_on_frequency" colspan="4" col="6">
+            <label name="nb_payments"/>
+            <field name="nb_payments"/>
+            <label name="payment_frequency"/>
+            <field name="payment_frequency"/>
+            <label name="first_payment_date"/>
+            <field name="first_payment_date"/>
+        </group>
+    </group>
+    <field name="scheduled_payments" colspan="4" mode="tree" view_ids="contract_instalment_plan.instalment_plan_payments_view_tree"/>
+    <group id="invisible" string="">
+        <field name="instalment"/>
+    </group>
+</form>

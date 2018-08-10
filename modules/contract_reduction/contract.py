@@ -157,11 +157,13 @@ class Contract:
                     self.reduction_date, datetime.time())])
         return (invoice_rrule[0], until) + tuple(invoice_rrule[2:])
 
-    def get_invoice_periods(self, up_to_date, from_date=None):
+    def get_invoice_periods(self, up_to_date, from_date=None,
+            ignore_invoices=False):
         if self.reduction_date:
             up_to_date = min(up_to_date or datetime.date.max,
                 coog_date.add_day(self.reduction_date, -1))
-        return super(Contract, self).get_invoice_periods(up_to_date, from_date)
+        return super(Contract, self).get_invoice_periods(up_to_date, from_date,
+            ignore_invoices)
 
     @classmethod
     def terminate(cls, contracts, at_date, termination_reason):

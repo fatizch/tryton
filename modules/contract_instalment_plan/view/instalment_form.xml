@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form col="4">
+    <label name="contract"/>
+    <field name="contract" colspan="3" readonly="1"/>
+    <label name="invoice_period_start"/>
+    <field name="invoice_period_start" readonly="1"/>
+    <label name="invoice_period_end"/>
+    <field name="invoice_period_end" readonly="1"/>
+    <label name="total_amount"/>
+    <group id="total_amount" colspan="3">
+        <field name="total_amount" xexpand="0"/> 
+        <label name="currency_symbol" string="" xalign="0" xexpand="0"/>
+    </group>
+    <field name="scheduled_payments" colspan="4" mode="tree" view_ids="contract_instalment_plan.instalment_plan_payments_view_tree" expand_toolbar="0"/>
+    <group col="4" colspan="4" id="state_buttons">
+        <label name="state"/>
+        <field name="state"/>
+        <group col="2" colspan="2" id="buttons">
+            <button name="validate_instalment_plan" string="Validate"/>
+            <button string="Cancel" name="cancel"/>
+        </group>
+    </group> 
+</form>

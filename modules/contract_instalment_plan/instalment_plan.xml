@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!--####################-->
+        <!--# Instalment Plans #-->
+        <!--####################-->
+        <record model="ir.ui.view" id="instalment_plan_view_tree">
+            <field name="model">contract.instalment_plan</field>
+            <field name="type">tree</field>
+            <field name="name">instalment_tree</field>
+        </record>
+        <record model="ir.ui.view" id="instalment_plan_view_form">
+            <field name="model">contract.instalment_plan</field>
+            <field name="type">form</field>
+            <field name="name">instalment_form</field>
+        </record>
+        <!--############################-->
+        <!--# Instalment Plan Payments #-->
+        <!--############################-->
+        <record model="ir.ui.view" id="instalment_plan_payments_view_tree">
+            <field name="model">contract.instalment_plan.payment</field>
+            <field name="type">tree</field>
+            <field name="name">instalment_payment_tree</field>
+        </record>
+        <!--#######################################-->
+        <!--# Relate Instalment Plans -> Invoices #-->
+        <!--#######################################-->
+        <record model="ir.action.act_window" id="act_invoice_relate_form">
+            <field name="name">Invoices</field>
+            <field name="res_model">account.invoice</field>
+            <field name="domain" eval="[('instalment_plan', 'in', Eval('active_ids'))]" pyson="1"/>
+            <field name="order" eval="[('start', 'DESC')]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_invoice_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract.instalment_plan,-1</field>
+            <field name="action" ref="act_invoice_relate_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_inst_invoice_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="contract_insurance_invoice.premium_notice_view_list"/>
+            <field name="act_window" ref="act_invoice_relate_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_inst_invoice_view2">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="contract_insurance_invoice.invoice_view_form"/>
+            <field name="act_window" ref="act_invoice_relate_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_inst_invoice_domain_all">
+            <field name="name">All</field>
+            <field name="sequence" eval="10"/>
+            <field name="act_window" ref="act_invoice_relate_form"/>
+        </record>        <record model="ir.action.act_window.domain" id="act_inst_invoice_domain_pending">
+            <field name="name">Pending</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[('state', 'in', ('posted', 'validated'))]" pyson="1"/>
+            <field name="act_window" ref="act_invoice_relate_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_inst_invoice_domain_paid">
+            <field name="name">Paid</field>
+            <field name="sequence" eval="30"/>
+            <field name="domain" eval="[('state', '=', 'paid')]" pyson="1"/>
+            <field name="act_window" ref="act_invoice_relate_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_inst_invoice_domain_canceled">
+            <field name="name">Canceled</field>
+            <field name="sequence" eval="40"/>
+            <field name="domain" eval="[('state', '=', 'cancel')]" pyson="1"/>
+            <field name="act_window" ref="act_invoice_relate_form"/>
+        </record>
+        <!--#################-->
+        <!--# Access Rights #-->
+        <!--#################-->        
+        <record model="ir.model.button" id="create_instalment_plan">
+            <field name="name">create_instalment_plan</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+        </record>
+        <record model="ir.model.button" id="validate_instalment_plan">
+            <field name="name">validate_instalment_plan</field>
+            <field name="model" search="[('model', '=', 'contract.instalment_plan')]"/>
+        </record>
+        <record model="ir.model.button" id="create_instalment_plan_from_invoices">
+            <field name="name">create_instalment_plan_from_invoices</field>
+            <field name="model" search="[('model', '=', 'account.invoice')]"/>
+        </record>
+        <record model="ir.model.button" id="instalment_plan_validate_instalment_button_id">
+            <field name="name">validate_instalment</field>
+            <field name="model" search="[('model', '=', 'contract.instalment_plan')]"/>
+        </record>
+        <record model="ir.model.button" id="instalment_plan_draft_button_id">
+            <field name="name">draft</field>
+            <field name="model" search="[('model', '=', 'contract.instalment_plan')]"/>
+        </record>
+        <record model="ir.model.button" id="instalment_plan_cancel_button_id">
+            <field name="name">cancel</field>
+            <field name="model" search="[('model', '=', 'contract.instalment_plan')]"/>
+        </record>
+    </data>
+</tryton>
+
+
+

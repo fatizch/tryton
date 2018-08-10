@@ -1,0 +1,4 @@
+- **Instalment Plans:**
+    - Manage instalment plans from a contract (consult and cancel plans)
+    - Instalment Plan Creation Process
+    - Automatic update of lines to pay for invoices related to an instalment plan

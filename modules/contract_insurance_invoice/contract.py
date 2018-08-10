@@ -489,6 +489,7 @@ class Contract:
 
         AccountInvoice.save(account_invoices)
         ContractInvoice.save(contract_invoices)
+
         AccountInvoice.post(account_invoices)
         lines_to_write = []
         for i, p in zip(account_invoices, payment_dates):
@@ -669,13 +670,14 @@ class Contract:
         invoice_rrule.rrule(rule)
         return (invoice_rrule, until_date, billing_information)
 
-    def get_invoice_periods(self, up_to_date, from_date=None):
+    def get_invoice_periods(self, up_to_date, from_date=None,
+            ignore_invoices=False):
         if not self.billing_informations:
             return []
         final_date = self._calculate_final_invoice_end_date()
         if from_date:
-            start = max(from_date, self.initial_start_date)
-        elif self.last_invoice_end:
+            start = max(from_date, self.start_date)
+        elif self.last_invoice_end and not ignore_invoices:
             start = self.last_invoice_end + relativedelta(days=+1)
         else:
             start = self.initial_start_date
@@ -922,9 +924,11 @@ class Contract:
         if not lang:
             self.company.raise_user_error('missing_lang',
                 {'party': self.company.rec_name})
-        cancelled = self.get_cancelled_invoice_in_rebill(start)
-        payment_term = cancelled.invoice.payment_term if cancelled else \
-            billing_information.payment_term
+        payment_term = ServerContext().get('payment_term', None)
+        if not payment_term:
+            cancelled = self.get_cancelled_invoice_in_rebill(start)
+            payment_term = cancelled.invoice.payment_term if cancelled else \
+                billing_information.payment_term
         return Invoice(
             invoice_address=None,  # Will be really set in finalize invoice
             contract=self,

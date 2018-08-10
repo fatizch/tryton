@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Financial Management Group -->
+        <!-- Contract -->
+        <record model="ir.model.button-res.group" id="create_instalment_plan_group_financial_manage">
+            <field name="button" ref="contract_instalment_plan.create_instalment_plan"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.action-res.group" id="act_create_instalment_plan_group_financial_manage">
+            <field name="action" ref="contract_instalment_plan.act_create_instalment_plan"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <!-- Contract Instalment Plan-->
+        <record model="ir.model.button-res.group" id="validate_instalment_plan_group_financial_manage">
+            <field name="button" ref="contract_instalment_plan.validate_instalment_plan"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.action-res.group" id="act_validate_instalment_plan_group_financial_manage">
+            <field name="action" ref="contract_instalment_plan.act_validate_instalment_plan"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <!-- Invoices -->
+        <record model="ir.model.button-res.group" id="create_instalment_plan_from_invoices_group_financial_manage">
+            <field name="button" ref="contract_instalment_plan.create_instalment_plan_from_invoices"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.action-res.group" id="act_create_instalment_plan_from_invoices_group_financial_manage">
+            <field name="action" ref="contract_instalment_plan.act_create_instalment_plan_from_invoices"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <!-- Contract Management Group -->
+        <!-- Contract -->
+        <record model="ir.model.button-res.group" id="create_instalment_plan_group_contract_manage">
+            <field name="button" ref="contract_instalment_plan.create_instalment_plan"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.action-res.group" id="act_create_instalment_plan_group_contract_manage">
+            <field name="action" ref="contract_instalment_plan.act_create_instalment_plan"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <!-- Contract Instalment Plan-->
+        <record model="ir.model.button-res.group" id="validate_instalment_plan_group_contract_manage">
+            <field name="button" ref="contract_instalment_plan.validate_instalment_plan"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.action-res.group" id="act_validate_instalment_plan_plan_group_contract_manage">
+            <field name="action" ref="contract_instalment_plan.act_validate_instalment_plan"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <!-- Invoices -->
+        <record model="ir.model.button-res.group" id="create_instalment_plan_from_invoices_group_contract_manage">
+            <field name="button" ref="contract_instalment_plan.create_instalment_plan_from_invoices"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+        <record model="ir.action-res.group" id="act_create_instalment_plan_from_invoices_group_contract_manage">
+            <field name="action" ref="contract_instalment_plan.act_create_instalment_plan_from_invoices"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
+    </data>
+</tryton>

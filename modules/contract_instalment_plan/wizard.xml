@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ################# -->
+        <!-- # Select Period # -->
+        <!-- ################# -->
+        <record model="ir.ui.view" id="select_period_view_form">
+            <field name="model">contract.instalment_plan.select_period</field>
+            <field name="type">form</field>
+            <field name="name">select_period_form</field>
+        </record>
+        <!-- ###################### -->
+        <!-- # Scheduled Payments # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="scheduled_payments_view_form">
+            <field name="model">contract.instalment_plan.scheduled_payments</field>
+            <field name="type">form</field>
+            <field name="name">scheduled_payments_form</field>
+        </record>
+        <!-- ########################## -->
+        <!-- # Create Instalment Plan # -->
+        <!-- ########################## -->
+        <record model="ir.action.wizard" id="act_create_instalment_plan">
+            <field name="name">Create Instalment Plan</field>
+            <field name="wiz_name">contract.instalment_plan.create_instalment</field>
+        </record>
+        <record model="ir.action.wizard" id="act_create_instalment_plan_from_invoices">
+            <field name="name">Create Instalment Plan</field>
+            <field name="wiz_name">contract.instalment_plan.create_instalment</field>
+        </record>
+        <record model="ir.action.wizard" id="act_validate_instalment_plan">
+            <field name="name">Validate Instalment Plan</field>
+            <field name="wiz_name">contract.instalment_plan.create_instalment</field>
+        </record>
+        <!--#################-->
+        <!--# Access Rights #-->
+        <!--#################-->        
+        <record model="ir.model.button" id="calculate_scheduled_payments_button_id">
+            <field name="name">calculate</field>
+            <field name="model" search="[('model', '=', 'contract.instalment_plan.scheduled_payments')]"/>
+        </record>
+    </data>
+</tryton>

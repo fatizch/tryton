@@ -1,0 +1,465 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:account.invoice.payment_term:"
+msgid ""
+"A contract invoice with an instalment is required to compute terms based on "
+"instalment."
+msgstr ""
+"Une quittance de contrat avec un échelonnement de paiement est requise."
+
+msgctxt "error:contract.instalment_plan.create_instalment:"
+msgid "It is not possible to resume an already validated instalment plan."
+msgstr "L'échelonnement de paiement a déjà été validé."
+
+msgctxt "error:contract.instalment_plan:"
+msgid "Contract and invoice period dates are required."
+msgstr ""
+"Le contrat et les dates de début et de fin des quittances sont des données "
+"requises."
+
+msgctxt "help:account.invoice.payment_term,based_on_instalment:"
+msgid "If checked, the terms will be calculated to match the entered instalment plan."
+msgstr ""
+"Les échéances seront calculées pour respecter l'échelonnement de paiement saisi."
+
+msgctxt "error:contract.instalment_plan:"
+msgid "Existing instalment(s) for this period: %(existing_instalment)s"
+msgstr ""
+"Des échelonnements existent pour cette période: %(existing_instalment)s"
+
+msgctxt "error:contract.instalment_plan:"
+msgid "Instalment Plan \"%(instalment)s\" must be in draft before deletion."
+msgstr ""
+"L'échelonnement de paiements \"%(instalment)s\" doit être à l'état brouillon"
+" pour être supprimé."
+
+msgctxt "error:contract.instalment_plan:"
+msgid ""
+"Invoice period end %(end_date)s should be greater than invoices period start "
+"%(start_date)s."
+msgstr ""
+"La date de fin des quittances %(end_date)s devrait être postérieure à la "
+"date de début des quittances %(start_date)s"
+
+msgctxt "error:contract.instalment_plan:"
+msgid "Invoice period end is not valid."
+msgstr "La date de fin des quittances n'est pas valide."
+
+msgctxt "error:contract.instalment_plan:"
+msgid "Invoices period start is not valid."
+msgstr "La date de début des quittances n'est pas valide."
+
+msgctxt "error:contract.instalment_plan:"
+msgid "Some invoices are already paid in the period: %(paid_invoices)s"
+msgstr "Des quittances de cette période sont déjà payées: %(paid_invoices)s"
+
+msgctxt "error:contract.instalment_plan:"
+msgid ""
+"Total amount %(total_amount)s should be equal to the sum of scheduled "
+"payments %(scheduled_amount)s"
+msgstr ""
+"Le montant total %(total_amount)s devrait être égal à la somme des montants "
+"des échéances."
+
+msgctxt "error:contract.instalment_plan:"
+msgid "Unknown calculation method: %(calculation_method)s"
+msgstr "Méthode de saisie inconnue: %(calculation_method)s"
+
+msgctxt "field:account.invoice,instalment_plan:"
+msgid "Instalment Plan"
+msgstr "Echelonnement de paiements"
+
+msgctxt "field:account.invoice.payment_term,based_on_instalment:"
+msgid "Based On Instalment Plan"
+msgstr "Depuis un échelonnement de paiements"
+
+msgctxt "field:contract.instalment_plan,color:"
+msgid "Color"
+msgstr "Couleur"
+
+msgctxt "field:contract.instalment_plan,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:contract.instalment_plan,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.instalment_plan,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.instalment_plan,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.instalment_plan,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.instalment_plan,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:contract.instalment_plan,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:contract.instalment_plan,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:contract.instalment_plan,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.instalment_plan,invoice_period_end:"
+msgid "Invoice Period End"
+msgstr "Date de fin des quittances"
+
+msgctxt "field:contract.instalment_plan,invoice_period_start:"
+msgid "Invoices Period Start"
+msgstr "Date de début des quittances"
+
+msgctxt "field:contract.instalment_plan,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.instalment_plan,scheduled_payments:"
+msgid "Scheduled Payments"
+msgstr "Echéances"
+
+msgctxt "field:contract.instalment_plan,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:contract.instalment_plan,total_amount:"
+msgid "Total Amount"
+msgstr "Montant Total"
+
+msgctxt "field:contract.instalment_plan,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:contract.instalment_plan,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.instalment_plan,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.instalment_plan.payment,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:contract.instalment_plan.payment,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.instalment_plan.payment,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.instalment_plan.payment,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.instalment_plan.payment,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:contract.instalment_plan.payment,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:contract.instalment_plan.payment,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.instalment_plan.payment,instalment:"
+msgid "Instalment Plan"
+msgstr "Echelonnement de paiements"
+
+msgctxt "field:contract.instalment_plan.payment,maturity_date:"
+msgid "Maturity Date"
+msgstr "Date d'échéance"
+
+msgctxt "field:contract.instalment_plan.payment,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.instalment_plan.payment,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:contract.instalment_plan.payment,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.instalment_plan.payment,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt ""
+"field:contract.instalment_plan.scheduled_payments,calculation_method:"
+msgid "Calculation Method"
+msgstr "Méthode de saisie"
+
+msgctxt "field:contract.instalment_plan.scheduled_payments,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:contract.instalment_plan.scheduled_payments,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.instalment_plan.scheduled_payments,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:contract.instalment_plan.scheduled_payments,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:contract.instalment_plan.scheduled_payments,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt ""
+"field:contract.instalment_plan.scheduled_payments,first_payment_date:"
+msgid "First Payment Date"
+msgstr "Première échéance"
+
+msgctxt "field:contract.instalment_plan.scheduled_payments,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.instalment_plan.scheduled_payments,instalment:"
+msgid "Instalment"
+msgstr "Echelonnement de paiements"
+
+msgctxt ""
+"field:contract.instalment_plan.scheduled_payments,invoice_period_end:"
+msgid "Invoice Period End"
+msgstr "Date de fin des quittances"
+
+msgctxt ""
+"field:contract.instalment_plan.scheduled_payments,invoice_period_start:"
+msgid "Invoices Period Start"
+msgstr "Date de début des quittances"
+
+msgctxt "field:contract.instalment_plan.scheduled_payments,nb_payments:"
+msgid "Number of Payments"
+msgstr "Nombre d'échéances"
+
+msgctxt "field:contract.instalment_plan.scheduled_payments,payment_frequency:"
+msgid "Frequency"
+msgstr "Fréquence"
+
+msgctxt ""
+"field:contract.instalment_plan.scheduled_payments,scheduled_payments:"
+msgid "Scheduled Payments"
+msgstr "Echéances"
+
+msgctxt "field:contract.instalment_plan.scheduled_payments,total_amount:"
+msgid "Total Amount"
+msgstr "Montant Total"
+
+msgctxt "field:contract.instalment_plan.select_period,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.instalment_plan.select_period,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.instalment_plan.select_period,invoice_period_end:"
+msgid "Invoice Period End"
+msgstr "Date de fin des quittances"
+
+msgctxt "field:contract.instalment_plan.select_period,invoice_period_start:"
+msgid "Invoices Period Start"
+msgstr "Date de début des quittances"
+
+msgctxt ""
+"model:account.invoice.payment_term,name:payment_term_based_on_instalment"
+msgid "Based On Instalment Plan"
+msgstr "Depuis un échelonnement de paiements"
+
+msgctxt "model:contract.instalment_plan,name:"
+msgid "Contract Instalment Plan"
+msgstr "Echelonnement de paiements"
+
+msgctxt "model:contract.instalment_plan.payment,name:"
+msgid "Scheduled Payment"
+msgstr "Echéance"
+
+msgctxt "model:contract.instalment_plan.scheduled_payments,name:"
+msgid "Enter Scheduled Payments"
+msgstr "Saisir les échéances"
+
+msgctxt "model:contract.instalment_plan.select_period,name:"
+msgid "Select Invoice Period"
+msgstr "Sélection des dates des quittances"
+
+msgctxt "model:ir.action,name:act_create_instalment_plan"
+msgid "Create Instalment Plan"
+msgstr "Saisir un échelonnement de paiements"
+
+msgctxt "model:ir.action,name:act_create_instalment_plan_from_invoices"
+msgid "Create Instalment Plan"
+msgstr "Saisir un échelonnement de paiements"
+
+msgctxt "model:ir.action,name:act_instalment_plan_relate_form"
+msgid "Instalment Plans"
+msgstr "Echelonnements de paiements"
+
+msgctxt "model:ir.action,name:act_invoice_relate_form"
+msgid "Invoices"
+msgstr "Quittances"
+
+msgctxt "model:ir.action,name:act_validate_instalment_plan"
+msgid "Validate Instalment Plan"
+msgstr "Valider l'échelonnement de paiements"
+
+msgctxt "model:ir.action.act_window.domain,name:act_inst_invoice_domain_all"
+msgid "All"
+msgstr "Toutes"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_inst_invoice_domain_canceled"
+msgid "Canceled"
+msgstr "Annulée"
+
+msgctxt "model:ir.action.act_window.domain,name:act_inst_invoice_domain_paid"
+msgid "Paid"
+msgstr "Payée"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_inst_invoice_domain_pending"
+msgid "Pending"
+msgstr "En cours"
+
+msgctxt "selection:contract.instalment_plan,state:"
+msgid "Canceled"
+msgstr "Annulé"
+
+msgctxt "selection:contract.instalment_plan,state:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:contract.instalment_plan,state:"
+msgid "Validated"
+msgstr "Validé"
+
+msgctxt ""
+"selection:contract.instalment_plan.scheduled_payments,calculation_method:"
+msgid "Based On Frequency"
+msgstr "par fréquence"
+
+msgctxt ""
+"selection:contract.instalment_plan.scheduled_payments,calculation_method:"
+msgid "Manual"
+msgstr "Manuelle"
+
+msgctxt ""
+"selection:contract.instalment_plan.scheduled_payments,payment_frequency:"
+msgid "Bimonthly"
+msgstr "Bimestriel"
+
+msgctxt ""
+"selection:contract.instalment_plan.scheduled_payments,payment_frequency:"
+msgid "Half yearly"
+msgstr "Semestriel"
+
+msgctxt ""
+"selection:contract.instalment_plan.scheduled_payments,payment_frequency:"
+msgid "Monthly"
+msgstr "Mensuel"
+
+msgctxt ""
+"selection:contract.instalment_plan.scheduled_payments,payment_frequency:"
+msgid "Quarterly"
+msgstr "Trimestriel"
+
+msgctxt ""
+"selection:contract.instalment_plan.scheduled_payments,payment_frequency:"
+msgid "Yearly"
+msgstr "Annuel"
+
+msgctxt "view:account.invoice:"
+msgid "Create Instalment Plan"
+msgstr "Saisir un échelonnement de paiements"
+
+msgctxt "view:contract.instalment_plan.payment:"
+msgid "Scheduled amount"
+msgstr "Montant"
+
+msgctxt "view:contract.instalment_plan.scheduled_payments:"
+msgid "Calculate Plan"
+msgstr "Calculer l'échéancier"
+
+msgctxt "view:contract.instalment_plan.scheduled_payments:"
+msgid "Instalment Parameters"
+msgstr "Paramètres de l'échelonnement"
+
+msgctxt "view:contract.instalment_plan.scheduled_payments:"
+msgid "Scheduled Payments"
+msgstr "Echéances"
+
+msgctxt "view:contract.instalment_plan.select_period:"
+msgid "Scheduled Payments"
+msgstr "Echéances"
+
+msgctxt "view:contract.instalment_plan:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "view:contract.instalment_plan:"
+msgid "Instalment Plan"
+msgstr "Echelonnement de paiements"
+
+msgctxt "view:contract.instalment_plan:"
+msgid "Instalment Plans"
+msgstr "Echelonnements de paiements"
+
+msgctxt "view:contract.instalment_plan:"
+msgid "Validate"
+msgstr "Valider"
+
+msgctxt "view:contract:"
+msgid "Create Instalment Plan"
+msgstr "Saisir un échelonnement de paiements"
+
+msgctxt ""
+"wizard_button:contract.instalment_plan.create_instalment,scheduled_payments,cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:contract.instalment_plan.create_instalment,scheduled_payments,select_period:"
+msgid "Select Period"
+msgstr "Sélection des dates des quittances"
+
+msgctxt ""
+"wizard_button:contract.instalment_plan.create_instalment,scheduled_payments,suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt ""
+"wizard_button:contract.instalment_plan.create_instalment,scheduled_payments,validate_instalment:"
+msgid "Validate"
+msgstr "Valider"
+
+msgctxt ""
+"wizard_button:contract.instalment_plan.create_instalment,select_period,cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:contract.instalment_plan.create_instalment,select_period,check_period:"
+msgid "Schedule Payments"
+msgstr "Echéances"
