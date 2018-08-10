@@ -37,7 +37,9 @@ class Invoice:
         all_commissions = cls.update_commissions_with_prepayment(
             all_commissions)
 
-        Commission.save(all_commissions)
+        # Bypass access rights since commission creation is forbidden
+        with Transaction().set_context(_check_access=False):
+            Commission.save(all_commissions)
         return all_commissions
 
     @classmethod

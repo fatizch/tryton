@@ -1,3 +1,4 @@
+* BUG#9613 Fix on rights of prepayment commisisons creation
 * FEA#8963 Add an option on the commission plan so that prepayment is only due at first paid invoice
 * BUG#9262 Fix redeemed while synchronizing prepayment
 * OTH#0000 Hotfix prepayment synchronization batch
