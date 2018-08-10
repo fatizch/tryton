@@ -406,7 +406,8 @@ class PaymentCreationBatch(batch.BatchRoot):
                     (party.block_payable_payments == Literal(False))))
             & (move_line.reconciliation == Null)
             & (move_line.payment_date <= treatment_date)
-            & (move_line.payment_blocked == Literal(False)))
+            & (move_line.payment_blocked == Literal(False))
+            & (move_line.state != 'draft'))
         if payment_kind == 'receivable':
             join_acc_cond &= (move_line.debit > 0) | (move_line.credit < 0)
         elif payment_kind == 'payable':
@@ -414,7 +415,6 @@ class PaymentCreationBatch(batch.BatchRoot):
         query_table = move_line.join(party,
             condition=(move_line.party == party.id)
         ).join(account, condition=join_acc_cond)
-
         where_clause = Equal(payment.select(Count(payment.id),
                 where=((payment.state != 'failed')
                     & (payment.line == move_line.id))), 0)

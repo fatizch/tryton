@@ -1,3 +1,4 @@
+* BUG#9627 Fix account payment creation batch: It does not select lines with a draft move anymore
 * BUG#9536 Fix to avoid null payment creation
 * BUG#7873 Refactor and improve payment amount calculation
 * BUG#9347 Properly use job_size in payment succeed batch

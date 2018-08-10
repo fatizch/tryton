@@ -1,3 +1,4 @@
+* BUG#9627 Correctif du batch de création des paiement: il ne selectionne plus les paiements dont le mouvement de la ligne est à l'état brouillon
 * BUG#9536 Correctif pour bloquer la création de paiements avec un montant nul
 * BUG#7873 Refactorisation et amélioration du calcul du payment_amount
 * BUG#9347 Prise en compte du job_size dans le batch de succès des prélèvements
