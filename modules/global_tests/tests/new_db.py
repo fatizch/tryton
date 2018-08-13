@@ -728,7 +728,7 @@ if LOAD_ACCOUNTING:  # {{{
 
 cash_journal, = Journal.find([('code', '=', 'CASH')])
 payment_sepa, = PaymentJournal.find([('name', '=', 'Sepa')])
-default_payment_term, = PaymentTerm.find([])
+default_payment_term, = PaymentTerm.find([('name', '=', 'Par défaut')])
 # }}}
 
 if CREATE_PROCESSES:  # {{{
