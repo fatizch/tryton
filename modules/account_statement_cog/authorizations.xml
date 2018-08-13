@@ -67,6 +67,22 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="account_statement_cog.menu_statement_bank_deposit_form"/>
             <field name="group" ref="account_cog.group_financial_manage"/>
         </record>
+        <record model="ir.model.access" id="access_account_statement_origin_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.statement.origin')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>}
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_statement_origin_information_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.statement.origin.information')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>}
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <record model="ir.model.access" id="access_account_statement_group_financial_manage">
             <field name="model" search="[('model', '=', 'account.statement')]"/>
             <field name="group" ref="account_cog.group_financial_manage"/>
@@ -126,6 +142,20 @@ this repository contains the full copyright notices and license terms. -->
             <field name="group" ref="account_cog.group_financial_manage"/>
         </record>
         <!-- Default Account Statement Access Rights -->
+        <record model="ir.model.access" id="access_account_statement_origin_read_only">
+            <field name="model" search="[('model', '=', 'account.statement.origin')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_account_statement_origin_information_read_only">
+            <field name="model" search="[('model', '=', 'account.statement.origin.information')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <record model="ir.model.access" id="access_account_statement">
             <field name="model" search="[('model', '=', 'account.statement')]"/>
             <field name="perm_read" eval="True"/>

@@ -1,3 +1,5 @@
+* BUG#9561 Add missing access rights on new 4.8 models
+
 Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
 * OTH#0000 Statement creation wizard no longer requires invoices
