@@ -10,6 +10,7 @@ _coog_env_files() { # set file names
     COOG_FILE_SRV="coog-srv-$USER"
     COOG_FILE_WRK="coog-wrk-$USER"
     COOG_FILE_API="coog-api-$USER"
+    COOG_FILE_APP=coog-app-$USER
     COOG_FILE_UNO="coog-uno-$USER"
     COOG_FILE_RQ="coog-rq-$USER"
     COOG_FILE_CEL="coog-cel-$USER"

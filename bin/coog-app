@@ -1,0 +1,64 @@
+# vim: set ft=sh:
+# app management - start, stop, log, etc.
+
+_coog_app_file() {
+    echo "$COOG_TMP/$COOG_FILE_APP.$1"
+}
+
+coog_app_pid() { # get pid
+    local pid_file; pid_file=$(_coog_app_file pid)
+    coog_env_pid "$pid_file"
+}
+
+coog_app_start() { # start
+    local pid_file; pid_file=$(_coog_app_file pid)
+    local out_file; out_file=$(_coog_app_file out)
+    local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
+        >&2 echo "already running" && return 1
+    coog_env_bak "$out_file" "$pid" || return $?
+    forever start --sourceDir "$COOG_APP" --pidFile "$pid_file" \
+        -e "$out_file" -o "$out_file" -c "npm start" "."
+    echo app started
+}
+
+coog_app_stop() { # stop
+    local pid_file; pid_file=$(_coog_app_file pid)
+    local out_file; out_file=$(_coog_app_file out)
+    local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null)
+    [ -z "$pid" ] && echo "app already stopped" && return 0
+    forever stop "$pid"
+
+    # Necessary since webpack does not properly exit
+    pkill -f "$COOG_APP"/node_modules/.bin/webpack-dev-server 2> /dev/null
+
+    coog_env_bak "$out_file" "$pid"
+    echo app stopped
+}
+
+coog_app_kill() { # kill
+    forever stopall
+
+    # Necessary since webpack does not properly exit
+    pkill -f "$COOG_APP"/node_modules/.bin/webpack-dev-server 2> /dev/null
+
+    echo app killed
+}
+
+coog_app_log() { # log
+    local out_file; out_file=$(_coog_app_file out)
+    less "$@" "$out_file"
+}
+
+coog_app_head() { # head logs - [head args]
+    local out_file; out_file=$(_coog_app_file out)
+    head "$@" "$out_file"
+}
+
+coog_app_tail() { # tail -f logs
+    local out_file; out_file=$(_coog_app_file out)
+    tail "$@" "$out_file"
+}
+
+coog_app_status() { # forever status
+    forever list | grep "$(coog_app_pid)"
+}
