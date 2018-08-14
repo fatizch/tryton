@@ -11,6 +11,7 @@ from sql.conditionals import Coalesce
 from trytond import backend
 from trytond.cache import Cache
 from trytond.model import fields as tryton_fields, Unique
+from trytond.model.modelstorage import without_check_access
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.pyson import Eval, Not, And, Bool
@@ -60,6 +61,7 @@ class ProcessAction(model.CoogSQL):
     def _export_light(cls):
         return set(['on_model'])
 
+    @without_check_access
     def execute(self, target):
         with model.error_manager():
             super(ProcessAction, self).execute(target)
