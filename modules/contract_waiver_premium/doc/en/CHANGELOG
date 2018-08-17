@@ -1,3 +1,4 @@
+* BUG#9550 Fix calculation of prorata when the period is fully exonerated
 * BUG#9358 Fix edge case when using prorated waivers on non prorated premiums
 * BUG#8879 Add a domain on account (not payable nor receivable) for waiver and change default value
 

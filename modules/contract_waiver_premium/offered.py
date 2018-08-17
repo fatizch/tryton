@@ -214,16 +214,19 @@ class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
         InvoiceLine = Pool().get('account.invoice.line')
         line.taxes = [x.id for x in self.taxes]
         line.account = self.get_account_for_waiver_line(line)
-        if self.invoice_line_period_behaviour == 'proportion':
+        waiver_start = waiver_option.start_date or datetime.date.min
+        waiver_end = waiver_option.end_date or datetime.date.max
+        fully_exonerated = (waiver_start <= line.coverage_start
+            and waiver_end >= line.coverage_end)
+        if self.invoice_line_period_behaviour == 'proportion' \
+                and not fully_exonerated:
             assert line.details
             premium = getattr(line.details[0], 'premium', None)
             if not premium:
                 return line
             line.unit_price = -1 * utils.get_prorated_amount_on_period(
-                max(line.coverage_start, waiver_option.start_date
-                    or datetime.date.min),
-                min(line.coverage_end, waiver_option.end_date
-                    or datetime.date.max),
+                max(line.coverage_start, waiver_start),
+                min(line.coverage_end, waiver_end),
                 frequency=premium.frequency, value=premium.amount,
                 sync_date=premium.main_contract.start_date,
                 interval_start=premium.start,

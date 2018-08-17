@@ -1,3 +1,4 @@
+* BUG#9550 Correction du calcul du prorata proportionnel en cas de période entièrement exonérées
 * BUG#9358 Correction d'un cas aux limites en cas de combinaison de primes non proratées et d'exonération proratées
 * BUG#8879 Ajout d'un domain sur le compte des exonérations (pas à payer ni à recevoir) et changement de la valeur par défault
 
