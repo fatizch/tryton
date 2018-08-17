@@ -5,7 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <record model="ir.ui.icon" id="cancel_indemnification_icon">
             <field name="name">cancel_indemnification</field>
-            <field name="path">icons/cancel-list.svg</field>
+            <field name="path">../coog_core/icons/cancel-list.svg</field>
         </record>
     </data>
 </tryton>

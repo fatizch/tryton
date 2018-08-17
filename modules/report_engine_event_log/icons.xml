@@ -5,7 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <record model="ir.ui.icon" id="generate_report_icon">
             <field name="name">generate_report</field>
-            <field name="path">icons/printer.svg</field>
+            <field name="path">../report_engine/icons/printer.svg</field>
         </record>
     </data>
 </tryton>

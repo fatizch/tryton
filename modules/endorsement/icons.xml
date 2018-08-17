@@ -5,15 +5,15 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <record model="ir.ui.icon" id="apply_endorsement_icon">
             <field name="name">apply_endorsement</field>
-            <field name="path">icons/check.svg</field>
+            <field name="path">../coog_core/icons/check.svg</field>
         </record>
         <record model="ir.ui.icon" id="decline_endorsement_icon">
             <field name="name">decline_endorsement</field>
-            <field name="path">icons/void.svg</field>
+            <field name="path">../coog_core/icons/void.svg</field>
         </record>
         <record model="ir.ui.icon" id="cancel_endorsement_icon">
             <field name="name">cancel_endorsement</field>
-            <field name="path">icons/cancel-list.svg</field>
+            <field name="path">../coog_core/icons/cancel-list.svg</field>
         </record>
     </data>
 </tryton>

@@ -5,15 +5,15 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <record model="ir.ui.icon" id="surrender_contract_icon">
             <field name="name">surrender_contract</field>
-            <field name="path">icons/contract_red.svg</field>
+            <field name="path">../contract/icons/contract_red.svg</field>
         </record>
         <record model="ir.ui.icon" id="plan_surrender_contract_icon">
             <field name="name">plan_surrender_contract</field>
-            <field name="path">icons/plan_termination_contract.svg</field>
+            <field name="path">../contract/icons/contract_red.svg</field>
         </record>
         <record model="ir.ui.icon" id="contract_surrender_cancelling_icon">
             <field name="name">contract_surrender_cancelling</field>
-            <field name="path">icons/cancel-list.svg</field>
+            <field name="path">../coog_core/icons/cancel-list.svg</field>
         </record>
     </data>
 </tryton>

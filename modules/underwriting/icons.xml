@@ -5,19 +5,19 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <record model="ir.ui.icon" id="event_underwriting_validated_icon">
             <field name="name">underwriting_validated</field>
-            <field name="path">icons/check.svg</field>
+            <field name="path">../coog_core/icons/check.svg</field>
         </record>
         <record model="ir.ui.icon" id="underwriting_completed_icon">
             <field name="name">underwriting_completed</field>
-            <field name="path">icons/check.svg</field>
+            <field name="path">../coog_core/icons/check.svg</field>
         </record>
         <record model="ir.ui.icon" id="underwriting_result_finalized_icon">
             <field name="name">underwriting_result_finalized</field>
-            <field name="path">icons/check.svg</field>
+            <field name="path">../coog_core/icons/check.svg</field>
         </record>
         <record model="ir.ui.icon" id="underwriting_result_abandoned_icon">
             <field name="name">underwriting_result_abandoned</field>
-            <field name="path">icons/cancel-list.svg</field>
+            <field name="path">../coog_core/icons/cancel-list.svg</field>
         </record>
     </data>
 </tryton>

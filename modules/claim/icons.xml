@@ -13,11 +13,11 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.ui.icon" id="draft_loss_icon">
             <field name="name">draft_loss</field>
-            <field name="path">icons/quote.svg</field>
+            <field name="path">../contract/icons/quote.svg</field>
         </record>
         <record model="ir.ui.icon" id="activate_loss_icon">
             <field name="name">activate_loss</field>
-            <field name="path">icons/contract_green.svg</field>
+            <field name="path">../contract/icons/contract_green.svg</field>
         </record>
     </data>
 </tryton>

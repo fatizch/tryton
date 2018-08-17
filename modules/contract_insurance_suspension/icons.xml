@@ -5,15 +5,15 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <record model="ir.ui.icon" id="contract_right_suspension_creation_icon">
             <field name="name">contract_right_suspension_creation</field>
-            <field name="path">icons/pause.svg</field>
+            <field name="path">../coog_core/icons/pause.svg</field>
         </record>
         <record model="ir.ui.icon" id="contract_disable_right_suspension_icon">
             <field name="name">contract_disable_right_suspension</field>
-            <field name="path">icons/play.svg</field>
+            <field name="path">../coog_core/icons/play.svg</field>
         </record>
         <record model="ir.ui.icon" id="contract_disable_temporary_right_suspension_icon">
             <field name="name">contract_disable_temporary_right_suspension</field>
-            <field name="path">icons/play.svg</field>
+            <field name="path">../coog_core/icons/play.svg</field>
         </record>
     </data>
 </tryton>

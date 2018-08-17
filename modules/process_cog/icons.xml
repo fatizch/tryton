@@ -5,7 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <record model="ir.ui.icon" id="process_not_initiated_icon">
             <field name="name">process_not_initiated</field>
-            <field name="path">icons/pause.svg</field>
+            <field name="path">../coog_core/icons/pause.svg</field>
         </record>
     </data>
 </tryton>

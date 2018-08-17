@@ -37,7 +37,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.ui.icon" id="succeed_payment_icon">
             <field name="name">succeed_payment</field>
-            <field name="path">icons/check.svg</field>
+            <field name="path">../coog_core/icons/check.svg</field>
         </record>
     </data>
 </tryton>

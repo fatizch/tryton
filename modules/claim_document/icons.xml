@@ -5,7 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <record model="ir.ui.icon" id="sent_document_requests_icon">
             <field name="name">sent_document_requests</field>
-            <field name="path">icons/document_request.svg</field>
+            <field name="path">../document_request/icons/document_request.svg</field>
         </record>
     </data>
 </tryton>

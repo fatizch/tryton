@@ -5,19 +5,19 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <record model="ir.ui.icon" id="prest_ij_request_sent_icon">
             <field name="name">prest_ij_request_sent</field>
-            <field name="path">icons/document.svg</field>
+            <field name="path">../document/icons/document.svg</field>
         </record>
         <record model="ir.ui.icon" id="prest_ij_request_failed_icon">
             <field name="name">prest_ij_request_failed</field>
-            <field name="path">icons/rounded_warning.svg</field>
+            <field name="path">../coog_core/icons/rounded_warning.svg</field>
         </record>
         <record model="ir.ui.icon" id="prest_ij_request_acknowledged_icon">
             <field name="name">prest_ij_request_acknowledged</field>
-            <field name="path">icons/tryton-clock.svg</field>
+            <field name="path">../coog_core/icons/reload_and_check.svg</field>
         </record>
         <record model="ir.ui.icon" id="prest_ij_request_arl_ok_icon">
             <field name="name">prest_ij_request_arl_ok</field>
-            <field name="path">icons/check.svg</field>
+            <field name="path">../coog_core/icons/check.svg</field>
         </record>
     </data>
 </tryton>

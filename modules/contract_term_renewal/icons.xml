@@ -5,11 +5,11 @@ this repository contains the full copyright notices and license terms. -->
     <data>
         <record model="ir.ui.icon" id="renew_contract_icon">
             <field name="name">renew_contract</field>
-            <field name="path">icons/reload_and_check.svg</field>
+            <field name="path">../coog_core/icons/reload_and_check.svg</field>
         </record>
         <record model="ir.ui.icon" id="decline_contract_renewal_icon">
             <field name="name">decline_contract_renewal</field>
-            <field name="path">icons/cancel-list.svg</field>
+            <field name="path">../coog_core/icons/cancel-list.svg</field>
         </record>
     </data>
 </tryton>
