@@ -119,6 +119,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="commission.menu_commission_create_invoice"/>
             <field name="group" ref="group_commission_manage"/>
         </record>
+        <record model="ir.action-res.group"
+            id="act_commission_create_invoice-group_commission">
+            <field name="action" ref="commission.act_commission_create_invoice"/>
+            <field name="group" ref="group_commission_manage"/>
+        </record>
+
         <!-- Party-->
         <record model="ir.model.button-res.group" id="party_button_commissions_synthesis_manage">
             <field name="button" ref="commission_insurance.party_button_commissions_synthesis"/>

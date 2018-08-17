@@ -1,3 +1,4 @@
+* BUG#9657 Add missing rights for the broker invoice creation entry point 
 * FEA#9476 Iteration on remove of agency field and replace it by distributor
 * FEA#9349 Remove the field agency and replace it with the distribution network
 * FEA#9492 Add a stored field for the commissioned contract

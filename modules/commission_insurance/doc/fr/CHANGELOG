@@ -1,3 +1,4 @@
+* BUG#9657 Ajout des droits manquants sur le point d'entrée de création des bordereaux de commission
 * FEA#9476 Itération sur la suppression du champ agence et le remplacement par distributeur
 * FEA#9349 Suppression du champ agence et le remplacer par le réseau de distribution
 * FEA#9492 Ajout d'un champ stocké pour le contrat commissionné
