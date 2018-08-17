@@ -1,3 +1,4 @@
+* BUG#9643 Rendre les codes pays obligatoires
 * BUG#9619 Le mandat SEPA ne peut plus être annulé si des paiements en brouillon / validé / en traitement l'utilise
 * BUG#8968 Ne pas ecraser la valeur de la RUM par la configuration par défaut si elle existe déjà
 * BUG#9368 Ne pas remplacer les paramètres de la configuration par des paramètres vides

@@ -3,6 +3,7 @@
 from trytond.pool import Pool
 
 import batch
+import country
 import payment
 import bank
 import test_case
@@ -14,6 +15,7 @@ import wizard
 
 def register():
     Pool.register(
+        country.Country,
         party.Party,
         party.Address,
         batch.PaymentTreatmentBatch,
