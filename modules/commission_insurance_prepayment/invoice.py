@@ -125,7 +125,9 @@ class Invoice:
     def post(cls, invoices):
         super(Invoice, cls).post(invoices)
         for sub_invoices in grouped_slice(invoices):
-            cls.unset_prepayment_date(sub_invoices)
+            contract_invoices = [x for x in sub_invoices if x.contract]
+            if contract_invoices:
+                cls.unset_prepayment_date(contract_invoices)
 
     @classmethod
     @ModelView.button
@@ -133,7 +135,9 @@ class Invoice:
     def cancel(cls, invoices):
         with Transaction().set_context(cancel_invoices=True):
             super(Invoice, cls).cancel(invoices)
-            cls.unset_prepayment_date(invoices)
+            contract_invoices = [x for x in invoices if x.contract]
+            if contract_invoices:
+                cls.unset_prepayment_date(contract_invoices)
 
     @classmethod
     def unset_prepayment_date(cls, invoices):
