@@ -65,13 +65,12 @@ __all__ = [
 
 class PostExecutionDataManager(object):
 
-    _instance = None
-    finish_queue = []
-    commit_queue = []
-
     def __new__(cls):
-        if cls._instance is None:
+        # We want a per-thread, per-class singleton
+        if not hasattr(cls, '_instance') or cls._instance.__class__ != cls:
             cls._instance = object.__new__(cls)
+            cls._instance.finish_queue = []
+            cls._instance.commit_queue = []
         return cls._instance
 
     def put(self, queue, func, *args, **kwargs):

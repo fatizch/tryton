@@ -1,3 +1,4 @@
+* BUG#9617 Correction d'un bug où des demandes de documents pouvaient être traitées plusieurs fois
 * BUG#9660 Correction des chemins des icônes
 * FEA#8852 Amélioration de la visualisation des logs d'événements: filtre sur groupes d'utilisateurs et icônes
 * FEA#9379 Ajout de phonenumbers dans coog-dep
