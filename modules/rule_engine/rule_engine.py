@@ -634,10 +634,7 @@ class FunctionFinder(ast.NodeVisitor):
     def visit(self, node):
         if (isinstance(node, ast.Call) and
                 isinstance(node.func, ast.Name)):
-            if node.func.id not in self.allowed_names:
-                if node.func.id not in Pool().get('rule_engine').get_builtins():
-                    raise LookupError(node.func.id)
-            else:
+            if node.func.id in self.allowed_names:
                 self.functions.append(node.func.id)
         return super(FunctionFinder, self).visit(node)
 

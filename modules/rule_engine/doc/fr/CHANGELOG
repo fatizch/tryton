@@ -1,3 +1,4 @@
+* BUG#9313 Correction des jeux d'essai dans le cas où la règle définit des fonctions
 * BUG#9212 Correctif crash lors d'ajout d'un message de débug avec caractères spéciaux dans le moteur de règle
 * FEA#8271 Simplification de la vue du moteur de règle en utilisant un groupe dépliable
 * BUG#8842 Ne pas stocker le contexte d'exécution de la règle si le mode de debug n'est pas actif
