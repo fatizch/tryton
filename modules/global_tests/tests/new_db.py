@@ -196,6 +196,7 @@ CoveredEndReason = Model.get('covered_element.end_reason')
 Country = Model.get('country.country')
 Currency = Model.get('currency.currency')
 DistributionNetwork = Model.get('distribution.network')
+DocumentDescription = Model.get('document.description')
 DunningProcedure = Model.get('account.dunning.procedure')
 EventDesc = Model.get('benefit.event.description')
 ExtraData = Model.get('extra_data')
@@ -762,6 +763,8 @@ if not champs_technique('loss.covered_person.id'):
     <field name="broker"/>
     <label name="agent"/>
     <field name="agent" widget="selection"/>
+    <label name="dist_network"/>
+    <field name="dist_network"/>
 </group>
 <field name="subscriber_desc" widget="richtext" colspan="4"/>
 <field name="billing_informations" invisible="1" colspan="4"/>
@@ -787,6 +790,8 @@ if not champs_technique('loss.covered_person.id'):
     <field name="broker"/>
     <label name="agent"/>
     <field name="agent" widget="selection"/>
+    <label name="dist_network"/>
+    <field name="dist_network"/>
 </group>
 <field name="subscriber_desc" widget="richtext" colspan="4"/>
 <field name="billing_informations" invisible="1" colspan="4"/>
@@ -967,6 +972,28 @@ if not champs_technique('loss.covered_person.id'):
     step_options_loan.code_after[5].technical_kind = 'step_after'
     step_options_loan.code_after[5].method_name = 'calculate'
     step_options_loan.save()
+    # }}}
+
+    do_print('    Creating step required documents')  # {{{
+    step_documents = ProcessStep()
+    step_documents.fancy_name = 'Documents'
+    step_documents.technical_name = 'documents'
+    step_documents.button_domain = "[]"
+    step_documents.main_model, = IrModel.find([('model', '=', 'contract')])
+    step_documents.step_xml = '''
+<field name='document_request_lines' colspan="4"/>
+'''
+    step_documents.code_before.new()
+    step_documents.code_before[0].content = 'method'
+    step_documents.code_before[0].technical_kind = 'step_before'
+    step_documents.code_before[0].method_name = \
+        'init_subscription_document_request'
+    step_documents.code_after.new()
+    step_documents.code_after[0].content = 'method'
+    step_documents.code_after[0].technical_kind = 'step_after'
+    step_documents.code_after[0].method_name = 'check_required_documents'
+    step_documents.code_after[0].parameters = 'True'
+    step_documents.save()
     # }}}
 
     do_print('    Creating step paiement')  # {{{
@@ -1289,7 +1316,7 @@ if not champs_technique('loss.covered_person.id'):
     step_claim_close.save()
     # }}}
 
-    # TODO : Add documents / underwriting steps for subscription
+    # TODO : Add underwriting steps for subscription
     do_print('\nCreating processes')
     do_print('    Creating process souscription_generique')  # {{{
     generic_process = Process()
@@ -1300,6 +1327,7 @@ if not champs_technique('loss.covered_person.id'):
     generic_process.steps_to_display.append(ProcessStep(step_subscriber.id))
     generic_process.steps_to_display.append(ProcessStep(step_covered.id))
     generic_process.steps_to_display.append(ProcessStep(step_options.id))
+    generic_process.steps_to_display.append(ProcessStep(step_documents.id))
     generic_process.steps_to_display.append(ProcessStep(step_payment.id))
     generic_process.steps_to_display.append(ProcessStep(step_complete.id))
     generic_process.menu_icon = 'tryton-open'
@@ -1360,6 +1388,7 @@ if not champs_technique('loss.covered_person.id'):
     life_process.steps_to_display.append(ProcessStep(step_life_subscriber.id))
     life_process.steps_to_display.append(ProcessStep(step_covered.id))
     life_process.steps_to_display.append(ProcessStep(step_options.id))
+    life_process.steps_to_display.append(ProcessStep(step_documents.id))
     life_process.steps_to_display.append(ProcessStep(step_payment.id))
     life_process.steps_to_display.append(ProcessStep(step_complete.id))
     life_process.menu_icon = 'tryton-open'
@@ -1387,6 +1416,7 @@ if not champs_technique('loss.covered_person.id'):
     loan_process.steps_to_display.append(ProcessStep(step_life_subscriber.id))
     loan_process.steps_to_display.append(ProcessStep(step_covered_loan.id))
     loan_process.steps_to_display.append(ProcessStep(step_options_loan.id))
+    loan_process.steps_to_display.append(ProcessStep(step_documents.id))
     loan_process.steps_to_display.append(ProcessStep(step_payment.id))
     loan_process.steps_to_display.append(ProcessStep(step_complete_loan.id))
     loan_process.menu_icon = 'tryton-open'
@@ -1573,6 +1603,17 @@ if CREATE_PRODUCTS:  # {{{
     option_extra_details_conf.lines[1].name = 'valeur_reduction'
     option_extra_details_conf.lines[1].type_ = 'numeric'
     option_extra_details_conf.save()
+    # }}}
+
+    do_print('\nCreating document types')  # {{{
+    subscription_request = DocumentDescription()
+    subscription_request.code = 'subscription_request'
+    subscription_request.name = u"Demande d\'adhésion"
+    subscription_request.save()
+    loan_planning = DocumentDescription()
+    loan_planning.code = 'loan_planning'
+    loan_planning.name = u"Échéancier des prêts"
+    loan_planning.save()
     # }}}
 
     do_print('\nCreating clauses')  # {{{
@@ -2624,6 +2665,12 @@ return result
     funeral_details_rule.algorithm = '''
 reduit = date_de_reduction()
 
+if not montant_de_couverture():
+    return {
+        'valeur_rachat': 0.00,
+        'valeur_reduction': 0.00,
+        }
+
 rachat = rule_rachat_obseques()
 if not reduit or reduit < date_de_calcul():
     reduction = rule_reduction_obseques()
@@ -3333,6 +3380,10 @@ return [{
     house_product.com_products[0].start_date = _base_date
     house_product.com_products[0].dist_networks.append(
         DistributionNetwork.find([('code', '=', 'C1')])[0])
+    house_product.document_rules.new()
+    house_product.document_rules[0].documents.new()
+    house_product.document_rules[0].documents[0].document = subscription_request
+    house_product.document_rules[0].documents[0].blocking = True
     house_product.save()
 
     generic_process.for_products.append(house_product)
@@ -3368,6 +3419,10 @@ return [{
     life_product.com_products[0].start_date = _base_date
     life_product.com_products[0].dist_networks.append(
         DistributionNetwork.find([('code', '=', 'C1')])[0])
+    life_product.document_rules.new()
+    life_product.document_rules[0].documents.new()
+    life_product.document_rules[0].documents[0].document = subscription_request
+    life_product.document_rules[0].documents[0].blocking = True
     life_product.save()
 
     life_process.for_products.append(life_product)
@@ -3404,6 +3459,13 @@ return [{
     loan_product.extra_data_def.append(ExtraData(reduction_libre.id))
     assert 'libelle_editique' in loan_product.extra_data
     loan_product.extra_data = {'libelle_editique': u'Prêt / voyez tout'}
+    loan_product.document_rules.new()
+    loan_product.document_rules[0].documents.new()
+    loan_product.document_rules[0].documents[0].document = subscription_request
+    loan_product.document_rules[0].documents[0].blocking = True
+    loan_product.document_rules[0].documents.new()
+    loan_product.document_rules[0].documents[1].document = loan_planning
+    loan_product.document_rules[0].documents[1].blocking = True
     loan_product.save()
 
     loan_process.for_products.append(loan_product)
@@ -3434,6 +3496,11 @@ return [{
     funeral_product.com_products[0].start_date = _base_date
     funeral_product.com_products[0].dist_networks.append(
         DistributionNetwork.find([('code', '=', 'C1')])[0])
+    funeral_product.document_rules.new()
+    funeral_product.document_rules[0].documents.new()
+    funeral_product.document_rules[0].documents[0].document = \
+        subscription_request
+    funeral_product.document_rules[0].documents[0].blocking = True
     funeral_product.save()
 
     life_process.for_products.append(funeral_product)
@@ -3650,6 +3717,9 @@ if CREATE_CONTRACTS:  # {{{
         'electrical_fires': True,
         }
     process_next(house_contract)
+    house_contract.document_request_lines[0].received = True
+    house_contract.document_request_lines[0].save()
+    process_next(house_contract)
     house_contract.billing_informations[0].billing_mode = BillingMode.find(
         [('code', '=', 'yearly_manual')])[0]
     process_next(house_contract)
@@ -3725,6 +3795,9 @@ if CREATE_CONTRACTS:  # {{{
         'monthly_annuity': '2000',
         }
     life_contract.save()
+    process_next(life_contract)
+    life_contract.document_request_lines[0].received = True
+    life_contract.document_request_lines[0].save()
     process_next(life_contract)
     life_contract.billing_informations[0].billing_mode = BillingMode.find(
         [('code', '=', 'yearly_manual')])[0]
@@ -3811,6 +3884,10 @@ if CREATE_CONTRACTS:  # {{{
         }
     loan_contract.save()
     process_next(loan_contract)
+    loan_contract.document_request_lines[0].received = True
+    loan_contract.document_request_lines[1].received = True
+    loan_contract.save()
+    process_next(loan_contract)
     loan_contract.billing_informations[0].billing_mode = BillingMode.find(
         [('code', '=', 'yearly_manual')])[0]
     process_next(loan_contract)
@@ -3863,6 +3940,9 @@ if CREATE_CONTRACTS:  # {{{
     funeral_option.beneficiaries_clause = funeral_beneficiary_clause
     funeral_contract.save()
 
+    process_next(funeral_contract)
+    funeral_contract.document_request_lines[0].received = True
+    funeral_contract.save()
     process_next(funeral_contract)
     funeral_contract.billing_informations[0].direct_debit_account = \
         funeral_subscriber_account

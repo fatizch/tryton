@@ -309,7 +309,7 @@ def values_mixin(value_model):
                         'relation': vfield.field.relation,
                         'states': encoder.encode({
                                 'invisible': ~Eval('values', {}).contains(
-                                    str(vfield.rec_name)),
+                                    vfield.rec_name),
                                 'readonly': cls.values.states.get('readonly',
                                     False),
                                 }),
