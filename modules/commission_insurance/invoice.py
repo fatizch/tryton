@@ -8,6 +8,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or, In, Not
 from trytond.transaction import Transaction
 from trytond.model import ModelView, Workflow
+from trytond.server_context import ServerContext
 from trytond.tools import grouped_slice
 
 from trytond.modules.coog_core import utils, fields, coog_sql
@@ -46,6 +47,12 @@ class InvoiceLine:
     def __register__(cls, module_name):
         super(InvoiceLine, cls).__register__(module_name)
         utils.add_reference_index(cls, module_name)
+
+    @classmethod
+    def delete(cls, invoice_lines):
+        # We want to have the right to clear the 'invoice_line' field
+        with ServerContext().set_context(allow_modify_commissions=True):
+            super(InvoiceLine, cls).delete(invoice_lines)
 
     def get_commissions(self):
         # Total override of tryton method just to add the agent parameter to

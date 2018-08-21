@@ -16,6 +16,7 @@ from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.wizard import StateAction
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 from trytond.tools import grouped_slice
 from trytond.cache import Cache
 
@@ -193,6 +194,15 @@ class Commission:
             if commission.invoice_line:
                 cls.raise_user_error('no_delete_invoiced_commission')
         super(Commission, cls).delete(instances)
+
+    @classmethod
+    def write(cls, *args):
+        # Bypass to allow reset of 'invoice_line' field on broker invoice
+        # deletion
+        override = ServerContext().get('allow_modify_commissions', False)
+        with Transaction().set_context(_check_access=not override and
+                Transaction().context.get('_check_access', False)):
+            super(Commission, cls).write(*args)
 
     def get_origin_invoice_line_field(self, name):
         if getattr(self.origin, '__name__', '') != 'account.invoice.line':
