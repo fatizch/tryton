@@ -1,0 +1,1 @@
+- Génération d'une ligne de mouvement comptable par produit d'assurance

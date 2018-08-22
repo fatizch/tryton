@@ -676,6 +676,12 @@ class PlanLines(export.ExportImportMixin):
         super(PlanLines, cls).delete(plan_lines)
         cls._get_matching_cache.clear()
 
+    def get_cache_key(self, coverage_id, pattern):
+        return (self.id, coverage_id)
+
+    def get_option_ids(self, pattern):
+        return {o.id for o in self.options}
+
     def match(self, pattern):
         if 'coverage' not in pattern:
             if 'product' in pattern and self.product:
@@ -683,13 +689,11 @@ class PlanLines(export.ExportImportMixin):
             else:
                 return False
         coverage_id = pattern['coverage'].id
-        key = (self.id, coverage_id)
+        key = self.get_cache_key(coverage_id, pattern)
         option_ids = self._get_matching_cache.get(key, -1)
-
         if option_ids != -1:
             return coverage_id in option_ids
-
-        option_ids = {o.id for o in self.options}
+        option_ids = self.get_option_ids(pattern)
         self._get_matching_cache.set(key, option_ids)
         return coverage_id in option_ids
 

@@ -1,0 +1,47 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.aged_balance.context,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:account.invoice,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:account.move,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:account.move.line,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:account.move.line.template,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:account.payment.journal,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:account.payment.journal,products:"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "field:account.reconcile.show,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:account.statement,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:insurer,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "selection:account.move.template.keyword,type_:"
+msgid "Product"
+msgstr "Produit"

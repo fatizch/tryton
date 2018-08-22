@@ -1,0 +1,1 @@
+- Generate one move line per insurance product
