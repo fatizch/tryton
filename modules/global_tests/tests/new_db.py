@@ -1550,11 +1550,14 @@ if CREATE_ACTORS:  # {{{
 
     do_print('    Creating distribution network')  # {{{
     run_test_cases(['distribution_network_test_case'])
-    distributors = DistributionNetwork.find([('code', '=', 'C1')])
-    for distributor, broker in zip(distributors, [broker_party]):
+    brokers = DistributionNetwork.find([('code', '=', 'C1')])
+    for broker in brokers:
+        broker.party = broker_party
+        broker.is_broker = True
+        broker.save()
+
+    for distributor in DistributionNetwork.find([('code', 'like', 'C101010%')]):
         distributor.is_distributor = True
-        distributor.party = broker
-        distributor.is_broker = True
         distributor.save()
     # }}}
 
@@ -3584,6 +3587,18 @@ if CREATE_COMMISSION_CONFIG:  # {{{
 return montant_ligne_quittance() * (0.15 if compl_vip_agent() else 0.11)
 '''
     broker_share_rule.save()
+
+    broker_flat_rule = RuleEngine()
+    broker_flat_rule.context = commission_context
+    broker_flat_rule.name = 'Commission Courtier Constant'
+    broker_flat_rule.short_name = 'commissionnement_courtier_constant'
+    broker_flat_rule.status = 'validated'
+    broker_flat_rule.type_ = 'commission'
+    broker_flat_rule.extra_data_used.append(ExtraData(vip_agent.id))
+    broker_flat_rule.algorithm = '''
+return 1.0 if compl_vip_agent() else 0.75
+'''
+    broker_flat_rule.save()
     # }}}
 
     do_print('    Creating insurer commission plans')  # {{{
@@ -3633,6 +3648,24 @@ return montant_ligne_quittance() * (0.15 if compl_vip_agent() else 0.11)
     broker_plan.lines[0].options.append(Coverage(loan_disability_coverage.id))
     broker_plan.extra_data_def.append(ExtraData(vip_agent.id))
     broker_plan.save()
+
+    broker_plan_flat = CommissionPlan()
+    broker_plan_flat.name = 'Commissionnement Courtier Constant'
+    broker_plan_flat.code = 'commissionnement_courtier_constant'
+    broker_plan_flat.commission_method = 'payment'
+    broker_plan_flat.commission_product = broker_account_product
+    broker_plan_flat.type_ = 'agent'
+    broker_plan_flat.insurer_plan = insurer_plan
+    broker_plan_flat.lines.new()
+    broker_plan_flat.lines[0].use_rule_engine = True
+    broker_plan_flat.lines[0].rule = broker_flat_rule
+    broker_plan_flat.lines[0].options.append(Coverage(loan_death_coverage.id))
+    broker_plan_flat.lines[0].options.append(
+        Coverage(loan_unemployment_coverage.id))
+    broker_plan_flat.lines[0].options.append(
+        Coverage(loan_disability_coverage.id))
+    broker_plan_flat.extra_data_def.append(ExtraData(vip_agent.id))
+    broker_plan_flat.save()
     # }}}
 
     do_print('    Creating insurer agents')  # {{{
@@ -3656,16 +3689,29 @@ return montant_ligne_quittance() * (0.15 if compl_vip_agent() else 0.11)
     assert 'vip_agent' in broker_agent.extra_data
     broker_agent.extra_data = {'vip_agent': True}
     broker_agent.save()
+
+    broker_flat = CommissionAgent()
+    broker_flat.company = company
+    broker_flat.currency = currency
+    broker_flat.party = broker
+    broker_flat.plan = broker_plan_flat
+    broker_flat.type_ = 'agent'
+    broker_flat.extra_data = {'vip_agent': True}
+    broker_flat.save()
     # }}}
 
 insurer_plan, = CommissionPlan.find(
     [('code', '=', 'commissionnement_assureur')])
 broker_plan, = CommissionPlan.find(
     [('code', '=', 'commissionnement_courtier')])
+broker_plan_flat, = CommissionPlan.find(
+    [('code', '=', 'commissionnement_courtier_constant')])
 insurer_agent, = CommissionAgent.find(
     [('plan', '=', insurer_plan.id), ('party', '=', insurer.party.id)])
 broker_agent, = CommissionAgent.find(
     [('plan', '=', broker_plan.id), ('party', '=', broker.id)])
+broker_agent_flat, = CommissionAgent.find(
+    [('plan', '=', broker_plan_flat.id), ('party', '=', broker.id)])
 # }}}
 
 if CREATE_CONTRACTS:  # {{{
@@ -3687,13 +3733,13 @@ if CREATE_CONTRACTS:  # {{{
     SubscribeContract = Wizard('contract.subscribe')
     SubscribeContract.form.signature_date = _base_contract_date
     SubscribeContract.form.distributor = DistributionNetwork.find(
-        [('code', '=', 'C1')])[0]
+        [('code', '=', 'C1010101')])[0]
     SubscribeContract.form.commercial_product = house_product.com_products[0]
     SubscribeContract.execute('action')
 
     house_contract = Contract.find([('product.code', '=', 'house_product')])[0]
     house_contract.subscriber = house_subscriber
-    house_contract.agent = broker_agent
+    assert house_contract.agent == broker_agent
     process_next(house_contract)
     covered = house_contract.covered_elements[0]
     covered.name = u'Résidence principale'
@@ -3743,13 +3789,12 @@ if CREATE_CONTRACTS:  # {{{
     SubscribeContract = Wizard('contract.subscribe')
     SubscribeContract.form.signature_date = _base_contract_date
     SubscribeContract.form.distributor = DistributionNetwork.find(
-        [('code', '=', 'C1')])[0]
+        [('code', '=', 'C1010102')])[0]
     SubscribeContract.form.commercial_product = life_product.com_products[0]
     SubscribeContract.execute('action')
 
     life_contract = Contract.find([('product.code', '=', 'life_product')])[0]
     life_contract.subscriber = life_subscriber
-    life_contract.agent = broker_agent
     process_next(life_contract)
     life_contract.covered_elements[0].current_extra_data = {
         'job_category': 'csp2',
@@ -3847,13 +3892,15 @@ if CREATE_CONTRACTS:  # {{{
     SubscribeContract = Wizard('contract.subscribe')
     SubscribeContract.form.signature_date = _base_contract_date
     SubscribeContract.form.distributor = DistributionNetwork.find(
-        [('code', '=', 'C1')])[0]
+        [('code', '=', 'C1010103')])[0]
     SubscribeContract.form.commercial_product = loan_product.com_products[0]
     SubscribeContract.execute('action')
 
     loan_contract = Contract.find([('product.code', '=', 'loan_product')])[0]
     loan_contract.subscriber = loan_subscriber
-    loan_contract.agent = broker_agent
+    assert loan_contract.agent is None
+    assert loan_contract.broker == loan_contract.dist_network.parent_brokers[0]
+    loan_contract.agent = broker_agent_flat
     process_next(loan_contract)
     assert loan_contract.extra_data_values == {'reduction_libre': '0'}
     loan_contract.extra_data_values = {'reduction_libre': '10'}
@@ -3919,14 +3966,13 @@ if CREATE_CONTRACTS:  # {{{
     SubscribeContract = Wizard('contract.subscribe')
     SubscribeContract.form.signature_date = _base_contract_date
     SubscribeContract.form.distributor = DistributionNetwork.find(
-        [('code', '=', 'C1')])[0]
+        [('code', '=', 'C1010101')])[0]
     SubscribeContract.form.commercial_product = funeral_product.com_products[0]
     SubscribeContract.execute('action')
 
     funeral_contract = Contract.find(
         [('product.code', '=', 'funeral_product')])[0]
     funeral_contract.subscriber = funeral_subscriber
-    funeral_contract.agent = broker_agent
     process_next(funeral_contract)
     funeral_contract.covered_elements.new()
     funeral_contract.covered_elements[1].party = life_subscriber
@@ -3977,7 +4023,7 @@ if CREATE_CONTRACTS:  # {{{
     group_life_contract = Contract()
     group_life_contract.product = group_life_product
     group_life_contract.dist_network, = DistributionNetwork.find(
-        [('code', '=', 'C1')])
+        [('code', '=', 'C1010101')])
     group_life_contract.subscriber = group_life_subscriber
     group_life_contract.start_date = _base_contract_date
     group_life_contract.signature_date = _base_contract_date

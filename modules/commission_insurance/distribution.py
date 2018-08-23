@@ -28,6 +28,9 @@ class DistributionNetwork:
     broker_party = fields.Function(
         fields.Many2One('party.party', 'Broker Party'),
         'get_broker_party', searcher='search_broker_party')
+    parent_brokers = fields.Function(
+        fields.Many2Many('distribution.network', None, None, 'Parent Brokers'),
+        'getter_parent_brokers')
 
     @classmethod
     def __register__(cls, module_name):
@@ -49,6 +52,9 @@ class DistributionNetwork:
     @staticmethod
     def default_is_broker():
         return False
+
+    def getter_parent_brokers(self, name):
+        return [x.id for x in list(self.parents) + [self] if x.is_broker]
 
     @fields.depends('is_broker', 'party')
     def on_change_with_is_broker(self):

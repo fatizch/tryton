@@ -1,3 +1,4 @@
+* BUG#9634 Initialize contract broker if there is only one possibility
 * BUG#9652 Bypass access right on commissions when deleting an invoice line
 * BUG#9657 Add missing rights for the broker invoice creation entry point
 * FEA#9476 Iteration on remove of agency field and replace it by distributor

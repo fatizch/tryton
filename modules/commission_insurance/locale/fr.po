@@ -642,6 +642,10 @@ msgctxt "field:contract.option,monthly_taxes:"
 msgid "Monthly Taxes"
 msgstr "Taxes mensuelles"
 
+msgctxt "field:distribution.network,parent_brokers:"
+msgid "Parent Brokers"
+msgstr "Courtiers parents"
+
 msgctxt "field:offered.option.description,agents:"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"

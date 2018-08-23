@@ -136,10 +136,14 @@ class Contract:
                 line.principal = contract_invoice.contract.find_insurer_agent(
                     line=line)
 
-    @fields.depends('agent')
+    @fields.depends('agent', 'dist_network')
     def on_change_with_broker(self, name=None):
-        return (self.agent.party.network[0].id
-            if self.agent and self.agent.party.is_broker else None)
+        if self.agent:
+            return (self.agent.party.network[0].id
+                if self.agent and self.agent.party.is_broker else None)
+        elif self.dist_network and self.dist_network.parent_brokers:
+            if len(self.dist_network.parent_brokers) == 1:
+                return self.dist_network.parent_brokers[0].id
 
     @fields.depends('broker')
     def on_change_with_broker_party(self, name=None):
