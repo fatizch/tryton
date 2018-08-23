@@ -124,8 +124,7 @@ class Contract:
             if contract.status == 'void':
                 continue
             prices = contract.calculate_prices_between_dates(start, end)
-            if start is None:
-                prices.update(contract.calculate_non_periodic_prices(start))
+            prices.update(contract.calculate_non_periodic_prices(start))
             for date, price in prices.iteritems():
                 final_prices[date].extend(price)
         cls.delete_prices(contracts, start)
@@ -149,7 +148,10 @@ class Contract:
         return lines
 
     def calculate_non_periodic_prices(self, start=None):
-        return self.product.calculate_premiums(self, [None])
+        if not start or start < self.initial_start_date:
+            return self.product.calculate_premiums(self, [None])
+        else:
+            return {}
 
     @classmethod
     def store_prices(cls, prices):

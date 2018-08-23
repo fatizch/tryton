@@ -1,3 +1,5 @@
+* BUG#9621 Properly recalculate aperiodic premiums when forced
+
 Version 2.0 - 2018-04-13
 * Bug#7788 Do not generate temporary 0 premium during computation of non periodic premium
 * BUG#7677 Wrong premium computation after a contract reactivation: premium before the last renewal are deleted 

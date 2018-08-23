@@ -324,10 +324,13 @@ class ContractOption:
 
         date = date or utils.today()
         for option in options:
-            premiums = utils.get_good_versions_at_date(option, 'premiums', date,
+            premiums = utils.get_good_versions_at_date(option, 'premiums',
+                max(date, option.initial_start_date or utils.today()),
                 'start', 'end')
             extra_premiums = utils.get_good_versions_at_date(option,
-                'extra_premiums', date, 'start', 'end')
+                'extra_premiums',
+                max(date, option.initial_start_date or utils.today()),
+                'start', 'end')
             annual_premium_incl_tax = annual_premium_excl_tax = \
                 monthly_premium_incl_tax = monthly_premium_excl_tax = \
                 Decimal('0.0')
