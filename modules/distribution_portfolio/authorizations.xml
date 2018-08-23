@@ -24,7 +24,6 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ######### Parties  -->
         <record model="ir.rule.group" id="rule_group_portfolio_party">
             <field name="model" search="[('model', '=', 'party.party')]"/>
-            <field name="global_p" eval="True"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -42,7 +41,6 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ######### Contact Mechanism  -->
         <record model="ir.rule.group" id="rule_group_portfolio_contact_mechanism">
             <field name="model" search="[('model', '=', 'party.contact_mechanism')]"/>
-            <field name="global_p" eval="True"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -60,7 +58,6 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ######### Relations  -->
         <record model="ir.rule.group" id="rule_group_portfolio_relation">
             <field name="model" search="[('model', '=', 'party.relation.all')]"/>
-            <field name="global_p" eval="True"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -78,7 +75,6 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ######### Contracts  -->
         <record model="ir.rule.group" id="rule_group_portfolio_contract">
             <field name="model" search="[('model', '=', 'contract')]"/>
-            <field name="global_p" eval="True"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>

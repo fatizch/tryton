@@ -1,3 +1,4 @@
+* BUG#9686 Le cloisonnement des données par portefeuille est optionnel
 * FEA#9186 Cloisonnement des données par portefeuille
 
 Version 2.0 - 2018-04-13

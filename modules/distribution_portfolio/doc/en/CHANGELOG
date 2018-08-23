@@ -1,8 +1,9 @@
+* BUG#9686 Make data partitioning optional
 * FEA#9186 Data partitioning by portfolio
 
 Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
-* BUG #7110 Typo in the distribution default portfolio multivalue's __name__
+* BUG#7110 Typo in the distribution default portfolio multivalue's __name__
 
 Version 1.12 - 2017-04-28
 

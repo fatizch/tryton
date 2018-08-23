@@ -7,7 +7,6 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ######### Commissions  -->
         <record model="ir.rule.group" id="rule_group_portfolio_commission">
             <field name="model" search="[('model', '=', 'commission')]"/>
-            <field name="global_p" eval="True"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -25,7 +24,6 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ######### Aggregated Commissions  -->
         <record model="ir.rule.group" id="rule_group_portfolio_commission_aggregated">
             <field name="model" search="[('model', '=', 'commission.aggregated')]"/>
-            <field name="global_p" eval="True"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>

@@ -7,7 +7,6 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ######### Invoices  -->
         <record model="ir.rule.group" id="rule_group_portfolio_invoice">
             <field name="model" search="[('model', '=', 'account.invoice')]"/>
-            <field name="global_p" eval="True"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
