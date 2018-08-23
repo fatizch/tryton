@@ -23,3 +23,8 @@ class Invoice:
         for move in moves:
             move.product = move.origin.product
         return moves
+
+    def get_move(self):
+        move = super(Invoice, self).get_move()
+        move.product = self.product
+        return move
