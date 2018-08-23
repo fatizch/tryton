@@ -205,11 +205,35 @@ class InvoiceAgainstBalanceBatch(batch.BatchRoot):
         return 'contract'
 
     @classmethod
-    def select_ids(cls, treatment_date, ids_list):
-        return [(int(x),) for x in ids_list[1:-1].split(',')]
+    def select_ids(cls, ids_list=None):
+        if ids_list:
+            return [(int(x),) for x in ids_list[1:-1].split(',')]
+        pool = Pool()
+        MoveLine = pool.get('account.move.line')
+        Account = pool.get('account.account')
+        cursor = Transaction().connection.cursor()
+
+        line = MoveLine.__table__()
+        account = Account.__table__()
+
+        line_query, _ = MoveLine.query_get(line)
+
+        query = line.join(account,
+                condition=account.id == line.account
+                ).select(line.contract,
+                where=(account.active &
+                    (account.kind == 'receivable') &
+                    (line.reconciliation == Null) &
+                    line_query &
+                    (line.state == 'valid') &
+                    ((line.credit > 0) | (line.debit < 0)) &
+                    (line.contract != Null)),
+                group_by=line.contract)
+        cursor.execute(*query)
+        return cursor.fetchall()
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, ids_list):
+    def execute(cls, objects, ids, ids_list=None):
         for contract in objects:
             contract.reconcile()
             if contract.status not in ['void', 'declined', 'quote']:
@@ -227,7 +251,7 @@ class SetNumberInvoiceAgainstBalanceBatch(batch.BatchRoot):
         return 'account.invoice'
 
     @classmethod
-    def select_ids(cls, treatment_date, ids_list):
+    def select_ids(cls, ids_list=None):
         pool = Pool()
         cursor = Transaction().connection.cursor()
         account_invoice = pool.get('account.invoice').__table__()
@@ -236,7 +260,7 @@ class SetNumberInvoiceAgainstBalanceBatch(batch.BatchRoot):
         invoice_against_batch = pool.get(
             'contract.invoice.against_balance.batch')
         contracts = [x[0] for x in invoice_against_batch.select_ids(
-                treatment_date, ids_list)]
+                ids_list)]
 
         query_table = contract_invoice.join(account_invoice,
             condition=(
@@ -253,7 +277,7 @@ class SetNumberInvoiceAgainstBalanceBatch(batch.BatchRoot):
         return res
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, extra_args):
+    def execute(cls, objects, ids, ids_list=None):
         for contract, invoices in groupby(objects, key=lambda x: x.contract):
             invoices = iter(sorted(invoices, key=lambda x: x.start))
             balance = contract.balance
@@ -276,7 +300,7 @@ class PostInvoiceAgainstBalanceBatch(batch.BatchRoot):
         return 'account.invoice'
 
     @classmethod
-    def select_ids(cls, treatment_date, ids_list):
+    def select_ids(cls, ids_list=None):
         pool = Pool()
         cursor = Transaction().connection.cursor()
         account_invoice = pool.get('account.invoice').__table__()
@@ -285,7 +309,7 @@ class PostInvoiceAgainstBalanceBatch(batch.BatchRoot):
         invoice_against_batch = pool.get(
             'contract.invoice.against_balance.batch')
         contracts = [x[0] for x in invoice_against_batch.select_ids(
-                treatment_date, ids_list)]
+                ids_list)]
 
         query_table = contract_invoice.join(account_invoice,
             condition=(
@@ -304,7 +328,7 @@ class PostInvoiceAgainstBalanceBatch(batch.BatchRoot):
         return res
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date, ids_list):
+    def execute(cls, objects, ids, ids_list=None):
         Invoice = Pool().get('account.invoice')
 
         for contract, invoices in groupby(objects, key=lambda x: x.contract):
