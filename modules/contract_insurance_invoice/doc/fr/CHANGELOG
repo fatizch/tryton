@@ -1,3 +1,4 @@
+* BUG#9211 Mettre à jour les dates de paiments à la dé-suspension des paiements
 * BUG#9697 Les batchs de numérotation et d'émission pour la gestion des trop percus plantent quand il n'y a aucun contrat à traiter
 * BUG#9694 Rendre le batch de gestion des trop percu fonctionnel
 * BUG#9685 Utilisation de la date d'effet initial plutôt que celle du terme courant lors du calcul des périodes de quittancement

@@ -329,3 +329,25 @@ class Reconcile:
         move.save()
         Move.post([move])
         self.show.lines = list(self.show.lines) + [move.lines[1]]
+
+
+class Reconciliation:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.move.reconciliation'
+
+    @classmethod
+    def create(cls, vlist):
+        pool = Pool()
+        PaymentSuspension = pool.get('contract.payment_suspension')
+        BillingInformation = pool.get('contract.billing_information')
+        reconciliations = super(Reconciliation, cls).create(vlist)
+        line_ids = set()
+        for reconciliation in reconciliations:
+            line_ids |= {l.id for l in reconciliation.lines}
+        inactive_suspensions = PaymentSuspension.search([('payment_line_due',
+                    'in', list(line_ids)), ('active', '=', False)])
+        unsuspended = [x.billing_info for x in inactive_suspensions
+            if not x.billing_info.suspended]
+        if unsuspended:
+            BillingInformation.update_after_unsuspend(unsuspended)
+        return reconciliations

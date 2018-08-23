@@ -299,8 +299,10 @@ class Invoice:
                 line.payment_date = \
                     self.contract.get_non_periodic_payment_date()
                 return
-        line.payment_date = billing_information.get_direct_debit_planned_date(
-            line)
+        new_date = billing_information.get_direct_debit_planned_date(line)
+        if new_date and (getattr(line, 'payment_date', None) or
+                datetime.date.min) < new_date:
+            line.payment_date = new_date
 
     def _get_move_line(self, date, amount):
         line = super(Invoice, self)._get_move_line(date, amount)

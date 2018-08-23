@@ -61,6 +61,7 @@ def register():
         move.Move,
         move.MoveLine,
         move.ReconcileShow,
+        move.Reconciliation,
         party.SynthesisMenu,
         party.SynthesisMenuInvoice,
         party.Party,
