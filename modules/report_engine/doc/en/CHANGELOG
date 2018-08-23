@@ -1,4 +1,5 @@
-* FEA#9299 ALlow model-less impressions
+* BUG#9672 Fix register method
+* FEA#9299 Allow model-less impressions
 * FEA#9045 Allow to define printing template on a party
 * BUG#8870 Fix on printing wizard, alway step into the post generation step of the print wizard 
 * BUG#8824 Fix template parameters for batch generated reports

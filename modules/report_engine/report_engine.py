@@ -777,7 +777,7 @@ class ReportTemplateVersion(model.CoogSQL, model.CoogView):
                 else:
                     logger.info('Inserting data from %s' % filename)
                     cursor.execute(*table.update(
-                            [table.data], [fields.Binary.sql_format(data)],
+                            [table.data], [cls.data.sql_format(data)],
                             where=(table.id == version_id)))
             table_handler.drop_column('file_id')
         table_handler.drop_column('type')
