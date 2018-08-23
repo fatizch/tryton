@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, model
 __all__ = [
     'Invoice',
     ]
@@ -31,6 +31,13 @@ class Invoice:
                 ~Eval('move', False) | ~Eval('credit_reconciliation_lines')},
             depends=['move']),
         'get_credit_reconciliation_lines')
+
+    @classmethod
+    def __setup__(cls):
+        super(Invoice, cls).__setup__()
+        cls._buttons.update({
+                'create_payments': {'readonly': Eval('state') != 'posted'},
+                })
 
     @classmethod
     def get_payments(cls, invoices, name):
@@ -71,3 +78,8 @@ class Invoice:
         if self.pending_payment:
             return 'green'
         return super(Invoice, self).get_color(name)
+
+    @classmethod
+    @model.CoogView.button_action('account_payment_cog.create_payments_wizard')
+    def create_payments(cls, invoices):
+        pass

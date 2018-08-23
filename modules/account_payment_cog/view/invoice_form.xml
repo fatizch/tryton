@@ -11,4 +11,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="payments" colspan="4"/>
         <field name="credit_reconciliation_lines" colspan="4"/>
     </xpath>
+    <xpath expr="/form/group[@id='invisible']" position="inside">
+        <button string="Create Payments" name="create_payments"/>
+    </xpath>
 </data>

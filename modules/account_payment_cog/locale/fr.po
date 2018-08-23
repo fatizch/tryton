@@ -3,6 +3,10 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:account.payment.creation:"
+msgid "Nothing to pay"
+msgstr "Rien à payer"
+
+msgctxt "error:account.payment.creation:"
 msgid "Selected lines are incompatible with selected kind"
 msgstr ""
 "Les lignes sélectionnées sont incompatibles avec le type de paiement "
@@ -1082,6 +1086,10 @@ msgstr "À recevoir"
 msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Payment"
 msgstr "Paiement"
+
+msgctxt "view:account.invoice:"
+msgid "Create Payments"
+msgstr "Créer les paiements"
 
 msgctxt "view:account.move.line:"
 msgid "Block"
