@@ -1,3 +1,4 @@
+* BUG#9697 invoice against balance set number and post batches crash when there is nothing to treat
 * BUG#9694 Make invoice against balance batch runnable
 * BUG#9685 Use contract initial start date instead of contract start date while getting the invoice periods 
 * BUG#9542 Prevent selection of contracts not entirely invoice by renewal batch

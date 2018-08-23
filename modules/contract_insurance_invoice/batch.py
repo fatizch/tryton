@@ -262,6 +262,8 @@ class SetNumberInvoiceAgainstBalanceBatch(batch.BatchRoot):
         contracts = [x[0] for x in invoice_against_batch.select_ids(
                 ids_list)]
 
+        if not contracts:
+            return []
         query_table = contract_invoice.join(account_invoice,
             condition=(
                 (account_invoice.id == contract_invoice.invoice) &
@@ -310,7 +312,8 @@ class PostInvoiceAgainstBalanceBatch(batch.BatchRoot):
             'contract.invoice.against_balance.batch')
         contracts = [x[0] for x in invoice_against_batch.select_ids(
                 ids_list)]
-
+        if not contracts:
+            return []
         query_table = contract_invoice.join(account_invoice,
             condition=(
                 (account_invoice.id == contract_invoice.invoice) &
