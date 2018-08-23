@@ -1,3 +1,4 @@
+* BUG#9685 Use contract initial start date instead of contract start date while getting the invoice periods 
 * BUG#9542 Prevent selection of contracts not entirely invoice by renewal batch
 * BUG#9433 Fix cache setting / retrieval for future invoices
 * BUG#9296 Retrieve the good period when recalculating the previous year premium

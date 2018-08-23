@@ -676,7 +676,7 @@ class Contract:
             return []
         final_date = self._calculate_final_invoice_end_date()
         if from_date:
-            start = max(from_date, self.start_date)
+            start = max(from_date, self.initial_start_date)
         elif self.last_invoice_end and not ignore_invoices:
             start = self.last_invoice_end + relativedelta(days=+1)
         else:

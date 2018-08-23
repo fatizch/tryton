@@ -1,3 +1,4 @@
+* BUG#9685 Utilisation de la date d'effet initial plutôt que celle du terme courant lors du calcul des périodes de quittancement
 * BUG#9542 Empêcher la sélection des contrats non entièrement quittancés par le batch de renouvellement
 * BUG#9433 Correction de la mise en cache des quittances pré calculées
 * BUG#9296 Retrouve la bonne période lors du recalcul de la prime de la période précédente
