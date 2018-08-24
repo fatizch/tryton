@@ -3,6 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <menuitem name="Insurers" parent="coog_core.general_configuration_menu" action="act_party_insurer_form" id="menu_insurers_general_configuration" sequence="140" icon="insurer"/>
+        <menuitem name="Insurers" parent="coog_core.general_configuration_menu" action="act_insurer_form" id="menu_insurers_general_configuration" sequence="140" icon="insurer"/>
     </data>
 </tryton>

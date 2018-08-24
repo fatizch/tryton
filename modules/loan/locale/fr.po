@@ -845,6 +845,10 @@ msgctxt "model:ir.action,name:act_display_insured_outstanding_loan_balance"
 msgid "Insured Outstanding Loan Balances"
 msgstr "Encours"
 
+msgctxt "model:ir.action,name:act_lender_form"
+msgid "Lenders"
+msgstr "Organismes prêteurs"
+
 msgctxt "model:ir.action,name:act_loan_form"
 msgid "Loans"
 msgstr "Prêts"
@@ -856,10 +860,6 @@ msgstr "Echéances"
 msgctxt "model:ir.action,name:act_loan_relate_form"
 msgid "Loans"
 msgstr "Prêts"
-
-msgctxt "model:ir.action,name:act_party_lender_form"
-msgid "Lenders"
-msgstr "Organismes prêteurs"
 
 msgctxt "model:ir.sequence,name:default_loan_sequence"
 msgid "Default Loan Sequence"

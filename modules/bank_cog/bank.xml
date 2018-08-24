@@ -16,26 +16,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="bank.bank_view_form"/>
             <field name="name">bank_form</field>
         </record>
-        <record model="ir.ui.view" id="party_view_list">
-            <field name="model">party.party</field>
-            <field name="inherit" ref="party.party_view_tree"/>
-            <field name="name">party_tree</field>
-        </record>
-        <record model="ir.action.act_window" id="act_bank_party_form">
-            <field name="name">Banks</field>
-            <field name="res_model">party.party</field>
-            <field name="domain" eval="[('is_bank', '=', True)]" pyson="1"></field>
-        </record>
-        <record model="ir.action.act_window.view" id="act_bank_view_list">
-            <field name="sequence" eval="10"/>
-            <field name="view" ref="party_view_list"/>
-            <field name="act_window" ref="act_bank_party_form"/>
-        </record>
-        <record model="ir.action.act_window.view" id="act_bank_view_form">
-            <field name="sequence" eval="20"/>
-            <field name="view" ref="party_view_form"/>
-            <field name="act_window" ref="act_bank_party_form"/>
-        </record>
         <!--  *******************************************
               ************   Bank account    ************
               *******************************************-->
@@ -55,7 +35,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">bank_account_number_list_sequence</field>
         </record>
         <menuitem name="Banking" sequence="3" id="bank.menu_banking" icon="bank"/>
-        <menuitem parent="bank.menu_banking" action="act_bank_party_form" sequence="10" id="bank.menu_bank_form" icon="bank"/>
+        <menuitem parent="bank.menu_banking" action="bank.act_bank_form" sequence="10" id="bank.menu_bank_form" icon="bank"/>
         <menuitem parent="bank.menu_banking" action="bank.act_bank_account_form" sequence="20" id="bank.menu_bank_account_form" icon="coopengo-bank_account"/>
         <record model="ir.ui.menu-res.group" id="group_bank_admin_menu_bank">
             <field name="group" ref="bank.group_bank_admin"/>

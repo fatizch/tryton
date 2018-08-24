@@ -22,6 +22,10 @@ msgctxt "field:bank,address:"
 msgid "Address"
 msgstr "Adresse"
 
+msgctxt "field:bank,last_modification:"
+msgid "Last Modification"
+msgstr "Dernière modification"
+
 msgctxt "field:bank,name:"
 msgid "Name"
 msgstr "Nom"
@@ -150,7 +154,7 @@ msgctxt "model:bank_cog.data.set,name:"
 msgid "Bank Data Set"
 msgstr "Mise à jour des banques"
 
-msgctxt "model:ir.action,name:act_bank_form"
+msgctxt "model:ir.action,name:"
 msgid "Banks"
 msgstr "Banques"
 
