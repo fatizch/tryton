@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
-from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields
 
@@ -31,8 +31,9 @@ class Move:
         vlist = [v.copy() for v in vlist]
         for vals in vlist:
             if not vals.get('product', None):
-                if Transaction().context.get('product', None):
-                    vals['product'] = Transaction().context.get('product')
+                product = ServerContext().get('product', None)
+                if product:
+                    vals['product'] = product.id
         moves = super(Move, cls).create(vlist)
         return moves
 
@@ -45,10 +46,10 @@ class MoveLine:
         'Product'), 'get_move_field', searcher='search_move_field')
 
     def get_query_get_where_clause(cls, table, where):
-        product = Transaction().context.get('product')
+        product = ServerContext().get('product', None)
         if product:
             move = Pool().get('account.move').__table__()
-            where &= (move.product == product)
+            where &= (move.product == product.id)
         return where
 
     @classmethod
@@ -57,7 +58,7 @@ class MoveLine:
         for lines in lines_list:
             products = list({l.product for l in lines})
             if len(products) == 1:
-                with Transaction().set_context(product=products[0].id):
+                with ServerContext().set_context(product=products[0]):
                     reconciliations += super(MoveLine, cls).reconcile(lines,
                         **writeoff)
             else:
@@ -82,7 +83,7 @@ class Reconcile:
         if len(products) == 1:
             product = products[0]
         if product:
-            with Transaction().set_context(product=products[0].id):
+            with ServerContext().set_context(product=products[0]):
                 return super(Reconcile, self).transition_reconcile()
         return super(Reconcile, self).transition_reconcile()
 

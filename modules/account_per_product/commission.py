@@ -17,7 +17,7 @@ class Commission:
     def _group_to_invoice_key(self):
         key = super(Commission, self)._group_to_invoice_key()
         if self.commissioned_contract:
-            key += (('product', self.commissioned_contract.product))
+            key += (('product', self.commissioned_contract.product),)
         return key
 
     @classmethod

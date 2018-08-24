@@ -4166,12 +4166,10 @@ if BILL_CONTRACTS:  # {{{
     # }}}
 
     do_print('    Generating insurer / broker reportings')  # {{{
-    ReportCreation = Wizard('report.create', Invoice.find(
-            [('business_kind', '=', 'broker_invoice')]))
-    ReportCreation.execute('generate')
-    ReportCreation = Wizard('report.create', Invoice.find(
-            [('business_kind', '=', 'insurer_invoice')]))
-    ReportCreation.execute('generate')
+    for invoice in Invoice.find(
+            [('business_kind', 'in', ['broker_invoice', 'insurer_invoice'])]):
+        ReportCreation = Wizard('report.create', [invoice])
+        ReportCreation.execute('generate')
     # }}}
 # }}}
 

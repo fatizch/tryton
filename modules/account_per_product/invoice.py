@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from trytond.pool import PoolMeta
+from trytond.server_context import ServerContext
 from trytond.modules.coog_core import fields
 
 __all__ = [
@@ -28,3 +29,9 @@ class Invoice:
         move = super(Invoice, self).get_move()
         move.product = self.product
         return move
+
+    def pay_invoice(self, amount, journal, date, description,
+            amount_second_currency=None, second_currency=None):
+        with ServerContext().set_context(product=self.product):
+            return super(Invoice, self).pay_invoice(amount, journal, date,
+                description, amount_second_currency, second_currency)

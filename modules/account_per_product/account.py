@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta, Pool
-from trytond.transaction import Transaction
+from trytond.pool import PoolMeta
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields
 
@@ -24,9 +24,8 @@ class AgedBalanceReport:
 
     @classmethod
     def get_context(cls, records, data):
-        Product = Pool().get('offered.product')
         report_context = super(AgedBalanceReport, cls).get_context(records,
             data)
-        product = Transaction().context.get('product')
-        report_context['product'] = Product(product) if product else None
+        product = ServerContext().get('product', None)
+        report_context['product'] = product
         return report_context
