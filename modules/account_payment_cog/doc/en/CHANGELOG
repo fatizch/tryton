@@ -1,3 +1,4 @@
+* OTH#0000 Add access rights on payment creation from invoices button
 * FEA#8233 Allow to create payments right from the invoice
 * BUG#9627 Fix account payment creation batch: It does not select lines with a draft move anymore
 * BUG#9536 Fix to avoid null payment creation

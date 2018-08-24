@@ -13,5 +13,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="account_invoice.invoice_view_form"/>
             <field name="name">invoice_form</field>
         </record>
+        <!-- Authorizations -->
+        <record model="ir.model.button" id="button_invoice_create_payments">
+            <field name="name">create_payments</field>
+            <field name="model" search="[('model', '=', 'account.invoice')]"/>
+        </record>
+        <record model="ir.model.button-res.group" id="button_invoice_payments_group_financial_manage">
+            <field name="button" ref="button_invoice_create_payments"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
     </data>
 </tryton>
