@@ -29,7 +29,8 @@ class Insurer:
             if self.options and self.options[0].products else None)
 
     def get_func_key(self, name):
-        return '%s|%s' % ((self.party.code, self.product.code))
+        return '%s|%s' % (self.party.code,
+            self.product.code if self.product else None)
 
     @classmethod
     def search_func_key(cls, name, clause):
