@@ -53,4 +53,4 @@ class TagObjectRelation(model.CoogSQL, model.CoogView):
         return utils.models_get()
 
     def get_rec_name(self, name):
-        return self.object_.rec_name
+        return self.object_.rec_name if self.object_ else None
