@@ -67,6 +67,10 @@ class Journal(export.ExportImportMixin):
                 ' journals at the same time',
                 })
 
+    @classmethod
+    def is_master_object(cls):
+        return True
+
     def process_actions_when_payments_failed(self, payments):
         return True
 
@@ -244,8 +248,10 @@ class JournalFailureAction(model.CoogSQL, model.CoogView):
 class RejectReason(model.CoogSQL, model.CoogView):
     'Payment Journal Reject Reason'
     __name__ = 'account.payment.journal.reject_reason'
-    _func_key = 'code'
+    _func_key = 'func_key'
 
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
     code = fields.Char('Code', required=True)
     description = fields.Char('Description', required=True, translate=True)
     process_method = fields.Selection('get_process_method',
@@ -282,6 +288,30 @@ class RejectReason(model.CoogSQL, model.CoogView):
     @classmethod
     def is_master_object(cls):
         return True
+
+    def get_func_key(self, name):
+        return '%s|%s' % ((self.code, self.payment_kind))
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            if len(operands) == 2:
+                code, payment_kind = operands
+                res = []
+                if code != 'None':
+                    res.append(('code', clause[1], code))
+                if payment_kind != 'None':
+                    res.append(('payment_kind', clause[1], payment_kind))
+                return res
+            else:
+                return [('id', '=', None)]
+        else:
+            return ['OR',
+                [('code',) + tuple(clause[1:])],
+                [('payment_kind',) + tuple(clause[1:])],
+                ]
 
     def get_rec_name(self, name):
         return '[%s] %s' % (self.code, self.description)

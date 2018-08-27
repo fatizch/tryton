@@ -1,3 +1,4 @@
+* BUG#9711 Correction de l'import JSON des motifs de rejet de paiement
 * OTH#0000 Ajout des droite d'accès pour la création des paiements depuis une quittance
 * FEA#8233 Possibilité de créer les paiements directement depuis la quittance
 * BUG#9627 Correctif du batch de création des paiement: il ne selectionne plus les paiements dont le mouvement de la ligne est à l'état brouillon
