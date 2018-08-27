@@ -61,8 +61,9 @@ coog_celery_running() { # count workers - <queue>
 coog_celery_queued() { # count queued jobs - <name>
     [ -z "$1" ] >&2 && echo missing queue name && return 1
     local q; q=$(coog_redis_exec celery LLEN "$1")
-    local wk; wk=$(coog_celery_cli inspect -C active 2> /dev/null | grep -c "$1")
-    echo $((q+wk))
+    local awk; awk=$(coog_celery_cli inspect -C active 2> /dev/null | grep -c "$1")
+    local rwk; rwk=$(coog_celery_cli inspect -C reserved 2> /dev/null | grep -c "$1")
+    echo $((q+awk+rwk))
 }
 
 coog_celery_log() { # less logs - [less args]
