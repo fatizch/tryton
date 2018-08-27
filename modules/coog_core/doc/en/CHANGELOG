@@ -1,3 +1,4 @@
+* BUG#9693 By default, prevent No Select batches from splitting on error
 * BUG#9617 Fix a bug where a single document production request could be treated multiple times
 * BUG#9660 Fix icons paths
 * FEA#8852 Improve event logs look and feel: filtering on groups and adding icons

@@ -96,7 +96,10 @@ class BatchRoot(ModelView):
         config = {}
         if _config.has_section(cls.__name__):
             for key, value in _config.items(cls.__name__):
-                config[key] = value
+                if key in ('split',):
+                    config[key] = _config.getboolean(cls.__name__, key)
+                else:
+                    config[key] = value
         return config
 
     @classmethod
@@ -275,6 +278,13 @@ class BatchRoot(ModelView):
 
 class BatchRootNoSelect(BatchRoot):
     "Root class for batches that don't query the database."
+
+    @classmethod
+    def __setup__(cls):
+        super(BatchRootNoSelect, cls).__setup__()
+        cls._default_config_items.update({
+                'split': False,
+                })
 
     @classmethod
     def convert_to_instances(cls, ids, *args, **kwargs):
