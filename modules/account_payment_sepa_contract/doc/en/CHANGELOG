@@ -1,3 +1,4 @@
+* BUG#9635 Initialization of the payer and the direct debit account at contract subscription
 * BUG#9619 Check billing informations related to a sepa mandate before cancelling it
 * BUG#9171 Add missing searcher definition
 * BUG#9171 Add searcher on invoice sepa mandate

@@ -56,6 +56,12 @@ class Contract:
         super(Contract, self).init_billing_information()
         if getattr(self, 'subscriber', None) and self.billing_informations:
             self.billing_informations[0].payer = self.subscriber
+            if self.subscriber.bank_accounts and len(
+                    self.subscriber.bank_accounts) == 1:
+                self.billing_informations[0].direct_debit_account, = \
+                    self.subscriber.bank_accounts
+                if self.billing_informations:
+                    self.billing_informations = list(self.billing_informations)
 
     @fields.depends('billing_informations')
     def on_change_subscriber(self):
@@ -71,7 +77,6 @@ class Contract:
                     ('party', '=', new_billing_information.payer.id),
                     ('account_number.account', '=',
                         new_billing_information.direct_debit_account.id),
-                    ('signature_date', '>=', self.start_date)
                     ])
             if possible_mandates:
                 new_billing_information.sepa_mandate = possible_mandates[0]

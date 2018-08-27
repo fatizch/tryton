@@ -1,3 +1,4 @@
+* BUG#9635 Initialisation du payeur et du compte bancaire lors de la souscription d'un contrat
 * BUG#9619 Vérification des informations de quittancement liés à un mandat SEPA avant son annulation
 * BUG#9171 Ajout du searcher dans la définition du champ 'sepa_mandate'
 * BUG#9171 Ajout d'un searcher sur le champ sepa mandate des invoices

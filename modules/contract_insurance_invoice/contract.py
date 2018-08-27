@@ -185,6 +185,11 @@ class Contract:
             if (new_billing_information.payer not in
                     new_billing_information.direct_debit_account.owners):
                 new_billing_information.direct_debit_account = None
+        else:
+            if self.subscriber.bank_accounts and len(
+                    self.subscriber.bank_accounts) == 1:
+                new_billing_information.direct_debit_account, = \
+                    self.subscriber.bank_accounts
         self.billing_informations = [new_billing_information]
 
     def appliable_fees(self):
