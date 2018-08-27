@@ -1,3 +1,4 @@
+* FEA#9379 Format and add area code when writing phone number
 * FEA#9687 Display parties with roles in new entry point "Configuration Parties". Display role objects in each dedicated entry point
 * FEA#8739 Add the possibility to call the anonymization wizard from party
 * FEA#9350 Only display parties with no role in party entry point, parties with roles will be displayed in dedicated entry points

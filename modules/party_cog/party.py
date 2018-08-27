@@ -236,6 +236,24 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             return False
         return len([x for x in self.all_addresses if x.id > 0]) > 1
 
+    def _change_value(self, value, type_):
+        Contact = Pool().get('party.contact_mechanism')
+        value = Contact.add_prefix_to_phone_number(value)
+        setattr(self, type_,
+                Contact.format_value(value=value, type_=type_))
+
+    @fields.depends('phone')
+    def on_change_phone(self):
+        self._change_value(self.phone, 'phone')
+
+    @fields.depends('mobile')
+    def on_change_mobile(self):
+        self._change_value(self.mobile, 'mobile')
+
+    @fields.depends('fax')
+    def on_change_fax(self):
+        self._change_value(self.fax, 'fax')
+
     @classmethod
     def add_func_key(cls, values):
         if 'code' in values:

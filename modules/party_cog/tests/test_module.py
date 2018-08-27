@@ -186,20 +186,20 @@ class ModuleTestCase(test_framework.CoogTestCase):
         marty.save()
 
         marty.set_contact([marty], 'phone', '0164091187')
-        test_value_length_and_type(['0164091187'], ['phone'], 1, marty)
+        test_value_length_and_type(['+33 1 64 09 11 87'], ['phone'], 1, marty)
 
         marty.set_contact([marty], 'phone', '')
         test_value_length_and_type('', '', 0, marty)
 
         marty.set_contact([marty], 'mobile', '0683162994')
-        test_value_length_and_type(['0683162994'], ['mobile'], 1, marty)
+        test_value_length_and_type(['+33 6 83 16 29 94'], ['mobile'], 1, marty)
 
         marty.set_contact([marty], 'mobile', '0679511857')
-        test_value_length_and_type(['0679511857'], ['mobile'], 1, marty)
+        test_value_length_and_type(['+33 6 79 51 18 57'], ['mobile'], 1, marty)
 
         marty.set_contact([marty], 'mobile', '0657511879')
         marty.set_contact([marty], 'phone', '0164091187')
-        test_value_length_and_type(['0657511879', '0164091187'], [
+        test_value_length_and_type(['+33 6 57 51 18 79', '+33 1 64 09 11 87'], [
                 'mobile', 'phone'], 2, marty)
 
 
