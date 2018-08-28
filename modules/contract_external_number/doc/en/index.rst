@@ -1,7 +1,7 @@
 .. contract
 
-Contrat - External Number
-=========================
+Contract - External Number
+==========================
 
 Summary
 -------

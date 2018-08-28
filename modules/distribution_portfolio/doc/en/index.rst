@@ -1,7 +1,7 @@
 .. contract
 
-Contrat - Client portfolio
-==========================
+Contract - Client portfolio
+===========================
 
 Summary
 -------

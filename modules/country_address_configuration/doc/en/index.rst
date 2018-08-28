@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Address lines configuration
-=========================================
+Transverse - Address lines configuration
+========================================
 
 Summary
 -------

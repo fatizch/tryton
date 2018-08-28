@@ -1,7 +1,7 @@
 .. accounting
 
-Accounting- Account aggregate
-=============================
+Accounting - Account aggregate
+==============================
 
 Summary
 -------

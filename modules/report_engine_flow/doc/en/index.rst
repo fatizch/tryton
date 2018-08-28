@@ -1,7 +1,7 @@
-.. MAIN_TOPIC
+.. transversal
 
-MAIN TOPIC - Module Topic
-=========================
+Transverse - Flow generation
+============================
 
 Summary
 -------

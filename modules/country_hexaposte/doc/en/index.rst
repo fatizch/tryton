@@ -4,12 +4,12 @@ Tryton Coog - Hexaposte
 =======================
 
 Summary
-------
+-------
 
 .. include:: summary.rst
 
 Features
----------------
+--------
 
 .. include:: features.rst
 

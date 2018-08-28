@@ -1,7 +1,7 @@
 .. contract
 
-Contrat - Payments
-==================
+Contract - Payments
+===================
 
 Summary
 -------

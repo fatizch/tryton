@@ -1,7 +1,7 @@
-.. MAIN_TOPIC
+.. accounting
 
-MAIN TOPIC - Module Topic
-=========================
+Accounting - Waiting account payment clearing
+=============================================
 
 Summary
 -------

@@ -1,7 +1,7 @@
 .. contract
 
-Contrat Planned Event
-=====================
+Contract Planned Event
+======================
 
 Summary
 -------
@@ -13,6 +13,6 @@ Features
 
 .. include:: features.rst
 
-User help
----------
+User guide
+----------
 

@@ -4,20 +4,20 @@ Transverse - Document Request
 =============================
 
 Summary
-------
+-------
 
 .. include:: summary.rst
 
 
 Features
----------------
+--------
 
 
 .. include:: features.rst
 
 
-User help
-----------------
+User guide
+----------
 
 .. toctree::
    :maxdepth: 2

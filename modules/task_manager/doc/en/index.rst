@@ -1,10 +1,10 @@
 .. transversal
 
-Transversal - Task Manager
-==========================
+Transverse - Task Manager
+=========================
 
 Summary
-------
+-------
 
 .. include:: summary.rst
 

@@ -1,7 +1,7 @@
 .. contract
 
-Contrat - Insurance premium
-===========================
+Contract - Insurance premium
+============================
 
 Summary
 -------

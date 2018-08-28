@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - SMS reports generation
-====================================
+Transverse - SMS reports generation
+===================================
 
 Summary
 -------

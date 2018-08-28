@@ -1,7 +1,7 @@
 .. contract
 
-MAIN TOPIC - Module Topic
-=========================
+Contrat - Echelonnements de paiements
+=====================================
 
 Résumé
 ------

@@ -1,9 +1,9 @@
 .. transversal
 
-Transversal - N dimensions tables
-==================================
+Transverse - N dimensions tables
+================================
 
-Sumamry
+Summary
 -------
 
 .. include:: summary.rst
@@ -13,8 +13,8 @@ Features
 
 .. include:: features.rst
 
-User help
----------
+User guide
+----------
 
 .. toctree::
    :maxdepth: 2

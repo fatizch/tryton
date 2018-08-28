@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Party data migration batches
-==========================================
+Transverse - Party data migration batches
+=========================================
 
 Summary
 -------

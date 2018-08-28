@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Underwriting Process
-==================================
+Transverse - Underwriting Process
+=================================
 
 Summary
 -------

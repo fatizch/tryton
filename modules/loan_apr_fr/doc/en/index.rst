@@ -1,17 +1,15 @@
 .. credit
 
-Emprunteur - Calcul du TAEA
-===========================
+Loan - Average Premium Rate calculation (fr)
+============================================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
-
 

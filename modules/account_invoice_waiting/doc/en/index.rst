@@ -1,7 +1,7 @@
 .. accounting
 
 Accounting - Waiting accounts on invoice payment
-===============================================
+================================================
 
 Summary
 -------

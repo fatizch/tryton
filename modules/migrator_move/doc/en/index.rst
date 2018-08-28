@@ -1,6 +1,6 @@
 .. transversal
 
-Transversal- Move lines batches
+Transverse - Move lines batches
 ===============================
 
 Summary

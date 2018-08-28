@@ -9,8 +9,8 @@ Résumé
 .. include:: summary.rst
 
 
-Fonctionnalitées
-----------------
+Fonctionnalités
+---------------
 
 .. include:: features.rst
 

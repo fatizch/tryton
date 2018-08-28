@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Work days management
-==================================
+Transverse - Work days management
+=================================
 
 Summary
 -------

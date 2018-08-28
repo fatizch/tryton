@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Underwriting
-==========================
+Transverse - Underwriting
+=========================
 
 Summary
 -------

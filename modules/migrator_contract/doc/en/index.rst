@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Contract data migration batches
-=============================================
+Transverse - Contract data migration batches
+============================================
 
 Summary
 -------

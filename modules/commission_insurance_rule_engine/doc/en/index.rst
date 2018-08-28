@@ -1,15 +1,15 @@
 .. commission
 
-Commission - Moteur de règles
-=============================
+Commission - Rule engine
+========================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

@@ -1,20 +1,20 @@
 .. health
 
 Health - Contract (fr)
-====================
+======================
 
 Summary
-------
+-------
 
 .. include:: summary.rst
 
 Features
----------------
+--------
 
 .. include:: features.rst
 
-User Help
-----------------
+User guide
+----------
 
 .. toctree::
     :maxdepth: 2

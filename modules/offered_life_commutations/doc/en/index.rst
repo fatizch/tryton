@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Compute commutation tables
-========================================
+Transverse - Compute commutation tables
+=======================================
 
 Summary
 -------

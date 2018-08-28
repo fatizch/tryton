@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Loan data migration batches
-=========================================
+Transverse - Loan data migration batches
+========================================
 
 Summary
 -------

@@ -1,15 +1,15 @@
 .. pnc
 
-IARD - Produit
-==============
+PNC - Product
+=============
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

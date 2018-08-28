@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Migration tools
-=============================
+Transverse - Migration tools
+============================
 
 Summary
 -------

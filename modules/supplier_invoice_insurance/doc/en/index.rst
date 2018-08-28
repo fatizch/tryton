@@ -1,7 +1,7 @@
 .. accounting
 
-Accounting- Insurer invoices
-================================
+Accounting - Insurer invoices
+=============================
 
 Summary
 -------

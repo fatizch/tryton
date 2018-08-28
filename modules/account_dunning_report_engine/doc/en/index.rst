@@ -1,7 +1,7 @@
 .. contract
 
-Contrat - Handle dunning reports
-================================
+Contract - Handle dunning reports
+=================================
 
 Summary
 -------

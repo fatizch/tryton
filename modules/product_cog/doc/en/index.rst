@@ -1,15 +1,15 @@
 .. accounting
 
-Tryton Coog - Produit comptable
-===============================
+Tryton Coog - Accounting product
+================================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

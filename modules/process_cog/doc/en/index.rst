@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Process step configuration
-========================================
+Transverse - Process step configuration
+=======================================
 
 Summary
 -------

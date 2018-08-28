@@ -1,7 +1,7 @@
 .. contract
 
-MAIN TOPIC - Module Topic
-=========================
+Contract - Instalment plans
+===========================
 
 Summary
 -------

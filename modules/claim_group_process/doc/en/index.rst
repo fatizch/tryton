@@ -1,15 +1,15 @@
 .. claim
 
 Claim - Group declaration process
-=============================================
+=================================
 
 Summary
-------
+-------
 
 .. include:: summary.rst
 
-Summary
----------------
+Features
+--------
 
 .. include:: features.rst
 

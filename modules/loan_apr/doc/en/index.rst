@@ -1,15 +1,15 @@
 .. credit
 
-Emprunteur - Calcul du taux moyen prêt
-======================================
+Loan - Average Premium Rate calculation
+=======================================
 
-Résumé
-------
+Summary
+-------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
+Features
+--------
 
 .. include:: features.rst
 

@@ -1,7 +1,7 @@
-.. MAIN TOPIC
+.. transversal
 
-MAIN TOPIC - Rule engine
-=============================
+Transverse - Rule engine
+========================
 
 Summary
 -------
@@ -13,8 +13,8 @@ Features
 
 .. include:: features.rst
 
-User help
----------
+User guide
+----------
 
 .. toctree::
    :maxdepth: 2

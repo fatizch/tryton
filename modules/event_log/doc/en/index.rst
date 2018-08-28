@@ -1,5 +1,5 @@
 Module event_log
-===================
+================
 
 The event_log module allows to record informations about actions made in coog.
 

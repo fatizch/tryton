@@ -1,7 +1,7 @@
-.. MAIN_TOPIC
+.. accounting
 
-MAIN TOPIC - Module Topic
-=========================
+Comptabilité - Comptabilité par produit d'assurance
+===================================================
 
 Résumé
 ------

@@ -1,7 +1,7 @@
 .. contract
 
-Contrat - Revaluated coverage amount
-====================================
+Contract - Revaluated coverage amount
+=====================================
 
 Summary
 -------

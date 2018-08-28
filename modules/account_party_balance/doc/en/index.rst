@@ -1,7 +1,7 @@
-.. MAIN_TOPIC
+.. accounting
 
-MAIN TOPIC - Module Topic
-=========================
+Accounting - Per party accounting balance
+=========================================
 
 Summary
 -------

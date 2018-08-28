@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Email reports generation
-======================================
+Transverse - Email reports generation
+=====================================
 
 Summary
 -------

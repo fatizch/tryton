@@ -1,6 +1,6 @@
 .. contract
 
-Contrat - Coverage amount
+Contract - Coverage amount
 =========================
 
 Summary

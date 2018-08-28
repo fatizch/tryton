@@ -1,7 +1,7 @@
-.. MAIN_TOPIC
+.. accounting
 
-MAIN TOPIC - Module Topic
-=========================
+Accounting - Accounting moves per insurance product
+===================================================
 
 Summary
 -------

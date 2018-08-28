@@ -1,7 +1,7 @@
 .. contract
 
-Contrat
-=======
+Contract
+========
 
 Summary
 -------
@@ -13,8 +13,8 @@ Features
 
 .. include:: features.rst
 
-Aide utilisateur
-----------------
+User guide
+----------
 
 .. toctree::
     user/batch.rst

@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Payments migration batch
-======================================
+Transverse - Payments migration batch
+=====================================
 
 Summary
 -------
@@ -10,7 +10,7 @@ Summary
 
 
 Features
----------------
+--------
 
 .. include:: features.rst
 

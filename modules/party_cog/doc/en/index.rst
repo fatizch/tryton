@@ -4,12 +4,12 @@ Tryton Coog - Parties
 =====================
 
 Summary
-------
+-------
 
 .. include:: summary.rst
 
 Features
----------------
+--------
 
 .. include:: features.rst
 

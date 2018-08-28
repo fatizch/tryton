@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - GLobal Tests
-==========================
+Transverse - GLobal Tests
+=========================
 
 Summary
 -------

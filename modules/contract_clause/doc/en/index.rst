@@ -1,7 +1,7 @@
 .. contract
 
-Contrat - Clauses
-=================
+Contract - Clauses
+==================
 
 Summary
 -------

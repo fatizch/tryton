@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Banking data migration batches
-============================================
+Transverse - Banking data migration batches
+===========================================
 
 Summary
 -------

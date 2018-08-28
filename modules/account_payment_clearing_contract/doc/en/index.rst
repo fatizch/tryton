@@ -1,7 +1,7 @@
 .. contract
 
-Contrat - Account payment clearing
-==================================
+Contract - Account payment clearing
+===================================
 
 Summary
 -------

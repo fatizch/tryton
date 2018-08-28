@@ -1,7 +1,7 @@
-.. MAIN_TOPIC
+.. claim
 
-MAIN TOPIC - Module Topic
-=========================
+Claim - Life process
+====================
 
 Summary
 -------

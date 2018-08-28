@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - SMS PrimoText reports generation
-==============================================
+Transverse - SMS PrimoText reports generation
+=============================================
 
 Summary
 -------

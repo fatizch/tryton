@@ -1,7 +1,7 @@
 .. transversal
 
-Transversal - Invoices data migration batches
-=============================================
+Transverse - Invoices data migration batches
+============================================
 
 Summary
 -------

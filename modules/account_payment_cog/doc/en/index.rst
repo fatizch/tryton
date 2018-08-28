@@ -13,8 +13,8 @@ Features
 
 .. include:: features.rst
 
-User Help
----------
+User guide
+----------
 
 .. toctree::
     user/batch.rst
