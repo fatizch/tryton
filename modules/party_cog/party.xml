@@ -219,6 +219,21 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">party.party,-1</field>
             <field name="action" ref="start_synthesis_menu"/>
         </record>
+        <record model="ir.action.wizard" id="start_extract_gpdr_data">
+            <field name="name">Extract GPDR Data</field>
+            <field name="wiz_name">party.extract.gpdr_data</field>
+            <field name="model">party.party</field>
+        </record>
+        <record model="ir.action.keyword" id="start_extract_gpdr_data_form_action_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="start_extract_gpdr_data"/>
+        </record>
+        <record model="ir.ui.view" id="extract_gpdr_data_view_form">
+            <field name="model">party.extract.gpdr_data_view</field>
+            <field name="type">form</field>
+            <field name="name">extract_gpdr_data_view_form</field>
+        </record>
         <record model="ir.action.wizard" id="wizard_open">
             <field name="name">Open Party Synthesis Menu</field>
             <field name="wiz_name">party.synthesis.menu.open</field>
@@ -238,6 +253,10 @@ this repository contains the full copyright notices and license terms. -->
         <menuitem parent="party.menu_configuration" id="menu_zipcode_form" action="country_cog.act_zip_form"/>
         <record model="ir.model.button" id="button_start_synthesis_menu">
             <field name="name">button_start_synthesis_menu</field>
+            <field name="model" search="[('model', '=', 'party.party')]"/>
+        </record>
+        <record model="ir.model.button" id="button_extract_gpdr_data">
+            <field name="name">button_extract_gpdr_data</field>
             <field name="model" search="[('model', '=', 'party.party')]"/>
         </record>
         <!-- ******************************************

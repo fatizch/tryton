@@ -10,5 +10,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/tree" position="inside">
         <field name="is_person" tree_invisible="1"/>
         <field name="main_address"/>
+        <field name="is_anonymized" tree_invisible="1"/>
+        <button name="button_extract_gpdr_data" string="Extract GPDR Data" tree_invisible="1"/>
     </xpath>
 </data>

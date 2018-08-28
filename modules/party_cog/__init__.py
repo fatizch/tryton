@@ -50,6 +50,7 @@ def register():
         party.SynthesisMenuRelationship,
         party.SynthesisMenu,
         party.SynthesisMenuOpenState,
+        party.ExtractGPDRDataView,
         PartyMenuTreeExpansion,
         party.PartyReplaceAsk,
         configuration.Configuration,
@@ -57,6 +58,7 @@ def register():
     Pool.register(
         party.SynthesisMenuSet,
         party.SynthesisMenuOpen,
+        party.ExtractGPDRData,
         party.PartyReplace,
         party.PartyErase,
         module='party_cog', type_='wizard')

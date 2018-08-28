@@ -145,6 +145,18 @@ msgctxt "field:party.contact_mechanism,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:party.extract.gpdr_data_view,data:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "field:party.extract.gpdr_data_view,filename:"
+msgid "Filename"
+msgstr "Nom du Fichier"
+
+msgctxt "field:party.extract.gpdr_data_view,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:party.identifier,code:"
 msgid "Code"
 msgstr "Code"
@@ -207,11 +219,11 @@ msgstr "ID"
 
 msgctxt "field:party.identifier.type,name:"
 msgid "Name"
-msgstr "Nom"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:party.identifier.type,rec_name:"
 msgid "Record Name"
-msgstr "Nom"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:party.identifier.type,write_date:"
 msgid "Write Date"
@@ -283,7 +295,7 @@ msgstr "Tiers"
 
 msgctxt "field:party.interaction,rec_name:"
 msgid "Record Name"
-msgstr "Nom"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:party.interaction,title:"
 msgid "Title"
@@ -475,7 +487,7 @@ msgstr "Etendre l'arbre"
 
 msgctxt "field:party.synthesis.menu,name:"
 msgid "Name"
-msgstr "Nom"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:party.synthesis.menu,parent:"
 msgid "Parent"
@@ -487,7 +499,7 @@ msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu,rec_name:"
 msgid "Record Name"
-msgstr "Nom"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:party.synthesis.menu,sequence:"
 msgid "Sequence"
@@ -531,7 +543,7 @@ msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.action_close,rec_name:"
 msgid "Record Name"
-msgstr "Nom"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:party.synthesis.menu.action_close,write_date:"
 msgid "Write Date"
@@ -571,7 +583,7 @@ msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.action_refresh,rec_name:"
 msgid "Record Name"
-msgstr "Nom"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:party.synthesis.menu.action_refresh,write_date:"
 msgid "Write Date"
@@ -611,7 +623,7 @@ msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.address,rec_name:"
 msgid "Record Name"
-msgstr "Nom"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:party.synthesis.menu.address,write_date:"
 msgid "Write Date"
@@ -651,7 +663,7 @@ msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.contact,rec_name:"
 msgid "Record Name"
-msgstr "Nom"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:party.synthesis.menu.contact,write_date:"
 msgid "Write Date"
@@ -699,7 +711,7 @@ msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.party_interaction,rec_name:"
 msgid "Record Name"
-msgstr "Nom"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:party.synthesis.menu.party_interaction,write_date:"
 msgid "Write Date"
@@ -739,7 +751,7 @@ msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.relationship,rec_name:"
 msgid "Record Name"
-msgstr "Nom"
+msgstr "Nom de l'enregistrement"
 
 msgctxt "field:party.synthesis.menu.relationship,write_date:"
 msgid "Write Date"
@@ -804,6 +816,10 @@ msgstr "Type d'identifiant de tiers"
 msgctxt "model:ir.action,name:act_person_form"
 msgid "Persons"
 msgstr "Personnes physiques"
+
+msgctxt "model:ir.action,name:start_extract_gpdr_data"
+msgid "Extract GPDR Data"
+msgstr "Extraction des données RGPD"
 
 msgctxt "model:ir.action,name:start_synthesis_menu"
 msgid "Synthesis"
@@ -880,6 +896,10 @@ msgstr "Personnes physiques"
 msgctxt "model:ir.ui.menu,name:menu_zipcode_form"
 msgid "Zip"
 msgstr "Code Postal"
+
+msgctxt "model:party.extract.gpdr_data_view,name:"
+msgid "Extract GPDR Data View"
+msgstr "Vue extraction des données RGPD"
 
 msgctxt "model:party.identifier,name:"
 msgid "Party Identifier"
@@ -1042,6 +1062,10 @@ msgid "Contact"
 msgstr "Contact"
 
 msgctxt "view:party.party:"
+msgid "Extract GPDR Data"
+msgstr "Extraction des données RGPD"
+
+msgctxt "view:party.party:"
 msgid "Roles"
 msgstr "Rôles"
 
@@ -1064,6 +1088,10 @@ msgstr "Synthèse acteur"
 msgctxt "view:party.synthesis.menu:"
 msgid "Synthesis"
 msgstr "Synthèse"
+
+msgctxt "wizard_button:party.extract.gpdr_data,data_view,end:"
+msgid "End"
+msgstr "Terminer"
 
 # Custom translations below
 

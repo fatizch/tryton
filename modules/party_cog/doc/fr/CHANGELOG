@@ -1,3 +1,4 @@
+* FEA#9655 Ajout d'une extraction basique des données d'un tiers pour la RGPD
 * FEA#9379 Formater et ajouter indicatif pays lors de l'écriture d'un numéro de téléphone
 * FEA#9687 Ajout du point d'entrée "Tiers de configuration" contenant  les tiers ayant un rôle. Les rôles sont affichés dans chaque point d'entrée dédié
 * FEA#8739 Ajouter la possibilité d'appeler le wizard anonymisation depuis un tiers

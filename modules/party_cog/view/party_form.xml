@@ -70,6 +70,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="all_addresses" mode="tree,from" colspan="4" yexpand="1" yfill="1" view_ids="party.address_view_tree_sequence,party.address_view_form"/>
         </group>
         <field name="has_multiple_addresses" invisible="1"/>
+        <field name="is_anonymized" invisible="1"/>
         <newline/>
     </xpath>
     <!-- Add Company and Role pages-->
