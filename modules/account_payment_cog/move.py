@@ -339,7 +339,7 @@ class MoveLine:
 
     @classmethod
     def get_payment_journals_from_lines(cls, lines):
-        return list(set([x.get_payment_journal() for x in lines]))
+        return [y for y in set([x.get_payment_journal() for x in lines]) if y]
 
     @classmethod
     def get_configuration_journals_from_lines(cls, lines):

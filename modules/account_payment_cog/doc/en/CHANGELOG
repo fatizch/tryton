@@ -1,3 +1,4 @@
+* FEA#8233 Fix a case where the payment journal would be empty
 * BUG#9711 Fix JSON import of payment reject reason
 * OTH#0000 Add access rights on payment creation from invoices button
 * FEA#8233 Allow to create payments right from the invoice
