@@ -120,6 +120,37 @@ agent.currency = company.currency
 agent.insurer = insurer
 agent.save()
 
+# #Comment# #Create broker commission plan
+Coverage = Model.get('offered.option.description')
+Plan = Model.get('commission.plan')
+broker_plan = Plan(name='Broker Plan')
+broker_plan.commission_product = commission_product
+broker_plan.commission_method = 'payment'
+broker_plan.type_ = 'agent'
+coverage = product.coverages[0].id
+line = broker_plan.lines.new()
+line.options.append(Coverage(coverage))
+line.formula = 'amount * 0.2'
+broker_plan.save()
+
+# #Comment# #Create broker and broker agent
+Agent = Model.get('commission.agent')
+Insurer = Model.get('insurer')
+PaymentTerm = Model.get('account.invoice.payment_term')
+Party = Model.get('party.party')
+DistributionNetwork = Model.get('distribution.network')
+broker_party = Party(name='Broker')
+broker_party.supplier_payment_term, = PaymentTerm.find([])
+broker_party.save()
+broker = DistributionNetwork(name='Broker', code='broker', party=broker_party,
+    is_broker=True)
+broker.save()
+broker_agent = Agent(party=broker_party)
+broker_agent.type_ = 'agent'
+broker_agent.plan = broker_plan
+broker_agent.currency = company.currency
+broker_agent.save()
+
 # #Comment# #Create Subscriber
 subscriber = create_party_person()
 
@@ -129,6 +160,7 @@ Contract = Model.get('contract')
 ContractPremium = Model.get('contract.premium')
 BillingInformation = Model.get('contract.billing_information')
 contract = Contract()
+contract.contract_number = '123456789'
 contract.company = company
 contract.subscriber = subscriber
 contract.start_date = contract_start_date
@@ -136,15 +168,6 @@ contract.product = product
 contract.billing_informations.append(BillingInformation(date=None,
         billing_mode=product.billing_modes[0],
         payment_term=product.billing_modes[0].allowed_payment_terms[0]))
-Party = Model.get('party.party')
-broker_party = Party(name='Broker')
-broker_party.supplier_payment_term, = PaymentTerm.find([])
-broker_party.save()
-contract.contract_number = '123456789'
-DistributionNetwork = Model.get('distribution.network')
-broker = DistributionNetwork(name='Broker', code='broker', party=broker_party,
-    is_broker=True)
-broker.save()
 contract.dist_network = DistributionNetwork(broker.id)
 contract.save()
 Wizard('contract.activate', models=[contract]).execute('apply')
