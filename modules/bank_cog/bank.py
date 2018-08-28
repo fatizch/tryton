@@ -219,9 +219,9 @@ class BankAccount(export.ExportImportMixin):
         for number in self.numbers:
             number.pre_validate()
 
-    def objects_using_me_for_party(self, for_party=None):
+    def objects_using_me_for_party(self, party=None):
         for n in self.numbers:
-            objects = n.objects_using_me_for_party(for_party)
+            objects = n.objects_using_me_for_party(party)
             if objects:
                 return objects
 
@@ -269,7 +269,7 @@ class BankAccountNumber(export.ExportImportMixin):
     def add_func_key(cls, values):
         values['_func_key'] = values['number']
 
-    def objects_using_me_for_party(self, for_party=None):
+    def objects_using_me_for_party(self, party=None):
         return None
 
 

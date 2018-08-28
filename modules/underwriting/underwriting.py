@@ -867,8 +867,8 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
         self.state = 'abandoned'
 
     @classmethod
-    def do_finalize(cls, instances):
-        Pool().get('event').notify_events(instances,
+    def do_finalize(cls, results):
+        Pool().get('event').notify_events(results,
             'underwriting_result_finalized')
 
     @classmethod

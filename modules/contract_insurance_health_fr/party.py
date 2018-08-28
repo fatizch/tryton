@@ -125,7 +125,7 @@ class Party:
         return [relation.to.id for relation in self.relations
             if (relation.type and relation.type.code == name)]
 
-    def get_SSN_required(self, name=None):
+    def get_SSN_required(self, name):
         if self.is_person and not self.social_security_dependent and \
                 any([x.product.is_health for x in self.get_all_contracts()]):
             return True

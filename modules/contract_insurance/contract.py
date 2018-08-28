@@ -640,11 +640,10 @@ class ContractOption(Printable):
         pass
 
     @classmethod
-    def new_option_from_coverage(cls, coverage, product,
-            start_date, end_date=None, item_desc=None):
+    def new_option_from_coverage(cls, coverage, product, start_date, **kwargs):
         new_option = super(ContractOption, cls).new_option_from_coverage(
-            coverage, product, start_date, end_date)
-        new_option.item_desc = item_desc
+            coverage, product, start_date, **kwargs)
+        new_option.item_desc = kwargs.get('item_desc', None)
         new_option.on_change_coverage()
         return new_option
 

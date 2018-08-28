@@ -236,6 +236,7 @@ class Loss:
         return total_share == 1, total_share
 
     @classmethod
+    @model.CoogView.button
     def activate(cls, losses):
         indemnized_losses = []
         for loss in losses:

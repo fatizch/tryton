@@ -778,6 +778,8 @@ class Payment(export.ExportImportMixin, Printable,
         return self.description
 
     @classmethod
+    @ModelView.button
+    @Workflow.transition('approved')
     def approve(cls, payments):
         with model.error_manager():
             for payment in payments:
@@ -853,6 +855,8 @@ class Payment(export.ExportImportMixin, Printable,
         return True, dates
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('succeeded')
     def succeed(cls, payments):
         pool = Pool()
         Event = pool.get('event')
@@ -1204,11 +1208,15 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
             cls.write(groups, {'state': 'acknowledged'})
 
     @classmethod
-    def reject_payment_group(cls, groups, reject_code, *args):
+    def reject_payment_group(cls, groups, *args):
+        # Full replacement of account_payment_paybox version
         pool = Pool()
         RejectReason = pool.get('account.payment.journal.reject_reason')
         Payment = pool.get('account.payment')
         Group = pool.get('account.payment.group')
+
+        # TODO : Use kwargs in method def
+        reject_code = args[0]
 
         def group_per_journal(g):
             return g.journal
@@ -1229,7 +1237,7 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
             Group.update_payments(sub_groups, 'fail')
 
     @classmethod
-    def succeed_payment_group(cls, groups, **kwargs):
+    def succeed_payment_group(cls, groups, *args):
         cls.to_acknowledge(groups)
 
     def get_currency(self):

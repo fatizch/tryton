@@ -2,6 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 
 from trytond.pool import PoolMeta, Pool
+from trytond.model import Workflow
+
 from trytond.modules.coog_core import model, fields, utils
 
 __all__ = [
@@ -14,6 +16,8 @@ class Invoice:
     __name__ = 'account.invoice'
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('posted')
     def post(cls, invoices):
         super(Invoice, cls).post(invoices)
         InvoiceLogging = Pool().get('account.invoice.logging')
@@ -21,12 +25,15 @@ class Invoice:
                 [x for x in invoices if x.state != 'posted']))
 
     @classmethod
+    @Workflow.transition('paid')
     def paid(cls, invoices):
         super(Invoice, cls).paid(invoices)
         InvoiceLogging = Pool().get('account.invoice.logging')
         InvoiceLogging.create(cls.generate_invoice_logging_list(invoices))
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('cancel')
     def cancel(cls, invoices):
         super(Invoice, cls).cancel(invoices)
         InvoiceLogging = Pool().get('account.invoice.logging')

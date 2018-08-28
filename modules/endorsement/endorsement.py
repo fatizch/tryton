@@ -1061,10 +1061,10 @@ class Contract:
                             'sub_status': None,
                             }})
 
-    def init_dict_for_rule_engine(self, args):
-        super(Contract, self).init_dict_for_rule_engine(args)
+    def init_dict_for_rule_engine(self, cur_dict):
+        super(Contract, self).init_dict_for_rule_engine(cur_dict)
         endorsement_context = ServerContext().get('endorsement_context', {})
-        args.update(endorsement_context)
+        cur_dict.update(endorsement_context)
 
 
 class ContractOption(object):
@@ -1322,15 +1322,14 @@ class Endorsement(QueueMixin, Workflow, model.CoogSQL, model.CoogView,
         return super(Endorsement, cls).create(vlist)
 
     @classmethod
-    def delete(cls, endorsements):
+    def delete(cls, records):
         with model.error_manager():
-            for endorsement in endorsements:
-                if endorsement.state == 'draft':
-                    super(Endorsement, cls).delete(endorsements)
-                else:
+            for endorsement in records:
+                if endorsement.state != 'draft':
                     cls.append_functional_error('delete_not_draft_endorsement',
                         {'number': endorsement.number,
                         'status': endorsement.state_string})
+        super(Endorsement, cls).delete(records)
 
     @staticmethod
     def order_last_modification(tables):

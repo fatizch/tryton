@@ -54,8 +54,8 @@ class Underwriting:
     def get_insurers_names(self, name):
         return ', '.join(x.rec_name for x in self.insurers)
 
-    def add_document(self, document_desc, data):
-        line = super(Underwriting, self).add_document(document_desc, data)
+    def add_document(self, document_code, data):
+        line = super(Underwriting, self).add_document(document_code, data)
         if self.on_object.__name__ == 'claim':
             line.claim = self.on_object
         return line

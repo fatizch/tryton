@@ -1,3 +1,4 @@
+* BUG#9703 Correction des inconsistences d'API
 * BUG#9693 Par défaut, empêcher les batches NoSelect de diviser les tâches en cas d'erreur
 * BUG#9617 Correction d'un bug où des demandes de documents pouvaient être traitées plusieurs fois
 * BUG#9660 Correction des chemins des icônes

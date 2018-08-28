@@ -74,7 +74,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
         return res
 
     @classmethod
-    def select_ids_regroup_key(cls, payment, payment_kind, **kwargs):
+    def select_ids_regroup_key(cls, payment, payment_kind):
         return payment.party
 
     @classmethod

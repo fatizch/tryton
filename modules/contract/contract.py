@@ -2121,8 +2121,7 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
         pass
 
     @classmethod
-    def new_option_from_coverage(cls, coverage, product,
-            start_date, end_date=None):
+    def new_option_from_coverage(cls, coverage, product, start_date, **kwargs):
         assert start_date
         if not utils.is_effective_at_date(coverage, start_date):
             cls.raise_user_error('inactive_coverage_at_date', (coverage.name,

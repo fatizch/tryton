@@ -80,7 +80,7 @@ class ChangeBillingInformation:
                 '=', payer.id)]
 
     @fields.depends('mandate_needed', 'new_billing_information',
-        'sepa_signature_date', 'payer', 'amendment_enabled')
+        'sepa_signature_date', 'amendment_enabled')
     def on_change_new_billing_information(self):
         super(ChangeBillingInformation,
             self).on_change_new_billing_information()

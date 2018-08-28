@@ -1628,8 +1628,7 @@ class ManageContacts(EndorsementWizardStepMixin, model.CoogView):
     def state_view_name(cls):
         return 'endorsement.manage_contacts_view_form'
 
-    @fields.depends('all_contacts', 'contract', 'current_contacts',
-        'possible_contacts')
+    @fields.depends('all_contacts', 'contract', 'current_contacts')
     def on_change_contract(self):
         self.update_all_contacts()
         self.update_current_contacts()

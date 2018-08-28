@@ -93,6 +93,8 @@ class Mandate(model.CoogSQL, model.CoogView):
                 })
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('canceled')
     def cancel(cls, mandates):
         with model.error_manager():
             for payment in sum([list(mandate.payments)
@@ -577,8 +579,8 @@ class Payment:
         return [('merged_id',) + tuple(domain[1:])]
 
     @classmethod
-    def search_sepa_instruction_id(cls, name, clause):
-        return cls.search_end_to_end_id(name, clause)
+    def search_sepa_instruction_id(cls, name, domain):
+        return cls.search_end_to_end_id(name, domain)
 
     @classmethod
     def get_reject_fee_amount(cls, payments, name):
@@ -615,6 +617,8 @@ class Payment:
                     })
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('approved')
     def approve(cls, payments):
         with model.error_manager():
             for payment in payments:

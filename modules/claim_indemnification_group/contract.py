@@ -30,9 +30,9 @@ class Option:
             ]
 
     @classmethod
-    def new_option_from_coverage(cls, coverage, *args, **kwargs):
+    def new_option_from_coverage(cls, coverage, product, start_date, **kwargs):
         new_option = super(Option, cls).new_option_from_coverage(coverage,
-            *args, **kwargs)
+            product, start_date, **kwargs)
         if not coverage.is_group:
             return new_option
         new_option.versions[0].init_from_coverage(coverage)

@@ -52,7 +52,7 @@ class Loss:
         fields.Many2One('distribution.network', 'Portfolio'),
         'get_portfolio', searcher='search_portfolio')
 
-    @fields.depends('claimant')
+    @fields.depends('claim')
     def on_change_with_portfolio(self, name=None):
         return self.claim.portfolio.id if self.claim and \
             self.claim.portfolio else None

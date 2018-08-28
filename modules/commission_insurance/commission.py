@@ -273,6 +273,7 @@ class Commission:
             ('agent', self.agent),)
 
     @classmethod
+    @model.CoogView.button
     def invoice(cls, commissions):
         pool = Pool()
         Event = pool.get('event')

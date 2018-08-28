@@ -230,7 +230,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
             (bool(self.attachment) or bool(self.attachment_data)) or
             self.allow_force_receive)
 
-    @fields.depends('attachment', 'attachment_date', 'reception_date',
+    @fields.depends('attachment', 'reception_date',
         'first_reception_date', 'allow_force_receive', 'received')
     def on_change_attachment(self):
         if not self.attachment:

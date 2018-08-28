@@ -8,7 +8,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
 from trytond.pyson import Eval, Bool, If
 from trytond.wizard import Wizard, StateView, Button, StateAction
-from trytond.model import ModelView
+from trytond.model import ModelView, Workflow
 from trytond.modules.account_statement.statement import _STATES, _DEPENDS
 from trytond.modules.coog_core import fields, export, model
 
@@ -204,6 +204,8 @@ class Statement(export.ExportImportMixin):
         return move
 
     @classmethod
+    @ModelView.button
+    @Workflow.transition('validated')
     def validate_statement(cls, statements):
         errors = []
         for statement in statements:

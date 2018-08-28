@@ -4,6 +4,7 @@ from itertools import groupby
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
+from trytond.model import Workflow
 
 from trytond.modules.coog_core import fields, utils, coog_string, model
 from trytond.modules.account_payment_sepa_cog.payment import \
@@ -200,6 +201,8 @@ class Mandate:
                 })
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('approved')
     def cancel(cls, mandates):
         BillingInfo = Pool().get('contract.billing_information')
         # Get all the billing informations using the sepa mandate in the future

@@ -8,6 +8,7 @@ from sql.aggregate import Max
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If
+from trytond.model import Workflow
 from trytond.tools import grouped_slice
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
@@ -420,6 +421,8 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
         Event.notify_events(invoices, 'change_payment_term')
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('posted')
     def post(cls, invoices):
         pool = Pool()
         Event = pool.get('event')
@@ -427,6 +430,8 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
         Event.notify_events(invoices, 'post_invoice')
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('cancel')
     def cancel(cls, invoices):
         pool = Pool()
         Event = pool.get('event')
@@ -435,6 +440,7 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
             Event.notify_events(invoices, 'cancel_invoice')
 
     @classmethod
+    @Workflow.transition('paid')
     def paid(cls, invoices):
         pool = Pool()
         Event = pool.get('event')

@@ -242,6 +242,7 @@ class ClaimLoss:
     __name__ = 'claim.loss'
 
     @classmethod
+    @model.CoogView.button
     def activate(cls, losses):
         super(ClaimLoss, cls).activate(losses)
         for loss in losses:

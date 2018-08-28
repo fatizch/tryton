@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
+from trytond.model import Workflow
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
 from trytond.pyson import Eval
@@ -25,6 +26,8 @@ class Invoice:
         cls.business_kind.selection.append(('claim_invoice', 'Claim Invoice'))
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('cancel')
     def cancel(cls, invoices):
         Indemnification = Pool().get('claim.indemnification')
         super(Invoice, cls).cancel(invoices)

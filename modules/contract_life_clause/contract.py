@@ -106,10 +106,9 @@ class ContractOption:
                 )]
 
     @classmethod
-    def new_option_from_coverage(cls, coverage, product, start_date,
-            end_date=None, item_desc=None):
+    def new_option_from_coverage(cls, coverage, product, start_date, **kwargs):
         new_option = super(ContractOption, cls).new_option_from_coverage(
-            coverage, product, start_date, end_date, item_desc)
+            coverage, product, start_date, **kwargs)
         new_option.has_beneficiary_clause = bool(len(
                 coverage.beneficiaries_clauses))
         if coverage.default_beneficiary_clause:

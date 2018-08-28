@@ -18,7 +18,7 @@ __all__ = [
 
 _FIELDS = ['all_lines', 'lines', 'hide_reconciled_lines',
     'from_date', 'contract', 'hide_canceled_invoices', 'party',
-    'hide_scheduled_terms', 'scheduled_lines',
+    'scheduled_lines',
     ]
 
 

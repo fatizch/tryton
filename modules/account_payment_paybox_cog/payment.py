@@ -7,6 +7,7 @@ from trytond.wizard import StateAction
 from trytond.pyson import Eval, Bool, If, And
 from trytond.wizard import StateView, Button, StateTransition
 from trytond.server_context import ServerContext
+from trytond.model import Workflow, ModelView
 
 from trytond.modules.coog_core import fields, model, coog_string, utils
 from trytond.modules.account_payment.payment import KINDS
@@ -34,6 +35,8 @@ class Group:
         return url
 
     @classmethod
+    @ModelView.button
+    @Workflow.transition('acknowledged')
     def acknowledge(cls, groups):
         super(Group, cls).acknowledge(groups)
         Payment = Pool().get('account.payment')

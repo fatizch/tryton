@@ -27,9 +27,9 @@ class Commission:
         return invoice
 
     @classmethod
-    def get_insurer_invoice(cls, company, insurer, journal, date, fname):
+    def get_insurer_invoice(cls, company, insurer, journal, date, notice_kind):
         invoice = super(Commission, cls).get_insurer_invoice(company, insurer,
-            journal, date, fname)
+            journal, date, notice_kind)
         invoice.product = insurer.product
         return invoice
 

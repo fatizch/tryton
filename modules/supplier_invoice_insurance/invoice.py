@@ -2,8 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If
+from trytond.model import Workflow
 
-from trytond.modules.coog_core import fields, utils
+from trytond.modules.coog_core import fields, utils, model
 
 __all__ = [
     'Invoice',
@@ -134,11 +135,15 @@ class Invoice:
             cls.save(invoices_to_save)
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('validated')
     def validate_invoice(cls, invoices):
         cls.set_description(invoices)
         super(Invoice, cls).validate_invoice(invoices)
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('posted')
     def post(cls, invoices):
         cls.set_description(invoices)
         super(Invoice, cls).post(invoices)

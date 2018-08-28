@@ -12,7 +12,7 @@ from trytond.rpc import RPC
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool, Not
 from trytond.wizard import Wizard, StateView, Button
-from trytond.model import ModelView, Workflow
+from trytond.model import Workflow
 
 from trytond.modules.coog_core import utils, model, fields
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
@@ -374,7 +374,7 @@ class Invoice:
             payments_per_state)
 
     @classmethod
-    @ModelView.button
+    @model.CoogView.button
     @Workflow.transition('cancel')
     def cancel(cls, invoices):
         if len(invoices) == 1 and invoices[0].contract and invoices[0].start:
@@ -399,6 +399,8 @@ class Invoice:
             Reconciliation.delete(reconciliations)
 
     @classmethod
+    @model.CoogView.button
+    @Workflow.transition('posted')
     def post(cls, invoices):
         if Transaction().user != 0 and len(invoices) == 1 and \
                 invoices[0].contract and invoices[0].start:

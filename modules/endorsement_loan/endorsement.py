@@ -631,13 +631,13 @@ class EndorsementCoveredElementOption:
         return values
 
     @classmethod
-    def updated_struct(cls, option):
+    def updated_struct(cls, element):
         struct = super(EndorsementCoveredElementOption, cls).updated_struct(
-            option)
+            element)
         EndorsementLoanShare = Pool().get('endorsement.loan.share')
         struct['loan_shares'] = shares = defaultdict(list)
-        for share in (option.new_shares
-                if isinstance(option, cls) else option.loan_shares):
+        for share in (element.new_shares
+                if isinstance(element, cls) else element.loan_shares):
             shares[share.loan].append(
                 EndorsementLoanShare.updated_struct(share))
         return struct

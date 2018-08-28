@@ -85,7 +85,7 @@ class MoveLine:
         return None
 
     @classmethod
-    def reconcile_perfect_lines(cls, possible_lines):
+    def reconcile_perfect_lines(cls, lines):
         """
         Find out which lines are matching perfectly to reconcile them
         together
@@ -96,7 +96,7 @@ class MoveLine:
         per_invoice = defaultdict(
             lambda: {section: [] for section in sections})
         unmatched = []
-        for line in possible_lines:
+        for line in lines:
             if cls._update_per_invoice_origin(per_invoice, line):
                 continue
             unmatched.append(line)

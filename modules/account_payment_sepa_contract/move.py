@@ -67,13 +67,7 @@ class MoveLine:
                         billing_info.sepa_mandate.id
         return sepa_mandate_per_lines
 
-    @classmethod
-    def get_bank_account(cls, lines, name):
-        bank_account_per_lines = {}
-        for line in lines:
-            bank_account_per_lines[line.id] = None
-            sepa_mandate = line.sepa_mandate
-            if sepa_mandate:
-                bank_account_per_lines[line.id] = \
-                    sepa_mandate.account_number.account.id
-        return bank_account_per_lines
+    def get_bank_account(self, name):
+        if self.sepa_mandate:
+            return self.sepa_mandate.account_number.account.id
+        return super(MoveLine, self).get_bank_account(name)

@@ -94,7 +94,6 @@ class EventTypeAction:
         return super(EventTypeAction, self).get_templates_list(
             filtering_object)
 
-    @fields.depends('notification_delay')
     def create_contract_notification(self, contracts):
         notifications = []
         date = utils.today() + datetime.timedelta(
