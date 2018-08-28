@@ -1,3 +1,4 @@
+* BUG#9729 Vérification de l'existence du contrat pour les quittances dont on retire la date de précompte lors de leur annulation
 * BUG#9650 Pas de reprise de précompte sur les quittances non rattachées à des contrats
 * BUG#9613 Correctif sur les droits de génération des commissions de précompte
 * FEA#8963 Ajout d'un option sur le plan de commissionnement pour que le précompte ne soit dû qu'à la première quittance payée

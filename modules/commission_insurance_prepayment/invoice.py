@@ -144,7 +144,7 @@ class Invoice:
         invoices = list(invoices)
         pool = Pool()
         Commission = pool.get('commission')
-        all_contracts = [x.contract.id for x in invoices]
+        all_contracts = [x.contract.id for x in invoices if x.contract]
         paid_contracts = cls.get_paid_contract_ids(invoices)
         unpaid_contracts = list(set(all_contracts) - set(paid_contracts))
         if not unpaid_contracts:
