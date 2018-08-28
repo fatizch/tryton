@@ -761,6 +761,14 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             wizard.ask.default_party()
             wizard._execute('erase')
 
+    def get_identifier_value(self, type_, default=None):
+        # This method is used by templates to get more easily
+        # identifiers values from its type
+        for identifier in self.identifiers:
+            if identifier.type == type_:
+                return identifier.code
+        return '' if default is None else default
+
 
 class PartyLang(export.ExportImportMixin):
     __metaclass__ = PoolMeta

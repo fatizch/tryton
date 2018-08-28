@@ -1,3 +1,4 @@
+* FEA#9431 Add function on parties to get the value of an identifier from its type
 * FEA#9655 Add basic data extraction on a party according to the GPDR 
 * FEA#9379 Format and add area code when writing phone number
 * FEA#9687 Display parties with roles in new entry point "Configuration Parties". Display role objects in each dedicated entry point
