@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ##################################### -->
+        <!-- ########### Account Views ########### -->
+        <!-- ######################################-->
+        <record model="ir.ui.view" id="analytic_account_view_form">
+            <field name="model">analytic_account.account</field>
+            <field name="inherit" ref="analytic_account.account_view_form"/>
+            <field name="name">analytic_account_form</field>
+        </record>
+        <!-- ##################################### -->
+        <!-- ##### Account Distribution Views #### -->
+        <!-- ######################################-->
+        <record model="ir.ui.view" id="analytic_distribution_view_form">
+            <field name="model">analytic_account.account.distribution</field>
+            <field name="inherit" ref="analytic_account.account_distribution_view_form"/>
+            <field name="name">account_distribution_form</field>
+        </record>
+        <record model="ir.ui.view" id="analytic_distribution_view_list">
+            <field name="model">analytic_account.account.distribution</field>
+            <field name="inherit" ref="analytic_account.account_distribution_view_list"/>
+            <field name="name">account_distribution_list</field>
+        </record>
+    </data>
+</tryton>

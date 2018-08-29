@@ -1,0 +1,28 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:commission:"
+msgid "Broker analytic account to use is missing. Do you want to continue?"
+msgstr ""
+"Le compte analytique courtier à utiliser est manquant. Souhaitez-vous "
+"continuer?"
+
+msgctxt "field:account.configuration,broker_analytic_account_to_use:"
+msgid "Broker Analytic Account To Use"
+msgstr "Comtpe analytique courtier à utiliser"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:commission_contract_broker"
+msgid "Commissioned Contract Broker"
+msgstr "Courtier du contrat commissionné"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:commission_contract_commercial_product_code"
+msgid "Commissioned Contract Product"
+msgstr "Produit du contrat commissionné"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:commission_contract_signature_month"
+msgid "Commissioned Contract Signature Month"
+msgstr "Mois de signature du contrat commissionné"

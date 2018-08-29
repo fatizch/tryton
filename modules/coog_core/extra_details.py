@@ -45,6 +45,7 @@ class ExtraDetailsConfiguration(model.CoogSQL, model.CoogView):
     'Extra Details Configuration'
 
     __name__ = 'extra_details.configuration'
+    _rec_name = 'model_name'
 
     model_name = fields.Selection('get_detailed_models', 'Model Name')
     lines = fields.One2Many('extra_details.configuration.line',

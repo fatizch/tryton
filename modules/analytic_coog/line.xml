@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ################################################### -->
+        <!-- ########### Extra Details Configuration ########### -->
+        <!-- ####################################################-->
+        <record model="extra_details.configuration" id="analytic_line_extra_details_configuration">
+            <field name="model_name">analytic_account.line</field>
+        </record>
+        <!-- ################################### -->
+        <!-- ########### Lines Views ########### -->
+        <!-- ####################################-->
+        <menuitem parent="account.menu_entries" action="analytic_account.act_line_form" id="menu_analytic_lines" sequence="90"/>
+        <record model="ir.ui.view" id="analytic_line_view_form">
+            <field name="model">analytic_account.line</field>
+            <field name="inherit" ref="analytic_account.line_view_form"/>
+            <field name="name">analytic_line_form</field>
+        </record>
+    </data>
+</tryton>

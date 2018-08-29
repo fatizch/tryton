@@ -1,3 +1,4 @@
+* FEA#9492 Add invoice line to server context when getting move lines
 * BUG#9211 Update payment dates when unsuspending payments
 * BUG#9697 invoice against balance set number and post batches crash when there is nothing to treat
 * BUG#9694 Make invoice against balance batch runnable

@@ -1,0 +1,64 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:analytic_account.account.distribution:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
+msgctxt "error:analytic_account.account:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
+msgctxt "error:analytic_account.rule:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
+msgctxt "error:analytic_account.rule:"
+msgid ""
+"You cannot create a rule using analytic accounts with type 'Distribution over extra details':\n"
+"%(accounts)s"
+msgstr ""
+"Vous ne pouvez pas créer une règle utilisant des comptes analytiques de type"
+" 'Distribution à partir de dimensions métier' :\n"
+"%(accounts)s"
+
+msgctxt "field:analytic_account.account,pattern:"
+msgid "Pattern"
+msgstr "Schéma"
+
+msgctxt "field:analytic_account.account,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:analytic_account.account.distribution,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:analytic_account.account.distribution,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:analytic_account.line,extra_details:"
+msgid "Extra Details"
+msgstr "Détails complémentaires"
+
+msgctxt "field:analytic_account.line,extra_summary:"
+msgid "Extra Summary"
+msgstr "Résumé complémentaire"
+
+msgctxt "field:analytic_account.rule,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:analytic_account.rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:ir.ui.menu,name:menu_analytic_lines"
+msgid "Analytic Lines"
+msgstr "Lignes analytiques"
+
+msgctxt "selection:analytic_account.account,type:"
+msgid "Distribution Over Extra Details"
+msgstr "Distribution à partir de dimensions métier"

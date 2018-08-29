@@ -1,3 +1,4 @@
+* FEA#9492 Ajouter la ligne de quittance au contexte du serveur au moment de la récupération des lignes de mouvements comptables
 * BUG#9211 Mettre à jour les dates de paiments à la dé-suspension des paiements
 * BUG#9697 Les batchs de numérotation et d'émission pour la gestion des trop percus plantent quand il n'y a aucun contrat à traiter
 * BUG#9694 Rendre le batch de gestion des trop percu fonctionnel

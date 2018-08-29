@@ -1,0 +1,1 @@
+- **Allow distributing commissions invoice invoice lines over extra details using the broker, commissioned contract and product as extra details**

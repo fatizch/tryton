@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='commission_invoice_payment_term']"
+        position="after">
+        <label name="broker_analytic_account_to_use"/>
+        <field name="broker_analytic_account_to_use"/>
+    </xpath>
+</data>

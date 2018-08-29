@@ -1,0 +1,1 @@
+- **Autoriser la distribution des lignes des bordereaux de commission en utilisant les dimensions métier courtier, contrat commissionné et produit**

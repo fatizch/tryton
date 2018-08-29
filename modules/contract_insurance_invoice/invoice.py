@@ -519,11 +519,12 @@ class InvoiceLine:
                 return covered_element.id
 
     def get_move_lines(self):
-        lines = super(InvoiceLine, self).get_move_lines()
-        if self.invoice.contract:
-            for line in lines:
-                line.contract = self.invoice.contract
-        return lines
+        with ServerContext().set_context(invoice_line=self):
+            lines = super(InvoiceLine, self).get_move_lines()
+            if self.invoice.contract:
+                for line in lines:
+                    line.contract = self.invoice.contract
+            return lines
 
     @property
     def origin_name(self):

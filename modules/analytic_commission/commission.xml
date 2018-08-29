@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################################# -->
+        <!-- ###### Commission Analytic Line Detail ###### -->
+        <!-- ############################################## -->
+        <record model="extra_details.configuration.line" id="commission_contract_signature_month">
+            <field name="configuration" ref="analytic_coog.analytic_line_extra_details_configuration"/>
+            <field name="string">Commissioned Contract Signature Month</field>
+            <field name="name">commissioned_contract_signature_month</field>
+            <field name="type_">integer</field>
+        </record>
+        <record model="extra_details.configuration.line" id="commission_contract_commercial_product_code">
+            <field name="configuration" ref="analytic_coog.analytic_line_extra_details_configuration"/>
+            <field name="string">Commissioned Contract Product</field>
+            <field name="name">commissioned_contract_product</field>
+            <field name="type_">char</field>
+        </record>
+        <record model="extra_details.configuration.line" id="commission_contract_broker">
+            <field name="configuration" ref="analytic_coog.analytic_line_extra_details_configuration"/>
+            <field name="string">Commissioned Contract Broker</field>
+            <field name="name">commissioned_contract_broker</field>
+            <field name="type_">integer</field>
+        </record>
+    </data>
+</tryton>
