@@ -1,3 +1,4 @@
+* BUG#9690 Fix brouillard template possible crash if there is no decision on the underwriting
 * BUG#9127 Remove readonly status for sub covered elements
 * FEA#8832 Replace 'hpaned' position attribute with 'group'
 * BUG#9046 Do not copy covered element extra datas on parties if they are empy

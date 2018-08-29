@@ -1,3 +1,4 @@
+* BUG#9690 Correctif dans le courrier de brouillard afin d'éviter un possible crash si il n'y pas de décision sur la demande de décision
 * BUG#9127 Suppression du statut readonly pour les champs des sous-éléments couverts
 * FEA#8832 Remplacer l'attribut position 'hpaned' par 'group'
 * BUG#9046 Ne pas copier les données complémentaires des éléments couverts sur les tiers si elles sont non renseignées
