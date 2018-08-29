@@ -1,7 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
 from trytond.pool import PoolMeta, Pool
 
+from trytond.modules.coog_core import utils
 
 __all__ = [
     'Contract',
@@ -61,11 +63,19 @@ class Contract:
 
     def check_no_amended_mandates(self):
         Mandate = Pool().get('account.payment.sepa.mandate')
-        mandates = [x.sepa_mandate for x in self.billing_informations
-            if x.sepa_mandate]
+        mandates = []
+        today = utils.today()
+        billing_informations = self.billing_informations
+        billing_infos = sorted(billing_informations, key=lambda x: x.date
+            if x.date else datetime.date.min, reverse=True)
+        for b in billing_infos:
+            if b.sepa_mandate:
+                mandates.append(b.sepa_mandate.id)
+            if not b.date or b.date <= today:
+                break
         if not mandates:
             return
         amendments = Mandate.search([('amendment_of', 'in', mandates)])
         if amendments:
             self.raise_user_error('amended_mandates', ', '.join(
-                    set(x.identification for x in amendments)))
+                    set(x.identification for x in mandates)))

@@ -1,3 +1,5 @@
+* BUG#9734 Mandate checking blocks contract reactivation even if the blocking billing information is outdated
+
 Version 2.0 - 2018-04-13
 * BUG#7623 check amended mandates only when contract status is quote
 

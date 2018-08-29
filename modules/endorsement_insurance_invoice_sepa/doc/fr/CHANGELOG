@@ -1,3 +1,5 @@
+* BUG#9734 La vérification des mandats Sepa bloque la réactivation des contrats même si le mode de quittancement bloquant est périmé.
+
 Version 2.0 - 2018-04-13
 * BUG#7623 Ne vérifier les mandats amendés que quand le statut du contrat est en devis
 
