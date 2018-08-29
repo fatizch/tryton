@@ -1,3 +1,4 @@
+* BUG#9718 Remove code hiding premiums display for loan contracts
 * FEA#9342 Add parameter which contains outstanding amount at the latest contract anniversary date to rule engine
 * BUG#8789 Configure sequence for loan numbers
 

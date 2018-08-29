@@ -1,3 +1,4 @@
+* BUG#9718 Retirer le code cachant l'affichage des tarifs pour un contrat emprunteur
 * FEA#9342 Ajout d'un paramètre contenant le capital restant dû à la dernière date anniversaire d'un contrat au moteur de règles
 * BUG#8789 Configuration des séquences de numéros de prêts
 

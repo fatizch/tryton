@@ -196,11 +196,6 @@ class Contract:
             self.raise_user_warning(self.rec_name, 'bad_loan_dates',
                 ('\t\n'.join(x.rec_name for x in bad_loans),))
 
-    def get_show_premium(self, name):
-        if not self.is_loan:
-            return super(Contract, self).get_show_premium(name)
-        return False
-
 
 class ContractLoan(model.CoogSQL, model.CoogView):
     'Contract Loan'
