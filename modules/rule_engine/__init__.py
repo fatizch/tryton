@@ -4,6 +4,7 @@ import ir
 import batch
 import rule_engine
 import event
+import linter
 from trytond.pool import Pool
 from rule_engine import get_rule_mixin, check_args, RuleTools
 
@@ -33,6 +34,7 @@ def register():
         batch.ValidateRuleBatch,
         ir.View,
         event.EventTypeAction,
+        linter.Linter,
         module='rule_engine', type_='model')
     Pool.register(
         rule_engine.RunTests,

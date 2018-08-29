@@ -1,3 +1,4 @@
+* FEA#9323 Add code linter to rule engine
 * BUG#9313 Fix test cases when the rule contains a function definition
 * BUG#9212 Fix crash when logging debug message with special characters in the rule engine
 * FEA#8271 Simplify the rule engine view by using an expandable group
