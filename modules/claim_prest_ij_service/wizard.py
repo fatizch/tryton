@@ -584,6 +584,6 @@ class IndemnificationDefinition:
     def period_definitions_dates(self):
         result = super(IndemnificationDefinition,
             self).period_definitions_dates()
-        if self.prestij_periods:
+        if getattr(self, 'prestij_periods', None):
             result += [x.start_date for x in self.prestij_periods[:-1]]
         return result

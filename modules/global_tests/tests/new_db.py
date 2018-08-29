@@ -5,6 +5,7 @@ from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 
 from proteus import config, Model, Wizard
+from trytond.exceptions import UserError
 
 
 def parse_environ(name, default):
@@ -45,6 +46,7 @@ CREATE_COMMISSION_CONFIG = parse_environ(
     'GEN_CREATE_COMMISSION_CONFIG', True)
 CREATE_CONTRACTS = parse_environ('GEN_CREATE_CONTRACTS', True)
 BILL_CONTRACTS = parse_environ('GEN_BILL_CONTRACTS', True)
+CREATE_CLAIMS = parse_environ('GEN_CREATE_CLAIMS', True)
 
 
 assert TESTING or (RESTORE_DB and not CREATE_NEW_DB or
@@ -62,6 +64,7 @@ _base_date = datetime.date(2000, 1, 1)
 _base_contract_date = datetime.date(2018, 1, 1)
 _contract_rebill_date = datetime.date(2018, 7, 1)
 _contract_rebill_post_date = datetime.date(2018, 6, 1)
+_claim_date = datetime.date(2018, 7, 12)
 _account_chart_code = 'PCS'
 _default_receivable_code = '4117'
 _default_payable_code = '467'
@@ -180,6 +183,7 @@ BenefitEligibilityDecision = Model.get('benefit.eligibility.decision')
 BillingMode = Model.get('offered.billing_mode')
 Bank = Model.get('bank')
 BankAccount = Model.get('bank.account')
+Claim = Model.get('claim')
 ClaimClosingReason = Model.get('claim.closing_reason')
 ClaimConfiguration = Model.get('claim.configuration')
 ClaimSubStatus = Model.get('claim.sub_status')
@@ -202,6 +206,7 @@ EventDesc = Model.get('benefit.event.description')
 ExtraData = Model.get('extra_data')
 ExtraDetails = Model.get('extra_details.configuration')
 FiscalYear = Model.get('account.fiscalyear')
+Group = Model.get('res.group')
 Insurer = Model.get('insurer')
 Invoice = Model.get('account.invoice')
 InvoiceSequence = Model.get('account.fiscalyear.invoice_sequence')
@@ -235,6 +240,8 @@ StatementCancelMotive = Model.get('account.statement.journal.cancel_motive')
 Table = Model.get('table')
 TestCase = Model.get('ir.test_case')
 TestCaseInstance = Model.get('ir.test_case.instance')
+UnderwritingDecision = Model.get('underwriting.decision')
+UnderwritingRule = Model.get('underwriting.rule')
 User = Model.get('res.user')
 # }}}
 
@@ -318,6 +325,15 @@ company_party = company.party
 def process_next(target):  # {{{
     target.save()
     button = '_button_next_%i' % target.current_state.process.id
+    res = getattr(target.__class__._proxy, button)(
+        [target.id], {'language': 'fr', 'company': company.id})
+    target.reload()
+    return res
+
+
+def process_previous(target):  # {{{
+    target.save()
+    button = '_button_previous_%i' % target.current_state.process.id
     res = getattr(target.__class__._proxy, button)(
         [target.id], {'language': 'fr', 'company': company.id})
     target.reload()
@@ -522,6 +538,18 @@ if LOAD_ACCOUNTING:  # {{{
     broker_account_product_template.products[0].code = 'commission_courtier'
     broker_account_product_template.save()
     broker_account_product = broker_account_product_template.products[0]
+
+    claim_product_template = AccountProductTemplate()
+    claim_product_template.name = 'Règlements sinistres'
+    claim_product_template.type = 'service'
+    claim_product_template.cost_price = Decimal(1)
+    claim_product_template.list_price = Decimal(1)
+    claim_product_template.account_expense, = Account.find(
+        [('code', '=', '622')])
+    claim_product_template.account_revenue, = Account.find(
+        [('code', '=', '706')])
+    claim_product_template.products[0].code = 'reglement_sinistres'
+    claim_product_template.save()
     # }}}
 
     do_print('    Creating Journals')  # {{{
@@ -730,6 +758,7 @@ if LOAD_ACCOUNTING:  # {{{
 cash_journal, = Journal.find([('code', '=', 'CASH')])
 payment_sepa, = PaymentJournal.find([('name', '=', 'Sepa')])
 default_payment_term, = PaymentTerm.find([('name', '=', 'Par défaut')])
+claim_product, = AccountProduct.find([('code', '=', 'reglement_sinistres')])
 # }}}
 
 if CREATE_PROCESSES:  # {{{
@@ -996,6 +1025,38 @@ if not champs_technique('loss.covered_person.id'):
     step_documents.save()
     # }}}
 
+    do_print('    Creating step contract underwriting')  # {{{
+    step_underwriting = ProcessStep()
+    step_underwriting.fancy_name = 'Analyse de risques'
+    step_underwriting.technical_name = 'underwriting'
+    step_underwriting.button_domain = "[]"
+    step_underwriting.main_model, = IrModel.find([('model', '=', 'contract')])
+    step_underwriting.step_xml = '''
+<field name="document_request_lines" colspan="4"/>
+<field name='underwritings' mode="form" expand_toolbar="1" colspan="4"/>
+<newline/>
+<group id="underwriting_buttons" colspan="4" yfill="1" yexpand="0">
+    <button name="button_decline" string="Décliner" icon="cancel-list"/>
+    <button name="create_extra_premium" string="Surprimes"
+        icon="tryton-currency"/>
+    <button name="propagate_exclusions" string="Exclusions"
+        icon="cancel-list"/>
+</group>
+'''
+    step_underwriting.code_before.new()
+    step_underwriting.code_before[-1].content = 'method'
+    step_underwriting.code_before[-1].technical_kind = 'step_before'
+    step_underwriting.code_before[-1].method_name = 'update_underwritings'
+    step_underwriting.code_after.new()
+    step_underwriting.code_after[-1].content = 'method'
+    step_underwriting.code_after[-1].technical_kind = 'step_after'
+    step_underwriting.code_after[-1].method_name = 'check_underwriting_complete'
+    step_underwriting.authorizations.append(
+        Group.find([('xml_id', '=',
+                    'contract_underwriting.group_contract_underwriting')])[0])
+    step_underwriting.save()
+    # }}}
+
     do_print('    Creating step paiement')  # {{{
     step_payment = ProcessStep()
     step_payment.fancy_name = 'Paiement'
@@ -1221,6 +1282,7 @@ if not champs_technique('loss.covered_person.id'):
     <field name="document_request_lines" colspan="4"/>
     <field name="doc_received" invisible="1"/>
 </group>
+<field name="beneficiaries" colspan="4"/>
 '''
     step_benefit_check.code_before.new()
     step_benefit_check.code_before[-1].content = 'method'
@@ -1389,6 +1451,7 @@ if not champs_technique('loss.covered_person.id'):
     life_process.steps_to_display.append(ProcessStep(step_covered.id))
     life_process.steps_to_display.append(ProcessStep(step_options.id))
     life_process.steps_to_display.append(ProcessStep(step_documents.id))
+    life_process.steps_to_display.append(ProcessStep(step_underwriting.id))
     life_process.steps_to_display.append(ProcessStep(step_payment.id))
     life_process.steps_to_display.append(ProcessStep(step_complete.id))
     life_process.menu_icon = 'tryton-open'
@@ -1403,7 +1466,7 @@ if not champs_technique('loss.covered_person.id'):
     life_process.steps_implicitly_available = True
     life_process.with_prev_next = True
     life_process.xml_tree = generic_process.xml_tree
-    life_process.xml_header = generic_process.xml_tree
+    life_process.xml_header = generic_process.xml_header
     life_process.save()
     # }}}
 
@@ -1431,39 +1494,39 @@ if not champs_technique('loss.covered_person.id'):
     loan_process.steps_implicitly_available = True
     loan_process.with_prev_next = True
     loan_process.xml_tree = generic_process.xml_tree
-    loan_process.xml_header = generic_process.xml_tree
+    loan_process.xml_header = generic_process.xml_header
     loan_process.save()
     # }}}
 
-    do_print('    Creating process declaration arret de travail')  # {{{
-    claim_std_process = Process()
-    claim_std_process.technical_name = 'claim_short_term_process'
-    claim_std_process.fancy_name = u"Déclaration d 'arrêt de travail"
-    claim_std_process.on_model, = IrModel.find([('model', '=', 'claim')])
-    claim_std_process.kind = 'claim_declaration'
-    claim_std_process.steps_to_display.append(
+    do_print('    Creating claim process')  # {{{
+    claim_process = Process()
+    claim_process.technical_name = 'claim_process'
+    claim_process.fancy_name = u"Déclaration de sinistre"
+    claim_process.on_model, = IrModel.find([('model', '=', 'claim')])
+    claim_process.kind = 'claim_declaration'
+    claim_process.steps_to_display.append(
         ProcessStep(step_claim_info.id))
-    claim_std_process.steps_to_display.append(
+    claim_process.steps_to_display.append(
         ProcessStep(step_benefit_check.id))
-    claim_std_process.steps_to_display.append(
+    claim_process.steps_to_display.append(
         ProcessStep(step_claim_services.id))
-    claim_std_process.steps_to_display.append(
+    claim_process.steps_to_display.append(
         ProcessStep(step_indemnification_validation.id))
-    claim_std_process.steps_to_display.append(
+    claim_process.steps_to_display.append(
         ProcessStep(step_claim_close.id))
-    claim_std_process.menu_icon = 'tryton-open'
-    claim_std_process.end_step_name = 'Terminer'
-    claim_std_process.hold_button = 'Suspendre'
-    claim_std_process.menu_name = u"Déclaration d'arrêt de travail"
-    claim_std_process.step_button_group_position = 'right'
-    claim_std_process.steps_implicitly_available = False
-    claim_std_process.xml_tree = '''
+    claim_process.menu_icon = 'tryton-open'
+    claim_process.end_step_name = 'Terminer'
+    claim_process.hold_button = 'Suspendre'
+    claim_process.menu_name = u"Déclaration de sinistre"
+    claim_process.step_button_group_position = 'right'
+    claim_process.steps_implicitly_available = False
+    claim_process.xml_tree = '''
 <field name="current_state"/>
 <field name="name"/>
 <field name="claimant"/>
 <field name="status"/>
 '''
-    claim_std_process.xml_header = '''
+    claim_process.xml_header = '''
 <label name="name"/>
 <field name="name"/>
 <label name="status"/>
@@ -1493,8 +1556,8 @@ if not champs_technique('loss.covered_person.id'):
         ('complete', step_claim_close, None, []),
         ]
     for data in transitions:
-        claim_std_process.transitions.new()
-        transition = claim_std_process.transitions[-1]
+        claim_process.transitions.new()
+        transition = claim_process.transitions[-1]
         if data[0] == 'complete':
             transition.name = 'Terminer'
         transition.kind = data[0]
@@ -1506,7 +1569,7 @@ if not champs_technique('loss.covered_person.id'):
             transition.methods[-1].technical_kind = 'transition'
             transition.methods[-1].method_name = name
         # }}}
-    claim_std_process.save()
+    claim_process.save()
     # }}}
 
 generic_process, = Process.find(
@@ -1515,8 +1578,8 @@ life_process, = Process.find(
     [('technical_name', '=', 'souscription_prevoyance')])
 loan_process, = Process.find(
     [('technical_name', '=', 'souscription_emprunteur')])
-claim_std_process, = Process.find(
-    [('technical_name', '=', 'claim_short_term_process')])
+claim_process, = Process.find(
+    [('technical_name', '=', 'claim_process')])
 # }}}
 
 if CREATE_ACTORS:  # {{{
@@ -2689,6 +2752,32 @@ return {
     # }}}
 
     do_print('    Creating benefit eligibility rules')  # {{{
+    capital_eligibility_rule = RuleEngine()
+    capital_eligibility_rule.context = rule_context
+    capital_eligibility_rule.name = u'Éligibilité capital'
+    capital_eligibility_rule.short_name = 'capital_eligibility'
+    capital_eligibility_rule.status = 'validated'
+    capital_eligibility_rule.type_ = 'benefit'
+    capital_eligibility_rule.algorithm = '''
+date_declaration = date_declaration_sinistre()
+date_debut_prejudice = date_de_debut_du_prejudice()
+
+if date_declaration > ajouter_mois(date_debut_prejudice, 3):
+    ajouter_info(u"Délai de saisi dépassé, veuillez être plus réactif "
+        u"à l'avenir")
+    return False
+
+if code_de_l_evenement_du_prejudice() == 'suicide':
+    if ajouter_annees(date_effet_initiale_contrat(), 1) < date_debut_prejudice:
+        return True
+    ajouter_info(u"Un suicide n'est pas éligible au versement d'un capital "
+        u"au cours de la première année")
+    return False
+
+return True
+'''
+    capital_eligibility_rule.save()
+
     benefit_eligibility_rule = RuleEngine()
     benefit_eligibility_rule.context = rule_context
     benefit_eligibility_rule.name = u'Éligibilité prestation'
@@ -2742,6 +2831,28 @@ return ajouter_jours(date_prejudice, param_number_of_days())
     # }}}
 
     do_print('    Creating benefit amount rules')  # {{{
+    benefit_capital_rule = RuleEngine()
+    benefit_capital_rule.context = rule_context
+    benefit_capital_rule.name = u'Capital Assuré'
+    benefit_capital_rule.short_name = 'benefit_capital'
+    benefit_capital_rule.status = 'validated'
+    benefit_capital_rule.type_ = 'benefit'
+    benefit_capital_rule.algorithm = '''
+date_debut_periode = date_debut_periode_indemnisation()
+base = montant_de_couverture()
+
+return [{
+        'start_date': date_debut_periode,
+        'end_date': None,
+        'nb_of_unit': 1,
+        'unit': 'day',
+        'amount': base,
+        'base_amount': base,
+        'amount_per_unit': base,
+        }]
+'''
+    benefit_capital_rule.save()
+
     benefit_simple_value_rule = RuleEngine()
     benefit_simple_value_rule.context = rule_context
     benefit_simple_value_rule.name = u'Montant forfaitaire'
@@ -2840,6 +2951,27 @@ return [{
     benefit_complex_value_rule.save()
     # }}}
 
+    do_print('    Creating underwriting rules')  # {{{
+    underwriting_rule = RuleEngine()
+    underwriting_rule.context = rule_context
+    underwriting_rule.name = u'Analyse de risque base CSP'
+    underwriting_rule.short_name = 'analyse_de_risque_csp'
+    underwriting_rule.status = 'validated'
+    underwriting_rule.type_ = 'underwriting'
+    underwriting_rule.extra_data_used.append(ExtraData(job_category.id))
+    underwriting_rule.algorithm = '''
+job_category = compl_job_category()
+if job_category == 'csp1':
+    return True
+elif job_category == 'csp2':
+    age = annees_entre(date_de_naissance(), date_effet_initiale_contrat())
+    return age <= 60
+else:
+    return False
+'''
+    underwriting_rule.save()
+    # }}}
+
     do_print('\nCreating End of Coverage Motives')  # {{{
     left_reason = CoveredEndReason()
     left_reason.code = 'demission'
@@ -2850,6 +2982,80 @@ return [{
     fired_reason.code = 'licensiement'
     fired_reason.name = 'Licensiement'
     fired_reason.save()
+    # }}}
+
+    do_print('\nCreating Underwriting Decisions')  # {{{
+    contract_accepted = UnderwritingDecision()
+    contract_accepted.name = 'Acceptation sans conditions'
+    contract_accepted.code = 'contract_fully_accepted'
+    contract_accepted.level = 'contract'
+    contract_accepted.status = 'accepted'
+    contract_accepted.decline_option = False
+    contract_accepted.save()
+
+    contract_accepted_conditions = UnderwritingDecision()
+    contract_accepted_conditions.name = 'Acceptation sous conditions'
+    contract_accepted_conditions.code = 'contract_accepted_with_conditions'
+    contract_accepted_conditions.level = 'contract'
+    contract_accepted_conditions.status = 'accepted_with_conditions'
+    contract_accepted_conditions.decline_option = False
+    contract_accepted_conditions.save()
+
+    contract_denied = UnderwritingDecision()
+    contract_denied.name = 'Refus'
+    contract_denied.code = 'contract_denied'
+    contract_denied.level = 'contract'
+    contract_denied.status = 'denied'
+    contract_denied.decline_option = True
+    contract_denied.save()
+
+    contract_pending = UnderwritingDecision()
+    contract_pending.name = 'En attente'
+    contract_pending.code = 'contract_pending'
+    contract_pending.level = 'contract'
+    contract_pending.status = 'pending'
+    contract_pending.decline_option = True
+    contract_pending.save()
+
+    option_accepted = UnderwritingDecision()
+    option_accepted.name = 'Acceptation sans conditions'
+    option_accepted.code = 'coverage_fully_accepted'
+    option_accepted.level = 'coverage'
+    option_accepted.status = 'accepted'
+    option_accepted.decline_option = False
+    option_accepted.contract_decisions.append(
+        UnderwritingDecision(contract_accepted.id))
+    option_accepted.save()
+
+    option_accepted_conditions = UnderwritingDecision()
+    option_accepted_conditions.name = 'Acceptation sous conditions'
+    option_accepted_conditions.code = 'coverage_accepted_with_conditions'
+    option_accepted_conditions.level = 'coverage'
+    option_accepted_conditions.status = 'accepted_with_conditions'
+    option_accepted_conditions.decline_option = False
+    option_accepted_conditions.contract_decisions.append(
+        UnderwritingDecision(contract_accepted_conditions.id))
+    option_accepted_conditions.save()
+
+    option_denied = UnderwritingDecision()
+    option_denied.name = 'Refus'
+    option_denied.code = 'coverage_denied'
+    option_denied.level = 'coverage'
+    option_denied.status = 'denied'
+    option_denied.decline_option = True
+    option_denied.contract_decisions.append(
+        UnderwritingDecision(contract_denied.id))
+    option_denied.save()
+
+    option_pending = UnderwritingDecision()
+    option_pending.name = 'En attente'
+    option_pending.code = 'coverage_pending'
+    option_pending.level = 'coverage'
+    option_pending.status = 'pending'
+    option_pending.decline_option = True
+    option_pending.contract_decisions.append(
+        UnderwritingDecision(contract_pending.id))
+    option_pending.save()
     # }}}
 
     do_print('\nSetting product configuration')  # {{{
@@ -2928,6 +3134,22 @@ return [{
     # }}}
 
     do_print('\nCreating Loss Descs')  # {{{
+    death = LossDesc()
+    death.code = 'death'
+    death.name = u'Décès'
+    death.kind = 'person'
+    death.loss_kind = 'death'
+    death.with_end_date = False
+    death.event_descs.append(EventDesc(illness_event.id))
+    death.event_descs.append(EventDesc(accident_event.id))
+    death.event_descs.append(EventDesc(suicide_event.id))
+    death.closing_reasons.append(
+        ClaimClosingReason(death_reason.id))
+    death.save()
+
+    claim_process.for_loss_descs.append(LossDesc(death.id))
+    claim_process.save()
+
     work_interruption = LossDesc()
     work_interruption.code = 'temporary_work_interruption'
     work_interruption.name = u'Arrêt de travail'
@@ -2947,8 +3169,8 @@ return [{
         ClaimClosingReason(invalidity_reason.id))
     work_interruption.save()
 
-    claim_std_process.for_loss_descs.append(LossDesc(work_interruption.id))
-    claim_std_process.save()
+    claim_process.for_loss_descs.append(LossDesc(work_interruption.id))
+    claim_process.save()
 
     validity_loss = LossDesc()
     validity_loss.code = 'temporary_validity_loss'
@@ -2966,6 +3188,33 @@ return [{
     # }}}
 
     do_print('\nCreating Benefits')
+    do_print('    Creating Death')  # {{{
+    capital_benefit = Benefit()
+    capital_benefit.code = 'death_capital'
+    capital_benefit.name = u'Capital Décès'
+    capital_benefit.start_date = _base_date
+    capital_benefit.insurer = insurer
+    capital_benefit.beneficiary_kind = 'manual_list'
+    capital_benefit.company = company
+    capital_benefit.indemnification_kind = 'capital'
+    capital_benefit.loss_descs.append(LossDesc(death.id))
+    capital_benefit.automatically_deliver = True
+    capital_benefit.eligibility_rules.new()
+    capital_benefit.eligibility_rules[0].rule = capital_eligibility_rule
+    capital_benefit.refuse_from_rules = True
+    capital_benefit.eligibility_decisions.append(
+        BenefitEligibilityDecision(automatically_accepted.id))
+    capital_benefit.eligibility_decisions.append(
+        BenefitEligibilityDecision(automatically_refused.id))
+    capital_benefit.refuse_decision_default = automatically_refused
+    capital_benefit.accept_decision_default = automatically_accepted
+    capital_benefit.products.append(AccountProduct(claim_product.id))
+    capital_benefit.benefit_rules.new()
+    rule = capital_benefit.benefit_rules[0]
+    rule.indemnification_rule = benefit_capital_rule
+    capital_benefit.save()
+    # }}}
+
     do_print('    Creating Group Incapacity')  # {{{
     group_incapacity_benefit = Benefit()
     group_incapacity_benefit.code = 'group_incapacity'
@@ -3142,11 +3391,23 @@ return [{
         'age_kind': 'real',
         'max_age_for_option': 76,
         }
+    death_coverage.underwriting_rules.new()
+    death_coverage.underwriting_rules[-1].rule = underwriting_rule
+    death_coverage.underwriting_rules[-1].decisions.append(
+        UnderwritingDecision(option_accepted.id))
+    death_coverage.underwriting_rules[-1].decisions.append(
+        UnderwritingDecision(option_accepted_conditions.id))
+    death_coverage.underwriting_rules[-1].decisions.append(
+        UnderwritingDecision(option_pending.id))
+    death_coverage.underwriting_rules[-1].decisions.append(
+        UnderwritingDecision(option_denied.id))
+    death_coverage.underwriting_rules[-1].accepted_decision = option_accepted
     death_coverage.beneficiaries_clauses.append(
         Clause(standard_beneficiary_clause.id))
     death_coverage.beneficiaries_clauses.append(
         Clause(custom_beneficiary_clause.id))
     death_coverage.default_beneficiary_clause = standard_beneficiary_clause
+    death_coverage.benefits.append(Benefit(capital_benefit.id))
     death_coverage.save()
     # }}}
 
@@ -3786,6 +4047,14 @@ if CREATE_CONTRACTS:  # {{{
     life_subscriber.all_addresses[0].country = country
     life_subscriber.save()
 
+    life_subscriber_account = BankAccount()
+    life_subscriber_account.owners.append(Party(life_subscriber.id))
+    life_subscriber_account.currency = currency
+    life_subscriber_account.number = get_iban()
+    life_subscriber_account.bank, = Bank.find(
+        [('bic', '=', _company_bank_bic)])
+    life_subscriber_account.save()
+
     SubscribeContract = Wizard('contract.subscribe')
     SubscribeContract.form.signature_date = _base_contract_date
     SubscribeContract.form.distributor = DistributionNetwork.find(
@@ -3797,7 +4066,7 @@ if CREATE_CONTRACTS:  # {{{
     life_contract.subscriber = life_subscriber
     process_next(life_contract)
     life_contract.covered_elements[0].current_extra_data = {
-        'job_category': 'csp2',
+        'job_category': 'csp3',
         }
     life_contract.covered_elements.new()
     life_contract.covered_elements[1].party = house_subscriber
@@ -3844,6 +4113,23 @@ if CREATE_CONTRACTS:  # {{{
     life_contract.document_request_lines[0].received = True
     life_contract.document_request_lines[0].save()
     process_next(life_contract)
+
+    # Underwriting should not pass here
+    try:
+        process_next(life_contract)
+    except UserError:
+        pass
+    else:
+        raise Exception
+    process_previous(life_contract)
+    life_contract.covered_elements[0].current_extra_data = {
+        'job_category': 'csp2',
+        }
+    life_contract.covered_elements[0].save()
+    process_next(life_contract)
+    # Now it should
+    process_next(life_contract)
+
     life_contract.billing_informations[0].billing_mode = BillingMode.find(
         [('code', '=', 'yearly_manual')])[0]
     process_next(life_contract)
@@ -3891,8 +4177,8 @@ if CREATE_CONTRACTS:  # {{{
 
     SubscribeContract = Wizard('contract.subscribe')
     SubscribeContract.form.signature_date = _base_contract_date
-    SubscribeContract.form.distributor = DistributionNetwork.find(
-        [('code', '=', 'C1010103')])[0]
+    SubscribeContract.form.distributor, = DistributionNetwork.find(
+        [('code', '=', 'C1010102')])
     SubscribeContract.form.commercial_product = loan_product.com_products[0]
     SubscribeContract.execute('action')
 
@@ -4170,6 +4456,57 @@ if BILL_CONTRACTS:  # {{{
             [('business_kind', 'in', ['broker_invoice', 'insurer_invoice'])]):
         ReportCreation = Wizard('report.create', [invoice])
         ReportCreation.execute('generate')
+    # }}}
+# }}}
+
+if CREATE_CLAIMS:  # {{{
+    do_print('\nCreating a death claim')  # {{{
+    CreateClaim = Wizard('claim.declare')
+    CreateClaim.form.party, = Party.find([('name', '=', 'DOE'),
+            ('first_name', '=', 'John')])
+    CreateClaim.execute('action')
+    claim, = Claim.find([])
+    claim.declaration_date = _claim_date
+    claim.losses[0].loss_desc, = LossDesc.find([('code', '=', 'death')])
+    claim.losses[0].event_desc, = EventDesc.find([('code', '=', 'suicide')])
+    claim.losses[0].start_date = _claim_date
+    claim.losses[0].save()
+    process_next(claim)
+
+    assert claim.losses[0].services[0].eligibility_status == 'refused'
+    process_previous(claim)
+    claim.losses[0].click('draft')
+    claim.losses[0].event_desc, = EventDesc.find([('code', '=', 'illness')])
+    claim.losses[0].save()
+    process_next(claim)
+
+    assert claim.losses[0].services[0].eligibility_status == 'accepted'
+    service = claim.losses[0].services[0]
+    service.beneficiaries.new()
+    service.beneficiaries[-1].party, = Party.find([('name', '=', 'DOE'),
+            ('first_name', '=', 'Jane')])
+    service.beneficiaries[-1].share = Decimal(1)
+    service.beneficiaries[-1].identification_date = _claim_date
+    service.beneficiaries[-1].click('identify')
+    service.beneficiaries[-1].save()
+    process_next(claim)
+
+    CreateIndemnification = Wizard('claim.create_indemnification', [claim])
+    CreateIndemnification.form.beneficiary, = Party.find([
+            ('name', '=', 'DOE'), ('first_name', '=', 'Jane')])
+    CreateIndemnification.execute('calculate')
+    CreateIndemnification.execute('regularisation')
+    CreateIndemnification.execute('validate_scheduling')
+
+    claim.reload()
+    assert claim.losses[0].services[0].indemnifications[0].total_amount == \
+        Decimal(20000)
+    process_next(claim)
+    process_next(claim)
+
+    CloseClaim = Wizard('claim.close', [claim])
+    CloseClaim.form.sub_status, = ClaimSubStatus.find([('code', '=', 'paid')])
+    CloseClaim.execute('apply_sub_status')
     # }}}
 # }}}
 

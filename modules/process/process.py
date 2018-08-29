@@ -15,7 +15,7 @@ from trytond.wizard import Wizard, StateAction
 from trytond.report import Report
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
-from trytond.pyson import Eval, Bool, Or, And, Not
+from trytond.pyson import Eval, Bool, Or, And, Not, In, Get
 from trytond.pool import Pool
 
 from trytond.modules.coog_core import coog_string, utils
@@ -987,7 +987,8 @@ class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
         if self.authorizations:
             auths = []
             for elem in self.authorizations:
-                auths.append(Bool(Eval('groups', []).contains(elem.id)))
+                auths.append(In(elem.id, Get(
+                            Eval('context', {}), 'groups', [])))
             auth_pyson = Or(*auths) if len(auths) > 1 else auths[0]
         else:
             auth_pyson = None

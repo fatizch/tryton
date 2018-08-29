@@ -83,8 +83,8 @@ class CreateIndemnification:
         input_start_date = self.definition.start_date
         input_end_date = self.definition.end_date
         service = self.definition.service
-        if (input_start_date and service.contract and
-                service.contract.end_date):
+        if (service.benefit.is_group and input_start_date and
+                service.contract and service.contract.end_date):
             contract_end = service.contract.end_date
             behaviour = service.contract.post_termination_claim_behaviour
             if contract_end < input_start_date:

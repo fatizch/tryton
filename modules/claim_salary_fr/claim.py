@@ -375,8 +375,10 @@ class ClaimService:
         self.save()
 
     def get_salary_mode(self, name=None):
-        return self.benefit.benefit_rules[0].option_benefit_at_date(
-            self.option, self.loss.start_date).salary_mode
+        if self.benefit.is_group:
+            return self.benefit.benefit_rules[0].option_benefit_at_date(
+                self.option, self.loss.start_date).salary_mode
+        return ''
 
     def init_from_loss(self, loss, benefit):
         super(ClaimService, self).init_from_loss(loss, benefit)

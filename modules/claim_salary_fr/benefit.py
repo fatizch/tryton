@@ -43,7 +43,7 @@ class BenefitRule:
         return option_benefit
 
     def process_revaluation_on_basic_salary(self, service):
-        if self.force_revaluation_on_basic_salary:
+        if not self.is_group or self.force_revaluation_on_basic_salary:
             return self.revaluation_on_basic_salary
         else:
             option = self.option_benefit_at_date(service.option,

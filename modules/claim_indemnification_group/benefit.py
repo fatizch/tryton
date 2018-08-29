@@ -205,7 +205,7 @@ class BenefitRule:
         # Use option defined rule
         version = option.get_version_at_date(args['date'])
         option_benefit = version.get_benefit(self.benefit)
-        if not getattr(option_benefit, rule_name):
+        if not option_benefit or not getattr(option_benefit, rule_name):
             return default_value
         return getattr(option_benefit, 'calculate_' + rule_name)(args,
             **kwargs)
