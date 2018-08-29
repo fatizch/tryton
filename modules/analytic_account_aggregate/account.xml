@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="analytic_account_line_aggregated_view_form">
+            <field name="model">analytic_account.line.aggregated</field>
+            <field name="type">form</field>
+            <field name="name">analytic_account_line_aggregated_form</field>
+        </record>
+        <record model="ir.ui.view" id="analytic_account_line_aggregated_view_list">
+            <field name="model">analytic_account.line.aggregated</field>
+            <field name="type">tree</field>
+            <field name="name">analytic_account_line_aggregated_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_analytic_account_line_aggregated_form">
+            <field name="name">Analytic Account Lines Aggregated</field>
+            <field name="res_model">analytic_account.line.aggregated</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_analytic_account_line_aggregated_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="analytic_account_line_aggregated_view_list"/>
+            <field name="act_window" ref="act_analytic_account_line_aggregated_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_analytic_account_line_aggregated_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="analytic_account_line_aggregated_view_form"/>
+            <field name="act_window" ref="act_analytic_account_line_aggregated_form"/>
+        </record>
+        <menuitem name="Analytic Account Line Aggregates" parent="account.menu_entries" action="act_analytic_account_line_aggregated_form" id="menu_analytic_account_line_aggregates_form"/>
+        <!-- ######################## -->
+        <!-- # Open Line Aggregated # -->
+        <!-- ######################## -->
+        <record model="ir.action.wizard" id="act_open_analytic_account_line">
+            <field name="name">Open Analytic Aggregate</field>
+            <field name="wiz_name">analytic_account.line.aggregated.open_line</field>
+            <field name="model">analytic_account.line.aggregated</field>
+        </record>
+        <record model="ir.action.keyword" id="act_open_line_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">analytic_account.line.aggregated,-1</field>
+            <field name="action" ref="act_open_analytic_account_line"/>
+        </record>
+    </data>
+</tryton>

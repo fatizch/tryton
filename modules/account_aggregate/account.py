@@ -365,7 +365,7 @@ class LineAggregated(model.CoogSQL, model.CoogView):
         if snap_ref:
             return (snapshot.name == snap_ref)
         return ((move.post_date <= treatment_date) &
-            (snapshot.extracted == False)) # NOQA
+            (snapshot.extracted == Literal(False)))
 
     @classmethod
     def sql_wrapper_batch(cls, col, type_):
@@ -539,9 +539,12 @@ class OpenLine(Wizard):
     start_state = 'open_'
     open_ = StateAction('account.act_move_line_form')
 
+    def from_aggregate_model_name(self):
+        return 'account.move.line.aggregated'
+
     def do_open_(self, action):
         pool = Pool()
-        LineAggregated = pool.get('account.move.line.aggregated')
+        LineAggregated = pool.get(self.from_aggregate_model_name())
         lines = LineAggregated.browse(Transaction().context['active_ids'])
         action['pyson_domain'] = ['OR'] + [
             LineAggregated.get_domain(l) for l in lines]

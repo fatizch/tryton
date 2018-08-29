@@ -12,6 +12,7 @@ def register():
         account.Account,
         account.AccountDistribution,
         account.AnalyticAccountEntry,
+        account.MoveLine,
         invoice.InvoiceLine,
         line.Line,
         rule.Rule,

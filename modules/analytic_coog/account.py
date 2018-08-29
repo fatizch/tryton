@@ -12,6 +12,7 @@ __all__ = [
     'Account',
     'AccountDistribution',
     'AnalyticAccountEntry',
+    'MoveLine',
     ]
 
 
@@ -125,3 +126,11 @@ class AnalyticAccountEntry:
                 analytic_line.date = date
                 analytic_line.extra_details = dict(extra_details)
                 yield analytic_line
+
+
+class MoveLine:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.move.line'
+
+    analytic_lines = fields.One2Many('analytic_account.line', 'move_line',
+        'Analytic Lines')

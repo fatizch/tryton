@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="aggregated_move_id"/>
+    <field name="aggregated_move_id"/>
+    <label name="snapshot"/>
+    <field name="snapshot"/>
+    <label name="account"/>
+    <field name="account"/>
+    <label name="analytic_account"/>
+    <field name="analytic_account"/>
+    <label name="journal"/>
+    <field name="journal"/>
+    <label name="date"/>
+    <field name="date"/>
+    <label name="post_date"/>
+    <field name="post_date"/>
+    <label name="description"/>
+    <field name="description"/>
+    <newline/>
+    <label name="debit"/>
+    <field name="debit"/>
+    <label name="credit"/>
+    <field name="credit"/>
+</form>
