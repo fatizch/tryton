@@ -177,6 +177,7 @@ AccountConfiguration = Model.get('account.configuration')
 AccountProduct = Model.get('product.product')
 AccountProductTemplate = Model.get('product.template')
 AccountTemplate = Model.get('account.account.template')
+AnalyticAccount = Model.get('analytic_account.account')
 AverageLoanPremiumRule = Model.get('loan.average_premium_rule')
 Benefit = Model.get('benefit')
 BenefitEligibilityDecision = Model.get('benefit.eligibility.decision')
@@ -329,6 +330,7 @@ def process_next(target):  # {{{
         [target.id], {'language': 'fr', 'company': company.id})
     target.reload()
     return res
+# }}}
 
 
 def process_previous(target):  # {{{
@@ -736,6 +738,26 @@ if LOAD_ACCOUNTING:  # {{{
     sepa_mandate_sequence.save()
     # }}}
 
+    do_print('    Creating analytic accounts')  # {{{
+    analytic_root = AnalyticAccount()
+    analytic_root.name = 'Racine analytique'
+    analytic_root.code = 'analytic_root'
+    analytic_root.type = 'root'
+    analytic_root.state = 'opened'
+    analytic_root.save()
+
+    analytic_child = AnalyticAccount()
+    analytic_child.name = u'Éclatement par détails'
+    analytic_child.code = 'analytic_child'
+    analytic_child.type = 'distribution_over_extra_details'
+    analytic_child.state = 'opened'
+    analytic_child.parent = analytic_root
+    analytic_child.root = analytic_root
+    analytic_child.pattern, = ExtraDetails.find([
+            ('model_name', '=', 'analytic_account.line')])
+    analytic_child.save()
+    # }}}
+
     do_print('    Global accounting configuration')  # {{{
     account_configuration = AccountConfiguration(1)
     account_configuration.sepa_mandate_sequence = sepa_mandate_sequence
@@ -752,6 +774,7 @@ if LOAD_ACCOUNTING:  # {{{
     account_configuration.surrender_journal, = Journal.find(
         [('code', '=', 'CLAIM')])
     account_configuration.surrender_payment_term = payment_term
+    account_configuration.broker_analytic_account_to_use = analytic_child
     account_configuration.save()
     # }}}
 
