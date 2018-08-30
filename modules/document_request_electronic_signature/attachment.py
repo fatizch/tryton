@@ -8,14 +8,10 @@ __all__ = [
     'Attachment',
     ]
 
-if not config.getboolean('env', 'testing'):
-    provider_name = config.get('electronic_signature', 'provider')
-    assert provider_name, "Please indicate a provider in the " \
-        "electronic_signature section of your configuration"
-    signature_status_field = provider_name + '_status'
-else:
-    signature_status_field = ''
-    provider_name = 'NO_PROVIDER_DEFINED'
+
+provider_name = config.get('electronic_signature', 'provider') \
+    or 'NO_PROVIDER_DEFINED'
+signature_status_field = provider_name + '_status'
 
 
 class Attachment:
