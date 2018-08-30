@@ -182,23 +182,26 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     def get_default_remind_fields(cls):
         return ['received']
 
+    def attachment_ok(self):
+        return self.attachment or self.attachment_data
+
     @fields.depends('attachment', 'attachment_data', 'reception_date',
         'first_reception_date', 'allow_force_receive')
     def update_lines_fields(self, uncheck_receive=False):
-        if self.attachment or self.attachment_data:
+        if self.attachment:
+            self.attachment_data = self.attachment.data
+        if self.attachment_ok():
             if not self.reception_date and not uncheck_receive:
                 self.reception_date = utils.today()
             if not self.first_reception_date:
                 self.first_reception_date = self.reception_date
-            if self.attachment:
-                self.attachment_data = self.attachment.data
         else:
             if self.allow_force_receive:
                 if not self.first_reception_date:
                     self.first_reception_date = self.reception_date
             else:
                 self.reception_date = None
-                if self.attachment_data:
+                if not self.attachment and self.attachment_data:
                     self.attachment_data = None
 
     @fields.depends('attachment', 'attachment_data', 'reception_date',
@@ -230,7 +233,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
             (bool(self.attachment) or bool(self.attachment_data)) or
             self.allow_force_receive)
 
-    @fields.depends('attachment', 'reception_date',
+    @fields.depends('attachment', 'attachment_data', 'reception_date',
         'first_reception_date', 'allow_force_receive', 'received')
     def on_change_attachment(self):
         if not self.attachment:
@@ -273,7 +276,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
 
     def get_attachment_info(self, name):
         if self.attachment:
-            return getattr(self.attachment, name.split('_')[1])
+            return getattr(self.attachment, '_'.join(name.split('_')[1:]))
 
     @classmethod
     def set_attachment_data(cls, requests, name, value):

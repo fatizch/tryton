@@ -1,0 +1,2 @@
+- **Configurer des documents comme exigeant une signature électronique**
+- **Envoi automatique des demandes de signature électronique**

@@ -1,0 +1,23 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:document.description,digital_signature_required:"
+msgid "Digital Signature Required"
+msgstr "Signature électronique requise"
+
+msgctxt "field:document.request.line,digital_signature_required:"
+msgid "Digital Signature Required"
+msgstr "Signature électronique requise"
+
+msgctxt "field:document.request.line,electronic_signature_icon:"
+msgid "Electronic Signature Icon"
+msgstr "Icône de signature électronique"
+
+msgctxt "help:document.request.line,received:"
+msgid ""
+"If a digital signature is required the document cannot be marked as received"
+" unless signed."
+msgstr ""
+"Si une signature électronique est requise, le document ne peut être marqué "
+"comme reçu avant d'être signé."

@@ -507,7 +507,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         pool = Pool()
         Attachment = pool.get('ir.attachment')
         attachment = Attachment()
-        attachment.resource = (report['resource'] or
+        attachment.resource = (report.get('resource') or
             report['object'].get_reference_object_for_edm(self))
         oext, attachment.data = self.convert(
             report['original_data'] or report['data'],
@@ -1015,11 +1015,7 @@ class ReportGenerate(CoogReport):
         name_giver = data.get('resource', None) or pool.get(data['model'])(
             data['id'])
         template = pool.get('report.template')(data['doc_template'][0])
-        party = pool.get('party.party')(data['party'])
-        if party and party.lang:
-            lang = party.lang
-        else:
-            lang = pool.get('res.user')(Transaction().user).language
+        lang = Transaction().language
         if not lang:
             raise Exception('No language defined')
         version = template.get_selected_version(utils.today(), lang)
@@ -1627,27 +1623,26 @@ class ReportCreate(wizard_context.PersistentContextWizard):
             return 'end'
         pool = Pool()
         ContactHistory = pool.get('party.interaction')
-        Attachment = pool.get('ir.attachment')
         instances = self.get_instances()
         for instance in instances:
             instance.post_generation()
         reports = {cur_id: report
             for ids, report in self.wizard_context['reports']
             for cur_id in ids}
-        contacts, attachments = [], []
+        contacts = []
         for instance in instances:
             contact = self.set_contact(instance)
             if contact:
                 contacts.append(contact)
-            attachment = self.set_attachment(instance, reports[instance.id])
+            self.complete_report(instance, reports[instance.id])
+            attachment = \
+                self.select_template.template.save_reports_in_edm(
+                    [reports[instance.id]])
             if attachment:
-                attachments.append(attachment)
                 self.wizard_context['attachments'].append(
                     (instance.id, attachment))
         if contacts:
             ContactHistory.save(contacts)
-        if attachments:
-            Attachment.save(attachments)
         return 'end'
 
     def set_contact(self, instance):
@@ -1663,11 +1658,11 @@ class ReportCreate(wizard_context.PersistentContextWizard):
         contact.for_object_ref = instance.get_object_for_contact()
         return contact
 
-    def set_attachment(self, instance, report):
+    def complete_report(self, instance, report):
         report_name_wo_ext, ext = report['file_basename'], report['extension']
         with open(report['server_filepath'], 'rb') as f:
-            original_data = f.read()
-        return self.select_template.template._create_attachment_from_report({
+            original_data = bytearray(f.read())
+        report.update({
                 'original_ext': ext.split(os.extsep)[-1],
                 'report_type': ext.split(os.extsep)[-1],
                 'object': instance,

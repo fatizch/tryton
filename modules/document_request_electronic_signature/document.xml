@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ###################### -->
+        <!-- # Document Description # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="document_desc_form">
+            <field name="model">document.description</field>
+            <field name="inherit" ref="document.document_desc_form"/>
+            <field name="name">document_description_form</field>
+        </record>
+        <record model="ir.ui.view" id="document_desc_list">
+            <field name="model">document.description</field>
+            <field name="inherit" ref="document.document_desc_tree"/>
+            <field name="name">document_description_list</field>
+        </record>
+        <!-- ###################### -->
+        <!-- # Document Reception # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="document_request_line_view_list">
+            <field name="model">document.request.line</field>
+            <field name="inherit" ref="document_request.document_request_line_view_list"/>
+            <field name="name">document_request_line_list</field>
+        </record>
+    </data>
+</tryton>
