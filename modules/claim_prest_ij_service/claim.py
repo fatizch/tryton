@@ -1265,14 +1265,8 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
             node_func(tree, 'Temps', True)[:19], '%Y-%m-%dT%H:%M:%S')
         to_process = []
         for institution in node_func(tree, 'Declarant'):
-            total_instit = Decimal(
-                node_func(institution, 'Cumul/n:Montant', True))
-            cur_total_instit = 0
             for subscriber in node_func(institution, 'Declare'):
                 siren = node_func(subscriber, 'Identite', True)[:-5]
-                total_subscriber = Decimal(
-                    node_func(subscriber, 'Cumul/n:Montant', True))
-                cur_total_subscriber = 0
                 for sub_instit in node_func(subscriber, 'Caisse'):
                     accounting_date = datetime.datetime.strptime(
                         node_func(sub_instit, 'JComptable', True),
@@ -1296,7 +1290,7 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
                                 'siren': siren,
                                 'ssn': ssn})
                         subscription, = subscriptions
-                        periods, total = cls._process_periods(subscription,
+                        periods = cls._process_periods(subscription,
                             party, node_func)
                         for period in periods:
                             period.accounting_date = accounting_date
@@ -1304,10 +1298,6 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
                         if periods:
                             to_process.append(subscription)
                             saver.extend(periods)
-                        cur_total_subscriber += total or 0
-                assert total_subscriber == cur_total_subscriber
-                cur_total_instit += total_subscriber
-            assert cur_total_instit == total_instit
         saver.finish()
 
         if to_process:
@@ -1316,7 +1306,6 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
     @classmethod
     def _process_periods(cls, subscription, data, node_func):
         periods = []
-        amount = Decimal(0)
         for main_period in node_func(data, 'Assurance'):
             kind = node_func(main_period, 'CodeNature', True)
             parsed = defaultdict(list)
@@ -1329,10 +1318,9 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
                 new_period = cls._new_period(period_data)
                 new_period.subscription = subscription
                 new_period.period_kind = kind
-                amount += sum(x.total_amount for x in new_period.lines)
                 periods.append(new_period)
 
-        return periods, amount
+        return periods
 
     @classmethod
     def _new_period(cls, period_data):
