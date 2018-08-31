@@ -301,6 +301,8 @@ class Endorsement:
         for endorsement in endorsements:
             if endorsement.endorsement_set:
                 to_apply.extend(endorsement.endorsement_set.endorsements)
+            else:
+                to_apply.append(endorsement)
         super(Endorsement, cls).apply_for_preview(list(set(to_apply)))
 
     @classmethod

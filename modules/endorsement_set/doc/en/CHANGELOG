@@ -1,3 +1,4 @@
+* OTH#0000 Properly preview premiums for endorsements outside of sets
 * BUG#9437 Fix crash when getting the endorsement summary
 * BUG#9509 Fix a crash on endorsement if endorsement set is none
 

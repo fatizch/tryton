@@ -1,3 +1,4 @@
+* OTH#0000 Prévisualisation des primes pour les avenants hors ensemble d'avenants
 * BUG#9437 Correction d'un crash sur la récupération du résumé de l'avenant
 * BUG#9509 Correction d'un crash sur l'impression de courrier d'avenant si liste d'ensemble d'avenants est nulle
 
