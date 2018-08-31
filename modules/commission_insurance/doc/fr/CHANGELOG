@@ -1,3 +1,4 @@
+* FEA#9432 Utiliser les dates de conditions pour chercher les agents
 * BUG#9634 Initialisation du courtier s'il n'y a qu'une seule possibilité
 * BUG#9652 Forçage de la mise à jour des commissions lors de la suppression des quittances
 * BUG#9657 Ajout des droits manquants sur le point d'entrée de création des bordereaux de commission
