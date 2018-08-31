@@ -15,7 +15,8 @@ class BaseMassFlowBatch(batch.MemorySavingBatch):
 
     @classmethod
     def check_mandatory_parameters(cls, *args, **kwargs):
-        assert cls.get_flush_size(*args, **kwargs), 'flush_size is required'
+        assert cls.get_flush_size(*args, **kwargs) is not None, \
+            'flush_size is required'
         assert cls.get_filename(*args, **kwargs), 'output_filename is required'
 
     @classmethod
@@ -85,7 +86,11 @@ class BaseMassFlowBatch(batch.MemorySavingBatch):
         """
         separator = cls.line_separator()
         flush_size = int(cls.get_flush_size(*args, **kwargs))
-        for lines in utils.iterator_slice(lines, flush_size):
+        if flush_size != 0:
+            for lines in utils.iterator_slice(lines, flush_size):
+                with utils.safe_open(filename, 'ab') as fo_:
+                    fo_.write(separator.join(lines) + separator)
+        else:
             with utils.safe_open(filename, 'ab') as fo_:
                 fo_.write(separator.join(lines) + separator)
 

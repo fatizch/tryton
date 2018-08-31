@@ -8,6 +8,7 @@ from sql.operators import Concat
 
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
+from trytond.wizard import StateAction
 
 from trytond.modules.coog_core import fields
 from trytond.modules.account_aggregate.account import LineAggregated, OpenLine
@@ -87,7 +88,6 @@ class AnalyticLineAggregated(LineAggregated):
                     cls.get_move_prefix(),
                     Max(move.number))).as_('aggregated_move_id'),
             line.account.as_('account'),
-            analytic_line.account.as_('analytic_account'),
             move.journal.as_('journal'),
             cls.sql_wrapper_batch(move.date, 'date').as_('date'),
             cls.sql_wrapper_batch(move.post_date, 'date').as_('post_date'),
@@ -96,6 +96,7 @@ class AnalyticLineAggregated(LineAggregated):
                 'decimal').as_('debit'),
             cls.sql_wrapper_batch(Sum(Coalesce(analytic_line.credit, 0)),
                 'decimal').as_('credit'),
+            analytic_line.account.as_('analytic_account'),
             ]
 
     @classmethod
@@ -119,20 +120,31 @@ class AnalyticLineAggregated(LineAggregated):
                 Sum(Coalesce(analytic_line.credit, 0)) != 0)
 
     @classmethod
-    def get_domain(cls, analytic_line):
+    def get_domain(cls, line):
         # Should return same filters as get_group_by
-        domain_ = super(AnalyticLineAggregated, cls).get_domain(analytic_line)
-        # Not sure about that ?
-        if analytic_line.journal.aggregate:
-            domain_.append(
-                ('analytic_lines.account', '=',
-                    analytic_line.analytic_account.id))
+        if line.journal.aggregate:
+            domain_ = [
+                ('move_line.account', '=', line.account.id),
+                ('move_line.move.journal', '=', line.journal.id),
+                ('move_line.move.post_date', '=', line.post_date),
+                ('move_line.move.date', '=', line.date),
+                ('move_line.analytic_lines.account', '=',
+                    line.analytic_account.id),
+                ]
+            if line.snapshot:
+                domain_.append(
+                    ('move_line.move.snapshot', '=', line.snapshot.id))
+        else:
+            domain_ = [('id', '=', line.id)]
+
         return domain_
 
 
 class OpenAnalyticLine(OpenLine):
     'Open Analytic Line'
     __name__ = 'analytic_account.line.aggregated.open_line'
+
+    open_ = StateAction('analytic_account.act_line_form')
 
     def from_aggregate_model_name(self):
         return 'analytic_account.line.aggregated'

@@ -4,13 +4,13 @@ import os
 import logging
 import datetime
 from decimal import Decimal
+from itertools import groupby
 
 from trytond.pool import Pool
 from trytond.modules.coog_core import batch
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 
-from trytond.modules.coog_core import utils
 from trytond.modules.report_engine_flow import batch as flow_batch
 
 __all__ = [
@@ -60,6 +60,7 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
     def __setup__(cls):
         super(ExtractAggregatedMove, cls).__setup__()
         cls._default_config_items.update({
+                'job_size': 0,
                 'flush_size': 1024,
                 })
 
@@ -88,7 +89,9 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
                 ).table_query()
 
         cursor.execute(*table_query)
-        return (tuple(rows) for rows in cursor.fetchall())
+        for snap, rows in groupby((rows for rows in cursor.fetchall()),
+                lambda x: x[11]):
+            yield tuple(rows)
 
     @classmethod
     def check_mandatory_parameters(cls, *args, **kwargs):
@@ -111,7 +114,7 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
             ]
 
     @classmethod
-    def transform_values(cls, values):
+    def transform_values(cls, values, *args, **kwargs):
         pool = Pool()
         Journal = pool.get('account.journal')
         Account = pool.get('account.account')
@@ -136,9 +139,9 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
 
     @classmethod
     def parse_select_ids(cls, fetched_data, *args, **kwargs):
-        for values in utils.iterator_slice(fetched_data,
-                int(cls.get_flush_size(*args, **kwargs))):
-            for single_values in zip(*cls.transform_values(values)):
+        for values in fetched_data:
+            for single_values in zip(*cls.transform_values(
+                        values, *args, **kwargs)):
                 yield single_values
 
     @classmethod
@@ -158,5 +161,6 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
         super(ExtractAggregatedMove, cls).execute(objects, ids, *args,
             **kwargs)
         Snapshot = Pool().get('account.move.snapshot')
-        snapshots = [x[0] for x in objects if not x[0].extracted]
-        Snapshot.write(snapshots, {'extracted': True})
+        snapshots = {x[0] for x in objects if not x[0].extracted}
+        if snapshots:
+            Snapshot.write(list(snapshots), {'extracted': True})

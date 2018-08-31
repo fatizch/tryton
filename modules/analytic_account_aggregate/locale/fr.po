@@ -1,3 +1,107 @@
 #
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:analytic_account.line,snapshot:"
+msgid "Snapshot"
+msgstr "Instantané"
+
+msgctxt "field:analytic_account.line.aggregated,account:"
+msgid "Account"
+msgstr "Compte"
+
+msgctxt "field:analytic_account.line.aggregated,aggregated_move_id:"
+msgid "Aggregated Move Id"
+msgstr "Identifiant du mouvement agrégé"
+
+msgctxt "field:analytic_account.line.aggregated,analytic_account:"
+msgid "Analytic Account"
+msgstr "Compte analytique"
+
+msgctxt "field:analytic_account.line.aggregated,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:analytic_account.line.aggregated,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:analytic_account.line.aggregated,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:analytic_account.line.aggregated,credit:"
+msgid "Credit"
+msgstr "Crédit"
+
+msgctxt "field:analytic_account.line.aggregated,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:analytic_account.line.aggregated,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:analytic_account.line.aggregated,debit:"
+msgid "Debit"
+msgstr "Débit"
+
+msgctxt "field:analytic_account.line.aggregated,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:analytic_account.line.aggregated,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:analytic_account.line.aggregated,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:analytic_account.line.aggregated,post_date:"
+msgid "Post Date"
+msgstr "Date de postage"
+
+msgctxt "field:analytic_account.line.aggregated,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l' enregistrement"
+
+msgctxt "field:analytic_account.line.aggregated,snapshot:"
+msgid "Snapshot"
+msgstr "Instantané"
+
+msgctxt "field:analytic_account.line.aggregated,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:analytic_account.line.aggregated,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:analytic_account.line.aggregated,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:analytic_account.line.aggregated,name:"
+msgid "Analytic Line Aggregated"
+msgstr "Agrégat Ligne Analytique"
+
+msgctxt "model:ir.action,name:act_analytic_account_line_aggregated_form"
+msgid "Analytic Account Lines Aggregated"
+msgstr "Lignes  analytiques agrégées"
+
+msgctxt "model:ir.action,name:act_open_analytic_account_line"
+msgid "Open Analytic Aggregate"
+msgstr "Ouvrir l'agrégat analytique"
+
+msgctxt "model:ir.ui.menu,name:menu_analytic_account_line_aggregates_form"
+msgid "Analytic Account Line Aggregates"
+msgstr "Agrégats de lignes analytique"
+
+msgctxt "view:analytic_account.line.aggregated:"
+msgid "Credit"
+msgstr "Crédit"
+
+msgctxt "view:analytic_account.line.aggregated:"
+msgid "Debit"
+msgstr "Débit"
