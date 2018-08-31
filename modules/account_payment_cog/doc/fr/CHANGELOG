@@ -1,3 +1,4 @@
+* BUG#9762 Correction des arguments du batch de traitement des paiements
 * FEA#8233 Correction d'une anomalie lors de la recherche du journal de paiement
 * BUG#9711 Correction de l'import JSON des motifs de rejet de paiement
 * OTH#0000 Ajout des droite d'accès pour la création des paiements depuis une quittance

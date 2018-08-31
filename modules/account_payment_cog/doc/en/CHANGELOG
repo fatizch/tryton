@@ -1,3 +1,4 @@
+* BUG#9762 Fix account payment process batch args
 * FEA#8233 Fix a case where the payment journal would be empty
 * BUG#9711 Fix JSON import of payment reject reason
 * OTH#0000 Add access rights on payment creation from invoices button

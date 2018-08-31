@@ -298,7 +298,7 @@ class PaymentGroupProcessBatch(batch.BatchRoot):
 
     @classmethod
     def select_ids(cls, treatment_date, payment_kind=None,
-            journal_methods=None):
+            journal_methods=None, **kwargs):
         pool = Pool()
         payment = pool.get('account.payment').__table__()
         journal = pool.get('account.payment.journal').__table__()
