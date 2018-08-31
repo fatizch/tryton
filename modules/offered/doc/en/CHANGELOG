@@ -1,3 +1,4 @@
+* OTH#0000 Extra data cache is not related to the context
 * FEA#9453 Add a customizable icon on products
 * BUG#9412 Properly handle boolean sub extra data
 * FEA#9151 Refactor extra_data code

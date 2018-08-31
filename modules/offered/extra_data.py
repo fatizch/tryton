@@ -66,8 +66,8 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT')
 
     _translation_cache = Cache('_get_extra_data_summary_cache')
-    _extra_data_cache = Cache('extra_data_cache')
-    _extra_data_structure_cache = Cache('extra_data_structure')
+    _extra_data_cache = Cache('extra_data_cache', context=False)
+    _extra_data_structure_cache = Cache('extra_data_structure', context=False)
 
     @classmethod
     def __setup__(cls):

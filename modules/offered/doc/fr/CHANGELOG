@@ -1,3 +1,4 @@
+* OTH#0000 Le cache des données complémentaires est indépendant du contexte
 * FEA#9453 Ajout d'une icône personnalisable sur les produits
 * BUG#9412 Gestion des données complémentaires liées de type booléen
 * FEA#9151 Refactorisation du code des données complémentaires
