@@ -1,4 +1,3 @@
-* BUG#9761: Remove checks on total amounts in imported file
 * OTH#0000: Add prest IJ documentation
 * BUG#9540 Handle party search on rec_name in BPIJ
 * BUG#9501 Avoid duplicate process_log when importing BPIJ

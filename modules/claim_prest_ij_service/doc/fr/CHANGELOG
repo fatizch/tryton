@@ -1,4 +1,3 @@
-* BUG#9761: Retrait des contrôles sur les montants dans les fichiers importés
 * OTH#0000: Ajout d'une documentation pour prest IJ
 * BUG#9540 Gérer la recherche des BPIJ à partir du nom de la personne
 * BUG#9501 Ne pas générer de tâche en doublon lors de l'import de BPIJ
