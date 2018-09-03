@@ -588,21 +588,23 @@ Create commission invoice::
     ...     (Decimal('0'), Decimal('10'))
     ...     ]
     True
+    >>> str_month_year1 = contract_start_date.strftime("%Y%m")
+    >>> str_month_year2 = contract2_start_date.strftime("%Y%m")
     >>> [x.extra_details for x in analytic_lines] == [
     ...     {
-    ...         u'commissioned_contract_signature_month': u'201808',
+    ...         u'commissioned_contract_signature_month': str_month_year1,
     ...         u'commissioned_contract_broker': 3,
     ...         u'commissioned_contract_product': 2
     ...     }, {
-    ...         u'commissioned_contract_signature_month': u'201808',
+    ...         u'commissioned_contract_signature_month': str_month_year1,
     ...         u'commissioned_contract_broker': 2,
     ...         u'commissioned_contract_product': 2
     ...     }, {
-    ...         u'commissioned_contract_signature_month': u'201808',
+    ...         u'commissioned_contract_signature_month': str_month_year1,
     ...         u'commissioned_contract_broker': 1,
     ...         u'commissioned_contract_product': 1
     ...     }, {
-    ...         u'commissioned_contract_signature_month': '201810',
+    ...         u'commissioned_contract_signature_month': str_month_year2,
     ...         u'commissioned_contract_broker': 1,
     ...         u'commissioned_contract_product': 1
     ...     }, ]
@@ -623,36 +625,36 @@ Create commission invoice::
     True
     >>> [x.extra_details for x in all_analytic_lines] == [
     ...     {
-    ...         u'commissioned_contract_signature_month': u'201808',
+    ...         u'commissioned_contract_signature_month': str_month_year1,
     ...         u'commissioned_contract_broker': 3,
     ...         u'commissioned_contract_product': 2
     ...     }, {
-    ...         u'commissioned_contract_signature_month': u'201808',
+    ...         u'commissioned_contract_signature_month': str_month_year1,
     ...         u'commissioned_contract_broker': 2,
     ...         u'commissioned_contract_product': 2
     ...     }, {
-    ...         u'commissioned_contract_signature_month': u'201808',
+    ...         u'commissioned_contract_signature_month': str_month_year1,
     ...         u'commissioned_contract_broker': 1,
     ...         u'commissioned_contract_product': 1
     ...     }, {
-    ...         u'commissioned_contract_signature_month': '201810',
+    ...         u'commissioned_contract_signature_month': str_month_year2,
     ...         u'commissioned_contract_broker': 1,
     ...         u'commissioned_contract_product': 1
     ...     },
     ...     {
-    ...         u'commissioned_contract_signature_month': u'201808',
+    ...         u'commissioned_contract_signature_month': str_month_year1,
     ...         u'commissioned_contract_broker': 3,
     ...         u'commissioned_contract_product': 2
     ...     }, {
-    ...         u'commissioned_contract_signature_month': u'201808',
+    ...         u'commissioned_contract_signature_month': str_month_year1,
     ...         u'commissioned_contract_broker': 2,
     ...         u'commissioned_contract_product': 2
     ...     }, {
-    ...         u'commissioned_contract_signature_month': u'201808',
+    ...         u'commissioned_contract_signature_month': str_month_year1,
     ...         u'commissioned_contract_broker': 1,
     ...         u'commissioned_contract_product': 1
     ...     }, {
-    ...         u'commissioned_contract_signature_month': '201810',
+    ...         u'commissioned_contract_signature_month': str_month_year2,
     ...         u'commissioned_contract_broker': 1,
     ...         u'commissioned_contract_product': 1
     ...     }, ]
