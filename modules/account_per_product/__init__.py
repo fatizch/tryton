@@ -27,6 +27,7 @@ def register():
         module='account_per_product', type_='model')
     Pool.register(
         payment.Journal,
+        payment.Payment,
         module='account_per_product', type_='model',
         depends=['account_payment_cog'])
     Pool.register(

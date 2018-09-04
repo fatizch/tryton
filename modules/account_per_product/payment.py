@@ -8,6 +8,7 @@ from trytond.modules.coog_core import fields
 
 __all__ = [
     'Journal',
+    'Payment',
     ]
 
 
@@ -27,3 +28,14 @@ class Journal:
     @classmethod
     def _export_skips(cls):
         return super(Journal, cls)._export_skips() | {'products'}
+
+
+class Payment:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.payment'
+
+    def create_clearing_move(self, date=None):
+        move = super(Payment, self).create_clearing_move(date)
+        if move:
+            move.product = self.line.move.product
+        return move
