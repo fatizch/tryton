@@ -239,7 +239,8 @@ class Contract:
             # Surrendering will also terminate the contracts
             cls.raise_user_warning('auto_surrendering_%s' % ','.join(
                     [str(x.id) for x in to_surrender]), 'auto_surrendering')
-            Contract.surrender(to_surrender, at_date)
+            # We still want a control, so only planning
+            cls.plan_surrender(to_surrender, at_date)
         if to_terminate:
             super(Contract, cls).terminate(to_terminate, at_date,
                 termination_reason)

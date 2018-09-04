@@ -1,3 +1,4 @@
+* BUG#9791 Planification plutôt qu'exécution des rachats automatiques
 * BUG#9302 Correction de la date de recalcul des quittances suite à annulation de rachat
 
 Version 2.0 - 2018-04-13

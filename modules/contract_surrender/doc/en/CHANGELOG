@@ -1,3 +1,4 @@
+* BUG#9791 Plan rather than execute automatic surrenders
 * BUG#9302 Fix rebill date when cancelling a surrender
 
 Version 2.0 - 2018-04-13
