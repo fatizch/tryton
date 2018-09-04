@@ -1,3 +1,4 @@
+* BUG#9752 Correctif d'une erreur dans le cas où il n'y a aucune données à imprimer
 * BUG#9334 Suppression du double appel de la methode parse_params
 * BUG#9253 Correctif appel de méthode dépréciée sur le batch de sortie du stock assureur
 * FEA#9104 Ajout de modèles de courriers par défaut pour les bordereaux assureur / courtier

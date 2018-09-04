@@ -64,6 +64,10 @@ class InsurerReportContract(model.CoogWizard):
                         insurer),
                     ('options.coverage.insurer', '=', insurer)]])
         template = self.configure_report.template
+        if not all_contracts:
+            return {
+                'reports': [],
+                }
         with Transaction().set_context(
                 reporting_date=max_date):
             _, attachments = template.produce_reports(all_contracts,
