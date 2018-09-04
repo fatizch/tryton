@@ -1,3 +1,4 @@
+* FEA#9764 Improve batches performances by using root as batch user
 * BUG#9703 FIx APIs inconsistencies
 * BUG#9693 By default, prevent No Select batches from splitting on error
 * BUG#9617 Fix a bug where a single document production request could be treated multiple times

@@ -40,8 +40,6 @@ def batch_generate(name, params):
     res = []
     with Transaction().start(database, 0, readonly=True):
         User = Pool().get('res.user')
-        # TODO: add batch user
-        admin, = User.search([('login', '=', 'admin')])
         BatchModel = Pool().get(name)
 
         # Batch params computation
@@ -131,8 +129,6 @@ def batch_exec(name, ids, params, **kwargs):
     logger.info('Executing batch on database %s' % database)
     with Transaction().start(database, 0, readonly=True):
         User = Pool().get('res.user')
-        # TODO: add batch user
-        admin, = User.search([('login', '=', 'admin')])
         BatchModel = Pool().get(name)
 
         batch_params = params.copy()
@@ -146,7 +142,7 @@ def batch_exec(name, ids, params, **kwargs):
         batch_params.pop('chain_name', None)
 
     res = []
-    with Transaction().start(database, admin.id):
+    with Transaction().start(database, 0):
         with Transaction().set_context(User.get_preferences(context_only=True),
                 client_defined_date=connection_date):
             Cache.clean(database)

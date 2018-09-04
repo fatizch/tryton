@@ -45,7 +45,6 @@ class ExtraDetailsConfiguration(model.CoogSQL, model.CoogView):
     'Extra Details Configuration'
 
     __name__ = 'extra_details.configuration'
-    _rec_name = 'model_name'
 
     model_name = fields.Selection('get_detailed_models', 'Model Name')
     lines = fields.One2Many('extra_details.configuration.line',
@@ -63,6 +62,13 @@ class ExtraDetailsConfiguration(model.CoogSQL, model.CoogView):
             ('model_uniq', Unique(t, t.model_name),
                 'The model must be unique!'),
             ]
+
+    def get_rec_name(self, name):
+        return self.model_name if self.model_name else ''
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return [('model_name',) + tuple(clause[1:])]
 
     @classmethod
     def create(cls, vlist):
