@@ -1,3 +1,4 @@
+* BUG#9760 Support de la génération de plusieurs modèles de courriers
 * BUG#9672 Correction de la méthode register
 * FEA#9299 Impression de documents sans modèles
 * BUG#9045 Permettre de définir un model d'impression sur un tiers

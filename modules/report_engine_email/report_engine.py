@@ -365,7 +365,7 @@ class ReportCreate:
                 report_context)
         ReportModel = Pool().get('report.generate', type='report')
         ReportModel.execute(ids, report_context)
-        return {}
+        return [{}]
 
     def transition_generate(self):
         next_state = super(ReportCreate, self).transition_generate()

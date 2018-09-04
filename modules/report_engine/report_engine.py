@@ -1514,10 +1514,14 @@ class ReportCreate(wizard_context.PersistentContextWizard):
         for group in groups:
             report_context = self.create_report_context(group)
             report_context.update(parameters)
-            report = self.report_execute([x.id for x in group], template,
+            # for a given template, there can be several reports. For
+            # instance a flow template can be printed to several output
+            # for some reporting tools
+            sub_reports = self.report_execute([x.id for x in group], template,
                 report_context)
-            self.finalize_report(report, group)
-            reports.append(report)
+            for report in sub_reports:
+                self.finalize_report(report, group)
+            reports.extend(sub_reports)
         self.preview_document.reports = reports
         if template.modifiable_before_printing:
             return 'preview_document'
@@ -1546,15 +1550,15 @@ class ReportCreate(wizard_context.PersistentContextWizard):
         os_extsep = os.extsep if ext else ''
         client_filepath, server_filepath = ReportModel.edm_write_tmp_report(
             filedata, '%s%s%s' % (file_basename, os_extsep, ext))
-        report = {
+        reports = [{
             'generated_report': client_filepath,
             'server_filepath': server_filepath,
             'file_basename': file_basename,
             'extension': ext,
             'template': doc_template,
-            }
-        self.wizard_context['reports'].append((tuple(ids), report))
-        return report
+            }]
+        self.wizard_context['reports'].append((tuple(ids), reports))
+        return reports
 
     def finalize_report(self, report, instances):
         instance = instances[0]
@@ -1626,18 +1630,18 @@ class ReportCreate(wizard_context.PersistentContextWizard):
         instances = self.get_instances()
         for instance in instances:
             instance.post_generation()
-        reports = {cur_id: report
-            for ids, report in self.wizard_context['reports']
+        reports = {cur_id: report_list
+            for ids, report_list in self.wizard_context['reports']
             for cur_id in ids}
         contacts = []
         for instance in instances:
             contact = self.set_contact(instance)
             if contact:
                 contacts.append(contact)
-            self.complete_report(instance, reports[instance.id])
+            self.complete_reports(instance, reports[instance.id])
             attachment = \
                 self.select_template.template.save_reports_in_edm(
-                    [reports[instance.id]])
+                    reports[instance.id])
             if attachment:
                 self.wizard_context['attachments'].append(
                     (instance.id, attachment))
@@ -1657,6 +1661,10 @@ class ReportCreate(wizard_context.PersistentContextWizard):
         contact.title = self.select_template.template.name
         contact.for_object_ref = instance.get_object_for_contact()
         return contact
+
+    def complete_reports(self, instance, reports):
+        for report in reports:
+            self.complete_report(instance, report)
 
     def complete_report(self, instance, report):
         report_name_wo_ext, ext = report['file_basename'], report['extension']

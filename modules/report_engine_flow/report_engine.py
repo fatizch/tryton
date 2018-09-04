@@ -435,13 +435,13 @@ class ReportCreate:
             filename = os.path.join(doc_template.get_export_dirname(),
                 filename)
             created_file = self.create_flow_file(filename, filedata)
-        return {
-            'generated_report': created_file,
-            'server_filepath': created_file,
-            'file_basename': file_basename,
-            'extension': ext,
-            'template': doc_template,
-            }
+        return [{
+                'generated_report': created_file,
+                'server_filepath': created_file,
+                'file_basename': file_basename,
+                'extension': ext,
+                'template': doc_template,
+                }]
 
     def default_flow_succeed_generated(self, fields):
         return {'template_name':
