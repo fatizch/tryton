@@ -830,6 +830,17 @@ class Printable(Model):
         good_model.save()
 
     @classmethod
+    def delete(cls, objects):
+        ReportRequests = Pool().get('report_production.request')
+        requests = None
+        if objects:
+            requests = ReportRequests.search([
+                    ('object_', 'in', [str(x) for x in objects])])
+        super(Printable, cls).delete(objects)
+        if requests:
+            ReportRequests.delete(requests)
+
+    @classmethod
     @model.CoogView.button_action('report_engine.letter_generation_wizard')
     def generic_send_letter(cls, objs):
         pass

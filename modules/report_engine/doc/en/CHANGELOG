@@ -1,3 +1,4 @@
+* BUG#9738 Automatically delete report production requests when deleting a printable model
 * BUG#9760 Handle multi report generation
 * BUG#9672 Fix register method
 * FEA#9299 Allow model-less impressions
