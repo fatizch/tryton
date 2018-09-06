@@ -1,6 +1,7 @@
 import logging
 import datetime
 import async.broker as async_broker
+from psycopg2.extensions import TransactionRollbackError
 from psycopg2 import OperationalError as DatabaseOperationalError
 
 
@@ -56,11 +57,15 @@ def batch_generate(name, params):
         transaction_size = int(batch_params.pop('transaction_size', 0))
         split = batch_params.pop('split', True)
         chain_name = batch_params.pop('chain_name', None)
+        retry = int(batch_params.pop('retry', 0))
 
         if transaction_size > 0 and transaction_size < job_size:
             assert not split, "Jobs with a transaction_size cannot be " \
                 "splitted. Please set split to False in this batch " \
                 "configuration or add --no-split option to your command line"
+            assert not retry, "Jobs with a transaction_size cannot be " \
+                "retried. Please set split to False in this batch " \
+                "configuration"
 
         # Prepare serialized params (to be saved on redis)
         job_params = batch_params.copy()
@@ -68,6 +73,7 @@ def batch_generate(name, params):
         job_params['job_size'] = job_size
         job_params['transaction_size'] = transaction_size
         job_params['split'] = split
+        job_params['retry'] = retry
         job_params['chain_name'] = chain_name or 'unknown'
         job_params = BatchModel.serializable_params(job_params)
 
@@ -137,32 +143,54 @@ def batch_exec(name, ids, params, **kwargs):
         # Remove non business params (batch_params to be passed to select_ids)
         connection_date = batch_params.pop('connection_date')
         job_size = batch_params.pop('job_size')
+        retry = batch_params.pop('retry')
         transaction_size = batch_params.pop('transaction_size')
         batch_params.pop('split')
         batch_params.pop('chain_name', None)
 
     res = []
-    with Transaction().start(database, 0):
-        with Transaction().set_context(User.get_preferences(context_only=True),
-                client_defined_date=connection_date):
-            Cache.clean(database)
-            try:
-                with ServerContext().set_context(from_batch=True,
-                        job_size=job_size, transaction_size=transaction_size,
-                        auto_accept_warnings=True):
-                    for l in split_job(ids, transaction_size):
-                        to_treat = BatchModel.convert_to_instances(l,
-                            **batch_params)
-                        r = BatchModel.execute(to_treat, [x[0] for x in l],
-                            **batch_params)
-                        res.append(r or len(l))
-                        Transaction().commit()
-            except Exception:
-                logger.critical('Job execution crashed')
-                Transaction().rollback()
-                raise
-            finally:
-                Cache.resets(database)
+
+    if retry >= 0:
+        loop = range(retry, -1, -1)
+    else:
+        def infinite():
+            while True:
+                yield -1
+        loop = infinite()
+
+    for count in loop:
+        with Transaction().start(database, 0) as transaction:
+            with transaction.set_context(
+                    User.get_preferences(context_only=True),
+                    client_defined_date=connection_date):
+                Cache.clean(database)
+                try:
+                    with ServerContext().set_context(from_batch=True,
+                            job_size=job_size,
+                            transaction_size=transaction_size,
+                            auto_accept_warnings=True):
+                        for l in split_job(ids, transaction_size):
+                            to_treat = BatchModel.convert_to_instances(l,
+                                **batch_params)
+                            r = BatchModel.execute(to_treat, [x[0] for x in l],
+                                **batch_params)
+                            res.append(r or len(l))
+                            transaction.commit()
+                        break
+                except TransactionRollbackError:
+                    if count:
+                        transaction.rollback()
+                        logger.info(
+                            'Retrying job: %d attempts left' % count)
+                        continue
+                    logger.critical('Job execution crashed after %d retry'
+                        % retry)
+                    raise
+                except Exception:
+                    logger.critical('Job execution crashed')
+                    raise
+                finally:
+                    Cache.resets(database)
     return res
 
 

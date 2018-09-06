@@ -1,3 +1,4 @@
+* FEA#9698 Add retry argument to batches
 * FEA#9764 Improve batches performances by using root as batch user
 * BUG#9703 FIx APIs inconsistencies
 * BUG#9693 By default, prevent No Select batches from splitting on error

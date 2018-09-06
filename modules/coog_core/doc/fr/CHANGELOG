@@ -1,3 +1,4 @@
+* FEA#9698 Ajout de l'argument retry au batches
 * FEA#9764 Améliorer les performances des batchs en les exécutant avec l'utilisateur root
 * BUG#9703 Correction des inconsistences d'API
 * BUG#9693 Par défaut, empêcher les batches NoSelect de diviser les tâches en cas d'erreur
