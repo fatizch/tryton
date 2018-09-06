@@ -7,6 +7,7 @@ from itertools import groupby
 from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard, StateAction
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 
 __all__ = [
     'Contract',
@@ -21,6 +22,9 @@ class Contract:
 
     @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
+        if ServerContext().get('disable_set_prices_calculation', False):
+            return super(Contract, cls).calculate_prices(contracts,
+                start, end)
         new_contracts = set(contracts)
         for contract in contracts:
             if contract.contract_set:

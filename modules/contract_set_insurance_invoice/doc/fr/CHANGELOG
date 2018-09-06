@@ -1,3 +1,5 @@
+* BUG#9814 Le calcul des primes sur tout l'ensemble, en avenant, se fait avenant par avenant
+
 Version 2.0 - 2018-04-13
 * BUG#8666 Correction d'un crash lors du traitement du renouvellement avec des contrats terminés dans un ensemble de contrat
 * BUG#8253 Ajout de la possibiliter de renouveller un seul contrat d'un ensemble de contrat

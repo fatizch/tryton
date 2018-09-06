@@ -1,3 +1,5 @@
+* BUG#9814 The premium calculation on all set, during endorsement, is done endorsement by endorsement
+
 Version 2.0 - 2018-04-13
 * BUG#8666 Fix crash during renewal on contract set with terminated contract 
 * BUG#8253 Add possibility to renew only one contract of a contract set

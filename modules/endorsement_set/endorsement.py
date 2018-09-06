@@ -9,6 +9,7 @@ from trytond.wizard import StateTransition, StateView, Button
 from trytond.transaction import Transaction
 from trytond.model import Workflow, Unique
 from trytond.pyson import Eval, Bool, Equal
+from trytond.server_context import ServerContext
 
 from trytond.modules.company.model import (CompanyValueMixin,
     CompanyMultiValueMixin)
@@ -282,6 +283,11 @@ class Endorsement:
         EndorsementSet = pool.get('endorsement.set')
         return [x.id for x in EndorsementSet.search(
             [('endorsements.generated_by', '=', self)])]
+
+    @classmethod
+    def run_methods(cls, endorsements, kind):
+        with ServerContext().set_context(disable_set_prices_calculation=True):
+            return super(Endorsement, cls).run_methods(endorsements, kind)
 
     @classmethod
     @model.CoogView.button
