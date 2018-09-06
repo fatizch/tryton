@@ -1321,10 +1321,10 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
             kind = node_func(main_period, 'CodeNature', True)
             parsed = defaultdict(list)
             for sub_period in node_func(main_period, 'Prestation'):
-                data = {}
+                period_data = {}
                 for node in sub_period:
-                    data[node.tag[len(BPIJ_NS):]] = node.text
-                parsed[data['DateDebPrest']].append(data)
+                    period_data[node.tag[len(BPIJ_NS):]] = node.text
+                parsed[period_data['DateDebPrest']].append(period_data)
             for period_data in parsed.itervalues():
                 new_period = cls._new_period(period_data)
                 new_period.subscription = subscription
@@ -1332,6 +1332,8 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
                 amount += sum(x.total_amount for x in new_period.lines)
                 periods.append(new_period)
 
+        for indu in node_func(data, 'Indu'):
+            amount += Decimal(node_func(indu, 'Montant', True))
         return periods, amount
 
     @classmethod
