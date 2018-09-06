@@ -511,7 +511,7 @@ class AggregatedCommission(model.CoogSQL, model.CoogView):
             group_by=klass.get_group_by(tables))
 
 
-class Plan(export.ExportImportMixin, model.TaggedMixin):
+class Plan(model.CoogSQL, model.CoogView, model.TaggedMixin):
     __name__ = 'commission.plan'
     _func_key = 'code'
 
@@ -650,7 +650,7 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
         return sorted(list(all_dates))
 
 
-class PlanLines(export.ExportImportMixin):
+class PlanLines(model.CoogSQL, model.CoogView):
     __name__ = 'commission.plan.line'
 
     options = fields.Many2Many(

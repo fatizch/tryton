@@ -121,7 +121,8 @@ class Plan:
     __name__ = 'commission.plan'
 
     is_prepayment = fields.Function(fields.Boolean('Is Prepayment'),
-        'getter_is_prepayment', searcher='search_is_prepayment')
+        'getter_is_prepayment', setter='setter_void',
+        searcher='search_is_prepayment')
     adjust_prepayment = fields.Boolean('Adjust Prepayment')
     delete_unpaid_prepayment = fields.Boolean('Delete Unpaid Prepayment',
         help='Redeemed of unpaid invoices will be deleted once contracts '

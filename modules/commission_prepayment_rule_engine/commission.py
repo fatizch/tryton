@@ -5,7 +5,7 @@ from decimal import Decimal
 
 from trytond.pool import PoolMeta
 from trytond.model import Unique
-from trytond.pyson import Eval, Not
+from trytond.pyson import Eval, Bool, Not, And
 
 from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
@@ -34,7 +34,9 @@ class Plan:
                 })
 
     def getter_is_prepayment(self, name):
-        return bool(self.prepayment_payment_rule)
+        if self.prepayment_payment_rule:
+            return True
+        return super(Plan, self).getter_is_prepayment(name)
 
     @classmethod
     def search_is_prepayment(cls, name, clause):
@@ -74,6 +76,17 @@ class Plan:
             return schedule
         return super(Plan, self).compute_prepayment_schedule(option, agent)
 
+    @fields.depends('lines', 'is_prepayment', 'prepayment_payment_rule')
+    def on_change_is_prepayment(self):
+        for line in self.lines:
+            line.is_prepayment = self.is_prepayment
+            if not self.is_prepayment:
+                line.prepayment_rule = None
+        if not self.is_prepayment:
+            self.prepayment_payment_rule = None
+        if self.lines:
+            self.lines = list(self.lines)
+
 
 class PrepaymentPaymentDateRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
@@ -107,13 +120,18 @@ class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule')):
     __metaclass__ = PoolMeta
     __name__ = 'commission.plan.line'
 
+    is_prepayment = fields.Function(fields.Boolean('Is Prepayment'),
+            getter='on_change_with_is_prepayment')
+
     @classmethod
     def __setup__(cls):
         super(PlanLines, cls).__setup__()
         cls.prepayment_rule.domain = [('type_', '=', 'commission')]
-        cls.prepayment_rule.depends = ['use_rule_engine']
-        cls.prepayment_rule.states = {'invisible':
-            Not(Eval('use_rule_engine', True))}
+        cls.prepayment_rule.depends = ['use_rule_engine', 'is_prepayment']
+        cls.prepayment_rule.states = {
+                'invisible': Not(And(Bool(Eval('use_rule_engine')),
+                    Bool(Eval('is_prepayment'))))
+                }
         cls.prepayment_formula.states['invisible'] = Eval('use_rule_engine',
             True)
         cls.prepayment_formula.depends.append('use_rule_engine')
@@ -154,3 +172,7 @@ class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule')):
             return {}
         return self.prepayment_rule.get_extra_data_for_on_change(
             self.prepayment_rule_extra_data)
+
+    @fields.depends('plan', 'use_rule_engine', 'is_prepayment')
+    def on_change_with_is_prepayment(self, name=None):
+        return self.plan.is_prepayment if self.plan else None

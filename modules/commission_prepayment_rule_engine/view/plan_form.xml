@@ -6,4 +6,8 @@ this repository contains the full copyright notices and license terms. -->
         <label name="prepayment_payment_rule"/>
         <field name="prepayment_payment_rule"/>
     </xpath>
+    <xpath expr="/form/field[@name='insurer_plan']" position="after">
+        <label name="is_prepayment"/>
+        <field name="is_prepayment"/>
+    </xpath>
 </data>
