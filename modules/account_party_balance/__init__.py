@@ -6,7 +6,6 @@ import move
 
 def register():
     Pool.register(
-        move.MoveLine,
         move.PartyBalance,
         move.PartyBalanceLine,
         module='account_party_balance', type_='model')

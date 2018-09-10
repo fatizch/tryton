@@ -70,4 +70,8 @@ class MoveLine:
     def get_bank_account(self, name):
         if self.sepa_mandate:
             return self.sepa_mandate.account_number.account.id
-        return super(MoveLine, self).get_bank_account(name)
+        if self.origin_item:
+            if getattr(self.origin_item, 'bank_account', None):
+                return self.origin_item.bank_account.id
+            elif getattr(self.origin_item, 'sepa_mandate', None):
+                return self.origin_item.sepa_mandate.account_number.account.id

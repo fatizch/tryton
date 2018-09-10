@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import Pool
 from trytond.pyson import Bool, Eval
 from trytond.wizard import Wizard, StateView, Button
 from trytond.transaction import Transaction
@@ -10,7 +10,6 @@ from trytond.modules.coog_core import fields, model, coog_date, utils
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
-    'MoveLine',
     'OpenPartyBalance',
     'PartyBalance',
     'PartyBalanceLine',
@@ -20,23 +19,6 @@ _FIELDS = ['all_lines', 'lines', 'hide_reconciled_lines',
     'from_date', 'contract', 'hide_canceled_invoices', 'party',
     'scheduled_lines',
     ]
-
-
-class MoveLine:
-    __metaclass__ = PoolMeta
-    __name__ = 'account.move.line'
-
-    bank_account = fields.Function(
-        fields.Many2One('bank.account', 'Bank Account',
-            states={'invisible': ~Eval('bank_account')}),
-        'get_bank_account')
-
-    def get_bank_account(self, name):
-        if self.origin_item:
-            if getattr(self.origin_item, 'bank_account', None):
-                return self.origin_item.bank_account.id
-            elif getattr(self.origin_item, 'sepa_mandate', None):
-                return self.origin_item.sepa_mandate.account_number.account.id
 
 
 class PartyBalanceLine(model.CoogView):
