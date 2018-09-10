@@ -43,6 +43,10 @@ def batch_generate(name, params):
         User = Pool().get('res.user')
         BatchModel = Pool().get(name)
 
+        admin = User.search([('login', '=', 'admin')])
+        company = admin[0].company.id if admin and admin[0].company else None
+        assert company is not None, 'No company configured on admin user'
+
         # Batch params computation
         batch_params = BatchModel._default_config_items.copy()
         batch_params.update(BatchModel.get_batch_configuration())
@@ -79,7 +83,7 @@ def batch_generate(name, params):
 
         with Transaction().set_context(
                 User.get_preferences(context_only=True),
-                client_defined_date=connection_date):
+                client_defined_date=connection_date, company=company):
             Cache.clean(database)
             try:
                 with ServerContext().set_context(
@@ -135,6 +139,10 @@ def batch_exec(name, ids, params, **kwargs):
     logger.info('Executing batch on database %s' % database)
     with Transaction().start(database, 0, readonly=True):
         User = Pool().get('res.user')
+        admin = User.search([('login', '=', 'admin')])
+        company = admin[0].company.id if admin and admin[0].company else None
+        assert company is not None, 'No company configured on admin user'
+
         BatchModel = Pool().get(name)
 
         batch_params = params.copy()
@@ -149,7 +157,6 @@ def batch_exec(name, ids, params, **kwargs):
         batch_params.pop('chain_name', None)
 
     res = []
-
     if retry >= 0:
         loop = range(retry, -1, -1)
     else:
@@ -162,7 +169,7 @@ def batch_exec(name, ids, params, **kwargs):
         with Transaction().start(database, 0) as transaction:
             with transaction.set_context(
                     User.get_preferences(context_only=True),
-                    client_defined_date=connection_date):
+                    client_defined_date=connection_date, company=company):
                 Cache.clean(database)
                 try:
                     with ServerContext().set_context(from_batch=True,
