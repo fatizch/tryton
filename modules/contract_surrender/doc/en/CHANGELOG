@@ -1,3 +1,4 @@
+* BUG#9844 Only reactivate contracts if needed when cancelling a surrender
 * BUG#9791 Plan rather than execute automatic surrenders
 * BUG#9302 Fix rebill date when cancelling a surrender
 

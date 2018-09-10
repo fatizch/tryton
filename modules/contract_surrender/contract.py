@@ -265,13 +265,22 @@ class Contract:
                     cls.append_functional_error('contract_not_surrendered', {
                             'contract': contract.rec_name})
         if contracts:
-            surrender_dates = {x.id: x.final_end_date for x in contracts}
+            surrender_dates = {x.id: x.final_end_date or
+                x.surrender_invoice.invoice_date for x in contracts}
+
+            # No need to rebill contracts that were not effectively surrendered
+            to_rebill = [x for x in contracts
+                if x.surrender_invoice_state in ('posted', 'paid')]
             cls._cancel_surrender_invoices(contracts)
             for contract in contracts:
+                # Contracts whose surrender was planned will still be active at
+                # the time of cancellation
+                if contract.status != 'active':
+                    contract.activate_contract()
                 contract._clean_contract_sub_status()
-                contract.activate_contract()
+
             cls.save(contracts)
-            for contract in contracts:
+            for contract in to_rebill:
                 # Rebill one day before, in order to make sure we cancel /
                 # recreate the full period invoice
                 contract.rebill(
