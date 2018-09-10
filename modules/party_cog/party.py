@@ -666,7 +666,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         result['gender'] = coog_string.translate_value(self, 'gender')
         try:
             result['main_address'] = self.addresses[0]
-        except Exception:
+        except IndexError:
             pass
         result['logo'] = StringIO.StringIO(str(self.logo)) if self.logo else ''
         return result

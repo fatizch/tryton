@@ -1,6 +1,5 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import logging
 import math
 
 from trytond.pool import Pool
@@ -21,9 +20,6 @@ import fields
 
 # CHANGELOG
 # 11/04/2016 - Changed method name _export_diff() to _diff_skip()
-
-
-LOG = logging.getLogger(__name__)
 
 
 __all__ = [
@@ -217,9 +213,6 @@ class Revisions(object):
                 self._instance.__name__,
                 self._revisions[self._index + 1])
         except IndexError:
-            raise StopIteration
-        except Exception:
-            LOG.error('An error occured while iterating revisions.')
             raise StopIteration
         else:
             self._index += 1

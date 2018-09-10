@@ -3,10 +3,12 @@
 from sql import Table, Column
 from itertools import groupby
 
+from trytond import backend
 from trytond.pool import Pool
 from trytond.modules.migrator import migrator, tools
 from trytond.modules.coog_core import utils
 
+DatabaseOperationalError = backend.get('DatabaseOperationalError')
 
 __all__ = [
     'MigratorInvoiceMoveLine',
@@ -296,6 +298,8 @@ class MigratorMoveReconciliation(migrator.Migrator):
                 payments.append(row['payment'])
         try:
             Payment.save(payments)
+        except DatabaseOperationalError:
+            raise
         except Exception as e:
             cls.logger.error('Payment save failed: %s.' % (str(e)))
         Reconciliation.save(reconciliations)

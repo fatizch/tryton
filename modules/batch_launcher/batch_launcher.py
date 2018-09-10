@@ -87,7 +87,7 @@ class LaunchBatch(Wizard):
         for model_ in pool.get('ir.model').search([]):
             try:
                 models.append((pool.get(model_.model), model_))
-            except Exception:
+            except KeyError:
                 # Some dirty models could remain in ir.model
                 # even if the definition doesn't exist anymore
                 # => ignoring it
@@ -163,11 +163,10 @@ class SelectBatch(model.CoogView):
         target_model = pool.get(self.batch.model)
         if LaunchBatch.is_batch(target_model):
             try:
-                target_name = getattr(target_model,
-                    'get_batch_main_model_name')()
+                target_name = target_model.get_batch_main_model_name()
                 return Model.search([('model', '=', target_name)],
                     limit=1)[0].id
-            except Exception:
+            except NotImplementedError:
                 # The batch does not implement
                 # get_batch_main_model_name() method
                 # Ignoring...

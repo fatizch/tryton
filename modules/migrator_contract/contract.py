@@ -7,10 +7,13 @@ from itertools import groupby, chain, tee, izip
 from sql import Table, Column
 from sql.aggregate import Count
 
+from trytond import backend
 from trytond.pool import Pool
 
 from trytond.modules.coog_core import coog_date
 from trytond.modules.migrator import migrator, tools
+
+DatabaseOperationalError = backend.get('DatabaseOperationalError')
 
 __all__ = [
     'MigratorContract',
@@ -262,6 +265,8 @@ class MigratorContract(migrator.Migrator):
                     Contract.calculate([c])
                     Contract.write([c], {'calculated': True})
                 c.save()
+            except DatabaseOperationalError:
+                raise
             except Exception as e:
                 cls.logger.error(cls.error_message('calculate_fail') % (
                     c.contract_number, c.start_date, str(e)))

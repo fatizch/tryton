@@ -47,6 +47,8 @@ from trytond.rpc import RPC
 from trytond.modules.coog_core import fields, model, utils, coog_string
 from trytond.modules.coog_core import wizard_context, coog_date
 
+DatabaseOperationalError = backend.get('DatabaseOperationalError')
+
 logger = logging.getLogger(__name__)
 
 __all__ = [
@@ -1210,6 +1212,8 @@ class ReportGenerate(CoogReport):
         try:
             return super(ReportGenerate, cls).render(
                 report, report_context)
+        except DatabaseOperationalError:
+            raise
         except Exception as exc:
             # Try to extract the relevant information to display to the user.
             # That would be the part of the genshi template being evaluated and

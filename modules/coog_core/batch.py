@@ -18,6 +18,8 @@ from trytond.perf_analyzer import PerfLog, profile, logger as perf_logger
 import model
 import coog_string
 
+DatabaseOperationalError = backend.get('DatabaseOperationalError')
+
 try:
     import async.broker as async_broker
     if config.get('async', 'celery', default=None) is not None:
@@ -48,6 +50,8 @@ def analyze(meth):
             p = PerfLog()
             p.on_enter()
             wrapped_meth = profile(m)
+        except DatabaseOperationalError:
+            raise
         except Exception:
             perf_logger.exception('batch: error on enter')
         else:
@@ -58,6 +62,8 @@ def analyze(meth):
         try:
             PerfLog().on_leave(unicode(
                     {'args': args, 'kwargs': kwargs, 'return': ret}))
+        except DatabaseOperationalError:
+            raise
         except Exception:
             perf_logger.exception('batch: error on leave')
         return ret

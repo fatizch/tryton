@@ -736,12 +736,12 @@ class ProcessAction(ModelSQL, ModelView):
 
     @fields.depends('method_name', 'on_model')
     def on_change_with_source_code(self, name=None):
-        if not (hasattr(self, 'method_name') and self.method_name):
+        if not getattr(self, 'method_name', None):
             return ''
-        if not (hasattr(self, 'on_model') and self.on_model):
+        if not getattr(self, 'on_model', None):
             return ''
+        GoodModel = Pool().get(self.on_model.model)
         try:
-            GoodModel = Pool().get(self.on_model.model)
             func = getattr(GoodModel, self.method_name)
             return ''.join(inspect.getsourcelines(func)[0])
         except Exception:

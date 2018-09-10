@@ -44,6 +44,8 @@ from trytond.modules.coog_core.model import CoogView as ModelView
 from trytond.modules.coog_core.exception import ReadOnlyException
 from trytond.modules.table import table
 
+DatabaseOperationalError = backend.get('DatabaseOperationalError')
+
 __all__ = [
     'debug_wrapper',
     'RuleEngine',
@@ -1343,6 +1345,8 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
                     raise ReadOnlyException(err_msg.encode('utf-8'))
                 self.rule_error(exc, the_result, evaluation_context,
                     err_msg=err_msg)
+            except DatabaseOperationalError:
+                raise
             except Exception, exc:
                 self.rule_error(exc, the_result, evaluation_context)
         return the_result
@@ -1873,6 +1877,8 @@ class TestCase(ModelView, ModelSQL):
     def run_test(self):
         try:
             test_result = self.execute_test()
+        except DatabaseOperationalError:
+            raise
         except Exception as exc:
             self.result_value = 'ERROR: {}'.format(exc)
             self.result_info = self.result_warnings = self.result_errors = ''
@@ -1929,8 +1935,9 @@ class TestCase(ModelView, ModelSQL):
     def do_test(self):
         try:
             test_result = self.execute_test()
-        except Exception:
+        except DatabaseOperationalError:
             raise
+        except Exception:
             return False, sys.exc_info()
         try:
             assert unicode(test_result) == self.expected_result

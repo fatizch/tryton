@@ -11,6 +11,9 @@ from trytond.modules.coog_core import fields, model
 from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.rule_engine.rule_engine import RuleEngineResult
 
+DatabaseOperationalError = backend.get('DatabaseOperationalError')
+
+
 __all__ = [
     'Product',
     'ProductQuoteNumberSequence',
@@ -56,6 +59,8 @@ class Product(CompanyMultiValueMixin):
         try:
             contract.init_dict_for_rule_engine(exec_context)
             res = rule.calculate_rule(exec_context, **kwargs)
+        except DatabaseOperationalError:
+            raise
         except Exception as e:
             if no_rule_errors:
                 return {}

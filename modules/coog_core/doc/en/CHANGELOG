@@ -1,3 +1,4 @@
+* BUG#7334 Proper handling of DatabaseOperationalError exceptions
 * FEA#9487 Allow to override the daily chain
 * BUG#9861 Set admin's company during batch execution
 * FEA#9698 Add retry argument to batches

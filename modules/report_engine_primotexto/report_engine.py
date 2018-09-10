@@ -55,7 +55,7 @@ class ReportGenerate:
         ReportTemplate = Pool().get('report.template')
         try:
             result = json.loads(response.text)
-        except Exception:
+        except ValueError:
             result = {}
         if process_method == 'primotexto' and not response.ok:
             if result.get('code'):
