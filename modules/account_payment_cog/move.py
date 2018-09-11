@@ -271,19 +271,22 @@ class MoveLine:
         '''
         unpaid_amount = cls.unpaid_outstanding_amount(lines)
         processing_amount = cls.processing_payments_outstanding_amount(lines)
-        kind = ('receivable' if sum([l.debit - l.credit for l in lines]) > 0
-            else 'payable')
+        kind = cls.get_kind(lines)
         inverted_lines = []
         for line in lines:
-            if (
-                ((line.debit > 0) or (line.credit < 0)) and (kind == 'payable')
-                ) or (
-                ((line.debit < 0) or (line.credit > 0))
-                    and (kind == 'receivable')):
+            if cls.get_kind([line]) != kind:
                 unpaid_amount += line.debit - line.credit
                 inverted_lines.append(line)
         return ([l for l in lines if l not in inverted_lines],
             unpaid_amount - processing_amount)
+
+    @classmethod
+    def get_sum(cls, lines):
+        return sum([l.debit - l.credit for l in lines])
+
+    @classmethod
+    def get_kind(cls, lines):
+        return 'receivable' if cls.get_sum(lines) > 0 else 'payable'
 
     def new_payment(self, journal, kind, amount):
         return {
@@ -561,12 +564,11 @@ class PaymentCreation(model.CoogWizard):
                 })
 
     def get_lines_amount_per_kind(self, lines):
-        # lines must be same type
+        Line = Pool().get('account.move.line')
+        # lines must be use the same account
         if len({l.account for l in lines}) != 1:
             self.raise_user_error('incompatible_lines')
-        total = sum([l.debit - l.credit for l in lines])
-        key = 'receivable' if total > 0 else 'payable'
-        return {key: total}
+        return {Line.get_kind(lines): Line.get_sum(lines)}
 
     @classmethod
     def get_possible_journals(cls, lines, kind=None):
@@ -662,17 +664,21 @@ class PaymentCreation(model.CoogWizard):
         if self.any_journal_not_allowed(self.start.lines_to_pay,
                 payment_journals):
             self.raise_user_error('different_payment_journal')
-        kind = self.get_lines_amount_per_kind(self.start.lines_to_pay)
-        if kind.keys()[0] != self.start.kind:
+        kind = MoveLine.get_kind(self.start.lines_to_pay)
+        if kind != self.start.kind:
             self.raise_user_error('incompatible_lines_with_kind')
         payment_date = self.start.payment_date or utils.today()
-        if any(x.payment_date != payment_date
-                for x in self.start.lines_to_pay):
+
+        # In the case we mix lines from different kind, we should not update
+        # the payment date for lines with a kind different as the global kind
+        lines_to_update = [l for l in self.start.lines_to_pay
+            if MoveLine.get_kind([l]) == kind]
+        if any(x.payment_date != payment_date for x in lines_to_update):
             self.raise_user_warning('updating_payment_date_%s' %
-                str(self.start.lines_to_pay[0]), 'updating_payment_date',
+                str(lines_to_update[0]), 'updating_payment_date',
                 {'date': str(payment_date)})
-            MoveLine.write(list(self.start.lines_to_pay),
-                {'payment_date': payment_date})
+            MoveLine.write(lines_to_update, {'payment_date': payment_date})
+
         payments = MoveLine.init_payments(self.start.lines_to_pay,
             self.start.journal)
         for payment in payments:
