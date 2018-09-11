@@ -205,7 +205,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="False"/>
+            <field name="perm_delete" eval="True"/>
         </record>
         <record model="ir.model.access" id="access_account_payment_group_group_financial_manage">
             <field name="model" search="[('model', '=', 'account.payment.group')]"/>
@@ -213,7 +213,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="False"/>
+            <field name="perm_delete" eval="True"/>
         </record>
         <record model="ir.model.access" id="access_account_payment_journal_group_financial_manage">
             <field name="model" search="[('model', '=', 'account.payment.journal')]"/>
