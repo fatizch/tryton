@@ -862,8 +862,9 @@ class PlanCalculationDate(model.CoogSQL, model.CoogView):
 
 class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
     __name__ = 'commission.agent'
-    _func_key = 'func_key'
+    _func_key = 'code'
 
+    code = fields.Char('Code', required=True)
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     active = fields.Function(fields.Boolean('Active'), 'get_active',
@@ -872,8 +873,6 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
         'account.invoice.payment_term', 'Commission Agent Payment Term',
         ondelete='RESTRICT', help='If defined, this payment term has priority '
         'over the party\'s one and the global configuration')
-    func_key = fields.Function(fields.Char('Functional Key'),
-        'get_func_key', searcher='search_func_key')
     commissioned_products = fields.Function(
         fields.Many2Many('offered.product', None, None,
             'Commissioned Products'),
@@ -883,6 +882,22 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
         'get_commissioned_products_name',
         searcher='search_commissioned_products')
     icon = fields.Function(fields.Char('Icon'), 'on_change_with_icon')
+
+    @classmethod
+    def __register__(cls, module_name):
+        # Migration from 1.14 : add code
+        TableHandler = backend.get('TableHandler')
+        table_handler = TableHandler(cls)
+        do_migrate = not table_handler.column_exist('code')
+        super(Agent, cls).__register__(module_name)
+        if not do_migrate:
+            return
+        for agent_slice in grouped_slice(cls.search([])):
+            agents = []
+            for agent in agent_slice:
+                agent.code = '%s_%s' % (agent.id, agent.on_change_with_code())
+                agents.append(agent)
+            cls.save(agents)
 
     @classmethod
     def __setup__(cls):
@@ -898,6 +913,9 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
         cls._error_messages.update({
                 'agent_not_found': 'Cannot find matching agent for %s :\n\n%s',
                 })
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_unique', Unique(t, t.code), 'The code must be unique')]
 
     @classmethod
     def create(cls, vlist):
@@ -927,6 +945,13 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
             'principal': 'cash-in',
             }[self.type_] if self.type_ else ''
 
+    @fields.depends('code', 'party', 'plan')
+    def on_change_with_code(self):
+        if self.code or not self.party or not self.plan:
+            return self.code
+        else:
+            return coog_string.slugify(self.party.code + '_' + self.plan.code)
+
     def get_payment_term_from_party(self, type_):
         AccountConfiguration = Pool().get('account.configuration')
         if self.agent_payment_term:
@@ -939,9 +964,6 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
             conf = AccountConfiguration(1)
             payment_term = conf.commission_invoice_payment_term
         return payment_term
-
-    def get_func_key(self, name):
-        return '%s|%s' % ((self.party.code, self.plan.code))
 
     def get_rec_name(self, name):
         return self.plan.rec_name
@@ -959,34 +981,6 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
     @classmethod
     def search_commissioned_products(cls, name, clause):
         return [('plan.commissioned_products',) + tuple(clause[1:])]
-
-    @classmethod
-    def search_func_key(cls, name, clause):
-        assert clause[1] == '='
-        if '|' in clause[2]:
-            operands = clause[2].split('|')
-            if len(operands) == 2:
-                party_code, plan_code = clause[2].split('|')
-                return [('party.code', clause[1], party_code),
-                    ('plan.code', clause[1], plan_code)]
-            elif len(operands) == 3:
-                party_code, plan_code, product_code = clause[2].split('|')
-                domain = []
-                if party_code:
-                    domain.append(('party.code', clause[1], party_code))
-                if plan_code:
-                    domain.append(('plan.code', clause[1], plan_code))
-                if product_code:
-                    domain.append(('plan.commissioned_products.code',
-                            clause[1], product_code))
-                return domain
-            else:
-                return [('id', '=', None)]
-        else:
-            return ['OR',
-                [('party.code',) + tuple(clause[1:])],
-                [('plan.code',) + tuple(clause[1:])],
-                ]
 
     @classmethod
     def search_active(cls, name, clause):

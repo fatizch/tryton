@@ -1,3 +1,4 @@
+* BUG#9712 Ajout d'un code sur le protocole de commissionnement pour corriger l'import JSON de deux protocoles de commissionnement différents utilisant le même tiers et plan
 * FEA#9432 Utiliser les dates de conditions pour chercher les agents
 * BUG#9634 Initialisation du courtier s'il n'y a qu'une seule possibilité
 * BUG#9652 Forçage de la mise à jour des commissions lors de la suppression des quittances

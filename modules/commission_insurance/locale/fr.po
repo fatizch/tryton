@@ -26,6 +26,10 @@ msgstr ""
 "\n"
 "%s"
 
+msgctxt "error:commission.agent:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
 msgctxt "error:commission.filter_commission:"
 msgid "The selected contracts do not have any invoice."
 msgstr "Les contrats sélectionnés n'ont pas de quittances"

@@ -4,6 +4,8 @@ this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form" position="inside">
         <newline/>
+        <label name="code"/>
+        <field name="code"/>
         <label name="agent_payment_term"/>
         <field name="agent_payment_term"/>
         <newline/>

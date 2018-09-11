@@ -1,3 +1,4 @@
+* BUG#9712 Add code on agent to fix JSON import of 2 different agents with the same commission plan and party
 * FEA#9432 Use contract appliable conditions date to search for commission agents
 * BUG#9634 Initialize contract broker if there is only one possibility
 * BUG#9652 Bypass access right on commissions when deleting an invoice line
