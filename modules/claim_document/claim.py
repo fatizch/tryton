@@ -1,7 +1,5 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from collections import defaultdict
-
 from sql import Null
 from sql.aggregate import Count
 from sql.operators import NotIn
@@ -126,15 +124,12 @@ class Claim(RemindableInterface):
 
     def link_attachments_to_requests(self):
         Request = Pool().get('document.request.line')
-        attachments_grouped = defaultdict(list)
-        for attachment in self.attachments:
-            attachments_grouped[attachment.document_desc].append(attachment)
         to_save = []
         for request in self.document_request_lines:
             if not (request.document_desc and
-                    len(attachments_grouped[request.document_desc]) == 1):
+                    len(request.matching_attachments) == 1):
                 continue
-            request.attachment = attachments_grouped[request.document_desc][0]
+            request.attachment = request.matching_attachments[0]
             request.reception_date = request.attachment.create_date.date()
             to_save.append(request)
         Request.save(to_save)

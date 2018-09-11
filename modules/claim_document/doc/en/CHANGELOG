@@ -1,3 +1,5 @@
+* BUG#9856 Fix automatic attachment on request lines
+
 Version 2.0 - 2018-04-13
 * BUG#8157 Add claim document request in the batch plan
 
