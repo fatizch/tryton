@@ -316,6 +316,7 @@ Agent = Model.get('commission.agent')
 Insurer = Model.get('insurer')
 insurer, = Insurer.find([])
 agent = Agent(party=insurer.party)
+agent.code = 'agent1'
 agent.type_ = 'principal'
 agent.plan = Plan(insurer_plan.id)
 agent.currency = company.currency
@@ -324,6 +325,7 @@ agent.save()
 
 # #Comment# #Create a second insurer agent
 agent2 = Agent(party=insurer.party)
+agent2.code = 'agent2'
 agent2.type_ = 'principal'
 agent2.plan = Plan(insurer_plan2.id)
 agent2.currency = company.currency
@@ -331,6 +333,7 @@ agent2.save()
 
 # #Comment# #Create a third insurer agent
 agent3 = Agent(party=insurer.party)
+agent3.code = 'agent3'
 agent3.type_ = 'principal'
 agent3.plan = Plan(insurer_plan2.id)
 agent3.currency = company.currency
