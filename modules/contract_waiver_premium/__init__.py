@@ -24,6 +24,7 @@ def register():
         contract.ContractOption,
         wizard.CreateWaiverChoice,
         wizard.SetWaiverEndDateChoice,
+        invoice.Invoice,
         invoice.InvoiceLineDetail,
         batch.WaiverPeriodsCreationBatch,
         module='contract_waiver_premium', type_='model')

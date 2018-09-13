@@ -4,8 +4,31 @@ from trytond.pool import PoolMeta
 from trytond.modules.coog_core import fields
 
 __all__ = [
+    'Invoice',
     'InvoiceLineDetail',
     ]
+
+
+class Invoice:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.invoice'
+
+    @classmethod
+    def _can_post_invoice(cls, invoice):
+        res = super(Invoice, cls)._can_post_invoice(invoice)
+        contract = invoice.contract
+        if (res or not contract or
+                not contract.product._must_invoice_after_contract):
+            return res
+
+        # We must allow invoices to go further than the contract end date if
+        # the product "_must_invoice_after_contract" on termination
+        if (contract.status == 'terminated' and
+                invoice.start and invoice.start <= contract.final_end_date
+                and invoice.start >= contract.initial_start_date
+                and invoice.end and invoice.end > contract.final_end_date):
+            return True
+        return res
 
 
 class InvoiceLineDetail:

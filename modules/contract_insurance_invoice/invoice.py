@@ -411,27 +411,12 @@ class Invoice:
         # Post aperiodic invoices first
         invoices = sorted(invoices, key=lambda o: o.start or datetime.date.min)
         for invoice in invoices:
-            if invoice.state in ('posted', 'paid'):
-                continue
-            if invoice.contract and invoice.contract.status != 'active':
-                contract = invoice.contract
-                if contract.status == 'terminated' and (not invoice.start or (
-                            invoice.start >= contract.initial_start_date and
-                            invoice.end <= contract.end_date)):
-                    # No problem as long as the invoice is within the contract
-                    # activated period
-                    continue
-                if (contract.status == 'hold' and contract.sub_status and
-                        not contract.sub_status.hold_billing):
-                    continue
-                if (invoice.contract_invoice.non_periodic and
-                        contract.status not in ('quote', 'declined')):
-                    continue
+            if not cls._can_post_invoice(invoice):
                 cls.raise_user_error(
                     'post_on_non_active_contract', {
                         'invoice': invoice.rec_name,
-                        'contract': contract.rec_name,
-                        'status': contract.status_string,
+                        'contract': invoice.contract.rec_name,
+                        'status': invoice.contract.status_string,
                         })
         updated_invoices = []
         for invoice in invoices:
@@ -443,6 +428,27 @@ class Invoice:
         if updated_invoices:
             cls.write(*updated_invoices)
         super(Invoice, cls).post(invoices)
+
+    @classmethod
+    def _can_post_invoice(cls, invoice):
+        if invoice.state in ('posted', 'paid'):
+            return True
+        if invoice.contract and invoice.contract.status != 'active':
+            contract = invoice.contract
+            if contract.status == 'terminated' and (not invoice.start or (
+                        invoice.start >= contract.initial_start_date and
+                        invoice.end <= contract.end_date)):
+                # No problem as long as the invoice is within the contract
+                # activated period
+                return True
+            if (contract.status == 'hold' and contract.sub_status and
+                    not contract.sub_status.hold_billing):
+                return True
+            if (invoice.contract_invoice.non_periodic and
+                    contract.status not in ('quote', 'declined')):
+                return True
+            return False
+        return True
 
     def check_cancel_move(self):
         # account_invoice.check_cancel_move makes it impossible to cancel moves
