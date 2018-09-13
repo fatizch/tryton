@@ -44,6 +44,8 @@ class Contract:
         fields.Many2One('party.party', 'Broker'),
         'on_change_with_broker_party', searcher='search_broker_party')
     agent = fields.Many2One('commission.agent', 'Agent', ondelete='RESTRICT',
+        # Careful, any change in the depends for this domain should be
+        # reflected in the on_change_broker / on_change_with_agent depends
         domain=[
             ('type_', '=', 'agent'),
             ('plan.commissioned_products', '=', Eval('product')),
@@ -151,7 +153,7 @@ class Contract:
         return self.broker.party.id if self.broker else None
 
     @fields.depends('broker', 'agent', 'product',
-        'initial_start_date')
+        'appliable_conditions_date', 'status')
     def on_change_broker(self):
         # Careful with depends, some clients are depending on the current
         # behaviour
@@ -159,9 +161,10 @@ class Contract:
         if self.broker_party:
             self.agent = self.on_change_with_agent()
 
-    @fields.depends('broker_party', 'product', 'initial_start_date')
+    @fields.depends('broker_party', 'product', 'appliable_conditions_date',
+        'status')
     def on_change_with_agent(self):
-        if self.product and self.initial_start_date:
+        if self.product and self.appliable_conditions_date:
             return utils.auto_complete_with_domain(self, 'agent')
 
     @classmethod
