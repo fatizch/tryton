@@ -1,3 +1,4 @@
+* BUG#9876 Ajout d'une option sur add_new_loss permettant d'éviter les doublons
 * FEA#9485 Déplacer la configuration de suspension dans la description de préjudice
 * FEA#9063 Ajout de configuration sur les événements de sinistre pour suspendre les contrats 
 * FEA#9439 Tri des sinistres par le dernier modifié en premier

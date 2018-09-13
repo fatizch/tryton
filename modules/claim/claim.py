@@ -398,7 +398,11 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
                 to_save.append(claim)
         cls.save(to_save)
 
-    def add_new_loss(self, loss_desc_code=None, **kwargs):
+    def add_new_loss(self, loss_desc_code=None, only_if_empty=False, **kwargs):
+        if only_if_empty:
+            if any(x.loss_desc.code == loss_desc_code or not loss_desc_code
+                    for x in self.losses if x.loss_desc):
+                return
         loss = Pool().get('claim.loss')()
         loss.claim = self
         loss.init_loss(loss_desc_code, **kwargs)
