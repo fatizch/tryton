@@ -18,6 +18,7 @@ def register():
         dunning.Procedure,
         dunning.Level,
         contract.Contract,
+        contract.SubStatus,
         offered.Product,
         account.MoveLine,
         invoice.Invoice,

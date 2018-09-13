@@ -128,22 +128,53 @@ class Dunning:
 
     def get_active(self, name):
         res = super(Dunning, self).get_active(name)
-        if not self.contract:
+        if not self.contract or not res:
             return res
-        return res and self.contract.status not in ('terminated', 'void')
+        if self.contract.status in ('terminated', 'void'):
+            return False
+        if not self.contract.sub_status:
+            return True
+        SubStatus = Pool().get('contract.sub_status')
+        return self.contract.sub_status not in \
+            SubStatus.sub_statuses_without_dunning()
 
     @classmethod
     def search_active(cls, name, clause):
+        SubStatus = Pool().get('contract.sub_status')
+        ignored_sub_statuses = SubStatus.sub_statuses_without_dunning()
+
         domain = super(Dunning, cls).search_active(name, clause)
         comparator = {'=': True, '!=': False}
         if clause[1] in comparator:
             if clause[2] == comparator[clause[1]]:
-                domain.append(['OR', ('line.contract', '=', None),
-                        ('line.contract.status', 'not in',
-                            ('terminated', 'void'))])
+                status_domain = [[('line.contract.status', 'not in',
+                            ('terminated', 'void'))]]
+                if ignored_sub_statuses:
+                    status_domain = [
+                        status_domain,
+                        ['OR',
+                            ('line.contract.sub_status', '=', None),
+                            ('line.contract.sub_status', 'not in',
+                                ignored_sub_statuses)],
+                        ]
+                domain.append(
+                    ['OR',
+                        [('line.contract', '=', None)],
+                        status_domain,
+                        ])
             else:
-                domain = ['OR', domain, [('line.contract', '!=', None),
-                        ('line.contract.status', 'in', ('terminated', 'void'))]]
+                domain = ['OR',
+                    domain,
+                    [
+                        ('line.contract', '!=', None),
+                        ('line.contract.status', 'in',
+                            ('terminated', 'void'))],
+                    ]
+                if ignored_sub_statuses:
+                    domain.append([
+                            ('line.contract.sub_status', '!=', None),
+                            ('line.contract.sub_status', 'in',
+                                ignored_sub_statuses)])
         return domain
 
 
