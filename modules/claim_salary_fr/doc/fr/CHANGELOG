@@ -1,3 +1,4 @@
+* BUG#9846 Prise en compte du cas de la mise à jour du salaire de brut à net dans le calcul du salaire net
 * OTH#0000 Correction de la détection de la revalorisaton du traitement de base dans la méthode de calcul des dates de recalcul des périodes d'indemnisation
 * FEA#9265 Gestion de la revalorisation sur le traitement de base
 * BUG#8691 Correction d'une erreur lorsque l'on calcule TA TB TC sur un service sans périodes de salaire

@@ -1,3 +1,4 @@
+* BUG#9846 Claim net salary calculation should take into account the salary update from gross to net case
 * OTH#0000 Fix wrong call to detect revaluation on basic salary on indemnification period calculation dates
 * FEA#9265 Handle revaluation on basic salary for group life insurance
 * BUG#8691 Fix crash when calculating TA TB TC range if no salary period are entered

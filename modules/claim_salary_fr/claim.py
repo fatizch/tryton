@@ -227,10 +227,18 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
 
     def calculate_net_salary(self):
         context = {'date': utils.today()}
-        delivered_service = self.delivered_service
-        rule = delivered_service.benefit.benefit_rules[0]. \
-            option_benefit_at_date(delivered_service.option,
-                delivered_service.loss.start_date).net_calculation_rule.rule
+        # claim net salary is computed based on the claim service attached
+        # to an option with a net salary rule. We are forced to do this
+        # in the case where we update a salary from an std with gross salary
+        # to an ltd with net salary
+        claim_services = self.delivered_service.claim.delivered_services
+        services_options = [
+            (x, x.benefit.benefit_rules[0].option_benefit_at_date(
+                x.option, x.loss.start_date)) for x in claim_services]
+        services_options_with_net_salary = [x for x in services_options
+            if x[1].net_calculation_rule]
+        delivered_service, service_option = services_options_with_net_salary[0]
+        rule = service_option.net_calculation_rule.rule
         delivered_service.init_dict_for_rule_engine(context)
         context['curr_salary'] = self
         self.net_salary = rule.execute(context).result
