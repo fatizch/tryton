@@ -4,6 +4,7 @@ from trytond.pool import Pool
 import move
 import account
 import party
+import offered
 import contract
 import invoice
 import payment
@@ -21,6 +22,8 @@ def register():
         move.MoveTemplateKeyword,
         move.MoveLineTemplate,
         account.AgedBalanceContext,
+        offered.Product,
+        offered.ProductOptionDescriptionRelation,
         contract.Contract,
         invoice.Invoice,
         party.Insurer,

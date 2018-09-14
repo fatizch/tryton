@@ -83,7 +83,7 @@ class Contract:
         if not option and line and getattr(line, 'details', None):
             coverage = getattr(line.details[0], 'rated_entity', None)
             date = line.coverage_start
-        if option:
+        elif option:
             coverage = option.coverage
             date = option.initial_start_date
         if (coverage and hasattr(coverage, 'get_insurer') and

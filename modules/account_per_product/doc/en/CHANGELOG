@@ -1,3 +1,4 @@
+* BUG#9892 Fix invoicing for contracts with fees
 * FEA#9462 Set product on clearing moves
 * FEA#9462 Global test correction
 * FEA#9462 Module creation

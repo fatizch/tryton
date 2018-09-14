@@ -38,6 +38,10 @@ msgctxt "field:account.statement,product:"
 msgid "Product"
 msgstr "Produit"
 
+msgctxt "error:offered.product-option.description:"
+msgid "The coverage can have a relation with only one product"
+msgstr "La garantie doit ne peut avoir une relation qu'avec un seul produit"
+
 msgctxt "field:insurer,product:"
 msgid "Product"
 msgstr "Produit"

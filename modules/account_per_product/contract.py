@@ -19,10 +19,11 @@ class Contract:
 
     def find_insurer_agent_domain(self, option=None, line=None):
         domain = super(Contract, self).find_insurer_agent_domain(option, line)
-        if not option and line:
+        coverage = None
+        if not option and line and getattr(line, 'details', None):
             coverage = getattr(line.details[0], 'rated_entity', None)
-        if option:
+        elif option:
             coverage = option.coverage
-        product, = coverage.products
-        domain.append(('insurer.product', '=', product.id))
+        if coverage and getattr(coverage, 'products', None):
+            domain.append(('insurer.product', '=', coverage.products[0].id))
         return domain
