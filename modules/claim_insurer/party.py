@@ -13,8 +13,13 @@ class Insurer:
 
     @classmethod
     def get_insurers_waiting_accounts(cls, insurers, notice_kind):
-        if notice_kind == 'benefits':
-            return list({(i, benefit.waiting_account) for i in insurers
-                    for benefit in i.benefits if benefit.waiting_account})
-        return super(Insurer, cls).get_insurers_waiting_accounts(
+        result = super(Insurer, cls).get_insurers_waiting_accounts(
             insurers, notice_kind)
+        if notice_kind not in ('all', 'benefits'):
+            return result
+        for insurer in insurers:
+            benefit_accounts = {x.waiting_account for x in insurer.benefits
+                if x.waiting_account}
+            if benefit_accounts:
+                result[insurer] = benefit_accounts | result.get(insurer, set())
+        return result

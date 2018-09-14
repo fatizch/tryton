@@ -5,7 +5,6 @@ from trytond.pool import Pool
 import party
 import commission
 import account
-import batch
 import report_engine
 
 
@@ -16,11 +15,5 @@ def register():
         commission.CreateInvoicePrincipalAsk,
         account.Invoice,
         account.InvoiceLine,
-        batch.CreateEmptyInvoicePrincipalBatch,
-        batch.LinkInvoicePrincipalBatch,
-        batch.FinalizeInvoicePrincipalBatch,
         report_engine.ReportTemplate,
         module='claim_insurer', type_='model')
-    Pool.register(
-        commission.CreateInvoicePrincipal,
-        module='claim_insurer', type_='wizard')

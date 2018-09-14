@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.invoice:"
-msgid "Claims Paid"
-msgstr "Sinistres payés"
-
 msgctxt "error:report.template:"
 msgid "Claim Insurer Invoice"
 msgstr "Bordereau assureur de prestation"

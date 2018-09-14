@@ -9,6 +9,7 @@ import configuration
 import offered
 import batch
 import party
+import report_engine
 
 
 def register():
@@ -26,6 +27,7 @@ def register():
         batch.LinkInvoicePrincipalBatch,
         batch.FinalizeInvoicePrincipalBatch,
         party.Insurer,
+        report_engine.ReportTemplate,
         module='commission_insurer', type_='model')
     Pool.register(
         commission.CreateInvoicePrincipal,

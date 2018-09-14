@@ -18,6 +18,12 @@ def parse_environ(name, default):
     return value
 
 
+_modules_to_ignore = [
+    'test',  # Trytond test modules
+    'account_per_product',  # Breaks everything
+    ]
+
+
 DB_USER = parse_environ('PGUSER', 'tryton')
 DB_PASSWORD = parse_environ('PGPASSWORD', 'tryton')
 COOG_USER = parse_environ('GEN_COOG_USER', 'admin')
@@ -47,6 +53,7 @@ CREATE_COMMISSION_CONFIG = parse_environ(
 CREATE_CONTRACTS = parse_environ('GEN_CREATE_CONTRACTS', True)
 BILL_CONTRACTS = parse_environ('GEN_BILL_CONTRACTS', True)
 CREATE_CLAIMS = parse_environ('GEN_CREATE_CLAIMS', True)
+GENERATE_REPORTINGS = parse_environ('GEN_GENERATE_REPORTINGS', True)
 
 
 assert TESTING or (RESTORE_DB and not CREATE_NEW_DB or
@@ -120,7 +127,8 @@ if CREATE_NEW_DB:  # {{{
     os.system((
             'DB_PASSWORD=%s psql -X -U %s -d %s -c ' +
             '"UPDATE ir_module SET state = \'to activate\' ' +
-            'WHERE name != \'tests\'"') % (DB_PASSWORD, DB_USER, DB_NAME))
+            'WHERE name NOT IN (%s)"') % (DB_PASSWORD, DB_USER, DB_NAME,
+            ', '.join("'%s'" % x for x in _modules_to_ignore)))
     os.system('DB_NAME="%s" coog module update ir' % DB_NAME)
     os.system('coog server start')
     # }}}
@@ -327,7 +335,7 @@ def process_next(target):  # {{{
     target.save()
     button = '_button_next_%i' % target.current_state.process.id
     res = getattr(target.__class__._proxy, button)(
-        [target.id], {'language': 'fr', 'company': company.id})
+        [target.id], config._context)
     target.reload()
     return res
 # }}}
@@ -337,7 +345,7 @@ def process_previous(target):  # {{{
     target.save()
     button = '_button_previous_%i' % target.current_state.process.id
     res = getattr(target.__class__._proxy, button)(
-        [target.id], {'language': 'fr', 'company': company.id})
+        [target.id], config._context)
     target.reload()
     return res
 # }}}
@@ -512,6 +520,21 @@ if LOAD_ACCOUNTING:  # {{{
     exceptional_revenue_account.party_required = False
     exceptional_revenue_account.reconcile = False
     exceptional_revenue_account.save()
+
+    claim_root = Account.find([('code', '=', '622')])[0]
+    claim_account = Account()
+    claim_account.company = company
+    claim_account.name = 'Compte de sinistres'
+    claim_account.code = '62200001'
+    claim_account.kind = 'other'
+    claim_account.type = claim_root.type
+    claim_account.parent = claim_root
+    claim_account.deferral = True
+    claim_account.general_ledger_balance = False
+    claim_account.party_required = False
+    claim_account.reconcile = False
+    claim_account.template = claim_root.template
+    claim_account.save()
     # }}}
 
     do_print('    Creating Accounting products templates')  # {{{
@@ -547,7 +570,7 @@ if LOAD_ACCOUNTING:  # {{{
     claim_product_template.cost_price = Decimal(1)
     claim_product_template.list_price = Decimal(1)
     claim_product_template.account_expense, = Account.find(
-        [('code', '=', '622')])
+        [('code', '=', '62200001')])
     claim_product_template.account_revenue, = Account.find(
         [('code', '=', '706')])
     claim_product_template.products[0].code = 'reglement_sinistres'
@@ -4076,6 +4099,7 @@ if CREATE_CONTRACTS:  # {{{
     life_subscriber_account.number = get_iban()
     life_subscriber_account.bank, = Bank.find(
         [('bic', '=', _company_bank_bic)])
+    life_subscriber_account.start_date = None
     life_subscriber_account.save()
 
     SubscribeContract = Wizard('contract.subscribe')
@@ -4447,43 +4471,12 @@ if BILL_CONTRACTS:  # {{{
         _contract_rebill_post_date, config.context)
     config._context.pop('client_defined_date')
     # }}}
-
-    do_print('    Paying invoices')  # {{{
-    config._context['client_defined_date'] = _contract_rebill_post_date + \
-        relativedelta(days=-1)
-    for invoice in Invoice.find([('state', '=', 'posted')]):
-        PayInvoice = Wizard('account.invoice.pay', [invoice])
-        PayInvoice.form.journal = cash_journal
-        PayInvoice.form.date = _contract_rebill_post_date + relativedelta(
-            days=-1)
-        PayInvoice.execute('choice')
-    config._context.pop('client_defined_date')
-    # }}}
-
-    do_print('    Generating commission invoices')  # {{{
-    CommissionCreate = Wizard('commission.create_invoice')
-    CommissionCreate.form.from_ = _base_contract_date
-    CommissionCreate.form.to = _contract_rebill_post_date + relativedelta(
-        days=-1)
-    CommissionCreate.execute('create_')
-
-    InsurerInvoiceCreate = Wizard('commission.create_invoice_principal')
-    InsurerInvoiceCreate.form.until_date = _contract_rebill_post_date + \
-        relativedelta(days=-1)
-    InsurerInvoiceCreate.form.insurers.append(Party(insurer.party.id))
-    InsurerInvoiceCreate.execute('create_')
-    # }}}
-
-    do_print('    Generating insurer / broker reportings')  # {{{
-    for invoice in Invoice.find(
-            [('business_kind', 'in', ['broker_invoice', 'insurer_invoice'])]):
-        ReportCreation = Wizard('report.create', [invoice])
-        ReportCreation.execute('generate')
-    # }}}
 # }}}
 
 if CREATE_CLAIMS:  # {{{
-    do_print('\nCreating a death claim')  # {{{
+    do_print('\nCreating claims')
+    do_print('    Creating a death claim')  # {{{
+    config._context['client_defined_date'] = _claim_date
     CreateClaim = Wizard('claim.declare')
     CreateClaim.form.party, = Party.find([('name', '=', 'DOE'),
             ('first_name', '=', 'John')])
@@ -4530,6 +4523,73 @@ if CREATE_CLAIMS:  # {{{
     CloseClaim = Wizard('claim.close', [claim])
     CloseClaim.form.sub_status, = ClaimSubStatus.find([('code', '=', 'paid')])
     CloseClaim.execute('apply_sub_status')
+    config._context.pop('client_defined_date')
+    # }}}
+# }}}
+
+if GENERATE_REPORTINGS:  # {{{
+    do_print('\nGenerating reportings')
+    do_print('    Paying invoices')  # {{{
+    config._context['client_defined_date'] = _contract_rebill_post_date + \
+        relativedelta(days=-1)
+    for invoice in Invoice.find([('state', '=', 'posted')]):
+        PayInvoice = Wizard('account.invoice.pay', [invoice])
+        PayInvoice.form.journal = cash_journal
+        PayInvoice.form.date = _contract_rebill_post_date + relativedelta(
+            days=-1)
+        PayInvoice.execute('choice')
+    config._context.pop('client_defined_date')
+    # }}}
+
+    do_print('    Generating commission invoices')  # {{{
+    CommissionCreate = Wizard('commission.create_invoice')
+    CommissionCreate.form.from_ = _base_contract_date
+    CommissionCreate.form.to = _contract_rebill_post_date + relativedelta(
+        days=-1)
+    CommissionCreate.execute('create_')
+
+    for invoice in Invoice.find(
+            [('business_kind', '=', 'broker_invoice')]):
+        ReportCreation = Wizard('report.create', [invoice])
+        ReportCreation.execute('generate')
+    # }}}
+
+    do_print('    Generating insurer invoices')  # {{{
+    InsurerInvoiceCreate = Wizard('commission.create_invoice_principal')
+    InsurerInvoiceCreate.form.until_date = _claim_date
+    InsurerInvoiceCreate.form.insurers.append(Party(insurer.party.id))
+    InsurerInvoiceCreate.form.notice_kind = 'options'
+    InsurerInvoiceCreate.execute('create_')
+
+    insurer_invoice, = Invoice.find(
+        [('business_kind', '=', 'insurer_invoice')])
+    assert insurer_invoice.total_amount == Decimal('1440.17')
+    ReportCreation = Wizard('report.create', [insurer_invoice])
+    ReportCreation.execute('generate')
+    Invoice.delete([insurer_invoice])
+
+    InsurerInvoiceCreate = Wizard('commission.create_invoice_principal')
+    InsurerInvoiceCreate.form.until_date = _claim_date
+    InsurerInvoiceCreate.form.insurers.append(Party(insurer.party.id))
+    InsurerInvoiceCreate.form.notice_kind = 'benefits'
+    InsurerInvoiceCreate.execute('create_')
+
+    claim_insurer_invoice, = Invoice.find(
+        [('business_kind', '=', 'claim_insurer_invoice')])
+    assert claim_insurer_invoice.total_amount == Decimal('20000')
+    Invoice.delete([claim_insurer_invoice])
+
+    insurer.group_insurer_invoices = True
+    insurer.save()
+    InsurerInvoiceCreate = Wizard('commission.create_invoice_principal')
+    InsurerInvoiceCreate.form.until_date = _claim_date
+    InsurerInvoiceCreate.form.insurers.append(Party(insurer.party.id))
+    InsurerInvoiceCreate.form.notice_kind = 'all'
+    InsurerInvoiceCreate.execute('create_')
+
+    insurer_invoice, = Invoice.find(
+        [('business_kind', '=', 'all_insurer_invoices')])
+    assert insurer_invoice.total_amount == Decimal('-18559.83')
     # }}}
 # }}}
 

@@ -80,17 +80,56 @@ class Commission:
                 'previously generated invoice line (%s result found, '
                 '1 expected), ensure there is no already existing invoice.',
                 'already_generated': 'An insurer notice has already been '
-                'generated today for (%s)'})
+                'generated today for (%s)',
+                'mixed_insurer_configuration': 'You cannot generate invoices '
+                'simultaneously for insurers whose group invoice '
+                'configuration is different',
+                'bad_insurer_configuration': 'Notice kind does not match '
+                'insurer configuration',
+                })
+
+    @classmethod
+    def _possible_notice_kinds(cls):
+        return ['all', 'options']
+
+    @classmethod
+    def get_insurers(cls, notice_kind, parties=None):
+        domain = cls._get_insurers_domain(notice_kind)
+        if parties:
+            domain = [domain, [('party', 'in', parties)]]
+        else:
+            if notice_kind == 'all':
+                domain = [domain, [('group_insurer_invoices', '=', True)]]
+            else:
+                domain = [domain, [
+                        ('group_insurer_invoices', 'in', (False, None))]]
+        insurers = Pool().get('insurer').search(domain)
+        if not insurers:
+            return []
+        grouped = {x.group_insurer_invoices for x in insurers}
+        if len(grouped) != 1:
+            cls.raise_user_error('mixed_insurer_configuration')
+        if bool(grouped.pop()) != (notice_kind == 'all'):
+            cls.raise_user_error('bad_insurer_configuration')
+        return insurers
+
+    @classmethod
+    def _get_insurers_domain(cls, notice_kind):
+        if notice_kind in ('options', 'all'):
+            return [('options.account_for_billing', '!=', None)]
+        return []
 
     @classmethod
     def get_insurer_invoice_type(cls, notice_kind):
-        assert notice_kind == 'options', 'Invalid notice kind'
-        return 'in'
+        if notice_kind == 'options' or notice_kind == 'all':
+            return 'in'
 
     @classmethod
     def get_insurer_business_kind(cls, notice_kind):
-        assert notice_kind == 'options', 'Invalid notice kind'
-        return 'insurer_invoice'
+        if notice_kind == 'all':
+            return 'all_insurer_invoices'
+        elif notice_kind == 'options':
+            return 'insurer_invoice'
 
     @classmethod
     def get_insurer_invoice(cls, company, insurer, journal, date, notice_kind):
@@ -156,11 +195,9 @@ class Commission:
         return line
 
     @classmethod
-    def create_empty_invoice_line(cls, description, account, invoice,
-            party=None):
+    def create_empty_invoice_line(cls, description, account, party=None):
         InvoiceLine = Pool().get('account.invoice.line')
         invoice_line = InvoiceLine()
-        invoice_line.invoice = invoice
         invoice_line.type = 'line'
         invoice_line.description = description
         invoice_line.unit_price = 0
@@ -170,61 +207,66 @@ class Commission:
         return invoice_line
 
     @classmethod
-    def get_insurer_account_description_line(cls, description, waiting_account
-            ):
+    def get_insurer_account_description_line(cls, description,
+            waiting_account):
         return description + waiting_account.rec_name
 
     @classmethod
     def create_empty_insurer_invoices(cls, insurers, company, journal, date,
-            desc, notice_kind):
+            notice_kind):
         pool = Pool()
         Insurer = pool.get('insurer')
 
-        for insurer, waiting_account in Insurer.get_insurers_waiting_accounts(
-                insurers, notice_kind):
+        invoices = []
+        for insurer, accounts in Insurer.get_insurers_waiting_accounts(
+                insurers, notice_kind).iteritems():
             invoice = cls.get_insurer_invoice(company, insurer, journal,
                 date, notice_kind)
             invoice_lines = list(invoice.lines)
-            invoice_line = cls.get_insurer_invoice_line(
-                waiting_account, 0, desc)
-            invoice_line.party = insurer.party
-            invoice_line.invoice = invoice
-            invoice_lines.append(invoice_line)
-            invoice_lines.append(cls.create_empty_invoice_line(
-                    cls.get_insurer_account_description_line('positive',
-                        waiting_account), waiting_account, invoice,
-                    party=insurer.party))
-            invoice_lines.append(cls.create_empty_invoice_line(
-                    cls.get_insurer_account_description_line('negative',
-                        waiting_account), waiting_account, invoice,
-                    party=insurer.party))
-            invoice.lines = list(invoice_lines)
-            invoice.save()
+            for account in accounts:
+                invoice_lines += cls.get_insurer_invoice_lines(insurer,
+                    account)
+            invoice.lines = invoice_lines
+            invoices.append(invoice)
+        if invoices:
+            pool.get('account.invoice').save(invoices)
 
     @classmethod
-    def retrieve_empty_insurer_invoices(cls, insurers, company, journal, desc,
-            date, notice_kind):
+    def get_insurer_invoice_lines(cls, insurer, account):
+        invoice_line = cls.get_insurer_invoice_line(account,
+            description=account.rec_name)
+        invoice_line.party = insurer.party
+        positive_line = cls.create_empty_invoice_line(
+            '%s > 0' % account.rec_name, account, party=insurer.party)
+        negative_line = cls.create_empty_invoice_line(
+            '%s < 0' % account.rec_name, account, party=insurer.party)
+        return [invoice_line, positive_line, negative_line]
+
+    @classmethod
+    def retrieve_empty_insurer_invoices(cls, insurers, company, journal, date,
+            notice_kind):
         Insurer = Pool().get('insurer')
-        insurers_invoices = defaultdict(list)
-        for insurer, waiting_account in Insurer.get_insurers_waiting_accounts(
-                insurers, notice_kind):
+
+        per_account = {}
+        for insurer, accounts in Insurer.get_insurers_waiting_accounts(
+                insurers, notice_kind).iteritems():
             invoice = cls.get_insurer_invoice(company, insurer, journal,
                 date, notice_kind)
-            invoice_line = cls.get_insurer_invoice_line(description=desc,
-                account=waiting_account, invoice=invoice)
-            positive_desc = cls.get_insurer_account_description_line(
-                'positive', waiting_account)
-            negative_desc = cls.get_insurer_account_description_line(
-                'negative', waiting_account)
-            positive_invoice_line = cls.get_insurer_invoice_line(
-                description=positive_desc, account=waiting_account,
-                invoice=invoice)
-            negative_invoice_line = cls.get_insurer_invoice_line(
-                description=negative_desc, account=waiting_account,
-                invoice=invoice)
-            insurers_invoices[invoice.id] += ((invoice, invoice_line,
-                positive_invoice_line, negative_invoice_line),)
-        return insurers_invoices
+
+            for account in accounts:
+                data = {}
+                data['invoice'] = invoice
+                data['invoice_line'] = cls.get_insurer_invoice_line(
+                    account, description=account.rec_name, invoice=invoice)
+                data['positive_invoice_line'] = cls.get_insurer_invoice_line(
+                    account, description='%s > 0' % account.rec_name,
+                    invoice=invoice)
+                data['negative_invoice_line'] = cls.get_insurer_invoice_line(
+                    account, description='%s < 0' % account.rec_name,
+                    invoice=invoice)
+                per_account[account] = data
+
+        return per_account
 
     @classmethod
     def select_lines(cls, accounts, with_data=False, max_date=None,
@@ -309,8 +351,8 @@ class Commission:
         return cursor.fetchall()
 
     @classmethod
-    def handle_lines_per_insurer(cls, until_date, invoices,
-            invoices_data, insurers, notice_kind):
+    def handle_lines_per_insurer(cls, until_date, invoices, invoices_data,
+            insurers, notice_kind):
         pool = Pool()
         Commission = pool.get('commission')
         per_insurer = defaultdict(lambda: [[], []])
@@ -352,24 +394,20 @@ class Commission:
         return per_insurer
 
     @classmethod
-    def write_commission_for_each_insurers(cls, per_insurer,
-            insurers_invoices):
+    def write_commission_for_each_insurers(cls, per_insurer, insurers_invoices):
         pool = Pool()
-        Line = pool.get('account.move.line')
         Account = pool.get('account.account')
+        Line = pool.get('account.move.line')
         line = Line.__table__()
         Commission = pool.get('commission')
         commission = Commission.__table__()
         cursor = Transaction().connection.cursor()
 
-        def is_positive(x):
-            return not commission_invoice.type.startswith(x.type_)
+        def is_positive(invoice, x):
+            return not invoice.type.startswith(x.type_)
 
         def get_insurer_empty_data(insurer_account, insurers_invoices):
-            for insurer_values in insurers_invoices.values():
-                for acc_values in insurer_values:
-                    if acc_values[1].account.id == insurer_account:
-                        return acc_values
+            return insurers_invoices.get(Account(insurer_account), None)
 
         def update_columns(table, columns, values, from_=None, where=None):
             cursor.execute(*table.update(columns, values,
@@ -377,44 +415,32 @@ class Commission:
 
         # Retrieve values for each insurers
         for insurer_account in per_insurer.keys():
-            commission_invoice, commission_invoice_line, _, _ = \
-                get_insurer_empty_data(insurer_account,
-                    insurers_invoices)
+            data = get_insurer_empty_data(insurer_account, insurers_invoices)
             if (not per_insurer[insurer_account][0] and not
                     per_insurer[insurer_account][1]):
                 continue
 
             if per_insurer[insurer_account][1]:
                 update_columns(line, [line.principal_invoice_line],
-                    [commission_invoice_line.id],
+                    [data['invoice_line'].id],
                     where=(line.id.in_(per_insurer[insurer_account][1])))
 
-            positive_desc = cls.get_insurer_account_description_line(
-                'positive', Account(insurer_account))
-            negative_desc = cls.get_insurer_account_description_line(
-                'negative', Account(insurer_account))
-            positive_invoice_line = Commission.get_insurer_invoice_line(
-                insurer_account, amount=0, description=positive_desc,
-                invoice=commission_invoice)
-            negative_invoice_line = Commission.get_insurer_invoice_line(
-                insurer_account, amount=0, description=negative_desc,
-                invoice=commission_invoice)
             positives = []
             negatives = []
 
             for comm in per_insurer[insurer_account][0]:
-                if is_positive(comm):
+                if is_positive(data['invoice'], comm):
                     positives.append(comm.id)
                 else:
                     negatives.append(comm.id)
 
             if positives:
                 update_columns(commission, [commission.invoice_line],
-                    [positive_invoice_line.id],
+                    [data['positive_invoice_line'].id],
                     where=commission.id.in_(positives))
             if negatives:
                 update_columns(commission, [commission.invoice_line],
-                    [negative_invoice_line.id],
+                    [data['negative_invoice_line'].id],
                     where=commission.id.in_(negatives))
 
 
@@ -433,7 +459,7 @@ class CreateInvoicePrincipal(Wizard):
 
     @classmethod
     def create_empty_invoices(cls, insurers, company, journal, date,
-            description, notice_kind):
+            notice_kind):
         '''
         First step (insurer notice creation)
         This function creates empty invoices with three null lines:
@@ -443,11 +469,11 @@ class CreateInvoicePrincipal(Wizard):
         '''
         Commission = Pool().get('commission')
         Commission.create_empty_insurer_invoices(insurers, company,
-            journal, date, description, notice_kind)
+            journal, date, notice_kind)
 
     @classmethod
     def link_invoices_and_lines(cls, insurers, until_date, company, journal,
-            description, notice_kind, invoice_ids=None):
+            notice_kind, invoice_ids=None):
         '''
         Second step (insurer notice creation)
         This function makes the links betweens the invoices and the lines
@@ -459,8 +485,9 @@ class CreateInvoicePrincipal(Wizard):
         Commission = pool.get('commission')
         Insurer = pool.get('insurer')
 
-        accounts = [x[1].id for x in Insurer.get_insurers_waiting_accounts(
-                insurers, notice_kind)]
+        accounts = [x.id for y in Insurer.get_insurers_waiting_accounts(
+                insurers, notice_kind).itervalues()
+            for x in y]
         # Retrieve invoices & invoices_data for the insurers accounts
         invoices, invoices_data = Commission.select_lines(accounts,
             with_data=True, max_date=until_date, invoice_ids=invoice_ids)
@@ -475,7 +502,7 @@ class CreateInvoicePrincipal(Wizard):
             invoices, invoices_data, insurers, notice_kind)
 
         insurers_invoices = Commission.retrieve_empty_insurer_invoices(
-            insurers, company, journal, description, until_date, notice_kind)
+            insurers, company, journal, until_date, notice_kind)
         Commission.write_commission_for_each_insurers(per_insurer,
             insurers_invoices)
 
@@ -506,8 +533,8 @@ class CreateInvoicePrincipal(Wizard):
             agent = Agent(agent)
             product = Product(product)
             new_invoice_line = Commission.create_empty_invoice_line(
-                agent.rec_name, product.account_revenue_used,
-                commission_invoice)
+                agent.rec_name, product.account_revenue_used)
+            new_invoice_line.invoice = commission_invoice
             if invoice_line == negative_line.id:
                 new_invoice_line.unit_price = amount * -1
             else:
@@ -530,8 +557,8 @@ class CreateInvoicePrincipal(Wizard):
                     & (commission.agent == agent)))
 
     @classmethod
-    def finalize_invoices_and_lines(cls, insurers, company, journal,
-            date, description, notice_kind):
+    def finalize_invoices_and_lines(cls, insurers, company, journal, date,
+            notice_kind):
         '''
         Third and last step (insurer notice creation)
         This function split the negative and positive lines,
@@ -546,18 +573,14 @@ class CreateInvoicePrincipal(Wizard):
         Commission = pool.get('commission')
         Event = pool.get('event')
         LineTable = MoveLine.__table__()
-        insurers_invoices = Commission.retrieve_empty_insurer_invoices(
-            insurers, company, journal, description, date, notice_kind)
+        lines_per_account = Commission.retrieve_empty_insurer_invoices(
+            insurers, company, journal, date, notice_kind)
         to_clean = []
         to_save = []
         commission_invoices = []
-        for account_values in [account_values
-                    for insurer_values in insurers_invoices.values()
-                    for account_values in insurer_values]:
-            commission_invoice, invoice_line, positive_invoice_line, \
-                negative_invoice_line = account_values
+        for account, data in lines_per_account.iteritems():
             where_clause = (LineTable.principal_invoice_line ==
-                invoice_line.id)
+                data['invoice_line'].id)
             cursor.execute(*LineTable.select(
                     Coalesce(Sum(Coalesce(LineTable.credit, 0)), 0)
                     .as_('tot_credit'),
@@ -567,21 +590,21 @@ class CreateInvoicePrincipal(Wizard):
             result = cursor.fetchone()
             if result and result != [[0, 0]]:
                 total_credit, total_debit = result
-                if commission_invoice.type == 'in':
+                if data['invoice'].type == 'in':
                     amount = total_credit - total_debit
-                elif commission_invoice.type == 'out':
+                elif data['invoice'].type == 'out':
                     amount = total_debit - total_credit
-                invoice_line.unit_price = amount
-                to_save.append(invoice_line)
+                data['invoice_line'].unit_price = amount
+                to_save.append(data['invoice_line'])
             else:
                 # No principal line
-                to_clean.append(invoice_line)
+                to_clean.append(data['invoice_line'])
 
-            cls.split_grouped_lines(commission_invoice, positive_invoice_line,
-                negative_invoice_line)
-            to_clean.append(negative_invoice_line)
-            to_clean.append(positive_invoice_line)
-            commission_invoices.append(commission_invoice)
+            cls.split_grouped_lines(data['invoice'],
+                data['positive_invoice_line'], data['negative_invoice_line'])
+            to_clean.append(data['negative_invoice_line'])
+            to_clean.append(data['positive_invoice_line'])
+            commission_invoices.append(data['invoice'])
         commission_invoices = list(set(commission_invoices))
         Invoice.update_taxes(commission_invoices)
         Line.delete(set(to_clean))
@@ -597,27 +620,22 @@ class CreateInvoicePrincipal(Wizard):
         if not insurers:
             return []
         self.create_empty_invoices(insurers, self.ask.company,
-            self.ask.journal, self.ask.until_date, self.ask.description,
-            self.ask.notice_kind)
-        accounts = [x[1].id for x in Insurer.get_insurers_waiting_accounts(
-                insurers, self.ask.notice_kind)]
+            self.ask.journal, self.ask.until_date, self.ask.notice_kind)
+        accounts = [x.id for y in Insurer.get_insurers_waiting_accounts(
+                insurers, self.ask.notice_kind).values()
+            for x in y]
         ids = Commission.select_lines(accounts, with_data=False,
             max_date=self.ask.until_date)
         self.link_invoices_and_lines(insurers, self.ask.until_date,
-            self.ask.company, self.ask.journal, self.ask.description,
-            self.ask.notice_kind, invoice_ids=[i for i in ids])
+            self.ask.company, self.ask.journal, self.ask.notice_kind,
+            invoice_ids=[i for i in ids])
         invoices = self.finalize_invoices_and_lines(insurers, self.ask.company,
-            self.ask.journal, self.ask.until_date, self.ask.description,
-            self.ask.notice_kind)
+            self.ask.journal, self.ask.until_date, self.ask.notice_kind)
         return invoices
 
     def get_insurers(self):
-        if self.ask.notice_kind == 'options':
-            insurers = Pool().get('insurer').search([
-                    ('options.account_for_billing', '!=', None),
-                    ('party', 'in', self.ask.insurers),
-                    ])
-            return insurers
+        return Pool().get('commission').get_insurers(
+            self.ask.notice_kind, parties=self.ask.insurers)
 
     def do_create_(self, action):
         Invoice = Pool().get('account.invoice')
@@ -642,10 +660,10 @@ class CreateInvoicePrincipalAsk(ModelView):
     insurers = fields.Many2Many('party.party', None, None, 'Insurers',
         required=True, domain=[('is_insurer', '=', True)])
     journal = fields.Many2One('account.journal', 'Journal', required=True)
-    description = fields.Text('Description', required=True)
     post_invoices = fields.Boolean('Post Invoices')
     until_date = fields.Date('Until Date')
-    notice_kind = fields.Selection([('options', 'Premiums')], 'Notice Kind')
+    notice_kind = fields.Selection([('all', 'All'), ('options', 'Premiums')],
+        'Notice Kind')
 
     @staticmethod
     def default_company():
@@ -662,20 +680,9 @@ class CreateInvoicePrincipalAsk(ModelView):
             return journals[0].id
 
     @staticmethod
-    def default_description():
-        Invoice = Pool().get('account.invoice')
-        return Invoice.raise_user_error('batch_premiums_received',
-            raise_exception=False)
-
-    @staticmethod
     def default_until_date():
         return coog_date.get_last_day_of_last_month(utils.today())
 
     @staticmethod
     def default_notice_kind():
         return 'options'
-
-    @fields.depends('notice_kind', 'description')
-    def on_change_with_description(self, name=None):
-        if self.notice_kind == 'options':
-            return self.default_description()

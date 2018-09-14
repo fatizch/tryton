@@ -1,3 +1,4 @@
+* FEA#9745 Possibilité de générer des bordereaux assureurs regroupant toutes les opérations
 * BUG#9597 Permettre la surcharge du comportement en cas de changement de protocole
 * BUG#9153 Correction du signe du montant du bordereau assureur de prestation
 * BUG#8936 Correctif sur la création imcomplète du bordereau assureur

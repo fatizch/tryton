@@ -32,8 +32,8 @@ class Configuration:
         if ((not isinstance(getattr(line, 'origin', None), Invoice))
                 or (line.origin.id < 0)):
             return super(Configuration, self).get_payment_journal(line)
-        if not (line.origin.business_kind == 'insurer_invoice' and
-                line.origin.type == 'in'):
+        if not (line.origin.business_kind in ('insurer_invoice',
+                    'all_insurer_invoices') and line.origin.type == 'in'):
             return super(Configuration, self).get_payment_journal(line)
         journal = self.insurer_payment_journal \
             if line.origin.party.automatic_wire_transfer \

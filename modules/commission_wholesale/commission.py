@@ -114,7 +114,7 @@ class CreateInvoicePrincipal:
 
     @classmethod
     def finalize_invoices_and_lines(cls, insurers, company, journal,
-            date, description, fname):
+            date, notice_kind):
         '''
         This method adds the commission amount paid to wholesale brokers to the
         insurer invoice
@@ -125,15 +125,16 @@ class CreateInvoicePrincipal:
         Invoice = pool.get('account.invoice')
         Insurer = pool.get('insurer')
 
-        commission_invoices = super(CreateInvoicePrincipal, cls).\
-            finalize_invoices_and_lines(insurers, company, journal,
-                date, description, fname)
+        commission_invoices = super(CreateInvoicePrincipal,
+            cls).finalize_invoices_and_lines(
+            insurers, company, journal, date, notice_kind)
         for commission_invoice in commission_invoices:
-            accounts = list({x[1]
-                    for x in Insurer.get_insurers_waiting_accounts(
-                        [commission_invoice.insurer_role], fname)})
+            accounts = [x for y in Insurer.get_insurers_waiting_accounts(
+                    [commission_invoice.insurer_role],
+                    notice_kind).itervalues()
+                for x in y]
             if not accounts:
-                return [commission_invoice]
+                continue
             for account in accounts:
                 lines = Line.search(
                     cls.get_wholesale_brokers_line_domain(account,

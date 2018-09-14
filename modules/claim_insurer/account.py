@@ -21,9 +21,6 @@ class Invoice:
     @classmethod
     def __setup__(cls):
         super(Invoice, cls).__setup__()
-        cls._error_messages.update({
-                'batch_claims_paid': 'Claims Paid',
-                })
         cls.business_kind.selection += [
             ('claim_insurer_invoice', 'Claim Insurer Invoice'),
             ]

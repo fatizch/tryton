@@ -12,10 +12,6 @@ msgstr ""
 "Pas de courtier défini sur le contrat %s pour facturer le frais d'apporteur "
 "%s"
 
-msgctxt "error:commission:"
-msgid "Cannot delete an already invoiced commission"
-msgstr "Impossible de supprimer une commission faisant partie d'un bordereau"
-
 msgctxt "error:commission.agent:"
 msgid ""
 "Cannot find matching agent for %s :\n"
@@ -45,6 +41,10 @@ msgstr "Au moins un champ de date doit être renseigné"
 msgctxt "error:commission.plan:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
+
+msgctxt "error:commission:"
+msgid "Cannot delete an already invoiced commission"
+msgstr "Impossible de supprimer une commission faisant partie d'un bordereau"
 
 msgctxt "field:account.configuration,broker_bank_transfer_journal:"
 msgid "Broker Bank Transfer Journal"
@@ -81,14 +81,6 @@ msgstr "Assiette"
 msgctxt "field:commission,broker:"
 msgid "Broker"
 msgstr "Courtier"
-
-msgctxt "field:distribution.network,is_broker:"
-msgid "Broker"
-msgstr "Courtier"
-
-msgctxt "field:distribution.network,broker_party:"
-msgid "Broker Party"
-msgstr "Tiers courtier"
 
 msgctxt "field:commission,commission_rate:"
 msgid "Commission Rate"
@@ -646,6 +638,14 @@ msgctxt "field:contract.option,monthly_taxes:"
 msgid "Monthly Taxes"
 msgstr "Taxes mensuelles"
 
+msgctxt "field:distribution.network,broker_party:"
+msgid "Broker Party"
+msgstr "Tiers courtier"
+
+msgctxt "field:distribution.network,is_broker:"
+msgid "Broker"
+msgstr "Courtier"
+
 msgctxt "field:distribution.network,parent_brokers:"
 msgid "Parent Brokers"
 msgstr "Courtiers parents"
@@ -907,7 +907,7 @@ msgstr "Bordereau courtier"
 
 msgctxt "selection:account.invoice,business_kind:"
 msgid "Insurer Invoice"
-msgstr "Bordereau assureur"
+msgstr "Bordereau primes assureur"
 
 msgctxt "selection:commission.aggregated,invoice_state:"
 msgid "Canceled"
@@ -1241,6 +1241,10 @@ msgctxt "view:commission.plan:"
 msgid "Administration"
 msgstr "Administration"
 
+msgctxt "view:commission.plan:"
+msgid "Data"
+msgstr "Données"
+
 msgctxt "view:commission.synthesis.show:"
 msgid "Commissions paid by year"
 msgstr "Commissions payées par année"
@@ -1260,10 +1264,6 @@ msgstr "%"
 msgctxt "view:commission:"
 msgid "Amount"
 msgstr "Montant"
-
-msgctxt "view:commission.plan:"
-msgid "Data"
-msgstr "Données"
 
 msgctxt "view:party.party:"
 msgid "Broker"

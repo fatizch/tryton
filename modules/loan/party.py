@@ -14,7 +14,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, PYSONEncoder, Not, Bool
 from trytond.wizard import Wizard, StateView, Button
 
-from trytond.modules.coog_core import fields, model, coog_string
+from trytond.modules.coog_core import fields, model, coog_string, utils
 from trytond.modules.party_cog.party import STATES_COMPANY
 
 __all__ = [
@@ -294,7 +294,7 @@ class DisplayInsuredOutstandingLoanBalance(Wizard):
         if not default_currency and currencies:
             default_currency = currencies[0]
         return {
-            'date': datetime.date.today(),
+            'date': utils.today(),
             'party': selected_party.id,
             'possible_currencies': currencies,
             'currency': default_currency,

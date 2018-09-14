@@ -7,8 +7,6 @@ this repository contains the full copyright notices and license terms. -->
     <label name="journal"/>
     <field name="journal"/>
     <newline/>
-    <label name="description"/>
-    <field name="description" yfill="0" yexpand="0"/>
     <label name="post_invoices"/>
     <field name="post_invoices"/>
     <label name="until_date"/>
