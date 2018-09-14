@@ -62,29 +62,25 @@ class Commission:
         to request commission amount to the insurer for the wholesale brokers.
         The invoice has to be sent to the insurer
         '''
-        pool = Pool()
-        Invoice = pool.get('account.invoice')
+        invoice = super(Commission, cls)._get_invoice(key)
         if ('insurer' not in key or 'delegation_of_payment' not in key or
                 key['delegation_of_payment']):
-            return super(Commission, cls)._get_invoice(key)
+            return invoice
         insurer = key['insurer']
+        party = insurer.party
         if key['type'].startswith('out'):
-            payment_term = insurer.party.customer_payment_term
-            account = insurer.party.account_receivable
+            payment_term = party.customer_payment_term
+            account = party.account_receivable
         else:
-            payment_term = insurer.party.supplier_payment_term
-            account = insurer.party.account_payable_used
-        return Invoice(
-            company=key['company'],
-            type=key['type'],
-            journal=cls.get_journal(),
-            party=insurer.party,
-            insurer_role=insurer,
-            invoice_address=insurer.party.address_get(type='invoice'),
-            currency=key['currency'],
-            account=account,
-            payment_term=payment_term,
-            business_kind='wholesale_invoice')
+            payment_term = party.supplier_payment_term
+            account = party.account_payable_used
+        invoice.party = party
+        invoice.insurer_role = insurer
+        invoice.invoice_address = party.address_get(type='invoice')
+        invoice.account = account
+        invoice.payment_term = payment_term
+        invoice.business_kind = 'wholesale_invoice'
+        return invoice
 
 
 class CreateInvoicePrincipal:
