@@ -352,8 +352,9 @@ class Invoice:
 
         super(Invoice, cls).cancel(invoices)
 
-        if not any(invoice.business_kind in ('broker_invoice',
-                'insurer_invoice') for invoice in invoices):
+        commission_invoice_type = cls.get_commission_invoice_types()
+        if not any(invoice.business_kind in commission_invoice_type
+                for invoice in invoices):
             return
 
         for sub_invoices in grouped_slice(invoices):
