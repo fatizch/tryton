@@ -10,6 +10,7 @@ PERFORM anon_table('contract_clause', 'text');
 PERFORM anon_table('contract_option', 'customized_beneficiary_clause');
 PERFORM anon_table('report_template', 'email_dest, email_bcc, email_cc');
 PERFORM anon_table('res_user', 'name');
+PERFORM anon_table('claim_ij_subscription', 'ssn');
 update res_user set login = md5(login) where login != 'admin';
 PERFORM anon_table('ir_attachment', 'name', 'data');
 PERFORM anon_table('account_invoice', '', 'comment, description');

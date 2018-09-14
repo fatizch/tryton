@@ -25,6 +25,7 @@ __all__ = [
     'TreatIjPeriodSelectLine',
     'CreateIndemnification',
     'IndemnificationDefinition',
+    'PartyErase',
     ]
 
 
@@ -587,3 +588,21 @@ class IndemnificationDefinition:
         if getattr(self, 'prestij_periods', None):
             result += [x.start_date for x in self.prestij_periods[:-1]]
         return result
+
+
+class PartyErase:
+    __metaclass__ = PoolMeta
+    __name__ = 'party.erase'
+
+    def to_erase(self, party_id):
+        to_erase = super(PartyErase, self).to_erase(party_id)
+        pool = Pool()
+        party = pool.get('party.party')(party_id)
+        if party.ssn:
+            ClaimIjSubscription = pool.get('claim.ij.subscription')
+            to_erase.append(
+                (ClaimIjSubscription, [('ssn', '=', party.ssn)],
+                    True,
+                    ['ssn'],
+                    [None]))
+        return to_erase

@@ -41,4 +41,5 @@ def register():
         wizard.RelaunchPartySubscription,
         wizard.TreatIjPeriod,
         wizard.CreateIndemnification,
+        wizard.PartyErase,
         module='claim_prest_ij_service', type_='wizard')
