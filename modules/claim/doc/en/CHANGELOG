@@ -1,3 +1,4 @@
+* BUG#9753 Give right to delete claim losses and services to claim manage group
 * BUG#9876 Add an option to avoid duplicating losses in add_new_loss
 * FEA#9485 Move suspension configuration on loss desc
 * FEA#9063 Add configuration on benefit events to hold contracts
