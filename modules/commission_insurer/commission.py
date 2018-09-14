@@ -106,7 +106,7 @@ class Commission:
         insurers = Pool().get('insurer').search(domain)
         if not insurers:
             return []
-        grouped = {x.group_insurer_invoices for x in insurers}
+        grouped = {bool(x.group_insurer_invoices) for x in insurers}
         if len(grouped) != 1:
             cls.raise_user_error('mixed_insurer_configuration')
         if bool(grouped.pop()) != (notice_kind == 'all'):

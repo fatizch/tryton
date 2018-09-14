@@ -20,7 +20,7 @@ class Commission:
     def _get_insurers_domain(cls, notice_kind):
         domain = super(Commission, cls)._get_insurers_domain(notice_kind)
         if notice_kind in ('all', 'benefits'):
-            domain = [domain, [('benefits', '!=', None)]]
+            domain = ['OR', domain, [('benefits', '!=', None)]]
         return domain
 
     @classmethod
