@@ -14,7 +14,7 @@ from trytond.pyson import Eval, Bool, Not
 from trytond.wizard import Wizard, StateView, Button
 from trytond.model import Workflow
 
-from trytond.modules.coog_core import utils, model, fields
+from trytond.modules.coog_core import utils, model, fields, coog_string
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
 
 __all__ = [
@@ -615,7 +615,7 @@ class InvoiceLineDetail(model.CoogSQL, model.CoogView):
 
     def get_rec_name(self, name):
         return '%s : %s %s' % (self.rated_entity.rec_name, self.rate,
-            self.frequency)
+            coog_string.translate_value(self, 'frequency'))
 
     def update_parent_field(self, value):
         value_model = value.__name__

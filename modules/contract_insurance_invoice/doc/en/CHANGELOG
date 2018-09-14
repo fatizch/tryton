@@ -1,3 +1,4 @@
+* BUG#9759 Translate frequency in invoice line detail rec_name
 * BUG#9857 Unlock invoice posting with an end date greater than that of the contract if prorata forces it
 * FEA#9492 Add invoice line to server context when getting move lines
 * BUG#9211 Update payment dates when unsuspending payments

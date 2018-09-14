@@ -1,3 +1,4 @@
+* BUG#9759 Traduire la fréquence dans le rec_name des détails de ligne de quittance
 * BUG#9857 Déblocage de l'émission des quittances avec une date de fin postérieure à la date de fin du contrat dans le cas où les calculs de prorata l'impose
 * FEA#9492 Ajouter la ligne de quittance au contexte du serveur au moment de la récupération des lignes de mouvements comptables
 * BUG#9211 Mettre à jour les dates de paiments à la dé-suspension des paiements
