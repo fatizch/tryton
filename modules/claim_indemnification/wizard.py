@@ -1046,7 +1046,7 @@ class CancelIndemnification(Wizard):
     start_state = 'cancel_reason'
     cancel_reason = StateView('claim.indemnification.select_cancel_reason',
         'claim_indemnification.select_cancel_reason_view_form', [
-            Button('Cancel', 'cancel', 'tryton-cancel'),
+            Button('Cancel', 'end', 'tryton-cancel'),
             Button('Apply', 'cancel_selection', 'tryton-go-next',
                 default=True)])
     cancel_selection = StateTransition()

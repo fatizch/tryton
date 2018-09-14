@@ -2058,11 +2058,11 @@ msgctxt ""
 msgid "Done"
 msgstr "Fait"
 
-msgctxt "wizard_button:claim.indemnification.cancel,cancel_reason,cancel:"
-msgid "Cancel"
-msgstr "Annuler"
-
 msgctxt ""
 "wizard_button:claim.indemnification.cancel,cancel_reason,cancel_selection:"
 msgid "Apply"
 msgstr "Appliquer"
+
+msgctxt "wizard_button:claim.indemnification.cancel,cancel_reason,end:"
+msgid "Cancel"
+msgstr "Annuler"
