@@ -49,7 +49,7 @@ class Party:
 
     def get_health_complement_at_date(self, at_date=None):
         return utils.get_good_version_at_date(self, 'health_complement',
-            at_date)
+            at_date, start_var_name='date')
 
 
 class HealthPartyComplement(model._RevisionMixin, model.CoogSQL,
