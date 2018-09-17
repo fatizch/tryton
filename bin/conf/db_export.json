@@ -41,6 +41,7 @@
     "contract_option-exclusion_kind",
     "contract_option_extra_premium",
     "contract_option_version",
+    "contract_payment_suspension",
     "contract_premium",
     "contract_premium_amount",
     "contract_service",
