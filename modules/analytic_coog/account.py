@@ -22,8 +22,8 @@ class Account(export.ExportImportMixin):
     _func_key = 'code'
 
     pattern = fields.Many2One('extra_details.configuration',
-        'Pattern', states={
-            'invisible': Eval('type') != 'distribution_over_extra_details'},
+        'Pattern', 'on_change_with_pattern',
+        states={'invisible': Eval('type') != 'distribution_over_extra_details'},
         depends=['type'],
         domain=[('model_name', '=', str('analytic_account.line'))])
 
@@ -43,6 +43,14 @@ class Account(export.ExportImportMixin):
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
+
+    @fields.depends('type')
+    def on_change_with_pattern(self):
+        if self.type != 'distribution_over_extra_details':
+            return None
+        candidates = [x.id for x in Pool().get('extra_details.configuration').
+            search([('model_name', '=', str('analytic_account.line'))])]
+        return candidates[0] if len(candidates) == 1 else None
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
