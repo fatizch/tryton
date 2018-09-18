@@ -1,3 +1,4 @@
+* BUG#9925 Ajout d'un domaine sur le statut du sous-statut de la raison de clôture des sinitres afin de les filtrer
 * BUG#9753 Ajout du droit de supprimer des préjudices et services au groupe de gestion de sinistres
 * BUG#9876 Ajout d'une option sur add_new_loss permettant d'éviter les doublons
 * FEA#9485 Déplacer la configuration de suspension dans la description de préjudice
