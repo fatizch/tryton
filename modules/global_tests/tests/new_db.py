@@ -162,7 +162,8 @@ else:
 
     modules = os.listdir(
         os.path.abspath(os.path.join(modules.__file__, os.path.pardir)))
-    modules = [x for x in modules if '.' not in x and x != 'tests']
+    modules = [x for x in modules
+        if '.' not in x and x not in _modules_to_ignore]
     config = activate_modules(modules, cache_file_name='global_tests')
 
 
@@ -4563,7 +4564,8 @@ if GENERATE_REPORTINGS:  # {{{
 
     insurer_invoice, = Invoice.find(
         [('business_kind', '=', 'insurer_invoice')])
-    assert insurer_invoice.total_amount == Decimal('1440.17')
+    assert insurer_invoice.total_amount == Decimal('1440.17'), \
+        'Bad amount %.2f, expected 1440.17' % insurer_invoice.total_amount
     ReportCreation = Wizard('report.create', [insurer_invoice])
     ReportCreation.execute('generate')
     Invoice.delete([insurer_invoice])
@@ -4576,7 +4578,8 @@ if GENERATE_REPORTINGS:  # {{{
 
     claim_insurer_invoice, = Invoice.find(
         [('business_kind', '=', 'claim_insurer_invoice')])
-    assert claim_insurer_invoice.total_amount == Decimal('20000')
+    assert claim_insurer_invoice.total_amount == Decimal('20000'), \
+        'Bad amount %.2f, expected 20000.00' % insurer_invoice.total_amount
     Invoice.delete([claim_insurer_invoice])
 
     insurer.group_insurer_invoices = True
@@ -4589,7 +4592,8 @@ if GENERATE_REPORTINGS:  # {{{
 
     insurer_invoice, = Invoice.find(
         [('business_kind', '=', 'all_insurer_invoices')])
-    assert insurer_invoice.total_amount == Decimal('-18559.83')
+    assert insurer_invoice.total_amount == Decimal('-18559.83'), \
+        'Bad amount %.2f, expected -18559.83' % insurer_invoice.total_amount
     # }}}
 # }}}
 
