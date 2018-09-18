@@ -1,0 +1,8 @@
+# vim: set ft=sh:
+# dev startall shortcut (server and client + api and app)
+
+coog_startall_main() { # start all + api and app
+        coog_start_main $*
+        coog_api_start
+        coog_app_start
+}

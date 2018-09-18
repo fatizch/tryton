@@ -1,0 +1,7 @@
+# vim: set ft=sh:
+# dev restart shortcut (server and client)
+
+coog_restart_main() { # restart all, [args] passed to server and client, eg. coog restart -- -v
+        coog_stop_main
+        coog_start_main $*
+}

@@ -1,0 +1,8 @@
+# vim: set ft=sh:
+# dev stopall shortcut (server and client + api and app)
+
+coog_stopall_main() { # stop all + api and app
+        coog_stop_main
+        coog_api_stop
+        coog_app_stop
+}
