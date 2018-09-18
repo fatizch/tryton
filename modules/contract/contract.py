@@ -156,7 +156,14 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
     contract_number = fields.Char('Contract Number', select=1,
         states={
             'required': Eval('status') == 'active',
-            }, depends=_DEPENDS, readonly=True)
+            'readonly': (~Eval('manual_contract_number') |
+                (Eval('status') != 'quote')),
+            'invisible': (~Eval('manual_contract_number') &
+                (Eval('status') == 'quote')),
+            }, depends=['status', 'manual_contract_number'])
+    manual_contract_number = fields.Function(
+        fields.Boolean('Manual Contract Number'),
+        'getter_manual_contract_number')
     extra_datas = fields.One2Many('contract.extra_data', 'contract',
         'Extra Data', delete_missing=True, states={
             'invisible': ~Eval('extra_datas'),
@@ -445,6 +452,9 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             return 'green'
         else:
             return 'red'
+
+    def getter_manual_contract_number(self, name):
+        return not self.product.contract_generator
 
     @classmethod
     def order_rec_name(cls, tables):

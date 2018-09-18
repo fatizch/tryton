@@ -76,8 +76,8 @@ class Product(model.CoogSQL, model.CoogView,
         'on_change_with_currency_symbol')
     contract_generator = fields.Many2One('ir.sequence',
         'Contract Number Generator', context={'code': 'offered.product'},
-        ondelete='RESTRICT', required=True,
-        domain=[('code', '=', 'contract')])
+        help='If empty, contract numbers will have to be manually set',
+        ondelete='RESTRICT', domain=[('code', '=', 'contract')])
     subscriber_kind = fields.Selection(SUBSCRIBER_KIND, 'Subscriber Kind')
     report_templates = fields.Many2Many('report.template-offered.product',
         'product', 'report_template', 'Report Templates')
@@ -110,14 +110,13 @@ class Product(model.CoogSQL, model.CoogView,
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
-        table = TableHandler(cls, module_name)
+
+        # Migration from 1.14: Remove required on contract_generator
+        if TableHandler.table_exist('offered_product'):
+            table = TableHandler(cls, module_name)
+            table.not_null_action('contract_generator', action='remove')
 
         super(Product, cls).__register__(module_name)
-
-        # Migration from 1.6 Drop Offered inheritance
-        if table.column_exist('template'):
-            table.drop_column('template')
-            table.drop_column('template_behaviour')
 
     @classmethod
     def is_master_object(cls):

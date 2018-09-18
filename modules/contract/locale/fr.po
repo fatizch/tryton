@@ -290,6 +290,10 @@ msgctxt "field:contract,last_modification:"
 msgid "Last Modification"
 msgstr "Dernière modification"
 
+msgctxt "field:contract,manual_contract_number:"
+msgid "Manual Contract Number"
+msgstr "Saisie manuelle du numéro de contrat"
+
 msgctxt "field:contract,options:"
 msgid "Options"
 msgstr "Garanties"

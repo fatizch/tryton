@@ -888,6 +888,11 @@ msgctxt "help:offered.option.description,sequence:"
 msgid "Used to order the coverages accross the application"
 msgstr "Utilisé pour ordonner les garanties dans l'application"
 
+msgctxt "help:offered.product,contract_generator:"
+msgid "If empty, contract numbers will have to be manually set"
+msgstr ""
+"Si non renseigné, les numéros de contrats devront être saisis manuellement"
+
 msgctxt "help:offered.product,data_shelf_life:"
 msgid ""
 "The number of years contract's data related to this product can be kept "
