@@ -1,0 +1,9 @@
+# vim: set ft=sh:
+# dev killall shortcut (server and client + api and app)
+
+coog_killall_main() { # kill all + api and app
+        coog_app_kill
+        coog_api_kill
+        coog_client_kill
+        coog_server_kill
+}

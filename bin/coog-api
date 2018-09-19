@@ -49,6 +49,11 @@ coog_api_kill() { # kill
     echo api killed
 }
 
+coog_api_restart() { # restart
+    coog_api_stop
+    coog_api_start
+}
+
 coog_api_log() { # log
     local out_file; out_file=$(_coog_api_file out)
     less "$@" "$out_file"

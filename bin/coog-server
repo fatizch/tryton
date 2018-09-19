@@ -60,7 +60,7 @@ coog_server_kill() { # kill
 }
 
 coog_server_restart() { # kill + start - [trytond args]
-        coog_server_stop
+        coog_server_kill
         coog_server_start $*
 }
 

@@ -45,6 +45,11 @@ coog_client_kill() { # kill
         echo client killed
 }
 
+coog_client_restart() { # kill + start - [trytond args]
+        coog_client_kill
+        coog_client_start $*
+}
+
 coog_client_pid() { # get pid
         local pid_file; pid_file=$(_coog_client_file pid)
         coog_env_pid "$pid_file"

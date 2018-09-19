@@ -45,6 +45,11 @@ coog_app_kill() { # kill
     echo app killed
 }
 
+coog_app_restart() { # restart
+    coog_app_stop
+    coog_app_start
+}
+
 coog_app_log() { # log
     local out_file; out_file=$(_coog_app_file out)
     less "$@" "$out_file"
