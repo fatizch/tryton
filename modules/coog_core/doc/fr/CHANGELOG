@@ -1,3 +1,4 @@
+* BUG#9746 Filtrer les actions par type d'évenement qui sont inactives afin de ne pas les appliquer
 * BUG#7334 Gestion des exceptions DatabaseOperationalError
 * FEA#9487 Possibilité de surcharger la daily chain
 * BUG#9861 Utilisation de la société de l'administrateur lors de l'exécution des batchs

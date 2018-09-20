@@ -385,6 +385,10 @@ msgctxt "field:event.type.action-event.type,event_type:"
 msgid "Event Type"
 msgstr "Type d'événement"
 
+msgctxt "field:event.type.action-event.type,active:"
+msgid "Active"
+msgstr "Active"
+
 msgctxt "field:event.type.action-event.type,id:"
 msgid "ID"
 msgstr "ID"

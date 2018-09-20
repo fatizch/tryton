@@ -177,6 +177,16 @@ class ActionEventTypeRelation(model.CoogSQL, model.CoogView):
         ondelete='CASCADE', select=True)
     action = fields.Many2One('event.type.action', 'Action', ondelete='CASCADE',
         required=True)
+    active = fields.Function(fields.Boolean('Active'), 'get_active',
+        searcher='search_active')
+
+    def get_active(self, name):
+        return self.action.active
+
+    @classmethod
+    def search_active(cls, name, clause):
+        _, operator, operand = clause
+        return [('action.active', operator, operand)]
 
 
 class EventTypeAction(model.CoogSQL, model.CoogView):
