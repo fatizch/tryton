@@ -36,7 +36,7 @@ _coog_code_st_repo() {
     then
         master=X
     else
-        master=$(git diff --shortstat master "$branch") || master=NA
+        master=$(git diff --shortstat $(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@') "$branch") || master=NA
         master=$(_coog_code_st_fmt $master)
     fi
     local stage
