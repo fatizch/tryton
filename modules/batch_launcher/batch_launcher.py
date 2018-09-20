@@ -64,7 +64,7 @@ class LaunchBatch(Wizard):
         ids = BatchModel.select_ids(**extra_args)
         for sub_ids in self.split_batch(ids, extra_args.get('job_size') or 0):
             sub_ids = list(sub_ids)
-            objects = BatchModel.convert_to_instances(sub_ids) \
+            objects = BatchModel.convert_to_instances(sub_ids, **extra_args) \
                 if sub_ids else []
             BatchModel.execute(objects, sub_ids, **extra_args)
         return 'end'
@@ -120,7 +120,7 @@ class BatchParameter(model.CoogView):
     'Batch Parameter'
 
     __name__ = 'batch.launcher.parameter'
-    code = fields.Char('Code', required=True, readonly=True,
+    code = fields.Char('Code', required=True,
         states={'invisible': Eval('code') == 'treatment_date'})
     value = fields.Char('Value',
         states={'invisible': Eval('code') == 'treatment_date'})
