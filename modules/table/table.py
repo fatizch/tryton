@@ -189,6 +189,10 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         return super(TableDefinition, cls)._export_light() | {'tags'}
 
     @classmethod
+    def _allow_update_links_on_xml_rec(cls):
+        return True
+
+    @classmethod
     def do_import(cls, value):
         if value['imported']:
             return value['record']

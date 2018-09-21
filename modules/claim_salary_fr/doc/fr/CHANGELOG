@@ -1,3 +1,4 @@
+* FEA#9957 Ajout d'une règle de revalorisation standard par défaut avec la structure des tables AGIRC / ARRCO
 * FEA#9940 Ajout de règles de calcul du salaire net par défaut
 * BUG#9965 Correctif sur la récupération du salaire net lorsqu'un dossier a plusieurs services délivrés
 * BUG#9846 Prise en compte du cas de la mise à jour du salaire de brut à net dans le calcul du salaire net

@@ -12,6 +12,22 @@ this repository contains the full copyright notices and license terms. -->
             <field name="dimension_name1">Date</field>
             <field name="number_of_digits">4</field>
         </record>
+        <record model="table" id="table_agirc">
+            <field name="name">AGIRC</field>
+            <field name="code">AGIRC</field>
+            <field name="type_">numeric</field>
+            <field name="dimension_kind1">range-date</field>
+            <field name="dimension_name1">Date</field>
+            <field name="number_of_digits">4</field>
+        </record>
+        <record model="table" id="table_arrco">
+            <field name="name">ARRCO</field>
+            <field name="code">ARRCO</field>
+            <field name="type_">numeric</field>
+            <field name="dimension_kind1">range-date</field>
+            <field name="dimension_name1">Date</field>
+            <field name="number_of_digits">4</field>
+        </record>
         <!-- DIMENSION VALUES -->
         <record model="table.dimension.value" id="pmss_dimension_value_2000">
             <field name="definition" ref="claim_salary_fr.table_pmss"/>
