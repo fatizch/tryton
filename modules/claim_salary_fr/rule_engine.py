@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from decimal import Decimal
+
 from trytond.pool import PoolMeta
 from trytond.modules.rule_engine import check_args
 
@@ -41,10 +43,18 @@ class RuleEngineRuntime:
     @classmethod
     @check_args('service')
     def _re_get_net_salary(cls, args):
+        service = args['service']
         if 'curr_salary' in args:
             return args['curr_salary'].net_salary
         else:
-            return args['service'].net_salary
+            if service.net_salary:
+                return service.net_salary
+            else:
+                for s in reversed([x for x in service.claim.delivered_services
+                            if x != service]):
+                    if s.net_salary:
+                        return s.net_salary
+        return Decimal(0)
 
     @classmethod
     @check_args('service')
