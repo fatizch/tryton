@@ -1,3 +1,4 @@
+* FEA#9940 Add default net salary computation rules
 * BUG#9965 Fix net salary retrieving when a claim has multiple delivered services 
 * BUG#9846 Claim net salary calculation should take into account the salary update from gross to net case
 * OTH#0000 Fix wrong call to detect revaluation on basic salary on indemnification period calculation dates

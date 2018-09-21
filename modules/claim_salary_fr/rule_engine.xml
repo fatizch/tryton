@@ -77,5 +77,302 @@ prévoit une limitation au salaire net</field>
             <field name="long_description">Vrai si la revalorisation s'effectue sur le traitement de base</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+        <!-- DEFAULT NET SALARY COMPUTATION RULES -->
+        <record model="rule_engine" id="net_salary_calculation_a_payer">
+            <field name="name">Calcul du salaire NET (A payer)</field>
+            <field name="short_name">coog_net_salary_calculation_a_payer</field>
+            <field name="algorithm">tranches = tranche_salaire(['gross_salary', 'salary_bonus'])
+TRA = tranches['TA']
+TRB = tranches['TB']
+TRC = tranches['TC']
+
+#calcul des contributions salariales
+contrib_salariales = ['4_chomage_1', '4_chomage_2', 
+    '3_prevoyance_1', '3_prevoyance_2', '2_retraite_1', '2_retraite_2', '1_urssaf_1', '1_urssaf_2', '1_urssaf_3', '1_urssaf_4',
+    '6_charges_salariales_sante_taux']
+TA = taux_de_la_tranche('A', fixed=False, codes_list=contrib_salariales) or 0
+TB = taux_de_la_tranche('B', fixed=False, codes_list=contrib_salariales) or 0
+TC = taux_de_la_tranche('C', fixed=False, codes_list=contrib_salariales) or 0
+
+salaire_net = TRA * (1 - TA/100) + TRB * (1 - TB/100) + TRC * (1 - TC/100)
+
+#calcul de la CSG/RDS
+contrib_patronales = ['5_charges_patronales_prevoyance', '6_charges_patronales_sante_taux']
+assiette_csg_rds = 0.9825*(TRA + TRB + TRC) + taux_de_la_tranche('A', fixed=False, codes_list=contrib_patronales) * TRA / 100 + \
+     taux_de_la_tranche('B', fixed=False, codes_list=contrib_patronales) * TRB / 100 + \
+     taux_de_la_tranche('C', fixed=False, codes_list=contrib_patronales) * TRC / 100
+assiette_csg_rds += taux_de_la_tranche(fixed=True, codes_list=['2_charges_patronales_sante_montant'])
+salaire_net -= assiette_csg_rds * (0.005 + 0.051 + 0.024)
+
+#Enlever le montant de la prévoyance
+salaire_net -= taux_de_la_tranche(fixed=True, codes_list=['1_charges_salariales_mutuelle'])
+
+return arrondir(salaire_net, 0.01)</field>
+            <field name="status">validated</field>
+            <field name="type_">benefit_net_salary_calculation</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine" id="net_salary_calculation_imposable">
+            <field name="name">Calcul du salaire NET (Imposable)</field>
+            <field name="short_name">coog_net_salary_calculation_imposable</field>
+            <field name="algorithm">tranches = tranche_salaire(['gross_salary', 'salary_bonus'])
+TRA = tranches['TA']
+TRB = tranches['TB']
+TRC = tranches['TC']
+
+#calcul des contributions salariales
+contrib_salariales = ['4_chomage_1', '4_chomage_2', 
+    '3_prevoyance_1', '3_prevoyance_2', '2_retraite_1', '2_retraite_2', '1_urssaf_1', '1_urssaf_2', '1_urssaf_3', '1_urssaf_4']
+TA = taux_de_la_tranche('A', fixed=False, codes_list=contrib_salariales) or 0
+TB = taux_de_la_tranche('B', fixed=False, codes_list=contrib_salariales) or 0
+TC = taux_de_la_tranche('C', fixed=False, codes_list=contrib_salariales) or 0
+
+salaire_net = TRA * (1 - TA/100) + TRB * (1 - TB/100) + TRC * (1 - TC/100)
+
+#calcul de la CSG/RDS
+contrib_patronales = ['5_charges_patronales_prevoyance', '6_charges_patronales_sante_taux']
+assiette_csg_rds = 0.9825*(TRA + TRB + TRC) + taux_de_la_tranche('A', fixed=False, codes_list=contrib_patronales) * TRA / 100 + \
+     taux_de_la_tranche('B', fixed=False, codes_list=contrib_patronales) * TRB / 100 + \
+     taux_de_la_tranche('C', fixed=False, codes_list=contrib_patronales) * TRC / 100
+assiette_csg_rds += taux_de_la_tranche(fixed=True, codes_list=['2_charges_patronales_sante_montant'])
+salaire_net -= assiette_csg_rds * (0.005 + 0.051 + 0.024)
+
+#Enlever le montant de la prévoyance
+salaire_net -= taux_de_la_tranche(fixed=True, codes_list=['1_charges_salariales_mutuelle'])
+
+return arrondir(salaire_net, 0.01)</field>
+            <field name="status">validated</field>
+            <field name="type_">benefit_net_salary_calculation</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_urssaf_1">
+            <field name="name">1_urssaf_1</field>
+            <field name="type_">numeric</field>
+            <field name="string">URSAFF 1</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_urssaf_2">
+            <field name="name">1_urssaf_2</field>
+            <field name="type_">numeric</field>
+            <field name="string">URSAFF 2</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_urssaf_3">
+            <field name="name">1_urssaf_3</field>
+            <field name="type_">numeric</field>
+            <field name="string">URSAFF 3</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_urssaf_4">
+            <field name="name">1_urssaf_4</field>
+            <field name="type_">numeric</field>
+            <field name="string">URSAFF 4</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_retraite_1">
+            <field name="name">2_retraite_1</field>
+            <field name="type_">numeric</field>
+            <field name="string">Retraite 1</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_retraite_2">
+            <field name="name">2_retraite_2</field>
+            <field name="type_">numeric</field>
+            <field name="string">Retraite 2</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_prevoyance_1">
+            <field name="name">3_prevoyance_1</field>
+            <field name="type_">numeric</field>
+            <field name="string">Prevoyance 1</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_prevoyance_2">
+            <field name="name">3_prevoyance_2</field>
+            <field name="type_">numeric</field>
+            <field name="string">Prevoyance 2</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_chomage_1">
+            <field name="name">4_chomage_1</field>
+            <field name="type_">numeric</field>
+            <field name="string">Chomage 1</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_chomage_2">
+            <field name="name">4_chomage_2</field>
+            <field name="type_">numeric</field>
+            <field name="string">Chomage 2</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_charges_patronales_prevoyance">
+            <field name="name">5_charges_patronales_prevoyance</field>
+            <field name="type_">numeric</field>
+            <field name="string">Charges PATRONALES prévoyance (taux)</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_charges_salariales_sante_taux">
+            <field name="name">6_charges_salariales_sante_taux</field>
+            <field name="type_">numeric</field>
+            <field name="string">Charges SALARIALES santé (si taux)</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_charges_patronales_sante_taux">
+            <field name="name">6_charges_patronales_sante_taux</field>
+            <field name="type_">numeric</field>
+            <field name="string">Charges PATRONALES santé (si taux)</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_1_charges_salariales_mutuelle">
+            <field name="name">1_charges_salariales_mutuelle</field>
+            <field name="type_">numeric</field>
+            <field name="string">Charges SALARIALES santé (si montant)</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_data" id="net_salary_contibution_2_charges_patronales_montant">
+            <field name="name">2_charges_patronales_sante_montant</field>
+            <field name="type_">numeric</field>
+            <field name="string">Charges PATRONALES santé (si montant)</field>
+            <field name="kind">salary</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="claim.net_calculation_rule" id="net_indemnification_rule_contributions_definition">
+            <field name="name">Calcul du NET à payer</field>
+            <field name="rule" ref="net_salary_calculation_a_payer"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_urssaf_1">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_urssaf_1"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_urssaf_2">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_urssaf_2"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_urssaf_3">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_urssaf_3"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_urssaf_4">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_urssaf_4"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_retraite_1">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_retraite_1"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_retraite_2">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_retraite_2"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_prevoyance_1">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_prevoyance_1"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_prevoyance_2">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_prevoyance_2"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_chomage_1">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_chomage_1"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_chomage_2">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_chomage_2"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_charges_patronales_prevoyance">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_charges_patronales_prevoyance"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_charges_salariales_sante_taux">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_charges_salariales_sante_taux"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_charges_patronales_sante_taux">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_charges_patronales_sante_taux"/>
+        </record>
+        <record model="net_calculation_rule-fix_extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_1_charges_salariales_mutuelle">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_1_charges_salariales_mutuelle"/>
+        </record>
+        <record model="net_calculation_rule-fix_extra_data" id="net_indemnification_rule_contributions_definition_net_salary_contibution_2_charges_patronales_montant">
+            <field name="calculation_rule" ref="net_indemnification_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_2_charges_patronales_montant"/>
+        </record>
+        <record model="claim.net_calculation_rule" id="net_indemnification_imposable_rule_contributions_definition">
+            <field name="name">Calcul du NET imposable</field>
+            <field name="rule" ref="net_salary_calculation_imposable"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_urssaf_1">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_urssaf_1"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_urssaf_2">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_urssaf_2"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_urssaf_3">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_urssaf_3"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_urssaf_4">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_urssaf_4"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_retraite_1">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_retraite_1"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_retraite_2">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_retraite_2"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_prevoyance_1">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_prevoyance_1"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_prevoyance_2">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_prevoyance_2"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_chomage_1">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_chomage_1"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_chomage_2">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_chomage_2"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_charges_patronales_prevoyance">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_charges_patronales_prevoyance"/>
+        </record>
+        <record model="net_calculation_rule-extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_charges_patronales_sante_taux">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_charges_patronales_sante_taux"/>
+        </record>
+        <record model="net_calculation_rule-fix_extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_1_charges_salariales_mutuelle">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_1_charges_salariales_mutuelle"/>
+        </record>
+        <record model="net_calculation_rule-fix_extra_data" id="net_indemnification_imposable_rule_contributions_definition_net_salary_contibution_2_charges_patronales_montant">
+            <field name="calculation_rule" ref="net_indemnification_imposable_rule_contributions_definition"/>
+            <field name="extra_data" ref="net_salary_contibution_2_charges_patronales_montant"/>
+        </record>
     </data>
 </tryton>

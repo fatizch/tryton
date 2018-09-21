@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="table">
+        <!-- TABLE -->
+        <record model="table" id="table_pmss">
+            <field name="name">PMSS</field>
+            <field name="code">pmss</field>
+            <field name="type_">numeric</field>
+            <field name="dimension_kind1">range-date</field>
+            <field name="dimension_name1">Date</field>
+            <field name="number_of_digits">4</field>
+        </record>
+        <!-- DIMENSION VALUES -->
+        <record model="table.dimension.value" id="pmss_dimension_value_2000">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2000-01-01</field>
+            <field name="end_date">2001-01-01</field>
+            <field name="name">[01/01/2000 - 01/01/2001[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2001">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2001-01-01</field>
+            <field name="end_date">2002-01-01</field>
+            <field name="name">[01/01/2001 - 01/01/2002[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2002">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2002-01-01</field>
+            <field name="end_date">2003-01-01</field>
+            <field name="name">[01/01/2002 - 01/01/2003[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2003">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2003-01-01</field>
+            <field name="end_date">2004-01-01</field>
+            <field name="name">[01/01/2003 - 01/01/2004[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2004">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2004-01-01</field>
+            <field name="end_date">2005-01-01</field>
+            <field name="name">[01/01/2004 - 01/01/2005[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2005">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2005-01-01</field>
+            <field name="end_date">2006-01-01</field>
+            <field name="name">[01/01/2005 - 01/01/2006[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2006">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2006-01-01</field>
+            <field name="end_date">2007-01-01</field>
+            <field name="name">[01/01/2006 - 01/01/2007[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2007">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2007-01-01</field>
+            <field name="end_date">2008-01-01</field>
+            <field name="name">[01/01/2007 - 01/01/2008[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2008">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2008-01-01</field>
+            <field name="end_date">2009-01-01</field>
+            <field name="name">[01/01/2008 - 01/01/2009[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2009">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2009-01-01</field>
+            <field name="end_date">2010-01-01</field>
+            <field name="name">[01/01/2009 - 01/01/2010[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2010">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2010-01-01</field>
+            <field name="end_date">2011-01-01</field>
+            <field name="name">[01/01/2010 - 01/01/2011[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2011">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2011-01-01</field>
+            <field name="end_date">2012-01-01</field>
+            <field name="name">[01/01/2011 - 01/01/2012[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2012">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2012-01-01</field>
+            <field name="end_date">2013-01-01</field>
+            <field name="name">[01/01/2012 - 01/01/2013[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2013">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2013-01-01</field>
+            <field name="end_date">2014-01-01</field>
+            <field name="name">[01/01/2013 - 01/01/2014[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2014">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2014-01-01</field>
+            <field name="end_date">2015-01-01</field>
+            <field name="name">[01/01/2014 - 01/01/2015[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2015">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2015-01-01</field>
+            <field name="end_date">2016-01-01</field>
+            <field name="name">[01/01/2015 - 01/01/2016[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2016">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2016-01-01</field>
+            <field name="end_date">2017-01-01</field>
+            <field name="name">[01/01/2016 - 01/01/2017[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2017">
+            <field name="definition" ref="table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2017-01-01</field>
+            <field name="end_date">2018-01-01</field>
+            <field name="name">[01/01/2017 - 01/01/2018[</field>
+        </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2018">
+            <field name="definition" ref="table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2018-01-01</field>
+            <field name="end_date">2019-01-01</field>
+            <field name="name">[01/01/2018 - 01/01/2019[</field>
+        </record>
+        <!-- CELLS -->
+        <record model="table.cell" id="pmss_cell_2000">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2000"/>
+            <field name="value">2241</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2001">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2001"/>
+            <field name="value">2279</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2002">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2002"/>
+            <field name="value">2352</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2003">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2003"/>
+            <field name="value">2432</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2004">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2004"/>
+            <field name="value">2476</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2005">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2005"/>
+            <field name="value">2516</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2006">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2006"/>
+            <field name="value">2589</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2007">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2007"/>
+            <field name="value">2682</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2008">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2008"/>
+            <field name="value">2773</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2009">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2009"/>
+            <field name="value">2859</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2010">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2010"/>
+            <field name="value">2885</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2011">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2011"/>
+            <field name="value">2946</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2012">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2012"/>
+            <field name="value">3031</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2013">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2013"/>
+            <field name="value">3086</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2014">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2014"/>
+            <field name="value">3129</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2015">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2015"/>
+            <field name="value">3170</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2016">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2016"/>
+            <field name="value">3218</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2017">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2017"/>
+            <field name="value">3269</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2018">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2018"/>
+            <field name="value">3311</field>
+        </record>
+    </data>
+</tryton>
