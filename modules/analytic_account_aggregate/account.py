@@ -135,7 +135,7 @@ class AnalyticLineAggregated(LineAggregated):
                 domain_.append(
                     ('move_line.move.snapshot', '=', line.snapshot.id))
         else:
-            domain_ = [('id', '=', line.id)]
+            domain_ = [('move_line.id', '=', line.id)]
 
         return domain_
 
