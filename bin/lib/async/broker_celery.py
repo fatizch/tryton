@@ -2,10 +2,13 @@ import os
 import time
 import json
 import redis
+import traceback
 
 from urlparse import urlparse
 from celery import Celery
 from celery import Task
+from celery.utils.log import get_task_logger
+
 
 import async.config as config
 from async.tasks import tasks as batch_tasks
@@ -27,6 +30,8 @@ broker_port = broker_url.port
 broker_db = broker_url.path.strip('/')
 connection = redis.StrictRedis(host=broker_host, port=broker_port,
     db=broker_db)
+
+logger = get_task_logger(__name__)
 
 
 class CoogTask(Task):
@@ -59,12 +64,18 @@ class CoogBatchTask(Task):
                 getattr(batch, method)(task_id, objects, *args, **kwargs)
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
-        connection.lpush('coog:fail', task_id)
-        extra_args = {}
-        extra_args.update(args[2])
-        extra_args.update(kwargs)
-        self.batch_trigger_event('on_job_fail', task_id, args[0],
-           args[1], exc, **extra_args)
+        try:
+            connection.lpush('coog:fail', task_id)
+            extra_args = {}
+            extra_args.update(args[2])
+            extra_args.update(kwargs)
+            self.batch_trigger_event('on_job_fail', task_id, args[0],
+               args[1], einfo, **extra_args)
+        except Exception:
+            logger.critical("!!!!Error happened during on failure!!!!")
+            logger.critical("!!!!See stack below!!!!")
+            tb = traceback.format_exc()
+            logger.critical(''.join(tb))
 
     def on_success(self, retval, task_id, args, kwargs):
         extra_args = {}
@@ -103,7 +114,7 @@ def enqueue(queue, fname, args, **kwargs):
 
 
 def insert_into_redis(chain, queue, nb_jobs, nb_records, start_time,
-    duration, status):
+        duration, status):
     info = {
         "chain_name": chain,
         "queue": queue,

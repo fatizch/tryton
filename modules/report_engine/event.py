@@ -246,6 +246,9 @@ class ReportProductionRequest(model.CoogSQL, model.CoogView):
     def treat_requests(cls, report_production_requests):
         all_reports, all_attachments = [], []
 
+        report_production_requests = [x for x in report_production_requests
+            if not x.treated]
+
         def group_prod_requests(x):
             return x.report_template
         report_production_requests = sorted(report_production_requests,

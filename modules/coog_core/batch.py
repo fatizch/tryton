@@ -206,7 +206,7 @@ class BatchRoot(ModelView):
         return MainModel.browse([x[0] for x in ids])
 
     @classmethod
-    def on_job_fail(cls, task_id, objects, exc, *args, **kwargs):
+    def on_job_fail(cls, task_id, objects, einfo, *args, **kwargs):
         '''
         This method is called on failure by the celery Task itself
         If the task has been enqueued and does not come from a batch,
@@ -215,7 +215,9 @@ class BatchRoot(ModelView):
         user = kwargs.get('user', None)
         if user:
             Pool().get('event').notify_events(objects,
-                'asynchronous_task_failure', description=exc.message,
+                'asynchronous_task_failure',
+                description='\n'.join([repr(einfo.exception.message),
+                        einfo.traceback]),
                 **kwargs)
 
     @classmethod

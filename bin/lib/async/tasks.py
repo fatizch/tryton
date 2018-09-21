@@ -151,7 +151,7 @@ def batch_exec(name, ids, params, **kwargs):
         # Remove non business params (batch_params to be passed to select_ids)
         connection_date = batch_params.pop('connection_date')
         job_size = batch_params.pop('job_size')
-        retry = batch_params.pop('retry')
+        retry = batch_params.pop('retry', 0)
         transaction_size = batch_params.pop('transaction_size')
         batch_params.pop('split')
         batch_params.pop('chain_name', None)

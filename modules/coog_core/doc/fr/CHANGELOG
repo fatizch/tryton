@@ -1,3 +1,4 @@
+* BUG#9948 Logger la pile d'exécution en cas d'échec de tâche asynchrone, securiser le comportement en cas d'échec
 * BUG#9746 Filtrer les actions par type d'évenement qui sont inactives afin de ne pas les appliquer
 * BUG#7334 Gestion des exceptions DatabaseOperationalError
 * FEA#9487 Possibilité de surcharger la daily chain
