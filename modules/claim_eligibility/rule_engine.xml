@@ -23,6 +23,88 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">_re_get_service_eligibility_decision_code</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+        <record model="rule_engine" id="eligibite_prestation">
+            <field name="name">Eligibilité prestation</field>
+            <field name="short_name">coog_eligibite_prestation</field>
+            <field name="algorithm">if service_deductible():
+    ajouter_info(u'La prestation est dans la période de franchise cumulée')
+    return True
+
+# gestion du délai de déclaration
+date_declaration = date_declaration_sinistre()
+fin_franchise = date_fin_franchise() or date_de_debut_du_prejudice()
+date_debut_prejudice = date_de_debut_du_prejudice()
+definition = param_2_delai_de_declaration_definition()
+delai = param_1_delai_de_declaration_quantite()
+date_max_declaration = ajouter_jours(date_debut_prejudice, 1)
+delai_max_rechute = param_3_periode_maximale_entre_un_precedent_arret_et_une_rechute_quantite()
+delai_max_rechute_periodicite = param_4_periode_maximale_entre_un_precedent_arret_et_une_rechute_type_periodicite()
+
+if definition == 'jour_apres_arret_travail':
+    date_max_declaration = ajouter_jours(date_debut_prejudice, delai)
+elif definition == 'mois_apres_arret_travail':
+    date_max_declaration = ajouter_mois(date_debut_prejudice, delai)
+elif definition == 'jour_apres_franchise':
+    date_max_declaration = ajouter_jours(fin_franchise, delai)
+elif definition == 'mois_apres_franchise':
+    date_max_declaration = ajouter_mois(fin_franchise, delai)
+if date_max_declaration &lt; date_declaration:
+    if 'accord_de_prise_en_charge' not in documents_recus():
+        ajouter_info(u'La date de déclaration saisie %s est superieure à la date maximale de déclaration %s. '
+            u'Un accord de prise en charge est nécessaire pour continuer.' % (
+                formater_date(date_declaration), formater_date(date_max_declaration)))
+        return False
+
+# gestion du délai de rechute
+if est_une_rechute():
+    date_max_rechute = date_fin_dernier_prejudice()
+    if delai_max_rechute_periodicite == 'mois':
+        date_max_rechute = ajouter_mois(date_max_rechute, delai_max_rechute)
+    else:
+        date_max_rechute = ajouter_jours(date_max_rechute, delai_max_rechute)
+    if date_de_debut_du_prejudice() &gt; date_max_rechute:
+        if 'accord_de_prise_en_charge' not in documents_recus():
+            ajouter_info(u'Pour une rechute, le nouvel arret doit survenir avant le %s.'
+                u'Un accord de prise en charge est nécessaire pour continuer'
+                u' ou vous pouvez créer un nouveau dossier de prestations' % formater_date(date_max_rechute))
+            return False
+
+return True</field>
+            <field name="status">validated</field>
+            <field name="type_">benefit</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="rule_parameter_2_data_delai_de_declaration_definition_eligibite_prestation">
+            <field name="name">2_delai_de_declaration_definition</field>
+            <field name="type_">selection</field>
+            <field name="selection">jour_apres_arret_travail:Nombre de jours après l'arrêt de travail
+mois_apres_arret_travail:Nombre de mois après l'arrêt de travail
+jour_apres_franchise:Nombre de jours après la franchise
+mois_apres_franchise:Nombre de mois après la franchise</field>
+            <field name="string">Délai de déclaration - definition</field>
+            <field name="selection_sorted">True</field>
+            <field name="parent_rule" ref="eligibite_prestation"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="rule_paramater_1_data_delai_de_declaration_quantite_eligibite_prestation">
+            <field name="name">1_delai_de_declaration_quantite</field>
+            <field name="type_">integer</field>
+            <field name="string">Délai de déclaration</field>
+            <field name="parent_rule" ref="eligibite_prestation"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="rule_parameter_4_periode_maximale_entre_un_precedent_arret_et_une_rechute_type_periodicite">
+            <field name="name">4_periode_maximale_entre_un_precedent_arret_et_une_rechute_type_periodicite</field>
+            <field name="type_">selection</field>
+            <field name="selection">jour:Jour
+            mois:Mois</field>
+            <field name="string">Période maximale entre un précédent arrêt et une rechute - periodicité</field>
+            <field name="selection_sorted">True</field>
+            <field name="parent_rule" ref="eligibite_prestation"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="rule_parameter_3_periode_maximale_entre_un_precedent_arret_et_une_rechute_quantite">
+            <field name="name">3_periode_maximale_entre_un_precedent_arret_et_une_rechute_quantite</field>
+            <field name="type_">integer</field>
+            <field name="string">Période maximale entre un précédent arrêt et une rechute</field>
+            <field name="parent_rule" ref="eligibite_prestation"/>
+        </record>
     </data>
 </tryton>
-
