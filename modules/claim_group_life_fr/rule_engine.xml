@@ -470,7 +470,7 @@ return ([{
             <field name="algorithm"># gestion de la rechute
 date_prejudice = param_date_de_prejudice() or date_de_debut_du_prejudice()
 if est_une_rechute():
-    return date_prejudice
+    return ajouter_jours(date_prejudice, -1)
 
 # recherche des jours de franchise déjà utilisés
 nb_jour = param_nombre_de_jours_de_franchise()
@@ -493,7 +493,7 @@ elif param_type_de_franchise() == 'cumulee_sur_annee_civile':
     nb_franchise_cumulee = nb_jour_franchise(date_debut, date_fin)
     nb_jour -= nb_franchise_cumulee
     
-nb_jour = max(nb_jour, 1)
+nb_jour = max(nb_jour, 0)
 return ajouter_jours(date_prejudice, nb_jour - 1)</field>
             <field name="status">validated</field>
             <field name="type_">benefit_deductible</field>
