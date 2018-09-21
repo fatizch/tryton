@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 
+from genshi.template import NewTextTemplate
 from sql.conditionals import Coalesce
 import datetime
 
@@ -86,6 +87,17 @@ class Sequence(model.CoogSQL):
         cls.number_next.depends.append('sub_sequences')
 
     @classmethod
+    def _get_substitutions(cls, date):
+        res = super(Sequence, cls)._get_substitutions(date)
+        res.update(ServerContext().get('sequence_substitutions', {}))
+        return res
+
+    @classmethod
+    def _process(cls, string, date=None):
+        tmpl = NewTextTemplate(string or '')
+        return tmpl.generate(**cls._get_substitutions(date)).render()
+
+    @classmethod
     def validate(cls, records):
         super(Sequence, cls).validate(records)
         with model.error_manager():
@@ -102,6 +114,12 @@ class Sequence(model.CoogSQL):
         if not number_next and not self.number_next:
             return
         return super(Sequence, self).update_sql_sequence(number_next)
+
+    @classmethod
+    def check_prefix_suffix(cls, sequences):
+        # Disable prefix / suffix validation because check is done
+        # without the overrided context.
+        pass
 
     @classmethod
     def set_number_next(cls, sequences, name, value):

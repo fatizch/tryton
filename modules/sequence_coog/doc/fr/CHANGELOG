@@ -1,3 +1,4 @@
+* FEA#9883 Ajout de surcharge afin d'ajouter des données dynamiques supplémentaires dans le prefixe / suffixes des séquences
 * BUG#9338 Mise à jour de la vue liste des sequences suite au merge de tryton 4.8
 
 Version 2.0 - 2018-04-13

@@ -18,6 +18,7 @@ from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.pool import Pool
 from trytond.model import dualmethod, Unique
 from trytond.wizard import Wizard, StateView, StateTransition, Button
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import utils, model, fields, coog_date
 from trytond.modules.coog_core import coog_string, export
@@ -1230,7 +1231,10 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         cur_dict['subscriber'] = self.get_policy_owner()
 
     def get_new_contract_number(self):
-        return self.product.new_contract_number()
+        with ServerContext().set_context(sequence_substitutions={
+                'contract': self,
+                }):
+            return self.product.new_contract_number()
 
     def after_activate(self):
         if not getattr(self, 'contract_number', None):
