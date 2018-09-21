@@ -2,6 +2,139 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tryton>
+    <data>
+        <record model="rule_engine" id="franchise_base_sur_un_nombre_de_jour_defaut">
+            <field name="name">Franchise basée sur un nombre de jours</field>
+            <field name="short_name">coog_franchise_base_sur_un_nombre_de_jour_defaut</field>
+            <field name="algorithm"># gestion de la rechute
+date_prejudice = param_date_de_prejudice() or date_de_debut_du_prejudice()
+if est_une_rechute():
+    return date_prejudice
+
+# recherche des jours de franchise déjà utilisés
+nb_jour = param_nombre_de_jours_de_franchise()
+if param_type_de_franchise() == 'cumulee_sur_365_jours':
+    date_fin = date_prejudice
+    date_fin = ajouter_jours(date_fin, -1)
+    date_debut = ajouter_jours(date_fin, -365)
+    nb_franchise_cumulee = nb_jour_franchise(date_debut, date_fin)
+    nb_jour -= nb_franchise_cumulee
+elif param_type_de_franchise() == '12_mois_glissants':
+    date_fin = date_prejudice
+    date_fin = ajouter_jours(date_fin, -1)
+    date_debut = ajouter_mois(date_fin, -12)
+    nb_franchise_cumulee = nb_jour_franchise(date_debut, date_fin)
+    nb_jour -= nb_franchise_cumulee
+elif param_type_de_franchise() == 'cumulee_sur_annee_civile':
+    date_fin = date_prejudice
+    date_fin = ajouter_jours(date_fin, -1)
+    date_debut = datetime.date(date_prejudice.year, 1, 1)
+    nb_franchise_cumulee = nb_jour_franchise(date_debut, date_fin)
+    nb_jour -= nb_franchise_cumulee
+    
+nb_jour = max(nb_jour, 1)
+return ajouter_jours(date_prejudice, nb_jour - 1)</field>
+            <field name="status">validated</field>
+            <field name="type_">benefit_deductible</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="1_type_de_franchise_base_sur_un_nombre_de_jour_defaut">
+            <field name="name">type_de_franchise</field>
+            <field name="type_">selection</field>
+            <field name="selection">continue:Continue
+cumulee_sur_365_jours:Cumulée sur les 365 jours précédant l'arrêt
+12_mois_glissants:Cumulée sur 12 mois glissants
+cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
+            <field name="string">Type de franchise</field>
+            <field name="parent_rule" ref="franchise_base_sur_un_nombre_de_jour_defaut"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="2_nombre_de_jours_de_franchise_base_sur_un_nombre_de_jour_default">
+            <field name="name">nombre_de_jours_de_franchise</field>
+            <field name="type_">integer</field>
+            <field name="string">Nombre de jours de franchise</field>
+            <field name="parent_rule" ref="franchise_base_sur_un_nombre_de_jour_defaut"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="3_date_de_prejudice_base_sur_un_nombre_de_jour_default">
+            <field name="name">date_de_prejudice</field>
+            <field name="type_">date</field>
+            <field name="string">Date de prejudice</field>
+            <field name="parent_rule" ref="franchise_base_sur_un_nombre_de_jour_defaut"/>
+        </record>
+        <record model="rule_engine" id="franchise_toute_nature_arret_defaut">
+            <field name="name">Franchise fixe toute nature d'arrêt confondue</field>
+            <field name="short_name">coog_franchise_fixe_toute_nature_d_arret_confondue</field>
+            <field name="algorithm">nb_jour = param_2_nombre_de_jours_de_franchise()
+type_franchise = param_1_type_de_franchise()
+return rule_coog_franchise_base_sur_un_nombre_de_jour_defaut(type_de_franchise=type_franchise, nombre_de_jours_de_franchise=nb_jour, date_de_prejudice=None)</field>
+            <field name="status">validated</field>
+            <field name="type_">benefit_deductible</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="1_type_de_franchise_toute_nature_arret_defaut">
+            <field name="name">1_type_de_franchise</field>
+            <field name="type_">selection</field>
+            <field name="selection">continue:Continue
+cumulee_sur_365_jours:Cumulée sur les 365 jours précédant l'arrêt
+12_mois_glissants:Cumulée sur 12 mois glissants
+cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
+            <field name="string">Type de franchise</field>
+            <field name="selection_sorted">True</field>
+            <field name="parent_rule" ref="franchise_toute_nature_arret_defaut"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="2_nombre_de_jours_de_franchise_toute_nature_arret_default">
+            <field name="name">2_nombre_de_jours_de_franchise</field>
+            <field name="type_">integer</field>
+            <field name="string">Nombre de jours de franchise</field>
+            <field name="parent_rule" ref="franchise_toute_nature_arret_defaut"/>
+        </record>
+        <record model="rule_engine-rule_engine" id="rule_used_toute_nature_arret_defaut_base_sur_un_nombre_de_jour_defaut">
+            <field name="parent_rule" ref="franchise_toute_nature_arret_defaut"/>
+            <field name="rule" ref="franchise_base_sur_un_nombre_de_jour_defaut"/>
+        </record>
+        <record model="rule_engine" id="franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut">
+            <field name="name">Franchise fixe toute nature d'arrêt confondue pour un arrêt total</field>
+            <field name="short_name">coog_franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total</field>
+            <field name="algorithm">nb_jour = param_2_nombre_de_jours_de_franchise()
+type_franchise = param_1_type_de_franchise()
+date_prejudice = date_de_debut_du_prejudice()
+date_calcul = date_prejudice
+
+periodes_mtt = periodes_de_deduction('part_time', date_calcul, date_fin_periode_indemnisation())
+fin_franchise = rule_coog_franchise_base_sur_un_nombre_de_jour_defaut(type_de_franchise=type_franchise, nombre_de_jours_de_franchise=nb_jour, date_de_prejudice=date_calcul)
+for debut_mtt, fin_mtt in periodes_mtt:
+    if debut_mtt &lt;= fin_franchise:
+        date_calcul = ajouter_jours(fin_mtt, 1)
+    else:
+       break
+    fin_franchise = rule_coog_franchise_base_sur_un_nombre_de_jour_defaut(
+        type_de_franchise=type_franchise, nombre_de_jours_de_franchise=nb_jour, date_de_prejudice=date_calcul)
+return fin_franchise</field>
+            <field name="status">validated</field>
+            <field name="type_">benefit_deductible</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="1_type_de_franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut">
+            <field name="name">1_type_de_franchise</field>
+            <field name="type_">selection</field>
+            <field name="selection">continue:Continue
+cumulee_sur_365_jours:Cumulée sur les 365 jours précédant l'arrêt
+12_mois_glissants:Cumulée sur 12 mois glissants
+cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
+            <field name="string">Type de franchise</field>
+            <field name="selection_sorted">True</field>
+            <field name="parent_rule" ref="franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="2_nombre_de_jours_de_franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut">
+            <field name="name">2_nombre_de_jours_de_franchise</field>
+            <field name="type_">integer</field>
+            <field name="string">Nombre de jours de franchise</field>
+            <field name="parent_rule" ref="franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut"/>
+        </record>
+        <record model="rule_engine-rule_engine" id="rule_used_toute_nature_arret_total_defaut_base_sur_un_nombre_de_jour_defaut">
+            <field name="parent_rule" ref="franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut"/>
+            <field name="rule" ref="franchise_base_sur_un_nombre_de_jour_defaut"/>
+        </record>
+    </data>
     <data noupdate="1">
         <record model="rule_engine.function" id="nombre_jours_hospitalisation_prejudice">
             <field name="translated_technical_name">nombre_jours_hospitalisation_prejudice</field>

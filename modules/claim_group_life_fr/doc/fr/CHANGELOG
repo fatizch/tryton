@@ -1,8 +1,10 @@
+* FEA#9904  Ajout de règles de franchise par défaut dans coog
+
 Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
 Version 1.12 - 2017-04-28
-* FEA#0000 Show part time in indemnification details status
+* FEA#0000 Ajout du mi-temps thérapeutique dans le statut des details d' indemnisations
 
 Version 1.10 - 2016-11-02
-* FEA#0000 Manage hospitalization period during claim treatment
-* FEA#0000 Module creation
+* FEA#0000 Gestion des périodes d'hospitalisation dans le traitement des dossiers de prestation
+* FEA#0000 Création du module

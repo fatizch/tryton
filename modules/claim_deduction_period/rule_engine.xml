@@ -20,5 +20,16 @@ est vrai, le montant journalier sera arrondi avant la proratisation.</field>
             <field name="fct_args">type, date_debut, date_fin, [montant_journalier], [arrondi]</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
+        <record model="rule_engine.function" id="deduction_payment_periods">
+            <field name="translated_technical_name">periodes_de_deduction</field>
+            <field name="description">Périodes de Déduction</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_deduction_periods</field>
+            <field name="long_description">Retourne les périodes de déductions  correspondant à la période et au type sélectionné sous forme de liste de deux éléments: (date de début période 1, date de fin période 1), (date de début période 2, date de fin période 2)...</field>
+            <field name="fct_args">type, date_debut, date_fin</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
     </data>
 </tryton>
