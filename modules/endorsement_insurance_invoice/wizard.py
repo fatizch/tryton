@@ -423,6 +423,9 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
             if not endorsement.clean_up():
                 new_endorsements.append(endorsement)
 
+        if not new_endorsements:
+            new_endorsements = [master_endorsement.contract_endorsements[0]]
+
         master_endorsement.contract_endorsements = new_endorsements
 
     @classmethod

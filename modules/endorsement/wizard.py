@@ -877,7 +877,10 @@ class ManageOptions(EndorsementWizardStepMixin):
                 contract_endorsement.contract._save_values)
             if not contract_endorsement.clean_up():
                 new_endorsements.append(contract_endorsement)
+        if not new_endorsements:
+            new_endorsements = [endorsement.contract_endorsements[0]]
         endorsement.contract_endorsements = new_endorsements
+
         endorsement.save()
 
     def get_parent_endorsed(self, parent, contract_endorsements):
