@@ -176,7 +176,7 @@ class Contract:
 
     @fields.depends('subscriber', 'billing_informations')
     def on_change_subscriber(self):
-        if not self.billing_informations:
+        if not self.subscriber or not self.billing_informations:
             return
         new_billing_information = self.billing_informations[-1]
         new_billing_information.date = None

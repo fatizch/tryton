@@ -1,10 +1,11 @@
+* BUG#9972 Do not crash when changing subscriber in subscription process
 * BUG#9759 Translate frequency in invoice line detail rec_name
 * BUG#9857 Unlock invoice posting with an end date greater than that of the contract if prorata forces it
 * FEA#9492 Add invoice line to server context when getting move lines
 * BUG#9211 Update payment dates when unsuspending payments
 * BUG#9697 invoice against balance set number and post batches crash when there is nothing to treat
 * BUG#9694 Make invoice against balance batch runnable
-* BUG#9685 Use contract initial start date instead of contract start date while getting the invoice periods 
+* BUG#9685 Use contract initial start date instead of contract start date while getting the invoice periods
 * BUG#9542 Prevent selection of contracts not entirely invoice by renewal batch
 * BUG#9433 Fix cache setting / retrieval for future invoices
 * BUG#9296 Retrieve the good period when recalculating the previous year premium
