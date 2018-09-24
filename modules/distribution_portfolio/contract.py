@@ -83,7 +83,7 @@ class CoveredElement:
     def __setup__(cls):
         super(CoveredElement, cls).__setup__()
         cls.party.depends.append('allowed_portfolios')
-        cls.party.domain = [cls.party.domain, ['OR',
+        cls.party.domain = ['AND', cls.party.domain, ['OR',
                 ('portfolio', 'in', Eval('allowed_portfolios')),
                 ('portfolio', '=', None)]]
 
