@@ -24,9 +24,12 @@ class Insurer:
         else:
             return '%s - %s' % (name, self.product.rec_name)
 
+    def get_products(self):
+        return [p for o in self.options for p in o.products if p]
+
     def get_product(self, name):
-        return (self.options[0].products[0].id
-            if self.options and self.options[0].products else None)
+        products = self.get_products()
+        return products[0].id if len(products) == 1 else None
 
     def get_func_key(self, name):
         return '%s|%s' % (self.party.code,

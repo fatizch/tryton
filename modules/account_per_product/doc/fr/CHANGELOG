@@ -1,3 +1,4 @@
+* FEA#9893 Ajout d'un message d'avertissement quand on mélange dans un produit des assureurs déjà utilisés dans d'autres produits
 * BUG#9892 Correction sur le quittancement des contrats qui ont des frais de dossier
 * FEA#9462 Alimentation du produit des mouvements comptables de compensation
 * FEA#9462 Correction des tests globaux

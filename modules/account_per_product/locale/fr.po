@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:offered.product:"
+msgid ""
+"The coverage \"%(coverage_code)s - %(coverage_name)s\" is already used in "
+"product(s) %(products)s"
+msgstr ""
+"La garantie \"%(coverage_code)s - %(coverage_name)s\" est déjà utilisée dans"
+" le(s) produit(s) %(products)s"
+
 msgctxt "field:account.aged_balance.context,product:"
 msgid "Product"
 msgstr "Produit"
