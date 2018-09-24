@@ -80,8 +80,8 @@ class Contract:
             super(Contract, self).update_start_date(caller)
 
     def finally_renewed(self):
-        return (self.activation_history and
-            self.activation_history[-1].final_renewal)
+        return (self.activation_history
+            and self.activation_history[-1].final_renewal)
 
     def get_is_renewable(self, name):
         if self.finally_renewed():
@@ -161,10 +161,9 @@ class Contract:
 
         contracts = sorted(contracts, key=keyfunc)
         for end_date, contracts in groupby(contracts, key=keyfunc):
-            new_start_date = end_date + relativedelta(days=1)
             to_renew = [x for x in contracts if x.is_renewable]
             if to_renew:
-                res[new_start_date] = to_renew
+                res[end_date + relativedelta(days=1)] = to_renew
         return res
 
     @classmethod

@@ -66,6 +66,11 @@ class Contract:
                 return False
         return True
 
+    def finally_renewed(self):
+        if self.reduction_date:
+            return True
+        return super(Contract, self).finally_renewed()
+
     @classmethod
     @model.CoogView.button_action('contract_reduction.act_reduce_contract')
     def button_reduce(cls, contracts):
@@ -134,6 +139,9 @@ class Contract:
         # the status back to active for consistency
         if self.status == 'hold':
             self.status = 'active'
+
+        # If the contract had en end date, we want to remove it
+        self.end_date = None
 
     def calculate_reductions(self, reduction_date):
         reductions = []
