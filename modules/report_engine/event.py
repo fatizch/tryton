@@ -138,8 +138,10 @@ class EventTypeAction:
             return object_
 
     def template_matches(self, event_object, filtering_objects, template):
-        return all([template in self.get_templates_list(filtering_object)
-                for filtering_object in filtering_objects])
+        res = [template in self.get_templates_list(filtering_object)
+            for filtering_object in filtering_objects
+            if template.matches_pyson(filtering_object)]
+        return all(res) if res else False
 
     def get_templates_list(self, filtering_object):
         '''To allow filtering of report templates by event, this method

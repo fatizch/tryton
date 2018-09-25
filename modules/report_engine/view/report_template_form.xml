@@ -10,6 +10,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="on_model" widget="selection"/>
     <label name="kind"/>
     <field name="kind"/>
+    <label name="pyson_condition"/>
+    <field name="pyson_condition" colspan="3"/>
     <label name="input_kind"/>
     <field name="input_kind"/>
     <label name="process_method"/>

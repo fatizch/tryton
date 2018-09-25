@@ -1,3 +1,4 @@
+* FEA#9985 Ajout d'une condition pyson sur les modèles de courrier. Utile pour ne pas traiter des modèles dont la condition ne serait pas vérifiée. Fonctionne également avec les actions par type d'évenement et les pièces jointes sur les mails.
 * BUG#9738 Suppression automatique des demandes d'impression lors de la suppression d'un modèle imprimable
 * BUG#9760 Support de la génération de plusieurs modèles de courriers
 * BUG#9672 Correction de la méthode register
@@ -32,7 +33,7 @@ Version 1.14 - 2017-11-09
 * BUG#6438 Restauration du fonctionnement des paramètres sur les courriers
 * OTH#0000 Supprimer les champs inutilisés sur le vue du report_template_version
 * FEA#6373 Ajout du type de traitement asynchrone immédiat sur les actions par type d'événement
-* OTH#0000 Corriger import manquant 
+* OTH#0000 Corriger import manquant
 * OTH#0000 Correctif: Utilisation de template.get_extension au lieu de template.output_format
 * FEA#2227 Stocker les modèles de courriers dans la base de données
 * FEA#6180 Ajout de la fonction strftime dans le contexte du rapport pour formater les dates de toutes les façons possibles

@@ -267,7 +267,8 @@ def pyson_result(pyson_expr, target):
     elif the_pyson is False:
         return False
 
-    env = EvalEnvironment(target, target.__class__)
+    # In a printing context the class is a fake report_engine.TranslateModel
+    env = EvalEnvironment(target, Pool().get(target.__name__))
     env.update(Transaction().context)
     env['current_date'] = datetime.datetime.today()
     env['time'] = time

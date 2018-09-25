@@ -117,6 +117,11 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     code = fields.Char('Code', required=True)
     versions = fields.One2Many('report.template.version', 'template',
         'Versions', delete_missing=True)
+    pyson_condition = fields.Char('Pyson Condition', help="A Pyson expression "
+        "to filter templates to produce for an object. If set and evaluated to "
+        "True, the report will be produced. Example:\n "
+        "Bool(Eval('must_be_printed'))"
+        "\n where must_be_printed is a field on the object")
     kind = fields.Selection('get_possible_kinds', 'Kind')
     input_kind = fields.Selection('get_possible_input_kinds',
         'Input Kind', required=True)
@@ -624,6 +629,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         if style_method:
             return style_method(at_date, self)
 
+    def matches_pyson(self, object_):
+        return not self.pyson_condition or utils.pyson_result(
+            self.pyson_condition, object_)
+
 
 class ReportLightTemplate:
     __metaclass__ = PoolMeta
@@ -882,7 +891,8 @@ class Printable(Model):
                 ]
         domain.append(['OR', ('groups', '=', None),
                 ('groups', 'in', [x.id for x in user.groups])])
-        return list(set(DocumentTemplate.search(domain)))
+        return [p for p in set(DocumentTemplate.search(domain))
+            if p.matches_pyson(self)]
 
     def build_template_domain(self, domain_kind):
         template_holders_sub_domains = self.get_template_holders_sub_domains()
