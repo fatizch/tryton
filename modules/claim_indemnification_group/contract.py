@@ -85,7 +85,7 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
     version = fields.Many2One('contract.option.version', 'Version',
         required=True, ondelete='CASCADE', select=True)
     benefit = fields.Many2One('benefit', 'Benefit', required=True,
-        ondelete='RESTRICT', readonly=True)
+        ondelete='RESTRICT')
     available_deductible_rules = fields.Function(
         fields.Many2Many('rule_engine', None, None,
             'Available Deductible Rule'),

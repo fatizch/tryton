@@ -16,7 +16,7 @@ class ManageOptionBenefits:
     @classmethod
     def get_displayer_fields(cls):
         res = super(ManageOptionBenefits, cls).get_displayer_fields()
-        res['contract.option.benefit'].append('available_underwriting_rules')
+        res['contract.option.benefit'] += ('available_underwriting_rules',)
         return res
 
     @classmethod
