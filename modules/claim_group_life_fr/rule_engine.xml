@@ -73,12 +73,6 @@ salaire_net_prime:Salaire Net + Primes</field>
             <field name="string">Méthode de traitement de référence</field>
             <field name="parent_rule" ref="calcul_du_traitement_de_base_journalier_en_fonction_des_tranches"/>
         </record>
-        <record model="extra_data" id="sanction_ijss_traitement_journalier_par_tranche_de_salaire">
-            <field name="name">sanction_ijss</field>
-            <field name="type_">numeric</field>
-            <field name="string">Sanction IJSS</field>
-            <field name="kind">benefit</field>
-        </record>
         <record model="rule_engine" id="traitement_journalier_par_tranche_de_salaire">
             <field name="name">Traitement journalier par tranche de salaire</field>
             <field name="short_name">coog_traitement_journalier_par_tranche_de_salaire</field>
@@ -129,8 +123,7 @@ description += description_compl
 
 # Calcul des périodes d'indemnisation
 return rule_coog_calcul_des_periodes_d_indemnisation(
-    traitement_journalier_de_base=traitement_journalier_de_base, description=description, tranche_ta=trancheTA, tranche_tb=trancheTB, tranche_tc=trancheTC, ijss=IJSS, 
-    sanction_ijss=compl_sanction_ijss())
+    traitement_journalier_de_base=traitement_journalier_de_base, description=description, tranche_ta=trancheTA, tranche_tb=trancheTB, tranche_tc=trancheTC, ijss=IJSS)
 </field>
             <field name="status">validated</field>
             <field name="type_">benefit</field>
@@ -184,10 +177,6 @@ tdrj_ijss_mtt: 100% Traitement de référénce - IJSS - mi-temps</field>
             <field name="type_">boolean</field>
             <field name="string">Limiter au net</field>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
-        </record>
-        <record model="rule_engine-extra_data" id="rule_extra_data_sanction_ijss_traitement_journalier_par_tranche_de_salaire">
-            <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
-            <field name="extra_data" ref="sanction_ijss_traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine-extra_data" id="rule_extra_data_ijss_traitement_journalier_par_tranche_de_salaire">
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
@@ -392,7 +381,6 @@ return ([{
                 'tranche_b': param_tranche_tb(), 
                 'tranche_c': param_tranche_tc(),
                 'ijss': param_ijss(),
-                'sanction_ijss': param_sanction_ijss(),
                 }
             }])</field>
             <field name="status">validated</field>
@@ -438,13 +426,6 @@ return ([{
             <field name="name">ijss</field>
             <field name="type_">numeric</field>
             <field name="string">IJSS</field>
-            <field name="digits">8</field>
-            <field name="parent_rule" ref="calcul_des_periodes_d_indemnisation"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="sanction_ijss_calcul_des_periodes_d_indemnisation">
-            <field name="name">sanction_ijss</field>
-            <field name="type_">numeric</field>
-            <field name="string">Sanction IJSS</field>
             <field name="digits">8</field>
             <field name="parent_rule" ref="calcul_des_periodes_d_indemnisation"/>
         </record>
@@ -595,6 +576,50 @@ cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
             <field name="parent_rule" ref="franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut"/>
             <field name="rule" ref="franchise_base_sur_un_nombre_de_jour_defaut"/>
         </record>
+
+        <record model="extra_data" id="date_d_effet_d_indemnisation_franchise_relais_conventation_defaut">
+            <field name="name">date_d_effet_d_indemnisation</field>
+            <field name="type_">date</field>
+            <field name="string">Date d'effet d'indemnisation</field>
+            <field name="kind">benefit</field>
+        </record>
+        <record model="rule_engine" id="franchise_relais_conventation_defaut">
+            <field name="name">Franchise relais convention</field>
+            <field name="short_name">coog_franchise_relais_conventation</field>
+            <field name="algorithm"># La donnée complémentaire de date d'effet d'indemnisation doit être définie sur la prestation collective.
+franchise_min = param_1_nombre_de_jours_de_franchise()
+date_indemnisation = compl_date_d_effet_d_indemnisation()
+
+# Calcul de la date de franchise renseignée et du nombre de jours
+date_franchise = ajouter_jours(date_indemnisation or date_de_calcul(), -1)
+
+if franchise_min:
+    # Calcul de la franchise minimale
+    date_franchise_min = rule_coog_franchise_base_sur_un_nombre_de_jour_defaut(
+        nombre_de_jours_de_franchise=franchise_min, type_de_franchise='continue', date_de_prejudice=None)
+    # Utilisation de la plus grande franchise
+    if date_franchise_min > date_franchise:
+        date_franchise = date_franchise_min
+return date_franchise</field>
+            <field name="status">validated</field>
+            <field name="type_">benefit_deductible</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="1_nombre_de_jours_de_franchise_franchise_relais_conventation_defaut">
+            <field name="name">1_nombre_de_jours_de_franchise</field>
+            <field name="type_">integer</field>
+            <field name="string">Nombre de jours de franchise minimum (optionnel)</field>
+            <field name="parent_rule" ref="franchise_relais_conventation_defaut"/>
+        </record>
+        <record model="rule_engine-rule_engine" id="rule_used_franchise_relais_conventation_defaut_base_sur_un_nombre_de_jour_defaut">
+            <field name="parent_rule" ref="franchise_relais_conventation_defaut"/>
+            <field name="rule" ref="franchise_base_sur_un_nombre_de_jour_defaut"/>
+        </record>
+        <record model="rule_engine-extra_data" id="rule_extra_data_date_d_effet_d_indemnisation_franchise_relais_conventation_defaut">
+            <field name="parent_rule" ref="franchise_relais_conventation_defaut"/>
+            <field name="extra_data" ref="date_d_effet_d_indemnisation_franchise_relais_conventation_defaut"/>
+        </record>
+
     </data>
     <data noupdate="1">
         <record model="rule_engine.function" id="nombre_jours_hospitalisation_prejudice">

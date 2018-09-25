@@ -14,7 +14,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="table" id="table_agirc">
             <field name="name">AGIRC</field>
-            <field name="code">AGIRC</field>
+            <field name="code">COOG_AGIRC</field>
             <field name="type_">numeric</field>
             <field name="dimension_kind1">range-date</field>
             <field name="dimension_name1">Date</field>
@@ -22,7 +22,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="table" id="table_arrco">
             <field name="name">ARRCO</field>
-            <field name="code">ARRCO</field>
+            <field name="code">COOG_ARRCO</field>
             <field name="type_">numeric</field>
             <field name="dimension_kind1">range-date</field>
             <field name="dimension_name1">Date</field>
