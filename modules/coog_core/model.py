@@ -1332,8 +1332,10 @@ def with_local_mptt(master_field, parent_field='parent'):
             right = left + 1
 
             column_name = parent_field if master_id else master_field
-            cursor.execute(*table.select(table.id,
-                    where=Column(table, column_name) == parent_id))
+            where = Column(table, column_name) == parent_id
+            if not master_id:
+                where &= (Column(table, parent_field) == Null)
+            cursor.execute(*table.select(table.id, where=where))
             childs = cursor.fetchall()
 
             for child_id, in childs:
