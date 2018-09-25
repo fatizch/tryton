@@ -1124,26 +1124,28 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             if indemnification.service.loss.state == 'draft':
                 cls.append_functional_error('cannot_schedule_draft_loss',
                     {'loss': indemnification.service.loss.rec_name})
-            previous_indemnification = \
-                indemnification.previous_indemnification(['calculated',
-                        'scheduled', 'controlled', 'validated', 'paid'])
-            delta = 0
-            if (not previous_indemnification and
-                    indemnification.service.loss.with_end_date):
-                delta = (indemnification.start_date -
-                    indemnification.service.loss.start_date).days + 1
-            if (previous_indemnification and
-                    previous_indemnification.service.loss.with_end_date):
-                delta = (indemnification.start_date -
-                    previous_indemnification.end_date).days
-            if delta > 1 or (previous_indemnification
-                    and previous_indemnification.status == 'calculated'
-                    and previous_indemnification not in to_schedule):
-                cls.append_functional_error(
-                    'missing_previous_indemnification', {
-                        'indemnification': indemnification.rec_name,
-                        'missing_days': delta - 1,
-                        })
+
+            if indemnification.status != 'cancelled':
+                previous_indemnification = \
+                    indemnification.previous_indemnification(['calculated',
+                            'scheduled', 'controlled', 'validated', 'paid'])
+                delta = 0
+                if (not previous_indemnification and
+                        indemnification.service.loss.with_end_date):
+                    delta = (indemnification.start_date -
+                        indemnification.service.loss.start_date).days + 1
+                if (previous_indemnification and
+                        previous_indemnification.service.loss.with_end_date):
+                    delta = (indemnification.start_date -
+                        previous_indemnification.end_date).days
+                if delta > 1 or (previous_indemnification
+                        and previous_indemnification.status == 'calculated'
+                        and previous_indemnification not in to_schedule):
+                    cls.append_functional_error(
+                        'missing_previous_indemnification', {
+                            'indemnification': indemnification.rec_name,
+                            'missing_days': delta - 1,
+                            })
             journal = indemnification.journal
             if (journal and journal.needs_bank_account() and
                     not indemnification.beneficiary.get_bank_account(
