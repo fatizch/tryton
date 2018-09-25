@@ -7,6 +7,7 @@ from itertools import chain
 from sql import Column, Literal, operators, functions
 from sql.conditionals import Coalesce, NullIf
 from sql.operators import Concat
+from sql.functions import CurrentDate
 
 from trytond import backend
 from trytond.model import fields as tryton_fields
@@ -44,7 +45,10 @@ class Numeric(tryton_fields.Numeric):
 
 
 class Date(tryton_fields.Date):
-    pass
+    def sql_format(self, value):
+        if value == CurrentDate:
+            return Pool().get('ir.date').today()
+        return super(Date, self).sql_format(value)
 
 
 class DateTime(tryton_fields.DateTime):
