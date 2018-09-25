@@ -47,6 +47,6 @@ class EventLog:
     def get_related_instances(cls, object_, model_name):
         if (model_name == 'contract' and
                 object_.__name__ == 'contract.covered_element'):
-            return [object_.main_contract]
+            return [object_.contract]
         return super(EventLog, cls).get_related_instances(object_,
             model_name)

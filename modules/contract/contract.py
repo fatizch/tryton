@@ -1726,7 +1726,7 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
         states={'invisible': ~Eval('contract')}, select=True)
     parent_contract = fields.Function(
         fields.Many2One('contract', 'Parent Contract'),
-        'on_change_with_parent_contract', searcher='search_parent_contract')
+        'getter_parent_contract', searcher='search_parent_contract')
     versions = fields.One2Many('contract.option.version', 'option', 'Versions',
         states={'readonly': Eval('contract_status') != 'quote'},
         depends=['contract_status'], delete_missing=True,
@@ -1925,11 +1925,6 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
         if self.contract and self.contract.product:
             return self.contract.product.id
 
-    @fields.depends('contract')
-    def on_change_with_parent_contract(self, name=None):
-        if self.contract:
-            return self.contract.id
-
     @fields.depends('parent_contract')
     def on_change_with_contract_status(self, name=None):
         return self.parent_contract.status if self.parent_contract else ''
@@ -1974,6 +1969,29 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
         if self.parent_contract.end_date:
             dates.append(self.parent_contract.end_date)
         return min(dates) if dates else None
+
+    @classmethod
+    def getter_parent_contract(cls, instances, name):
+        pool = Pool()
+        Contract = pool.get('contract')
+        option = cls.__table__()
+        contract = Contract.__table__()
+
+        result = {x.id: None for x in instances}
+        cursor = Transaction().connection.cursor()
+        query = option.join(contract,
+            condition=contract.id == option.contract
+            )
+
+        for cur_slice in grouped_slice(instances):
+            cursor.execute(*query.select(option.id, contract.id,
+                    where=option.id.in_([x.id for x in cur_slice])
+                    ))
+
+            for option, contract in cursor.fetchall():
+                result[option] = contract
+
+        return result
 
     def get_final_end_date(self, name):
         return self.manual_end_date or self.automatic_end_date or \
@@ -2025,7 +2043,12 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
 
     @classmethod
     def search_parent_contract(cls, name, clause):
-        return [('contract',) + tuple(clause[1:])]
+        columns = clause[0].split('.')
+        if len(columns) == 1:
+            return [('contract',) + tuple(clause[1:])]
+        else:
+            columns_to_add = '.'.join(columns[1:])
+            return [('contract.' + columns_to_add,) + tuple(clause[1:])]
 
     @classmethod
     def search_func_key(cls, name, clause):

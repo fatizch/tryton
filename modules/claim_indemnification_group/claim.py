@@ -90,7 +90,7 @@ class Indemnification:
         covered_elements = {}
 
         def group_by_party_contract(x):
-            return (x.main_contract, x.party)
+            return (x.contract, x.party)
 
         elements = sorted([x.service.theoretical_covered_element for x in
                 indemnifications], key=group_by_party_contract)

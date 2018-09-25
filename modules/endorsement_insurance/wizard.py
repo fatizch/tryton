@@ -1018,7 +1018,6 @@ class CoveredElementDisplayer(model.CoogView):
         covered.name = self.name
         covered.versions = [self.to_version()]
         covered.contract = self.contract
-        covered.main_contract = self.contract
         covered.product = self.contract.product
         covered.update_default_options()
         if covered.options:
@@ -1440,7 +1439,7 @@ class OptionDisplayer:
         if not self._parent:
             return
         if self._parent.__name__ == 'contract.covered_element':
-            return self._parent.main_contract.product
+            return self._parent.contract.product
         if self._parent.__name__ == 'endorsement.contract.covered_element':
             return self._parent.contract_endorsement.contract.product
 
@@ -1971,7 +1970,6 @@ class StartEndorsement:
                     if x.action == 'add'])
         result['covered_elements'] = [{
                 'item_desc': (result['possible_item_desc'] or [None])[0],
-                'main_contract': contract.id,
                 'contract': contract.id,
                 'product': result['product'],
                 } for _ in xrange(num_covered_elements)]

@@ -302,7 +302,7 @@ class Loss:
                 self.covered_person, self.start_date):
             if (covered_element.party and
                     covered_element.party == self.covered_person and
-                    covered_element.main_contract == self.claim.main_contract):
+                    covered_element.contract == self.claim.main_contract):
                 return covered_element.find_extra_data_value(name, **kwargs)
 
     def covered_options(self):
@@ -404,10 +404,21 @@ class ClaimService:
         self.extra_datas[-1].extra_data_values = values
 
     def get_theoretical_covered_element(self, name):
+        CoveredElement = Pool().get('contract.covered_element')
         if self.option and self.option.covered_element:
             person = self.get_covered_person()
-            if person and self.option.covered_element.party == person:
-                return self.option.covered_element.id
+            covered_element = self.option.covered_element
+            if person and covered_element.party == person:
+                return covered_element.id
+            else:
+                matches = CoveredElement.search([
+                        ('left', '>', covered_element.left),
+                        ('right', '<', covered_element.right),
+                        ('contract', '=', covered_element.contract),
+                        ('party', '=', person),
+                        ])
+                if matches:
+                    return matches[0]
         return super(ClaimService, self).get_theoretical_covered_element(name)
 
     def init_from_option(self, option):

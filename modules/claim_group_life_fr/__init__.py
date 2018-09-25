@@ -11,7 +11,6 @@ def register():
     Pool.register(
         benefit.BenefitRule,
         claim.Loss,
-        claim.Service,
         claim.IndemnificationDetail,
         claim.HospitalisationPeriod,
         rule_engine.RuleEngineRuntime,

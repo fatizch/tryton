@@ -64,12 +64,10 @@ class CoveredElement:
         health_complements = []
         for cov_dict in values:
             contract = None
-            if 'main_contract' in cov_dict and cov_dict['main_contract']:
-                contract = Contract(cov_dict['main_contract'])
-            elif 'parent' in cov_dict and cov_dict['parent']:
-                contract = CovElement(cov_dict['parent']).main_contract
-            elif 'contract' in cov_dict and cov_dict['contract']:
+            if 'contract' in cov_dict and cov_dict['contract']:
                 contract = Contract(cov_dict['contract'])
+            elif 'parent' in cov_dict and cov_dict['parent']:
+                contract = CovElement(cov_dict['parent']).contract
             if (not getattr(contract, 'is_health', None) or
                     'party' not in cov_dict):
                 continue
@@ -112,4 +110,4 @@ class CoveredElement:
                 Health_Complement.create(action[1])
 
     def get_is_health(self, name):
-        return self.main_contract.is_health if self.main_contract else False
+        return self.contract.is_health

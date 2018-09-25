@@ -77,7 +77,7 @@ class Premium:
 
     def _get_main_contract(self):
         if self.covered_element:
-            return self.covered_element.main_contract.id
+            return self.covered_element.contract.id
         elif self.extra_premium:
             return self.extra_premium.option.parent_contract.id
         return super(Premium, self)._get_main_contract()

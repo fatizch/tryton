@@ -25,9 +25,9 @@ class Party:
     def get_companies(self, name):
         covered_elements = sorted(self.covered_elements,
             key=lambda x: x.start_date, reverse=True)
-        return [covered.main_contract.subscriber.id
+        return [covered.contract.subscriber.id
             for covered in covered_elements
-            if not covered.main_contract.subscriber.is_person]
+            if not covered.contract.subscriber.is_person]
 
     @classmethod
     def search_companies(cls, name, clause):

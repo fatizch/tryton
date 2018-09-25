@@ -108,7 +108,7 @@ class DocumentReception:
         contracts = set()
         contracts |= {x.id for x in Contract.search([
                     ('subscriber', '=', self.party.id)])}
-        contracts |= {x.main_contract.id for x in CoveredElement.search([
+        contracts |= {x.contract.id for x in CoveredElement.search([
                     ('party', '=', self.party.id)])}
         return list(contracts)
 

@@ -45,6 +45,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'TestHistoryTable': 'coog_core.test_history',
             'TestHistoryChildTable': 'coog_core.test_history.child',
             'TestLoaderUpdater': 'coog_core.test_loader_updater',
+            'TestLocalMpttMaster': 'coog_core.test_local_mptt_master',
+            'TestLocalMptt': 'coog_core.test_local_mptt',
             }
 
     def test0010class_injection(self):
@@ -1458,6 +1460,73 @@ class ModuleTestCase(test_framework.CoogTestCase):
         date = datetime.date(2012, 5, 4)
         self.assertEqual(coog_date.get_latest_anniversary(
                 original_date, date), datetime.date(2012, 3, 13))
+
+    def test0300_local_mptt(self):
+        master_1, master_2 = self.TestLocalMpttMaster.create([{}, {}])
+
+        child_1 = self.TestLocalMptt(master=master_1)
+        child_1.save()
+        self.assertEqual(
+            (child_1.left, child_1.right, child_1.master, child_1.parent),
+            (1, 2, master_1, None))
+
+        child_2 = self.TestLocalMptt(master=master_2)
+        child_2.save()
+        self.assertEqual(
+            (child_1.left, child_1.right, child_1.master, child_1.parent),
+            (1, 2, master_1, None))
+        self.assertEqual(
+            (child_2.left, child_2.right, child_2.master, child_2.parent),
+            (1, 2, master_2, None))
+
+        child_3 = self.TestLocalMptt(parent=child_1)
+        child_3.save()
+        self.assertEqual(
+            (child_1.left, child_1.right, child_1.master, child_1.parent),
+            (1, 4, master_1, None))
+        self.assertEqual(
+            (child_2.left, child_2.right, child_2.master, child_2.parent),
+            (1, 2, master_2, None))
+        self.assertEqual(
+            (child_3.left, child_3.right, child_3.master, child_3.parent),
+            (2, 3, master_1, child_1))
+
+        child_3.parent = None
+        child_3.save()
+        self.assertEqual(
+            (child_1.left, child_1.right, child_1.master, child_1.parent),
+            (1, 2, master_1, None))
+        self.assertEqual(
+            (child_2.left, child_2.right, child_2.master, child_2.parent),
+            (1, 2, master_2, None))
+        self.assertEqual(
+            (child_3.left, child_3.right, child_3.master, child_3.parent),
+            (3, 4, master_1, None))
+
+        child_2.parent = child_3
+        child_2.save()
+        self.assertEqual(
+            (child_1.left, child_1.right, child_1.master, child_1.parent),
+            (1, 2, master_1, None))
+        self.assertEqual(
+            (child_2.left, child_2.right, child_2.master, child_2.parent),
+            (4, 5, master_1, child_3))
+        self.assertEqual(
+            (child_3.left, child_3.right, child_3.master, child_3.parent),
+            (3, 6, master_1, None))
+
+        child_3.master = master_2
+        child_3.parent = None
+        child_3.save()
+        self.assertEqual(
+            (child_1.left, child_1.right, child_1.master, child_1.parent),
+            (1, 2, master_1, None))
+        self.assertEqual(
+            (child_2.left, child_2.right, child_2.master, child_2.parent),
+            (2, 3, master_2, child_3))
+        self.assertEqual(
+            (child_3.left, child_3.right, child_3.master, child_3.parent),
+            (1, 4, master_2, None))
 
 
 def suite():

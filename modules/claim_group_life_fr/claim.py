@@ -10,7 +10,6 @@ from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 
 __all__ = [
     'Loss',
-    'Service',
     'IndemnificationDetail',
     'HospitalisationPeriod',
     ]
@@ -56,22 +55,6 @@ class Loss:
                                 period[1], periods[idx + 1][0],
                                 periods[idx + 1][1]):
                         cls.raise_user_error('period_overlap')
-
-
-class Service:
-    __metaclass__ = PoolMeta
-    __name__ = 'claim.service'
-
-    def get_theoretical_covered_element(self, name):
-        # This should be in a claim_group_life module which does not exist
-        if (self.option and self.option.is_group and
-                self.option.covered_element):
-            person = self.get_covered_person()
-            if person and self.option.covered_element.party != person:
-                for elem in self.option.covered_element.sub_covered_elements:
-                    if elem.party == person:
-                        return elem.id
-        return super(Service, self).get_theoretical_covered_element(name)
 
 
 class IndemnificationDetail:

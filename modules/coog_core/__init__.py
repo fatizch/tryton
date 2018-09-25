@@ -122,6 +122,8 @@ def register():
             models_for_tests.TestHistoryTable,
             models_for_tests.TestHistoryChildTable,
             models_for_tests.TestLoaderUpdater,
+            models_for_tests.TestLocalMpttMaster,
+            models_for_tests.TestLocalMptt,
             module='coog_core', type_='model')
 
     Pool.register(

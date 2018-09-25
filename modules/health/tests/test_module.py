@@ -99,7 +99,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         for covered_element in contract.covered_elements:
             covered_element.contract = contract
             covered_element.item_desc = item_desc
-            covered_element.main_contract = contract
+            covered_element.contract = contract
             covered_element.options[0].main_contract = contract
             for option in covered_element.options:
                 option.parent_contract = contract

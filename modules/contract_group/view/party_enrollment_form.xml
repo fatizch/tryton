@@ -24,6 +24,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="product" invisible="1"/>
     <field name="options" invisible="1"/>
     <field name="item_desc" invisible="1"/>
-    <field name="main_contract" invisible="1"/>
     <field name="contract" invisible="1"/>
 </form>

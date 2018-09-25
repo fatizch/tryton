@@ -1,10 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
+from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 
-from sql import Null, Window
-from sql.conditionals import Coalesce
+from sql import Null, Window, Literal
+from sql.conditionals import Coalesce, Case
 from sql.aggregate import Max, Min, Count
 
 from trytond import backend
@@ -248,7 +249,7 @@ class Contract(Printable):
     def init_covered_elements(self):
         for elem in self.covered_elements:
             elem.init_options(self.product, self.start_date)
-            elem.save()
+        self.covered_elements = list(self.covered_elements)
 
     @classmethod
     def search_contract(cls, product, subscriber, at_date):
@@ -285,6 +286,7 @@ class Contract(Printable):
         super(Contract, cls).update_contract_after_import(contracts)
         for contract in contracts:
             contract.init_covered_elements()
+        cls.save(contracts)
 
     @classmethod
     @ModelView.button_action('contract_insurance.act_manage_extra_premium')
@@ -380,7 +382,7 @@ class Contract(Printable):
         self.covered_elements = []
         for cov_dict in contract_dict['covered_elements']:
             covered_element = CoveredElement()
-            covered_element.main_contract = self
+            covered_element.contract = self
             covered_element.init_covered_element(product, item_desc, cov_dict)
             self.covered_elements.append(covered_element)
 
@@ -554,17 +556,6 @@ class ContractOption(Printable):
         else:
             return None
 
-    @fields.depends('covered_element')
-    def on_change_with_parent_contract(self, name=None):
-        contract_id = super(
-            ContractOption, self).on_change_with_parent_contract(name)
-        if contract_id:
-            return contract_id
-        elif self.covered_element:
-            contract = getattr(self.covered_element, 'contract')
-            if contract:
-                return contract.id
-
     @fields.depends('covered_element', 'coverage')
     def on_change_with_parent_option(self, name=None):
         if not self.covered_element or not self.covered_element.parent:
@@ -594,20 +585,50 @@ class ContractOption(Printable):
         return self.coverage.with_extra_premiums
 
     @classmethod
+    def getter_parent_contract(cls, instances, name):
+        pool = Pool()
+        CoveredElement = pool.get('contract.covered_element')
+        option = cls.__table__()
+        covered = CoveredElement.__table__()
+
+        options_without_covered, options_with_covered = [], []
+        for instance in instances:
+            if instance.covered_element:
+                options_with_covered.append(instance)
+            else:
+                options_without_covered.append(instance)
+
+        result = {x.id: None for x in instances}
+        result.update(super(ContractOption, cls).getter_parent_contract(
+                options_without_covered, name))
+
+        cursor = Transaction().connection.cursor()
+        query = option.join(covered,
+            condition=option.covered_element == covered.id
+            )
+
+        for cur_slice in grouped_slice(options_with_covered):
+            cursor.execute(*query.select(option.id, covered.contract,
+                    where=option.id.in_([x.id for x in cur_slice])
+                    ))
+
+            for option_id, contract in cursor.fetchall():
+                result[option_id] = contract
+
+        return result
+
+    @classmethod
     def search_parent_contract(cls, name, clause):
+        domain = super(ContractOption, cls).search_parent_contract(
+            name, clause)
         columns = clause[0].split('.')
         if len(columns) == 1:
-            return ['OR',
-                ('contract',) + tuple(clause[1:]),
-                ('covered_element.contract',) + tuple(clause[1:]),
-                ]
+            new_clause = [('covered_element.contract',) + tuple(clause[1:])]
         else:
             columns_to_add = '.'.join(columns[1:])
-            return ['OR',
-                ('contract.' + columns_to_add,) + tuple(clause[1:]),
-                ('covered_element.contract.' + columns_to_add,) +
-                tuple(clause[1:]),
-                ]
+            new_clause = [('covered_element.contract.' + columns_to_add,) +
+                tuple(clause[1:])]
+        return ['OR', domain, new_clause]
 
     @classmethod
     def searcher_start_date(cls, name, clause):
@@ -700,13 +721,13 @@ class ContractOption(Printable):
         self.extra_premiums = self.extra_premiums
 
     def get_contact(self):
-        return self.covered_element.party or self.main_contract.get_contact()
+        return self.covered_element.party or self.contract.get_contact()
 
     def get_object_for_contact(self):
-        return self.covered_element.party or self.main_contract.get_contact()
+        return self.covered_element.party or self.contract.get_contact()
 
     def get_sender(self):
-        return self.covered_element.party or self.main_contract.get_contact()
+        return self.covered_element.party or self.contract.get_contact()
 
     @classmethod
     def check_dates(cls, options):
@@ -767,7 +788,7 @@ class ContractOptionVersion:
             option_h.drop_column('extra_data')
 
 
-class CoveredElement(model.CoogSQL, model.CoogView,
+class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         with_extra_data(['covered_element'], schema='item_desc',
             field_name='current_extra_data', field_string='Current Extra Data',
             getter_name='get_current_version', setter_name='setter_void'),
@@ -831,9 +852,8 @@ class CoveredElement(model.CoogSQL, model.CoogView,
         order=[('coverage.sequence', 'ASC NULLS LAST'), ('start_date', 'ASC')],
         readonly=True)
     parent = fields.Many2One('contract.covered_element', 'Parent',
-        ondelete='CASCADE', select=True, states={
-            'readonly': Bool(Eval('contract', False))},
-        depends=['contract'])
+        domain=[('contract', '=', Eval('contract'))],
+        depends=['contract'], ondelete='CASCADE', select=True)
     party = fields.Many2One('party.party', 'Actor', domain=[
             If(
                 Eval('item_kind') == 'person',
@@ -851,13 +871,14 @@ class CoveredElement(model.CoogSQL, model.CoogView,
         depends=['item_kind', 'contract_status', 'parent'], select=True)
     sub_covered_elements = fields.One2Many('contract.covered_element',
         'parent', 'Sub Covered Elements',
-        # TODO : invisibility should depend on a function field checking the
-        # item desc definition
         states={
-            'invisible': Eval('item_kind') == 'person',
+            'invisible': ~Eval('has_sub_covered_elements'),
             },
-        depends=['contract', 'item_kind', 'id'],
+        depends=['has_sub_covered_elements'],
         target_not_required=True)
+    has_sub_covered_elements = fields.Function(
+        fields.Boolean('Has sub-covered elements'),
+        'getter_has_sub_covered_elements')
     start_date = fields.Function(
         fields.Date('Start Date'),
         'get_start_date')
@@ -866,10 +887,14 @@ class CoveredElement(model.CoogSQL, model.CoogView,
             'required': Bool(Eval('parent', False)),
             'readonly': COVERED_READ_ONLY,
             }, depends=['parent', 'contract_status'])
-    manual_end_date = fields.Date('End Date', states={
+    manual_end_date = fields.Date('Manual End Date', states={
             'invisible': ~Eval('parent'),
             'readonly': COVERED_READ_ONLY,
             }, depends=['parent', 'contract_status'])
+    end_date = fields.Function(
+        fields.Date('End Date', states={'invisible': ~Eval('parent')},
+            depends=['parent']),
+        'getter_end_date')
     end_reason = fields.Many2One('covered_element.end_reason', 'End Reason',
         ondelete='RESTRICT', domain=[If(~Eval('parent'), [],
             [('item_descs', '=', Eval('item_desc'))])], states={
@@ -893,11 +918,6 @@ class CoveredElement(model.CoogSQL, model.CoogView,
     item_kind = fields.Function(
         fields.Char('Item Kind', states={'invisible': True}),
         'on_change_with_item_kind')
-    main_contract = fields.Function(
-        fields.Many2One('contract', 'Contract',
-            states={'invisible': Bool(Eval('contract'))},
-            depends=['contract']),
-        'on_change_with_main_contract')
     party_extra_data = fields.Function(
         fields.Dict('extra_data', 'Party Extra Data',
             states={'invisible': Or(~IS_PARTY, ~Eval('party_extra_data'))},
@@ -910,6 +930,11 @@ class CoveredElement(model.CoogSQL, model.CoogView,
     party_code = fields.Function(
         fields.Char('Party Code'), 'get_party_code',
         searcher='search_party_code')
+    affiliated_to = fields.Function(
+        fields.Many2One('party.party', 'Affiliated To',
+            help='The company which is the closest (in terms of parent '
+            'covered elements / subscribers) to the covered'),
+        'getter_affiliated_to', searcher='search_affiliated_to')
 
     multi_mixed_view = options
 
@@ -918,11 +943,32 @@ class CoveredElement(model.CoogSQL, model.CoogView,
         super(CoveredElement, cls).__setup__()
         t = cls.__table__()
         cls._sql_constraints += [
-            ('party_unique', Unique(t, t.party, t.contract), 'The party '
-                'cannot be added more than once on the same contract')]
+            ('party_unique', Unique(t, t.party, t.contract, t.parent),
+                'The party cannot be added more than once on the same '
+                'contract')]
         cls.current_extra_data.states['readonly'] = COVERED_READ_ONLY
         cls.current_extra_data.depends += ['contract_status', 'versions',
             'parent']
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        table = TableHandler(cls, module_name)
+
+        # Migration from 2.0: Always store the contract field
+        to_migrate = False
+        if TableHandler.table_exist('contract_covered_element'):
+            to_migrate = not table.column_exist('left')
+
+        super(CoveredElement, cls).__register__(module_name)
+
+        if to_migrate:
+            # Initialize Tree
+            contract = Pool().get('contract').__table__()
+            cursor = Transaction().connection.cursor()
+            cursor.execute(*contract.select(contract.id))
+            for contract, in cursor.fetchall():
+                cls._update_local_mptt_one(contract, None)
 
     @classmethod
     def __post_setup__(cls):
@@ -950,7 +996,7 @@ class CoveredElement(model.CoogSQL, model.CoogView,
                 ), (
                 '/form/notebook/page[@id="sub_elements"]',
                 'states',
-                {'invisible': Eval('item_kind') == 'person'}
+                {'invisible': ~Eval('has_sub_covered_elements')}
                 )]
 
     @classmethod
@@ -980,21 +1026,6 @@ class CoveredElement(model.CoogSQL, model.CoogView,
             cls.raise_user_error('too_many_party')
 
     @classmethod
-    def write(cls, *args):
-        action = iter(args)
-        for covered_elements, values in zip(action, action):
-            if 'sub_covered_elements' not in values:
-                continue
-            for covered_element in covered_elements:
-                for val in values['sub_covered_elements']:
-                    if val[0] != 'create':
-                        continue
-                    for sub_cov_elem in val[1]:
-                        sub_cov_elem['contract'] = \
-                            covered_element.main_contract.id
-        super(CoveredElement, cls).write(*args)
-
-    @classmethod
     def copy(cls, instances, default=None):
         default = {} if default is None else default.copy()
         if Transaction().context.get('copy_mode', '') == 'functional':
@@ -1008,15 +1039,14 @@ class CoveredElement(model.CoogSQL, model.CoogView,
         return [Pool().get(
                 'contract.covered_element.version').get_default_version()]
 
-    @fields.depends('contract', 'item_desc', 'item_kind', 'main_contract',
+    @fields.depends('contract', 'item_desc', 'item_kind',
         'options', 'parent', 'party', 'party_extra_data', 'product',
         'versions', 'contract_status')
     def on_change_contract(self):
-        self.main_contract = self.contract
-        if self.main_contract:
+        if self.contract:
             self.recalculate()
 
-    @fields.depends('current_extra_data', 'item_desc', 'main_contract',
+    @fields.depends('current_extra_data', 'item_desc',
         'party', 'party_extra_data', 'product', 'versions', 'contract_status')
     def on_change_current_extra_data(self):
         if not self.versions:
@@ -1032,19 +1062,19 @@ class CoveredElement(model.CoogSQL, model.CoogView,
         self.current_extra_data = current_version.extra_data
 
     @fields.depends('contract', 'current_extra_data', 'item_desc',
-        'item_kind', 'main_contract', 'options', 'parent', 'party',
+        'item_kind', 'options', 'parent', 'party',
         'party_extra_data', 'product', 'versions', 'contract_status')
     def on_change_item_desc(self):
         self.recalculate()
 
     @fields.depends('contract', 'current_extra_data', 'item_desc', 'item_kind',
-        'main_contract', 'options', 'parent', 'party', 'party_extra_data',
+        'options', 'parent', 'party', 'party_extra_data',
         'product', 'versions', 'contract_status')
     def on_change_parent(self):
         self.recalculate()
 
     @fields.depends('contract', 'current_extra_data', 'item_desc', 'item_kind',
-        'main_contract', 'options', 'parent', 'party', 'party_extra_data',
+        'options', 'parent', 'party', 'party_extra_data',
         'product', 'versions', 'contract_status')
     def on_change_party(self):
         self.recalculate()
@@ -1066,10 +1096,15 @@ class CoveredElement(model.CoogSQL, model.CoogView,
             return self.party.rec_name
         return self.name
 
-    @fields.depends('is_person')
+    def getter_has_sub_covered_elements(self, name):
+        return bool(self.item_desc and self.item_desc.sub_item_descs)
+
+    @fields.depends('item_kind')
     def on_change_with_icon(self, name=None):
-        if self.is_person:
+        if self.item_kind in ('person', 'party'):
             return 'coopengo-party'
+        elif self.item_kind == 'company':
+            return 'coopengo-company'
         return ''
 
     @fields.depends('party')
@@ -1082,26 +1117,15 @@ class CoveredElement(model.CoogSQL, model.CoogView,
             return self.item_desc.kind
         return ''
 
-    @fields.depends('contract', 'parent')
-    def on_change_with_main_contract(self, name=None):
-        contract = getattr(self, 'contract', None)
-        if contract:
-            return contract.id
-        parent = getattr(self, 'parent', None)
-        if parent:
-            return self.parent.main_contract.id
-
     @fields.depends('contract')
     def on_change_with_contract_status(self, name=None):
         # Only 1st level must be read only to deal with group contracts
         return self.contract.status if self.contract else ''
 
-    @fields.depends('contract', 'parent', 'main_contract')
+    @fields.depends('contract', 'parent')
     def on_change_with_product(self, name=None):
         if self.contract and self.contract.product:
             return self.contract.product.id
-        if self.main_contract and self.main_contract.product:
-            return self.main_contract.product.id
         if self.parent:
             return self.parent.product.id
 
@@ -1145,6 +1169,91 @@ class CoveredElement(model.CoogSQL, model.CoogView,
         return self.name
 
     @classmethod
+    def getter_affiliated_to(cls, instances, name):
+        pool = Pool()
+        Party = pool.get('party.party')
+        Contract = pool.get('contract')
+        covered = cls.__table__()
+        parent_covered = cls.__table__()
+        contract = Contract.__table__()
+        subscriber = Party.__table__()
+        party = Party.__table__()
+        cursor = Transaction().connection.cursor()
+
+        result = {x.id: None for x in instances}
+        query = covered.join(parent_covered, 'LEFT OUTER',
+            condition=(parent_covered.left <= covered.left) & (
+                parent_covered.right >= covered.right) & (
+                parent_covered.contract == covered.contract)
+            ).join(party, 'LEFT OUTER', condition=(
+                parent_covered.party == party.id)
+            ).join(contract, condition=covered.contract == contract.id
+            ).join(subscriber, condition=contract.subscriber == subscriber.id
+            )
+
+        sub_query = query.select(covered.id, parent_covered.party,
+            parent_covered.left, subscriber.id.as_('subscriber'),
+            subscriber.is_person,
+            Max(Case((party.is_person == Literal(False), parent_covered.left),
+                    else_=Literal(0)),
+                window=Window([covered.id])).as_('max_left'))
+
+        for cur_slice in grouped_slice(instances):
+            cursor.execute(*sub_query.select(sub_query.id,
+                    Case((sub_query.left != Literal(0), sub_query.party),
+                        else_=sub_query.subscriber),
+                    where=sub_query.id.in_([x.id for x in cur_slice]) &
+                    (sub_query.left == sub_query.max_left)
+                    ))
+
+            for covered_id, party_id in cursor.fetchall():
+                result[covered_id] = party_id
+        return result
+
+    @classmethod
+    def getter_end_date(cls, instances, name):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        covered = cls.__table__()
+        parent = cls.__table__()
+        option = Option.__table__()
+
+        result = {x.id: None for x in instances}
+
+        cursor = Transaction().connection.cursor()
+        query = covered.join(parent,
+            condition=(parent.left <= covered.left)
+            & (parent.right >= covered.right)
+            & (parent.contract == covered.contract)
+            ).join(option, 'LEFT OUTER',
+                condition=option.covered_element == parent.id)
+        cursor.execute(*query.select(
+                covered.id, option.id, parent.manual_end_date,
+                where=covered.id.in_([x.id for x in instances]),
+                order_by=[covered.id]))
+
+        per_covered = defaultdict(list)
+        options = defaultdict(set)
+        for covered_id, option, manual_end in cursor.fetchall():
+            per_covered[covered_id].append(manual_end)
+            if option:
+                options[option].add(covered_id)
+
+        # No need to look for the contrat's end date since the option's already
+        # takes it into account
+        options_end = defaultdict(list)
+        for option in Option.browse(options.keys()):
+            for covered in options[option.id]:
+                options_end[covered].append(option.end_date)
+
+        for k, v in per_covered.iteritems():
+            option_end = max([x for x in options_end[k] if x] or [None])
+            result[k] = min(([x for x in v if x] +
+                    ([option_end] if option_end else [])) or [None])
+
+        return result
+
+    @classmethod
     def set_party_extra_data(cls, instances, name, vals):
         Party = Pool().get('party.party')
         to_save = []
@@ -1162,8 +1271,44 @@ class CoveredElement(model.CoogSQL, model.CoogView,
     def search_party_code(cls, name, clause):
         return [('party.code',) + tuple(clause[1:])]
 
+    @classmethod
+    def search_affiliated_to(cls, name, clause):
+        pool = Pool()
+        Party = pool.get('party.party')
+        Contract = pool.get('contract')
+        covered = cls.__table__()
+        parent_covered = cls.__table__()
+        contract = Contract.__table__()
+        subscriber = Party.__table__()
+        party = Party.__table__()
+
+        _, operator, value = clause
+        Operator = fields.SQL_OPERATORS[operator]
+        query = covered.join(parent_covered, 'LEFT OUTER',
+            condition=(parent_covered.left <= covered.left) & (
+                parent_covered.right >= covered.right) & (
+                parent_covered.contract == covered.contract)
+            ).join(party, 'LEFT OUTER', condition=(
+                parent_covered.party == party.id)
+            ).join(contract, condition=covered.contract == contract.id
+            ).join(subscriber, condition=contract.subscriber == subscriber.id
+            )
+
+        sub_query = query.select(covered.id, parent_covered.party,
+            parent_covered.left, subscriber.id.as_('subscriber'),
+            subscriber.is_person,
+            Max(Case((party.is_person == Literal(False), parent_covered.left),
+                    else_=Literal(0)),
+                window=Window([covered.id])).as_('max_left'))
+
+        final_query = sub_query.select(sub_query.id,
+            where=(sub_query.left == sub_query.max_left) &
+            Operator(Case((sub_query.left != Literal(0), sub_query.party),
+                    else_=sub_query.subscriber), value))
+        return [('id', 'in', final_query)]
+
     def get_currency(self):
-        return self.main_contract.currency if self.main_contract else None
+        return self.contract.currency if self.contract else None
 
     def get_version_at_date(self, at_date):
         for version in sorted(self.versions,
@@ -1183,7 +1328,7 @@ class CoveredElement(model.CoogSQL, model.CoogView,
                 Option.save(to_write)
 
     def recalculate(self):
-        self.update_main_contract()
+        self.update_from_contract()
 
         self.update_item_desc()
 
@@ -1198,14 +1343,14 @@ class CoveredElement(model.CoogSQL, model.CoogView,
 
         self.start_date = self.get_start_date()
 
-    def update_main_contract(self):
-        self.main_contract = self.parent.main_contract if self.parent else \
+    def update_from_contract(self):
+        self.contract = self.parent.contract if self.parent else \
             self.contract
-        if not self.main_contract:
+        if not self.contract:
             self.product = None
             return
-        self.contract_status = self.main_contract.status
-        self.product = self.main_contract.product
+        self.contract_status = self.contract.status
+        self.product = self.contract.product
 
     def update_item_desc(self):
         if self.parent and self.parent.item_desc:
@@ -1258,7 +1403,7 @@ class CoveredElement(model.CoogSQL, model.CoogView,
             if elem.subscription_behaviour == 'optional':
                 continue
             new_options.append(Option.new_option_from_coverage(elem,
-                    self.product, self.main_contract.start_date,
+                    self.product, self.contract.start_date,
                     item_desc=self.item_desc))
 
         self.options = new_options
@@ -1321,7 +1466,7 @@ class CoveredElement(model.CoogSQL, model.CoogView,
     def get_package(self, at_date=None):
         if not at_date:
             at_date = utils.today()
-        for package in self.main_contract.product.packages:
+        for package in self.contract.product.packages:
             coverages = [c for c in package.options if not c.is_service]
             if not coverages or not all([self.is_covered_at_date(at_date, c)
                     for c in coverages]):
@@ -1329,9 +1474,9 @@ class CoveredElement(model.CoogSQL, model.CoogView,
             return package
 
     def is_covered_at_date(self, at_date, coverage=None):
-        if not self.main_contract:
+        if not self.contract:
             return False
-        if not self.main_contract.is_active_at_date(at_date):
+        if not self.contract.is_active_at_date(at_date):
             return False
         for option in self.options:
             if ((not coverage or option.coverage == coverage) and
@@ -1358,14 +1503,13 @@ class CoveredElement(model.CoogSQL, model.CoogView,
 
         # Filter out lines whose contract is not active at the effective
         # date
-        contract = self.main_contract
-        if not contract.is_active_at_date(at_date):
+        if not self.contract.is_active_at_date(at_date):
             return False
 
         # Filter out contracts which do not match the current company
         company = Transaction().context.get('company')
         if company:
-            if not contract.company or contract.company.id != company:
+            if not self.contract.company or self.contract.company.id != company:
                 return False
 
         return True
@@ -1383,8 +1527,8 @@ class CoveredElement(model.CoogSQL, model.CoogView,
             date = min(dates)
         if self.parent:
             date = max(date or datetime.date.min, self.parent.start_date)
-        return max(self.main_contract.start_date
-            if self.main_contract else datetime.date.min,
+        return max(
+            self.contract.start_date if self.contract else datetime.date.min,
             date or datetime.date.min)
 
     def get_covered_parties(self, at_date):
@@ -1454,10 +1598,10 @@ class CoveredElement(model.CoogSQL, model.CoogView,
 
     def init_dict_for_rule_engine(self, args):
         args = args if args else {}
-        if self.contract:
-            self.contract.init_dict_for_rule_engine(args)
-        elif self.parent:
+        if self.parent:
             self.parent.init_dict_for_rule_engine(args)
+        elif self.contract:
+            self.contract.init_dict_for_rule_engine(args)
         else:
             raise Exception('Orphan covered element')
         args['elem'] = self

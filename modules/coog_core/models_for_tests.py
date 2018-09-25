@@ -28,6 +28,8 @@ __all__ = [
     'TestHistoryTable',
     'TestHistoryChildTable',
     'TestLoaderUpdater',
+    'TestLocalMpttMaster',
+    'TestLocalMptt',
     ]
 
 
@@ -271,3 +273,18 @@ class TestLoaderUpdater(model.CoogSQL):
 
     def update_field(self, value):
         self.real_field = value
+
+
+class TestLocalMpttMaster(model.CoogSQL):
+    'Test Local Mptt Master'
+
+    __name__ = 'coog_core.test_local_mptt_master'
+
+
+class TestLocalMptt(model.with_local_mptt('master')):
+    'Test Local Mptt'
+
+    __name__ = 'coog_core.test_local_mptt'
+
+    parent = fields.Many2One('coog_core.test_local_mptt', 'Parent')
+    master = fields.Many2One('coog_core.test_local_mptt_master', 'Master')

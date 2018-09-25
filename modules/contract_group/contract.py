@@ -69,7 +69,7 @@ class CoveredElement:
         'get_subscriber')
 
     def get_subscriber(self, name):
-        return self.main_contract.subscriber.id
+        return self.contract.subscriber.id
 
     @classmethod
     def create(cls, vlist):

@@ -5,9 +5,6 @@ this repository contains the full copyright notices and license terms. -->
     <label name="contract"/>
     <field name="contract"/>
     <newline/>
-    <label name="main_contract"/>
-    <field name="main_contract"/>
-    <newline/>
     <label name="item_desc"/>
     <field name="item_desc" widget="selection"/>
     <label name="name"/>
@@ -16,6 +13,15 @@ this repository contains the full copyright notices and license terms. -->
     <label name="party"/>
     <field name="party"/>
     <field name="covered_name" invisible="1"/>
+    <newline/>
+    <label name="manual_start_date"/>
+    <field name="manual_start_date"/>
+    <label name="manual_end_date"/>
+    <field name="manual_end_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <label name="end_reason"/>
+    <field name="end_reason"/>
     <newline/>
     <notebook>
         <page id="details" string="Details">

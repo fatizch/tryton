@@ -88,11 +88,11 @@ class CoveredElement:
                 ('portfolio', '=', None)]]
 
     def get_allowed_portfolios(self, name=None):
-        if not self.main_contract or not self.main_contract.dist_network:
+        if not self.contract or not self.contract.dist_network:
             return []
         else:
             return [x.id for x in
-                self.main_contract.dist_network.visible_portfolios]
+                self.contract.dist_network.visible_portfolios]
 
     @fields.depends('allowed_portfolios')
     def on_change_contract(self):

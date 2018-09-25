@@ -1242,3 +1242,110 @@ def view_only(model_name):
             super(ReadOnly, cls).__post_setup__()
 
     return ReadOnly
+
+
+def with_local_mptt(master_field, parent_field='parent'):
+    '''
+        Defines a MPTT on the model, which will be compartimentized with the
+        master field.
+
+        Basically, it's a MPTT "per master field", which allows to have
+        sub-trees independently updated rather than one global tree. This
+        allows to have the left / right mechanic as long as we filter per the
+        master field, without having to rebuild the whole database when
+        inserting new records.
+    '''
+    class LocalMptt(ModelSQL):
+        left = fields.Integer('Left', select=True, required=True)
+        right = fields.Integer('Right', select=True, required=True)
+
+        @classmethod
+        def default_left(cls):
+            return 0
+
+        @classmethod
+        def default_right(cls):
+            return 0
+
+        @classmethod
+        def create(cls, vlist):
+            for elem in vlist:
+                cls._check_local_mptt(elem)
+            result = super(LocalMptt, cls).create(vlist)
+            cls._update_local_mptt(result)
+            return result
+
+        @classmethod
+        def write(cls, *args):
+            actions = iter(args)
+            to_rebuild = []
+            for instances, action in zip(actions, actions):
+                cls._check_local_mptt(action)
+                if parent_field in action or master_field in action:
+                    to_rebuild += instances
+            super(LocalMptt, cls).write(*args)
+            if to_rebuild:
+                cls._update_local_mptt(to_rebuild)
+
+        @classmethod
+        def _check_local_mptt(cls, value):
+            if value.get('left', None) or value.get('right', None):
+                raise ValueError('Cannot directly set / write left / right '
+                    'fields')
+
+        @classmethod
+        def _update_local_mptt(cls, instances):
+            if not instances:
+                return
+
+            def get_master_value(elem):
+                parent = getattr(elem, parent_field, None)
+                if not parent:
+                    master = getattr(elem, master_field)
+
+                    # Master could be empty when nesting creations. In that
+                    # case we do nothing, the parent will written later
+                    return master.id if master else None
+                return get_master_value(parent)
+
+            masters = {get_master_value(x) for x in instances}
+            masters = {x for x in masters if x is not None}
+
+            if not masters:
+                return
+
+            for master in masters:
+                cls._update_local_mptt_one(master, None)
+
+            # Clear transaction cache for the model since we updated through
+            # sql
+            instances[0]._cache.clear()
+            instances[0]._local_cache.clear()
+
+        @classmethod
+        def _update_local_mptt_one(cls, parent_id, master_id, left=0):
+            '''
+            Rebuild left, right, master value for the tree.
+            '''
+            cursor = Transaction().connection.cursor()
+            table = cls.__table__()
+            right = left + 1
+
+            column_name = parent_field if master_id else master_field
+            cursor.execute(*table.select(table.id,
+                    where=Column(table, column_name) == parent_id))
+            childs = cursor.fetchall()
+
+            for child_id, in childs:
+                right = cls._update_local_mptt_one(child_id,
+                    master_id or parent_id, right)
+
+            if master_id:
+                cursor.execute(*table.update(
+                        [Column(table, 'left'), Column(table, 'right'),
+                            Column(table, master_field)],
+                        [left, right, master_id],
+                        where=table.id == parent_id))
+            return right + 1
+
+    return LocalMptt
