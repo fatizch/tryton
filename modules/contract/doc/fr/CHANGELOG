@@ -1,3 +1,4 @@
+* OTH#0000 Suppression de la méthode "lowest_level_object", maintenant inutile
 * BUG#9498 Le gestionnaire de contrat devrait être capable de supprimer un devis
 * BUG#9490 Correction de l'appel au super lors de la suppression d'un devis
 * BUG#9296 Itération après 29893e0, meilleur calcul de la date du début pour les contrats sans effet

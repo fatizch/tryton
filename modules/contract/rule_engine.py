@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import PoolMeta
 
 from trytond.modules.coog_core import fields
 from trytond.modules.rule_engine import check_args
@@ -14,24 +14,6 @@ __all__ = [
 class RuleEngineRuntime:
     __metaclass__ = PoolMeta
     __name__ = 'rule_engine.runtime'
-
-    @classmethod
-    def get_lowest_level_object(cls, args):
-        '''This method to be overriden in different modules sets the lowest
-        object from where to search data. The object will level up itself if it
-        doesn't find the good information at its own level'''
-        if 'option' in args:
-            return args['option']
-        if 'contract' in args:
-            return args['contract']
-
-    @classmethod
-    def _re_extra_data(cls, args, data_name, from_object=None):
-        if not from_object:
-            from_object = cls.get_lowest_level_object(args)
-        ComplDataDef = Pool().get('extra_data')
-        return ComplDataDef.get_extra_data_value(from_object,
-            data_name, args['date'])
 
     @classmethod
     def _re_get_contract_initial_start_date(cls, args):

@@ -17,12 +17,6 @@ class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
 
     @classmethod
-    def get_lowest_level_object(cls, args):
-        if 'service' in args:
-            return args['service']
-        return super(RuleEngineRuntime, cls).get_lowest_level_object(args)
-
-    @classmethod
     @check_args('claim')
     def _re_claim_declaration_date(cls, args):
         return args['claim'].declaration_date

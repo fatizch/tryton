@@ -87,15 +87,6 @@ courant du contrat</field>
             <field name="long_description">Retourne le statut du contrat</field>
             <field name="parent" ref="te_contract"/>
         </record>
-        <record model="rule_engine.function" id="te_contract_extra_data">
-            <field name="description">Donnée Complémentaire</field>
-            <field name="name">_re_extra_data</field>
-            <field name="namespace">rule_engine.runtime</field>
-            <field name="type">function</field>
-            <field name="parent" ref="te_contract"/>
-            <field name="translated_technical_name">donnee_compl</field>
-            <field name="language" ref="ir.lang_fr"/>
-        </record>
         <record model="rule_engine.function" id="te_contract_conditions_date">
             <field name="description">Date de Conditions</field>
             <field name="name">_re_contract_conditions_date</field>
