@@ -5,7 +5,7 @@ from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import If, Bool
 
-from trytond.modules.coog_core import fields, coog_date
+from trytond.modules.coog_core import fields, coog_date, model
 
 __all__ = [
     'Contract',
@@ -66,10 +66,26 @@ class CoveredElement:
         depends=['manual_end_date'])
     subscriber = fields.Function(
         fields.Many2One('party.party', 'Subscriber'),
-        'get_subscriber')
+        'getter_subscriber')
 
-    def get_subscriber(self, name):
-        return self.contract.subscriber.id
+    @classmethod
+    def __setup__(cls):
+        super(CoveredElement, cls).__setup__()
+        cls.party.domain = ['AND', cls.party.domain, [
+                If(
+                    Eval('item_kind') == 'subsidiary',
+                    (('is_person', '=', False),
+                        ('parent_company', '=', Eval('subscriber'))),
+                    ())]]
+        cls.party.depends += ['subscriber', 'item_kind']
+        cls.party.states['invisible'] &= (Eval('item_kind') != 'subsidiary')
+        cls.party.states['required'] |= (Eval('item_kind') == 'subsidiary')
+        cls.name.states['invisible'] |= (Eval('item_kind') == 'subsidiary')
+        cls._buttons.update({
+                'button_open_sub_elements': {
+                    'readonly': ~Eval('has_sub_covered_elements'),
+                    },
+                })
 
     @classmethod
     def create(cls, vlist):
@@ -99,9 +115,33 @@ class CoveredElement:
         if modified:
             Event.notify_events(modified, 'changed_enrollment')
 
+    @classmethod
+    def view_attributes(cls):
+        return super(CoveredElement, cls).view_attributes() + [(
+                '/form//group[@id="invisible"]',
+                'states',
+                {'invisible': True},
+                ),
+            ]
+
     @fields.depends('contract_exit_date', 'manual_end_date')
     def on_change_manual_end_date(self):
         self.contract_exit_date = self.manual_end_date
+
+    @fields.depends('item_kind')
+    def on_change_with_icon(self, name=None):
+        if self.item_kind == 'subsidiary':
+            return 'coopengo-company'
+        return super(CoveredElement, self).on_change_with_icon(name)
+
+    def getter_subscriber(self, name):
+        return self.contract.subscriber.id
+
+    @fields.depends('contract')
+    def on_change_contract(self):
+        super(CoveredElement, self).on_change_contract()
+        if self.contract:
+            self.subscriber = self.contract.subscriber
 
     @classmethod
     def transfer_sub_covered(cls, matches, at_date):
@@ -127,3 +167,8 @@ class CoveredElement:
         if new_elements:
             Event.notify_events(new_elements, 'transferred_enrollment')
         return new_elements
+
+    @classmethod
+    @model.CoogView.button_action('contract_group.act_open_sub_elements')
+    def button_open_sub_elements(cls, instances):
+        pass

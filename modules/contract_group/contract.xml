@@ -87,11 +87,27 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">enrollment_list</field>
         </record>
+        <!-- Sub covered elements -->
+        <record model="ir.action.act_window" id="act_open_sub_elements">
+            <field name="name">Sub Elements</field>
+            <field name="domain" eval="[('parent', '=', Eval('active_id'))]" pyson="1"/>
+            <field name="res_model">contract.covered_element</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_open_sub_elements_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="enrollment_view_list"/>
+            <field name="act_window" ref="act_open_sub_elements"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_open_sub_elements_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="enrollment_view_form"/>
+            <field name="act_window" ref="act_open_sub_elements"/>
+        </record>
         <!-- Contract relate -->
         <record model="ir.action.act_window" id="act_display_enrollment_form">
             <field name="name">Enrollments</field>
             <field name="res_model">contract.covered_element</field>
-            <field name="domain" eval="[('parent.contract', '=', Eval('active_id'))]" pyson="1"/>
+            <field name="domain" eval="[('contract', '=', Eval('active_id')), ('item_desc.kind', '=', 'person'), ('parent.item_desc.sub_item_descs.kind', '=', 'person')]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_display_enrollment_list_view">
             <field name="sequence" eval="10"/>
@@ -107,6 +123,26 @@ this repository contains the full copyright notices and license terms. -->
             <field name="keyword">form_relate</field>
             <field name="model">contract,-1</field>
             <field name="action" ref="act_display_enrollment_form"/>
+        </record>
+        <record model="ir.action.act_window" id="act_display_subsidiary_form">
+            <field name="name">Subsidiaries</field>
+            <field name="res_model">contract.covered_element</field>
+            <field name="domain" eval="[('contract', '=', Eval('active_id')), ('item_desc.kind', '=', 'subsidiary'), ('parent.item_desc.sub_item_descs.kind', '=', 'subsidiary')]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_display_subsidiary_list_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="enrollment_view_list"/>
+            <field name="act_window" ref="act_display_subsidiary_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_display_subsidiary_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="enrollment_view_form"/>
+            <field name="act_window" ref="act_display_subsidiary_form"/>
+        </record>
+        <record model="ir.action.keyword" id="act_display_subsidiary_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_display_subsidiary_form"/>
         </record>
         <!-- Party relate -->
         <record model="ir.action.act_window" id="act_display_party_enrollments">
@@ -128,6 +164,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="keyword">form_relate</field>
             <field name="model">party.party,-1</field>
             <field name="action" ref="act_display_party_enrollments"/>
+        </record>
+        <!-- Buttons -->
+        <record model="ir.model.button" id="button_open_sub_elements">
+            <field name="name">button_open_sub_elements</field>
+            <field name="model" search="[('model', '=', 'contract.covered_element')]"/>
         </record>
     </data>
 </tryton>

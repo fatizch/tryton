@@ -15,5 +15,28 @@ this repository contains the full copyright notices and license terms. -->
         <record model="party.relation.type" id="parent_company_relation" update="1">
             <field name="reverse" ref="contract_group.parent_company_relation"/>
         </record>
+        <!-- ######### -->
+        <!-- # Party # -->
+        <!-- ######### -->
+        <record model="ir.ui.view" id="party_view_tree">
+            <field name="model">party.party</field>
+            <field name="inherit" ref="party.party_view_tree"/>
+            <field name="name">party_tree</field>
+        </record>
+        <record model="ir.ui.view" id="party_view_form">
+            <field name="model">party.party</field>
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="name">party_form</field>
+        </record>
+        <record model="ir.ui.view" id="company_view_tree">
+            <field name="model">party.party</field>
+            <field name="inherit" ref="party_cog.company_view_tree"/>
+            <field name="name">company_tree</field>
+        </record>
+        <!-- Buttons -->
+        <record model="ir.model.button" id="button_display_hierarchy">
+            <field name="name">button_display_hierarchy</field>
+            <field name="model" search="[('model', '=', 'party.party')]"/>
+        </record>
     </data>
 </tryton>

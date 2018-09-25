@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ################ -->
+        <!-- # Organisation # -->
+        <!-- ################ -->
+        <record model="ir.ui.view" id="hierarchy_view_tree">
+            <field name="model">party.hierarchy</field>
+            <field name="type">tree</field>
+            <field name="field_childs">childs</field>
+            <field name="priority" eval="20"/>
+            <field name="name">hierarchy_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_hierarchy_form">
+            <field name="name">Hierarchy</field>
+            <field name="res_model">party.hierarchy</field>
+            <field name="domain" eval="[('main_field', 'in', Eval('active_ids', [])), ('parent', '=', None)]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_hierarchy_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="hierarchy_view_tree"/>
+            <field name="act_window" ref="act_hierarchy_form"/>
+        </record>
+        <record model="ir.action.wizard" id="hierarchy_menu_open">
+            <field name="name">Open Hierarchy Menu</field>
+            <field name="wiz_name">party.hierarchy.open</field>
+            <field name="model">party.hierarchy</field>
+        </record>
+        <record model="ir.action.keyword" id="wizard_hierarchy_open_keyword1">
+            <field name="keyword">tree_open</field>
+            <field name="model">party.hierarchy,-1</field>
+            <field name="action" ref="hierarchy_menu_open"/>
+        </record>
+        <record model="ir.action.act_window" id="act_hierarchy_menu_open">
+            <field name="name">Open Party Hierarchy Menu</field>
+        </record>
+    </data>
+</tryton>

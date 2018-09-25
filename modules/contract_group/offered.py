@@ -9,6 +9,7 @@ from trytond.modules.coog_core import fields
 __all__ = [
     'Product',
     'OptionDescription',
+    'ItemDesc',
     ]
 
 
@@ -32,3 +33,13 @@ class OptionDescription:
     __name__ = 'offered.option.description'
 
     is_group = fields.Boolean('Group Coverage')
+
+
+class ItemDesc:
+    __metaclass__ = PoolMeta
+    __name__ = 'offered.item.description'
+
+    @classmethod
+    def __setup__(cls):
+        super(ItemDesc, cls).__setup__()
+        cls.kind.selection.append(('subsidiary', 'Subsidiary'))

@@ -12,6 +12,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="manual_start_date"/>
     <label name="manual_end_date"/>
     <field name="manual_end_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
     <label name="end_reason"/>
     <field name="end_reason" widget="selection"/>
     <label name="contract_exit_date"/>
@@ -25,4 +27,9 @@ this repository contains the full copyright notices and license terms. -->
     <field name="options" invisible="1"/>
     <field name="item_desc" invisible="1"/>
     <field name="contract" invisible="1"/>
+    <newline/>
+    <group id="invisible">
+        <button name="button_open_sub_elements" string="Sub Elements" keyword="relate"/>
+        <field name="has_sub_covered_elements" invisible="1"/>
+    </group>
 </form>

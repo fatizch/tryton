@@ -14,6 +14,30 @@ msgstr ""
 "Il y a une période non couverte, le contrat d'origine se termine le "
 "%(source_end)s alors que le nouveau commence le %(target_start)s."
 
+msgctxt "error:party.hierarchy.contract.terminated:"
+msgid "Terminated Contracts"
+msgstr "Contrats résiliés"
+
+msgctxt "error:party.hierarchy.contract:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "error:party.hierarchy.contracts.terminated_covered:"
+msgid "Terminated Covereds"
+msgstr "Filiales résiliées"
+
+msgctxt "error:party.hierarchy.subsidiary.terminated:"
+msgid "Terminated"
+msgstr "Résiliés"
+
+msgctxt "error:party.hierarchy.subsidiary:"
+msgid "Subsidiaries"
+msgstr "Filiales"
+
+msgctxt "error:party.hierarchy.terminated_covered:"
+msgid "Terminated Covereds"
+msgstr "Filiales résiliées"
+
 msgctxt "field:contract,is_group:"
 msgid "Group Contract"
 msgstr "Contrat Collectif"
@@ -99,9 +123,1033 @@ msgctxt "field:offered.product,is_group:"
 msgid "Group Product"
 msgstr "Produit collectif"
 
+msgctxt "field:party.hierarchy,childs:"
+msgid "Childs"
+msgstr "Enfants"
+
+msgctxt "field:party.hierarchy,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy,main_field:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:party.hierarchy,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
+msgctxt "field:party.hierarchy,parent:"
+msgid "Parent"
+msgstr "Société mère"
+
+msgctxt "field:party.hierarchy,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l' enregistrement"
+
+msgctxt "field:party.hierarchy,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.contract,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contract,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contract,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.contract,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.contract,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.contract,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.contract,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.contract,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:party.hierarchy.contract,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.contract,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contract,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contract,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.contract.terminated,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contract.terminated,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contract.terminated,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.contract.terminated,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.contract.terminated,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.contract.terminated,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.contract.terminated,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.contract.terminated,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.contract.terminated,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.contract.terminated,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contract.terminated,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contract.terminated,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.contracts,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contracts,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contracts,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.contracts,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.contracts,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.contracts,instance:"
+msgid "Instance"
+msgstr "Cible"
+
+msgctxt "field:party.hierarchy.contracts,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.contracts,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.contracts,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.contracts,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.contracts,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contracts,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contracts,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.contracts.covereds,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contracts.covereds,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contracts.covereds,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.contracts.covereds,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.contracts.covereds,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.contracts.covereds,instance:"
+msgid "Instance"
+msgstr "Cible"
+
+msgctxt "field:party.hierarchy.contracts.covereds,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.contracts.covereds,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.contracts.covereds,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.contracts.covereds,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.contracts.covereds,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contracts.covereds,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contracts.covereds,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.contracts.terminated,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contracts.terminated,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contracts.terminated,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.contracts.terminated,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.contracts.terminated,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.contracts.terminated,instance:"
+msgid "Instance"
+msgstr "Cible"
+
+msgctxt "field:party.hierarchy.contracts.terminated,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.contracts.terminated,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.contracts.terminated,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.contracts.terminated,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.contracts.terminated,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contracts.terminated,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contracts.terminated,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covered,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covered,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covered,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covered,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covered,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covered,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covered,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covered,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covered,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covered,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covered,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covered,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covereds,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covereds,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covereds,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covereds,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covereds,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covereds,instance:"
+msgid "Instance"
+msgstr "Cible"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covereds,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covereds,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covereds,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covereds,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covereds,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covereds,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.contracts.terminated_covereds,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.covereds,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.covereds,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.covereds,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.covereds,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.covereds,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.covereds,instance:"
+msgid "Instance"
+msgstr "Cible"
+
+msgctxt "field:party.hierarchy.covereds,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.covereds,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.covereds,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.covereds,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.covereds,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.covereds,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.covereds,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.party,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.party,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.party,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.party,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.party,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.party,instance:"
+msgid "Instance"
+msgstr "Cible"
+
+msgctxt "field:party.hierarchy.party,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.party,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.party,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.party,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.party,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.party,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.party,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.subsidiaries,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiaries,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiaries,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.subsidiaries,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.subsidiaries,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.subsidiaries,instance:"
+msgid "Instance"
+msgstr "Cible"
+
+msgctxt "field:party.hierarchy.subsidiaries,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.subsidiaries,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.subsidiaries,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.subsidiaries,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.subsidiaries,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiaries,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiaries,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.subsidiary,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiary,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiary,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.subsidiary,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.subsidiary,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.subsidiary,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.subsidiary,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.subsidiary,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l' enregistrement"
+
+msgctxt "field:party.hierarchy.subsidiary,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.subsidiary,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiary,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiary,xml_id:"
+msgid "XML Id"
+msgstr "Société"
+
+msgctxt "field:party.hierarchy.subsidiary.contracts,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiary.contracts,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiary.contracts,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.subsidiary.contracts,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.subsidiary.contracts,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.subsidiary.contracts,instance:"
+msgid "Instance"
+msgstr "Cible"
+
+msgctxt "field:party.hierarchy.subsidiary.contracts,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.subsidiary.contracts,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.subsidiary.contracts,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.subsidiary.contracts,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.subsidiary.contracts,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiary.contracts,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiary.contracts,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.subsidiary.covereds,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiary.covereds,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiary.covereds,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.subsidiary.covereds,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.subsidiary.covereds,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.subsidiary.covereds,instance:"
+msgid "Instance"
+msgstr "Cible"
+
+msgctxt "field:party.hierarchy.subsidiary.covereds,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.subsidiary.covereds,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.subsidiary.covereds,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.subsidiary.covereds,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.subsidiary.covereds,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiary.covereds,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiary.covereds,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.contracts,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.contracts,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.contracts,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.contracts,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.contracts,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.contracts,instance:"
+msgid "Instance"
+msgstr "Cible"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.contracts,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.contracts,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.contracts,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.contracts,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.contracts,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.contracts,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.contracts,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.covereds,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.covereds,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.covereds,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.covereds,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.covereds,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.covereds,instance:"
+msgid "Instance"
+msgstr "Cible"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.covereds,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.covereds,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.covereds,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.covereds,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.covereds,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.covereds,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.subsidiary.terminated.covereds,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.terminated_contracts.covered,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.terminated_contracts.covered,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.terminated_contracts.covered,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.terminated_contracts.covered,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.terminated_contracts.covered,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.terminated_contracts.covered,instance:"
+msgid "Instance"
+msgstr "Cible"
+
+msgctxt "field:party.hierarchy.terminated_contracts.covered,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.terminated_contracts.covered,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.terminated_contracts.covered,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.terminated_contracts.covered,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.terminated_contracts.covered,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.terminated_contracts.covered,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.terminated_contracts.covered,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.terminated_covered,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.terminated_covered,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.terminated_covered,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.terminated_covered,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.terminated_covered,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.terminated_covered,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.terminated_covered,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.terminated_covered,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.terminated_covered,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.terminated_covered,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.terminated_covered,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.terminated_covered,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.hierarchy.terminated_covereds,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.terminated_covereds,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.hierarchy.terminated_covereds,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.hierarchy.terminated_covereds,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:party.hierarchy.terminated_covereds,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.hierarchy.terminated_covereds,instance:"
+msgid "Instance"
+msgstr "Cible"
+
+msgctxt "field:party.hierarchy.terminated_covereds,main_field:"
+msgid "Main Field"
+msgstr "Élément principal"
+
+msgctxt "field:party.hierarchy.terminated_covereds,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:party.hierarchy.terminated_covereds,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:party.hierarchy.terminated_covereds,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:party.hierarchy.terminated_covereds,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.terminated_covereds,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.hierarchy.terminated_covereds,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:party.party,companies:"
 msgid "Companies"
 msgstr "Sociétés"
+
+msgctxt "field:party.party,parent_company:"
+msgid "Parent Company"
+msgstr "Société parente"
 
 msgctxt ""
 "help:contract.transfer_covered_elements.item_desc_line,source_covered:"
@@ -171,6 +1219,22 @@ msgctxt "model:ir.action,name:act_display_party_enrollments"
 msgid "Enrollments"
 msgstr "Affiliations"
 
+msgctxt "model:ir.action,name:act_display_subsidiary_form"
+msgid "Subsidiaries"
+msgstr "Filiales"
+
+msgctxt "model:ir.action,name:act_hierarchy_form"
+msgid "Hierarchy"
+msgstr "Organisation"
+
+msgctxt "model:ir.action,name:act_hierarchy_menu_open"
+msgid "Open Party Hierarchy Menu"
+msgstr "Ouvrir le menu organisation"
+
+msgctxt "model:ir.action,name:act_open_sub_elements"
+msgid "Sub Elements"
+msgstr "Affiliations"
+
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Group Products"
 msgstr "Produits Collectif"
@@ -178,6 +1242,10 @@ msgstr "Produits Collectif"
 msgctxt "model:ir.action,name:act_transfer_covered_elements"
 msgid "Transfer Covered Elements"
 msgstr "Transférer des risques"
+
+msgctxt "model:ir.action,name:hierarchy_menu_open"
+msgid "Open Hierarchy Menu"
+msgstr "Ouvrir le menu organisation"
 
 msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_active"
 msgid "Active"
@@ -224,6 +1292,86 @@ msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Group Products"
 msgstr "Produits Collectif"
 
+msgctxt "model:party.hierarchy,name:"
+msgid "Hierarchy"
+msgstr "Organisation"
+
+msgctxt "model:party.hierarchy.contract,name:"
+msgid "Node"
+msgstr "Noeud"
+
+msgctxt "model:party.hierarchy.contract.terminated,name:"
+msgid "Node"
+msgstr "Noeud"
+
+msgctxt "model:party.hierarchy.contracts,name:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "model:party.hierarchy.contracts.covereds,name:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "model:party.hierarchy.contracts.terminated,name:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "model:party.hierarchy.contracts.terminated_covered,name:"
+msgid "Node"
+msgstr "Noeud"
+
+msgctxt "model:party.hierarchy.contracts.terminated_covereds,name:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "model:party.hierarchy.covereds,name:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "model:party.hierarchy.party,name:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "model:party.hierarchy.subsidiaries,name:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "model:party.hierarchy.subsidiary,name:"
+msgid "Node"
+msgstr "Noeud"
+
+msgctxt "model:party.hierarchy.subsidiary.contracts,name:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "model:party.hierarchy.subsidiary.covereds,name:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "model:party.hierarchy.subsidiary.terminated,name:"
+msgid "Node"
+msgstr "Noeud"
+
+msgctxt "model:party.hierarchy.subsidiary.terminated.contracts,name:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "model:party.hierarchy.subsidiary.terminated.covereds,name:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "model:party.hierarchy.terminated_contracts.covered,name:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "model:party.hierarchy.terminated_covered,name:"
+msgid "Node"
+msgstr "Noeud"
+
+msgctxt "model:party.hierarchy.terminated_covereds,name:"
+msgid "Data"
+msgstr "Données"
+
 msgctxt "model:party.relation.type,name:parent_company_relation"
 msgid "Parent Company"
 msgstr "Société parente"
@@ -236,8 +1384,12 @@ msgctxt "model:tag,name:tag_group"
 msgid "Group"
 msgstr "Collectif"
 
+msgctxt "selection:offered.item.description,kind:"
+msgid "Subsidiary"
+msgstr "Filiale"
+
 msgctxt "view:contract.covered_element:"
-msgid "Enrollments"
+msgid "Sub Elements"
 msgstr "Affiliations"
 
 msgctxt "view:contract.transfer_covered_elements.contracts:"
@@ -255,6 +1407,10 @@ msgstr "Risques"
 msgctxt "view:contract:"
 msgid "Add Enrollment"
 msgstr "Créer une affiliation"
+
+msgctxt "view:party.party:"
+msgid "Hierarchy"
+msgstr "Organisation"
 
 msgctxt "wizard_button:contract.transfer_covered_elements,item_descs,end:"
 msgid "Cancel"
