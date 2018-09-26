@@ -114,12 +114,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
         item_desc = self.ItemDesc(sub_item_descs=[])
         for covered_element in contract1.covered_elements:
             covered_element.item_desc = item_desc
-            covered_element.main_contract = contract1
+            covered_element.contract = contract1
             for option in covered_element.options:
                 option.parent_contract = contract1
         for covered_element in contract2.covered_elements:
             covered_element.item_desc = item_desc
-            covered_element.main_contract = contract2
+            covered_element.contract = contract2
             for option in covered_element.options:
                 option.parent_contract = contract2
 
