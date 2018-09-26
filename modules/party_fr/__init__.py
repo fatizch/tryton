@@ -9,7 +9,6 @@ from trytond.pool import Pool
 
 import address
 import party
-import test_case
 
 
 def register():
@@ -17,7 +16,6 @@ def register():
         address.Address,
         address.Zip,
         party.Party,
-        test_case.TestCaseModel,
         module='party_fr', type_='model')
 
     Pool.register_post_init_hooks(migrate_1_10_include_line3_in_street,

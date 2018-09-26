@@ -13,7 +13,6 @@ from sql.conditionals import Coalesce
 from sql.functions import Function
 
 from trytond import backend
-from trytond.model import Unique
 from trytond.pyson import Eval, Bool, Or
 from trytond.pool import PoolMeta, Pool
 from trytond.tools import grouped_slice, cursor_dict
@@ -117,13 +116,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             'readonly': STATES_ACTIVE,
             'required': STATES_PERSON,
             }, depends=['is_person', 'active'])
-    ssn = fields.EmptyNullChar('SSN', states={
-            'invisible': ~STATES_PERSON,
-            'readonly': STATES_ACTIVE,
-            'required': Eval('ssn_required', False)
-            }, depends=['is_person', 'ssn_required', 'active'])
-    ssn_required = fields.Function(fields.Boolean('SSN Required'),
-        'get_SSN_required')
     ####################################
     # Company information
     commercial_name = fields.Char('Commercial Name', states={
@@ -171,11 +163,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
-        t = cls.__table__()
-        cls._sql_constraints = [
-            ('SSN_uniq', Unique(t, t.ssn),
-             'The SSN of the party must be unique.')
-        ]
         cls.name.required = True
         cls._error_messages.update({
                 'duplicate_party': ('Duplicate(s) already exist(s) : %s'),
@@ -429,9 +416,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             return ['OR'] + role_fields_domains
         return ['AND'] + role_fields_domains
 
-    def get_SSN_required(self, name):
-        return False
-
     @classmethod
     def search_is_actor(cls, name, clause):
         clause = list(clause)
@@ -471,17 +455,12 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         if Transaction().context.get('company') == self.id:
             return self.name
         else:
-            if self.ssn:
-                return '[%s] %s - %s' % (self.code, self.full_name, self.ssn)
-            else:
-                return '[%s] %s' % (self.code, self.full_name)
+            return '[%s] %s' % (self.code, self.full_name)
 
     def get_synthesis_rec_name(self, name):
         if self.is_person:
             res = '%s %s %s' % (coog_string.translate_value(
                 self, 'gender'), self.name.upper(), self.first_name)
-            if self.ssn:
-                res += ' (%s)' % self.ssn
             if self.birth_date:
                 Date = Pool().get('ir.date')
                 res += ' (%s)' % Date.date_as_string(self.birth_date)
@@ -509,8 +488,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             label = self.rec_name
         value = []
         if self.is_person:
-            value.append(coog_string.get_field_summary(self, 'ssn', True,
-                at_date, lang))
             value.append(coog_string.get_field_summary(self, 'birth_date',
                 True, at_date, lang))
             if self.birth_name:
@@ -528,17 +505,18 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         return (label, value)
 
     @classmethod
+    def get_key_for_search_rec_name_domain(cls):
+        return ['code', 'identifiers.code']
+
+    @classmethod
     def search_rec_name(cls, name, clause):
         # TODO : add an index on full_name search
         if clause[1].startswith('!') or clause[1].startswith('not '):
             bool_op = 'AND'
         else:
             bool_op = 'OR'
-        domain = [bool_op,
-            ('code',) + tuple(clause[1:]),
-            ('identifiers.code',) + tuple(clause[1:]),
-            ('ssn',) + tuple(clause[1:]),
-            ]
+        domain = [bool_op] + [(k,) + tuple(clause[1:])
+            for k in cls.get_key_for_search_rec_name_domain()]
         # We do not want to search on full_name for too short strings since the
         # search is rather expensive
         if (not isinstance(clause[2], basestring) or
@@ -697,8 +675,6 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         # TODO : USE person constraint
         # if person_dict.get('code', None):
         #     domain = [('code', '=', person_dict['code'])]
-        # elif person_dict.get('ssn', None):
-        #     domain = [('ssn', '=', person_dict['ssn'])]
         # else:
         #     domain = [('name', '=', person_dict['name']),
         #         ('first_name', '=', person_dict['first_name']),
@@ -768,6 +744,11 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             if identifier.type == type_:
                 return identifier.code
         return '' if default is None else default
+
+    @classmethod
+    def get_values_to_erase(cls):
+        return {'first_name': None, 'birth_name': None, 'birth_date': None,
+            'extra_data': None}
 
 
 class PartyLang(export.ExportImportMixin):
@@ -1465,9 +1446,8 @@ class PartyErase:
         ContactHistory = pool.get('party.interaction')
         to_erase.extend([
                 (Party, [('id', '=', party_id)], True,
-                    ['first_name', 'ssn', 'birth_name', 'birth_date',
-                    'extra_data'],
-                    [None, None, None, None, None]),
+                    Party.get_values_to_erase().keys(),
+                    Party.get_values_to_erase().values()),
                 (ContactHistory, [('party', '=', party_id)], True,
                     ['address', 'comment', 'attachment', 'for_object_ref'],
                     [None, None, None, None])

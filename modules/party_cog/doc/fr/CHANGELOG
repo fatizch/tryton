@@ -37,7 +37,6 @@ Version 1.12 - 2017-04-28
 * FEA#0000 Ajout du champ "genre long"
 
 Version 1.10 - 2016-11-02
-* FEA#0000 Ajout de la recherche par numéro de sécurité sociale
 * FEA#0000 Modification du comportement: Un tiers est soit une société (par défaut) soit une personne, mais ne peut plus être les deux à la fois
 
 Version 1.8 - 2016-07-06

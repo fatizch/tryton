@@ -140,9 +140,7 @@ class Party:
         return self.get_relations(name)
 
     def get_func_key(self, name):
-        if self.is_person and self.ssn:
-            return self.ssn
-        elif self.is_person and self.social_security_dependent:
+        if self.is_person and self.social_security_dependent:
             return '%s|%s|%s|%s' % (self.name, self.first_name,
                 self.birth_date, self.main_insured_ssn)
         else:
@@ -167,10 +165,7 @@ class Party:
                 res.append(('main_insured_ssn', clause[1], ssn))
             return res
         else:
-            return ['OR',
-                [('code',) + tuple(clause[1:])],
-                [('ssn',) + tuple(clause[1:])],
-                ]
+            return super(Party, cls).search_func_key(name, clause)
 
     @classmethod
     def add_func_key(cls, values):

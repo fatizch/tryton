@@ -30,14 +30,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">party_change_address_form</field>
         </record>
         <!-- #################### -->
-        <!-- # Change Party SSN # -->
-        <!-- #################### -->
-        <record model="ir.ui.view" id="party_change_ssn_view_form">
-            <field name="model">endorsement.party.change_ssn</field>
-            <field name="type">form</field>
-            <field name="name">party_change_ssn_form</field>
-        </record>
-        <!-- #################### -->
         <!-- # Change Party Name # -->
         <!-- #################### -->
         <record model="ir.ui.view" id="party_change_name_displayer_view_form">
@@ -80,6 +72,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">endorsement.start.select_endorsement</field>
             <field name="inherit" ref="endorsement.select_endorsement_view_form"/>
             <field name="name">select_endorsement_form</field>
+        </record>
+    </data>
+    <data depends="party_ssn">
+        <!-- #################### -->
+        <!-- # Change Party SSN # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="party_change_ssn_view_form">
+            <field name="model">endorsement.party.change_ssn</field>
+            <field name="type">form</field>
+            <field name="name">party_change_ssn_form</field>
         </record>
     </data>
 </tryton>

@@ -25,7 +25,6 @@ def register():
         wizard.ChangePartyBirthDate,
         wizard.AddressDisplayer,
         wizard.ChangePartyAddress,
-        wizard.ChangePartySSN,
         wizard.PartyNameDisplayer,
         wizard.ChangePartyName,
         wizard.ChangePartyRelationship,
@@ -33,9 +32,16 @@ def register():
         wizard.SelectEndorsement,
         event.EventTypeAction,
         module='endorsement_party', type_='model')
-
+    Pool.register(
+        wizard.ChangePartySSN,
+        depends=['party_ssn'],
+        module='endorsement_party', type_='model')
     Pool.register(
         wizard.StartEndorsement,
         party.PartyReplace,
         wizard.PartyErase,
+        module='endorsement_party', type_='wizard')
+    Pool.register(
+        wizard.StartEndorsementSSN,
+        depends=['party_ssn'],
         module='endorsement_party', type_='wizard')

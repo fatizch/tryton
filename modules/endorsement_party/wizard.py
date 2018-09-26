@@ -21,6 +21,7 @@ __all__ = [
     'PartyNameDisplayer',
     'ChangePartyName',
     'StartEndorsement',
+    'StartEndorsementSSN',
     'SelectEndorsement',
     'RelationDisplayer',
     'ChangePartyRelationship',
@@ -705,14 +706,20 @@ add_endorsement_step(StartEndorsement, ChangePartyBirthDate,
 add_endorsement_step(StartEndorsement, ChangePartyAddress,
     'change_party_address')
 
-add_endorsement_step(StartEndorsement, ChangePartySSN,
-    'change_party_ssn')
-
 add_endorsement_step(StartEndorsement, ChangePartyName,
     'change_party_name')
 
 add_endorsement_step(StartEndorsement, ChangePartyRelationship,
     'change_party_relationship')
+
+
+class StartEndorsementSSN:
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.start'
+
+
+add_endorsement_step(StartEndorsementSSN, ChangePartySSN,
+    'change_party_ssn')
 
 
 class PartyErase:

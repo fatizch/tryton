@@ -46,10 +46,6 @@ msgctxt "error:party.party:"
 msgid "Duplicate(s) already exist(s) : %s"
 msgstr "Des doublon(s) existe(nt) déjà : %s"
 
-msgctxt "error:party.party:"
-msgid "The SSN of the party must be unique."
-msgstr "Le NIR du tiers doit être unique"
-
 msgctxt "error:party.replace:"
 msgid ""
 "Parties have different first names: %(source_name)s vs %(destination_name)s."
@@ -376,14 +372,6 @@ msgstr "Genre long"
 msgctxt "field:party.party,main_address:"
 msgid "Main Address"
 msgstr "Adresse"
-
-msgctxt "field:party.party,ssn:"
-msgid "SSN"
-msgstr "NIR"
-
-msgctxt "field:party.party,ssn_required:"
-msgid "SSN Required"
-msgstr "Numéro de SS obligatoire"
 
 msgctxt "field:party.party,summary:"
 msgid "Summary"

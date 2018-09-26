@@ -23,8 +23,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="birth_date"/>
             <label name="birth_name"/>
             <field name="birth_name"/>
-            <label name="ssn"/>
-            <field name="ssn"/>
             <newline/>
             <group id="label_company_name" xfill="1" xexpand="0">
                 <label name="name" xfill="1" xexpand="1" xalign="1"/>

@@ -34,19 +34,6 @@ class Party:
             if contract.is_health:
                 return contract.id
 
-    @classmethod
-    def search_rec_name(cls, name, clause):
-        domain = super(Party, cls).search_rec_name(name, clause)
-        if domain[0] == 'OR':
-            domain.append([('ssn',) + tuple(clause[1:])])
-        return domain
-
-    def get_rec_name(self, name):
-        name = super(Party, self).get_rec_name(name)
-        if self.is_person and self.ssn:
-            name += " - %s" % self.ssn
-        return name
-
     def get_health_complement_at_date(self, at_date=None):
         return utils.get_good_version_at_date(self, 'health_complement',
             at_date, start_var_name='date')

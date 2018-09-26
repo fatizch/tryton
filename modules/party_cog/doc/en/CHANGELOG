@@ -1,5 +1,5 @@
 * FEA#9431 Add function on parties to get the value of an identifier from its type
-* FEA#9655 Add basic data extraction on a party according to the GPDR 
+* FEA#9655 Add basic data extraction on a party according to the GPDR
 * FEA#9379 Format and add area code when writing phone number
 * FEA#9687 Display parties with roles in new entry point "Configuration Parties". Display role objects in each dedicated entry point
 * FEA#8739 Add the possibility to call the anonymization wizard from party
@@ -37,7 +37,6 @@ Version 1.12 - 2017-04-28
 * FEA#0000 Add long gender field
 
 Version 1.10 - 2016-11-02
-* FEA#0000 Allow to search party from SSN information
 * FEA#0000 Behaviour change : A party is either a company (by default) or a person but it can not be both anymore
 
 Version 1.8 - 2016-07-06

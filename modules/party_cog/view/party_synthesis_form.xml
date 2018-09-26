@@ -15,8 +15,6 @@ this repository contains the full copyright notices and license terms. -->
         <field name="birth_date"/>
         <label name="birth_name"/>
         <field name="birth_name"/>
-        <label name="ssn"/>
-        <field name="ssn"/>
         <label name="lang"/>
         <field name="lang"/>
     </group>
