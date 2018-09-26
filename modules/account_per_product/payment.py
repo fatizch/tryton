@@ -22,6 +22,12 @@ class Journal:
     products = fields.One2Many('offered.product', 'payment_journal', 'Products'
         )
 
+    @classmethod
+    def copy(cls, instances, default=None):
+        default = default.copy() if default else {}
+        default.setdefault('products', None)
+        return super(Journal, cls).copy(instances, default=default)
+
     def get_product(self, name):
         return self.products[0].id if self.products else None
 
