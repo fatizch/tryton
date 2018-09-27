@@ -101,6 +101,13 @@ coog_daily_run() {
                 --notice_kind="benefits"
             )
             [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
+            (
+            _coog_daily_check_modules "claim_insurer" || return 0 &&            \
+                coog_chain_main commission_insurer commission                   \
+                --treatment_date="$LAST_DAY_OF_THE_MONTH"                       \
+                --notice_kind="all"
+            )
+            [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         fi
 
