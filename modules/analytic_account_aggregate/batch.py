@@ -28,7 +28,7 @@ class ExtractAggregatedMove:
     @classmethod
     def _analytic_match_line(cls, line, analytic):
         # Lines indexes are defined into the method 'transform_values' of
-        # account_aggregate/batch.py (and all it's overrides)
+        # account_aggregate/batch.py (and all its overrides)
         Journal = Pool().get('account.journal')
         l_journal, a_journal = Journal.browse([line[8], analytic[8]])
         agg_idx = 8 if l_journal.aggregate else 0

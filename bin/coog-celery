@@ -41,6 +41,11 @@ coog_celery_kill() { # kill workers
     echo celery stopped
 }
 
+coog_celery_restart() { # restart workers
+    coog_celery_kill
+    coog_celery_start $*
+}
+
 coog_celery_pid() { # get pid
     local pid_file; pid_file=$(_coog_celery_file pid)
     coog_env_pid "$pid_file"

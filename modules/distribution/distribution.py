@@ -49,7 +49,8 @@ class DistributionNetwork(model.CoogSQL, model.CoogView):
     parent_party = fields.Function(
         fields.Many2One('party.party', 'Parent Party'),
         'get_parent_party', searcher='search_parent_party')
-    address = fields.Many2One('party.address', 'Address', ondelete='SET NULL',
+    address = fields.Many2One('party.address', 'Address',
+        'on_change_with_address', ondelete='SET NULL',
         domain=[('party', '=', Eval('parent_party'))],
         depends=['parent_party'])
     contact_mechanisms = fields.Many2Many(
@@ -122,6 +123,12 @@ class DistributionNetwork(model.CoogSQL, model.CoogView):
         if self.code:
             return self.code
         return coog_string.slugify(self.name)
+
+    @fields.depends('party')
+    def on_change_with_address(self, name=None):
+        if self.party and not self.party.has_multiple_addresses:
+            return self.party.main_address.id
+        return None
 
     def get_rec_name(self, name):
         if self.code:

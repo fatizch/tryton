@@ -1,3 +1,4 @@
+* BUG#10010 Unset address when removing party from distribution network
 * BUG#9000 Add default authorization
 * BUG#8918 Set default company to migrate existing distribution networks in database when installing the module
 
