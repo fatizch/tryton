@@ -1588,7 +1588,12 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
 
     def find_extra_data_value(self, name, **kwargs):
         version = self.get_version_at_date(kwargs.get('date', utils.today()))
-        return version.find_extra_data_value(name, **kwargs)
+        try:
+            return version.find_extra_data_value(name, **kwargs)
+        except KeyError:
+            if self.parent:
+                return self.parent.find_extra_data_value(name, **kwargs)
+            raise
 
     def find_package_extra_data_value(self, name, **kwargs):
         package = self.get_package(kwargs.get('date', utils.today()))
