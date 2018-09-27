@@ -12,6 +12,7 @@ __all__ = [
     'AgentAgentRelation',
     'Plan',
     'PlanAgentRelation',
+    'SimulateCommissionsParameters',
     ]
 
 
@@ -156,3 +157,15 @@ class PlanAgentRelation(model.CoogSQL, model.CoogView):
 
     plan = fields.Many2One('commission.plan', 'Plan', ondelete='CASCADE')
     agent = fields.Many2One('commission.agent', 'Agent', ondelete='RESTRICT')
+
+
+class SimulateCommissionsParameters:
+    __metaclass__ = PoolMeta
+    __name__ = 'commission.simulate.params'
+
+    @classmethod
+    def __setup__(cls):
+        super(SimulateCommissionsParameters, cls).__setup__()
+        cls.agent.domain.append(('second_level_commission', '=', False))
+        cls.broker.domain.append(
+            ('party.agents.second_level_commission', '=', False))

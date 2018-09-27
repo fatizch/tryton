@@ -34,6 +34,10 @@ def register():
         module='contract_reduction', type_='model',
         depends=['contract_insurance_invoice'])
     Pool.register(
+        wizard.SimulateCommissionsParameters,
+        module='contract_reduction', type_='model',
+        depends=['commission_insurance'])
+    Pool.register(
         endorsement.StartEndorsement,
         module='contract_reduction', type_='wizard',
         depends=['endorsement'])

@@ -1,3 +1,4 @@
+* FEA#9242 New tool to simulate all commissions directly from a product. If the commission amount is also based on extra data on the contract, the user can set them manually.
 * BUG#9912 Fix cancel wholesale type invoice
 * BUG#9841 Update on_change dependencies following agent domain overhaul
 * BUG#9712 Add code on agent to fix JSON import of 2 different agents with the same commission plan and party

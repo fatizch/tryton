@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <group id="filters" colspan="3" col="4" yfill="1">
+        <label name="product"/>
+        <field name="product"/>
+        <newline/>
+        <label name="contract_date"/>
+        <field name="contract_date"/>
+        <label name="invoice_date"/>
+        <field name="invoice_date"/>
+        <label name="broker"/>
+        <field name="broker"/>
+        <label name="agent"/>
+        <field name="agent"/>
+        <newline/>
+    </group>
+    <group id="extra_data" yfill="1">
+        <field name="extra_data" no_command="1" colspan="2"/>
+    </group>
+    <button name="refresh" string="_Refresh" icon="tryton-refresh" colspan="4"/>
+    <newline/>
+    <field name="lines" colspan="4" expand_toolbar="0"/>
+    <field name="broker_party" invisible="1"/>
+</form>

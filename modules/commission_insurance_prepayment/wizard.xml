@@ -31,5 +31,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="wiz_name">prepayment.sync</field>
             <field name="window" eval="True"/>
         </record>
+        <record model="ir.ui.view" id="simulate_commissions_line_view_list">
+            <field name="model">commission.simulate.line</field>
+            <field name="inherit" ref="commission_insurance.simulate_commissions_line_view_list"/>
+            <field name="name">simulate_commissions_line_list</field>
+        </record>
     </data>
 </tryton>

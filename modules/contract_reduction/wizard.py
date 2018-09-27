@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
 
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
@@ -17,6 +17,7 @@ __all__ = [
     'ReduceParameters',
     'ReducePreview',
     'CancelReduction',
+    'SimulateCommissionsParameters',
     ]
 
 
@@ -135,3 +136,14 @@ class CancelReduction(Wizard):
             Transaction().context.get('active_id'))
         contract.cancel_reduction([contract])
         return 'end'
+
+
+class SimulateCommissionsParameters:
+    __metaclass__ = PoolMeta
+    __name__ = 'commission.simulate.params'
+
+    def mock_contract(self, product):
+        contract = super(SimulateCommissionsParameters, self).mock_contract(
+            product)
+        contract.reduction_date = None
+        return contract

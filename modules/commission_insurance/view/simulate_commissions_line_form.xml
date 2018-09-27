@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="premium"/>
+    <field name="premium"/>
+    <label name="base_amount"/>
+    <field name="base_amount"/>
+    <label name="rate"/>
+    <group id="rate">
+        <field name="rate" xexpand="0" factor="100"/>
+        <label string="%" id="rate" xexpand="1" xalign="0"/>
+    </group>
+    <label name="in_commission"/>
+    <field name="in_commission"/>
+    <label name="out_commission"/>
+    <field name="out_commission"/>
+    <field name="currency_digits" invisible="1"/>
+    <field name="kind" invisible="1"/>
+</form>

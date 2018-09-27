@@ -486,6 +486,118 @@ msgctxt "field:commission.plan.lines-offered.option.description,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:commission.simulate.line,agent:"
+msgid "Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "field:commission.simulate.line,base_amount:"
+msgid "Base Amount"
+msgstr "Assiette"
+
+msgctxt "field:commission.simulate.line,color:"
+msgid "Color"
+msgstr "Couleur"
+
+msgctxt "field:commission.simulate.line,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:commission.simulate.line,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:commission.simulate.line,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision de la devise"
+
+msgctxt "field:commission.simulate.line,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:commission.simulate.line,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:commission.simulate.line,frequency:"
+msgid "Frequency"
+msgstr "Fréquence"
+
+msgctxt "field:commission.simulate.line,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:commission.simulate.line,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:commission.simulate.line,in_commission:"
+msgid "In Commission"
+msgstr "Commission entrante"
+
+msgctxt "field:commission.simulate.line,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:commission.simulate.line,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission.simulate.line,out_commission:"
+msgid "Out Commission"
+msgstr "Commission sortante"
+
+msgctxt "field:commission.simulate.line,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:commission.simulate.line,premium:"
+msgid "Premium"
+msgstr "Prime"
+
+msgctxt "field:commission.simulate.line,rate:"
+msgid "Commission Rate"
+msgstr "Taux de commission"
+
+msgctxt "field:commission.simulate.params,agent:"
+msgid "Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "field:commission.simulate.params,broker:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "field:commission.simulate.params,broker_party:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "field:commission.simulate.params,contract_date:"
+msgid "Contract Initial Date"
+msgstr "Date d'effet initiale"
+
+msgctxt "field:commission.simulate.params,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:commission.simulate.params,extra_data_summary:"
+msgid "Extra Data Summary"
+msgstr "Résumé des données complémentaires"
+
+msgctxt "field:commission.simulate.params,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:commission.simulate.params,invoice_date:"
+msgid "Invoice Date"
+msgstr "Date de la quittance"
+
+msgctxt "field:commission.simulate.params,lines:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "field:commission.simulate.params,product:"
+msgid "Product"
+msgstr "Produit"
+
 msgctxt "field:commission.synthesis.show,broker_fees_paid:"
 msgid "Broker fees paid"
 msgstr "Frais courtier payés"
@@ -738,6 +850,14 @@ msgctxt "model:commission.plan.lines-offered.option.description,name:"
 msgid "Commission Plan Line - Offered Option Description"
 msgstr "Lien Ligne de plan de commissionnement - Garantie offerte"
 
+msgctxt "model:commission.simulate.line,name:"
+msgid "Simulate Commissions Lines"
+msgstr "Lignes de simulation de commission"
+
+msgctxt "model:commission.simulate.params,name:"
+msgid "Simulate Commissions Parameters"
+msgstr "Simuler les commissions : Paramètres"
+
 msgctxt "model:commission.synthesis.show,name:"
 msgid "Open Commissions Synthesis Show"
 msgstr "Ouvrir la synthèse des commissions - Affichage"
@@ -830,6 +950,10 @@ msgstr "Protocoles de commissionnement"
 msgctxt "model:ir.action,name:act_product_agents_relate_form"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "model:ir.action,name:act_simulate_commissions_wizard"
+msgid "Simulate Commissions"
+msgstr "Simuler les commissions"
 
 msgctxt ""
 "model:ir.action.act_window.domain,name:act_commission_contract_domain_broker"
@@ -1236,6 +1360,22 @@ msgstr "Créer les protocoles de commissionnement"
 msgctxt "view:commission.plan.date:"
 msgid "Calculation Dates"
 msgstr "Dates de calcul"
+
+msgctxt "view:commission.simulate.line:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:commission.simulate.line:"
+msgid "In Commission"
+msgstr "Commission entrante"
+
+msgctxt "view:commission.simulate.line:"
+msgid "Out Commission"
+msgstr "Commission sortante"
+
+msgctxt "view:commission.simulate.params:"
+msgid "_Refresh"
+msgstr "_Rafraichir"
 
 msgctxt "view:commission.plan:"
 msgid "Administration"

@@ -50,6 +50,10 @@ msgctxt "field:commission.plan.line,prepayment_formula:"
 msgid "Prepayment Formula"
 msgstr "Formule de calcul du précompte"
 
+msgctxt "field:commission.simulate.line,is_prepayment:"
+msgid "Prepayment"
+msgstr "Précompte"
+
 msgctxt "field:contract,with_prepayment:"
 msgid "With Prepayment"
 msgstr "Précompte"

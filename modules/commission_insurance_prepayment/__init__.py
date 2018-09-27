@@ -29,6 +29,8 @@ def register():
         wizard.PrepaymentSyncShowDisplayer,
         wizard.PrepaymentSyncResult,
         wizard.PrepaymentSyncShow,
+        wizard.SimulateCommissionsParameters,
+        wizard.SimulateCommissionsLine,
         batch.DesynchronizedPrepaymentReport,
         batch.DesynchronizedRedeemedReport,
         module='commission_insurance_prepayment', type_='model')

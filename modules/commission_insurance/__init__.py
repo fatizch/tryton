@@ -14,6 +14,7 @@ import offered
 import process
 import distribution
 import res
+import wizard
 
 
 def register():
@@ -47,9 +48,15 @@ def register():
         commission.OpenCommissionSynthesisYearLine,
         batch.CreateCommissionInvoiceBatch,
         batch.PostCommissionInvoiceBatch,
+        wizard.SimulateCommissionsParameters,
+        wizard.SimulateCommissionsLine,
         test_case.TestCaseModel,
         res.User,
         module='commission_insurance', type_='model')
+    Pool.register(
+        wizard.SimulateCommissionsParametersTermRenewal,
+        module='commission_insurance', type_='model',
+        depends=['contract_term_renewal'])
     Pool.register(
         commission.CreateInvoice,
         commission.CreateAgents,
@@ -57,6 +64,7 @@ def register():
         commission.FilterCommissions,
         commission.OpenCommissionsSynthesis,
         commission.FilterAggregatedCommissions,
+        wizard.SimulateCommissions,
         module='commission_insurance', type_='wizard')
     Pool.register(
         process.ContractSubscribe,

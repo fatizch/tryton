@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.wizard import StateView, Button, StateTransition
 from trytond.transaction import Transaction
 
@@ -12,7 +12,9 @@ __all__ = [
     'PrepaymentSyncShowDisplayer',
     'PrepaymentSyncResult',
     'PrepaymentSyncShow',
-    'PrepaymentSync'
+    'PrepaymentSync',
+    'SimulateCommissionsParameters',
+    'SimulateCommissionsLine',
     ]
 
 
@@ -182,3 +184,59 @@ class PrepaymentSync(model.CoogWizard):
             'adjusted': [x.as_dict() for x in self.result.adjusted],
             'non_adjusted': [x.as_dict() for x in self.result.non_adjusted],
             }
+
+
+class SimulateCommissionsParameters:
+    __metaclass__ = PoolMeta
+    __name__ = 'commission.simulate.params'
+
+    def add_commissions(self, line, invoice, contract):
+        commissions = super(SimulateCommissionsParameters,
+            self).add_commissions(line, invoice, contract)
+        if contract.with_prepayment:
+            for commission in line.get_option(contract).compute_prepayment(
+                    False, contract.start_date, contract.end_date):
+                commission.redeemed_prepayment = None
+                commission.base_amount = commission.get_base_amount(None)
+                if (not commission.date
+                        or commission.date >= self.invoice_date):
+                    commissions.append(commission)
+        return commissions
+
+    def mock_contract(self, product):
+        contract = super(SimulateCommissionsParameters, self).mock_contract(
+            product)
+        contract.with_prepayment = contract.getter_with_prepayment(None)
+        return contract
+
+    def mock_option(self, coverage, parent_contract, contract=None,
+            covered=None):
+        option = super(SimulateCommissionsParameters, self).mock_option(
+            coverage, parent_contract, contract, covered)
+        if not parent_contract.getter_with_prepayment(None):
+            return option
+        premium_rule, = [r for r in coverage.premium_rules
+            if r.match(coverage.get_match_rule(option))]
+        option.first_year_premium = option.get_first_year_premium(None)
+        option.monthly_premium_incl_tax = None
+        option.monthly_premium_excl_tax = None
+        return option
+
+    def new_line(self, parent, commission, currency):
+        if commission.agent.plan.is_prepayment and not getattr(commission,
+                'is_prepayment', False):
+            return None
+        return super(SimulateCommissionsParameters, self).new_line(parent,
+            commission, currency)
+
+
+class SimulateCommissionsLine:
+    __metaclass__ = PoolMeta
+    __name__ = 'commission.simulate.line'
+
+    is_prepayment = fields.Boolean('Prepayment', readonly=True)
+
+    def init_from_commission(self, commission):
+        self.is_prepayment = getattr(commission, 'is_prepayment', False)
+        commission.redeemed_prepayment = None
+        super(SimulateCommissionsLine, self).init_from_commission(commission)

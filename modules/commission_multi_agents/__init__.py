@@ -18,4 +18,5 @@ def register():
         contract.Contract,
         contract.ContractOption,
         offered.OptionDescription,
+        commission.SimulateCommissionsParameters,
         module='commission_multi_agents', type_='model')
