@@ -25,7 +25,7 @@ class Insurer:
             return '%s - %s' % (name, self.product.rec_name)
 
     def get_products(self):
-        return [p for o in self.options for p in o.products if p]
+        return list(set([p for o in self.options for p in o.products if p]))
 
     def get_product(self, name):
         products = self.get_products()
