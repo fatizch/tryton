@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.menu-res.group" id="menu_default_pasrau_rate_admin">
+            <field name="menu" ref="claim_pasrau.menu_pasrau"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_upload_pasrau_file_admin">
+            <field name="menu" ref="claim_pasrau.menu_upload_pasrau_file"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_party_pasrau_default_rate_admin">
+            <field name="menu" ref="claim_pasrau.menu_default_pasrau_rates"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+        </record>
+        <!-- Default Party Pasrau Rate Access Rights -->
+        <record model="ir.model.access" id="access_party_pasrau_rate_read">
+            <field name="model" search="[('model', '=', 'party.pasrau.rate')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_pasrau_rate">
+            <field name="model" search="[('model', '=', 'party.pasrau.rate')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Clain Pasrau Default Rate Access Rights -->
+        <record model="ir.model.access" id="access_default_pasrau_rate_read">
+            <field name="model" search="[('model', '=', 'claim.pasrau.default.rate')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_default_pasrau_rate_manage">
+            <field name="model" search="[('model', '=', 'claim.pasrau.default.rate')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

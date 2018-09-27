@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ########################################### -->
+        <!-- ######## Pasrau file upload wizard ######## -->
+        <!-- ########################################### -->
+        <record model="ir.action.wizard" id="upload_pasrau_file_wizard">
+            <field name="name">Upload Pasrau File Wizard</field>
+            <field name="wiz_name">claim.pasrau.upload.wizard</field>
+        </record>
+        <!-- ###################### -->
+        <!-- ######## View ######## -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="select_file_displayer">
+            <field name="model">claim.pasrau.select_file</field>
+            <field name="type">form</field>
+            <field name="name">select_file_displayer</field>
+        </record>
+        <!-- ###################### -->
+        <!-- ######## Menu ######## -->
+        <!-- ###################### -->
+        <menuitem name="Upload Pasrau File" id="menu_upload_pasrau_file" sequence="5" parent="claim_pasrau.menu_pasrau" action="upload_pasrau_file_wizard"/>
+    </data>
+</tryton>

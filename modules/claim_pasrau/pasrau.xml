@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+    	<!-- Claim Pasrau form view -->
+    	<record model="ir.ui.view" id="party_pasrau_rate_view_list">
+            <field name="model">party.pasrau.rate</field>
+            <field name="type">tree</field>
+            <field name="name">party_pasrau_rate_tree</field>
+        </record>
+        <record model="ir.ui.view" id="party_pasrau_rate_view_form">
+            <field name="model">party.pasrau.rate</field>
+            <field name="type">form</field>
+            <field name="name">party_pasrau_rate_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_party_pasrau_rate_window">
+            <field name="name">Claim Party Pasrau Rate</field>
+            <field name="res_model">party.pasrau.rate</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_party_pasrau_rate_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="party_pasrau_rate_view_list"/>
+            <field name="act_window" ref="act_party_pasrau_rate_window"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_party_pasrau_rate_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="party_pasrau_rate_view_form"/>
+            <field name="act_window" ref="act_party_pasrau_rate_window"/>
+        </record>
+        <!-- Party Relate -->
+        <record model="ir.action.act_window" id="act_party_pasrau_rate">
+            <field name="name">Claim Party Pasrau Rate</field>
+            <field name="res_model">party.pasrau.rate</field>
+            <field name="domain" eval="[['party', '=', Eval('active_id')]]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_party_pasrau_rate_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="party_pasrau_rate_view_list"/>
+            <field name="act_window" ref="act_party_pasrau_rate"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_party_pasrau_rate_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="party_pasrau_rate_view_form"/>
+            <field name="act_window" ref="act_party_pasrau_rate"/>
+        </record>
+        <record model="ir.action.keyword" id="act_party_pasrau_rate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="act_party_pasrau_rate"/>
+        </record>
+        <!-- Default Rates -->
+    	<record model="ir.ui.view" id="pasrau_default_rate_view_list">
+            <field name="model">claim.pasrau.default.rate</field>
+            <field name="type">tree</field>
+            <field name="name">pasrau_default_rate_list</field>
+        </record>
+        <record model="ir.ui.view" id="pasrau_default_rate_view_form">
+            <field name="model">claim.pasrau.default.rate</field>
+            <field name="type">form</field>
+            <field name="name">pasrau_default_rate_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_default_pasrau_rate_form">
+            <field name="name">Pasrau Default Rates</field>
+            <field name="res_model">claim.pasrau.default.rate</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_default_pasrau_rate_list_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="pasrau_default_rate_view_list"/>
+            <field name="act_window" ref="act_default_pasrau_rate_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_default_pasrau_rates_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="pasrau_default_rate_view_form"/>
+            <field name="act_window" ref="act_default_pasrau_rate_form"/>
+        </record>
+        <!-- Pasrau Entry Point in Financial -->
+        <menuitem name="Pasrau" parent="account.menu_account" id="menu_pasrau" sequence="50"/>
+        <menuitem name="Default Rates" id="menu_default_pasrau_rates" sequence="10" parent="claim_pasrau.menu_pasrau" action="act_default_pasrau_rate_form"/>
+    </data>
+</tryton>

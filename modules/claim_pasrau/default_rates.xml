@@ -1,0 +1,481 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_null_to_1569">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_higher_bound">1569</field>
+            <field name="region">grm</field>
+            <field name="rate">0</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_1569_to_1663">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1569</field>
+            <field name="income_higher_bound">1663</field>
+            <field name="region">grm</field>
+            <field name="rate">0.005</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_1663_to_1790">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1663</field>
+            <field name="income_higher_bound">1790</field>
+            <field name="region">grm</field>
+            <field name="rate">0.015</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_1790_to_1898">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1790</field>
+            <field name="income_higher_bound">1898</field>
+            <field name="region">grm</field>
+            <field name="rate">0.025</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_1898_to_2063">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1898</field>
+            <field name="income_higher_bound">2063</field>
+            <field name="region">grm</field>
+            <field name="rate">0.035</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_2063_to_2316">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">2063</field>
+            <field name="income_higher_bound">2316</field>
+            <field name="region">grm</field>
+            <field name="rate">0.045</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_2316_to_2713">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">2316</field>
+            <field name="income_higher_bound">2713</field>
+            <field name="region">grm</field>
+            <field name="rate">0.06</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_2713_to_3095">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">2713</field>
+            <field name="income_higher_bound">3095</field>
+            <field name="region">grm</field>
+            <field name="rate">0.075</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_3095_to_3602">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">3095</field>
+            <field name="income_higher_bound">3602</field>
+            <field name="region">grm</field>
+            <field name="rate">0.09</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_3602_to_4308">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">3602</field>
+            <field name="income_higher_bound">4308</field>
+            <field name="region">grm</field>
+            <field name="rate">0.105</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_4308_to_5587">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">4308</field>
+            <field name="income_higher_bound">5587</field>
+            <field name="region">grm</field>
+            <field name="rate">0.12</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_5587_to_7100">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">5587</field>
+            <field name="income_higher_bound">7100</field>
+            <field name="region">grm</field>
+            <field name="rate">0.14</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_7100_to_7814">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">7100</field>
+            <field name="income_higher_bound">7814</field>
+            <field name="region">grm</field>
+            <field name="rate">0.16</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_7814_to_8687">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">7814</field>
+            <field name="income_higher_bound">8687</field>
+            <field name="region">grm</field>
+            <field name="rate">0.18</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_8687_to_10375">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">8687</field>
+            <field name="income_higher_bound">10375</field>
+            <field name="region">grm</field>
+            <field name="rate">0.2</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_10375_to_13141">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">10375</field>
+            <field name="income_higher_bound">13141</field>
+            <field name="region">grm</field>
+            <field name="rate">0.24</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_13141_to_17375">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">13141</field>
+            <field name="income_higher_bound">17375</field>
+            <field name="region">grm</field>
+            <field name="rate">0.28</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_17375_to_26519">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">17375</field>
+            <field name="income_higher_bound">26519</field>
+            <field name="region">grm</field>
+            <field name="rate">0.33</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_26519_to_55986">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">26519</field>
+            <field name="income_higher_bound">55986</field>
+            <field name="region">grm</field>
+            <field name="rate">0.38</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_grm_from_55986_to_null">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">55986</field>
+            <field name="region">grm</field>
+            <field name="rate">0.43</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_null_to_1368">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_higher_bound">1368</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_1368_to_1420">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1368</field>
+            <field name="income_higher_bound">1420</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.005</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_1420_to_1511">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1420</field>
+            <field name="income_higher_bound">1511</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.015</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_1511_to_1614">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1511</field>
+            <field name="income_higher_bound">1614</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.025</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_1614_to_1724">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1614</field>
+            <field name="income_higher_bound">1724</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.035</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_1724_to_1816">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1724</field>
+            <field name="income_higher_bound">1816</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.045</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_1816_to_1937">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1816</field>
+            <field name="income_higher_bound">1937</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.06</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_1937_to_2512">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1937</field>
+            <field name="income_higher_bound">2512</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.075</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_2512_to_2726">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">2512</field>
+            <field name="income_higher_bound">2726</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.09</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_2726_to_2989">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">2726</field>
+            <field name="income_higher_bound">2989</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.105</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_2989_to_3364">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">2989</field>
+            <field name="income_higher_bound">3364</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.12</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_3364_to_3926">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">3364</field>
+            <field name="income_higher_bound">3926</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.14</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_3926_to_4707">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">3926</field>
+            <field name="income_higher_bound">4707</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.16</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_4707_to_5889">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">4707</field>
+            <field name="income_higher_bound">5889</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.18</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_5889_to_7582">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">5889</field>
+            <field name="income_higher_bound">7582</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.2</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_7582_to_10293">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">7582</field>
+            <field name="income_higher_bound">10293</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.24</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_10293_to_14418">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">10293</field>
+            <field name="income_higher_bound">14418</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.28</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_14418_to_22043">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">14418</field>
+            <field name="income_higher_bound">22043</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.33</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_22043_to_46501">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">22043</field>
+            <field name="income_higher_bound">46501</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.38</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_metropolitan_from_46501_to_null">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">46501</field>
+            <field name="region">metropolitan</field>
+            <field name="rate">0.43</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_null_to_1680">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_higher_bound">1680</field>
+            <field name="region">gm</field>
+            <field name="rate">0</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_1680_to_1786">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1680</field>
+            <field name="income_higher_bound">1786</field>
+            <field name="region">gm</field>
+            <field name="rate">0.005</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_1786_to_1924">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1786</field>
+            <field name="income_higher_bound">1924</field>
+            <field name="region">gm</field>
+            <field name="rate">0.015</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_1924_to_2112">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">1924</field>
+            <field name="income_higher_bound">2112</field>
+            <field name="region">gm</field>
+            <field name="rate">0.025</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_2112_to_2341">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">2112</field>
+            <field name="income_higher_bound">2341</field>
+            <field name="region">gm</field>
+            <field name="rate">0.035</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_2341_to_2580">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">2341</field>
+            <field name="income_higher_bound">2580</field>
+            <field name="region">gm</field>
+            <field name="rate">0.045</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_2580_to_2989">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">2580</field>
+            <field name="income_higher_bound">2989</field>
+            <field name="region">gm</field>
+            <field name="rate">0.06</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_2989_to_3554">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">2989</field>
+            <field name="income_higher_bound">3554</field>
+            <field name="region">gm</field>
+            <field name="rate">0.075</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_3554_to_4380">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">3554</field>
+            <field name="income_higher_bound">4380</field>
+            <field name="region">gm</field>
+            <field name="rate">0.09</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_4380_to_5707">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">4380</field>
+            <field name="income_higher_bound">5707</field>
+            <field name="region">gm</field>
+            <field name="rate">0.105</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_5707_to_7064">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">5707</field>
+            <field name="income_higher_bound">7064</field>
+            <field name="region">gm</field>
+            <field name="rate">0.12</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_7064_to_7709">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">7064</field>
+            <field name="income_higher_bound">7709</field>
+            <field name="region">gm</field>
+            <field name="rate">0.14</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_7709_to_8484">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">7709</field>
+            <field name="income_higher_bound">8484</field>
+            <field name="region">gm</field>
+            <field name="rate">0.16</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_8484_to_9432">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">8484</field>
+            <field name="income_higher_bound">9432</field>
+            <field name="region">gm</field>
+            <field name="rate">0.18</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_9432_to_11076">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">9432</field>
+            <field name="income_higher_bound">11076</field>
+            <field name="region">gm</field>
+            <field name="rate">0.2</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_11076_to_13961">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">11076</field>
+            <field name="income_higher_bound">13961</field>
+            <field name="region">gm</field>
+            <field name="rate">0.24</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_13961_to_18294">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">13961</field>
+            <field name="income_higher_bound">18294</field>
+            <field name="region">gm</field>
+            <field name="rate">0.28</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_18294_to_27923">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">18294</field>
+            <field name="income_higher_bound">27923</field>
+            <field name="region">gm</field>
+            <field name="rate">0.33</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_27923_to_58948">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">27923</field>
+            <field name="income_higher_bound">58948</field>
+            <field name="region">gm</field>
+            <field name="rate">0.38</field>
+        </record>
+        <record model="claim.pasrau.default.rate" id="pasrau_default_rate_2019_gm_from_58948_to_null">
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2019-12-31</field>
+            <field name="income_lower_bound">58948</field>
+            <field name="region">gm</field>
+            <field name="rate">0.43</field>
+        </record>
+    </data>
+</tryton>

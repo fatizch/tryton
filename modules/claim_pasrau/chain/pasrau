@@ -1,0 +1,15 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=pasrau
+
+CHAIN_PARAMETERS=('DIRECTORY')
+CHAIN_REQUIRED=()
+
+chain_params "$@"
+chain_begin
+
+chain_step party.pasrau.rate.batch ${GIVEN_PARAMETERS[@]}
+chain_wait party.pasrau.rate.batch || chain_end
+
+chain_end

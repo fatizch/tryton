@@ -221,6 +221,7 @@ CoveredElement = Model.get('contract.covered_element')
 CoveredEndReason = Model.get('covered_element.end_reason')
 Country = Model.get('country.country')
 Currency = Model.get('currency.currency')
+DefaultPasrauRate = Model.get('claim.pasrau.default.rate')
 DistributionNetwork = Model.get('distribution.network')
 DocumentDescription = Model.get('document.description')
 DunningProcedure = Model.get('account.dunning.procedure')
@@ -229,6 +230,7 @@ ExtraData = Model.get('extra_data')
 ExtraDetails = Model.get('extra_details.configuration')
 FiscalYear = Model.get('account.fiscalyear')
 Group = Model.get('res.group')
+Indemnification = Model.get('claim.indemnification')
 Insurer = Model.get('insurer')
 Invoice = Model.get('account.invoice')
 InvoiceSequence = Model.get('account.fiscalyear.invoice_sequence')
@@ -242,6 +244,7 @@ LossDesc = Model.get('benefit.loss.description')
 NetCalculationRule = Model.get('claim.net_calculation_rule')
 Party = Model.get('party.party')
 PartyConfiguration = Model.get('party.configuration')
+PartyPasrauRate = Model.get('party.pasrau.rate')
 PaymentJournal = Model.get('account.payment.journal')
 PaymentJournalFailureAction = Model.get(
     'account.payment.journal.failure_action')
@@ -642,9 +645,8 @@ if LOAD_ACCOUNTING:  # {{{
 
     pasrau_tax = Tax()
     pasrau_tax.name = 'pasrau'
-    pasrau_tax.type = 'percentage'
+    pasrau_tax.type = 'pasrau_rate'
     pasrau_tax.description = u'Prélèvement à la source (Pasrau)'
-    pasrau_tax.rate = Decimal('-0.014')
     pasrau_tax.company = company
     pasrau_tax.invoice_account = pasrau_tax_account
     pasrau_tax.credit_note_account = pasrau_tax_account
@@ -4727,6 +4729,8 @@ if CREATE_CONTRACTS:  # {{{
                     [('bic', '=', _company_bank_bic)])
                 employee_account.start_date = None
                 employee_account.save()
+                employee.addresses[0].zip = '75010'
+                employee.addresses[0].save()
 
     group_life_subscriber_account = BankAccount()
     group_life_subscriber_account.owners.append(Party(group_life_subscriber.id))
@@ -4900,6 +4904,8 @@ if BILL_CONTRACTS:  # {{{
 if CREATE_CLAIMS:  # {{{
     do_print('\nCreating claims')
     do_print('    Creating a work interruption claim')  # {{{
+
+    # Initialize claim {{{
     config._context['client_defined_date'] = _illness_claim_date
     claimant, = Party.find([
             ('name', '=', 'Petit Charpentier Sud'),
@@ -4918,7 +4924,9 @@ if CREATE_CLAIMS:  # {{{
     claim.losses[0].save()
     process_next(claim)
     process_next(claim)
+    # }}}
 
+    # Create and compute salaries {{{
     SalaryWizard = Wizard('claim.salaries_computation', [claim])
     for idx, period in enumerate(SalaryWizard.form.periods):
         period.gross_salary = Decimal(2143) + Decimal('14.27') * idx
@@ -4993,7 +5001,9 @@ if CREATE_CLAIMS:  # {{{
                 Decimal('1643.21'), Decimal('1653.85'), Decimal('1664.48')]):
         assert salary.net_salary == net
     process_next(claim)
+    # }}}
 
+    # First indemnification period (paid to the company) {{{
     CreateIndemnification = Wizard('claim.create_indemnification', [claim])
     assert CreateIndemnification.form.beneficiary == Party.find(
         [('name', '=', 'Petit Charpentier Sud'), ('is_person', '=', False)])[0]
@@ -5026,6 +5036,60 @@ if CREATE_CLAIMS:  # {{{
     assert benefit_line.base_amount == Decimal('9.48')
     assert benefit_line.amount_per_unit == Decimal('9.48')
     assert benefit_line.amount == Decimal('303.36')
+    # }}}
+
+    # Second indemnification period (paid to the party, with pasrau) {{{
+    # Create fake pasrau value for testing
+    default_pasrau = DefaultPasrauRate()
+    default_pasrau.start_date = datetime.date(2018, 1, 1)
+    default_pasrau.end_date = datetime.date(2019, 1, 1)
+    default_pasrau.income_lower_bound = Decimal(0)
+    default_pasrau.income_higher_bound = Decimal(1000000)  # Arbitrarly high
+    default_pasrau.region = 'metropolitan'
+    default_pasrau.rate = Decimal('0.07')
+    default_pasrau.save()
+
+    CreateIndemnification = Wizard('claim.create_indemnification', [claim])
+    assert CreateIndemnification.form.beneficiary == claim.claimant
+    assert CreateIndemnification.form.extra_data == {
+        'date_d_effet_d_indemnisation': _illness_claim_date +
+        relativedelta(days=30),
+        'ijss': Decimal('15.00'),
+        }
+    assert CreateIndemnification.form.start_date == \
+        _illness_claim_end_date_1 + relativedelta(days=1)
+    CreateIndemnification.form.end_date = _illness_claim_end_date_2
+    CreateIndemnification.form.product = claim_product_reduced_taxed
+    CreateIndemnification.execute('calculate')
+    CreateIndemnification.execute('regularisation')
+    CreateIndemnification.execute('end')
+    claim.reload()
+
+    benefit_line = claim.losses[0].services[0].indemnifications[1].details[0]
+    assert benefit_line.kind == 'benefit'
+    assert benefit_line.nb_of_unit == 14
+    assert benefit_line.unit == 'day'
+    assert benefit_line.base_amount == Decimal('9.48')
+    assert benefit_line.amount_per_unit == Decimal('9.48')
+    assert benefit_line.amount == Decimal('132.72')
+    assert claim.losses[0].services[0].indemnifications[1].amount == \
+        Decimal('132.72')
+    assert claim.losses[0].services[0].indemnifications[1].total_amount == \
+        Decimal('118.08')
+    assert claim.losses[0].services[0].indemnifications[1].tax_amount == \
+        Decimal('-14.64')
+
+    # Recompute and switch to personalized pasrau rate
+    Indemnification.delete([claim.losses[0].services[0].indemnifications[1]])
+    DefaultPasrauRate.delete([default_pasrau])
+    claim.reload()
+
+    party_pasrau = PartyPasrauRate()
+    party_pasrau.effective_date = _illness_claim_end_date_1
+    party_pasrau.origin = 'manual'
+    party_pasrau.party = claimant
+    party_pasrau.pasrau_tax_rate = Decimal('0.144')
+    party_pasrau.save()
 
     CreateIndemnification = Wizard('claim.create_indemnification', [claim])
     assert CreateIndemnification.form.beneficiary == claim.claimant
@@ -5043,10 +5107,6 @@ if CREATE_CLAIMS:  # {{{
     CreateIndemnification.execute('validate_scheduling')
     claim.reload()
 
-    assert claim.losses[0].services[0].indemnifications[1].total_amount == \
-        Decimal('125.23')
-    assert claim.losses[0].services[0].indemnifications[1].tax_amount == \
-        Decimal('-7.49')
     benefit_line = claim.losses[0].services[0].indemnifications[1].details[0]
     assert benefit_line.kind == 'benefit'
     assert benefit_line.nb_of_unit == 14
@@ -5054,8 +5114,16 @@ if CREATE_CLAIMS:  # {{{
     assert benefit_line.base_amount == Decimal('9.48')
     assert benefit_line.amount_per_unit == Decimal('9.48')
     assert benefit_line.amount == Decimal('132.72')
+    assert claim.losses[0].services[0].indemnifications[1].total_amount == \
+        Decimal('108.63')
+    assert claim.losses[0].services[0].indemnifications[1].tax_amount == \
+        Decimal('-24.09')
+    assert claim.losses[0].services[0].indemnifications[1].amount == \
+        Decimal('132.72')
     process_next(claim)
+    # }}}
 
+    # Finalize claim {{{
     claim.losses[0].end_date = _illness_claim_end_date_2
     claim.losses[0].closing_reason, = ClaimClosingReason.find(
         [('code', '=', 'back_to_work')])
@@ -5066,6 +5134,28 @@ if CREATE_CLAIMS:  # {{{
     CloseClaim.execute('apply_sub_status')
 
     config._context.pop('client_defined_date')
+    # }}}
+
+    # Check invoices {{{
+    invoice_1 = (claim.losses[0].services[0].indemnifications[0]
+        .invoice_line_details[0].invoice_line.invoice)
+    assert invoice_1.base_amount == Decimal('303.36')
+    assert invoice_1.total_amount == Decimal('303.36')
+    assert invoice_1.tax_amount == Decimal(0)
+    assert len(invoice_1.taxes) == 0
+
+    invoice_2 = (claim.losses[0].services[0].indemnifications[1]
+        .invoice_line_details[0].invoice_line.invoice)
+    assert invoice_2.base_amount == Decimal('132.72')
+    assert invoice_2.total_amount == Decimal('108.63')
+    assert invoice_2.tax_amount == Decimal('-24.09')
+    assert len(invoice_2.taxes) == 3
+    per_tax = {x.tax.name: x for x in invoice_2.taxes}
+    assert per_tax['CRDS'].amount == Decimal('-0.66')  # 0.5 %
+    assert per_tax[u'CSG déductible'].amount == Decimal('-5.04')  # 3.8 %
+    # 14.4 % based on base_amount - CSG => 132.72 * -1 - 0.038)
+    assert per_tax['pasrau'].amount == Decimal('-18.39')
+    # }}}
     # }}}
 
     do_print('    Creating a death claim')  # {{{

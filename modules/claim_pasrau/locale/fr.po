@@ -1,0 +1,234 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:claim.pasrau.default.rate:"
+msgid ""
+"Could not compute a default pasrau value for parameters:\n"
+"\n"
+"Zip: %(zip)s\n"
+"Income: %(income)s\n"
+"Start: %(start)s\n"
+"End: %(end)s"
+msgstr ""
+"Impossible de calculer un taux Pasrau par défaut pour les paramètres :\n"
+"\n"
+"Code postal : %(zip)s\n"
+"Revenu : %(income)s\n"
+"Début de période : %(start)s\n"
+"Fin de période : %(end)s"
+
+msgctxt "error:claim.pasrau.default.rate:"
+msgid "Unable to find PASRAU region for zip code %s"
+msgstr "Impossible d'identifier la zone géographique pour le code postal %s"
+
+msgctxt "error:claim.pasrau.upload.wizard:"
+msgid "The file could not be processed"
+msgstr "Le fichier n'a pas pu être traité"
+
+msgctxt "error:party.party:"
+msgid "A zip is required to compute the default pasrau rate"
+msgstr ""
+"Un code postal est nécessaire pour pouvoir calculer le taux Pasrau par "
+"défaut"
+
+msgctxt "error:party.pasrau.rate:"
+msgid "The rate must be unique per party / date"
+msgstr "Le taux pasrau doit être unique par personne / date"
+
+msgctxt "field:claim.pasrau.default.rate,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.pasrau.default.rate,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:claim.pasrau.default.rate,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:claim.pasrau.default.rate,end_date:"
+msgid "End Date"
+msgstr "Date de fin"
+
+msgctxt "field:claim.pasrau.default.rate,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.pasrau.default.rate,income_higher_bound:"
+msgid "Income Higher Bound"
+msgstr "Borne de revenu supérieure"
+
+msgctxt "field:claim.pasrau.default.rate,income_lower_bound:"
+msgid "Income Lower Bound"
+msgstr "Borne de revenu inférieure"
+
+msgctxt "field:claim.pasrau.default.rate,rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:claim.pasrau.default.rate,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:claim.pasrau.default.rate,region:"
+msgid "Region"
+msgstr "Région"
+
+msgctxt "field:claim.pasrau.default.rate,start_date:"
+msgid "Start Date"
+msgstr "Date de début"
+
+msgctxt "field:claim.pasrau.default.rate,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:claim.pasrau.default.rate,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:claim.pasrau.default.rate,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:claim.pasrau.select_file,file:"
+msgid "File"
+msgstr "Fichier"
+
+msgctxt "field:claim.pasrau.select_file,file_name:"
+msgid "File Name"
+msgstr "Nom du fichier"
+
+msgctxt "field:claim.pasrau.select_file,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.pasrau.rate,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.pasrau.rate,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.pasrau.rate,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.pasrau.rate,effective_date:"
+msgid "Effective date"
+msgstr "Date d'effet"
+
+msgctxt "field:party.pasrau.rate,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.pasrau.rate,origin:"
+msgid "Origin"
+msgstr "Origine"
+
+msgctxt "field:party.pasrau.rate,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:party.pasrau.rate,pasrau_tax_rate:"
+msgid "Pasrau tax rate"
+msgstr "Taux Pasrau"
+
+msgctxt "field:party.pasrau.rate,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:party.pasrau.rate,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.pasrau.rate,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.pasrau.rate,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.pasrau.rate.batch,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "model:claim.pasrau.default.rate,name:"
+msgid "Default Pasrau Rate"
+msgstr "Taux Pasrau par défaut"
+
+msgctxt "model:claim.pasrau.select_file,name:"
+msgid "Claim Pasrau Select File"
+msgstr "Choisir un fichier de taux PASRAU"
+
+msgctxt "model:ir.action,name:act_default_pasrau_rate_form"
+msgid "Pasrau Default Rates"
+msgstr "Taux Pasrau par défaut"
+
+msgctxt "model:ir.action,name:act_party_pasrau_rate"
+msgid "Claim Party Pasrau Rate"
+msgstr "Taux Pasrau"
+
+msgctxt "model:ir.action,name:act_party_pasrau_rate_window"
+msgid "Claim Party Pasrau Rate"
+msgstr "Taux Pasrau"
+
+msgctxt "model:ir.action,name:upload_pasrau_file_wizard"
+msgid "Upload Pasrau File Wizard"
+msgstr "Assistant de chargement de fichier de taux PASRAU"
+
+msgctxt "model:ir.ui.menu,name:menu_default_pasrau_rates"
+msgid "Default Rates"
+msgstr "Taux par défaut"
+
+msgctxt "model:ir.ui.menu,name:menu_pasrau"
+msgid "Pasrau"
+msgstr "Pasrau"
+
+msgctxt "model:ir.ui.menu,name:menu_upload_pasrau_file"
+msgid "Upload Pasrau File"
+msgstr "Charger un fichier de taux PASRAU"
+
+msgctxt "model:party.pasrau.rate,name:"
+msgid "Party Custom Pasrau Rate"
+msgstr "Taux Pasrau"
+
+msgctxt "model:party.pasrau.rate.batch,name:"
+msgid "Update Party Pasrau Rate Batch"
+msgstr "Batch de mise à jour des taux PASRAU"
+
+msgctxt "selection:account.tax,type:"
+msgid "Pasrau Rate"
+msgstr "Taux Pasrau"
+
+msgctxt "selection:claim.pasrau.default.rate,region:"
+msgid "Guadeloupe, Reunion, Martinique"
+msgstr "Guadeloupe, Réunion, Martinique"
+
+msgctxt "selection:claim.pasrau.default.rate,region:"
+msgid "Guyane, Mayotte"
+msgstr "Guyanne, Mayotte"
+
+msgctxt "selection:claim.pasrau.default.rate,region:"
+msgid "Metropolitan France"
+msgstr "France métropolitaine"
+
+msgctxt "selection:party.pasrau.rate,origin:"
+msgid "Default"
+msgstr "Défaut"
+
+msgctxt "selection:party.pasrau.rate,origin:"
+msgid "Manual"
+msgstr "Manuelle"
+
+msgctxt "wizard_button:claim.pasrau.upload.wizard,file_selection,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:claim.pasrau.upload.wizard,file_selection,process_pasrau_file:"
+msgid "Validate"
+msgstr "Valider"
