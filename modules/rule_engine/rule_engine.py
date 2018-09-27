@@ -357,7 +357,11 @@ class RuleExecutionLog(ModelSQL, ModelView):
         self.warnings = '\n'.join(result.print_warnings())
         self.info = '\n'.join(result.print_info())
         self.debug = '\n'.join(result.print_debug())
-        self.low_level_debug = '\n'.join(result.low_level_debug)
+        try:
+            self.low_level_debug = '\n'.join(result.low_level_debug)
+        except UnicodeEncodeError:
+            self.low_level_debug = '\n'.join([
+                    x.decode('utf-8') for x in result.low_level_debug])
         self.result = result.print_result()
         self.calls = '\n'.join(['|&|'.join(x) for x in result.calls])
         self.context = result.context

@@ -71,7 +71,10 @@ _base_date = datetime.date(2000, 1, 1)
 _base_contract_date = datetime.date(2018, 1, 1)
 _contract_rebill_date = datetime.date(2018, 7, 1)
 _contract_rebill_post_date = datetime.date(2018, 6, 1)
-_claim_date = datetime.date(2018, 7, 12)
+_death_claim_date = datetime.date(2018, 7, 12)
+_illness_claim_date = datetime.date(2018, 5, 12)
+_illness_claim_end_date_1 = datetime.date(2018, 7, 12)
+_illness_claim_end_date_2 = datetime.date(2018, 7, 26)
 _account_chart_code = 'PCS'
 _default_receivable_code = '4117'
 _default_payable_code = '467'
@@ -98,6 +101,14 @@ _test_ibans = [
     'FR0830066832195314724587549',
     'FR2030066378352292545684161',
     'FR2730066897575269427455715',
+    'FR2230066446544236999944545',
+    'FR0930066987275756646844158',
+    'FR1730066246237579312716591',
+    'FR4630066476937225464577286',
+    'FR8930066999195411969171933',
+    'FR0630066874485998598859995',
+    'FR8630066373597772548279933',
+    'FR5730066717949961591819945',
     ]
 
 
@@ -183,6 +194,7 @@ def run_test_cases(names):  # {{{
 do_print('\nFetching models')  # {{{
 Account = Model.get('account.account')
 AccountConfiguration = Model.get('account.configuration')
+AccountKind = Model.get('account.account.type')
 AccountProduct = Model.get('product.product')
 AccountProductTemplate = Model.get('product.template')
 AccountTemplate = Model.get('account.account.template')
@@ -227,6 +239,7 @@ Journal = Model.get('account.journal')
 Lang = Model.get('ir.lang')
 Loan = Model.get('loan')
 LossDesc = Model.get('benefit.loss.description')
+NetCalculationRule = Model.get('claim.net_calculation_rule')
 Party = Model.get('party.party')
 PartyConfiguration = Model.get('party.configuration')
 PaymentJournal = Model.get('account.payment.journal')
@@ -248,6 +261,7 @@ SequenceStrict = Model.get('ir.sequence.strict')
 StatementJournal = Model.get('account.statement.journal')
 StatementCancelMotive = Model.get('account.statement.journal.cancel_motive')
 Table = Model.get('table')
+Tax = Model.get('account.tax')
 TestCase = Model.get('ir.test_case')
 TestCaseInstance = Model.get('ir.test_case.instance')
 UnderwritingDecision = Model.get('underwriting.decision')
@@ -349,6 +363,18 @@ def process_previous(target):  # {{{
         [target.id], config._context)
     target.reload()
     return res
+# }}}
+
+
+def get_rule(code):  # {{{
+    rule, = RuleEngine.find([('short_name', '=', code)])
+    return rule
+# }}}
+
+
+def get_extra_data(code):  # {{{
+    extra_data, = ExtraData.find([('name', '=', code)])
+    return extra_data
 # }}}
 
 
@@ -460,7 +486,47 @@ if LOAD_ACCOUNTING:  # {{{
     payable.save()
     # }}}
 
+    do_print('    Creating account kinds')  # {{{
+    tax_account_kind = AccountKind()
+    tax_account_kind.name = 'Taxes'
+    tax_account_kind.company = company
+    tax_account_kind.save()
+    # }}}
+
     do_print('    Creating required accounts')  # {{{
+    tax_parent = Account.find([('code', '=', '4')])[0]
+    tax_root = Account()
+    tax_root.company = company
+    tax_root.name = 'Taxes'
+    tax_root.code = '43'
+    tax_root.kind = 'view'
+    tax_root.type = tax_account_kind
+    tax_root.parent = tax_parent
+    tax_root.deferral = False
+    tax_root.general_ledger_balance = False
+    tax_root.party_required = False
+    tax_root.reconcile = False
+    tax_root.template = tax_parent.template
+    tax_root.save()
+
+    def create_tax_account(name, code):
+        account = Account()
+        account.company = company
+        account.name = name
+        account.code = code
+        account.template = tax_root.template
+        account.parent = tax_root
+        account.type = tax_root.type
+        account.kind = 'other'
+        account.save()
+        return account
+
+    csg_tax_account = create_tax_account('Compte CSG', '43000001')
+    csg_deductible_tax_account = create_tax_account(u'Compte CSG déductible',
+        '43000002')
+    crds_tax_account = create_tax_account('Compte CRDS', '43000003')
+    pasrau_tax_account = create_tax_account('Compte Pasrau', '43000004')
+
     bank_root = Account.find([('code', '=', '512')])[0]
     bank_account = Account()
     bank_account.company = company
@@ -538,6 +604,54 @@ if LOAD_ACCOUNTING:  # {{{
     claim_account.save()
     # }}}
 
+    do_print('    Creating Taxes')  # {{{
+    crds_tax = Tax()
+    crds_tax.name = 'CRDS'
+    crds_tax.type = 'percentage'
+    crds_tax.description = u'Contribution à la réduction de la dette sociale'
+    crds_tax.rate = Decimal('-0.005')
+    crds_tax.company = company
+    crds_tax.invoice_account = crds_tax_account
+    crds_tax.credit_note_account = crds_tax_account
+    crds_tax.sequence = 1
+    crds_tax.save()
+
+    csg_tax = Tax()
+    csg_tax.name = 'CSG'
+    csg_tax.type = 'percentage'
+    csg_tax.description = u'Contribution sociale généralisée'
+    csg_tax.rate = Decimal('-0.062')
+    csg_tax.company = company
+    csg_tax.invoice_account = csg_tax_account
+    csg_tax.credit_note_account = csg_tax_account
+    csg_tax.sequence = 2
+    csg_tax.save()
+
+    csg_deductible_tax = Tax()
+    csg_deductible_tax.name = u'CSG déductible'
+    csg_deductible_tax.type = 'percentage'
+    csg_deductible_tax.description = \
+        u'Contribution sociale généralisée (déductible)'
+    csg_deductible_tax.rate = Decimal('-0.038')
+    csg_deductible_tax.company = company
+    csg_deductible_tax.invoice_account = csg_deductible_tax_account
+    csg_deductible_tax.credit_note_account = csg_deductible_tax_account
+    csg_deductible_tax.sequence = 2
+    csg_deductible_tax.update_unit_price = True
+    csg_deductible_tax.save()
+
+    pasrau_tax = Tax()
+    pasrau_tax.name = 'pasrau'
+    pasrau_tax.type = 'percentage'
+    pasrau_tax.description = u'Prélèvement à la source (Pasrau)'
+    pasrau_tax.rate = Decimal('-0.014')
+    pasrau_tax.company = company
+    pasrau_tax.invoice_account = pasrau_tax_account
+    pasrau_tax.credit_note_account = pasrau_tax_account
+    pasrau_tax.sequence = 3
+    pasrau_tax.save()
+    # }}}
+
     do_print('    Creating Accounting products templates')  # {{{
     insurer_account_product_template = AccountProductTemplate()
     insurer_account_product_template.name = 'Chargement Produit'
@@ -565,17 +679,56 @@ if LOAD_ACCOUNTING:  # {{{
     broker_account_product_template.save()
     broker_account_product = broker_account_product_template.products[0]
 
-    claim_product_template = AccountProductTemplate()
-    claim_product_template.name = 'Règlements sinistres'
-    claim_product_template.type = 'service'
-    claim_product_template.cost_price = Decimal(1)
-    claim_product_template.list_price = Decimal(1)
-    claim_product_template.account_expense, = Account.find(
+    claim_product_template_no_taxes = AccountProductTemplate()
+    claim_product_template_no_taxes.name = 'Règlements sinistres'
+    claim_product_template_no_taxes.type = 'service'
+    claim_product_template_no_taxes.cost_price = Decimal(1)
+    claim_product_template_no_taxes.list_price = Decimal(1)
+    claim_product_template_no_taxes.account_expense, = Account.find(
         [('code', '=', '62200001')])
-    claim_product_template.account_revenue, = Account.find(
+    claim_product_template_no_taxes.account_revenue, = Account.find(
         [('code', '=', '706')])
-    claim_product_template.products[0].code = 'reglement_sinistres'
-    claim_product_template.save()
+    claim_product_template_no_taxes.products[0].code = 'reglement_sinistres'
+    claim_product_template_no_taxes.save()
+
+    claim_product_template_full_taxes = AccountProductTemplate()
+    claim_product_template_full_taxes.name = 'Règlements sinistres (taxes)'
+    claim_product_template_full_taxes.type = 'service'
+    claim_product_template_full_taxes.cost_price = Decimal(1)
+    claim_product_template_full_taxes.list_price = Decimal(1)
+    claim_product_template_full_taxes.account_expense, = Account.find(
+        [('code', '=', '62200001')])
+    claim_product_template_full_taxes.account_revenue, = Account.find(
+        [('code', '=', '706')])
+    claim_product_template_full_taxes.products[0].code = \
+        'reglement_sinistres_taxes'
+    claim_product_template_full_taxes.supplier_taxes.append(
+        Tax(crds_tax.id))
+    claim_product_template_full_taxes.supplier_taxes.append(
+        Tax(csg_tax.id))
+    claim_product_template_full_taxes.supplier_taxes.append(
+        Tax(pasrau_tax.id))
+    claim_product_template_full_taxes.save()
+
+    claim_product_template_reduced_taxes = AccountProductTemplate()
+    claim_product_template_reduced_taxes.name = \
+        'Règlements sinistres (taxes réduites)'
+    claim_product_template_reduced_taxes.type = 'service'
+    claim_product_template_reduced_taxes.cost_price = Decimal(1)
+    claim_product_template_reduced_taxes.list_price = Decimal(1)
+    claim_product_template_reduced_taxes.account_expense, = Account.find(
+        [('code', '=', '62200001')])
+    claim_product_template_reduced_taxes.account_revenue, = Account.find(
+        [('code', '=', '706')])
+    claim_product_template_reduced_taxes.products[0].code = \
+        'reglement_sinistres_taxes_deductible'
+    claim_product_template_reduced_taxes.supplier_taxes.append(
+        Tax(crds_tax.id))
+    claim_product_template_reduced_taxes.supplier_taxes.append(
+        Tax(csg_deductible_tax.id))
+    claim_product_template_reduced_taxes.supplier_taxes.append(
+        Tax(pasrau_tax.id))
+    claim_product_template_reduced_taxes.save()
     # }}}
 
     do_print('    Creating Journals')  # {{{
@@ -806,6 +959,10 @@ cash_journal, = Journal.find([('code', '=', 'CASH')])
 payment_sepa, = PaymentJournal.find([('name', '=', 'Sepa')])
 default_payment_term, = PaymentTerm.find([('name', '=', 'Par défaut')])
 claim_product, = AccountProduct.find([('code', '=', 'reglement_sinistres')])
+claim_product_taxed, = AccountProduct.find(
+    [('code', '=', 'reglement_sinistres_taxes')])
+claim_product_reduced_taxed, = AccountProduct.find(
+    [('code', '=', 'reglement_sinistres_taxes_deductible')])
 # }}}
 
 if CREATE_PROCESSES:  # {{{
@@ -1348,6 +1505,25 @@ if not champs_technique('loss.covered_person.id'):
     step_benefit_check.save()
     # }}}
 
+    do_print('    Creating claim salary step')  # {{{
+    step_claim_salary = ProcessStep()
+    step_claim_salary.fancy_name = u'Salaires'
+    step_claim_salary.technical_name = 'step_claim_salary'
+    step_claim_salary.button_domain = "[]"
+    step_claim_salary.pyson = "Eval('all_services_refused')"
+    step_claim_salary.main_model, = IrModel.find([('model', '=', 'claim')])
+    step_claim_salary.step_xml = '''
+<label name="losses_description"/>
+<field name="losses_description" colspan="3"/>
+<button string="Saisie des salaires" name="launch_salaries_wizard"/>
+<field name="delivered_services"  colspan="4" mode="form,tree"
+    view_ids="claim_salary_fr.claim_service_with_salary_view_form"
+    expand_toolbar="0"/>
+<field name="delivered_services" invisible="1"/>
+'''
+    step_claim_salary.save()
+    # }}}
+
     do_print('    Creating claim services step')  # {{{
     step_claim_services = ProcessStep()
     step_claim_services.fancy_name = u'Prestations'
@@ -1545,35 +1721,41 @@ if not champs_technique('loss.covered_person.id'):
     loan_process.save()
     # }}}
 
-    do_print('    Creating claim process')  # {{{
-    claim_process = Process()
-    claim_process.technical_name = 'claim_process'
-    claim_process.fancy_name = u"Déclaration de sinistre"
-    claim_process.on_model, = IrModel.find([('model', '=', 'claim')])
-    claim_process.kind = 'claim_declaration'
-    claim_process.steps_to_display.append(
-        ProcessStep(step_claim_info.id))
-    claim_process.steps_to_display.append(
-        ProcessStep(step_benefit_check.id))
-    claim_process.steps_to_display.append(
-        ProcessStep(step_claim_services.id))
-    claim_process.steps_to_display.append(
-        ProcessStep(step_indemnification_validation.id))
-    claim_process.steps_to_display.append(
-        ProcessStep(step_claim_close.id))
-    claim_process.menu_icon = 'tryton-open'
-    claim_process.end_step_name = 'Terminer'
-    claim_process.hold_button = 'Suspendre'
-    claim_process.menu_name = u"Déclaration de sinistre"
-    claim_process.step_button_group_position = 'right'
-    claim_process.steps_implicitly_available = False
-    claim_process.xml_tree = '''
+    do_print('    Creating death claim process')  # {{{
+    claim_death_process = Process()
+    claim_death_process.technical_name = 'claim_death_process'
+    claim_death_process.fancy_name = u"Déclaration de décès"
+    claim_death_process.on_model, = IrModel.find([('model', '=', 'claim')])
+    claim_death_process.kind = 'claim_declaration'
+    claim_death_process.all_steps.new()
+    claim_death_process.all_steps[-1].step = step_claim_info
+    claim_death_process.all_steps[-1].order = 1
+    claim_death_process.all_steps.new()
+    claim_death_process.all_steps[-1].step = step_benefit_check
+    claim_death_process.all_steps[-1].order = 2
+    claim_death_process.all_steps.new()
+    claim_death_process.all_steps[-1].step = step_claim_services
+    claim_death_process.all_steps[-1].order = 3
+    claim_death_process.all_steps.new()
+    claim_death_process.all_steps[-1].step = step_indemnification_validation
+    claim_death_process.all_steps[-1].order = 4
+    claim_death_process.all_steps.new()
+    claim_death_process.all_steps[-1].step = step_claim_close
+    claim_death_process.all_steps[-1].order = 5
+    claim_death_process.menu_icon = 'tryton-open'
+    claim_death_process.end_step_name = 'Terminer'
+    claim_death_process.hold_button = 'Suspendre'
+    claim_death_process.menu_name = u"Déclaration de décès"
+    claim_death_process.step_button_group_position = 'right'
+    claim_death_process.steps_implicitly_available = False
+    claim_death_process.custom_transitions = True
+    claim_death_process.xml_tree = '''
 <field name="current_state"/>
 <field name="name"/>
 <field name="claimant"/>
 <field name="status"/>
 '''
-    claim_process.xml_header = '''
+    claim_death_process.xml_header = '''
 <label name="name"/>
 <field name="name"/>
 <label name="status"/>
@@ -1584,39 +1766,165 @@ if not champs_technique('loss.covered_person.id'):
 <field name="declaration_date"/>
 '''
     transitions = [  # {{{
-        ('start', None, step_claim_info, ['add_new_loss']),
-        ('standard', step_claim_info, step_benefit_check, [
-                'activate_underwritings_if_needed']),
-        ('standard', step_benefit_check, step_claim_info, []),
-        ('standard', step_benefit_check, step_claim_services, []),
-        ('standard', step_benefit_check, step_indemnification_validation, []),
-        ('standard', step_benefit_check, step_claim_close, []),
-        ('standard', step_claim_services, step_benefit_check, []),
-        ('standard', step_claim_services, step_claim_info, []),
-        ('standard', step_claim_services, step_indemnification_validation, []),
-        ('standard', step_claim_services, step_claim_close, []),
-        ('standard', step_indemnification_validation, step_claim_services, []),
-        ('standard', step_indemnification_validation, step_benefit_check, []),
-        ('standard', step_indemnification_validation, step_claim_info, []),
-        ('standard', step_indemnification_validation, step_claim_close, []),
-        ('standard', step_claim_close, step_indemnification_validation, []),
-        ('complete', step_claim_close, None, []),
+        ('start', None, step_claim_info,
+            [('add_new_loss', "'death'")], ''),
+        ('standard', step_claim_info, step_benefit_check,
+            [('activate_underwritings_if_needed', '')], ''),
+        ('standard', step_benefit_check, step_claim_info, [], ''),
+        ('standard', step_benefit_check, step_claim_services, [], ''),
+        ('standard', step_benefit_check, step_indemnification_validation, [],
+            ''),
+        ('standard', step_benefit_check, step_claim_close, [], ''),
+        ('standard', step_claim_services, step_benefit_check, [], ''),
+        ('standard', step_claim_services, step_claim_info, [], ''),
+        ('standard', step_claim_services, step_indemnification_validation, [],
+            ''),
+        ('standard', step_claim_services, step_claim_close, [], ''),
+        ('standard', step_indemnification_validation, step_claim_services, [],
+            ''),
+        ('standard', step_indemnification_validation, step_benefit_check, [],
+            ''),
+        ('standard', step_indemnification_validation, step_claim_info, [], ''),
+        ('standard', step_indemnification_validation, step_claim_close, [],
+            ''),
+        ('standard', step_claim_close, step_indemnification_validation, [],
+            ''),
+        ('complete', step_claim_close, None, [], ''),
         ]
     for data in transitions:
-        claim_process.transitions.new()
-        transition = claim_process.transitions[-1]
+        claim_death_process.transitions.new()
+        transition = claim_death_process.transitions[-1]
         if data[0] == 'complete':
             transition.name = 'Terminer'
         transition.kind = data[0]
+        transition.method_kind = 'add'
         transition.from_step = data[1]
         transition.to_step = data[2]
-        for name in data[3]:
+        for name, params in data[3]:
             transition.methods.new()
             transition.methods[-1].content = 'method'
             transition.methods[-1].technical_kind = 'transition'
             transition.methods[-1].method_name = name
+            transition.methods[-1].parameters = params or ''
+        if data[4]:
+            transition.pyson = data[4]
         # }}}
-    claim_process.save()
+    claim_death_process.save()
+    # }}}
+
+    do_print('    Creating claim work interruption process')  # {{{
+    claim_work_interruption_process = Process()
+    claim_work_interruption_process.technical_name = \
+        'claim_work_interruption_process'
+    claim_work_interruption_process.fancy_name = \
+        u"Déclaration d'arrêt de travail"
+    claim_work_interruption_process.on_model, = \
+        IrModel.find([('model', '=', 'claim')])
+    claim_work_interruption_process.kind = 'claim_declaration'
+    claim_work_interruption_process.all_steps.new()
+    claim_work_interruption_process.all_steps[-1].step = \
+        step_claim_info
+    claim_work_interruption_process.all_steps[-1].order = 1
+    claim_work_interruption_process.all_steps.new()
+    claim_work_interruption_process.all_steps[-1].step = \
+        step_benefit_check
+    claim_work_interruption_process.all_steps[-1].order = 2
+    claim_work_interruption_process.all_steps.new()
+    claim_work_interruption_process.all_steps[-1].step = \
+        step_claim_salary
+    claim_work_interruption_process.all_steps[-1].order = 3
+    claim_work_interruption_process.all_steps.new()
+    claim_work_interruption_process.all_steps[-1].step = \
+        step_claim_services
+    claim_work_interruption_process.all_steps[-1].order = 4
+    claim_work_interruption_process.all_steps.new()
+    claim_work_interruption_process.all_steps[-1].step = \
+        step_indemnification_validation
+    claim_work_interruption_process.all_steps[-1].order = 5
+    claim_work_interruption_process.all_steps.new()
+    claim_work_interruption_process.all_steps[-1].step = \
+        step_claim_close
+    claim_work_interruption_process.all_steps[-1].order = 6
+    claim_work_interruption_process.menu_icon = 'tryton-open'
+    claim_work_interruption_process.end_step_name = 'Terminer'
+    claim_work_interruption_process.hold_button = 'Suspendre'
+    claim_work_interruption_process.menu_name = \
+        u"Déclaration d'arrêt de travail"
+    claim_work_interruption_process.step_button_group_position = 'right'
+    claim_work_interruption_process.steps_implicitly_available = False
+    claim_work_interruption_process.custom_transitions = True
+    claim_work_interruption_process.xml_tree = '''
+<field name="current_state"/>
+<field name="name"/>
+<field name="claimant"/>
+<field name="status"/>
+'''
+    claim_work_interruption_process.xml_header = '''
+<label name="name"/>
+<field name="name"/>
+<label name="status"/>
+<field name="status"/>
+<label name="claimant"/>
+<field name="claimant" readonly="1"/>
+<label name="declaration_date"/>
+<field name="declaration_date"/>
+'''
+    transitions = [  # {{{
+        ('start', None, step_claim_info,
+            [('add_new_loss', "'temporary_work_interruption'")], ''),
+        ('standard', step_claim_info, step_benefit_check,
+            [('activate_underwritings_if_needed', '')], ''),
+        ('standard', step_benefit_check, step_claim_info, [], ''),
+        ('standard', step_benefit_check, step_claim_salary, [], ''),
+        ('standard', step_benefit_check, step_claim_services, [], ''),
+        ('standard', step_benefit_check, step_indemnification_validation, [],
+            ''),
+        ('standard', step_benefit_check, step_claim_close, [], ''),
+        ('standard', step_claim_salary, step_claim_info, [], ''),
+        ('standard', step_claim_salary, step_claim_services, [],
+            "~Bool(Eval('delivered_services'))"),
+        ('standard', step_claim_salary, step_benefit_check, [], ''),
+        ('standard', step_claim_salary, step_indemnification_validation, [],
+            ''),
+        ('standard', step_claim_salary, step_claim_close, [], ''),
+        ('standard', step_claim_services, step_claim_salary, [], ''),
+        ('standard', step_claim_services, step_benefit_check, [], ''),
+        ('standard', step_claim_services, step_claim_info, [], ''),
+        ('standard', step_claim_services, step_indemnification_validation, [],
+            ''),
+        ('standard', step_claim_services, step_claim_close, [], ''),
+        ('standard', step_indemnification_validation, step_claim_services, [],
+            ''),
+        ('standard', step_indemnification_validation, step_claim_salary, [],
+            ''),
+        ('standard', step_indemnification_validation, step_benefit_check, [],
+            ''),
+        ('standard', step_indemnification_validation, step_claim_info, [], ''),
+        ('standard', step_indemnification_validation, step_claim_close, [],
+            ''),
+        ('standard', step_claim_close, step_indemnification_validation, [],
+            ''),
+        ('complete', step_claim_close, None, [], ''),
+        ]
+    for data in transitions:
+        claim_work_interruption_process.transitions.new()
+        transition = claim_work_interruption_process.transitions[-1]
+        if data[0] == 'complete':
+            transition.name = 'Terminer'
+        transition.kind = data[0]
+        transition.method_kind = 'add'
+        transition.from_step = data[1]
+        transition.to_step = data[2]
+        for name, params in data[3]:
+            transition.methods.new()
+            transition.methods[-1].content = 'method'
+            transition.methods[-1].technical_kind = 'transition'
+            transition.methods[-1].method_name = name
+            transition.methods[-1].parameters = params or ''
+        if data[4]:
+            transition.pyson = data[4]
+        # }}}
+    claim_work_interruption_process.save()
     # }}}
 
 generic_process, = Process.find(
@@ -1625,8 +1933,10 @@ life_process, = Process.find(
     [('technical_name', '=', 'souscription_prevoyance')])
 loan_process, = Process.find(
     [('technical_name', '=', 'souscription_emprunteur')])
-claim_process, = Process.find(
-    [('technical_name', '=', 'claim_process')])
+death_claim_process, = Process.find(
+    [('technical_name', '=', 'claim_death_process')])
+work_interruption_claim_process, = Process.find(
+    [('technical_name', '=', 'claim_work_interruption_process')])
 # }}}
 
 if CREATE_ACTORS:  # {{{
@@ -1786,8 +2096,8 @@ if CREATE_PRODUCTS:  # {{{
         account.type = coverage_root.type
         account.parent = coverage_root
         account.kind = 'other'
-        account.save()
         account.party_required = True
+        account.save()
         return account
 
     fire_coverage_account = create_coverage_account(
@@ -3029,6 +3339,11 @@ else:
     fired_reason.code = 'licensiement'
     fired_reason.name = 'Licensiement'
     fired_reason.save()
+
+    sell_reason = CoveredEndReason()
+    sell_reason.code = 'revente'
+    sell_reason.name = 'Revente'
+    sell_reason.save()
     # }}}
 
     do_print('\nCreating Underwriting Decisions')  # {{{
@@ -3194,8 +3509,8 @@ else:
         ClaimClosingReason(death_reason.id))
     death.save()
 
-    claim_process.for_loss_descs.append(LossDesc(death.id))
-    claim_process.save()
+    death_claim_process.for_loss_descs.append(LossDesc(death.id))
+    death_claim_process.save()
 
     work_interruption = LossDesc()
     work_interruption.code = 'temporary_work_interruption'
@@ -3216,8 +3531,9 @@ else:
         ClaimClosingReason(invalidity_reason.id))
     work_interruption.save()
 
-    claim_process.for_loss_descs.append(LossDesc(work_interruption.id))
-    claim_process.save()
+    work_interruption_claim_process.for_loss_descs.append(
+        LossDesc(work_interruption.id))
+    work_interruption_claim_process.save()
 
     validity_loss = LossDesc()
     validity_loss.code = 'temporary_validity_loss'
@@ -3274,6 +3590,8 @@ else:
     group_incapacity_benefit.indemnification_kind = 'period'
     group_incapacity_benefit.loss_descs.append(LossDesc(work_interruption.id))
     group_incapacity_benefit.automatically_deliver = True
+    group_incapacity_benefit.extra_data_def.append(get_extra_data(
+            'date_d_effet_d_indemnisation'))
     group_incapacity_benefit.eligibility_rules.new()
     group_incapacity_benefit.eligibility_rules[0].rule = \
         benefit_eligibility_rule
@@ -3284,13 +3602,26 @@ else:
         BenefitEligibilityDecision(automatically_refused.id))
     group_incapacity_benefit.refuse_decision_default = automatically_refused
     group_incapacity_benefit.accept_decision_default = automatically_accepted
+    group_incapacity_benefit.products.append(
+        AccountProduct(claim_product_taxed.id))
+    group_incapacity_benefit.products.append(
+        AccountProduct(claim_product_reduced_taxed.id))
+    group_incapacity_benefit.company_products.append(
+        AccountProduct(claim_product.id))
 
     group_incapacity_benefit.benefit_rules.new()
     rule = group_incapacity_benefit.benefit_rules[0]
-    rule.indemnification_rules.append(RuleEngine(benefit_simple_value_rule.id))
-    rule.indemnification_rules.append(RuleEngine(benefit_complex_value_rule.id))
-    rule.deductible_rule = benefit_deductible_rule
-    rule.deductible_rule_extra_data = {'number_of_days': 41}
+    rule.indemnification_rules.append(
+        get_rule('coog_traitement_journalier_par_tranche_de_salaire'))
+    rule.deductible_rules.append(
+        get_rule('coog_franchise_fixe_toute_nature_d_arret_confondue'))
+    rule.deductible_rules.append(
+        get_rule('coog_franchise_fixe_toute_nature_d_arret_confondue'
+            '_pour_un_arret_total'))
+    rule.deductible_rules.append(
+        get_rule('coog_franchise_relais_conventation'))
+    rule.revaluation_rules.append(
+        get_rule('coog_regle_standard_de_calcul_de_la_revalorisation'))
     group_incapacity_benefit.save()
     # }}}
 
@@ -3344,7 +3675,22 @@ else:
     employee_item_desc.kind = 'person'
     employee_item_desc.extra_data_def.append(ExtraData(job_start.id))
     employee_item_desc.extra_data_def.append(ExtraData(job_end.id))
+    employee_item_desc.covered_element_end_reasons.append(
+        CoveredEndReason(left_reason.id))
+    employee_item_desc.covered_element_end_reasons.append(
+        CoveredEndReason(fired_reason.id))
     employee_item_desc.save()
+    # }}}
+
+    do_print('    Creating Subsidiary Item Desc')  # {{{
+    subsidiary_item_desc = ItemDesc()
+    subsidiary_item_desc.name = u'Filiale'
+    subsidiary_item_desc.code = 'subsidiary_item_desc'
+    subsidiary_item_desc.kind = 'subsidiary'
+    subsidiary_item_desc.sub_item_descs.append(ItemDesc(employee_item_desc.id))
+    subsidiary_item_desc.covered_element_end_reasons.append(
+        CoveredEndReason(sell_reason.id))
+    subsidiary_item_desc.save()
     # }}}
 
     do_print('    Creating Employee Category Item Desc')  # {{{
@@ -3353,11 +3699,7 @@ else:
     category_item_desc.code = 'category_item_desc'
     category_item_desc.kind = None
     category_item_desc.extra_data_def.append(ExtraData(employee_type.id))
-    category_item_desc.sub_item_descs.append(ItemDesc(employee_item_desc.id))
-    category_item_desc.covered_element_end_reasons.append(
-        CoveredEndReason(left_reason.id))
-    category_item_desc.covered_element_end_reasons.append(
-        CoveredEndReason(fired_reason.id))
+    category_item_desc.sub_item_descs.append(ItemDesc(subsidiary_item_desc.id))
     category_item_desc.save()
     # }}}
 
@@ -4338,13 +4680,53 @@ if CREATE_CONTRACTS:  # {{{
         [('short_name', '=', 'benefit_complex_value')])
     group_life_subscriber = Party()
     group_life_subscriber.is_person = False
-    group_life_subscriber.name = 'DOE SA'
+    group_life_subscriber.name = 'Petit Charpentier'
     group_life_subscriber.lang = lang
     group_life_subscriber.all_addresses[0].street = "\n\n50 rue d'Hauteville"
     group_life_subscriber.all_addresses[0].zip = '75010'
     group_life_subscriber.all_addresses[0].city = 'PARIS'
     group_life_subscriber.all_addresses[0].country = country
     group_life_subscriber.save()
+
+    # Create subsidiaries, employees
+    subsidiaries = []
+    for idx, name in enumerate(['Nord', 'Sud', 'Est', 'Ouest']):
+        subsidiary = Party()
+        subsidiary.is_person = False
+        subsidiary.lang = lang
+        subsidiary.parent_company = group_life_subscriber
+        subsidiary.name = '%s %s' % (group_life_subscriber.name, name)
+        subsidiary.save()
+
+        subsidiary_account = BankAccount()
+        subsidiary_account.owners.append(Party(subsidiary.id))
+        subsidiary_account.currency = currency
+        subsidiary_account.number = get_iban()
+        subsidiary_account.bank, = Bank.find(
+            [('bic', '=', _company_bank_bic)])
+        subsidiary_account.start_date = None
+        subsidiary_account.save()
+
+        subsidiaries.append(subsidiary)
+        for jdx in range(3):
+            employee = Party()
+            employee.is_person = True
+            employee.name = subsidiary.name
+            employee.first_name = 'Employé %i' % (jdx + 1)
+            employee.gender = {0: 'male', 1: 'female'}[jdx % 2]
+            employee.birth_date = datetime.date(
+                1960, idx + 1, (jdx + 1) * 3 + idx)
+            employee.save()
+
+            if idx == 1 and jdx == 1:
+                employee_account = BankAccount()
+                employee_account.owners.append(Party(employee.id))
+                employee_account.currency = currency
+                employee_account.number = get_iban()
+                employee_account.bank, = Bank.find(
+                    [('bic', '=', _company_bank_bic)])
+                employee_account.start_date = None
+                employee_account.save()
 
     group_life_subscriber_account = BankAccount()
     group_life_subscriber_account.owners.append(Party(group_life_subscriber.id))
@@ -4378,15 +4760,51 @@ if CREATE_CONTRACTS:  # {{{
         'relapse_threshold': '90'}
     assert len(covered.options[-1].versions[-1].benefits) == 1
     benefit_data = covered.options[-1].versions[-1].benefits[-1]
-    assert benefit_data.deductible_rule_extra_data.keys() == ['number_of_days']
-    benefit_data.deductible_rule_extra_data = {'number_of_days': 3}
-    benefit_data.indemnification_rule = complex_rule
-    assert set(benefit_data.indemnification_rule_extra_data.keys()) == {
-        'range_a_rate', 'range_b_rate', 'range_c_rate'}
+    benefit_data.salary_mode = 'last_12_months'
+    benefit_data.net_salary_mode = True
+    benefit_data.net_calculation_rule, = NetCalculationRule.find(
+        [('rule.short_name', '=', 'coog_net_salary_calculation_a_payer')])
+    assert benefit_data.deductible_rule is None
+    benefit_data.deductible_rule = get_rule(
+        'coog_franchise_relais_conventation')
+    assert benefit_data.deductible_rule_extra_data.keys() == \
+        ['1_nombre_de_jours_de_franchise']
+
+    assert benefit_data.indemnification_rule.short_name == \
+        'coog_traitement_journalier_par_tranche_de_salaire'
+    assert set(benefit_data.indemnification_rule_extra_data) == {
+        '1_pourcentage_ij_ta',
+        '2_pourcentage_ij_tb',
+        '3_pourcentage_ij_tc',
+        '4_traitement_de_reference',
+        '5_inclusion_du_mi_temps_therapeutique',
+        '6_deduction_de_l_ijss',
+        '7_limiter_au_net',
+        }
     benefit_data.indemnification_rule_extra_data = {
-        'range_a_rate': Decimal(100),
-        'range_b_rate': Decimal(100),
-        'range_c_rate': Decimal(100),
+        '1_pourcentage_ij_ta': 20,
+        '2_pourcentage_ij_tb': 15,
+        '3_pourcentage_ij_tc': 15,
+        '4_traitement_de_reference': 'salaire_brut_prime',
+        '5_inclusion_du_mi_temps_therapeutique': 'tdrj_ijss_mtt',
+        '6_deduction_de_l_ijss': True,
+        '7_limiter_au_net': True,
+        }
+    assert benefit_data.revaluation_rule.short_name == \
+        'coog_regle_standard_de_calcul_de_la_revalorisation'
+    assert set(benefit_data.revaluation_rule_extra_data) == {
+        '1_reval_mode',
+        '2_date_de_reference',
+        '3_1ere_revalorisation',
+        '4_nombre_de_jours',
+        '5_frequence_revalo',
+        }
+    benefit_data.revaluation_rule_extra_data = {
+        '1_reval_mode': 'AGIRC',
+        '2_date_de_reference': 'DAT',
+        '3_1ere_revalorisation': None,
+        '4_nombre_de_jours': None,
+        '5_frequence_revalo': 'changement_taux',
         }
 
     group_life_contract.covered_elements.new()
@@ -4398,66 +4816,71 @@ if CREATE_CONTRACTS:  # {{{
     covered.options[-1].current_extra_data = {
         'relapse_threshold': '30'}
     benefit_data = covered.options[-1].versions[-1].benefits[-1]
-    benefit_data.deductible_rule_extra_data = {'number_of_days': 30}
-    benefit_data.indemnification_rule = complex_rule
+    benefit_data.salary_mode = 'last_12_months'
+    benefit_data.net_salary_mode = True
+    benefit_data.net_calculation_rule, = NetCalculationRule.find(
+        [('rule.short_name', '=', 'coog_net_salary_calculation_a_payer')])
+    benefit_data.deductible_rule = get_rule(
+        'coog_franchise_relais_conventation')
     benefit_data.indemnification_rule_extra_data = {
-        'range_a_rate': Decimal(80),
-        'range_b_rate': Decimal(60),
-        'range_c_rate': Decimal(40),
+        '1_pourcentage_ij_ta': 30,
+        '2_pourcentage_ij_tb': 10,
+        '3_pourcentage_ij_tc': 0,
+        '4_traitement_de_reference': 'salaire_brut_prime',
+        '5_inclusion_du_mi_temps_therapeutique': 'tdrj_ijss_mtt',
+        '6_deduction_de_l_ijss': True,
+        '7_limiter_au_net': True,
+        }
+    benefit_data.revaluation_rule_extra_data = {
+        '1_reval_mode': 'ARRCO',
+        '2_date_de_reference': 'DAT',
+        '3_1ere_revalorisation': None,
+        '4_nombre_de_jours': None,
+        '5_frequence_revalo': 'changement_taux',
         }
 
-    group_life_contract.covered_elements.new()
-    covered = group_life_contract.covered_elements[-1]
-    covered.name = 'Autres'
-    covered.item_desc = employee_category
-    covered.current_extra_data = {
-        'employee_type': 'autre'}
-    covered.options[-1].current_extra_data = {
-        'relapse_threshold': '60'}
-    benefit_data = covered.options[-1].versions[-1].benefits[-1]
-    benefit_data.deductible_rule_extra_data = {'number_of_days': 15}
-    benefit_data.indemnification_rule = simple_rule
-    assert set(benefit_data.indemnification_rule_extra_data.keys()) == {
-        'flat_daily_amount'}
-    benefit_data.indemnification_rule_extra_data = {
-        'flat_daily_amount': Decimal('20.14'),
-        }
     group_life_contract.save()
     Activate = Wizard('contract.activate', [group_life_contract])
     Activate.execute('apply')
     group_life_contract.reload()
 
-    employee_1 = CoveredElement()
-    employee_1.parent = group_life_contract.covered_elements[0]
-    employee_1.party = house_subscriber
-    employee_1.manual_start_date = _base_contract_date
-    assert set(employee_1.current_extra_data.keys()) == {
-        'job_start', 'job_end'}
-    employee_1.current_extra_data = {
-        'job_start': _base_contract_date + relativedelta(days=-30),
-        'job_end': None,
-        }
-    employee_1.save()
+    for idx, subsidiary in enumerate(subsidiaries):
+        subsidiary_covered = CoveredElement()
+        subsidiary_covered.parent = group_life_contract.covered_elements[
+            idx % 2]
+        subsidiary_covered.party = subsidiary
+        assert subsidiary_covered.item_desc.kind == 'subsidiary'
+        subsidiary_covered.manual_start_date = _base_contract_date
+        if idx == 3:
+            subsidiary_covered.manual_end_date = _contract_rebill_date
+            subsidiary_covered.end_reason, = CoveredEndReason.find(
+                [('code', '=', 'revente')])
+        subsidiary_covered.save()
 
-    employee_2 = CoveredElement()
-    employee_2.parent = group_life_contract.covered_elements[1]
-    employee_2.party = life_subscriber
-    employee_2.manual_start_date = _base_contract_date
-    employee_2.current_extra_data = {
-        'job_start': _base_contract_date + relativedelta(days=-30),
-        'job_end': None,
-        }
-    employee_2.save()
-
-    employee_3 = CoveredElement()
-    employee_3.parent = group_life_contract.covered_elements[2]
-    employee_3.party = loan_subscriber
-    employee_3.manual_start_date = _base_contract_date
-    employee_3.current_extra_data = {
-        'job_start': _base_contract_date + relativedelta(days=-30),
-        'job_end': None,
-        }
-    employee_3.save()
+        for jdx, employee in enumerate(Party.find([
+                        ('name', '=', subsidiary.name),
+                        ('is_person', '=', True)])):
+            employee_covered = CoveredElement()
+            employee_covered.parent = subsidiary_covered
+            assert employee_covered.item_desc.kind == 'person'
+            assert set(employee_covered.current_extra_data.keys()) == {
+                'job_start', 'job_end'}
+            employee_covered.current_extra_data = {
+                'job_start': _base_contract_date + relativedelta(days=-30),
+                'job_end': None,
+                }
+            employee_covered.party = employee
+            if jdx == 0:
+                employee_covered.manual_start_date = _contract_rebill_date
+            else:
+                employee_covered.manual_start_date = _base_contract_date
+            if (employee.name == 'Petit Charpentier Sud' and
+                    employee.first_name == u'Employé 2'):
+                employee_covered.manual_end_date = \
+                    _illness_claim_end_date_1 + relativedelta(days=1)
+                employee_covered.end_reason, = CoveredEndReason.find(
+                    [('code', '=', 'demission')])
+            employee_covered.save()
     # }}}
 # }}}
 
@@ -4476,17 +4899,188 @@ if BILL_CONTRACTS:  # {{{
 
 if CREATE_CLAIMS:  # {{{
     do_print('\nCreating claims')
-    do_print('    Creating a death claim')  # {{{
-    config._context['client_defined_date'] = _claim_date
+    do_print('    Creating a work interruption claim')  # {{{
+    config._context['client_defined_date'] = _illness_claim_date
+    claimant, = Party.find([
+            ('name', '=', 'Petit Charpentier Sud'),
+            ('first_name', '=', u'Employé 2')])
     CreateClaim = Wizard('claim.declare')
-    CreateClaim.form.party, = Party.find([('name', '=', 'DOE'),
-            ('first_name', '=', 'John')])
+    CreateClaim.form.party = claimant
+    CreateClaim.form.good_process = work_interruption_claim_process
     CreateClaim.execute('action')
+
+    config._context['client_defined_date'] = _illness_claim_end_date_2
     claim, = Claim.find([])
-    claim.declaration_date = _claim_date
+    claim.declaration_date = _illness_claim_date
+    assert claim.losses[0].loss_desc.code == 'temporary_work_interruption'
+    claim.losses[0].event_desc, = EventDesc.find([('code', '=', 'illness')])
+    claim.losses[0].start_date = _illness_claim_date
+    claim.losses[0].save()
+    process_next(claim)
+    process_next(claim)
+
+    SalaryWizard = Wizard('claim.salaries_computation', [claim])
+    for idx, period in enumerate(SalaryWizard.form.periods):
+        period.gross_salary = Decimal(2143) + Decimal('14.27') * idx
+        if idx == 6:
+            period.salary_bonus = Decimal('3124.11')
+    SalaryWizard.execute('process')
+    assert SalaryWizard.form.rates[0].extra_data.name == \
+        '1_coog_urssaf_1'
+    SalaryWizard.form.rates[0].ta = Decimal('0.75')
+    SalaryWizard.form.rates[0].tb = Decimal('0.23')
+    assert SalaryWizard.form.rates[1].extra_data.name == \
+        '1_coog_urssaf_2'
+    SalaryWizard.form.rates[1].ta = Decimal('1.5')
+    SalaryWizard.form.rates[1].tb = Decimal('1.6')
+    assert SalaryWizard.form.rates[2].extra_data.name == \
+        '1_coog_urssaf_3'
+    SalaryWizard.form.rates[2].ta = Decimal('6.9')
+    SalaryWizard.form.rates[2].ta = Decimal('7.43')
+    assert SalaryWizard.form.rates[3].extra_data.name == \
+        '1_coog_urssaf_4'
+    SalaryWizard.form.rates[3].ta = Decimal('0.35')
+    SalaryWizard.form.rates[3].ta = Decimal('0.67')
+    assert SalaryWizard.form.rates[4].extra_data.name == \
+        '2_coog_retraite_1'
+    SalaryWizard.form.rates[4].ta = Decimal('0.8')
+    SalaryWizard.form.rates[4].ta = Decimal('1.52')
+    assert SalaryWizard.form.rates[5].extra_data.name == \
+        '2_coog_retraite_2'
+    SalaryWizard.form.rates[5].ta = Decimal('3.1')
+    SalaryWizard.form.rates[5].ta = Decimal('3.21')
+    assert SalaryWizard.form.rates[6].extra_data.name == \
+        '3_coog_prevoyance_1'
+    SalaryWizard.form.rates[6].ta = Decimal(0)
+    SalaryWizard.form.rates[6].tb = Decimal('1.1')
+    assert SalaryWizard.form.rates[7].extra_data.name == \
+        '3_coog_prevoyance_2'
+    SalaryWizard.form.rates[7].ta = Decimal(0)
+    SalaryWizard.form.rates[7].tb = Decimal('2.1')
+    assert SalaryWizard.form.rates[8].extra_data.name == \
+        '4_coog_chomage_1'
+    SalaryWizard.form.rates[8].ta = Decimal('2.4')
+    SalaryWizard.form.rates[8].tb = Decimal('3.1')
+    assert SalaryWizard.form.rates[9].extra_data.name == \
+        '4_coog_chomage_2'
+    SalaryWizard.form.rates[9].ta = Decimal(0)
+    SalaryWizard.form.rates[9].tb = Decimal(0)
+    assert SalaryWizard.form.rates[10].extra_data.name == \
+        '5_coog_charges_patronales_prevoyance'
+    SalaryWizard.form.rates[10].ta = Decimal('1.428')
+    SalaryWizard.form.rates[10].tb = Decimal('1.72')
+    assert SalaryWizard.form.rates[11].extra_data.name == \
+        '6_coog_charges_patronales_sante_taux'
+    SalaryWizard.form.rates[11].ta = Decimal(0)
+    SalaryWizard.form.rates[11].tb = Decimal(0)
+    assert SalaryWizard.form.rates[12].extra_data.name == \
+        '6_coog_charges_salariales_sante_taux'
+    SalaryWizard.form.rates[12].ta = Decimal(0)
+    SalaryWizard.form.rates[12].tb = Decimal(0)
+
+    assert SalaryWizard.form.fixed_amounts[0].extra_data.name == \
+        '1_coog_charges_salariales_mutuelle'
+    SalaryWizard.form.fixed_amounts[0].fixed_amount = Decimal('46.34')
+    assert SalaryWizard.form.fixed_amounts[1].extra_data.name == \
+        '2_coog_charges_patronales_sante_montant'
+    SalaryWizard.form.fixed_amounts[1].fixed_amount = Decimal('46.34')
+    SalaryWizard.execute('compute')
+    claim.reload()
+    for salary, net in zip(claim.losses[0].services[0].salary, [
+                Decimal('1547.47'), Decimal('1558.11'), Decimal('1568.74'),
+                Decimal('1579.38'), Decimal('1590.02'), Decimal('1600.66'),
+                Decimal('4134.53'), Decimal('1621.93'), Decimal('1632.57'),
+                Decimal('1643.21'), Decimal('1653.85'), Decimal('1664.48')]):
+        assert salary.net_salary == net
+    process_next(claim)
+
+    CreateIndemnification = Wizard('claim.create_indemnification', [claim])
+    assert CreateIndemnification.form.beneficiary == Party.find(
+        [('name', '=', 'Petit Charpentier Sud'), ('is_person', '=', False)])[0]
+    assert set(CreateIndemnification.form.extra_data.keys()) == {
+        'date_d_effet_d_indemnisation', 'ijss'}
+    CreateIndemnification.form.extra_data = {
+        'date_d_effet_d_indemnisation': _illness_claim_date +
+        relativedelta(days=30),
+        'ijss': Decimal('15.00'),
+        }
+    CreateIndemnification.form.end_date = _illness_claim_end_date_1
+    CreateIndemnification.execute('calculate')
+    CreateIndemnification.execute('regularisation')
+    CreateIndemnification.execute('validate_scheduling')
+    claim.reload()
+
+    assert claim.losses[0].services[0].indemnifications[0].total_amount == \
+        Decimal('303.36')
+    deductible_line = claim.losses[0].services[0].indemnifications[0].details[0]
+    assert deductible_line.kind == 'deductible'
+    assert deductible_line.nb_of_unit == 30
+    assert deductible_line.unit == 'day'
+    assert deductible_line.base_amount == Decimal(0)
+    assert deductible_line.amount_per_unit == Decimal(0)
+    assert deductible_line.amount == Decimal(0)
+    benefit_line = claim.losses[0].services[0].indemnifications[0].details[1]
+    assert benefit_line.kind == 'benefit'
+    assert benefit_line.nb_of_unit == 32
+    assert benefit_line.unit == 'day'
+    assert benefit_line.base_amount == Decimal('9.48')
+    assert benefit_line.amount_per_unit == Decimal('9.48')
+    assert benefit_line.amount == Decimal('303.36')
+
+    CreateIndemnification = Wizard('claim.create_indemnification', [claim])
+    assert CreateIndemnification.form.beneficiary == claim.claimant
+    assert CreateIndemnification.form.extra_data == {
+        'date_d_effet_d_indemnisation': _illness_claim_date +
+        relativedelta(days=30),
+        'ijss': Decimal('15.00'),
+        }
+    assert CreateIndemnification.form.start_date == \
+        _illness_claim_end_date_1 + relativedelta(days=1)
+    CreateIndemnification.form.end_date = _illness_claim_end_date_2
+    CreateIndemnification.form.product = claim_product_reduced_taxed
+    CreateIndemnification.execute('calculate')
+    CreateIndemnification.execute('regularisation')
+    CreateIndemnification.execute('validate_scheduling')
+    claim.reload()
+
+    assert claim.losses[0].services[0].indemnifications[1].total_amount == \
+        Decimal('125.23')
+    assert claim.losses[0].services[0].indemnifications[1].tax_amount == \
+        Decimal('-7.49')
+    benefit_line = claim.losses[0].services[0].indemnifications[1].details[0]
+    assert benefit_line.kind == 'benefit'
+    assert benefit_line.nb_of_unit == 14
+    assert benefit_line.unit == 'day'
+    assert benefit_line.base_amount == Decimal('9.48')
+    assert benefit_line.amount_per_unit == Decimal('9.48')
+    assert benefit_line.amount == Decimal('132.72')
+    process_next(claim)
+
+    claim.losses[0].end_date = _illness_claim_end_date_2
+    claim.losses[0].closing_reason, = ClaimClosingReason.find(
+        [('code', '=', 'back_to_work')])
+    claim.losses[0].save()
+    process_next(claim)
+    CloseClaim = Wizard('claim.close', [claim])
+    CloseClaim.form.sub_status, = ClaimSubStatus.find([('code', '=', 'paid')])
+    CloseClaim.execute('apply_sub_status')
+
+    config._context.pop('client_defined_date')
+    # }}}
+
+    do_print('    Creating a death claim')  # {{{
+    config._context['client_defined_date'] = _death_claim_date
+    claimant, = Party.find([('name', '=', 'DOE'), ('first_name', '=', 'John')])
+    CreateClaim = Wizard('claim.declare')
+    CreateClaim.form.party = claimant
+    CreateClaim.form.good_process = death_claim_process
+    CreateClaim.form.legal_entity = None
+    CreateClaim.execute('action')
+    claim, = Claim.find([('claimant', '=', claimant.id)])
+    claim.declaration_date = _death_claim_date
     claim.losses[0].loss_desc, = LossDesc.find([('code', '=', 'death')])
     claim.losses[0].event_desc, = EventDesc.find([('code', '=', 'suicide')])
-    claim.losses[0].start_date = _claim_date
+    claim.losses[0].start_date = _death_claim_date
     claim.losses[0].save()
     process_next(claim)
 
@@ -4503,7 +5097,7 @@ if CREATE_CLAIMS:  # {{{
     service.beneficiaries[-1].party, = Party.find([('name', '=', 'DOE'),
             ('first_name', '=', 'Jane')])
     service.beneficiaries[-1].share = Decimal(1)
-    service.beneficiaries[-1].identification_date = _claim_date
+    service.beneficiaries[-1].identification_date = _death_claim_date
     service.beneficiaries[-1].click('identify')
     service.beneficiaries[-1].save()
     process_next(claim)
@@ -4557,7 +5151,7 @@ if GENERATE_REPORTINGS:  # {{{
 
     do_print('    Generating insurer invoices')  # {{{
     InsurerInvoiceCreate = Wizard('commission.create_invoice_principal')
-    InsurerInvoiceCreate.form.until_date = _claim_date
+    InsurerInvoiceCreate.form.until_date = _illness_claim_end_date_2
     InsurerInvoiceCreate.form.insurers.append(Party(insurer.party.id))
     InsurerInvoiceCreate.form.notice_kind = 'options'
     InsurerInvoiceCreate.execute('create_')
@@ -4571,29 +5165,29 @@ if GENERATE_REPORTINGS:  # {{{
     Invoice.delete([insurer_invoice])
 
     InsurerInvoiceCreate = Wizard('commission.create_invoice_principal')
-    InsurerInvoiceCreate.form.until_date = _claim_date
+    InsurerInvoiceCreate.form.until_date = _illness_claim_end_date_2
     InsurerInvoiceCreate.form.insurers.append(Party(insurer.party.id))
     InsurerInvoiceCreate.form.notice_kind = 'benefits'
     InsurerInvoiceCreate.execute('create_')
 
     claim_insurer_invoice, = Invoice.find(
         [('business_kind', '=', 'claim_insurer_invoice')])
-    assert claim_insurer_invoice.total_amount == Decimal('20000'), \
-        'Bad amount %.2f, expected 20000.00' % insurer_invoice.total_amount
+    assert claim_insurer_invoice.total_amount == Decimal('20436.08'), \
+        'Bad amount %.2f, expected 20436.08' % insurer_invoice.total_amount
     Invoice.delete([claim_insurer_invoice])
 
     insurer.group_insurer_invoices = True
     insurer.save()
     InsurerInvoiceCreate = Wizard('commission.create_invoice_principal')
-    InsurerInvoiceCreate.form.until_date = _claim_date
+    InsurerInvoiceCreate.form.until_date = _illness_claim_end_date_2
     InsurerInvoiceCreate.form.insurers.append(Party(insurer.party.id))
     InsurerInvoiceCreate.form.notice_kind = 'all'
     InsurerInvoiceCreate.execute('create_')
 
     insurer_invoice, = Invoice.find(
         [('business_kind', '=', 'all_insurer_invoices')])
-    assert insurer_invoice.total_amount == Decimal('-18559.83'), \
-        'Bad amount %.2f, expected -18559.83' % insurer_invoice.total_amount
+    assert insurer_invoice.total_amount == Decimal('-18995.91'), \
+        'Bad amount %.2f, expected -18995.91' % insurer_invoice.total_amount
     # }}}
 # }}}
 

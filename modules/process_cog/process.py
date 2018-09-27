@@ -561,9 +561,6 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
 
     @classmethod
     def button_step_states(cls, process, step_data):
-        if process.custom_transitions and \
-                not process.steps_implicitly_available:
-            return {'readonly': True}
         pool = Pool()
         ProcessStep = pool.get('process.step')
         from_step, to_step = ProcessStep.browse(map(int, step_data))
@@ -791,6 +788,7 @@ class Process(model.CoogSQL, model.TaggedMixin):
                             self.id, self.all_steps[-1].id)):
                         result = 'complete'
                         break
+                continue
             if not cur_step_found:
                 continue
             if self.custom_transitions:

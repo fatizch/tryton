@@ -26,6 +26,8 @@ class ClaimDeclareFindProcess:
             companies = self.party.companies
             if companies:
                 self.legal_entity = companies[0].id
+            else:
+                self.legal_entity = None
 
 
 class ClaimDeclare:
