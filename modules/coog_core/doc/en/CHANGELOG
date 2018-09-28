@@ -1,3 +1,4 @@
+* OTH#0000 Update developper view to match the debug module definition
 * OTH#0000 Manage sql queries trying to match CurrentDate with a date field
 * BUG#9948 Log call stack in case of asynchronous tasks failure, secure failure behavior
 * BUG#9746 Filter inactive action event type in order to not apply them

@@ -34,7 +34,8 @@ class Model:
     @classmethod
     def get_perms(cls, instances, name):
         active_model = Transaction().context.get('active_model')
-        assert active_model == 'res.user'
+        if active_model != 'res.user':
+            return {x.id: None for x in instances}
         ModelAccess = Pool().get('ir.model.access')
         with Transaction().set_user(Transaction().context.get('active_id')):
             rights = ModelAccess.get_access([i.model for i in instances])
@@ -43,7 +44,8 @@ class Model:
     @classmethod
     def get_rule_perms(cls, instances, name):
         active_model = Transaction().context.get('active_model')
-        assert active_model == 'res.user'
+        if active_model != 'res.user':
+            return {x.id: None for x in instances}
         Rule = Pool().get('ir.rule')
         with Transaction().set_user(Transaction().context.get('active_id')):
             return {i.id: bool(Rule.domain_get(i.model, name[10:]))
@@ -74,7 +76,8 @@ class ModelField:
     @classmethod
     def get_perms(cls, instances, name):
         active_model = Transaction().context.get('active_model')
-        assert active_model == 'res.user'
+        if active_model != 'res.user':
+            return {x.id: None for x in instances}
         ModelFieldAccess = Pool().get('ir.model.field.access')
         with Transaction().set_user(Transaction().context.get('active_id')):
             model_rights = ModelFieldAccess.get_access(
@@ -102,7 +105,8 @@ class UIMenuAccess:
     @classmethod
     def get_perms(cls, instances, name):
         active_model = Transaction().context.get('active_model')
-        assert active_model == 'res.user'
+        if active_model != 'res.user':
+            return {x.id: None for x in instances}
         Menu = Pool().get('ir.ui.menu')
         with Transaction().set_user(Transaction().context.get('active_id')):
             return {i.id: i in Menu.search([]) for i in instances}
