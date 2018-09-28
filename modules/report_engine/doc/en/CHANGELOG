@@ -1,3 +1,4 @@
+* BUG#10026 Fix on model-less impressions
 * FEA#9985 Add pyson condition to report template. Useful to opt out templates that must be produced only under certain circumstances. Also work on action by events and attachments on e-mail.
 * BUG#9738 Automatically delete report production requests when deleting a printable model
 * BUG#9760 Handle multi report generation

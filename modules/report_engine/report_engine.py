@@ -741,6 +741,9 @@ class ReportData(object):
     def get_lang(self):
         return None
 
+    def get_report_style_content(self, at_date, template):
+        return None
+
 
 class ReportTemplateVersion(model.CoogSQL, model.CoogView):
     'Report Template Version'
