@@ -157,7 +157,7 @@ class SimulateCommissionsParameters(model.CoogView,
                     'end_date': end_date}],
             block_invoicing_until=None,
             billing_informations=[{'billing_mode': product.billing_modes[0],
-                'is_once_per_contract': False}],
+                'is_once_per_contract': False, 'date': self.contract_date}],
             currency=product.currency,
             company=Transaction().context.get('company'),
             extra_datas=[{'date': self.contract_date,
@@ -168,7 +168,8 @@ class SimulateCommissionsParameters(model.CoogView,
         CoveredElement = Pool().get('contract.covered_element')
         contract = self.mock_contract(self.product)
         covered = CoveredElement(contract=contract, options=[],
-            versions=[{'start': self.contract_date, 'extra_data': {}}])
+            versions=[{'start': self.contract_date, 'extra_data': {}}],
+            parent=None)
         contract.covered_elements = [covered]
         for coverage in self.product.coverages:
             if coverage.is_service:
