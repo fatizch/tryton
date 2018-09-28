@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from collections import defaultdict
+
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Workflow
@@ -72,6 +74,20 @@ class Invoice:
                 self.lines[0].claim_detail.indemnification:
             return self.lines[0].claim_detail.indemnification.tax_date
         return super(Invoice, self).tax_date
+
+    def get_invoice_indemn_details_per_claim_and_service(self):
+        """
+        Mainly used for report generation
+        """
+        ind_details_claim = defaultdict(tuple)
+        for claim_detail in sum([list(line.claim_details)
+                    for line in self.lines], []):
+            ind_details_claim[
+                (claim_detail.claim,
+                    claim_detail.indemnification.details[0
+                        ].indemnification.service)] += \
+                    claim_detail.indemnification.details
+        return {(k[0], k[1], v) for k, v in ind_details_claim.items()}
 
 
 class InvoiceLine:
