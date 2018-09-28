@@ -45,6 +45,7 @@ class MoveLine:
     product = fields.Function(fields.Many2One('offered.product',
         'Product'), 'get_move_field', searcher='search_move_field')
 
+    @classmethod
     def get_query_get_where_clause(cls, table, where):
         product = ServerContext().get('product', None)
         if product:
