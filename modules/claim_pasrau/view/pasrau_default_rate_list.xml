@@ -7,5 +7,5 @@ this repository contains the full copyright notices and license terms. -->
 	<field name="region"/>
 	<field name="income_lower_bound"/>
 	<field name="income_higher_bound"/>
-	<field name="rate"/>
+	<field name="rate" factor="100"/>
 </tree>

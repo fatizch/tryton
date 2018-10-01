@@ -15,5 +15,5 @@ this repository contains the full copyright notices and license terms. -->
 	<field name="income_higher_bound"/>
     <newline/>
 	<label name="rate"/>
-	<field name="rate"/>
+	<field name="rate" factor="100"/>
 </form>
