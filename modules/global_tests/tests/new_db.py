@@ -5153,7 +5153,7 @@ if CREATE_CLAIMS:  # {{{
     per_tax = {x.tax.name: x for x in invoice_2.taxes}
     assert per_tax['CRDS'].amount == Decimal('-0.66')  # 0.5 %
     assert per_tax[u'CSG déductible'].amount == Decimal('-5.04')  # 3.8 %
-    # 14.4 % based on base_amount - CSG => 132.72 * -1 - 0.038)
+    # 14.4 % based on base_amount - CSG => 132.72 * (1 - 0.038)
     assert per_tax['pasrau'].amount == Decimal('-18.39')
     # }}}
     # }}}
