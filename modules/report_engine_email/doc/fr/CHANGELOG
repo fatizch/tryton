@@ -1,3 +1,4 @@
+* OTH#0000 Amélioration graphique de la vue modèle de courrier de type courrier électronique
 * BUG#9023 La variable msg est référencée avant d'être instantiée
 * BUG#8835 Correctif sur les en-têtes et méta-données des emails envoyés
 
@@ -7,7 +8,7 @@ Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
 * FEA#6410 Le bouton "Envoi manuel eMail" est désormais caché lorsque ce n'est pas autorisé sur le modèle de courrier.
 * BUG#0000 La variable "attachments" est déplacé en haut de la fonction afin d'éviter un crash
-* FEA#6356 Les pièces jointes des emails sont filtrées de la même façon que les actions par type d'événement 
+* FEA#6356 Les pièces jointes des emails sont filtrées de la même façon que les actions par type d'événement
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Support du stockage dans la GED interne pour les modèles de courrier en pièce jointe

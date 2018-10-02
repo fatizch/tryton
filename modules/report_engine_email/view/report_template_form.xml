@@ -2,32 +2,34 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/field[@name='split_reports']" position="after">
-        <newline/>
-        <label name="email_sender"/>
-        <field name="email_sender" colspan="3"/>
-        <label name="email_dest"/>
-        <field name="email_dest" colspan="3"/>
-        <label name="email_cc"/>
-        <field name="email_cc" colspan="3"/>
-        <label name="email_bcc"/>
-        <field name="email_bcc" colspan="3"/>
-        <label name="email_subject"/>
-        <field name="email_subject" colspan="3"/>
-        <label name="html_body"/>
-        <field name="html_body" colspan="3"/>
-        <label name="email_body"/>
-        <newline/>
-        <field name="email_body" colspan="4"/>
-        <label name="email_blocking"/>
-        <field name="email_blocking" colspan="1"/>
-        <label name="allow_manual_sending"/>
-        <field name="allow_manual_sending" colspan="1"/>
-    </xpath>
-    <xpath expr="/form/notebook/page[@id='versions']" position="after">
-        <page string="Attachments" id="attachments">
-            <field name="attachments" colspan="2"/>
-            <field name="images" colspan="2" widget="one2many"/>
+    <xpath expr="//notebook/page[@name='event_type_actions']" position="before">
+        <page name="email_sender">
+            <label name="email_sender"/>
+            <field name="email_sender" colspan="3"/>
+            <label name="email_dest"/>
+            <field name="email_dest" colspan="3"/>
+            <label name="email_cc"/>
+            <field name="email_cc" colspan="3"/>
+            <label name="email_bcc"/>
+            <field name="email_bcc" colspan="3"/>
+            <label name="email_subject"/>
+            <field name="email_subject" colspan="3"/>
+            <label name="email_blocking"/>
+            <field name="email_blocking" colspan="1"/>
+            <label name="allow_manual_sending"/>
+            <field name="allow_manual_sending" colspan="1"/>
+        </page>
+        <page name="email_body">
+            <label name="html_body"/>
+            <field name="html_body"/>
+            <newline/>
+            <field name="email_body" colspan="4"/>
+        </page>
+        <page name="attachments">
+            <field name="attachments" colspan="4"/>
+        </page>
+        <page name="images">
+            <field name="images" colspan="4" widget="one2many"/>
         </page>
     </xpath>
 </data>

@@ -1,3 +1,4 @@
+* OTH#0000 UI enhancement of mail report template view
 * BUG#9023 msg variable referenced before assignment
 * BUG#8835 Fix headers and metadatas of sent mails
 

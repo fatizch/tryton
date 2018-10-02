@@ -261,8 +261,11 @@ class ReportTemplate:
                 '/form/notebook/page[@id="versions"]', 'states',
                 {'invisible': getattr(cls, 'versions').states.get(
                         'invisible')}),
-                ('/form/notebook/page[@id="attachments"]', 'states',
+                ('/form/notebook/page[@name="attachments"]', 'states',
                 {'invisible': getattr(cls, 'attachments').states.get(
+                        'invisible')}),
+                ('/form/notebook/page[@name="images"]', 'states',
+                {'invisible': getattr(cls, 'images').states.get(
                         'invisible')})
             ]
 

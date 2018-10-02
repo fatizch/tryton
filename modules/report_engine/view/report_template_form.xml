@@ -28,12 +28,12 @@ this repository contains the full copyright notices and license terms. -->
     <field name="export_dir"/>
     <label name="output_filename"/>
     <field name="output_filename"/>
-    <separator id="automatic_generation" string="Automatic Generation" colspan="4"/>
-    <newline/>
-    <label name="split_reports"/>
-    <field name="split_reports"/>
     <label name="recipient_needed"/>
     <field name="recipient_needed"/>
+    <group id="automatic_generation" string="Automatic Generation" colspan="2">
+        <label name="split_reports"/>
+        <field name="split_reports"/>
+    </group>
     <notebook colspan="4">
         <page string="Versions" id="versions">
             <field name="versions"/>
@@ -41,11 +41,11 @@ this repository contains the full copyright notices and license terms. -->
         <page name="event_type_actions">
             <field name="event_type_actions" colspan="4"/>
         </page>
-        <page name="tags">
-            <field name="tags" colspan="4"/>
-        </page>
         <page name="parameters">
             <field name="parameters" colspan="4"/>
+        </page>
+        <page name="tags">
+            <field name="tags" colspan="4"/>
         </page>
     </notebook>
     <field name="nb_of_possible_process_methods" invisible="1"/>
