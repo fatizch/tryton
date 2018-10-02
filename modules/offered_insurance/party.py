@@ -99,7 +99,7 @@ class Insurer(model.CoogView, model.CoogSQL):
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
     party = fields.Many2One('party.party', 'Insurer', ondelete='RESTRICT',
-        required=True)
+        required=True, domain=[('is_person', '=', False)])
     delegations = fields.One2Many('insurer.delegation', 'insurer',
         'Insurer Delegations', delete_missing=True)
     options = fields.One2Many('offered.option.description', 'insurer',

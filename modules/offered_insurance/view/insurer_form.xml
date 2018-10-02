@@ -4,5 +4,9 @@ this repository contains the full copyright notices and license terms. -->
 <form>
     <label name="party"/>
     <field name="party"/>
-    <field name="delegations" mode="tree" colspan="4"/>
+    <notebook colspan="4">
+        <page name="delegations">
+            <field name="delegations" mode="tree" colspan="4"/>
+        </page>
+    </notebook>
 </form>
