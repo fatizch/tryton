@@ -5,8 +5,17 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/field[@name='process_method']" position="after">
         <label name="default_reject_fee"/>
         <field name="default_reject_fee"/>
-        <field name="failure_actions" colspan="4"/>
         <label name="allow_group_deletion"/>
         <field name="allow_group_deletion"/>
+    </xpath>
+    <xpath expr="/form" position="inside">
+        <notebook colspan="4">
+            <page name="failure_actions">
+                <field name="failure_actions" colspan="4"/>
+            </page>
+            <page name="tags">
+                <field name="tags" colspan="4"/>
+            </page>
+        </notebook>
     </xpath>
 </data>

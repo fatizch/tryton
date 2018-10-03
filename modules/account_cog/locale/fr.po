@@ -22,6 +22,14 @@ msgctxt "error:fiscal_year.set.wizard:"
 msgid "Post Move Sequence"
 msgstr "Séquence d'émission de mouvement"
 
+msgctxt "field:account.account,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:account.account,tags_name:"
+msgid "Tags"
+msgstr "Labels"
+
 msgctxt "field:account.account,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"

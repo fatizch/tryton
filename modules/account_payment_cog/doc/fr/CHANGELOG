@@ -1,3 +1,4 @@
+* FEA#10048 Ajout des labels sur les journaux de paiement
 * BUG#9851 Ne pas positionner de date de paiement sur toutes les lignes de mouvement comptable quand on crée un paiement depuis plusieurs lignes de signes inversés
 * BUG#9855 Les responsables financiers devraient être capable de supprimer un paiement
 * BUG#9762 Correction des arguments du batch de traitement des paiements

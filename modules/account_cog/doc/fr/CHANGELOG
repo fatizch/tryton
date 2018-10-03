@@ -1,3 +1,4 @@
+* FEA#10048 Ajout des labels sur les comptes comptables
 * FEA#9417 Tri des lettrages par identifiant décroissant
 * FEA#8226 Adaptation de la réconciliation à l'amélioration de la méthode tryton reconcile
 * BUG#8679 S'assurer que la réconciliation en cascade ne sélectionne pas un tiers différent

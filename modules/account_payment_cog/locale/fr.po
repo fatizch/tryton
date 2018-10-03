@@ -390,6 +390,14 @@ msgctxt "field:account.payment.journal,failure_actions:"
 msgid "Failure Actions"
 msgstr "Actions en cas de rejet"
 
+msgctxt "field:account.payment.journal,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:account.payment.journal,tags_name:"
+msgid "Tags"
+msgstr "Labels"
+
 msgctxt "field:account.payment.journal,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"

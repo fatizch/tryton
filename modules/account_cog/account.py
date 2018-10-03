@@ -6,7 +6,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import export, fields, utils
+from trytond.modules.coog_core import export, fields, utils, model
 
 
 __all__ = [
@@ -58,7 +58,7 @@ class AccountTypeTemplate(export.ExportImportMixin):
             return [('name',) + tuple(clause[1:])]
 
 
-class Account(export.ExportImportMixin):
+class Account(export.ExportImportMixin, model.TaggedMixin):
     __name__ = 'account.account'
     _func_key = 'code'
 

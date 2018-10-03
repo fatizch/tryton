@@ -45,7 +45,7 @@ __all__ = [
     ]
 
 
-class Journal(export.ExportImportMixin):
+class Journal(export.ExportImportMixin, model.TaggedMixin):
     __name__ = 'account.payment.journal'
     _func_key = 'name'
 
