@@ -1051,13 +1051,19 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         else:
             return self.contract_number
 
-    def get_synthesis_rec_name(self, name=None):
+    def get_synthesis_dates(self):
         Date = Pool().get('ir.date')
-        dates = '[%s - %s]' % (
+        return '[%s - %s]' % (
             Date.date_as_string(self.start_date) if self.start_date else '',
             Date.date_as_string(self.end_date) if self.end_date else '')
+
+    def get_synthesis_status(self):
+        return '[%s]' % coog_string.translate_value(self, 'status')
+
+    def get_synthesis_rec_name(self, name=None):
+        dates = self.get_synthesis_dates()
+        status = self.get_synthesis_status()
         product = '[%s]' % self.product.rec_name
-        status = '[%s]' % coog_string.translate_value(self, 'status')
         number = self.contract_number or self.quote_number
         if self.status in ['void', 'declined']:
             return '%s %s %s' % (number, product, status)

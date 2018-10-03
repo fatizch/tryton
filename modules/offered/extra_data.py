@@ -257,7 +257,11 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
                         instance.get_rec_name(None)))
 
     @classmethod
-    def get_extra_data_summary(cls, instances, var_name, lang=None):
+    def get_extra_data_per_instances(cls, instances, var_name, lang=None):
+        '''
+        Returns a dict with a list of tuple (key, value) per instances.
+        The returned keys and values in this tuple list are translated.
+        '''
         res = {}
         for instance in instances:
             vals = []
@@ -281,7 +285,14 @@ class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
                         vals.append((trans_keys[k], trans_vals[k]))
                     cls._translation_cache.set((k, v), vals[-1])
                 break
-            res[instance.id] = '\n'.join(('%s : %s' % (x, y) for x, y in vals))
+            res[instance.id] = vals
+        return res
+
+    @classmethod
+    def get_extra_data_summary(cls, instances, var_name, lang=None):
+        res = cls.get_extra_data_per_instances(instances, var_name, lang)
+        for instance_id, vals in res.items():
+            res[instance_id] = '\n'.join(('%s : %s' % (x, y) for x, y in vals))
         return res
 
     @classmethod

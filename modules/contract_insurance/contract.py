@@ -1136,6 +1136,12 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             'contract.covered_element.version', 'covered_element',
             utils.today(), field_map=field_map)
 
+    def get_synthesis_dates(self):
+        Date = Pool().get('ir.date')
+        return '[%s - %s]' % (
+            Date.date_as_string(self.start_date) if self.start_date else '',
+            Date.date_as_string(self.end_date) if self.end_date else '')
+
     @classmethod
     def get_field_map(cls):
         return {'id': 'current_version', 'extra_data': 'current_extra_data'}

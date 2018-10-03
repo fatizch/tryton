@@ -55,9 +55,10 @@ def get_organization_hierarchy():
         'main_field': 'party',
         'type': 'data',
         'domain': [('manual_end_date', '<', CurrentDate)],
-        'name_func': lambda x: '%s - %s - %s' % (
-            x.contract.get_synthesis_rec_name(None),
-            x.parent.rec_name, x.rec_name),
+        'name_func': lambda x: ' - '.join(filter(None, [
+                    x.name,
+                    x.contract.get_synthesis_rec_name(None),
+                    ])),
         }
     subsidiary_terminated = {
         'node_name': 'party.hierarchy.subsidiary.terminated',
@@ -80,9 +81,10 @@ def get_organization_hierarchy():
         'type': 'data',
         'domain': ['OR', ('manual_end_date', '=', None),
             ('manual_end_date', '>=', CurrentDate)],
-        'name_func': lambda x: '%s - %s - %s' % (
-            x.contract.get_synthesis_rec_name(None),
-            x.parent.rec_name, x.rec_name),
+        'name_func': lambda x: ' - '.join(filter(None, [
+                    x.name,
+                    x.contract.get_synthesis_rec_name(None),
+                    ])),
         }
     subsidiary_contracts = {
         'node_name': 'party.hierarchy.subsidiary.contracts',
@@ -116,8 +118,9 @@ def get_organization_hierarchy():
         'main_field': 'party',
         'type': 'data',
         'domain': [('manual_end_date', '<', CurrentDate)],
-        'name_func': lambda x: '%s - %s - %s' % (
-            x.contract.rec_name, x.rec_name, x.parent.rec_name),
+        'name_func': lambda x: ' - '.join(filter(None, [
+                    x.contract.rec_name,
+                    ])),
         }
     terminated_covered_root = {
         'node_name': 'party.hierarchy.terminated_covered',
@@ -136,8 +139,9 @@ def get_organization_hierarchy():
         'type': 'data',
         'domain': ['OR', ('manual_end_date', '=', None),
             ('manual_end_date', '>=', CurrentDate)],
-        'name_func': lambda x: '%s - %s - %s' % (
-            x.contract.rec_name, x.rec_name, x.parent.rec_name),
+        'name_func': lambda x: ' - '.join(filter(None, [
+                    x.contract.rec_name,
+                    ])),
         }
     terminated_contracts_covereds = {
         'node_name': 'party.hierarchy.terminated_contracts.covered',
@@ -146,7 +150,9 @@ def get_organization_hierarchy():
         'parent_field': 'contract',
         'type': 'data',
         'domain': [('item_desc.kind', '=', 'subsidiary')],
-        'name_func': lambda x: '%s - %s' % (x.parent.rec_name, x.rec_name),
+        'name_func': lambda x: ' - '.join(filter(None, [
+                    x.rec_name, x.name, x.get_synthesis_dates(),
+                    ])),
         }
     terminated_contracts = {
         'node_name': 'party.hierarchy.contracts.terminated',
@@ -174,7 +180,9 @@ def get_organization_hierarchy():
         'type': 'data',
         'domain': [('item_desc.kind', '=', 'subsidiary'),
             ('manual_end_date', '<', CurrentDate)],
-        'name_func': lambda x: '%s - %s' % (x.rec_name, x.parent.rec_name),
+        'name_func': lambda x: ' - '.join(filter(None, [
+                    x.rec_name, x.name, x.get_synthesis_dates(),
+                    ])),
         }
     contracts_terminated_covered_root = {
         'node_name': 'party.hierarchy.contracts.terminated_covered',
@@ -197,7 +205,9 @@ def get_organization_hierarchy():
         'domain': [('item_desc.kind', '=', 'subsidiary'),
             ['OR', ('manual_end_date', '=', None),
                 ('manual_end_date', '>=', CurrentDate)]],
-        'name_func': lambda x: '%s - %s' % (x.rec_name, x.parent.rec_name),
+        'name_func': lambda x: ' - '.join(filter(None, [
+                    x.rec_name, x.name, x.get_synthesis_dates(),
+                    ])),
         }
     contracts = {
         'node_name': 'party.hierarchy.contracts',
@@ -206,6 +216,10 @@ def get_organization_hierarchy():
         'type': 'data',
         'domain': [('status', 'not in', ['void', 'terminated'])],
         'childs': [contracts_covereds, contracts_terminated_covered_root],
+        'name_func': lambda x: ' - '.join(filter(None, [
+                    x.contract_number, x.product.rec_name,
+                    x.get_synthesis_dates(), x.get_synthesis_status(),
+                    ])),
         }
     contract_root = {
         'node_name': 'party.hierarchy.contract',
