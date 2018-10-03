@@ -125,7 +125,7 @@ msgstr "Précision"
 
 msgctxt "field:extra_data,has_default_value:"
 msgid "Default Value"
-msgstr "Valeur par Défaut"
+msgstr "Valeur par défaut"
 
 msgctxt "field:extra_data,id:"
 msgid "ID"
@@ -458,6 +458,10 @@ msgstr "Nom"
 msgctxt "field:offered.item.description,rec_name:"
 msgid "Record Name"
 msgstr "Nom"
+
+msgctxt "field:offered.item.description,show_name:"
+msgid "Show Covered Element Name"
+msgstr "Afficher le nom sur l'élément couvert"
 
 msgctxt "field:offered.item.description,sub_item_descs:"
 msgid "Sub Item Descriptions"
@@ -950,6 +954,13 @@ msgstr "Identifiant XML"
 msgctxt "help:extra_data,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
+
+msgctxt "help:offered.item.description,show_name:"
+msgid ""
+"If checked, the name will be showed on the covered element, allowing the "
+"editing of the field"
+msgstr ""
+"Si coché, le nom sur l'élément couvert sera affiché et pourra être édité"
 
 msgctxt "help:offered.option.description,with_exclusions:"
 msgid "If True, it is be possible to add exclusions to subscribed options"

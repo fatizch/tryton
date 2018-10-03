@@ -334,6 +334,10 @@ msgctxt "field:contract.covered_element,right:"
 msgid "Right"
 msgstr "Droite"
 
+msgctxt "field:contract.covered_element,show_name:"
+msgid "Show Name"
+msgstr "Afficher le nom"
+
 msgctxt "field:contract.covered_element,start_date:"
 msgid "Start Date"
 msgstr "Date de début"

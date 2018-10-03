@@ -1,7 +1,12 @@
 # -*- coding:utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from sql import Null
+from sql.operators import NotIn
+
+from trytond import backend
+from trytond.pool import Pool, PoolMeta
+from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.cache import Cache
 
@@ -97,6 +102,35 @@ class ItemDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
         'offered.item.description-covered_element.end_reason', 'item_desc',
         'reason', 'Possible End Reasons')
     _check_sub_options_cache = Cache('has_sub_options')
+    show_name = fields.Boolean('Show Covered Element Name',
+        help='If checked, the name will be showed on the covered element, '
+        'allowing the editing of the field')
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        table = TableHandler(cls, module_name)
+
+        # Migration from 2.0: Add show_name field
+        migrate_show_name = False
+        migrate_show_name = not table.column_exist('show_name')
+        super(ItemDescription, cls).__register__(module_name)
+
+        if migrate_show_name:
+            item_desc = Pool().get('offered.item.description').__table__()
+            cursor = Transaction().connection.cursor()
+            selection = item_desc.select(item_desc.id,
+                where=(item_desc.kind != Null))
+            cursor.execute(*item_desc.update(
+                    columns=[item_desc.show_name],
+                    values=[True],
+                    where=item_desc.id.in_(selection))
+                )
+            cursor.execute(*item_desc.update(
+                    columns=[item_desc.show_name],
+                    values=[False],
+                    where=NotIn(item_desc.id, selection))
+                )
 
     @classmethod
     def copy(cls, items, default=None):

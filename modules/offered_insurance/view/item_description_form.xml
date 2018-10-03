@@ -9,6 +9,8 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <label name="kind"/>
     <field name="kind"/>
+    <label name="show_name"/>
+    <field name="show_name"/>
     <field name="extra_data_def" colspan="4"/>
     <field name="sub_item_descs" colspan="4"/>
     <field name="covered_element_end_reasons" colspan="2"/>

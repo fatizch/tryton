@@ -80,7 +80,6 @@ class CoveredElement:
         cls.party.depends += ['subscriber', 'item_kind']
         cls.party.states['invisible'] &= (Eval('item_kind') != 'subsidiary')
         cls.party.states['required'] |= (Eval('item_kind') == 'subsidiary')
-        cls.name.states['invisible'] |= (Eval('item_kind') == 'subsidiary')
         cls._buttons.update({
                 'button_open_sub_elements': {
                     'readonly': ~Eval('has_sub_covered_elements'),

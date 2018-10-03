@@ -829,10 +829,14 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         ondelete='RESTRICT', required=True, states={
             'readonly': COVERED_READ_ONLY},
         depends=COVERED_STATUS_DEPENDS)
+    show_name = fields.Function(fields.Boolean('Show Name'),
+        'on_change_with_show_name')
     name = fields.Char('Name', states={
-            'invisible': IS_PARTY,
+            'invisible': ~Eval('show_name'),
             'readonly': COVERED_READ_ONLY,
-            }, depends=['party', 'item_kind', 'contract_status', 'parent'])
+            },
+        depends=['party', 'item_kind', 'contract_status', 'parent',
+            'show_name'])
     options = fields.One2ManyDomain('contract.option', 'covered_element',
         'Options', domain=[
             ('coverage.products', '=', Eval('product')),
@@ -1096,6 +1100,10 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             return self.party.rec_name
         return self.name
 
+    @fields.depends('parent', 'item_desc')
+    def on_change_with_show_name(self, name=None):
+        return bool(self.item_desc and self.item_desc.show_name)
+
     def getter_has_sub_covered_elements(self, name):
         return bool(self.item_desc and self.item_desc.sub_item_descs)
 
@@ -1171,7 +1179,8 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
                 return '%s (%s)' % (res, relations)
             return res
         if self.item_desc:
-            return '%s: %s' % (self.item_desc.rec_name, self.name)
+            return ': '.join(filter(None,
+                    [self.item_desc.rec_name, self.name]))
         return self.name
 
     @classmethod

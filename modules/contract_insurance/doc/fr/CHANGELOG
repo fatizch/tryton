@@ -1,3 +1,4 @@
+* FEA#10055 Ajout de configuration pour afficher le nom lors de la saisie d'un élément couvert
 * OTH#0000 Recherche des données complémentaires dans les éléments couverts parent
 * FEA#9928 Gestion arborescente des données de risque
 * BUG#9690 Correctif dans le courrier de brouillard afin d'éviter un possible crash si il n'y pas de décision sur la demande de décision
