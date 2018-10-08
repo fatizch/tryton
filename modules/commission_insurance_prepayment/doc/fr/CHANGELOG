@@ -1,8 +1,9 @@
+* BUG#10084 Prise en compte du min entre la date de fin de contrat et la date de la dernière quittance payée lors du calcul de la prime de première année
 * BUG#9729 Vérification de l'existence du contrat pour les quittances dont on retire la date de précompte lors de leur annulation
 * BUG#9650 Pas de reprise de précompte sur les quittances non rattachées à des contrats
 * BUG#9613 Correctif sur les droits de génération des commissions de précompte
 * FEA#8963 Ajout d'un option sur le plan de commissionnement pour que le précompte ne soit dû qu'à la première quittance payée
-* BUG#9262 Ajout du rattrapage d'amortissement dans le traitement de synchronisation du précompte 
+* BUG#9262 Ajout du rattrapage d'amortissement dans le traitement de synchronisation du précompte
 * OTH#0000 Correctif du batch de synchronisation du précompte
 * BUG#8871 Traitement différent pour les commission linéaires payées: création d'une ligne d'ajustement
 * BUG#8836 Ne pas générer de lignes d'ajustements de prècompte si la différence entre les commissions payées et le total de l'amortissement de précompte est de l'ordre de quelques millièmes de centimes

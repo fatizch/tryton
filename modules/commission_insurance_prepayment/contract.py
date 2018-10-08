@@ -350,9 +350,9 @@ class Contract:
             computed_amount_today = contract._get_computed_amount(key[2],
                 paid_invoices_only=True)
             generated_amount = sum([x.amount for x in grouped_commissions
-                    if not x.invoice_state])
+                    if not x.invoice_line])
             paid_amount = sum([x.amount for x in grouped_commissions
-                    if x.invoice_state])
+                    if x.invoice_line])
             deviation_amount = computed_amount - (
                 generated_amount + paid_amount)
             codes = contract._fill_deviation_errors(key, grouped_commissions,
@@ -399,6 +399,7 @@ class Contract:
             err_code):
         Commission = Pool().get('commission')
         adjustements = []
+        to_delete = []
         contract = deviation['contract']
         with ServerContext().set_context(prepayment_adjustment=True):
             options = list(self.covered_element_options)
@@ -414,10 +415,10 @@ class Contract:
                         ('party', '=', party.id),
                         ('commissioned_option', '=', option.id),
                         ])
-                generated_amount = sum([x.amount for x in commissions
-                        if not x.invoice_state])
+                generated_coms = [x for x in commissions if not x.invoice_line]
+                generated_amount = sum([x.amount for x in generated_coms])
                 paid_amount = sum([x.amount for x in commissions
-                        if x.invoice_state])
+                        if x.invoice_line])
                 actual_amount = generated_amount + paid_amount
                 _, rate = option._get_prepayment_amount_and_rate(agent,
                     agent.plan)
@@ -427,15 +428,21 @@ class Contract:
                 else:
                     computed_amount = contract._get_computed_amount(agent,
                         per_option=True)[option.id]
-                    deviation_amount = computed_amount - (
-                        generated_amount + paid_amount)
+                    deviation_amount = computed_amount - actual_amount
                     adjustement_amount = deviation_amount
-                adjustements.extend(
-                    option.compute_commission_with_prepayment_schedule(
-                        agent, agent.plan, rate, adjustement_amount,
-                        self.last_paid_invoice_end, self.final_end_date, {}))
+                if (adjustement_amount + generated_amount).quantize(
+                        Decimal('.0001'), rounding=ROUND_UP) != Decimal(0):
+                    adjustements.extend(
+                        option.compute_commission_with_prepayment_schedule(
+                            agent, agent.plan, rate, adjustement_amount,
+                            self.last_paid_invoice_end, self.final_end_date,
+                            {}))
+                else:
+                    to_delete.extend(generated_coms)
             if adjustements:
                 Commission.save(adjustements)
+            if to_delete:
+                Commission.delete(to_delete)
 
     @classmethod
     def try_adjust_prepayments(cls, deviations, codes=None, adjusted=None,
@@ -605,7 +612,8 @@ class ContractOption:
                 (limit_to_paid_invoice and not limit_for_terminated)):
             if not self.parent_contract.last_paid_invoice_end:
                 return 0
-            end_first_year = self.parent_contract.last_paid_invoice_end
+            end_first_year = min(self.parent_contract.last_paid_invoice_end,
+                end_first_year)
         lines = []
         periods = self.parent_contract.get_invoice_periods(end_first_year,
             contract_start_date)
