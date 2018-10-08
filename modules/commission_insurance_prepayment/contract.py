@@ -600,6 +600,20 @@ class ContractOption:
             used.append((insurer, insurer.plan))
         return used
 
+    def get_first_year_paid_periods(self, end_date):
+        periods = []
+        last_state = None
+        first_year_invoices = [i for i in self.parent_contract.invoices
+            if i.start < end_date and i.invoice_state != 'cancel']
+        first_year_invoices.sort(key=lambda x: x.start)
+        for invoice in first_year_invoices:
+            if invoice.invoice_state == 'paid' and last_state == 'paid':
+                periods[-1][-1] = invoice.end
+            elif invoice.invoice_state == 'paid' and last_state != 'paid':
+                periods.append([invoice.start, invoice.end])
+            last_state = invoice.invoice_state
+        return periods
+
     def get_first_year_premium(self, name, limit_to_paid_invoice=False,
             limit_for_terminated=True):
         if not self.start_date:
@@ -612,18 +626,21 @@ class ContractOption:
                 (limit_to_paid_invoice and not limit_for_terminated)):
             if not self.parent_contract.last_paid_invoice_end:
                 return 0
-            end_first_year = min(self.parent_contract.last_paid_invoice_end,
-                end_first_year)
+            paid_periods = self.get_first_year_paid_periods(end_first_year)
+        else:
+            paid_periods = [(contract_start_date, end_first_year)]
         lines = []
-        periods = self.parent_contract.get_invoice_periods(end_first_year,
-            contract_start_date)
-        for premium in self.premiums:
-            for start, end, _ in periods:
-                if end < premium.start or (premium.end and start > premium.end):
-                    continue
-                lines.extend(premium.get_invoice_lines(
-                        max(premium.start, start),
-                        min(end, end_first_year)))
+        for paid_period in paid_periods:
+            periods = self.parent_contract.get_invoice_periods(paid_period[1],
+                paid_period[0])
+            for premium in self.premiums:
+                for start, end, _ in periods:
+                    if end < premium.start or (premium.end
+                            and start > premium.end):
+                        continue
+                    lines.extend(premium.get_invoice_lines(
+                            max(premium.start, start),
+                            min(end, end_first_year)))
         first_year_premium = sum([
                 self.parent_contract.currency.round(line.unit_price)
                 for line in lines])
