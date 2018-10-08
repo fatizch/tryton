@@ -1779,7 +1779,7 @@ msgstr "Personne Physique"
 
 msgctxt "selection:contract.option,status:"
 msgid "Active"
-msgstr "Active"
+msgstr "Actif"
 
 msgctxt "selection:contract.option,status:"
 msgid "Declined"
@@ -1831,7 +1831,7 @@ msgstr "Sans Effet"
 
 msgctxt "selection:contract.sub_status,status:"
 msgid "Active"
-msgstr "Active"
+msgstr "Actif"
 
 msgctxt "selection:contract.sub_status,status:"
 msgid "Declined"
