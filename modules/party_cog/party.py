@@ -502,6 +502,9 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         if self.addresses:
             value.append(coog_string.get_field_summary(self, 'addresses', True,
                 at_date, lang))
+        if self.contact_mechanisms:
+            value.append(coog_string.get_field_summary(self,
+                'contact_mechanisms', True, at_date, lang))
         return (label, value)
 
     @classmethod

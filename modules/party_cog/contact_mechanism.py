@@ -128,6 +128,9 @@ class ContactMechanism(export.ExportImportMixin):
         super(ContactMechanism, self)._change_value(value, type_)
         self.other_value = self.value
 
+    def get_summary_content(self, label, at_date=None, lang=None):
+        return (self.type_string, self.value) if self.value else None
+
 
 class PartyInteraction(model.CoogSQL, model.CoogView):
     'Party Interaction'
