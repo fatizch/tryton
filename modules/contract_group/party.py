@@ -47,7 +47,7 @@ class Party:
         for covered in sorted(self.covered_elements,
                 key=lambda x: x.start_date, reverse=True):
             if covered.affiliated_to:
-                results.append(covered.affiliated_to)
+                results.append(covered.affiliated_to.id)
         return results
 
     @classmethod
