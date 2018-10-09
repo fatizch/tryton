@@ -36,21 +36,22 @@ class Party:
             party=self.id,
             )
 
-    def get_personalized_pasrau_rate(self, period_start, period_end):
+    def get_personalized_pasrau_rate(self, invoice_date):
         PartyCustomPasrauRate = Pool().get('party.pasrau.rate')
         candidates = PartyCustomPasrauRate.search([('party', '=', self.id),
-                ('effective_date', '<=', period_start)],
+                ('effective_date', '<=', invoice_date)],
             order=[('effective_date', 'ASC')])
         if candidates:
             return candidates[-1].pasrau_tax_rate
 
-    def get_appliable_pasrau_rate(self, income, period_start, period_end):
+    def get_appliable_pasrau_rate(self, income, period_start, period_end,
+            invoice_date):
         DefaultPasrauRate = Pool().get('claim.pasrau.default.rate')
-        rate = self.get_personalized_pasrau_rate(period_start, period_end)
+        rate = self.get_personalized_pasrau_rate(invoice_date)
         if not rate:
             zip_code = self.main_address.zip
             if not zip_code:
                 self.raise_user_error('no_zip_for_pasrau')
             rate = DefaultPasrauRate.get_appliable_default_pasrau_rate(zip_code,
-                income, period_start, period_end)
+                income, period_start, period_end, invoice_date)
         return rate

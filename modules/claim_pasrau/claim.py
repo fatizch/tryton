@@ -3,6 +3,8 @@
 from trytond.pool import PoolMeta
 from trytond.server_context import ServerContext
 
+from trytond.modules.coog_core import utils
+
 __all__ = [
     'Indemnification',
     ]
@@ -18,6 +20,7 @@ class Indemnification:
         pasrau_dict['period_start'] = self.start_date
         pasrau_dict['period_end'] = self.end_date
         pasrau_dict['income'] = self.total_amount
+        pasrau_dict['invoice_date'] = utils.today()
         with ServerContext().set_context(pasrau_data=pasrau_dict):
             return super(Indemnification, self).get_amount(name)
 
@@ -27,5 +30,6 @@ class Indemnification:
         pasrau_dict['period_start'] = self.start_date
         pasrau_dict['period_end'] = self.end_date
         pasrau_dict['income'] = self.amount
+        pasrau_dict['invoice_date'] = utils.today()
         with ServerContext().set_context(pasrau_data=pasrau_dict):
             return super(Indemnification, self)._get_taxes()

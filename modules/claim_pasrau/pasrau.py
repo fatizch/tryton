@@ -152,7 +152,8 @@ class DefaultPasrauRate(model.CoogSQL, model.CoogView):
                 'for zip code %s',
                 'no_default_pasrau': 'Could not compute a default pasrau '
                 'value for parameters:\n\nZip: %(zip)s\nIncome: %(income)s\n'
-                'Start: %(start)s\nEnd: %(end)s',
+                'Start: %(start)s\nEnd: %(end)s\n'
+                'Invoice Date: %(invoice_date)s',
                 })
 
     @classmethod
@@ -170,7 +171,7 @@ class DefaultPasrauRate(model.CoogSQL, model.CoogView):
 
     @classmethod
     def get_appliable_default_pasrau_rate(cls, zip_code, income, period_start,
-            period_end):
+            period_end, invoice_date):
         assert period_start and period_end
         assert period_end >= period_start
         region = cls.get_region(zip_code)
@@ -188,7 +189,8 @@ class DefaultPasrauRate(model.CoogSQL, model.CoogView):
 
         candidates = cls.search([
                 ('region', '=', region),
-                ('start_date', '<=', period_start),
+                ('start_date', '<=', invoice_date),
+                ('end_date', '>=', invoice_date),
                 ])
 
         def keyfunc(x):
@@ -205,4 +207,5 @@ class DefaultPasrauRate(model.CoogSQL, model.CoogView):
                 'income': '%.2f' % income,
                 'start': period_start,
                 'end': period_end,
+                'invoice_date': invoice_date
                 })

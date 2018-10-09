@@ -32,6 +32,7 @@ class Invoice:
             pasrau_dict['income'] = sum([
                     x.indemnification.amount
                     for x in details] or [])
+            pasrau_dict['invoice_date'] = self.tax_date
             with ServerContext().set_context(pasrau_data=pasrau_dict):
                 return super(Invoice, self)._get_taxes()
         return super(Invoice, self)._get_taxes()
@@ -52,6 +53,7 @@ class InvoiceLine:
                 self.claim_detail.indemnification.end_date or
                 datetime.date.min)
             pasrau_dict['income'] = self.claim_detail.indemnification.amount
+            pasrau_dict['invoice_date'] = self.tax_date
             with ServerContext().set_context(pasrau_data=pasrau_dict):
                 return super(InvoiceLine, self)._get_taxes()
         return super(InvoiceLine, self)._get_taxes()
@@ -74,8 +76,9 @@ class Tax:
             period_start = pasrau_dict.get('period_start')
             period_end = pasrau_dict.get('period_end')
             income = pasrau_dict.get('income')
+            invoice_date = pasrau_dict.get('invoice_date')
             rate = -party.get_appliable_pasrau_rate(income, period_start,
-                period_end)
+                period_end, invoice_date)
             amount = price_unit * rate
             return {
                 'base': price_unit,
@@ -91,7 +94,8 @@ class Tax:
             period_start = pasrau_dict.get('period_start')
             period_end = pasrau_dict.get('period_end')
             income = pasrau_dict.get('income')
+            invoice_date = pasrau_dict.get('invoice_date')
             rate = party.get_appliable_pasrau_rate(income, period_start,
-                period_end)
+                period_end, invoice_date)
             return -rate, 0
         return super(Tax, self)._reverse_rate_amount_from_type()

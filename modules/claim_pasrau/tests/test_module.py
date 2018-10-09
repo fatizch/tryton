@@ -74,7 +74,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             city='Emerald')
         joe_address.save()
         self.assertEqual(
-            joe.get_appliable_pasrau_rate(None, self.effective_date, None),
+            joe.get_appliable_pasrau_rate(None, self.effective_date, None,
+                self.effective_date),
             Decimal('0.14'))
 
         new_rate_value = Decimal('0.12')
@@ -82,7 +83,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             self.effective_date, new_rate_value)
         new_rate.save()
         self.assertEqual(
-            joe.get_appliable_pasrau_rate(None, self.effective_date, None),
+            joe.get_appliable_pasrau_rate(None, self.effective_date, None,
+                self.effective_date),
             new_rate_value)
 
     def test0003_get_appliable_default_pasrau_rate(self):
@@ -103,30 +105,35 @@ class ModuleTestCase(test_framework.CoogTestCase):
         for values, expected in [
             (
                 # full month, this is in reference dodcument
-                ('75001', Decimal('500'), d(2019, 1, 1), d(2019, 1, 31)),
+                ('75001', Decimal('500'), d(2019, 1, 1), d(2019, 1, 31),
+                    d(2019, 1, 1)),
                 Decimal('0')
             ),
             (
                 # full month, this is in reference dodcument
-                ('75001', Decimal('1420'), d(2019, 1, 1), d(2019, 1, 31)),
+                ('75001', Decimal('1420'), d(2019, 1, 1), d(2019, 1, 31),
+                    d(2019, 1, 1)),
                 Decimal('0.015')
             ),
             (
                 # full month, this is in reference dodcument
-                ('75001', Decimal('46502'), d(2019, 1, 1), d(2019, 1, 31)),
+                ('75001', Decimal('46502'), d(2019, 1, 1), d(2019, 1, 31),
+                    d(2019, 1, 1)),
                 Decimal('0.43')
             ),
             (   # full trimester, also in reference document
-                ('75001', Decimal('4104'), d(2019, 1, 1), d(2019, 3, 31)),
+                ('75001', Decimal('4104'), d(2019, 1, 1), d(2019, 3, 31),
+                    d(2019, 1, 1)),
                 Decimal('0.005')
             ),
             (   # one day, also in reference document
-                ('75001', Decimal('55'), d(2019, 1, 1), d(2019, 1, 1)),
+                ('75001', Decimal('55'), d(2019, 1, 1), d(2019, 1, 1),
+                    d(2019, 1, 1)),
                 Decimal('0.015')
             ),
             (   # three days, also in reference document
                 ('75001', Decimal('53.14') * 3, d(2019, 1, 1),
-                    d(2019, 1, 3)),
+                    d(2019, 1, 3), d(2019, 1, 1)),
                 Decimal('0.005')
             ),
             (
@@ -135,7 +142,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 # the current rules gets us a coeff of 3.76 and a rate of 0.025
                 # but, if we used for example, a coeff of (nb_days / 26.0),
                 # we'll get a coeff of 4.3  and a rate of 0.005
-                ('75001', Decimal('5948.32'), d(2019, 10, 9), d(2020, 1, 28)),
+                ('75001', Decimal('5948.32'), d(2019, 10, 9), d(2020, 1, 28),
+                    d(2019, 10, 9)),
                 Decimal('0.025')
             ),
                 ]:
