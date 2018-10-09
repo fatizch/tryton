@@ -33,7 +33,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="definition" ref="claim_salary_fr.table_agirc"/>
             <field name="type">dimension1</field>
             <field name="start_date">2016-01-01</field>
-            <field name="name">[01/01/2016 - [</field>
+            <field name="name">[01/01/2016 - 01/01/2017[</field>
         </record>
         <record model="table.dimension.value" id="agirc_dimension_value_2017">
             <field name="definition" ref="claim_salary_fr.table_agirc"/>
@@ -53,7 +53,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="definition" ref="claim_salary_fr.table_arrco"/>
             <field name="type">dimension1</field>
             <field name="start_date">2016-01-01</field>
-            <field name="name">[01/01/2016 - [</field>
+            <field name="name">[01/01/2016 - 01/01/2017[</field>
         </record>
         <record model="table.dimension.value" id="arrco_dimension_value_2017">
             <field name="definition" ref="claim_salary_fr.table_arrco"/>
