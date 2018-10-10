@@ -2,7 +2,8 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/field[@name='form_color']" position="after">
-        <field name="with_prepayment" invisible="1"/>
+    <xpath expr="/form/group[@id='button_change_start_date']" position="inside">
+        <field name="with_prepayment"/>
+        <button string="Synchronize Prepayment" name="sync_prepayment"/>
     </xpath>
 </data>

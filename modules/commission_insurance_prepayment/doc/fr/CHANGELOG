@@ -1,3 +1,4 @@
+* BUG#10058 Ajout de l'action de synchronisation du précompte sur la vue formulaire du contrat
 * BUG#10088 Prise en compte des périodes impayées dans le calcul de la prime de première année pour le précompte
 * BUG#10084 Prise en compte du min entre la date de fin de contrat et la date de la dernière quittance payée lors du calcul de la prime de première année
 * BUG#9729 Vérification de l'existence du contrat pour les quittances dont on retire la date de précompte lors de leur annulation
