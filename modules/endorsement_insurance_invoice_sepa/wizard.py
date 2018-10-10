@@ -188,6 +188,8 @@ class ChangeBillingInformation:
                     'new_mandate_creation', {})
                 new_mandate.signature_date = self.sepa_signature_date
                 new_mandate.state = 'validated'
+                Billing_Information.update_mandate_from_contract(
+                    new_mandate, self.contract)
             else:
                 amendment_mandate = Mandate.search([
                     ('party', '=', new_info.payer.id),
@@ -206,8 +208,6 @@ class ChangeBillingInformation:
                     self.previous_mandate.signature_date
                 new_mandate.amendment_of = self.previous_mandate
                 new_mandate.start_date = self.effective_date
-            Billing_Information.update_mandate_from_contract(
-                new_mandate, self.contract)
             new_mandate.save()
             new_info.sepa_mandate = new_mandate
 
