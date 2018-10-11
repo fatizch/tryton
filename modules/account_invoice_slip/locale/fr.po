@@ -1,0 +1,239 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:account.invoice.create.slip:"
+msgid "All fields must be set before proceeding"
+msgstr "Tous les champs doivent être saisis avant de poursuivre"
+
+msgctxt "error:account.invoice.slip.configuration:"
+msgid ""
+"More than one draft slip for parameters:\nParty: %(party)s\nKind: "
+"%(business_kind)s\nDate: %(invoice_date)s"
+msgstr ""
+"Il y a plus d'un bordereau brouillon correspondant aux critères suivants :"
+"\nTiers : %(party)s\nType : %(business_kind)s\nDate : %(invoice_date)s"
+
+msgctxt "error:account.invoice:"
+msgid "Principal line reset following unreconciliation of invoice %s"
+msgstr "Ligne de bordereau suite à la dé-réconciliation de la quittance %s"
+
+msgctxt "field:account.invoice.slip.account,account:"
+msgid "Account"
+msgstr "Compte"
+
+msgctxt "field:account.invoice.slip.account,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.invoice.slip.account,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.invoice.slip.account,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.invoice.slip.account,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account.invoice.slip.account,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:account.invoice.slip.account,slip_configuration:"
+msgid "Slip Configuration"
+msgstr "Batch de finalisation des bordereaux"
+
+msgctxt "field:account.invoice.slip.account,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:account.invoice.slip.account,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:account.invoice.slip.account,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.invoice.slip.configuration,accounts:"
+msgid "Accounts"
+msgstr "Comptes"
+
+msgctxt "field:account.invoice.slip.configuration,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.invoice.slip.configuration,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.invoice.slip.configuration,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.invoice.slip.configuration,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account.invoice.slip.configuration,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:account.invoice.slip.configuration,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.invoice.slip.configuration,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:account.invoice.slip.configuration,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:account.invoice.slip.configuration,slip_kind:"
+msgid "Slip kind"
+msgstr "Type de bordereau"
+
+msgctxt "field:account.invoice.slip.configuration,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:account.invoice.slip.configuration,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:account.invoice.slip.configuration,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.invoice.slip.create_empty,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account.invoice.slip.finalize,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account.invoice.slip.link,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account.invoice.slip.parameters,accounts:"
+msgid "Accounts"
+msgstr "Comptes"
+
+msgctxt "field:account.invoice.slip.parameters,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account.invoice.slip.parameters,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:account.invoice.slip.parameters,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:account.invoice.slip.parameters,slip_date:"
+msgid "Slip Date"
+msgstr "Date du bordereau"
+
+msgctxt "field:account.invoice.slip.parameters,slip_kind:"
+msgid "Slip Kind"
+msgstr "Type de bordereau"
+
+msgctxt "help:account.invoice.slip.configuration,name:"
+msgid ""
+"The value of this field will be used as the description of the generated "
+"slip"
+msgstr ""
+"La valeur de ce champ sera utilisée comme description pour le bordereau "
+"généré"
+
+msgctxt "model:account.invoice.slip.account,name:"
+msgid "Invoice Slip Account Relation"
+msgstr "Comptes à intégrer dans les bordereaux"
+
+msgctxt "model:account.invoice.slip.configuration,name:"
+msgid "Invoice Slip Configuration"
+msgstr "Configuration de bordereau"
+
+msgctxt "model:account.invoice.slip.create_empty,name:"
+msgid "Empty Slip Creation Batch"
+msgstr "Batch de création des bordereaux vides"
+
+msgctxt "model:account.invoice.slip.finalize,name:"
+msgid "Slip Finalize Batch"
+msgstr "Batch de finalisation des bordereaux"
+
+msgctxt "model:account.invoice.slip.link,name:"
+msgid "Slip Link Batch"
+msgstr "Batch d'alimentation des bordereaux"
+
+msgctxt "model:account.invoice.slip.parameters,name:"
+msgid "Invoice Slip Parameters"
+msgstr "Paramètres du bordereau"
+
+msgctxt "model:account.journal,name:journal_principal_line_reset"
+msgid "Principal Line Reset"
+msgstr "Cohérence des bordereaux"
+
+msgctxt "model:account.journal.type,name:journal_type_principal_line_reset"
+msgid "Principal Line Reset"
+msgstr "Cohérence des bordereaux"
+
+msgctxt "model:event.type,name:event_slips_generated"
+msgid "Slips Generated"
+msgstr "Bordereau généré"
+
+msgctxt "model:ir.action,name:act_account_invoice_create_slip"
+msgid "Create Slip"
+msgstr "Générer un bordereau"
+
+msgctxt "model:ir.action,name:act_related_lines_relate"
+msgid "Related Lines"
+msgstr "Lignes associées"
+
+msgctxt "model:ir.action,name:act_slip_configuration_form"
+msgid "Slip Configuration"
+msgstr "Configuration de bordereau"
+
+msgctxt "model:ir.action,name:act_window_slip"
+msgid "Slips"
+msgstr "Bordereaux"
+
+msgctxt "model:ir.ui.menu,name:menu_generated_slip"
+msgid "Slips"
+msgstr "Bordereaux"
+
+msgctxt "model:ir.ui.menu,name:menu_slip"
+msgid "Slips"
+msgstr "Bordereaux"
+
+msgctxt "model:ir.ui.menu,name:menu_slip_configuration"
+msgid "Slip Configuration"
+msgstr "Configuration des bordereaux"
+
+msgctxt "selection:account.invoice,business_kind:"
+msgid "Slip"
+msgstr "Bordereau"
+
+msgctxt "selection:account.invoice.slip.configuration,slip_kind:"
+msgid "Slip"
+msgstr "Bordereau"
+
+msgctxt "selection:account.invoice.slip.parameters,slip_kind:"
+msgid "Slip"
+msgstr "Bordereau"
+
+msgctxt "wizard_button:account.invoice.create.slip,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:account.invoice.create.slip,start,open_slip:"
+msgid "Generate"
+msgstr "Générer"

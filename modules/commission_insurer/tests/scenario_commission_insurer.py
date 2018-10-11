@@ -212,8 +212,9 @@ invoice.total_amount == Decimal('40')
 # #Comment# #Cancel commission invoice
 invoice.click('cancel')
 invoice.reload()
-[x.principal_lines for x in invoice.lines] == [[], []]
-# #Res# #True
+MoveLine = Model.get('account.move.line')
+MoveLine.find([('principal_invoice_line', 'in', [x.id for x in invoice.lines])])
+# #Res# #[]
 
 # #Comment# #Recreate insurer commission invoice
 agent.party._parent = None

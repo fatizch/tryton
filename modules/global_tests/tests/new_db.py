@@ -75,6 +75,7 @@ _death_claim_date = datetime.date(2018, 7, 12)
 _illness_claim_date = datetime.date(2018, 5, 12)
 _illness_claim_end_date_1 = datetime.date(2018, 7, 12)
 _illness_claim_end_date_2 = datetime.date(2018, 7, 26)
+_slip_generation_date = datetime.date(2018, 9, 1)
 _account_chart_code = 'PCS'
 _default_receivable_code = '4117'
 _default_payable_code = '467'
@@ -234,6 +235,7 @@ Indemnification = Model.get('claim.indemnification')
 Insurer = Model.get('insurer')
 Invoice = Model.get('account.invoice')
 InvoiceSequence = Model.get('account.fiscalyear.invoice_sequence')
+InvoiceSlipConfiguration = Model.get('account.invoice.slip.configuration')
 IrAction = Model.get('ir.action')
 IrModel = Model.get('ir.model')
 ItemDesc = Model.get('offered.item.description')
@@ -1996,6 +1998,12 @@ if CREATE_ACTORS:  # {{{
     lender_party.save()
     # }}}
 
+    do_print('    Creating french state')  # {{{
+    french_state = Party()
+    french_state.name = u'État français'
+    french_state.save()
+    # }}}
+
 insurer, = Insurer.find([])
 broker, = Party.find([('name', '=', _broker_name)])
 lender, = Party.find([('name', '=', _lender_name)])
@@ -2165,6 +2173,20 @@ if CREATE_PRODUCTS:  # {{{
         loan_sequence.code = 'loan'
         loan_sequence.company = company
         loan_sequence.save()
+    # }}}
+
+    do_print('\nSlip Configuration')  # {{{
+    slip_configuration = InvoiceSlipConfiguration()
+    slip_configuration.party = french_state
+    slip_configuration.name = 'Bordereau de taxes'
+    slip_configuration.accounts.append(Account(csg_tax_account.id))
+    slip_configuration.accounts.append(Account(csg_deductible_tax_account.id))
+    slip_configuration.accounts.append(Account(crds_tax_account.id))
+    slip_configuration.accounts.append(Account(pasrau_tax_account.id))
+    slip_configuration.slip_kind = 'slip'
+    exp_journal, = Journal.find([('code', '=', 'EXP')])
+    slip_configuration.journal = exp_journal
+    slip_configuration.save()
     # }}}
 
     do_print('\nCreating Extra Data')
@@ -5263,7 +5285,8 @@ if GENERATE_REPORTINGS:  # {{{
     claim_insurer_invoice, = Invoice.find(
         [('business_kind', '=', 'claim_insurer_invoice')])
     assert claim_insurer_invoice.total_amount == Decimal('20436.08'), \
-        'Bad amount %.2f, expected 20436.08' % insurer_invoice.total_amount
+        'Bad amount %.2f, expected 20436.08' \
+        % claim_insurer_invoice.total_amount
     Invoice.delete([claim_insurer_invoice])
 
     insurer.group_insurer_invoices = True
@@ -5278,6 +5301,22 @@ if GENERATE_REPORTINGS:  # {{{
         [('business_kind', '=', 'all_insurer_invoices')])
     assert insurer_invoice.total_amount == Decimal('-18995.91'), \
         'Bad amount %.2f, expected -18995.91' % insurer_invoice.total_amount
+    # }}}
+
+    do_print('    Generating slip')  # {{{
+    slip_configuration, = InvoiceSlipConfiguration.find([])
+    CreateSlip = Wizard('account.invoice.create.slip', [slip_configuration])
+    assert CreateSlip.form.party == slip_configuration.party
+    assert CreateSlip.form.accounts == slip_configuration.accounts
+    assert CreateSlip.form.slip_kind == slip_configuration.slip_kind
+    assert CreateSlip.form.journal == slip_configuration.journal
+    CreateSlip.form.slip_date = _slip_generation_date
+    CreateSlip.execute('open_slip')
+
+    slip, = Invoice.find(
+        [('business_kind', '=', 'slip')])
+    assert slip.total_amount == Decimal('24.09'), \
+        'Bad amount %.2f expected 24.09' % slip.total_amount
     # }}}
 # }}}
 

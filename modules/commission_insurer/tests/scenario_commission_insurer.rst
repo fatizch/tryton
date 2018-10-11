@@ -235,8 +235,9 @@ Cancel commission invoice::
 
     >>> invoice.click('cancel')
     >>> invoice.reload()
-    >>> [x.principal_lines for x in invoice.lines] == [[], []]
-    True
+    >>> MoveLine = Model.get('account.move.line')
+    >>> MoveLine.find([('principal_invoice_line', 'in', [x.id for x in invoice.lines])])
+    []
 
 Recreate insurer commission invoice::
 

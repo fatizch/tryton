@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 import party
 import commission
+import slip
 import account
 import report_engine
 
@@ -11,8 +12,8 @@ import report_engine
 def register():
     Pool.register(
         party.Insurer,
-        commission.Commission,
         commission.CreateInvoicePrincipalAsk,
+        slip.InvoiceSlipConfiguration,
         account.Invoice,
         account.InvoiceLine,
         report_engine.ReportTemplate,

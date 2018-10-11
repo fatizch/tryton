@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ################################## -->
+        <!-- # Principal Invoice Line Relates # -->
+        <!-- ################################## -->
+        <record model="ir.action.act_window" id="act_related_lines_relate">
+            <field name="name">Related Lines</field>
+            <field name="res_model">account.move.line</field>
+            <field name="domain" eval="[('principal_invoice_line.invoice', 'in', Eval('active_ids'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_received_premiums_relate_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="account_cog.move_line_party_balance_view_list"/>
+            <field name="act_window" ref="act_related_lines_relate"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_received_premiums_relate_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="account_cog.move_line_party_balance_view_form"/>
+            <field name="act_window" ref="act_related_lines_relate"/>
+        </record>
+        <record model="ir.action.keyword" id="act_received_premiums_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">account.invoice, -1</field>
+            <field name="action" ref="act_related_lines_relate"/>
+        </record>
+        <!-- ################ -->
+        <!-- # Journal Type # -->
+        <!-- ################ -->
+        <record model="account.journal.type" id="journal_type_principal_line_reset">
+            <field name="name">Principal Line Reset</field>
+            <field name="code">principal_line_reset</field>
+        </record>
+        <!-- ######### -->
+        <!-- # Slips # -->
+        <!-- ######### -->
+        <record model="ir.action.act_window" id="act_window_slip">
+            <field name="name">Slips</field>
+            <field name="res_model">account.invoice</field>
+            <field name="domain" eval="[('business_kind', '=', 'slip')]" pyson="1"/>
+            <field name="search_value"></field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_slip_list_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="account_invoice.invoice_view_tree"/>
+            <field name="act_window" ref="act_window_slip"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_slip_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="account_invoice.invoice_view_form"/>
+            <field name="act_window" ref="act_window_slip"/>
+        </record>
+        <menuitem parent="account.menu_account" id="menu_slip" sequence="60" name="Slips"/>
+        <menuitem parent="menu_slip" action="act_window_slip" id="menu_generated_slip" sequence="20"/>
+    </data>
+    <data noupdate="1">
+        <!-- ########### -->
+        <!-- # Journal # -->
+        <!-- ########### -->
+        <record model="account.journal" id="journal_principal_line_reset">
+            <field name="name">Principal Line Reset</field>
+            <field name="code">PRINCIPRST</field>
+            <field name="type">principal_line_reset</field>
+            <field name="sequence" ref="account.sequence_account_journal"/>
+        </record>
+    </data>
+</tryton>

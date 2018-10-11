@@ -29,12 +29,68 @@ class Insurer:
             insurer_h.drop_column('waiting_account')
 
     @classmethod
-    def get_insurers_waiting_accounts(cls, insurers, notice_kind):
-        accounts_per_insurer = {}
+    def __setup__(cls):
+        super(Insurer, cls).__setup__()
+        cls._error_messages.update({
+                'mixed_insurer_configuration': 'You cannot generate invoices '
+                'simultaneously for insurers whose group invoice '
+                'configuration is different',
+                'bad_insurer_configuration': 'Notice kind does not match '
+                'insurer configuration',
+                })
+
+    @classmethod
+    def generate_slip_parameters(cls, notice_kind, parties=None):
+        insurers = cls._get_insurers_from_notice_kind(notice_kind, parties)
+        return [x._generate_slip_parameter(notice_kind) for x in insurers]
+
+    @classmethod
+    def _get_insurers_from_notice_kind(cls, notice_kind, parties):
+        domain = cls._get_domain_from_notice_kind(notice_kind)
+        if parties:
+            domain = [domain, [('party', 'in', parties)]]
+        else:
+            if notice_kind == 'all':
+                domain = [domain, [('group_insurer_invoices', '=', True)]]
+            else:
+                domain = [domain, [
+                        ('group_insurer_invoices', 'in', (False, None))]]
+        insurers = cls.search(domain)
+        if not insurers:
+            return []
+        grouped = {bool(x.group_insurer_invoices) for x in insurers}
+        if len(grouped) != 1:
+            cls.raise_user_error('mixed_insurer_configuration')
+        if bool(grouped.pop()) != (notice_kind == 'all'):
+            cls.raise_user_error('bad_insurer_configuration')
+        return insurers
+
+    @classmethod
+    def _get_domain_from_notice_kind(cls, notice_kind):
         if notice_kind in ('options', 'all'):
-            for insurer in insurers:
-                billing_accounts = {x.account_for_billing
-                    for x in insurer.options if x.account_for_billing}
-                if billing_accounts:
-                    accounts_per_insurer[insurer] = billing_accounts
-        return accounts_per_insurer
+            return [('options.account_for_billing', '!=', None)]
+        return []
+
+    def _generate_slip_parameter(self, notice_kind):
+        accounts = self._get_slip_accounts(notice_kind)
+        return {
+            'insurer': self,
+            'party': self.party,
+            'accounts': list(accounts),
+            'slip_kind': self._get_slip_business_kind(notice_kind),
+            }
+
+    def _get_slip_accounts(self, notice_kind):
+        if notice_kind in ('options', 'all'):
+            billing_accounts = {x.account_for_billing
+                for x in self.options if x.account_for_billing}
+            if billing_accounts:
+                return set(billing_accounts)
+        return set()
+
+    @classmethod
+    def _get_slip_business_kind(cls, notice_kind):
+        if notice_kind == 'all':
+            return 'all_insurer_invoices'
+        elif notice_kind == 'options':
+            return 'insurer_invoice'

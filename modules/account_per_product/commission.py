@@ -27,11 +27,14 @@ class Commission:
         return invoice
 
     @classmethod
-    def get_insurer_invoice(cls, company, insurer, journal, date, notice_kind):
-        invoice = super(Commission, cls).get_insurer_invoice(company, insurer,
-            journal, date, notice_kind)
-        invoice.product = insurer.product
-        return invoice
+    def _get_new_slip(cls, parameters):
+        invoice = super(Commission, cls)._get_new_slip(parameters)
+        if parameters.get('insurer', None):
+            invoice.product = parameters['insurer'].product
+        else:
+            # No idea of what to do in this case, since the configuration has
+            # no reason to be linked to a particular insurer
+            raise ValueError
 
 
 class Agent:

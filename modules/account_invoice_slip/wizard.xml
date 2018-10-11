@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- #################################### -->
+        <!-- ########### Create Slips ########### -->
+        <!-- #################################### -->
+        <record model="ir.action.wizard" id="act_account_invoice_create_slip">
+            <field name="name">Create Slip</field>
+            <field name="wiz_name">account.invoice.create.slip</field>
+        </record>
+        <record model="ir.ui.view" id="create_slip_parameters_view_form">
+            <field name="model">account.invoice.slip.parameters</field>
+            <field name="type">form</field>
+            <field name="name">create_slip_parameters_form</field>
+        </record>
+        <record model="ir.action.keyword" id="act_create_slip_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">account.invoice.slip.configuration,-1</field>
+            <field name="action" ref="act_account_invoice_create_slip"/>
+        </record>
+    </data>
+</tryton>

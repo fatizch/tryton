@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################################### -->
+        <!-- ########### Slip Configuration View ########### -->
+        <!-- ############################################### -->
+        <record model="ir.ui.view" id="slip_configuration_view_list">
+            <field name="model">account.invoice.slip.configuration</field>
+            <field name="type">tree</field>
+            <field name="name">slip_configuration_list</field>
+        </record>
+        <record model="ir.ui.view" id="slip_configuration_view_form">
+            <field name="model">account.invoice.slip.configuration</field>
+            <field name="type">form</field>
+            <field name="name">slip_configuration_form</field>
+        </record>        
+        <record model="ir.action.act_window" id="act_slip_configuration_form">
+            <field name="name">Slip Configuration</field>
+            <field name="res_model">account.invoice.slip.configuration</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_slip_configuration_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="slip_configuration_view_list"/>
+            <field name="act_window" ref="act_slip_configuration_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_slip_configuration_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="slip_configuration_view_form"/>
+            <field name="act_window" ref="act_slip_configuration_form"/>
+        </record>
+        <menuitem parent="account_invoice_slip.menu_slip" id="menu_slip_configuration" action="act_slip_configuration_form" sequence="10"/>
+        <!-- ################################## -->
+        <!-- ########### Event Type ########### -->
+        <!-- ################################## -->
+        <record model="event.type" id="event_slips_generated">
+            <field name="name">Slips Generated</field>
+            <field name="code">slips_generated</field>
+        </record>
+    </data>
+</tryton>

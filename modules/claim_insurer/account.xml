@@ -13,11 +13,6 @@ this repository contains the full copyright notices and license terms. -->
         <menuitem parent="claim.menu_claim" action="act_invoice_claim_insurer_invoice_form"
             id="menu_invoice_claim_insurer_invoice" sequence="14"/>
         </data>
-        <record model="ir.ui.view" id="invoice_line_view_form">
-            <field name="model">account.invoice.line</field>
-            <field name="inherit" ref="account_invoice.invoice_line_view_form"/>
-            <field name="name">invoice_line_form</field>
-        </record>
         <record model="ir.ui.view" id="invoice_view_form">
             <field name="model">account.invoice</field>
             <field name="inherit" ref="account_invoice.invoice_view_form"/>

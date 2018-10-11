@@ -3,10 +3,10 @@
 from trytond.pool import Pool
 
 import commission
-import account
 import invoice
 import configuration
 import offered
+import slip
 import batch
 import party
 import report_engine
@@ -15,12 +15,9 @@ import report_engine
 def register():
     Pool.register(
         commission.Agent,
-        commission.Commission,
         commission.CreateInvoicePrincipalAsk,
-        account.MoveLine,
-        account.InvoiceLine,
-        account.Invoice,
         invoice.Invoice,
+        slip.InvoiceSlipConfiguration,
         configuration.Configuration,
         offered.OptionDescription,
         batch.CreateEmptyInvoicePrincipalBatch,

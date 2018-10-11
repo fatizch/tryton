@@ -3,7 +3,6 @@
 import logging
 
 from trytond.pool import Pool
-from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import batch
 
@@ -14,18 +13,7 @@ __all__ = [
     ]
 
 
-class BaseInvoicePrincipalBatch(batch.BatchRoot):
-
-    @classmethod
-    def parse_params(cls, params):
-        params = super(BaseInvoicePrincipalBatch, cls).parse_params(
-            params)
-        assert params.get('notice_kind') in \
-            Pool().get('commission')._possible_notice_kinds()
-        return params
-
-
-class CreateEmptyInvoicePrincipalBatch(BaseInvoicePrincipalBatch):
+class CreateEmptyInvoicePrincipalBatch(batch.BatchRootNoSelect):
     'Insurer Empty Invoice Principal Creation Batch'
 
     __name__ = 'commission.invoice_principal.create_empty'
@@ -33,43 +21,42 @@ class CreateEmptyInvoicePrincipalBatch(BaseInvoicePrincipalBatch):
     logger = logging.getLogger(__name__)
 
     @classmethod
-    def __setup__(cls):
-        super(CreateEmptyInvoicePrincipalBatch, cls).__setup__()
-        cls._default_config_items.update({
-                'job_size': 0,
-                })
+    def possible_notice_kinds(cls):
+        CreateNoticeAsk = Pool().get('commission.create_invoice_principal.ask')
+        return [x[0] for x in CreateNoticeAsk.notice_kind.selection]
 
     @classmethod
     def parse_params(cls, params):
         params = super(CreateEmptyInvoicePrincipalBatch, cls).parse_params(
             params)
-        assert params.get('job_size') == 0
+        assert params.get('notice_kind') in cls.possible_notice_kinds()
         return params
 
     @classmethod
-    def get_batch_main_model_name(cls):
-        return 'insurer'
-
-    @classmethod
-    def select_ids(cls, treatment_date, notice_kind=None):
-        Commission = Pool().get('commission')
-        return [(x.id,) for x in Commission.get_insurers(notice_kind)]
-
-    @classmethod
-    def execute(cls, objects, ids, treatment_date, notice_kind=None):
+    def get_slip_configurations(cls, treatment_date, notice_kind):
         pool = Pool()
+        Insurer = pool.get('insurer')
         Journal = pool.get('account.journal')
-        Company = pool.get('company.company')
-        CreateInvoicePrincipal = pool.get(
-            'commission.create_invoice_principal', type='wizard')
 
-        company = Company(Transaction().context.get('company'))
-        journal = Journal.search([('type', '=', 'commission')], limit=1)[0]
-        CreateInvoicePrincipal.create_empty_invoices(objects, company, journal,
-            treatment_date, notice_kind)
+        parameters = Insurer.generate_slip_parameters(notice_kind)
+        journal, = Journal.search([('type', '=', 'commission')])
+
+        for parameter in parameters:
+            parameter['journal'] = journal
+            parameter['date'] = treatment_date
+        return parameters
+
+    @classmethod
+    def execute(cls, objects, ids, treatment_date, notice_kind):
+        pool = Pool()
+        Slip = pool.get('account.invoice.slip.configuration')
+
+        parameters = cls.get_slip_configurations(treatment_date, notice_kind)
+        if parameters:
+            Slip.create_empty_slips(parameters)
 
 
-class LinkInvoicePrincipalBatch(BaseInvoicePrincipalBatch):
+class LinkInvoicePrincipalBatch(batch.BatchRoot):
     'Insurer Invoice Principal Link Batch'
 
     __name__ = 'commission.invoice_principal.link'
@@ -77,45 +64,41 @@ class LinkInvoicePrincipalBatch(BaseInvoicePrincipalBatch):
     logger = logging.getLogger(__name__)
 
     @classmethod
+    def parse_params(cls, params):
+        params = super(LinkInvoicePrincipalBatch, cls).parse_params(
+            params)
+        CreateEmpty = Pool().get('commission.invoice_principal.create_empty')
+        assert params.get('notice_kind') in CreateEmpty.possible_notice_kinds()
+        return params
+
+    @classmethod
     def get_batch_main_model_name(cls):
-        return 'insurer'
+        return 'account.invoice'
 
     @classmethod
     def select_ids(cls, treatment_date, notice_kind=None):
         pool = Pool()
-        Commission = pool.get('commission')
-        Insurer = pool.get('insurer')
-        until_date = treatment_date
+        CreateEmpty = pool.get('commission.invoice_principal.create_empty')
+        Slip = pool.get('account.invoice.slip.configuration')
 
-        insurers = Commission.get_insurers(notice_kind)
-        accounts = [x.id for y in Insurer.get_insurers_waiting_accounts(
-                insurers, notice_kind).values()
-            for x in y]
-        if not accounts:
-            return []
-        invoices = pool.get('commission').select_lines(accounts,
-                with_data=False, max_date=until_date)
-        return ([[invoice]] for invoice in invoices)
+        parameters = CreateEmpty.get_slip_configurations(treatment_date,
+            notice_kind)
+        invoices_ids = Slip.select_invoices(parameters)
+        return ([[invoice]] for invoice in invoices_ids)
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, notice_kind=None):
         pool = Pool()
-        Commission = pool.get('commission')
-        Journal = pool.get('account.journal')
-        Company = pool.get('company.company')
+        CreateEmpty = pool.get('commission.invoice_principal.create_empty')
+        Slip = pool.get('account.invoice.slip.configuration')
 
-        CreateInvoicePrincipal = pool.get(
-            'commission.create_invoice_principal', type='wizard')
-        insurers = Commission.get_insurers(notice_kind)
-
-        company = Company(Transaction().context.get('company'))
-        journal = Journal.search([('type', '=', 'commission')], limit=1)[0]
-
-        CreateInvoicePrincipal.link_invoices_and_lines(insurers,
-            treatment_date, company, journal, notice_kind, invoice_ids=ids)
+        parameters = CreateEmpty.get_slip_configurations(treatment_date,
+            notice_kind)
+        if parameters:
+            Slip.update_slips_from_invoices(parameters, ids)
 
 
-class FinalizeInvoicePrincipalBatch(BaseInvoicePrincipalBatch):
+class FinalizeInvoicePrincipalBatch(batch.BatchRootNoSelect):
     'Insurer Invoice Principal Finalize Batch'
 
     __name__ = 'commission.invoice_principal.finalize'
@@ -123,36 +106,20 @@ class FinalizeInvoicePrincipalBatch(BaseInvoicePrincipalBatch):
     logger = logging.getLogger(__name__)
 
     @classmethod
-    def __setup__(cls):
-        super(FinalizeInvoicePrincipalBatch, cls).__setup__()
-        cls._default_config_items.update({
-                'job_size': 0,
-                })
-
-    @classmethod
     def parse_params(cls, params):
-        params = super(FinalizeInvoicePrincipalBatch, cls).parse_params(params)
-        assert params.get('job_size') == 0
+        params = super(FinalizeInvoicePrincipalBatch, cls).parse_params(
+            params)
+        CreateEmpty = Pool().get('commission.invoice_principal.create_empty')
+        assert params.get('notice_kind') in CreateEmpty.possible_notice_kinds()
         return params
 
     @classmethod
-    def get_batch_main_model_name(cls):
-        return 'insurer'
-
-    @classmethod
-    def select_ids(cls, treatment_date, notice_kind=None):
-        Commission = Pool().get('commission')
-        return [(x.id,) for x in Commission.get_insurers(notice_kind)]
-
-    @classmethod
-    def execute(cls, objects, ids, treatment_date, notice_kind=None):
+    def execute(cls, objects, ids, treatment_date, notice_kind):
         pool = Pool()
-        Journal = pool.get('account.journal')
-        Company = pool.get('company.company')
-        CreateInvoicePrincipal = pool.get(
-            'commission.create_invoice_principal', type='wizard')
-        company = Company(Transaction().context.get('company'))
-        journal = Journal.search([('type', '=', 'commission')], limit=1)[0]
+        CreateEmpty = pool.get('commission.invoice_principal.create_empty')
+        Slip = pool.get('account.invoice.slip.configuration')
 
-        CreateInvoicePrincipal.finalize_invoices_and_lines(objects, company,
-            journal, treatment_date, notice_kind)
+        parameters = CreateEmpty.get_slip_configurations(treatment_date,
+            notice_kind)
+        if parameters:
+            Slip.finalize_slips(parameters)

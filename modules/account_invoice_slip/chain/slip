@@ -1,0 +1,19 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=slip
+
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE')
+CHAIN_REQUIRED=('TREATMENT_DATE')
+
+chain_params "$@"
+chain_begin
+
+chain_step account.invoice.slip.create_empty ${GIVEN_PARAMETERS[@]}
+chain_wait account.invoice.slip.create_empty || chain_end
+chain_step account.invoice.slip.link ${GIVEN_PARAMETERS[@]}
+chain_wait account.invoice.slip.link || chain_end
+chain_step account.invoice.slip.finalize ${GIVEN_PARAMETERS[@]}
+chain_wait account.invoice.slip.finalize || chain_end
+
+chain_end
