@@ -36,6 +36,7 @@ class Contract:
             return
         pool = Pool()
         Commission = pool.get('commission')
+        Invoice = pool.get('account.invoice')
         Agent = pool.get('commission.agent')
         for endorsement in endorsements:
             if endorsement.contract not in contracts:
@@ -58,6 +59,13 @@ class Contract:
                         ('start', '>=',
                             endorsement.endorsement.effective_date),
                         ]), Agent(to_agent))
+            Invoice.modify_invoice_agent(Invoice.search([
+                        ('contract', '=', endorsement.contract.id),
+                        ('agent', '=', from_agent),
+                        ('start', '>=',
+                            endorsement.endorsement.effective_date)]),
+
+                to_agent)
 
 
 class Endorsement:

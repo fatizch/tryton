@@ -174,7 +174,7 @@ class Contract:
         Commission = pool.get('commission')
         Agent = pool.get('commission.agent')
         Event = pool.get('event')
-        invoice = pool.get('account.invoice')
+        Invoice = pool.get('account.invoice')
         per_agent = defaultdict(list)
         [per_agent[contract.agent].append(contract) for contract in contracts]
 
@@ -208,7 +208,7 @@ class Contract:
                             'account.invoice.line')]),
                 to_agent)
 
-            invoice.modify_invoice_agent(invoice.search([
+            Invoice.modify_invoice_agent(Invoice.search([
                         ('contract', 'in',
                             [x.id for x in per_agent[from_agent]]),
                         ('agent', '=', from_agent),
