@@ -1,0 +1,1 @@
+- **OAuth**: It is a protocol used to let a web service use another web service's API which are secured. It is used to delegate user connection.

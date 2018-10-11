@@ -1,0 +1,79 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:api.provider,active:"
+msgid "active"
+msgstr "Actif"
+
+msgctxt "field:api.provider,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:api.provider,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:api.provider,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:api.provider,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:api.provider,provider:"
+msgid "Provider"
+msgstr "Fournisseur d'accès"
+
+msgctxt "field:api.provider,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:api.provider,token:"
+msgid "Token"
+msgstr "Jeton"
+
+msgctxt "field:api.provider,user_identifier:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:api.provider,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:api.provider,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:api.provider,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:api.token,request_hash:"
+msgid "Request Hash"
+msgstr "Bon pour jeton"
+
+msgctxt "help:api.token,request_hash:"
+msgid "Allow user to create Token via Api"
+msgstr "Autoriser les utilisateur a créer un jeton via API"
+
+msgctxt "model:api.provider,name:"
+msgid "API Providers"
+msgstr "Fournisseur d'API"
+
+msgctxt "model:ir.action,name:act_provider_form"
+msgid "providers"
+msgstr "Fournisseur d'accès"
+
+msgctxt "model:ir.ui.menu,name:menu_token"
+msgid "providers"
+msgstr "Fournisseur d'accès"
+
+msgctxt "selection:api.provider,provider:"
+msgid "Facebook"
+msgstr "Facebook"
+
+msgctxt "selection:api.provider,provider:"
+msgid "Google"
+msgstr "Google"

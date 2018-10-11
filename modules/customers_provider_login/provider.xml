@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="provider_view_form">
+            <field name="model">api.provider</field>
+            <field name="type">form</field>
+            <field name="name">provider_form</field>
+        </record>
+        <record model="ir.ui.view" id="provider_view_tree">
+            <field name="model">api.provider</field>
+            <field name="type">tree</field>
+            <field name="name">provider_tree</field>
+        </record>
+        <record model="ir.action.act_window" id="act_provider_form">
+            <field name="name">providers</field>
+            <field name="res_model">api.provider</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_view_provider_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="provider_view_tree"/>
+            <field name="act_window" ref="act_provider_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_view_provider_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="provider_view_form"/>
+            <field name="act_window" ref="act_provider_form"/>
+        </record>
+        <menuitem parent="res.menu_res" action="act_provider_form" id="menu_token"/>
+    </data>
+</tryton>
