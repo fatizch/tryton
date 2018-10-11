@@ -22,45 +22,53 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/field[@name='subdivision']" position="replace_attributes">
         <field name="subdivision" invisible="1"/>
     </xpath>
-    <xpath expr="/form/group[@id='checkboxes']" position="before">
+    <xpath expr="/form/group[@id='checkboxes']" position="replace_attributes">
+        <group colspan="2" col="4" id="checkboxes" yfill="1" yexpand="1"/>
+    </xpath>
+   <xpath expr="/form/group[@id='checkboxes']" position="before">
+        <group id="left" colspan="2" col="1" yfill="1" yexpand="1">
+            <field name="address_lines" no_command="1" no_label="1" xfill="1" xexpand="1"/>
+            <group id="street" col="1" xfill="1" xexpand="1" yfill="1" yexpand="1">
+                <separator name="street" xfill="1" xexpand="1"/>
+                <field name="street" xfill="1" xexpand="1"/>
+            </group>
+        </group>
+    </xpath>
+    <xpath expr="/form/group[@id='checkboxes']/field[@name='active']" position="after">
+        <newline/>
+        <label id="zip" string="Zip:"/>
+        <group id="field" colspan="3">
+            <group id="zip_and_city" colspan="2" col="-1">
+                <field name="zip_and_city"/>
+                <field name="zip"/>
+                <label name="city"/>
+                <field name="city"/>
+            </group>
+        </group>
+        <newline/>
+        <label name="country"/>
+        <field name="country" colspan="3"/>
+        <newline/>
+        <label name="subdivision"/>
+        <field name="subdivision" widget="selection"/>
         <newline/>
         <label name="start_date"/>
-        <group id="date">
-            <field name="start_date"/>
-            <label name="end_date"/>
-            <field name="end_date"/>
-        </group>
-    </xpath>
-    <xpath expr="/form/group[@id='checkboxes']/field[@name='active']" position="before">
+        <field name="start_date"/>
+        <label name="end_date"/>
+        <field name="end_date"/>
+        <newline/>
         <label name="return_to_sender"/>
         <field name="return_to_sender" xexpand="0" width="25"/>
-    </xpath>
-    <xpath expr="/form/group[@id='left']" position="after">
-        <group id="right" colspan="2" col="2" xfill="1" xexpand="1">
-            <group id="label" col="1" xexpand="0" xfill="0" yfill="1" yexpand="1">
-                <group id="label_zip" col="99" yfill="1" yexpand="1">
-                    <label name="zip_and_city"/>
-                    <label name="zip"/>
-                </group>
-                <label name="country" yfill="1" yexpand="1"/>
-            </group>
-            <group id="field" col="1">
-                <group id="zip_and_city" colspan="2" col="99">
-                    <field name="zip_and_city"/>
-                    <field name="zip"/>
-                    <label name="city"/>
-                    <field name="city"/>
-                </group>
-                <field name="country"/>
-            </group>
-            <label name="subdivision"/>
-            <field name="subdivision" widget="selection"/>
-            <newline/>
-            <field name="needs_subdivision" invisible="1"/>
-        </group>
     </xpath>
     <xpath expr="/form/label[@name='zip']" position="replace"/>
     <xpath expr="/form/field[@name='zip']" position="replace"/>
     <xpath expr="/form/label[@name='city']" position="replace"/>
     <xpath expr="/form/field[@name='city']" position="replace"/>
+    <xpath expr="/form" position="inside">
+        <newline/>
+        <group id="invisible">
+            <field name="needs_subdivision" invisible="1"/>
+            <field name="has_address_lines"/>
+        </group>
+    </xpath>
 </data>

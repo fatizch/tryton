@@ -66,6 +66,16 @@ FORM_ATTRIBUTES = """
     </define>
     <define name="attlist.field" combine="interleave">
         <optional>
+            <attribute name="no_label">
+                <choice>
+                    <value>0</value>
+                    <value>1</value>
+                </choice>
+            </attribute>
+        </optional>
+    </define>
+    <define name="attlist.field" combine="interleave">
+        <optional>
             <attribute name="relation"/>
         </optional>
     </define>

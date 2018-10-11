@@ -1,3 +1,4 @@
+* FEA#5633 Fusion de party_cog et country_address_configuration ainsi qu'une amélioration graphique de le vue formulaire d'une adresse
 * FEA#10057 Ajout du téléphone portable et du mail dans la synthèse textuelle d'un tiers
 * FEA#9431 Ajout d'une fonction sur les tiers pour récupérer la valeur d'un identifiant depuis son type
 * FEA#9655 Ajout d'une extraction basique des données d'un tiers pour la RGPD

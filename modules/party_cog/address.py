@@ -44,6 +44,14 @@ class Address(export.ExportImportMixin):
         'get_icon')
     one_line_street = fields.Function(fields.Char('Street'),
         'on_change_with_one_line_street')
+    address_lines = fields.Function(
+        fields.Dict('country.address.line', 'Address Lines', states={
+                    'invisible': ~Eval('has_address_lines')},
+                depends=['has_address_lines']),
+        'on_change_with_address_lines', 'setter_void')
+    has_address_lines = fields.Function(
+        fields.Boolean('Has Address Lines', states={'invisible': True}),
+        'on_change_with_has_address_lines')
 
     @classmethod
     def __setup__(cls):
@@ -62,11 +70,34 @@ class Address(export.ExportImportMixin):
     def view_attributes(cls):
         return super(Address, cls).view_attributes() + [
             ('/tree', 'colors', Eval('color')),
+            ('/form/group[@id="left"]/group[@id="street"]', 'states',
+                {'invisible': Bool(Eval('has_address_lines'))}),
+            ('/form/group[@id="invisible"]', 'states', {'invisible': True}),
             ]
 
     @classmethod
     def _export_light(cls):
         return set(['country'])
+
+    @classmethod
+    def default_address_lines(cls):
+        default_country = cls.default_country()
+        if not default_country:
+            return {}
+        country = Pool().get('country.country')(default_country)
+        return {x: '' for x in country.get_address_lines()}
+
+    @classmethod
+    def default_country(cls):
+        return getattr(country.Country._default_country(), 'id', None)
+
+    @classmethod
+    def default_has_address_lines(cls):
+        default_country = cls.default_country()
+        if not default_country:
+            return False
+        country = Pool().get('country.country')(default_country)
+        return bool(country.get_address_lines())
 
     def get_summary_content(self, label, at_date=None, lang=None):
         return (None, ' '.join(self.full_address.splitlines()))
@@ -136,9 +167,12 @@ class Address(export.ExportImportMixin):
             else:
                 self.zip = None
 
-    @fields.depends('address_lines', 'city', 'country', 'zip', 'zip_and_city')
+    @fields.depends('address_lines', 'country', 'street', 'city', 'zip',
+        'zip_and_city')
     def on_change_address_lines(self):
-        super(Address, self).on_change_address_lines()
+        self.address_lines = self.address_lines or {}
+        self._update_street()
+        self.address_lines = self.address_lines.copy()
         if not self.city or not self.zip:
             return
         data_finder = {'zip': self.zip, 'city': self.city}
@@ -201,16 +235,80 @@ class Address(export.ExportImportMixin):
         self.city = self.zip_and_city.city if self.zip_and_city else ''
         self.zip = self.zip_and_city.zip if self.zip_and_city else ''
 
+    @fields.depends('country', 'street')
+    def on_change_with_address_lines(self, name=None):
+        self._update_address_lines()
+        return self.address_lines
+
+    def _update_address_lines(self):
+        if not self.country:
+            self.address_lines = {}
+            return
+        self.street = self.street or ''
+        address_lines = self.country.get_address_lines()
+        values = {x: '' for x in address_lines}
+        for idx, value in enumerate(self.street.split('\n')):
+            if idx >= len(address_lines):
+                break
+            values[address_lines[idx]] = value
+        self.address_lines = values
+        self._format_address_lines()
+
+    @fields.depends('country')
+    def on_change_with_has_address_lines(self, name=None):
+        return bool(self.country and self.country.get_address_lines())
+
+    @fields.depends('country', 'zip', 'city', 'zip_and_city',
+        'address_lines', 'street')
+    def on_change_country(self):
+        if not self.country:
+            self.address_lines = {}
+            return
+        address_lines = self.country.get_address_lines()
+        if not address_lines:
+            self.address_lines = {}
+            return
+        self._update_address_lines()
+        self.address_lines = self.address_lines.copy()
+        if self.zip_and_city and self.zip_and_city.country != self.country:
+            self.zip_and_city = None
+            self.zip = None
+            self.city = None
+
+    def _update_street(self):
+        self._format_address_lines()
+        if not self.country:
+            return
+        address_lines = self.country.get_address_lines()
+        if address_lines is None:
+            return
+        self.street = '\n'.join((self.address_lines or {}).get(x, '')
+            for x in address_lines)
+        self.one_line_street = self.on_change_with_one_line_street()
+
+    def _format_address_lines(self):
+        if not self.country:
+            return
+        if self.address_lines is None:
+            self.address_lines = {}
+        format_method = getattr(self.__class__, '_format_address_' +
+            self.country.code, None)
+        if format_method:
+            self.address_lines = format_method(self.address_lines)
+
+    @classmethod
+    def _format_address_FR(cls, lines):
+        res = {}
+        for k, v in lines.iteritems():
+            res[k] = (v or '').upper()
+        return res
+
     def get_address_as_char(self, name, with_return_carriage=False):
         sep = '\n' if with_return_carriage else ' '
         return sep.join(self.get_full_address(None).splitlines())
 
     def get_rec_name(self, name):
         return self.get_address_as_char(name)
-
-    @staticmethod
-    def default_country():
-        return getattr(country.Country._default_country(), 'id', None)
 
     @classmethod
     def search_rec_name(cls, name, clause):
@@ -293,17 +391,9 @@ class Address(export.ExportImportMixin):
         return ' '.join(filter(None, (x.strip() for x in
                         self.street.splitlines())))
 
-    def _update_street(self):
-        super(Address, self)._update_street()
-        self.one_line_street = self.on_change_with_one_line_street()
-
-    @fields.depends('country', 'zip', 'city', 'zip_and_city')
-    def on_change_country(self):
-        super(Address, self).on_change_country()
-        if self.zip_and_city and self.zip_and_city.country != self.country:
-            self.zip_and_city = None
-            self.zip = None
-            self.city = None
+    @classmethod
+    def setter_void(cls, objects, name, values):
+        pass
 
 
 class Zip:

@@ -11,6 +11,7 @@ from trytond.pool import Pool
 import party
 import category
 import contact_mechanism
+import country
 import address
 import test_case
 import relationship
@@ -32,6 +33,8 @@ def register():
         party.PartyIdentifier,
         party.PartyIdentifierType,
         category.PartyCategory,
+        country.Country,
+        country.CountryAddressLine,
         address.Address,
         address.Zip,
         contact_mechanism.ContactMechanism,
