@@ -109,7 +109,7 @@ class ContractBillingInformation:
     def update_mandate_from_contract(cls, mandate, contract):
         pool = Pool()
         Seq = pool.get('ir.sequence')
-        assert not mandate.identification
+        assert not getattr(mandate, 'identification', None)
         product_mandate_sequence = contract.product.sepa_mandate_sequence
         if product_mandate_sequence:
             mandate.identification = Seq.get_id(product_mandate_sequence.id)

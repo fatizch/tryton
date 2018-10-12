@@ -1,8 +1,9 @@
+* BUG#10133 Correction d'un crash sur le processus de souscription de contrat lorsque le champ identification sur le mandat n'est pas défini
 * BUG#9635 Initialisation du payeur et du compte bancaire lors de la souscription d'un contrat
 * BUG#9619 Vérification des informations de quittancement liés à un mandat SEPA avant son annulation
 * BUG#9171 Ajout du searcher dans la définition du champ 'sepa_mandate'
 * BUG#9171 Ajout d'un searcher sur le champ sepa mandate des invoices
-* BUG#9120 Fix mandate initialization when activating non-billed contracts
+* BUG#9120 Correction de l'initialisation du mandat sepa lors de l'activation de contrats non quittancés
 * BUG#8828 Ajouter une nouvelle méthode d'initialisation d'un nouveau mandat à partir de données du contrat
 
 Version 2.0 - 2018-04-13
