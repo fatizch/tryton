@@ -1,6 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
+from trytond.tools import grouped_slice
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields
 
@@ -31,10 +33,26 @@ class InvoiceLine:
 
     loan = fields.Function(
         fields.Many2One('loan', 'Loan'),
-        'get_loan')
+        'getter_loan')
 
-    def get_loan(self, name=None):
-        if self.detail and self.detail.premium:
-            loan = getattr(self.detail.premium, 'loan', None)
-            if loan:
-                return loan.id
+    @classmethod
+    def getter_loan(cls, instances, name):
+        pool = Pool()
+        detail = pool.get('account.invoice.line.detail').__table__()
+        premium = pool.get('contract.premium').__table__()
+
+        result = {x.id: None for x in instances}
+        cursor = Transaction().connection.cursor()
+        query = detail.join(premium,
+            condition=detail.premium == premium.id
+            )
+
+        for cur_slice in grouped_slice(instances):
+            cursor.execute(*query.select(detail.invoice_line, premium.loan,
+                    where=detail.invoice_line.in_([x.id for x in cur_slice])
+                    ))
+
+            for line_id, loan_id in cursor.fetchall():
+                result[line_id] = loan_id
+
+        return result
