@@ -1,3 +1,4 @@
+* FEA#10139 Add default eligibility decisions handled in the default deductible rules
 * FEA#10086 Add default benefit rule based on the event type
 * BUG#9997 Iteration - Fixes - Add rules
 * FEA#9940 Add default indemnification rules

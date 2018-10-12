@@ -507,7 +507,16 @@ cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
             <field name="short_name">coog_franchise_fixe_toute_nature_d_arret_confondue</field>
             <field name="algorithm">nb_jour = param_nombre_de_jours_de_franchise()
 type_franchise = param_type_de_franchise()
-return rule_coog_franchise_base_sur_un_nombre_de_jour_defaut(type_de_franchise=type_franchise, nombre_de_jours_de_franchise=nb_jour, date_de_prejudice=None)</field>
+code_decision = code_decision_eligibilite_prestation()
+date_calcul = date_de_debut_du_prejudice()
+
+# Gestion des declarations tardives
+if code_decision == 'coog_accepte_pena_franchise_declaration':
+    date_calcul = date_declaration_sinistre()
+elif code_decision == 'coog_accepte_pena_declaration_date':
+    return date_declaration_sinistre()
+
+return rule_coog_franchise_base_sur_un_nombre_de_jour_defaut(type_de_franchise=type_franchise, nombre_de_jours_de_franchise=nb_jour, date_de_prejudice=date_calcul)</field>
             <field name="status">validated</field>
             <field name="type_">benefit_deductible</field>
             <field name="context" ref="rule_engine.default_context"/>
@@ -539,7 +548,14 @@ cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
             <field name="algorithm">nb_jour = param_nombre_de_jours_de_franchise()
 type_franchise = param_type_de_franchise()
 date_prejudice = date_de_debut_du_prejudice()
+code_decision = code_decision_eligibilite_prestation()
 date_calcul = date_prejudice
+
+# Gestion des declarations tardives
+if code_decision == 'coog_accepte_pena_franchise_declaration':
+    date_calcul = date_declaration_sinistre()
+elif code_decision == 'coog_accepte_pena_declaration_date':
+    return date_declaration_sinistre()
 
 periodes_mtt = periodes_de_deduction('part_time', date_calcul, date_fin_periode_indemnisation())
 fin_franchise = rule_coog_franchise_base_sur_un_nombre_de_jour_defaut(type_de_franchise=type_franchise, nombre_de_jours_de_franchise=nb_jour, date_de_prejudice=date_calcul)

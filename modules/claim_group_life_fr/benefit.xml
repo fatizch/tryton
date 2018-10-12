@@ -17,4 +17,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="digits" eval="2"/>
         </record>
     </data>
+    <data depends="claim_eligibility">
+        <record model="benefit.eligibility.decision" id="eligiblity_decision_accepte_pena_franchise_declaration">
+            <field name="name">Accepté avec pénalité: Franchise à partir de la date de déclaration</field>
+            <field name="code">coog_accepte_pena_franchise_declaration</field>
+            <field name="description">La franchise sera calculée à partir de la date de déclaration</field>
+            <field name="state">accepted</field>
+        </record>
+        <record model="benefit.eligibility.decision" id="eligiblity_decision_accepte_pena_declaration_date">
+            <field name="name">Accepté avec pénalité: Indemnisation le jour de la déclaration</field>
+            <field name="code">coog_accepte_pena_declaration_date</field>
+            <field name="description">L'indemnisation débutera le jours de la déclaration du sinistre</field>
+            <field name="state">accepted</field>
+        </record>
+    </data>
 </tryton>
