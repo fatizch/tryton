@@ -253,7 +253,15 @@ def delete_reference_backref(objs, target_model, target_field):
 
 
 def get_user_language():
-    return Pool().get('ir.lang').get_from_code(Transaction().language)
+    transaction = Transaction()
+    language = getattr(transaction, '_cached_language', None)
+    if language:
+        if language.code == transaction.language:
+            return language
+        transaction._cached_language = None
+    language = Pool().get('ir.lang').get_from_code(transaction.language)
+    transaction._cached_language = language
+    return language
 
 
 def pyson_result(pyson_expr, target):
