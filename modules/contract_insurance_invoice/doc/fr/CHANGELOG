@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * BUG#9972 Ne pas planter lors du changement de souscripteur dans le processus de souscription
 * BUG#9759 Traduire la fréquence dans le rec_name des détails de ligne de quittance
 * BUG#9857 Déblocage de l'émission des quittances avec une date de fin postérieure à la date de fin du contrat dans le cas où les calculs de prorata l'impose

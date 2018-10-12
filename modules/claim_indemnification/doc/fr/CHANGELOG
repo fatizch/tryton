@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * FEA#10024 Ajout de méthode pour récuperer les informations de sinistre depuis une quittance
 * BUG#9914 Ne pas vérifier les dates de périodes précédentes à l'ordonnancement d'une annulation
 * BUG#9874 Correctif: il n'y a plus besoin de renseigner un motif d'annulation lorsqu'on souhaite annuler l'action d'annulation d'indemnisation à travers l'assistant

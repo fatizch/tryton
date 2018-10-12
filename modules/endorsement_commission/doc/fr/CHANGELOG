@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * BUG#10049 Propagation du changement d'apporteur aux quittances déjà générées
 * FEA#9349 Suppression du champ agence et remplacement par le réseau de distribution
 

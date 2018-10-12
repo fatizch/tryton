@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * OTH#0000 Fix active translation
 * OTH#0000 Remove now useless "lowest_level_object"
 * BUG#9498 Contract manager should be able to delete a quote contract

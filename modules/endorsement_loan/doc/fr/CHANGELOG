@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * BUG#8404 Blocage de la possibilité d'ajouter par erreur des lignes dans l'avenant de changement de quotité
 * BUG#9168 Correctif d'un crash lors du changement de date d'effet d'un contrat dans le passé
 

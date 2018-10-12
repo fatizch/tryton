@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * FEA#5633 Merge party_cog and country_address_configuration and enhance address form view
 * FEA#10057 Add phone and email on party textual synthesis
 * FEA#9431 Add function on parties to get the value of an identifier from its type

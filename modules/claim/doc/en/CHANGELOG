@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * BUG#9925 Add a domain on the status of the sub-status of the close claim reason in order to filter them.
 * BUG#9753 Give right to delete claim losses and services to claim manage group
 * BUG#9876 Add an option to avoid duplicating losses in add_new_loss

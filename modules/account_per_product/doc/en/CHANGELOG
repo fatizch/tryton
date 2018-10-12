@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * BUG#10014 Fix product not found for insurer
 * FEA#9893 Add warning when mixing on a product insurers that are already used on other products
 * BUG#9892 Fix invoicing for contracts with fees

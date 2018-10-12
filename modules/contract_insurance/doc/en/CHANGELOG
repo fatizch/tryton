@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * FEA#10055 Add configuration to show the covered element's name when editing it
 * OTH#0000 Also look for extra data in parent covered elements
 * FEA#9928 Manage covered elements as a tree

@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * FEA#10048 Ajout des labels sur les comptes comptables
 * FEA#9417 Tri des lettrages par identifiant décroissant
 * FEA#8226 Adaptation de la réconciliation à l'amélioration de la méthode tryton reconcile

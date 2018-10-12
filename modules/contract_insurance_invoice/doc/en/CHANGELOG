@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * BUG#9972 Do not crash when changing subscriber in subscription process
 * BUG#9759 Translate frequency in invoice line detail rec_name
 * BUG#9857 Unlock invoice posting with an end date greater than that of the contract if prorata forces it

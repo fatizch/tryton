@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * OTH#0000 Improve performances of get_user_language
 * OTH#0000 Improve and detail default trytond.conf
 * OTH#0000 Update developper view to match the debug module definition

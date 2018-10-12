@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * FEA#10024 Add method to retrieve claim informations from an invoice
 * BUG#9914 Do not check previous period dates when scheduling cancellation
 * BUG#9874 Fix: No need to select a cancel reason to cancel indemnification cancellation action through wizard

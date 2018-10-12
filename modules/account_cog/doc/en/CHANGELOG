@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * FEA#10048 Add tags to account
 * FEA#9417 Sort reconciliations by ID descending
 * FEA#8226 Adapt reconciliation to tryton's improvement on reconcile method

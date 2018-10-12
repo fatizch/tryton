@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * FEA#9242 Nouvel outil de simulation du calcul des commissions depuis un produit. Si le montant des commissions est aussi lié à des données complémentaires de contrat, le gestionnaire peut les saisir manuellement.
 * BUG#9912 Correction sur l'annulation d'une quittance de type courtier grossiste
 * BUG#9841 Mise à jour des dépendances de on_change suite à la modification du domaine des agents

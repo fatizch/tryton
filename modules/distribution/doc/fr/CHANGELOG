@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * BUG#10010 Mettre à vide l'adresse d'un réseau de distribution lorsqu'on supprime le lien vers le tiers
 * BUG#9000 Ajout d'un paramétrage par défaut des habilitations
 * BUG#8918 Définition d'une société par défaut pour migrer les réseaux de distribution existants en base à l'installation du module

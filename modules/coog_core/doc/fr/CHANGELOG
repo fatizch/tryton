@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * OTH#0000 Amélioration des performances pour get_user_language
 * OTH#0000 Amélioration du fichier de configuration "par défaut" de trytond
 * OTH#0000 Mise à jour du plugin de la vue développeur par rapport au module de debug

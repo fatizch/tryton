@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * FEA#9883 Add override to add dynamic datas for the sequence's prefix / suffix
 * BUG#9338 Update of the sequence view list following the merge of tryton 4.8
 

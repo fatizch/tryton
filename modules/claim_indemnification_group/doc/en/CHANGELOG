@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * FEA#9102 Improve benefit configuration display on group contract
 * BUG#9123 Fix creation of group contracts if rules are directly on the benefit
 * BUG#9124 Fix option benefit view

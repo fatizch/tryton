@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * BUG#10026 Correction sur l'impression de documents sans modèles
 * FEA#9985 Ajout d'une condition pyson sur les modèles de courrier. Utile pour ne pas traiter des modèles dont la condition ne serait pas vérifiée. Fonctionne également avec les actions par type d'évenement et les pièces jointes sur les mails.
 * BUG#9738 Suppression automatique des demandes d'impression lors de la suppression d'un modèle imprimable

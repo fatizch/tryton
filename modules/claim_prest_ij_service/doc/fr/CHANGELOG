@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * BUG#9730 Anonymisation du ssn dans les inscriptions lorsqu'on anonymise un tiers
 * BUG#9761: Ajout des montants des noeuds Indu dans le calcul de la validation des montants
 * OTH#0000: Ajout d'une documentation pour prest IJ

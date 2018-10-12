@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * BUG#10058 Add synchronize prepayment action to contract form view
 * BUG#10088 Consider unpaid periods to calculate the first year premium for the prepayment commission
 * BUG#10084 Take the min between the contract end date and the last paid invoice to calculate the first year premium

@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * FEA#9957 Add default standard revaluation rule with the AGIRC / ARRCO tables structures
 * FEA#9940 Add default net salary computation rules
 * BUG#9965 Fix net salary retrieving when a claim has multiple delivered services 

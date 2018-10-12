@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * BUG#9643 Rendre les codes pays obligatoires
 * BUG#9619 Le mandat SEPA ne peut plus être annulé si des paiements en brouillon / validé / en traitement l'utilise
 * BUG#8968 Ne pas ecraser la valeur de la RUM par la configuration par défaut si elle existe déjà

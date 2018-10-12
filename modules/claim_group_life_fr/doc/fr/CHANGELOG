@@ -1,3 +1,4 @@
+Version 2.2 - 2018-10-12
 * FEA#10139 Ajout de décisions d'éligibilité par défaut avec gestion dans les règles de franchise 
 * FEA#10086 Ajout de règles de franchise en fonction de la nature de l'événement
 * BUG#9997 Itération - Correctifs - ajout de règle
