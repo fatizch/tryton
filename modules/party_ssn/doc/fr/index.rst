@@ -1,4 +1,4 @@
-.. party
+.. life
 
 Tiers - Tiers NIR
 =================

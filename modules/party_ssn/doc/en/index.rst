@@ -1,4 +1,4 @@
-.. party
+.. life
 
 Party - Party SSN
 =================
