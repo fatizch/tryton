@@ -1172,6 +1172,7 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         return res
 
     def get_rec_name(self, name):
+        res = ''
         if self.party:
             res = self.party.full_name
             relations = self.get_relation_with_subscriber()
@@ -1179,9 +1180,16 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
                 return '%s (%s)' % (res, relations)
             return res
         if self.item_desc:
-            return ': '.join(filter(None,
+            res = ': '.join(filter(None,
                     [self.item_desc.rec_name, self.name]))
-        return self.name
+        extra_data = self.item_desc.extra_data_rec_name
+        if extra_data:
+            separator = ' ' if self.name else ': '
+            res = separator.join(filter(None, [
+                        res, unicode(
+                            self.current_extra_data.get(extra_data, None))
+                        ]))
+        return res or self.name
 
     @classmethod
     def getter_affiliated_to(cls, instances, name):

@@ -102,6 +102,10 @@ class ItemDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
         'offered.item.description-covered_element.end_reason', 'item_desc',
         'reason', 'Possible End Reasons')
     _check_sub_options_cache = Cache('has_sub_options')
+    extra_data_rec_name = fields.Selection(
+        'getter_extra_data_rec_name', 'Extra Data To Show In The Rec Name',
+        help='If set, the extra data value will be showed in the rec name '
+        'of the covered element')
     show_name = fields.Boolean('Show Covered Element Name',
         help='If checked, the name will be showed on the covered element, '
         'allowing the editing of the field')
@@ -158,6 +162,10 @@ class ItemDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
     @classmethod
     def is_master_object(cls):
         return True
+
+    @fields.depends('extra_data_def')
+    def getter_extra_data_rec_name(self):
+        return [('', '')] + [(x.name, x.string) for x in self.extra_data_def]
 
     def has_sub_options(self):
         cached = self.__class__._check_sub_options_cache.get(self.id, -1)

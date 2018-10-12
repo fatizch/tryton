@@ -1,3 +1,4 @@
+* FEA#10080 Add item description configuration to show extra data value in the covered element rec name 
 * OTH#0000 Replace multiple small list to notebook view on insurer view form
 * BUG#9483 Change xml ids to fix module update
 * BUG#8953 Add a warning when creating multiple insurers on the same party
