@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:commission.plan.line:"
+msgid "Linear"
+msgstr "Linéaire"
+
+msgctxt "error:commission.plan.line:"
+msgid "Prepayment"
+msgstr "Précompte"
+
 msgctxt "error:commission.plan.prepayment.payment_rule:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
@@ -14,17 +22,13 @@ msgstr ""
 "Le résultat de la règle d'échéancier de versement du précompte ne correspond"
 " pas au format attendu [(date, pourcentage)]"
 
-msgctxt "error:commission.plan.line:"
-msgid "Linear"
-msgstr "Linéaire"
-
-msgctxt "error:commission.plan.line:"
-msgid "Prepayment"
-msgstr "Précompte"
-
 msgctxt "field:commission.plan,prepayment_payment_rule:"
 msgid "Payment Date Rule for Prepayment"
 msgstr "Règle de calcul de la date de paiement du précompte"
+
+msgctxt "field:commission.plan.line,is_prepayment:"
+msgid "Is Prepayment"
+msgstr "Précompte"
 
 msgctxt "field:commission.plan.line,prepayment_rule:"
 msgid "Prepayment Rule"

@@ -425,6 +425,10 @@ msgctxt "field:party.party,has_multiple_addresses:"
 msgid "Has multiple addresses"
 msgstr "A plusieurs adresses"
 
+msgctxt "field:party.party,has_role:"
+msgid "has_role"
+msgstr "A un rôle"
+
 msgctxt "field:party.party,identifiers:"
 msgid "Identifiers"
 msgstr "Identifiants"

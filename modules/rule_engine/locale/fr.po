@@ -131,6 +131,10 @@ msgctxt "field:functional_error,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:linter.Linter,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:rule_engine,algorithm:"
 msgid "Algorithm"
 msgstr "Algorithme"
@@ -166,14 +170,6 @@ msgstr "Logs d'exécution"
 msgctxt "field:rule_engine,execution_code:"
 msgid "Execution Code"
 msgstr "Code à exécuter"
-
-msgctxt "field:rule_engine,extra_data:"
-msgid "Display Extra Data"
-msgstr "Afficher Plus de Données"
-
-msgctxt "field:rule_engine,extra_data_kind:"
-msgid "Kind"
-msgstr "Type de donnée"
 
 msgctxt "field:rule_engine,functions_used:"
 msgid "Used Functions"
@@ -967,6 +963,10 @@ msgctxt "model:ir.ui.menu,name:menu_tree_element"
 msgid "Rule Functions"
 msgstr "Fonctions du Moteur de règle"
 
+msgctxt "model:linter.Linter,name:"
+msgid "Linter"
+msgstr "Parseur"
+
 msgctxt "model:rule_engine,name:"
 msgid "Rule"
 msgstr "Règle"
@@ -1038,22 +1038,6 @@ msgstr "Info"
 msgctxt "selection:functional_error,kind:"
 msgid "Warning"
 msgstr "Avertissement"
-
-msgctxt "selection:rule_engine,extra_data_kind:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:rule_engine,extra_data_kind:"
-msgid "Parameter"
-msgstr "Paramètre"
-
-msgctxt "selection:rule_engine,extra_data_kind:"
-msgid "Rule"
-msgstr "Règle"
-
-msgctxt "selection:rule_engine,extra_data_kind:"
-msgid "Table"
-msgstr "Table"
 
 msgctxt "selection:rule_engine,result_type:"
 msgid ""
@@ -1198,14 +1182,6 @@ msgstr "Résultat"
 msgctxt "view:rule_engine:"
 msgid "Display More Data"
 msgstr "Afficher plus de données"
-
-msgctxt "view:rule_engine:"
-msgid "Rule"
-msgstr "Règle"
-
-msgctxt "view:rule_engine:"
-msgid "Rules"
-msgstr "Règles"
 
 msgctxt "view:tag:"
 msgid "Rules"

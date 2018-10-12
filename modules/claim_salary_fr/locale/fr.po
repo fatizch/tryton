@@ -433,6 +433,71 @@ msgid "Start Set Salaries"
 msgstr "Saisie des salaires"
 
 msgctxt ""
+"model:extra_data,string:net_salary_contibution_1_charges_salariales_mutuelle"
+msgid "Charges SALARIALES santé (si montant)"
+msgstr "Charges SALARIALES santé (si montant)"
+
+msgctxt ""
+"model:extra_data,string:net_salary_contibution_2_charges_patronales_montant"
+msgid "Charges PATRONALES santé (si montant)"
+msgstr "Charges PATRONALES santé (si montant)"
+
+msgctxt ""
+"model:extra_data,string:net_salary_contibution_charges_patronales_prevoyance"
+msgid "Charges PATRONALES prévoyance (taux)"
+msgstr "Charges PATRONALES prévoyance (taux)"
+
+msgctxt ""
+"model:extra_data,string:net_salary_contibution_charges_patronales_sante_taux"
+msgid "Charges PATRONALES santé (si taux)"
+msgstr "Charges PATRONALES santé (si taux)"
+
+msgctxt ""
+"model:extra_data,string:net_salary_contibution_charges_salariales_sante_taux"
+msgid "Charges SALARIALES santé (si taux)"
+msgstr "Charges SALARIALES santé (si taux)"
+
+msgctxt "model:extra_data,string:net_salary_contibution_chomage_1"
+msgid "Chomage 1"
+msgstr "Chomage 1"
+
+msgctxt "model:extra_data,string:net_salary_contibution_chomage_2"
+msgid "Chomage 2"
+msgstr "Chomage 2"
+
+msgctxt "model:extra_data,string:net_salary_contibution_prevoyance_1"
+msgid "Prevoyance 1"
+msgstr "Prevoyance 1"
+
+msgctxt "model:extra_data,string:net_salary_contibution_prevoyance_2"
+msgid "Prevoyance 2"
+msgstr "Prevoyance 2"
+
+msgctxt "model:extra_data,string:net_salary_contibution_retraite_1"
+msgid "Retraite 1"
+msgstr "Retraite 1"
+
+msgctxt "model:extra_data,string:net_salary_contibution_retraite_2"
+msgid "Retraite 2"
+msgstr "Retraite 2"
+
+msgctxt "model:extra_data,string:net_salary_contibution_urssaf_1"
+msgid "URSAFF 1"
+msgstr "URSAFF 1"
+
+msgctxt "model:extra_data,string:net_salary_contibution_urssaf_2"
+msgid "URSAFF 2"
+msgstr "URSAFF 2"
+
+msgctxt "model:extra_data,string:net_salary_contibution_urssaf_3"
+msgid "URSAFF 3"
+msgstr "URSAFF 3"
+
+msgctxt "model:extra_data,string:net_salary_contibution_urssaf_4"
+msgid "URSAFF 4"
+msgstr "URSAFF 4"
+
+msgctxt ""
 "model:extra_details.configuration.line,string:indemnification_extra_details_tranche_a"
 msgid "Tranche A"
 msgstr "Tranche A"
@@ -470,6 +535,205 @@ msgstr "Règle de calcul net - Donnée complémentaire"
 msgctxt "model:net_calculation_rule-fix_extra_data,name:"
 msgid "Net Calculation Rule - Extra Data"
 msgstr "Règle de calcul net - Donnée complémentaire"
+
+msgctxt "model:rule_engine,name:net_salary_calculation_a_payer"
+msgid "Calcul du salaire NET (A payer)"
+msgstr "Calcul du salaire NET (A payer)"
+
+msgctxt "model:rule_engine,name:net_salary_calculation_imposable"
+msgid "Calcul du salaire NET (Imposable)"
+msgstr "Calcul du salaire NET (Imposable)"
+
+msgctxt "model:rule_engine,name:regle_standard_de_calcul_de_la_revalorisation"
+msgid "Règle standard de calcul de la revalorisation"
+msgstr "Règle standard de calcul de la revalorisation"
+
+msgctxt ""
+"model:rule_engine.rule_parameter,selection:1_reval_mode_regle_standard_de_calcul_de_la_revalorisation"
+msgid ""
+"AGIRC:Selon le point AGIRC\n"
+"ARRCO:Selon le point ARRCO"
+msgstr ""
+"AGIRC:Selon le point AGIRC\n"
+"ARRCO:Selon le point ARRCO"
+
+msgctxt ""
+"model:rule_engine.rule_parameter,selection:2_date_de_reference_regle_standard_de_calcul_de_la_revalorisation"
+msgid ""
+"DAT: Date d'arrêt de travail\n"
+"DEI: Date d'affet d'indémnisation"
+msgstr ""
+"DAT: Date d'arrêt de travail\n"
+"DEI: Date d'affet d'indémnisation"
+
+msgctxt ""
+"model:rule_engine.rule_parameter,selection:3_1ere_revalorisation_regle_standard_de_calcul_de_la_revalorisation"
+msgid ""
+"nb_jour: Nombre de jours\n"
+"1jour_mois_suivant_date_anniversaire: 1er jour du mois suivant la date anniversaire\n"
+"1er_semestre_suivant_date_ref: 1er jour du semestre suivant la date de Ref plus 366 jours\n"
+"1er_jour_du_7_eme_mois_suivant_date_anniversaire: 1er jour du 7 mois suivant la date anniversaire\n"
+"1er_janvier_suivant_date_reference_365_jours: 1 janvier qui suit la date de référence plus365 jours\n"
+"1er_janvier_suivant_date_ref: 1 janvier qui suit la date de référence"
+msgstr ""
+"nb_jour: Nombre de jours\n"
+"1jour_mois_suivant_date_anniversaire: 1er jour du mois suivant la date anniversaire\n"
+"1er_semestre_suivant_date_ref: 1er jour du semestre suivant la date de Ref plus 366 jours\n"
+"1er_jour_du_7_eme_mois_suivant_date_anniversaire: 1er jour du 7 mois suivant la date anniversaire\n"
+"1er_janvier_suivant_date_reference_365_jours: 1 janvier qui suit la date de référence plus365 jours\n"
+"1er_janvier_suivant_date_ref: 1 janvier qui suit la date de référence"
+
+msgctxt ""
+"model:rule_engine.rule_parameter,selection:5_frequence_revalo_regle_standard_de_calcul_de_la_revalorisation"
+msgid ""
+"changement_taux: Changement de valeur du point\n"
+"date_anniversaire_1er_revalo: A la date anniversaire de la 1ere revalo\n"
+"01/01/YEARLY: Tous les 1er janvier\n"
+"01/07/YEARLY: Tous les 1er juillet\n"
+"D0101: Met Quatrem au 01/01 avec Val  "
+msgstr ""
+"changement_taux: Changement de valeur du point\n"
+"date_anniversaire_1er_revalo: A la date anniversaire de la 1ere revalo\n"
+"01/01/YEARLY: Tous les 1er janvier\n"
+"01/07/YEARLY: Tous les 1er juillet\n"
+"D0101: Met Quatrem au 01/01 avec Val  "
+
+msgctxt ""
+"model:rule_engine.rule_parameter,string:1_reval_mode_regle_standard_de_calcul_de_la_revalorisation"
+msgid "Mode de revalorisation"
+msgstr "Mode de revalorisation"
+
+msgctxt ""
+"model:rule_engine.rule_parameter,string:2_date_de_reference_regle_standard_de_calcul_de_la_revalorisation"
+msgid "Date de référence"
+msgstr "Date de référence"
+
+msgctxt ""
+"model:rule_engine.rule_parameter,string:3_1ere_revalorisation_regle_standard_de_calcul_de_la_revalorisation"
+msgid "1ère revalorisation (optionnel)"
+msgstr "1ère revalorisation (optionnel)"
+
+msgctxt ""
+"model:rule_engine.rule_parameter,string:4_nombre_de_jours_regle_standard_de_calcul_de_la_revalorisation"
+msgid "Nombre de jours"
+msgstr "Nombre de jours"
+
+msgctxt ""
+"model:rule_engine.rule_parameter,string:5_frequence_revalo_regle_standard_de_calcul_de_la_revalorisation"
+msgid "Fréquence des revalorisations"
+msgstr "Fréquence des revalorisations"
+
+msgctxt "model:table,name:table_agirc"
+msgid "AGIRC"
+msgstr "AGIRC"
+
+msgctxt "model:table,name:table_arrco"
+msgid "ARRCO"
+msgstr "ARRCO"
+
+msgctxt "model:table,name:table_pmss"
+msgid "PMSS"
+msgstr "PMSS"
+
+msgctxt "model:table.dimension.value,name:agirc_dimension_value_2016"
+msgid "[01/01/2016 - ["
+msgstr "[01/01/2016 - ["
+
+msgctxt "model:table.dimension.value,name:agirc_dimension_value_2017"
+msgid "[01/01/2017 - 01/01/2018["
+msgstr "[01/01/2017 - 01/01/2018["
+
+msgctxt "model:table.dimension.value,name:agirc_dimension_value_2018"
+msgid "[01/01/2018 - 01/01/2019["
+msgstr "[01/01/2018 - 01/01/2019["
+
+msgctxt "model:table.dimension.value,name:arrco_dimension_value_2016"
+msgid "[01/01/2016 - ["
+msgstr "[01/01/2016 - ["
+
+msgctxt "model:table.dimension.value,name:arrco_dimension_value_2017"
+msgid "[01/01/2017 - 01/01/2018["
+msgstr "[01/01/2017 - 01/01/2018["
+
+msgctxt "model:table.dimension.value,name:arrco_dimension_value_2018"
+msgid "[01/01/2018 - 01/01/2019["
+msgstr "[01/01/2018 - 01/01/2019["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2000"
+msgid "[01/01/2000 - 01/01/2001["
+msgstr "[01/01/2000 - 01/01/2001["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2001"
+msgid "[01/01/2001 - 01/01/2002["
+msgstr "[01/01/2001 - 01/01/2002["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2002"
+msgid "[01/01/2002 - 01/01/2003["
+msgstr "[01/01/2002 - 01/01/2003["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2003"
+msgid "[01/01/2003 - 01/01/2004["
+msgstr "[01/01/2003 - 01/01/2004["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2004"
+msgid "[01/01/2004 - 01/01/2005["
+msgstr "[01/01/2004 - 01/01/2005["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2005"
+msgid "[01/01/2005 - 01/01/2006["
+msgstr "[01/01/2005 - 01/01/2006["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2006"
+msgid "[01/01/2006 - 01/01/2007["
+msgstr "[01/01/2006 - 01/01/2007["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2007"
+msgid "[01/01/2007 - 01/01/2008["
+msgstr "[01/01/2007 - 01/01/2008["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2008"
+msgid "[01/01/2008 - 01/01/2009["
+msgstr "[01/01/2008 - 01/01/2009["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2009"
+msgid "[01/01/2009 - 01/01/2010["
+msgstr "[01/01/2009 - 01/01/2010["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2010"
+msgid "[01/01/2010 - 01/01/2011["
+msgstr "[01/01/2010 - 01/01/2011["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2011"
+msgid "[01/01/2011 - 01/01/2012["
+msgstr "[01/01/2011 - 01/01/2012["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2012"
+msgid "[01/01/2012 - 01/01/2013["
+msgstr "[01/01/2012 - 01/01/2013["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2013"
+msgid "[01/01/2013 - 01/01/2014["
+msgstr "[01/01/2013 - 01/01/2014["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2014"
+msgid "[01/01/2014 - 01/01/2015["
+msgstr "[01/01/2014 - 01/01/2015["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2015"
+msgid "[01/01/2015 - 01/01/2016["
+msgstr "[01/01/2015 - 01/01/2016["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2016"
+msgid "[01/01/2016 - 01/01/2017["
+msgstr "[01/01/2016 - 01/01/2017["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2017"
+msgid "[01/01/2017 - 01/01/2018["
+msgstr "[01/01/2017 - 01/01/2018["
+
+msgctxt "model:table.dimension.value,name:pmss_dimension_value_2018"
+msgid "[01/01/2018 - 01/01/2019["
+msgstr "[01/01/2018 - 01/01/2019["
 
 msgctxt "selection:contract.option.benefit,salary_mode:"
 msgid ""

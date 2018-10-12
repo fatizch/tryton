@@ -499,6 +499,10 @@ msgctxt "field:account.payment.journal.reject_reason,failure_actions:"
 msgid "Failure Actions"
 msgstr "Actions en cas de rejet"
 
+msgctxt "field:account.payment.journal.reject_reason,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:account.payment.journal.reject_reason,id:"
 msgid "ID"
 msgstr "ID"

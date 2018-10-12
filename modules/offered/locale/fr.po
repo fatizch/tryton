@@ -3,6 +3,15 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:extra_data:"
+msgid "Data %(data)s has multiple parents with the current configuration"
+msgstr ""
+"La donnée %(data)s a plusieurs parents dans la configuration courante"
+
+msgctxt "error:extra_data:"
+msgid "Data %(sub_data)s is missing from the configuration"
+msgstr "La donnée %(sub_data)s est manquante dans la configuration"
+
+msgctxt "error:extra_data:"
 msgid "Expected key %s to be set in field %s of %s"
 msgstr "%s doit être renseigné dans le champ %s de %s"
 
@@ -13,6 +22,10 @@ msgstr "Valeur invalide pour la donnée %s du champ %s de %s"
 msgctxt "error:extra_data:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
+
+msgctxt "error:extra_data:"
+msgid "Too many recursion levels in \"sub data definition"
+msgstr "La définition des sous données a trop de niveaux de récursivité"
 
 msgctxt "error:offered.option.description:"
 msgid "The code must be unique!"
@@ -75,6 +88,10 @@ msgstr "Type métier"
 msgctxt "field:extra_data,name:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:extra_data,parents:"
+msgid "Parents"
+msgstr "Parents"
 
 msgctxt "field:extra_data,rec_name:"
 msgid "Record Name"
@@ -263,6 +280,10 @@ msgstr "Typage"
 msgctxt "field:offered.option.description,extra_data_def:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
+
+msgctxt "field:offered.option.description,extra_data_summary:"
+msgid "Offered Kind Summary"
+msgstr "Résumé des données complémentaires"
 
 msgctxt "field:offered.option.description,id:"
 msgid "ID"
@@ -516,6 +537,10 @@ msgctxt "field:offered.package,extra_data:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
+msgctxt "field:offered.package,extra_data_summary:"
+msgid "Extra Data Summary"
+msgstr "Résumé des données complémentaires"
+
 msgctxt "field:offered.package,id:"
 msgid "ID"
 msgstr "ID"
@@ -643,6 +668,10 @@ msgstr "Typage"
 msgctxt "field:offered.product,extra_data_def:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
+
+msgctxt "field:offered.product,extra_data_summary:"
+msgid "Offered Kind Summary"
+msgstr "Résumé des données complémentaires"
 
 msgctxt "field:offered.product,icon:"
 msgid "Icon"
@@ -900,6 +929,10 @@ msgid ""
 msgstr ""
 "Nombre d'années de conservation des données de contrats liés à ce produit "
 "après la résiliation."
+
+msgctxt "help:offered.product,icon:"
+msgid "This icon will be used to quickly identify the product"
+msgstr "Cette icône sera utilisée afin de rapidement identifier le produit"
 
 msgctxt "model:extra_data,name:"
 msgid "Extra Data"

@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:product.product:"
+msgid "The code must be unique."
+msgstr "Le code doit être unique."
+
+msgctxt "error:product.template:"
+msgid "The name must be unique."
+msgstr "Le nom doit être unique."
+
 msgctxt "field:product.category,code:"
 msgid "Code"
 msgstr "Code"

@@ -10,3 +10,7 @@ msgctxt "help:report.template,generate_event:"
 msgid "If true, an event will be generated each time the report is generated."
 msgstr ""
 "Si coché, un événement sera généré chaque fois que le courrier sera généré."
+
+msgctxt "model:event.type,name:event_report_generation"
+msgid "Generate Report"
+msgstr "Impression d'un courrier"

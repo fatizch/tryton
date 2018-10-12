@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:endorsement.contract.change_broker,dist_network:"
-msgid "New Distributor"
-msgstr "Nouveau distributeur"
-
 msgctxt "field:endorsement.contract.change_broker,agent:"
 msgid "New Agent"
 msgstr "Nouveau protocole de commissionnement"
@@ -18,10 +14,6 @@ msgctxt "field:endorsement.contract.change_broker,broker_party:"
 msgid "New Broker Party"
 msgstr "Nouveau courtier"
 
-msgctxt "field:endorsement.contract.change_broker,current_dist_network:"
-msgid "Current Distributor"
-msgstr "Distributeur actuel"
-
 msgctxt "field:endorsement.contract.change_broker,current_agent:"
 msgid "Current Agent"
 msgstr "Protocole de commissionnement actuel"
@@ -30,9 +22,17 @@ msgctxt "field:endorsement.contract.change_broker,current_broker:"
 msgid "Current Broker"
 msgstr "Courtier actuel"
 
+msgctxt "field:endorsement.contract.change_broker,current_dist_network:"
+msgid "Current Distributor"
+msgstr "Distributeur actuel"
+
 msgctxt "field:endorsement.contract.change_broker,current_plan:"
 msgid "Current Plan"
 msgstr "Plan de commissionnement sélectionné"
+
+msgctxt "field:endorsement.contract.change_broker,dist_network:"
+msgid "New Distributor"
+msgstr "Nouveau distributeur"
 
 msgctxt "field:endorsement.contract.change_broker,effective_date:"
 msgid "Effective Date"
@@ -58,10 +58,6 @@ msgctxt "field:endorsement.contract.change_broker,signature_date:"
 msgid "Signature Date"
 msgstr "Date de signature"
 
-msgctxt "field:endorsement.contract.change_commission,dist_network:"
-msgid "Distributor"
-msgstr "Distributeur"
-
 msgctxt "field:endorsement.contract.change_commission,agent:"
 msgid "New Agent"
 msgstr "Nouveau protocole de commissionnement"
@@ -74,10 +70,6 @@ msgctxt "field:endorsement.contract.change_commission,broker_party:"
 msgid "New Broker Party"
 msgstr "Nouveau courtier"
 
-msgctxt "field:endorsement.contract.change_commission,current_dist_network:"
-msgid "Current Distributor"
-msgstr "Distributeur actuel"
-
 msgctxt "field:endorsement.contract.change_commission,current_agent:"
 msgid "Current Agent"
 msgstr "Protocole de commissionnement actuel"
@@ -85,6 +77,14 @@ msgstr "Protocole de commissionnement actuel"
 msgctxt "field:endorsement.contract.change_commission,current_broker:"
 msgid "Current Broker"
 msgstr "Courtier actuel"
+
+msgctxt "field:endorsement.contract.change_commission,current_dist_network:"
+msgid "Current Distributor"
+msgstr "Distributeur actuel"
+
+msgctxt "field:endorsement.contract.change_commission,dist_network:"
+msgid "New Distributor"
+msgstr "Nouveau distributeur"
 
 msgctxt "field:endorsement.contract.change_commission,effective_date:"
 msgid "Effective Date"

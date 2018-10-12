@@ -15,12 +15,20 @@ msgid "End Date is smaller than start date"
 msgstr "La date de fin est antérieure à la date de début"
 
 msgctxt "error:claim.loss:"
+msgid "End Date:"
+msgstr "Date de fin :"
+
+msgctxt "error:claim.loss:"
 msgid "LTD End Date:"
 msgstr "Date de fin de l'invalidité :"
 
 msgctxt "error:claim.loss:"
 msgid "LTD Start Date:"
 msgstr "Date de début de l'invalidité :"
+
+msgctxt "error:claim.loss:"
+msgid "Loss Date:"
+msgstr "Date de survenance :"
 
 msgctxt "error:claim.loss:"
 msgid "One day is required between the relapse and the previous std"
@@ -43,14 +51,6 @@ msgstr "Date d'arrêt de travail :"
 msgctxt "error:claim.loss:"
 msgid "Start Date:"
 msgstr "Date de début :"
-
-msgctxt "error:claim.loss:"
-msgid "End Date:"
-msgstr "Date de fin :"
-
-msgctxt "error:claim.loss:"
-msgid "Loss Date:"
-msgstr "Date de survenance :"
 
 msgctxt "error:claim.loss:"
 msgid "The initial loss is missing on the relapse: %(loss)s"
@@ -204,6 +204,10 @@ msgstr "Date de réception des documents"
 msgctxt "field:claim.beneficiary,extra_data_values:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
+
+msgctxt "field:claim.beneficiary,extra_data_values_summary:"
+msgid "Extra Data Summary"
+msgstr "Résumé des données complémentaires"
 
 msgctxt "field:claim.beneficiary,id:"
 msgid "ID"

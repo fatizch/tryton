@@ -780,6 +780,10 @@ msgctxt "field:contract.premium.display.premiums.line,premiums:"
 msgid "Premium"
 msgstr "Prime"
 
+msgctxt "field:contract.rebill.batch,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:contract.sub_status,hold_billing:"
 msgid "Hold Billing"
 msgstr "Suspend la facturation"
@@ -1214,6 +1218,10 @@ msgstr "Ecran d'affichage des primes du contrat"
 msgctxt "model:contract.premium.display.premiums.line,name:"
 msgid "Display Contract Premium Displayer Prmeium Line"
 msgstr "Ecran d'affichage des primes du contrat par ligne"
+
+msgctxt "model:contract.rebill.batch,name:"
+msgid "Rebill Contracts"
+msgstr "Requittancer les contrats"
 
 msgctxt "model:ir.action,name:"
 msgid "Invoice Frequencies"

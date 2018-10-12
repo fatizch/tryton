@@ -1042,6 +1042,14 @@ msgctxt "wizard_button:report.create,select_template,generate:"
 msgid "Generate"
 msgstr "Générer"
 
+msgctxt "wizard_button:report.template.print_unbound,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:report.template.print_unbound,start,generate:"
+msgid "Print"
+msgstr "Imprimer"
+
 msgctxt ""
 "wizard_button:report_production.request.treat,confirm_production,end:"
 msgid "Cancel"

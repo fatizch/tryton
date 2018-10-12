@@ -158,8 +158,8 @@ class Invoice:
     __metaclass__ = PoolMeta
     __name__ = 'account.invoice'
 
-    is_insurer_invoice = fields.Function(fields.Boolean('Is insurer commission \
-        invoice'), 'get_is_insurer_invoice',
+    is_insurer_invoice = fields.Function(fields.Boolean('Is insurer commission '
+        'invoice'), 'get_is_insurer_invoice',
         searcher='search_is_insurer_invoice')
 
     @classmethod

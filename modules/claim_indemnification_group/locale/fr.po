@@ -382,6 +382,10 @@ msgctxt "field:contract.option.benefit,deductible_rule_extra_data:"
 msgid "Deductible Rule Extra Data"
 msgstr "Données complémentaires de franchise"
 
+msgctxt "field:contract.option.benefit,extra_data_def:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:contract.option.benefit,id:"
 msgid "ID"
 msgstr "ID"

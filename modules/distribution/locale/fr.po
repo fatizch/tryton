@@ -229,7 +229,7 @@ msgctxt "model:ir.ui.menu,name:menu_distribution"
 msgid "Distribution"
 msgstr "Distribution"
 
-msgctxt "model:res.group,name:group_distribution"
+msgctxt "model:res.group,name:"
 msgid "Distribution Administration"
 msgstr "Administration des réseaux de distribution"
 

@@ -291,8 +291,8 @@ msgid "Cancel Surrender"
 msgstr "Annuler le rachat"
 
 msgctxt "model:ir.action,name:act_plan_surrender_contract"
-msgid "Racheter"
-msgstr "Racheter"
+msgid "Plan Surrender"
+msgstr "Planifier un rachat"
 
 msgctxt "model:ir.action,name:act_validate_surrender_contract"
 msgid "Validate Surrender"
@@ -307,8 +307,8 @@ msgid "Planned Surrenders"
 msgstr "Rachats planifiés"
 
 msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_surrender"
-msgid "Rachats"
-msgstr "Rachats"
+msgid "Validated Surrenders"
+msgstr "Rachats validés"
 
 msgctxt "model:ir.ui.menu,name:menu_surrender_contract_form"
 msgid "Surrender Contracts"

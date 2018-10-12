@@ -66,6 +66,10 @@ msgctxt "field:account.fee,broker_fee:"
 msgid "Broker Fee"
 msgstr "Frais d'apporteur"
 
+msgctxt "field:account.invoice,is_insurer_invoice:"
+msgid "Is insurer commission invoice"
+msgstr "Est un bordereau assureur de commission"
+
 msgctxt "field:account.invoice.line,broker_fee_lines:"
 msgid "Broker Fee Lines"
 msgstr "Lignes de frais d'apporteur"
@@ -134,9 +138,17 @@ msgctxt "field:commission,start:"
 msgid "Start"
 msgstr "Date de début"
 
+msgctxt "field:commission.agent,active:"
+msgid "Active"
+msgstr "Actif"
+
 msgctxt "field:commission.agent,agent_payment_term:"
 msgid "Commission Agent Payment Term"
 msgstr "Condition de paiement du protocole de commissionnement"
+
+msgctxt "field:commission.agent,code:"
+msgid "Code"
+msgstr "Code"
 
 msgctxt "field:commission.agent,commissioned_products:"
 msgid "Commissioned Products"
@@ -150,9 +162,9 @@ msgctxt "field:commission.agent,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:commission.agent,func_key:"
-msgid "Functional Key"
-msgstr "Clé fonctionnelle"
+msgctxt "field:commission.agent,icon:"
+msgid "Icon"
+msgstr "Icône"
 
 msgctxt "field:commission.agent,start_date:"
 msgid "Start Date"
@@ -246,6 +258,62 @@ msgctxt "field:commission.aggregated,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:commission.aggregated.agent,agent:"
+msgid "Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "field:commission.aggregated.agent,agent_name:"
+msgid "Agent Name"
+msgstr "Nom du protocole"
+
+msgctxt "field:commission.aggregated.agent,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:commission.aggregated.agent,broker:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "field:commission.aggregated.agent,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.aggregated.agent,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.aggregated.agent,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.aggregated.agent,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:commission.aggregated.agent,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:commission.aggregated.agent,party:"
+msgid "Party"
+msgstr "Courtier"
+
+msgctxt "field:commission.aggregated.agent,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:commission.aggregated.agent,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:commission.aggregated.agent,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:commission.aggregated.agent,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:commission.change_broker.select_new_broker,all_contracts:"
 msgid "Change All Contracts"
 msgstr "Modifier tous les contrats"
@@ -330,6 +398,10 @@ msgctxt "field:commission.invoice.post,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:commission.plan,active:"
+msgid "Active"
+msgstr "Actif"
+
 msgctxt "field:commission.plan,code:"
 msgid "Code"
 msgstr "Code"
@@ -345,6 +417,10 @@ msgstr "Produits commissionnés"
 msgctxt "field:commission.plan,computation_dates:"
 msgid "Computation Dates"
 msgstr "Dates de calcul"
+
+msgctxt "field:commission.plan,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
 
 msgctxt "field:commission.plan,insurer_plan:"
 msgid "Insurer Plan"
@@ -429,6 +505,10 @@ msgstr "Identifiant XML"
 msgctxt "field:commission.plan.date,year:"
 msgid "Year"
 msgstr "Année"
+
+msgctxt "field:commission.plan.line,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
 
 msgctxt "field:commission.plan.line,formula_description:"
 msgid "Formula"
@@ -806,6 +886,10 @@ msgctxt "field:product.uom,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:res.user,broker_party:"
+msgid "Broker Party"
+msgstr "Tiers courtier"
+
 msgctxt "help:commission.agent,agent_payment_term:"
 msgid ""
 "If defined, this payment term has priority over the party's one and the "
@@ -821,6 +905,10 @@ msgstr "Si 'Vrai', seule la première occurence sera prise en compte"
 msgctxt "model:commission.aggregated,name:"
 msgid "Commission Aggregated"
 msgstr "Commission agrégée"
+
+msgctxt "model:commission.aggregated.agent,name:"
+msgid "Commission Aggregated By Agent"
+msgstr "Commissions agrégées par protocole"
 
 msgctxt "model:commission.change_broker.select_new_broker,name:"
 msgid "Select New Broker"
@@ -1361,6 +1449,10 @@ msgctxt "view:commission.plan.date:"
 msgid "Calculation Dates"
 msgstr "Dates de calcul"
 
+msgctxt "view:commission.plan:"
+msgid "Data"
+msgstr "Données"
+
 msgctxt "view:commission.simulate.line:"
 msgid "%"
 msgstr "%"
@@ -1376,14 +1468,6 @@ msgstr "Commission sortante"
 msgctxt "view:commission.simulate.params:"
 msgid "_Refresh"
 msgstr "_Rafraichir"
-
-msgctxt "view:commission.plan:"
-msgid "Administration"
-msgstr "Administration"
-
-msgctxt "view:commission.plan:"
-msgid "Data"
-msgstr "Données"
 
 msgctxt "view:commission.synthesis.show:"
 msgid "Commissions paid by year"
@@ -1404,6 +1488,10 @@ msgstr "%"
 msgctxt "view:commission:"
 msgid "Amount"
 msgstr "Montant"
+
+msgctxt "view:offered.option.description:"
+msgid "Commission"
+msgstr "Commission"
 
 msgctxt "view:party.party:"
 msgid "Broker"
@@ -1440,6 +1528,10 @@ msgstr "Suivant"
 msgctxt "wizard_button:commission.create_agents,parties,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "wizard_button:commission.simulate,start,end:"
+msgid "End"
+msgstr "Terminer"
 
 msgctxt "wizard_button:commission.synthesis,show,end:"
 msgid "Ok"
@@ -1508,12 +1600,12 @@ msgid "Principal Of"
 msgstr "Commissionne"
 
 msgctxt "view:commission.agent:commission."
-msgid "Agent"
-msgstr "Protocole de commissionnement"
-
-msgctxt "view:commission.agent:commission."
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "view:commission.agent:commission."
+msgid "Agent"
+msgstr "Protocole de commissionnement"
 
 msgctxt "view:commission.create_invoice.ask:commission."
 msgid "Create Commission Invoice"

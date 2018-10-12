@@ -66,6 +66,10 @@ msgctxt "field:desynchronized.prepayment.report,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt "field:desynchronized.redeemed.report,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:offered.configuration,remove_commission_for_sub_status:"
 msgid "Termination Sub Status That Remove Unpaid Prepayment"
 msgstr ""
@@ -175,6 +179,10 @@ msgctxt "field:prepayment.sync.show.redeemed,agent:"
 msgid "Agent"
 msgstr "Protocole de commissionnement"
 
+msgctxt "field:prepayment.sync.show.redeemed,code:"
+msgid "Codes"
+msgstr "Codes"
+
 msgctxt "field:prepayment.sync.show.redeemed,commissions:"
 msgid "Commissions"
 msgstr "Commissions"
@@ -187,6 +195,14 @@ msgctxt "field:prepayment.sync.show.redeemed,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:prepayment.sync.show.redeemed,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:prepayment.sync.show.redeemed,end:"
+msgid "End"
+msgstr "Terminer"
+
 msgctxt "field:prepayment.sync.show.redeemed,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -194,6 +210,10 @@ msgstr "Identifiant"
 msgctxt "field:prepayment.sync.show.redeemed,line:"
 msgid "Line"
 msgstr "Ligne"
+
+msgctxt "field:prepayment.sync.show.redeemed,start:"
+msgid "Start"
+msgstr "Début"
 
 msgctxt "field:prepayment.sync.show_prepayment,commissions:"
 msgid "Commissions"
@@ -241,6 +261,10 @@ msgstr "Expression python qui va être évalué avec :"
 msgctxt "model:desynchronized.prepayment.report,name:"
 msgid "Prepayment Synchronization Batch"
 msgstr "Batch de synchronisation du précompte"
+
+msgctxt "model:desynchronized.redeemed.report,name:"
+msgid "Redeemed Synchronization Batch"
+msgstr "Batch de synchronization de l'amortissement de précompte"
 
 msgctxt "model:extra_details.configuration.line,string:commission_adjustment"
 msgid "Is adjustment"
