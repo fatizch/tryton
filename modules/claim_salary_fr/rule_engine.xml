@@ -176,7 +176,7 @@ ARRCO:Selon le point ARRCO</field>
             <field name="name">2_date_de_reference</field>
             <field name="type_">selection</field>
             <field name="selection">DAT: Date d'arrêt de travail
-DEI: Date d'affet d'indémnisation</field>
+DEI: Date d'effet d'indémnisation</field>
             <field name="selection_sorted">True</field>
             <field name="string">Date de référence</field>
             <field name="parent_rule" ref="regle_standard_de_calcul_de_la_revalorisation"/>
@@ -206,8 +206,7 @@ DEI: Date d'affet d'indémnisation</field>
             <field name="selection">changement_taux: Changement de valeur du point
 date_anniversaire_1er_revalo: A la date anniversaire de la 1ere revalo
 01/01/YEARLY: Tous les 1er janvier
-01/07/YEARLY: Tous les 1er juillet
-D0101: Met Quatrem au 01/01 avec Val  </field>
+01/07/YEARLY: Tous les 1er juillet</field>
             <field name="selection_sorted">True</field>
             <field name="string">Fréquence des revalorisations</field>
             <field name="parent_rule" ref="regle_standard_de_calcul_de_la_revalorisation"/>

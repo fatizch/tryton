@@ -48,19 +48,19 @@ return traitement_journalier, traitement_de_reference, trancheTA, trancheTB, tra
         <record model="rule_engine.rule_parameter" id="pourcentage_ij_ta_calcul_du_traitement_de_base_journalier_en_fonction_des_tranches">
             <field name="name">pourcentage_ij_ta</field>
             <field name="type_">integer</field>
-            <field name="string">Pourcentage IJ TA</field>
+            <field name="string">Pourcentage TA</field>
             <field name="parent_rule" ref="calcul_du_traitement_de_base_journalier_en_fonction_des_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="pourcentage_ij_tb_calcul_du_traitement_de_base_journalier_en_fonction_des_tranches">
             <field name="name">pourcentage_ij_tb</field>
             <field name="type_">integer</field>
-            <field name="string">Pourcentage IJ TB</field>
+            <field name="string">Pourcentage TB</field>
             <field name="parent_rule" ref="calcul_du_traitement_de_base_journalier_en_fonction_des_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="_pourcentage_ij_tc_calcul_du_traitement_de_base_journalier_en_fonction_des_tranches">
             <field name="name">pourcentage_ij_tc</field>
             <field name="type_">integer</field>
-            <field name="string">Pourcentage IJ TC</field>
+            <field name="string">Pourcentage TC</field>
             <field name="parent_rule" ref="calcul_du_traitement_de_base_journalier_en_fonction_des_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="methode_de_traitement_de_reference_calcul_du_traitement_de_base_journalier_en_fonction_des_tranches">
@@ -82,13 +82,13 @@ date_debut_periode = date_debut_periode_indemnisation()
 date_fin_periode = date_fin_periode_indemnisation()
 limite = ajouter_jours(date_de_debut_du_prejudice(), 1095)
 traitement_de_reference = param_4_traitement_de_reference()
-ijss_deduite = param_6_deduction_de_l_ijss()
+ijss_non_deduite = param_6_sans_deduction_de_l_ijss()
 inclusion_mi_temps = param_5_inclusion_du_mi_temps_therapeutique()
 limiter_au_net = param_7_limiter_au_net()
 description = u''
 TA, TB, TC = param_1_pourcentage_ij_ta(), param_2_pourcentage_ij_tb(), param_3_pourcentage_ij_tc()
 
-if (not IJSS and ijss_deduite) or date_fin_periode &gt; limite:
+if (not IJSS and not ijss_non_deduite) or date_fin_periode &gt; limite:
     if not IJSS:
         description += u"Aucune prestation à verser car l'IJSS est nulle\n"
     else:
@@ -111,13 +111,13 @@ description += description_compl
 
 # Calcul du mi-temps
 traitement_journalier_base, montant_mi_temps, description_compl = rule_coog_regle_de_calcul_des_deductions_des_montants_percus(
-    traitement_de_base_journalier=traitement_journalier_base, ijss=IJSS, inclusion_du_mi_temps_therapeutique=inclusion_mi_temps, deduction_de_l_ijss=ijss_deduite, traitement_de_reference=traitement_de_reference)
+    traitement_de_base_journalier=traitement_journalier_base, ijss=IJSS, inclusion_du_mi_temps_therapeutique=inclusion_mi_temps, sans_deduction_de_l_ijss=ijss_non_deduite, traitement_de_reference=traitement_de_reference)
 description += description_compl
 
 # Calcul des limitations
 traitement_journalier_de_base, description_compl = rule_coog_calcul_des_limitations_du_traitement_journalier(
     ijss=IJSS, traitement_de_reference=traitement_de_reference, inclusion_du_mi_temps_therapeutique=inclusion_mi_temps, 
-    deduction_de_l_ijss=ijss_deduite, montant_du_mi_temps_therapeutique=montant_mi_temps, 
+    sans_deduction_de_l_ijss=ijss_non_deduite, montant_du_mi_temps_therapeutique=montant_mi_temps, 
     limiter_au_net=limiter_au_net, traitement_journalier_de_base=traitement_journalier_base)
 description += description_compl
 
@@ -132,19 +132,19 @@ return rule_coog_calcul_des_periodes_d_indemnisation(
         <record model="rule_engine.rule_parameter" id="1_pourcentage_ij_ta_salaire_brut_net_par_tranche_de_salaire">
             <field name="name">1_pourcentage_ij_ta</field>
             <field name="type_">integer</field>
-            <field name="string">Pourcentage IJ TA</field>
+            <field name="string">Pourcentage TA</field>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_pourcentage_ij_tb_salaire_brut_net_par_tranche_de_salaire">
             <field name="name">2_pourcentage_ij_tb</field>
             <field name="type_">integer</field>
-            <field name="string">Pourcentage IJ TB</field>
+            <field name="string">Pourcentage TB</field>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine.rule_parameter" id="3_pourcentage_ij_tc_salaire_brut_net_par_tranche_de_salaire">
             <field name="name">3_pourcentage_ij_tc</field>
             <field name="type_">integer</field>
-            <field name="string">Pourcentage IJ TC</field>
+            <field name="string">Pourcentage TC</field>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine.rule_parameter" id="4_traitement_de_reference_salaire_brut_net_par_tranche_de_salaire">
@@ -160,16 +160,16 @@ salaire_net_prime:Salaire Net + Primes</field>
         <record model="rule_engine.rule_parameter" id="5_inclusion_du_mi_temps_salaire_brut_net_par_tranche_de_salaire">
             <field name="name">5_inclusion_du_mi_temps_therapeutique</field>
             <field name="type_">selection</field>
-            <field name="selection">ijb_ijss_mtt:IJ de base - IJSS - mi-temps
-min_ijb_2_tdrj_mtt: (Minimum entre l'IJ de base et 100 % du traitement de référence) - IJSS - mi-temps
+            <field name="selection">ijb_ijss_mtt:Prestation de base - IJSS - mi-temps
+min_ijb_2_tdrj_mtt:Minimum de (Prestation base / 2) et (100% traitement de référence - IJSS - mi-temps) 
 tdrj_ijss_mtt: 100% Traitement de référénce - IJSS - mi-temps</field>
-            <field name="string">Inclusion du mi-temps thérapeutique</field>
+            <field name="string">Calcul du mi-temps thérapeutique</field>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine.rule_parameter" id="6_deduction_de_l_ijss_salaire_brut_net_par_tranche_de_salaire">
-            <field name="name">6_deduction_de_l_ijss</field>
+            <field name="name">6_sans_deduction_de_l_ijss</field>
             <field name="type_">boolean</field>
-            <field name="string">Déduction de l'IJSS</field>
+            <field name="string">Sans déduction de l'IJSS</field>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine.rule_parameter" id="7_limiter_au_net_salaire_brut_net_par_tranche_de_salaire">
@@ -190,7 +190,7 @@ date_fin_periode = date_fin_periode_indemnisation()
 description = u''
 traitement_journalier_base_originel = param_traitement_de_base_journalier()
 IJSS = param_ijss()
-IJSS_deduite = param_deduction_de_l_ijss()
+IJSS_deduite = not param_sans_deduction_de_l_ijss()
 traitement_de_reference = param_traitement_de_reference()
 
 traitement_journalier_base = traitement_journalier_base_originel
@@ -251,13 +251,13 @@ return traitement_journalier_base, montant_mi_temps, description</field>
             <field name="name">inclusion_du_mi_temps_therapeutique</field>
             <field name="type_">selection</field>
             <field name="selection">jb_ijss_mtt:IJ de base - IJSS - mi-temps</field>
-            <field name="string">Inclusion du mi-temps thérapeutique</field>
+            <field name="string">Calcul du mi-temps thérapeutique</field>
             <field name="parent_rule" ref="regle_de_calcul_des_deductions_des_montants_percus"/>
         </record>
         <record model="rule_engine.rule_parameter" id="deduction_de_l_ijss_regle_de_calcul_des_deductions_des_montants_percus">
-            <field name="name">deduction_de_l_ijss</field>
+            <field name="name">sans_deduction_de_l_ijss</field>
             <field name="type_">boolean</field>
-            <field name="string">Déduction de l'IJSS</field>
+            <field name="string">Sans déduction de l'IJSS</field>
             <field name="parent_rule" ref="regle_de_calcul_des_deductions_des_montants_percus"/>
         </record>
         <record model="rule_engine.rule_parameter" id="traitement_de_reference_regle_de_calcul_des_deductions_des_montants_percus">
@@ -275,7 +275,7 @@ date_fin_periode = date_fin_periode_indemnisation()
 traitement_de_reference = param_traitement_de_reference()
 description = u''
 IJSS = param_ijss()
-IJSS_deduite = param_deduction_de_l_ijss()
+IJSS_deduite = not param_sans_deduction_de_l_ijss()
 limiter_au_net = param_limiter_au_net()
 montant_mi_temps = param_montant_du_mi_temps_therapeutique()
 calcul_du_net = limite_au_net()
@@ -326,16 +326,16 @@ return traitement_journalier_base, description</field>
         <record model="rule_engine.rule_parameter" id="inclusion_du_mi_temps_therapeutique_calcul_des_limitations_du_traitement_journalier">
             <field name="name">inclusion_du_mi_temps_therapeutique</field>
             <field name="type_">selection</field>
-            <field name="selection">ijb_ijss_mtt:IJ de base - IJSS - mi-temps
-min_ijb_2_tdrj_mtt: (Minimum entre l'IJ de base et 100 % du traitement de référence) - IJSS - mi-temps
+            <field name="selection">ijb_ijss_mtt:Prestation de base - IJSS - mi-temps
+min_ijb_2_tdrj_mtt:Minimum de (Prestation de base / 2) et(100% traitement de référence - IJSS - mi-temps) 
 tdrj_ijss_mtt: 100% Traitement de référénce - IJSS - mi-temps</field>
-            <field name="string">Inclusion du mi-temps thérapeutique</field>
+            <field name="string">Calcul du mi-temps thérapeutique</field>
             <field name="parent_rule" ref="calcul_des_limitations_du_traitement_journalier"/>
         </record>
         <record model="rule_engine.rule_parameter" id="deduction_de_l_ijss_calcul_des_limitations_du_traitement_journalier">
-            <field name="name">deduction_de_l_ijss</field>
+            <field name="name">sans_deduction_de_l_ijss</field>
             <field name="type_">boolean</field>
-            <field name="string">Déduction de l'IJSS</field>
+            <field name="string">Sans déduction de l'IJSS</field>
             <field name="parent_rule" ref="calcul_des_limitations_du_traitement_journalier"/>
         </record>
         <record model="rule_engine.rule_parameter" id="limiter_au_net_calcul_des_limitations_du_traitement_journalier">
@@ -505,15 +505,15 @@ cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
         <record model="rule_engine" id="franchise_toute_nature_arret_defaut">
             <field name="name">Franchise fixe toute nature d'arrêt confondue</field>
             <field name="short_name">coog_franchise_fixe_toute_nature_d_arret_confondue</field>
-            <field name="algorithm">nb_jour = param_2_nombre_de_jours_de_franchise()
-type_franchise = param_1_type_de_franchise()
+            <field name="algorithm">nb_jour = param_nombre_de_jours_de_franchise()
+type_franchise = param_type_de_franchise()
 return rule_coog_franchise_base_sur_un_nombre_de_jour_defaut(type_de_franchise=type_franchise, nombre_de_jours_de_franchise=nb_jour, date_de_prejudice=None)</field>
             <field name="status">validated</field>
             <field name="type_">benefit_deductible</field>
             <field name="context" ref="rule_engine.default_context"/>
         </record>
         <record model="rule_engine.rule_parameter" id="1_type_de_franchise_toute_nature_arret_defaut">
-            <field name="name">1_type_de_franchise</field>
+            <field name="name">type_de_franchise</field>
             <field name="type_">selection</field>
             <field name="selection">continue:Continue
 cumulee_sur_365_jours:Cumulée sur les 365 jours précédant l'arrêt
@@ -524,7 +524,7 @@ cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
             <field name="parent_rule" ref="franchise_toute_nature_arret_defaut"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_nombre_de_jours_de_franchise_toute_nature_arret_default">
-            <field name="name">2_nombre_de_jours_de_franchise</field>
+            <field name="name">nombre_de_jours_de_franchise</field>
             <field name="type_">integer</field>
             <field name="string">Nombre de jours de franchise</field>
             <field name="parent_rule" ref="franchise_toute_nature_arret_defaut"/>
@@ -534,10 +534,10 @@ cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
             <field name="rule" ref="franchise_base_sur_un_nombre_de_jour_defaut"/>
         </record>
         <record model="rule_engine" id="franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut">
-            <field name="name">Franchise fixe toute nature d'arrêt confondue pour un arrêt total</field>
+            <field name="name">Franchise fixe en arrêt total</field>
             <field name="short_name">coog_franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total</field>
-            <field name="algorithm">nb_jour = param_2_nombre_de_jours_de_franchise()
-type_franchise = param_1_type_de_franchise()
+            <field name="algorithm">nb_jour = param_nombre_de_jours_de_franchise()
+type_franchise = param_type_de_franchise()
 date_prejudice = date_de_debut_du_prejudice()
 date_calcul = date_prejudice
 
@@ -556,7 +556,7 @@ return fin_franchise</field>
             <field name="context" ref="rule_engine.default_context"/>
         </record>
         <record model="rule_engine.rule_parameter" id="1_type_de_franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut">
-            <field name="name">1_type_de_franchise</field>
+            <field name="name">type_de_franchise</field>
             <field name="type_">selection</field>
             <field name="selection">continue:Continue
 cumulee_sur_365_jours:Cumulée sur les 365 jours précédant l'arrêt
@@ -567,7 +567,7 @@ cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
             <field name="parent_rule" ref="franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_nombre_de_jours_de_franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut">
-            <field name="name">2_nombre_de_jours_de_franchise</field>
+            <field name="name">nombre_de_jours_de_franchise</field>
             <field name="type_">integer</field>
             <field name="string">Nombre de jours de franchise</field>
             <field name="parent_rule" ref="franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut"/>
@@ -619,7 +619,149 @@ return date_franchise</field>
             <field name="parent_rule" ref="franchise_relais_conventation_defaut"/>
             <field name="extra_data" ref="date_d_effet_d_indemnisation_franchise_relais_conventation_defaut"/>
         </record>
+        <record model="rule_engine" id="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi">
+            <field name="name">Franchise fixe en arrêt total (Maladie AT/MP maternité hospi)</field>
+            <field name="short_name">coog_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi</field>
+            <field name="algorithm">evenement = code_de_l_evenement_du_prejudice()
+type_franchise = param_1_type_de_franchise()
+nb_jour = param_2_franchise()
+franchise_hospi = param_6_franchise_en_cas_d_hospitalisation()
+franchise_mp = param_3_franchise_en_cas_de_maladie_professionnelle()
+franchise_at = param_4_franchise_en_cas_d_accident_du_travail()
+franchise_mater = param_5_franchise_en_cas_de_maternite()
 
+if nombre_jours_hospitalisation_prejudice() > 0:
+    nb_jour = franchise_hospi if franchise_hospi is not None else nb_jour
+elif evenement == 'maladie_professionnelle':
+    nb_jour = franchise_mp if franchise_mp is not None else nb_jour
+elif evenement == 'accident_du_travail':
+    nb_jour = franchise_at if franchise_at is not None else nb_jour
+elif evenement == 'maternite':
+    nb_jour = franchise_mater if franchise_mater is not None else nb_jour
+
+return rule_coog_franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total(
+    type_de_franchise=type_franchise, nombre_de_jours_de_franchise=nb_jour)</field>
+            <field name="status">validated</field>
+            <field name="type_">benefit_deductible</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="1_type_de_franchise_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi">
+            <field name="name">1_type_de_franchise</field>
+            <field name="type_">selection</field>
+            <field name="selection">continue:Continue
+cumulee_sur_365_jours:Cumulée sur les 365 jours précédant l'arrêt
+12_mois_glissants:Cumulée sur 12 mois glissants
+cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
+            <field name="string">Type de franchise</field>
+            <field name="selection_sorted">True</field>
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="2_franchise_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi">
+            <field name="name">2_franchise</field>
+            <field name="type_">integer</field>
+            <field name="string">Franchise (jours)</field>
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="3_franchise_en_cas_de_maladie_professionnelle_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi">
+            <field name="name">3_franchise_en_cas_de_maladie_professionnelle</field>
+            <field name="type_">integer</field>
+            <field name="string">Franchise en cas de maladie professionnelle (jours)</field>
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="4_franchise_en_cas_d_accident_du_travail_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi">
+            <field name="name">4_franchise_en_cas_d_accident_du_travail</field>
+            <field name="type_">integer</field>
+            <field name="string">Franchise en cas d'accident du travail (jours)</field>
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="5_franchise_en_cas_de_maternite_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi">
+            <field name="name">5_franchise_en_cas_de_maternite</field>
+            <field name="type_">integer</field>
+            <field name="string">Franchise en cas de maternité (jours)</field>
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="6_franchise_en_cas_d_hospitalisation_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi">
+            <field name="name">6_franchise_en_cas_d_hospitalisation</field>
+            <field name="type_">integer</field>
+            <field name="string">Franchise en cas d'hospitalisation (jours)</field>
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
+        </record>
+        <record model="rule_engine-rule_engine" id="rule_used_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi_franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut">
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
+            <field name="rule" ref="franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut"/>
+        </record>
+
+        <record model="rule_engine" id="franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
+            <field name="name">Franchise fixe arrêt total et temps partiel thérapeuthique</field>
+            <field name="short_name">coog_franchise_fixe_en_arret_total_et_mi_temps_therapeutique</field>
+            <field name="algorithm">evenement = code_de_l_evenement_du_prejudice()
+type_franchise = param_1_type_de_franchise()
+nb_jour = param_2_franchise()
+franchise_hospi = param_6_franchise_en_cas_d_hospitalisation()
+franchise_mp = param_3_franchise_en_cas_de_maladie_professionnelle()
+franchise_at = param_4_franchise_en_cas_d_accident_du_travail()
+franchise_mater = param_5_franchise_en_cas_de_maternite()
+
+if nombre_jours_hospitalisation_prejudice() > 0:
+    nb_jour = franchise_hospi if franchise_hospi is not None else nb_jour
+elif evenement == 'maladie_professionnelle':
+    nb_jour = franchise_mp if franchise_mp is not None else nb_jour
+elif evenement == 'accident_du_travail':
+    nb_jour = franchise_at if franchise_at is not None else nb_jour
+elif evenement == 'maternite':
+    nb_jour = franchise_mater if franchise_mater is not None else nb_jour
+
+return rule_coog_franchise_fixe_toute_nature_d_arret_confondue(
+    type_de_franchise=type_franchise, nombre_de_jours_de_franchise=nb_jour)</field>
+            <field name="status">validated</field>
+            <field name="type_">benefit_deductible</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="1_type_de_franchise_franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
+            <field name="name">1_type_de_franchise</field>
+            <field name="type_">selection</field>
+            <field name="selection">continue:Continue
+cumulee_sur_365_jours:Cumulée sur les 365 jours précédant l'arrêt
+12_mois_glissants:Cumulée sur 12 mois glissants
+cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
+            <field name="string">Type de franchise</field>
+            <field name="selection_sorted">True</field>
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_et_mi_temps_therapeutique"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="2_franchise_franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
+            <field name="name">2_franchise</field>
+            <field name="type_">integer</field>
+            <field name="string">Franchise (jours)</field>
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_et_mi_temps_therapeutique"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="3_franchise_en_cas_de_maladie_professionnelle_franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
+            <field name="name">3_franchise_en_cas_de_maladie_professionnelle</field>
+            <field name="type_">integer</field>
+            <field name="string">Franchise en cas de maladie professionnelle (jours)</field>
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_et_mi_temps_therapeutique"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="4_franchise_en_cas_d_accident_du_travail_franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
+            <field name="name">4_franchise_en_cas_d_accident_du_travail</field>
+            <field name="type_">integer</field>
+            <field name="string">Franchise en cas d'accident du travail (jours)</field>
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_et_mi_temps_therapeutique"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="5_franchise_en_cas_de_maternite_franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
+            <field name="name">5_franchise_en_cas_de_maternite</field>
+            <field name="type_">integer</field>
+            <field name="string">Franchise en cas de maternité (jours)</field>
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_et_mi_temps_therapeutique"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="6_franchise_en_cas_d_hospitalisation_franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
+            <field name="name">6_franchise_en_cas_d_hospitalisation</field>
+            <field name="type_">integer</field>
+            <field name="string">Franchise en cas d'hospitalisation (jours)</field>
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_et_mi_temps_therapeutique"/>
+        </record>
+        <record model="rule_engine-rule_engine" id="rule_used_franchise_fixe_en_arret_total_et_mi_temps_therapeutique_coog_franchise_fixe_toute_nature_d_arret_confondue">
+            <field name="parent_rule" ref="franchise_fixe_en_arret_total_et_mi_temps_therapeutique"/>
+            <field name="rule" ref="franchise_toute_nature_arret_defaut"/>
+        </record>
     </data>
     <data noupdate="1">
         <record model="rule_engine.function" id="nombre_jours_hospitalisation_prejudice">
