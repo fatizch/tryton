@@ -80,9 +80,9 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
                 })
 
     @classmethod
-    def select_ids(cls, in_directory):
+    def select_ids(cls, in_directory=None):
         in_directory = in_directory or\
-            cls.get_batch_configuration()['in_directory']
+            cls.get_batch_configuration().get('in_directory', None)
         if not in_directory:
             raise Exception("'in_directory' is required")
         files = cls.get_file_names_and_paths(in_directory)

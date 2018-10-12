@@ -1,7 +1,12 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond import backend
+
+from sql.conditionals import Coalesce
+
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, utils
 
@@ -24,6 +29,34 @@ class Contract:
         fields.Many2One('distribution.commercial_product',
             'Commercial Product'),
         'get_com_product_id')
+
+    @classmethod
+    def __register__(cls, module):
+        # Migrate from 2.0 : remove agency and use the dist_network
+        contract_handler = backend.get('TableHandler')(cls, module)
+        migrate = contract_handler.column_exist('agency')
+
+        super(Contract, cls).__register__(module)
+
+        if migrate:
+            pool = Pool()
+            agent = pool.get('commission.agent').__table__()
+            network = pool.get('distribution.network').__table__()
+            cursor = Transaction().connection.cursor()
+            for table in [cls.__table__, cls.__table_history__]:
+                to_update = table()
+                contract = table()
+                update_data = contract.join(
+                    agent, 'LEFT OUTER', condition=agent.id == contract.agent
+                    ).join(network, condition=agent.party == network.party
+                    ).select(contract.id,
+                    Coalesce(contract.agency, network.id).as_('network'))
+                cursor.execute(*to_update.update(
+                        columns=[to_update.dist_network],
+                        values=[update_data.network],
+                        from_=[update_data],
+                        where=update_data.id == to_update.id))
+            contract_handler.drop_column('agency')
 
     def get_com_product_id(self, name):
         if not self.dist_network:
