@@ -1,21 +1,18 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import re
-
 from itertools import groupby
 from sql import Column, Table
 
 from trytond.pool import Pool
+from trytond.transaction import Transaction
 
 from trytond.modules.migrator import migrator
 from trytond.modules.migrator import tools
-from trytond.modules.party_cog.contact_mechanism import VALID_EMAIL_REGEX
 
 
 __all__ = [
     'MigratorCountry',
     'MigratorAddress',
-    'MigratorContact',
     'MigratorZip',
 ]
 
@@ -120,11 +117,12 @@ class MigratorAddress(migrator.Migrator):
     @classmethod
     def __setup__(cls):
         super(MigratorAddress, cls).__setup__()
-        cls.table = 'address'
+        cls.table = Table('addresses')
         cls.model = 'party.address'
-        cls.columns = {k: k for k in ('id', 'party', 'start_date',
-            'end_date', 'name', 'line3', 'street', 'streetbis', 'zip', 'city',
-            'country_code', 'country', 'sequence')}
+        cls.func_key = 'uid'
+        cls.columns = {k: k for k in ('party', 'start_date',
+            'end_date', 'line1', 'line2', 'line3', 'line4', 'line5', 'zip',
+            'city', 'country_code', 'sequence')}
         cls._default_config_items.update({
                 'default_country_code': 'FR',
                 })
@@ -133,92 +131,117 @@ class MigratorAddress(migrator.Migrator):
             })
 
     @classmethod
-    def query_data(cls, numbers):
-        select = super(MigratorAddress, cls).query_data(numbers)
+    def query_data(cls, ids):
+        select = cls.table.select(*cls.select_columns())
         select.order_by = (Column(cls.table, cls.columns['start_date']))
         return select
 
     @classmethod
+    def init_update_cache(cls, rows):
+        pool = Pool()
+        cursor = Transaction().connection.cursor()
+        cls.cache_obj['update'] = {}
+
+        parties = [row['party'] for row in rows]
+        sequences = [row['sequence'] for row in rows]
+        if not parties or not sequences:
+            return
+
+        Address = pool.get(cls.model)
+        address_table = Address.__table__()
+        party_table = pool.get('party.party').__table__()
+        addresses = address_table.join(party_table, condition=(
+            address_table.party == party_table.id))
+        query = addresses.select(
+            address_table.id, party_table.code,
+            address_table.sequence, address_table.start_date,
+            where=(
+                Column(party_table, 'code').in_(parties) &
+                Column(address_table, 'sequence').in_(sequences)))
+        cursor.execute(*query)
+        addresses = Address.browse([row[0] for row in cursor.fetchall()])
+        update = {}
+        for address in addresses:
+            code = address.party.code
+            seq = str(address.sequence)
+            uid = ':'.join([code, seq])
+            update[uid] = address
+        cls.cache_obj['update'] = update
+
+    @classmethod
     def init_cache(cls, rows, **kwargs):
         super(MigratorAddress, cls).init_cache(rows, **kwargs)
-        cls.cache_obj['country'] = tools.cache_from_query('country_country',
-            ('code', ))
-        cls.cache_obj['party'] = tools.cache_from_query('party_party',
-            ('code', ), ('code', [r['party'] for r in rows]))
+        parties = [r['party'] for r in rows]
+        codes = [r['country_code'] for r in rows]
+        cls.cache_obj['party'] = tools.cache_from_search('party.party',
+            'code', ('code', 'in', parties))
+        cls.cache_obj['country'] = tools.cache_from_search('country.country',
+            'code', ('code', 'in', codes))
 
     @classmethod
     def populate(cls, row):
-        Party = Pool().get('party.party')
         row = super(MigratorAddress, cls).populate(row)
         cls.resolve_key(row, 'party', 'party')
         cls.resolve_key(row, 'country_code', 'country', dest_key='country')
-        for adr in Party(row['party']).addresses:
-            if all(row[x] == getattr(adr, x, None) for x in ('name', 'street',
-                    'line3', 'zip', 'streetbis', 'start_date', 'city')):
+        for adr in row['party'].addresses:
+            if all(row[x] == getattr(adr, x, None) for x in ('street',
+                    'zip', 'start_date', 'city')):
                 cls.raise_error(row, 'duplicate_address')
         return row
 
-
-class MigratorContact(migrator.Migrator):
-    """Migrator contact"""
-
-    __name__ = 'migrator.contact'
+    @classmethod
+    def sanitize(cls, row, parent=None):
+        row = super(MigratorAddress, cls).sanitize(row)
+        street = '\n'.join([row['line1']or '', row['line2']or '',
+            row['line3'] or '', row['line4'] or '', row['line5'] or ''])
+        row.pop('line1')
+        row.pop('line2')
+        row.pop('line3')
+        row.pop('line4')
+        row.pop('line5')
+        row['street'] = street
+        row['uid'] = ':'.join([row['sequence'], row['party']])
+        return row
 
     @classmethod
-    def __setup__(cls):
-        super(MigratorContact, cls).__setup__()
-        cls.table = 'contact_mechanism'
-        cls.model = 'party.contact_mechanism'
-        cls.columns = {k: k for k in ('id', 'party', 'email',
-            'phone', 'mobile', 'fax')}
-        cls.error_messages.update({
-            'no_contact': "no contact mechanism set in input data",
-            'skip_has_contact': "skip contact as party already has contacts",
-            'skip_email': 'skip email %s for party %s',
-            })
+    def select(cls, **kwargs):
+        select_keys = [
+            Column(cls.table, 'sequence'),
+            Column(cls.table, 'party'),
+            ]
+        select = cls.table.select(*select_keys)
+        return select, cls.func_key
 
     @classmethod
-    def init_cache(cls, rows, **kwargs):
-        super(MigratorContact, cls).init_cache(rows, **kwargs)
-        cls.cache_obj['party'] = tools.cache_from_query('party_party',
-            ('code', ), ('code', [r['party'] for r in rows]))
-
-    @classmethod
-    def populate(cls, row):
-        Party = Pool().get('party.party')
-        contacts = []
-        cls.resolve_key(row, 'party', 'party')
-        if len(Party(row['party']).contact_mechanisms):
-            cls.logger.warning(cls.error_message('skip_has_contact') %
-                row['id'])
-            return contacts
-        if not any([row[k] for k in ('email', 'phone', 'mobile', 'fax')]):
-            cls.logger.warning(cls.error_message('no_contact') % row['id'])
-            return contacts
-        for kind in ('email', 'phone', 'mobile', 'fax'):
-            if row[kind]:
-                if (kind == 'email') and not re.match(VALID_EMAIL_REGEX,
-                        row[kind]):
-                    cls.logger.warning(cls.error_message('skip_email') % (
-                        row[cls.func_key], row[kind], row['party']))
-                    continue
-                contacts.append({'type': kind,
-                    'value': row[kind],
-                    'party': row['party']})
-        return contacts
-
-    @classmethod
-    def migrate_rows(cls, rows, ids, **kwargs):
-        pool = Pool()
-        to_create = []
-        for row in rows:
-            try:
-                to_create.extend(cls.populate(row))
-            except migrator.MigrateError as e:
-                cls.logger.error(e)
-                continue
+    def select_extract_ids(cls, select_key, rows):
         ids = []
-        if to_create:
-            Mechanisms = pool.get('party.contact_mechanism')
-            ids = Mechanisms.create(to_create)
-        return dict(zip(ids, to_create))
+        for row in rows:
+            ids.append('{}_{}'.format(
+                row.get('sequence'),
+                row.get('party'),
+                ))
+        return set(ids)
+
+    @classmethod
+    def select_remove_ids(cls, ids, excluded, **kwargs):
+        table_name = cls.model.replace('.', '_')
+        existing_ids = tools.cache_from_query(table_name,
+            ('sequence', 'party')).keys()
+        existing_ids = {'%s_%s' % (x[0], x[1]) for x in existing_ids}
+        return list(set(ids) - set(excluded) - set(existing_ids))
+
+    @classmethod
+    def migrate(cls, ids, **kwargs):
+        res = super(MigratorAddress, cls).migrate(ids, **kwargs)
+        if not res:
+            return []
+        ids = []
+        Party = Pool().get('party.party')
+        for r in res:
+            party_code = Party(res[r]['party']).code
+            ids.append(
+                (party_code, res[r]['sequence']),
+                )
+        clause = Column(cls.table, 'party').in_([x[0] for x in ids]
+            ) & Column(cls.table, 'sequence').in_([x[1] for x in ids])
+        cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)

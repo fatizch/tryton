@@ -1,0 +1,15 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=contacts
+
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'UPDATE')
+CHAIN_REQUIRED=()
+
+chain_params "$@"
+chain_begin
+
+chain_step migrator.contact ${GIVEN_PARAMETERS[@]}
+chain_wait migrator.contact || chain_end
+
+chain_end

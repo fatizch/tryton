@@ -10,8 +10,9 @@ def register():
     Pool.register(
         address.MigratorCountry,
         party.MigratorParty,
+        party.MigratorContactMechanism,
+        party.MigratorCompany,
         address.MigratorAddress,
-        address.MigratorContact,
         address.MigratorZip,
         party.MigratorPartyRelation,
         module='migrator_party', type_='model')

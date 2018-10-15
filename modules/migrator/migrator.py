@@ -5,7 +5,7 @@ import logging
 import tools
 
 from random import shuffle
-from sql import Column
+from sql import Column, Literal, Null
 
 from trytond.modules.coog_core import batch
 from trytond.pool import Pool
@@ -164,11 +164,15 @@ class Migrator(batch.BatchRootNoSelect):
                 --in            [ID_LIST]
                 --in-file       FILENAME
                 --not-in        [ID_LIST]
-                --not-in-file  FILENAME
+                --not-in-file   FILENAME
+                --none-fields   [f1,f2,f3...]
         """
         ids = []
         excluded = []
         kwargs.update(cls.cast_extra_args(**kwargs))
+        fields_filter = []
+        if 'none-fields' in kwargs:
+            fields_filter = eval(kwargs.get('none-fields', '[]'))
         if 'not-in' in kwargs:
             excluded = eval(kwargs.get('not-in', '[]'))
         elif 'not-in-file' in kwargs:
@@ -182,7 +186,8 @@ class Migrator(batch.BatchRootNoSelect):
         # By default query all table ids
         elif cls.table and cls.columns:
             cursor = tools.CONNECT_SRC.cursor()
-            select, select_key = cls.select(**kwargs)
+            select, select_key = cls.select(fields_filter=fields_filter,
+                **kwargs)
             for kw in ('limit', 'offset'):
                 if kwargs and kw in kwargs:
                     setattr(select, kw, int(kwargs[kw]))
@@ -205,8 +210,13 @@ class Migrator(batch.BatchRootNoSelect):
            existing ids
         """
         select_key = cls.columns[cls.func_key]
+        where_clause = Literal(True)
+        fields_filter = kwargs.get('fields_filter', [])
+        for field_ in fields_filter:
+            where_clause &= Column(cls.table, field_) == Null
+
         select = cls.table.select(*[Column(cls.table, select_key)],
-            order_by=(Column(cls.table, select_key)))
+            order_by=(Column(cls.table, select_key)), where=where_clause)
         return select, cls.func_key
 
     @classmethod
@@ -252,6 +262,18 @@ class Migrator(batch.BatchRootNoSelect):
         else:
             cls.logger.error(cls.error_message('no_rows') % (None, select,))
         return res
+
+    @classmethod
+    def delete_rows(cls, conn, table, clauses):
+        try:
+            cursor = conn.cursor()
+            delete = table.delete(where=clauses)
+            cursor.execute(*delete)
+        except Exception as e:
+            conn.rollback()
+            raise e
+        else:
+            conn.commit()
 
     @classmethod
     def migrate_rows(cls, rows, ids, **kwargs):

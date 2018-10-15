@@ -1,11 +1,12 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from itertools import groupby
-from sql.aggregate import Min
-from sql.operators import Not
-from sql import Table
+import datetime
+
+from sql import Table, Column
 
 from trytond.pool import Pool
+from trytond.transaction import Transaction
 
 from trytond.modules.migrator import migrator, tools
 
@@ -34,7 +35,7 @@ class MigratorBank(migrator.Migrator):
                 })
 
     @classmethod
-    def init_cache(cls, rows):
+    def init_cache(cls, rows, **kwargs):
         super(MigratorBank, cls).init_cache(rows)
         cls.cache_obj['party'] = tools.cache_from_query('party_party',
             ('code', ), ('code', [r['party'] for r in rows]))
@@ -84,7 +85,7 @@ class MigratorBankAgency(migrator.Migrator):
                 })
 
     @classmethod
-    def init_cache(cls, rows):
+    def init_cache(cls, rows, **kwargs):
         cls.cache_obj['bank'] = tools.cache_from_query('bank', ('bic',),
             ('bic', [r['bic'] for r in rows]))
         cls.cache_obj['agency'] = tools.cache_from_query(
@@ -136,111 +137,107 @@ class MigratorBankAccount(migrator.Migrator):
     @classmethod
     def __setup__(cls):
         super(MigratorBankAccount, cls).__setup__()
-        cls.table = Table('bank_account')
-        cls.error_messages.update({
-                'no_account_owner': 'No owner for account %s',
-                'no_mandate_account': 'No account for mandate %s: %s'
-                })
-        cls.columns = {k: k for k in ('id', 'party', 'start_date', 'end_date',
-                'iban', 'bic', 'identification', 'signature_date')}
-        cls.cache_obj = {'bank': {}, 'account': {}, 'sepa_mandate': {},
-            'party': {}}
+        cls.table = Table('bank_accounts')
+        cls.model = 'bank.account'
+        cls.func_key = 'iban'
+        cls.columns = {
+            'party': 'party',
+            'start_date': 'start_date',
+            'end_date': 'end_date',
+            'iban': 'iban',
+            'bic': 'bic',
+            'identification': 'identification',
+            }
 
     @classmethod
-    def select(cls, extra_args=None):
-        """If --create flag then select first row for each iban.
-           If no --create flag then select all rows but first for each iban.
-        """
-        subselect = cls.table.select(Min(cls.table.id),
-            group_by=cls.table.iban)
-        if 'create' in extra_args and extra_args['create']:
-            select = cls.table.select(cls.table.id, cls.table.iban,
-                where=cls.table.id.in_(subselect))
-        else:
-            select = cls.table.select(cls.table.id, cls.table.iban,
-                where=Not(cls.table.id.in_(subselect)))
-        select.order_by = (cls.table.iban)
-        return select, cls.func_key
+    def init_update_cache(cls, rows):
+        pool = Pool()
+        cursor = Transaction().connection.cursor()
+        cls.cache_obj['update'] = {}
+        numbers = [row[cls.func_key] for row in rows]
+        if not numbers:
+            return
+        Account = pool.get(cls.model)
+        account = Account.__table__()
+        number = pool.get('bank.account.number').__table__()
+        accounts = account.join(number, condition=(
+                Column(number, 'account') == Column(account, 'id')))
+        query = accounts.select(account.id, account.start_date,
+            where=(
+                Column(number, 'number_compact').in_(numbers)
+            ))
+        cursor.execute(*query)
+        update = {}
+        accounts = Account.browse([row[0] for row in cursor.fetchall()])
+        for account in accounts:
+            update[account.number.replace(' ', '')] = account
+        cls.cache_obj['update'] = update
 
     @classmethod
-    def select_extract_ids(cls, select_key, rows):
-        codes = []
-        for iban, _rows in groupby(rows, lambda x: x['iban']):
-            codes.append([x['id'] for x in _rows])
-        return codes
-
-    @classmethod
-    def init_cache(cls, rows):
+    def init_cache(cls, rows, **kwargs):
+        super(MigratorBankAccount, cls).init_cache(rows, **kwargs)
         cls.cache_obj['bank'] = tools.cache_from_query('bank', ('bic', ),
             ('bic', [r['bic'] for r in rows if r['bic']]))
         ibans = [r['iban'] for r in rows if r['iban']]
+        parties = [r['party'] for r in rows]
+        cls.cache_obj['party'] = tools.cache_from_search('party.party',
+                'code', ('code', 'in', parties))
         if ibans:
             cls.cache_obj['account'] = tools.cache_from_search('bank.account',
                 'number', ('number', 'in', ibans))
-        umrs = [r['identification'] for r in rows if r['identification']]
+        umrs = [r['identification'] for r in rows if r.get('identification')]
         if umrs:
             cls.cache_obj['sepa_mandate'] = tools.cache_from_query(
                 'account_payment_sepa_mandate',
                 ('identification', ), ('identification', umrs))
-        cls.cache_obj['party'] = tools.cache_from_query('party_party',
-            ('code', ), ('code', [r['party'] for r in rows]))
 
     @classmethod
     def sanitize(cls, row):
         row = super(MigratorBankAccount, cls).sanitize(row)
         if len(row['bic']) == 8:
             row['bic'] += 'XXX'
+        row['start_date'] = datetime.datetime.strptime(
+            row['start_date'], '%Y-%m-%d').date()
+        row['end_date'] = datetime.datetime.strptime(
+            row['end_date'], '%Y-%m-%d').date()
         return row
 
     @classmethod
     def populate(cls, row):
-        try:
-            cls.resolve_key(row, 'party', 'party', dest_key='party_obj')
-            cls.resolve_key(row, 'bic', 'bank')
-        except migrator.MigrateError as e:
-            cls.logger.error(e)
-            return
+        row['active'] = True
+        row['owners'] = []
+        party_code = row.get('party')
+        if party_code in cls.cache_obj['party']:
+            row['owners'] = [
+                ('add', [cls.cache_obj['party'][party_code].id])]
+        if row['bic']:
+            row['bank'] = cls.cache_obj['bank'][row['bic']]
+        if row['iban'] not in cls.cache_obj.get('update', {}):
+            row['numbers'] = [
+                ('create', [{'number': row['iban'], 'type': 'iban'}])]
         return row
 
     @classmethod
-    def migrate_rows(cls, rows, ids, cursor_src=None, **kwargs):
+    def update_records(cls, rows):
         pool = Pool()
-        BankAccount = pool.get('bank.account')
+        Model = pool.get(cls.model)
+        if rows:
+            to_update = {}
+            for row in rows:
+                obj = cls.cache_obj['update'][row[cls.func_key]]
+                func_key = row[cls.func_key]
+                row = {k: row[k] for k in row
+                    if k in set(Model._fields) - {'id', }}
+                to_update[func_key] = [[obj], row]
+            Model.write(*sum(to_update.values(), []))
+            return rows
+        return []
 
-        to_write = []
-        currency = Pool().get('currency.currency')(1)
-        rows = filter(None, [cls.populate(r) for r in rows])
-
-        # Group rows by iban to handle bank accounts with multiple owners
-        for iban, _rows in groupby(rows, lambda row: row['iban']):
-            iban_rows = list(_rows)
-
-            if not iban_rows:
-                cls.logger.error(cls.error_message('no_account_owner') % iban)
-                continue
-            owners = [r['party_obj'] for r in iban_rows]
-
-            if iban in cls.cache_obj['account']:
-                cls.logger.info('Update owners for iban %s' % iban)
-                to_write.append([BankAccount(
-                    cls.cache_obj['account'][iban].id)])
-                to_write.append({'owners': [('add', owners)]})
-            else:
-                acc = (iban, {
-                        'owners': [('add', owners)],
-                        'numbers': [
-                            ('create', [{'number': iban, 'type': 'iban'}]),
-                            ],
-                        'bank': iban_rows[0]['bic'],
-                        'start_date': None,
-                        'currency': currency,
-                        })
-                cls.logger.info('Creating iban %s' % acc[0])
-                cls.cache_obj['account'][acc[0]] = BankAccount.create(
-                    [acc[1]])[0]
-        if to_write:
-            BankAccount.write(*to_write)
-        cls.migrate_sepa_mandate(rows)
+    # @classmethod
+    # def migrate_rows(cls, rows, ids, **kwargs):
+    #     super(MigratorBankAccount, cls).migrate_rows(
+    #         rows, ids, **kwargs)
+    #     cls.migrate_sepa_mandate(rows)
 
     @classmethod
     def migrate_sepa_mandate(cls, rows):
@@ -279,3 +276,18 @@ class MigratorBankAccount(migrator.Migrator):
         if sepa_to_create:
             SepaMandate.create(sepa_to_create.values())
             cls.cache_obj['sepa_mandate'].update(sepa_to_create)
+
+    @classmethod
+    def select_remove_ids(cls, ids, excluded, **kwargs):
+        existing_ids = tools.cache_from_search('bank.account', 'number',
+            ('number', 'in', ids))
+        return list(set(ids) - set(excluded) - set(existing_ids))
+
+    @classmethod
+    def migrate(cls, ids, **kwargs):
+        res = super(MigratorBankAccount, cls).migrate(ids, **kwargs)
+        if not res:
+            return []
+        ids = [res[r]['iban'] for r in res]
+        clause = Column(cls.table, cls.func_key).in_(ids)
+        cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)

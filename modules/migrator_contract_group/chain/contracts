@@ -1,0 +1,21 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=contracts
+
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'UPDATE')
+CHAIN_REQUIRED=()
+
+chain_params "$@"
+chain_begin
+
+chain_step migrator.contract.group ${GIVEN_PARAMETERS[@]}
+chain_wait migrator.contract.group || chain_end
+
+chain_step migrator.contract.subsidiary ${GIVEN_PARAMETERS[@]}
+chain_wait migrator.contract.subsidiary || chain_end
+
+chain_step migrator.affiliated ${GIVEN_PARAMETERS[@]}
+chain_wait migrator.affiliated || chain_end
+
+chain_end

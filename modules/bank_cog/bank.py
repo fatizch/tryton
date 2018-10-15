@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from sql.conditionals import Coalesce
+from sql import Query
 
 from trytond.pool import Pool, PoolMeta
 from trytond.model import fields as tryton_fields, Unique
@@ -143,8 +144,14 @@ class BankAccount(export.ExportImportMixin):
         Operator = tryton_fields.SQL_OPERATORS[operator]
         query_table = account.join(number, condition=(
                 account.id == number.account))
-        query = query_table.select(account.id, where=Operator(
-                number.number, getattr(cls, name).sql_format(value)))
+
+        if not isinstance(value, list) and not isinstance(value, Query):
+            value = getattr(cls, name).sql_format(value)
+        if value != []:
+            query = query_table.select(account.id, where=Operator(
+                    number.number, value))
+        else:
+            query = []
         return [('id', 'in', query)]
 
     @staticmethod
