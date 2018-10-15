@@ -204,21 +204,21 @@ if montant_mi_temps:
     description += u'Versement employeur - Mi temps thérapeutique: %s euros (montant journalier: %s€)\n\n' % (montant_mi_temps_total, montant_mi_temps)
     if param_inclusion_du_mi_temps_therapeutique() == 'ijb_ijss_mtt':
         traitement_journalier_base = traitement_journalier_base_originel - IJSS - montant_mi_temps
-        description += u'Limitation du mi-temps thérapeuthique (Traitement de référence - IJSS - montant percu en mi-temps): %s€ - %s€ - %s€ = %s€\n' % (
+        description += u'Limitation du mi-temps thérapeutique (Traitement de référence - IJSS - montant percu en mi-temps): %s€ - %s€ - %s€ = %s€\n' % (
             traitement_journalier_base_originel, IJSS, montant_mi_temps, traitement_journalier_base)
     elif param_inclusion_du_mi_temps_therapeutique() == 'tdrj_ijss_mtt':
         traitement_journalier_base = traitement_reference_journalier - IJSS - montant_mi_temps
-        description += u'Limitation du mi-temps thérapeuthique (100 %% du traitement journalier de référence - IJSS - montant percu en mi-temps): %s€ - %s€ - %s€ = %s€\n' % (
+        description += u'Limitation du mi-temps thérapeutique (100 %% du traitement journalier de référence - IJSS - montant percu en mi-temps): %s€ - %s€ - %s€ = %s€\n' % (
             traitement_reference_journalier, IJSS, montant_mi_temps, traitement_journalier_base)
     elif param_inclusion_du_mi_temps_therapeutique() == 'min_ijb_2_tdrj_mtt':
         ijb_ijss_mtt = traitement_journalier_base_originel - IJSS - montant_mi_temps
         tdrj_divise_par_deux =  arrondir(traitement_reference_journalier / 2, 0.01)
         traitement_journalier_base = min(ijb_ijss_mtt, tdrj_divise_par_deux)
         if tdrj_divise_par_deux > ijb_ijss_mtt:
-            description += u'Limitation du mi-temps thérapeuthique (Ij de base - IJSS - montant percu en mi-temps): %s€ - %s€ - %s€ = %s€\n' % (
+            description += u'Limitation du mi-temps thérapeutique (Ij de base - IJSS - montant percu en mi-temps): %s€ - %s€ - %s€ = %s€\n' % (
                 traitement_journalier_base_originel, IJSS, montant_mi_temps, traitement_journalier_base)
         else:
-            description += u'Limitation du mi-temps thérapeuthique (100%% traitement journalier de référence / 2 - IJSS - montant percu en mi-temps): %s€ - %s€ - %s€ = %s€\n' % (
+            description += u'Limitation du mi-temps thérapeutique (100%% traitement journalier de référence / 2 - IJSS - montant percu en mi-temps): %s€ - %s€ - %s€ = %s€\n' % (
                 tdrj_divise_par_deux, IJSS, montant_mi_temps, traitement_journalier_base)
     else:
         ajouter_erreur(u"La règle de mi-temps thérapeutique est inconnue")
@@ -708,7 +708,7 @@ cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
         </record>
 
         <record model="rule_engine" id="franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
-            <field name="name">Franchise fixe arrêt total et temps partiel thérapeuthique</field>
+            <field name="name">Franchise fixe arrêt total et temps partiel thérapeutique</field>
             <field name="short_name">coog_franchise_fixe_en_arret_total_et_mi_temps_therapeutique</field>
             <field name="algorithm">evenement = code_de_l_evenement_du_prejudice()
 type_franchise = param_1_type_de_franchise()
