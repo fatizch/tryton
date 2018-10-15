@@ -1,3 +1,5 @@
+* BUG#10107 L'option Split doit être défini à True et la taille d'un job à 1000 par défaut dans le batch migrator
+
 Version 2.2 - 2018-10-12
 * FEA#9975 Gestion de la création de la table staging à partir des fichiers csv
 

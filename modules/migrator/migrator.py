@@ -43,6 +43,10 @@ class Migrator(batch.BatchRootNoSelect):
     @classmethod
     def __setup__(cls):
         super(Migrator, cls).__setup__()
+        cls._default_config_items.update({
+                'job_size': '1000',
+                'split': True
+                })
         cls.__rpc__.update({'migrate': RPC(readonly=False),
                 'select_ids': RPC(readonly=False)})
         cls.error_messages.update({
