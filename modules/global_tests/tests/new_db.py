@@ -4804,7 +4804,7 @@ if CREATE_CONTRACTS:  # {{{
         '3_pourcentage_ij_tc',
         '4_traitement_de_reference',
         '5_inclusion_du_mi_temps_therapeutique',
-        '6_deduction_de_l_ijss',
+        '6_sans_deduction_de_l_ijss',
         '7_limiter_au_net',
         }
     benefit_data.indemnification_rule_extra_data = {
@@ -4813,7 +4813,7 @@ if CREATE_CONTRACTS:  # {{{
         '3_pourcentage_ij_tc': 15,
         '4_traitement_de_reference': 'salaire_brut_prime',
         '5_inclusion_du_mi_temps_therapeutique': 'tdrj_ijss_mtt',
-        '6_deduction_de_l_ijss': True,
+        '6_sans_deduction_de_l_ijss': False,
         '7_limiter_au_net': True,
         }
     assert benefit_data.revaluation_rule.short_name == \
@@ -4854,7 +4854,7 @@ if CREATE_CONTRACTS:  # {{{
         '3_pourcentage_ij_tc': 0,
         '4_traitement_de_reference': 'salaire_brut_prime',
         '5_inclusion_du_mi_temps_therapeutique': 'tdrj_ijss_mtt',
-        '6_deduction_de_l_ijss': True,
+        '6_sans_deduction_de_l_ijss': False,
         '7_limiter_au_net': True,
         }
     benefit_data.revaluation_rule_extra_data = {
