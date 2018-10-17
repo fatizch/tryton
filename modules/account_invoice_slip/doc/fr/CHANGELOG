@@ -1,2 +1,5 @@
+* FEA#10156 Autoriser l'import/export pour la configuration des bordereaux
+* OTH#0000 Utilisation d'une liste au lieu d'un générateur pour la requête selection de quittances
+
 Version 2.2 - 2018-10-12
 * FEA#9974 Création du module

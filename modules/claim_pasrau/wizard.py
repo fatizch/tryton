@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from os.path import join as pjoin
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
 from trytond.modules.coog_core import fields, model
@@ -54,3 +54,14 @@ class ClaimPasrauSelectFile(model.CoogView):
     @staticmethod
     def default_file_name():
         return 'pasrau-crm.xml'
+
+
+class InvoiceSlipParameters:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.invoice.slip.parameters'
+
+    @classmethod
+    def __setup__(cls):
+        super(InvoiceSlipParameters, cls).__setup__()
+        cls.slip_kind.selection.append(
+            ('pasrau', 'Pasrau'))

@@ -8,6 +8,7 @@ import pasrau
 import tax
 import wizard
 import batch
+import slip
 
 
 def register():
@@ -21,6 +22,9 @@ def register():
         tax.Tax,
         wizard.ClaimPasrauSelectFile,
         batch.UpdatePartyPasrauRateBatch,
+        slip.InvoiceSlipConfiguration,
+        slip.Invoice,
+        wizard.InvoiceSlipParameters,
         module='claim_pasrau', type_='model')
     Pool.register(
         wizard.ClaimPasrauUploadWizard,

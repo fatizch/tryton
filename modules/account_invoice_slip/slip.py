@@ -11,7 +11,7 @@ from trytond import backend
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import model, fields, coog_sql, utils
+from trytond.modules.coog_core import model, fields, coog_sql, utils, export
 
 __all__ = [
     'InvoiceSlipConfiguration',
@@ -19,7 +19,8 @@ __all__ = [
     ]
 
 
-class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView):
+class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView,
+        export.ExportImportMixin):
     'Invoice Slip Configuration'
 
     __name__ = 'account.invoice.slip.configuration'
@@ -37,6 +38,11 @@ class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView):
     accounts_names = fields.Function(
         fields.Char('Accounts Names'),
         'on_change_with_accounts_names')
+
+    @classmethod
+    def _export_light(cls):
+        return super(InvoiceSlipConfiguration, cls)._export_light() | {
+            'party', 'journal', 'accounts'}
 
     @classmethod
     def __setup__(cls):
@@ -313,8 +319,11 @@ class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView):
             where_clause &= (move.date <= date)
 
         if invoices_ids is not None:
+            invoices_ids_list = [x for x in invoices_ids]
+            if not invoices_ids_list:
+                return {}
             invoices_data = defaultdict(list)
-            where_clause &= invoice.id.in_([x for x in invoices_ids])
+            where_clause &= invoice.id.in_(invoices_ids_list)
             cursor.execute(*query_table.select(
                     invoice.id, move_line.id, move_line.account,
                     where=where_clause, order_by=invoice.id,

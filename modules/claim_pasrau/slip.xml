@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+         <!-- ################################## -->
+        <!-- ########### Event Type ########### -->
+        <!-- ################################## -->
+        <record model="event.type" id="event_slips_generated">
+            <field name="name">Pasrau Slips Generated</field>
+            <field name="code">pasrau_slips_generated</field>
+        </record>
+    </data>
+</tryton>

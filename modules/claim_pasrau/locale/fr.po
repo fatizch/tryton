@@ -166,6 +166,10 @@ msgctxt "model:claim.pasrau.select_file,name:"
 msgid "Claim Pasrau Select File"
 msgstr "Choisir un fichier CRM nominatif PASRAU"
 
+msgctxt "model:event.type,name:event_slips_generated"
+msgid "Pasrau Slips Generated"
+msgstr "Bordereaux pasrau générés"
+
 msgctxt "model:ir.action,name:act_default_pasrau_rate_form"
 msgid "Pasrau Default Rates"
 msgstr "Taux Pasrau par défaut"
@@ -177,6 +181,10 @@ msgstr "Taux Pasrau"
 msgctxt "model:ir.action,name:act_party_pasrau_rate_window"
 msgid "Claim Party Pasrau Rate"
 msgstr "Taux Pasrau"
+
+msgctxt "model:ir.action,name:act_pasrau_slips"
+msgid "Pasrau Slips"
+msgstr "Bordereaux pasrau"
 
 msgctxt "model:ir.action,name:upload_pasrau_file_wizard"
 msgid "Upload Pasrau File Wizard"
@@ -190,6 +198,10 @@ msgctxt "model:ir.ui.menu,name:menu_pasrau"
 msgid "Pasrau"
 msgstr "Pasrau"
 
+msgctxt "model:ir.ui.menu,name:menu_pasrau_slips"
+msgid "Pasrau Slips"
+msgstr "Bordereaux pasrau"
+
 msgctxt "model:ir.ui.menu,name:menu_upload_pasrau_file"
 msgid "Upload Pasrau File"
 msgstr "Charger un fichier CRM nominatif PASRAU"
@@ -201,6 +213,18 @@ msgstr "Taux Pasrau"
 msgctxt "model:party.pasrau.rate.batch,name:"
 msgid "Update Party Pasrau Rate Batch"
 msgstr "Batch de mise à jour des taux PASRAU"
+
+msgctxt "selection:account.invoice,business_kind:"
+msgid "Pasrau"
+msgstr "Pasrau"
+
+msgctxt "selection:account.invoice.slip.configuration,slip_kind:"
+msgid "Pasrau"
+msgstr "Pasrau"
+
+msgctxt "selection:account.invoice.slip.parameters,slip_kind:"
+msgid "Pasrau"
+msgstr "Pasrau"
 
 msgctxt "selection:account.tax,type:"
 msgid "Pasrau Rate"
@@ -225,6 +249,10 @@ msgstr "Défaut"
 msgctxt "selection:party.pasrau.rate,origin:"
 msgid "Manual"
 msgstr "Manuelle"
+
+msgctxt "view:party.pasrau.rate:"
+msgid "%"
+msgstr "%"
 
 msgctxt "wizard_button:claim.pasrau.upload.wizard,file_selection,end:"
 msgid "Cancel"
