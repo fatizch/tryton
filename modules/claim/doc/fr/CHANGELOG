@@ -1,3 +1,5 @@
+* BUG#10120 Amélioration du message d'erreur en cas de saisie d'une date de déclaration invalide
+
 Version 2.2 - 2018-10-12
 * BUG#9925 Ajout d'un domaine sur le statut du sous-statut de la raison de clôture des sinitres afin de les filtrer
 * BUG#9753 Ajout du droit de supprimer des préjudices et services au groupe de gestion de sinistres

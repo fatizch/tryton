@@ -96,7 +96,7 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
                 'no_main_contract': 'Impossible to find a main contract, '
                 'please try again once it has been set',
                 'invalid_declaration_date': 'Declaration date cannot be '
-                'posterior to today\'s date',
+                'in the future, or posterior to the claim\'s creation date',
                 'loss_desc_mixin': 'You can not close multiple claims '
                 'with different loss descriptions at the same time',
                 'contract_will_be_held': 'The contract %(contract)s will be '
