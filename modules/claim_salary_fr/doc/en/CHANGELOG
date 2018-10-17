@@ -1,3 +1,5 @@
+* BUG#10083 Remove unused "Net bonuses" column
+
 Version 2.2 - 2018-10-12
 * FEA#9957 Add default standard revaluation rule with the AGIRC / ARRCO tables structures
 * FEA#9940 Add default net salary computation rules

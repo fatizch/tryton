@@ -182,10 +182,6 @@ msgctxt "field:claim.salary,net_salary:"
 msgid "Net Salary"
 msgstr "Salaire net"
 
-msgctxt "field:claim.salary,net_salary_bonus:"
-msgid "Net Salary Bonus"
-msgstr "Prime (net)"
-
 msgctxt "field:claim.salary,rec_name:"
 msgid "Record Name"
 msgstr "Nom"
@@ -229,10 +225,6 @@ msgstr "Salaire brut"
 msgctxt "field:claim.service,net_salary:"
 msgid "Gross Salary"
 msgstr "Salaire brut"
-
-msgctxt "field:claim.service,net_salary_bonus:"
-msgid "Net Salary Bonus"
-msgstr "Primes nettes"
 
 msgctxt "field:claim.service,salary:"
 msgid "Salary"
@@ -796,10 +788,6 @@ msgstr "Montant total du salaire brut"
 msgctxt "view:claim.salary:"
 msgid "Total Net Salary"
 msgstr "Montant total du salaire net"
-
-msgctxt "view:claim.salary:"
-msgid "Total Net Salary Bonuses"
-msgstr "Montant total des primes (net)"
 
 msgctxt "view:claim.service:"
 msgid "Delivered Service"

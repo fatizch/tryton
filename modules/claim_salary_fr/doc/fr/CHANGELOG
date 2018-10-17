@@ -1,3 +1,5 @@
+* BUG#10083 Suppression de la colonne (non alimentée) "Primes nettes"
+
 Version 2.2 - 2018-10-12
 * FEA#9957 Ajout d'une règle de revalorisation standard par défaut avec la structure des tables AGIRC / ARRCO
 * FEA#9940 Ajout de règles de calcul du salaire net par défaut
