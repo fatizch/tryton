@@ -3525,7 +3525,7 @@ else:
     death.name = u'Décès'
     death.kind = 'person'
     death.loss_kind = 'death'
-    death.with_end_date = False
+    death.has_end_date = False
     death.event_descs.append(EventDesc(illness_event.id))
     death.event_descs.append(EventDesc(accident_event.id))
     death.event_descs.append(EventDesc(suicide_event.id))
@@ -3541,7 +3541,7 @@ else:
     work_interruption.name = u'Arrêt de travail'
     work_interruption.kind = 'person'
     work_interruption.loss_kind = 'std'
-    work_interruption.with_end_date = True
+    work_interruption.has_end_date = True
     work_interruption.event_descs.append(EventDesc(illness_event.id))
     work_interruption.event_descs.append(EventDesc(work_illness_event.id))
     work_interruption.event_descs.append(EventDesc(accident_event.id))
@@ -3564,7 +3564,7 @@ else:
     validity_loss.name = u'Invalidité'
     validity_loss.kind = 'person'
     validity_loss.loss_kind = 'ltd'
-    validity_loss.with_end_date = True
+    validity_loss.has_end_date = True
     validity_loss.event_descs.append(EventDesc(illness_event.id))
     validity_loss.event_descs.append(EventDesc(work_illness_event.id))
     validity_loss.event_descs.append(EventDesc(accident_event.id))

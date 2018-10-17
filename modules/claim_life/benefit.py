@@ -91,13 +91,13 @@ class LossDescription:
         cls.loss_kind.selection.append(('std', 'Short Term'))
         cls.loss_kind.selection.append(('ltd', 'Long term'))
         cls.loss_kind.selection.append(('death', 'Death'))
-        cls.with_end_date.domain.append(
+        cls.has_end_date.domain.append(
             If(In(Eval('loss_kind', ''), ['std', 'ltd']),
-                [('with_end_date', '=', True)],
+                [('has_end_date', '=', True)],
                 If(Eval('loss_kind') == 'death',
-                    [('with_end_date', '=', False)],
+                    [('has_end_date', '=', False)],
                     [])))
-        cls.with_end_date.depends.append('loss_kind')
+        cls.has_end_date.depends.append('loss_kind')
 
 
 class BeneficiaryExtraDataRelation(model.CoogSQL):

@@ -127,7 +127,7 @@ class LossDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
         domain=[('company', '=', Eval('company'))], depends=['company'])
     item_kind = fields.Selection([('', '')], 'Kind')
     item_kind_string = item_kind.translated('item_kind')
-    with_end_date = fields.Boolean('With End Date')
+    has_end_date = fields.Boolean('With End Date')
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
     loss_kind = fields.Selection([('generic', 'Generic')], 'Loss Kind')
@@ -148,6 +148,16 @@ class LossDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
         cls._sql_constraints += [
             ('code_unique', Unique(t, t.code), 'The code must be unique'),
             ]
+
+    @classmethod
+    def __register__(cls, module):
+        table = backend.get('TableHandler')(cls, module)
+
+        # Migration from 2.0: Rename with_end_date
+        if table.column_exist('with_end_date'):
+            table.column_rename('with_end_date', 'has_end_date')
+
+        super(LossDescription, cls).__register__(module)
 
     @classmethod
     def is_master_object(cls):

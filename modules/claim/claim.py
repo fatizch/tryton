@@ -466,13 +466,13 @@ class Loss(model.CoogSQL, model.CoogView,
     start_date = fields.Date('Loss Date',
         help='Date of the event, or start date of a period',
         states={'readonly': CLAIM_READONLY, }, depends=['claim_status'])
-    with_end_date = fields.Function(
-        fields.Boolean('With End Date'), 'get_with_end_date')
+    has_end_date = fields.Function(
+        fields.Boolean('With End Date'), 'getter_has_end_date')
     end_date = fields.Date('End Date',
         states={
-            'invisible': Bool(~Eval('with_end_date')),
+            'invisible': Bool(~Eval('has_end_date')),
             'readonly': Eval('claim_status') == 'closed',
-            }, depends=['with_end_date', 'claim_status'])
+            }, depends=['has_end_date', 'claim_status'])
     loss_desc_code = fields.Function(
         fields.Char('Loss Desc Code', depends=['loss_desc']),
         'get_loss_desc_code')
@@ -489,8 +489,8 @@ class Loss(model.CoogSQL, model.CoogView,
         domain=[('id', 'in', Eval('available_closing_reasons'))],
         states={
             'readonly': Eval('claim_status') == 'closed',
-            'invisible': ~Eval('with_end_date')},
-        depends=['available_closing_reasons', 'claim_status', 'with_end_date'],
+            'invisible': ~Eval('has_end_date')},
+        depends=['available_closing_reasons', 'claim_status', 'has_end_date'],
         ondelete='RESTRICT')
 
     @classmethod
@@ -585,10 +585,10 @@ class Loss(model.CoogSQL, model.CoogView,
     def search_loss_desc_kind(cls, name, clause):
         return [('loss_desc.kind',) + tuple(clause[1:])]
 
-    @fields.depends('event_desc', 'loss_desc', 'with_end_date', 'end_date')
+    @fields.depends('event_desc', 'loss_desc', 'has_end_date', 'end_date')
     def on_change_loss_desc(self):
         super(Loss, self).on_change_loss_desc()
-        self.with_end_date = self.get_with_end_date('')
+        self.has_end_date = self.getter_has_end_date('')
         self.loss_desc_code = self.loss_desc.code if self.loss_desc else ''
         if (self.loss_desc and self.event_desc
                 and self.event_desc not in self.loss_desc.event_descs):
@@ -617,8 +617,8 @@ class Loss(model.CoogSQL, model.CoogView,
     def get_date_field_for_kind(cls, kind):
         return 'start_date'
 
-    def get_with_end_date(self, name=None):
-        return self.loss_desc and self.loss_desc.with_end_date
+    def getter_has_end_date(self, name=None):
+        return self.loss_desc and self.loss_desc.has_end_date
 
     @classmethod
     def search_func_key(cls, name, clause):
@@ -719,7 +719,7 @@ class Loss(model.CoogSQL, model.CoogView,
             super(Loss, cls).validate(instances)
             for instance in instances:
                 instance.check_end_date()
-                if instance.with_end_date and instance.end_date is None \
+                if instance.has_end_date and instance.end_date is None \
                         and instance.closing_reason:
                     cls.append_functional_error('no_end_date',
                         {'loss': instance.rec_name})

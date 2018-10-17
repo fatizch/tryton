@@ -17,5 +17,5 @@
     <field name="start_date"/>
     <label name="end_date"/>
     <field name="end_date"/>
-    <field name="with_end_date" invisible="1"/>
+    <field name="has_end_date" invisible="1"/>
 </form>

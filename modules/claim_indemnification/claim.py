@@ -193,10 +193,10 @@ class Loss:
         super(Loss, self).close(sub_status, date)
         all_service_refused = all([x.eligibility_status == 'refused'
             for x in self.services])
-        if (not all_service_refused and self.with_end_date
+        if (not all_service_refused and self.has_end_date
                 and not self.end_date):
             self.__class__.raise_user_error('missing_end_date')
-        if (not all_service_refused and self.with_end_date
+        if (not all_service_refused and self.has_end_date
                 and not self.closing_reason):
             self.__class__.raise_user_error('missing_closing_reason')
         for service in self.services:
@@ -615,12 +615,12 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     kind_string = kind.translated('kind')
     start_date = fields.Date('Start Date', states={
             'readonly': Or(~Eval('manual'), Eval('status') != 'calculated'),
-            'invisible': ~Eval('service.loss.with_end_date')
-            }, depends=['manual', 'status', 'kind'], required=True)
+            }, depends=['manual', 'status', 'kind'],
+        required=True)
     end_date = fields.Date('End Date', states={
             'readonly': Or(~Eval('manual'), Eval('status') != 'calculated'),
-            'invisible': ~Eval('service.loss.with_end_date')
-            }, depends=['manual', 'status', 'kind'])
+            'invisible': ~Eval('has_end_date'),
+            }, depends=['manual', 'status', 'kind', 'has_end_date'])
     product = fields.Many2One('product.product', 'Product', states={
             'invisible': Bool(Eval('product', False)) &
             (Len(Eval('possible_products', [])) == 1),
@@ -726,6 +726,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                     ['cancelled', 'cancel_paid'])),
             'required': Eval('status') == 'cancel_paid'
             }, ondelete='RESTRICT')
+    has_end_date = fields.Function(
+        fields.Boolean('With End Date'),
+        'getter_has_end_date')
 
     @classmethod
     def __setup__(cls):
@@ -820,6 +823,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                         ['cancelled', 'cancel_paid', 'cancel_scheduled',
                             'cancel_validated', 'cancel_controlled']))))
         cursor.execute(*query)
+
+    def getter_has_end_date(self, name):
+        return self.kind != 'capital'
 
     @classmethod
     def _get_skip_set_readonly_fields(cls):
@@ -1131,11 +1137,11 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                             'scheduled', 'controlled', 'validated', 'paid'])
                 delta = 0
                 if (not previous_indemnification and
-                        indemnification.service.loss.with_end_date):
+                        indemnification.service.loss.has_end_date):
                     delta = (indemnification.start_date -
                         indemnification.service.loss.start_date).days + 1
                 if (previous_indemnification and
-                        previous_indemnification.service.loss.with_end_date):
+                        previous_indemnification.service.loss.has_end_date):
                     delta = (indemnification.start_date -
                         previous_indemnification.end_date).days
                 if delta > 1 or (previous_indemnification

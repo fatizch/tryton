@@ -290,7 +290,7 @@
                 "name": "Suite / Nouvelle période",
                 "loss_kind": "std",
                 "item_kind": "person",
-                "with_end_date": true
+                "has_end_date": true
             }
         ],
         "hide_main_menu": false,

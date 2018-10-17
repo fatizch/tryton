@@ -1,3 +1,5 @@
+* BUG#10087 Fix periodicity detection of indemnifications
+
 Version 2.2 - 2018-10-12
 * FEA#10024 Add method to retrieve claim informations from an invoice
 * BUG#9914 Do not check previous period dates when scheduling cancellation

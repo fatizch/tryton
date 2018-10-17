@@ -102,8 +102,8 @@ class Loss:
             depends=['loss_desc_kind', 'loss_desc']),
         'on_change_with_start_date_string')
     end_date_string = fields.Function(fields.Char('End Date String',
-        states={'invisible': Bool(~Eval('with_end_date'))},
-        depends=['loss_desc_kind', 'loss_desc', 'with_end_date']),
+        states={'invisible': Bool(~Eval('has_end_date'))},
+        depends=['loss_desc_kind', 'loss_desc', 'has_end_date']),
         'on_change_with_end_date_string')
     initial_std_start_date = fields.Date('Initial STD Start Date',
         states={'invisible': Eval('loss_desc_kind') != 'ltd',
@@ -119,9 +119,9 @@ class Loss:
             ], depends=['end_date'])
     is_a_relapse = fields.Boolean('Is A Relapse',
         states={
-            'invisible': ~Eval('with_end_date'),
+            'invisible': ~Eval('has_end_date'),
             'readonly': CLAIM_READONLY, },
-        depends=['with_end_date', 'claim_status'])
+        depends=['has_end_date', 'claim_status'])
     loss_kind = fields.Function(
         fields.Char('Loss Kind'),
         'get_loss_kind')
@@ -194,7 +194,7 @@ class Loss:
 
     @fields.depends('loss_desc', 'loss_desc_kind')
     def on_change_with_start_date_string(self, name=None):
-        if self.loss_desc and self.loss_desc.with_end_date:
+        if self.loss_desc and self.loss_desc.has_end_date:
             return self.date_string('start_date_string')
         else:
             return self.date_string('loss_date_string')
@@ -208,7 +208,7 @@ class Loss:
             return ''
         key = (self.loss_desc_kind + '_') \
             if self.loss_desc_kind and self.loss_desc_kind in ('std', 'ltd') \
-                and self.loss_desc and self.loss_desc.with_end_date else ''
+                and self.loss_desc and self.loss_desc.has_end_date else ''
         key += name[:-7]
         return self.raise_user_error(key, raise_exception=False)
 

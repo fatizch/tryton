@@ -434,7 +434,7 @@
                 "name": "Passage en invalidité",
                 "loss_kind": "ltd",
                 "item_kind": "person",
-                "with_end_date": true
+                "has_end_date": true
             },
             {
                 "_func_key": "invalidite"

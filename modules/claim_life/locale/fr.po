@@ -165,7 +165,7 @@ msgctxt "field:benefit-beneficiary_document,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:benefit.loss.description,with_end_date:"
+msgctxt "field:benefit.loss.description,has_end_date:"
 msgid "With End Date"
 msgstr "Avec Date de Fin"
 
@@ -315,7 +315,7 @@ msgctxt "field:claim.loss,start_date_string:"
 msgid "Start Date String"
 msgstr "Date de début"
 
-msgctxt "field:claim.loss,with_end_date:"
+msgctxt "field:claim.loss,has_end_date:"
 msgid "With End Date"
 msgstr "Avec Date de Fin"
 

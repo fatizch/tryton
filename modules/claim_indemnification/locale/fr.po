@@ -1305,7 +1305,7 @@ msgctxt "field:claim.select_service,start_date:"
 msgid "Loss Date"
 msgstr "Date"
 
-msgctxt "field:claim.select_service,with_end_date:"
+msgctxt "field:claim.select_service,has_end_date:"
 msgid "With End Date"
 msgstr "Avec Date de Fin"
 

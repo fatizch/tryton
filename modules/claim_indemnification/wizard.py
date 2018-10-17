@@ -404,11 +404,11 @@ class SelectService(model.CoogView):
         'Possible Services', states={'invisible': True})
     start_date = fields.Date('Loss Date', readonly=True,
         states={'invisible': ~Eval('selected_service')})
-    with_end_date = fields.Boolean('With End Date', readonly=True,
+    has_end_date = fields.Boolean('With End Date', readonly=True,
         states={'invisible': True})
     end_date = fields.Date('End Date', readonly=True,
         states={'invisible': Or(~Eval('selected_service'),
-                Bool(~Eval('with_end_date')))})
+                Bool(~Eval('has_end_date')))})
     loss_desc = fields.Many2One('benefit.loss.description', 'Loss Descriptor',
         readonly=True, states={'invisible': ~Eval('selected_service')})
     event_desc = fields.Many2One('benefit.event.description',
@@ -416,13 +416,13 @@ class SelectService(model.CoogView):
         states={'invisible': ~Eval('selected_service')})
 
     @fields.depends('contract', 'option', 'selected_service', 'start_date',
-        'with_end_date', 'end_date', 'loss_desc', 'event_desc')
+        'has_end_date', 'end_date', 'loss_desc', 'event_desc')
     def on_change_selected_service(self):
         if self.selected_service:
             self.contract = self.selected_service.contract
             self.option = self.selected_service.option
             self.start_date = self.selected_service.loss.start_date
-            self.with_end_date = self.selected_service.loss.with_end_date
+            self.has_end_date = self.selected_service.loss.has_end_date
             self.end_date = self.selected_service.loss.end_date
             self.loss_desc = self.selected_service.loss.loss_desc
             self.event_desc = self.selected_service.loss.event_desc
@@ -430,7 +430,7 @@ class SelectService(model.CoogView):
             self.contract = None
             self.option = None
             self.start_date = None
-            self.with_end_date = False
+            self.has_end_date = False
             self.end_date = None
             self.loss_desc = None
             self.event_desc = None

@@ -47,18 +47,18 @@ class TestCaseModel:
         loss_descs = []
         loss_descs.append(cls.create_loss_desc(code='WI',
                 name=translater('Work Incapacity'),
-                item_kind='person', with_end_date=True,
+                item_kind='person', has_end_date=True,
                 event_descs=[cls.get_event_desc('AC')],
                 documents=[cls.get_document_desc('WI')]))
         loss_descs.append(cls.create_loss_desc(code='DH',
                 name=translater('Death'),
-                item_kind='person', with_end_date=False,
+                item_kind='person', has_end_date=False,
                 event_descs=[cls.get_event_desc('AC'),
                     cls.get_event_desc('DI')],
                 documents=[cls.get_document_desc('DH')]))
         loss_descs.append(cls.create_loss_desc(code='DY',
                 name=translater('Disability'),
-                item_kind='person', with_end_date=False,
+                item_kind='person', has_end_date=False,
                 event_descs=[cls.get_event_desc('AC'),
                     cls.get_event_desc('DI')],
                 documents=[cls.get_document_desc('WI')]))

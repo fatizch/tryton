@@ -467,7 +467,7 @@ msgctxt "field:benefit.loss.description,rec_name:"
 msgid "Record Name"
 msgstr "Nom de l'enregistrement"
 
-msgctxt "field:benefit.loss.description,with_end_date:"
+msgctxt "field:benefit.loss.description,has_end_date:"
 msgid "With End Date"
 msgstr "Avec Date de Fin"
 
@@ -835,7 +835,7 @@ msgctxt "field:claim.loss,state:"
 msgid "State"
 msgstr "Etat"
 
-msgctxt "field:claim.loss,with_end_date:"
+msgctxt "field:claim.loss,has_end_date:"
 msgid "With End Date"
 msgstr "Avec Date de Fin"
 

@@ -1,3 +1,5 @@
+* BUG#10087 Correction de la détection du caractère périodique d'une indemnisation
+
 Version 2.2 - 2018-10-12
 * FEA#10024 Ajout de méthode pour récuperer les informations de sinistre depuis une quittance
 * BUG#9914 Ne pas vérifier les dates de périodes précédentes à l'ordonnancement d'une annulation
