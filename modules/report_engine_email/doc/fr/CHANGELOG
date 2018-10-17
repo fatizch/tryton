@@ -1,3 +1,5 @@
+* BUG#10112 Ajout de l'email sélectionné dans le contexte d'impression
+
 Version 2.2 - 2018-10-12
 * OTH#0000 Amélioration graphique de la vue modèle de courrier de type courrier électronique
 * BUG#9023 La variable msg est référencée avant d'être instantiée

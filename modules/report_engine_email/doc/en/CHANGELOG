@@ -1,3 +1,5 @@
+* BUG#10112 Add recipient email to printing context
+
 Version 2.2 - 2018-10-12
 * OTH#0000 UI enhancement of mail report template view
 * BUG#9023 msg variable referenced before assignment

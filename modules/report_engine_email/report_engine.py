@@ -376,6 +376,13 @@ class ReportCreate:
             return 'end'
         return next_state
 
+    def create_report_context(self, instances):
+        context = super(ReportCreate, self).create_report_context(instances)
+        context['recipient_email'] =  \
+            self.select_template.recipient_email.value \
+            if self.select_template.recipient_email else ''
+        return context
+
     def finalize_report(self, report, instances):
         if self.select_template.template.input_kind == 'email':
             return
