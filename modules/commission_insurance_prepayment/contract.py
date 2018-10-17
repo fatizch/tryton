@@ -27,15 +27,15 @@ class Contract:
     __metaclass__ = PoolMeta
     __name__ = 'contract'
 
-    with_prepayment = fields.Function(fields.Boolean('With Prepayment'),
-        'getter_with_prepayment')
+    has_prepayment = fields.Function(fields.Boolean('With Prepayment'),
+        'getter_has_prepayment')
 
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls._buttons.update({
                 'sync_prepayment': {
-                    'invisible': ~Eval('with_prepayment'),
+                    'invisible': ~Eval('has_prepayment'),
                     },
                 })
 
@@ -114,9 +114,10 @@ class Contract:
         Commission.delete(to_delete)
         Commission.save(to_save)
 
-    def getter_with_prepayment(self, name):
-        if self.agent and self.agent.plan:
+    def getter_has_prepayment(self, name):
+        if self.agent:
             return self.agent.plan.is_prepayment
+        return False
 
     def rebill(self, start, end=None, post_end=None):
         start_date = start if start and start != datetime.date.min else \

@@ -54,7 +54,7 @@ msgctxt "field:commission.simulate.line,is_prepayment:"
 msgid "Prepayment"
 msgstr "Précompte"
 
-msgctxt "field:contract,with_prepayment:"
+msgctxt "field:contract,has_prepayment:"
 msgid "With Prepayment"
 msgstr "Précompte"
 

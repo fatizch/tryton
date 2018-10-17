@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/group[@id='button_change_start_date']" position="inside">
-        <field name="with_prepayment"/>
+        <field name="has_prepayment"/>
         <button string="Synchronize Prepayment" name="sync_prepayment"/>
     </xpath>
 </data>

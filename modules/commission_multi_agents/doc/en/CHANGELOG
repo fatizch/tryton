@@ -1,3 +1,5 @@
+* BUG#9915 Allow to sync pre-payment for multi-agents
+
 Version 2.2 - 2018-10-12
 * OTH#0000 Allow to have an insurer agent as second level commission (missing report from d5a773fb4)
 

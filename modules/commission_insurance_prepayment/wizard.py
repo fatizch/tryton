@@ -206,14 +206,14 @@ class SimulateCommissionsParameters:
     def mock_contract(self, product):
         contract = super(SimulateCommissionsParameters, self).mock_contract(
             product)
-        contract.with_prepayment = contract.getter_with_prepayment(None)
+        contract.has_prepayment = contract.getter_has_prepayment(None)
         return contract
 
     def mock_option(self, coverage, parent_contract, contract=None,
             covered=None):
         option = super(SimulateCommissionsParameters, self).mock_option(
             coverage, parent_contract, contract, covered)
-        if not parent_contract.getter_with_prepayment(None):
+        if not parent_contract.getter_has_prepayment(None):
             return option
         premium_rule, = [r for r in coverage.premium_rules
             if r.match(coverage.get_match_rule(option))]

@@ -19,6 +19,13 @@ class Contract:
         cls.broker.domain.append(
             ('party.agents.second_level_commission', '=', False))
 
+    def getter_has_prepayment(self, name):
+        result = super(Contract, self).getter_has_prepayment(name)
+        if self.agent:
+            return result or any(x.plan.is_prepayment
+                for x in self.agent.commissioned_agents)
+        return result
+
 
 class ContractOption:
     __metaclass__ = PoolMeta
