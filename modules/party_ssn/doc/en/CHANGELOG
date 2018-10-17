@@ -1,2 +1,4 @@
+* BUG#10131 Allow SSN number that not start with 1 or 2
+
 Version 2.2 - 2018-10-12
 * FEA#4242 Allow to search party from SSN information

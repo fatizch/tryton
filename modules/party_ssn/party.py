@@ -98,7 +98,7 @@ class Party:
         if not self.ssn:
             res = True
         else:
-            pattern = """^[123478]
+            pattern = """^[12345678]
                 [0-9]{2}
                 [0-9][0-9]
                 (2[AB]|[0-9]{2})

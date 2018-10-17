@@ -1,2 +1,4 @@
+* BUG#10131 Autoriser les numéros SSN qui ne commencent pas par 1 ou 2
+
 Version 2.2 - 2018-10-12
 * FEA#4242 Ajout de la recherche par numéro de sécurité sociale
