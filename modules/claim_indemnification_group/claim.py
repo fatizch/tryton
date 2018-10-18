@@ -114,7 +114,7 @@ class Indemnification:
                     indemnification.beneficiary != covered_element.party and
                     (indemnification.start_date <=
                         covered_element.contract_exit_date and
-                        (indemnification.end_date or datetime.date.min) >=
+                        (indemnification.end_date or datetime.date.min) >
                         covered_element.contract_exit_date)):
                 cls.append_functional_error('covered_element_rupture', {
                         'party_rec_name': key[1].rec_name,

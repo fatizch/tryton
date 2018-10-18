@@ -2183,7 +2183,7 @@ if CREATE_PRODUCTS:  # {{{
     slip_configuration.accounts.append(Account(csg_deductible_tax_account.id))
     slip_configuration.accounts.append(Account(crds_tax_account.id))
     slip_configuration.accounts.append(Account(pasrau_tax_account.id))
-    slip_configuration.slip_kind = 'slip'
+    slip_configuration.slip_kind = 'pasrau'
     exp_journal, = Journal.find([('code', '=', 'EXP')])
     slip_configuration.journal = exp_journal
     slip_configuration.save()
@@ -4903,7 +4903,7 @@ if CREATE_CONTRACTS:  # {{{
             if (employee.name == 'Petit Charpentier Sud' and
                     employee.first_name == u'Employé 2'):
                 employee_covered.manual_end_date = \
-                    _illness_claim_end_date_1 + relativedelta(days=1)
+                    _illness_claim_end_date_1
                 employee_covered.end_reason, = CoveredEndReason.find(
                     [('code', '=', 'demission')])
             employee_covered.save()
@@ -5314,7 +5314,7 @@ if GENERATE_REPORTINGS:  # {{{
     CreateSlip.execute('open_slip')
 
     slip, = Invoice.find(
-        [('business_kind', '=', 'slip')])
+        [('business_kind', '=', 'pasrau')])
     assert slip.total_amount == Decimal('24.09'), \
         'Bad amount %.2f expected 24.09' % slip.total_amount
     # }}}
