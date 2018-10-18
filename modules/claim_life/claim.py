@@ -35,7 +35,7 @@ class Claim:
     __name__ = 'claim'
 
     beneficiaries = fields.Function(
-        fields.Many2Many('claim.beneficiary', None, None, 'Beneficiaries',
+        fields.One2Many('claim.beneficiary', None, 'Beneficiaries',
             help='The beneficiaries for the different services for which '
             'they must be set manually',
             domain=[('service', 'in', Eval('services_with_beneficiaries'))],
@@ -48,6 +48,39 @@ class Claim:
         fields.Many2Many('claim.service', None, None,
             'Services with beneficiaries'),
         'getter_services_with_beneficiaries')
+
+    @classmethod
+    def write(cls, *args):
+        actions = iter(args)
+        to_create, to_write, to_delete = [], [], []
+
+        Beneficiary = Pool().get('claim.beneficiary')
+        for claims, data in zip(actions, actions):
+            for beneficiary_data in data.pop('beneficiaries', []):
+                action = beneficiary_data[0]
+                if action in ('add', 'remove', 'copy'):
+                    # We do not handle those cases, they should not happen in
+                    # the standard case of a O2M widget
+                    continue
+                if action == 'create':
+                    to_create += beneficiary_data[1]
+                elif action == 'delete':
+                    to_delete += beneficiary_data[1]
+                elif action == 'write':
+                    for idx, value in enumerate(beneficiary_data[1:]):
+                        if idx % 2 == 0:
+                            to_write.append(Beneficiary.browse(value))
+                        else:
+                            to_write.append(value)
+
+        if to_delete:
+            Beneficiary.delete(Beneficiary.browse(to_delete))
+        if to_create:
+            Beneficiary.create(to_create)
+        if to_write:
+            Beneficiary.write(*to_write)
+
+        super(Claim, cls).write(*args)
 
     def getter_beneficiaries(self, name):
         return [beneficiary.id for loss in self.losses

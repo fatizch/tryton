@@ -1,3 +1,5 @@
+* BUG#10072 Allow to delete beneficiaries from a claim
+
 Version 2.2 - 2018-10-12
 * BUG#9277 Fix initialization / storage of beneficiary extra data
 * BUG#9074 Fix claim saving performances issues

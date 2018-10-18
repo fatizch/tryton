@@ -1,3 +1,5 @@
+* BUG#10072 Possibilité de supprimer les bénéficiaires depuis un sinistre
+
 Version 2.2 - 2018-10-12
 * BUG#9277 Correction de l'initialisation / sauvegarde des données complémentaires des bénéficiaires
 * BUG#9074 Correction des performances sur la sauvegarde d'un dossier de prestation
