@@ -299,3 +299,7 @@ msgstr "Emise"
 msgctxt "view:account.invoice:account_invoice."
 msgid "Invoice"
 msgstr "Quittance"
+
+msgctxt "view:account.invoice:account_invoice."
+msgid "Post"
+msgstr "Emettre"
