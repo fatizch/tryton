@@ -1,3 +1,5 @@
+* BUG#10173 Correctif de l'import - export des produits
+
 Version 2.2 - 2018-10-12
 * BUG#7445 Ajout d'une contrainte d'unicité sur les clés fonctionnelles des produits et modèles
 

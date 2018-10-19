@@ -294,6 +294,10 @@ class Benefit(model.CoogSQL, model.CoogView,
         return super(Benefit, cls)._export_light() | {'company', 'loss_descs'}
 
     @classmethod
+    def _export_skips(cls):
+        return super(Benefit, cls)._export_skips() | {'options'}
+
+    @classmethod
     def _migrate_insurer_benefit(cls):
         benefits = cls.search([])
         to_write = []

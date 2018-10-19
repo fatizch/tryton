@@ -12,4 +12,7 @@ def register():
         product.TemplateAccount,
         product.Uom,
         product.Category,
+        product.ProductCostPrice,
+        product.ProductListPrice,
+        product.ProductCostPriceMethod,
         module='product_cog', type_='model')

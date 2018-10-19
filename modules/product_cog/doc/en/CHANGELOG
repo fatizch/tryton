@@ -1,3 +1,5 @@
+* BUG#10173 Fix products export import 
+
 Version 2.2 - 2018-10-12
 * BUG#7445 Add unicity constraint on functional keys for products and templates
 
