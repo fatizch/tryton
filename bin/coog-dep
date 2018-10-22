@@ -30,7 +30,7 @@ coog_dep_main() { # install base deps
                 "werkzeug==0.12.2" \
                 "Mock==2.0.0" \
                 "simpleeval==0.9.5" \
-                "ldap3<2.0" \
+                "ldap3==2.5.1" \
                 "requests==2.18.4" \
                 "chardet==3.0.4" \
                 "vobject==0.9.5" \
