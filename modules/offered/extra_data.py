@@ -497,9 +497,10 @@ def with_extra_data_def(reverse_model_name, reverse_field_name, kind,
                 self.extra_data_def)
 
         @classmethod
-        def extra_data_structure(cls, ids):
-            instances = cls.browse(ids)
-            return {x.id: x._extra_data_structure() for x in instances}
+        def extra_data_structure(cls, ids, kind):
+            return {x.id: x._extra_data_structure()
+                for x in cls.browse()
+                if not kind or x.business_kind == kind}
 
         def _extra_data_structure(self):
             cache = Pool().get('extra_data')._extra_data_structure_cache

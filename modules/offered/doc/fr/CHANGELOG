@@ -1,3 +1,5 @@
+* BUG#9937 Ajout d'un filtre suplémentaire sur le type de données complémentaires
+
 Version 2.2 - 2018-10-12
 * FEA#9942 Configuration et gestion de la saisie manuelle des numéros de contrat
 * OTH#0000 Le cache des données complémentaires est indépendant du contexte

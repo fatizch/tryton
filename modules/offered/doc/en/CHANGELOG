@@ -1,3 +1,5 @@
+* BUG#9937 Add kind selector on extra_data cache
+
 Version 2.2 - 2018-10-12
 * FEA#9942 Configure and manage manual input of contract numbers
 * OTH#0000 Extra data cache is not related to the context
