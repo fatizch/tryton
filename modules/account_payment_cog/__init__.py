@@ -55,5 +55,6 @@ def register():
         module='account_payment_cog', type_='wizard')
     Pool.register(
         invoice.Invoice,
+        payment.PaymentInvoice,
         module='account_payment_cog', type_='model',
         depends=['account_invoice'])

@@ -221,8 +221,8 @@ class MoveLine:
         account = pool.get('account.account').__table__()
         line = pool.get('account.move.line').__table__()
         payment = pool.get('account.payment').__table__()
-        kind = lines[0].account.kind
         company_id = lines[0].move.company.id
+        account_id = lines[0].account.id
         query_table = line.join(account, condition=account.id == line.account
             ).join(payment, condition=(payment.line == line.id) &
                 (payment.state.in_(['processing', 'approved'])))
@@ -231,9 +231,8 @@ class MoveLine:
                 Sum(Coalesce(line.debit, 0) - Coalesce(line.credit, 0)),
                 where=account.active
                 & (account.company == company_id)
-                & Not(line.id.in_([p.id for p in lines]))
                 & cls.payment_outstanding_group_clause(lines, line)
-                & (account.kind == kind)
+                & (account.id == account_id)
                 & (line.reconciliation != Null)
                 & (line.payment_date != Null)))
 
@@ -245,8 +244,8 @@ class MoveLine:
         cursor = Transaction().connection.cursor()
         account = pool.get('account.account').__table__()
         line = pool.get('account.move.line').__table__()
-        kind = lines[0].account.kind
         company_id = lines[0].move.company.id
+        account_id = lines[0].account.id
         query_table = line.join(account, condition=account.id == line.account)
         today_where = ((line.maturity_date <= utils.today())
             | (line.maturity_date == Null))
@@ -256,11 +255,10 @@ class MoveLine:
                 & (account.company == company_id)
                 & Not(line.id.in_([p.id for p in lines]))
                 & cls.payment_outstanding_group_clause(lines, line)
-                & (account.kind == kind)
+                & (account.id == account_id)
                 & today_where
                 & (line.reconciliation == Null)
                 & (line.payment_date == Null)))
-
         return cursor.fetchone()[0] or Decimal(0)
 
     @classmethod
@@ -269,6 +267,7 @@ class MoveLine:
             Calculate outstanding payment amount receivable or payable
             as of today for a specific account
         '''
+        assert len({l.account for l in lines}) == 1
         unpaid_amount = cls.unpaid_outstanding_amount(lines)
         processing_amount = cls.processing_payments_outstanding_amount(lines)
         kind = cls.get_kind(lines)
@@ -308,9 +307,10 @@ class MoveLine:
         lines, outstanding = cls.get_outstanding_amount(lines)
         if not lines:
             return []
-        if lines[0].account.kind == 'receivable' and outstanding > 0:
+        global_kind = cls.get_kind(lines)
+        if global_kind == 'receivable' and outstanding > 0:
             outstanding = 0
-        elif lines[0].account.kind == 'payable' and outstanding < 0:
+        elif global_kind == 'payable' and outstanding < 0:
             outstanding = 0
         else:
             outstanding = abs(outstanding)
@@ -321,7 +321,7 @@ class MoveLine:
                 kind = 'receivable'
             else:
                 kind = 'payable'
-            if kind == line.account.kind:
+            if kind == global_kind:
                 if outstanding >= line.payment_amount:
                     outstanding -= line.payment_amount
                     continue
