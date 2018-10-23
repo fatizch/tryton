@@ -677,9 +677,38 @@ class Contract:
 
     def get_invoice_periods(self, up_to_date, from_date=None,
             ignore_invoices=False):
+        '''
+            Returns a list of invoice periods (start / end) with the matching
+            billing information:
+                    [
+                        (start_1, start_2, billing_info_1),
+                        (start_3, start_4, billing_info_1),
+                        (start_5, start_6, billing_info_2),
+                    ]
+
+            - up_to_date: The maximum value for the start of the period. It is
+              basically the date until which we want to know the periods. If
+              set to None, at most one invoice will be generated
+            - from_date: The starting date for the periods. If not set, it will
+              default to the initial start date of the contract
+            - ignore_invoices: If False, the start_date will be updated to
+              resume from the already generated invoices
+        '''
         if not self.billing_informations:
             return []
+
+        # The "final_date" is the date that shall never be exceeded. In other
+        # words, it will be the end of the last period (unless "up_to_date"
+        # blocks us earlier). It defaults to the contract's final end date (if
+        # it exists)
         final_date = self._calculate_final_invoice_end_date()
+
+        # We define the "start" as the maximum date among:
+        #   - The "from_date" parameter
+        #   - The initial start date of the contract
+        #   - The day following the last generated invoice on the contract (if
+        #      "ignore_invoices" is not True)
+        # If one of those is not set, it will be ignored
         if from_date:
             start = max(from_date, self.initial_start_date)
         elif self.last_invoice_end and not ignore_invoices:
@@ -688,39 +717,97 @@ class Contract:
             start = self.initial_start_date
         if self.block_invoicing_until:
             start = max(start, self.block_invoicing_until)
+
+        # The "maximum_date" is that of the final iteration. We want the last
+        # period to be generated to include this date (unless of course it is
+        # not possible).
+        maximum_date = up_to_date or start
+
+        # If the first period we could generate already exceeds the maximum
+        # date, no need to go further
         if up_to_date and start > up_to_date:
             return []
+
+        # The main loop iterate on billing_informations. The idea is to fill up
+        # the periods with the current billing information.
+        #
+        # We will loop until the beginning of the next period exceeds either
+        # "maximum_date" or "final_date".
         periods = []
-        while (up_to_date and start < up_to_date) or len(periods) < 1:
+        while (maximum_date and start <= maximum_date) and (
+                not final_date or start <= final_date):
+            # We need to store the start of the validity period of the current
+            # billing information, so that we do not forget the sync date
+            # (typically if the start is the end of a month)
             original_start = start
+
+            # This will give us the billing information to use between
+            # "original_start" and "until".
+            #
+            # The "rule" is a rrule object on which we can iterate to know when
+            # new periods should start
             rule, until, billing_information = \
                 self._get_invoice_rrule_and_billing_information(start)
-            for date in rule:
-                if hasattr(date, 'date'):
-                    date = date.date()
-                if date <= start:
+            for rule_date in rule:
+                # The rrule may return datetimes
+                if hasattr(rule_date, 'date'):
+                    rule_date = rule_date.date()
+                # We know nothing about the rrule, so some values may be
+                # outside our scope
+                if rule_date <= start:
                     continue
-                end = date + relativedelta(days=-1)
-                periods.append((start, min(end, final_date or
-                            datetime.date.max), billing_information))
-                start = date
-                if not up_to_date or start > up_to_date:
+
+                # The rule_date gives us the start of the next period. So we
+                # remove one day, and use it as the end of the current period.
+                # Of course, we make sure we do not exceed final_date, which is
+                # our absolute limit
+                periods.append((start,
+                        min(rule_date + relativedelta(days=-1),
+                            final_date or datetime.date.max),
+                        billing_information))
+
+                start = rule_date
+
+                # If the start of the new period exceeds our exit condition,
+                # there is no need to go further
+                if start > maximum_date or final_date and start > final_date:
                     break
-            if until and (up_to_date and until < up_to_date):
-                if final_date and final_date < up_to_date:
-                    if until > final_date:
-                        until = final_date
-                if start != until:
-                    end = until + relativedelta(days=-1)
-                    periods.append((start, end, billing_information))
-                    start = until
-                continue
-            if start == original_start:
+
+            # No need to keep going, the exit condition is already met
+            if start > maximum_date or final_date and start > final_date:
+                break
+
+            # We exhausted all the usable values from the rule. However there
+            # may still be a period for which the billing_information is valid,
+            # but which is not yet included in a period.
+
+            # We first update until to reflect final_date
+            if final_date and (until or datetime.date.max) > final_date:
+                until = final_date
+
+            # If "until" does not exceed "maximum_date", we want a period that
+            # completes the validity period of the billing_information
+            if until and maximum_date and until < maximum_date:
+                periods.append((start,
+                        until + relativedelta(days=-1),
+                        billing_information))
+                start = until
+            # Final case : If nothing happened during this iteration, and
+            # there is a "until" value, we create one period matching exactly
+            # the iteration limits
+            elif start == original_start:
                 if until and start <= until:
-                    end = until + relativedelta(days=-1)
-                    periods.append((start, end, billing_information))
+                    periods.append((start,
+                            until + relativedelta(days=-1),
+                            billing_information))
                     start = until
                 else:
+                    # Something went very wrong: The iteration found no period,
+                    # and no "until". There is no reason this should happen, so
+                    # we raise an error.
+                    # If there is a valid use case, the probable solution would
+                    # be to create a period from "original_start" to either
+                    # "final_date" or "maximum_date"
                     raise NotImplementedError
         return periods
 

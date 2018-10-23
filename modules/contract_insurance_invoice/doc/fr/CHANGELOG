@@ -1,3 +1,5 @@
+* BUG#10168 Correction d'un cas aux limite dans get_invoice_periods qui pouvait donner lieu à une boucle infinie
+
 Version 2.2 - 2018-10-12
 * BUG#9972 Ne pas planter lors du changement de souscripteur dans le processus de souscription
 * BUG#9759 Traduire la fréquence dans le rec_name des détails de ligne de quittance

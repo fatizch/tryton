@@ -229,6 +229,54 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 (date(2014, 3, 31), date(2014, 4, 29), bil_info),
                 ])
 
+        contract = self.Contract(company=company,
+            start_date=date(2018, 1, 19),
+            product=product,
+            billing_informations=[
+                self.BillingInformation(date=None,
+                    billing_mode=freq_month,
+                    payment_term=payment_term),
+                ])
+        contract.save()
+        contract.end_date = datetime.date(2018, 8, 18)
+        contract.save()
+        billing_info = contract.billing_informations[0]
+        self.assertEqual(contract.get_invoice_periods(date(2019, 1, 18)), [
+                (date(2018, 1, 19), date(2018, 2, 18), billing_info),
+                (date(2018, 2, 19), date(2018, 3, 18), billing_info),
+                (date(2018, 3, 19), date(2018, 4, 18), billing_info),
+                (date(2018, 4, 19), date(2018, 5, 18), billing_info),
+                (date(2018, 5, 19), date(2018, 6, 18), billing_info),
+                (date(2018, 6, 19), date(2018, 7, 18), billing_info),
+                (date(2018, 7, 19), date(2018, 8, 18), billing_info),
+                ])
+
+        contract = self.Contract(company=company,
+            start_date=date(2018, 1, 19),
+            product=product,
+            billing_informations=[
+                self.BillingInformation(date=None,
+                    billing_mode=freq_month,
+                    payment_term=payment_term),
+                self.BillingInformation(date=datetime.date(2018, 8, 19),
+                    billing_mode=freq_quart,
+                    direct_debit_day='5',
+                    payment_term=payment_term),
+                ])
+        contract.save()
+        contract.end_date = datetime.date(2018, 8, 18)
+        contract.save()
+        billing_info = contract.billing_informations[0]
+        self.assertEqual(contract.get_invoice_periods(date(2019, 1, 18)), [
+                (date(2018, 1, 19), date(2018, 2, 18), billing_info),
+                (date(2018, 2, 19), date(2018, 3, 18), billing_info),
+                (date(2018, 3, 19), date(2018, 4, 18), billing_info),
+                (date(2018, 4, 19), date(2018, 5, 18), billing_info),
+                (date(2018, 5, 19), date(2018, 6, 18), billing_info),
+                (date(2018, 6, 19), date(2018, 7, 18), billing_info),
+                (date(2018, 7, 19), date(2018, 8, 18), billing_info),
+                ])
+
     def test_get_direct_debit_day(self):
         current_date = date(2014, 9, 1)
         with Transaction().set_context(client_defined_date=current_date):
