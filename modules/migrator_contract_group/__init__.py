@@ -9,4 +9,5 @@ def register():
         contract.MigratorContractGroup,
         contract.MigratorContractSubsidiary,
         contract.MigratorSubsidiaryAffiliated,
+        contract.MigratorContractGroupConfiguration,
         module='migrator_contract_group', type_='model')

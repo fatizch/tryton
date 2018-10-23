@@ -28,8 +28,6 @@ class CreateStaging(batch.BatchRootNoSelect):
 
     @classmethod
     def get_tablename_from_filename(cls, filename):
-        if '_' in filename:
-            return filename.split('_')[0]
         return (os.path.splitext(filename)[0])
 
     @classmethod

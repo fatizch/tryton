@@ -5,7 +5,7 @@ import datetime
 from collections import defaultdict
 from itertools import groupby
 
-from sql import Table, Column
+from sql import Table, Column, Literal, Null
 
 from trytond.modules.migrator import Migrator, tools
 from trytond.pool import Pool
@@ -17,6 +17,7 @@ __all__ = [
     'MigratorContractGroup',
     'MigratorContractSubsidiary',
     'MigratorSubsidiaryAffiliated',
+    'MigratorContractGroupConfiguration',
     ]
 
 
@@ -330,7 +331,7 @@ class MigratorContractSubsidiary(BaseMigratorContractGroup):
     @classmethod
     def init_cache(cls, rows, **kwargs):
         super(MigratorContractSubsidiary, cls).init_cache(rows, **kwargs)
-        ContractOption = Pool().get('contract.covered_element')
+        CoveredElement = Pool().get('contract.covered_element')
         # TODO: Optimize ?
         cls.cache_obj['covered_element'] = {}
         cls.cache_obj['contract'] = tools.cache_from_search(
@@ -350,7 +351,7 @@ class MigratorContractSubsidiary(BaseMigratorContractGroup):
             parent_clause = [('contract', '=', contract)]
             if coverage:
                 parent_clause.append(('coverage', '=', coverage))
-            parent_covereds = ContractOption.search(parent_clause)
+            parent_covereds = CoveredElement.search(parent_clause)
             for parent_covered in parent_covereds:
                 if parent_covered.name == parent_code or parent_code in \
                         parent_covered.current_extra_data.values():
@@ -631,8 +632,301 @@ class MigratorSubsidiaryAffiliated(Migrator):
 
         ids = [(res[r]['party'].code, res[r]['parent'].party.code,
                 res[r]['parent'].contract.contract_number) for r in res]
-        clause = Column(cls.table, 'person').in_([x[0] for x in ids]
-            ) & Column(cls.table, 'company').in_([x[1] for x in ids]
-            ) & Column(cls.table, 'contract').in_([x[2] for x in ids]
-            )
+        clause = Literal(False)
+        for id_ in ids:
+            clause |= ((cls.table.person == id_[0]) &
+                (cls.table.company == id_[1]) &
+                (cls.table.contract == id_[2])
+                )
         cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
+
+
+class MigratorContractGroupConfiguration(Migrator):
+    'Migrate Contracts Groups Configuration'
+    __name__ = 'migrator.contract.group.configuration'
+
+    @classmethod
+    def __setup__(cls):
+        super(MigratorContractGroupConfiguration, cls).__setup__()
+        cls.table = Table('contracts_configuration')
+        cls.model = 'contract.option.benefit'
+        cls.func_key = 'uid'
+        cls.columns = {
+            'contract_number': 'contract_number',
+            'coverage': 'coverage',
+            'population': 'population',
+            'start_date': 'start_date',
+            'benefit': 'benefit',
+            'salary_mode': 'salary_mode',
+            'net_calculation_rule': 'net_calculation_rule',
+            'deductible_rule': 'deductible_rule',
+            'deductible_rule_extra_data': 'deductible_rule_extra_data',
+            'indemnification_rule': 'indemnification_rule',
+            'indemnification_rule_extra_data':
+            'indemnification_rule_extra_data',
+            'revaluation_rule': 'revaluation_rule',
+            'revaluation_rule_extra_data':
+            'revaluation_rule_extra_data',
+            'revaluation_on_basic_salary': 'revaluation_on_basic_salary',
+            }
+
+    @classmethod
+    def _select_exisiting_benefits_query(cls, rows):
+        pool = Pool()
+        contract = pool.get('contract').__table__()
+        covered_element = pool.get('contract.covered_element').__table__()
+        option = pool.get('contract.option').__table__()
+        version = pool.get('contract.option.version').__table__()
+        Benefit = pool.get('contract.option.benefit')
+        benefit_configuration = pool.get('benefit').__table__()
+        coverage = pool.get('offered.option.description').__table__()
+        cursor = Transaction().connection.cursor()
+        cls.cache_obj['update'] = {}
+        benefit = Benefit.__table__()
+
+        query_table = contract.join(covered_element, condition=(
+                covered_element.contract == contract.id)
+            ).join(option, condition=(
+                option.covered_element == covered_element.id)
+            ).join(version, condition=(
+                version.option == option.id)
+            ).join(benefit, condition=(
+                benefit.version == version.id)
+            ).join(benefit_configuration, condition=(
+                benefit.benefit == benefit_configuration.id)
+            ).join(coverage, condition=(
+                option.coverage == coverage.id))
+
+        clause = Literal(False)
+        for row in rows:
+            clause |= (
+                (contract.contract_number == row['contract_number']) &
+                (version.start == row['start_date']) &
+                (coverage.code == row['coverage']) &
+                (benefit_configuration.code == row['benefit'])
+                )
+
+        cursor.execute(*query_table.select(benefit.id,
+                contract.contract_number, covered_element.id,
+                benefit_configuration.code, coverage.code, version.start,
+                where=clause))
+        return cursor.fetchall()
+
+    @classmethod
+    def init_update_cache(cls, rows):
+        Benefit = Pool().get('contract.option.benefit')
+        cls.cache_obj['update'] = {}
+
+        update = {}
+
+        for benefit_id, contract, covered_element, benefit_code, \
+                coverage_code, start_date in \
+                cls._select_exisiting_benefits_query(rows):
+            uid = ':'.join([benefit_code, contract, str(covered_element),
+                    coverage_code,
+                    start_date.strftime('%Y-%m-%d') if start_date else ''])
+            update[uid] = Benefit(benefit_id)
+        cls.cache_obj['update'] = update
+
+    @classmethod
+    def init_cache(cls, rows, **kwargs):
+        pool = Pool()
+        CoveredElement = pool.get('contract.covered_element')
+        Version = pool.get('contract.option.version')
+        NetRule = pool.get('claim.net_calculation_rule')
+        coverage_codes = [r['coverage'] for r in rows]
+        contract_numbers = [r['contract_number'] for r in rows]
+        cls.cache_obj['contract'] = tools.cache_from_search('contract',
+            'contract_number', ('contract_number', 'in', contract_numbers))
+        cls.cache_obj['coverage'] = tools.cache_from_search(
+            'offered.option.description', 'code', ('code', 'in',
+                coverage_codes))
+        cls.cache_obj['benefit'] = tools.cache_from_search(
+            'benefit', 'code', ('code', 'in',
+                [r['benefit'] for r in rows]))
+        cls.cache_obj['deductible_rule'] = tools.cache_from_search(
+            'rule_engine', 'short_name', ('short_name', 'in',
+                [r['deductible_rule'] for r in rows]))
+        cls.cache_obj['indemnification_rule'] = tools.cache_from_search(
+            'rule_engine', 'short_name', ('short_name', 'in',
+                [r['indemnification_rule'] for r in rows]))
+        cls.cache_obj['revaluation_rule'] = tools.cache_from_search(
+            'rule_engine', 'short_name', ('short_name', 'in',
+                [r['revaluation_rule'] for r in rows]))
+        net_calculation_rules = NetRule.search([
+                ('rule.short_name', 'in',
+                    [r['net_calculation_rule'] for r in rows])
+                ])
+        cls.cache_obj['net_calculation_rule'] = {}
+        for net_rule in net_calculation_rules:
+            cls.cache_obj['net_calculation_rule'][net_rule.rule.short_name] = \
+                net_rule
+        versions = Version.search([
+                ('option.coverage.code', 'in', coverage_codes),
+                ('option.covered_element.contract.contract_number', 'in',
+                    contract_numbers),
+                ])
+        cls.cache_obj['version'] = {}
+        for version in versions:
+            version_key = ':'.join([
+                    version.option.covered_element.contract.contract_number,
+                    version.option.covered_element.name or '',
+                    version.option.coverage.code,
+                    version.start_date.strftime('%Y-%m-%d')
+                    if version.start else '',
+                    ])
+            cls.cache_obj['version'][version_key] = version
+        cls.cache_obj['covered_element'] = {}
+        for row in rows:
+            parent_code = row['population']
+            parent_key = ':'.join(
+                [row['contract_number'], row['coverage'] or '',
+                    parent_code])
+            contract = cls.cache_obj['contract'][row['contract_number']].id
+            coverage = cls.cache_obj['coverage'][row['coverage']].id \
+                if row['coverage'] else None
+            parent_clause = [
+                ('contract', '=', contract),
+                ('options.coverage', '=', coverage),
+                ]
+            parent_covereds = CoveredElement.search(parent_clause)
+            # TODO: Handle population properly
+
+            for parent_covered in parent_covereds:
+                if parent_covered.name == parent_code or parent_code in \
+                        parent_covered.current_extra_data.values():
+                    cls.cache_obj['covered_element'][
+                        parent_key] = parent_covered
+                    break
+            else:
+                assert False, "Parent covered not found with code %s (%s)" % (
+                    parent_code, parent_key)
+
+        super(MigratorContractGroupConfiguration, cls).init_cache(
+            rows, **kwargs)
+
+    @classmethod
+    def sanitize(cls, row):
+        row = super(MigratorContractGroupConfiguration, cls).sanitize(row)
+        row['start_date'] = datetime.datetime.strptime(
+            row['start_start'], '%Y-%m-%d').date() \
+            if row['start_date'] else None
+        row['deductible_rule_extra_data'] = eval(
+            row['deductible_rule_extra_data'])
+        row['indemnification_rule_extra_data'] = eval(
+            row['indemnification_rule_extra_data'])
+        row['revaluation_rule_extra_data'] = eval(
+            row['revaluation_rule_extra_data'])
+        row['revaluation_on_basic_salary'] = bool(
+            row['revaluation_on_basic_salary'])
+        return row
+
+    @classmethod
+    def populate(cls, row):
+        benefit = cls.cache_obj['benefit'][row['benefit']]
+        contract = cls.cache_obj['contract'][row['contract_number']]
+        parent_key = ':'.join([row['contract_number'], row['coverage'] or '',
+                    row['population']])
+        covered_element = cls.cache_obj['covered_element'][parent_key]
+        start_date = row['start_date']
+        uid = ':'.join([row['benefit'], contract.contract_number,
+                str(covered_element.id), row['coverage'],
+                start_date.strftime('%Y-%m-%d') if start_date else ''])
+        row['uid'] = uid
+        version_key = ':'.join([
+                contract.contract_number,
+                covered_element.name or '',
+                row['coverage'],
+                start_date.strftime('%Y-%m-%d') if start_date else '',
+                ])
+        row['version'] = cls.cache_obj['version'][version_key]
+        row['deductible_rule'] = cls.cache_obj['deductible_rule'][
+                row['deductible_rule']]
+        row['indemnification_rule'] = cls.cache_obj['indemnification_rule'][
+                row['indemnification_rule']]
+        row['revaluation_rule'] = cls.cache_obj['revaluation_rule'][
+                row['revaluation_rule']]
+        row['benefit'] = benefit
+        row['net_calculation_rule'] = cls.cache_obj['net_calculation_rule'][
+            row['net_calculation_rule']] if row['net_calculation_rule'] else \
+            None
+        row['net_salary_mode'] = bool(row['net_calculation_rule'])
+        return row
+
+    @classmethod
+    def select(cls, **kwargs):
+        select = cls.table.select(
+            *[Column(cls.table, x) for x in cls.columns.keys()])
+        return select, cls.func_key
+
+    @classmethod
+    def select_extract_ids(cls, select_key, rows):
+        ids = []
+        cls.init_cache(rows)
+        for row in rows:
+            covered_key = ':'.join([
+                    row['contract_number'], row['coverage'] or '',
+                    row['population'],
+                    ])
+            covered = cls.cache_obj['covered_element'][covered_key]
+            ids.append('{}|{}|{}|{}|{}'.format(
+                    row['benefit'],
+                    row['contract_number'],
+                    str(covered.id),
+                    row['coverage'],
+                    row['start_date'] or '',
+                    ))
+        return set(ids)
+
+    @classmethod
+    def select_remove_ids(cls, ids, excluded, **kwargs):
+        rows = []
+        for id_ in ids:
+            row = id_.split('|')
+            rows.append({
+                    'contract_number': row[1],
+                    'start_date': datetime.datetime.strptime(row[4],
+                        '%Y-%m-%d').date() if row[4] else None,
+                    'coverage': row[3],
+                    'benefit': row[0],
+                    })
+        existing_ids = {'|'.join([
+                    r[3], r[1], str(r[2]), r[4], r[5] if r[5] else ''
+                    ]) for r in cls._select_exisiting_benefits_query(rows)}
+        return list(set(ids) - set(excluded) - set(existing_ids))
+
+    @classmethod
+    def query_data(cls, ids):
+        where_clause = Literal(False)
+        for id_ in ids:
+            benefit_code, contract_number, covered_id, coverage, start_date = \
+                id_.split('|')
+            # TODO: Handle population properly in where clause
+            where_clause |= (
+                (cls.table.benefit == benefit_code) &
+                (cls.table.contract_number == contract_number) &
+                (cls.table.coverage == coverage) &
+                (cls.table.start_date == (start_date if start_date else Null)
+                ))
+        select = cls.table.select(*cls.select_columns(),
+            where=where_clause)
+        return select
+
+    @classmethod
+    def migrate(cls, ids, **kwargs):
+        res = super(MigratorContractGroupConfiguration, cls).migrate(
+            ids, **kwargs)
+        if not res:
+            return []
+        ids = [(res[r]['benefit'].code, res[r]['version'].option.coverage.code,
+                res[r]['version'
+                    ].option.covered_element.contract.contract_number,
+                res[r]['version'].start or None) for r in res]
+        clause = Literal(False)
+        for benefit_code, coverage_code, contract_number, start_date in ids:
+            clause |= ((cls.table.benefit == benefit_code) &
+                (cls.table.coverage == coverage_code) &
+                (cls.table.contract_number == contract_number) &
+                (cls.table.start_date == (start_date or Null)))
+        cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
+        return res

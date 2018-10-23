@@ -16,3 +16,6 @@ def register():
         address.MigratorZip,
         party.MigratorPartyRelation,
         module='migrator_party', type_='model')
+    Pool.register(
+        party.MigratorInterlocutor,
+        module='migrator_party', type_='model', depends=['party_interlocutor'])

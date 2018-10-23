@@ -16,7 +16,8 @@ __all__ = [
     'MigratorContactMechanism',
     'MigratorCompany',
     'MigratorPartyRelation',
-]
+    'MigratorInterlocutor',
+    ]
 
 
 class MigratorParty(migrator.Migrator):
@@ -37,7 +38,8 @@ class MigratorParty(migrator.Migrator):
                 'existing_code': "a party already exists with code '%s'",
                 })
         cls.columns = {k: k for k in ('code', 'name', 'first_name',
-                'birth_name', 'ssn', 'gender', 'birth_date', 'extra_data'
+                'birth_name', 'ssn', 'ssn_key', 'gender', 'birth_date',
+                'extra_data'
                 )}
 
     @classmethod
@@ -72,6 +74,7 @@ class MigratorParty(migrator.Migrator):
         row['all_addresses'] = []
         row['is_person'] = True
         row['extra_data'] = eval(row['extra_data'] or '{}')
+        row['ssn'] += row['ssn_key']
         return row
 
     @classmethod
@@ -334,3 +337,200 @@ class MigratorPartyRelation(migrator.Migrator):
         cls.resolve_key(row, 'to', 'party')
         cls.resolve_key(row, 'type', 'relation_type')
         return row
+
+
+class MigratorInterlocutor(migrator.Migrator):
+    'Migrate Interlocutors'
+
+    __name__ = 'migrator.interlocutor'
+
+    @classmethod
+    def __setup__(cls):
+        super(MigratorInterlocutor, cls).__setup__()
+        cls.table = Table('interlocutors')
+        cls.model = 'party.interlocutor'
+        cls.func_key = 'uid'
+        cls.columns = {
+            'company': 'company',
+            'interlocutor': 'interlocutor',
+            'job': 'job',
+            'phone': 'phone',
+            'email': 'email',
+            'address_sequence': 'address_sequence',
+            'start_date': 'start_date',
+            'end_date': 'end_date',
+            }
+
+    @classmethod
+    def init_update_cache(cls, rows):
+        pool = Pool()
+        Address = pool.get('party.address')
+        Interlocutor = pool.get('party.interlocutor')
+        cursor = Transaction().connection.cursor()
+        cls.cache_obj['update'] = {}
+        interlocutor = Interlocutor.__table__()
+        party = pool.get('party.party').__table__()
+        address = Address.__table__()
+        parties = [cls.cache_obj['company'][r['company']].id for r in rows]
+
+        query_table = interlocutor.join(party, condition=(
+                interlocutor.party == party.id)).join(address, condition=(
+                interlocutor.address == address.id))  # NOQA
+        sub_where_clause = Literal(False)
+        for r in rows:
+            party = cls.cache_obj['company'][r['company']]
+            sub_where_clause |= (address.party == party.id)
+        sub_query = address.select(address.id, where=sub_where_clause)
+        where_clause = (interlocutor.address.in_(sub_query) &
+            interlocutor.party.in_(parties))
+
+        query = query_table.select(interlocutor.id, where=where_clause)
+        cursor.execute(*query)
+        update = {}
+        existing_interlocutors = Interlocutor.browse(
+            [x[0] for x in cursor.fetchall()])
+        update = {}
+        for interlocutor in existing_interlocutors:
+            uid = '%s:%s' % (interlocutor.name, interlocutor.party.code)
+            update[uid] = interlocutor
+        cls.cache_obj['update'] = update
+
+    @classmethod
+    def init_cache(cls, rows, **kwargs):
+        Address = Pool().get('party.address')
+        cls.cache_obj['company'] = tools.cache_from_search(
+            'party.party', 'code',
+            ('code', 'in', [r['company'] for r in rows]))
+        addresses = Address.search([
+                ('party', 'in', cls.cache_obj['company'].values())
+                ])
+        cls.cache_obj['address'] = {
+            '%s:%s' % (x.party.code, x.sequence): x
+            for x in addresses}
+        super(MigratorInterlocutor, cls).init_cache(rows, **kwargs)
+
+    @classmethod
+    def sanitize(cls, row):
+        row = super(MigratorInterlocutor, cls).sanitize(row)
+        row['interlocutor'] = row['interlocutor'].strip()
+        row['start_date'] = datetime.datetime.strptime(
+            row['start_start'], '%Y-%m-%d') if row['start_date'] else None
+        row['end_date'] = datetime.datetime.strptime(
+            row['end_date'], '%Y-%m-%d') if row['end_date'] else None
+        row['address_sequence'] = int(row['address_sequence'])
+        return row
+
+    @classmethod
+    def create_contact(cls, row):
+        party = cls.cache_obj['company'][row['company']]
+        mechanisms = ['phone', 'email']
+        row_mech = {k: row.pop(k) for k in mechanisms}
+        contacts = []
+        for k, v in row_mech.items():
+            if v:
+                new_contact = {
+                    'party': party,
+                    'value': v,
+                    'type': k,
+                    'sequence': row['address_sequence'],
+                    }
+                contacts.append(new_contact)
+        return contacts
+
+    @classmethod
+    def get_or_create_contacts(cls, code, sequence, row):
+        pool = Pool()
+        cursor = Transaction().connection.cursor()
+        party_table = pool.get('party.party').__table__()
+        Contact = pool.get('party.contact_mechanism')
+        contact_table = Contact.__table__()
+
+        query_table = contact_table.join(party_table, condition=(
+                Column(contact_table, 'party') == Column(party_table, 'id')
+                ))
+        cursor.execute(*query_table.select(contact_table.id, where=(
+                (Column(party_table, 'code') == code) &
+                (Column(contact_table, 'sequence') == sequence) &
+                (Column(contact_table, 'type').in_(['phone', 'email'])) &
+                (Column(contact_table, 'value').in_(
+                    [row['phone'], row['email']]))
+                )))
+        to_add = Contact.browse([r[0] for r in cursor.fetchall()])
+        if to_add:
+            return [('add', to_add)]
+        return [('create', cls.create_contact(row))]
+
+    @classmethod
+    def populate(cls, row):
+        code = '_'.join([row['company'], str(row['address_sequence'])])
+        row['code'] = code
+        row['name'] = row['interlocutor']
+        row[cls.func_key] = ':'.join(
+            [row['interlocutor'], row['company']])
+        row['party'] = cls.cache_obj['company'][row['company']]
+        address_key = ':'.join([row['company'], str(row['address_sequence'])])
+        row['address'] = cls.cache_obj['address'][address_key]
+        contacts = cls.get_or_create_contacts(
+            row['company'], row['address_sequence'], row)
+        row['contact_mechanisms'] = contacts
+        return row
+
+    @classmethod
+    def select(cls, **kwargs):
+        select = cls.table.select(
+            *[Column(cls.table, x) for x in cls.columns.keys()])
+        return select, cls.func_key
+
+    @classmethod
+    def select_extract_ids(cls, select_key, rows):
+        ids = []
+        cls.init_cache(rows)
+        for row in rows:
+            ids.append(u'{}_{}'.format(
+                row['interlocutor'],
+                row['company']))
+        return set(ids)
+
+    @classmethod
+    def select_remove_ids(cls, ids, excluded, **kwargs):
+        pool = Pool()
+        interlocutor = pool.get('party.interlocutor').__table__()
+        party = pool.get('party.party').__table__()
+        address = pool.get('party.address').__table__()
+        cursor = Transaction().connection.cursor()
+
+        query_table = interlocutor.join(party, condition=(
+                interlocutor.party == party.id)).join(address, condition=(
+                address.party == party.id))  # NOQA
+        cursor.execute(*query_table.select(interlocutor.name,
+                party.code,
+                ))
+        existing_ids = {
+            '%s_%s' % (row[0], row[1]) for
+            row in cursor.fetchall()}
+        return list(set(ids) - set(excluded) - set(existing_ids))
+
+    @classmethod
+    def query_data(cls, ids):
+        where_clause = Literal(False)
+        for id_ in ids:
+            name, company = id_.split('_')
+            where_clause |= (
+                (cls.table.interlocutor == name) &
+                (cls.table.company == company))
+        select = cls.table.select(*cls.select_columns(),
+            where=where_clause)
+        return select
+
+    @classmethod
+    def migrate(cls, ids, **kwargs):
+        res = super(MigratorInterlocutor, cls).migrate(ids, **kwargs)
+        if not res:
+            return []
+        ids = [(res[r]['party'].code, res[r]['name']) for r in res]
+        clause = Literal(False)
+        for company, interlocutor in ids:
+            clause |= ((Column(cls.table, 'company') == company) &
+                (Column(cls.table, 'interlocutor') == interlocutor))
+        cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
+        return res

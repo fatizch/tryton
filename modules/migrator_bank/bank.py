@@ -197,9 +197,10 @@ class MigratorBankAccount(migrator.Migrator):
         if len(row['bic']) == 8:
             row['bic'] += 'XXX'
         row['start_date'] = datetime.datetime.strptime(
-            row['start_date'], '%Y-%m-%d').date()
+            row['start_date'], '%Y-%m-%d').date() if row['start_date'] else \
+            None
         row['end_date'] = datetime.datetime.strptime(
-            row['end_date'], '%Y-%m-%d').date()
+            row['end_date'], '%Y-%m-%d').date() if row['end_date'] else None
         return row
 
     @classmethod
