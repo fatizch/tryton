@@ -1,3 +1,5 @@
+* BUG#10166 Modification de la valeur de la date de facturation sur les quittances de rachats en leur attribuant la date de rachat
+
 Version 2.2 - 2018-10-12
 * BUG#9844 Réactivation des contrats uniquement si nécessaire suite à annulation de rachat
 * BUG#9791 Planification plutôt qu'exécution des rachats automatiques

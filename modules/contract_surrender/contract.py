@@ -129,8 +129,15 @@ class Contract:
     @classmethod
     def post_surrender_invoices(cls, contracts):
         Invoice = Pool().get('account.invoice')
-        Invoice.post([c.surrender_invoice for c in contracts
-                if c.surrender_invoice.state in ('draft', 'validated')])
+        invoices_to_post = []
+        for contract in contracts:
+            if contract.surrender_invoice.state in ('draft', 'validated'):
+                contract.surrender_invoice.accounting_date = max(utils.today(),
+                     contract.surrender_invoice.invoice_date)
+                invoices_to_post.append(contract.surrender_invoice)
+        if invoices_to_post:
+            Invoice.save(invoices_to_post)
+            Invoice.post(invoices_to_post)
 
     @classmethod
     def plan_surrender(cls, contracts, surrender_date):
@@ -200,7 +207,7 @@ class Contract:
             account=self.subscriber.account_payable_used,
             payment_term=config.surrender_payment_term,
             state='validated',
-            invoice_date=max(utils.today(), surrender_date),
+            invoice_date=surrender_date,
             accounting_date=None,
             description=self._surrender_invoice_description(surrender_date),
             )

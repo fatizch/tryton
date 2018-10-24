@@ -1,3 +1,5 @@
+* BUG#10166 Modify the value of the invoice date in the invoice surrender by assigning the surrender date
+
 Version 2.2 - 2018-10-12
 * BUG#9844 Only reactivate contracts if needed when cancelling a surrender
 * BUG#9791 Plan rather than execute automatic surrenders
