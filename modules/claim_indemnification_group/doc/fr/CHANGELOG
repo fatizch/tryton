@@ -1,3 +1,5 @@
+* BUG#10198 Correctif sur la saisie automatique des règles de prestation lorsqu'un seul choix est disponible
+
 Version 2.2 - 2018-10-12
 * FEA#9102 Amélioration de l'affichage du paramétrage des prestations sur un contrat collectif
 * BUG#9123 Correction de la saisie de contrats collectifs si les règles paramétrées sur la prestation ne sont pas dans benefit.rule

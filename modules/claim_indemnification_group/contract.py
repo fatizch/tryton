@@ -155,6 +155,19 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
             self.annuity_frequency = \
                 self.benefit.benefit_rules[0].annuity_frequency
 
+        if len(self.available_deductible_rules) == 1:
+            self.deductible_rule = self.available_deductible_rules[0]
+            self.deductible_rule_extra_data = \
+                self.on_change_with_deductible_rule_extra_data()
+        if len(self.available_indemnification_rules) == 1:
+            self.indemnification_rule = self.available_indemnification_rules[0]
+            self.indemnification_rule_extra_data = \
+                self.on_change_with_indemnification_rule_extra_data()
+        if len(self.available_revaluation_rules) == 1:
+            self.revaluation_rule = self.available_revaluation_rules[0]
+            self.revaluation_rule_extra_data = \
+                self.on_change_with_revaluation_rule_extra_data()
+
     def getter_rules_extra_data(self, name):
         used = []
         for rule_name in self.rule_fields():
