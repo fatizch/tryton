@@ -1,3 +1,5 @@
+* BUG#10186 Correction du state du champ date du rejet bancaire afin de le rendre visible
+
 Version 2.2 - 2018-10-12
 * BUG#9643 Rendre les codes pays obligatoires
 * BUG#9619 Le mandat SEPA ne peut plus être annulé si des paiements en brouillon / validé / en traitement l'utilise

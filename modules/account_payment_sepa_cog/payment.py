@@ -487,8 +487,8 @@ class Payment:
     sepa_bank_reject_date = fields.Date('SEPA Bank Reject Date',
         states={'invisible': Or(
                 Eval('state') != 'failed',
-                Eval('journal.process_method') != 'sepa')
-                })
+                Eval('journal_method') != 'sepa')
+                }, depends=['journal_method', 'state'])
     reject_fee_amount = fields.Function(
         fields.Numeric('Reject Fee Amount',
             digits=(16, Eval('currency_digits', 2)),

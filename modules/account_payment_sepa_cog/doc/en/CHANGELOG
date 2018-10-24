@@ -1,3 +1,5 @@
+* BUG#10186 Fix the state of the field sepa bank reject date in order to make it visible
+
 Version 2.2 - 2018-10-12
 * BUG#9643 Make country codes mandatory
 * BUG#9619 The SEPA mandate cannot be cancelled if there is any draft / validated / processing payment which use it
