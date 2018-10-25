@@ -712,7 +712,7 @@ class CoogView(ModelView, FunctionalErrorMixIn):
 class CoogDictSchema(DictSchemaMixin):
     @classmethod
     def __setup__(cls):
-        super(DictSchemaMixin, cls).__setup__()
+        super(CoogDictSchema, cls).__setup__()
         cls._error_messages.update({
                 'rename_dict_codes': 'The following keys will be renamed in '
                 'all existing data in the database, this may take some time:'
