@@ -61,6 +61,7 @@ coog_module_create() { # creates a new module in the modules folder - <module_na
 
         # Init tryton.cfg
         echo "[tryton]" > "$module_folder"/tryton.cfg
+        echo "version=2.3.0" >> "$module_folder"/tryton.cfg
         echo "depends:" >> "$module_folder"/tryton.cfg
         echo "    ir" >> "$module_folder"/tryton.cfg
         echo "    res" >> "$module_folder"/tryton.cfg
@@ -112,6 +113,10 @@ coog_module_create() { # creates a new module in the modules folder - <module_na
         echo "# This file is part of Coog. The COPYRIGHT file at the top level of" > "$module_folder"/tests/__init__.py
         echo "# this repository contains the full copyright notices and license terms." >> "$module_folder"/tests/__init__.py
         echo "from .test_module import suite" >> "$module_folder"/tests/__init__.py
+        echo "__all__ = ['suite']" >> "$module_folder"/tests/__init__.py
+
+        echo "# This file is part of Coog. The COPYRIGHT file at the top level of" > "$module_folder"/tests/test_module.py
+        echo "# this repository contains the full copyright notices and license terms." >> "$module_folder"/tests/test_module.py
         echo "import unittest" > "$module_folder"/tests/test_module.py
         echo "" >> "$module_folder"/tests/test_module.py
         echo "import trytond.tests.test_tryton" >> "$module_folder"/tests/test_module.py
