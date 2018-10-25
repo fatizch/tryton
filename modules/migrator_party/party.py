@@ -4,7 +4,7 @@
 from itertools import groupby
 from datetime import datetime
 
-from sql import Table, Column, Literal
+from sql import Table, Column, Literal, Null
 
 from trytond.modules.migrator import migrator
 from trytond.modules.migrator import tools
@@ -412,7 +412,8 @@ class MigratorInterlocutor(migrator.Migrator):
     @classmethod
     def sanitize(cls, row):
         row = super(MigratorInterlocutor, cls).sanitize(row)
-        row['interlocutor'] = row['interlocutor'].strip()
+        row['interlocutor'] = row['interlocutor'].strip() \
+            if row['interlocutor'] else ''
         row['start_date'] = datetime.datetime.strptime(
             row['start_start'], '%Y-%m-%d') if row['start_date'] else None
         row['end_date'] = datetime.datetime.strptime(
@@ -487,8 +488,8 @@ class MigratorInterlocutor(migrator.Migrator):
         cls.init_cache(rows)
         for row in rows:
             ids.append(u'{}_{}'.format(
-                row['interlocutor'],
-                row['company']))
+                row['interlocutor'] or '',
+                row['company'] or ''))
         return set(ids)
 
     @classmethod
@@ -506,7 +507,7 @@ class MigratorInterlocutor(migrator.Migrator):
                 party.code,
                 ))
         existing_ids = {
-            '%s_%s' % (row[0], row[1]) for
+            '%s_%s' % (row[0] or '', row[1] or '') for
             row in cursor.fetchall()}
         return list(set(ids) - set(excluded) - set(existing_ids))
 
@@ -516,7 +517,7 @@ class MigratorInterlocutor(migrator.Migrator):
         for id_ in ids:
             name, company = id_.split('_')
             where_clause |= (
-                (cls.table.interlocutor == name) &
+                (cls.table.interlocutor == (name or Null)) &
                 (cls.table.company == company))
         select = cls.table.select(*cls.select_columns(),
             where=where_clause)
