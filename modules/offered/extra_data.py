@@ -5,7 +5,7 @@ from trytond import backend
 from trytond.pool import Pool
 from trytond.cache import Cache
 from trytond.rpc import RPC
-from trytond.model import DictSchemaMixin, Unique, Model
+from trytond.model import Unique, Model
 from trytond.model.fields.dict import TranslatedDict
 from trytond.pyson import Eval, Bool, In
 from trytond.transaction import Transaction
@@ -19,7 +19,7 @@ __all__ = [
     ]
 
 
-class ExtraData(DictSchemaMixin, model.CoogSQL, model.CoogView,
+class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
         model.TaggedMixin):
     'Extra Data'
 

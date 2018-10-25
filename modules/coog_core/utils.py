@@ -824,3 +824,9 @@ def check_button_access(model_name, button_name):
             if not groups & button_groups:
                 return False
     return True
+
+
+def clear_transaction_cache_for(models):
+    for cache in Transaction().cache.values():
+        for model in [models] if isinstance(models, basestring) else models:
+            cache.pop(model, None)

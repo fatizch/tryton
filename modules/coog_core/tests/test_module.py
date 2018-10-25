@@ -47,6 +47,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'TestLoaderUpdater': 'coog_core.test_loader_updater',
             'TestLocalMpttMaster': 'coog_core.test_local_mptt_master',
             'TestLocalMptt': 'coog_core.test_local_mptt',
+            'TestDictSchema': 'coog_core.test.dict.schema',
             }
 
     def test0010class_injection(self):
@@ -1527,6 +1528,49 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(
             (child_3.left, child_3.right, child_3.master, child_3.parent),
             (1, 4, master_2, None))
+
+    def test0400_dict_schema_updates(self):
+        schema_1 = self.TestDictSchema(type_='char', name='test_1',
+            string='Test 1')
+        schema_1.save()
+        schema_2 = self.TestDictSchema(type_='char', name='test_2',
+            string='Test 2')
+        schema_2.save()
+
+        target_1 = self.ExportTest(some_dict={})
+        target_1.save()
+        target_2 = self.ExportTest(some_dict=None)
+        target_2.save()
+        target_3 = self.ExportTest(some_dict={'test_1': False})
+        target_3.save()
+        target_4 = self.ExportTest(some_dict={'test_1': False, 'test_2': True})
+        target_4.save()
+
+        schema_2.name = 'test_2_renamed'
+        schema_2.save()
+
+        target_1 = self.ExportTest(target_1.id)
+        target_2 = self.ExportTest(target_2.id)
+        target_3 = self.ExportTest(target_3.id)
+        target_4 = self.ExportTest(target_4.id)
+
+        self.assertEqual(target_1.some_dict, {})
+        self.assertEqual(target_2.some_dict, {})
+        self.assertEqual(target_3.some_dict, {'test_1': False})
+        self.assertEqual(target_4.some_dict,
+            {'test_1': False, 'test_2_renamed': True})
+
+        self.TestDictSchema.delete([schema_1])
+
+        target_1 = self.ExportTest(target_1.id)
+        target_2 = self.ExportTest(target_2.id)
+        target_3 = self.ExportTest(target_3.id)
+        target_4 = self.ExportTest(target_4.id)
+
+        self.assertEqual(target_1.some_dict, {})
+        self.assertEqual(target_2.some_dict, {})
+        self.assertEqual(target_3.some_dict, {})
+        self.assertEqual(target_4.some_dict, {'test_2_renamed': True})
 
 
 def suite():

@@ -3,7 +3,6 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Bool, Eval
 from trytond.cache import Cache
-from trytond.model import DictSchemaMixin
 
 from trytond.modules.coog_core import model, fields
 
@@ -44,7 +43,7 @@ class Country:
         return address_lines
 
 
-class CountryAddressLine(DictSchemaMixin, model.CoogSQL, model.CoogView):
+class CountryAddressLine(model.CoogDictSchema, model.CoogSQL, model.CoogView):
     'Country Address Line'
 
     __name__ = 'country.address.line'

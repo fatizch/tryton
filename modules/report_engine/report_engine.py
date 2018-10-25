@@ -38,7 +38,6 @@ from trytond.report import Report
 from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Equal, Bool
-from trytond.model import DictSchemaMixin
 from trytond.server_context import ServerContext
 from trytond.filestore import filestore
 from trytond.tools import file_open
@@ -69,7 +68,7 @@ __all__ = [
     ]
 
 
-class TemplateParameter(DictSchemaMixin, model.CoogSQL, model.CoogView):
+class TemplateParameter(model.CoogDictSchema, model.CoogSQL, model.CoogView):
     'Template Parameter'
 
     __name__ = 'report.template.parameter'

@@ -26,7 +26,7 @@ from sql.conditionals import Coalesce
 from trytond import backend
 from trytond.rpc import RPC
 from trytond.cache import Cache
-from trytond.model import DictSchemaMixin, ModelView as TrytonModelView, Unique
+from trytond.model import ModelView as TrytonModelView, Unique
 from trytond.model import fields as tryton_fields, Model
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.wizard import StateAction
@@ -707,7 +707,7 @@ class RuleEngineRuleEngine(model.CoogSQL):
                     cur_rule_parameter['the_rule']]]))
 
 
-class RuleParameter(DictSchemaMixin, model.CoogSQL, model.CoogView):
+class RuleParameter(model.CoogDictSchema, model.CoogSQL, model.CoogView):
     'Rule Parameter'
 
     __name__ = 'rule_engine.rule_parameter'

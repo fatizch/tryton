@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 from trytond.cache import Cache
-from trytond.model import Model, DictSchemaMixin, Unique
+from trytond.model import Model, Unique
 from trytond.model.fields.dict import TranslatedDict
 
 import coog_string
@@ -158,7 +158,7 @@ class ExtraDetailsConfiguration(model.CoogSQL, model.CoogView):
         return res
 
 
-class ExtraDetailsConfigurationLine(DictSchemaMixin, model.CoogSQL,
+class ExtraDetailsConfigurationLine(model.CoogDictSchema, model.CoogSQL,
         model.CoogView):
     'Extra Details Configuration Line'
 

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.model import DictSchemaMixin
 from trytond.modules.company.model import (CompanyValueMixin,
     CompanyMultiValueMixin)
 
@@ -62,7 +61,7 @@ class TestMethodDefinitions(model.CoogSQL):
         pass
 
 
-class TestDictSchema(DictSchemaMixin, model.CoogSQL):
+class TestDictSchema(model.CoogDictSchema, model.CoogSQL):
     'Test Dict Schema'
     __name__ = 'coog_core.test.dict.schema'
 

@@ -11,7 +11,7 @@ import sys
 from functools import wraps
 from genshi.template import NewTextTemplate
 
-from sql import Union, Column, Literal, Window, Null
+from sql import Union, Column, Literal, Window, Null, Table
 from sql.aggregate import Max
 from sql.conditionals import Coalesce
 
@@ -20,6 +20,7 @@ from contextlib import contextmanager
 from trytond import backend
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.model import UnionMixin as TrytonUnionMixin, Unique, ModelStorage
+from trytond.model import DictSchemaMixin
 from trytond.exceptions import UserError
 from trytond.pool import Pool, PoolMeta
 from trytond.cache import Cache
@@ -35,6 +36,8 @@ import fields
 import export
 import summary
 import exception
+import coog_sql
+import utils
 
 try:
     import async.broker as async_broker
@@ -704,6 +707,111 @@ class CoogView(ModelView, FunctionalErrorMixIn):
             field_.states['readonly'] = Or(readonly_state,
                 pyson_condition)
             field_.depends += depends
+
+
+class CoogDictSchema(DictSchemaMixin):
+    @classmethod
+    def __setup__(cls):
+        super(DictSchemaMixin, cls).__setup__()
+        cls._error_messages.update({
+                'rename_dict_codes': 'The following keys will be renamed in '
+                'all existing data in the database, this may take some time:'
+                '\n%(codes)s',
+                'remove_dict_codes': 'The following keys will be removed from '
+                'all existing data in the database, this may take some time:'
+                '\n%(codes)s',
+                })
+
+    @classmethod
+    def write(cls, *args):
+        actions = iter(args)
+
+        renames = []
+        for schemas, values in zip(actions, actions):
+            if 'name' not in values:
+                continue
+            changes = [schema for schema in schemas
+                if schema.name != values['name']]
+            if changes:
+                renames += [(schema.name, values['name']) for schema in changes]
+
+        super(CoogDictSchema, cls).write(*args)
+
+        if renames:
+            cls.raise_user_warning('rename_dict_codes_%s' %
+                '_'.join(str(renames[:10])), 'rename_dict_codes',
+                {'codes': '\n'.join(' -> '.join(x) for x in renames)})
+            cursor = Transaction().connection.cursor()
+
+            models = set()
+            for model_name, table_name, field_name in cls._fields_to_update():
+                models.add(model_name)
+                table = Table(table_name)
+                column = Column(table, field_name)
+                for old, new in renames:
+                    cursor.execute(*table.update([column],
+                            values=[
+                                coog_sql.JsonRenameKey(column, old, new)],
+                            where=coog_sql.JsonFindKey(column, old)))
+
+            # We must manually clear the cache because we updated directly
+            # through sql
+            utils.clear_transaction_cache_for(models)
+
+    @classmethod
+    def delete(cls, schemas):
+        codes = [x.name for x in schemas]
+
+        super(CoogDictSchema, cls).delete(schemas)
+
+        if codes:
+            cls.raise_user_warning('remove_dict_codes_%s' %
+                '_'.join(codes[:10]), 'remove_dict_codes',
+                {'codes': ' - '.join(codes)})
+            cursor = Transaction().connection.cursor()
+            models = set()
+            for model_name, table_name, field_name in cls._fields_to_update():
+                models.add(model_name)
+                table = Table(table_name)
+                column = Column(table, field_name)
+                for code in codes:
+                    cursor.execute(*table.update([column],
+                            values=[coog_sql.JsonRemoveKey(column, code)],
+                            where=coog_sql.JsonFindKey(column, code)))
+
+            # We must manually clear the cache because we updated directly
+            # through sql
+            utils.clear_transaction_cache_for(models)
+
+    @classmethod
+    def _fields_to_update(cls):
+        '''
+            Returns all the tables / fields which may use instances of this
+            class as keys for their Dict fields.
+
+            We return an iterator so that there is no risk of accidentally
+            modifying the cache contents
+        '''
+        cache = getattr(cls, '_fields_to_update_cache', None)
+        if cache:
+            return iter(cache)
+        to_update = []
+        for model_name, klass in Pool().iterobject():
+            if not issubclass(klass, ModelSQL):
+                continue
+            if klass.table_query():
+                continue
+            for field_name, field in klass._fields.iteritems():
+                if not isinstance(field, tryton_fields.Dict):
+                    continue
+                if field.schema_model != cls.__name__:
+                    continue
+                to_update.append((model_name, klass._table, field_name))
+                if klass._history:
+                    to_update.append((model_name, klass._table + '__history',
+                        field_name))
+        cls._fields_to_update_cache = to_update
+        return iter(cls._fields_to_update_cache)
 
 
 class ExpandTreeMixin(object):
