@@ -1,3 +1,5 @@
+* FEA#10145 Utilisation de psycopg2 pour les opérations liées à la base de données
+
 Version 2.2 - 2018-10-12
 * OTH#0000 Configuration réelle et sinistres incapacité collective
 * OTH#0000 Création d'un sinistre prévoyance

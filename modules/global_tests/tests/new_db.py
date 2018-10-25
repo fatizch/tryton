@@ -1,6 +1,8 @@
 # encoding: utf-8
 import os
 import datetime
+import psycopg2
+
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 
@@ -26,10 +28,14 @@ _modules_to_ignore = [
 
 DB_USER = parse_environ('PGUSER', 'tryton')
 DB_PASSWORD = parse_environ('PGPASSWORD', 'tryton')
+DB_HOST = parse_environ('PGHOST', 'localhost')
+
 COOG_USER = parse_environ('GEN_COOG_USER', 'admin')
 COOG_PASSWORD = parse_environ('GEN_COOG_PASSWORD', 'admin')
 
 TESTING = parse_environ('GEN_TESTING', False)
+COOG_BINARY = parse_environ('GEN_COOG_BINARY', 'coog')
+RESTART_SERVER = parse_environ('GEN_RESTART_SERVER', True)
 
 # If CREATE_NEW_DB is True, a database name DB_NAME will be dropped,
 # re-created, then initialized with all vailable modules installed
@@ -120,39 +126,73 @@ def get_iban():
 # }}}
 
 if CREATE_NEW_DB:  # {{{
+    TRYTOND_CONFIG = os.environ['TRYTOND_CONFIG']
     assert all([DB_NAME, DB_PASSWORD, DB_USER]), 'DB connection data not set'
     do_print('\nNew database')
     do_print('    Creating new database %s' % DB_NAME)  # {{{
-    os.system('coog server kill')
-    os.system('PGPASSWORD="%s" dropdb -U "%s" "%s"' % (
-            DB_PASSWORD, DB_USER, DB_NAME))
-    os.system('PGPASSWORD="%s" createdb -U "%s" "%s"' % (
-            DB_PASSWORD, DB_USER, DB_NAME))
+
+    if RESTART_SERVER:
+        os.system('%s server kill' % COOG_BINARY)
+
+    conn = psycopg2.connect(
+        "dbname='postgres' user='%s' host='%s' password='%s'" % (
+            DB_USER, DB_HOST, DB_PASSWORD))
+    conn.autocommit = True
+    cur = conn.cursor()
+    try:
+        cur.execute("DROP DATABASE %s;" % DB_NAME)
+    except psycopg2.ProgrammingError:
+        # Database may not exist already
+        pass
+
+    cur.execute("CREATE DATABASE %s;" % DB_NAME)
     # }}}
 
     do_print('    Initializing database')  # {{{
     os.system('echo "%s" > /tmp/trpass' % COOG_PASSWORD)
-    os.system(
-        'DB_NAME="%s" TRYTONPASSFILE=/tmp/trpass '
-        'coog module update ir' % DB_NAME)
+
+    os.system('TRYTONPASSFILE=/tmp/trpass trytond-admin -d %s -c %s '
+        '--email %s -u ir' % (
+            DB_NAME, TRYTOND_CONFIG, 'admin@coopengo.com'))
+
     os.system('rm /tmp/trpass')
-    os.system((
-            'DB_PASSWORD=%s psql -X -U %s -d %s -c ' +
-            '"UPDATE ir_module SET state = \'to activate\' ' +
-            'WHERE name NOT IN (%s)"') % (DB_PASSWORD, DB_USER, DB_NAME,
+
+    conn = psycopg2.connect(
+        "dbname='%s' user='%s' host='%s' password='%s'" % (
+            DB_NAME, DB_USER, DB_HOST, DB_PASSWORD))
+    conn.autocommit = True
+    cur = conn.cursor()
+    cur.execute('UPDATE ir_module SET state = \'to activate\' '
+        'WHERE name NOT IN (%s);' % (
             ', '.join("'%s'" % x for x in _modules_to_ignore)))
-    os.system('DB_NAME="%s" coog module update ir' % DB_NAME)
-    os.system('coog server start')
+    os.system('TRYTONPASSFILE=/tmp/trpass trytond-admin -d %s -c %s -u ir' % (
+            DB_NAME, TRYTOND_CONFIG))
+
+    if RESTART_SERVER:
+        os.system('%s server start' % COOG_BINARY)
     # }}}
 elif RESTORE_DB:
     assert all([DB_NAME, DB_PASSWORD, DB_USER]), 'DB connection data not set'
     do_print('\nRestoring database')  # {{{
-    os.system('coog server kill')
-    os.system('PGPASSWORD=%s dropdb -U %s %s' % (
-            DB_PASSWORD, DB_USER, DB_NAME))
-    os.system('PGPASSWORD=%s createdb -U %s -T %s %s' % (
-            DB_PASSWORD, DB_USER, RESTORE_FROM, DB_NAME))
-    os.system('coog server start')
+
+    if RESTART_SERVER:
+        os.system('%s server kill' % COOG_BINARY)
+
+    conn = psycopg2.connect(
+        "dbname='postgres' user='%s' host='%s' password='%s'" % (
+            DB_USER, DB_HOST, DB_PASSWORD))
+    conn.autocommit = True
+    cur = conn.cursor()
+    try:
+        cur.execute("DROP DATABASE %s;" % DB_NAME)
+    except psycopg2.ProgrammingError:
+        # Database may not exist already
+        pass
+
+    cur.execute("CREATE DATABASE %s TEMPLATE ;" % (DB_NAME, RESTORE_FROM))
+
+    if RESTART_SERVER:
+        os.system('%s server start' % COOG_BINARY)
     # }}}
 # }}}
 
@@ -160,8 +200,8 @@ do_print('\nConnecting to Coog')  # {{{
 if not TESTING:
     assert COOG_USER
     config = config.set_trytond(
-        database='postgresql://%s:%s@localhost:5432/%s' % (
-            DB_USER, DB_PASSWORD, DB_NAME),
+        database='postgresql://%s:%s@%s:5432/%s' % (
+            DB_USER, DB_PASSWORD, DB_HOST, DB_NAME),
         user=COOG_USER,
         config_file=os.environ['TRYTOND_CONFIG'],
         )

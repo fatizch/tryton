@@ -1,3 +1,5 @@
+* FEA#10145 Use psycopg2 for database operations
+
 Version 2.2 - 2018-10-12
 * OTH#0000 Real life configuration and claim for group incapacity
 * OTH#0000 Create a life claim
