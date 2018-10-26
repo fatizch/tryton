@@ -189,7 +189,7 @@ elif RESTORE_DB:
         # Database may not exist already
         pass
 
-    cur.execute("CREATE DATABASE %s TEMPLATE ;" % (DB_NAME, RESTORE_FROM))
+    cur.execute("CREATE DATABASE %s TEMPLATE %s;" % (DB_NAME, RESTORE_FROM))
 
     if RESTART_SERVER:
         os.system('%s server start' % COOG_BINARY)
