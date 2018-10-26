@@ -74,7 +74,8 @@ class MigratorParty(migrator.Migrator):
         row['all_addresses'] = []
         row['is_person'] = True
         row['extra_data'] = eval(row['extra_data'] or '{}')
-        row['ssn'] += row['ssn_key']
+        if row['ssn'] and row['ssn_key']:
+            row['ssn'] += row['ssn_key']
         return row
 
     @classmethod

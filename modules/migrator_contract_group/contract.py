@@ -515,10 +515,7 @@ class MigratorSubsidiaryAffiliated(Migrator):
         contracts = [cls.cache_obj['contract'][row['contract']].id
             for row in rows]
         populations = [row['population'] for row in rows]
-        coverages = [cls.cache_obj['coverage'][row['coverage']].id
-            for row in rows]
-        if not parties or not companies or not contracts or not populations \
-                or not coverages:
+        if not parties or not companies or not contracts or not populations:
             return
         CoveredElement = pool.get('contract.covered_element')
         covered_person = CoveredElement.__table__()
@@ -533,13 +530,12 @@ class MigratorSubsidiaryAffiliated(Migrator):
             ).join(option, condition=(
                 option.covered_element == covered_parent_parent.id))
 
-        query = query_table.select(covered_person.id, where=(
-                covered_person.contract.in_(contracts) &
-                covered_parent.party.in_(companies) &
-                covered_person.party.in_(parties) &
-                option.coverage.in_(coverages) &
-                covered_parent_parent.name.in_(populations)
-                ))
+        where_clause = (covered_person.contract.in_(contracts) &
+            covered_parent.party.in_(companies) &
+            covered_person.party.in_(parties) &
+            covered_parent_parent.name.in_(populations))
+
+        query = query_table.select(covered_person.id, where=where_clause)
         cursor.execute(*query)
 
         update = {}
@@ -563,13 +559,18 @@ class MigratorSubsidiaryAffiliated(Migrator):
 
     @classmethod
     def populate(cls, row):
-        row['contract'] = cls.cache_obj['contract'][row['contract']].id
-        parent_covered, = Pool().get('contract.covered_element').search([
-                ('party', '=', cls.cache_obj['company'][row['company']].id),
-                ('contract', '=', row['contract']),
-                ('parent.all_options.coverage', '=',
-                    cls.cache_obj['coverage'][row['coverage']].id),
-                ], limit=1)
+        row['contract'] = cls.cache_obj['contract'][row['contract']]
+        coverage = row['coverage']
+        if coverage:
+            coverage = cls.cache_obj['coverage'][row['coverage']].id
+        parent_search = [
+            ('party', '=', cls.cache_obj['company'][row['company']].id),
+            ('contract', '=', row['contract'].id),
+            ]
+        if coverage:
+            parent_search += [('parent.all_options.coverage', '=', coverage)]
+        parent_covered, = Pool().get('contract.covered_element').search(
+            parent_search, limit=1)
         row['parent'] = parent_covered
         row['party'] = cls.cache_obj['person'][row['person']]
         row['manual_end_date'] = row['end']
@@ -596,14 +597,19 @@ class MigratorSubsidiaryAffiliated(Migrator):
         cls.init_cache(rows)
         for row in rows:
             # TODO: optimize
+            coverage = row['coverage']
+            if coverage:
+                coverage = cls.cache_obj['coverage'][row['coverage']].id
             contract = cls.cache_obj['contract'][row['contract']].id
-            parent_covered, = Pool().get('contract.covered_element').search([
-                    ('party', '=', cls.cache_obj['company'][row['company']].id),
-                    ('contract', '=', contract),
-                    ('parent.all_options.coverage', '=',
-                        cls.cache_obj['coverage'][row['coverage']].id),
-                    ], limit=1)
-
+            parent_search = [
+                ('party', '=', cls.cache_obj['company'][row['company']].id),
+                ('contract', '=', contract),
+                ]
+            if coverage:
+                parent_search += [
+                    ('parent.all_options.coverage', '=', coverage)]
+            parent_covered, = Pool().get('contract.covered_element').search(
+                parent_search, limit=1)
             ids.append('{}_{}'.format(
                 row.get('person'),
                 parent_covered.id,
@@ -621,7 +627,22 @@ class MigratorSubsidiaryAffiliated(Migrator):
 
     @classmethod
     def query_data(cls, ids):
-        select = cls.table.select(*cls.select_columns())
+        Covered = Pool().get('contract.covered_element')
+        where_clause = Literal(False)
+        for id_ in ids:
+            person, parent_covered_id = id_.split('_')
+            parent_covered = Covered(int(parent_covered_id))
+            company_code = parent_covered.party.code
+            contract = parent_covered.contract.contract_number
+            # TODO: Handle population properly in where clause
+            where_clause |= (
+                (cls.table.person == person) &
+                (cls.table.company == company_code) &
+                (cls.table.contract == contract)
+                )
+
+        select = cls.table.select(*cls.select_columns(),
+            where=where_clause)
         return select
 
     @classmethod
