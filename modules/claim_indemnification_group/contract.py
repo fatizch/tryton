@@ -102,10 +102,10 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         depends=['annuity_frequency_forced', 'annuity_frequency_required'])
     annuity_frequency_forced = fields.Function(
         fields.Boolean('Annuity frequency Forced'),
-        'get_annuity_frequency_forced')
+        'on_change_with_annuity_frequency_forced')
     annuity_frequency_required = fields.Function(
         fields.Boolean('Annuity Frequency Required'),
-        'get_annuity_frequency_required')
+        'on_change_with_annuity_frequency_required')
     available_revaluation_rules = fields.Function(
         fields.Many2Many('rule_engine', None, None,
             'Available Revaluation Rule'),
@@ -176,15 +176,22 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
                     if x.kind == 'benefit']
         return used
 
-    def get_annuity_frequency_forced(self, name):
+    @fields.depends('benefit')
+    def on_change_with_annuity_frequency_forced(self, name=None):
         if not self.benefit:
             return False
         return self.benefit.benefit_rules[0].force_annuity_frequency
 
-    def get_annuity_frequency_required(self, name):
+    @fields.depends('benefit')
+    def on_change_with_annuity_frequency_required(self, name=None):
         if not self.benefit:
             return False
-        return self.benefit.indemnification_kind == 'annuity'
+        return self.benefit.indemnification_kind == 'annuity' and \
+            not self.benefit.benefit_rules[0].force_annuity_frequency
+
+    @classmethod
+    def default_annuity_frequency(cls):
+        return 'quarterly'
 
     def get_available_rule(self, name):
         if not self.benefit:

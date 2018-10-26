@@ -135,6 +135,9 @@ class BenefitRule:
         cls.annuity_frequency.states['invisible'] = Or(
                 cls.annuity_frequency.states.get('invisible'),
                 And(Bool(Eval('is_group')), ~Eval('force_annuity_frequency')))
+        cls.annuity_frequency.states['required'] = And(
+                cls.annuity_frequency.states.get('required', False),
+                Bool(Eval('force_annuity_frequency')))
         cls.annuity_frequency.depends.extend(['force_annuity_frequency',
             'is_group'])
 

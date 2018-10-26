@@ -25,7 +25,9 @@ class ClaimService:
             return
         option_benefit = self.option.get_version_at_date(
             self.loss.start_date).get_benefit(self.benefit)
-        self.annuity_frequency = option_benefit.annuity_frequency
+        self.annuity_frequency = option_benefit.annuity_frequency if not \
+            self.benefit.benefit_rules[0].force_annuity_frequency else \
+            self.benefit.benefit_rules[0].annuity_frequency
 
     @classmethod
     def transfer_services(cls, matches, at_date):

@@ -15,4 +15,8 @@ this repository contains the full copyright notices and license terms. -->
     <label name="revaluation_rule"/>
     <field name="revaluation_rule" widget="selection"/>
     <field name="revaluation_rule_extra_data" colspan="2" no_command="1"/>
+    <group id="invisible">
+        <field name="annuity_frequency_required" invisible="1"/>
+        <field name="annuity_frequency_forced" invisible="1"/>
+    </group>
 </form>

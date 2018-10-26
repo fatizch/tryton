@@ -1,3 +1,4 @@
+* BUG#10215 Correctif sur les problèmes d'affichage et champ requis concernant la fréquence d'indemnisation
 * BUG#10198 Correctif sur la saisie automatique des règles de prestation lorsqu'un seul choix est disponible
 
 Version 2.2 - 2018-10-12
