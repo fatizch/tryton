@@ -1407,13 +1407,15 @@ class ManualPaymentFail(model.CoogWizard):
     'Fail Payment'
     __name__ = 'account.payment.manual_payment_fail'
 
-    start_state = 'fail_information'
+    start_state = 'init_payments'
+    init_payments = StateTransition()
     fail_information = StateView('account.payment.fail_information',
         'account_payment_cog.payment_fail_information_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Fail Payments', 'fail_payments', 'tryton-ok', default=True)
             ])
     fail_payments = StateTransition()
+    fail_nothing = StateTransition()
 
     @classmethod
     def __setup__(cls):
@@ -1427,7 +1429,7 @@ class ManualPaymentFail(model.CoogWizard):
                 'differents journal process methods at the same time',
                 })
 
-    def default_fail_information(self, values):
+    def transition_init_payments(self):
         pool = Pool()
         Payment = pool.get('account.payment')
         active_model = Transaction().context.get('active_model')
@@ -1442,13 +1444,19 @@ class ManualPaymentFail(model.CoogWizard):
             groups = Group.browse(active_ids)
             if len({x.process_method for x in groups}) > 1:
                 self.raise_user_error('multiple_journal_fail')
-            active_ids = [p.id for group in groups for p in group.payments]
-        if any([x.state not in ('succeeded', 'processing')
+            active_ids = [p.id for group in groups for p in group.payments
+                if p.state in ('succeeded', 'processing')]
+        if active_ids and any([x.state not in ('succeeded', 'processing')
                 for x in Payment.browse(active_ids)]):
             self.raise_user_error('payment_must_be_succeed_processing')
-        return {
-            'payments': active_ids
-            }
+        elif not active_ids:
+            return 'fail_nothing'
+
+        self.fail_informations.payments = Payment.browse(active_ids)
+        return 'fail_information'
+
+    def default_fail_information(self, values):
+        return self.fail_information._default_values
 
     def transition_fail_payments(self):
         pool = Pool()
@@ -1463,6 +1471,16 @@ class ManualPaymentFail(model.CoogWizard):
             Group = pool.get('account.payment.group')
             groups = list({p.group for p in self.fail_information.payments})
             Group._failed(groups)
+        return 'end'
+
+    def transition_fail_nothing(self):
+        if Transaction().context.get('active_model') != 'account.payment.group':
+            return 'end'
+
+        # All payments in the group are already failed
+        Group = Pool().get('account.payment.group')
+        groups = Group.browse(Transaction().context.get('active_ids'))
+        Group._failed(groups)
         return 'end'
 
 

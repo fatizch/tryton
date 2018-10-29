@@ -1,3 +1,5 @@
+* BUG#10191 Allow to fail a group for which all payments already failed
+
 Version 2.2 - 2018-10-12
 * FEA#10048 Add tags to payment journals
 * BUG#9851 Do not set payment date on all move lines when creating a payment from different lines with inverted signs
