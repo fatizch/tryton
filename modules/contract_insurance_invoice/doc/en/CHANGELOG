@@ -1,3 +1,4 @@
+* BUG#10223 Fix a case where invalid invoice periods could be computed
 * BUG#10168 Fix an edge case of get_invoice_periods which could lead to an infinite loop
 
 Version 2.2 - 2018-10-12

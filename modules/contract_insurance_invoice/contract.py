@@ -777,6 +777,11 @@ class Contract:
             if start > maximum_date or final_date and start > final_date:
                 break
 
+            # If we already are at the maximum validity of our instance, we can
+            # continue
+            if start == until:
+                continue
+
             # We exhausted all the usable values from the rule. However there
             # may still be a period for which the billing_information is valid,
             # but which is not yet included in a period.
