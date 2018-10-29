@@ -4414,6 +4414,16 @@ return 1.0 if compl_vip_agent() else 0.75
     broker_flat.save()
     # }}}
 
+    do_print('    Creating broker user')  # {{{
+    contract_user, = User.find([('login', '=', 'contract_user')])
+    broker_user = User(User.copy([contract_user.id], {})[0])
+    broker_user.login = 'jean.petit'
+    broker_user.password = 'azertyuiop'
+    broker_user.dist_network, = DistributionNetwork.find(
+        [('code', '=', 'C1010102')])
+    broker_user.save()
+    # }}}
+
 insurer_plan, = CommissionPlan.find(
     [('code', '=', 'commissionnement_assureur')])
 broker_plan, = CommissionPlan.find(
