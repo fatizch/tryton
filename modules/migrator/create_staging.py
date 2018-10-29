@@ -32,7 +32,7 @@ class CreateStaging(batch.BatchRootNoSelect):
 
     @classmethod
     def select_ids(cls, **kwargs):
-        dirpath = kwargs.get('dir')
+        dirpath = kwargs.get('directory')
         if not dirpath or not os.path.isdir(dirpath):
             raise Exception("A directory must be specified")
         paths = []
@@ -47,8 +47,9 @@ class CreateStaging(batch.BatchRootNoSelect):
         if not ids:
             raise Exception('No files to stage.')
         path = ids[0]
-        dirpath = kwargs.get('dir')
+        dirpath = kwargs.get('directory')
         encoding = kwargs.get('encoding')
+        delim = kwargs.get('delimiter')
         tablename = cls.get_tablename_from_filename(
             os.path.basename(path).lower())
         with tools.connect_to_source() as conn:
@@ -56,7 +57,7 @@ class CreateStaging(batch.BatchRootNoSelect):
                 cls.logger.info('Importing file %s into staging' % tablename)
                 CreateStaging.create_table(conn, tablename, dirpath)
                 rowcount = cls.copy_from_file(conn, path, tablename, encoding,
-                    delim=',')
+                    delim)
                 CreateStaging.rename_move_file(path, tablename)
             except Exception as e:
                 conn.rollback()
@@ -95,7 +96,7 @@ class CreateStaging(batch.BatchRootNoSelect):
                 with open(columns_file, 'r') as f:
                     table_description = json.loads(f.read())
                 if tablename in table_description.keys():
-                    columns = table_description[tablename].split(',')
+                    columns = table_description[tablename]
                 return columns
             else:
                 raise Exception('No table definition file')
@@ -104,7 +105,7 @@ class CreateStaging(batch.BatchRootNoSelect):
 
     @classmethod
     def copy_from_file(cls, conn, path, tablename, encoding,
-            delim=','):
+            delim=';'):
         cursor = conn.cursor()
         op = "COPY {} FROM STDIN WITH CSV ENCODING '{}' DELIMITER '{}'".format(
             tablename, encoding, delim)
