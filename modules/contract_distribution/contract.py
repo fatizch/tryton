@@ -3,6 +3,7 @@
 from trytond import backend
 
 from sql.conditionals import Coalesce
+from sql import Null
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
@@ -55,7 +56,8 @@ class Contract:
                         columns=[to_update.dist_network],
                         values=[update_data.network],
                         from_=[update_data],
-                        where=update_data.id == to_update.id))
+                        where=((update_data.id == to_update.id) &
+                            (to_update.dist_network == Null))))
             contract_handler.drop_column('agency')
 
     def get_com_product_id(self, name):
