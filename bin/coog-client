@@ -6,11 +6,19 @@ _coog_client_file() {
 }
 
 coog_client_launch() { # launch - [tryton args]
+        set_coog_theme
         tryton -c "$COOG_CONF_CLI" "$@"
 }
 
 coog_client_debug() { # launch in pdb - [tryton args]
+        set_coog_theme
         python -m pdb "$COOG_TRYTON/bin/tryton" -c "$COOG_CONF_CLI" "$@"
+}
+
+set_coog_theme() {
+    [ -z $GTK_DATA_PREFIX ] && GTK_DATA_PREFIX="$COOG_TRYTON"
+    [ -z $GTK_THEME ] && GTK_THEME=Coog
+    export GTK_DATA_PREFIX=$GTK_DATA_PREFIX GTK_THEME=$GTK_THEME
 }
 
 coog_client_start() { # start - [tryton args]
@@ -27,6 +35,7 @@ coog_client_start() { # start - [tryton args]
         else
                 args="$args $*"
         fi
+        set_coog_theme
         tryton -c "$COOG_CONF_CLI" $args &> "$out_file" &
         echo "$!" > "$pid_file"
         echo client started
