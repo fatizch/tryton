@@ -1430,6 +1430,14 @@ class ManualPaymentFail(model.CoogWizard):
                 })
 
     def transition_init_payments(self):
+        payments = self.get_payments()
+        if any(x.state not in ('succeeded', 'processing') for x in payments):
+            self.raise_user_error('payment_must_be_succeed_processing')
+        elif not payments:
+            return 'fail_nothing'
+        return 'fail_information'
+
+    def get_payments(self):
         pool = Pool()
         Payment = pool.get('account.payment')
         active_model = Transaction().context.get('active_model')
@@ -1437,26 +1445,18 @@ class ManualPaymentFail(model.CoogWizard):
         if active_model == 'account.payment.merged':
             payments = Payment.browse(active_ids)
             merged_ids = [x.merged_id for x in payments]
-            active_ids = [x.id for x in Payment.search(
-                    [('merged_id', 'in', merged_ids)])]
-        if active_model == 'account.payment.group':
+            payments = Payment.search([('merged_id', 'in', merged_ids)])
+        elif active_model == 'account.payment.group':
             Group = pool.get('account.payment.group')
             groups = Group.browse(active_ids)
-            if len({x.process_method for x in groups}) > 1:
-                self.raise_user_error('multiple_journal_fail')
-            active_ids = [p.id for group in groups for p in group.payments
+            payments = [p for group in groups for p in group.payments
                 if p.state in ('succeeded', 'processing')]
-        if active_ids and any([x.state not in ('succeeded', 'processing')
-                for x in Payment.browse(active_ids)]):
-            self.raise_user_error('payment_must_be_succeed_processing')
-        elif not active_ids:
-            return 'fail_nothing'
-
-        self.fail_informations.payments = Payment.browse(active_ids)
-        return 'fail_information'
+        else:
+            payments = Payment.browse(active_ids)
+        return payments
 
     def default_fail_information(self, values):
-        return self.fail_information._default_values
+        return {'payments': [x.id for x in self.get_payments()]}
 
     def transition_fail_payments(self):
         pool = Pool()
