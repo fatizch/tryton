@@ -1,3 +1,5 @@
+* BUG#10229 Properly set the context when running a process
+
 Version 2.2 - 2018-10-12
 * BUG#9278 Add searcher on rec_name of process-process-step
 

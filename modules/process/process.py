@@ -594,6 +594,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         act_window['id'] = None
         act_window['res_model'] = instance.__name__
         act_window['context'] = json.dumps(self.get_action_context())
+        act_window['pyson_context'] = json.dumps(self.get_action_context())
         act_window['domain'] = '[["current_state", "in", (%s)]]' % (
             ','.join(map(lambda x: str(x.id), self.all_steps)))
         act_window['context_module'] = None

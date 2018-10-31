@@ -1,3 +1,5 @@
+* BUG#10229 Correction du contexte lors de l'exécution d'un processus
+
 Version 2.2 - 2018-10-12
 * BUG#9278 Ajout d'un searcher sur le rec_name de process-process-step
 
