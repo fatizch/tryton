@@ -643,6 +643,18 @@ msgctxt "field:account.payment.payment_creation.start,created_payments:"
 msgid "Created Payments"
 msgstr "Paiements créés"
 
+msgctxt "field:account.payment.payment_creation.start,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:account.payment.payment_creation.start,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision de la devise"
+
+msgctxt "field:account.payment.payment_creation.start,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
 msgctxt "field:account.payment.payment_creation.start,description:"
 msgid "Description"
 msgstr "Description"
@@ -660,6 +672,10 @@ msgctxt "field:account.payment.payment_creation.start,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:account.payment.payment_creation.start,ignore_unpaid_lines:"
+msgid "Ignore Unpaid Lines"
+msgstr "Ignorer les lignes impayées"
+
 msgctxt "field:account.payment.payment_creation.start,journal:"
 msgid "Payment Journal"
 msgstr "Journal de paiement"
@@ -675,6 +691,11 @@ msgstr "Lignes à payer"
 msgctxt "field:account.payment.payment_creation.start,lines_to_pay_filter:"
 msgid "Lines To Pay Filter"
 msgstr "Lignes à payer"
+
+msgctxt ""
+"field:account.payment.payment_creation.start,lines_with_processing_payments:"
+msgid "Lines with Processing Payments"
+msgstr "Lignes de paiement en cours"
 
 msgctxt "field:account.payment.payment_creation.start,motive:"
 msgid "Motive"
@@ -708,6 +729,11 @@ msgstr "Traiter et valider les paiements"
 msgctxt "field:account.payment.payment_creation.start,total_amount:"
 msgid "Total Amount"
 msgstr "Montant total"
+
+msgctxt ""
+"field:account.payment.payment_creation.start,unpaid_outstanding_lines:"
+msgid "Unpaid Outstanding Lines"
+msgstr "Lignes d'encours impayées"
 
 msgctxt "field:account.payment.payment_information_selection,id:"
 msgid "ID"

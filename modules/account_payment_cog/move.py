@@ -14,6 +14,7 @@ from trytond.wizard import StateView, Button, StateTransition, StateAction
 from trytond.transaction import Transaction
 from trytond.modules.account_payment.payment import KINDS
 from trytond.modules.coog_core import fields, model, utils
+from trytond.modules.currency_cog import ModelCurrency
 
 
 __all__ = [
@@ -216,66 +217,68 @@ class MoveLine:
         return (line_table.party == lines[0].party.id)
 
     @classmethod
-    def processing_payments_outstanding_amount(cls, lines):
+    def outstanding_amount(cls, lines, processing_payments=False):
+        if not lines:
+            return [], Decimal(0)
         pool = Pool()
+        cursor = Transaction().connection.cursor()
         account = pool.get('account.account').__table__()
         line = pool.get('account.move.line').__table__()
         payment = pool.get('account.payment').__table__()
         company_id = lines[0].move.company.id
         account_id = lines[0].account.id
-        query_table = line.join(account, condition=account.id == line.account
-            ).join(payment, condition=(payment.line == line.id) &
-                (payment.state.in_(['processing', 'approved'])))
-        cursor = Transaction().connection.cursor()
-        cursor.execute(*query_table.select(
-                Sum(Coalesce(line.debit, 0) - Coalesce(line.credit, 0)),
-                where=account.active
-                & (account.company == company_id)
-                & cls.payment_outstanding_group_clause(lines, line)
-                & (account.id == account_id)
-                & (line.reconciliation != Null)
-                & (line.payment_date != Null)))
-
-        return cursor.fetchone()[0] or Decimal(0)
-
-    @classmethod
-    def unpaid_outstanding_amount(cls, lines):
-        pool = Pool()
-        cursor = Transaction().connection.cursor()
-        account = pool.get('account.account').__table__()
-        line = pool.get('account.move.line').__table__()
-        company_id = lines[0].move.company.id
-        account_id = lines[0].account.id
         query_table = line.join(account, condition=account.id == line.account)
-        today_where = ((line.maturity_date <= utils.today())
-            | (line.maturity_date == Null))
-        cursor.execute(*query_table.select(
-                Sum(Coalesce(line.debit, 0) - Coalesce(line.credit, 0)),
+        if processing_payments:
+            query_table = query_table.join(payment,
+                condition=(payment.line == line.id) &
+                (payment.state.in_(['processing', 'approved'])))
+            where_clause = ((line.reconciliation != Null)
+                & (line.payment_date != Null))
+            sign = -1
+        else:
+            where_clause = (
+                ((line.maturity_date <= utils.today())
+                    | (line.maturity_date == Null))
+                & (line.reconciliation == Null) & (line.payment_date == Null)
+                & Not(line.id.in_([p.id for p in lines])))
+            sign = 1
+
+        cursor.execute(*query_table.select(line.id,
                 where=account.active
                 & (account.company == company_id)
-                & Not(line.id.in_([p.id for p in lines]))
                 & cls.payment_outstanding_group_clause(lines, line)
                 & (account.id == account_id)
-                & today_where
-                & (line.reconciliation == Null)
-                & (line.payment_date == Null)))
-        return cursor.fetchone()[0] or Decimal(0)
+                & where_clause))
+        ids = [x[0] for x in cursor.fetchall()]
+        if ids:
+            cursor.execute(*line.select(
+                    Sum(Coalesce(line.debit, 0) - Coalesce(line.credit, 0)),
+                    where=line.id.in_(ids)))
+            outstanding = cursor.fetchone()[0] * sign or 0
+        else:
+            outstanding = 0
+        global_kind = cls.get_kind(lines)
+        if (global_kind == 'receivable' and outstanding > 0) or (
+                global_kind == 'payable' and outstanding < 0):
+            outstanding = 0
+        if outstanding:
+            return ids, outstanding
+        else:
+            return [], Decimal(0)
 
     @classmethod
-    def get_outstanding_amount(cls, lines):
-        '''
-            Calculate outstanding payment amount receivable or payable
-            as of today for a specific account
-        '''
-        assert len({l.account for l in lines}) == 1
-        unpaid_amount = cls.unpaid_outstanding_amount(lines)
-        processing_amount = cls.processing_payments_outstanding_amount(lines)
+    def calculate_amount(cls, lines, ignore_unpaid_lines=False):
+        if len({l.account for l in lines}) > 1:
+            cls.raise_user_error('incompatible_lines')
+        unpaid_amount = 0
+        if not ignore_unpaid_lines:
+            _, unpaid_amount = cls.outstanding_amount(lines)
+        _, processing_amount = cls.outstanding_amount(lines, True)
         kind = cls.get_kind(lines)
         inverted_lines = []
-        for line in lines:
-            if cls.get_kind([line]) != kind:
-                unpaid_amount += line.debit - line.credit
-                inverted_lines.append(line)
+        for line in [l for l in lines if cls.get_kind([l]) != kind]:
+            unpaid_amount += cls.get_sum([line])
+            inverted_lines.append(line)
         return ([l for l in lines if l not in inverted_lines],
             unpaid_amount - processing_amount)
 
@@ -284,8 +287,8 @@ class MoveLine:
         return sum([l.debit - l.credit for l in lines])
 
     @classmethod
-    def get_kind(cls, lines):
-        return 'receivable' if cls.get_sum(lines) > 0 else 'payable'
+    def get_kind(cls, lines, amount=0):
+        return 'receivable' if (cls.get_sum(lines) + amount) > 0 else 'payable'
 
     def new_payment(self, journal, kind, amount):
         return {
@@ -300,38 +303,25 @@ class MoveLine:
             }
 
     @classmethod
-    def init_payments(cls, lines, journal):
+    def init_payments(cls, lines, journal, ignore_unpaid_lines=False):
         if not lines:
             return []
         payments = []
-        lines, outstanding = cls.get_outstanding_amount(lines)
+        lines, outstanding = cls.calculate_amount(lines, ignore_unpaid_lines)
         if not lines:
             return []
-        global_kind = cls.get_kind(lines)
-        if global_kind == 'receivable' and outstanding > 0:
-            outstanding = 0
-        elif global_kind == 'payable' and outstanding < 0:
-            outstanding = 0
-        else:
-            outstanding = abs(outstanding)
+        outstanding = abs(outstanding)
         for line in lines:
             if line.payment_blocked:
                 continue
-            if (line.debit > 0) or (line.credit < 0):
-                kind = 'receivable'
-            else:
-                kind = 'payable'
-            if kind == global_kind:
-                if outstanding >= line.payment_amount:
-                    outstanding -= line.payment_amount
-                    continue
-                amount = line.payment_amount - outstanding
-                outstanding = 0
-            else:
-                # Can't reduce amount if kind are different
-                amount = line.payment_amount
+            if outstanding >= line.payment_amount:
+                outstanding -= line.payment_amount
+                continue
+            amount = line.payment_amount - outstanding
+            outstanding = 0
             if amount:
-                payments.append(line.new_payment(journal, kind, amount))
+                payments.append(line.new_payment(journal, cls.get_kind(lines),
+                    amount))
         return payments
 
     def get_payment_journal(self):
@@ -422,7 +412,7 @@ class PaymentInformationModification(model.CoogWizard):
         return 'end'
 
 
-class PaymentCreationStart(model.CoogView):
+class PaymentCreationStart(model.CoogView, ModelCurrency):
     'Payment Creation Start'
     __name__ = 'account.payment.payment_creation.start'
 
@@ -466,12 +456,23 @@ class PaymentCreationStart(model.CoogView):
     process_validate_payment = fields.Boolean('Process and Validate Payments',
         states={'invisible': Eval('process_method') != 'manual'},
         depends=['process_method'])
-    total_amount = fields.Numeric('Total Amount', readonly=True)
+    total_amount = fields.Numeric('Total Amount', readonly=True,
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     have_lines_payment_date = fields.Boolean('Lines Have Payment Date')
     created_payments = fields.Many2Many('account.payment', None, None,
         'Created Payments')
     possible_journals = fields.Many2Many('account.payment.journal',
         None, None, 'Possible Journals', readonly=True)
+    unpaid_outstanding_lines = fields.Many2Many('account.move.line', None, None,
+        'Unpaid Outstanding Lines', readonly=True,
+        states={'invisible': ~Eval('unpaid_outstanding_lines')
+            | Bool(Eval('ignore_unpaid_lines'))})
+    ignore_unpaid_lines = fields.Boolean('Ignore Unpaid Lines',
+        states={'invisible': ~Eval('unpaid_outstanding_lines')},
+        depends=['unpaid_outstanding_lines'])
+    lines_with_processing_payments = fields.Many2Many('account.move.line', None,
+         None, 'Lines with Processing Payments', readonly=True,
+        states={'invisible': ~Eval('lines_with_processing_payments')})
 
     @classmethod
     def view_attributes(cls):
@@ -509,30 +510,48 @@ class PaymentCreationStart(model.CoogView):
     def on_change_with_process_method(self, name=None):
         return self.journal.process_method if self.journal else ''
 
-    @fields.depends('lines_to_pay', 'kind')
-    def on_change_with_total_amount(self, name=None):
-        total = sum([(line.credit - line.debit) for line in self.lines_to_pay])
-        if self.kind == 'receivable':
-            total = -total
-        return total
-
     @fields.depends('motive')
     def on_change_with_description(self):
         return self.motive.name if self.motive else None
 
-    @fields.depends('lines_to_pay', 'payment_date')
+    def refresh_total_amount(self):
+        Line = Pool().get('account.move.line')
+        if len({l.account for l in self.lines_to_pay}) > 1:
+            self.raise_user_error('incompatible_lines')
+        self.unpaid_outstanding_lines, outstanding_1 = \
+            Line.outstanding_amount(self.lines_to_pay)
+        if self.ignore_unpaid_lines:
+            outstanding_1 = 0
+        self.lines_with_processing_payments, outstanding_2 = \
+            Line.outstanding_amount(self.lines_to_pay, True)
+        self.kind = Line.get_kind(self.lines_to_pay,
+            outstanding_1 + outstanding_2)
+        self.total_amount = (Line.get_sum(self.lines_to_pay)
+            + outstanding_1 + outstanding_2) * (
+            -1 if self.kind == 'payable' else 1)
+
+    @fields.depends('lines_to_pay', 'payment_date', 'total_amount', 'kind',
+            'ignore_unpaid_lines')
     def on_change_lines_to_pay(self):
         self.have_lines_payment_date = all(
             x.payment_date and x.payment_date >= utils.today()
             for x in self.lines_to_pay)
         if not self.have_lines_payment_date and self.payment_date is None:
             self.payment_date = utils.today()
+        self.refresh_total_amount()
+
+    @fields.depends('lines_to_pay', 'ignore_unpaid_lines')
+    def on_change_ignore_unpaid_lines(self):
+        self.refresh_total_amount()
 
     @fields.depends('lines_to_pay', 'kind')
     def on_change_with_possible_journals(self, name=None):
         return [x.id for x in Pool().get('account.payment.creation',
                 type='wizard').get_possible_journals(self.lines_to_pay,
                 self.kind)]
+
+    def get_currency(self, name=None):
+        return self.journal.currency if self.journal else None
 
 
 class PaymentCreation(model.CoogWizard):
@@ -562,13 +581,6 @@ class PaymentCreation(model.CoogWizard):
                 'them to be processed at the same time.',
                 'nothing_to_pay': 'Nothing to pay',
                 })
-
-    def get_lines_amount_per_kind(self, lines):
-        Line = Pool().get('account.move.line')
-        # lines must be use the same account
-        if len({l.account for l in lines}) != 1:
-            self.raise_user_error('incompatible_lines')
-        return {Line.get_kind(lines): Line.get_sum(lines)}
 
     @classmethod
     def get_possible_journals(cls, lines, kind=None):
@@ -631,18 +643,16 @@ class PaymentCreation(model.CoogWizard):
             return {}
         possible_journals = self.get_possible_journals(lines)
         Line = Pool().get('account.move.line')
-        kind = self.get_lines_amount_per_kind(lines)
         parties = list(set([l.party for l in lines]))
         payment_dates = list(set([l.payment_date for l in lines]))
         journals = Line.get_payment_journals_from_lines(lines)
         journal = None
+
         if len(lines) == 1 and len(journals) == 1:
             journal = journals[0].id
         return {
             'possible_journals': [x.id for x in possible_journals],
             'lines_to_pay': [x.id for x in lines],
-            'total_amount': kind.values()[0],
-            'kind': kind.keys()[0],
             'multiple_parties': len(parties) != 1,
             'party': parties[0].id if len(parties) == 1 else None,
             'payment_date': payment_dates[0]
@@ -680,7 +690,7 @@ class PaymentCreation(model.CoogWizard):
             MoveLine.write(lines_to_update, {'payment_date': payment_date})
 
         payments = MoveLine.init_payments(self.start.lines_to_pay,
-            self.start.journal)
+            self.start.journal, self.start.ignore_unpaid_lines)
         for payment in payments:
             self.init_payment(payment)
         payments = Payment.create(payments)

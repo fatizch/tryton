@@ -24,11 +24,14 @@ this repository contains the full copyright notices and license terms. -->
     <label name="total_amount"/>
     <field name="total_amount"/>
     <field name="lines_to_pay" colspan="4"/>
-    <newline/>
-    <field name="multiple_parties" invisible="1"/>
-    <field name="have_lines_payment_date" invisible="1"/>
+    <label name="ignore_unpaid_lines"/>
+    <field name="ignore_unpaid_lines"/>
+    <field name="unpaid_outstanding_lines" colspan="4"/>
+    <field name="lines_with_processing_payments" colspan="4"/>
     <group id="invisible" string="">
         <field name="lines_to_pay_filter" colspan="4"/>
         <field name="possible_journals"/>
+        <field name="multiple_parties"/>
+        <field name="have_lines_payment_date"/>
     </group>
 </form>

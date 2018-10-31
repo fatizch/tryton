@@ -158,7 +158,7 @@ WHERE
         super(MoveLine, cls).write(*args)
 
     @classmethod
-    def init_payments(cls, lines, journal):
+    def init_payments(cls, lines, journal, ignore_unpaid_lines=False):
         valid_lines = []
         for line in lines:
             contract = line.contract
@@ -174,7 +174,8 @@ WHERE
                         not journal.apply_payment_suspension)):
                 valid_lines.append(line)
 
-        return super(MoveLine, cls).init_payments(valid_lines, journal)
+        return super(MoveLine, cls).init_payments(valid_lines, journal,
+            ignore_unpaid_lines)
 
     def split(self, amount_to_split, journal=None):
         split_move = super(MoveLine, self).split(amount_to_split, journal)

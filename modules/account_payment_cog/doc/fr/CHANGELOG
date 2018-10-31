@@ -1,3 +1,4 @@
+* FEA#10193 Lors de la création de paiement par l'assistant, toutes les lignes pouvant affecter le montant total du paiement sont affichées et l'utilisateur a la possibilité d'en ignorer certaines
 * BUG#10191 Possibilité d'échouer un groupe dont tous les paiements sont échoués
 
 Version 2.2 - 2018-10-12

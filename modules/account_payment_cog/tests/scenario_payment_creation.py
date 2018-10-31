@@ -14,8 +14,7 @@ from trytond.modules.account.tests.tools import create_fiscalyear, \
     create_chart, get_accounts
 
 # #Comment# #Install Modules
-config = activate_modules(['account_payment_cog',
-    'account_payment_clearing_cog'])
+config = activate_modules(['account_payment_cog'])
 
 # #Comment# #Create currency
 currency = get_currency(code='EUR')
@@ -80,36 +79,41 @@ def create_move_line(amount):
     return line
 
 
-def test_create_payment(origin, party, kind, line0, payment_line, total_amount,
-        payment_amount, and_delete=True):
+def test_create_payment(origin, expected_kind, lines, expected_amount,
+        unpaid_outstanding_lines=None, lines_with_processing_payments=None,
+        ignore_unpaid_lines=False):
     create_payment = Wizard('account.payment.creation', origin)
     create_payment.form.free_motive = True
     create_payment.form.description = "test"
     create_payment.form.payment_date = datetime.date.today()
     create_payment.form.journal = journal
+    create_payment.form.ignore_unpaid_lines = ignore_unpaid_lines
     assert create_payment.form.party == party
-    assert create_payment.form.kind == kind
-    assert create_payment.form.total_amount == total_amount
+    assert create_payment.form.kind == expected_kind
+    assert create_payment.form.total_amount == expected_amount
+    if unpaid_outstanding_lines:
+        assert sorted(create_payment.form.unpaid_outstanding_lines,
+            key=lambda x: x.id) == sorted(unpaid_outstanding_lines,
+            key=lambda x: x.id)
+    if lines_with_processing_payments:
+        lines_with_processing_payments.sort(key=lambda x: x.id)
+        assert sorted(create_payment.form.lines_with_processing_payments,
+            key=lambda x: x.id) == sorted(lines_with_processing_payments,
+            key=lambda x: x.id)
 
     warning = Warning()
     warning.always = False
     warning.user = User(1)
     warning.name = 'updating_payment_date_%s' % ('account.move.line,' +
-        str(line0.id))
+        str(lines[0].id))
     warning.save()
 
     create_payment.execute('create_payments')
 
-    payment, = Payment.find([('line', '=', payment_line)])
-    assert payment.kind == kind
-    assert payment.amount == payment_amount
-
-    if and_delete:
-        payment.state = 'draft'
-        payment.save()
-        Payment.delete([payment])
-    else:
-        return payment
+    payment, = Payment.find([('line', '=', lines[-1].id)])
+    assert payment.kind == expected_kind
+    assert payment.amount == expected_amount
+    return payment
 
 
 def reset_payment_date(line):
@@ -124,38 +128,54 @@ def set_payment_date(line):
     line.save()
 
 
+def delete_payment(payment):
+    payment.state = 'draft'
+    payment.save()
+    Payment.delete([payment])
+
+
 debit = Decimal(42)
 debit_line = create_move_line(debit)
-test_create_payment([party], party, 'receivable', debit_line, debit_line, debit,
-    debit)
+delete_payment(test_create_payment(origin=[party], expected_kind='receivable',
+        lines=[debit_line], expected_amount=debit))
 
 credit = Decimal(20)
 credit_line = create_move_line(- credit)
-test_create_payment([credit_line], party, 'payable', credit_line, credit_line,
-    credit, credit)
+delete_payment(test_create_payment(origin=[credit_line],
+        expected_kind='payable', lines=[credit_line], expected_amount=credit))
 
-test_create_payment([party], party, 'receivable', debit_line, debit_line,
-    debit - credit, debit - credit)
+delete_payment(test_create_payment(origin=[party], expected_kind='receivable',
+        lines=[debit_line], expected_amount=debit - credit))
 
 credit_2 = Decimal(33)
 credit_line_2 = create_move_line(- credit_2)
-test_create_payment([party], party, 'payable', credit_line_2, credit_line,
-    - debit + credit + credit_2, - debit + credit + credit_2)
+delete_payment(test_create_payment(origin=[party], expected_kind='payable',
+        lines=[credit_line_2, credit_line],
+        expected_amount=- debit + credit + credit_2))
 
 # #Comment# #Test Unpaid outstanding amount
 debit_2 = Decimal(45)
 debit_line_2 = create_move_line(debit_2)
 
-test_create_payment([credit_line, credit_line_2], party, 'payable', credit_line,
-    credit_line_2, credit + credit_2, - debit_2 + credit + credit_2)
+delete_payment(test_create_payment(origin=[credit_line, credit_line_2],
+        expected_kind='payable', lines=[credit_line, credit_line_2],
+        expected_amount=- debit_2 + credit + credit_2,
+        unpaid_outstanding_lines=[debit_line_2]))
+
+# #Comment# #Test Ignore Unpaid outstanding amount
+delete_payment(test_create_payment(origin=[credit_line],
+        expected_kind='payable', lines=[credit_line],
+        expected_amount=credit,
+        unpaid_outstanding_lines=[debit_line_2],
+        ignore_unpaid_lines=True))
 
 debit_3 = Decimal(99)
 debit_line_3 = create_move_line(debit_3)
 reset_payment_date(credit_line)
 reset_payment_date(credit_line_2)
-payment = test_create_payment([debit_line_3], party, 'receivable',
-    debit_line_3, debit_line_3, debit_3, debit_3 + debit_2 - credit - credit_2,
-    and_delete=False)
+payment = test_create_payment(origin=[debit_line_3], expected_kind='receivable',
+    lines=[debit_line_3], expected_amount=debit_3 + debit_2 - credit - credit_2,
+    unpaid_outstanding_lines=[debit_line_2, credit_line, credit_line_2])
 
 set_payment_date(debit_line_2)
 set_payment_date(credit_line)
@@ -169,5 +189,7 @@ reconciliation_line = create_move_line(- debit_3)
 reconciliation = Reconciliation(date=datetime.date.today(),
     lines=[MoveLine(debit_line_3.id), MoveLine(reconciliation_line.id)])
 reconciliation.save()
-test_create_payment([debit_line], party, 'receivable', debit_line, debit_line,
-    debit, debit - debit_3)
+delete_payment(test_create_payment(origin=[debit_line],
+    expected_kind='receivable', lines=[debit_line],
+    expected_amount=debit - debit_3,
+    lines_with_processing_payments=[debit_line_3]))
