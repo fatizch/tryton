@@ -119,7 +119,7 @@ coog_daily_run() {
 
         (
         _coog_daily_check_modules "contract_insurance_invoice" || return 0 &&   \
-            coog_chain_main contract_insurance_invoice invoice                  \
+            coog_chain_main contract_insurance_invoice fast_invoice             \
                 --working_days="$WORKING_DAYS"                                  \
                 --conf_code="$WORKING_DAYS_CONF"
         )
