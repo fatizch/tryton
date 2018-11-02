@@ -421,8 +421,9 @@ class ClaimService:
     def init_dict_for_rule_engine(self, cur_dict):
         super(ClaimService, self).init_dict_for_rule_engine(
             cur_dict)
-        if self.loss.loss_desc.loss_kind == 'life':
+        if self.loss.loss_desc.loss_kind in ('person', 'std', 'ltd', 'death'):
             cur_dict['covered_person'] = self.get_covered_person()
+            cur_dict['person'] = self.get_covered_person()
 
     def init_from_loss(self, loss, benefit):
         super(ClaimService, self).init_from_loss(loss, benefit)

@@ -1,3 +1,4 @@
+* BUG#10172 Ajout de la donnée personne dans le contexte de la règle de paramétrage afin de calculer la date de naissance des affiliés
 * BUG#10072 Possibilité de supprimer les bénéficiaires depuis un sinistre
 
 Version 2.2 - 2018-10-12
