@@ -1242,12 +1242,12 @@ class ReportGenerate(CoogReport):
                     ReportCreate.raise_user_error('parsing_error', (
                             frame[2][14:-2], str(exc)))
                 else:
-                    raise exc
+                    raise
             except UserError:
                 raise
             except Exception:
                 pass
-            raise exc
+            raise
 
     @classmethod
     def create_shared_tmp_dir(cls):
