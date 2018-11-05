@@ -157,6 +157,9 @@ for period in periodes:
             'base_amount': salaire_journalier_base,
             'description': description.encode('utf-8'),
             'date_limite': None,
+            'extra_details': {
+                'montant_revalorisation': salaire_journalier_revalorise - salaire_journalier_base,
+                } 
             })
 return res</field>
             <field name="status">validated</field>

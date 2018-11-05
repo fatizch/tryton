@@ -306,6 +306,14 @@ class BenefitRule(
                     for reval_benefit in reval_benefits:
                         tmp_benefit = benefit.copy()
                         tmp_benefit.update(reval_benefit)
+                        extra_details_orig = benefit.get('extra_details', {})
+                        if 'extra_details' in tmp_benefit:
+                            for key, value in extra_details_orig.items():
+                                if key not in tmp_benefit['extra_details']:
+                                    tmp_benefit['extra_details'][key] = \
+                                        value
+                        else:
+                            tmp_benefit['extra_details'] = extra_details_orig
                         all_benefits.append(tmp_benefit)
             else:
                 all_benefits.extend(benefits)

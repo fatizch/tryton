@@ -1,3 +1,4 @@
+* BUG#10270 Correctif sur le calcul de la revalorisation qui écrase les détails d'indémnisation
 * BUG#10087 Correction de la détection du caractère périodique d'une indemnisation
 
 Version 2.2 - 2018-10-12

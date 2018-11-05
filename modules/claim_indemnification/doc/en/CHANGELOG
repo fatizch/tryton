@@ -1,3 +1,4 @@
+* BUG#10270 Fix on revaluation computation which erase the indemnification details
 * BUG#10087 Fix periodicity detection of indemnifications
 
 Version 2.2 - 2018-10-12
