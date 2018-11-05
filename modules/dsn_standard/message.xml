@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="dsn_message_view_form">
+            <field name="model">dsn.message</field>
+            <field name="type">form</field>
+            <field name="name">dsn_message_form</field>
+        </record>
+        <record model="ir.ui.view" id="dsn_message_view_list">
+            <field name="model">dsn.message</field>
+            <field name="type">tree</field>
+            <field name="name">dsn_message_list</field>
+        </record>
+		<record model="ir.action.act_window" id="act_dsn_message_form">
+            <field name="name">Dsn Messages</field>
+            <field name="res_model">dsn.message</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_dsn_message_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="dsn_message_view_list"/>
+            <field name="act_window" ref="act_dsn_message_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_dsn_message_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="dsn_message_view_form"/>
+            <field name="act_window" ref="act_dsn_message_form"/>
+        </record>
+            <record model="ir.model.button" id="dsn_message_cancel_button">
+            <field name="name">cancel</field>
+            <field name="string">Cancel</field>
+            <field name="model" search="[('model', '=', 'dsn.message')]"/>
+        </record>
+        <record model="ir.model.button" id="dsn_message_draft_button">
+            <field name="name">draft</field>
+            <field name="string">Draft</field>
+            <field name="model"
+                search="[('model', '=', 'dsn.message')]"/>
+        </record>
+        <record model="ir.model.button" id="dsn_message_wait_button">
+            <field name="name">wait</field>
+            <field name="string">Wait</field>
+            <field name="model"
+                search="[('model', '=', 'dsn.message')]"/>
+        </record>
+        <record model="ir.model.button" id="dsn_message_do_button">
+            <field name="name">do</field>
+            <field name="string">Do</field>
+            <field name="model" search="[('model', '=', 'dsn.message')]"/>
+        </record>
+
+        <record model="ir.action.act_window.domain" id="act_dsn_message_form_domain_draft">
+            <field name="name">Draft</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain" eval="[('state', '=', 'draft')]" pyson="1"/>
+            <field name="count" eval="True"/>
+            <field name="act_window" ref="act_dsn_message_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_dsn_message_form_domain_waiting">
+            <field name="name">Waiting</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[('state', '=', 'waiting')]" pyson="1"/>
+            <field name="count" eval="True"/>
+            <field name="act_window" ref="act_dsn_message_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_dsn_message_form_domain_done">
+            <field name="name">Done</field>
+            <field name="sequence" eval="30"/>
+            <field name="domain" eval="[('state', '=', 'done')]" pyson="1"/>
+            <field name="act_window" ref="act_dsn_message_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_dsn_message_form_domain_canceled">
+            <field name="name">Canceled</field>
+            <field name="sequence" eval="40"/>
+            <field name="domain" eval="[('state', '=', 'canceled')]" pyson="1"/>
+            <field name="act_window" ref="act_dsn_message_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_dsn_message_form_domain_all">
+            <field name="name">All</field>
+            <field name="sequence" eval="100"/>
+            <field name="act_window" ref="act_dsn_message_form"/>
+        </record>
+        <!--event type-->
+        <record model="event.type" id="event_mail_traited_dsn_message">
+            <field name="name">DSN message sent</field>
+            <field name="code">dsn_message_sent</field>
+        </record>
+        <menuitem name="Dsn Messages" parent="account.menu_account" sequence="40" action="act_dsn_message_form" id="menu_dsn_message_form"/>
+    </data>
+</tryton>

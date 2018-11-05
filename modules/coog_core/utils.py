@@ -31,6 +31,7 @@ from trytond.config import config
 from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT
 from trytond.model.modelstorage import EvalEnvironment
 from trytond.modules.coog_core import coog_date
+import coog_string
 
 from .model import fields
 
@@ -824,6 +825,65 @@ def check_button_access(model_name, button_name):
             if not groups & button_groups:
                 return False
     return True
+
+
+class DataExporter(object):
+
+    def format_amount(self, data):
+        raise NotImplementedError
+
+    def format_date(self, data):
+        raise NotImplementedError
+
+    def format_boolean(self, data):
+        return coog_string.translate_bool(data)
+
+    def instance_field_getter(self, instance, attribute_path):
+        """
+        instance: a Python object
+        attribute_path: a string encoding an attribute path
+        ex: 'parent.name.id'
+
+        returns the formatted value of the attribute,
+        or the return value of a method defined on
+        the DataExporter instance as :
+        def custom_xxx(self, instance) where xxx is
+        the attribute_path
+
+        This is a slightly modified version of a code by
+        Adrien BenDuc. Thank him if you find this useful
+        """
+        custom_field = None
+
+        def _format(data):
+            if issubclass(data.__class__, Decimal):
+                return self.format_amount(data)
+            elif issubclass(data.__class__, datetime.date):
+                return self.format_date(data)
+            elif (issubclass(data.__class__, fields.Boolean or
+                    data) or type(data) is bool):
+                return self.format_boolean(data)
+            assert isinstance(data, (type(u''), type(None))), (
+                attribute_path, data, type(data))
+            return data
+
+        def get_deep_field(fields_, curr_obj=None):
+            curr_obj = curr_obj or instance
+            if fields_:
+                curr_obj = getattr(curr_obj, fields_.pop(0), None)
+                if not curr_obj:
+                    return curr_obj
+                return get_deep_field(fields_, curr_obj)
+            return curr_obj
+
+        if '.' in attribute_path:
+            custom_field = attribute_path.replace('.', '_')
+        if hasattr(self, 'custom_%s' % (custom_field or attribute_path)):
+            return _format(getattr(self, 'custom_%s' %
+                (custom_field or attribute_path))(instance))
+        if custom_field:
+            return _format(get_deep_field(attribute_path.split('.')))
+        return _format(getattr(instance, attribute_path) or '')
 
 
 def clear_transaction_cache_for(models):

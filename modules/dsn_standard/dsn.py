@@ -1,0 +1,327 @@
+# encoding: utf8
+# This file is part of Coog. The COPYRIGHT file at the top level of
+# this repository contains the full copyright notices and license terms.
+import os
+import csv
+import re
+
+from collections import namedtuple
+from decimal import Decimal
+
+from trytond.config import config
+from trytond.pool import Pool
+from trytond.modules.coog_core import utils
+
+
+class DSNValidationError(Exception):
+    pass
+
+
+class Entry(namedtuple("DSNEntry", ['id_', 'value'])):
+
+    def __str__(self):
+        # prepare for python3
+        return u','.join([self.id_, u"'%s'" % self.value])
+
+    def __unicode__(self):
+        return u','.join([self.id_, u"'%s'" % self.value])
+
+
+class NEODeSTemplate(utils.DataExporter):
+    encoding = 'iso-8859-1'
+    custom_mapping = None
+    mapping = {
+        # Dispatch block
+        'S10.G00.00.001': 'software_name',
+        'S10.G00.00.002': 'software_editor_name',
+        'S10.G00.00.003': 'software_version_number',
+        # 'S10.G00.00.004':
+        'S10.G00.00.005': 'dispatch_test_code',
+        'S10.G00.00.006': 'norm_version',
+        'S10.G00.00.008': 'dispatch_kind',
+
+        # Sender block
+        'S10.G00.01.001': 'siren',
+        'S10.G00.01.002': 'conf_sender_nic',
+        'S10.G00.01.003': 'name',
+        'S10.G00.01.004': 'main_address.one_line_street',
+        'S10.G00.01.005': 'main_address.zip',
+        'S10.G00.01.006': 'main_address.city',
+        'S10.G00.01.007': 'main_address.country.code',
+
+        # 'S10.G00.01.008': 'main_address.?',
+        # 'S10.G00.01.009': 'main_address.?',
+        # 'S10.G00.01.010': 'main_address.?',
+
+        # Sender contact block
+        'S10.G00.02.001': 'conf_sender_contact_civility',
+        'S10.G00.02.002': 'conf_sender_contact_full_name',
+        'S10.G00.02.004': 'conf_sender_contact_email',
+        'S10.G00.02.005': 'conf_sender_contact_phone',
+
+        # Declaration block
+        'S20.G00.05.001': 'declaration_nature',
+        'S20.G00.05.002': 'declaration_kind',
+        'S20.G00.05.003': 'fraction_number',
+        'S20.G00.05.004': 'declaration_rank',
+        'S20.G00.05.005': 'declaration_month',
+        'S20.G00.05.007': 'file_date',
+        # 'S20.G00.05.009': '',  #   Identifiant métier
+        'S20.G00.05.010': 'declaration_currency',
+
+        # Footer : totals
+        'S90.G00.90.001': 'total_entries',  # len(message) + 2
+        'S90.G00.90.002': 'declaration_number',  # Nombre de déclarations
+    }
+
+    def __init__(self, origin, testing=False, void=False, replace=False):
+        self.origin = origin
+        self.testing = testing
+        self.void = void
+        self.replace = replace
+        self.load_specifications()
+        self.errors = []
+        self.message = []
+        if self.custom_mapping:
+            self.mapping.update(self.custom_mapping)
+
+    def load_specifications(self):
+        self.spec = NEODES()
+
+    def format_amount(self, amount):
+        return u'%s' % str(amount.quantize(Decimal(10) ** -2))
+
+    def format_date(self, date):
+        return u'%s' % date.strftime('%d%m%Y')
+
+    def generate(self):
+        self._generate()
+        self.validate()
+        # We must add a \n at the end because the specifications
+        # says that every line must end with a '0A' byte
+        return (u'\n'.join([unicode(x) for x in self.message]) + u'\n').encode(
+            'latin1')
+
+    def _generate(self):
+        for structure in ('S10', 'S20', 'S90'):
+            self.generate_structure(structure)
+
+    def generate_structure(self, structure_name):
+        # header here is whole block id, eg: S10.G00.02
+        headers = [x for x in self.spec.header_defs.keys()
+            if x.startswith(structure_name)]
+        self.generate_message(headers)
+
+    def generate_message(self, blocks_ids, parent=None):
+        for block_id in blocks_ids:
+            child_block_ids = self.get_child_block_ids(block_id)
+            for instance in self.get_instances(block_id, parent):
+                self.generate_block_message(instance, block_id, parent)
+                if child_block_ids:
+                    self.generate_message(child_block_ids, instance)
+
+    def get_child_block_ids(self, parent_id):
+        return sorted([k for k, v in self.spec.block_defs.iteritems()
+                if v['ParentId'] == parent_id])
+
+    def generate_block_message(self, instance, block_id, parent):
+        field_defs = self.get_field_defs(block_id)
+        for field_def in field_defs:
+            val = self.get_value(instance, field_def, parent)
+            if val == -1:
+                continue
+            assert isinstance(val, type(u'')), ('Value of %s is %s , type %s'
+                % (field_def[0], val, type(val)))
+            assert val
+            self.message.append(Entry(field_def[0], val))
+
+    def get_field_defs(self, block_id):
+        return sorted([(k, v) for k, v in self.spec.field_defs.iteritems()
+            if k.startswith(block_id)], key=lambda x: x[0])
+
+    def get_value(self, instance, field_def, parent):
+        if field_def[0] in self.mapping:
+            name = self.mapping[field_def[0]]
+            if name.startswith('conf_'):
+                return self.get_conf_item(name[5:])
+            return self.instance_field_getter(instance, name)
+        # ignore undefined fields
+        return -1
+
+    def validate(self):
+        for entry in self.message:
+            # TODO : check for fordidden chars
+            self.check_regexp(entry)
+            self.check_encodable(entry)
+        if self.errors:
+            concat = "\n".join(self.errors)
+            raise DSNValidationError(("\n" + concat).encode('utf8'))
+        return True
+
+    def check_encodable(self, entry):
+        try:
+            unicode(entry).encode('latin1')
+        except UnicodeEncodeError:
+            raise DSNValidationError(
+                'Cannot encode %s to latin1' % unicode(entry).encode('utf8'))
+
+    def check_regexp(self, entry):
+        field_def = self.spec.field_defs[entry.id_]
+        data_def = self.spec.data_types[field_def["DataType Id"]]
+        exp = data_def.get("CompiledRegex")
+        if exp:
+            # TODO : check that entire value matches (not a substring)
+            valid_ = bool(exp.match(entry.value))
+            if not valid_:
+                msg = ((u"The value \"%s\" for entry \"%s\" (%s) does "
+                "not match regexp \"%s\". The DataType is \"%s\".") % (
+                    entry.value, entry.id_, field_def["Comment"],
+                    data_def['Regexp'], data_def['Name']))
+                self.errors.append(msg)
+
+    def get_instances(self, block_id, parent):
+        Party = Pool().get('party.party')
+        if block_id == 'S10.G00.00':
+            return [self]
+        elif block_id == 'S10.G00.01':  # sender
+            sender_code = self.get_conf_item('sender_code')
+            sender, = Party.search(['code', '=', sender_code])
+            return [sender]
+        elif block_id == 'S10.G00.02':  # sender contact
+            return [self]
+        elif block_id == 'S20.G00.05':  # Declaration
+            return [self]
+        elif block_id == 'S90.G00.90':  # totals
+            return [self]
+        return []
+
+    @property
+    def software_name(self):
+        return u'Coog'
+
+    @property
+    def software_editor_name(self):
+        return u'Coopengo'
+
+    @property
+    def software_version_number(self):
+        from trytond.modules import get_module_info
+        return get_module_info('dsn_standard').get('version')
+
+    @property
+    def dispatch_kind(self):
+        return u'01' if not self.void else u'02'
+
+    @property
+    def dispatch_test_code(self):
+        return u'01' if self.testing else u'02'  # sic!
+
+    @property
+    def norm_version(self):
+        return u'20176'  # not sure
+
+    def get_conf_item(self, item):
+        conf_item = config.get('dsn', item)
+        assert conf_item, "Please set %s in the dsn section of "\
+            "the configuration" % item
+        return unicode(config.get('dsn', item))
+
+    @property
+    def declaration_nature(self):
+        if config.getboolean('env', 'testing') is True:
+            return u'21'
+        raise NotImplementedError
+
+    @property
+    def declaration_kind(self):
+        if not self.replace:
+            return u'01' if not self.void else u'02'
+        return u'03' if not self.void else u'05'
+
+    @property
+    def fraction_number(self):
+        if config.getboolean('env', 'testing') is True:
+            return u'23'
+        raise NotImplementedError
+
+    @property
+    def declaration_rank(self):
+        if config.getboolean('env', 'testing') is True:
+            return u'24'
+        raise NotImplementedError
+
+    @property
+    def declaration_month(self):
+        if config.getboolean('env', 'testing') is True:
+            return unicode(utils.today().strftime('01%m%Y'))
+        raise NotImplementedError
+
+    @property
+    def file_date(self):
+        return unicode(utils.today().strftime('%d%m%Y'))
+
+    @property
+    def declaration_currency(self):
+        return u'01'
+
+    @property
+    def total_entries(self):
+        return u'%s' % (len(self.message) + 2)
+
+    @property
+    def declaration_number(self):
+        return u'1'
+
+
+class NEODES(object):
+
+    def __init__(self):
+        self.load_field_definitions()
+
+    def get_resource_path(self, kind):
+        import sys
+        fname = self.get_resource_file_name(kind)
+        mpath = sys.modules[self.__module__].__file__
+        return os.path.join(os.path.dirname(mpath),
+            'resources/%s' % fname)
+
+    def get_resource_file_name(self, kind):
+        # The files below are the "Fields", "Data Types", "Blocks" tab from
+        # http://dsn-info.custhelp.com/app/answers/detail/a_id/907/kw/datatypes
+        # encoding is utf8
+        return 'dsn-datatypes-CT2019-1_%s.csv' % kind
+
+    def load_field_definitions(self):
+        # fields
+        # Block Id       Id      Name    Description     DataType Id    Comment
+        # data types
+        # Id     Name    Description     Nature  Regexp  Lg Min  Lg Max  Values
+        field_defs = {}
+        data_types = {}
+        block_defs = {}
+        header_defs = {}
+
+        for name in ('datatypes', 'fields', 'blocks', 'headers'):
+            with open(self.get_resource_path(name)) as f:
+                reader = csv.DictReader(f, delimiter=';', quotechar='"')
+                for row in reader:
+                    if name == 'datatypes':
+                        id_ = row.pop("Id")
+                        data_types[id_] = row
+                        reg = data_types[id_]["Regexp"]
+                        if reg:
+                            data_types[id_]["CompiledRegex"] = re.compile(reg)
+                    elif name == 'fields':
+                        id_ = '.'.join([row.pop("Block Id"), row.pop("Id")])
+                        field_defs[id_] = row
+                    elif name == 'blocks':
+                        id_ = row.pop("Id")
+                        block_defs[id_] = row
+                    elif name == 'headers':
+                        id_ = row.pop("Id")
+                        header_defs[id_] = row
+
+        self.field_defs = field_defs
+        self.data_types = data_types
+        self.block_defs = block_defs
+        self.header_defs = header_defs

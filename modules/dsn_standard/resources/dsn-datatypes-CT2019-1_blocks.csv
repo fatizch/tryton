@@ -1,0 +1,124 @@
+"Id";"Name";"Description";"ParentId";"lowerBound";"upperBound"
+"S10.G00.01";"Emetteur";;"S10.G00.00";1;1
+"S10.G00.02";"Contact Emetteur";"Acteur à contacter, chez le déclarant, dès lors qu’un problème est détecté suite à l’émission et le dépôt du fichier DSN._x000D_
+_x000D_
+Il s’agit d’un point d’entrée unique chargé d’instruire les demandes transmises et de les re-router, si besoin, aux acteurs concernés, notamment dans le cas ou le déclaré n’est pas l’émetteur final du fichier (passage par un concentrateur ou un Tiers déclarant). Il peut s'agir : _x000D_
+1. Du déclaré lui-même_x000D_
+2. Du tiers déclarant, dans le cas où la production des données déclaratives et  la transmission du ficher sur le point de dépôt sont externalisées (recours à Expert comptable) _x000D_
+3. Du concentrateur, en charge pour le compte du déclarant, de la concaténation et de la transmission des fichiers sur le point de dépôt";"S10.G00.00";1;1
+"S20.G00.07";"Contact chez le déclaré";"Acteur en charge, chez le déclaré, des échanges avec les organismes de Protection sociale, Administrations et services de l'Etat, au titre des données transmises en DSN.";"S20.G00.05";0;"*"
+"S20.G00.08";"Identifiant de l’organisme destinataire de la déclaration « néant »";;"S20.G00.05";0;"*"
+"S21.G00.06";"Entreprise";"L'entreprise est une unité économique, juridiquement autonome, organisée pour produire des biens ou des services pour le marché._x000D_
+Elle est composée d'un ou plusieurs établissements";"S20.G00.05";1;1
+"S21.G00.11";"Etablissement";"Unité de production localisée géographiquement, individualisée mais dépendant juridiquement d'une entreprise";"S21.G00.06";1;1
+"S21.G00.15";"Adhésion Prévoyance";"Adhésion à un contrat collectif de Prévoyance, Complémentaire Santé ou Retraite Supplémentaire souscrit auprès d'une institution de prévoyance, mutuelle, société d'assurance ou organisme complémentaire non fédéré par un membre du GIP-MDS (CTIP, FFSA, FNMF)._x000D_
+Ce bloc est utilisé exclusivement par les organismes complémentaires.";"S21.G00.11";0;"*"
+"S21.G00.16";"Changements destinataire Adhésion Prévoyance";"Ce bloc se limite à signaler une correction apportée à l'identification de l'organisme Prévoyance destinataire, en cas d'erreur sur la ou les déclarations précédentes.";"S21.G00.15";0;"*"
+"S21.G00.82";"Cotisation établissement";"Renseigne d'éventuelles cotisations imputables à l'établissement (par exemple : fonds de formation). Il ne s'agit pas d'un récapitulatif ou total de cotisations versées pour un ensemble de salariés attachés au contrat ou à l'établissement._x000D_
+_x000D_
+Ce bloc est utilisé exclusivement par :_x000D_
+- Caisses CIBTP_x000D_
+- Organismes complémentaires_x000D_
+- MSA_x000D_
+_x000D_
+Les règles détaillées de soumission aux cotisations CCCA-BTP, APNAB et CONSTRUCTYS, pour le secteur du bâtiment et des travaux publics (codes de cotisation 002, 003, et 036 à 040) sont disponibles sur le site http://probtp/._x000D_
+Les seules combinaisons autorisées pour les cotisations de code type 037 à 040 sont les suivantes :_x000D_
+- cotisation de type 037_x000D_
+- cotisations de type 037 et 038_x000D_
+- cotisations de type 037 et 039_x000D_
+- cotisations de type 037, 038, 039 et 040  ";"S21.G00.11";0;"*"
+"S21.G00.20";"Versement organisme de protection sociale";"Le bloc Versement permet à l'établissement de déclarer les informations relatives au paiement de ses cotisations. Si les versements sont pris en charge par un autre établissement de l'entreprise, l'établissement peut ne réaliser aucun versement aux organismes de protection sociale.";"S21.G00.11";0;"*"
+"S21.G00.55";"Composant de versement";"Ce bloc est à destination des organismes complémentaires";"S21.G00.20";0;"*"
+"S21.G00.22";"Bordereau de cotisation due";"Il établit la dette de cotisation sociale de l'établissement employeur, pour ses propres salariés ou pour son propre compte, vis-à-vis d'un organisme de protection sociale._x000D_
+Le bordereau définit ainsi :_x000D_
+- auprès de quel organisme l'établissement est redevable de cotisations_x000D_
+- la période de rattachement des cotisations déclarées";"S21.G00.11";0;"*"
+"S21.G00.23";"Cotisation agrégée";"La cotisation agrégée est une cotisation ou un total de cotisations dont l'établissement est redevable pour ses propres salariés (somme de cotisations individuelles) ou pour son propre compte (cotisations de strate établissement)._x000D_
+Une cotisation agrégée est toujours associée à un bordereau._x000D_
+Ce bloc est utilisé exclusivement par les URSSAF.";"S21.G00.22";0;"*"
+"S21.G00.42";"Affectation fiscale";;"S21.G00.11";0;"*"
+"S21.G00.44";"Assujettissement fiscal";"Ce bloc est à destination de la DGFiP. Le renseignement de celui-ci permet la déclaration des assujettissements ou non-assujettissement à la CVAE, à la taxe sur les salaires et aux taxes annexes._x000D_
+_x000D_
+Si une entreprise n'est pas assujettie à une taxe, le motif correspondant à celle-ci comme pour exemple le code ""010 - Non assujettissement à la taxe sur les salaires"" pour la taxe sur les salaires doit être renseigné dans la rubrique ""Code taxe - S21.G00.44.001""._x000D_
+_x000D_
+Si une entreprise est assujettie à une taxe, au moins un bloc ""Assujettissement fiscal - S21.G00.44"" doit être présent avec la rubrique ""Code taxe - S21.G00.44.001"" renseignée avec un motif correspondant à celle-ci comme pour exemple le motif ""009 - Assujettissement à la taxe sur les salaires"" pour la taxe sur les salaires et la rubrique ""Montant - S21.G00.44.002"" renseignée avec le montant de l'assiette de la taxe sur les salaires au taux normal pour l'ensemble des salariés de l'entreprise._x000D_
+_x000D_
+Si l'entreprise présente une assiette soumise à taux majoré, doivent être présent autant de blocs ""Assujettissement fiscal - S21.G00.44"" que nécessaire en y portant le motif correspondant au taux majore d'assujettissement et le montant d'assiette correspondant.";"S21.G00.11";0;"*"
+"S21.G00.30";"Individu";"Personne physique (salarié, stagiaire sous convention, mandataire social)";"S21.G00.11";0;"*"
+"S21.G00.31";"Changements Individu";"Les rubriques de ce bloc sont à renseigner en cas de modification d’une des caractéristiques suivantes d'un individu (par exemple, changement état civil)._x000D_
+Plusieurs caractéristiques d'un individu peuvent être modifiées à la même date._x000D_
+Dans ce cas, l’ensemble de ces modifications sera porté par une seule occurrence du bloc._x000D_
+Si plusieurs modifications surviennent pendant le mois à des dates différentes, il sera nécessaire de les déclarer dans autant de blocs qu’il y a de dates différentes de modifications._x000D_
+Les rubriques doivent être renseignées avec la valeur avant changement.";"S21.G00.30";0;"*"
+"S21.G00.34";"Pénibilité";"Ce bloc permet de renseigner l'exposition de chaque individu à la pénibilité.";"S21.G00.30";0;"*"
+"S21.G00.40";"Contrat (contrat de travail, convention, mandat)";"Accord conclu entre une entreprise et un individu par lequel sont fixés les termes des obligations réciproques en termes d'activités ou de fonctions et en termes de rétributions. Le lien de subordination n'existe que dans la notion de contrat de travail. Trois types de contrats ont été à ce jour identifiés : le contrat de travail, la convention de stage, le mandat social";"S21.G00.30";1;"*"
+"S21.G00.41";"Changements Contrat";"Les rubriques de ce bloc sont à renseigner en cas de modification d’une caractéristique du contrat (par exemple, changement du statut du salarié). Les rubriques doivent être renseignées avec la valeur avant changement.";"S21.G00.40";0;"*"
+"S21.G00.60";"Arrêt de travail";"Un arrêt de travail est une suspension temporaire du contrat de travail pour cause de maladie, maternité ou paternité durant laquelle le salarié ne peut exercer son activité._x000D_
+La transmission d'une annule et remplace doit s'accompagner de la transmission de la ""date du dernier jour travaillé"" et de la ""date de fin prévisionnelle"" de l'arrêt à annuler._x000D_
+En cas de suspension supra-mensuelle, la suspension doit être déclarée dans toutes les DSN mensuelles dont le Mois Principal déclaré présente une période commune avec la suspension concernée.";"S21.G00.40";0;"*"
+"S21.G00.66";"Temps partiel Thérapeutique";"Il permet à l'établissement de déclarer les informations relatives au temps partiel thérapeutique : période concernée et montant de la perte de salaire associé._x000D_
+Ces informations sont nécessaires à l’Assurance Maladie qui indemnise la perte de revenus du salarié en versant des indemnités journalières pour le temps non travaillé.";"S21.G00.60";0;"*"
+"S21.G00.62";"Fin du contrat";"Evénement de fin du contrat de travail signifiant la fin des relations de travail entre l'employeur et le salarié.";"S21.G00.40";0;1
+"S21.G00.63";"Préavis de fin de contrat";"Délai de prévenance que doit respecter celui qui prend l'initiative de rompre le contrat de travail.";"S21.G00.62";1;"*"
+"S21.G00.65";"Autre suspension de l'exécution du contrat";"En cas de suspension supra-mensuelle, la suspension doit être déclarée dans toutes les DSN mensuelles dont le Mois Principal déclaré présente une période commune avec la suspension concernée.";"S21.G00.40";0;"*"
+"S21.G00.70";"Affiliation Prévoyance";"Rattachement d’un individu à un contrat collectif de Prévoyance, Complémentaire Santé ou Retraite Supplémentaire souscrit par son employeur auprès d’une institution de prévoyance, mutuelle ou société d’assurance._x000D_
+Ce bloc est relié à une ""Adhésion Prévoyance"" S21.G00.15 par l'identifiant technique adhésion S21.G00.70.013. Ce bloc est lui-même identifié techniquement par la rubrique S21.G00.70.012.";"S21.G00.40";0;"*"
+"S21.G00.73";"Ayant-droit";"Description des ayants droit attachés au salarié, pour l'Affiliation Prévoyance concernée._x000D_
+Le renseignement de ce bloc est optionnel et vise à permettre aux entreprises gérant les ayant droits de prévoyance dans leur système de paie, de continuer à en faire la déclaration par voie dématérialisée.";"S21.G00.70";0;"*"
+"S21.G00.71";"Retraite complémentaire";;"S21.G00.40";1;"*"
+"S21.G00.50";"Versement individu";"Versement à l'individu des revenus constituant la contrepartie de son activité ou découlant de l'existence de cette activité.";"S21.G00.30";1;"*"
+"S21.G00.51";"Rémunération";"Contrepartie de l'activité de l'individu dans le cadre du contrat. Dans certains cas, cette contrepartie est exprimée sous la forme de base d'indemnisation. ";"S21.G00.50";1;"*"
+"S21.G00.53";"Activité";"Temps alloué par le salarié à un type d'activité._x000D_
+Il est valorisé par période de paie et est rattaché à un et un seul contrat d'une part et à une et une seule rémunération de type Salaire brut soumis à contribution d'Assurance chômage.";"S21.G00.51";0;"*"
+"S21.G00.52";"Prime, gratification et indemnité";"Les Primes, gratifications et indemnités à mentionner dans ce bloc sont de périodicités non mensuelles._x000D_
+Ce bloc concerne aussi les indemnités liées à la rupture d'un contrat de travail._x000D_
+Concernant les primes exceptionnelles,  lorsque cela fait sens, il convient d’indiquer la période de rattachement au titre de laquelle la prime a été attribuée._x000D_
+Concernant les primes versées à périodicité fixe, il convient d'indiquer lorsque cela fait sens, leur période de rattachement._x000D_
+_x000D_
+ATTENTION : Les primes et indemnités ajoutées pour la Fonction publique (préfixées [FP]) dans ce bloc ne sont pas intégrées dans le Salaire brut soumis à contributions d’Assurance chômage (code 002 en rubrique Type - S21.G00.51.011). _x000D_
+Pour la Fonction publique, les primes et indemnités renseignées dans ce bloc peuvent être de nature mensuelle.";"S21.G00.50";0;"*"
+"S21.G00.54";"Autre élément de revenu brut";"Il s'agit des éléments de revenu brut qui peuvent ne pas être rattachables à un seul et unique contrat de travail._x000D_
+Toutefois, certaines parties des montants des autres éléments de revenu brut peuvent être assujettis à contribution ou cotisation sociales de droit commun et doivent, à ce titre, être intégrés dans la valorisation de certaines rémunérations déclarées en bloc 51.";"S21.G00.50";0;"*"
+"S21.G00.78";"Base assujettie";"Somme des montants assujettis de manière homogène à une ou plusieurs cotisations sociales._x000D_
+Les montants assujettis peuvent être :_x000D_
+- des éléments de revenu brut (ex : salaire de base, l'intéressement, etc…) donnant lieu à versement au salarié_x000D_
+- des composants de base assujettie ne donnant pas lieu à versement au salarié._x000D_
+Certains des éléments assujettis peuvent être fixés de manière forfaitaire si les règles d'assujettissement et de cotisation le prévoient.";"S21.G00.50";0;"*"
+"S21.G00.79";"Composant de base assujettie";"Composante de la base assujettie déterminée selon des règles différentes de celles utilisées pour l'établissement d'éléments de revenu brut._x000D_
+Pour les organismes autres que Prévoyance, ce bloc n'est à renseigner que dans le cas où les éléments de revenu brut sont insuffisants pour constituer la base assujettie. Ce cas peut notamment se présenter lorsqu'une base assujettie est composée, d'une part, d'éléments de revenu brut et, d'autre part, de composants ne donnant pas lieu à versement au salarié._x000D_
+Pour la Prévoyance, ce bloc est à alimenter par les éléments constituant les paramètres qui entrent dans le calcul de la cotisation.";"S21.G00.78";0;"*"
+"S21.G00.81";"Cotisation individuelle";"Une cotisation individuelle est un dispositif de contribution à la protection sociale dont le montant est fixé soit proportionnellement à la base assujettie, soit de manière forfaitaire._x000D_
+Lorsqu'il s'agit d'une cotisation proportionnelle, cette règle s'exprime usuellement par un taux de cotisation appliqué à une assiette constituée de tout ou partie de la base assujettie._x000D_
+L'assiette est déterminée par application de plafonnements et/ou d'abattements sur la base assujettie._x000D_
+La cotisation individuelle est toujours rattachée à une base assujettie. Ainsi, la cotisation individuelle est toujours valorisée au titre de la période de rattachement de la base assujettie._x000D_
+Lorsqu'il s'agit d'une cotisation forfaitaire, son montant est établi de manière fixe._x000D_
+Le bloc s'applique également aux exonérations et réductions de cotisations individuelles.";"S21.G00.78";0;"*"
+"S21.G00.56";"Régularisation de prélèvement à la source";;"S21.G00.50";0;"*"
+"S21.G00.86";"Ancienneté";"Pour les salariés affiliés à un contrat de Prévoyance, certaines conventions collectives ou certains contrats prévoient que le salarié ne peut en bénéficier qu'à partir d'un certain délai d'ancienneté. Ce bloc permet de renseigner l’ancienneté dans l'entreprise ou le groupe, dans la branche professionnelle ou le secteur d'activité, dans le collège ou la catégorie professionnelle, ou dans le poste.";"S21.G00.30";0;"*"
+"S21.G00.85";"Lieu de travail ou établissement utilisateur";"Unité géographiquement localisée dans laquelle l'individu exécute habituellement sa prestation de travail._x000D_
+Ce bloc présente les références d'identification des lieux de travail où travaillent les individus de la présente déclaration._x000D_
+Créer un bloc pour chaque lieu de travail cité au moins une fois dans le contrat et qui n'est pas l'établissement d'affectation._x000D_
+Dans le cadre des entreprises de travail temporaire (ETT), ce bloc est à renseigner pour chaque établissement utilisateur déclaré en rubrique « Identifiant de l’établissement utilisateur - S21.G00.40.046 ».";"S20.G00.05";0;"*"
+"S89.G00.32";"Bénéficiaire des honoraires";;"S20.G00.05";0;"*"
+"S89.G00.33";"Avantages en nature";;"S89.G00.32";0;"*"
+"S89.G00.35";"Prise en charge des indemnités";;"S89.G00.32";0;"*"
+"S89.G00.43";"Rémunérations";;"S89.G00.32";0;"*"
+"S89.G00.87";"Actions gratuites";;"S20.G00.05";0;"*"
+"S89.G00.88";"Options sur titres (stock options)";;"S20.G00.05";0;"*"
+"S89.G00.89";"Bons de souscription de parts de créateur d'entreprise (BSPCE)";;"S20.G00.05";0;"*"
+"S89.G00.91";"Individu non salarié";"Personne physique bénéficiant soit : _x000D_
+_x000D_
+- d'une allocation de chômage pour les entreprises en auto-assurance chômage_x000D_
+- d'une allocation de cessation anticipée d'activité Amiante_x000D_
+- d'une allocation de pré-retraite suite à rupture du contrat_x000D_
+- du versement d'une somme versée par un tiers_x000D_
+";"S20.G00.05";0;"*"
+"S89.G00.92";"Bases spécifiques individu non salarié";"Il peut s'agir de montants assujettis de manière homogène à une ou plusieurs cotisations sociales._x000D_
+Les montants assujettis peuvent être :_x000D_
+- allocation de chômage pour les entreprises en auto-assurance chômage_x000D_
+- allocation de cessation anticipée d'activité Amiante_x000D_
+- allocation de pré-retraite suite à rupture du contrat_x000D_
+- allocation préretraite sans rupture de contrat_x000D_
+- somme versée par un tiers";"S89.G00.91";1;"*"
+"S89.G00.93";"Régularisation de prélèvement à la source";;"S89.G00.92";0;"*"
+"S89.G00.94";"Cotisation Individu non salarié";;"S89.G00.92";0;"*"

@@ -1,0 +1,18 @@
+"Id";"Name";"Description";"ParentId"
+"S10.G00.01";"Emetteur";;"S10.G00.00"
+"S10.G00.02";"Contact Emetteur";"Acteur à contacter, chez le déclarant, dès lors qu’un problème est détecté suite à l’émission et le dépôt du fichier PASRAU._x000D_
+Il s’agit d’un point d’entrée unique chargé d’instruire les demandes transmises et de les re-router, si besoin, aux acteurs concernés, notamment dans le cas où le déclaré n’est pas l’émetteur final du fichier (passage par un tiers déclarant). Il peut s'agir : _x000D_
+1. Du déclaré lui-même ;_x000D_
+2. Du tiers déclarant, dans le cas où la production des données déclaratives et  la transmission du ficher sur le point de dépôt sont externalisées (recours à un expert comptable).";"S10.G00.00"
+"S20.G00.07";"Contact chez le déclaré";"Acteur en charge, chez le déclaré, des échanges avec la DGFiP au titre des données transmises dans PASRAU.";"S20.G00.05"
+"S21.G00.06";"Entreprise";"Correspond au niveau SIREN de l'entité. ";"S20.G00.05"
+"S21.G00.11";"Etablissement";"Correspond au niveau SIRET de l'entité. ";"S21.G00.06"
+"S21.G00.20";"Versement organisme";"Le bloc Versement organisme permet à l'organisme de déclarer les informations relatives au versement du PAS. Si les versements sont pris en charge par une autre entité de l'organisme, l'établissement peut ne réaliser aucun versement à la DGFiP.";"S21.G00.11"
+"S21.G00.30";"Individu";"Personne physique (bénéficiaire ou agent).";"S21.G00.11"
+"S21.G00.31";"Changements Individu";"Les rubriques de ce bloc sont à renseigner en cas de modification d’une des caractéristiques suivantes d'un individu (par exemple, changement état civil)._x000D_
+Plusieurs caractéristiques d'un individu peuvent être modifiées à la même date._x000D_
+Dans ce cas, l’ensemble de ces modifications sera porté par une seule occurrence du bloc._x000D_
+Si plusieurs modifications surviennent pendant le mois à des dates différentes, il sera nécessaire de les déclarer dans autant de blocs qu’il y a de dates différentes de modifications._x000D_
+Les rubriques doivent être renseignées avec la valeur avant changement.";"S21.G00.30"
+"S21.G00.50";"Versement individu";"Versement à l'individu des prestations (ou rémunérations pour la fonction publique).";"S21.G00.30"
+"S21.G00.56";"Régularisation du prélèvement à la source";"Déclaration d'une rectification de montant de prélèvement à la source (erreur de taux ou de calcul de la base fiscale sur un montant initial correct) ou  d'une prise en compte d’un trop-versé (montant brut du versement trop important).";"S21.G00.50"

@@ -1,0 +1,5 @@
+"Element";"Id";"Name";"Description";"Comment"
+"Message";"DSN";"DSN";;
+"Header";"S10.G00.00";"Envoi";;
+"Footer";"S90.G00.90";"Total de l'envoi";;
+"Declaration";"S20.G00.05";"Déclaration";;

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.menu-res.group" id="menu_dsn_message_financial_manage">
+            <field name="menu" ref="dsn_standard.menu_dsn_message_form"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.access" id="access_dsn_message">
+            <field name="model" search="[('model', '=', 'dsn.message')]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_dsn_message_group_financial_manage">
+            <field name="model" search="[('model', '=', 'dsn.message')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.button-res.group" id="dsn_message_cancel_group_financial_manage">
+            <field name="button" ref="dsn_standard.dsn_message_cancel_button"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="dsn_message_wait_group_financial_manage">
+            <field name="button" ref="dsn_standard.dsn_message_wait_button"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+        <record model="ir.model.button-res.group" id="dsn_message_do_group_financial_manage">
+            <field name="button" ref="dsn_standard.dsn_message_do_button"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
+    </data>
+</tryton>

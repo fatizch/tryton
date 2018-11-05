@@ -1,0 +1,236 @@
+"Block Id";"Id";"Name";"Description";"DataType Id";"Comment"
+"S10.G00.00";"001";"Nom du logiciel utilisé";"Logiciel utilisé pour établir les déclarations._x000D_
+L'alimentation systématique de cette rubrique est obligatoire pour faciliter le dialogue avec les éditeurs et les émetteurs en cas d'anomalie détectée par les récepteurs._x000D_
+Mettre 'Logiciel maison' dans le cas où l'émetteur utilise un logiciel de constitution du PASRAU non acheté mais développé en interne.";"Type_Alphanumeric_1-20";"Envoi.NomLogiciel"
+"S10.G00.00";"002";"Nom de l'éditeur";"Nom de l'éditeur du logiciel utilisé._x000D_
+Mettre 'Logiciel maison' dans le cas où l'émetteur utilise un logiciel de constitution du PASRAU non acheté mais développé en interne.";"Type_Alphanumeric_1-20";"Envoi.EditeurLogiciel"
+"S10.G00.00";"003";"Numéro de version du logiciel utilisé";"Numéro de la version du logiciel utilisé, s'il existe.";"Type_Alphanumeric_1-10";"Envoi.VersionLogiciel"
+"S10.G00.00";"005";"Code envoi du fichier d'essai ou réel";"Les fichiers d'essai sont recommandés lors des premiers échanges avec le service PASRAU._x000D_
+L'envoi d'un fichier en mode essai permet de vérifier si le fichier passe les pré-contrôles et sera effectivement transmis à la DGFiP lors de son envoi en mode réel. ";"N4DS_Essai";"Envoi.EssaiReel"
+"S10.G00.00";"006";"Numéro de version de la norme utilisée";;"DGFiP_Version";"Envoi.VersionNorme"
+"S10.G00.00";"008";"Type de l'envoi";"Cette rubrique permet de définir s'il s'agit d'un envoi normal, ou d'un envoi contenant uniquement des déclarations mensuelles ""néant"".";"DSN_Envoi_Type";"Envoi.Type"
+"S10.G00.01";"001";"Siren de l'émetteur de l'envoi";"Identifiant de l'entité ayant élaboré le présent envoi._x000D_
+Dans le cas d'un tiers déclarant ou d'un concentrateur, c'est l'identifiant SIREN de ce tiers qui doit figurer ici._x000D_
+Attention : pour qu'il puisse déposer un message PASRAU sur le site de net entreprises, il convient que l'acteur émetteur (http://www.net-entreprises.fr/) soit inscrit comme administrateur sur le site._x000D_
+Pour les réceptions de PASRAU en machine to machine une enveloppe gérant sera à associer au message et ne figure pas dans le cahier technique.";"Identifiant_Siren_strict";"Emetteur.Siren"
+"S10.G00.01";"002";"Nic de l'émetteur de l'envoi";"Identifiant établissement (Numéro Interne de Classement)._x000D_
+Un identifiant à zéro n'est pas admis.";"Identifiant_Nic_strict";"Emetteur.Nic"
+"S10.G00.01";"003";"Nom ou raison sociale de l'émetteur";;"Type_Alphanumeric_1-60";"Emetteur.Nom"
+"S10.G00.01";"004";"Numéro, extension, nature et libellé de la voie";"Numéro : Il précise l’adresse dans la voie. Sa valeur est différente de 0 et ne doit pas dépasser 4 chiffres. En cas de numéro multiple, seul le premier doit être indiqué (pour exemple indiquer 4 pour 4/14)_x000D_
+Extension : Lettre accolée au numéro si celui-ci ne présente pas une précision suffisante (par exemple B pour BIS, T pour TER, etc…)_x000D_
+Nature de la voie : information facultative décrivant la nature de la voie (rue, avenue, etc…)_x000D_
+Libellé de la voie : Appellation officielle de la voie";"N4DS_Adresse";"Emetteur.Voie"
+"S10.G00.01";"005";"Code postal";"Il s’agit de données d’organisation postale qui doivent être utilisées en l’état. Le code postal est composé de 5 chiffres.";"CodePostalAlpha";"Emetteur.CodePostal"
+"S10.G00.01";"006";"Localité";"La localité est un élément géographique et administratif. C’est le premier élément d’identification associé au code postal. Le libellé est la plupart du temps le nom officiel de la localité enregistrée à l’INSEE et au Journal Officiel.";"N4DS_Adresse_Localite";"Emetteur.Localite"
+"S10.G00.01";"007";"Code pays";"Nom du pays (territoire d’un état) exprimé sous la forme d’un code.";"ISO_3166-1-A2_Pays";"Emetteur.Pays"
+"S10.G00.01";"008";"Code de distribution à l'étranger";"Mention complémentaire pour les adresses ne relevant du système postal français";"N4DS_Adresse";"Emetteur.CodeDistribution"
+"S10.G00.01";"009";"Complément de la localisation de la construction";"Les compléments d’adresse permettent d’indiquer le point de remise exact du courrier. Ils donnent des informations précises et déterminantes dans la phase finale de distribution du courrier, tel que le bâtiment, la boîte aux lettres, le numéro d’appartement.";"N4DS_Adresse";"Emetteur.ComplementConstruction"
+"S10.G00.01";"010";"Service de distribution, complément de localisation de la voie";"Il s’agit de services de distribution du courrier spécifiques proposés ou mis en place par La Poste";"N4DS_Adresse";"Emetteur.ComplementVoie"
+"S10.G00.02";"001";"Code civilité";;"Civilite";"Contact.Civilite"
+"S10.G00.02";"002";"Nom et prénom de la personne à contacter";"Nom, prénom de l'agent de l'émetteur pouvant donner des précisions sur cet envoi._x000D_
+";"Identite_Base_1-80_regex";"Contact.Nom"
+"S10.G00.02";"004";"Adresse mél du contact émetteur";"Cette adresse sera utilisée dans le cadre des contacts en lien avec vos déclarations actuelles et à venir.";"N4DS_Email_6-100";"Contact.Mel"
+"S10.G00.02";"005";"Adresse téléphonique";;"Telephone";"Contact.Tel"
+"S20.G00.05";"001";"Nature de la déclaration";"Systématiquement renseignée à ""11"" pour PASRAU";"DGFiP_Declaration_Nature";"Declaration.Nature"
+"S20.G00.05";"002";"Type de la déclaration";"Les valeurs possibles sont : _x000D_
+01 - déclaration normale_x000D_
+02 - déclaration normale néant_x000D_
+03 - déclaration annule et remplace intégral_x000D_
+05 - annule et remplace néant";"DGFiP_Declaration_Type";"Declaration.Type"
+"S20.G00.05";"003";"Numéro de fraction de déclaration";"Le numéro de fraction de la déclaration est exprimé par un nombre 'n' qui correspond au numéro de la fraction. Le nombre de fractions ne peut pas être supérieur à 9 pour un même déclarant. Le dénominateur (second caractère) n'est pas significatif et peut être renseigné avec la valeur 0. Les numéros des fractions ne sont pas contrôlés d’un mois sur l’autre (il peut y avoir pour un SIRET déclaré 4 fractions en mois M et 3 ou 5 en M+1).";"DGFiP_Declaration_Fraction";"Declaration.Fraction"
+"S20.G00.05";"004";"Numéro d'ordre de la déclaration";"Le numéro d'ordre de la déclaration (attribué par le déclarant) est une référence qui permet d'identifier le rang de constitution d'une déclaration au cours du mois courant._x000D_
+Ce numéro est remis à zéro à chaque premier jour de mois civil.";"Declaration_Ordre";"Declaration.Ordre"
+"S20.G00.05";"005";"Date du mois principal déclaré";" Il s’agit du premier jour du mois civil durant lequel les revenus ont été versés. Cette date doit être renseignée au premier jour du mois (sous la forme 01MMAAAA).";"Date_JJMMAAAA_Mois_Declare";"Declaration.Mois"
+"S20.G00.05";"007";"Date de constitution du fichier";;"Date_JJMMAAAA_20";"Declaration.DateFichier"
+"S20.G00.05";"009";"Identifiant métier";"Cette rubrique vous permet de renseigner un identifiant métier de déclaration qui pourra être utilisé en cas de contact direct avec la DGFiP.";"Type_Alphanumeric_1-15";"Declaration.IdentifiantMetier"
+"S20.G00.05";"010";"Devise de la déclaration";"La devise choisie s'applique à tous les montants présents dans la déclaration._x000D_
+Elle est systématiquement renseignée à ""01 - euro"".";"DGFiP_Devise_Paiement";"Declaration.DeviseDeclaration"
+"S20.G00.07";"001";"Nom et prénom du contact";;"Identite_Base_1-80";"ContactDeclare.Nom"
+"S20.G00.07";"002";"Adresse téléphonique";;"Telephone";"ContactDeclare.Tel"
+"S20.G00.07";"003";"Adresse mél du contact";;"N4DS_Email_6-100";"ContactDeclare.mel"
+"S20.G00.07";"004";"Type";;"DGFiP_ContactDeclare";"ContactDeclare.type"
+"S21.G00.06";"001";"SIREN";"Le numéro SIREN est un identifiant de neuf chiffres attribué à chaque unité légale. Les huit premiers chiffres n'ont aucune signification, excepté pour les organismes publics dont le numéro SIREN commence obligatoirement par 1 ou 2. Le neuvième chiffre est un chiffre de contrôle de validité du numéro. Il forme avec le NIC (11.001) le SIRET déclaré.";"Identifiant_Siren_strict";"Entreprise.Siren"
+"S21.G00.06";"002";"NIC du siège";"Il s'agit du NIC de l'établissement siège, lorsque celui-ci est SIRETisé.";"Identifiant_Nic_strict";"Entreprise.Nic"
+"S21.G00.06";"003";"Code APEN";"Le code APE est attribué par l’INSEE à toute entreprise et chacun de ses établissements lors de son inscription au répertoire SIRENE. Ce code caractérise son activité principale par référence à la nomenclature d'activités française (NAF rév. 2)._x000D_
+Il est nommé APEN dans le cas d'une entreprise, et APET pour un établissement.";"Insee_Naf_2008_4";"Entreprise.Apen"
+"S21.G00.06";"004";"Numéro, extension, nature et libellé de la voie";"Numéro : Il précise l’adresse dans la voie. Sa valeur est différente de 0 et ne doit pas dépasser 4 chiffres. En cas de numéro multiple, seul le premier doit être indiqué (pour exemple indiquer 4 pour 4/14)_x000D_
+Extension : Lettre accolée au numéro si celui-ci ne présente pas une précision suffisante (par exemple B pour BIS, T pour TER, etc…)_x000D_
+Nature de la voie : information facultative décrivant la nature de la voie (rue, avenue, etc…)_x000D_
+Libellé de la voie : Appellation officielle de la voie";"N4DS_Adresse";"Entreprise.Voie"
+"S21.G00.06";"005";"Code postal";"Il s’agit de données d’organisation postale qui doivent être utilisées en l’état. Le code postal est composé de 5 chiffres.";"CodePostalAlpha";"Entreprise.CodePostal"
+"S21.G00.06";"006";"Localité";"La localité est un élément géographique et administratif. C’est le premier élément d’identification associé au code postal. Le libellé est la plupart du temps le nom officiel de la localité enregistrée à l’INSEE et au Journal Officiel.";"N4DS_Adresse_Localite";"Entreprise.Localite"
+"S21.G00.06";"007";"Complément de la localisation de la construction";"Les compléments d’adresse permettent d’indiquer le point de remise exact du courrier. Ils donnent des informations précises et déterminantes dans la phase finale de distribution du courrier, tel que le bâtiment, la boîte aux lettres, le numéro d’appartement.";"Type_Alphanumeric_1-50";"Entreprise.ComplementConstruction"
+"S21.G00.06";"008";"Service de distribution, complément de localisation de la voie";"Il s’agit de services de distribution du courrier spécifiques proposés ou mis en place par La Poste.";"N4DS_Adresse";"Entreprise.ComplementVoie"
+"S21.G00.06";"010";"Code pays";"Nom du pays (territoire d’un état) où est localisée l'entreprise, exprimé sous la forme d’un code._x000D_
+Le code pays ne doit pas être renseigné pour les adresses relevant du système postal français._x000D_
+Le domaine d'application du système postal français est constitué des territoires suivants :_x000D_
+FR : France métropolitaine_x000D_
+GP : Guadeloupe_x000D_
+BL : Saint Barthélémy_x000D_
+MF : Saint Martin_x000D_
+MQ : Martinique_x000D_
+GF : Guyane Française_x000D_
+RE : Ile de la Réunion_x000D_
+PM : Saint Pierre et Miquelon_x000D_
+YT : Mayotte_x000D_
+WF : Wallis et Futuna_x000D_
+PF : Polynésie Française_x000D_
+NC : Nouvelle Calédonie_x000D_
+MC : Monaco";"ISO_3166-1-A2_Pays";"Entreprise.CodePays"
+"S21.G00.06";"011";"Code de distribution à l'étranger";;"Type_Alphanumeric_1-50";"Entreprise.CodeDistribution"
+"S21.G00.11";"001";"NIC";"Le Numéro interne de classement (NIC) est composé de 5 chiffres ajoutés au SIREN de l'entité pour identifier un établissement.";"Identifiant_Nic_strict";"Etablissement.Nic"
+"S21.G00.11";"002";"Code APET";"Le code APE est attribué par l’INSEE à toute entreprise et chacun de ses établissements lors de son inscription au répertoire SIRENE. Ce code caractérise son activité principale par référence à la nomenclature d'activités française (NAF rév. 2)._x000D_
+Il est nommé APEN dans le cas d'une entreprise, et APET pour un établissement.";"Insee_Naf_2008_4";"Etablissement.Apet"
+"S21.G00.11";"003";"Numéro, extension, nature et libellé de la voie";"Numéro : Il précise l’adresse dans la voie. Sa valeur est différente de 0 et ne doit pas dépasser 4 chiffres. En cas de numéro multiple, seul le premier doit être indiqué (pour exemple indiquer 4 pour 4/14)_x000D_
+Extension : Lettre accolée au numéro si celui-ci ne présente pas une précision suffisante (par exemple B pour BIS, T pour TER, etc…)_x000D_
+Nature de la voie : information facultative décrivant la nature de la voie (rue, avenue, etc…)_x000D_
+Libellé de la voie : Appellation officielle de la voie";"N4DS_Adresse";"Etablissement.Voie"
+"S21.G00.11";"004";"Code postal";"Il s’agit de données d’organisation postale qui doivent être utilisées en l’état. Le code postal est composé de 5 chiffres.";"CodePostalAlpha";"Etablissement.CodePostal"
+"S21.G00.11";"005";"Localité";"La localité est un élément géographique et administratif. C’est le premier élément d’identification associé au code postal. Le libellé est la plupart du temps le nom officiel de la localité enregistrée à l’INSEE et au Journal Officiel.";"N4DS_Adresse_Localite";"Etablissement.Localite"
+"S21.G00.11";"006";"Complément de la localisation de la construction";"Les compléments d’adresse permettent d’indiquer le point de remise exact du courrier. Ils donnent des informations précises et déterminantes dans la phase finale de distribution du courrier, tel que le bâtiment, la boîte aux lettres, le numéro d’appartement.";"N4DS_Adresse";"Etablissement.ComplementConstruction"
+"S21.G00.11";"007";"Service de distribution, complément de localisation de la voie";"Il s’agit de services de distribution du courrier spécifiques proposés ou mis en place par La Poste";"N4DS_Adresse";"Etablissement.ComplementVoie"
+"S21.G00.11";"015";"Code pays";"Nom du pays (territoire d’un état) où est localisé l'établissement, exprimé sous la forme d’un code._x000D_
+Le code pays ne doit pas être renseigné pour les adresses relevant du système postal français._x000D_
+Le domaine d'application du système postal français est constitué des territoires suivants :_x000D_
+FR : France métropolitaine_x000D_
+GP : Guadeloupe_x000D_
+BL : Saint Barthélémy_x000D_
+MF : Saint Martin_x000D_
+MQ : Martinique_x000D_
+GF : Guyane Française_x000D_
+RE : Ile de la Réunion_x000D_
+PM : Saint Pierre et Miquelon_x000D_
+YT : Mayotte_x000D_
+WF : Wallis et Futuna_x000D_
+PF : Polynésie Française_x000D_
+NC : Nouvelle Calédonie_x000D_
+MC : Monaco";"ISO_3166-1-A2_Pays";"Etablissement.CodePays"
+"S21.G00.11";"016";"Code de distribution à l'étranger";;"Type_Alphanumeric_1-50";"Etablissement.CodeDistribution"
+"S21.G00.20";"001";"Identifiant organisme";"Code identifiant de l'organisme destinataire du versement émis par l'établissement payeur._x000D_
+Systématiquement valorisé à ""DGFiP"".";"Identifiant_Organisme";"Versement.IdentifiantOrga"
+"S21.G00.20";"003";"BIC";"Il s'agit des coordonnées bancaires au format BIC du compte sur lequel doit être prélevé le montant de l'ordre de règlement. Cette rubrique s'appuie sur la norme ISO 9362.";"Type_Alphanumeric_8-11";"Versement.BIC"
+"S21.G00.20";"004";"IBAN";"Il s'agit des coordonnées bancaires au format IBAN du compte sur lequel doit être prélevé le montant de l'ordre de règlement. Cette rubrique s'appuie sur la norme ISO 13616:2007._x000D_
+Les comptes bancaires étrangers au format SEPA sont admis .";"Type_Alphanumeric_15-34";"Versement.IBAN"
+"S21.G00.20";"005";"Montant du versement";"Montant du versement correspondant au montant réglé._x000D_
+Le montant de versement doit être arrondi à l’euro le plus proche (cf. article 1724 du code général des impôts) avec deux décimales valorisées à zéro ; la fraction d'euro égale à 0,50 est comptée pour 1._x000D_
+Il est valorisé à zéro dans l'ordre de paiement de la déclaration du SIRET déclaré en cas de délégation de paiement à un autre SIRET._x000D_
+Les zéros non significatifs sont tolérés. ";"Montant_ZNS_4_18_2";"Versement.Montant"
+"S21.G00.20";"006";"Date de début de période de rattachement";"Cette date correspond au premier jour du mois principal déclaré._x000D_
+Le mois principal déclaré est le mois de versement des revenus.";"Date_JJMMAAAA_20";"Versement.RattachementDateDebut"
+"S21.G00.20";"007";"Date de fin de période de rattachement";"Cette date correspond au dernier jour du mois principal déclaré._x000D_
+Le mois principal déclaré est le mois de versement des revenus.";"Date_JJMMAAAA_20";"Versement.RattachementDateFin"
+"S21.G00.20";"010";"Mode de paiement";"Mode de paiement utilisé pour le règlement _x000D_
+Modalité de valorisation : ""05"" Prélèvement SEPA ou ""06"" Versement réalisé par un autre établissement.";"DGFiP_Mode_Paiement";"Versement.ModePaiement"
+"S21.G00.20";"012";"SIRET Payeur";" Permet d’identifier le cas où un établissement délègue le paiement du PAS à un autre établissement._x000D_
+Cette rubrique ne peut être renseignée que par un SIRET disposant de la même racine SIREN que le SIRET déclaré (SIRET redevable du PAS).";"DSN_SIRET_Payeur";"Versement.SiretPayeur"
+"S21.G00.30";"001";"Numéro d'inscription au répertoire";"Le numéro d'inscription au répertoire (NIR) est l'identifiant unique et invariable des individus inscrits au répertoire national d'identification des personnes physiques (RNIPP). Ce numéro correspond au numéro de sécurité sociale._x000D_
+Ce numéro est composé de 13 chiffres et d'une clé de 2 chiffres. La clé n'est pas à déclarer dans cette rubrique._x000D_
+Cette rubrique permet la déclaration du NIA (numéro d'immatriculation d'attente attribué par les organismes de protection sociale) en l'absence de NIR. Le NIA est constitué comme un NIR dans l'attente d'être certifié (circulaire DSS/sd4c N° 2012-213 du 1er juin 2012)._x000D_
+Le Nir doit avoir la forme SAAMMDDCCCNNN avec :_x000D_
+S = sexe de la personne physique doit être égal à 1 ou 2_x000D_
+AA = année de naissance de la personne physique doit être comprise entre 00 et 99_x000D_
+MM = mois de naissance de la personne physique doit être compris entre 01 et 12 ou entre 20 et 42 ou entre 50 et 99 ou égal à 00_x000D_
+DD = département de naissance de la personne physique doit être compris entre 01 et 99 ou être égal à 2A ou 2B_x000D_
+CCC = commune de naissance de la personne physique doit être comprise entre 001 et 999_x000D_
+NNN = numéro d'inscription la personne physique au registre d'état civil doit être compris entre 001 et 999_x000D_
+_x000D_
+ATTENTION : Un NIR ne peut être présent qu'une seule fois dans la déclaration, il doit être unique pour permettre la traçabilité et l'identification de l'individu._x000D_
+_x000D_
+Si l'immatriculation est provisoire, ne pas utiliser les numéros provisoires reconnaissables par leur premier caractère égal à 7 ou 8, mais utiliser le NIA qui a été notifié._x000D_
+En l'absence de NIR ou de NIA, il est obligatoire de remplir la rubrique Numéro technique temporaire (S21.G00.30.020).";"Identifiant_Nir_13_regex";"Individu.Identifiant"
+"S21.G00.30";"002";"Nom de famille";"Le nom de famille est le nom défini pour chaque individu dans les jours qui suivent sa naissance. Il est usuellement défini sur la base de la filiation avec l’un ou l’autre parent, voire les deux. Il peut être défini par disposition administrative ou judiciaire.";"Identite_Base_1-80_regex";"Individu.NomFamille"
+"S21.G00.30";"003";"Nom d'usage";"Il s’agit de la possibilité pour une personne de porter un nom qu’elle n’a pas acquis selon les règles d’acquisition du nom de famille.";"Identite_Base_1-80_regex";"Individu.NomUsage"
+"S21.G00.30";"004";"Prénoms";"Elément d'identification joint au nom de famille qui permet de distinguer les personnes d'une même famille.";"Identite_Base_1-80_regex";"Individu.Prenoms"
+"S21.G00.30";"005";"Sexe";"Le sexe décrit la qualité d'homme ou la qualité de femme._x000D_
+Il est à renseigner si différent du sexe porté par le NIR ou si le NIR est absent en cas d'identification par un NTT";"DSN_Sexe";"Individu.Sexe"
+"S21.G00.30";"006";"Date de naissance";"Instant où une personne naît, tel qu'enregistré à l'état civil. _x000D_
+Renseigner la date de naissance de l'individu sous la forme JJMMAAAA. Lorsque le collecteur ne connaît pas la date de naissance de l’individu, les valeurs d’échappements suivantes sont acceptées :_x000D_
+- Jour de naissance inconnu : 99MMAAAA, _x000D_
+- Mois de naissance inconnu : JJ99AAAA, _x000D_
+- Année de naissance inconnue : JJMM9999,_x000D_
+- Si jour et mois inconnus : 9999AAAA_x000D_
+- Si jour, mois et année de naissance inconnus : 99999999.";"N4DS_DDN";"Individu.DateNaissance"
+"S21.G00.30";"007";"Lieu de naissance";"Il s’agit du nom de la localité de naissance, tel qu’enregistré à l’état civil._x000D_
+Libellé en toutes lettres. Obligatoire pour les individus nés en France métropolitaine, dans les DOM et dans les TOM. Il peut éventuellement s'agir d'un pays._x000D_
+Pour les personnes dont le collecteur n’a pas connaissance du lieu de naissance, la valeur ""SLN"" est acceptée.";"Commune";"Individu.LieuNaissance"
+"S21.G00.30";"008";"Numéro, extension, nature et libellé de la voie";"Numéro : Il précise l’adresse dans la voie. Sa valeur est différente de 0 et ne doit pas dépasser 4 chiffres. En cas de numéro multiple, seul le premier doit être indiqué (pour exemple indiquer 4 pour 4/14)_x000D_
+Extension : Lettre accolée au numéro si celui-ci ne présente pas une précision suffisante (par exemple B pour BIS, T pour TER, etc…)_x000D_
+Nature de la voie : information facultative décrivant la nature de la voie (rue, avenue, etc…)_x000D_
+Libellé de la voie : Appellation officielle de la voie";"N4DS_Adresse";"Individu.Voie"
+"S21.G00.30";"009";"Code postal";"Il s’agit de données d’organisation postale qui doivent être utilisées en l’état. Le code postal est composé de 5 chiffres.";"CodePostalAlpha";"Individu.CodePostal"
+"S21.G00.30";"010";"Localité";"La localité est un élément géographique et administratif. C’est le premier élément d’identification associé au code postal. Le libellé est la plupart du temps le nom officiel de la localité enregistrée à l’INSEE et au Journal Officiel.";"N4DS_Adresse_Localite";"Individu.Localite"
+"S21.G00.30";"011";"Code pays";"Nom du pays (territoire d’un Etat) de résidence de l'individu exprimé sous la forme d’un code._x000D_
+Le code pays ne doit pas être renseigné pour les adresses relevant du système postal français._x000D_
+Le domaine d'application du système postal français est constitué des territoires suivants :_x000D_
+FR : France métropolitaine_x000D_
+GP : Guadeloupe_x000D_
+BL : Saint Barthélémy_x000D_
+MF : Saint Martin_x000D_
+MQ : Martinique_x000D_
+GF : Guyane Française_x000D_
+RE : Ile de la Réunion_x000D_
+PM : Saint Pierre et Miquelon_x000D_
+YT : Mayotte_x000D_
+WF : Wallis et Futuna_x000D_
+PF : Polynésie Française_x000D_
+NC : Nouvelle Calédonie_x000D_
+MC : Monaco";"ISO_3166-1-A2_Pays";"Individu.CodePays"
+"S21.G00.30";"012";"Code de distribution à l'étranger";;"N4DS_Adresse";"Individu.CodeDistribution"
+"S21.G00.30";"014";"Code département de naissance";"Pour les individus nés en France : code 01 à 97 ou 2A ou 2B_x000D_
+Pour les individus nés dans les TOM : code 98_x000D_
+Pour les personnes nées à l'étranger, renseigner 99_x000D_
+Pour les personnes dont le collecteur n’a pas connaissance du code département de naissance, la valeur ""00"" est acceptée.";"Departement";"Individu.DepartementNaissance"
+"S21.G00.30";"015";"Code pays de naissance";"Le Code pays de naissance est à déterminer dans la table ""Codes Pays"" ISO 3166-1-A2.";"ISO_3166-1-A2_Pays_All";"Individu.PaysNaissance"
+"S21.G00.30";"016";"Complément de la localisation de la construction";"Les compléments d’adresse permettent d’indiquer le point de remise exact du courrier. Ils donnent des informations précises et déterminantes dans la phase finale de distribution du courrier, tel que le bâtiment, la boîte aux lettres, le numéro d’appartement.";"N4DS_Adresse";"Individu.ComplementConstruction"
+"S21.G00.30";"017";"Service de distribution, complément de localisation de la voie";"Il s’agit de services de distribution du courrier spécifiques proposés ou mis en place par La Poste.";"N4DS_Adresse";"Individu.ComplementVoie"
+"S21.G00.30";"019";"Matricule de l'individu dans l'entreprise";"Le choix de la valeur que prend le matricule revient à l’employeur.";"Type_Alphanumeric_1-30";"Individu.Matricule"
+"S21.G00.30";"020";"Numéro technique temporaire";"Le NTT est un identifiant technique unique et invariant permettant à l'organisme de déclarer, dans un temps limité, un individu pour lequel il n'aurait pas connaissance du Numéro d'Inscription au Répertoire ou du Numéro d'Identification d'Attente au moment de l'émission d'une déclaration PASRAU._x000D_
+Il est composé du code sexe de la personne physique qui doit être égal à 1 ou 2, suivi du SIREN de l'organisme et d'un identifiant unique et pérenne de l'individu dans l'organisme, comme la date de naissance et le matricule de l'individu._x000D_
+Il s'agit d'une donnée technique destinée uniquement au système d'information PASRAU. Le NTT n'est pas une donnée de gestion et ne permet pas l'ouverture de droits de l'individu auprès d'autres organismes._x000D_
+Le NTT doit désigner un individu et un seul dans un organisme. En cas d'obtention de plusieurs NTT, l'organisme doit utiliser pour ses déclarations le NTT le plus ancien en cours de validité._x000D_
+En l'absence de NIR ou de NIA, il est obligatoire de remplir la rubrique_x000D_
+Le NTT doit être renseigné sur la première déclaration PASRAU où le NIR est attribué. Ceci permettra de faire le lien entre les deux identités déclarées par l'organisme déclarant.";"Type_Alphanumeric_11_40";"Individu.NTT"
+"S21.G00.31";"001";"Date de la modification";"La date de modification correspond à la date de survenance du changement de caractéristique de l'individu.";"Date_JJMMAAAA";"ChangementsIndividu.DateModification"
+"S21.G00.31";"008";"Ancien NIR";"Le numéro d'inscription au répertoire (NIR) est l'identifiant unique et invariable des individus inscrits au répertoire national d'identification des personnes physiques (RNIPP). Ce numéro correspond au numéro de sécurité sociale._x000D_
+Ce numéro est composé de 13 chiffres et d'une clé de 2 chiffres. La clé n'est pas à déclarer dans cette rubrique._x000D_
+Cette rubrique permet la déclaration du NIA (numéro d'immatriculation d'attente attribué par les organismes de protection sociale). Le NIA est constitué comme un NIR dans l'attente d'être certifié (circulaire DSS/sd4c N° 2012-213 du 1er juin 2012)._x000D_
+Le Nir doit avoir la forme SAAMMDDCCCNNN avec :_x000D_
+S = sexe de la personne physique doit être égal à 1 ou 2_x000D_
+AA = année de naissance de la personne physique doit être comprise entre 00 et 99_x000D_
+MM = mois de naissance de la personne physique doit être compris entre 01 et 12 ou entre 20 et 42 ou entre 50 et 99 ou égal à 00_x000D_
+DD = département de naissance de la personne physique doit être compris entre 01 et 99 ou être égal à 2A ou 2B_x000D_
+CCC = commune de naissance de la personne physique doit être comprise entre 001 et 999_x000D_
+NNN = numéro d'inscription la personne physique au registre d'état civil doit être compris entre 001 et 999_x000D_
+Si l'immatriculation est provisoire, ne pas utiliser les numéros provisoires reconnaissables par leur premier caractère égal à 7 ou 8, mais utiliser le NIA qui a été notifié._x000D_
+En l'absence de NIR ou de NIA, il est obligatoire de remplir la rubrique Numéro technique temporaire (S21.G00.30.020).";"Identifiant_Nir_13_regex";"ChangementsIndividu.Identifiant"
+"S21.G00.31";"009";"Ancien Nom de famille";"Le nom de famille est le nom défini pour chaque individu dans les jours qui suivent sa naissance. Il est usuellement défini sur la base de la filiation avec l’un ou l’autre parent, voire les deux. Il peut être défini par disposition administrative ou judiciaire.";"Identite_Base_1-80";"ChangementsIndividu.NomFamille"
+"S21.G00.31";"010";"Anciens Prénoms";"Elément d'identification joint au nom de famille qui permet de distinguer les personnes d'une même famille.";"Identite_Base_1-80";"ChangementsIndividu.Prenoms"
+"S21.G00.31";"011";"Ancienne Date de naissance";"Instant où une personne naît, tel qu'enregistré à l'état civil. _x000D_
+Renseigner la date de naissance de l'individu sous la forme JJMMAAAA. Lorsque le collecteur ne connaît pas la date de naissance de l’individu, les valeurs d’échappements suivantes sont acceptées :_x000D_
+- Jour de naissance inconnu : 99MMAAAA, _x000D_
+- Mois de naissance inconnu : JJ99AAAA, _x000D_
+- Année de naissance inconnue : JJMM9999,_x000D_
+- Si jour et mois inconnus : 9999AAAA_x000D_
+- Si jour, mois et année de naissance inconnus : 99999999. ";"N4DS_DDN";"ChangementsIndividu.DateNaissance"
+"S21.G00.50";"001";"Date de versement";"Date à laquelle le débiteur effectue le versement. Cette date peut différer de la date à laquelle le bénéficiaire perçoit effectivement le versement.";"Date_JJMMAAAA_20";"VersementIndividu.Date"
+"S21.G00.50";"002";"Rémunération nette fiscale";"Le revenu imposable est le revenu net, c'est-à-dire après déduction des cotisations sociales obligatoires (Sécurité sociale, vieillesse, retraite complémentaire et prévoyance/santé collective obligatoire), exception faite des contributions non déductibles (CSG en partie et CRDS dans son intégralité). Elle est obtenue par la détermination de l'assiette nette imposable soumise à l'impôt sur le revenu par le verseur de revenus.";"Montant_ZNS_4_12_2_N_Z";"VersementIndividu.NetFiscal"
+"S21.G00.50";"003";"Numéro de versement";"Numéro valorisé par le débiteur permettant de distinguer deux versements au même bénéficiaire survenant le même jour.";"DGFiP_numero_versement";"VersementIndividu.Numero"
+"S21.G00.50";"005";"Rémunération nette fiscale potentielle";"Donnée à renseigner dans le cas où le déclarant n'est pas en capacité de connaître le caractère imposable du revenu versé._x000D_
+Cette rubrique peut également être à valoriser dans certains cas spécifiques : contrats à durée déterminée n’excédant pas deux mois ou à terme imprécis par exemple. Ces cas sont documentés par voie de fiche consigne sur la base de connaissance PASRAU.";"Montant_ZNS_4_12_2_N_Z";
+"S21.G00.50";"006";"Taux de prélèvement à la source";"Taux appliqué sur le mois de versement";"DGFiP_Taux_PAS";
+"S21.G00.50";"007";"Type du taux de prélèvement à la source";"Il s’agit du type de taux appliqué. ";"DGFiP_type_taux_PAS";
+"S21.G00.50";"008";"Identifiant du taux de prélèvement à la source";"Identifiant du taux porté par le CRM PAS (compte-rendu métier) transmis par la DGFiP._x000D_
+En cas de contrat à durée déterminée dont le terme initial n’excède pas deux mois ou dont le terme est imprécis cette rubrique doit être valorisée à « -1 ».";"DGFiP_ID_Taux_PAS";
+"S21.G00.50";"009";"Montant du prélèvement à la source";"Montant calculé à partir du montant de la base fiscale et du taux à lui appliquer._x000D_
+Il prend en compte la règle de l’arrondi sur les deux décimales après la virgule, en application du f) du 3° de l'article 39 C de l'annexe III au Code général des impôts._x000D_
+Exemple : si le montant de PAS calculé s’élève à 120,5678 euros, la somme à transmettre à la DGFiP dans la déclaration PASRAU sera 120,57 euros.";"Montant_ZNS_4_12_2_N_Z";
+"S21.G00.50";"010";"Date de fin de la relation entre la personne et l’organisme";"Date de sortie définitive d'un bénéficiaire du périmètre d'un déclarant. Indique que le versement concerne un bénéficiaire sorti du périmètre de l'organisme collecteur. La présence de cette rubrique est demandée dès lors que le versement porte un rappel ou une reprise d'une somme concernant une personne qui n'est plus gérée par l'organisme.";"Date_JJMMAAAA_20";
+"S21.G00.56";"001";"Mois de l'erreur";"Il s’agit du mois sur lequel l’erreur s’est produite. En cas de reconduction de l’erreur sur plusieurs mois, chaque mois doit figurer. Le mois de l'erreur est à renseigner sur 6 caractères (""MMAAAA"").";"Date_MMAAAA";
+"S21.G00.56";"002";"Type d'erreur";"Cette rubrique permet d'indiquer le type d’erreur à rectifier.";"DGFiP_Type_Erreur";
+"S21.G00.56";"003";"Régularisation de la rémunération nette fiscale";"Cette valeur doit être renseignée de l’écart entre la base fiscale indiquée le mois M et celle qui aurait dû être indiquée ou du résultat du calcul du trop versé ne pouvant être compensé dans le mois courant.";"Montant_ZNS_4_12_2_N_Z";
+"S21.G00.56";"004";"Rémunération nette fiscale déclarée le mois de l’erreur";"Reprise de la ""Rémunération nette fiscale"" du mois de l’erreur de taux (type 02).";"Montant_ZNS_4_12_2_N_Z";
+"S21.G00.56";"005";"Régularisation du taux de prélèvement à la source";"Cette rubrique prend la valeur de l’écart entre le taux qui aurait dû être appliqué et celui réellement appliqué le mois de l’erreur.";"DGFiP_ZNS_Taux_4_6_2_N";
+"S21.G00.56";"006";"Taux déclaré le mois de l’erreur";"Il s’agit du taux appliqué le mois de l’erreur ou de l’indu.";"DGFiP_ZNS_Taux_4_5_2_Z";
+"S21.G00.56";"007";"Montant de la régularisation du prélèvement à la source";"Il s'agit du produit entre soit la rémunération nette fiscale du mois de l'erreur et le taux rectifié, soit la rémunération nette fiscale rectifiée et le taux du mois.";"Montant_ZNS_4_12_2_N_Z";
+"S90.G00.90";"001";"Nombre total de rubriques";"Totalisation de toutes les rubriques et sous-rubriques de toutes les structures y compris celles de la structure S90.";"Nombre_ZNS_1_12";"TotalEnvoi.nbTotal"
+"S90.G00.90";"002";"Nombre de déclarations";"Dénombrement des structures S20 c'est à dire nombre de déclarations y compris les doublons éventuels.";"Nombre_ZNS_1_5";"TotalEnvoi.nbDec"

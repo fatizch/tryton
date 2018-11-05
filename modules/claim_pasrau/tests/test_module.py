@@ -1,3 +1,4 @@
+# encoding: utf8
 import unittest
 import datetime
 
@@ -5,6 +6,8 @@ from decimal import Decimal
 
 import trytond.tests.test_tryton
 from trytond.modules.coog_core import test_framework
+from trytond.modules.dsn_standard import dsn
+from trytond.modules.claim_pasrau import dsn as pasrau_dsn
 import os
 
 
@@ -19,6 +22,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
     effective_date = datetime.date(2019, 12, 1)
 
     @classmethod
+    def fetch_models_for(cls):
+        return ['dsn_standard']
+
+    @classmethod
     def get_models(cls):
         return {
             'Party': 'party.party',
@@ -27,6 +34,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'PartyCustomPasrauRate': 'party.pasrau.rate',
             'DefaultPasrauRate': 'claim.pasrau.default.rate',
         }
+
+    def test_neorau_validate(self):
+        D = pasrau_dsn.NEORAUTemplate(None, void=True, replace=True)
+
+        bad_iban = dsn.Entry(u'S21.G00.20.004', u'tééé')
+        good_iban = dsn.Entry(u'S21.G00.20.004',
+            u'64G1DFR14DRF514GDF54GD')
+
+        D.message = [good_iban]
+        self.assertTrue(D.validate)
+        D.message.append(bad_iban)
+        self.assertRaises(dsn.DSNValidationError, D.validate)
 
     def test0001_test_pasrau_files(self):
         Party = self.Party

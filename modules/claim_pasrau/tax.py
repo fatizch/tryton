@@ -16,23 +16,27 @@ class Invoice:
     __metaclass__ = PoolMeta
     __name__ = 'account.invoice'
 
+    def _build_pasrau_dict(self):
+        pasrau_dict = {}
+        pasrau_dict['party'] = self.party
+        details = [x.claim_detail for x in self.lines]
+        pasrau_dict['period_start'] = min(
+            [x.indemnification.start_date for x in details
+                if x.indemnification.start_date] +
+            [datetime.date.max])
+        pasrau_dict['period_end'] = max(
+            [x.indemnification.end_date for x in details
+                if x.indemnification.end_date] +
+            [datetime.date.min])
+        pasrau_dict['income'] = sum([
+                x.indemnification.amount
+                for x in details] or [])
+        pasrau_dict['invoice_date'] = self.tax_date
+        return pasrau_dict
+
     def _get_taxes(self):
         if self.business_kind == 'claim_invoice':
-            pasrau_dict = {}
-            pasrau_dict['party'] = self.party
-            details = [x.claim_detail for x in self.lines]
-            pasrau_dict['period_start'] = min(
-                [x.indemnification.start_date for x in details
-                    if x.indemnification.start_date] +
-                [datetime.date.max])
-            pasrau_dict['period_end'] = max(
-                [x.indemnification.end_date for x in details
-                    if x.indemnification.end_date] +
-                [datetime.date.min])
-            pasrau_dict['income'] = sum([
-                    x.indemnification.amount
-                    for x in details] or [])
-            pasrau_dict['invoice_date'] = self.tax_date
+            pasrau_dict = self._build_pasrau_dict()
             with ServerContext().set_context(pasrau_data=pasrau_dict):
                 return super(Invoice, self)._get_taxes()
         return super(Invoice, self)._get_taxes()

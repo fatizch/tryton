@@ -1,0 +1,164 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:dsn.message:"
+msgid "Message \"%s\" must be in draft before deletion."
+msgstr "Le message \"%s\" doit être à l'état brouillon pour être supprimé"
+
+msgctxt "field:dsn.message,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:dsn.message,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:dsn.message,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:dsn.message,filename:"
+msgid "Filename"
+msgstr "Nom du Fichier"
+
+msgctxt "field:dsn.message,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:dsn.message,message:"
+msgid "Message"
+msgstr "Message"
+
+msgctxt "field:dsn.message,origin:"
+msgid "Origin"
+msgstr "Origine"
+
+msgctxt "field:dsn.message,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:dsn.message,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:dsn.message,text_message:"
+msgid "Message"
+msgstr "Message"
+
+msgctxt "field:dsn.message,type:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:dsn.message,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:dsn.message,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:dsn.message,xml_id:"
+msgid "XML Id"
+msgstr "XML id"
+
+msgctxt "model:dsn.message,name:"
+msgid "Dsn message"
+msgstr "Message Dsn"
+
+msgctxt "model:event.type,name:event_mail_traited_dsn_message"
+msgid "DSN message sent"
+msgstr "Message DSN envoyé"
+
+msgctxt "model:ir.action,name:"
+msgid "DSN Messages"
+msgstr "Messages DSN"
+
+msgctxt "model:ir.action,name:act_dsn_message_form"
+msgid "Dsn Messages"
+msgstr "Messages Dsn"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_dsn_message_form_domain_all"
+msgid "All"
+msgstr "Tous"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_dsn_message_form_domain_canceled"
+msgid "Canceled"
+msgstr "Annulé"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_dsn_message_form_domain_done"
+msgid "Done"
+msgstr "Effectué"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_dsn_message_form_domain_draft"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_dsn_message_form_domain_waiting"
+msgid "Waiting"
+msgstr "En attente"
+
+msgctxt "model:ir.model.button,string:dsn_message_cancel_button"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "model:ir.model.button,string:dsn_message_do_button"
+msgid "Do"
+msgstr "Faire"
+
+msgctxt "model:ir.model.button,string:dsn_message_draft_button"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "model:ir.model.button,string:dsn_message_wait_button"
+msgid "Wait"
+msgstr "Mettre en attente"
+
+msgctxt "model:ir.ui.menu,name:menu_dsn_message_form"
+msgid "Dsn Messages"
+msgstr "Messages Dsn"
+
+msgctxt "selection:dsn.message,state:"
+msgid "Canceled"
+msgstr "Annulé"
+
+msgctxt "selection:dsn.message,state:"
+msgid "Done"
+msgstr "Traité"
+
+msgctxt "selection:dsn.message,state:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:dsn.message,state:"
+msgid "Waiting"
+msgstr "En attente"
+
+msgctxt "selection:dsn.message,type:"
+msgid "In"
+msgstr "Entrant"
+
+msgctxt "selection:dsn.message,type:"
+msgid "Out"
+msgstr "Sortant"
+
+msgctxt "view:dsn.message:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "view:dsn.message:"
+msgid "Do"
+msgstr "Fait"
+
+msgctxt "view:dsn.message:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "view:dsn.message:"
+msgid "Wait"
+msgstr "En attente"

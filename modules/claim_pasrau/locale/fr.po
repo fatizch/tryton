@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.invoice:"
+msgid "There are untreated DSN messages for this slip"
+msgstr "Il existe des messages non traités pour ce bordereau pasrau"
+
+msgctxt "error:account.invoice:"
+msgid "You can not generate the DSN message after the 10th month"
+msgstr "Vous ne pouvez pas générer de message DSN  après le 10 du mois"
+
 msgctxt "error:claim.pasrau.default.rate:"
 msgid ""
 "Could not compute a default pasrau value for parameters:\n"
@@ -174,6 +182,10 @@ msgctxt "model:ir.action,name:act_default_pasrau_rate_form"
 msgid "Pasrau Default Rates"
 msgstr "Taux Pasrau par défaut"
 
+msgctxt "model:ir.action,name:act_dsn_message"
+msgid "DSN messages"
+msgstr "Messages DSN"
+
 msgctxt "model:ir.action,name:act_party_pasrau_rate"
 msgid "Claim Party Pasrau Rate"
 msgstr "Taux Pasrau"
@@ -189,6 +201,10 @@ msgstr "Bordereaux pasrau"
 msgctxt "model:ir.action,name:upload_pasrau_file_wizard"
 msgid "Upload Pasrau File Wizard"
 msgstr "Assistant de chargement de fichier CRM nominatif PASRAU"
+
+msgctxt "model:ir.model.button,string:generate_dsn_message_button"
+msgid "Generate Dsn Message"
+msgstr "Générer le message Dsn"
 
 msgctxt "model:ir.ui.menu,name:menu_default_pasrau_rates"
 msgid "Default Rates"
@@ -249,6 +265,10 @@ msgstr "Défaut"
 msgctxt "selection:party.pasrau.rate,origin:"
 msgid "Manual"
 msgstr "Manuelle"
+
+msgctxt "view:account.invoice:"
+msgid "Generate Dsn Message"
+msgstr "Générer le message Dsn"
 
 msgctxt "view:party.pasrau.rate:"
 msgid "%"
