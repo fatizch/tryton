@@ -60,6 +60,10 @@ company = get_company()
 fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company))
 fiscalyear.click('create_period')
 
+second_fiscalyear = set_fiscalyear_invoice_sequences(create_fiscalyear(company,
+    datetime.date.today() + relativedelta(years=1)))
+second_fiscalyear.click('create_period')
+
 # #Comment# #Create chart of accounts
 _ = create_chart(company)
 accounts = get_accounts(company)
