@@ -7,6 +7,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Part Time</field>
             <field name="code">part_time</field>
         </record>
+        <record model="benefit.loss.description.deduction_period_kind" id="pole_emploi_deduction_type">
+            <field name="name">Pôle Emploi</field>
+            <field name="code">pole_emploi</field>
+        </record>
         <!-- IJSS extra data -->
         <record model="extra_data" id="ijss_extra_data">
             <field name="has_default_value" eval="False"/>

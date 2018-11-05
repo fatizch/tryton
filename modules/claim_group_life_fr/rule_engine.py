@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.rule_engine import check_args
 from trytond.modules.coog_core import coog_date
@@ -47,3 +47,84 @@ class RuleEngineRuntime:
             if not part_time_period_at_date(date):
                 return ijss[date]
         return Decimal('0')
+
+    @classmethod
+    def _re_ltd_periods(cls, args, periods, description, annuity_amount,
+            ss_annuity_amount, reference_salary, net_reference_salary,
+            trancheTA, trancheTB, trancheTC, rounding_factor=None,
+            annex_rule_code=None):
+        '''
+            This method computes annuity periods given an initial annuity
+            amount, social security amount to deduce, salary values and
+            a rule to deduce annex benefits
+            This method's periods parameter is an annuity periods list.
+            Such a list containts tuples with:
+                * start_date
+                * end_date
+                * full_period to know if the period is a full period
+                * prorata which represents the period's months number if it is
+                  a full period and the period's days number otherwise
+                * unit which represents the time unit, 'days', 'months', ...
+            The method returns a list of such periods after deduction and
+            with additional information about base amount, amount per unit...
+        '''
+        if not rounding_factor:
+            rounding_factor = Decimal('0.01')
+        annex_rules = None
+        if annex_rule_code:
+            RuleEngine = Pool().get('rule_engine')
+            annex_rules = RuleEngine.search(
+                [('short_name', '=', annex_rule_code)])
+            if not annex_rules:
+                raise Exception('No rule found for code %s' % annex_rule_code)
+        res = []
+        description_copy = description
+        for start_date, end_date, full_period, prorata, unit in periods:
+            description = description_copy
+            ratio = 365
+            if full_period:
+                ratio = 12
+            rounded_annuity_amount = cls._re_round(args, annuity_amount,
+                rounding_factor)
+            rounded_reference_salary = cls._re_round(args, reference_salary,
+                rounding_factor)
+            rounded_net_reference_salary = cls._re_round(args,
+                net_reference_salary, rounding_factor)
+            period_ss_annuity = cls._re_round(args,
+                ss_annuity_amount / ratio * prorata, rounding_factor)
+            if rounded_annuity_amount < 0:
+                rounded_annuity_amount = Decimal('0.0')
+            if annex_rules:
+                annex_rule = annex_rules[0]
+                annex_rule_args = {
+                    'type_de_regle': annex_rule_code,
+                    'date_debut_periode': start_date,
+                    'date_fin_periode': end_date,
+                    'rente_de_base': rounded_annuity_amount,
+                    'salaire_de_reference': rounded_reference_salary,
+                    'rente_ss': period_ss_annuity,
+                    'salaire_de_reference_net': rounded_net_reference_salary
+                    }
+                rule_res = annex_rule.execute(
+                    arguments=args, parameters=annex_rule_args)
+                if rule_res.result:
+                    rouned_annuity_amount, annex_description = rule_res.result
+                    description += annex_description
+            unit_annuity = cls._re_round(args, rouned_annuity_amount / prorata,
+                rounding_factor)
+            res.append({
+                    'start_date': start_date,
+                    'end_date': end_date,
+                    'nb_of_unit': prorata,
+                    'unit': unit,
+                    'amount': rounded_annuity_amount,
+                    'base_amount': unit_annuity,
+                    'amount_per_unit': unit_annuity,
+                    'description': description,
+                    'extra_details': {
+                        'tranche_a': trancheTA,
+                        'tranche_b': trancheTB,
+                        'tranche_c': trancheTC
+                    }
+                    })
+        return res

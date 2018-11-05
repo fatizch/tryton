@@ -1,3 +1,5 @@
+* FEA#10124 Add default LTD rules
+
 Version 2.2 - 2018-10-12
 * FEA#10139 Add default eligibility decisions handled in the default deductible rules
 * FEA#10086 Add default benefit rule based on the event type
