@@ -1,3 +1,5 @@
+* BUG#10247 Correctif sur l'éligibilité par défaut lorsque qu'aucune règle d'eligibilité n'est définie
+
 Version 2.2 - 2018-10-12
 * FEA#9944 Ajout d'une règle d'éligibilité par défaut
 * FEA#8075 Possibilité de re-déclencher le calcul d'éligibilité en re-passsant en brouillon

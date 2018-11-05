@@ -1,3 +1,5 @@
+* BUG#10247 Fix default eligibility decision when no eligibility rule is set
+
 Version 2.2 - 2018-10-12
 * FEA#9944 Add default eligibility rule
 * FEA#8075 Re-trigger eligibility check when going back to draft state

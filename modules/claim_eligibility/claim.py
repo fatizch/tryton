@@ -145,6 +145,9 @@ class ClaimService:
             eligible, message = service.calculate_eligibility()
             service.eligibility_comment = message
             if eligible:
+                if service.benefit.decision_default and not \
+                        service.benefit.eligibility_rules:
+                    continue
                 if (service.eligibility_decision and
                         service.eligibility_decision.state != 'accepted'):
                     service.eligibility_decision = None
