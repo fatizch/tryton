@@ -88,7 +88,7 @@ class Priority(model.CoogSQL, model.CoogView):
         Log = pool.get('process.log')
         return Log.search_count([
             ('latest', '=', True),
-            ('to_state', '=', self.process_step)
+            ('from_state', '=', self.process_step)
             ])
 
     @fields.depends('process_step')
@@ -178,7 +178,7 @@ class Team(model.CoogSQL, model.CoogView):
             for priority in self.priorities]
         return Log.search_count([
                 ('latest', '=', True),
-                ('to_state', 'in', valid_states)])
+                ('from_state', 'in', valid_states)])
 
     def search_next_priority_task_for_team(self):
         pool = Pool()
@@ -188,7 +188,7 @@ class Team(model.CoogSQL, model.CoogView):
         priority = pool.get('res.team.priority').__table__()
 
         query_table = log.join(priority, condition=(
-                priority.process_step == log.to_state))
+                priority.process_step == log.from_state))
 
         cursor.execute(*query_table.select(log.id,
             where=(priority.team == self.id) & (log.end_time == Null),
@@ -223,7 +223,7 @@ class UserTeamRelation(model.CoogSQL, model.CoogView):
         return Log.search_count([
                 ('latest', '=', True),
                 ('from_state', 'in', steps),
-                ('user', '=', self.id)])
+                ('user', '=', self.user)])
 
 
 class ProcessStepRelation:
