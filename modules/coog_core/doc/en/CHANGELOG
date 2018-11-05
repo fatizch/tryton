@@ -1,3 +1,4 @@
+* OTH#0000 Optimize memory usage of "stream" methods
 * BUG#10249 Use fast_invoice chain in default daily batch chain
 * BUG#10179 Propagate renaming and deletion of dict field keys
 

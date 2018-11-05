@@ -1171,7 +1171,7 @@ def search_and_stream(klass, domain, offset=0, order=None, batch_size=None):
         across iterations, which can make some potential results to
         disappear from the final output
     '''
-    batch_size = batch_size or config.getint('cache', 'record')
+    batch_size = batch_size or Transaction().database.IN_MAX
     cur_offset = offset
 
     # Force order on id at the end to make sure there are no missing values
@@ -1185,6 +1185,13 @@ def search_and_stream(klass, domain, offset=0, order=None, batch_size=None):
         for record in records:
             yield record
         cur_offset += batch_size
+
+        # Since this will be used to handle large volumes, we should force
+        # clear the cache after each data group is yielded to reclaim some
+        # memory
+        record._cache.clear()
+        record._local_cache.clear()
+        del records
 
 
 def order_data_stream(iterable, key_func, batch_size=None):
@@ -1211,7 +1218,7 @@ def order_data_stream(iterable, key_func, batch_size=None):
     if not full_list:
         raise StopIteration
 
-    batch_size = batch_size or config.getint('cache', 'record')
+    batch_size = batch_size or Transaction().database.IN_MAX
     full_list.sort(key=lambda x: x[1])
 
     for i in range(len(full_list) / batch_size + 1):
@@ -1221,6 +1228,13 @@ def order_data_stream(iterable, key_func, batch_size=None):
         instances = klass.browse(ids)
         for x in instances:
             yield x
+
+        # Since this will be used to handle large volumes, we should force
+        # clear the cache after each data group is yielded to reclaim some
+        # memory
+        x._cache.clear()
+        x._local_cache.clear()
+        del instances
 
 
 def is_class_or_dual_method(method):

@@ -1,3 +1,4 @@
+* OTH#0000 Optimisation de l'utilisation mémoire des méthodes "stream"
 * BUG#10249 Utiliser la chaîne fast_invoice dans la chaîne de batch journalière par défaut
 * BUG#10179 Propagation du renommage et de la suppression des clés de champs dictionnaire
 
