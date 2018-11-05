@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import logging
 from functools import wraps
 from celery.result import AsyncResult
 
@@ -11,11 +12,14 @@ from trytond.cache import Cache
 from trytond.config import config
 
 from trytond.modules.coog_core import fields, model
-import async.broker as async_broker
-
-if not config.getboolean('env', 'testing'):
-    async_broker.set_module('celery')
-    broker = async_broker.get_module()
+try:
+    import async.broker as async_broker
+    if not config.getboolean('env', 'testing'):
+        async_broker.set_module('celery')
+        broker = async_broker.get_module()
+except ImportError as error:
+    logging.getLogger(__name__).error(error)
+    broker = None
 
 
 class CoogAsyncTask(model.CoogSQL):
