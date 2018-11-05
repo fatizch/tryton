@@ -48,6 +48,7 @@ def get_organization_hierarchy():
         'main_field': 'subscriber',
         'type': 'data',
         'domain': [('status', 'in', ['terminated', 'void'])],
+        'order_fields': [('contract_number', 'ASC')],
         }
     subsidiary_terminated_covereds = {
         'node_name': 'party.hierarchy.subsidiary.terminated.covereds',
@@ -59,6 +60,7 @@ def get_organization_hierarchy():
                     x.name,
                     x.contract.get_synthesis_rec_name(None),
                     ])),
+        'order_fields': [('name', 'ASC')],
         }
     subsidiary_terminated = {
         'node_name': 'party.hierarchy.subsidiary.terminated',
@@ -85,6 +87,8 @@ def get_organization_hierarchy():
                     x.name,
                     x.contract.get_synthesis_rec_name(None),
                     ])),
+
+        'order_fields': [('name', 'ASC')],
         }
     subsidiary_contracts = {
         'node_name': 'party.hierarchy.subsidiary.contracts',
@@ -92,6 +96,7 @@ def get_organization_hierarchy():
         'main_field': 'subscriber',
         'type': 'data',
         'domain': [('status', 'not in', ['terminated', 'void'])],
+        'order_fields': [('contract_number', 'ASC')],
         }
     subsidiaries = {
         'node_name': 'party.hierarchy.subsidiaries',
@@ -102,6 +107,7 @@ def get_organization_hierarchy():
         'domain': [('parent_company', '!=', None)],
         'childs': [subsidiary_contracts, subsidiary_covered,
             subsidiary_terminated],
+        'order_fields': [('name', 'ASC')],
         }
     subsidiary = {
         'node_name': 'party.hierarchy.subsidiary',
@@ -121,6 +127,7 @@ def get_organization_hierarchy():
         'name_func': lambda x: ' - '.join(filter(None, [
                     x.contract.rec_name,
                     ])),
+        'order_fields': [('name', 'ASC')],
         }
     terminated_covered_root = {
         'node_name': 'party.hierarchy.terminated_covered',
@@ -142,6 +149,7 @@ def get_organization_hierarchy():
         'name_func': lambda x: ' - '.join(filter(None, [
                     x.contract.rec_name,
                     ])),
+        'order_fields': [('name', 'ASC')],
         }
     terminated_contracts_covereds = {
         'node_name': 'party.hierarchy.terminated_contracts.covered',
@@ -153,6 +161,7 @@ def get_organization_hierarchy():
         'name_func': lambda x: ' - '.join(filter(None, [
                     x.rec_name, x.name, x.get_synthesis_dates(),
                     ])),
+        'order_fields': [('name', 'ASC')],
         }
     terminated_contracts = {
         'node_name': 'party.hierarchy.contracts.terminated',
@@ -161,6 +170,7 @@ def get_organization_hierarchy():
         'type': 'data',
         'domain': [('status', 'in', ['void', 'terminated'])],
         'childs': [terminated_contracts_covereds],
+        'order_fields': [('contract_number', 'ASC')],
         }
     terminated_contract_root = {
         'node_name': 'party.hierarchy.contract.terminated',
@@ -183,6 +193,7 @@ def get_organization_hierarchy():
         'name_func': lambda x: ' - '.join(filter(None, [
                     x.rec_name, x.name, x.get_synthesis_dates(),
                     ])),
+        'order_fields': [('name', 'ASC')],
         }
     contracts_terminated_covered_root = {
         'node_name': 'party.hierarchy.contracts.terminated_covered',
@@ -208,6 +219,7 @@ def get_organization_hierarchy():
         'name_func': lambda x: ' - '.join(filter(None, [
                     x.rec_name, x.name, x.get_synthesis_dates(),
                     ])),
+        'order_fields': [('name', 'ASC')],
         }
     contracts = {
         'node_name': 'party.hierarchy.contracts',
@@ -220,6 +232,7 @@ def get_organization_hierarchy():
                     x.contract_number, x.product.rec_name,
                     x.get_synthesis_dates(), x.get_synthesis_status(),
                     ])),
+        'order_fields': [('contract_number', 'ASC')],
         }
     contract_root = {
         'node_name': 'party.hierarchy.contract',

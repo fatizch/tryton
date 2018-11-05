@@ -1,7 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from sql import Column, Literal
+from sql import Column, Literal, Window
 from sql.aggregate import Max
+from sql.functions import RowNumber
 
 from trytond.pool import Pool
 from trytond.wizard import Wizard
@@ -11,7 +12,7 @@ from trytond.pyson import PYSONEncoder
 from trytond.modules.coog_core import model, UnionMixin, fields
 
 
-def generate_hierarchy(config, classes=None, sequence=0):
+def generate_hierarchy(config, classes=None, counter=0):
     '''
         Provides a high-level abstraction to create complex UnionMixin trees.
 
@@ -113,7 +114,8 @@ def generate_hierarchy(config, classes=None, sequence=0):
         classes = []
 
     for idx, elem in enumerate(config.get('childs', [])):
-        generate_hierarchy(elem, classes=classes, sequence=sequence + idx)
+        generate_hierarchy(elem, classes=classes, counter=counter + idx)
+        classes[-1][1]._counter = counter + idx
         classes[-1][1]._parent_model_name = config['node_name']
 
     classes_dict = {m.__name__: c for c, m in classes}
@@ -249,6 +251,9 @@ def generate_hierarchy(config, classes=None, sequence=0):
                     domain = Target.search(config['domain'], query=True)
                     where = target.id.in_(domain)
 
+                group_by = [Column(target, config.get('parent_field',
+                            config['main_field']))]
+
                 return target.select(
                     Max(Column(target, config.get('parent_field',
                                 config['main_field']))).as_('id'),
@@ -260,10 +265,10 @@ def generate_hierarchy(config, classes=None, sequence=0):
                                 config['main_field']))).as_('parent'),
                     Max(Column(target, config['main_field'])).as_(
                         'main_field'),
-                    Literal(sequence).as_('sequence'),
+                    Literal(cls._counter).as_('sequence'),
                     where=where,
-                    group_by=Column(target, config.get('parent_field',
-                            config['main_field'])))
+                    group_by=group_by,
+                    )
 
             def getter_icon(self, name):
                 return config['icon']
@@ -307,6 +312,20 @@ def generate_hierarchy(config, classes=None, sequence=0):
                     domain = Target.search(config['domain'], query=True)
                     where = target.id.in_(domain)
 
+                order_fields = config.get('order_fields', [])
+                if order_fields:
+                    order_by = []
+                    for field_, order in order_fields:
+                        if order == 'DESC':
+                            order_by.append(Column(target, field_).desc)
+                        else:
+                            order_by.append(Column(target, field_).asc)
+                    sequence_col = RowNumber(window=Window([
+                                Column(target, config.get('parent_field',
+                                        config['main_field']))
+                                ], order_by=order_by))
+                else:
+                    sequence_col = Literal(cls._counter)
                 return target.select(
                     target.id,
                     target.id.as_('instance'),
@@ -317,7 +336,7 @@ def generate_hierarchy(config, classes=None, sequence=0):
                     target.create_date,
                     target.write_uid,
                     target.write_date,
-                    Literal(sequence).as_('sequence'),
+                    sequence_col.as_('sequence'),
                     where=where)
 
             def getter_icon(self, name):
