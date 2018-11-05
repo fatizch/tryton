@@ -65,3 +65,4 @@ Cette formation s'adresse à des personnes :
     commissionnement
     editique
     actions_evenements
+    gestion_contrats/index

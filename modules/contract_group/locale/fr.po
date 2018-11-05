@@ -1179,6 +1179,10 @@ msgctxt "model:contract.transfer_covered_elements.item_descs,name:"
 msgid "Transfer Covered Elements Item Descs"
 msgstr "Risques du transfert"
 
+msgctxt "model:covered_element.end_reason,name:default_end_reason_for_transfers"
+msgid "Contract Transfer"
+msgstr "Transfert de contrat"
+
 msgctxt "model:event.type,name:event_changed_enrollment"
 msgid "Changed Enrollment"
 msgstr "Modification d'affiliation"

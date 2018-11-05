@@ -151,7 +151,7 @@ class TransferServices(Wizard):
                         'number': number,
                         'source_benefit': benefit.id,
                         'source_covered': option.covered_element.id,
-                        'source_option': option.covered_element.id,
+                        'source_option': option.id,
                         })
         return {
             'possible_covered': possible_covered,
@@ -195,6 +195,7 @@ class TransferServicesContracts(model.CoogView):
     @classmethod
     def benefit_data(cls, contract, at_date):
         pool = Pool()
+        LossDesc = pool.get('benefit.loss.description')
         service = pool.get('claim.service').__table__()
         loss = pool.get('claim.loss').__table__()
         Benefit = pool.get('benefit')
@@ -202,12 +203,19 @@ class TransferServicesContracts(model.CoogView):
         options = list(contract.options) + list(
             contract.covered_element_options)
 
+        losses_to_consider = [
+            x.id for x in LossDesc.search([('has_end_date', '=', True)])]
+
+        if not losses_to_consider:
+            return {}
+
         cursor = Transaction().connection.cursor()
 
         cursor.execute(*service.join(loss, condition=loss.id == service.loss
                 ).select(service.benefit, service.option, Count(service.id),
                 where=service.option.in_([x.id for x in options])
-                & ((loss.end_date != Null)
+                & loss.loss_desc.in_(losses_to_consider)
+                & ((loss.end_date == Null)
                     | (loss.end_date >= at_date)),
                 group_by=[service.benefit, service.option],
                 order_by=service.benefit))

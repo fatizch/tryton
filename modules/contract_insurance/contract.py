@@ -1015,7 +1015,7 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
     @classmethod
     def _export_skips(cls):
         return super(CoveredElement, cls)._export_skips() | {
-            'multi_mixed_view', 'all_options'}
+            'multi_mixed_view', 'all_options', 'left', 'right'}
 
     @classmethod
     def add_func_key(cls, values):
@@ -1094,11 +1094,11 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             self.versions[-1].on_change_with_extra_data_as_string()
         self.versions = list(self.versions)
 
-    @fields.depends('name', 'party')
+    @fields.depends('name', 'rec_name', 'party')
     def on_change_with_covered_name(self, name=None):
         if self.party:
             return self.party.rec_name
-        return self.name
+        return self.rec_name or self.name
 
     @fields.depends('parent', 'item_desc')
     def on_change_with_show_name(self, name=None):

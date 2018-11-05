@@ -1367,6 +1367,12 @@ def with_local_mptt(master_field, parent_field='parent'):
                 cls._update_local_mptt(to_rebuild)
 
         @classmethod
+        def copy(cls, instances, default=None):
+            default = default if default else {}
+            default.update({'left': 0, 'right': 0})
+            return super(LocalMptt, cls).copy(instances, default)
+
+        @classmethod
         def _check_local_mptt(cls, value):
             if value.get('left', None) or value.get('right', None):
                 raise ValueError('Cannot directly set / write left / right '

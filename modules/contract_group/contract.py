@@ -80,6 +80,8 @@ class CoveredElement:
         cls.party.depends += ['subscriber', 'item_kind']
         cls.party.states['invisible'] &= (Eval('item_kind') != 'subsidiary')
         cls.party.states['required'] |= (Eval('item_kind') == 'subsidiary')
+        cls.end_reason.domain = ['OR', cls.end_reason.domain,
+            [('code', '=', 'contract_transfer')]]
         cls._buttons.update({
                 'button_open_sub_elements': {
                     'readonly': ~Eval('has_sub_covered_elements'),
@@ -149,23 +151,47 @@ class CoveredElement:
             The `matches` dictionary uses the source element as key and the
             target as value.
         '''
+        pool = Pool()
+        Event = pool.get('event')
+        EndReason = pool.get('covered_element.end_reason')
+        end_motive, = EndReason.search([('code', '=', 'contract_transfer')])
+
         new_elements = []
+        to_terminate = []
         for source, target in matches.iteritems():
-            to_move = cls.search([
-                    ('parent', '=', source.id),
-                    ['OR', ('manual_end_date', '=', None),
-                        ('manual_end_date', '>', at_date)],
-                    ])
-            if not to_move:
-                continue
-            new_elements += cls.copy(to_move, default={
-                    'parent': target.id,
-                    'manual_start_date': coog_date.add_day(at_date, 1)})
-            cls.write(to_move, {'manual_end_date': at_date})
-        Event = Pool().get('event')
+            copies, terminated = cls.terminate_and_copy(source, target, at_date)
+            to_terminate += terminated
+            new_elements += copies
+        if to_terminate:
+            cls.write(to_terminate, {
+                    'manual_end_date': at_date,
+                    'end_reason': end_motive.id,
+                    })
         if new_elements:
             Event.notify_events(new_elements, 'transferred_enrollment')
         return new_elements
+
+    @classmethod
+    def terminate_and_copy(cls, source, target, date):
+        to_move = cls.search([
+                ('parent', '=', source.id),
+                ['OR', ('manual_end_date', '=', None),
+                    ('manual_end_date', '>', date)],
+                ])
+        if not to_move:
+            return [], []
+        copies = cls.copy(to_move, default={
+                'parent': target.id,
+                'contract': target.contract.id,
+                'sub_covered_elements': None,
+                'manual_start_date': coog_date.add_day(date, 1)})
+        result = copies, to_move
+        for sub_source, sub_target in zip(to_move, copies):
+            sub_copies, sub_terminated = cls.terminate_and_copy(sub_source,
+                sub_target, date)
+            result[0].extend([x for x in sub_copies if not x.manual_end_date])
+            result[1].extend(sub_terminated)
+        return result
 
     @classmethod
     @model.CoogView.button_action('contract_group.act_open_sub_elements')

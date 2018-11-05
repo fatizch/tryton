@@ -3,11 +3,24 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- ########### -->
+        <!-- # Product # -->
+        <!-- ########### -->
         <record model="ir.action.act_window" id="offered.act_product_form">
             <field name="domain" eval="[('is_group', '=', False), ('company', '=', Eval('context', {}).get('company', None))]" pyson="1"/>
         </record>
+        <!-- ############ -->
+        <!-- # Coverage # -->
+        <!-- ############ -->
         <record model="ir.action.act_window" id="offered.act_coverage_form">
             <field name="domain" eval="[('is_group', '=', False), ('company', '=', Eval('context', {}).get('company', None))]" pyson="1"/>
+        </record>
+        <!-- #################################### -->
+        <!-- # Default end reason for transfers # -->
+        <!-- #################################### -->
+        <record model="covered_element.end_reason" id="default_end_reason_for_transfers">
+            <field name="code">contract_transfer</field>
+            <field name="name">Contract Transfer</field>
         </record>
     </data>
 </tryton>
