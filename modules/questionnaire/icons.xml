@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="questionnaire_family_icon">
+            <field name="name">questionnaire</field>
+            <field name="path">icons/questionnaire.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="house_family_icon">
+            <field name="name">house-family</field>
+            <field name="path">icons/house.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="loan_family_icon">
+            <field name="name">loan-family</field>
+            <field name="path">icons/loan.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="vehicle_family_icon">
+            <field name="name">vehicle-family</field>
+            <field name="path">icons/vehicle.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="health_family_icon">
+            <field name="name">health-family</field>
+            <field name="path">icons/health.svg</field>
+        </record>
+    </data>
+</tryton>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ################ -->
+        <!--  Questionnaires  -->
+        <!-- ################ -->
+        <record model="ir.ui.view" id="questionnaire_view_form">
+            <field name="model">questionnaire</field>
+            <field name="type">form</field>
+            <field name="name">questionnaire_form</field>
+        </record>
+        <record model="ir.ui.view" id="questionnaire_view_tree">
+            <field name="model">questionnaire</field>
+            <field name="type">tree</field>
+            <field name="name">questionnaire_tree</field>
+        </record>
+        <!-- ####### -->
+        <!--  Menus  -->
+        <!-- ####### -->
+        <record model="ir.action.act_window" id="act_questionnaire_form">
+            <field name="name">Questionnaires</field>
+            <field name="res_model">questionnaire</field>
+            <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', None))]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_questionnaire_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="questionnaire_view_tree"/>
+            <field name="act_window" ref="act_questionnaire_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_questionnaire_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="questionnaire_view_form"/>
+            <field name="act_window" ref="act_questionnaire_form"/>
+        </record>
+        <menuitem name="Questionnaires" parent="offered.menu_product_configuration" id="menu_questionnaire" sequence="200" icon="questionnaire" action="act_questionnaire_form"/>
+    </data>
+</tryton>

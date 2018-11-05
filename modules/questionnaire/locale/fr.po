@@ -1,0 +1,241 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:questionnaire:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
+msgctxt "error:questionnaire:"
+msgid ""
+"The return value of the questionnaire rule must be a dictionnary with "
+"products code as keys."
+msgstr ""
+"Le retour de la règle du questionnaire doit être un dictionnaire dont les "
+"clefs sont des codes de produits."
+
+msgctxt "field:questionnaire,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:questionnaire,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:questionnaire,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:questionnaire,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:questionnaire,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:questionnaire,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:questionnaire,extra_data_def:"
+msgid "Extra Data"
+msgstr "Questions"
+
+msgctxt "field:questionnaire,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:questionnaire,icon_name:"
+msgid "Icon Name"
+msgstr "Nom de l'icône"
+
+msgctxt "field:questionnaire,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:questionnaire,name:"
+msgid "Title"
+msgstr "Titre"
+
+msgctxt "field:questionnaire,products:"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "field:questionnaire,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:questionnaire,rule:"
+msgid "Rule Engine"
+msgstr "Règle"
+
+msgctxt "field:questionnaire,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de la règle"
+
+msgctxt "field:questionnaire,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:questionnaire,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:questionnaire,tags_name:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:questionnaire,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:questionnaire,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:questionnaire,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:questionnaire-extra_data,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:questionnaire-extra_data,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:questionnaire-extra_data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:questionnaire-extra_data,extra_data_def:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:questionnaire-extra_data,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:questionnaire-extra_data,order:"
+msgid "Order"
+msgstr "Ordre"
+
+msgctxt "field:questionnaire-extra_data,questionnaire:"
+msgid "Questionnaire"
+msgstr "Questionnaire"
+
+msgctxt "field:questionnaire-extra_data,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:questionnaire-extra_data,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:questionnaire-extra_data,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:questionnaire-extra_data,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:questionnaire-offered.product,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:questionnaire-offered.product,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:questionnaire-offered.product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:questionnaire-offered.product,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:questionnaire-offered.product,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:questionnaire-offered.product,questionnaire:"
+msgid "Questionnaire"
+msgstr "Questionnaire"
+
+msgctxt "field:questionnaire-offered.product,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:questionnaire-offered.product,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:questionnaire-offered.product,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:questionnaire-offered.product,xml_id:"
+msgid ""
+"The rule must return a dictionnary with products codes as keys, and "
+"dictionnaries as values. The possible keys for these sub dictionnaries are :"
+" [('score', 'Score'), ('eligible', 'Eligible'), ('message', 'Message')] "
+msgstr "XML Id"
+
+msgctxt "help:questionnaire,icon:"
+msgid "This icon will be used to quickly identify the questionnaire"
+msgstr "Cette icône sera utilisée pour identifier le questionnaire."
+
+msgctxt "help:questionnaire,rule:"
+msgid ""
+"The rule must return a dictionnary with products codes as keys, and "
+"dictionnaries as values. The possible keys for these sub dictionnaries are :"
+" [('score', 'Score'), ('eligible', 'Eligible'), ('message', 'Message')] "
+msgstr ""
+"Le retour de la règle du questionnaire doit être un dictionnaire dont les "
+"clefs sont des codes de produits et les valeurs des dictionnaires. Les clefs"
+" possibles poru ces sous-dictionnaire sont  [('score', 'Score'), "
+"('eligible', 'Eligible'), ('message', 'Message')]  "
+
+msgctxt "model:ir.action,name:act_questionnaire_form"
+msgid "Questionnaires"
+msgstr "Questionnaires"
+
+msgctxt "model:ir.ui.menu,name:menu_questionnaire"
+msgid "Questionnaires"
+msgstr "Paramètres de la règle"
+
+msgctxt "model:questionnaire,name:"
+msgid "Questionnaire"
+msgstr "Questionnaire"
+
+msgctxt "model:questionnaire-extra_data,name:"
+msgid "Relation between Questionnaire and Extra Data"
+msgstr "Relation entre questionnaire et données complémentaires"
+
+msgctxt "model:questionnaire-offered.product,name:"
+msgid "Product to Questionnaire Rule Relation"
+msgstr "Relation entre questionnaire et produit"
+
+msgctxt "selection:extra_data,kind:"
+msgid "Questionnaire"
+msgstr "Questionnaire"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Questionnaire"
+msgstr "Questionnaire"
+
+msgctxt "view:questionnaire:"
+msgid "Administration"
+msgstr "Administration"
+
+msgctxt "view:questionnaire:"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "view:questionnaire:"
+msgid "Questionnaire"
+msgstr "Questionnaire"
