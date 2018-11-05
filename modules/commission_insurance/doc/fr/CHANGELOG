@@ -1,3 +1,5 @@
+* OTH#0000 Ajout de champs (pour le reporting) permettant d'afficher les montants de taxe / montants totaux proratés sur la période de la commission
+
 Version 2.2 - 2018-10-12
 * FEA#9242 Nouvel outil de simulation du calcul des commissions depuis un produit. Si le montant des commissions est aussi lié à des données complémentaires de contrat, le gestionnaire peut les saisir manuellement.
 * BUG#9912 Correction sur l'annulation d'une quittance de type courtier grossiste

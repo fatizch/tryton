@@ -1616,9 +1616,9 @@
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string"><text:p><text:a xlink:href="relatorio://com.origin.tax_rate" xlink:type="simple">com.origin.tax_rate</text:a></text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p><text:a xlink:href="relatorio://com.origin.tax_amount" xlink:type="simple">com.origin.tax_amount</text:a></text:p>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p><text:a xlink:href="relatorio://com.base_tax_amount" xlink:type="simple">com.base_tax_amount</text:a></text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p><text:a xlink:href="relatorio://com.origin.taxed_amount" xlink:type="simple">com.origin.taxed_amount</text:a></text:p>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p><text:a xlink:href="relatorio://com.base_full_amount" xlink:type="simple">com.base_full_amount</text:a></text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce78" office:value-type="string" calcext:value-type="string"><text:p><text:a xlink:href="relatorio://com.commission_rate" xlink:type="simple">com.commission_rate</text:a></text:p>
      </table:table-cell>

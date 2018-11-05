@@ -79,6 +79,14 @@ msgid "Broker Fee Invoice Line"
 msgstr "Lignes de frais d'apporteur"
 
 msgctxt "field:commission,base_amount:"
+msgid "Commissioned amount tax"
+msgstr "Taxes sur l'assiette"
+
+msgctxt "field:commission,base_full_amount:"
+msgid "Commissioned amount (with taxes)"
+msgstr "Assiette (avec taxes)"
+
+msgctxt "field:commission,base_amount:"
 msgid "Base Amount"
 msgstr "Assiette"
 

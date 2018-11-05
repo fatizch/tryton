@@ -1,3 +1,5 @@
+* OTH#0000 Add reporting fields with prorated tax amounts / full amounts on commissions
+
 Version 2.2 - 2018-10-12
 * FEA#9242 New tool to simulate all commissions directly from a product. If the commission amount is also based on extra data on the contract, the user can set them manually.
 * BUG#9912 Fix cancel wholesale type invoice

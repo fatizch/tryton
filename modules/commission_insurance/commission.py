@@ -104,6 +104,14 @@ class Commission:
     currency_digits = fields.Function(
         fields.Integer('Currency Digits'),
         'get_currency_digits')
+    base_tax_amount = fields.Function(
+        # No rounding here, it would break the sums
+        fields.Numeric('Commissioned amount tax'),
+        'getter_base_tax_amount')
+    base_full_amount = fields.Function(
+        # No rounding here, it would break the sums
+        fields.Numeric('Commissioned amount (with taxes)'),
+        'getter_base_full_amount')
 
     @classmethod
     def __setup__(cls):
@@ -216,6 +224,21 @@ class Commission:
         if self.amount and self.commission_rate:
             return self.amount / self.commission_rate
         return Decimal(0)
+
+    def getter_base_tax_amount(self, name):
+        # We cannot directly use the line_tax_amount field because sometimes
+        # the periods do not match (for instance when there is a commission
+        # rate change in the middle of the invoiced period.
+        # We could use start / end vs line.start / line.end to compute a
+        # prorata, but since we already have the ratio in line_amount /
+        # base_amount, so we can reuse that.
+        if not self.line_amount:
+            return Decimal(0)
+        return ((self.base_amount / self.line_amount) *
+            self.line_tax_amount)
+
+    def getter_base_full_amount(self, name):
+        return self.base_amount + self.base_tax_amount
 
     def get_commissioned_subscriber(self, name):
         return self.commissioned_contract.subscriber.id
