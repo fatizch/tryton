@@ -47,19 +47,19 @@ return traitement_journalier, traitement_de_reference, trancheTA, trancheTB, tra
         </record>
         <record model="rule_engine.rule_parameter" id="pourcentage_ij_ta_calcul_du_traitement_de_base_journalier_en_fonction_des_tranches">
             <field name="name">pourcentage_ij_ta</field>
-            <field name="type_">integer</field>
+            <field name="type_">numeric</field>
             <field name="string">Pourcentage TA</field>
             <field name="parent_rule" ref="calcul_du_traitement_de_base_journalier_en_fonction_des_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="pourcentage_ij_tb_calcul_du_traitement_de_base_journalier_en_fonction_des_tranches">
             <field name="name">pourcentage_ij_tb</field>
-            <field name="type_">integer</field>
+            <field name="type_">numeric</field>
             <field name="string">Pourcentage TB</field>
             <field name="parent_rule" ref="calcul_du_traitement_de_base_journalier_en_fonction_des_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="_pourcentage_ij_tc_calcul_du_traitement_de_base_journalier_en_fonction_des_tranches">
             <field name="name">pourcentage_ij_tc</field>
-            <field name="type_">integer</field>
+            <field name="type_">numeric</field>
             <field name="string">Pourcentage TC</field>
             <field name="parent_rule" ref="calcul_du_traitement_de_base_journalier_en_fonction_des_tranches"/>
         </record>
@@ -131,19 +131,19 @@ return rule_coog_calcul_des_periodes_d_indemnisation(
         </record>
         <record model="rule_engine.rule_parameter" id="1_pourcentage_ij_ta_salaire_brut_net_par_tranche_de_salaire">
             <field name="name">1_pourcentage_ij_ta</field>
-            <field name="type_">integer</field>
+            <field name="type_">numeric</field>
             <field name="string">Pourcentage TA</field>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_pourcentage_ij_tb_salaire_brut_net_par_tranche_de_salaire">
             <field name="name">2_pourcentage_ij_tb</field>
-            <field name="type_">integer</field>
+            <field name="type_">numeric</field>
             <field name="string">Pourcentage TB</field>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine.rule_parameter" id="3_pourcentage_ij_tc_salaire_brut_net_par_tranche_de_salaire">
             <field name="name">3_pourcentage_ij_tc</field>
-            <field name="type_">integer</field>
+            <field name="type_">numeric</field>
             <field name="string">Pourcentage TC</field>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>

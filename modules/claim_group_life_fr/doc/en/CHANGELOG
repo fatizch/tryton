@@ -1,3 +1,4 @@
+* OTH#00000 Use numeric instead of integer for TA, TB, TC rates
 * FEA#10124 Add default LTD rules
 
 Version 2.2 - 2018-10-12
