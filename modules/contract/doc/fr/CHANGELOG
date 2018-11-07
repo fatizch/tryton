@@ -1,3 +1,5 @@
+* BUG#10242 Réinitialiser la date de fin manuelle des options résiliées lors de la résiliation de contrats
+
 Version 2.2 - 2018-10-12
 * OTH#0000 Correction de la traduction de active
 * OTH#0000 Suppression de la méthode "lowest_level_object", maintenant inutile

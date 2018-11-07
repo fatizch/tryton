@@ -1398,6 +1398,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             activation_history.end_date = at_date
             activation_history.termination_reason = termination_reason
             contract.activation_history = new_activation_history
+            contract.notify_end_date_change(at_date)
         cls.save(contracts)
         cls.plan_termination_or_terminate(contracts)
 
