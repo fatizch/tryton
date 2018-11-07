@@ -1,3 +1,4 @@
+* BUG#9962 Correction des types de données des détails des lignes analytiques
 * OTH#0000 Ajout d'une seconde année fiscale au scénario de tests
 
 Version 2.2 - 2018-10-12
