@@ -1,3 +1,5 @@
+* BUG#10221 Fix formatting of erros
+
 Version 2.2 - 2018-10-12
 * FEA#9323 Add code linter to rule engine
 * BUG#9313 Fix test cases when the rule contains a function definition

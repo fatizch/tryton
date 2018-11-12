@@ -163,12 +163,12 @@ def debug_wrapper(base_context, func, name):
             base_context['__result__'].calls.append(call)
             base_context['__result__'].errors.append(
                 'ERROR in %s : %s' % (
-                    name, str(exc)))
+                    name, unicode(exc)))
             raise
         call[3] = repr(result)
         base_context['__result__'].calls.append(call)
         base_context['__result__'].low_level_debug.append(
-            '\tresult = %s' % str(result))
+            '\tresult = %s' % unicode(result))
         return result
     return wrapper_func
 
@@ -1468,7 +1468,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             rule_execution.calculation_date = date
             if exc:
                 rule_execution.errors += '\n' + (
-                    coog_string.slugify(self.name) + ' - ' + str(exc))
+                    coog_string.slugify(self.name) + ' - ' + unicode(exc))
             rule_execution.save()
             try:
                 transaction.commit()
