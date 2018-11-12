@@ -7,6 +7,7 @@ from trytond.modules.dsn_standard import dsn
 
 from trytond.config import config
 from trytond.modules.coog_core import utils
+from trytond.modules import get_module_info
 
 
 class ModuleTestCase(test_framework.CoogTestCase):
@@ -59,10 +60,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         D = dsn.NEODeSTemplate(None)
         s = D.generate()
+        version = get_module_info('dsn_standard').get('version')
         expected_file = '\n'.join([
             u"S10.G00.00.001,'Coog'",
             u"S10.G00.00.002,'Coopengo'",
-            u"S10.G00.00.003,'2.3.0'",
+            u"S10.G00.00.003,'%s'" % version,
             u"S10.G00.00.005,'02'",
             u"S10.G00.00.006,'20176'",
             u"S10.G00.00.008,'01'",
