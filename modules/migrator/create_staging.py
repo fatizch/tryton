@@ -107,7 +107,8 @@ class CreateStaging(batch.BatchRootNoSelect):
     def copy_from_file(cls, conn, path, tablename, encoding,
             delim=';'):
         cursor = conn.cursor()
-        op = "COPY {} FROM STDIN WITH CSV ENCODING '{}' DELIMITER '{}'".format(
+        op = ("COPY {} FROM STDIN WITH CSV ENCODING '{}' DELIMITER '{}'" +
+            " QUOTE '~'").format(
             tablename, encoding, delim)
         with open(path, 'rb') as csvfile:
             cursor.copy_expert(op, csvfile)

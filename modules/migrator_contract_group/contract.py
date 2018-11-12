@@ -1,7 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 
+import json
 import datetime
+from decimal import Decimal
 from collections import defaultdict
 from itertools import groupby
 
@@ -827,17 +829,30 @@ class MigratorContractGroupConfiguration(Migrator):
             rows, **kwargs)
 
     @classmethod
+    def _set_extra_data_decimal(cls, *extra_datas):
+        for key, value, extra_data in [(k, v, extra_data)
+                for extra_data in extra_datas
+                for k, v in extra_data.items()]:
+            if isinstance(value, basestring) and not \
+                    filter(lambda x: x not in '0123456789.', value):
+                extra_data[key] = Decimal(value)
+
+    @classmethod
     def sanitize(cls, row):
         row = super(MigratorContractGroupConfiguration, cls).sanitize(row)
         row['start_date'] = datetime.datetime.strptime(
-            row['start_start'], '%Y-%m-%d').date() \
+            row['start_date'], '%Y-%m-%d').date() \
             if row['start_date'] else None
-        row['deductible_rule_extra_data'] = eval(
-            row['deductible_rule_extra_data'])
-        row['indemnification_rule_extra_data'] = eval(
+        deductible_extra_data = json.loads(row['deductible_rule_extra_data'])
+        indemnification_extra_data = json.loads(
             row['indemnification_rule_extra_data'])
-        row['revaluation_rule_extra_data'] = eval(
-            row['revaluation_rule_extra_data'])
+        reval_extra_data = json.loads(row['revaluation_rule_extra_data'])
+        cls._set_extra_data_decimal(
+            deductible_extra_data, indemnification_extra_data,
+            reval_extra_data)
+        row['deductible_rule_extra_data'] = deductible_extra_data
+        row['indemnification_rule_extra_data'] = indemnification_extra_data
+        row['revaluation_rule_extra_data'] = reval_extra_data
         row['revaluation_on_basic_salary'] = bool(
             row['revaluation_on_basic_salary'])
         return row
@@ -912,7 +927,7 @@ class MigratorContractGroupConfiguration(Migrator):
                     'benefit': row[0],
                     })
         existing_ids = {'|'.join([
-                    r[3], r[1], str(r[2]), r[4], r[5] if r[5] else ''
+                    r[3], r[1], str(r[2]), r[4], str(r[5]) if r[5] else ''
                     ]) for r in cls._select_exisiting_benefits_query(rows)}
         return list(set(ids) - set(excluded) - set(existing_ids))
 
@@ -948,6 +963,7 @@ class MigratorContractGroupConfiguration(Migrator):
             clause |= ((cls.table.benefit == benefit_code) &
                 (cls.table.coverage == coverage_code) &
                 (cls.table.contract_number == contract_number) &
-                (cls.table.start_date == (start_date or Null)))
+                (cls.table.start_date == (
+                    start_date.strftime('%Y-%m-%d') if start_date else Null)))
         cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
         return res
