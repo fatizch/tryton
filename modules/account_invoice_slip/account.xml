@@ -23,7 +23,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.action.keyword" id="act_received_premiums_relate_keyword">
             <field name="keyword">form_relate</field>
-            <field name="model">account.invoice, -1</field>
+            <field name="model">account.invoice,-1</field>
             <field name="action" ref="act_related_lines_relate"/>
         </record>
         <!-- ################ -->
