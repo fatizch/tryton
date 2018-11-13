@@ -202,8 +202,8 @@ if montant_mi_temps:
     montant_mi_temps_total = arrondir(montant_mi_temps_total, 0.01)
     montant_mi_temps = arrondir(montant_mi_temps, 0.01)
     description += u'Versement employeur - Mi temps thérapeutique: %s euros (montant journalier: %s€)\n\n' % (montant_mi_temps_total, montant_mi_temps)
-    if param_inclusion_du_mi_temps_theapeutique() == 'ijb_ijss_mtt':
-        taitement_journalier_base = traitement_journalier_base_originel - IJSS - montant_mi_temps
+    if param_inclusion_du_mi_temps_therapeutique() == 'ijb_ijss_mtt':
+        traitement_journalier_base = traitement_journalier_base_originel - IJSS - montant_mi_temps
         description += u'Limitation du mi-temps thérapeutique (Traitement de référence - IJSS - montant percu en mi-temps): %s€ - %s€ - %s€ = %s€\n' % (
             traitement_journalier_base_originel, IJSS, montant_mi_temps, traitement_journalier_base)
     elif param_inclusion_du_mi_temps_therapeutique() == 'tdrj_ijss_mtt':
@@ -1173,7 +1173,7 @@ return annuites</field>
             <field name="has_default_value" eval="False"/>
             <field name="string">Catégorie de rente d'invalidité</field>
             <field name="name">categorie_de_rente_d_invalidite</field>
-            <field name="kind">benefit</field>
+            <field name="kind">loss</field>
             <field name="type_">selection</field>
             <field name="selection">r1:Catégorie 1
 r2:Catégorie 2
