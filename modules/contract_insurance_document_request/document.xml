@@ -11,5 +11,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="document.document_reception_view_form"/>
             <field name="name">document_reception_form</field>
         </record>
+        <!-- ######################### -->
+        <!-- # Document Request Line # -->
+        <!-- ######################### -->
+        <record model="ir.ui.view" id="document_request_line_view_list">
+            <field name="model">document.request.line</field>
+            <field name="inherit" ref="document_request.document_request_line_view_list"/>
+            <field name="name">document_request_line_list</field>
+        </record>
     </data>
 </tryton>

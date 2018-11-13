@@ -58,6 +58,11 @@ class DocumentRequestLine:
                     continue
                 value['contract'] = contract_id
 
+    @fields.depends('contract', 'for_object')
+    def on_change_contract(self):
+        if self.for_object is None:
+            self.for_object = self.contract
+
     @classmethod
     def for_object_models(cls):
         return super(DocumentRequestLine, cls).for_object_models() + \

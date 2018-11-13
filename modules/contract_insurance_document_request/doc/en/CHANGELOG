@@ -1,3 +1,5 @@
+* BUG#10264 Enable adding new document request lines on quotes
+
 Version 2.2 - 2018-10-12
 * BUG#7841 Fix duplicate medical documents on quotation creation by a user whom is not authorized to see those documents
 

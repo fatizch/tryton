@@ -1,3 +1,5 @@
+* BUG#10264 Possibilité d'ajouter des lignes de documents requis pour les devis
+
 Version 2.2 - 2018-10-12
 * BUG#7841 Correction de la duplication des documents médicaux lors de la création d'un devis par un utilisateur non habilité à voir ces documents
 
