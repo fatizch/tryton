@@ -186,22 +186,41 @@ class Beneficiary(model.CoogSQL, model.CoogView):
     __name__ = 'contract.option.beneficiary'
 
     option = fields.Many2One('contract.option', 'Option', required=True,
-        ondelete='CASCADE', select=True)
-    accepting = fields.Boolean('Accepting')
+        ondelete='CASCADE', select=True, states={
+            'readonly': Bool(Eval('contract_status'))
+            & (Eval('contract_status') != 'quote'),
+            }, depends=['contract_status'])
+    accepting = fields.Boolean('Accepting', states={
+            'readonly': Bool(Eval('contract_status'))
+            & (Eval('contract_status') != 'quote'),
+            }, depends=['contract_status'])
     party = fields.Many2One('party.party', 'Party', states={
             'required': Bool(Eval('accepting')),
-            }, depends=['accepting'],
+            'readonly': Bool(Eval('contract_status'))
+            & (Eval('contract_status') != 'quote'),
+            }, depends=['accepting', 'contract_status'],
         ondelete='RESTRICT')
     address = fields.Many2One('party.address', 'Address',
         domain=[('party', '=', Eval('party', None))], states={
             'invisible': ~Eval('accepting'),
             'required': Bool(Eval('accepting')),
-            }, depends=['party', 'accepting'], ondelete='RESTRICT')
+            'readonly': Bool(Eval('contract_status'))
+            & (Eval('contract_status') != 'quote'),
+            }, depends=['party', 'accepting', 'contract_status'],
+            ondelete='RESTRICT')
     reference = fields.Char('Reference', states={
             'invisible': Or(Bool(Eval('party')), Bool(Eval('accepting'))),
             'required': ~Eval('party'),
-            }, depends=['party', 'accepting'])
-    share = fields.Numeric('Share', digits=(4, 4))
+            'readonly': Bool(Eval('contract_status'))
+            & (Eval('contract_status') != 'quote'),
+            }, depends=['party', 'accepting', 'contract_status'])
+    share = fields.Numeric('Share', digits=(4, 4), states={
+            'readonly': Bool(Eval('contract_status'))
+            & (Eval('contract_status') != 'quote'),
+            }, depends=['contract_status'])
+    contract_status = fields.Function(
+        fields.Char('Contract Status'),
+        'on_change_with_contract_status')
 
     @staticmethod
     def default_accepting():
@@ -224,3 +243,7 @@ class Beneficiary(model.CoogSQL, model.CoogView):
             self.address = None
         else:
             self.reference = ''
+
+    @fields.depends('option')
+    def on_change_with_contract_status(self, name=None):
+        return self.option.contract_status if self.option else ''

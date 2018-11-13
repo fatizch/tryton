@@ -1,3 +1,5 @@
+* BUG#10206 Rendre les bénéficiaires non éditables si le statut du contrat est autre que devis
+
 Version 2.2 - 2018-10-12
 * BUG#8709 Rendre les clauses bénéficaires normales et personnalisées non requises si le contrat est en cours de souscription
 
