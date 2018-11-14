@@ -614,16 +614,5 @@ def with_extra_data(kinds, schema=None, field_name='extra_data',
             getattr(self, 'on_change_%s' % field_name)()
 
         setattr(WithExtraDataMixin, 'on_change_%s' % schema, on_change_schema)
-    else:
-        @staticmethod
-        def default_values():
-            ExtraData = Pool().get('extra_data')
-            res = {}
-            for kind in kinds:
-                res.update(ExtraData._refresh_extra_data({},
-                        ExtraData._global_extra_data_structure(kind)))
-            return res
-
-        setattr(WithExtraDataMixin, 'default_%s' % field_name, default_values)
 
     return WithExtraDataMixin

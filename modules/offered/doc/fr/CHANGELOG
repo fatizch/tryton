@@ -1,3 +1,4 @@
+* BUG#10296 Ne pas initialiser les données complémentaires sans paramétrage dédié
 * BUG#9937 Ajout d'un filtre suplémentaire sur le type de données complémentaires
 
 Version 2.2 - 2018-10-12

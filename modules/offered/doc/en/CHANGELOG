@@ -1,3 +1,4 @@
+* BUG#10296 Do not add default extra data if no configuration says to
 * BUG#9937 Add kind selector on extra_data cache
 
 Version 2.2 - 2018-10-12

@@ -323,6 +323,12 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
             return company.currency.id
 
     @staticmethod
+    def default_extra_data():
+        ExtraData = Pool().get('extra_data')
+        return ExtraData._refresh_extra_data({},
+            ExtraData._global_extra_data_structure('loan'))
+
+    @staticmethod
     def default_kind():
         return 'fixed_rate'
 
