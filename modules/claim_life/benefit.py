@@ -57,17 +57,11 @@ class Benefit:
                     'manual_list_enum', raise_exception=False)])
         return res
 
-    @fields.depends('beneficiary_documents', 'beneficiary_kind')
-    def on_change_with_beneficiary_documents(self):
-        if self.beneficiary_kind != 'manual_list':
-            return []
-        return [x.id for x in self.beneficiary_documents]
-
-    @fields.depends('beneficiary_extra_data_def', 'beneficiary_kind')
-    def on_change_with_beneficiary_extra_data_def(self):
-        if self.beneficiary_kind != 'manual_list':
-            return []
-        return [x.id for x in self.beneficiary_extra_data_def]
+    @fields.depends('beneficiary_kind')
+    def on_change_beneficiary_kind(self):
+        if self.beneficiary_kind == 'manual_list':
+            self.beneficiary_documents = []
+            self.beneficiary_extra_data_def = []
 
 
 class BenefitBeneficiaryDocument(model.CoogSQL):

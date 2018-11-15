@@ -1,3 +1,4 @@
+* BUG#10280 Correction d'une boucle infinie lors de la saisie de données complémentaires sur les prestations
 * BUG#10172 Ajout de la donnée personne dans le contexte de la règle de paramétrage afin de calculer la date de naissance des affiliés
 * BUG#10072 Possibilité de supprimer les bénéficiaires depuis un sinistre
 
