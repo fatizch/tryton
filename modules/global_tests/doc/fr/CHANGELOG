@@ -1,3 +1,4 @@
+* FEA#10308 Ne pas installer les modules liés aux ensembles de contrats et aux processus d'avenant
 * FEA#10145 Utilisation de psycopg2 pour les opérations liées à la base de données
 
 Version 2.2 - 2018-10-12

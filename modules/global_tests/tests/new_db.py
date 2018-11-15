@@ -23,6 +23,13 @@ def parse_environ(name, default):
 _modules_to_ignore = [
     'test',  # Trytond test modules
     'account_per_product',  # Breaks everything
+    'endorsement_process',  # To use endorsements without processes
+    'endorsement_party_process',  # To use endorsements without processes
+    'endorsement_set_process',  # We do not test contract sets so far
+    'contract_set',  # We do not test contract sets so far
+    'contract_set_insurance_invoice',  # We do not test contract sets so far
+    'contract_set_process',  # We do not test contract sets so far
+    'endorsement_set',  # We do not test it so far
     ]
 
 
