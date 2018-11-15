@@ -476,6 +476,7 @@ class LineAggregated(model.CoogSQL, model.CoogView):
         move = tables['account.move']
         journal = tables['account.journal']
         snapshot = tables['account.move.snapshot']
+        line = tables['account.move.line']
         if ServerContext().get('from_batch', False):
             order = [snapshot.id.desc]
         else:
@@ -492,6 +493,7 @@ class LineAggregated(model.CoogSQL, model.CoogView):
                     cls.get_move_prefix(),
                     Max(move.number))).as_('aggregated_move_id').desc,
             move.journal.desc,
+            line.account,
             ]
 
     @classmethod
