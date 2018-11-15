@@ -102,7 +102,7 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
                         pasrau_tax_rate = node_func(salarie,
                             'taux_imposition_PAS', True)
                         party = Party.search([
-                                ('ssn', '=', ssn)
+                                ('ssn', 'like', ssn + '%')
                                 ])
                         if not party:
                             if logger:

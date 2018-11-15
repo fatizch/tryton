@@ -28,7 +28,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         'S21.G00.06.006': 'main_address.city',
         # 'S21.G00.06.007': '',  # Complément de la localisation de la constr.
         # 'S21.G00.06.008': '',  # Service de distribution, complément de loc.
-        'S21.G00.06.010': 'main_address.country.code',
+        'S21.G00.06.010': 'main_address_country_code',
         # 'S21.G00.06.011': '',  # Code de distribution à l'étranger
 
         # BLOC ETABLISSEMENT (SIRET LEVEL)
@@ -40,7 +40,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         'S21.G00.11.005': 'main_address.city',
         # 'S21.G00.11.006': '',  # Complément de la localisation de la constr.
         # 'S21.G00.11.007': '',  # Service de distribution, complément de loc.
-        'S21.G00.11.015': 'main_address.country.code',
+        'S21.G00.11.015': 'main_address_country_code',
         # 'S21.G00.11.016': '',  # Code de distribution à l'étranger
 
         # BLOC  VERSEMENT ORGANISME
@@ -56,7 +56,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
 
         # BLOC INDIVIDU
 
-        'S21.G00.30.001': 'ssn',
+        'S21.G00.30.001': 'ssn_no_key',
         'S21.G00.30.002': 'name',
         # 'S21.G00.30.003': '',  # Nom d'usage
         'S21.G00.30.004': 'first_name',
@@ -66,7 +66,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         'S21.G00.30.008': 'main_address.one_line_street',
         'S21.G00.30.009': 'main_address.zip',
         'S21.G00.30.010': 'main_address.city',
-        'S21.G00.30.011': 'main_address.country.code',
+        'S21.G00.30.011': 'main_address_country_code',
         # 'S21.G00.30.012': '',  # Code de distribution à l'étranger
         'S21.G00.30.014': 'birth_department',
         # 'S21.G00.30.015': '',  # Code pays de naissance
@@ -250,13 +250,13 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         return u'11'
 
     @property
-    def fraction_number(self):
-        return u'10'
-
-    @property
     def declaration_rank(self):
-        # TODO : sequence starting at zero each month
-        return u'0'
+        Message = Pool().get('dsn.message')
+        messages = Message.search([
+                ('origin', '=', str(self.origin)),
+                ('state', '=', 'done')],
+            order=[('create_date', 'ASC')])
+        return unicode(len(messages) + 1)
 
     @property
     def declaration_month(self):
@@ -269,7 +269,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         return slip.company.party.bank_accounts[0].bank.bic
 
     def custom_pasrau_iban(self, slip):
-        return slip.company.party.bank_accounts[0].number
+        return slip.company.party.bank_accounts[0].numbers[0].number_compact
 
     def custom_pasrau_total_amount(self, slip):
         return slip.total_amount if slip.total_amount else Decimal('0')

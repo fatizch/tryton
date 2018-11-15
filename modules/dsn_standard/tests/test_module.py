@@ -57,6 +57,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         config.set('dsn', 'sender_contact_full_name', 'Joe Doe')
         config.set('dsn', 'sender_contact_email', 'joe@corp.com')
         config.set('dsn', 'sender_contact_phone', '0101010101')
+        config.set('dsn', 'fraction_number', '11')
 
         D = dsn.NEODeSTemplate(None)
         s = D.generate()
@@ -66,7 +67,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             u"S10.G00.00.002,'Coopengo'",
             u"S10.G00.00.003,'%s'" % version,
             u"S10.G00.00.005,'02'",
-            u"S10.G00.00.006,'20176'",
+            u"S10.G00.00.006,'201710'",
             u"S10.G00.00.008,'01'",
             u"S10.G00.01.001,'379158322'",
             u"S10.G00.01.002,'123'",
@@ -74,19 +75,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
             u"S10.G00.01.004,'2 Common Street'",
             u"S10.G00.01.005,'1'",
             u"S10.G00.01.006,'Emerald'",
-            u"S10.G00.01.007,'OZ'",
             u"S10.G00.02.001,'01'",
             u"S10.G00.02.002,'Joe Doe'",
             u"S10.G00.02.004,'joe@corp.com'",
             u"S10.G00.02.005,'0101010101'",
             u"S20.G00.05.001,'21'",
             u"S20.G00.05.002,'01'",
-            u"S20.G00.05.003,'23'",
+            u"S20.G00.05.003,'11'",
             u"S20.G00.05.004,'24'",
             u"S20.G00.05.005,'%s'" % utils.today().strftime('01%m%Y'),
             u"S20.G00.05.007,'%s'" % utils.today().strftime('%d%m%Y'),
             u"S20.G00.05.010,'01'",
-            u"S90.G00.90.001,'26'",
+            u"S90.G00.90.001,'25'",
             u"S90.G00.90.002,'1'"
         ])
 

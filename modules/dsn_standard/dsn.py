@@ -47,7 +47,7 @@ class NEODeSTemplate(utils.DataExporter):
         'S10.G00.01.004': 'main_address.one_line_street',
         'S10.G00.01.005': 'main_address.zip',
         'S10.G00.01.006': 'main_address.city',
-        'S10.G00.01.007': 'main_address.country.code',
+        'S10.G00.01.007': 'main_address_country_code',
 
         # 'S10.G00.01.008': 'main_address.?',
         # 'S10.G00.01.009': 'main_address.?',
@@ -62,7 +62,7 @@ class NEODeSTemplate(utils.DataExporter):
         # Declaration block
         'S20.G00.05.001': 'declaration_nature',
         'S20.G00.05.002': 'declaration_kind',
-        'S20.G00.05.003': 'fraction_number',
+        'S20.G00.05.003': 'conf_fraction_number',
         'S20.G00.05.004': 'declaration_rank',
         'S20.G00.05.005': 'declaration_month',
         'S20.G00.05.007': 'file_date',
@@ -76,12 +76,16 @@ class NEODeSTemplate(utils.DataExporter):
 
     def __init__(self, origin, testing=False, void=False, replace=False):
         self.origin = origin
-        self.testing = testing
         self.void = void
         self.replace = replace
         self.load_specifications()
         self.errors = []
         self.message = []
+        conf_testing = config.get('dsn', 'testing')
+        if conf_testing:
+            self.testing = conf_testing == 'True'
+        else:
+            self.testing = testing
         if self.custom_mapping:
             self.mapping.update(self.custom_mapping)
 
@@ -128,7 +132,7 @@ class NEODeSTemplate(utils.DataExporter):
         field_defs = self.get_field_defs(block_id)
         for field_def in field_defs:
             val = self.get_value(instance, field_def, parent)
-            if val == -1:
+            if val == -1 or val is None:
                 continue
             assert isinstance(val, type(u'')), ('Value of %s is %s , type %s'
                 % (field_def[0], val, type(val)))
@@ -218,7 +222,7 @@ class NEODeSTemplate(utils.DataExporter):
 
     @property
     def norm_version(self):
-        return u'20176'  # not sure
+        return u'201710'  # not sure
 
     def get_conf_item(self, item):
         conf_item = config.get('dsn', item)
@@ -237,12 +241,6 @@ class NEODeSTemplate(utils.DataExporter):
         if not self.replace:
             return u'01' if not self.void else u'02'
         return u'03' if not self.void else u'05'
-
-    @property
-    def fraction_number(self):
-        if config.getboolean('env', 'testing') is True:
-            return u'23'
-        raise NotImplementedError
 
     @property
     def declaration_rank(self):
@@ -271,6 +269,12 @@ class NEODeSTemplate(utils.DataExporter):
     @property
     def declaration_number(self):
         return u'1'
+
+    def custom_main_address_country_code(self, party):
+        # if S10.G00.01.005 defined country must be empty
+        if party.main_address.zip:
+            return None
+        return party.main_address.country.code
 
 
 class NEODES(object):
