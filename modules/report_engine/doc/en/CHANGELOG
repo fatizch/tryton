@@ -1,3 +1,4 @@
+* FEA#10315 Add possibility to sort rules parameters
 * OTH#0000 Raise the technical error if it is not caused by the template's syntax
 
 Version 2.2 - 2018-10-12

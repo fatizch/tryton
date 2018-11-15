@@ -19,9 +19,10 @@ from dateutil.relativedelta import relativedelta
 
 from StringIO import StringIO
 from pyflakes.checker import Checker
-from sql import Null
+from sql import Null, Window
 from sql.aggregate import Count
 from sql.conditionals import Coalesce
+from sql.functions import RowNumber
 
 from trytond import backend
 from trytond.rpc import RPC
@@ -83,7 +84,7 @@ result_%s = fct_%s()
 def check_code(algorithm):
     try:
         tree = compile(algorithm, 'test', 'exec', _ast.PyCF_ONLY_AST)
-    except SyntaxError, syn_error:
+    except SyntaxError as syn_error:
         error = pyflakes.messages.Message('test', syn_error)
         error.message = 'Syntax Error'
         return [error]
@@ -158,7 +159,7 @@ def debug_wrapper(base_context, func, name):
                 '\tkwargs : %s' % str(kwargs))
         try:
             result = func(*args, **kwargs)
-        except Exception, exc:
+        except Exception as exc:
             call[3] = str(exc)
             base_context['__result__'].calls.append(call)
             base_context['__result__'].errors.append(
@@ -714,11 +715,15 @@ class RuleParameter(model.CoogDictSchema, model.CoogSQL, model.CoogView):
 
     parent_rule = fields.Many2One('rule_engine', 'Parent Rule', required=True,
         ondelete='CASCADE', select=True)
+    sequence_order = fields.Integer('Sequence Order')
 
     @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().connection.cursor()
+
+        the_table = TableHandler(cls, module_name)
+        sequence_order_exists = the_table.column_exist('sequence_order')
 
         super(RuleParameter, cls).__register__(module_name)
 
@@ -748,6 +753,25 @@ class RuleParameter(model.CoogDictSchema, model.CoogSQL, model.CoogView):
                     values=[[cur_rule_parameter['parent_rule'],
                     cur_rule_parameter['code'], cur_rule_parameter['name'],
                     'numeric']]))
+
+        # Migration from 2.2: Add sequence order field
+        if not sequence_order_exists:
+            sequence_col = RowNumber(window=Window([
+                        parameter_definition.parent_rule],
+                    order_by=[parameter_definition.name]))
+            sub_query = parameter_definition.select(parameter_definition.name,
+                sequence_col.as_('sequence_order'),
+                parameter_definition.parent_rule,
+                )
+            values = sub_query.select(sub_query.name, sub_query.sequence_order,
+                sub_query.parent_rule)
+            query = parameter_definition.update(
+                columns=[parameter_definition.sequence_order],
+                values=[values.sequence_order],
+                from_=[values],
+                where=(values.name == parameter_definition.name)
+                & (values.parent_rule == parameter_definition.parent_rule))
+            cursor.execute(*query)
 
     @fields.depends('string', 'name')
     def on_change_with_name(self):
@@ -806,7 +830,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     execution_code = fields.Function(fields.Text('Execution Code'),
         'on_change_with_execution_code')
     parameters = fields.One2Many('rule_engine.rule_parameter', 'parent_rule',
-        'Parameters', delete_missing=True)
+        'Parameters', delete_missing=True, order=[('sequence_order', 'ASC')])
     rules_used = fields.Many2Many(
         'rule_engine-rule_engine', 'parent_rule', 'rule', 'Rules')
     tables_used = fields.Many2Many(
