@@ -62,8 +62,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         file1 = os.path.join(dir_path, 'pasrau-crm.xml')
         file2 = os.path.join(dir_path, 'pasrau-crm-multi.xml')
 
-        self.assertTrue(PartyCustomPasrauRate.process_xml_file(file1))
-        self.assertTrue(PartyCustomPasrauRate.process_xml_file(file2))
+        PartyCustomPasrauRate.process_xml_file(file1)
+        PartyCustomPasrauRate.process_xml_file(file2)
 
         created_rates = PartyCustomPasrauRate.search([])
         self.assertEqual(len(created_rates), 3)

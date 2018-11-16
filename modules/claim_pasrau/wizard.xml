@@ -18,6 +18,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">select_file_displayer</field>
         </record>
+        <record model="ir.ui.view" id="import_file_summary_form_view">
+            <field name="model">claim.pasrau.file_import_summary</field>
+            <field name="type">form</field>
+            <field name="name">import_file_summary_form</field>
+        </record>
         <!-- ###################### -->
         <!-- ######## Menu ######## -->
         <!-- ###################### -->

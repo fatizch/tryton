@@ -23,12 +23,13 @@ def register():
         tax.Tax,
         tax.MoveLine,
         tax.InvoiceTax,
-        wizard.ClaimPasrauSelectFile,
         batch.UpdatePartyPasrauRateBatch,
         slip.InvoiceSlipConfiguration,
         slip.Invoice,
         message.DsnMessage,
+        wizard.ClaimPasrauSelectFile,
         wizard.InvoiceSlipParameters,
+        wizard.ClaimPasrauImportFileSummary,
         module='claim_pasrau', type_='model')
     Pool.register(
         wizard.ClaimPasrauUploadWizard,

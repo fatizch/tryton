@@ -33,14 +33,26 @@ msgid "Unable to find PASRAU region for zip code %s"
 msgstr "Impossible d'identifier la zone géographique pour le code postal %s"
 
 msgctxt "error:claim.pasrau.upload.wizard:"
-msgid "The file could not be processed"
-msgstr "Le fichier n'a pas pu être traité"
+msgid "The file is not valid"
+msgstr "Le fichier n'est pas valide"
 
 msgctxt "error:party.party:"
 msgid "A zip is required to compute the default pasrau rate"
 msgstr ""
 "Un code postal est nécessaire pour pouvoir calculer le taux Pasrau par "
 "défaut"
+
+msgctxt "error:party.pasrau.rate:"
+msgid "No NIR provided"
+msgstr "NIR manquant"
+
+msgctxt "error:party.pasrau.rate:"
+msgid "No party found for NIR %(ssn)s"
+msgstr "Aucun tiers rattaché au NIR %(ssn)s"
+
+msgctxt "error:party.pasrau.rate:"
+msgid "No pasrau rate found for NIR %(ssn)s"
+msgstr "Aucun taux trouvé pour le NIR %(ssn)s"
 
 msgctxt "error:party.pasrau.rate:"
 msgid "The rate must be unique per party / date"
@@ -158,6 +170,18 @@ msgctxt "field:claim.pasrau.default.rate,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:claim.pasrau.file_import_summary,created_rates:"
+msgid "Created Rate"
+msgstr "Taux créés"
+
+msgctxt "field:claim.pasrau.file_import_summary,errors:"
+msgid "Errors"
+msgstr "Erreurs"
+
+msgctxt "field:claim.pasrau.file_import_summary,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:claim.pasrau.select_file,file:"
 msgid "File"
 msgstr "Fichier"
@@ -234,6 +258,10 @@ msgctxt "model:claim.pasrau.default.rate,name:"
 msgid "Default Pasrau Rate"
 msgstr "Taux Pasrau par défaut"
 
+msgctxt "model:claim.pasrau.file_import_summary,name:"
+msgid "Claim Pasrau Select File"
+msgstr "Choisir un fichier CRM nominatif PASRAU"
+
 msgctxt "model:claim.pasrau.select_file,name:"
 msgid "Claim Pasrau Select File"
 msgstr "Choisir un fichier CRM nominatif PASRAU"
@@ -267,7 +295,7 @@ msgid "Upload Pasrau File Wizard"
 msgstr "Assistant de chargement de fichier CRM nominatif PASRAU"
 
 msgctxt "model:ir.model.button,string:generate_dsn_message_button"
-msgid "Generate Dsn Message"
+msgid "Générer le message Dsn"
 msgstr "Générer le message Dsn"
 
 msgctxt "model:ir.ui.menu,name:menu_default_pasrau_rates"
@@ -354,3 +382,7 @@ msgctxt ""
 "wizard_button:claim.pasrau.upload.wizard,file_selection,process_pasrau_file:"
 msgid "Validate"
 msgstr "Valider"
+
+msgctxt "wizard_button:claim.pasrau.upload.wizard,process_summary,end:"
+msgid "OK"
+msgstr "OK"

@@ -58,16 +58,21 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
             ('party_date_unique', Unique(t, t.party, t.effective_date),
                 'The rate must be unique per party / date'),
             ]
+        cls._error_messages.update({
+                'no_nir_provided': 'No NIR provided',
+                'no_party_found': 'No party found for NIR %(ssn)s',
+                'no_rate_found': 'No pasrau rate found for NIR %(ssn)s',
+                })
 
     @classmethod
     def default_origin(cls):
         return 'manual'
 
     @classmethod
-    def process_xml_file(cls, path, logger=None):
+    def process_xml_file(cls, path):
         pool = Pool()
         Party = pool.get('party.party')
-        return_bool = False
+        errors = []
         with open(path, 'r') as f:
             root_element = etree.fromstring(f.read())
             if root_element is None:
@@ -94,8 +99,8 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
                     for salarie in node_func(declaration_bilan, 'salarie'):
                         ssn = node_func(salarie, 'NIR', True)
                         if not ssn:
-                            if logger:
-                                logger.warning('No NIR provided')
+                            errors.append(cls.raise_user_error(
+                                    'no_nir_provided', raise_exception=False))
                             continue
                         pasrau_tax_rate = node_func(salarie,
                             'taux_imposition_PAS', True)
@@ -103,14 +108,13 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
                                 ('ssn', 'like', ssn + '%')
                                 ])
                         if not party:
-                            if logger:
-                                logger.warning(
-                                    'No party found for NIR %s' % ssn)
+                            errors.append(cls.raise_user_error(
+                                    'no_party_found', {'ssn': ssn},
+                                    raise_exception=False))
                             continue
                         if not pasrau_tax_rate:
-                            if logger:
-                                logger.warning('No pasrau rate provided for NIR'
-                                    ' %s' % ssn)
+                            errors.append(cls.raise_user_error('no_rate_found',
+                                    {'ssn': ssn}, raise_exception=False))
                             continue
                         rate = party[0].update_pasrau_rate(effective_date,
                             Decimal(pasrau_tax_rate) / Decimal(100),
@@ -119,8 +123,7 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
                             to_save.append(rate)
             if to_save:
                 cls.save(to_save)
-            return_bool = True
-        return return_bool
+        return to_save, errors
 
 
 class DefaultPasrauRate(model.CoogSQL, model.CoogView):
