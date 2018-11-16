@@ -883,10 +883,26 @@ class DataExporter(object):
                 (custom_field or attribute_path))(instance))
         if custom_field:
             return _format(get_deep_field(attribute_path.split('.')))
-        return _format(getattr(instance, attribute_path) or '')
+        return _format(getattr(instance, attribute_path))
 
 
 def clear_transaction_cache_for(models):
     for cache in Transaction().cache.values():
         for model in [models] if isinstance(models, basestring) else models:
             cache.pop(model, None)
+
+
+class DictAsObject(object):
+    def __init__(self, data, fail_on_miss=True):
+        self._data = data
+        self.fail_on_miss = fail_on_miss
+
+    def __getattribute__(self, name):
+        data = object.__getattribute__(self, '_data')
+        fail_on_miss = object.__getattribute__(self, 'fail_on_miss')
+        if name in data:
+            return data[name]
+        else:
+            if fail_on_miss:
+                raise AttributeError
+            return None

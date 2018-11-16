@@ -10,6 +10,7 @@ from sql.operators import Not
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
+from trytond.modules.coog_core import utils
 from trytond.modules.dsn_standard import dsn
 from trytond.config import config
 
@@ -75,6 +76,12 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         # 'S21.G00.30.019': '',  # Matricule de l'individu dans l'entreprise
         # 'S21.G00.30.020': '',  # Numéro technique temporaire
 
+        'S21.G00.31.001': 'modification_date',  # Date de la modification
+        'S21.G00.31.008': 'ssn',  # Ancien NIR
+        'S21.G00.31.009': 'name',  # Ancien Nom de famille
+        'S21.G00.31.010': 'first_name',  # Anciens Prénoms
+        'S21.G00.31.011': 'birth_date',  # Ancienne Date de naissance
+
         # BLOC VERSEMENT INDIVIDU
 
         'S21.G00.50.001': 'pasrau_reconciliation_date',
@@ -124,6 +131,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         Tax = pool.get('account.tax')
+        DSNMessage = pool.get('dsn.message')
         account_ids = [x.invoice_account.id
             for x in Tax.search([('type', '=', 'pasrau_rate')])]
 
@@ -176,6 +184,17 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
 
         data['individuals'].update({x: {'lines': [0]}
             for x in individuals_at_zero})
+
+        # manage person modification
+        from_date = DSNMessage.last_dsn_message_create_date()
+        for party in data['individuals'].keys():
+            modifications = []
+            for modification in party.pasrau_modified_fields(from_date,
+                    self.origin.create_date):
+                modifications.append(
+                    utils.DictAsObject(modification, fail_on_miss=False))
+            data['individuals'][party]['modifications'] = modifications
+
         self.data = data
         if not self.data['individuals']:
             self.void = True
@@ -261,6 +280,8 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
             return [self.origin]
         elif block_id == 'S21.G00.30':
             return self.data['individuals'].keys()
+        elif block_id == 'S21.G00.31':
+            return self.data['individuals'][parent]['modifications']
         elif block_id == 'S21.G00.50':
             return self.data['individuals'][parent]['lines']
         elif block_id == 'S21.G00.56':
@@ -277,7 +298,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
             return line.move.invoice
         if line.move.origin.__name__ == 'account.invoice':
             return line.move.origin
-        assert False, "Cant find invoice for line %s on move %s" % (
+        assert False, "Can't find invoice for line %s on move %s" % (
             line.rec_name, line.move.rec_name)
 
     @property

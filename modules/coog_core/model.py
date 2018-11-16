@@ -1436,3 +1436,57 @@ def with_local_mptt(master_field, parent_field='parent'):
             return right + 1
 
     return LocalMptt
+
+
+def fields_changed_since_date(instance, datetime, field_names, base_date=None):
+    '''
+        Returns whether at least one field among ``field_names`` has
+        changed since ``datetime``.
+
+        If it did, it will return a dictionnary with the old values, else
+        an empty one
+    '''
+    assert instance.__class__._history
+
+    if base_date is None:
+        base = instance
+    else:
+        with Transaction().set_context(_datetime=base_date):
+            base = instance.__class__(instance.id)
+
+    old_values = {}
+    with Transaction().set_context(_datetime=datetime):
+        past_instance = instance.__class__(instance.id)
+        for field_name in field_names:
+            assert isinstance(instance._fields[field_name],
+                (tryton_fields.Char, tryton_fields.Integer,
+                    tryton_fields.Text, tryton_fields.Date,
+                    tryton_fields.Integer))
+            old_value = getattr(past_instance, field_name)
+            if getattr(base, field_name) != old_value:
+                old_values[field_name] = old_value
+    return old_values
+
+
+def history_versions(instance, start, end):
+    '''
+        Returns a list of instance versions ordered by create / write_date
+        whose creation / modification date is between ``start`` and ``end``
+    '''
+    assert instance.__class__._history
+
+    cursor = Transaction().connection.cursor()
+    history = instance.__class__.__table_history__()
+    date = Coalesce(history.write_date, history.create_date)
+    cursor.execute(*history.select(date, history.create_date,
+            where=(Column(history, 'id') == instance.id)
+            & (date <= end) & (date >= start)))
+    result = {}
+    for history_datetime, deleted in cursor.fetchall():
+        if bool(deleted) is None:
+            # History entries without creation date mean a deletion
+            result[None] = None
+            continue
+        with Transaction().set_context(_datetime=history_datetime):
+            result[history_datetime] = instance.__class__(instance.id)
+    return result

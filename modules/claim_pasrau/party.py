@@ -1,8 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level off
 # this repository contains the full copyright notices and license terms.
+from itertools import groupby
 
 from trytond.pool import PoolMeta, Pool
 from trytond.server_context import ServerContext
+from trytond.modules.coog_core import model
 
 __all__ = [
     'Party',
@@ -12,6 +14,8 @@ __all__ = [
 class Party:
     __metaclass__ = PoolMeta
     __name__ = 'party.party'
+
+    _history = True
 
     @classmethod
     def __setup__(cls):
@@ -72,3 +76,43 @@ class Party:
             rate = DefaultPasrauRate.get_appliable_default_pasrau_rate(zip_code,
                 income, period_start, period_end, invoice_date)
         return rate
+
+    def pasrau_modified_fields(self, from_date, max_date):
+        if not from_date:
+            return []
+        fields_to_track = ['name', 'first_name', 'birth_date', 'ssn']
+        previous_fields = model.fields_changed_since_date(self,
+            from_date, fields_to_track)
+        if not previous_fields:
+            return []
+        # Look for all versions since the last slip
+        versions = model.history_versions(self, from_date, max_date)
+
+        assert None not in versions  # "self" should not be deleted...
+
+        # Apply upper to avoid "fake" modifications
+        previous_fields = {k: v.upper() if isinstance(v, basestring) else v
+            for k, v in previous_fields.iteritems()}
+
+        changes = []
+
+        # We must group per date, and versions are per datetime
+        for date, date_versions in groupby(sorted(versions.iteritems(),
+                    key=lambda x: x[0]), key=lambda x: x[0].date()):
+            cur_changes = {}
+            for _, cur_version in sorted(date_versions, key=lambda x: x[0]):
+                for field_name in fields_to_track:
+                    if field_name not in previous_fields:
+                        continue
+                    new_value = getattr(cur_version, field_name)
+                    if isinstance(new_value, basestring):
+                        new_value = new_value.upper()
+                    if new_value != previous_fields[field_name]:
+                        cur_changes[field_name] = previous_fields[field_name]
+                        previous_fields[field_name] = new_value
+            if cur_changes:
+                cur_changes['modification_date'] = date
+                if 'ssn' in cur_changes:
+                    cur_changes['ssn'] = cur_changes['ssn'][:-2]
+                changes.append(cur_changes)
+        return changes
