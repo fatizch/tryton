@@ -19,7 +19,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     ssn1 = '180104161674907'
     ssn2 = '180106741921625'
     ssn3 = '180104807063318'
-    effective_date = datetime.date(2019, 12, 1)
+    effective_date = datetime.date.today()
 
     @classmethod
     def fetch_models_for(cls):
@@ -73,14 +73,17 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 self.assertEqual(rate.effective_date, effective_date)
                 self.assertEqual(rate.pasrau_tax_rate, Decimal('0.14'))
                 self.assertEqual(rate.origin, 'default')
+                self.assertEqual(rate.business_id, 'NOVEMBRE-2019')
             elif rate.party.ssn == self.ssn2:
                 self.assertEqual(rate.effective_date, effective_date)
                 self.assertEqual(rate.pasrau_tax_rate, Decimal('0.02'))
                 self.assertEqual(rate.origin, 'default')
+                self.assertEqual(rate.business_id, 'NOVEMBRE-2019')
             elif rate.party.ssn == self.ssn3:
                 self.assertEqual(rate.effective_date, effective_date)
                 self.assertEqual(rate.pasrau_tax_rate, Decimal('0.14'))
                 self.assertEqual(rate.origin, 'default')
+                self.assertEqual(rate.business_id, 'DECEMBRE-2019')
 
     @test_framework.prepare_test(
         'claim_pasrau.test0001_test_pasrau_files'

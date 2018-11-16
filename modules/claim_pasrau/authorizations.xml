@@ -31,6 +31,29 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="access_account_move_line_pasrau_rate_claim_manage">
+            <field name="model" search="[('model', '=', 'account.move.line.pasrau.rate')]"/>
+            <field name="group" ref="claim.group_claim_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_move_line_pasrau_rate_financial_manage">
+            <field name="model" search="[('model', '=', 'account.move.line.pasrau.rate')]"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_account_move_line_pasrau_rate">
+            <field name="model" search="[('model', '=', 'account.move.line.pasrau.rate')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <!-- Default Clain Pasrau Default Rate Access Rights -->
         <record model="ir.model.access" id="access_default_pasrau_rate_read">
             <field name="model" search="[('model', '=', 'claim.pasrau.default.rate')]"/>

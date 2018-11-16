@@ -89,25 +89,17 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         # entre la personne et l’organisme C
 
 
-        # BLOC RÉGULARISATION DU PRÉLÈVEMENT À LA SOURCE : TODO
+        # BLOC RÉGULARISATION DU PRÉLÈVEMENT À LA SOURCE
 
-        # 'S21.G00.56.001': '', #   Mois de l'erreur O
-        # 'S21.G00.56.002': '', #   Type d'erreur O
-
-        # Régularisation de la rémunération nette fiscale C
-        # 'S21.G00.56.003': '',
-
+        'S21.G00.56.001': 'pasrau_error_month',
+        'S21.G00.56.002': 'pasrau_error_type',
+        'S21.G00.56.003': 'pasrau_regularization_base',
         # Rémunération nette fiscale déclarée le mois de l’erreur C
         # 'S21.G00.56.004': '',
-
         #   Régularisation du taux de prélèvement à la source C
         # 'S21.G00.56.005': '',
-
-        #   Taux déclaré le mois de l’erreur C
-        # 'S21.G00.56.006': '',
-
-        #   Montant de la régularisation du prélèvement à la source O
-        # 'S21.G00.56.007': '',
+        'S21.G00.56.006': 'pasrau_rate',
+        'S21.G00.56.007': 'pasrau_regularization_debit_amount'
     }
 
     translations = {
@@ -141,13 +133,42 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
                 ])
 
         def keyfunc(line):
-            return line.origin.party
+            return self.get_invoice_from_move_line(line).party
 
         sorted_lines = sorted(associated_lines, key=keyfunc)
 
         data = {'individuals': {}}
         for party, grouped_lines in groupby(sorted_lines, key=keyfunc):
-            data['individuals'][party] = {'lines': list(grouped_lines)}
+            def key(x):
+                return self.get_invoice_from_move_line(x)
+
+            lines = sorted(list(grouped_lines), key=key)
+            add_to_zero_individual = True
+
+            to_output = []
+            for invoice, invoice_group_lines in groupby(lines, key=key):
+                invoice_group_lines = list(invoice_group_lines)
+
+                sum_ = sum([line.credit - line.debit for line in
+                        invoice_group_lines])
+                by_date = sorted(invoice_group_lines,
+                    key=lambda x: x.create_date)
+
+                last = by_date.pop()
+                if sum_ != Decimal('0.0'):
+                    if len(by_date) >= 1:
+                        # Check that the sum of the outstanding line are zero
+                        # Normally these lines cancel each other
+                        rest_sum = sum([line.credit - line.debit
+                                for line in by_date])
+                        assert rest_sum in (0, Decimal(0.0)), rest_sum
+                    add_to_zero_individual = False
+                    to_output.append(last)
+
+            if add_to_zero_individual:
+                to_output.append(0)
+
+            data['individuals'][party] = {'lines': to_output}
 
         individuals_at_zero = self.fetch_individuals_at_zero(associated_lines,
             data['individuals'])
@@ -242,8 +263,22 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
             return self.data['individuals'].keys()
         elif block_id == 'S21.G00.50':
             return self.data['individuals'][parent]['lines']
+        elif block_id == 'S21.G00.56':
+            # a regularization block only for negative lines
+            if parent and (parent.credit - parent.debit) < Decimal('0.0'):
+                return [parent]
+            else:
+                return []
         else:
             return super(NEORAUTemplate, self).get_instances(block_id, parent)
+
+    def get_invoice_from_move_line(self, line):
+        if line.move.invoice:
+            return line.move.invoice
+        if line.move.origin.__name__ == 'account.invoice':
+            return line.move.origin
+        assert False, "Cant find invoice for line %s on move %s" % (
+            line.rec_name, line.move.rec_name)
 
     @property
     def declaration_nature(self):
@@ -290,64 +325,40 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         return u'00'
 
     def get_pasrau_tax_line(self, line):
-        invoice = line.origin
+        invoice = self.get_invoice_from_move_line(line)
         for tax_line in invoice.taxes:
-            if tax_line.tax.invoice_account == line.account:
+            if (tax_line.tax.invoice_account == line.account and
+                    abs(tax_line.amount) == abs(line.credit - line.debit)):
                 return tax_line
 
     def custom_pasrau_reconciliation_date(self, line):
         if line == 0:
             return self.origin.invoice_date
-        return line.origin.reconciliation_date
+        return self.get_invoice_from_move_line(line).reconciliation_date
 
     def custom_pasrau_base(self, line):
-        if line == 0:
+        # We declare a zero block and a regularization for negative lines
+        if line == 0 or (line.credit - line.debit) < Decimal('0.0'):
             return Decimal('0.0')
         return self.get_pasrau_tax_line(line).base
 
     def custom_pasrau_debit_amount(self, line):
-        if line == 0:
+        # We declare a zero block and a regularization for negative lines
+        if line == 0 or (line.credit - line.debit) < Decimal('0.0'):
             return Decimal('0.0')
         return self.get_pasrau_tax_line(line).amount * -1
 
-    def get_potential_personalized_rate(self, line):
-        PartyCustomPasrauRate = Pool().get('party.pasrau.rate')
-        invoice_date = line.origin.tax_date
-        candidates = PartyCustomPasrauRate.search([
-                ('party', '=', line.origin.party.id),
-                ('create_date', '<=', line.origin.create_date),
-                ('effective_date', '<=', invoice_date)],
-            order=[('effective_date', 'ASC')])
-        if candidates:
-            return candidates[-1]
-
     def custom_pasrau_rate(self, line):
-        # TODO: this should be stored somewhere
-        # for now, we try to re-calculate
         if line == 0:
             return Decimal('0.0')
-        DefaultPasrauRate = Pool().get('claim.pasrau.default.rate')
-        rate = None
-        perso_rate = self.get_potential_personalized_rate(line)
-        if perso_rate:
-            rate = perso_rate.pasrau_tax_rate
-        else:
-            pasrau_data = line.origin._build_pasrau_dict()
-            zip_code = line.origin.party.main_address.zip
-            rate = DefaultPasrauRate.get_appliable_default_pasrau_rate(zip_code,
-                pasrau_data['income'], pasrau_data['period_start'],
-                pasrau_data['period_end'], pasrau_data['invoice_date'])
-        return rate * 100
+        return line.pasrau_rates_info[0].pasrau_rate * Decimal('100.0')
 
     def custom_pasrau_rate_kind(self, line):
         if line == 0:
             return u'99'
-        DefaultPasrauRate = Pool().get('claim.pasrau.default.rate')
-        perso_rate = self.get_potential_personalized_rate(line)
-        if perso_rate:
+        region = line.pasrau_rates_info[0].pasrau_rate_region
+        if not region:
             return u'01'
-        region = DefaultPasrauRate.get_region(
-            line.origin.party.main_address.zip)
         return {
             'metropolitan': u'17',
             'grm': u'27',
@@ -356,6 +367,19 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
 
     def custom_pasrau_rate_id(self, line):
         return u'-1'  # TODO : should be stored on perso rate from DGFIP crm
+
+    def custom_pasrau_error_month(self, line):
+        # todo : what is the date of the error ?
+        return unicode(self.origin.invoice_date.strftime('%m%Y'))
+
+    def custom_pasrau_error_type(self, line):
+        return u'03'
+
+    def custom_pasrau_regularization_base(self, line):
+        return self.get_pasrau_tax_line(line).base
+
+    def custom_pasrau_regularization_debit_amount(self, line):
+        return self.get_pasrau_tax_line(line).amount
 
 
 class NEORAU(dsn.NEODES):

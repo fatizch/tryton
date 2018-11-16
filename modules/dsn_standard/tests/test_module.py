@@ -44,7 +44,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         country = self.Country(name="Oz", code='OZ')
         country.save()
-        address = self.Address(party=sender, zip="1", country=country,
+        address = self.Address(party=sender, zip="75000", country=country,
             city="Emerald", street='2 Common Street')
         address.save()
         sender.addresses = [address.id]
@@ -52,7 +52,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         config.add_section('dsn')
         config.set('dsn', 'sender_code', 'a_dsn_sender')
-        config.set('dsn', 'sender_nic', '123')
+        config.set('dsn', 'sender_nic', '12345')
         config.set('dsn', 'sender_contact_civility', '01')
         config.set('dsn', 'sender_contact_full_name', 'Joe Doe')
         config.set('dsn', 'sender_contact_email', 'joe@corp.com')
@@ -70,10 +70,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
             u"S10.G00.00.006,'201710'",
             u"S10.G00.00.008,'01'",
             u"S10.G00.01.001,'379158322'",
-            u"S10.G00.01.002,'123'",
+            u"S10.G00.01.002,'12345'",
             u"S10.G00.01.003,'Corp'",
             u"S10.G00.01.004,'2 Common Street'",
-            u"S10.G00.01.005,'1'",
+            u"S10.G00.01.005,'75000'",
             u"S10.G00.01.006,'Emerald'",
             u"S10.G00.02.001,'01'",
             u"S10.G00.02.002,'Joe Doe'",

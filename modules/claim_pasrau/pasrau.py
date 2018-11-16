@@ -1,7 +1,5 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import datetime
-
 from lxml import etree
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
@@ -9,12 +7,14 @@ from decimal import Decimal
 from trytond.pyson import Eval
 from trytond.model import Unique
 from trytond.pool import Pool
+from trytond.server_context import ServerContext
 
-from trytond.modules.coog_core import model, fields, coog_date
+from trytond.modules.coog_core import model, fields, coog_date, utils
 
 __all__ = [
     'PartyCustomPasrauRate',
     'DefaultPasrauRate',
+    'MoveLinePasrauRate',
     ]
 
 MONTH_FROM_STR = {
@@ -32,6 +32,11 @@ MONTH_FROM_STR = {
     'DECEMBRE': 12,
     }
 
+RATE_ORIGIN = [
+    ('default', 'Default'),
+    ('manual', 'Manual')
+    ]
+
 
 class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
     'Party Custom Pasrau Rate'
@@ -40,11 +45,10 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
     effective_date = fields.Date('Effective date', required=True, select=True)
     pasrau_tax_rate = fields.Numeric('Pasrau tax rate', digits=(16, 4),
         required=True)
-    origin = fields.Selection([
-            ('default', 'Default'),
-            ('manual', 'Manual')], 'Origin')
+    origin = fields.Selection(RATE_ORIGIN, 'Origin')
     party = fields.Many2One('party.party', 'Party', required=True,
        ondelete='CASCADE', select=True)
+    business_id = fields.Char('Business Id')
 
     @classmethod
     def __setup__(cls):
@@ -78,19 +82,13 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
                 return node[0].text
 
             to_save = []
+            effective_date = utils.today()
             for declaration in node_func(root_element, 'declaration'):
                 for declaration_identification in node_func(declaration,
                         'declaration_identification'):
                     identifiant_metier = node_func(declaration_identification,
                         'identifiant_metier', True)
-                    _month_year_str = identifiant_metier.replace(" ", "")
-                    month_year_str = _month_year_str.upper()
-                    lmonth_year = month_year_str.split('-')
-                    assert len(lmonth_year) == 2
-                    month = MONTH_FROM_STR[lmonth_year[0]]
-                    year = int(lmonth_year[1])
-                    effective_date = datetime.date(year, month, 1)
-                    assert effective_date
+
                 for declaration_bilan in node_func(declaration,
                         'declaration_bilan'):
                     for salarie in node_func(declaration_bilan, 'salarie'):
@@ -115,7 +113,8 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
                                     ' %s' % ssn)
                             continue
                         rate = party[0].update_pasrau_rate(effective_date,
-                            Decimal(pasrau_tax_rate) / Decimal(100))
+                            Decimal(pasrau_tax_rate) / Decimal(100),
+                            identifiant_metier)
                         if rate:
                             to_save.append(rate)
             if to_save:
@@ -201,6 +200,14 @@ class DefaultPasrauRate(model.CoogSQL, model.CoogView):
         for candidate in candidates:
             if monthly_income < (candidate.income_higher_bound or
                     Decimal('10e9')):
+                pasrau_dict = ServerContext().get('pasrau_data')
+                if pasrau_dict:
+                    pasrau_dict['pasrau_rate'] = candidate.rate
+                    pasrau_dict['pasrau_rate_kind'] = 'default'
+                    pasrau_dict['pasrau_rate_business_id'] = None
+                    pasrau_dict['pasrau_rate_region'] = region
+                    with ServerContext().set_context(pasrau_data=pasrau_dict):
+                        return candidate.rate
                 return candidate.rate
         cls.raise_user_error('no_default_pasrau', {
                 'zip': zip_code,
@@ -209,3 +216,17 @@ class DefaultPasrauRate(model.CoogSQL, model.CoogView):
                 'end': period_end,
                 'invoice_date': invoice_date
                 })
+
+
+class MoveLinePasrauRate(model.CoogSQL, model.CoogView):
+    'Move Line Pasrau Rate'
+
+    __name__ = 'account.move.line.pasrau.rate'
+
+    move_line = fields.Many2One('account.move.line', 'Move Line',
+        ondelete='CASCADE', required=True, select=True)
+    pasrau_rate = fields.Numeric('Rate', digits=(16, 4), required=True,
+        select=True)
+    pasrau_rate_kind = fields.Selection(RATE_ORIGIN, 'Pasrau Rate Kind')
+    pasrau_rate_business_id = fields.Char('Pasrau Rate Business Id')
+    pasrau_rate_region = fields.Char('Pasrau Rate Region')

@@ -290,6 +290,7 @@ Journal = Model.get('account.journal')
 Lang = Model.get('ir.lang')
 Loan = Model.get('loan')
 LossDesc = Model.get('benefit.loss.description')
+MoveLinePasrauRate = Model.get('account.move.line.pasrau.rate')
 NetCalculationRule = Model.get('claim.net_calculation_rule')
 Party = Model.get('party.party')
 PartyConfiguration = Model.get('party.configuration')
@@ -5168,6 +5169,7 @@ if CREATE_CLAIMS:  # {{{
     party_pasrau.origin = 'manual'
     party_pasrau.party = claimant
     party_pasrau.pasrau_tax_rate = Decimal('0.144')
+    party_pasrau.business_id = 'Some Business Id'
     party_pasrau.save()
 
     CreateIndemnification = Wizard('claim.create_indemnification', [claim])
@@ -5236,6 +5238,14 @@ if CREATE_CLAIMS:  # {{{
     assert per_tax['pasrau'].amount == Decimal('-18.39')
     # }}}
     # }}}
+
+    account_move_line_pasrau_rate, = MoveLinePasrauRate.find([])
+    assert account_move_line_pasrau_rate.move_line.amount == Decimal(
+        '-18.39')
+    assert account_move_line_pasrau_rate.pasrau_rate == Decimal('0.144')
+    assert account_move_line_pasrau_rate.pasrau_rate_kind == 'manual'
+    assert account_move_line_pasrau_rate.pasrau_rate_business_id == \
+        'Some Business Id'
 
     do_print('    Creating a death claim')  # {{{
     config._context['client_defined_date'] = _death_claim_date

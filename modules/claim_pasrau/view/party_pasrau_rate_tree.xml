@@ -8,4 +8,5 @@ this repository contains the full copyright notices and license terms. -->
 	<field name="party"/>
 	<field name="effective_date"/>
 	<field name="origin"/>
+    <field name="business_id"/>
 </tree>

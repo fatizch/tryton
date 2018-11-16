@@ -46,6 +46,62 @@ msgctxt "error:party.pasrau.rate:"
 msgid "The rate must be unique per party / date"
 msgstr "Le taux pasrau doit être unique par personne / date"
 
+msgctxt "field:account.move.line,pasrau_rates_info:"
+msgid "Pasrau Rates Information"
+msgstr "Informations taux pasrau"
+
+msgctxt "field:account.move.line.pasrau.rate,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.move.line.pasrau.rate,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.move.line.pasrau.rate,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.move.line.pasrau.rate,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account.move.line.pasrau.rate,move_line:"
+msgid "Move Line"
+msgstr "Ligne de mouvement"
+
+msgctxt "field:account.move.line.pasrau.rate,pasrau_rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:account.move.line.pasrau.rate,pasrau_rate_business_id:"
+msgid "Pasrau Rate Business Id"
+msgstr "Identifiant Métier du taux pasrau"
+
+msgctxt "field:account.move.line.pasrau.rate,pasrau_rate_kind:"
+msgid "Pasrau Rate Kind"
+msgstr "Type de taux pasrau"
+
+msgctxt "field:account.move.line.pasrau.rate,pasrau_rate_region:"
+msgid "Pasrau Rate Region"
+msgstr "Région du taux pasrau"
+
+msgctxt "field:account.move.line.pasrau.rate,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:account.move.line.pasrau.rate,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:account.move.line.pasrau.rate,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:account.move.line.pasrau.rate,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:claim.pasrau.default.rate,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -114,6 +170,10 @@ msgctxt "field:claim.pasrau.select_file,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt "field:party.pasrau.rate,business_id:"
+msgid "Business Id"
+msgstr "Identifiant métier"
+
 msgctxt "field:party.pasrau.rate,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -165,6 +225,10 @@ msgstr "Identifiant XML"
 msgctxt "field:party.pasrau.rate.batch,id:"
 msgid "ID"
 msgstr "Identifiant"
+
+msgctxt "model:account.move.line.pasrau.rate,name:"
+msgid "Move Line Pasrau Rate"
+msgstr "Taux pasrau de la ligne de mouvement"
 
 msgctxt "model:claim.pasrau.default.rate,name:"
 msgid "Default Pasrau Rate"
@@ -241,6 +305,14 @@ msgstr "Pasrau"
 msgctxt "selection:account.invoice.slip.parameters,slip_kind:"
 msgid "Pasrau"
 msgstr "Pasrau"
+
+msgctxt "selection:account.move.line.pasrau.rate,pasrau_rate_kind:"
+msgid "Default"
+msgstr "Par défaut"
+
+msgctxt "selection:account.move.line.pasrau.rate,pasrau_rate_kind:"
+msgid "Manual"
+msgstr "Manuel"
 
 msgctxt "selection:account.tax,type:"
 msgid "Pasrau Rate"

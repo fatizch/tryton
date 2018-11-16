@@ -3,6 +3,29 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- ################ -->
+        <!-- # Pasrau Slips # -->
+        <!-- ################ -->
+        <record model="ir.action.act_window" id="act_pasrau_slips">
+            <field name="name">Pasrau Slips</field>
+            <field name="res_model">account.invoice</field>
+            <field name="domain" eval="[('business_kind', '=', 'pasrau')]" pyson="1"/>
+            <field name="search_value"></field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_pasrau_slip_list_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="account_invoice.invoice_view_tree"/>
+            <field name="act_window" ref="act_pasrau_slips"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_pasrau_slip_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="account_invoice.invoice_view_form"/>
+            <field name="act_window" ref="act_pasrau_slips"/>
+        </record>
+        <!-- ############################ -->
+        <!-- # Pasrau Slips Entry Point # -->
+        <!-- ############################ -->
+        <menuitem name="Pasrau Slips" id="menu_pasrau_slips" parent="claim_pasrau.menu_pasrau" action="act_pasrau_slips" sequence="20"/>
          <!-- ################################## -->
         <!-- ########### Event Type ########### -->
         <!-- ################################## -->

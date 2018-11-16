@@ -2,13 +2,16 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.server_context import ServerContext
+
+from trytond.modules.coog_core import fields
 
 __all__ = [
     'Invoice',
-    'InvoiceLine',
     'Tax',
+    'MoveLine',
+    'InvoiceTax'
     ]
 
 
@@ -36,31 +39,19 @@ class Invoice:
 
     def _get_taxes(self):
         if self.business_kind == 'claim_invoice':
-            pasrau_dict = self._build_pasrau_dict()
+            pasrau_dict = ServerContext().get('pasrau_data')
+            if not pasrau_dict:
+                pasrau_dict = self._build_pasrau_dict()
             with ServerContext().set_context(pasrau_data=pasrau_dict):
                 return super(Invoice, self)._get_taxes()
         return super(Invoice, self)._get_taxes()
 
-
-class InvoiceLine:
-    __metaclass__ = PoolMeta
-    __name__ = 'account.invoice.line'
-
-    def _get_taxes(self):
-        if self.invoice.business_kind == 'claim_invoice':
-            pasrau_dict = {}
-            pasrau_dict['party'] = self.party
-            pasrau_dict['period_start'] = (
-                self.claim_detail.indemnification.start_date or
-                datetime.date.max)
-            pasrau_dict['period_end'] = (
-                self.claim_detail.indemnification.end_date or
-                datetime.date.min)
-            pasrau_dict['income'] = self.claim_detail.indemnification.amount
-            pasrau_dict['invoice_date'] = self.tax_date
+    def get_move(self):
+        if self.business_kind == 'claim_invoice':
+            pasrau_dict = self._build_pasrau_dict()
             with ServerContext().set_context(pasrau_data=pasrau_dict):
-                return super(InvoiceLine, self)._get_taxes()
-        return super(InvoiceLine, self)._get_taxes()
+                return super(Invoice, self).get_move()
+        return super(Invoice, self).get_move()
 
 
 class Tax:
@@ -103,3 +94,38 @@ class Tax:
                 period_end, invoice_date)
             return -rate, 0
         return super(Tax, self)._reverse_rate_amount_from_type()
+
+
+class MoveLine:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.move.line'
+
+    pasrau_rates_info = fields.One2Many('account.move.line.pasrau.rate',
+        'move_line', 'Pasrau Rates Information', readonly=True)
+
+
+class InvoiceTax:
+    __metaclass__ = PoolMeta
+    __name__ = 'account.invoice.tax'
+
+    def get_move_lines(self):
+        lines = super(InvoiceTax, self).get_move_lines()
+        pasrau_dict = ServerContext().get('pasrau_data')
+        if pasrau_dict is not None:
+            pasrau_rate = pasrau_dict.get(
+                'pasrau_rate', None)
+            if pasrau_rate is None:
+                return lines
+            MoveLinePasrauRate = Pool().get('account.move.line.pasrau.rate')
+            line_pasrau_rate_obj = MoveLinePasrauRate()
+            line_pasrau_rate_obj.pasrau_rate = pasrau_rate
+            line_pasrau_rate_obj.pasrau_rate_business_id = pasrau_dict.get(
+                'pasrau_rate_business_id', None)
+            line_pasrau_rate_obj.pasrau_rate_kind = pasrau_dict.get(
+                'pasrau_rate_kind', None)
+            line_pasrau_rate_obj.pasrau_rate_region = pasrau_dict.get(
+                'pasrau_rate_region', None)
+            for line in lines:
+                if self.tax.type == 'pasrau_rate':
+                    line.pasrau_rates_info = (line_pasrau_rate_obj,)
+        return lines

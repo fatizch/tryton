@@ -1,3 +1,4 @@
+* FEA#10293 Handle pasrau rate business id and create a pasrau rate object linked to move lines
 * FEA#10156 Handle pasrau slips
 
 Version 2.2 - 2018-10-12

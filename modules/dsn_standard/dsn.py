@@ -155,7 +155,7 @@ class NEODeSTemplate(utils.DataExporter):
     def validate(self):
         for entry in self.message:
             # TODO : check for fordidden chars
-            self.check_regexp(entry)
+            self.check_value(entry)
             self.check_encodable(entry)
         if self.errors:
             concat = "\n".join(self.errors)
@@ -169,9 +169,13 @@ class NEODeSTemplate(utils.DataExporter):
             raise DSNValidationError(
                 'Cannot encode %s to latin1' % unicode(entry).encode('utf8'))
 
-    def check_regexp(self, entry):
+    def check_value(self, entry):
         field_def = self.spec.field_defs[entry.id_]
         data_def = self.spec.data_types[field_def["DataType Id"]]
+        self.check_regexp(entry, data_def, field_def)
+        self.check_length(entry, data_def, field_def)
+
+    def check_regexp(self, entry, data_def, field_def):
         exp = data_def.get("CompiledRegex")
         if exp:
             # TODO : check that entire value matches (not a substring)
@@ -182,6 +186,20 @@ class NEODeSTemplate(utils.DataExporter):
                     entry.value, entry.id_, field_def["Comment"],
                     data_def['Regexp'], data_def['Name']))
                 self.errors.append(msg)
+
+    def check_length(self, entry, data_def, field_def):
+        min_length = int(data_def['Lg Min'])
+        max_length = int(data_def['Lg Max'])
+        len_ = len(entry.value)
+        valid_ = (len_ >= min_length) and (len_ <= max_length)
+        if not valid_:
+            msg = ((u"The value \"%s\" for entry \"%s\" (%s) , length %s does "
+            "not match Min Length \"%s\" or Max Length \"%s\" ."
+            "The DataType is \"%s\".") % (
+                entry.value, entry.id_, field_def["Comment"],
+                unicode(len_), data_def['Lg Min'],
+                data_def['Lg Max'], data_def['Name']))
+            self.errors.append(msg)
 
     def get_instances(self, block_id, parent):
         Party = Pool().get('party.party')
