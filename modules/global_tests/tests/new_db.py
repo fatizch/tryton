@@ -4182,7 +4182,6 @@ else:
     loan_product.com_products[0].dist_networks.append(
         DistributionNetwork.find([('code', '=', 'C1')])[0])
     loan_product.extra_data_def.append(ExtraData(reduction_libre.id))
-    assert 'libelle_editique' in loan_product.extra_data
     loan_product.extra_data = {'libelle_editique': u'Prêt / voyez tout'}
     loan_product.document_rules.new()
     loan_product.document_rules[0].documents.new()
