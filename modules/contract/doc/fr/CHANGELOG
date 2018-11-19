@@ -1,3 +1,4 @@
+* BUG#10316 Blocage lors de la souscription d'une garantie ayant une date de fin antérieure à sa date de début
 * BUG#10242 Réinitialiser la date de fin manuelle des options résiliées lors de la résiliation de contrats
 
 Version 2.2 - 2018-10-12

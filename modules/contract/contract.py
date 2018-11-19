@@ -1282,9 +1282,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         self.status = 'active'
         options = list(self.options)
         for option in options:
-            if not option.manual_end_date:
-                option.status = 'active'
-                option.sub_status = None
+            option.activate()
         self.options = options
 
     def decline_options(self, reason):
@@ -1822,7 +1820,10 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                 'manual_start_date_anterior_to_contract_initial_start_date':
                 'Option %(option)s manual start date %(manual_start_date)s is '
                 'anterior to contract initial start date %(start_date)s in '
-                'contract %(contract)s'
+                'contract %(contract)s',
+                'bad_dates': 'The computed end date for option %(option)s is '
+                'less than its start date, it will be automatically '
+                'declined',
                 })
 
     @classmethod
@@ -2247,6 +2248,25 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
             self.parent_contract.is_active_at_date(at_date) and \
             (at_date >= (self.initial_start_date or datetime.date.min) and
                 at_date <= (self.final_end_date or datetime.date.max))
+
+    def activate(self):
+        if self.status in ('declined', 'void'):
+            return
+        if not self.final_end_date:
+            self.status = 'active'
+            self.sub_status = None
+        elif self.initial_start_date < self.final_end_date < utils.today():
+            SubStatus = Pool().get('contract.sub_status')
+            self.sub_status = SubStatus.get_sub_status('reached_end_date')
+            self.status = 'terminated'
+        elif self.initial_start_date > self.final_end_date:
+            if not utils.is_module_installed('offered_eligibility'):
+                # If the module is installed, the "before_activate" method will
+                # call check_eligibility on options, which will already raise
+                # the warning
+                self.raise_user_warning('bad_dates_%i' % self.id, 'bad_dates',
+                    {'option': self.rec_name})
+            self.status = 'declined'
 
     @classmethod
     def get_covered_options_from_party(cls, party, at_date):

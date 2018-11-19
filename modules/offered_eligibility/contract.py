@@ -44,7 +44,7 @@ class ContractOption:
                 })
 
     def check_eligibility(self):
-        if self.status == 'void':
+        if self.status in ('void', 'declined'):
             return True
         exec_context = {'date': self.start_date}
         self.init_dict_for_rule_engine(exec_context)
@@ -52,4 +52,8 @@ class ContractOption:
             self.append_functional_error('option_not_eligible',
                 (self.coverage.name))
             return False
+        if (self.final_end_date and self.initial_start_date
+                and self.initial_start_date > self.final_end_date):
+            self.raise_user_warning('bad_dates_%i' % self.id, 'bad_dates', {
+                    'option': self.rec_name})
         return True

@@ -359,14 +359,11 @@ class Contract(Printable):
 
     def do_activate(self):
         super(Contract, self).do_activate()
-        covered_elements = getattr(self, 'covered_elements', [])
-        for covered_element in covered_elements:
+        for covered_element in self.covered_elements:
             for option in covered_element.options:
-                if not option.manual_end_date:
-                    option.status = 'active'
-                    option.sub_status = None
-            covered_element.options = covered_element.options
-        self.covered_elements = list(covered_elements)
+                option.activate()
+            covered_element.options = list(covered_element.options)
+        self.covered_elements = list(self.covered_elements)
 
     def init_contract(self, product, party, contract_dict=None):
         CoveredElement = Pool().get('contract.covered_element')
