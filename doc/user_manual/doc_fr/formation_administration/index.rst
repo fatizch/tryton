@@ -63,6 +63,7 @@ Cette formation s'adresse à des personnes :
     produit/index
     reseau_distribution
     commissionnement
+    documents
     editique
     actions_evenements
     gestion_contrats/index
