@@ -726,33 +726,29 @@ class CoogDictSchema(DictSchemaMixin):
     def write(cls, *args):
         actions = iter(args)
 
-        renames = []
+        schema_data = []
         for schemas, values in zip(actions, actions):
             if 'name' not in values:
                 continue
             changes = [schema for schema in schemas
                 if schema.name != values['name']]
             if changes:
-                renames += [(schema.name, values['name']) for schema in changes]
+                schema_data += cls._write_schema_data(schemas, values['name'])
 
         super(CoogDictSchema, cls).write(*args)
 
-        if renames:
+        if schema_data:
+            codes_for_error = [(x['old_code'], x['new_code'])
+                    for x in schema_data][:10]
             cls.raise_user_warning('rename_dict_codes_%s' %
-                '_'.join(str(renames[:10])), 'rename_dict_codes',
-                {'codes': '\n'.join(' -> '.join(x) for x in renames)})
-            cursor = Transaction().connection.cursor()
+                '_'.join((x[0] for x in codes_for_error)), 'rename_dict_codes',
+                {'codes': '\n'.join(' -> '.join(x) for x in codes_for_error)})
 
             models = set()
             for model_name, table_name, field_name in cls._fields_to_update():
                 models.add(model_name)
-                table = Table(table_name)
-                column = Column(table, field_name)
-                for old, new in renames:
-                    cursor.execute(*table.update([column],
-                            values=[
-                                coog_sql.JsonRenameKey(column, old, new)],
-                            where=coog_sql.JsonFindKey(column, old)))
+                cls._update_targets_json(schema_data, table_name, model_name,
+                    field_name)
 
             # We must manually clear the cache because we updated directly
             # through sql
@@ -760,28 +756,82 @@ class CoogDictSchema(DictSchemaMixin):
 
     @classmethod
     def delete(cls, schemas):
-        codes = [x.name for x in schemas]
+        schema_data = cls._delete_schema_data(schemas)
 
         super(CoogDictSchema, cls).delete(schemas)
 
-        if codes:
+        if schema_data:
+            codes_for_error = [x['code_to_remove'] for x in schema_data][:10]
             cls.raise_user_warning('remove_dict_codes_%s' %
-                '_'.join(codes[:10]), 'remove_dict_codes',
-                {'codes': ' - '.join(codes)})
-            cursor = Transaction().connection.cursor()
+                '_'.join(codes_for_error), 'remove_dict_codes',
+                {'codes': ' - '.join(codes_for_error)})
             models = set()
             for model_name, table_name, field_name in cls._fields_to_update():
                 models.add(model_name)
-                table = Table(table_name)
-                column = Column(table, field_name)
-                for code in codes:
-                    cursor.execute(*table.update([column],
-                            values=[coog_sql.JsonRemoveKey(column, code)],
-                            where=coog_sql.JsonFindKey(column, code)))
+                cls._update_targets_json(schema_data, table_name, model_name,
+                    field_name)
 
             # We must manually clear the cache because we updated directly
             # through sql
             utils.clear_transaction_cache_for(models)
+
+    @classmethod
+    def _write_schema_data(cls, schemas, new_name):
+        return [{'old_code': schema.name, 'new_code': new_name}
+            for schema in schemas]
+
+    @classmethod
+    def _delete_schema_data(cls, schemas):
+        return [{'code_to_remove': schema.name} for schema in schemas]
+
+    @classmethod
+    def _update_targets_json(cls, schema_data, target_table, target_model,
+            target_column):
+        '''
+            Effectively update the target_column of the target_table (either
+            the main table or the history table of target_model) using the
+            schema_data.
+
+            schema_data is a list of dict, each of which should contain at
+            least either:
+
+                - 'code_to_remove': The list of codes to remove from the
+                  target_column values
+                - 'old_code' and 'new_code': How the target_column values
+                  should be renamed
+
+            Additional data may be included by child classes for finer control
+        '''
+        cursor = Transaction().connection.cursor()
+        table = Table(target_table)
+        column = Column(table, target_column)
+
+        for schema in schema_data:
+            if 'code_to_remove' in schema:
+                where_clause = coog_sql.JsonFindKey(column,
+                    schema['code_to_remove'])
+                values = [coog_sql.JsonRemoveKey(column,
+                        schema['code_to_remove'])]
+            elif 'old_code' in schema and 'new_code' in schema:
+                where_clause = coog_sql.JsonFindKey(column,
+                    schema['old_code'])
+                values = [coog_sql.JsonRenameKey(column, schema['old_code'],
+                        schema['new_code'])]
+            else:
+                raise NotImplementedError
+            extra_where = cls._update_schema_custom_where_clause(schema, table,
+                target_model, target_column)
+            if extra_where:
+                where_clause &= extra_where
+            cursor.execute(*table.update([column],
+                    values=values, where=where_clause))
+
+    @classmethod
+    def _update_schema_custom_where_clause(cls, schema_data, table,
+            target_model, target_field):
+        # Override in models for which the name is not Unique, and should be
+        # partitioned depending on other fields
+        return None
 
     @classmethod
     def _fields_to_update(cls):

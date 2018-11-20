@@ -19,7 +19,7 @@ from dateutil.relativedelta import relativedelta
 
 from StringIO import StringIO
 from pyflakes.checker import Checker
-from sql import Null, Window
+from sql import Null, Column, Literal, Window
 from sql.aggregate import Count
 from sql.conditionals import Coalesce
 from sql.functions import RowNumber
@@ -718,6 +718,12 @@ class RuleParameter(model.CoogDictSchema, model.CoogSQL, model.CoogView):
     sequence_order = fields.Integer('Sequence Order')
 
     @classmethod
+    def __setup__(cls):
+        super(RuleParameter, cls).__setup__()
+        cls.name.string = 'Code'
+        cls.string.string = 'Name'
+
+    @classmethod
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().connection.cursor()
@@ -727,34 +733,8 @@ class RuleParameter(model.CoogDictSchema, model.CoogSQL, model.CoogView):
 
         super(RuleParameter, cls).__register__(module_name)
 
-        # Migration from 1.1: split rule parameters in multiple table
-        parameter_definition = cls.__table__()
-        if TableHandler.table_exist('rule_engine_parameter'):
-            cursor.execute(*parameter_definition.delete())
-            cursor.execute("SELECT name, code, parent_rule "
-                "FROM rule_engine_parameter "
-                "WHERE kind = 'kwarg'")
-            for cur_rule_parameter in cursor_dict(cursor):
-                cursor.execute(*parameter_definition.insert(
-                    columns=[parameter_definition.parent_rule,
-                    parameter_definition.name, parameter_definition.string,
-                    parameter_definition.type_],
-                    values=[[cur_rule_parameter['parent_rule'],
-                    cur_rule_parameter['code'], cur_rule_parameter['name'],
-                    'numeric']]))
-            cursor.execute("SELECT name, code, parent_rule "
-                "FROM rule_engine_parameter "
-                "WHERE kind = 'rule_compl'")
-            for cur_rule_parameter in cursor_dict(cursor):
-                cursor.execute(*parameter_definition.insert(
-                    columns=[parameter_definition.parent_rule,
-                    parameter_definition.name, parameter_definition.string,
-                    parameter_definition.type_],
-                    values=[[cur_rule_parameter['parent_rule'],
-                    cur_rule_parameter['code'], cur_rule_parameter['name'],
-                    'numeric']]))
-
         # Migration from 2.2: Add sequence order field
+        parameter_definition = cls.__table__()
         if not sequence_order_exists:
             sequence_col = RowNumber(window=Window([
                         parameter_definition.parent_rule],
@@ -773,17 +753,47 @@ class RuleParameter(model.CoogDictSchema, model.CoogSQL, model.CoogView):
                 & (values.parent_rule == parameter_definition.parent_rule))
             cursor.execute(*query)
 
+    @classmethod
+    def _write_schema_data(cls, schemas, new_name):
+        result = super(RuleParameter, cls)._write_schema_data(schemas,
+            new_name)
+        for rule_parameters, schema in zip(schemas, result):
+            schema['rule'] = rule_parameters.parent_rule.id
+        return result
+
+    @classmethod
+    def _delete_schema_data(cls, schemas):
+        result = super(RuleParameter, cls)._delete_schema_data(schemas)
+        for rule_parameters, schema in zip(schemas, result):
+            schema['rule'] = rule_parameters.parent_rule.id
+        return result
+
+    @classmethod
+    def _update_schema_custom_where_clause(cls, schema_data, table,
+            target_model, target_field):
+        # We need to make sure we only update the rule data that are concerned
+        # by the rule linked to the schema we modified / deleted
+        Target = Pool().get(target_model)
+
+        # Ideally this should be "cleaner"
+        rule_fields = [x for x in Target._fields[target_field].depends
+            if isinstance(Target._fields[x], fields.Many2One)
+            and Target._fields[x].model_name == 'rule_engine']
+        if len(rule_fields) == 0:
+            # Nothing to do => Filter everything out
+            return Literal(0) == Literal(1)
+
+        res = Literal(False)
+        for field in rule_fields:
+            res |= ((Column(table, field) != Null) &
+                (Column(table, field) == schema_data['rule']))
+        return res
+
     @fields.depends('string', 'name')
     def on_change_with_name(self):
         if self.name:
             return self.name
         return coog_string.slugify(self.string)
-
-    @classmethod
-    def __setup__(cls):
-        super(RuleParameter, cls).__setup__()
-        cls.name.string = 'Code'
-        cls.string.string = 'Name'
 
 
 class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):

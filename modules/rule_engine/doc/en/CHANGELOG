@@ -1,4 +1,5 @@
-* BUG#10221 Fix formatting of erros
+* BUG#10287 Update rule parameters only if they match the modified rule
+* BUG#10221 Fix formatting of errors
 
 Version 2.2 - 2018-10-12
 * FEA#9323 Add code linter to rule engine
