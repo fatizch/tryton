@@ -76,8 +76,8 @@ class OptionVersion:
 class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         get_rule_mixin('indemnification_rule', 'Indemnification Rule'),
         get_rule_mixin('revaluation_rule', 'Revaluation Rule'),
-        model.CoogSQL, model.CoogView,
-        with_extra_data_def(None, None, 'benefit', 'getter_rules_extra_data')):
+        with_extra_data_def(None, None, 'benefit', 'getter_rules_extra_data'),
+        model.CoogSQL, model.CoogView):
     'Option Benefit'
 
     __name__ = 'contract.option.benefit'
