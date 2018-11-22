@@ -1462,6 +1462,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(coog_date.get_latest_anniversary(
                 original_date, date), datetime.date(2012, 3, 13))
 
+        original_date = datetime.date(2018, 11, 5)
+        date = datetime.date(2031, 5, 5)
+        self.assertEqual(coog_date.get_latest_anniversary(
+                original_date, date), datetime.date(2030, 11, 5))
+
     def test0300_local_mptt(self):
         master_1, master_2 = self.TestLocalMpttMaster.create([{}, {}])
 
