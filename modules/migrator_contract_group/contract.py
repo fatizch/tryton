@@ -217,6 +217,9 @@ class MigratorContractGroup(BaseMigratorContractGroup):
         contract_lines = sorted(contract_lines, key=cls._group_by_population)
         covered_elements = []
         ItemDesc = Pool().get('offered.item.description')
+        terminated_sub_status, = Pool().get('contract.sub_status').search([
+                ('code', '=', 'terminated'),
+                ])
         for key, rows in groupby(contract_lines, key=cls._group_by_population):
             rows = list(rows)
             item_desc, = ItemDesc.search([('code', '=', key[1])])
@@ -231,6 +234,7 @@ class MigratorContractGroup(BaseMigratorContractGroup):
                     'item_desc': item_desc.id,
                     'manual_start_date': option_row['start_date'],
                     'manual_end_date': option_row['end_date'],
+                    'sub_status': terminated_sub_status,
                     'coverage': coverage.id,
                     'versions': [
                         ('create', [{'start': option_row['start_date']}])]
@@ -270,7 +274,8 @@ class MigratorContractGroup(BaseMigratorContractGroup):
             # contract['covered_elements'] = cls.update_covered_elements(
             #     existing, contract_lines)
         else:
-            contract['status'] = 'quote'  # only set status when not updating
+            # only set status when not updating
+            contract['status'] = contract_lines[0]['status']
             options = cls.init_options_from_row(
                 [line for line in contract_lines if line['coverage']])
             contract['covered_elements'] = [('create', options)]
@@ -387,8 +392,8 @@ class MigratorContractSubsidiary(BaseMigratorContractGroup):
     @classmethod
     def group_func(cls, x):
         return (
-            x['contract_number'], x['code'], x['coverage'], x['party'],
-            x['item_desc'])
+            x['contract_number'], x['code'], x['coverage'],
+            x['party'], x['item_desc'], x['start_date'])
 
     @classmethod
     def migrate_rows(cls, rows, ids, **kwargs):
@@ -401,6 +406,8 @@ class MigratorContractSubsidiary(BaseMigratorContractGroup):
             contract_rows = list(contract_rows)
             assert len(contract_rows) == 1
             row = cls.populate(contract_rows[0])
+            start_date = keys[-1].strftime('%Y-%m-%d')
+            keys = keys[:-1] + (start_date,)
             key = ':'.join([x or '' for x in keys])
             to_upsert[key] = row
         if to_upsert:
@@ -418,11 +425,17 @@ class MigratorContractSubsidiary(BaseMigratorContractGroup):
             item_desc = ItemDesc(res[r]['item_desc'])
             ids.append((
                     res[r]['contract'].contract_number,
+                    res[r]['party'].code,
                     item_desc.code,
                     ))
-        clause = Column(cls.table, cls.func_key).in_([x[0] for x in ids]
-            ) & Column(cls.table, 'item_desc').in_([x[1] for x in ids])
-        cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
+        where_clause = Literal(False)
+        for id_ in ids:
+            where_clause |= (
+                (cls.table.contract_number == id_[0]) &
+                (cls.table.party == id_[1]) &
+                (cls.table.item_desc == id_[2])
+                )
+        cls.delete_rows(tools.CONNECT_SRC, cls.table, where_clause)
 
     @classmethod
     def select(cls, **kwargs):
@@ -455,13 +468,22 @@ class MigratorContractSubsidiary(BaseMigratorContractGroup):
                 [('id', 'in', [x[0] for x in existing_ids])])]
         parties = [x.code for x in Party.search(
                 [('id', 'in', [x[1] for x in existing_ids])])]
-        existing_ids = {'%s_%s' % (x[0], x[1]) for x in zip(contracts, parties)}
+        existing_ids = {'%s_%s' % (x[0], x[1]) for x in zip(
+                contracts, parties)}
         return list(set(ids) - set(excluded) - set(existing_ids))
 
     @classmethod
     def query_data(cls, ids):
-        ids = [x.split('_')[0] for x in ids]
-        return super(MigratorContractSubsidiary, cls).query_data(ids)
+        where_clause = Literal(False)
+        for id_ in ids:
+            contract, party = id_.split('_')
+            where_clause |= (
+                (cls.table.contract_number == contract) &
+                (cls.table.party == party)
+                )
+        select = cls.table.select(*cls.select_columns(),
+            where=where_clause)
+        return select
 
 
 class MigratorSubsidiaryAffiliated(Migrator):
