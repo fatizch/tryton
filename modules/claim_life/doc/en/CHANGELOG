@@ -1,3 +1,4 @@
+* BUG#10353 Fix claim beneficiary documents reception date
 * BUG#10280 Fix an inifinite loop when defining extra data on benefits
 * BUG#10172 Adding of the data 'person' on the rule engine context in order to calculate the birthday of the covered element
 * BUG#10072 Allow to delete beneficiaries from a claim

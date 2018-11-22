@@ -592,6 +592,7 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView,
         dates = {x.id: None for x in beneficiaries}
         request_line = Pool().get('document.request.line').__table__()
         claims = [b.service.claim for b in beneficiaries]
+        losses = [b.service.loss for b in beneficiaries]
         cursor.execute(*request_line.select(request_line.for_object,
                 Max(Coalesce(request_line.reception_date, datetime.date.max)),
                 where=(request_line.blocking == Literal(True))
@@ -605,18 +606,30 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView,
                 Max(Coalesce(request_line.reception_date, datetime.date.max)),
                 where=(request_line.blocking == Literal(True))
                 & request_line.for_object.in_(
+                    [str(x) for x in losses]),
+                group_by=[request_line.for_object]))
+        loss_documents = {}
+        for loss, date in cursor.fetchall():
+            loss_documents[int(loss.split(',')[1])] = date
+        cursor.execute(*request_line.select(request_line.for_object,
+                Max(Coalesce(request_line.reception_date, datetime.date.max)),
+                where=(request_line.blocking == Literal(True))
+                & request_line.for_object.in_(
                     [str(x) for x in beneficiaries]),
                 group_by=[request_line.for_object]))
+        # TODO: perfs, browse ids rather than reinstantiate
         for beneficiary, date in cursor.fetchall():
             beneficiary_id = int(beneficiary.split(',')[1])
-            claim_document_date = datetime.date.max
-            claim_document_date = claim_documents[
-                cls(beneficiary_id).service.claim.id]
-            if (date == datetime.date.max or
-                    claim_document_date == datetime.date.max):
+            service = cls(beneficiary_id).service
+            claim_document_date = claim_documents[service.claim.id] \
+                if service.claim.id in claim_documents else datetime.date.min
+            loss_document_date = loss_documents[service.loss.id] \
+                if service.loss.id in loss_documents else datetime.date.min
+            if date == datetime.date.max and (datetime.date.min in
+                    (claim_document_date, loss_document_date)):
                 date = None
-            dates[beneficiary_id] = max(date, claim_document_date)\
-                if date else None
+            dates[beneficiary_id] = max(date, claim_document_date,
+                loss_document_date) if date else None
         return dates
 
     @model.CoogView.button_change('document_request_lines', 'identified',
