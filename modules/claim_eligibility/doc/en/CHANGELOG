@@ -1,3 +1,4 @@
+* BUG#10335 Fix deductible end date computation when using eligibility datas
 * BUG#10247 Fix default eligibility decision when no eligibility rule is set
 
 Version 2.2 - 2018-10-12

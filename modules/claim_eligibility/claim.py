@@ -93,7 +93,6 @@ class ClaimService:
         return 'study_in_progress'
 
     def init_from_loss(self, loss, benefit):
-        super(ClaimService, self).init_from_loss(loss, benefit)
         if benefit:
             self.eligibility_decision = benefit.decision_default
             if self.eligibility_decision:
@@ -101,6 +100,7 @@ class ClaimService:
                     self.eligibility_decision.state
             else:
                 self.eligibility_status = 'study_in_progress'
+        super(ClaimService, self).init_from_loss(loss, benefit)
 
     @fields.depends('benefit', 'eligibility_status')
     def on_change_with_possible_decisions(self, name=None):

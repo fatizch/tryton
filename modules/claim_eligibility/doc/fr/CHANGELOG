@@ -1,3 +1,4 @@
+* BUG#10335 Correctif du crash sur le calcul de la date de fin de franchise utilisant les données d'éligibilité
 * BUG#10247 Correctif sur l'éligibilité par défaut lorsque qu'aucune règle d'eligibilité n'est définie
 
 Version 2.2 - 2018-10-12
