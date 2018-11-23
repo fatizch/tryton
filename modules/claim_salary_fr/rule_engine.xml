@@ -179,7 +179,7 @@ ARRCO:Selon le point ARRCO</field>
             <field name="name">2_date_de_reference</field>
             <field name="type_">selection</field>
             <field name="selection">DAT: Date d'arrêt de travail
-DEI: Date d'effet d'indémnisation</field>
+DEI: Date d'effet d'indemnisation</field>
             <field name="selection_sorted">True</field>
             <field name="string">Date de référence</field>
             <field name="parent_rule" ref="regle_standard_de_calcul_de_la_revalorisation"/>
