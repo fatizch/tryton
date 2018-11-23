@@ -15,6 +15,12 @@ from trytond.modules.dsn_standard import dsn
 from trytond.config import config
 
 
+class ZeroLine(object):
+
+    def __init__(self, party):
+        self.party = party
+
+
 class NEORAUTemplate(dsn.NEODeSTemplate):
 
     custom_mapping = {
@@ -73,7 +79,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         # 'S21.G00.30.015': '',  # Code pays de naissance
         # 'S21.G00.30.016': '',  # Complément de la localisation
         # 'S21.G00.30.017': '',  # Service de distribution, complément de loc.
-        # 'S21.G00.30.019': '',  # Matricule de l'individu dans l'entreprise
+        'S21.G00.30.019': 'code',  # Matricule de l'individu dans l'entreprise
         # 'S21.G00.30.020': '',  # Numéro technique temporaire
 
         'S21.G00.31.001': 'modification_date',  # Date de la modification
@@ -174,7 +180,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
                     to_output.append(last)
 
             if add_to_zero_individual:
-                to_output.append(0)
+                to_output.append(ZeroLine(party))
 
             data['individuals'][party] = {'lines': to_output}
 
@@ -182,7 +188,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
             data['individuals'])
         assert not any(x in data['individuals'] for x in individuals_at_zero)
 
-        data['individuals'].update({x: {'lines': [0]}
+        data['individuals'].update({x: {'lines': [ZeroLine(party)]}
             for x in individuals_at_zero})
 
         # manage person modification
@@ -286,7 +292,8 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
             return self.data['individuals'][parent]['lines']
         elif block_id == 'S21.G00.56':
             # a regularization block only for negative lines
-            if parent and (parent.credit - parent.debit) < Decimal('0.0'):
+            if (parent and not isinstance(parent, ZeroLine) and
+                    (parent.credit - parent.debit) < Decimal('0.0')):
                 return [parent]
             else:
                 return []
@@ -353,31 +360,35 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
                 return tax_line
 
     def custom_pasrau_reconciliation_date(self, line):
-        if line == 0:
+        if isinstance(line, ZeroLine):
             return self.origin.invoice_date
         return self.get_invoice_from_move_line(line).reconciliation_date
 
     def custom_pasrau_base(self, line):
         # We declare a zero block and a regularization for negative lines
-        if line == 0 or (line.credit - line.debit) < Decimal('0.0'):
+        if (isinstance(line, ZeroLine) or
+                (line.credit - line.debit) < Decimal('0.0')):
             return Decimal('0.0')
         return self.get_pasrau_tax_line(line).base
 
     def custom_pasrau_debit_amount(self, line):
         # We declare a zero block and a regularization for negative lines
-        if line == 0 or (line.credit - line.debit) < Decimal('0.0'):
+        if (isinstance(line, ZeroLine) or
+                (line.credit - line.debit) < Decimal('0.0')):
             return Decimal('0.0')
         return self.get_pasrau_tax_line(line).amount * -1
 
     def custom_pasrau_rate(self, line):
-        if line == 0:
+        if isinstance(line, ZeroLine):
             return Decimal('0.0')
         return line.pasrau_rates_info[0].pasrau_rate * Decimal('100.0')
 
     def custom_pasrau_rate_kind(self, line):
-        if line == 0:
-            return u'99'
-        region = line.pasrau_rates_info[0].pasrau_rate_region
+        DefaultPasrauRate = Pool().get('claim.pasrau.default.rate')
+        if isinstance(line, ZeroLine):
+            region = DefaultPasrauRate.get_region(line.party.main_address.zip)
+        else:
+            region = line.pasrau_rates_info[0].pasrau_rate_region
         if not region:
             return u'01'
         return {

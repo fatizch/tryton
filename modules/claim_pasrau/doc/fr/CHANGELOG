@@ -1,3 +1,4 @@
+* FEA#10394 Gérer le matricule avec le code de l'assuré dans les fichier pasrau
 * OTH#0000 Amélioration de l'assistant et du batch d'intégration des fichiers pasrau
 * FEA#10343 Gestion des modifications d'état civil
 * FEA#10293 Gestion de l'identifiant métier de taux pasrau et création d'objets taux pasrau liés aux lignes de mouvement

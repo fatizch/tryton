@@ -59,8 +59,8 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
                 'The rate must be unique per party / date'),
             ]
         cls._error_messages.update({
-                'no_nir_provided': 'No NIR provided',
-                'no_party_found': 'No party found for NIR %(ssn)s',
+                'no_party_found': 'No party found for NIR %(ssn)s '
+                'and matricule %(matricule)s',
                 'no_rate_found': 'No pasrau rate found for NIR %(ssn)s',
                 })
 
@@ -98,20 +98,20 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
                         'declaration_bilan'):
                     for salarie in node_func(declaration_bilan, 'salarie'):
                         ssn = node_func(salarie, 'NIR', True)
-                        if not ssn:
+                        matricule = node_func(salarie, 'matricule', True)
+                        party = []
+                        if ssn:
+                            party = Party.search([('ssn', 'like', ssn + '%')])
+                        if not party and matricule:
+                            party = Party.search([('code', '=', matricule)])
+                        if not party:
                             errors.append(cls.raise_user_error(
-                                    'no_nir_provided', raise_exception=False))
+                                    'no_party_found', {'ssn': ssn,
+                                        'matricule': matricule},
+                                    raise_exception=False))
                             continue
                         pasrau_tax_rate = node_func(salarie,
                             'taux_imposition_PAS', True)
-                        party = Party.search([
-                                ('ssn', 'like', ssn + '%')
-                                ])
-                        if not party:
-                            errors.append(cls.raise_user_error(
-                                    'no_party_found', {'ssn': ssn},
-                                    raise_exception=False))
-                            continue
                         if not pasrau_tax_rate:
                             errors.append(cls.raise_user_error('no_rate_found',
                                     {'ssn': ssn}, raise_exception=False))
