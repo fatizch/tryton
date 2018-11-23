@@ -281,6 +281,11 @@ class ClaimService:
             digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
         'get_salary_field')
+    net_salary_bonus = fields.Function(
+        fields.Numeric('Net Salary Bonus',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_salary_field')
     salary_mode = fields.Function(
         fields.Char('Salary Mode'),
         'get_salary_mode')

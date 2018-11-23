@@ -182,6 +182,10 @@ msgctxt "field:claim.salary,net_salary:"
 msgid "Net Salary"
 msgstr "Salaire net"
 
+msgctxt "field:claim.salary,net_salary:"
+msgid "Net Salary Bonus"
+msgstr "Prime (nette)"
+
 msgctxt "field:claim.salary,rec_name:"
 msgid "Record Name"
 msgstr "Nom"
