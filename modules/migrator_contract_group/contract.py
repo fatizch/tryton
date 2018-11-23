@@ -11,6 +11,7 @@ from sql import Table, Column, Literal, Null
 
 from trytond.modules.migrator import Migrator, tools
 from trytond.pool import Pool
+from trytond.tools import grouped_slice
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import batch
@@ -742,20 +743,23 @@ class MigratorContractGroupConfiguration(Migrator):
             ).join(coverage, condition=(
                 option.coverage == coverage.id))
 
-        clause = Literal(False)
-        for row in rows:
-            clause |= (
-                (contract.contract_number == row['contract_number']) &
-                (version.start == row['start_date']) &
-                (coverage.code == row['coverage']) &
-                (benefit_configuration.code == row['benefit'])
-                )
+        for sliced_rows in grouped_slice(
+                rows, count=Transaction().context.get('job_size') or 1):
+            clause = Literal(False)
+            for row in sliced_rows:
+                clause |= (
+                    (contract.contract_number == row['contract_number']) &
+                    (version.start == row['start_date']) &
+                    (coverage.code == row['coverage']) &
+                    (benefit_configuration.code == row['benefit'])
+                    )
 
-        cursor.execute(*query_table.select(benefit.id,
-                contract.contract_number, covered_element.id,
-                benefit_configuration.code, coverage.code, version.start,
-                where=clause))
-        return cursor.fetchall()
+            cursor.execute(*query_table.select(benefit.id,
+                    contract.contract_number, covered_element.id,
+                    benefit_configuration.code, coverage.code, version.start,
+                    where=clause))
+            for values in cursor.fetchall():
+                yield values
 
     @classmethod
     def init_update_cache(cls, rows):
@@ -865,10 +869,12 @@ class MigratorContractGroupConfiguration(Migrator):
         row['start_date'] = datetime.datetime.strptime(
             row['start_date'], '%Y-%m-%d').date() \
             if row['start_date'] else None
-        deductible_extra_data = json.loads(row['deductible_rule_extra_data'])
+        deductible_extra_data = json.loads(row['deductible_rule_extra_data']
+            or '{}')
         indemnification_extra_data = json.loads(
-            row['indemnification_rule_extra_data'])
-        reval_extra_data = json.loads(row['revaluation_rule_extra_data'])
+            row['indemnification_rule_extra_data'] or '{}')
+        reval_extra_data = json.loads(row['revaluation_rule_extra_data'] or
+            '{}')
         cls._set_extra_data_decimal(
             deductible_extra_data, indemnification_extra_data,
             reval_extra_data)
@@ -898,12 +904,15 @@ class MigratorContractGroupConfiguration(Migrator):
                 start_date.strftime('%Y-%m-%d') if start_date else '',
                 ])
         row['version'] = cls.cache_obj['version'][version_key]
-        row['deductible_rule'] = cls.cache_obj['deductible_rule'][
-                row['deductible_rule']]
-        row['indemnification_rule'] = cls.cache_obj['indemnification_rule'][
-                row['indemnification_rule']]
-        row['revaluation_rule'] = cls.cache_obj['revaluation_rule'][
-                row['revaluation_rule']]
+        if row['deductible_rule']:
+            row['deductible_rule'] = cls.cache_obj['deductible_rule'][
+                    row['deductible_rule']]
+        if row['indemnification_rule']:
+            row['indemnification_rule'] = cls.cache_obj['indemnification_rule'][
+                    row['indemnification_rule']]
+        if row['revaluation_rule']:
+            row['revaluation_rule'] = cls.cache_obj['revaluation_rule'][
+                    row['revaluation_rule']]
         row['benefit'] = benefit
         row['net_calculation_rule'] = cls.cache_obj['net_calculation_rule'][
             row['net_calculation_rule']] if row['net_calculation_rule'] else \
