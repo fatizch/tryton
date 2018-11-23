@@ -30,12 +30,16 @@ class CreateSlip(Wizard):
         cls._error_messages.update({
                 'missing_required_inputs': 'All fields must be set before '
                 'proceeding',
+                'missing_configuration': 'A configuration is required to '
+                'generate a slip',
                 })
 
     def default_start(self, name):
         active_model = Transaction().context.get('active_model', None)
         if active_model != 'account.invoice.slip.configuration':
             return {}
+        if not Transaction().context.get('active_id'):
+            self.raise_user_error('missing_configuration')
         config = Pool().get(active_model)(
             Transaction().context.get('active_id'))
         return {
@@ -83,12 +87,14 @@ class InvoiceSlipParameters(model.CoogView):
     'Invoice Slip Parameters'
     __name__ = 'account.invoice.slip.parameters'
 
-    party = fields.Many2One('party.party', 'Party')
-    accounts = fields.Many2Many('account.account', None, None, 'Accounts')
-    slip_kind = fields.Selection([('slip', 'Slip')], 'Slip Kind')
+    party = fields.Many2One('party.party', 'Party', readonly=True)
+    accounts = fields.Many2Many('account.account', None, None, 'Accounts',
+        readonly=True)
+    slip_kind = fields.Selection([('slip', 'Slip')], 'Slip Kind',
+        readonly=True)
     slip_date = fields.Date('Slip Date')
-    journal = fields.Many2One('account.journal', 'Journal')
-    name = fields.Char('Name')
+    journal = fields.Many2One('account.journal', 'Journal', readonly=True)
+    name = fields.Char('Name', readonly=True)
 
     @staticmethod
     def default_slip_date():

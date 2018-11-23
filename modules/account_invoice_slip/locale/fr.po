@@ -3,6 +3,10 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:account.invoice.create.slip:"
+msgid "A configuration is required to generate a slip"
+msgstr "La configuration est requise pour générer le bordereau"
+
+msgctxt "error:account.invoice.create.slip:"
 msgid "All fields must be set before proceeding"
 msgstr "Tous les champs doivent être saisis avant de poursuivre"
 

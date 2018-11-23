@@ -1,3 +1,4 @@
+* BUG#10337 Fix crash when launching slip generation without slip configuration from the application
 * OTH#000 Fix relate on slip for related lines display
 * FEA#10156 Allow import/export for invoice slip configuration
 * OTH#0000 Use list instead of generator in select invoices request

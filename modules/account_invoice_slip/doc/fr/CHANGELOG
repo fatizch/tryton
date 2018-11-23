@@ -1,3 +1,4 @@
+* BUG#10337 Correction d'un crash au lancement de l'assistant de génération des bordereaux si aucune configuration n'est choisie
 * OTH#000 Correction du relate depuis un bordereau vers les lignes associées
 * FEA#10156 Autoriser l'import/export pour la configuration des bordereaux
 * OTH#0000 Utilisation d'une liste au lieu d'un générateur pour la requête selection de quittances
