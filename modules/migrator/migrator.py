@@ -366,6 +366,6 @@ class Migrator(batch.BatchRootNoSelect):
 
     @classmethod
     def parse_params(cls, params):
-        super(Migrator, cls).parse_params(params)
-        params.setdefault('update', False)
-        return params
+        new_params = super(Migrator, cls).parse_params(params)
+        new_params.setdefault('update', False)
+        return new_params

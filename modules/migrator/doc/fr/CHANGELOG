@@ -1,3 +1,4 @@
+* BUG#10381 Correction de l'initialisation des paramètres d'un batch
 * FEA#10153 Ajout de l'option de délimiteur dans la configuration et définition du point-virgule comme valeur par défaut
 * BUG#10107 L'option Split doit être défini à True et la taille d'un job à 1000 par défaut dans le batch migrator
 
