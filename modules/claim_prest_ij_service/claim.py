@@ -677,7 +677,19 @@ class ClaimIjSubscription(CoogProcessFramework, model.CoogView):
         return 'undeclared'
 
     def get_rec_name(self, name):
-        return self.parties[0].rec_name
+        return ' - '.join([self.subscriber.full_name if self.subscriber else '',
+                self.parties[0].full_name])
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        _, operator, value = clause
+        if not value:
+            return []
+        Party = Pool().get('party.party')
+        parties = Party.search([('rec_name', operator, value)])
+        ssns = [p.ssn for p in parties if p.ssn]
+        sirens = [p.siren for p in parties if p.siren]
+        return ['OR', [('ssn', 'in', ssns)], [('siren', 'in', sirens)]]
 
     def getter_claims(self, name):
         return [x.claim.id for x in self.periods_to_treat if x.claim]

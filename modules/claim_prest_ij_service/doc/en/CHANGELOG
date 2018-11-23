@@ -1,3 +1,5 @@
+* FEA#10393: Improve task display and allow to search according legal entity name or 
+
 Version 2.2 - 2018-10-12
 * BUG#9730 Anonymize ssn in subscriptions when anonymizing a party
 * BUG#9761: Add Indu node in amount check
