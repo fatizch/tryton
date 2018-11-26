@@ -242,8 +242,7 @@ class MoveLine(metaclass=PoolMeta):
             sign = 1
 
         cursor.execute(*query_table.select(line.id,
-                where=account.active
-                & (account.company == company_id)
+                where=(account.company == company_id)
                 & cls.payment_outstanding_group_clause(lines, line)
                 & (account.id == account_id)
                 & where_clause))
