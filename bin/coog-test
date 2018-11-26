@@ -65,7 +65,8 @@ coog_test_generate() { # generate test jobs - [module *]
 coog_test_join() { # wait for tests execution
     while true
     do
-        sleep 300
+        # Check status once per minute
+        sleep 60
         local queued; queued=$(coog_rq_queued test) || return $?
         [ "$queued" -eq 0 ] && break
         echo -en "\rwait @ $(date +'%H:%M:%S') - $queued"
