@@ -114,6 +114,7 @@ receivable_account.kind = 'receivable'
 receivable_account.reconcile = True
 receivable_account.type = receivable_account_kind
 receivable_account.company = company
+receivable_account.party_required = True
 receivable_account.save()
 
 payable_account = Account()
@@ -122,6 +123,7 @@ payable_account.code = 'account_payable'
 payable_account.kind = 'payable'
 payable_account.type = payable_account_kind
 payable_account.company = company
+payable_account.party_required = True
 payable_account.save()
 
 
@@ -190,15 +192,23 @@ coverage.save()
 
 accounts = get_accounts(company)
 # #Comment# #Create Contract Fee
+ProductCategory = Model.get('product.category')
+account_category = ProductCategory(name="Account Category")
+account_category.accounting = True
+account_category.account_expense = accounts['expense']
+account_category.account_revenue = accounts['revenue']
+account_category.code = 'account_category_1'
+account_category.save()
+
 Uom = Model.get('product.uom')
 unit, = Uom.find([('name', '=', 'Unit')])
 AccountProduct = Model.get('product.product')
+
 Template = Model.get('product.template')
 template = Template()
 template.name = 'contract Fee Template'
 template.default_uom = unit
-template.account_expense = accounts['expense']
-template.account_revenue = accounts['revenue']
+template.account_category = account_category
 template.type = 'service'
 template.list_price = Decimal(0)
 template.cost_price = Decimal(0)
@@ -292,7 +302,7 @@ all_invoices = ContractInvoice.find([('contract', '=', contract.id)])
 len(all_invoices)
 # #Res# #1
 all_invoices[0].invoice.state
-# #Res# #u'posted'
+# #Res# #'posted'
 
 # #Comment# #Test invoicing
 Contract.first_invoice([contract.id], config.context)
@@ -338,7 +348,7 @@ def test_posting(ids_to_test):
 test_posting([all_invoices[-1].invoice.id])
 AccountInvoice.post([all_invoices[0].invoice.id], config.context)
 all_invoices[0].invoice.state
-# #Res# #u'posted'
+# #Res# #'posted'
 Contract.first_invoice([contract.id], config.context)
 all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id)]),
     key=lambda x: (x.start or datetime.date.min, x.create_date))
@@ -350,18 +360,18 @@ len(all_invoices) == 3 + relativedelta(datetime.date.today(),
 all_invoices[0].invoice.total_amount
 # #Res# #Decimal('800.00')
 all_invoices[0].invoice.state
-# #Res# #u'posted'
+# #Res# #'posted'
 all_invoices[1].invoice.state
-# #Res# #u'cancel'
+# #Res# #'cancel'
 all_invoices[2].invoice.state
-# #Res# #u'validated'
+# #Res# #'validated'
 
 # #Comment# #Test option declined
 contract = Contract(contract.id)
 option_id = contract.options[0].id
 Option.delete([Option(option_id)])
 Option(option_id).status
-# #Res# #u'declined'
+# #Res# #'declined'
 contract = Contract(contract.id)
 len(contract.options)
 # #Res# #0

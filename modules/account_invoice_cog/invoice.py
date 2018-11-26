@@ -353,7 +353,8 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
             return 'invoice_paid'
         elif self.state == 'draft':
             return 'invoice_draft'
-        elif self.amount_to_pay_today > 0 or self.total_amount < 0:
+        elif (self.amount_to_pay_today or 0) > 0 \
+                or (self.total_amount or -1) < 0:
             return 'invoice_unpaid'
         elif self.state == 'posted':
             return 'invoice_post'

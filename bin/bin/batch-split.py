@@ -1,5 +1,5 @@
 import sys
-import async.broker as async_broker
+import coog_async.broker as async_broker
 
 
 def main():

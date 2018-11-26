@@ -86,6 +86,13 @@ Create Product::
     >>> product = add_invoice_configuration(product, accounts)
     >>> product = add_insurer_to_product(product)
     >>> product.save()
+    >>> ProductCategory = Model.get('product.category')
+    >>> account_category = ProductCategory(name="Account Category")
+    >>> account_category.accounting = True
+    >>> account_category.account_expense = accounts['expense']
+    >>> account_category.account_revenue = accounts['revenue']
+    >>> account_category.code = 'account_category'
+    >>> account_category.save()
 
 Create commission product::
 
@@ -99,8 +106,7 @@ Create commission product::
     >>> template.type = 'service'
     >>> template.list_price = Decimal(0)
     >>> template.cost_price = Decimal(0)
-    >>> template.account_expense = accounts['expense']
-    >>> template.account_revenue = accounts['revenue']
+    >>> template.account_category = account_category
     >>> template.products[0].code = 'commission_product'
     >>> template.save()
     >>> commission_product = template.products[0]
@@ -200,9 +206,9 @@ Check prepayment commission creation::
     >>> [(x.amount, x.commission_rate, x.is_prepayment, x.redeemed_prepayment,
     ...     x.base_amount, x.agent.party.name) for x in commissions] == [
     ...     (Decimal('720.0000'), Decimal('.6'), True, None, Decimal('1200.0000'),
-    ...         u'Broker'),
+    ...         'Broker'),
     ...     (Decimal('360.0000'), Decimal('.3'), True, None, Decimal('1200.0000'),
-    ...         u'Insurer')]
+    ...         'Insurer')]
     True
 
 Create invoices::
@@ -231,9 +237,9 @@ Validate first invoice commissions::
     >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     ...     x.agent.party.name) for x in line.commissions] == [
     ...     (Decimal('0.0000'), False, Decimal('60.0000'), Decimal('100.0000'),
-    ...         u'Broker'),
+    ...         'Broker'),
     ...     (Decimal('0.0000'), False, Decimal('30.0000'), Decimal('100.0000'),
-    ...         u'Insurer')]
+    ...         'Insurer')]
     True
 
 Validate last invoice of the year commissions::
@@ -245,9 +251,9 @@ Validate last invoice of the year commissions::
     >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     ...     x.agent.party.name) for x in line.commissions] == [
     ...     (Decimal('0.0000'), False, Decimal('60.0000'), Decimal('100.0000'),
-    ...         u'Broker'),
+    ...         'Broker'),
     ...     (Decimal('0.0000'), False, Decimal('30.0000'), Decimal('100.0000'),
-    ...         u'Insurer')]
+    ...         'Insurer')]
     True
 
 Validate first invoice of next year commissions::
@@ -259,9 +265,9 @@ Validate first invoice of next year commissions::
     >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     ...     x.agent.party.name) for x in line.commissions] == [
     ...     (Decimal('60.0000'), False, Decimal('0.0000'), Decimal('100.0000'),
-    ...         u'Broker'),
+    ...         'Broker'),
     ...     (Decimal('30.0000'), False, Decimal('0.0000'), Decimal('100.0000'),
-    ...         u'Insurer')]
+    ...         'Insurer')]
     True
 
  Nothing is paid, no broker invoice is generated::
@@ -273,18 +279,27 @@ Validate first invoice of next year commissions::
     >>> Invoice = Model.get('account.invoice')
     >>> Invoice.find([('business_kind', '=', 'broker_invoice')]) == []
     True
+    >>> cash_journal, = Journal.find([('code', '=', 'CASH')])
+    >>> account_cash = accounts['cash']
+    >>> PaymentMethod = Model.get('account.invoice.payment.method')
+    >>> payment_method = PaymentMethod()
+    >>> payment_method.name = 'Cash'
+    >>> payment_method.journal = cash_journal
+    >>> payment_method.credit_account = account_cash
+    >>> payment_method.debit_account = account_cash
+    >>> payment_method.save()
 
  Pay the first invoice::
 
     >>> first_account_invoice = first_invoice.invoice
     >>> PayInvoice = Wizard('account.invoice.pay', [first_account_invoice])
     >>> cash_journal, = Journal.find([('code', '=', 'CASH')])
-    >>> PayInvoice.form.journal = cash_journal
+    >>> PayInvoice.form.payment_method = payment_method
     >>> PayInvoice.form.date = contract.start_date
     >>> PayInvoice.execute('choice')
     >>> first_account_invoice.reload()
     >>> first_account_invoice.state
-    u'paid'
+    'paid'
     >>> prepayment_coms = Commission.find([('is_prepayment', '=', True)])
     >>> assert all(com.date for com in prepayment_coms)
 
@@ -296,17 +311,16 @@ make sure the date of commission is untouched::
     >>> second_invoice = contract_invoices[1]
     >>> second_account_invoice = second_invoice.invoice
     >>> PayInvoice = Wizard('account.invoice.pay', [second_account_invoice])
-    >>> cash_journal, = Journal.find([('code', '=', 'CASH')])
-    >>> PayInvoice.form.journal = cash_journal
+    >>> PayInvoice.form.payment_method = payment_method
     >>> PayInvoice.form.date = contract.start_date
     >>> PayInvoice.execute('choice')
     >>> second_account_invoice.reload()
     >>> second_account_invoice.state
-    u'paid'
+    'paid'
     >>> second_account_invoice.payment_lines[0].reconciliation.delete()
     >>> second_account_invoice.reload()
     >>> second_account_invoice.state
-    u'posted'
+    'posted'
     >>> prepayment_coms = Commission.find([('is_prepayment', '=', True)])
     >>> assert all(com.date for com in prepayment_coms)
 
@@ -320,14 +334,14 @@ Generate broker invoice::
     >>> broker_invoice, = Invoice.find([
     ...         ('business_kind', '=', 'broker_invoice')])
     >>> sorted([(x.description, x.amount) for x in broker_invoice.lines]) == [
-    ...     (u'Prepayment', Decimal('720.00')),
-    ...     (u'Prepayment Amortization', Decimal('0.00'))]
+    ...     ('Prepayment', Decimal('720.00')),
+    ...     ('Prepayment Amortization', Decimal('0.00'))]
     True
     >>> first_broker_invoice_id = broker_invoice.id
     >>> first_account_invoice.payment_lines[0].reconciliation.delete()
     >>> first_account_invoice.reload()
     >>> first_account_invoice.state
-    u'posted'
+    'posted'
 
 Generate broker invoice::
 
@@ -340,7 +354,7 @@ Generate broker invoice::
     ...         ('id', '!=', first_broker_invoice_id)])
     >>> second_broker_invoice_id = new_broker_invoice.id
     >>> sorted([(x.description, x.amount) for x in new_broker_invoice.lines]) == [
-    ...     (u'Prepayment Amortization', Decimal('0.00'))]
+    ...     ('Prepayment Amortization', Decimal('0.00'))]
     True
     >>> coms_in_second_broker_invoice, = Commission.find([('invoice_line.id', '=',
     ...         new_broker_invoice.lines[0].id)])
@@ -381,24 +395,24 @@ Generate broker invoice::
     ...         ('business_kind', '=', 'broker_invoice'),
     ...         ('id', 'not in', (first_broker_invoice_id, second_broker_invoice_id))])
     >>> sorted([(x.description, x.amount) for x in third_broker_invoice.lines]) == [
-    ...     (u'Broker Plan', Decimal('0.00')),
-    ...     (u'Prepayment', Decimal('-600.00')),
-    ...     (u'Prepayment Amortization', Decimal('0.00'))]
+    ...     ('Broker Plan', Decimal('0.00')),
+    ...     ('Prepayment', Decimal('-600.00')),
+    ...     ('Prepayment Amortization', Decimal('0.00'))]
     True
     >>> amort_line, = [x for x in third_broker_invoice.lines
-    ...     if x.description == u'Prepayment Amortization']
+    ...     if x.description == 'Prepayment Amortization']
     >>> amort_coms = Commission.find([('invoice_line.id', '=', amort_line.id)])
     >>> sum(amort_com.redeemed_prepayment
     ...     for amort_com in amort_coms) == Decimal('60.00')
     True
     >>> prepayment_line, = [x for x in third_broker_invoice.lines
-    ...     if x.description == u'Prepayment']
+    ...     if x.description == 'Prepayment']
     >>> prepayment_com, = Commission.find([
     ...         ('invoice_line.id', '=', prepayment_line.id)])
     >>> prepayment_com.amount == Decimal('-600.00')
     True
     >>> linear_line, = [x for x in third_broker_invoice.lines
-    ...     if x.description == u'Broker Plan']
+    ...     if x.description == 'Broker Plan']
     >>> linear_coms = Commission.find([
     ...         ('invoice_line.id', '=', linear_line.id)])
     >>> sorted([x.amount for x in linear_coms]) == [

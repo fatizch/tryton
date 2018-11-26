@@ -115,6 +115,9 @@ class RuleEngine(metaclass=PoolMeta):
 
     @staticmethod
     def get_external_extra_data_def(key, args):
+        if 'contract' in args and args['contract'].id == 2 and key == 'job_category' \
+                and 'elem' in args and args['elem'].party.id == 2529:
+            pass
         ExtraData = Pool().get('extra_data')
         if key in args.get('extra_data', {}):
             return args['extra_data'][key]

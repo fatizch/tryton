@@ -3,6 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <menuitem name="Endorsement Configuration" parent="coog_core.general_configuration_menu" action="act_configuration_form" id="menu_endorsement_configuration_general_configuration" sequence="160" icon="tryton-preferences"/>
+        <menuitem name="Endorsement Configuration" parent="coog_core.general_configuration_menu" action="act_configuration_form" id="menu_endorsement_configuration_general_configuration" sequence="160" icon="tryton-settings"/>
     </data>
 </tryton>

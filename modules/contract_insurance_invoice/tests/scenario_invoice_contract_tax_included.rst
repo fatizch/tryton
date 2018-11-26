@@ -111,6 +111,7 @@ Create Account::
     >>> product_account.name = 'Product Account'
     >>> product_account.code = 'product_account'
     >>> product_account.kind = 'revenue'
+    >>> product_account.party_required = True
     >>> product_account.type = product_account_kind
     >>> product_account.company = company
     >>> product_account.save()
@@ -119,6 +120,7 @@ Create Account::
     >>> receivable_account.code = 'account_receivable'
     >>> receivable_account.kind = 'receivable'
     >>> receivable_account.reconcile = True
+    >>> receivable_account.party_required = True
     >>> receivable_account.type = receivable_account_kind
     >>> receivable_account.company = company
     >>> receivable_account.save()
@@ -126,6 +128,7 @@ Create Account::
     >>> payable_account.name = 'Account Payable'
     >>> payable_account.code = 'account_payable'
     >>> payable_account.kind = 'payable'
+    >>> payable_account.party_required = True
     >>> payable_account.type = payable_account_kind
     >>> payable_account.company = company
     >>> payable_account.save()
@@ -133,6 +136,7 @@ Create Account::
     >>> tax_account.name = 'Main tax'
     >>> tax_account.code = 'main_tax'
     >>> tax_account.kind = 'revenue'
+    >>> tax_account.party_required = True
     >>> tax_account.company = company
     >>> tax_account.type = tax_account_kind
     >>> tax_account.save()
@@ -231,8 +235,8 @@ Create Product::
     >>> coverage = OptionDescription()
     >>> coverage.company = company
     >>> coverage.currency = currency
-    >>> coverage.name = u'Test Coverage'
-    >>> coverage.code = u'test_coverage'
+    >>> coverage.name = 'Test Coverage'
+    >>> coverage.code = 'test_coverage'
     >>> coverage.start_date = product_start_date
     >>> coverage.account_for_billing = product_account
     >>> coverage.taxes_included_in_premium = True
@@ -244,8 +248,8 @@ Create Product::
     >>> coverage_1 = OptionDescription()
     >>> coverage_1.company = company
     >>> coverage_1.currency = currency
-    >>> coverage_1.name = u'Test coverage_1'
-    >>> coverage_1.code = u'test_coverage_1'
+    >>> coverage_1.name = 'Test coverage_1'
+    >>> coverage_1.code = 'test_coverage_1'
     >>> coverage_1.start_date = product_start_date
     >>> coverage_1.account_for_billing = product_account
     >>> coverage_1.taxes_included_in_premium = True
@@ -257,8 +261,8 @@ Create Product::
     >>> coverage_2 = OptionDescription()
     >>> coverage_2.company = company
     >>> coverage_2.currency = currency
-    >>> coverage_2.name = u'Test coverage_2'
-    >>> coverage_2.code = u'test_coverage_2'
+    >>> coverage_2.name = 'Test coverage_2'
+    >>> coverage_2.code = 'test_coverage_2'
     >>> coverage_2.start_date = product_start_date
     >>> coverage_2.account_for_billing = product_account
     >>> coverage_2.taxes_included_in_premium = True

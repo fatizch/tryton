@@ -71,8 +71,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             requests=[Req(), Req(ssn=ssn, period_end=True),
                 Req(ssn=ssn2), Req(ssn=ssn3, operation='sup')]
         )
-        str(gesti_templates.GestipHeader(data))
-        str(gesti_templates.GestipDocument(data))
+        gesti_templates.GestipHeader(data)
+        gesti_templates.GestipDocument(data)
 
         data['timestamp'] = 'very invalid timestamp'
 

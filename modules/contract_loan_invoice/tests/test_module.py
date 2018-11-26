@@ -27,14 +27,14 @@ class ModuleTestCase(test_framework.CoogTestCase):
             }
 
     def test001_store_prices(self):
-        loan1 = self.Loan()
-        loan2 = self.Loan()
+        loan1 = self.Loan(1)
+        loan2 = self.Loan(2)
         extra_premium = self.ExtraPremium(premiums=[])
         start1 = datetime.date(2000, 1, 1)
         end1 = datetime.date(2000, 11, 30)
         start2 = datetime.date(2000, 12, 1)
         end2 = datetime.date(2000, 12, 31)
-        coverage = self.Coverage()
+        coverage = self.Coverage(1)
         premium1_1 = self.Premium(loan=loan1, amount=200, parent=extra_premium,
             start=start1, end=end1, rated_entity=coverage, frequency='monthly',
             account=None)
@@ -59,14 +59,14 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     (loan2, start1, end1), (loan2, start2, end2)])
 
     def test002_store_prices_merge(self):
-        loan1 = self.Loan()
-        loan2 = self.Loan()
+        loan1 = self.Loan(1)
+        loan2 = self.Loan(2)
         extra_premium = self.ExtraPremium(premiums=[])
         start1 = datetime.date(2000, 1, 1)
         end1 = datetime.date(2000, 11, 30)
         start2 = datetime.date(2000, 12, 1)
         end2 = datetime.date(2000, 12, 31)
-        coverage = self.Coverage()
+        coverage = self.Coverage(1)
         premium1_1 = self.Premium(loan=loan1, amount=100, parent=extra_premium,
             start=start1, end=end1, rated_entity=coverage, frequency='monthly',
             account=None)

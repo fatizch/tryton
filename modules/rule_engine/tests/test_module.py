@@ -250,7 +250,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(func_code, [
                 '',
                 'def fct_%s ():' % func_id,
-                ' return Decimal (u\'10.0\')',
+                ' return Decimal (\'10.0\')',
                 '',
                 'result_%s =fct_%s ()' % (func_id, func_id),
                 ''])
@@ -764,8 +764,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         rule.save()
         self.assertRaises(UserError, rule.execute, {})
 
-    def test_0061_testTestCaseCreationFromLog(self):
-        # test0060 forces a commit so no need for prepare_test
+    #@test_framework.prepare_test('rule_engine.test0060_testRuleEngineDebugging')
+    def test0061_testTestCaseCreationFromLog(self):
         rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
         rule.debug_mode = True
         rule.algorithm = '\n'.join([
@@ -791,7 +791,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
             wizard.do_created_test_case(action)
 
         with Transaction().set_context({'active_id': rule.id}):
-            print('ici')
             wizard_id, _, _ = self.RunTests.create()
             wizard = self.RunTests(wizard_id)
             wizard._execute('report')

@@ -482,7 +482,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         xml += '</form>'
         # Prettify xml to ease reading
         return lxml.etree.tostring(lxml.etree.fromstring(xml),
-            pretty_print=True)
+            pretty_print=True, encoding='unicode')
 
     def get_view(self, relation_step):
         pool = Pool()

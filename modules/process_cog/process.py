@@ -902,7 +902,7 @@ class Process(model.CoogSQL, model.TaggedMixin):
             if step2.id == elem.step.id:
                 step2_rank = elem.order
                 step2_idx = idx
-        if step1_rank > step2_rank:
+        if (step1_rank and step2_rank) and step1_rank > step2_rank:
             return []
         return [x.step for x in self.all_steps[step1_idx:step2_idx + 1]]
 

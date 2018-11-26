@@ -20,6 +20,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="user_connection_configuration_form"/>
             <field name="act_window" ref="act_user_connection_configuration"/>
         </record>
-        <menuitem id="menu_user_connection_configuration_conf" sequence="100" name="Connection Configuration" parent="menu_user_activity" icon="tryton-preferences" action="act_user_connection_configuration"/>
+        <menuitem id="menu_user_connection_configuration_conf" sequence="100" name="Connection Configuration" parent="menu_user_activity" icon="tryton-settings" action="act_user_connection_configuration"/>
     </data>
 </tryton>

@@ -1,4 +1,4 @@
-from async.tasks import split_batch, split_job
+from coog_async.tasks import split_batch, split_job
 
 
 def test_split_batch():

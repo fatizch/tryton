@@ -114,6 +114,7 @@ Create Account::
     >>> receivable_account.reconcile = True
     >>> receivable_account.type = receivable_account_kind
     >>> receivable_account.company = company
+    >>> receivable_account.party_required = True
     >>> receivable_account.save()
     >>> payable_account = Account()
     >>> payable_account.name = 'Account Payable'
@@ -121,6 +122,7 @@ Create Account::
     >>> payable_account.kind = 'payable'
     >>> payable_account.type = payable_account_kind
     >>> payable_account.company = company
+    >>> payable_account.party_required = True
     >>> payable_account.save()
     >>> config = switch_user('product_user')
     >>> company = get_company()
@@ -178,8 +180,8 @@ Create Product::
     >>> coverage = OptionDescription()
     >>> coverage.company = company
     >>> coverage.currency = currency
-    >>> coverage.name = u'Test Coverage'
-    >>> coverage.code = u'test_coverage'
+    >>> coverage.name = 'Test Coverage'
+    >>> coverage.code = 'test_coverage'
     >>> coverage.start_date = product_start_date
     >>> product_account, = Account.find([('code', '=', 'product_account')])
     >>> coverage.account_for_billing = product_account
@@ -188,6 +190,13 @@ Create Product::
 
 Create Contract Fee::
 
+    >>> ProductCategory = Model.get('product.category')
+    >>> account_category = ProductCategory(name="Account Category")
+    >>> account_category.accounting = True
+    >>> account_category.account_expense = accounts['expense']
+    >>> account_category.account_revenue = accounts['revenue']
+    >>> account_category.code = 'account_category_1'
+    >>> account_category.save()
     >>> Uom = Model.get('product.uom')
     >>> unit, = Uom.find([('name', '=', 'Unit')])
     >>> AccountProduct = Model.get('product.product')
@@ -195,8 +204,7 @@ Create Contract Fee::
     >>> template = Template()
     >>> template.name = 'contract Fee Template'
     >>> template.default_uom = unit
-    >>> template.account_expense = accounts['expense']
-    >>> template.account_revenue = accounts['revenue']
+    >>> template.account_category = account_category
     >>> template.type = 'service'
     >>> template.list_price = Decimal(0)
     >>> template.cost_price = Decimal(0)
@@ -285,7 +293,7 @@ Create Test Contract::
     >>> len(all_invoices)
     1
     >>> all_invoices[0].invoice.state
-    u'posted'
+    'posted'
 
 Test invoicing::
 
@@ -323,7 +331,7 @@ Test invoicing::
     >>> test_posting([all_invoices[-1].invoice.id])
     >>> AccountInvoice.post([all_invoices[0].invoice.id], config.context)
     >>> all_invoices[0].invoice.state
-    u'posted'
+    'posted'
     >>> Contract.first_invoice([contract.id], config.context)
     >>> all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id)]),
     ...     key=lambda x: (x.start or datetime.date.min, x.create_date))
@@ -333,11 +341,11 @@ Test invoicing::
     >>> all_invoices[0].invoice.total_amount
     Decimal('800.00')
     >>> all_invoices[0].invoice.state
-    u'posted'
+    'posted'
     >>> all_invoices[1].invoice.state
-    u'cancel'
+    'cancel'
     >>> all_invoices[2].invoice.state
-    u'validated'
+    'validated'
 
 Test option declined::
 
@@ -345,7 +353,7 @@ Test option declined::
     >>> option_id = contract.options[0].id
     >>> Option.delete([Option(option_id)])
     >>> Option(option_id).status
-    u'declined'
+    'declined'
     >>> contract = Contract(contract.id)
     >>> len(contract.options)
     0

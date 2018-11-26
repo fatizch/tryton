@@ -10,9 +10,9 @@ from celery import Task
 from celery.utils.log import get_task_logger
 
 
-import async.config as config
-from async.tasks import tasks as batch_tasks
-from async.tasks import _execute
+import coog_async.config as config
+from coog_async.tasks import tasks as batch_tasks
+from coog_async.tasks import _execute
 
 
 broker_url = os.environ.get('TRYTOND_ASYNC_CELERY')

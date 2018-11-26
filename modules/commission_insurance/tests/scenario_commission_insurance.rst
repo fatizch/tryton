@@ -83,11 +83,32 @@ Create Broker Fee Account::
     >>> broker_fee_account.save()
     >>> Journal = Model.get('account.journal')
     >>> cash_journal, = Journal.find([('type', '=', 'cash')])
-    >>> cash_journal.debit_account, = Account.find(['name', '=', 'Main Cash'])
-    >>> cash_journal.save()
+    >>> account_cash = accounts['cash']
+    >>> PaymentMethod = Model.get('account.invoice.payment.method')
+    >>> payment_method = PaymentMethod()
+    >>> payment_method.name = 'Cash'
+    >>> payment_method.journal = cash_journal
+    >>> payment_method.credit_account = account_cash
+    >>> payment_method.debit_account = account_cash
+    >>> payment_method.save()
     >>> config = switch_user('product_user')
     >>> Account = Model.get('account.account')
     >>> accounts = get_accounts(company)
+    >>> ProductCategory = Model.get('product.category')
+    >>> account_category = ProductCategory(name="Account Category")
+    >>> account_category.accounting = True
+    >>> account_category.account_expense = Account(broker_fee_account.id)
+    >>> account_category.account_revenue = Account(broker_fee_account.id)
+    >>> account_category.code = 'account_category'
+    >>> account_category.save()
+    >>> ProductCategory = Model.get('product.category')
+    >>> account_category_commission = ProductCategory(
+    ...     name="Account Category Commission")
+    >>> account_category_commission.accounting = True
+    >>> account_category_commission.account_expense = accounts['expense']
+    >>> account_category_commission.account_revenue = accounts['revenue']
+    >>> account_category_commission.code = 'account_category_commission'
+    >>> account_category_commission.save()
 
 Create Broker Fee::
 
@@ -97,8 +118,7 @@ Create Broker Fee::
     >>> Template = Model.get('product.template')
     >>> template = Template()
     >>> template.name = 'Broker Fee Template'
-    >>> template.account_expense = Account(broker_fee_account.id)
-    >>> template.account_revenue = Account(broker_fee_account.id)
+    >>> template.account_category = account_category
     >>> template.list_price = Decimal(0)
     >>> template.cost_price = Decimal(0)
     >>> template.default_uom = unit
@@ -131,6 +151,7 @@ Create Product::
     >>> Product = Model.get('product.product')
     >>> Template = Model.get('product.template')
     >>> Uom = Model.get('product.uom')
+    >>> ProductCategory = Model.get('product.category')
     >>> unit, = Uom.find([('name', '=', 'Unit')])
     >>> accounts = get_accounts(company)
 
@@ -143,8 +164,8 @@ Create commission product::
     >>> templateComission.type = 'service'
     >>> templateComission.list_price = Decimal(0)
     >>> templateComission.cost_price = Decimal(0)
-    >>> templateComission.account_expense = accounts['expense']
-    >>> templateComission.account_revenue = accounts['revenue']
+    >>> templateComission.account_category = ProductCategory(
+    ...     account_category_commission.id)
     >>> templateComission.products[0].code = 'commission_product'
     >>> templateComission.save()
     >>> commission_product = templateComission.products[0]
@@ -246,7 +267,7 @@ Create invoice::
     True
     >>> set([(x.amount, x.account.code)
     ...     for x in first_invoice.invoice.lines]) == set([
-    ...             (Decimal('20'), u'broker_fee_account'),
+    ...             (Decimal('20'), 'broker_fee_account'),
     ...             (Decimal('100'), None)])
     True
 
@@ -258,15 +279,16 @@ Post Invoice::
     2
     >>> set([(x.amount, x.commission_rate, x.agent.party.name, x.line_amount)
     ...     for x in line.commissions]) == set([
-    ...             (Decimal('10'), Decimal('.1'), u'Broker', Decimal('100')),
-    ...             (Decimal('60'), Decimal('.6'), u'Insurer', Decimal('100'))])
+    ...             (Decimal('10'), Decimal('.1'), 'Broker', Decimal('100')),
+    ...             (Decimal('60'), Decimal('.6'), 'Insurer', Decimal('100'))])
     True
 
 Pay invoice::
 
     >>> Journal = Model.get('account.journal')
+    >>> PaymentMethod = Model.get('account.invoice.payment.method')
     >>> pay = Wizard('account.invoice.pay', [first_invoice.invoice])
-    >>> pay.form.journal = Journal(cash_journal.id)
+    >>> pay.form.payment_method = PaymentMethod(payment_method.id)
     >>> pay.execute('choice')
 
 Create commission invoice::
@@ -308,7 +330,7 @@ Cancel Invoice::
 
     >>> Contract.first_invoice([contract.id], config.context)
     >>> first_invoice.invoice.state
-    u'cancel'
+    'cancel'
 
 Create commission invoice::
 

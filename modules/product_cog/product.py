@@ -1,23 +1,26 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
 from decimal import Decimal
 
-from sql import Null
-from trytond.pool import Pool
+from sql import Null, Table
+from trytond.pool import Pool, PoolMeta
 from trytond.model import Unique
 from trytond.transaction import Transaction
+from trytond.pyson import Eval
+from trytond import backend
 
 from trytond.modules.coog_core import export, fields, coog_string
 
 __all__ = [
     'Template',
-    'TemplateAccount',
     'Product',
     'Uom',
     'Category',
     'ProductCostPrice',
     'ProductListPrice',
     'ProductCostPriceMethod',
+    'CategoryAccount',
     ]
 
 
@@ -41,16 +44,6 @@ class Template(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Template, cls).__setup__()
-        cls.account_expense.domain = cls.account_expense.domain[1:] + [[
-                'OR',
-                [('kind', '=', 'expense')],
-                [('kind', '=', 'other')],
-                ]]
-        cls.account_revenue.domain = cls.account_revenue.domain[1:] + [[
-                'OR',
-                [('kind', '=', 'revenue')],
-                [('kind', '=', 'other')],
-                ]]
         cls.name.required = True
         t = cls.__table__()
         cls._sql_constraints += [
@@ -60,7 +53,7 @@ class Template(export.ExportImportMixin):
     @classmethod
     def _export_light(cls):
         return (super(Template, cls)._export_light() |
-            set(['default_uom', 'account_expense', 'account_revenue']))
+            set(['default_uom']))
 
     @classmethod
     def _export_skips(cls):
@@ -75,47 +68,6 @@ class Template(export.ExportImportMixin):
         UOM = Pool().get('product.uom')
         uom, = UOM.search([('symbol', '=', 'u')])
         return uom.id
-
-
-class TemplateAccount(export.ExportImportMixin):
-    __name__ = 'product.template.account'
-    _func_key = 'func_key'
-
-    func_key = fields.Function(fields.Char('Func Key'),
-        'getter_func_key', searcher='searcher_func_key')
-
-    @classmethod
-    def __setup__(cls):
-        super(TemplateAccount, cls).__setup__()
-        cls.account_expense.domain = cls.account_expense.domain[1:] + [[
-                'OR',
-                [('kind', '=', 'expense')],
-                [('kind', '=', 'other')],
-                ]]
-        cls.account_revenue.domain = cls.account_revenue.domain[1:] + [[
-                'OR',
-                [('kind', '=', 'revenue')],
-                [('kind', '=', 'other')],
-                ]]
-
-    def getter_func_key(self, name):
-        return '|'.join([
-                self.template.name,
-                self.account_expense.code if self.account_expense else '',
-                self.account_revenue.code if self.account_revenue else '',
-                ])
-
-    @classmethod
-    def searcher_func_key(cls, name, clause):
-        assert clause[1] == '='
-        template, account_expense, account_revenue = clause[2].split('|')
-        account_expense = int(account_expense) if account_expense else None
-        account_revenue = int(account_revenue) if account_revenue else None
-
-        return [('template.name', '=', int(template)),
-            ('account_expense.code', '=', account_expense),
-            ('account_revenue.code', '=', account_revenue),
-            ]
 
 
 class Product(export.ExportImportMixin):
@@ -163,6 +115,117 @@ class Category(export.ExportImportMixin):
     _func_key = 'code'
 
     code = fields.Char('Code', required=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(Category, cls).__setup__()
+        account_revenue_original_domain = cls.account_revenue.domain
+        assert account_revenue_original_domain == [
+                ('kind', '=', 'revenue'),
+                ('company', '=', Eval('context', {}).get('company', -1)),
+                ], account_revenue_original_domain
+        cls.account_revenue.domain = [['OR', ('kind', '=', 'other'),
+            account_revenue_original_domain[0]],
+            account_revenue_original_domain[1]]
+        account_expense_original_domain = cls.account_expense.domain
+        assert account_expense_original_domain == [
+                ('kind', '=', 'expense'),
+                ('company', '=', Eval('context', {}).get('company', -1)),
+                ], account_expense_original_domain
+        cls.account_expense.domain = [['OR', ('kind', '=', 'other'),
+            account_expense_original_domain[0]],
+            account_expense_original_domain[1]]
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(Category, cls).__register__(module_name)
+        # Migration from 4.8 : create accounting_category for Product Templates
+        Template = Pool().get('product.template')
+        template = Template.__table__()
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().connection.cursor()
+        product_category = Table('product_category')
+        product_template_account = Table('product_template_account')
+        product_category_account = Table('product_category_account')
+        category_customer_tax = Table('product_category_customer_taxes_rel')
+        category_supplier_tax = Table('product_category_supplier_taxes_rel')
+        template_customer_tax = Table('product_customer_taxes_rel')
+        template_supplier_tax = Table('product_supplier_taxes_rel')
+
+        exist = TableHandler.table_exist('product_template_account')
+        if not exist:
+            return
+
+        cursor.execute(*template.select(template.id,
+                where=(template.account_category == Null)))
+        to_migrate = [x[0] for x in cursor.fetchall()]
+        if not to_migrate:
+            return
+
+        cursor.execute(*product_template_account.join(template, condition=(
+                    (product_template_account.template == template.id) & (
+                        template.id.in_(to_migrate)))
+                ).select(
+                    product_template_account.company,
+                    template.name,
+                    product_template_account.account_expense,
+                    product_template_account.account_revenue))
+        res = list(cursor.fetchall())
+        now = datetime.datetime.now()
+        product_category_insert_columns = [
+            product_category.name,
+            product_category.code,
+            product_category.accounting,
+            product_category.create_uid,
+            product_category.create_date,
+        ]
+        product_category_account_insert_columns = [
+            product_category_account.company,
+            product_category_account.category,
+            product_category_account.account_expense,
+            product_category_account.account_revenue,
+            product_category_account.create_uid,
+            product_category_account.create_date,
+            ]
+        for company, name, account_expense, account_revenue in res:
+            code = coog_string.slugify(name)
+            product_category_insert_values = [
+                name, code, True, 0, now]
+            cursor.execute(*product_category.insert(
+                    product_category_insert_columns,
+                    [product_category_insert_values],
+                    [product_category.id]))
+            category_id, = cursor.fetchone()
+
+            product_category_account_insert_values = [
+                company, category_id, account_expense, account_revenue,
+                0, now]
+            cursor.execute(*product_category_account.insert(
+                    product_category_account_insert_columns,
+                    [product_category_account_insert_values]))
+            cursor.execute(*template.update(
+                    columns=[template.account_category],
+                    values=[category_id],
+                    where=(template.name == name)))
+        # Link taxes to category
+
+        for old, new in [(template_customer_tax, category_customer_tax),
+                (template_supplier_tax, category_supplier_tax)]:
+            cursor.execute(*old.join(template,
+                    condition=(old.product == template.id)
+                    ).select(template.account_category, old.tax))
+            for category, tax in cursor.fetchall():
+                values = [category, tax, 0, now]
+                cursor.execute(*new.insert([new.category, new.tax,
+                            new.create_uid, new.create_date], [values]))
+
+        TableHandler.drop_table('product.template.account',
+            'product_template_account')
+        TableHandler.drop_table('product.template-customer-account.tax',
+            'product_customer_taxes_rel')
+        TableHandler.drop_table('product.template-supplier-account.tax',
+            'product_supplier_taxes_rel')
+        # End of Migration from 4.8
 
 
 class ProductCostPrice(export.ExportImportMixin):
@@ -226,3 +289,27 @@ class ProductCostPriceMethod(export.ExportImportMixin):
         template, cost_price_method = clause[2].split('|')
         return [('template.name', '=', template),
             ('cost_price_method', '=', cost_price_method)]
+
+
+class CategoryAccount(metaclass=PoolMeta):
+    __name__ = 'product.category.account'
+
+    @classmethod
+    def __setup__(cls):
+        super(CategoryAccount, cls).__setup__()
+        account_revenue_original_domain = cls.account_revenue.domain
+        assert account_revenue_original_domain == [
+                ('kind', '=', 'revenue'),
+                ('company', '=', Eval('company', -1)),
+                ], account_revenue_original_domain
+        cls.account_revenue.domain = [['OR', ('kind', '=', 'other'),
+            account_revenue_original_domain[0]],
+            account_revenue_original_domain[1]]
+        account_expense_original_domain = cls.account_expense.domain
+        assert account_expense_original_domain == [
+                ('kind', '=', 'expense'),
+                ('company', '=', Eval('company', -1)),
+                ], account_expense_original_domain
+        cls.account_expense.domain = [['OR', ('kind', '=', 'other'),
+            account_expense_original_domain[0]],
+            account_expense_original_domain[1]]

@@ -110,7 +110,7 @@ def new_create_toolbar(self, toolbars):
                     })
 
     toolbar = old_toolbar(self, toolbars)
-    qbutton = gtk.ToolButton('tryton-preferences-system')
+    qbutton = gtk.ToolButton('tryton-settings')
     qbutton.set_label('Dev Edit...')
     qbutton.connect('clicked', lambda b: dev_edit())
     toolbar.insert(qbutton, -1)

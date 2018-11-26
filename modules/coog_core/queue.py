@@ -12,8 +12,9 @@ from trytond.cache import Cache
 from trytond.config import config
 
 from trytond.modules.coog_core import fields, model
+
 try:
-    import async.broker as async_broker
+    import coog_async.broker as async_broker
     if not config.getboolean('env', 'testing'):
         async_broker.set_module('celery')
         broker = async_broker.get_module()

@@ -219,9 +219,6 @@ Create invoice::
     >>> MoveLine = Model.get('account.move.line')
     >>> for line in [x for x in invoice.invoice.move.lines if x.account.kind ==
     ...         'receivable']:
-    ...     line._parent = None
-    ...     line._parent_field_name = None
-    ...     line._parent_name = None
     ...     create_payment.form.lines_to_pay.append(MoveLine(line.id))
     >>> create_payment.form.description = "test"
 
@@ -250,9 +247,6 @@ Create warning to simulate clicking yes::
     >>> MoveLine = Model.get('account.move.line')
     >>> for line in [x for x in invoice.invoice.move.lines if x.account.kind ==
     ...         'receivable']:
-    ...     line._parent = None
-    ...     line._parent_field_name = None
-    ...     line._parent_name = None
     ...     create_payment.form.lines_to_pay.append(MoveLine(line.id))
     >>> create_payment.form.description = "test"
 

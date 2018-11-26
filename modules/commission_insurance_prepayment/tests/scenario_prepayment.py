@@ -63,6 +63,14 @@ product = add_invoice_configuration(product, accounts)
 product = add_insurer_to_product(product)
 product.save()
 
+ProductCategory = Model.get('product.category')
+account_category = ProductCategory(name="Account Category")
+account_category.accounting = True
+account_category.account_expense = accounts['expense']
+account_category.account_revenue = accounts['revenue']
+account_category.code = 'account_category'
+account_category.save()
+
 # #Comment# #Create commission product
 Uom = Model.get('product.uom')
 Template = Model.get('product.template')
@@ -74,8 +82,7 @@ template.default_uom = unit
 template.type = 'service'
 template.list_price = Decimal(0)
 template.cost_price = Decimal(0)
-template.account_expense = accounts['expense']
-template.account_revenue = accounts['revenue']
+template.account_category = account_category
 template.products[0].code = 'commission_product'
 template.save()
 

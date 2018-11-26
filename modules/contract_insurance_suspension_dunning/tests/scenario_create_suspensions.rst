@@ -76,6 +76,12 @@ Create Fee::
     >>> dunning_fee_account.type = dunning_fee_kind
     >>> dunning_fee_account.company = company
     >>> dunning_fee_account.save()
+    >>> ProductCategory = Model.get('product.category')
+    >>> account_category_dunning = ProductCategory(name="Account Category Dunning")
+    >>> account_category_dunning.accounting = True
+    >>> account_category_dunning.account_revenue = dunning_fee_account
+    >>> account_category_dunning.code = 'account_category_waiting'
+    >>> account_category_dunning.save()
     >>> Product = Model.get('product.product')
     >>> Template = Model.get('product.template')
     >>> template = Template()
@@ -86,7 +92,7 @@ Create Fee::
     >>> template.type = 'service'
     >>> template.list_price = Decimal(0)
     >>> template.cost_price = Decimal(0)
-    >>> template.account_revenue = dunning_fee_account
+    >>> template.account_category = account_category_dunning
     >>> template.products[0].code = 'dunning_fee_product'
     >>> template.save()
     >>> product_product = template.products[0]

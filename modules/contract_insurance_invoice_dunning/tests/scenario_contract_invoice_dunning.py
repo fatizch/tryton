@@ -73,6 +73,14 @@ dunning_fee_account.type = dunning_fee_kind
 dunning_fee_account.company = company
 dunning_fee_account.save()
 Product = Model.get('product.product')
+
+ProductCategory = Model.get('product.category')
+account_category = ProductCategory(name="Account Category")
+account_category.accounting = True
+account_category.account_revenue = dunning_fee_account
+account_category.code = 'account_category'
+account_category.save()
+
 Template = Model.get('product.template')
 template = Template()
 Uom = Model.get('product.uom')
@@ -82,7 +90,7 @@ template.name = 'Dunning Fee Template'
 template.type = 'service'
 template.list_price = Decimal(0)
 template.cost_price = Decimal(0)
-template.account_revenue = dunning_fee_account
+template.account_category = account_category
 template.products[0].code = 'dunning_fee_product'
 template.save()
 product_product = template.products[0]
@@ -176,10 +184,10 @@ dunning.procedure == procedure
 # #Comment# #Process dunnning
 Wizard('account.dunning.process', [dunning]).execute('process')
 dunning.reload()
-dunning.state == 'done'
+dunning.state == 'waiting'
 # #Res# #True
 contract.dunning_status
-# #Res# #u'Reminder'
+# #Res# #'Reminder'
 dunning_contracts = Contract.find([('dunning_status', '=', 'Reminder')])
 len(dunning_contracts)
 # #Res# #1
@@ -194,7 +202,7 @@ dunning, = Dunning.find(['state', '=', 'draft'])
 # #Comment# #Process dunnning
 Wizard('account.dunning.process', [dunning]).execute('process')
 dunning.reload()
-dunning.state == 'done'
+dunning.state == 'waiting'
 # #Res# #True
 
 # #Comment# #Create dunnings at 90 days
@@ -207,7 +215,7 @@ dunning, = Dunning.find(['state', '=', 'draft'])
 # #Comment# #Process dunnning
 Wizard('account.dunning.process', [dunning]).execute('process')
 dunning.reload()
-dunning.state == 'done'
+dunning.state == 'waiting'
 # #Res# #True
 contract.status == 'hold'
 # #Res# #True
@@ -227,7 +235,7 @@ dunning = Dunning.find([('state', '=', 'draft')])[0]
 # #Comment# #Process dunnning
 Wizard('account.dunning.process', [dunning]).execute('process')
 dunning.reload()
-dunning.state == 'done'
+dunning.state == 'waiting'
 # #Res# #True
 contract.end_date == first_invoice.end
 # #Res# #True

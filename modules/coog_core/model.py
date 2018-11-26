@@ -40,7 +40,7 @@ from . import coog_sql
 from . import utils
 
 try:
-    import async.broker as async_broker
+    import coog_async.broker as async_broker
     if config.get('async', 'celery', default=None) is not None:
         async_broker.set_module('celery')
     elif config.get('async', 'rq', default=None) is not None:
@@ -849,7 +849,7 @@ class CoogDictSchema(DictSchemaMixin):
         for model_name, klass in Pool().iterobject():
             if not issubclass(klass, ModelSQL):
                 continue
-            if klass.table_query():
+            if klass.table_query:
                 continue
             for field_name, field in klass._fields.items():
                 if not isinstance(field, tryton_fields.Dict):
@@ -1270,7 +1270,7 @@ def order_data_stream(iterable, key_func, batch_size=None):
     batch_size = batch_size or Transaction().database.IN_MAX
     full_list.sort(key=lambda x: x[1])
 
-    for i in range(len(full_list) / batch_size + 1):
+    for i in range(len(full_list) // batch_size + 1):
         ids = [x[0] for x in full_list[i * batch_size:(i + 1) * batch_size]]
         if not ids:
             raise StopIteration

@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-
+import json
 import os
 
 from trytond.wizard import StateTransition, Button, StateView
@@ -68,7 +68,8 @@ class ImportProcess(model.CoogWizard):
             filepath = os.path.normpath(to_import.path)
             if not filepath or not to_import.to_install:
                 continue
-            with file_open(filepath, 'rb') as f_:
+            with file_open(filepath, 'r') as f_:
                 values = f_.read()
-                ExportImportMixin.import_json(str(values))
+                json_values = json.loads(values)
+                ExportImportMixin.import_json(json_values)
         return 'end'

@@ -11,6 +11,7 @@ from . import wizard
 from . import event
 from . import period
 from . import load_data
+from . import account
 
 
 def register():
@@ -31,6 +32,7 @@ def register():
         wizard.SelectTerm,
         event.EventTypeAction,
         period.Period,
+        account.Journal,
         module='account_invoice_cog', type_='model')
 
     Pool.register(

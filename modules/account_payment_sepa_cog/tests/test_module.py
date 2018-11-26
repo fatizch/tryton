@@ -63,7 +63,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         'Handle camt.054'
         message_file = os.path.join(os.path.dirname(__file__),
             '%s.xml' % flavor)
-        message = open(message_file).read()
+        message = None
+        with open(message_file, 'rb') as f:
+            message = f.read()
         namespace = self.Message().get_namespace(message)
         self.assertEqual(namespace,
             'urn:iso:std:iso:20022:tech:xsd:%s' % flavor)

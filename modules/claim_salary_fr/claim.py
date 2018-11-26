@@ -401,16 +401,18 @@ class ClaimService(metaclass=PoolMeta):
         Table = pool.get('table')
 
         def calculate_salary_range(salary, pmss):
-            salary_range = {'TA': 0, 'TB': 0, 'TC': 0}
+            salary_range = {'TA': Decimal(0), 'TB': Decimal(0),
+                'TC': Decimal(0)}
             salary_range['TA'] = min(pmss, salary)
             if salary > pmss:
-                salary_range['TB'] = min(3 * pmss, salary - pmss)
-                if salary > 4 * pmss:
-                    salary_range['TC'] = min(4 * pmss, salary - 4 * pmss)
+                salary_range['TB'] = min(Decimal(3) * pmss, salary - pmss)
+                if salary > Decimal(4) * pmss:
+                    salary_range['TC'] = min(Decimal(4) * pmss,
+                        salary - Decimal(4) * pmss)
             return salary_range
 
         pmss_table, = Table.search([('code', '=', 'pmss')])
-        salary_range = {'TA': 0, 'TB': 0, 'TC': 0}
+        salary_range = {'TA': Decimal(0), 'TB': Decimal(0), 'TC': Decimal(0)}
         salaries = self.claim.delivered_services[0].salary \
             if not current_salary else [current_salary]
         salary_mode = self.claim.delivered_services[0].salary_mode
@@ -445,10 +447,12 @@ class ClaimService(metaclass=PoolMeta):
                 if 'bonus' in salary_def:
                     # bonus are added only one time at the end
                     # and are not prorated
-                    bonus += getattr(cur_salary, salary_def, 0) or 0
+                    bonus += getattr(cur_salary, salary_def, Decimal(0)) \
+                        or Decimal(0)
                 elif in_period:
-                    salary_to_add = \
-                        (getattr(cur_salary, salary_def, 0) or 0)
+                    salary_to_add = getattr(
+                        cur_salary, salary_def, Decimal(0)
+                        ) or Decimal(0)
                     if salary_to_add:
                         if salary_mode != 'last_year':
                             pmss += TableCell.get(pmss_table,
@@ -463,13 +467,13 @@ class ClaimService(metaclass=PoolMeta):
         # Calculate monthly salary
         if salary_mode != 'last_year' and not current_salary and \
                 sum_prorata:
-            salary_to_use *= 12 / sum_prorata
-            pmss *= 12 / sum_prorata
+            salary_to_use *= Decimal(12) / sum_prorata
+            pmss *= Decimal(12) / sum_prorata
         salary_to_use += bonus
 
-        pmss = pmss.quantize(Decimal(1) / 10 ** self.currency_digits)
+        pmss = pmss.quantize(Decimal(1) / Decimal(10) ** self.currency_digits)
         salary_to_use = salary_to_use.quantize(Decimal(1) /
-            10 ** self.currency_digits)
+            Decimal(10) ** self.currency_digits)
 
         salary_to_use = self.apply_revaluation_if_needed(salary_to_use, args)
 

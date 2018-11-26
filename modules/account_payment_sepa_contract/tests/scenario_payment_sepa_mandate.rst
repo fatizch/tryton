@@ -424,9 +424,6 @@ payment)::
     >>> MoveLine = Model.get('account.move.line')
     >>> for line in [x for x in contract_invoice_2.invoice.move.lines
     ...         if x.account.kind == 'receivable']:
-    ...     line._parent = None
-    ...     line._parent_field_name = None
-    ...     line._parent_name = None
     ...     create_payment.form.lines_to_pay.append(MoveLine(line.id))
     >>> create_payment.form.description = "test"
     >>> create_payment.form.bank_account = mandate.account_number.account
@@ -577,7 +574,7 @@ with no sepa mandate::
     >>> launcher.form.batch = create_batch
     >>> launcher.form.treatment_date = \
     ...     contract_2_invoice_2.invoice.lines_to_pay[1].payment_date
-    >>> for i in xrange(0, len(launcher.form.parameters)):
+    >>> for i in range(0, len(launcher.form.parameters)):
     ...     if launcher.form.parameters[i].code == 'journal_methods':
     ...         launcher.form.parameters[i].value = 'sepa'
     ...     elif launcher.form.parameters[i].code == 'payment_kind':
@@ -614,7 +611,7 @@ Payment date on lines must be re-set and so on, the sepa_mandate::
     >>> process_batch, = IrModel.find([('model', '=', 'account.payment.process')])
     >>> launcher.form.batch = process_batch
     >>> launcher.form.treatment_date = future_date
-    >>> for i in xrange(0, len(launcher.form.parameters)):
+    >>> for i in range(0, len(launcher.form.parameters)):
     ...     if launcher.form.parameters[i].code == 'journal_methods':
     ...         launcher.form.parameters[i].value = 'sepa'
     ...     elif launcher.form.parameters[i].code == 'payment_kind':

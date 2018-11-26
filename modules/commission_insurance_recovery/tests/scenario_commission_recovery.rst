@@ -74,6 +74,13 @@ Create Broker Fee Account::
     >>> broker_fee_account.type = broker_fee_kind
     >>> broker_fee_account.company = company
     >>> broker_fee_account.save()
+    >>> ProductCategory = Model.get('product.category')
+    >>> account_category_fee = ProductCategory(name="Account Category Fee")
+    >>> account_category_fee.accounting = True
+    >>> account_category_fee.account_expense = Account(broker_fee_account.id)
+    >>> account_category_fee.account_revenue = Account(broker_fee_account.id)
+    >>> account_category_fee.code = 'account_category_1'
+    >>> account_category_fee.save()
 
 Create Broker Fee::
 
@@ -81,7 +88,7 @@ Create Broker Fee::
     >>> Template = Model.get('product.template')
     >>> template = Template()
     >>> template.name = 'Broker Fee Template'
-    >>> template.account_expense = broker_fee_account
+    >>> template.account_category = account_category_fee
     >>> template.list_price = Decimal(0)
     >>> template.cost_price = Decimal(0)
     >>> template.products[0].code = 'broker_fee_product'
@@ -97,6 +104,16 @@ Create Broker Fee::
     >>> broker_fee.product = product
     >>> broker_fee.broker_fee = True
     >>> broker_fee.save()
+
+Create Contract Fee::
+
+    >>> ProductCategory = Model.get('product.category')
+    >>> account_category = ProductCategory(name="Account Category")
+    >>> account_category.accounting = True
+    >>> account_category.account_expense = accounts['expense']
+    >>> account_category.account_revenue = accounts['revenue']
+    >>> account_category.code = 'account_category_2'
+    >>> account_category.save()
 
 Create Product::
 
@@ -119,8 +136,7 @@ Create commission product::
     >>> template.type = 'service'
     >>> template.list_price = Decimal(0)
     >>> template.cost_price = Decimal(0)
-    >>> template.account_expense = accounts['expense']
-    >>> template.account_revenue = accounts['revenue']
+    >>> template.account_category = account_category
     >>> template.products[0].code = 'commission_product'
     >>> template.save()
     >>> commission_product = template.products[0]

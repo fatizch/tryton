@@ -184,13 +184,13 @@ def duration_between(date1, date2, duration_unit):
     if duration_unit == 'day':
         return number_of_days_between(date1, date2)
     elif duration_unit == 'week':
-        return number_of_days_between(date1, date2) / 7
+        return number_of_days_between(date1, date2) // 7
     elif duration_unit in ['month', 'quarter', 'half_year']:
         res = number_of_months_between(date1, date2)
         if duration_unit == 'quarter':
-            return res / 3
+            return res // 3
         elif duration_unit == 'half_year':
-            return res / 6
+            return res // 6
         else:
             return res
     elif duration_unit == 'year':

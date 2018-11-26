@@ -34,6 +34,7 @@ def add_accounts(person, company):
     receivable_account.name = 'Account Receivable'
     receivable_account.code = 'account_receivable'
     receivable_account.kind = 'receivable'
+    receivable_account.party_required = True
     receivable_account.reconcile = True
     receivable_account.type = receivable_account_kind
     receivable_account.company = company
@@ -42,6 +43,7 @@ def add_accounts(person, company):
     payable_account.name = 'Account Payable'
     payable_account.code = 'account_payable'
     payable_account.kind = 'payable'
+    payable_account.party_required = True
     payable_account.type = payable_account_kind
     payable_account.company = company
     payable_account.save()

@@ -85,10 +85,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="account.menu_journal_configuration"/>
             <field name="group" ref="group_financial_read"/>
         </record>
-        <record model="ir.ui.menu-res.group" id="menu_journal_type_form_financial_read">
-            <field name="menu" ref="account.menu_journal_type_form"/>
-            <field name="group" ref="group_financial_read"/>
-        </record>
         <record model="ir.ui.menu-res.group" id="menu_journal_form_financial_read">
             <field name="menu" ref="account.menu_journal_form"/>
             <field name="group" ref="group_financial_read"/>
@@ -285,10 +281,6 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.ui.menu-res.group" id="menu_journal_configuration_financial_manage">
             <field name="menu" ref="account.menu_journal_configuration"/>
-            <field name="group" ref="group_financial_manage"/>
-        </record>
-        <record model="ir.ui.menu-res.group" id="menu_journal_type_form_financial_manage">
-            <field name="menu" ref="account.menu_journal_type_form"/>
             <field name="group" ref="group_financial_manage"/>
         </record>
         <record model="ir.ui.menu-res.group" id="menu_journal_form_financial_manage">
@@ -614,21 +606,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-        <record model="ir.model.access" id="access_account_journal_account">
-            <field name="model" search="[('model', '=', 'account.journal.account')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="access_account_journal_account_group_financial_manage">
-            <field name="model" search="[('model', '=', 'account.journal.account')]"/>
-            <field name="group" ref="group_financial_manage"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
-        </record>
         <record model="ir.model.access" id="access_account_journal_period">
             <field name="model" search="[('model', '=', 'account.journal.period')]"/>
             <field name="perm_read" eval="True"/>
@@ -654,21 +631,6 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.model.access" id="access_account_journal_sequence_group_financial_read">
             <field name="model" search="[('model', '=', 'account.journal.sequence')]"/>
             <field name="group" ref="group_financial_read"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
-        </record>
-        <record model="ir.model.access" id="access_account_journal_type">
-            <field name="model" search="[('model', '=', 'account.journal.type')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="access_account_journal_type_group_financial_manage">
-            <field name="model" search="[('model', '=', 'account.journal.type')]"/>
-            <field name="group" ref="group_financial_manage"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -1004,6 +966,21 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_writeoff_group_financial_manage">
+            <field name="model" search="[('model', '=', 'account.move.reconcile.write_off')]"/>
+            <field name="group" ref="group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_writeoff">
+            <field name="model" search="[('model', '=', 'account.move.reconcile.write_off')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.sequence.type-res.group"
             id="sequence_type_account_move_group_financial_manage">

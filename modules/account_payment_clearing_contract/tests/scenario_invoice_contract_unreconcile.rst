@@ -122,11 +122,19 @@ Create the account journal::
 
     >>> account_journal = AccountJournal(name='Statement',
     ...     type='statement',
-    ...     credit_account=cash,
-    ...     debit_account=cash,
-    ...     sequence=sequence
+    ...     sequence=sequence,
     ...     )
     >>> account_journal.save()
+    >>> WriteOff = Model.get('account.move.reconcile.write_off')
+    >>> journal_writeoff = Journal(name='Write-Off', code='SPLIT', type='write-off',
+    ...     sequence=sequence)
+    >>> journal_writeoff.save()
+    >>> writeoff = WriteOff()
+    >>> writeoff.name = 'Write Off'
+    >>> writeoff.journal = journal_writeoff
+    >>> writeoff.credit_account = cash
+    >>> writeoff.debit_account = cash
+    >>> writeoff.save()
 
 Create the statement journal::
 
@@ -134,6 +142,7 @@ Create the statement journal::
     ...     journal=account_journal,
     ...     validation='balance',
     ...     sequence=statement_sequence,
+    ...     account=cash,
     ...     process_method='cheque'
     ...     )
     >>> statement_journal.save()
@@ -245,6 +254,7 @@ There is an overdue of 80.00 which is set on the contract::
     >>> for line in [MoveLine(line_to_pay.id), MoveLine(overdue_line.id)]:
     ...     reconcile_wiz.form.lines.append(line)
     >>> reconcile_wiz.form.remaining_repartition_method = 'set_on_contract'
+    >>> reconcile_wiz.form.write_off = writeoff
     >>> reconcile_wiz.execute('reconcile')
     >>> invoices[0].state == 'paid'
     True
@@ -302,10 +312,8 @@ Unreconcile the statement line of 180. All reconciliations should::
     >>> unreconcile = Wizard('account.move.unreconcile_lines', [overdue_line])
     >>> invoices = [x.invoice for x in
     ...     ContractInvoice.find([('contract', '=', contract.id)])]
-    >>> invoices[0].state == 'posted'
-    True
-    >>> invoices[1].state == 'posted'
-    True
+    >>> assert invoices[0].state == 'posted', [x.state for x in invoices]
+    >>> assert invoices[1].state == 'posted', [x.state for x in invoices]
 
 Each line of the split move should be reconciliated together::
 

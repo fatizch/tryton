@@ -5,8 +5,8 @@ import redis
 from urllib.parse import urlparse
 from rq import Queue
 
-import async.config as config
-from async.tasks import tasks
+import coog_async.config as config
+from coog_async.tasks import tasks
 
 broker_url = os.environ.get('TRYTOND_ASYNC_RQ')
 assert broker_url, 'TRYTOND_ASYNC_RQ should be set'

@@ -94,12 +94,12 @@ Partially pay the line::
     >>> payment.amount = Decimal('30.0')
     >>> payment.click('approve')
     >>> payment.state
-    u'approved'
+    'approved'
     >>> process_payment = Wizard('account.payment.process', [payment])
     >>> process_payment.execute('pre_process')
     >>> payment.reload()
     >>> payment.state
-    u'processing'
+    'processing'
     >>> line.reload()
     >>> line.payment_amount
     Decimal('20.00')
@@ -112,11 +112,11 @@ Succeed payment::
     >>> succeed.form.date = first
     >>> succeed.execute('succeed')
     >>> payment.state
-    u'succeeded'
+    'succeeded'
     >>> payment.clearing_move.date == first
     True
     >>> payment.clearing_move.state
-    u'posted'
+    'posted'
     >>> payable.reload()
     >>> payable.balance
     Decimal('-20.00')

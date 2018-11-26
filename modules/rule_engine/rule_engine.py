@@ -286,9 +286,6 @@ class RuleEngineResult(object):
         return bool(self.errors)
 
     def __str__(self):
-        return str(self).encode('utf-8')
-
-    def __unicode__(self):
         result = '[' + self.print_result()
         result += ', [' + ', '.join(self.print_errors()) + ']'
         result += ', [' + ', '.join(self.print_warnings()) + ']'
@@ -298,8 +295,6 @@ class RuleEngineResult(object):
 
     def _format_for_print(self, data):
         if isinstance(data, str):
-            return str(data, 'utf8')
-        elif isinstance(data, str):
             return data
         else:
             return str(data)
@@ -2058,9 +2053,6 @@ class RuleError(model.CoogSQL, model.CoogView):
     arguments = fields.Char('Arguments')
 
     def __str__(self):
-        return str(self).encode('utf-8')
-
-    def __unicode__(self):
         return '[%s] %s' % (self.kind, self.name)
 
     @classmethod

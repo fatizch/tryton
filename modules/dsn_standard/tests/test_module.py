@@ -88,9 +88,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             "S20.G00.05.010,'01'",
             "S90.G00.90.001,'25'",
             "S90.G00.90.002,'1'"
-        ])
+        ]).encode('latin1')
 
-        for line, expected in zip(s.split('\n'), expected_file.split('\n')):
+        for line, expected in zip(s.split(b'\n'), expected_file.split(b'\n')):
             self.assertEqual(line, expected)
 
 

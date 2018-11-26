@@ -50,7 +50,7 @@ class Contract(metaclass=PoolMeta):
                 (line.reconciliation == Null))
             ).join(dunning, condition=(
                 (dunning.line == line.id) &
-                (dunning.state == 'done') &
+                (dunning.state == 'waiting') &
                 dunning.id.in_(active_clause))
             ).join(level, condition=(
                 dunning.level == level.id)
@@ -67,7 +67,7 @@ class Contract(metaclass=PoolMeta):
         result = {contract.id: '' for contract in contracts}
         dunnings = Dunning.search([
                 ('contract', 'in', [contract.id for contract in contracts]),
-                ('state', '=', 'done'),
+                ('state', '=', 'waiting'),
                 ('active', '=', True),
                 ])
         for dunning in dunnings:

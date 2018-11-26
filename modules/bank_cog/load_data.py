@@ -2,7 +2,6 @@
 # this repository contains the full copyright notices and license terms.
 import os
 import csv
-from io import BytesIO
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 from trytond.wizard import Wizard, StateView, Button, StateTransition
@@ -59,14 +58,16 @@ class BankDataSetWizard(Wizard):
 
     def read_resource_file(self):
         if self.configuration.use_default is True:
-            with open(self.configuration.data_file, 'rb') as _file:
-                data = BytesIO(_file.read())
+            with open(self.configuration.data_file, 'r') as _file:
+                reader = csv.DictReader(_file, delimiter=';')
+                for row in reader:
+                    yield row
         else:
-            data = BytesIO(self.configuration.resource)
+            data = self.configuration.resource
+            reader = csv.DictReader(data, delimiter=';')
+            for row in reader:
+                yield row
 
-        reader = csv.DictReader(data, delimiter=';')
-        for row in reader:
-            yield row
 
     def address_compare(self, address, bank_row, country):
         return ((not address.street and not bank_row['address_street'] or

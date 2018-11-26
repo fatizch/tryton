@@ -14,6 +14,7 @@ def register():
         wizard.InvoiceSlipParameters,
         account.MoveLine,
         account.Invoice,
+        account.Journal,
         batch.CreateEmptySlipBatch,
         batch.LinkSlipBatch,
         batch.FinalizeSlipBatch,

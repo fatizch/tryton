@@ -561,6 +561,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract = self.Contract(123)
         subscriber = self.Party(456)
         account = self.Account(789)
+
+        account.current = mock.MagicMock(return_value=account)
         contract.subscriber = subscriber
         contract.subscriber.account_receivable = account
 
@@ -767,10 +769,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
         line_payment_none.amount = -42
 
         def test_perfect(original_lines, expected):
-            for expected_item, result_item in zip(expected,
-                    MoveLine.reconcile_perfect_lines(original_lines)):
-                self.assertEqual(sorted(expected_item), sorted(result_item))
+            result_matched, result_unmatched = MoveLine.reconcile_perfect_lines(
+                original_lines)
+            expected_matched, expected_unmatched = expected
 
+            self.assertEqual(len(result_matched), len(expected_matched))
+            for result_match_group, expected_match_group in zip(result_matched,
+                    expected_matched):
+                self.assertEqual(
+                    set(result_match_group[0]), set(expected_match_group[0]))
+                self.assertEqual(result_match_group[1], expected_match_group[1])
+
+            self.assertEqual(set(result_unmatched), set(expected_unmatched))
         # Test non affected lines are not used, base is reconciled with
         # cancellation
         test_perfect(

@@ -24,22 +24,21 @@ class FLOW5(BankMobilityHandler):
                 message_id = element.text
             if tag.localname == 'Mod':
                 d = {}
-                d['message_id'] = str(message_id, 'utf-8')
-                d['modification_id'] = str(element.findtext('{*}Id') or '',
-                    'utf-8')
-                d['date_of_signature'] = str(element.findtext(
-                        '{*}AcctSwtchngRef/{*}DtOfSgntr') or '', "utf-8")
-                d['original_iban'] = str(element.findtext(
-                        '{*}OrgnlPtyAndAcctId/{*}Acct/{*}IBAN') or '', "utf-8")
-                d['original_bic'] = str(element.findtext(
-                        '{*}OrgnlPtyAndAcctId/{*}Agt/{*}FinInstnId/{*}BICFI')
-                    or '', "utf-8")
-                d['updated_iban'] = str(element.findtext(
-                        '{*}UpdtdPtyAndAcctId/{*}Acct/{*}IBAN') or '', "utf-8")
-                d['updated_bic'] = str(element.findtext(
-                        '{*}UpdtdPtyAndAcctId/{*}Agt/{*}FinInstnId/{*}BICFI')
-                    or '', "utf-8")
-                d['mandate_identification'] = [str(x.text, 'utf-8') for x in
+                d['message_id'] = message_id
+                d['modification_id'] = element.findtext('{*}Id') or ''
+                d['date_of_signature'] = element.findtext(
+                    '{*}AcctSwtchngRef/{*}DtOfSgntr') or ''
+                d['original_iban'] = element.findtext(
+                    '{*}OrgnlPtyAndAcctId/{*}Acct/{*}IBAN') or ''
+                d['original_bic'] = element.findtext(
+                        '{*}OrgnlPtyAndAcctId/{*}Agt/{*}FinInstnId/{*}BICFI') \
+                    or ''
+                d['updated_iban'] = element.findtext(
+                        '{*}UpdtdPtyAndAcctId/{*}Acct/{*}IBAN') or ''
+                d['updated_bic'] = element.findtext(
+                        '{*}UpdtdPtyAndAcctId/{*}Agt/{*}FinInstnId/{*}BICFI') \
+                    or ''
+                d['mandate_identification'] = [x.text for x in
                         element.findall('{*}TxRprt/{*}TxDtls/{*}Refs/{*}MndtId')
                         ]
                 result.append([d])

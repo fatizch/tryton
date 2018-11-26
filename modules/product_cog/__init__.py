@@ -9,10 +9,10 @@ def register():
     Pool.register(
         product.Product,
         product.Template,
-        product.TemplateAccount,
         product.Uom,
         product.Category,
         product.ProductCostPrice,
         product.ProductListPrice,
         product.ProductCostPriceMethod,
+        product.CategoryAccount,
         module='product_cog', type_='model')

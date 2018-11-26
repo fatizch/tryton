@@ -36,7 +36,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     def test0001_testFunctionalRuleCreation(self):
         fr = self.Lang.search([('name', '=', 'French')], limit=1)[0]
-
         te2 = self.RuleFunction()
         te2.language = fr
         te2.type = 'function'
@@ -116,7 +115,7 @@ return True'''
 
         tcv = self.TestCaseValue()
         tcv.name = 'date_de_naissance_souscripteur'
-        tcv.value = 'datetime.date(2000, 11, 02)'
+        tcv.value = 'datetime.date(2000, 11, 0o2)'
 
         tc = self.TestCase()
         tc.description = 'Test'
@@ -125,7 +124,7 @@ return True'''
 
         tcv1 = self.TestCaseValue()
         tcv1.name = 'date_de_naissance_souscripteur'
-        tcv1.value = 'datetime.date(1950, 11, 02)'
+        tcv1.value = 'datetime.date(1950, 11, 0o2)'
 
         tc1 = self.TestCase()
         tc1.description = 'Test1'

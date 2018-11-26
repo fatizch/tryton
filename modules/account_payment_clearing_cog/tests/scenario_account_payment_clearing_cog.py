@@ -11,7 +11,7 @@ from trytond.modules.company.tests.tools import get_company
 from trytond.modules.company_cog.tests.tools import create_company
 from trytond.modules.account.tests.tools import create_fiscalyear, \
     create_chart, get_accounts
-from.trytond.modules.account_invoice.tests.tools import \
+from trytond.modules.account_invoice.tests.tools import \
     set_fiscalyear_invoice_sequences
 today = datetime.date.today()
 
@@ -82,19 +82,19 @@ payment, = Payment.find()
 payment.amount = Decimal('30.0')
 payment.click('approve')
 payment.state
-# #Res# #u'approved'
+# #Res# #'approved'
 process_payment = Wizard('account.payment.process', [payment])
 process_payment.execute('pre_process')
 payment.reload()
 payment.state
-# #Res# #u'processing'
+# #Res# #'processing'
 
 # #Comment# #Succeed payment
 payment.click('succeed')
 payment.state
-# #Res# #u'succeeded'
+# #Res# #'succeeded'
 payment.clearing_move.state
-# #Res# #u'posted'
+# #Res# #'posted'
 clearing_move = payment.clearing_move
 payable.reload()
 payable.balance
@@ -107,7 +107,7 @@ payment.line.reconciliation
 # #Comment# #Fail payment
 payment.click('fail')
 payment.state
-# #Res# #u'failed'
+# #Res# #'failed'
 payment.clearing_move
 payment.line.reconciliation
 payable.reload()
@@ -119,4 +119,4 @@ bank_clearing.balance
 cancel_move, = Move.find([('origin', '=',
     'account.move,%s' % clearing_move.id)])
 cancel_move.state
-# #Res# #u'posted'
+# #Res# #'posted'

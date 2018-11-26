@@ -110,6 +110,7 @@ receivable_account.kind = 'receivable'
 receivable_account.reconcile = True
 receivable_account.type = receivable_account_kind
 receivable_account.company = company
+receivable_account.party_required = True
 receivable_account.save()
 payable_account = Account()
 payable_account.name = 'Account Payable'
@@ -117,6 +118,7 @@ payable_account.code = 'account_payable'
 payable_account.kind = 'payable'
 payable_account.type = payable_account_kind
 payable_account.company = company
+payable_account.party_required = True
 payable_account.save()
 receivable_account2 = Account()
 receivable_account2.name = 'Account Receivable 2'
@@ -125,19 +127,26 @@ receivable_account2.kind = 'receivable'
 receivable_account2.reconcile = True
 receivable_account2.type = receivable_account_kind
 receivable_account2.company = company
+receivable_account2.party_required = True
 receivable_account2.save()
 payable_account2 = Account()
 payable_account2.name = 'Account Payable 2'
 payable_account2.code = 'account_payable 2'
 payable_account2.kind = 'payable'
 payable_account2.type = payable_account_kind
+payable_account2.party_required = True
 payable_account2.company = company
 payable_account2.save()
 
 # #Comment# #Update cash journal
 journal_cash, = Journal.find([('code', '=', 'CASH')])
-journal_cash.debit_account = product_account
-journal_cash.save()
+PaymentMethod = Model.get('account.invoice.payment.method')
+payment_method = PaymentMethod()
+payment_method.name = 'Cash'
+payment_method.journal = journal_cash
+payment_method.credit_account = product_account
+payment_method.debit_account = product_account
+payment_method.save()
 
 # #Comment# #Create billing modes
 payment_term = PaymentTerm()
@@ -151,6 +160,15 @@ freq_monthly.frequency = 'monthly'
 freq_monthly.allowed_payment_terms.append(payment_term)
 freq_monthly.save()
 
+
+ProductCategory = Model.get('product.category')
+account_category_fee = ProductCategory(name="Account Category Fee")
+account_category_fee.accounting = True
+account_category_fee.account_expense = product_account
+account_category_fee.account_revenue = product_account
+account_category_fee.code = 'account_category_fee'
+account_category_fee.save()
+
 # #Comment# #Create Fee
 product_template = ProductTemplate()
 product_template.name = 'Fee'
@@ -159,8 +177,7 @@ product_template.type = 'service'
 product_template.default_uom = Uom(1)
 product_template.list_price = Decimal(1)
 product_template.cost_price = Decimal(0)
-product_template.account_expense = product_account
-product_template.account_revenue = product_account
+product_template.account_category = account_category_fee
 product_template.products[0].code = 'free_product'
 product_template.save()
 fee_product = product_template.products[0]
@@ -308,7 +325,7 @@ deposit.coverage == coverage
 # #Res# #True
 
 pay = Wizard('account.invoice.pay', [invoice])
-pay.form.journal = journal_cash
+pay.form.payment_method = payment_method
 pay.execute('choice')
 
 deposit.reload()

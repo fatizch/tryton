@@ -19,7 +19,7 @@ coog_celery_start() { # start workers - <concurrency> [queue,+]
     fi
     coog_env_bak "$out_file" "$pid" || return $?
     celery worker \
-        --app=async.broker_celery \
+        --app=coog_async.broker_celery \
         --queues="$queue" \
         --concurrency="$1" \
         --pidfile="$pid_file" \
@@ -52,7 +52,7 @@ coog_celery_pid() { # get pid
 }
 
 coog_celery_cli() { # celery cli wrapper - [celery args]
-    celery --app=async.broker_celery "$@"
+    celery --app=coog_async.broker_celery "$@"
 }
 
 coog_celery_info() { # print workers infos

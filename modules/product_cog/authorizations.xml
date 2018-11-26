@@ -41,6 +41,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.rule.group-res.group" id="rule_group_category_accounting-financial">
+            <field name="rule_group" ref="account_product.rule_group_category_accounting"/>
+            <field name="group" ref="account_cog.group_financial_manage"/>
+        </record>
         <record model="ir.model.access" id="access_product_configuration">
             <field name="model" search="[('model', '=', 'product.configuration')]"/>
             <field name="perm_read" eval="True"/>
@@ -120,14 +124,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-        <record model="ir.model.access" id="access_product_template_account_group_financial_manage">
-            <field name="model" search="[('model', '=', 'product.template.account')]"/>
-            <field name="group" ref="account_cog.group_financial_manage"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
-        </record>
         <!-- Default Product Access Rights -->
         <record model="ir.model.access" id="access_product_category">
             <field name="model" search="[('model', '=', 'product.category')]"/>
@@ -187,13 +183,6 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.model.access" id="access_product_category_account">
             <field name="model" search="[('model', '=', 'product.category.account')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="access_product_template_account">
-            <field name="model" search="[('model', '=', 'product.template.account')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>

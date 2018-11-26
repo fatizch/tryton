@@ -114,6 +114,7 @@ Create Account::
     >>> receivable_account.code = 'account_receivable'
     >>> receivable_account.kind = 'receivable'
     >>> receivable_account.reconcile = True
+    >>> receivable_account.party_required = True
     >>> receivable_account.type = receivable_account_kind
     >>> receivable_account.company = company
     >>> receivable_account.save()
@@ -123,11 +124,13 @@ Create Account::
     >>> payable_account.kind = 'payable'
     >>> payable_account.type = payable_account_kind
     >>> payable_account.company = company
+    >>> payable_account.party_required = True
     >>> payable_account.save()
     >>> receivable_account2 = Account()
     >>> receivable_account2.name = 'Account Receivable 2'
     >>> receivable_account2.code = 'account_receivable 2'
     >>> receivable_account2.kind = 'receivable'
+    >>> receivable_account2.party_required = True
     >>> receivable_account2.reconcile = True
     >>> receivable_account2.type = receivable_account_kind
     >>> receivable_account2.company = company
@@ -138,6 +141,7 @@ Create Account::
     >>> payable_account2.kind = 'payable'
     >>> payable_account2.type = payable_account_kind
     >>> payable_account2.company = company
+    >>> payable_account2.party_required = True
     >>> payable_account2.save()
     >>> Party = Model.get('party.party')
     >>> Address = Model.get('party.address')

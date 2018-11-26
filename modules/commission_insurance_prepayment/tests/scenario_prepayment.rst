@@ -70,6 +70,13 @@ Create Product::
     >>> product = add_invoice_configuration(product, accounts)
     >>> product = add_insurer_to_product(product)
     >>> product.save()
+    >>> ProductCategory = Model.get('product.category')
+    >>> account_category = ProductCategory(name="Account Category")
+    >>> account_category.accounting = True
+    >>> account_category.account_expense = accounts['expense']
+    >>> account_category.account_revenue = accounts['revenue']
+    >>> account_category.code = 'account_category'
+    >>> account_category.save()
 
 Create commission product::
 
@@ -83,8 +90,7 @@ Create commission product::
     >>> template.type = 'service'
     >>> template.list_price = Decimal(0)
     >>> template.cost_price = Decimal(0)
-    >>> template.account_expense = accounts['expense']
-    >>> template.account_revenue = accounts['revenue']
+    >>> template.account_category = account_category
     >>> template.products[0].code = 'commission_product'
     >>> template.save()
     >>> commission_product = template.products[0]
@@ -182,9 +188,9 @@ Check prepayment commission creation::
     >>> [(x.amount, x.commission_rate, x.is_prepayment, x.redeemed_prepayment,
     ...     x.base_amount, x.agent.party.name) for x in commissions] == [
     ...     (Decimal('720.0000'), Decimal('.6'), True, None, Decimal('1200.0000'),
-    ...         u'Broker'),
+    ...         'Broker'),
     ...     (Decimal('360.0000'), Decimal('.3'), True, None, Decimal('1200.0000'),
-    ...         u'Insurer')]
+    ...         'Insurer')]
     True
 
 Create invoices::
@@ -213,9 +219,9 @@ Validate first invoice commissions::
     >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     ...     x.agent.party.name) for x in line.commissions] == [
     ...     (Decimal('0.0000'), False, Decimal('60.0000'), Decimal('100.0000'),
-    ...         u'Broker'),
+    ...         'Broker'),
     ...     (Decimal('0.0000'), False, Decimal('30.0000'), Decimal('100.0000'),
-    ...         u'Insurer')]
+    ...         'Insurer')]
     True
 
 Validate last invoice of the year commissions::
@@ -227,9 +233,9 @@ Validate last invoice of the year commissions::
     >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     ...     x.agent.party.name) for x in line.commissions] == [
     ...     (Decimal('0.0000'), False, Decimal('60.0000'), Decimal('100.0000'),
-    ...         u'Broker'),
+    ...         'Broker'),
     ...     (Decimal('0.0000'), False, Decimal('30.0000'), Decimal('100.0000'),
-    ...         u'Insurer')]
+    ...         'Insurer')]
     True
 
 Validate first invoice of next year commissions::
@@ -241,9 +247,9 @@ Validate first invoice of next year commissions::
     >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     ...     x.agent.party.name) for x in line.commissions] == [
     ...     (Decimal('60.0000'), False, Decimal('0.0000'), Decimal('100.0000'),
-    ...         u'Broker'),
+    ...         'Broker'),
     ...     (Decimal('30.0000'), False, Decimal('0.0000'), Decimal('100.0000'),
-    ...         u'Insurer')]
+    ...         'Insurer')]
     True
 
 Generate insurer and broker invoice::
@@ -263,13 +269,13 @@ Cancel invoice::
     >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     ...     x.agent.party.name) for x in line.commissions] == [
     ...     (Decimal('0.0000'), False, Decimal('60.0000'), Decimal('100.0000'),
-    ...         u'Broker'),
+    ...         'Broker'),
     ...     (Decimal('0.0000'), False, Decimal('30.0000'), Decimal('100.0000'),
-    ...         u'Insurer'),
+    ...         'Insurer'),
     ...     (Decimal('0.0000'), False, Decimal('-30.0000'), Decimal('-100.0000'),
-    ...         u'Insurer'),
+    ...         'Insurer'),
     ...     (Decimal('0.0000'), False, Decimal('-60.0000'), Decimal('-100.0000'),
-    ...         u'Broker')]
+    ...         'Broker')]
     True
 
 Terminate Contract::
@@ -293,10 +299,10 @@ Check commission once terminated::
     >>> commissions = Commission.find([('is_prepayment', '=', True)],
     ...     order=[('create_date', 'ASC')])
     >>> [(x.amount, x.base_amount, x.agent.party.name) for x in commissions] == [
-    ...     (Decimal('360.00000000'), Decimal('1200.0000'), u'Insurer'),
-    ...     (Decimal('720.00000000'), Decimal('1200.0000'), u'Broker'),
-    ...     (Decimal('-300.00000000'), Decimal('-500.0000'), u'Broker'),
-    ...     (Decimal('-150.00000000'), Decimal('-500.0000'), u'Insurer')]
+    ...     (Decimal('360.00000000'), Decimal('1200.0000'), 'Insurer'),
+    ...     (Decimal('720.00000000'), Decimal('1200.0000'), 'Broker'),
+    ...     (Decimal('-300.00000000'), Decimal('-500.0000'), 'Broker'),
+    ...     (Decimal('-150.00000000'), Decimal('-500.0000'), 'Insurer')]
     True
 
 Reactivate Contract::
@@ -305,12 +311,12 @@ Reactivate Contract::
     >>> commissions = Commission.find([('is_prepayment', '=', True)],
     ...     order=[('create_date', 'ASC')])
     >>> [(x.amount, x.base_amount, x.agent.party.name) for x in commissions] == [
-    ...     (Decimal('360.00000000'), Decimal('1200.0000'), u'Insurer'),
-    ...     (Decimal('720.00000000'), Decimal('1200.0000'), u'Broker'),
-    ...     (Decimal('-300.00000000'), Decimal('-500.0000'), u'Broker'),
-    ...     (Decimal('-150.00000000'), Decimal('-500.0000'), u'Insurer'),
-    ...     (Decimal('300.00000000'), Decimal('500.0000'), u'Broker'),
-    ...     (Decimal('150.00000000'), Decimal('500.0000'), u'Insurer')]
+    ...     (Decimal('360.00000000'), Decimal('1200.0000'), 'Insurer'),
+    ...     (Decimal('720.00000000'), Decimal('1200.0000'), 'Broker'),
+    ...     (Decimal('-300.00000000'), Decimal('-500.0000'), 'Broker'),
+    ...     (Decimal('-150.00000000'), Decimal('-500.0000'), 'Insurer'),
+    ...     (Decimal('300.00000000'), Decimal('500.0000'), 'Broker'),
+    ...     (Decimal('150.00000000'), Decimal('500.0000'), 'Insurer')]
     True
 
 Add new premium version::
@@ -357,9 +363,9 @@ Check invoice amount and commission::
     >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     ...     x.agent.party.name) for x in last_year_invoice.lines[0].commissions] == [
     ...     (Decimal('18.0000'), False, Decimal('48.0000'), Decimal('110.0000'),
-    ...         u'Broker'),
+    ...         'Broker'),
     ...     (Decimal('9.0000'), False, Decimal('24.0000'), Decimal('110.0000'),
-    ...         u'Insurer')]
+    ...         'Insurer')]
     True
     >>> last_invoice, = Invoice.find([
     ...         ('start', '=', datetime.date(2016, 1, 1)),
@@ -368,9 +374,9 @@ Check invoice amount and commission::
     >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     ...     x.agent.party.name) for x in last_invoice.lines[0].commissions] == [
     ...     (Decimal('66.0000'), False, Decimal('0.0000'), Decimal('110.0000'),
-    ...         u'Broker'),
+    ...         'Broker'),
     ...     (Decimal('33.0000'), False, Decimal('0.0000'), Decimal('110.0000'),
-    ...         u'Insurer')]
+    ...         'Insurer')]
     True
 
 Terminate Contract::
@@ -388,12 +394,12 @@ Check commission once terminated::
     >>> commissions = Commission.find([('is_prepayment', '=', True)])
     >>> sorted([(x.amount, x.base_amount, x.agent.party.name) for x in commissions]) \
     ...     == [
-    ...     (Decimal('-300.00000000'), Decimal('-500.0000'), u'Broker'),
-    ...     (Decimal('-150.00000000'), Decimal('-500.0000'), u'Insurer'),
-    ...     (Decimal('-48.00000000'), Decimal('-80.0000'), u'Broker'),
-    ...     (Decimal('-24.00000000'), Decimal('-80.0000'), u'Insurer'),
-    ...     (Decimal('150.00000000'), Decimal('500.0000'), u'Insurer'),
-    ...     (Decimal('300.00000000'), Decimal('500.0000'), u'Broker'),
-    ...     (Decimal('360.00000000'), Decimal('1200.0000'), u'Insurer'),
-    ...     (Decimal('720.00000000'), Decimal('1200.0000'), u'Broker')]
+    ...     (Decimal('-300.00000000'), Decimal('-500.0000'), 'Broker'),
+    ...     (Decimal('-150.00000000'), Decimal('-500.0000'), 'Insurer'),
+    ...     (Decimal('-48.00000000'), Decimal('-80.0000'), 'Broker'),
+    ...     (Decimal('-24.00000000'), Decimal('-80.0000'), 'Insurer'),
+    ...     (Decimal('150.00000000'), Decimal('500.0000'), 'Insurer'),
+    ...     (Decimal('300.00000000'), Decimal('500.0000'), 'Broker'),
+    ...     (Decimal('360.00000000'), Decimal('1200.0000'), 'Insurer'),
+    ...     (Decimal('720.00000000'), Decimal('1200.0000'), 'Broker')]
     True

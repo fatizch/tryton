@@ -9,43 +9,44 @@ _coog_dep_proxy() {
 
 coog_dep_main() { # install base deps
         pip install $(_coog_dep_proxy) "$@" \
-                "pyflakes==1.6.0" \
-                "dateutils==0.6.6" \
-                "lxml==3.8.0" \
-                "python-sql==0.9" \
-                "psycopg2==2.7.3.1" \
-                "polib==1.0.8" \
-                "Genshi==0.7" \
-                "relatorio==0.7.0" \
-                "pydot==1.2.3" \
-                "pyparsing==2.2.0" \
-                "python-stdnum==1.6" \
-                "unidecode==0.4.21" \
-                "argcomplete==1.9.2" \
-                "num2words==0.5.5" \
-                "intervaltree==2.1.0" \
-                "filelock==2.0.12" \
-                "wrapt==1.10.11" \
-                "ipaddress==1.0.22" \
-                "werkzeug==0.12.2" \
-                "Mock==2.0.0" \
-                "simpleeval==0.9.5" \
-                "ldap3==2.5.1" \
-                "requests==2.18.4" \
-                "chardet==3.0.4" \
-                "vobject==0.9.5" \
-                "raven==6.1.0" \
-                "redis==2.10.6" \
-                "hiredis==0.2.0" \
-                "msgpack-python==0.4.8" \
-                "uwsgi==2.0.15" \
-                "rq==0.8.2" \
-                "celery==4.1.0" \
-                "sphinx==1.6.4" \
-                "sphinxcontrib-inheritance==0.9.0" \
-                "sphinxprettysearchresults==0.3.2" \
-                "sphinx-rtd-theme==0.2.4" \
-                "pytest==3.2.2"\
-                "python-magic==0.4.15" \
-                "phonenumbers==8.9.10"
+                "pyflakes" \
+                "dateutils" \
+                "lxml" \
+                "python-sql" \
+                "psycopg2-binary" \
+                "polib" \
+                "Genshi" \
+                "relatorio" \
+                "pydot" \
+                "pyparsing" \
+                "python-stdnum" \
+                "unidecode" \
+                "argcomplete" \
+                "num2words" \
+                "intervaltree" \
+                "filelock" \
+                "wrapt" \
+                "ipaddress" \
+                "werkzeug" \
+                "Mock" \
+                "simpleeval" \
+                "ldap3" \
+                "requests" \
+                "chardet" \
+                "vobject" \
+                "raven" \
+                "redis" \
+                "hiredis" \
+                "msgpack-python" \
+                "uwsgi" \
+                "rq" \
+                "celery" \
+                "sphinx" \
+                "sphinxcontrib-inheritance" \
+                "sphinxprettysearchresults" \
+                "sphinx-rtd-theme" \
+                "pytest"\
+                "python-magic" \
+                "phonenumbers" \
+                "passlib"
 }

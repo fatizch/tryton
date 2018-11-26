@@ -1403,6 +1403,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="code">4117</field>
             <field name="kind">receivable</field>
             <field name="reconcile" eval="True"/>
+            <field name="party_required" eval="True"/>
             <field name="type" ref="Comptes_de_tiers_et_de_regularisation"/>
             <field name="parent" ref="PCA_411"/>
         </record>
@@ -3736,6 +3737,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="code">4117</field>
             <field name="kind">receivable</field>
             <field name="reconcile" eval="True"/>
+            <field name="party_required" eval="True"/>
             <field name="type" ref="Comptes_de_tiers"/>
             <field name="parent" ref="PCS_411"/>
         </record>
@@ -3758,6 +3760,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="code">467</field>
             <field name="kind">payable</field>
             <field name="reconcile" eval="True"/>
+            <field name="party_required" eval="True"/>
             <field name="type" ref="Comptes_de_tiers"/>
             <field name="parent" ref="PCS_46"/>
         </record>

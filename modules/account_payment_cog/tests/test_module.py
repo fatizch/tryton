@@ -27,7 +27,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'Currency': 'currency.currency',
             'MoveLine': 'account.move.line',
             'Journal': 'account.journal',
-            'JournalType': 'account.journal.type',
             'PaymentJournal': 'account.payment.journal',
             'Payment': 'account.payment',
             'Party': 'party.party',
@@ -61,13 +60,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         'post_move_sequence': sequence.id,
                         }])
             self.FiscalYear.create_period([fiscalyear])
-            journal_type, = self.JournalType.create([{
-                        'name': 'Revenue',
-                        'code': 'REV',
-                        }])
             journal_revenue, = self.Journal.create([{
                         'name': 'Revenue',
-                        'type': 'REV',
+                        'type': 'revenue',
                         'sequence': sequence_journal.id,
                         }])
             account_kind_receivable, = self.AccountType.create([{

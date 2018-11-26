@@ -98,6 +98,7 @@ receivable_account.name = 'Account Receivable'
 receivable_account.code = 'account_receivable'
 receivable_account.kind = 'receivable'
 receivable_account.reconcile = True
+receivable_account.party_required = True
 receivable_account.type = receivable_account_kind
 receivable_account.company = company
 receivable_account.save()
@@ -105,6 +106,7 @@ payable_account = Account()
 payable_account.name = 'Account Payable'
 payable_account.code = 'account_payable'
 payable_account.kind = 'payable'
+payable_account.party_required = True
 payable_account.type = payable_account_kind
 payable_account.company = company
 payable_account.save()

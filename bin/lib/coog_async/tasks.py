@@ -1,6 +1,6 @@
 import logging
 import datetime
-import async.broker as async_broker
+import coog_async.broker as async_broker
 from psycopg2.extensions import TransactionRollbackError
 from psycopg2 import OperationalError as DatabaseOperationalError
 

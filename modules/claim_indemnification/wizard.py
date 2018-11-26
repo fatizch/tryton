@@ -604,7 +604,7 @@ class IndemnificationRegularisation(model.CoogView):
 
     @fields.depends('remaining_amount')
     def on_change_with_payback_required(self):
-        return self.remaining_amount < 0
+        return (self.remaining_amount or -1) < 0
 
     @fields.depends('payback_method', 'payback_required')
     def on_change_with_payment_term_required(self):

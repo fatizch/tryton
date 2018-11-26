@@ -47,7 +47,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <menuitem name="Indemnification Control Rule" parent="claim.menu_claim_configuration"
               id="menu_indemnification_control_rule" action="act_indemnification_control_rule"
-              icon="tryton-preferences"/>
+              icon="tryton-settings"/>
         <record model="ir.model.button" id="claim_indemnification_modify_indemnification_button">
             <field name="name">modify_indemnification</field>
             <field name="model" search="[('model', '=', 'claim.indemnification')]"/>

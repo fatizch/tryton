@@ -67,11 +67,9 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
             return []
         all_elements = []
         for file_name, file_path in files:
-            with codecs.open(file_path, 'r') as _file:
-                source = _file.read()
-                f = BytesIO(source)
+            with codecs.open(file_path, 'rb') as _file:
                 handler = cls.get_file_handler()
-                all_elements.extend(handler.handle_file(f))
+                all_elements.extend(handler.handle_file(_file))
         cls.archive_treated_files(files, archive, utils.today())
         return all_elements
 

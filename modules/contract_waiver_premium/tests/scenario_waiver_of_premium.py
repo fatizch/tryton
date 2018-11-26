@@ -135,6 +135,7 @@ receivable_account = Account()
 receivable_account.name = 'Account Receivable'
 receivable_account.code = 'account_receivable'
 receivable_account.kind = 'receivable'
+receivable_account.party_required = True
 receivable_account.reconcile = True
 receivable_account.type = receivable_account_kind
 receivable_account.company = company
@@ -144,6 +145,7 @@ payable_account = Account()
 payable_account.name = 'Account Payable'
 payable_account.code = 'account_payable'
 payable_account.kind = 'payable'
+payable_account.party_required = True
 payable_account.type = payable_account_kind
 payable_account.company = company
 payable_account.save()
@@ -166,6 +168,7 @@ payable_account_insurer.name = 'Account Payable Insurer'
 payable_account_insurer.code = 'account_payable_insurer'
 payable_account_insurer.kind = 'other'
 payable_account_insurer.type = other_account_kind
+payable_account_insurer.party_required = True
 payable_account_insurer.company = company
 payable_account_insurer.save()
 
@@ -349,12 +352,12 @@ all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
     key=lambda x: x.invoice.start)
 AccountInvoice.post([all_invoices[0].invoice.id], config.context)
 all_invoices[0].invoice.state
-# #Res# #u'posted'
+# #Res# #'posted'
 all_invoices[0].invoice.total_amount
 # #Res# #Decimal('155.00')
 AccountInvoice.post([all_invoices[1].invoice.id], config.context)
 all_invoices[1].invoice.state
-# #Res# #u'posted'
+# #Res# #'posted'
 all_invoices[1].invoice.total_amount
 # #Res# #Decimal('155.00')
 
@@ -374,11 +377,11 @@ all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
 all_invoices[0].invoice.total_amount == 100
 # #Res# #True
 all_invoices[0].invoice.state
-# #Res# #u'posted'
+# #Res# #'posted'
 all_invoices[1].invoice.total_amount == 100
 # #Res# #True
 all_invoices[1].invoice.state
-# #Res# #u'posted'
+# #Res# #'posted'
 all([(x.invoice.total_amount, x.invoice.state) == (100, 'posted')
     for x in all_invoices[2:]])
 # #Res# #True

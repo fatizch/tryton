@@ -11,5 +11,5 @@ data = sys.stdin.read()
 
 buf = StringIO(data)
 config = ConfigParser()
-config.readfp(buf)
-print((config.get(SECTION, OPTION)))
+config.read_file(buf)
+print(config.get(SECTION, OPTION))

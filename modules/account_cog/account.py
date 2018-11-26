@@ -1,7 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from sql import Null
+import datetime
+from sql import Null, Table
 
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
 from trytond.transaction import Transaction
@@ -119,6 +121,57 @@ class Journal(export.ExportImportMixin):
     __name__ = 'account.journal'
     _func_key = 'code'
     _get_default_journal_cache = Cache('get_default_journal')
+
+    @classmethod
+    def __setup__(cls):
+        super(Journal, cls).__setup__()
+        cls.type.selection.append(('split', "Split"))
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(Journal, cls).__register__(module_name)
+
+        # Migration from 4.8 : create a write-off method for each journal
+        # of type 'write-off'
+        TableHandler = backend.get('TableHandler')
+        if not TableHandler.table_exist('account_journal_account'):
+            return
+        journal = cls.__table__()
+        write_off_method = Table('account_move_reconcile_write_off')
+        journal_account = Table('account_journal_account')
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*write_off_method.select(write_off_method.id))
+        res = list(cursor.fetchall())
+        if res:
+            return
+        cursor.execute(*journal_account.join(journal,
+                condition=((journal_account.journal == journal.id) & (
+                        journal.type == 'write-off'))
+                ).select(
+                    journal_account.company,
+                    journal.name,
+                    journal_account.journal,
+                    journal_account.credit_account,
+                    journal_account.debit_account))
+        res = cursor.fetchall()
+        now = datetime.datetime.now()
+        write_off_method_insert_cols = [
+            write_off_method.company,
+            write_off_method.name,
+            write_off_method.journal,
+            write_off_method.credit_account,
+            write_off_method.debit_account,
+            write_off_method.create_uid,
+            write_off_method.create_date,
+            write_off_method.active,
+        ]
+        for company, journal_name, journal, credit_account, \
+                debit_account in res:
+            cursor.execute(*write_off_method.insert(
+                    write_off_method_insert_cols, [[company, journal_name,
+                            journal, credit_account, debit_account, 0, now,
+                            True]]))
+        # End of migration from 4.8
 
     @classmethod
     def _export_skips(cls):

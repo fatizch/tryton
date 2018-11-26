@@ -1,7 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import os
-from io import BytesIO
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 from trytond.wizard import Wizard, StateTransition, StateView, Button
@@ -56,11 +55,12 @@ class HexaPostSetWizard(Wizard):
     def transition_set_(self):
         Zip = Pool().get('country.zip')
         if self.configuration.use_default:
-            with open(self.configuration.data_file, 'rb') as _file:
+            with open(self.configuration.data_file, 'r',
+                    encoding='latin-1') as _file:
                 data = HexaPostLoader.get_hexa_post_data_from_file(_file)
         else:
             data = HexaPostLoader.get_hexa_post_data_from_file(
-                BytesIO(self.configuration.resource))
+                self.configuration.resource)
         to_create, to_write = HexaPostLoader.get_hexa_post_updates(data)
         if to_create:
             Zip.create(to_create)

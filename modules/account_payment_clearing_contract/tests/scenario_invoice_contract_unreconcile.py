@@ -125,17 +125,27 @@ statement_sequence.save()
 # #Comment# #Create the account journal
 account_journal = AccountJournal(name='Statement',
     type='statement',
-    credit_account=cash,
-    debit_account=cash,
-    sequence=sequence
+    sequence=sequence,
     )
 account_journal.save()
+
+WriteOff = Model.get('account.move.reconcile.write_off')
+journal_writeoff = Journal(name='Write-Off', code='SPLIT', type='write-off',
+    sequence=sequence)
+journal_writeoff.save()
+writeoff = WriteOff()
+writeoff.name = 'Write Off'
+writeoff.journal = journal_writeoff
+writeoff.credit_account = cash
+writeoff.debit_account = cash
+writeoff.save()
 
 # #Comment# #Create the statement journal
 statement_journal = StatementJournal(name='Test',
     journal=account_journal,
     validation='balance',
     sequence=statement_sequence,
+    account=cash,
     process_method='cheque'
     )
 statement_journal.save()
@@ -251,6 +261,7 @@ for line in [MoveLine(line_to_pay.id), MoveLine(overdue_line.id)]:
     reconcile_wiz.form.lines.append(line)
 
 reconcile_wiz.form.remaining_repartition_method = 'set_on_contract'
+reconcile_wiz.form.write_off = writeoff
 reconcile_wiz.execute('reconcile')
 invoices[0].state == 'paid'
 # #Res# #True
@@ -306,10 +317,8 @@ ContractInvoice = Model.get('contract.invoice')
 unreconcile = Wizard('account.move.unreconcile_lines', [overdue_line])
 invoices = [x.invoice for x in
     ContractInvoice.find([('contract', '=', contract.id)])]
-invoices[0].state == 'posted'
-# #Res# #True
-invoices[1].state == 'posted'
-# #Res# #True
+assert invoices[0].state == 'posted', [x.state for x in invoices]
+assert invoices[1].state == 'posted', [x.state for x in invoices]
 
 # #Comment# #Each line of the split move should be reconciliated together
 # #Comment# # be deleted

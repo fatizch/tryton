@@ -7,7 +7,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- # Menu # -->
         <!-- ######## -->
         <menuitem name="Document" id="menu_document" sequence="15" icon="document"/>
-        <menuitem name="Configuration" parent="menu_document" id="menu_document_configuration" sequence="100" icon="tryton-preferences"/>
+        <menuitem name="Configuration" parent="menu_document" id="menu_document_configuration" sequence="100" icon="tryton-settings"/>
         <!-- ######################## -->
         <!-- # Document Description # -->
         <!-- ######################## -->

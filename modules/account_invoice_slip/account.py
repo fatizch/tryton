@@ -13,6 +13,7 @@ from trytond.modules.coog_core import fields, utils
 __all__ = [
     'MoveLine',
     'Invoice',
+    'Journal',
     ]
 
 
@@ -146,3 +147,13 @@ class Invoice(metaclass=PoolMeta):
             move.lines = lines
             moves.append(move)
         return moves
+
+
+class Journal(metaclass=PoolMeta):
+    __name__ = 'account.journal'
+
+    @classmethod
+    def __setup__(cls):
+        super(Journal, cls).__setup__()
+        cls.type.selection.append(
+            ('principal_line_reset', 'Principal Line Reset'))

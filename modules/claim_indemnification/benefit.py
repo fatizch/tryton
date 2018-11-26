@@ -106,7 +106,7 @@ class Benefit(metaclass=PoolMeta):
 
     def get_benefit_accounts(self):
         return list({x.account_expense_used for x in self.products
-            if x.account_expense and x.account_expense_used})
+                if x.account_expense_used})
 
     @staticmethod
     def default_indemnification_kind():

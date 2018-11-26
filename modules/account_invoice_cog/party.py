@@ -26,10 +26,11 @@ class Party(metaclass=PoolMeta):
         original_domain = cls.account_payable.domain
         assert original_domain == [
                 ('kind', '=', 'payable'),
+                ('party_required', '=', True),
                 ('company', '=', Eval('context', {}).get('company', -1)),
-                ]
+                ], original_domain
         cls.account_payable.domain = [['OR', ('kind', '=', 'other'),
-                original_domain[0]], original_domain[1]]
+                original_domain[0]], original_domain[1], original_domain[2]]
 
 
 class PartyPaymentTerm(export.ExportImportMixin, metaclass=PoolMeta):
@@ -45,7 +46,8 @@ class PartyAccount(metaclass=PoolMeta):
         original_domain = cls.account_payable.domain
         assert original_domain == [
                ('kind', '=', 'payable'),
+               ('party_required', '=', True),
                ('company', '=', Eval('context', {}).get('company', -1)),
-               ]
+               ], original_domain
         cls.account_payable.domain = [['OR', ('kind', '=', 'other'),
-                original_domain[0]], original_domain[1]]
+                original_domain[0]], original_domain[1], original_domain[2]]

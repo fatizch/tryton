@@ -74,6 +74,17 @@ for coverage in product.coverages:
 product = add_insurer_to_product(product)
 product.save()
 
+expense = accounts['expense']
+revenue = accounts['revenue']
+
+ProductCategory = Model.get('product.category')
+account_category = ProductCategory(name="Account Category Waiting")
+account_category.accounting = True
+account_category.account_expense = expense
+account_category.account_revenue = revenue
+account_category.code = 'account_category'
+account_category.save()
+
 # #Comment# #Create commission product
 Product = Model.get('product.product')
 Template = Model.get('product.template')
@@ -86,8 +97,7 @@ template.default_uom = unit
 template.type = 'service'
 template.list_price = Decimal(0)
 template.cost_price = Decimal(0)
-template.account_expense = accounts['expense']
-template.account_revenue = accounts['revenue']
+template.account_category = account_category
 template.products[0].code = 'commission_product'
 template.save()
 commission_product = template.products[0]
@@ -192,10 +202,18 @@ set([(x.amount, x.agent.party.name) for x in line.commissions]) == set([
 Account = Model.get('account.account')
 Journal = Model.get('account.journal')
 cash_journal, = Journal.find([('type', '=', 'cash')])
-cash_journal.debit_account, = Account.find(['name', '=', 'Main Cash'])
-cash_journal.save()
+account_cash = accounts['cash']
+
+PaymentMethod = Model.get('account.invoice.payment.method')
+payment_method = PaymentMethod()
+payment_method.name = 'Cash'
+payment_method.journal = cash_journal
+payment_method.credit_account = account_cash
+payment_method.debit_account = account_cash
+payment_method.save()
+
 pay = Wizard('account.invoice.pay', [first_invoice.invoice])
-pay.form.journal = cash_journal
+pay.form.payment_method = payment_method
 pay.execute('choice')
 
 # #Comment# #Create insurer commission invoice
@@ -217,8 +235,7 @@ MoveLine.find([('principal_invoice_line', 'in', [x.id for x in invoice.lines])])
 # #Res# #[]
 
 # #Comment# #Recreate insurer commission invoice
-agent.party._parent = None
-agent.party._parent_field_name = None
+agent.reload()
 Invoice = Model.get('account.invoice')
 create_invoice = Wizard('commission.create_invoice_principal')
 create_invoice.form.insurers.append(agent.party)
@@ -233,11 +250,10 @@ invoice.click('post')
 # #Comment# #Cancel Invoice
 Contract.first_invoice([contract.id], config.context)
 first_invoice.invoice.state
-# #Res# #u'cancel'
+# #Res# #'cancel'
 
 # #Comment# #Create commission invoice
-agent.party._parent = None
-agent.party._parent_field_name = None
+agent.reload()
 Invoice = Model.get('account.invoice')
 create_invoice = Wizard('commission.create_invoice_principal')
 create_invoice.form.insurers.append(agent.party)

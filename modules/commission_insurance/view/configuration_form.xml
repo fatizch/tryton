@@ -2,7 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/separator[@id='product']" position="before">
+    <xpath expr="/form/separator[@id='category']" position="before">
         <newline/>
         <separator id="commission" string="Commission" colspan="4"/>
         <label name="broker_bank_transfer_journal"/>

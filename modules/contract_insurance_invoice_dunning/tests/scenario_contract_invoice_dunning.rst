@@ -79,6 +79,12 @@ Create Fee::
     >>> dunning_fee_account.company = company
     >>> dunning_fee_account.save()
     >>> Product = Model.get('product.product')
+    >>> ProductCategory = Model.get('product.category')
+    >>> account_category = ProductCategory(name="Account Category")
+    >>> account_category.accounting = True
+    >>> account_category.account_revenue = dunning_fee_account
+    >>> account_category.code = 'account_category'
+    >>> account_category.save()
     >>> Template = Model.get('product.template')
     >>> template = Template()
     >>> Uom = Model.get('product.uom')
@@ -88,7 +94,7 @@ Create Fee::
     >>> template.type = 'service'
     >>> template.list_price = Decimal(0)
     >>> template.cost_price = Decimal(0)
-    >>> template.account_revenue = dunning_fee_account
+    >>> template.account_category = account_category
     >>> template.products[0].code = 'dunning_fee_product'
     >>> template.save()
     >>> product_product = template.products[0]
@@ -186,10 +192,10 @@ Process dunnning::
 
     >>> Wizard('account.dunning.process', [dunning]).execute('process')
     >>> dunning.reload()
-    >>> dunning.state == 'done'
+    >>> dunning.state == 'waiting'
     True
     >>> contract.dunning_status
-    u'Reminder'
+    'Reminder'
     >>> dunning_contracts = Contract.find([('dunning_status', '=', 'Reminder')])
     >>> len(dunning_contracts)
     1
@@ -206,7 +212,7 @@ Process dunnning::
 
     >>> Wizard('account.dunning.process', [dunning]).execute('process')
     >>> dunning.reload()
-    >>> dunning.state == 'done'
+    >>> dunning.state == 'waiting'
     True
 
 Create dunnings at 90 days::
@@ -221,7 +227,7 @@ Process dunnning::
 
     >>> Wizard('account.dunning.process', [dunning]).execute('process')
     >>> dunning.reload()
-    >>> dunning.state == 'done'
+    >>> dunning.state == 'waiting'
     True
     >>> contract.status == 'hold'
     True
@@ -242,7 +248,7 @@ Process dunnning::
 
     >>> Wizard('account.dunning.process', [dunning]).execute('process')
     >>> dunning.reload()
-    >>> dunning.state == 'done'
+    >>> dunning.state == 'waiting'
     True
     >>> contract.end_date == first_invoice.end
     True

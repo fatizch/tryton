@@ -94,6 +94,7 @@ Create Account::
     >>> receivable_account.name = 'Account Receivable'
     >>> receivable_account.code = 'account_receivable'
     >>> receivable_account.kind = 'receivable'
+    >>> receivable_account.party_required = True
     >>> receivable_account.reconcile = True
     >>> receivable_account.type = receivable_account_kind
     >>> receivable_account.company = company
@@ -102,6 +103,7 @@ Create Account::
     >>> payable_account.name = 'Account Payable'
     >>> payable_account.code = 'account_payable'
     >>> payable_account.kind = 'payable'
+    >>> payable_account.party_required = True
     >>> payable_account.type = payable_account_kind
     >>> payable_account.company = company
     >>> payable_account.save()
@@ -109,6 +111,7 @@ Create Account::
     >>> receivable_account2.name = 'Account Receivable 2'
     >>> receivable_account2.code = 'account_receivable 2'
     >>> receivable_account2.kind = 'receivable'
+    >>> receivable_account2.party_required = True
     >>> receivable_account2.reconcile = True
     >>> receivable_account2.type = receivable_account_kind
     >>> receivable_account2.company = company
@@ -117,6 +120,7 @@ Create Account::
     >>> payable_account2.name = 'Account Payable 2'
     >>> payable_account2.code = 'account_payable 2'
     >>> payable_account2.kind = 'payable'
+    >>> payable_account2.party_required = True
     >>> payable_account2.type = payable_account_kind
     >>> payable_account2.company = company
     >>> payable_account2.save()

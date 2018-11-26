@@ -49,14 +49,22 @@ Template = Model.get('product.template')
 Product = Model.get('product.product')
 unit, = Uom.find([('name', '=', 'Unit')])
 account_product = Product()
+
+ProductCategory = Model.get('product.category')
+account_category = ProductCategory(name="Account Category")
+account_category.accounting = True
+account_category.account_expense = accounts['expense']
+account_category.account_revenue = accounts['revenue']
+account_category.code = 'account_category'
+account_category.save()
+
 template = Template()
 template.name = 'Benefit Product'
 template.default_uom = unit
 template.type = 'service'
 template.list_price = Decimal(0)
 template.cost_price = Decimal(0)
-template.account_expense = accounts['expense']
-template.account_revenue = accounts['revenue']
+template.account_category = account_category
 template.products[0].code = 'benefit_product'
 template.save()
 account_product = template.products[0]

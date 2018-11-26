@@ -12,7 +12,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ######### -->
         <!-- # Menus # -->
         <!-- ######### -->
-        <menuitem parent="offered.menu_contract_configuration" name="Endorsement Configuration" id="menu_configuration" sequence="0" icon="tryton-preferences"/>
+        <menuitem parent="offered.menu_contract_configuration" name="Endorsement Configuration" id="menu_configuration" sequence="0" icon="tryton-settings"/>
         <!-- ############### -->
         <!-- # Endorsement # -->
         <!-- ############### -->
@@ -317,7 +317,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="endorsement_configuration_view_form"/>
             <field name="act_window" ref="act_configuration_form"/>
         </record>
-        <menuitem parent="offered.menu_contract_configuration" action="act_configuration_form" id="menuitem_endorsement_configuration" sequence="0" icon="tryton-preferences"/>
+        <menuitem parent="offered.menu_contract_configuration" action="act_configuration_form" id="menuitem_endorsement_configuration" sequence="0" icon="tryton-settings"/>
 
         <record model="endorsement.part" id="endorsement_party_change_extra_data">
             <field name="code">modify_extra_data</field>

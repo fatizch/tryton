@@ -42,6 +42,15 @@ fiscalyear.click('create_period')
 _ = create_chart(company)
 accounts = get_accounts(company)
 
+
+ProductCategory = Model.get('product.category')
+account_category = ProductCategory(name="Account Category")
+account_category.accounting = True
+account_category.account_expense = accounts['expense']
+account_category.account_revenue = accounts['revenue']
+account_category.code = 'account_category'
+account_category.save()
+
 # #Comment# #Create benefit account product
 Uom = Model.get('product.uom')
 Template = Model.get('product.template')
@@ -54,8 +63,7 @@ template.default_uom = unit
 template.type = 'service'
 template.list_price = Decimal(0)
 template.cost_price = Decimal(0)
-template.account_expense = accounts['expense']
-template.account_revenue = accounts['revenue']
+template.account_category = account_category
 template.products[0].code = 'benefit_product'
 template.save()
 
@@ -396,5 +404,5 @@ indemnifications[1].status == 'cancel_paid'
 indemnifications[0].status == 'paid'
 # #Res# #True
 
-claim.invoices[0].total_amount < 0
-# #Res# #True
+claim.invoices[1].total_amount
+# #Res# #Decimal('-2562.00')

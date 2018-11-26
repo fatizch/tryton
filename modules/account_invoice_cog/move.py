@@ -132,4 +132,4 @@ class MoveLine(metaclass=PoolMeta):
             return 'grey'
         color = super(MoveLine, self).get_color(name)
         amount = getattr(self.move.origin_item, 'total_amount', None)
-        return 'red' if color == 'black' and amount < 0 else color
+        return 'red' if color == 'black' and (amount or -1) < 0 else color

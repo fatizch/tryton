@@ -249,8 +249,8 @@ class Contract(metaclass=PoolMeta):
             cursor.execute(*line.join(account,
                     condition=account.id == line.account
                     ).select(line.contract, balance,
-                    where=(account.active
-                        & (account.kind == 'receivable')
+                    where=(
+                        (account.kind == 'receivable')
                         & (line.reconciliation == Null)
                         & (account.company == company_id)
                         & line_query

@@ -43,7 +43,7 @@ class Benefit(metaclass=PoolMeta):
             return accounts
         return accounts + [
             x.account_expense_used for x in self.company_products
-            if x.account_expense and x.account_expense_used]
+            if x.account_expense_used]
 
 
 class BenefitCompanyProduct(model.CoogSQL):

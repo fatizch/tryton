@@ -2,7 +2,7 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/field[@name='journal']" position="after">
+    <xpath expr="/form/field[@name='writeoff']" position="after">
         <label name="post_writeoff"/>
         <field name="post_writeoff"/>
     </xpath>

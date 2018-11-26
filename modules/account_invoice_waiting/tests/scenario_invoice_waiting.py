@@ -106,9 +106,13 @@ credit_note_tax_code.save()
 
 Journal = Model.get('account.journal')
 journal_cash, = Journal.find([('type', '=', 'cash')])
-journal_cash.credit_account = account_cash
-journal_cash.debit_account = account_cash
-journal_cash.save()
+PaymentMethod = Model.get('account.invoice.payment.method')
+payment_method = PaymentMethod()
+payment_method.name = 'Cash'
+payment_method.journal = journal_cash
+payment_method.credit_account = account_cash
+payment_method.debit_account = account_cash
+payment_method.save()
 
 # #Comment# #Create Write-Off journal
 
@@ -117,9 +121,17 @@ sequence_journal, = Sequence.find([('code', '=', 'account.journal')])
 journal_writeoff = Journal(
     name='Write-Off',
     type='write-off',
-    sequence=sequence_journal,
-    credit_account=waiting_account,
-    debit_account=expense)
+    sequence=sequence_journal)
+journal_writeoff.save()
+
+WriteOff = Model.get('account.move.reconcile.write_off')
+writeoff = WriteOff()
+writeoff.name = 'Write Off Journal'
+writeoff.journal = journal_writeoff
+writeoff.credit_account = waiting_account
+writeoff.debit_account = expense
+writeoff.save()
+
 
 journal_writeoff.save()
 
@@ -136,20 +148,36 @@ unit, = ProductUom.find([('name', '=', 'Unit')])
 ProductTemplate = Model.get('product.template')
 Product = Model.get('product.product')
 product = Product()
+
+ProductCategory = Model.get('product.category')
+account_category_waiting = ProductCategory(name="Account Category Waiting")
+account_category_waiting.accounting = True
+account_category_waiting.account_expense = expense
+account_category_waiting.account_revenue = waiting_account
+account_category_waiting.customer_taxes.append(tax)
+account_category_waiting.code = 'account_category_waiting'
+account_category_waiting.save()
+
 template = ProductTemplate()
 template.name = 'product'
 template.default_uom = unit
 template.type = 'service'
 template.list_price = Decimal('40')
 template.cost_price = Decimal('25')
-template.account_expense = expense
-template.account_revenue = waiting_account
-template.customer_taxes.append(tax)
+template.account_category = account_category_waiting
 template.products[0].code = 'waiting_product'
 template.save()
 product = template.products[0]
 
 # #Comment# #Create product without waiting account
+
+
+account_category = ProductCategory(name="Account Category")
+account_category.accounting = True
+account_category.account_expense = expense
+account_category.account_revenue = revenue_without_waiting
+account_category.code = 'account_category'
+account_category.save()
 
 template_without_waiting = ProductTemplate()
 template_without_waiting.name = 'Without Waiting Template'
@@ -157,8 +185,7 @@ template_without_waiting.default_uom = unit
 template_without_waiting.type = 'service'
 template_without_waiting.list_price = Decimal('40')
 template_without_waiting.cost_price = Decimal('25')
-template_without_waiting.account_expense = expense
-template_without_waiting.account_revenue = revenue_without_waiting
+template_without_waiting.account_category = account_category
 template_without_waiting.products[0].code = 'without_waiting'
 template_without_waiting.save()
 product_without_waiting = template_without_waiting.products[0]
@@ -206,11 +233,14 @@ waiting_amount = sum(x.amount
     for x in invoice.move.lines if x.account == waiting_account)
 
 pay = Wizard('account.invoice.pay', [invoice])
-pay.form.journal = journal_cash
+pay.form.payment_method = payment_method
 pay.execute('choice')
 
-waiting_move, = Model.get('account.move').find([(
-        'origin', '=', 'account.invoice,' + str(invoice.id)),
+journal_expense, = Journal.find([('type', '=', 'expense')])
+
+waiting_move, = Model.get('account.move').find([
+        ('origin', '=', 'account.invoice,' + str(invoice.id)),
+        ('journal', '=', journal_expense.id),
         ('id', '!=', invoice.move.id)
         ])
 
@@ -229,10 +259,11 @@ waiting_amount + waiting_amount_paid == 0
 invoice.payment_lines[0].reconciliation.delete()
 invoice.reload()
 
-waiting_move_payment_cancel, = Model.get('account.move').find(
-    [('origin', '=', 'account.invoice,' + str(invoice.id)),
-    ('id', 'not in', [invoice.move.id, waiting_move.id])]
-    )
+waiting_move_payment_cancel, = Model.get('account.move').find([
+        ('origin', '=', 'account.invoice,' + str(invoice.id)),
+        ('journal', '=', journal_expense.id),
+        ('id', 'not in', [invoice.move.id, waiting_move.id])
+        ])
 
 waiting_amount_payment_cancel = sum(x.amount
     for x in waiting_move_payment_cancel.lines if x.account == waiting_account)
@@ -277,11 +308,14 @@ waiting_amount = sum(x.amount
     for x in invoice.move.lines if x.account == waiting_account)
 
 pay = Wizard('account.invoice.pay', [invoice])
-pay.form.journal = journal_cash
+pay.form.payment_method = payment_method
 pay.execute('choice')
 
-waiting_move, = Model.get('account.move').find([(
-        'origin', '=', 'account.invoice,' + str(invoice.id)),
+journal_revenue, = Journal.find([('type', '=', 'revenue')])
+
+waiting_move, = Model.get('account.move').find([
+        ('origin', '=', 'account.invoice,' + str(invoice.id)),
+        ('journal', '=', journal_revenue.id),
         ('id', '!=', invoice.move.id)
         ])
 
@@ -300,9 +334,10 @@ waiting_amount + waiting_amount_paid == 0
 invoice.payment_lines[0].reconciliation.delete()
 invoice.reload()
 
-waiting_move_payment_cancel, = Model.get('account.move').find(
-    [('origin', '=', 'account.invoice,' + str(invoice.id)),
-    ('id', 'not in', [invoice.move.id, waiting_move.id])])
+waiting_move_payment_cancel, = Model.get('account.move').find([
+        ('origin', '=', 'account.invoice,' + str(invoice.id)),
+        ('journal', '=', journal_revenue),
+        ('id', 'not in', [invoice.move.id, waiting_move.id])])
 
 waiting_amount_payment_cancel = sum(x.amount
     for x in waiting_move_payment_cancel.lines if x.account == waiting_account)

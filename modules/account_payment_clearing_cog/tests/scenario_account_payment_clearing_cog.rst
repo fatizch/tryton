@@ -13,7 +13,7 @@ Imports::
     >>> from trytond.modules.company_cog.tests.tools import create_company
     >>> from trytond.modules.account.tests.tools import create_fiscalyear, \
     ...     create_chart, get_accounts
-    >>> from.trytond.modules.account_invoice.tests.tools import \
+    >>> from trytond.modules.account_invoice.tests.tools import \
     ...     set_fiscalyear_invoice_sequences
     >>> today = datetime.date.today()
 
@@ -90,20 +90,20 @@ Partially pay the line::
     >>> payment.amount = Decimal('30.0')
     >>> payment.click('approve')
     >>> payment.state
-    u'approved'
+    'approved'
     >>> process_payment = Wizard('account.payment.process', [payment])
     >>> process_payment.execute('pre_process')
     >>> payment.reload()
     >>> payment.state
-    u'processing'
+    'processing'
 
 Succeed payment::
 
     >>> payment.click('succeed')
     >>> payment.state
-    u'succeeded'
+    'succeeded'
     >>> payment.clearing_move.state
-    u'posted'
+    'posted'
     >>> clearing_move = payment.clearing_move
     >>> payable.reload()
     >>> payable.balance
@@ -117,7 +117,7 @@ Fail payment::
 
     >>> payment.click('fail')
     >>> payment.state
-    u'failed'
+    'failed'
     >>> payment.clearing_move
     >>> payment.line.reconciliation
     >>> payable.reload()
@@ -129,4 +129,4 @@ Fail payment::
     >>> cancel_move, = Move.find([('origin', '=',
     ...     'account.move,%s' % clearing_move.id)])
     >>> cancel_move.state
-    u'posted'
+    'posted'

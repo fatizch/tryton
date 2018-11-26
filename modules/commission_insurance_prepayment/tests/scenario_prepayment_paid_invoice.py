@@ -79,6 +79,14 @@ product = add_invoice_configuration(product, accounts)
 product = add_insurer_to_product(product)
 product.save()
 
+ProductCategory = Model.get('product.category')
+account_category = ProductCategory(name="Account Category")
+account_category.accounting = True
+account_category.account_expense = accounts['expense']
+account_category.account_revenue = accounts['revenue']
+account_category.code = 'account_category'
+account_category.save()
+
 # #Comment# #Create commission product
 Uom = Model.get('product.uom')
 Template = Model.get('product.template')
@@ -90,8 +98,7 @@ template.default_uom = unit
 template.type = 'service'
 template.list_price = Decimal(0)
 template.cost_price = Decimal(0)
-template.account_expense = accounts['expense']
-template.account_revenue = accounts['revenue']
+template.account_category = account_category
 template.products[0].code = 'commission_product'
 template.save()
 
@@ -254,17 +261,28 @@ Invoice = Model.get('account.invoice')
 Invoice.find([('business_kind', '=', 'broker_invoice')]) == []
 # #Res# #True
 
+
+cash_journal, = Journal.find([('code', '=', 'CASH')])
+account_cash = accounts['cash']
+PaymentMethod = Model.get('account.invoice.payment.method')
+payment_method = PaymentMethod()
+payment_method.name = 'Cash'
+payment_method.journal = cash_journal
+payment_method.credit_account = account_cash
+payment_method.debit_account = account_cash
+payment_method.save()
+
 # #Comment# # Pay the first invoice
 first_account_invoice = first_invoice.invoice
 PayInvoice = Wizard('account.invoice.pay', [first_account_invoice])
 cash_journal, = Journal.find([('code', '=', 'CASH')])
-PayInvoice.form.journal = cash_journal
+PayInvoice.form.payment_method = payment_method
 PayInvoice.form.date = contract.start_date
 PayInvoice.execute('choice')
 
 first_account_invoice.reload()
 first_account_invoice.state
-# #Res# #u'paid'
+# #Res# #'paid'
 
 prepayment_coms = Commission.find([('is_prepayment', '=', True)])
 assert all(com.date for com in prepayment_coms)
@@ -275,19 +293,18 @@ assert all(com.date for com in prepayment_coms)
 second_invoice = contract_invoices[1]
 second_account_invoice = second_invoice.invoice
 PayInvoice = Wizard('account.invoice.pay', [second_account_invoice])
-cash_journal, = Journal.find([('code', '=', 'CASH')])
-PayInvoice.form.journal = cash_journal
+PayInvoice.form.payment_method = payment_method
 PayInvoice.form.date = contract.start_date
 PayInvoice.execute('choice')
 
 second_account_invoice.reload()
 second_account_invoice.state
-# #Res# #u'paid'
+# #Res# #'paid'
 
 second_account_invoice.payment_lines[0].reconciliation.delete()
 second_account_invoice.reload()
 second_account_invoice.state
-# #Res# #u'posted'
+# #Res# #'posted'
 
 prepayment_coms = Commission.find([('is_prepayment', '=', True)])
 assert all(com.date for com in prepayment_coms)
@@ -315,7 +332,7 @@ first_broker_invoice_id = broker_invoice.id
 first_account_invoice.payment_lines[0].reconciliation.delete()
 first_account_invoice.reload()
 first_account_invoice.state
-# #Res# #u'posted'
+# #Res# #'posted'
 
 # #Comment# #Generate broker invoice
 create_invoice = Wizard('commission.create_invoice')

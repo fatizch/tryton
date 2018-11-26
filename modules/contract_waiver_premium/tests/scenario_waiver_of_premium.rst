@@ -132,6 +132,7 @@ Create Account::
     >>> receivable_account.name = 'Account Receivable'
     >>> receivable_account.code = 'account_receivable'
     >>> receivable_account.kind = 'receivable'
+    >>> receivable_account.party_required = True
     >>> receivable_account.reconcile = True
     >>> receivable_account.type = receivable_account_kind
     >>> receivable_account.company = company
@@ -140,6 +141,7 @@ Create Account::
     >>> payable_account.name = 'Account Payable'
     >>> payable_account.code = 'account_payable'
     >>> payable_account.kind = 'payable'
+    >>> payable_account.party_required = True
     >>> payable_account.type = payable_account_kind
     >>> payable_account.company = company
     >>> payable_account.save()
@@ -159,6 +161,7 @@ Create Account::
     >>> payable_account_insurer.code = 'account_payable_insurer'
     >>> payable_account_insurer.kind = 'other'
     >>> payable_account_insurer.type = other_account_kind
+    >>> payable_account_insurer.party_required = True
     >>> payable_account_insurer.company = company
     >>> payable_account_insurer.save()
 
@@ -252,8 +255,8 @@ Create Product::
     >>> coverage.insurer = insurer
     >>> coverage.company = company
     >>> coverage.currency = currency
-    >>> coverage.name = u'Test Coverage1'
-    >>> coverage.code = u'test_coverage1'
+    >>> coverage.name = 'Test Coverage1'
+    >>> coverage.code = 'test_coverage1'
     >>> coverage.item_desc = item_description
     >>> coverage.start_date = product_start_date
     >>> coverage.account_for_billing = product_account
@@ -263,8 +266,8 @@ Create Product::
     >>> coverage2.insurer = insurer
     >>> coverage2.company = company
     >>> coverage2.currency = currency
-    >>> coverage2.name = u'Test Coverage2'
-    >>> coverage2.code = u'test_coverage2'
+    >>> coverage2.name = 'Test Coverage2'
+    >>> coverage2.code = 'test_coverage2'
     >>> coverage2.item_desc = item_description
     >>> coverage2.start_date = product_start_date
     >>> coverage2.account_for_billing = product_account
@@ -348,12 +351,12 @@ Create Test Contract::
     ...     key=lambda x: x.invoice.start)
     >>> AccountInvoice.post([all_invoices[0].invoice.id], config.context)
     >>> all_invoices[0].invoice.state
-    u'posted'
+    'posted'
     >>> all_invoices[0].invoice.total_amount
     Decimal('155.00')
     >>> AccountInvoice.post([all_invoices[1].invoice.id], config.context)
     >>> all_invoices[1].invoice.state
-    u'posted'
+    'posted'
     >>> all_invoices[1].invoice.total_amount
     Decimal('155.00')
 
@@ -374,11 +377,11 @@ Test Waiver Creation Wizard::
     >>> all_invoices[0].invoice.total_amount == 100
     True
     >>> all_invoices[0].invoice.state
-    u'posted'
+    'posted'
     >>> all_invoices[1].invoice.total_amount == 100
     True
     >>> all_invoices[1].invoice.state
-    u'posted'
+    'posted'
     >>> all([(x.invoice.total_amount, x.invoice.state) == (100, 'posted')
     ...     for x in all_invoices[2:]])
     True

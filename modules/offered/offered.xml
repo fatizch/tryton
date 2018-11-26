@@ -16,9 +16,9 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ############################################################ -->
         <!-- Menus -->
         <!-- ############################################################ -->
-        <menuitem name="Contract Configuration" id="menu_contract_configuration" sequence="15" icon="tryton-preferences"/>
+        <menuitem name="Contract Configuration" id="menu_contract_configuration" sequence="15" icon="tryton-settings"/>
         <menuitem name="Laboratory" id="menu_product" sequence="20" icon="laboratory"/>
-        <menuitem name="Configuration" parent="menu_product" id="menu_product_configuration" sequence="100" icon="tryton-preferences"/>
+        <menuitem name="Configuration" parent="menu_product" id="menu_product_configuration" sequence="100" icon="tryton-settings"/>
         <!-- Moving existing Entry Points -->
         <menuitem parent="menu_product_configuration" name="Rule Engine" id="rule_engine.menu_rule_engine" sequence="100"/>
         <!-- ############################################################ -->

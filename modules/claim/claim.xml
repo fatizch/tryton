@@ -29,7 +29,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="group" ref="group_claim"/>
         </record>
         <menuitem name="Claim" id="menu_claim" sequence="15" icon="claim"/>
-        <menuitem name="Configuration" parent="menu_claim" sequence="20" id="menu_claim_configuration" icon="tryton-preferences"/>
+        <menuitem name="Configuration" parent="menu_claim" sequence="20" id="menu_claim_configuration" icon="tryton-settings"/>
         <record model="ir.ui.menu-res.group" id="menu_configuration_group_claim_admin">
             <field name="menu" ref="menu_claim_configuration"/>
             <field name="group" ref="group_claim_admin"/>

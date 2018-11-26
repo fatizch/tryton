@@ -69,14 +69,18 @@ CREATE_CLAIMS = parse_environ('GEN_CREATE_CLAIMS', True)
 GENERATE_REPORTINGS = parse_environ('GEN_GENERATE_REPORTINGS', True)
 
 
-assert TESTING or (RESTORE_DB and not CREATE_NEW_DB or
-    CREATE_NEW_DB and not RESTORE_DB), \
+assert TESTING or (RESTORE_DB and not CREATE_NEW_DB
+    or CREATE_NEW_DB and not RESTORE_DB), \
     'Choose between restoring and creating a new database'
 
 
 def do_print(x):
     if not TESTING:
         print(x)
+
+
+def assert_eq(x, y):
+    assert x == y, 'Assertion error, got %s, expected %s' % (str(x), str(y))
 
 
 do_print('\nDefining constants')  # {{{
@@ -222,7 +226,7 @@ else:
     modules = os.listdir(
         os.path.abspath(os.path.join(modules.__file__, os.path.pardir)))
     modules = [x for x in modules
-        if '.' not in x and x not in _modules_to_ignore]
+        if '.' not in x and x not in _modules_to_ignore and x != '__pycache__']
     config = activate_modules(modules, cache_file_name='global_tests')
 
 
@@ -299,11 +303,13 @@ PaymentJournal = Model.get('account.payment.journal')
 PaymentJournalFailureAction = Model.get(
     'account.payment.journal.failure_action')
 PaymentJournalRejectReason = Model.get('account.payment.journal.reject_reason')
+PaymentMethod = Model.get('account.invoice.payment.method')
 PaymentTerm = Model.get('account.invoice.payment_term')
 PaymentTermLine = Model.get('account.invoice.payment_term.line')
 Process = Model.get('process')
 ProcessConfiguration = Model.get('process.configuration')
 ProcessStep = Model.get('process.step')
+ProductCategory = Model.get('product.category')
 ProductConfiguration = Model.get('offered.configuration')
 Product = Model.get('offered.product')
 Reconciliation = Model.get('account.move.reconciliation')
@@ -704,16 +710,82 @@ if LOAD_ACCOUNTING:  # {{{
     pasrau_tax.save()
     # }}}
 
+    do_print('    Creating Accounting catgeories')  # {{{
+    insurer_account_category = ProductCategory()
+    insurer_account_category.name = 'Insurer Account Category'
+    insurer_account_category.code = 'insurer_account_category'
+    insurer_account_category.accounting = True
+    insurer_account_category.account_expense, = Account.find(
+        [('code', '=', '622')])
+    insurer_account_category.account_revenue, = Account.find(
+        [('code', '=', '706')])
+    insurer_account_category.save()
+
+    broker_account_category = ProductCategory()
+    broker_account_category.name = 'Broker Account Category'
+    broker_account_category.code = 'broker_account_category'
+    broker_account_category.accounting = True
+    broker_account_category.account_expense, = Account.find(
+        [('code', '=', '622')])
+    broker_account_category.account_revenue, = Account.find(
+        [('code', '=', '706')])
+    broker_account_category.save()
+
+    claim_wo_taxes_account_category = ProductCategory()
+    claim_wo_taxes_account_category.name = 'Claim (No taxes) Account Category'
+    claim_wo_taxes_account_category.code = 'claim_wo_taxes_account_category'
+    claim_wo_taxes_account_category.accounting = True
+    claim_wo_taxes_account_category.account_expense, = Account.find(
+        [('code', '=', '62200001')])
+    claim_wo_taxes_account_category.account_revenue, = Account.find(
+        [('code', '=', '706')])
+    claim_wo_taxes_account_category.save()
+
+    claim_full_taxes_account_category = ProductCategory()
+    claim_full_taxes_account_category.name = \
+        'Claim (Full taxes) Account Category'
+    claim_full_taxes_account_category.code = \
+        'claim_full_taxes_account_category'
+    claim_full_taxes_account_category.accounting = True
+    claim_full_taxes_account_category.account_expense, = Account.find(
+        [('code', '=', '62200001')])
+    claim_full_taxes_account_category.account_revenue, = Account.find(
+        [('code', '=', '706')])
+    claim_full_taxes_account_category.supplier_taxes.append(
+        Tax(crds_tax.id))
+    claim_full_taxes_account_category.supplier_taxes.append(
+        Tax(csg_tax.id))
+    claim_full_taxes_account_category.supplier_taxes.append(
+        Tax(pasrau_tax.id))
+    claim_full_taxes_account_category.save()
+
+    claim_reduced_taxes_account_category = ProductCategory()
+    claim_reduced_taxes_account_category.name = \
+        'Claim (Reduced taxes) Account Category'
+    claim_reduced_taxes_account_category.code = \
+        'claim_reduced_taxes_account_category'
+    claim_reduced_taxes_account_category.accounting = True
+    claim_reduced_taxes_account_category.account_expense, = Account.find(
+        [('code', '=', '62200001')])
+    claim_reduced_taxes_account_category.account_revenue, = Account.find(
+        [('code', '=', '706')])
+    claim_reduced_taxes_account_category.supplier_taxes.append(
+        Tax(crds_tax.id))
+    claim_reduced_taxes_account_category.supplier_taxes.append(
+        Tax(csg_deductible_tax.id))
+    claim_reduced_taxes_account_category.supplier_taxes.append(
+        Tax(pasrau_tax.id))
+    claim_reduced_taxes_account_category.save()
+    # }}}
+
     do_print('    Creating Accounting products templates')  # {{{
     insurer_account_product_template = AccountProductTemplate()
     insurer_account_product_template.name = 'Chargement Produit'
     insurer_account_product_template.type = 'service'
     insurer_account_product_template.cost_price = Decimal(1)
     insurer_account_product_template.list_price = Decimal(1)
-    insurer_account_product_template.account_expense, = Account.find(
-        [('code', '=', '622')])
-    insurer_account_product_template.account_revenue, = Account.find(
-        [('code', '=', '706')])
+    insurer_account_product_template.account_category = \
+        insurer_account_category
     insurer_account_product_template.products[0].code = 'chargement_produit'
     insurer_account_product_template.save()
     insurer_account_product = insurer_account_product_template.products[0]
@@ -723,10 +795,7 @@ if LOAD_ACCOUNTING:  # {{{
     broker_account_product_template.type = 'service'
     broker_account_product_template.cost_price = Decimal(1)
     broker_account_product_template.list_price = Decimal(1)
-    broker_account_product_template.account_expense, = Account.find(
-        [('code', '=', '622')])
-    broker_account_product_template.account_revenue, = Account.find(
-        [('code', '=', '706')])
+    broker_account_product_template.account_category = broker_account_category
     broker_account_product_template.products[0].code = 'commission_courtier'
     broker_account_product_template.save()
     broker_account_product = broker_account_product_template.products[0]
@@ -736,10 +805,8 @@ if LOAD_ACCOUNTING:  # {{{
     claim_product_template_no_taxes.type = 'service'
     claim_product_template_no_taxes.cost_price = Decimal(1)
     claim_product_template_no_taxes.list_price = Decimal(1)
-    claim_product_template_no_taxes.account_expense, = Account.find(
-        [('code', '=', '62200001')])
-    claim_product_template_no_taxes.account_revenue, = Account.find(
-        [('code', '=', '706')])
+    claim_product_template_no_taxes.account_category = \
+        claim_wo_taxes_account_category
     claim_product_template_no_taxes.products[0].code = 'reglement_sinistres'
     claim_product_template_no_taxes.save()
 
@@ -748,18 +815,10 @@ if LOAD_ACCOUNTING:  # {{{
     claim_product_template_full_taxes.type = 'service'
     claim_product_template_full_taxes.cost_price = Decimal(1)
     claim_product_template_full_taxes.list_price = Decimal(1)
-    claim_product_template_full_taxes.account_expense, = Account.find(
-        [('code', '=', '62200001')])
-    claim_product_template_full_taxes.account_revenue, = Account.find(
-        [('code', '=', '706')])
+    claim_product_template_full_taxes.account_category = \
+        claim_full_taxes_account_category
     claim_product_template_full_taxes.products[0].code = \
         'reglement_sinistres_taxes'
-    claim_product_template_full_taxes.supplier_taxes.append(
-        Tax(crds_tax.id))
-    claim_product_template_full_taxes.supplier_taxes.append(
-        Tax(csg_tax.id))
-    claim_product_template_full_taxes.supplier_taxes.append(
-        Tax(pasrau_tax.id))
     claim_product_template_full_taxes.save()
 
     claim_product_template_reduced_taxes = AccountProductTemplate()
@@ -768,18 +827,10 @@ if LOAD_ACCOUNTING:  # {{{
     claim_product_template_reduced_taxes.type = 'service'
     claim_product_template_reduced_taxes.cost_price = Decimal(1)
     claim_product_template_reduced_taxes.list_price = Decimal(1)
-    claim_product_template_reduced_taxes.account_expense, = Account.find(
-        [('code', '=', '62200001')])
-    claim_product_template_reduced_taxes.account_revenue, = Account.find(
-        [('code', '=', '706')])
+    claim_product_template_reduced_taxes.account_category = \
+        claim_reduced_taxes_account_category
     claim_product_template_reduced_taxes.products[0].code = \
-        'reglement_sinistres_taxes_deductible'
-    claim_product_template_reduced_taxes.supplier_taxes.append(
-        Tax(crds_tax.id))
-    claim_product_template_reduced_taxes.supplier_taxes.append(
-        Tax(csg_deductible_tax.id))
-    claim_product_template_reduced_taxes.supplier_taxes.append(
-        Tax(pasrau_tax.id))
+        'reglement_sinistres_taxes_reduites'
     claim_product_template_reduced_taxes.save()
     # }}}
 
@@ -806,12 +857,15 @@ if LOAD_ACCOUNTING:  # {{{
     exceptional_journal.sequence, = Sequence.find(
         [('code', '=', 'account.journal')])
     exceptional_journal.save()
+    # }}}
 
-    # Update cash journal to use bank account (for testing purposes)
-    cash_journal, = Journal.find([('code', '=', 'CASH')])
-    cash_journal.debit_account = bank_account
-    cash_journal.credit_account = bank_account
-    cash_journal.save()
+    do_print('    Creating Payment method for cash')  # {{{
+    payment_method = PaymentMethod()
+    payment_method.name = 'Cash'
+    payment_method.journal, = Journal.find([('code', '=', 'CASH')])
+    payment_method.credit_account = bank_account
+    payment_method.debit_account = bank_account
+    payment_method.save()
     # }}}
 
     do_print('    Creating Payment Journals')  # {{{
@@ -871,6 +925,7 @@ if LOAD_ACCOUNTING:  # {{{
     cheque_journal.company = company
     cheque_journal.journal = bank_journal
     cheque_journal.bank_account = company.party.bank_accounts[0]
+    cheque_journal.account = bank_account
     cheque_journal.process_method = 'cheque'
     cheque_journal.sequence = cheque_sequence
     cheque_journal.cancel_motives.append(cheque_journal_cancel_motive)
@@ -1007,14 +1062,14 @@ if LOAD_ACCOUNTING:  # {{{
     account_configuration.save()
     # }}}
 
-cash_journal, = Journal.find([('code', '=', 'CASH')])
+cash_method, = PaymentMethod.find([('name', '=', 'Cash')])
 payment_sepa, = PaymentJournal.find([('name', '=', 'Sepa')])
 default_payment_term, = PaymentTerm.find([('name', '=', 'Par défaut')])
 claim_product, = AccountProduct.find([('code', '=', 'reglement_sinistres')])
 claim_product_taxed, = AccountProduct.find(
     [('code', '=', 'reglement_sinistres_taxes')])
 claim_product_reduced_taxed, = AccountProduct.find(
-    [('code', '=', 'reglement_sinistres_taxes_deductible')])
+    [('code', '=', 'reglement_sinistres_taxes_reduites')])
 # }}}
 
 if CREATE_PROCESSES:  # {{{
@@ -1661,12 +1716,24 @@ if not champs_technique('loss.covered_person.id'):
     generic_process.fancy_name = 'Souscription Générique'
     generic_process.on_model, = IrModel.find([('model', '=', 'contract')])
     generic_process.kind = 'subscription'
-    generic_process.steps_to_display.append(ProcessStep(step_subscriber.id))
-    generic_process.steps_to_display.append(ProcessStep(step_covered.id))
-    generic_process.steps_to_display.append(ProcessStep(step_options.id))
-    generic_process.steps_to_display.append(ProcessStep(step_documents.id))
-    generic_process.steps_to_display.append(ProcessStep(step_payment.id))
-    generic_process.steps_to_display.append(ProcessStep(step_complete.id))
+    generic_process.all_steps.new()
+    generic_process.all_steps[-1].step = step_subscriber
+    generic_process.all_steps[-1].order = 0
+    generic_process.all_steps.new()
+    generic_process.all_steps[-1].step = step_covered
+    generic_process.all_steps[-1].order = 1
+    generic_process.all_steps.new()
+    generic_process.all_steps[-1].step = step_options
+    generic_process.all_steps[-1].order = 2
+    generic_process.all_steps.new()
+    generic_process.all_steps[-1].step = step_documents
+    generic_process.all_steps[-1].order = 3
+    generic_process.all_steps.new()
+    generic_process.all_steps[-1].step = step_payment
+    generic_process.all_steps[-1].order = 4
+    generic_process.all_steps.new()
+    generic_process.all_steps[-1].step = step_complete
+    generic_process.all_steps[-1].order = 5
     generic_process.menu_icon = 'tryton-open'
     generic_process.close_tab_on_completion = True
     generic_process.complete_message = 'Le contrat sera actif après ' + \
@@ -1722,13 +1789,27 @@ if not champs_technique('loss.covered_person.id'):
     life_process.fancy_name = 'Souscription Prévoyance'
     life_process.on_model, = IrModel.find([('model', '=', 'contract')])
     life_process.kind = 'subscription'
-    life_process.steps_to_display.append(ProcessStep(step_life_subscriber.id))
-    life_process.steps_to_display.append(ProcessStep(step_covered.id))
-    life_process.steps_to_display.append(ProcessStep(step_options.id))
-    life_process.steps_to_display.append(ProcessStep(step_documents.id))
-    life_process.steps_to_display.append(ProcessStep(step_underwriting.id))
-    life_process.steps_to_display.append(ProcessStep(step_payment.id))
-    life_process.steps_to_display.append(ProcessStep(step_complete.id))
+    life_process.all_steps.new()
+    life_process.all_steps[-1].step = step_life_subscriber
+    life_process.all_steps[-1].order = 0
+    life_process.all_steps.new()
+    life_process.all_steps[-1].step = step_covered
+    life_process.all_steps[-1].order = 1
+    life_process.all_steps.new()
+    life_process.all_steps[-1].step = step_options
+    life_process.all_steps[-1].order = 2
+    life_process.all_steps.new()
+    life_process.all_steps[-1].step = step_documents
+    life_process.all_steps[-1].order = 3
+    life_process.all_steps.new()
+    life_process.all_steps[-1].step = step_underwriting
+    life_process.all_steps[-1].order = 4
+    life_process.all_steps.new()
+    life_process.all_steps[-1].step = step_payment
+    life_process.all_steps[-1].order = 5
+    life_process.all_steps.new()
+    life_process.all_steps[-1].step = step_complete
+    life_process.all_steps[-1].order = 6
     life_process.menu_icon = 'tryton-open'
     life_process.close_tab_on_completion = True
     life_process.complete_message = 'Le contrat sera actif après ' + \
@@ -1751,12 +1832,24 @@ if not champs_technique('loss.covered_person.id'):
     loan_process.fancy_name = 'Souscription Emprunteur'
     loan_process.on_model, = IrModel.find([('model', '=', 'contract')])
     loan_process.kind = 'subscription'
-    loan_process.steps_to_display.append(ProcessStep(step_life_subscriber.id))
-    loan_process.steps_to_display.append(ProcessStep(step_covered_loan.id))
-    loan_process.steps_to_display.append(ProcessStep(step_options_loan.id))
-    loan_process.steps_to_display.append(ProcessStep(step_documents.id))
-    loan_process.steps_to_display.append(ProcessStep(step_payment.id))
-    loan_process.steps_to_display.append(ProcessStep(step_complete_loan.id))
+    loan_process.all_steps.new()
+    loan_process.all_steps[-1].step = step_life_subscriber
+    loan_process.all_steps[-1].order = 0
+    loan_process.all_steps.new()
+    loan_process.all_steps[-1].step = step_covered_loan
+    loan_process.all_steps[-1].order = 1
+    loan_process.all_steps.new()
+    loan_process.all_steps[-1].step = step_options_loan
+    loan_process.all_steps[-1].order = 2
+    loan_process.all_steps.new()
+    loan_process.all_steps[-1].step = step_documents
+    loan_process.all_steps[-1].order = 3
+    loan_process.all_steps.new()
+    loan_process.all_steps[-1].step = step_payment
+    loan_process.all_steps[-1].order = 4
+    loan_process.all_steps.new()
+    loan_process.all_steps[-1].step = step_complete_loan
+    loan_process.all_steps[-1].order = 5
     loan_process.menu_icon = 'tryton-open'
     loan_process.close_tab_on_completion = True
     loan_process.complete_message = 'Le contrat sera actif après ' + \
@@ -1874,28 +1967,23 @@ if not champs_technique('loss.covered_person.id'):
         IrModel.find([('model', '=', 'claim')])
     claim_work_interruption_process.kind = 'claim_declaration'
     claim_work_interruption_process.all_steps.new()
-    claim_work_interruption_process.all_steps[-1].step = \
-        step_claim_info
+    claim_work_interruption_process.all_steps[-1].step = step_claim_info
     claim_work_interruption_process.all_steps[-1].order = 1
     claim_work_interruption_process.all_steps.new()
-    claim_work_interruption_process.all_steps[-1].step = \
-        step_benefit_check
+    claim_work_interruption_process.all_steps[-1].step = step_benefit_check
     claim_work_interruption_process.all_steps[-1].order = 2
     claim_work_interruption_process.all_steps.new()
-    claim_work_interruption_process.all_steps[-1].step = \
-        step_claim_salary
+    claim_work_interruption_process.all_steps[-1].step = step_claim_salary
     claim_work_interruption_process.all_steps[-1].order = 3
     claim_work_interruption_process.all_steps.new()
-    claim_work_interruption_process.all_steps[-1].step = \
-        step_claim_services
+    claim_work_interruption_process.all_steps[-1].step = step_claim_services
     claim_work_interruption_process.all_steps[-1].order = 4
     claim_work_interruption_process.all_steps.new()
     claim_work_interruption_process.all_steps[-1].step = \
         step_indemnification_validation
     claim_work_interruption_process.all_steps[-1].order = 5
     claim_work_interruption_process.all_steps.new()
-    claim_work_interruption_process.all_steps[-1].step = \
-        step_claim_close
+    claim_work_interruption_process.all_steps[-1].step = step_claim_close
     claim_work_interruption_process.all_steps[-1].order = 6
     claim_work_interruption_process.menu_icon = 'tryton-open'
     claim_work_interruption_process.end_step_name = 'Terminer'
@@ -4630,7 +4718,7 @@ if CREATE_CONTRACTS:  # {{{
     loan_1.rate = Decimal('0.045')
     loan_1.amount = Decimal('250000')
     loan_1.duration = 200
-    assert set(loan_1.extra_data.keys()) == {'objet_du_pret'}
+    assert_eq(set(loan_1.extra_data.keys()), {'objet_du_pret'})
     loan_1.extra_data = {'objet_du_pret': 'terrain'}
     loan_1.save()
 
@@ -4655,11 +4743,12 @@ if CREATE_CONTRACTS:  # {{{
 
     loan_contract = Contract.find([('product.code', '=', 'loan_product')])[0]
     loan_contract.subscriber = loan_subscriber
-    assert loan_contract.agent is None
-    assert loan_contract.broker == loan_contract.dist_network.parent_brokers[0]
+    assert_eq(loan_contract.agent, None)
+    assert_eq(loan_contract.broker,
+        loan_contract.dist_network.parent_brokers[0])
     loan_contract.agent = broker_agent_flat
     process_next(loan_contract)
-    assert loan_contract.extra_data_values == {'reduction_libre': '0'}
+    assert_eq(loan_contract.extra_data_values, {'reduction_libre': '0'})
     loan_contract.extra_data_values = {'reduction_libre': '10'}
     loan_contract.covered_elements[0].current_extra_data = {
         'job_category': 'csp2',
@@ -4957,8 +5046,8 @@ if CREATE_CONTRACTS:  # {{{
                 employee_covered.manual_start_date = _contract_rebill_date
             else:
                 employee_covered.manual_start_date = _base_contract_date
-            if (employee.name == 'Petit Charpentier Sud' and
-                    employee.first_name == 'Employé 2'):
+            if (employee.name == 'Petit Charpentier Sud'
+                    and employee.first_name == 'Employé 2'):
                 employee_covered.manual_end_date = \
                     _illness_claim_end_date_1
                 employee_covered.end_reason, = CoveredEndReason.find(
@@ -5084,13 +5173,14 @@ if CREATE_CLAIMS:  # {{{
 
     # First indemnification period (paid to the company) {{{
     CreateIndemnification = Wizard('claim.create_indemnification', [claim])
-    assert CreateIndemnification.form.beneficiary == Party.find(
-        [('name', '=', 'Petit Charpentier Sud'), ('is_person', '=', False)])[0]
-    assert set(CreateIndemnification.form.extra_data.keys()) == {
-        'date_d_effet_d_indemnisation', 'ijss'}
+    assert_eq(CreateIndemnification.form.beneficiary,
+        Party.find([('name', '=', 'Petit Charpentier Sud'),
+                ('is_person', '=', False)])[0])
+    assert_eq(set(CreateIndemnification.form.extra_data.keys()),
+        {'date_d_effet_d_indemnisation', 'ijss'})
     CreateIndemnification.form.extra_data = {
-        'date_d_effet_d_indemnisation': _illness_claim_date +
-        relativedelta(days=30),
+        'date_d_effet_d_indemnisation': _illness_claim_date
+        + relativedelta(days=30),
         'ijss': Decimal('15.00'),
         }
     CreateIndemnification.form.end_date = _illness_claim_end_date_1
@@ -5099,22 +5189,22 @@ if CREATE_CLAIMS:  # {{{
     CreateIndemnification.execute('validate_scheduling')
     claim.reload()
 
-    assert claim.losses[0].services[0].indemnifications[0].total_amount == \
-        Decimal('303.36')
+    assert_eq(claim.losses[0].services[0].indemnifications[0].total_amount,
+        Decimal('303.36'))
     deductible_line = claim.losses[0].services[0].indemnifications[0].details[0]
-    assert deductible_line.kind == 'deductible'
-    assert deductible_line.nb_of_unit == 30
-    assert deductible_line.unit == 'day'
-    assert deductible_line.base_amount == Decimal(0)
-    assert deductible_line.amount_per_unit == Decimal(0)
-    assert deductible_line.amount == Decimal(0)
+    assert_eq(deductible_line.kind, 'deductible')
+    assert_eq(deductible_line.nb_of_unit, 30)
+    assert_eq(deductible_line.unit, 'day')
+    assert_eq(deductible_line.base_amount, Decimal(0))
+    assert_eq(deductible_line.amount_per_unit, Decimal(0))
+    assert_eq(deductible_line.amount, Decimal(0))
     benefit_line = claim.losses[0].services[0].indemnifications[0].details[1]
-    assert benefit_line.kind == 'benefit'
-    assert benefit_line.nb_of_unit == 32
-    assert benefit_line.unit == 'day'
-    assert benefit_line.base_amount == Decimal('9.48')
-    assert benefit_line.amount_per_unit == Decimal('9.48')
-    assert benefit_line.amount == Decimal('303.36')
+    assert_eq(benefit_line.kind, 'benefit')
+    assert_eq(benefit_line.nb_of_unit, 32)
+    assert_eq(benefit_line.unit, 'day')
+    assert_eq(benefit_line.base_amount, Decimal('9.48'))
+    assert_eq(benefit_line.amount_per_unit, Decimal('9.48'))
+    assert_eq(benefit_line.amount, Decimal('303.36'))
     # }}}
 
     # Second indemnification period (paid to the party, with pasrau) {{{
@@ -5129,14 +5219,14 @@ if CREATE_CLAIMS:  # {{{
     default_pasrau.save()
 
     CreateIndemnification = Wizard('claim.create_indemnification', [claim])
-    assert CreateIndemnification.form.beneficiary == claim.claimant
-    assert CreateIndemnification.form.extra_data == {
-        'date_d_effet_d_indemnisation': _illness_claim_date +
-        relativedelta(days=30),
+    assert_eq(CreateIndemnification.form.beneficiary, claim.claimant)
+    assert_eq(CreateIndemnification.form.extra_data, {
+        'date_d_effet_d_indemnisation': _illness_claim_date
+        + relativedelta(days=30),
         'ijss': Decimal('15.00'),
-        }
-    assert CreateIndemnification.form.start_date == \
-        _illness_claim_end_date_1 + relativedelta(days=1)
+        })
+    assert_eq(CreateIndemnification.form.start_date,
+        _illness_claim_end_date_1 + relativedelta(days=1))
     CreateIndemnification.form.end_date = _illness_claim_end_date_2
     CreateIndemnification.form.product = claim_product_reduced_taxed
     CreateIndemnification.execute('calculate')
@@ -5145,18 +5235,18 @@ if CREATE_CLAIMS:  # {{{
     claim.reload()
 
     benefit_line = claim.losses[0].services[0].indemnifications[1].details[0]
-    assert benefit_line.kind == 'benefit'
-    assert benefit_line.nb_of_unit == 14
-    assert benefit_line.unit == 'day'
-    assert benefit_line.base_amount == Decimal('9.48')
-    assert benefit_line.amount_per_unit == Decimal('9.48')
-    assert benefit_line.amount == Decimal('132.72')
-    assert claim.losses[0].services[0].indemnifications[1].amount == \
-        Decimal('132.72')
-    assert claim.losses[0].services[0].indemnifications[1].total_amount == \
-        Decimal('118.08')
-    assert claim.losses[0].services[0].indemnifications[1].tax_amount == \
-        Decimal('-14.64')
+    assert_eq(benefit_line.kind, 'benefit')
+    assert_eq(benefit_line.nb_of_unit, 14)
+    assert_eq(benefit_line.unit, 'day')
+    assert_eq(benefit_line.base_amount, Decimal('9.48'))
+    assert_eq(benefit_line.amount_per_unit, Decimal('9.48'))
+    assert_eq(benefit_line.amount, Decimal('132.72'))
+    assert_eq(claim.losses[0].services[0].indemnifications[1].amount,
+        Decimal('132.72'))
+    assert_eq(claim.losses[0].services[0].indemnifications[1].total_amount,
+        Decimal('118.08'))
+    assert_eq(claim.losses[0].services[0].indemnifications[1].tax_amount,
+        Decimal('-14.64'))
 
     # Recompute and switch to personalized pasrau rate
     Indemnification.delete([claim.losses[0].services[0].indemnifications[1]])
@@ -5172,14 +5262,14 @@ if CREATE_CLAIMS:  # {{{
     party_pasrau.save()
 
     CreateIndemnification = Wizard('claim.create_indemnification', [claim])
-    assert CreateIndemnification.form.beneficiary == claim.claimant
-    assert CreateIndemnification.form.extra_data == {
-        'date_d_effet_d_indemnisation': _illness_claim_date +
-        relativedelta(days=30),
+    assert_eq(CreateIndemnification.form.beneficiary, claim.claimant)
+    assert_eq(CreateIndemnification.form.extra_data, {
+        'date_d_effet_d_indemnisation': _illness_claim_date
+        + relativedelta(days=30),
         'ijss': Decimal('15.00'),
-        }
-    assert CreateIndemnification.form.start_date == \
-        _illness_claim_end_date_1 + relativedelta(days=1)
+        })
+    assert_eq(CreateIndemnification.form.start_date,
+        _illness_claim_end_date_1 + relativedelta(days=1))
     CreateIndemnification.form.end_date = _illness_claim_end_date_2
     CreateIndemnification.form.product = claim_product_reduced_taxed
     CreateIndemnification.execute('calculate')
@@ -5188,18 +5278,18 @@ if CREATE_CLAIMS:  # {{{
     claim.reload()
 
     benefit_line = claim.losses[0].services[0].indemnifications[1].details[0]
-    assert benefit_line.kind == 'benefit'
-    assert benefit_line.nb_of_unit == 14
-    assert benefit_line.unit == 'day'
-    assert benefit_line.base_amount == Decimal('9.48')
-    assert benefit_line.amount_per_unit == Decimal('9.48')
-    assert benefit_line.amount == Decimal('132.72')
-    assert claim.losses[0].services[0].indemnifications[1].total_amount == \
-        Decimal('108.63')
-    assert claim.losses[0].services[0].indemnifications[1].tax_amount == \
-        Decimal('-24.09')
-    assert claim.losses[0].services[0].indemnifications[1].amount == \
-        Decimal('132.72')
+    assert_eq(benefit_line.kind, 'benefit')
+    assert_eq(benefit_line.nb_of_unit, 14)
+    assert_eq(benefit_line.unit, 'day')
+    assert_eq(benefit_line.base_amount, Decimal('9.48'))
+    assert_eq(benefit_line.amount_per_unit, Decimal('9.48'))
+    assert_eq(benefit_line.amount, Decimal('132.72'))
+    assert_eq(claim.losses[0].services[0].indemnifications[1].total_amount,
+        Decimal('108.63'))
+    assert_eq(claim.losses[0].services[0].indemnifications[1].tax_amount,
+        Decimal('-24.09'))
+    assert_eq(claim.losses[0].services[0].indemnifications[1].amount,
+        Decimal('132.72'))
     process_next(claim)
     # }}}
 
@@ -5219,22 +5309,22 @@ if CREATE_CLAIMS:  # {{{
     # Check invoices {{{
     invoice_1 = (claim.losses[0].services[0].indemnifications[0]
         .invoice_line_details[0].invoice_line.invoice)
-    assert invoice_1.base_amount == Decimal('303.36')
-    assert invoice_1.total_amount == Decimal('303.36')
-    assert invoice_1.tax_amount == Decimal(0)
-    assert len(invoice_1.taxes) == 0
+    assert_eq(invoice_1.base_amount, Decimal('303.36'))
+    assert_eq(invoice_1.total_amount, Decimal('303.36'))
+    assert_eq(invoice_1.tax_amount, Decimal(0))
+    assert_eq(len(invoice_1.taxes), 0)
 
     invoice_2 = (claim.losses[0].services[0].indemnifications[1]
         .invoice_line_details[0].invoice_line.invoice)
-    assert invoice_2.base_amount == Decimal('132.72')
-    assert invoice_2.total_amount == Decimal('108.63')
-    assert invoice_2.tax_amount == Decimal('-24.09')
-    assert len(invoice_2.taxes) == 3
+    assert_eq(invoice_2.base_amount, Decimal('132.72'))
+    assert_eq(invoice_2.total_amount, Decimal('108.63'))
+    assert_eq(invoice_2.tax_amount, Decimal('-24.09'))
+    assert_eq(len(invoice_2.taxes), 3)
     per_tax = {x.tax.name: x for x in invoice_2.taxes}
-    assert per_tax['CRDS'].amount == Decimal('-0.66')  # 0.5 %
-    assert per_tax['CSG déductible'].amount == Decimal('-5.04')  # 3.8 %
+    assert_eq(per_tax['CRDS'].amount, Decimal('-0.66'))  # 0.5 %
+    assert_eq(per_tax['CSG déductible'].amount, Decimal('-5.04'))  # 3.8 %
     # 14.4 % based on base_amount - CSG => 132.72 * (1 - 0.038)
-    assert per_tax['pasrau'].amount == Decimal('-18.39')
+    assert_eq(per_tax['pasrau'].amount, Decimal('-18.39'))
     # }}}
     # }}}
 
@@ -5262,14 +5352,14 @@ if CREATE_CLAIMS:  # {{{
     claim.losses[0].save()
     process_next(claim)
 
-    assert claim.losses[0].services[0].eligibility_status == 'refused'
+    assert_eq(claim.losses[0].services[0].eligibility_status, 'refused')
     process_previous(claim)
     claim.losses[0].click('draft')
     claim.losses[0].event_desc, = EventDesc.find([('code', '=', 'illness')])
     claim.losses[0].save()
     process_next(claim)
 
-    assert claim.losses[0].services[0].eligibility_status == 'accepted'
+    assert_eq(claim.losses[0].services[0].eligibility_status, 'accepted')
     service = claim.losses[0].services[0]
     service.beneficiaries.new()
     service.beneficiaries[-1].party, = Party.find([('name', '=', 'DOE'),
@@ -5288,8 +5378,8 @@ if CREATE_CLAIMS:  # {{{
     CreateIndemnification.execute('validate_scheduling')
 
     claim.reload()
-    assert claim.losses[0].services[0].indemnifications[0].total_amount == \
-        Decimal(20000)
+    assert_eq(claim.losses[0].services[0].indemnifications[0].total_amount,
+        Decimal(20000))
     process_next(claim)
     process_next(claim)
 
@@ -5307,7 +5397,7 @@ if GENERATE_REPORTINGS:  # {{{
         relativedelta(days=-1)
     for invoice in Invoice.find([('state', '=', 'posted')]):
         PayInvoice = Wizard('account.invoice.pay', [invoice])
-        PayInvoice.form.journal = cash_journal
+        PayInvoice.form.payment_method = cash_method
         PayInvoice.form.date = _contract_rebill_post_date + relativedelta(
             days=-1)
         PayInvoice.execute('choice')
@@ -5336,8 +5426,7 @@ if GENERATE_REPORTINGS:  # {{{
 
     insurer_invoice, = Invoice.find(
         [('business_kind', '=', 'insurer_invoice')])
-    assert insurer_invoice.total_amount == Decimal('1440.17'), \
-        'Bad amount %.2f, expected 1440.17' % insurer_invoice.total_amount
+    assert_eq(insurer_invoice.total_amount, Decimal('1440.17'))
     ReportCreation = Wizard('report.create', [insurer_invoice])
     ReportCreation.execute('generate')
     Invoice.delete([insurer_invoice])
@@ -5350,9 +5439,7 @@ if GENERATE_REPORTINGS:  # {{{
 
     claim_insurer_invoice, = Invoice.find(
         [('business_kind', '=', 'claim_insurer_invoice')])
-    assert claim_insurer_invoice.total_amount == Decimal('20436.08'), \
-        'Bad amount %.2f, expected 20436.08' \
-        % claim_insurer_invoice.total_amount
+    assert_eq(claim_insurer_invoice.total_amount, Decimal('20436.08'))
     Invoice.delete([claim_insurer_invoice])
 
     insurer.group_insurer_invoices = True
@@ -5365,24 +5452,22 @@ if GENERATE_REPORTINGS:  # {{{
 
     insurer_invoice, = Invoice.find(
         [('business_kind', '=', 'all_insurer_invoices')])
-    assert insurer_invoice.total_amount == Decimal('-18995.91'), \
-        'Bad amount %.2f, expected -18995.91' % insurer_invoice.total_amount
+    assert_eq(insurer_invoice.total_amount, Decimal('-18995.91'))
     # }}}
 
     do_print('    Generating slip')  # {{{
     slip_configuration, = InvoiceSlipConfiguration.find([])
     CreateSlip = Wizard('account.invoice.create.slip', [slip_configuration])
-    assert CreateSlip.form.party == slip_configuration.party
-    assert CreateSlip.form.accounts == slip_configuration.accounts
-    assert CreateSlip.form.slip_kind == slip_configuration.slip_kind
-    assert CreateSlip.form.journal == slip_configuration.journal
+    assert_eq(CreateSlip.form.party, slip_configuration.party)
+    assert_eq(CreateSlip.form.accounts, slip_configuration.accounts)
+    assert_eq(CreateSlip.form.slip_kind, slip_configuration.slip_kind)
+    assert_eq(CreateSlip.form.journal, slip_configuration.journal)
     CreateSlip.form.slip_date = _slip_generation_date
     CreateSlip.execute('open_slip')
 
     slip, = Invoice.find(
         [('business_kind', '=', 'pasrau')])
-    assert slip.total_amount == Decimal('24.09'), \
-        'Bad amount %.2f expected 24.09' % slip.total_amount
+    assert_eq(slip.total_amount, Decimal('24.09'))
     # }}}
 # }}}
 

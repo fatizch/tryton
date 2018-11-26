@@ -2,7 +2,7 @@ import os
 import uuid
 import unittest
 from rq import get_current_job
-import async.broker_rq as broker
+import coog_async.broker_rq as broker
 
 
 def test(module, options=None):

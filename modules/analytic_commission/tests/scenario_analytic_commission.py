@@ -84,14 +84,49 @@ broker_fee_account.type = broker_fee_kind
 broker_fee_account.company = company
 broker_fee_account.save()
 Journal = Model.get('account.journal')
+
 cash_journal, = Journal.find([('type', '=', 'cash')])
-cash_journal.debit_account, = Account.find(['name', '=', 'Main Cash'])
-cash_journal.save()
+account_cash = accounts['cash']
+PaymentMethod = Model.get('account.invoice.payment.method')
+payment_method = PaymentMethod()
+payment_method.name = 'Cash'
+payment_method.journal = cash_journal
+payment_method.credit_account = account_cash
+payment_method.debit_account = account_cash
+payment_method.save()
 
 config = switch_user('product_user')
 
 Account = Model.get('account.account')
 accounts = get_accounts(company)
+
+ProductCategory = Model.get('product.category')
+account_category = ProductCategory(name="Account Category")
+account_category.accounting = True
+account_category.account_expense = Account(broker_fee_account.id)
+account_category.account_revenue = Account(broker_fee_account.id)
+account_category.code = 'account_category'
+account_category.save()
+
+expense = accounts['expense']
+revenue = accounts['revenue']
+ProductCategory = Model.get('product.category')
+account_category_commission = ProductCategory(
+    name="Account Category Commission")
+account_category_commission.accounting = True
+account_category_commission.account_expense = expense
+account_category_commission.account_revenue = revenue
+account_category_commission.code = 'account_category_commission'
+account_category_commission.save()
+
+account_category_commission2 = ProductCategory(
+    name="Account Category Commission")
+account_category_commission2.accounting = True
+account_category_commission2.account_expense = expense
+account_category_commission2.account_revenue = revenue
+account_category_commission2.code = 'account_category_commission'
+account_category_commission2.save()
+
 
 # #Comment# #Create Broker Fee
 Uom = Model.get('product.uom')
@@ -100,8 +135,7 @@ Product = Model.get('product.product')
 Template = Model.get('product.template')
 template = Template()
 template.name = 'Broker Fee Template'
-template.account_expense = Account(broker_fee_account.id)
-template.account_revenue = Account(broker_fee_account.id)
+template.account_category = account_category
 template.list_price = Decimal(0)
 template.cost_price = Decimal(0)
 template.default_uom = unit
@@ -175,9 +209,11 @@ company = get_company()
 Plan = Model.get('commission.plan')
 Product = Model.get('product.product')
 Template = Model.get('product.template')
+ProductCategory = Model.get('product.category')
 Uom = Model.get('product.uom')
 unit, = Uom.find([('name', '=', 'Unit')])
 accounts = get_accounts(company)
+
 
 # #Comment# #Create commission product
 commission_product = Product(offered_product.id)
@@ -187,11 +223,12 @@ templateComission.default_uom = unit
 templateComission.type = 'service'
 templateComission.list_price = Decimal(0)
 templateComission.cost_price = Decimal(0)
-templateComission.account_expense = accounts['expense']
-templateComission.account_revenue = accounts['revenue']
+templateComission.account_category = ProductCategory(
+    account_category_commission.id)
 templateComission.products[0].code = 'commission_product'
 templateComission.save()
 commission_product = templateComission.products[0]
+
 
 # #Comment# #Create a second commission product
 commission_product2 = Product(offered_product2.id)
@@ -201,8 +238,8 @@ templateComission2.default_uom = unit
 templateComission2.type = 'service'
 templateComission2.list_price = Decimal(0)
 templateComission2.cost_price = Decimal(0)
-templateComission2.account_expense = accounts['expense']
-templateComission2.account_revenue = accounts['revenue']
+templateComission2.account_category = ProductCategory(
+    account_category_commission2.id)
 templateComission2.products[0].code = 'commission_product2'
 templateComission2.save()
 commission_product2 = templateComission2.products[0]
@@ -543,26 +580,28 @@ set([(x.amount, x.commission_rate, x.agent.party.name, x.line_amount)
 # #Res# #True
 
 
+PaymentMethod = Model.get('account.invoice.payment.method')
+
 # #Comment# #Pay invoices
 Journal = Model.get('account.journal')
 pay = Wizard('account.invoice.pay',
     [first_invoice.invoice])
-pay.form.journal = Journal(cash_journal.id)
+pay.form.payment_method = PaymentMethod(payment_method.id)
 pay.execute('choice')
 
 pay2 = Wizard('account.invoice.pay',
     [first_invoice2.invoice])
-pay2.form.journal = Journal(cash_journal.id)
+pay2.form.payment_method = PaymentMethod(payment_method.id)
 pay2.execute('choice')
 
 pay3 = Wizard('account.invoice.pay',
     [first_invoice3.invoice])
-pay3.form.journal = Journal(cash_journal.id)
+pay3.form.payment_method = PaymentMethod(payment_method.id)
 pay3.execute('choice')
 
 pay4 = Wizard('account.invoice.pay',
     [first_invoice4.invoice])
-pay4.form.journal = Journal(cash_journal.id)
+pay4.form.payment_method = PaymentMethod(payment_method.id)
 pay4.execute('choice')
 
 

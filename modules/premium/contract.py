@@ -225,7 +225,7 @@ class Contract(metaclass=PoolMeta):
                             prev_value.end = coog_date.add_day(elem.start, -1)
                     else:
                         if (getattr(prev_value, 'end', None) is None and
-                                getattr(prev_value, 'id', -1) < 0 and
+                                (getattr(prev_value, 'id', -1) or -1) < 0 and
                                 elem.end and prev_value.start and
                                 elem.end >= prev_value.start):
                             prev_value.end = elem.end

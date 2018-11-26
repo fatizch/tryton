@@ -23,7 +23,7 @@ class GestipTemplate(object):
                 )
         schema_filepath = os.path.join(os.path.dirname(__file__), 'resources/'
             + self.schema_filename)
-        with open(schema_filepath, 'r') as f:
+        with open(schema_filepath, 'rb') as f:
             schema = etree.XMLSchema(etree.XML(f.read()))
             self.parser = etree.XMLParser(schema=schema)
         self.generate(data)
@@ -34,14 +34,14 @@ class GestipTemplate(object):
     def generate(self, data):
         raise NotImplementedError
 
-    def __str__(self):
+    def __bytes__(self):
         return etree.tostring(self.xml,
             pretty_print=True,
             xml_declaration=True,
             encoding=self.encoding)
 
     def validate(self):
-        return etree.fromstring(str(self), self.parser)
+        return etree.fromstring(bytes(self), self.parser)
 
 
 class GestipHeader(GestipTemplate):

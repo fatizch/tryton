@@ -212,6 +212,18 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="access_product_category_group_product_manage">
+            <field name="model" search="[('model', '=', 'product.category')]"/>
+            <field name="group" ref="offered.group_product_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.rule.group-res.group" id="rule_group_category_accounting-product_manage">
+            <field name="rule_group" ref="account_product.rule_group_category_accounting"/>
+            <field name="group" ref="offered.group_product_manage"/>
+        </record>
         <record model="ir.model.access" id="access_account_fee_group_product_manage">
             <field name="model" search="[('model', '=', 'account.fee')]"/>
             <field name="group" ref="offered.group_product_manage"/>

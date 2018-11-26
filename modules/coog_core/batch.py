@@ -21,7 +21,7 @@ from . import coog_string
 DatabaseOperationalError = backend.get('DatabaseOperationalError')
 
 try:
-    import async.broker as async_broker
+    import coog_async.broker as async_broker
     if config.get('async', 'celery', default=None) is not None:
         async_broker.set_module('celery')
     elif config.get('async', 'rq', default=None) is not None:
@@ -76,7 +76,7 @@ def load_batch_config():
     if config_file:
         try:
             with open(config_file, 'r') as fconf:
-                config.readfp(fconf)
+                config.read_file(fconf)
         except IOError:
             pass
     return config

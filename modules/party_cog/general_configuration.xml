@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <menuitem name="Party Configuration" parent="coog_core.general_configuration_menu" action="party.act_party_configuration_form" id="menu_party_general_configuration" sequence="10" icon="tryton-preferences"/>
+        <menuitem name="Party Configuration" parent="coog_core.general_configuration_menu" action="party.act_party_configuration_form" id="menu_party_general_configuration" sequence="10" icon="tryton-settings"/>
         <menuitem name="Party Relation Types" parent="coog_core.general_configuration_menu" action="party_relationship.act_relation_type" id="menu_party_relation_type_general_configuration" sequence="60" icon="party_relation"/>
     </data>
 </tryton>

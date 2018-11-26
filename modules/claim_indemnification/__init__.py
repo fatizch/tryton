@@ -14,6 +14,7 @@ from . import party
 from . import wizard
 from .benefit import BenefitRule
 from . import payment
+from . import account
 
 __all__ = [
     'BenefitRule'
@@ -56,6 +57,7 @@ def register():
         move.MoveLine,
         payment.Payment,
         claim.ClaimSubStatus,
+        account.Journal,
         module='claim_indemnification', type_='model')
     Pool.register(
         wizard.FillExtraData,

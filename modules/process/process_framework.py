@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
-from trytond.model import ModelView, ModelSQL
+from trytond.model import ModelView, ModelSQL, model
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import coog_string, utils, fields
@@ -72,7 +72,7 @@ class DynamicButtonDict(dict):
         return super(DynamicButtonDict, self).__contains__(name)
 
 
-class ClassAttr(PoolMeta):
+class ClassAttr(model.ModelMeta):
     '''
         The purpose of this class is to allow us to override the __getattr__
         of the class it instanciate in order to be able to direct all the calls

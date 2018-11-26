@@ -192,11 +192,11 @@ class ReconcileShow(metaclass=PoolMeta):
             ('set_on_contract', 'Set on Contract')
             ],
         'Remaining Repartition Method', states={
-            'required': Bool(Eval('write_off', False)),
-            'invisible': If(~Eval('write_off', 0), 0,
-                Eval('write_off', 0)) >= 0
+            'required': Bool(Eval('write_off_amount', False)),
+            'invisible': If(~Eval('write_off_amount', 0), 0,
+                Eval('write_off_amount', 0)) >= 0
             },
-        depends=['write_off'])
+        depends=['write_off_amount'])
     repartition_method_string = remaining_repartition_method.translated(
         'remaining_repartition_method')
     contract = fields.Many2One('contract', 'Contract',
@@ -210,15 +210,6 @@ class ReconcileShow(metaclass=PoolMeta):
         depends=['party', 'remaining_repartition_method'])
 
     @classmethod
-    def __setup__(cls):
-        super(ReconcileShow, cls).__setup__()
-        cls.journal.domain = [If(
-                Eval('remaining_repartition_method', '') == 'write_off',
-                cls.journal.domain,
-                [('type', '=', 'split')])]
-        cls.journal.depends.append('remaining_repartition_method')
-
-    @classmethod
     def default_date(cls):
         return utils.today()
 
@@ -226,20 +217,14 @@ class ReconcileShow(metaclass=PoolMeta):
     def default_remaining_repartition_method(cls):
         return 'set_on_party'
 
-    @fields.depends('contract', 'description', 'journal', 'lines', 'party',
-        'remaining_repartition_method', 'write_off')
-    def on_change_lines(self):
-        if not self.lines:
-            return
-        self.write_off = self.on_change_with_write_off()
-        self.on_change_write_off()
-
-    @fields.depends('contract', 'description', 'journal', 'party',
-        'remaining_repartition_method', 'repartition_method_string')
+    @fields.depends('contract', 'description', 'party',
+        'remaining_repartition_method')
     def on_change_remaining_repartition_method(self):
         pool = Pool()
         Contract = pool.get('contract')
-        Journal = pool.get('account.journal')
+        # line below is to prevent test_fields_methods crash
+        if not self.remaining_repartition_method:
+            return
         if self.remaining_repartition_method != 'set_on_contract':
             self.contract = None
         else:
@@ -247,26 +232,19 @@ class ReconcileShow(metaclass=PoolMeta):
                 [('subscriber', '=', self.party.id)])
             if len(possible_contracts) == 1:
                 self.contract = possible_contracts[0]
-        if self.remaining_repartition_method != 'write_off':
-            self.journal = Journal.get_default_journal('split')
-        else:
-            self.journal = Journal.get_default_journal('write-off')
         self.description = '%s - %s' % (self.repartition_method_string,
             self.contract.rec_name if self.contract
             else self.party.rec_name if self.party else '')
 
-    @fields.depends('contract', 'journal', 'party',
-        'remaining_repartition_method', 'write_off')
-    def on_change_write_off(self):
-        if self.write_off >= 0:
+    @fields.depends('contract', 'party',
+        'remaining_repartition_method', 'write_off_amount')
+    def on_change_write_off_amount(self):
+        if (self.write_off_amount or -1) >= 0:
             self.contract = None
             self.remaining_repartition_method = 'write_off'
         else:
             self.remaining_repartition_method = 'set_on_party'
         self.on_change_remaining_repartition_method()
-        if not self.write_off:
-            # Set journal to avoid 0.0 write_off line creation
-            self.journal = None
 
 
 class Reconcile(metaclass=PoolMeta):
@@ -286,14 +264,15 @@ class Reconcile(metaclass=PoolMeta):
             return
         if not self.show.lines:
             return
-        to_write_off = self.show.account.currency.round(self.show.write_off)
+        to_write_off = self.show.account.currency.round(
+            self.show.write_off_amount or 0)
         if not to_write_off:
             return
         period_id = Period.find(self.show.account.company.id,
             date=self.show.date)
 
         move = Move()
-        move.journal = self.show.journal
+        move.journal = self.show.write_off.journal
         move.period = Period(period_id)
         move.date = self.show.date
         move.description = self.show.description

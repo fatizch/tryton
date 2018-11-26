@@ -7,7 +7,7 @@ this repository contains the full copyright notices and license terms. -->
         <label name="remaining_repartition_method"/>
         <field name="remaining_repartition_method"/>
     </xpath>
-    <xpath expr="/form/field[@name='journal']" position="after">
+    <xpath expr="/form/field[@name='write_off']" position="after">
         <label name="contract"/>
         <field name="contract"/>
     </xpath>

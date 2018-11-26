@@ -4,7 +4,7 @@ this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
         <menuitem name="Health" id="menu_health" sequence="15"/>
-        <menuitem name="Configuration" parent="menu_health" id="menu_health_configuration" sequence="100" icon="tryton-preferences"/>
+        <menuitem name="Configuration" parent="menu_health" id="menu_health_configuration" sequence="100" icon="tryton-settings"/>
         <!-- Group Access to Menu -->
         <record model="res.group" id="group_health_admin">
             <field name="name">Health Administration</field>

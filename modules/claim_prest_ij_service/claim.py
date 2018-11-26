@@ -235,11 +235,11 @@ class ClaimIjSubscriptionRequestGroup(Workflow, model.CoogSQL, model.CoogView):
 
     def generate_header_xml(self, common_data):
         header = gesti_templates.GestipHeader(common_data)
-        return str(header)
+        return bytes(header)
 
     def generate_document_xml(self, common_data):
         doc = gesti_templates.GestipDocument(common_data)
-        return str(doc)
+        return bytes(doc)
 
     def get_timestamp(self, n):
         return n.strftime('%Y-%m-%dT%H:%M:%SZ')

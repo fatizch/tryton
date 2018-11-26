@@ -2,8 +2,8 @@ import os
 import argparse
 import logging
 
-import async.broker as async_broker
-from async.tasks import batch_generate
+import coog_async.broker as async_broker
+from coog_async.tasks import batch_generate
 
 
 def generate(name, params):
@@ -70,4 +70,4 @@ def main():
 
 
 if __name__ == '__main__':
-    print((main()))
+    print(main())

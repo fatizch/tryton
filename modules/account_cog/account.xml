@@ -3,13 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <!-- ################ -->
-        <!-- # Journal Type # -->
-        <!-- ################ -->
-        <record model="account.journal.type" id="journal_type_split">
-            <field name="name">Split</field>
-            <field name="code">split</field>
-        </record>
         <record model="ir.ui.view" id="aged_balance_view_list">
             <field name="model">account.aged_balance</field>
             <field name="inherit" ref="account.aged_balance_view_list"/>

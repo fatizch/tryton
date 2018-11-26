@@ -48,14 +48,20 @@ Create benefit account product::
     >>> Product = Model.get('product.product')
     >>> unit, = Uom.find([('name', '=', 'Unit')])
     >>> account_product = Product()
+    >>> ProductCategory = Model.get('product.category')
+    >>> account_category = ProductCategory(name="Account Category")
+    >>> account_category.accounting = True
+    >>> account_category.account_expense = accounts['expense']
+    >>> account_category.account_revenue = accounts['revenue']
+    >>> account_category.code = 'account_category'
+    >>> account_category.save()
     >>> template = Template()
     >>> template.name = 'Benefit Product'
     >>> template.default_uom = unit
     >>> template.type = 'service'
     >>> template.list_price = Decimal(0)
     >>> template.cost_price = Decimal(0)
-    >>> template.account_expense = accounts['expense']
-    >>> template.account_revenue = accounts['revenue']
+    >>> template.account_category = account_category
     >>> template.products[0].code = 'benefit_product'
     >>> template.save()
     >>> account_product = template.products[0]
@@ -268,8 +274,8 @@ Case 1 : the final decision is to reduce : we reject::
     >>> event_desc = EventDesc(event_desc.id)
     >>> loss_desc = LossDesc(loss_desc.id)
     >>> loss = claim.losses.new()
-    >>> loss.start_date = datetime.date(2016, 1, 01)
-    >>> loss.end_date = datetime.date(2017, 1, 01)
+    >>> loss.start_date = datetime.date(2016, 1, 0o1)
+    >>> loss.end_date = datetime.date(2017, 1, 0o1)
     >>> loss.loss_desc = loss_desc
     >>> loss.event_desc = event_desc
     >>> loss.save()
@@ -348,7 +354,7 @@ Create warning to simulate clicking yes::
     >>> UnderwritingDecisionType = Model.get('underwriting.decision.type')
     >>> result.final_decision = UnderwritingDecisionType(reduce_decision.id)
     >>> values, = result.click('finalize')
-    >>> for k, val in values.iteritems():
+    >>> for k, val in list(values.items()):
     ...     setattr(result, k, val)
 
 Create warning to simulate clicking yes::
@@ -389,8 +395,8 @@ Case 2 : the final decision is to do nothing special:: we schedule::
     >>> event_desc = EventDesc(event_desc.id)
     >>> loss_desc = LossDesc(loss_desc.id)
     >>> loss = claim.losses.new()
-    >>> loss.start_date = datetime.date(2016, 1, 01)
-    >>> loss.end_date = datetime.date(2017, 1, 01)
+    >>> loss.start_date = datetime.date(2016, 1, 0o1)
+    >>> loss.end_date = datetime.date(2017, 1, 0o1)
     >>> loss.loss_desc = loss_desc
     >>> loss.event_desc = event_desc
     >>> loss.save()
@@ -469,7 +475,7 @@ Create warning to simulate clicking yes::
     >>> UnderwritingDecisionType = Model.get('underwriting.decision.type')
     >>> result.final_decision = UnderwritingDecisionType(nothing_decision.id)
     >>> values, = result.click('finalize')
-    >>> for k, val in values.iteritems():
+    >>> for k, val in list(values.items()):
     ...     setattr(result, k, val)
 
 Create warning to simulate clicking yes::

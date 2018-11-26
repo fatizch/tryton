@@ -12,9 +12,9 @@ def get_value(d, p):
 
 def print_value(v):
     if type(v) is dict:
-        print((json.dumps(v)))
+        print(json.dumps(v))
     elif type(v) in (str, str):
-        print((html.parser.HTMLParser().unescape(v)))
+        print(html.parser.HTMLParser().unescape(v))
     else:
         print(v)
 

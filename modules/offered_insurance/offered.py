@@ -241,8 +241,12 @@ class ExtraData(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(ExtraData, cls).__setup__()
-        cls._hardcoded_rule_context_matches = getattr(cls,
-            '_hardcoded_rule_context_matches', {})
+        cls._hardcoded_rule_context_matches = {
+            'covered_element': [
+                ('elem', ['find_extra_data_value']),
+                ('subscriber', ['find_extra_data_value']),
+                ],
+            }
 
     @classmethod
     def _extra_data_value_for_rule(cls, name, context):

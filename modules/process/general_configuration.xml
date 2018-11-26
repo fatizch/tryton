@@ -3,6 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <menuitem name="Process Configuration" parent="coog_core.general_configuration_menu" action="act_configuration" id="menu_process_configuration_general_configuration" sequence="155" icon="tryton-preferences"/>
+        <menuitem name="Process Configuration" parent="coog_core.general_configuration_menu" action="act_configuration" id="menu_process_configuration_general_configuration" sequence="155" icon="tryton-settings"/>
     </data>
 </tryton>

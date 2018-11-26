@@ -86,12 +86,12 @@ payment, = Payment.find()
 payment.amount = Decimal('30.0')
 payment.click('approve')
 payment.state
-# #Res# #u'approved'
+# #Res# #'approved'
 process_payment = Wizard('account.payment.process', [payment])
 process_payment.execute('pre_process')
 payment.reload()
 payment.state
-# #Res# #u'processing'
+# #Res# #'processing'
 line.reload()
 line.payment_amount
 # #Res# #Decimal('20.00')
@@ -103,11 +103,11 @@ succeed.form.date == today
 succeed.form.date = first
 succeed.execute('succeed')
 payment.state
-# #Res# #u'succeeded'
+# #Res# #'succeeded'
 payment.clearing_move.date == first
 # #Res# #True
 payment.clearing_move.state
-# #Res# #u'posted'
+# #Res# #'posted'
 payable.reload()
 payable.balance
 # #Res# #Decimal('-20.00')

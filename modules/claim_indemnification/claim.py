@@ -111,7 +111,7 @@ class Claim(metaclass=PoolMeta):
         details = Detail.search([('claim', '=', self.id)])
         invoices = [detail.invoice_line.invoice for detail in details]
         invoices = list(set(invoices))
-        return [invoice.id for invoice in invoices]
+        return sorted([invoice.id for invoice in invoices])
 
     def validate_indemnifications(self):
         Indemnification = Pool().get('claim.indemnification')
@@ -854,8 +854,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         Date = Pool().get('ir.date')
         for indemn in indemnifications:
             all_taxes = []
-            all_taxes.extend(indemn.product.supplier_taxes)
-            for tax in indemn.product.supplier_taxes:
+            all_taxes.extend(indemn.product.supplier_taxes_used)
+            for tax in indemn.product.supplier_taxes_used:
                 if tax.childs:
                     all_taxes.extend(tax.childs)
             for tax in all_taxes:
@@ -879,7 +879,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         pass
 
     def _get_applied_product_supplier_taxes(self):
-        taxes = self.product.supplier_taxes
+        taxes = self.product.supplier_taxes_used
         if not taxes:
             return []
 
@@ -903,7 +903,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
 
     @property
     def taxable_lines(self):
-        return [(self.product.supplier_taxes, self.amount, 1)]
+        return [(self.product.supplier_taxes_used, self.amount, 1)]
 
     def is_removable(self):
         return self.status in ('calculated', 'scheduled')
@@ -1027,7 +1027,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         self.details = list(self.details)
 
     def get_amount(self, name):
-        if not self.product.supplier_taxes:
+        if not self.product.supplier_taxes_used:
             return self.total_amount
         pool = Pool()
         Tax = pool.get('account.tax')
@@ -1056,7 +1056,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     def update_amounts(self):
         if not self.product:
             return
-        if not self.product.supplier_taxes:
+        if not self.product.supplier_taxes_used:
             if self.product.taxes_included:
                 self.amount = self.total_amount
             else:
@@ -1315,9 +1315,15 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             cur_dict['start_date'] = indemnification.start_date
             cur_dict['end_date'] = indemnification.end_date
             cur_dict['currency'] = indemnification.service.get_currency()
-            details = indemnification.service.benefit.calculate_benefit(
+            details_data = indemnification.service.benefit.calculate_benefit(
                 cur_dict)
-            details = [IndemnificationDetail(**detail) for detail in details]
+            details = []
+            for detail in details_data:
+                if 'description' in detail and isinstance(
+                        detail['description'], bytes):
+                    detail['description'] = detail['description'].decode(
+                        'utf-8')
+                details.append(IndemnificationDetail(**detail))
             indemnification.details = details
             amount = sum([getattr(d, 'amount', 0) for d in details])
             if indemnification.product.taxes_included:
@@ -1362,7 +1368,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         if not indemnifications_with_values:
             return
         to_write = []
-        for indemnification, values in list(indemnifications_with_values.items()):
+        for indemnification, values in list(
+                indemnifications_with_values.items()):
             values.update({'status': 'rejected'})
             to_write.extend([[indemnification], values])
         cls.write(*to_write)
@@ -1458,7 +1465,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         if invoice_line.product.taxes_included:
             invoice_line.unit_price = Tax.reverse_compute(
                 indemnification.total_amount,
-                invoice_line.product.supplier_taxes,
+                invoice_line.product.supplier_taxes_used,
                 indemnification.start_date)
             invoice_line.unit_price = invoice_line.unit_price.quantize(
                 Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1])
@@ -1501,7 +1508,11 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         def group_key(x):
             return x._group_to_claim_invoice_key()
 
-        indemnifications.sort(key=group_key)
+        def sort_key(x):
+            g_key = group_key(x)
+            return tuple([g_key[k] for k in sorted(g_key.keys())])
+
+        indemnifications.sort(key=sort_key)
         for key, group_indemnification in groupby(indemnifications,
                 key=group_key):
             invoice = cls._get_invoice(key)
