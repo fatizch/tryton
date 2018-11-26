@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class EndorsementPart:
-    __metaclass__ = PoolMeta
+class EndorsementPart(metaclass=PoolMeta):
     __name__ = 'endorsement.part'
 
     covered_elements_fields = fields.One2Many(
@@ -88,9 +87,8 @@ class EndorsementCoveredElementField(field_mixin('contract.covered_element'),
 
 class EndorsementCoveredElementVersionField(
         field_mixin('contract.covered_element.version'), model.CoogSQL,
-        model.CoogView):
+        model.CoogView, metaclass=PoolMeta):
     'Endorsement Covered Element Version Field'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.covered_element.version.field'
 
 

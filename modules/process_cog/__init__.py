@@ -2,12 +2,12 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 from trytond.config import config
-import process
-import process_timings
-import models_for_test
-import event
-import document
-import wizard
+from . import process
+from . import process_timings
+from . import models_for_test
+from . import event
+from . import document
+from . import wizard
 
 
 def register():

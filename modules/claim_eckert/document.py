@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class DocumentRequestLine:
-    __metaclass__ = PoolMeta
+class DocumentRequestLine(metaclass=PoolMeta):
     __name__ = 'document.request.line'
 
     @classmethod

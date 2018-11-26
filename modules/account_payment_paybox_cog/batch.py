@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class PaymentAcknowledgeBatch:
-    __metaclass__ = PoolMeta
+class PaymentAcknowledgeBatch(metaclass=PoolMeta):
     __name__ = 'account.payment.acknowledge'
 
     @classmethod

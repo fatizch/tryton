@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Fee:
-    __metaclass__ = PoolMeta
+class Fee(metaclass=PoolMeta):
     __name__ = 'account.fee'
 
     one_per_set = fields.Boolean('One Per Set')

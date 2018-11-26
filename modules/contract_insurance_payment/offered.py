@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     payment_journal = fields.Many2One('account.payment.journal',
@@ -25,8 +24,7 @@ class Product:
         return super(Product, cls)._export_light() | {'payment_journal'}
 
 
-class BillingMode:
-    __metaclass__ = PoolMeta
+class BillingMode(metaclass=PoolMeta):
     __name__ = 'offered.billing_mode'
 
     failure_billing_mode = fields.Many2One('offered.billing_mode',

@@ -134,8 +134,8 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
                 '"_func_key": "%s_clone"' % record.code)
             values = values.replace('"code": "%s"' % record.code,
                 '"code": "%s_clone"' % record.code)
-            values = values.replace(u'"name": "%s"' % record.name,
-                u'"name": "%s Clone"' % record.name)
+            values = values.replace('"name": "%s"' % record.name,
+                '"name": "%s Clone"' % record.name)
             tmp = record.import_json(json.loads(values,
                     object_hook=JSONDecoder()))
             result.append(tmp)
@@ -279,7 +279,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         for records, values in zip(actions, actions):
             if any(k for k in values if k.startswith('dimension_order')):
                 dimensions = [d for r in records
-                    for i in xrange(DIMENSION_MAX)
+                    for i in range(DIMENSION_MAX)
                     for d in getattr(r, 'dimension%s' % (i + 1)) or []]
                 TableDefinitionDimension.clean_sequence(dimensions)
 
@@ -568,7 +568,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
     @classmethod
     def search_rec_name(cls, name, clause):
         _, operator, value = clause
-        if operator == '=' and isinstance(value, (int, long)):
+        if operator == '=' and isinstance(value, int):
             return [('id', '=', value)]
         if operator == 'ilike':
             return [('name', 'ilike', value.strip('%'))]
@@ -1064,7 +1064,7 @@ class Table2DDict(dict):
                 ('type', '=', 'dimension2'),
                 ('definition', '=', definition_id),
                 ])
-        result = super(Table2DDict, self).keys()
+        result = list(super(Table2DDict, self).keys())
         result += ['col%d' % d.id for d in dimensions2]
         return result
 
@@ -1238,7 +1238,7 @@ class Table2D(ModelSQL, ModelView):
         dim1_ids = [r.id for r in rows]
         definition_id = int(context.get('table', -1))
         to_creates = []
-        for col, value in values.iteritems():
+        for col, value in values.items():
             dim2_id = int(col[3:])
             domain = [
                 ('definition', '=', definition_id),

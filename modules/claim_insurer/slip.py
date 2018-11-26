@@ -7,8 +7,7 @@ __all__ = [
     ]
 
 
-class InvoiceSlipConfiguration:
-    __metaclass__ = PoolMeta
+class InvoiceSlipConfiguration(metaclass=PoolMeta):
     __name__ = 'account.invoice.slip.configuration'
 
     @classmethod

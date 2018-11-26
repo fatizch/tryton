@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     @classmethod
@@ -68,8 +67,7 @@ class Contract:
                 to_agent)
 
 
-class Endorsement:
-    __metaclass__ = PoolMeta
+class Endorsement(metaclass=PoolMeta):
     __name__ = 'endorsement'
 
     def new_endorsement(self, endorsement_part):

@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 
 import logging
-import tools
+from . import tools
 
 from random import shuffle
 from sql import Column, Literal, Null
@@ -76,7 +76,7 @@ class Migrator(batch.BatchRootNoSelect):
     @classmethod
     def cast_extra_args(cls, **kwargs):
         if kwargs.get('update', None) and isinstance(kwargs['update'],
-                basestring):
+                str):
             kwargs['update'] = kwargs['update'].lower() in ('1',
                 'true')
         if kwargs.get('update', None) and cls.func_key == 'id':
@@ -86,7 +86,7 @@ class Migrator(batch.BatchRootNoSelect):
     @classmethod
     def select_columns(cls, tables=None):
         res = []
-        for dest_col, src_col in cls.columns.iteritems():
+        for dest_col, src_col in cls.columns.items():
             if src_col:
                 res.append(Column(cls.table, src_col).as_(dest_col))
         return res
@@ -138,12 +138,12 @@ class Migrator(batch.BatchRootNoSelect):
         """
         for k in cls.columns:
             if k in row:
-                if isinstance(row[k], basestring):
+                if isinstance(row[k], str):
                     row[k] = row[k].strip()
             else:
                 row[k] = None
         # If row key is in transcoding, replace row value by transcoded one
-        for key in cls.transcoding.keys():
+        for key in list(cls.transcoding.keys()):
             if key in row:
                 row[key] = cls.transcoding[key].get(row[key], row[key])
         return row
@@ -225,8 +225,8 @@ class Migrator(batch.BatchRootNoSelect):
            in coog.
         """
         table_name = cls.model.replace('.', '_')
-        existing_ids = tools.cache_from_query(table_name,
-            (cls.func_key,)).keys()
+        existing_ids = list(tools.cache_from_query(table_name,
+            (cls.func_key,)).keys())
         return list(set(ids) - set(excluded) - set(existing_ids))
 
     @classmethod
@@ -287,9 +287,9 @@ class Migrator(batch.BatchRootNoSelect):
                 continue
             to_upsert[row[cls.func_key]] = row
         if to_upsert:
-            cls.upsert_records(to_upsert.values(), **kwargs)
+            cls.upsert_records(list(to_upsert.values()), **kwargs)
             for migrator in cls.extra_migrator_names():
-                pool.get(migrator).migrate(to_upsert.keys(), **kwargs)
+                pool.get(migrator).migrate(list(to_upsert.keys()), **kwargs)
         return to_upsert
 
     @classmethod
@@ -336,7 +336,7 @@ class Migrator(batch.BatchRootNoSelect):
                     if k in set(Model._fields) - {'id', }}
                 obj = Model(cls.cache_obj['update'][func_key])
                 to_update[func_key] = [[obj], row]
-            Model.write(*sum(to_update.values(), []))
+            Model.write(*sum(list(to_update.values()), []))
             return rows
         return []
 

@@ -1,16 +1,16 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-import move
-import account
-import party
-import offered
-import contract
-import invoice
-import payment
-import statement
-import commission
-import claim
+from . import move
+from . import account
+from . import party
+from . import offered
+from . import contract
+from . import invoice
+from . import payment
+from . import statement
+from . import commission
+from . import claim
 
 
 def register():

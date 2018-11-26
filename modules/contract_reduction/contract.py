@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     reduction_date = fields.Date('Reduction Date', states={
@@ -232,8 +231,7 @@ class Contract:
             option.cancel_reduction()
 
 
-class Option:
-    __metaclass__ = PoolMeta
+class Option(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     reduction_value = fields.Numeric('Reduction Value', states={

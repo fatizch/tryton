@@ -7,8 +7,7 @@ __all__ = [
     ]
 
 
-class Attachment:
-    __metaclass__ = PoolMeta
+class Attachment(metaclass=PoolMeta):
     __name__ = 'ir.attachment'
 
     @classmethod

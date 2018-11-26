@@ -15,8 +15,7 @@ __all__ = [
     ]
 
 
-class Sequence:
-    __metaclass__ = PoolMeta
+class Sequence(metaclass=PoolMeta):
     __name__ = 'ir.sequence'
 
     @classmethod
@@ -24,8 +23,7 @@ class Sequence:
         return super(Sequence, cls)._export_light() | {'company'}
 
 
-class SequenceStrict:
-    __metaclass__ = PoolMeta
+class SequenceStrict(metaclass=PoolMeta):
     __name__ = 'ir.sequence.strict'
 
     @classmethod
@@ -33,8 +31,7 @@ class SequenceStrict:
         return super(SequenceStrict, cls)._export_light() | {'company'}
 
 
-class Date:
-    __metaclass__ = PoolMeta
+class Date(metaclass=PoolMeta):
     __name__ = 'ir.date'
 
     @classmethod

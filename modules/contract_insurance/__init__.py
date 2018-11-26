@@ -2,13 +2,13 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import event
-import contract
-import party
-import report_engine
-import wizard
-import rule_engine
-import batch
+from . import event
+from . import contract
+from . import party
+from . import report_engine
+from . import wizard
+from . import rule_engine
+from . import batch
 
 from trytond.modules.coog_core import expand_tree
 CoveredElementTreeExpansion = expand_tree('contract.covered_element')

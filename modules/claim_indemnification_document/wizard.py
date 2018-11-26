@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class IndemnificationCalculationResult:
-    __metaclass__ = PoolMeta
+class IndemnificationCalculationResult(metaclass=PoolMeta):
     __name__ = 'claim.indemnification_calculation_result'
 
     requested_documents = fields.One2Many('document.request.line', None,
@@ -20,8 +19,7 @@ class IndemnificationCalculationResult:
         states={'invisible': ~Eval('requested_documents')})
 
 
-class CreateIndemnification:
-    __metaclass__ = PoolMeta
+class CreateIndemnification(metaclass=PoolMeta):
     __name__ = 'claim.create_indemnification'
 
     def transition_calculate(self):

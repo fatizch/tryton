@@ -13,17 +13,15 @@ __all__ = [
     ]
 
 
-class ContractDisplayer:
+class ContractDisplayer(metaclass=PoolMeta):
 
-    __metaclass__ = PoolMeta
     __name__ = 'contract.billing_information.change.contract_displayer'
 
     sepa_mandate = fields.Many2One('account.payment.sepa.mandate',
         'Sepa Mandate', readonly=True)
 
 
-class ChangeBillingInformation:
-    __metaclass__ = PoolMeta
+class ChangeBillingInformation(metaclass=PoolMeta):
     __name__ = 'contract.billing_information.change'
 
     mandate_needed = fields.Boolean('Mandate Needed',

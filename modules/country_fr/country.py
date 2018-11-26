@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Zip:
-    __metaclass__ = PoolMeta
+class Zip(metaclass=PoolMeta):
     __name__ = 'country.zip'
 
     line5 = fields.Char('Line 5', select=True)
@@ -59,7 +58,7 @@ class Zip:
         def replace(city):
             m = re.match(regex, city)
             if m:
-                city = u'%sST%s %s' % (m.group('before'), m.group('e_letter'),
+                city = '%sST%s %s' % (m.group('before'), m.group('e_letter'),
                     m.group('after'))
                 return replace(city)
             return city
@@ -72,7 +71,7 @@ class Zip:
         domain = [(
             'city', clause[1],
             cls.replace_city_name_with_support_for_french_sna(
-                unicode(clause[2])))]
+                str(clause[2])))]
         if cls.search(domain, limit=1):
             return domain
         return [(cls._rec_name,) + tuple(clause[1:])]
@@ -90,8 +89,8 @@ class Zip:
                     cur_domain[2])
                 domain.remove(cur_domain)
                 if 'like' in cur_domain[1]:
-                    city = u'%' + city + u'%'
-                domain.append([u'city', cur_domain[1], city])
+                    city = '%' + city + '%'
+                domain.append(['city', cur_domain[1], city])
                 break
         return super(Zip, cls).search(
             domain, offset, limit, order, count, query)

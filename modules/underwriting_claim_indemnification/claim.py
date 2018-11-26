@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class BenefitRule:
-    __metaclass__ = PoolMeta
+class BenefitRule(metaclass=PoolMeta):
     __name__ = 'benefit.rule'
 
     @classmethod
@@ -63,8 +62,7 @@ class BenefitRule:
         return periods
 
 
-class Service:
-    __metaclass__ = PoolMeta
+class Service(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     @classmethod
@@ -124,8 +122,7 @@ class Service:
         return res
 
 
-class Indemnification:
-    __metaclass__ = PoolMeta
+class Indemnification(metaclass=PoolMeta):
     __name__ = 'claim.indemnification'
 
     apply_underwriting_reduction = fields.Boolean(
@@ -147,8 +144,7 @@ class Indemnification:
         return status + ' - ' + blocking.rec_name
 
 
-class IndemnificationDefinition:
-    __metaclass__ = PoolMeta
+class IndemnificationDefinition(metaclass=PoolMeta):
     __name__ = 'claim.indemnification_definition'
 
     underwritings = fields.Many2Many('underwriting.result', None, None,
@@ -185,8 +181,7 @@ class IndemnificationDefinition:
         return dates + [blocking.effective_decision_date]
 
 
-class CreateIndemnification(model.FunctionalErrorMixIn):
-    __metaclass__ = PoolMeta
+class CreateIndemnification(model.FunctionalErrorMixIn, metaclass=PoolMeta):
     __name__ = 'claim.create_indemnification'
 
     def check_input(self):

@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class PaymentTerm:
-    __metaclass__ = PoolMeta
+class PaymentTerm(metaclass=PoolMeta):
     __name__ = 'account.invoice.payment_term'
 
     is_one_shot = fields.Function(
@@ -22,8 +21,7 @@ class PaymentTerm:
         return len(self.lines) == 1 and self.lines[0].type == 'remainder'
 
 
-class PaymentTermLine:
-    __metaclass__ = PoolMeta
+class PaymentTermLine(metaclass=PoolMeta):
     __name__ = 'account.invoice.payment_term.line'
 
     def get_date(self, date):
@@ -32,8 +30,7 @@ class PaymentTermLine:
         return date
 
 
-class PaymentTermLineRelativeDelta:
-    __metaclass__ = PoolMeta
+class PaymentTermLineRelativeDelta(metaclass=PoolMeta):
     __name__ = 'account.invoice.payment_term.line.delta'
 
     quarter = fields.Boolean('Quarter', help="Synchronise to calendar quarter "

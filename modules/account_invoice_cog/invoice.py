@@ -23,8 +23,7 @@ __all__ = [
     ]
 
 
-class InvoiceLine:
-    __metaclass__ = PoolMeta
+class InvoiceLine(metaclass=PoolMeta):
     __name__ = 'account.invoice.line'
 
     tax_lines = fields.One2Many('account.invoice.line-account.tax', 'line',
@@ -474,7 +473,7 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
         expected_amount_non_rounded = 0
         sum_of_rounded = 0
         initial_data = ServerContext().get('taxes_initial_base')
-        for taxline in taxes.itervalues():
+        for taxline in taxes.values():
             if expected_amount_non_rounded == 0:
                 # Add base amount only for the first tax
                 expected_amount_non_rounded = initial_data[taxline]
@@ -496,8 +495,7 @@ class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
         return self.taxes_included and self.currency
 
 
-class InvoiceLineTax:
-    __metaclass__ = PoolMeta
+class InvoiceLineTax(metaclass=PoolMeta):
     __name__ = 'account.invoice.line-account.tax'
 
     amount = fields.Function(
@@ -569,7 +567,7 @@ class InvoiceLineTax:
         # 3.9450
         expected_amount_non_rounded = self.line.unit_price
         sum_of_rounded = 0
-        for taxline in line_taxes.itervalues():
+        for taxline in line_taxes.values():
             # 3.9450 + 0.3555 = 4.3005
             expected_amount_non_rounded += taxline['amount']
             # base => 3.9450 rounded to 3.95

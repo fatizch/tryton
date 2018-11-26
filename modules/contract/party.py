@@ -21,8 +21,7 @@ __all__ = [
     ]
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     contracts = fields.One2ManyDomain('contract', 'subscriber',
@@ -140,8 +139,7 @@ class SynthesisMenuContrat(model.CoogSQL):
         return coog_string.translate_label(ContractSynthesis, 'name')
 
 
-class SynthesisMenu:
-    __metaclass__ = PoolMeta
+class SynthesisMenu(metaclass=PoolMeta):
     __name__ = 'party.synthesis.menu'
 
     @classmethod
@@ -193,8 +191,7 @@ class SynthesisMenuOpen(Wizard):
         return actions
 
 
-class PartyReplace:
-    __metaclass__ = PoolMeta
+class PartyReplace(metaclass=PoolMeta):
     __name__ = 'party.replace'
 
     @classmethod

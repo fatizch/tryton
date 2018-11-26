@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     @classmethod
@@ -39,8 +38,7 @@ class Contract:
         self.covered_elements = covered_elements
 
 
-class ContractOption:
-    __metaclass__ = PoolMeta
+class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     @fields.depends('versions')
@@ -75,8 +73,7 @@ class ContractOption:
         version.coverage_amount_revaluation = True
 
 
-class ContractOptionVersion:
-    __metaclass__ = PoolMeta
+class ContractOptionVersion(metaclass=PoolMeta):
     __name__ = 'contract.option.version'
 
     coverage_amount_revaluation = fields.Boolean('Coverage Amount Revaluation',

@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class Commission:
-    __metaclass__ = PoolMeta
+class Commission(metaclass=PoolMeta):
     __name__ = 'commission'
 
     @classmethod
@@ -29,8 +28,7 @@ class Commission:
         Move.post(moves)
 
 
-class Agent:
-    __metaclass__ = PoolMeta
+class Agent(metaclass=PoolMeta):
     __name__ = 'commission.agent'
 
     @classmethod
@@ -38,8 +36,7 @@ class Agent:
         return (super(Agent, cls)._export_light() | set(['waiting_account']))
 
 
-class CreateAgents:
-    __metaclass__ = PoolMeta
+class CreateAgents(metaclass=PoolMeta):
     __name__ = 'commission.create_agents'
 
     def new_agent(self, party, plan):
@@ -53,8 +50,7 @@ class CreateAgents:
         return vals
 
 
-class CreateAgentsAsk:
-    __metaclass__ = PoolMeta
+class CreateAgentsAsk(metaclass=PoolMeta):
     __name__ = 'commission.create_agents.ask'
 
     waiting_account = fields.Many2One('account.account', 'Waiting Account',

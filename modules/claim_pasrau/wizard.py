@@ -75,8 +75,7 @@ class ClaimPasrauImportFileSummary(model.CoogView):
     errors = fields.Text('Errors', readonly=True)
 
 
-class InvoiceSlipParameters:
-    __metaclass__ = PoolMeta
+class InvoiceSlipParameters(metaclass=PoolMeta):
     __name__ = 'account.invoice.slip.parameters'
 
     @classmethod

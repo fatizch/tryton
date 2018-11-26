@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class RuleEngineRuntime:
-    __metaclass__ = PoolMeta
+class RuleEngineRuntime(metaclass=PoolMeta):
     __name__ = 'rule_engine.runtime'
 
     @classmethod
@@ -50,8 +49,7 @@ class RuleEngineRuntime:
         return args['commission_end_date']
 
 
-class RuleEngine:
-    __metaclass__ = PoolMeta
+class RuleEngine(metaclass=PoolMeta):
     __name__ = 'rule_engine'
 
     @classmethod

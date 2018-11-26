@@ -19,7 +19,7 @@ from trytond.modules.coog_core import model, fields, utils, coog_date
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.contract import _STATES, _DEPENDS
 
-from offered import PREMIUM_FREQUENCY
+from .offered import PREMIUM_FREQUENCY
 
 __all__ = [
     'Contract',
@@ -29,8 +29,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     all_premiums = fields.One2Many('contract.premium', 'main_contract',
@@ -125,7 +124,7 @@ class Contract:
                 continue
             prices = contract.calculate_prices_between_dates(start, end)
             prices.update(contract.calculate_non_periodic_prices(start))
-            for date, price in prices.iteritems():
+            for date, price in prices.items():
                 final_prices[date].extend(price)
         cls.delete_prices(contracts, start)
         cls.store_prices(final_prices)
@@ -173,7 +172,7 @@ class Contract:
 
         # Create premiums from calculated prices
         to_save = []
-        for date, price_list in prices.iteritems():
+        for date, price_list in prices.items():
             for price in price_list:
                 to_save += cls.new_premium_from_price(price, date, None)
 
@@ -184,7 +183,7 @@ class Contract:
 
         # Clean up premiums
         to_save = []
-        for parent, premiums in per_parent.iteritems():
+        for parent, premiums in per_parent.items():
             # Create the full list of premiums, and order it (so that
             # successive elements concerns the same rated_entity, with
             # an ascending start date)
@@ -271,7 +270,7 @@ class Contract:
             if contract_fees[fee].manual:
                 contract_fees[fee].manual = False
 
-        self.fees = sorted(contract_fees.values(), key=lambda x: x.fee)
+        self.fees = sorted(list(contract_fees.values()), key=lambda x: x.fee)
         if to_delete:
             ContractFee.delete(to_delete)
 
@@ -285,8 +284,7 @@ class Contract:
             ('contract', 'calculate_prices')]
 
 
-class ContractOption:
-    __metaclass__ = PoolMeta
+class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     premiums = fields.One2Many('contract.premium', 'option', 'Premiums',
@@ -604,7 +602,7 @@ class Premium(model.CoogSQL, model.CoogView):
         clause_data = cls.get_premium_tree(Pool().get('contract').browse(
                 value))
         clause = ['OR']
-        for fname, ids in clause_data.iteritems():
+        for fname, ids in clause_data.items():
             if not ids:
                 continue
             clause.append((fname, 'in', ids))

@@ -35,9 +35,8 @@ class ContributionsView(model.CoogView):
     fixed_amount = fields.Numeric('Amount', digits=(16, 4), required=True)
 
 
-class StartSetContributions(model.CoogView):
+class StartSetContributions(model.CoogView, metaclass=PoolMeta):
     'Start Set Contributions'
-    __metaclass__ = PoolMeta
     __name__ = 'claim.start_set_contributions'
 
     rates = fields.One2Many('claim.contributions_view', None, 'Rates',

@@ -15,9 +15,8 @@ __all__ = [
     ]
 
 
-class Contract(CoogProcessFramework):
+class Contract(CoogProcessFramework, metaclass=ClassAttr):
     __name__ = 'contract'
-    __metaclass__ = ClassAttr
 
     product_desc = fields.Function(
         fields.Text('Description', readonly=True),
@@ -149,8 +148,7 @@ class Contract(CoogProcessFramework):
         return True
 
 
-class ContractOption:
-    __metaclass__ = PoolMeta
+class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     status_selection = fields.Function(
@@ -170,9 +168,8 @@ class ContractOption:
         return self.status and self.status == 'active'
 
 
-class ContractNotification(CoogProcessFramework):
+class ContractNotification(CoogProcessFramework, metaclass=ClassAttr):
     __name__ = 'contract.notification'
-    __metaclass__ = ClassAttr
 
     def do_treat(self, date):
         super(ContractNotification, self).do_treat(date)

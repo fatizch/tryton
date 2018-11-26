@@ -67,8 +67,7 @@ class SelectTerm(model.CoogView):
     current_invoice_date = fields.Date('Current Invoice Date', readonly=True)
 
 
-class PartyErase:
-    __metaclass__ = PoolMeta
+class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
     def to_erase(self, party_id):

@@ -199,8 +199,8 @@ class PropagateBenefitExtraData(Wizard):
             if service.loss is None:
                 continue
             for extra_data in service.extra_datas:
-                for key, value in self.select_extra_data.extra_data.iteritems():
-                    if key not in extra_data.extra_data_values.keys():
+                for key, value in self.select_extra_data.extra_data.items():
+                    if key not in list(extra_data.extra_data_values.keys()):
                         extra_data.extra_data_values.update({key: value})
                         extra_data.extra_data_values = \
                             extra_data.extra_data_values
@@ -254,8 +254,8 @@ class PropagateLossExtraData(Wizard):
         extra_data_to_propagate = self.select_extra_data.extra_data
         for loss in affected_losses:
             new_extra_data = {}
-            for key, value in extra_data_to_propagate.iteritems():
-                if key not in loss.extra_data.keys():
+            for key, value in extra_data_to_propagate.items():
+                if key not in list(loss.extra_data.keys()):
                     new_extra_data[key] = value
             if new_extra_data:
                 loss.extra_data.update(new_extra_data)
@@ -265,8 +265,7 @@ class PropagateLossExtraData(Wizard):
         return 'end'
 
 
-class PartyErase:
-    __metaclass__ = PoolMeta
+class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
     @classmethod

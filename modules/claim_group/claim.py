@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Claim:
-    __metaclass__ = PoolMeta
+class Claim(metaclass=PoolMeta):
     __name__ = 'claim'
 
     legal_entity = fields.Many2One('party.party', 'Legal Entity', select=True,
@@ -31,8 +30,7 @@ class Claim:
         return recipients
 
 
-class ClaimService:
-    __metaclass__ = PoolMeta
+class ClaimService(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     def get_beneficiaries_data(self, at_date):

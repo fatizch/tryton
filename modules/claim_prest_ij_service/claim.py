@@ -27,9 +27,9 @@ from trytond.modules.coog_core import model, fields, utils, coog_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.process_cog.process import CoogProcessFramework
 
-import gesti_templates
+from . import gesti_templates
 
-from benefit import EVENT_DESCS
+from .benefit import EVENT_DESCS
 
 LINE_KINDS = [
     ("ADO", "I.J. ADOPTION"),
@@ -850,8 +850,7 @@ class ClaimIjSubscription(CoogProcessFramework, model.CoogView):
                 {'current_state': process.first_step()})
 
 
-class ClaimService:
-    __metaclass__ = PoolMeta
+class ClaimService(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     def prest_ij_start_date(self):
@@ -864,8 +863,7 @@ class ClaimService:
         return None
 
 
-class ClaimIndemnification:
-    __metaclass__ = PoolMeta
+class ClaimIndemnification(metaclass=PoolMeta):
     __name__ = 'claim.indemnification'
 
     prestij_periods = fields.One2Many('claim.ij.period', 'indemnification',
@@ -1139,7 +1137,7 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
         for period in periods:
             per_ssn[period.subscription.ssn].append(period.id)
 
-        matches = Party.search([('ssn', 'in', per_ssn.keys())])
+        matches = Party.search([('ssn', 'in', list(per_ssn.keys()))])
 
         result = {}
         for party in matches:
@@ -1337,7 +1335,7 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
                 for node in sub_period:
                     period_data[node.tag[len(BPIJ_NS):]] = node.text
                 parsed[period_data['DateDebPrest']].append(period_data)
-            for period_data in parsed.itervalues():
+            for period_data in parsed.values():
                 new_period = cls._new_period(period_data)
                 new_period.subscription = subscription
                 new_period.period_kind = kind
@@ -1398,7 +1396,7 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
             indemn_periods = per_indemn[indemn]
             indemn_periods.append(p)
 
-        for indemn, periods in per_indemn.iteritems():
+        for indemn, periods in per_indemn.items():
             indemn.prestij_periods = periods
 
 

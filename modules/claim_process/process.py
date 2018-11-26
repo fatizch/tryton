@@ -18,8 +18,7 @@ __all__ = [
     ]
 
 
-class Process:
-    __metaclass__ = PoolMeta
+class Process(metaclass=PoolMeta):
     __name__ = 'process'
 
     for_loss_descs = fields.Many2Many('process-benefit.loss.description',
@@ -310,10 +309,8 @@ class ClaimDeclare(ProcessFinder):
         document.transfer(obj)
 
 
-class CloseClaim:
+class CloseClaim(metaclass=PoolMeta):
     'Clase Claims'
-
-    __metaclass__ = PoolMeta
     __name__ = 'claim.close'
 
     process = StateAction('claim_process.declaration_process_launcher')

@@ -4,7 +4,7 @@ import copy
 
 from trytond.pool import Pool
 
-import fields
+from . import fields
 
 
 __all__ = [
@@ -77,7 +77,7 @@ class Many2OneForm(fields.Function):
                 Target.delete(Target.browse(action[1]))
             elif action[0] == 'delete_all':
                 Target.delete(Target.browse(
-                        self.get(ids, model, name)[name].values()))
+                        list(self.get(ids, model, name)[name].values())))
             elif action[0] in ('unlink', 'unlink_all'):
                 model.write(records, {
                         self.many2one.name: None,

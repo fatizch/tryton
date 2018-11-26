@@ -75,7 +75,7 @@ class Questionnaire(model.CoogSQL, model.CoogView, model.TaggedMixin,
             return result
         product_codes = [p.code for p in self.products]
         result = {product_code: product_result for product_code, product_result
-            in result.iteritems() if product_code in product_codes}
+            in result.items() if product_code in product_codes}
         return result
 
 

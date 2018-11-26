@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class OptionDisplayer:
-    __metaclass__ = PoolMeta
+class OptionDisplayer(metaclass=PoolMeta):
     __name__ = 'contract.manage_options.option_displayer'
 
     has_coverage_amount = fields.Boolean('Has Coverage Amount', readonly=True)
@@ -70,9 +69,7 @@ class OptionDisplayer:
                 values = option.get_coverage_amount_rule_result(
                     self.effective_date)
             if values:
-                selection += map(
-                    lambda x: (str(x), option.currency.amount_as_string(x)),
-                    values)
+                selection += [(str(x), option.currency.amount_as_string(x)) for x in values]
         if self.coverage_amount and self.coverage_amount not in values:
             selection.append((str(self.coverage_amount),
                     option.currency.amount_as_string(self.coverage_amount)))

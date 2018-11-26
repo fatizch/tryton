@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     term_renewal_rule = fields.One2Many(

@@ -61,12 +61,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
         relation.start_date = datetime.date.today()
         relation.save()
 
-        self.assert_(relation.id > 0)
-        self.assert_(party1.relations[0].from_ == party2.relations[0].to)
-        self.assert_(party1.relations[0].to == party2.relations[0].from_)
-        self.assert_(
+        self.assertTrue(relation.id > 0)
+        self.assertTrue(party1.relations[0].from_ == party2.relations[0].to)
+        self.assertTrue(party1.relations[0].to == party2.relations[0].from_)
+        self.assertTrue(
             party1.relations[0].type.reverse == party2.relations[0].type)
-        self.assert_(party1.relations[0].type.name == rel_kind.name)
+        self.assertTrue(party1.relations[0].type.name == rel_kind.name)
 
     def test0020SearchDuplicate(self):
         with Transaction().set_user(1):
@@ -74,7 +74,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 name='Wazowski', birth_date=datetime.date(2001, 10, 28),
                 gender='male')
             party1.save()
-            self.assert_(party1.id > 0)
+            self.assertTrue(party1.id > 0)
             party2 = self.Party(is_person=True, first_name='Mike',
                 name='Wazowski', birth_date=datetime.date(2001, 10, 28),
                 gender='male')
@@ -87,7 +87,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 name='Wazowski', birth_date=datetime.date(2001, 10, 28),
                 gender='male')
             party4.save()
-            self.assert_(party4.id > 0)
+            self.assertTrue(party4.id > 0)
             party5 = self.Party(name='Monsters Incorporated',
                 commercial_name='Monsters, Inc.')
             party5.save()

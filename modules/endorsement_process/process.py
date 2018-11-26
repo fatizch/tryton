@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Process:
-    __metaclass__ = PoolMeta
+class Process(metaclass=PoolMeta):
     __name__ = 'process'
 
     @classmethod
@@ -22,8 +21,7 @@ class Process:
         cls.kind.selection.append(('endorsement', 'Contract Endorsement'))
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     @classmethod

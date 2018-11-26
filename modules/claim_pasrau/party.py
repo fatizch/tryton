@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     _history = True
@@ -91,13 +90,13 @@ class Party:
         assert None not in versions  # "self" should not be deleted...
 
         # Apply upper to avoid "fake" modifications
-        previous_fields = {k: v.upper() if isinstance(v, basestring) else v
-            for k, v in previous_fields.iteritems()}
+        previous_fields = {k: v.upper() if isinstance(v, str) else v
+            for k, v in previous_fields.items()}
 
         changes = []
 
         # We must group per date, and versions are per datetime
-        for date, date_versions in groupby(sorted(versions.iteritems(),
+        for date, date_versions in groupby(sorted(iter(versions.items()),
                     key=lambda x: x[0]), key=lambda x: x[0].date()):
             cur_changes = {}
             for _, cur_version in sorted(date_versions, key=lambda x: x[0]):
@@ -105,7 +104,7 @@ class Party:
                     if field_name not in previous_fields:
                         continue
                     new_value = getattr(cur_version, field_name)
-                    if isinstance(new_value, basestring):
+                    if isinstance(new_value, str):
                         new_value = new_value.upper()
                     if new_value != previous_fields[field_name]:
                         cur_changes[field_name] = previous_fields[field_name]

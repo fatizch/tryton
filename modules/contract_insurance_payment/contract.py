@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     processing_payments = fields.Function(

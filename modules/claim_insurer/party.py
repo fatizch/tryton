@@ -7,8 +7,7 @@ __all__ = [
     ]
 
 
-class Insurer:
-    __metaclass__ = PoolMeta
+class Insurer(metaclass=PoolMeta):
     __name__ = 'insurer'
 
     @classmethod

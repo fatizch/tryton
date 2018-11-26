@@ -2,9 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.cache import Cache
 from trytond.ir.resource import ResourceMixin
-import utils
-import fields
-import export
+from . import utils
+from . import fields
+from . import export
 
 
 __all__ = [

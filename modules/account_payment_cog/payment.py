@@ -423,9 +423,9 @@ class MergedPaymentsMixin(model.CoogSQL, model.CoogView, ModelCurrency,
         tables = cls.get_tables()
         query_table = cls.get_query_table(tables)
         return query_table.select(
-            *cls.get_select_fields(tables).values(),
+            *list(cls.get_select_fields(tables).values()),
             where=cls.get_where_clause(tables),
-            group_by=cls.get_group_by_clause(tables).values())
+            group_by=list(cls.get_group_by_clause(tables).values()))
 
     @classmethod
     def get_payments(cls, merged_payments, name):
@@ -456,10 +456,10 @@ class MergedPayments(MergedPaymentsMixin):
         cursor = Transaction().connection.cursor()
         res = {x.merged_id: [x.id, []] for x in merged_payments}
         cursor.execute(*payment.select(payment.id, payment.merged_id,
-                where=payment.merged_id.in_(res.keys())))
+                where=payment.merged_id.in_(list(res.keys()))))
         for payment_id, merged_id in cursor.fetchall():
             res[merged_id][1].append(payment_id)
-        return {v[0]: v[1] for v in res.values()}
+        return {v[0]: v[1] for v in list(res.values())}
 
     @classmethod
     def __setup__(cls):
@@ -898,7 +898,7 @@ class Payment(export.ExportImportMixin, Printable,
     @classmethod
     def delete_payments_by_state(cls, payments_per_state):
         actions = cls.get_delete_actions()
-        for state, payments in payments_per_state.iteritems():
+        for state, payments in payments_per_state.items():
             next_state = state
             while next_state:
                 function, next_state = actions[next_state]
@@ -913,8 +913,7 @@ class Payment(export.ExportImportMixin, Printable,
             }
 
 
-class PaymentInvoice:
-    __metaclass__ = PoolMeta
+class PaymentInvoice(metaclass=PoolMeta):
     __name__ = 'account.payment'
 
     related_invoice = fields.Function(fields.Many2One(
@@ -932,8 +931,7 @@ class PaymentInvoice:
                 self.related_invoice else None)
 
 
-class Configuration(CompanyMultiValueMixin):
-    __metaclass__ = PoolMeta
+class Configuration(CompanyMultiValueMixin, metaclass=PoolMeta):
     __name__ = 'account.configuration'
 
     direct_debit_journal = fields.MultiValue(
@@ -1272,7 +1270,7 @@ class Group(Workflow, ModelCurrency, export.ExportImportMixin, Printable,
         Date = pool.get('ir.date')
         return {k: ', '.join([Date.date_as_string(x) for x in v])
             for k, v in cls.get_payment_dates_per_group(groups, name
-                ).iteritems()}
+                ).items()}
 
     @classmethod
     def get_payment_dates_per_group(cls, groups, name):
@@ -1500,8 +1498,7 @@ class ProcessManualFailPament(model.CoogWizard):
         return 'end'
 
 
-class ProcessPayment:
-    __metaclass__ = PoolMeta
+class ProcessPayment(metaclass=PoolMeta):
     __name__ = 'account.payment.process'
 
     pre_process = StateTransition()

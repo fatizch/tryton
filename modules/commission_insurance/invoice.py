@@ -20,8 +20,7 @@ __all__ = [
     ]
 
 
-class InvoiceLine:
-    __metaclass__ = PoolMeta
+class InvoiceLine(metaclass=PoolMeta):
     __name__ = 'account.invoice.line'
 
     broker_fee_lines = fields.One2Many('account.move.line',
@@ -154,8 +153,7 @@ class InvoiceLine:
         return lines
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     is_insurer_invoice = fields.Function(fields.Boolean('Is insurer commission '

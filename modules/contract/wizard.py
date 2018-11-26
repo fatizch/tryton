@@ -573,8 +573,7 @@ class SelectSubStatus(model.CoogView):
         'New Sub Status', domain=[('status', '=', 'active')])
 
 
-class PartyErase:
-    __metaclass__ = PoolMeta
+class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
     @classmethod

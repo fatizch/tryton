@@ -9,9 +9,8 @@ __all__ = [
     ]
 
 
-class TestCaseModel:
+class TestCaseModel(metaclass=PoolMeta):
     __name__ = 'ir.test_case'
-    __metaclass__ = PoolMeta
 
     main_company_name = fields.Char('Main Company Name')
 

@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class PaymentTerm:
-    __metaclass__ = PoolMeta
+class PaymentTerm(metaclass=PoolMeta):
     __name__ = 'account.invoice.payment_term'
 
     based_on_instalment = fields.Boolean('Based On Instalment Plan',

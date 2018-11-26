@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Country:
-    __metaclass__ = PoolMeta
+class Country(metaclass=PoolMeta):
     __name__ = 'country.country'
 
     address_line_configuration = fields.Function(

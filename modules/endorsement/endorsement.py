@@ -174,7 +174,7 @@ class EndorsementRoot(object):
 
         pool = Pool()
         endorsement_tree = {}
-        for fname, field in cls._fields.iteritems():
+        for fname, field in cls._fields.items():
             if not isinstance(field, fields.One2Many):
                 continue
             Target = pool.get(field.model_name)
@@ -184,7 +184,7 @@ class EndorsementRoot(object):
             endorsement_tree[EndorsedField._get_model()] = (fname, field)
         cls._endorsement_tree = endorsement_tree
         cls._reversed_endorsed_dict = {
-            v: k for k, v in cls._endorsed_dicts.iteritems()}
+            v: k for k, v in cls._endorsed_dicts.items()}
 
     def _get_field_for_model(self, target_model):
         return self.__class__._endorsement_tree[target_model]
@@ -202,7 +202,7 @@ class EndorsementRoot(object):
         for fname in self.__class__._endorsed_dicts:
             if getattr(self, fname, None):
                 return False
-        for fname, _ in self._endorsement_tree.itervalues():
+        for fname, _ in self._endorsement_tree.values():
             for elem in getattr(self, fname, []):
                 if not elem.is_null():
                     return False
@@ -213,7 +213,7 @@ class EndorsementRoot(object):
             Remove all 'dead' (as in 'is_null()') children endorsements, and
             returns own is_null status after trimming.
         '''
-        for fname, _ in self._endorsement_tree.itervalues():
+        for fname, _ in self._endorsement_tree.values():
             values, new_values = getattr(self, fname, ()), []
             for elem in values:
                 if not elem.clean_up():
@@ -223,7 +223,7 @@ class EndorsementRoot(object):
 
     def set_applied_on(self, at_datetime):
         self.applied_on = at_datetime
-        for fname, _ in self._endorsement_tree.itervalues():
+        for fname, _ in self._endorsement_tree.values():
             values, new_values = getattr(self, fname, ()), []
             for elem in values:
                 elem.set_applied_on(at_datetime)
@@ -253,7 +253,7 @@ def values_mixin(value_model):
                 Target = instance.__class__
                 values = Target.read([instance.id],
                     list(self.values.keys()))[0]
-                self.values = {k: v for k, v in self.values.items()
+                self.values = {k: v for k, v in list(self.values.items())
                     if v != values[k]}
             return super(Mixin, self).clean_up()
 
@@ -416,7 +416,7 @@ def values_mixin(value_model):
         def clean(self):
             pool = Pool()
             self.values = {}
-            for fname, field in self.__class__._fields.iteritems():
+            for fname, field in self.__class__._fields.items():
                 if not isinstance(field, fields.One2Many):
                     continue
                 Target = pool.get(field.model_name)
@@ -460,7 +460,7 @@ def values_mixin(value_model):
                     base_object = self.base_instance
             if not self.values:
                 return []
-            for k, v in self.values.iteritems():
+            for k, v in self.values.items():
                 if base_object and hasattr(base_object, k):
                     prev_value = getattr(base_object, k, '') or ''
                 else:
@@ -488,7 +488,7 @@ def values_mixin(value_model):
                     vals.append((k, field, prev_value, v))
                 elif isinstance(field, tryton_fields.Selection):
                     def _translate_selection(prev_value, v):
-                        if isinstance(field.selection, basestring):
+                        if isinstance(field.selection, str):
                             prev_translated, v_translated = prev_value, v
                             if not base_object:
                                 return prev_translated, v_translated
@@ -518,7 +518,7 @@ def values_mixin(value_model):
                     vals.append((k, field, prev_value, v if v is not None
                             else ''))
             for fname, target_fname in \
-                    self.__class__._endorsed_dicts.iteritems():
+                    self.__class__._endorsed_dicts.items():
                 if base_object:
                     prev_value = ', '.join(coog_string.translate_value(
                             base_object, target_fname).split('\n'))
@@ -533,17 +533,17 @@ def values_mixin(value_model):
             if hasattr(self, 'action') and self.action == 'add':
                 for fname, ffield, _, new in vals:
                     field_string = ffield.string if ffield else fname
-                    label = u'%s' % coog_string.translate(
+                    label = '%s' % coog_string.translate(
                         ValueModel, fname, field_string, 'field')
-                    value = u' → %s' % new
+                    value = ' → %s' % new
                     result.append((label, value))
             else:
                 for fname, ffield, old, new in vals:
                     field_string = ffield.string if ffield else fname
                     if old != new:
-                        label = u'%s' % coog_string.translate(
+                        label = '%s' % coog_string.translate(
                             ValueModel, fname, field_string, 'field')
-                        value = u'%s → %s' % (old, new)
+                        value = '%s → %s' % (old, new)
                         result.append((label, value))
             return result
 
@@ -552,7 +552,7 @@ def values_mixin(value_model):
             if not parent_endorsed_record:
                 parent_endorsed_record = self.get_endorsed_record()
             for endorsement_fname in [x[0] for x
-                    in self._endorsement_tree.values()]:
+                    in list(self._endorsement_tree.values())]:
                 sub_endorsements = getattr(self, endorsement_fname, [])
                 if not sub_endorsements:
                     continue
@@ -569,7 +569,7 @@ def values_mixin(value_model):
                 record = self.get_endorsed_record()
                 parent_endorsed_record = Pool().get(record.__name__)(record.id)
             for endorsement_fname in [x[0] for x
-                    in self._endorsement_tree.values()]:
+                    in list(self._endorsement_tree.values())]:
                 sub_endorsements = getattr(self, endorsement_fname, [])
                 if sub_endorsements:
                     current_records = list(getattr(parent_endorsed_record,
@@ -583,7 +583,7 @@ def values_mixin(value_model):
             if not parent_endorsed_record:
                 parent_endorsed_record = self.get_endorsed_record()
             for endorsement_fname in [x[0] for x
-                    in self._endorsement_tree.values()]:
+                    in list(self._endorsement_tree.values())]:
                 sub_endorsements = getattr(self, endorsement_fname, [])
                 for sub_endorsement in sub_endorsements:
                     sub_endorsement.update_after_cancellation(
@@ -599,7 +599,7 @@ def values_mixin(value_model):
             if record.__name__ != self._model_name:
                 return False
             ignore_fields = self._ignore_fields_for_matching()
-            for k, v in self.values.iteritems():
+            for k, v in self.values.items():
                 if k in ignore_fields:
                     continue
                 if not hasattr(record, k):
@@ -627,7 +627,7 @@ def values_mixin(value_model):
         def apply_values(self):
             values = (self.values if self.values else {}).copy()
             for fname, target_fname in \
-                    self.__class__._endorsed_dicts.iteritems():
+                    self.__class__._endorsed_dicts.items():
                 new_value = getattr(self, fname, None)
                 if new_value:
                     values[target_fname] = new_value.copy()
@@ -728,7 +728,7 @@ def relation_mixin(value_model, field, model, name):
                 values_field = values['values']
                 if values_field:
                     new_values_field = {}
-                    for key, value in values_field.iteritems():
+                    for key, value in values_field.items():
                         field = the_model._fields[key]
                         # TODO handle Reference fields
                         if isinstance(field, tryton_fields.Many2One) and value:
@@ -751,7 +751,7 @@ def relation_mixin(value_model, field, model, name):
                 values_field = values['values']
                 if values_field:
                     new_values_field = {}
-                    for key, value in values_field.iteritems():
+                    for key, value in values_field.items():
                         field = the_model._fields[key]
                         if isinstance(field, tryton_fields.Many2One) and value:
                             Target = field.get_target()
@@ -872,8 +872,7 @@ def relation_mixin(value_model, field, model, name):
     return Mixin
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     _history = True
     __name__ = 'contract'
 
@@ -1067,14 +1066,12 @@ class Contract:
         cur_dict.update(endorsement_context)
 
 
-class ContractOption(object):
-    __metaclass__ = PoolMeta
+class ContractOption(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'contract.option'
 
 
-class ContractOptionVersion(object):
-    __metaclass__ = PoolMeta
+class ContractOptionVersion(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'contract.option.version'
 
@@ -1116,8 +1113,7 @@ class ContractOptionVersion(object):
                 version_h.table_name + '__', cursor.fetchone()[0] or 0 + 1)
 
 
-class ContractActivationHistory(object):
-    __metaclass__ = PoolMeta
+class ContractActivationHistory(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'contract.activation_history'
 
@@ -1137,23 +1133,19 @@ class ContractActivationHistory(object):
             "SET active = 'TRUE'")
 
 
-class ContractExtraData(object):
-    __metaclass__ = PoolMeta
+class ContractExtraData(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'contract.extra_data'
 
 
-class ContractContact(object):
-    __metaclass__ = PoolMeta
+class ContractContact(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'contract.contact'
 
 
 class Endorsement(QueueMixin, Workflow, model.CoogSQL, model.CoogView,
-        Printable):
+        Printable, metaclass=PoolMeta):
     'Endorsement'
-
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement'
     _func_key = 'number'
     _rec_name = 'number'
@@ -1500,7 +1492,7 @@ class Endorsement(QueueMixin, Workflow, model.CoogSQL, model.CoogView,
         groups = cls.group_per_model(endorsements)
         cursor = Transaction().connection.cursor()
         table_ = cls.__table__()
-        for model_name, values in groups.iteritems():
+        for model_name, values in groups.items():
             pool.get(model_name).check_in_progress_unicity(values)
         cursor.execute(*table_.update(
                 columns=[table_.rollback_date],
@@ -1723,7 +1715,7 @@ class Endorsement(QueueMixin, Workflow, model.CoogSQL, model.CoogView,
     def ws_create_endorsements(cls, endorsements_dict):
         'This method is a standard API for webservice use'
         result = {}
-        for ext_id, objects in endorsements_dict.iteritems():
+        for ext_id, objects in endorsements_dict.items():
             message = []
             result[ext_id] = {'return': True, 'messages': message}
             try:
@@ -1778,9 +1770,8 @@ class Endorsement(QueueMixin, Workflow, model.CoogSQL, model.CoogView,
 
 
 class EndorsementContract(values_mixin('endorsement.contract.field'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Contract'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract'
     _func_key = 'func_key'
 
@@ -2139,7 +2130,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         Endorsement = pool.get('endorsement')
         Configuration = pool.get('offered.configuration')
         ContractEndorsement = pool.get('endorsement.contract')
-        if isinstance(definition, basestring):
+        if isinstance(definition, str):
             definition = Configuration.get_auto_definition(definition)
             if not definition:
                 return
@@ -2178,9 +2169,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
 class EndorsementOption(relation_mixin(
             'endorsement.contract.option.field', 'option', 'contract.option',
             'Options'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Option'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.option'
 
     contract_endorsement = fields.Many2One('endorsement.contract',
@@ -2272,9 +2262,8 @@ class EndorsementOption(relation_mixin(
 class EndorsementOptionVersion(relation_mixin(
             'endorsement.contract.option.version.field', 'version',
             'contract.option.version', 'Versions'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Option Version'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.option.version'
 
     option_endorsement = fields.Many2One('endorsement.contract.option',
@@ -2314,9 +2303,8 @@ class EndorsementActivationHistory(relation_mixin(
             'endorsement.contract.activation_history.field',
             'activation_history', 'contract.activation_history',
             'Activation History'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Activation History'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.activation_history'
 
     contract_endorsement = fields.Many2One('endorsement.contract',
@@ -2337,9 +2325,8 @@ class EndorsementContact(relation_mixin(
             'endorsement.contract.contact.field',
             'contact', 'contract.contact',
             'Contract Contacts'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Contact'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.contact'
 
     contract_endorsement = fields.Many2One('endorsement.contract',
@@ -2364,9 +2351,8 @@ class EndorsementContact(relation_mixin(
 class EndorsementExtraData(relation_mixin(
             'endorsement.contract.extra_data.field', 'extra_data',
             'contract.extra_data', 'Extra Datas'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Extra Data'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.extra_data'
 
     contract_endorsement = fields.Many2One('endorsement.contract',
@@ -2466,16 +2452,16 @@ class EndorsementExtraData(relation_mixin(
             return self.__class__.get_extra_data_def_cache(name).string
 
         if cur_data_values and not endorsement_state == 'applied':
-            for k, v in cur_data_values.iteritems():
+            for k, v in cur_data_values.items():
                 if new_data_values[k] != v:
                     label = '%s ' % _get_name(k)
-                    value = _translate(v, k) + u' → ' + _translate(
+                    value = _translate(v, k) + ' → ' + _translate(
                         new_data_values[k], k)
                     res[1].append((label, value))
         else:
-            for k, v in new_data_values.iteritems():
+            for k, v in new_data_values.items():
                 label = '%s ' % _get_name(k)
-                value = u' → ' + _translate(v, k)
+                value = ' → ' + _translate(v, k)
                 res[1].append((label, value))
         return res
 
@@ -2485,10 +2471,9 @@ class EndorsementExtraData(relation_mixin(
 
 
 class EndorsementConfiguration(ModelSingleton, model.CoogSQL, model.CoogView,
-        CompanyMultiValueMixin):
+        CompanyMultiValueMixin, metaclass=PoolMeta):
     'Endorsement Configuration'
     __name__ = 'endorsement.configuration'
-    __metaclass__ = PoolMeta
 
     endorsement_number_sequence = fields.MultiValue(
         fields.Many2One('ir.sequence', 'Endorsement Number Sequence'))
@@ -2524,9 +2509,8 @@ class EndorsementConfigurationNumberSequence(model.CoogSQL, CompanyValueMixin):
             parent='configuration', fields=fields)
 
 
-class OfferedConfiguration:
+class OfferedConfiguration(metaclass=PoolMeta):
     __name__ = 'offered.configuration'
-    __metaclass__ = PoolMeta
 
     automatic_termination_endorsement = fields.Many2One(
         'endorsement.definition', 'Automatic Termination Endorsement',
@@ -2555,9 +2539,8 @@ class OfferedConfiguration:
         super(OfferedConfiguration, cls).write(*args)
 
 
-class ReportTemplate:
+class ReportTemplate(metaclass=PoolMeta):
     __name__ = 'report.template'
-    __metaclass__ = PoolMeta
 
     def get_possible_kinds(self):
         result = super(ReportTemplate, self).get_possible_kinds()

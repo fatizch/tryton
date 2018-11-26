@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class ReportGenerate:
-    __metaclass__ = PoolMeta
+class ReportGenerate(metaclass=PoolMeta):
     __name__ = 'report.generate'
 
     @classmethod
@@ -84,8 +83,7 @@ class ReportGenerate:
 
 
 @model.genshi_evaluated_fields('campaign_name', 'category')
-class ReportTemplate:
-    __metaclass__ = PoolMeta
+class ReportTemplate(metaclass=PoolMeta):
     __name__ = 'report.template'
 
     logger = logging.getLogger(__name__)

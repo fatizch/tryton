@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     eligibility_rules = fields.One2Many(

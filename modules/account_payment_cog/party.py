@@ -22,8 +22,7 @@ __all__ = [
     ]
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     block_payable_payments = fields.Boolean('Block Payments')
@@ -85,8 +84,7 @@ class Party:
         return False
 
 
-class PartyPaymentDirectDebit(export.ExportImportMixin):
-    __metaclass__ = PoolMeta
+class PartyPaymentDirectDebit(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'party.party.payment_direct_debit'
 
 
@@ -120,8 +118,7 @@ class SynthesisMenuPayment(model.CoogSQL):
         return coog_string.translate_label(PaymentSynthesis, 'name')
 
 
-class SynthesisMenu:
-    __metaclass__ = PoolMeta
+class SynthesisMenu(metaclass=PoolMeta):
     __name__ = 'party.synthesis.menu'
 
     @classmethod

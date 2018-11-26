@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class EndorsementPart:
-    __metaclass__ = PoolMeta
+class EndorsementPart(metaclass=PoolMeta):
     __name__ = 'endorsement.part'
 
     @classmethod

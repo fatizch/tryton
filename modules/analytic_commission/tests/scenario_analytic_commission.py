@@ -464,7 +464,7 @@ first_invoice.invoice.total_amount == Decimal('120')
 # #Res# #True
 set([(x.amount, x.account.code)
     for x in first_invoice.invoice.lines]) == set([
-            (Decimal('20'), u'broker_fee_account'),
+            (Decimal('20'), 'broker_fee_account'),
             (Decimal('100'), None)])
 # #Res# #True
 
@@ -474,7 +474,7 @@ first_invoice2.invoice.total_amount == Decimal('120')
 # #Res# #True
 set([(x.amount, x.account.code)
     for x in first_invoice2.invoice.lines]) == set([
-            (Decimal('20'), u'broker_fee_account'),
+            (Decimal('20'), 'broker_fee_account'),
             (Decimal('100'), None)])
 # #Res# #True
 
@@ -504,8 +504,8 @@ len(line.commissions)
 # #Res# #2
 set([(x.amount, x.commission_rate, x.agent.party.name, x.line_amount)
     for x in line.commissions]) == set([
-            (Decimal('10'), Decimal('.1'), u'Broker', Decimal('100')),
-            (Decimal('60'), Decimal('.6'), u'Insurer', Decimal('100'))])
+            (Decimal('10'), Decimal('.1'), 'Broker', Decimal('100')),
+            (Decimal('60'), Decimal('.6'), 'Insurer', Decimal('100'))])
 # #Res# #True
 
 first_invoice2.invoice.click('post')
@@ -514,8 +514,8 @@ len(line2.commissions)
 # #Res# #2
 set([(x.amount, x.commission_rate, x.agent.party.name, x.line_amount)
     for x in line2.commissions]) == set([
-            (Decimal('10'), Decimal('.1'), u'Broker', Decimal('100')),
-            (Decimal('60'), Decimal('.6'), u'Insurer', Decimal('100'))])
+            (Decimal('10'), Decimal('.1'), 'Broker', Decimal('100')),
+            (Decimal('60'), Decimal('.6'), 'Insurer', Decimal('100'))])
 # #Res# #True
 
 
@@ -526,8 +526,8 @@ len(line3.commissions)
 # #Res# #2
 set([(x.amount, x.commission_rate, x.agent.party.name, x.line_amount)
     for x in line3.commissions]) == set([
-            (Decimal('20'), Decimal('.2'), u'Broker 2', Decimal('100')),
-            (Decimal('60'), Decimal('.6'), u'Insurer', Decimal('100'))])
+            (Decimal('20'), Decimal('.2'), 'Broker 2', Decimal('100')),
+            (Decimal('60'), Decimal('.6'), 'Insurer', Decimal('100'))])
 # #Res# #True
 
 
@@ -538,8 +538,8 @@ len(line4.commissions)
 # #Res# #2
 set([(x.amount, x.commission_rate, x.agent.party.name, x.line_amount)
     for x in line4.commissions]) == set([
-            (Decimal('40'), Decimal('.4'), u'Broker 3', Decimal('100')),
-            (Decimal('60'), Decimal('.6'), u'Insurer', Decimal('100'))])
+            (Decimal('40'), Decimal('.4'), 'Broker 3', Decimal('100')),
+            (Decimal('60'), Decimal('.6'), 'Insurer', Decimal('100'))])
 # #Res# #True
 
 
@@ -595,21 +595,21 @@ str_month_year2 = contract2_start_date.strftime("%Y%m")
 
 [x.extra_details for x in analytic_lines] == [
     {
-        u'commissioned_contract_signature_month': str_month_year1,
-        u'commissioned_contract_broker': 3,
-        u'commissioned_contract_product': 2
+        'commissioned_contract_signature_month': str_month_year1,
+        'commissioned_contract_broker': 3,
+        'commissioned_contract_product': 2
     }, {
-        u'commissioned_contract_signature_month': str_month_year1,
-        u'commissioned_contract_broker': 2,
-        u'commissioned_contract_product': 2
+        'commissioned_contract_signature_month': str_month_year1,
+        'commissioned_contract_broker': 2,
+        'commissioned_contract_product': 2
     }, {
-        u'commissioned_contract_signature_month': str_month_year1,
-        u'commissioned_contract_broker': 1,
-        u'commissioned_contract_product': 1
+        'commissioned_contract_signature_month': str_month_year1,
+        'commissioned_contract_broker': 1,
+        'commissioned_contract_product': 1
     }, {
-        u'commissioned_contract_signature_month': str_month_year2,
-        u'commissioned_contract_broker': 1,
-        u'commissioned_contract_product': 1
+        'commissioned_contract_signature_month': str_month_year2,
+        'commissioned_contract_broker': 1,
+        'commissioned_contract_product': 1
     }, ]
 # #Res# #True
 
@@ -632,37 +632,37 @@ all_analytic_lines = AnalyticLine.find([])
 
 [x.extra_details for x in all_analytic_lines] == [
     {
-        u'commissioned_contract_signature_month': str_month_year1,
-        u'commissioned_contract_broker': 3,
-        u'commissioned_contract_product': 2
+        'commissioned_contract_signature_month': str_month_year1,
+        'commissioned_contract_broker': 3,
+        'commissioned_contract_product': 2
     }, {
-        u'commissioned_contract_signature_month': str_month_year1,
-        u'commissioned_contract_broker': 2,
-        u'commissioned_contract_product': 2
+        'commissioned_contract_signature_month': str_month_year1,
+        'commissioned_contract_broker': 2,
+        'commissioned_contract_product': 2
     }, {
-        u'commissioned_contract_signature_month': str_month_year1,
-        u'commissioned_contract_broker': 1,
-        u'commissioned_contract_product': 1
+        'commissioned_contract_signature_month': str_month_year1,
+        'commissioned_contract_broker': 1,
+        'commissioned_contract_product': 1
     }, {
-        u'commissioned_contract_signature_month': str_month_year2,
-        u'commissioned_contract_broker': 1,
-        u'commissioned_contract_product': 1
+        'commissioned_contract_signature_month': str_month_year2,
+        'commissioned_contract_broker': 1,
+        'commissioned_contract_product': 1
     },
     {
-        u'commissioned_contract_signature_month': str_month_year1,
-        u'commissioned_contract_broker': 3,
-        u'commissioned_contract_product': 2
+        'commissioned_contract_signature_month': str_month_year1,
+        'commissioned_contract_broker': 3,
+        'commissioned_contract_product': 2
     }, {
-        u'commissioned_contract_signature_month': str_month_year1,
-        u'commissioned_contract_broker': 2,
-        u'commissioned_contract_product': 2
+        'commissioned_contract_signature_month': str_month_year1,
+        'commissioned_contract_broker': 2,
+        'commissioned_contract_product': 2
     }, {
-        u'commissioned_contract_signature_month': str_month_year1,
-        u'commissioned_contract_broker': 1,
-        u'commissioned_contract_product': 1
+        'commissioned_contract_signature_month': str_month_year1,
+        'commissioned_contract_broker': 1,
+        'commissioned_contract_product': 1
     }, {
-        u'commissioned_contract_signature_month': str_month_year2,
-        u'commissioned_contract_broker': 1,
-        u'commissioned_contract_product': 1
+        'commissioned_contract_signature_month': str_month_year2,
+        'commissioned_contract_broker': 1,
+        'commissioned_contract_product': 1
     }, ]
 # #Res# #True

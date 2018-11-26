@@ -1,11 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import contract
-import offered
-import extra_data
-import report_engine
-import rule_engine
-import test_case
+from . import contract
+from . import offered
+from . import extra_data
+from . import report_engine
+from . import rule_engine
+from . import test_case
 from trytond.pool import Pool
 
 

@@ -4,7 +4,7 @@ import pyflakes.messages
 
 from trytond.model import Model
 from trytond.rpc import RPC
-from rule_engine import check_code
+from .rule_engine import check_code
 
 
 CODE_TEMPLATE = """

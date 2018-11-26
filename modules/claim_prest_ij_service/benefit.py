@@ -20,8 +20,7 @@ __all__ = [
     ]
 
 
-class Benefit:
-    __metaclass__ = PoolMeta
+class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     prest_ij = fields.Boolean('Handle Prest IJ System',
@@ -57,8 +56,7 @@ class Benefit:
         return benefits
 
 
-class EventDesc:
-    __metaclass__ = PoolMeta
+class EventDesc(metaclass=PoolMeta):
     __name__ = 'benefit.event.description'
 
     prest_ij_type = fields.Selection([('', '')] + EVENT_DESCS,

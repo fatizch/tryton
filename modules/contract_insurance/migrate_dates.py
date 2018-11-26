@@ -10,7 +10,7 @@ from trytond.transaction import Transaction
 
 dbname = ''
 if len(sys.argv) != 2:
-    print "Please provide database name as argument"
+    print("Please provide database name as argument")
     sys.exit()
 else:
     dbname = sys.argv[1]
@@ -34,7 +34,7 @@ def migrate_dates():
 
     with Transaction().start(dbname, user_id, context=CONTEXT) as transaction:
         try:
-            print "migrating options"
+            print("migrating options")
             Option = pool.get('contract.option')
             transaction.connection.cursor().execute(
                 'select id, start_date from contract_option')
@@ -42,7 +42,7 @@ def migrate_dates():
             values = dict(transaction.connection.cursor().fetchall())
             if values:
                 to_save = []
-                for option_id, prev_start_date in values.iteritems():
+                for option_id, prev_start_date in values.items():
                     option = Option(option_id)
                     start_date = option.parent_contract.start_date
                     if prev_start_date != start_date:
@@ -56,7 +56,7 @@ def migrate_dates():
             transaction.commit()
 
     with Transaction().start(dbname, user_id, context=CONTEXT) as transaction:
-        print "migrating extra_premiums"
+        print("migrating extra_premiums")
         try:
             ExtraPremium = pool.get('contract.option.extra_premium')
             transaction.connection.cursor().execute(
@@ -66,7 +66,7 @@ def migrate_dates():
                 item in transaction.connection.cursor().fetchall()}
             if request_res:
                 to_save = []
-                for extra_premium_id, dates in request_res.iteritems():
+                for extra_premium_id, dates in request_res.items():
                     extra_premium = ExtraPremium(extra_premium_id)
                     delta = relativedelta(dates[1], dates[0])
                     months = delta.months + 12 * delta.years
@@ -98,7 +98,7 @@ def migrate_dates():
             raise e
         else:
             transaction.commit()
-            print "options migration done"
+            print("options migration done")
 
     with Transaction().start(dbname, user_id, context=CONTEXT) as transaction:
         try:
@@ -111,7 +111,7 @@ def migrate_dates():
             raise e
         else:
             transaction.commit()
-            print "extra_premiums migration done"
+            print("extra_premiums migration done")
 
 
 if __name__ == "__main__":

@@ -17,8 +17,7 @@ __all__ = [
     ]
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     insurance_kind = fields.Selection([('', '')], 'Insurance Kind',

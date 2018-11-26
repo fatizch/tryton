@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class ImportProcessSelect:
-    __metaclass__ = PoolMeta
+class ImportProcessSelect(metaclass=PoolMeta):
     __name__ = 'import.process.select'
 
     @classmethod

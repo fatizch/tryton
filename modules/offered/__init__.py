@@ -2,14 +2,14 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import configuration
-import extra_data
-import offered
-import package
-import report_engine
-import rule_engine
-import global_search
-import test_case
+from . import configuration
+from . import extra_data
+from . import offered
+from . import package
+from . import report_engine
+from . import rule_engine
+from . import global_search
+from . import test_case
 
 
 def register():

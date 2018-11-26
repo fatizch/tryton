@@ -38,9 +38,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
     def test_neorau_validate(self):
         D = pasrau_dsn.NEORAUTemplate(None, void=True, replace=True)
 
-        bad_iban = dsn.Entry(u'S21.G00.20.004', u'tééé')
-        good_iban = dsn.Entry(u'S21.G00.20.004',
-            u'64G1DFR14DRF514GDF54GD')
+        bad_iban = dsn.Entry('S21.G00.20.004', 'tééé')
+        good_iban = dsn.Entry('S21.G00.20.004',
+            '64G1DFR14DRF514GDF54GD')
 
         D.message = [good_iban]
         self.assertTrue(D.validate)
@@ -51,11 +51,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         Party = self.Party
         PartyCustomPasrauRate = self.PartyCustomPasrauRate
 
-        person1 = Party(name=u'doe', first_name=u'joe', ssn=self.ssn1)
+        person1 = Party(name='doe', first_name='joe', ssn=self.ssn1)
         person1.save()
-        person2 = Party(name=u'doe', first_name=u'jane', ssn=self.ssn2)
+        person2 = Party(name='doe', first_name='jane', ssn=self.ssn2)
         person2.save()
-        person3 = Party(name=u'dane', first_name=u'jane', ssn=self.ssn3)
+        person3 = Party(name='dane', first_name='jane', ssn=self.ssn3)
         person3.save()
 
         dir_path = os.path.dirname(os.path.realpath(__file__))

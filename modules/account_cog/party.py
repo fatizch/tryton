@@ -97,8 +97,7 @@ class Party(ModelCurrency, model.CoogView):
             return 'rounded_warning'
 
 
-class PartyAccount(export.ExportImportMixin):
-    __metaclass__ = PoolMeta
+class PartyAccount(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'party.party.account'
 
 
@@ -136,8 +135,7 @@ class SynthesisMenuMoveLine(model.CoogSQL):
         return coog_string.translate_label(Move_Line_Synthesis, 'name')
 
 
-class SynthesisMenu:
-    __metaclass__ = PoolMeta
+class SynthesisMenu(metaclass=PoolMeta):
     __name__ = 'party.synthesis.menu'
 
     @classmethod

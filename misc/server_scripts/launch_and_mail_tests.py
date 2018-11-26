@@ -41,7 +41,7 @@ and only update the repo if the running file contains '0'.
 import os
 import subprocess
 import smtplib
-import ConfigParser
+import configparser
 import sys
 
 from email.mime.text import MIMEText
@@ -49,14 +49,14 @@ from tendo import singleton
 
 me = singleton.SingleInstance()
 
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 
 
 try:
     with open(os.path.expanduser('~/auto_tests.conf')) as fconf:
         config.readfp(fconf)
 except:
-    print "Error while trying to read from your ~/auto_tests.conf"
+    print("Error while trying to read from your ~/auto_tests.conf")
     sys.exit(1)
 
 path_to_running = config.get('tests', 'path_to_running_file')

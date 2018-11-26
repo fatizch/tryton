@@ -7,14 +7,13 @@ __all__ = [
     ]
 
 
-class DocumentRequestLine:
-    __metaclass__ = PoolMeta
+class DocumentRequestLine(metaclass=PoolMeta):
     __name__ = 'document.request.line'
 
     @classmethod
     def update_values_from_target(cls, data_dict):
         underwritings = []
-        for target, values in data_dict.iteritems():
+        for target, values in data_dict.items():
             if target.startswith('underwriting,'):
                 underwritings.append(int(target.split(',')[1]))
         if underwritings:

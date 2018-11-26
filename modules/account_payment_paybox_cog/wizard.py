@@ -26,7 +26,7 @@ class ProcessPayboxPayment(model.CoogWizard):
         ProcessWizard = pool.get('account.payment.process', type='wizard')
         wizard_id, _, _ = ProcessWizard.create()
         process_wizard = ProcessWizard(wizard_id)
-        for key, value in process_wizard.default_start(None).items():
+        for key, value in list(process_wizard.default_start(None).items()):
             setattr(process_wizard.start, key, value)
         process_wizard.is_paybox = False
         action, context_ = process_wizard.do_process(action)
@@ -59,7 +59,7 @@ class CreatePayboxPayment(model.CoogWizard):
         Payment = pool.get('account.payment')
         wizard_id, _, _ = CreatePaymentWiz.create()
         create_payment = CreatePaymentWiz(wizard_id)
-        for key, value in create_payment.default_start(None).items():
+        for key, value in list(create_payment.default_start(None).items()):
             setattr(create_payment.start, key, value)
         create_payment.transition_create_payments()
         _, context_ = create_payment.do_created_payments({})

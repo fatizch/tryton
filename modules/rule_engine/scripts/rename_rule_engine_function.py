@@ -9,7 +9,7 @@ from trytond.transaction import Transaction
 
 dbname = ''
 if len(sys.argv) != 3:
-    print "Please provide database name and file_name as argument"
+    print("Please provide database name and file_name as argument")
     sys.exit()
 else:
     dbname = sys.argv[1]

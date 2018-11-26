@@ -10,9 +10,8 @@ __all__ = [
     ]
 
 
-class TestCaseModel:
+class TestCaseModel(metaclass=PoolMeta):
     __name__ = 'ir.test_case'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def beneficiary_clause_test_case(cls):

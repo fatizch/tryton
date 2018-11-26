@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class ContractSubscribeFindProcess:
-    __metaclass__ = PoolMeta
+class ContractSubscribeFindProcess(metaclass=PoolMeta):
     __name__ = 'contract.subscribe.find_process'
 
     authorized_distributors = fields.Many2Many(
@@ -90,8 +89,7 @@ class ContractSubscribeFindProcess:
         self.commercial_product = None
 
 
-class ContractSubscribe:
-    __metaclass__ = PoolMeta
+class ContractSubscribe(metaclass=PoolMeta):
     __name__ = 'contract.subscribe'
 
     def init_main_object_from_process(self, obj, process_param):

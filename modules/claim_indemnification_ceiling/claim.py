@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class ClaimService:
-    __metaclass__ = PoolMeta
+class ClaimService(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     @classmethod
@@ -46,8 +45,7 @@ class ClaimService:
             if not x.status.startswith('cancel') and x.status != 'rejected')
 
 
-class Indemnification:
-    __metaclass__ = PoolMeta
+class Indemnification(metaclass=PoolMeta):
     __name__ = 'claim.indemnification'
 
     @classmethod

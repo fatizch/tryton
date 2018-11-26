@@ -20,16 +20,16 @@ def generate(output_doc_directory=None):
             ('core_coog', 'Noyau Coog\n'),
             ('custom_tryton_coog',
                 'Personnalisation Coog des modules Tryton\n'),
-            ('transversal', u'Fonctionnalités transverses Coog\n'),
-            ('accounting', u'Comptabilité\n'),
+            ('transversal', 'Fonctionnalités transverses Coog\n'),
+            ('accounting', 'Comptabilité\n'),
             ('laboratory', 'Laboratoire Produit\n'),
             ('contract', 'Coog transverse Assurance : Contrat\n'),
             ('endorsement', 'Avenant\n'),
             ('commission', 'Commission\n'),
-            ('life', u'Prévoyance\n'),
+            ('life', 'Prévoyance\n'),
             ('claim', 'Coog transverse Assurance : Sinistre\n'),
             ('credit', 'Coog transverse Assurance : Emprunteur\n'),
-            ('health', u'Santé\n'),
+            ('health', 'Santé\n'),
             ('capital', 'Capitalisation\n'),
             ('pnc', 'IARD\n'),
             ('none', None),
@@ -128,7 +128,7 @@ def generate(output_doc_directory=None):
     with codecs.open(features_file, 'a', encoding='utf-8') as output:
         # Process sections in same order than they are declared above here
         for section, modules in groupby(sorted(section_data,
-                    key=lambda x: (SECTIONS.values().index(x[0]), x[1])),
+                    key=lambda x: (list(SECTIONS.values()).index(x[0]), x[1])),
                 key=lambda x: x[0]):
             output.writelines([section, '-' * len(section), '\n\n'])
             for module in modules:

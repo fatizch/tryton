@@ -28,8 +28,7 @@ ANNUAL_CONVERSION_TABLE = {
     }
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     broker = fields.Function(
@@ -178,11 +177,11 @@ class Contract:
         per_agent = defaultdict(list)
         [per_agent[contract.agent].append(contract) for contract in contracts]
 
-        agent_matches = Agent.find_matches(per_agent.keys(), new_broker)
+        agent_matches = Agent.find_matches(list(per_agent.keys()), new_broker)
 
         to_create = []
         with model.error_manager():
-            for src_agent, dest_agent in agent_matches.items():
+            for src_agent, dest_agent in list(agent_matches.items()):
                 if dest_agent:
                     continue
                 if not create_missing:
@@ -196,7 +195,7 @@ class Contract:
                     src_agent: src_agent.copy_to_broker(new_broker)
                     for src_agent in to_create})
 
-        for from_agent, to_agent in agent_matches.iteritems():
+        for from_agent, to_agent in agent_matches.items():
             if update_contracts:
                 cls.write(per_agent[from_agent], {'agent': to_agent.id,
                     'dist_network': dist_network})
@@ -247,8 +246,7 @@ class Contract:
         return [query.order]
 
 
-class ContractOption:
-    __metaclass__ = PoolMeta
+class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     annual_premium_incl_tax = fields.Function(

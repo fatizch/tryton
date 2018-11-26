@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class Claim:
-    __metaclass__ = PoolMeta
+class Claim(metaclass=PoolMeta):
     __name__ = 'claim'
 
     portfolio = fields.Function(
@@ -44,8 +43,7 @@ class Claim:
         return [('claimant.portfolio',) + tuple(clause[1:])]
 
 
-class Loss:
-    __metaclass__ = PoolMeta
+class Loss(metaclass=PoolMeta):
     __name__ = 'claim.loss'
 
     portfolio = fields.Function(

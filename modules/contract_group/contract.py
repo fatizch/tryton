@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     is_group = fields.Function(
@@ -42,8 +41,7 @@ class Contract:
         return [('product.is_group', ) + tuple(clause[1:])]
 
 
-class Option:
-    __metaclass__ = PoolMeta
+class Option(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     is_group = fields.Function(
@@ -57,8 +55,7 @@ class Option:
         return self.coverage.is_group
 
 
-class CoveredElement:
-    __metaclass__ = PoolMeta
+class CoveredElement(metaclass=PoolMeta):
     __name__ = 'contract.covered_element'
 
     contract_exit_date = fields.Date('Contract Exit Date', states={
@@ -158,7 +155,7 @@ class CoveredElement:
 
         new_elements = []
         to_terminate = []
-        for source, target in matches.iteritems():
+        for source, target in matches.items():
             copies, terminated = cls.terminate_and_copy(source, target, at_date)
             to_terminate += terminated
             new_elements += copies

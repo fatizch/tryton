@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class BenefitRule:
-    __metaclass__ = PoolMeta
+class BenefitRule(metaclass=PoolMeta):
     __name__ = 'benefit.rule'
 
     def get_indemnification_end_date(self, from_date, to_date, args):

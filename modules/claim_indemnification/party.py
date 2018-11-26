@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class InsurerDelegation:
-    __metaclass__ = PoolMeta
+class InsurerDelegation(metaclass=PoolMeta):
     __name__ = 'insurer.delegation'
 
     claim_create_indemnifications = fields.Boolean('Indemnifications Creation')
@@ -32,8 +31,7 @@ class InsurerDelegation:
         return True
 
 
-class PartyReplace:
-    __metaclass__ = PoolMeta
+class PartyReplace(metaclass=PoolMeta):
     __name__ = 'party.replace'
 
     @classmethod

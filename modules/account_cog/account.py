@@ -193,8 +193,7 @@ class Configuration(export.ExportImportMixin):
         return super(Configuration, cls)._import_json(values, main_object)
 
 
-class ThirdPartyBalance:
-    __metaclass__ = PoolMeta
+class ThirdPartyBalance(metaclass=PoolMeta):
     __name__ = 'account.third_party_balance'
 
     @classmethod

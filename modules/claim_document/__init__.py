@@ -1,12 +1,12 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-import claim
-import document
-import benefit
-import rule_engine
-import report_engine
-import wizard
+from . import claim
+from . import document
+from . import benefit
+from . import rule_engine
+from . import report_engine
+from . import wizard
 
 
 def register():

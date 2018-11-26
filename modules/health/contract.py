@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     is_health = fields.Function(
@@ -30,8 +29,7 @@ class Contract:
         return [('product.is_health',) + tuple(clause[1:])]
 
 
-class Option:
-    __metaclass__ = PoolMeta
+class Option(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     is_health = fields.Function(
@@ -42,8 +40,7 @@ class Option:
         return self.product and self.product.is_health
 
 
-class CoveredElement:
-    __metaclass__ = PoolMeta
+class CoveredElement(metaclass=PoolMeta):
     __name__ = 'contract.covered_element'
 
     is_health = fields.Function(

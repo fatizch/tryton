@@ -153,7 +153,7 @@ return True'''
         item_desc.code = 'person'
         item_desc.name = 'Person'
         item_desc.save()
-        self.assert_(item_desc.id)
+        self.assertTrue(item_desc.id)
 
     def test0005_testInsurerCreation(self):
         insurer = self.Insurer()
@@ -161,7 +161,7 @@ return True'''
         insurer.party.name = 'Insurer'
         insurer.party.save()
         insurer.save()
-        self.assert_(insurer.id)
+        self.assertTrue(insurer.id)
 
     @test_framework.prepare_test(
         'offered_insurance.test0001_testFunctionalRuleCreation',
@@ -254,7 +254,7 @@ return True'''
         product_a.currency = company.currency
         product_a.save()
 
-        self.assert_(product_a.id)
+        self.assertTrue(product_a.id)
 
     def test0100_testExtraPremiumKindCreation(self):
         def createExtraPremiumKind(code, is_discount=False, max_rate=None,
@@ -275,8 +275,8 @@ return True'''
         extra_premium_kind1, = self.ExtraPremiumKind.search([
                 ('code', '=', 'reduc_no_limit'),
                 ])
-        self.assert_(extra_premium_kind1.id)
-        self.assert_(extra_premium_kind1.is_discount)
+        self.assertTrue(extra_premium_kind1.id)
+        self.assertTrue(extra_premium_kind1.is_discount)
 
         extra_premium_kind2 = createExtraPremiumKind('reduc_max_10_prct', True,
             '-0.10')

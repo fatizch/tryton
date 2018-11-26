@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Process:
-    __metaclass__ = PoolMeta
+class Process(metaclass=PoolMeta):
     __name__ = 'process'
 
     @classmethod
@@ -23,8 +22,7 @@ class Process:
                 'Endorsement Set'))
 
 
-class EndorsementFindProcess:
-    __metaclass__ = PoolMeta
+class EndorsementFindProcess(metaclass=PoolMeta):
     __name__ = 'endorsement.start.find_process'
 
     @fields.depends('contracts', 'model', 'good_process')
@@ -62,8 +60,7 @@ class EndorsementFindProcess:
         return [c.id for c in all_contracts]
 
 
-class EndorsementStartProcess:
-    __metaclass__ = PoolMeta
+class EndorsementStartProcess(metaclass=PoolMeta):
     __name__ = 'endorsement.start_process'
 
     @classmethod

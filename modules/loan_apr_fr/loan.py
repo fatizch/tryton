@@ -64,8 +64,7 @@ def find_dec_root(func, x, step, tol):
     return find_dec_root(func, pivot, step / 5, tol)
 
 
-class Loan:
-    __metaclass__ = PoolMeta
+class Loan(metaclass=PoolMeta):
     __name__ = 'loan'
 
     taea = fields.Function(
@@ -102,7 +101,7 @@ class Loan:
 
         rule_fees = dict([(x.fee, x.action) for x in rule.fee_rules])
         fee_ratios = {}
-        for fee_id, data_dict in premiums['fee_totals'].iteritems():
+        for fee_id, data_dict in premiums['fee_totals'].items():
             action = rule_fees.get(Fee(fee_id), rule.default_fee_action)
             fee_ratios[fee_id] = ratios[action]
 

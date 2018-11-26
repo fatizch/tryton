@@ -7,9 +7,8 @@ __all__ = [
     ]
 
 
-class GlobalSearchSet:
+class GlobalSearchSet(metaclass=PoolMeta):
     __name__ = 'global_search.set'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def global_search_list(cls):

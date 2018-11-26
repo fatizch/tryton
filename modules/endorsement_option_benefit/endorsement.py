@@ -17,8 +17,7 @@ __all__ = [
     ]
 
 
-class EndorsementContract:
-    __metaclass__ = PoolMeta
+class EndorsementContract(metaclass=PoolMeta):
     __name__ = 'endorsement.contract'
 
     @classmethod
@@ -36,8 +35,7 @@ class EndorsementContract:
             instances['contract.option.benefit'] += version.benefits
 
 
-class EndorsementOptionVersion:
-    __metaclass__ = PoolMeta
+class EndorsementOptionVersion(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.covered_element.option.version'
 
     benefits = fields.One2Many(
@@ -83,9 +81,8 @@ class EndorsementOptionVersion:
 class EndorsementOptionBenefit(relation_mixin(
             'endorsement.contract.benefit.field', 'benefit',
             'contract.option.benefit', 'Benefits'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Option Benefit'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.benefit'
 
     option_version_endorsement = fields.Many2One(
@@ -129,8 +126,7 @@ class EndorsementOptionBenefit(relation_mixin(
         return {'version'}
 
 
-class EndorsementPart:
-    __metaclass__ = PoolMeta
+class EndorsementPart(metaclass=PoolMeta):
     __name__ = 'endorsement.part'
 
     benefit_fields = fields.One2Many(

@@ -47,8 +47,7 @@ class PaymentSepaDoBatch(batch.BatchRoot):
         return [o.id for o in objects]
 
 
-class PaymentTreatmentBatch:
-    __metaclass__ = PoolMeta
+class PaymentTreatmentBatch(metaclass=PoolMeta):
     __name__ = 'account.payment.process'
 
     @classmethod
@@ -160,8 +159,7 @@ class PaymentFailMessageCreationBatch(batch.BatchRootNoSelect):
         cls.archive_treated_files(files, archive, utils.today())
 
 
-class PaymentGroupCreationBatch:
-    __metaclass__ = PoolMeta
+class PaymentGroupCreationBatch(metaclass=PoolMeta):
     __name__ = 'account.payment.group.create'
 
     @classmethod
@@ -185,8 +183,7 @@ class PaymentGroupCreationBatch:
         return clause
 
 
-class PaymentGroupProcessBatch:
-    __metaclass__ = PoolMeta
+class PaymentGroupProcessBatch(metaclass=PoolMeta):
     __name__ = 'account.payment.group.process'
 
     @classmethod

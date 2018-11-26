@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class ContractOption(Printable):
-    __metaclass__ = PoolMeta
+class ContractOption(Printable, metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     def update_planned_events(self, context_=None):
@@ -20,8 +19,7 @@ class ContractOption(Printable):
         return self.coverage.update_planned_events(context_, [self])
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     @classmethod

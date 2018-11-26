@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class Endorsement:
-    __metaclass__ = PoolMeta
+class Endorsement(metaclass=PoolMeta):
     __name__ = 'endorsement'
 
     generated_sets_processes_over = fields.Function(
@@ -49,10 +48,9 @@ class Endorsement:
                 self.generated_endorsement_sets])
 
 
-class EndorsementSet(CoogProcessFramework):
+class EndorsementSet(CoogProcessFramework, metaclass=ClassAttr):
 
     __name__ = 'endorsement.set'
-    __metaclass__ = ClassAttr
 
     endorsements_parts_union = fields.Function(
         fields.One2Many('endorsement.part.union',
@@ -111,8 +109,7 @@ class EndorsementSet(CoogProcessFramework):
                 [('origin', 'in', endorsements_and_set)]])]
 
 
-class EndorsementPartUnion:
-    __metaclass__ = PoolMeta
+class EndorsementPartUnion(metaclass=PoolMeta):
     __name__ = 'endorsement.part.union'
 
     @classmethod

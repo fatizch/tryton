@@ -19,8 +19,7 @@ __all__ = [
     ]
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     @classmethod
@@ -65,15 +64,15 @@ class Invoice:
         if not agent_options:
             return commissions
         outstanding_prepayment = Agent.outstanding_prepayment(
-            agent_options.keys())
+            list(agent_options.keys()))
 
         outstanding_prepayment_per_contract = defaultdict(lambda: 0)
         for (agent_id, option_id), prepayment_amount_base in \
-                outstanding_prepayment.iteritems():
+                outstanding_prepayment.items():
             outstanding_prepayment_per_contract[
                 all_options[(option_id, agent_id)]] += prepayment_amount_base[0]
 
-        for (agent_id, option_id), comms in agent_options.iteritems():
+        for (agent_id, option_id), comms in agent_options.items():
             key = all_options[(option_id, agent_id)]
             for commission in comms:
                 if key not in outstanding_prepayment_per_contract:

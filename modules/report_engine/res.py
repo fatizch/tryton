@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class Group:
-    __metaclass__ = PoolMeta
+class Group(metaclass=PoolMeta):
     __name__ = 'res.group'
 
     report_templates = fields.Many2Many('report.template-res.group',

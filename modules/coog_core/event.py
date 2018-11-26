@@ -6,10 +6,10 @@ from trytond.model import Model, Unique
 from trytond.rpc import RPC
 from trytond.cache import Cache
 
-import model
-import fields
-import coog_string
-import utils
+from . import model
+from . import fields
+from . import coog_string
+from . import utils
 
 __all__ = [
     'Event',

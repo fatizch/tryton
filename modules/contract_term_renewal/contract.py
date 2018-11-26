@@ -20,8 +20,7 @@ __all__ = [
     ]
 
 
-class ActivationHistory:
-    __metaclass__ = PoolMeta
+class ActivationHistory(metaclass=PoolMeta):
     __name__ = 'contract.activation_history'
 
     final_renewal = fields.Boolean('Final Renewal', readonly=True)
@@ -35,8 +34,7 @@ class ActivationHistory:
         self.final_renewal = False
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     is_renewable = fields.Function(
@@ -172,7 +170,7 @@ class Contract:
         Event = pool.get('event')
         renewed_contracts = []
         for new_start_date, contracts_to_renew in \
-                cls.filter_and_sort_contracts_to_renew(contracts).iteritems():
+                cls.filter_and_sort_contracts_to_renew(contracts).items():
             cls.before_renew(contracts_to_renew, new_start_date)
             cls.do_renew(contracts_to_renew, new_start_date)
             cls.after_renew(contracts_to_renew, new_start_date)

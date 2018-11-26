@@ -18,9 +18,8 @@ __all__ = [
     ]
 
 
-class BillingInformation(object):
+class BillingInformation(object, metaclass=PoolMeta):
     _history = True
-    __metaclass__ = PoolMeta
     __name__ = 'contract.billing_information'
 
     direct_debit_account_selector = fields.Function(
@@ -67,8 +66,7 @@ class BillingInformation(object):
         return False
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     @classmethod
@@ -151,8 +149,7 @@ class Contract:
         Pool().get('contract').reconcile([x.contract for x in caller])
 
 
-class Endorsement:
-    __metaclass__ = PoolMeta
+class Endorsement(metaclass=PoolMeta):
     __name__ = 'endorsement'
 
     def new_endorsement(self, endorsement_part):
@@ -166,8 +163,7 @@ class Endorsement:
         return super(Endorsement, self).find_parts(endorsement_part)
 
 
-class EndorsementContract:
-    __metaclass__ = PoolMeta
+class EndorsementContract(metaclass=PoolMeta):
     __name__ = 'endorsement.contract'
 
     billing_informations = fields.One2Many(

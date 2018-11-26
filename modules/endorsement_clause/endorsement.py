@@ -15,14 +15,12 @@ __all__ = [
     ]
 
 
-class Clause(object):
-    __metaclass__ = PoolMeta
+class Clause(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'contract.clause'
 
 
-class EndorsementContract:
-    __metaclass__ = PoolMeta
+class EndorsementContract(metaclass=PoolMeta):
     __name__ = 'endorsement.contract'
 
     clauses = fields.One2Many('endorsement.contract.clause',
@@ -72,9 +70,8 @@ class EndorsementContract:
 
 class EndorsementClause(relation_mixin('endorsement.contract.clause.field',
             'clause', 'contract.clause', 'Clause'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Clause'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.clause'
 
     contract_endorsement = fields.Many2One('endorsement.contract',

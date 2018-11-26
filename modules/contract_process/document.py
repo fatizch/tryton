@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class DocumentDescription:
-    __metaclass__ = PoolMeta
+class DocumentDescription(metaclass=PoolMeta):
     __name__ = 'document.description'
 
     @classmethod
@@ -21,8 +20,7 @@ class DocumentDescription:
             ('start_subscription', 'Start Subscription'))
 
 
-class ReceiveDocument:
-    __metaclass__ = PoolMeta
+class ReceiveDocument(metaclass=PoolMeta):
     __name__ = 'document.receive'
 
     start_subscription = StateAction(

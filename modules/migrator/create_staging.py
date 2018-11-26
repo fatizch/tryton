@@ -95,7 +95,7 @@ class CreateStaging(batch.BatchRootNoSelect):
                     'columns_definition.json')
                 with open(columns_file, 'r') as f:
                     table_description = json.loads(f.read())
-                if tablename in table_description.keys():
+                if tablename in list(table_description.keys()):
                     columns = table_description[tablename]
                 return columns
             else:

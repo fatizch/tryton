@@ -11,7 +11,7 @@ from trytond.modules.coog_core import model, fields, utils, coog_date
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.offered.extra_data import with_extra_data
 
-from commission import COMMISSION_RATE_DIGITS
+from .commission import COMMISSION_RATE_DIGITS
 
 
 __all__ = [

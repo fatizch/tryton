@@ -28,10 +28,8 @@ PAYMENT_FREQUENCY = [
     ]
 
 
-class ContractInstalmentPlan(Workflow, model.CoogSQL, model.CoogView):
+class ContractInstalmentPlan(Workflow, model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Contract Instalment Plan'
-
-    __metaclass__ = PoolMeta
     __name__ = 'contract.instalment_plan'
     _func_key = 'rec_name'
 
@@ -530,7 +528,7 @@ class ContractInstalmentPlan(Workflow, model.CoogSQL, model.CoogView):
                     'currency': cls.default_currency(),
                     'currency_digits': cls.default_currency_digits(),
                     'currency_symbol': cls.default_currency_symbol()}
-                for i in xrange(nb_payments - 1)]
+                for i in range(nb_payments - 1)]
             payments.append({
                     'maturity_date': coog_date.add_month(start_date,
                         frequency * (nb_payments - 1)),
@@ -564,10 +562,8 @@ class ContractInstalmentPlan(Workflow, model.CoogSQL, model.CoogView):
         return Invoice.browse([x[0] for x in cursor.fetchall()])
 
 
-class ContractInstalmentPlanPayment(model.CoogSQL, model.CoogView):
+class ContractInstalmentPlanPayment(model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Scheduled Payment'
-
-    __metaclass__ = PoolMeta
     __name__ = 'contract.instalment_plan.payment'
 
     instalment = fields.Many2One('contract.instalment_plan', 'Instalment Plan',

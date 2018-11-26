@@ -10,9 +10,8 @@ __all__ = [
     ]
 
 
-class Attachment:
+class Attachment(metaclass=PoolMeta):
     __name__ = 'ir.attachment'
-    __metaclass__ = PoolMeta
 
     document_desc = fields.Many2One('document.description',
         'Document Description', ondelete='SET NULL')

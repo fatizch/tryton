@@ -17,7 +17,7 @@ import logging
 from decimal import Decimal, ROUND_HALF_UP
 from dateutil.relativedelta import relativedelta
 
-from StringIO import StringIO
+from io import StringIO
 from pyflakes.checker import Checker
 from sql import Null, Column, Literal, Window
 from sql.aggregate import Count
@@ -164,12 +164,12 @@ def debug_wrapper(base_context, func, name):
             base_context['__result__'].calls.append(call)
             base_context['__result__'].errors.append(
                 'ERROR in %s : %s' % (
-                    name, unicode(exc)))
+                    name, str(exc)))
             raise
         call[3] = repr(result)
         base_context['__result__'].calls.append(call)
         base_context['__result__'].low_level_debug.append(
-            '\tresult = %s' % unicode(result))
+            '\tresult = %s' % str(result))
         return result
     return wrapper_func
 
@@ -179,7 +179,7 @@ def noargs_func(name, values):
 
     def newfunc(*args, **keywords):
         try:
-            return v_iterator.next()
+            return next(v_iterator)
         except StopIteration:
             raise TooManyFunctionCall('Too many calls to {}'.format(name))
 
@@ -286,7 +286,7 @@ class RuleEngineResult(object):
         return bool(self.errors)
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __unicode__(self):
         result = '[' + self.print_result()
@@ -298,29 +298,29 @@ class RuleEngineResult(object):
 
     def _format_for_print(self, data):
         if isinstance(data, str):
-            return unicode(data, 'utf8')
-        elif isinstance(data, unicode):
+            return str(data, 'utf8')
+        elif isinstance(data, str):
             return data
         else:
-            return unicode(data)
+            return str(data)
 
     def print_errors(self):
-        return map(self._format_for_print, self.errors)
+        return list(map(self._format_for_print, self.errors))
 
     def print_warnings(self):
-        return map(self._format_for_print, self.warnings)
+        return list(map(self._format_for_print, self.warnings))
 
     def print_info(self):
-        return map(self._format_for_print, self.info)
+        return list(map(self._format_for_print, self.info))
 
     def print_debug(self):
-        return map(self._format_for_print, self.debug)
+        return list(map(self._format_for_print, self.debug))
 
     def print_result(self):
         return self._format_for_print(self.result)
 
     def print_low_level_debug(self):
-        return map(self._format_for_print, self.low_level_debug)
+        return list(map(self._format_for_print, self.low_level_debug))
 
 
 class RuleExecutionLog(ModelSQL, ModelView):
@@ -1070,8 +1070,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         # JCA : Do not crash if the user is 0, for tests and module updates
         if Transaction().user == 0:
             return True
-        errors = filter(lambda m: self.filter_errors(m),
-            check_code(self.execution_code))
+        errors = [m for m in check_code(self.execution_code) if self.filter_errors(m)]
         if not errors:
             return True
         logging.getLogger('rule_engine').warning([
@@ -1160,13 +1159,13 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             if self.id >= 0 and not debug:
                 self._prepare_context_cache.set(self.id, pre_context)
         self._exec_context = {k: self.deflat_element(v) for
-            k, v in pre_context.iteritems()}
+            k, v in pre_context.items()}
         return self._exec_context
 
     @classmethod
     def format_context(cls, context):
         result = ['Execution context :', '']
-        for k, v in context.iteritems():
+        for k, v in context.items():
             if k == '__result__':
                 continue
             result.append(k)
@@ -1186,18 +1185,18 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             }
         static_context = self.get_static_context()
         exec_context.update(static_context)
-        for k, v in pre_context.iteritems():
+        for k, v in pre_context.items():
             if k in execution_kwargs:
                 exec_context[k] = execution_kwargs.pop(k)
             else:
                 exec_context[k] = functools.partial(v, evaluation_context)
-        for k, v in execution_kwargs.iteritems():
+        for k, v in execution_kwargs.items():
             if 'param_%s' % k in exec_context:
                 exec_context['param_%s' % k] = v
         evaluation_context['__result__'] = RuleEngineResult()
         if not debug:
             return exec_context
-        for k, v in exec_context.iteritems():
+        for k, v in exec_context.items():
             if k == 'evaluation_context' or k in static_context:
                 continue
             exec_context[k] = debug_wrapper(evaluation_context, v, k)
@@ -1240,7 +1239,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             'abs': abs,                         # Absolute value
             'all': all,                         # Boolean intersect
             'any': any,                         # Boolean union
-            'basestring': basestring,           # String typechecking
+            'basestring': str,           # String typechecking
             'bin': bin,                         # Convert to binary string
             'bool': bool,                       # Convert to bool
             'bytearray': bytearray,             # Convert string to bytearray
@@ -1282,7 +1281,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             'len': len,                         # List / Dict length
             'list': list,                       # Cast to list
             # 'locals': locals,                 # Local variables dictionnary
-            'long': long,                       # Cast to long
+            'long': int,                       # Cast to long
             'map': map,                         # Apply rule to list
             'max': max,                         # Maximum value of a list
             # 'memoryview': memoryview,         # Memory view of an object
@@ -1311,8 +1310,8 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             #  'super': super,                  # Get previous elem in mro
             'tuple': tuple,                     # Tuple constructor
             'type': type,                       # Check type of an object
-            'unichr': unichr,                   # Cast to unicode char
-            'unicode': unicode,                 # Cast to unicode
+            'unichr': chr,                   # Cast to unicode char
+            'unicode': str,                 # Cast to unicode
             #  'vars': vars,                    # Introspect module
             'zip': zip,                         # Aggregate iterators
             }
@@ -1363,7 +1362,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             localcontext = {}
             try:
                 comp = _compile_source_exec(self.execution_code)
-                exec comp in context, localcontext
+                exec(comp, context, localcontext)
                 if (not ServerContext().get('rule_debug') and
                         self.status == 'draft'):
                     self.raise_user_error('execute_draft_rule', (self.name))
@@ -1376,7 +1375,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             except CatchedRuleEngineError:
                 pass
                 the_result.result = None
-            except ReadOnlyException, exc:
+            except ReadOnlyException as exc:
                 err_msg = self.raise_user_error('readonly_rule',
                     raise_exception=False)
                 if self.debug_mode:
@@ -1385,7 +1384,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
                     err_msg=err_msg)
             except DatabaseOperationalError:
                 raise
-            except Exception, exc:
+            except Exception as exc:
                 self.rule_error(exc, the_result, evaluation_context)
         return the_result
 
@@ -1502,7 +1501,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             rule_execution.calculation_date = date
             if exc:
                 rule_execution.errors += '\n' + (
-                    coog_string.slugify(self.name) + ' - ' + unicode(exc))
+                    coog_string.slugify(self.name) + ' - ' + str(exc))
             rule_execution.save()
             try:
                 transaction.commit()
@@ -1523,7 +1522,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             return lambda: value
 
         parameters_as_func = {}
-        for k, v in (parameters or {}).iteritems():
+        for k, v in (parameters or {}).items():
             parameters_as_func[k] = v if callable(v) else kwarg_function(v)
         result = rule.compute(arguments, parameters_as_func)
         rule.add_debug_log(result, arguments.get('date', None), arguments)
@@ -1908,7 +1907,7 @@ class TestCase(ModelView, ModelSQL):
             test_context.setdefault(value.name, []).append(val)
         test_context = {
             key: noargs_func(key, value)
-            for key, value in test_context.items()}
+            for key, value in list(test_context.items())}
         with ServerContext().set_context(rule_debug=True):
             return self.rule.execute({}, test_context)
 
@@ -1978,10 +1977,10 @@ class TestCase(ModelView, ModelSQL):
         except Exception:
             return False, sys.exc_info()
         try:
-            assert unicode(test_result) == self.expected_result
+            assert str(test_result) == self.expected_result
             return True, None
         except AssertionError:
-            return False, unicode(test_result) + ' vs. ' + self.expected_result
+            return False, str(test_result) + ' vs. ' + self.expected_result
         except Exception:
             return False, str(sys.exc_info())
 
@@ -2059,7 +2058,7 @@ class RuleError(model.CoogSQL, model.CoogView):
     arguments = fields.Char('Arguments')
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return str(self).encode('utf-8')
 
     def __unicode__(self):
         return '[%s] %s' % (self.kind, self.name)

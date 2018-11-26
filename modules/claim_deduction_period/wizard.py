@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class CreateIndemnification:
-    __metaclass__ = PoolMeta
+class CreateIndemnification(metaclass=PoolMeta):
     __name__ = 'claim.create_indemnification'
 
     @classmethod
@@ -56,7 +55,7 @@ class CreateIndemnification:
                     new_deduction = Deduction()
                     elem.update_deduction(new_deduction)
                     new_deductions.append(new_deduction)
-            loss.deduction_periods = tuple(updated_deduction_periods.values() +
+            loss.deduction_periods = tuple(list(updated_deduction_periods.values()) +
                 new_deductions)
             loss.save()
         return super(CreateIndemnification, self).transition_calculate()
@@ -74,8 +73,7 @@ class CreateIndemnification:
                         deduction_period, 'start_date')})
 
 
-class IndemnificationDefinition:
-    __metaclass__ = PoolMeta
+class IndemnificationDefinition(metaclass=PoolMeta):
     __name__ = 'claim.indemnification_definition'
 
     deduction_period_kinds = fields.Many2Many(

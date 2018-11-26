@@ -19,8 +19,7 @@ __all__ = [
     ]
 
 
-class Dunning:
-    __metaclass__ = PoolMeta
+class Dunning(metaclass=PoolMeta):
     __name__ = 'account.dunning'
 
     contract = fields.Function(
@@ -178,16 +177,14 @@ class Dunning:
         return domain
 
 
-class Procedure:
-    __metaclass__ = PoolMeta
+class Procedure(metaclass=PoolMeta):
     __name__ = 'account.dunning.procedure'
 
     from_payment_date = fields.Boolean('Maturity Date From Payment Date',
         help='Maturity date is equal to payment date if defined')
 
 
-class Level:
-    __metaclass__ = PoolMeta
+class Level(metaclass=PoolMeta):
     __name__ = 'account.dunning.level'
 
     contract_action = fields.Selection([
@@ -274,7 +271,7 @@ class Level:
                 to_void.append(dunning.contract)
             else:
                 to_terminate[date].append(dunning.contract)
-        for date, contracts in to_terminate.iteritems():
+        for date, contracts in to_terminate.items():
             Contract.terminate(contracts, date, termination_reason)
         if to_void:
             Contract.void(to_void, void_reason)

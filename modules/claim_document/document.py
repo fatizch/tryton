@@ -19,8 +19,7 @@ __all__ = [
     ]
 
 
-class DocumentRequestLine:
-    __metaclass__ = PoolMeta
+class DocumentRequestLine(metaclass=PoolMeta):
     __name__ = 'document.request.line'
 
     claim = fields.Many2One('claim', 'Claim', ondelete='CASCADE', select=True)
@@ -64,7 +63,7 @@ class DocumentRequestLine:
     @classmethod
     def update_values_from_target(cls, data_dict):
         super(DocumentRequestLine, cls).update_values_from_target(data_dict)
-        for target, values in data_dict.iteritems():
+        for target, values in data_dict.items():
             if not target.startswith('claim,'):
                 continue
             claim_id = int(target.split(',')[1])
@@ -84,8 +83,7 @@ class DocumentRequestLine:
             ['claim', 'claim.loss']
 
 
-class DocumentRequest:
-    __metaclass__ = PoolMeta
+class DocumentRequest(metaclass=PoolMeta):
     __name__ = 'document.request'
 
     @classmethod
@@ -96,8 +94,7 @@ class DocumentRequest:
             ('claim.service', 'Claim Service'))
 
 
-class DocumentReception:
-    __metaclass__ = PoolMeta
+class DocumentReception(metaclass=PoolMeta):
     __name__ = 'document.reception'
 
     claim = fields.Many2One('claim', 'Claim', ondelete='SET NULL',
@@ -131,8 +128,7 @@ class DocumentReception:
         return list(claims)
 
 
-class ReceiveDocument:
-    __metaclass__ = PoolMeta
+class ReceiveDocument(metaclass=PoolMeta):
     __name__ = 'document.receive'
 
     def get_possible_objects_from_document(self, document):

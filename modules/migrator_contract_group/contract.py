@@ -305,7 +305,7 @@ class MigratorContractGroup(BaseMigratorContractGroup):
             key = ':'.join(keys)
             to_upsert[key] = row
         if to_upsert:
-            cls.upsert_records(to_upsert.values(), **kwargs)
+            cls.upsert_records(list(to_upsert.values()), **kwargs)
         return to_upsert
 
     @classmethod
@@ -362,7 +362,7 @@ class MigratorContractSubsidiary(BaseMigratorContractGroup):
             parent_covereds = CoveredElement.search(parent_clause)
             for parent_covered in parent_covereds:
                 if parent_covered.name == parent_code or parent_code in \
-                        parent_covered.current_extra_data.values():
+                        list(parent_covered.current_extra_data.values()):
                     cls.cache_obj['covered_element'][
                         parent_key] = parent_covered.id
                     break
@@ -412,7 +412,7 @@ class MigratorContractSubsidiary(BaseMigratorContractGroup):
             key = ':'.join([x or '' for x in keys])
             to_upsert[key] = row
         if to_upsert:
-            cls.upsert_records(to_upsert.values(), **kwargs)
+            cls.upsert_records(list(to_upsert.values()), **kwargs)
         return to_upsert
 
     @classmethod
@@ -460,8 +460,8 @@ class MigratorContractSubsidiary(BaseMigratorContractGroup):
     @classmethod
     def select_remove_ids(cls, ids, excluded, **kwargs):
         table_name = cls.model.replace('.', '_')
-        existing_ids = tools.cache_from_query(table_name,
-            ('contract', 'party')).keys()
+        existing_ids = list(tools.cache_from_query(table_name,
+            ('contract', 'party')).keys())
         pool = Pool()
         Contract = pool.get('contract')
         Party = pool.get('party.party')
@@ -613,7 +613,7 @@ class MigratorSubsidiaryAffiliated(Migrator):
     @classmethod
     def select(cls, **kwargs):
         select = cls.table.select(
-            *[Column(cls.table, x) for x in cls.columns.keys()])
+            *[Column(cls.table, x) for x in list(cls.columns.keys())])
         return select, cls.func_key
 
     @classmethod
@@ -644,8 +644,8 @@ class MigratorSubsidiaryAffiliated(Migrator):
     @classmethod
     def select_remove_ids(cls, ids, excluded, **kwargs):
         table_name = cls.model.replace('.', '_')
-        existing_ids = tools.cache_from_query(table_name,
-            ('party', 'parent')).keys()
+        existing_ids = list(tools.cache_from_query(table_name,
+            ('party', 'parent')).keys())
         existing_ids = {
             '%s_%s' % (party, parent) for party, parent in existing_ids}
         return list(set(ids) - set(excluded) - set(existing_ids))
@@ -843,7 +843,7 @@ class MigratorContractGroupConfiguration(Migrator):
 
             for parent_covered in parent_covereds:
                 if parent_covered.name == parent_code or parent_code in \
-                        parent_covered.current_extra_data.values():
+                        list(parent_covered.current_extra_data.values()):
                     cls.cache_obj['covered_element'][
                         parent_key] = parent_covered
                     break
@@ -858,9 +858,9 @@ class MigratorContractGroupConfiguration(Migrator):
     def _set_extra_data_decimal(cls, *extra_datas):
         for key, value, extra_data in [(k, v, extra_data)
                 for extra_data in extra_datas
-                for k, v in extra_data.items()]:
-            if isinstance(value, basestring) and not \
-                    filter(lambda x: x not in '0123456789.', value):
+                for k, v in list(extra_data.items())]:
+            if isinstance(value, str) and not \
+                    [x for x in value if x not in '0123456789.']:
                 extra_data[key] = Decimal(value)
 
     @classmethod
@@ -923,7 +923,7 @@ class MigratorContractGroupConfiguration(Migrator):
     @classmethod
     def select(cls, **kwargs):
         select = cls.table.select(
-            *[Column(cls.table, x) for x in cls.columns.keys()])
+            *[Column(cls.table, x) for x in list(cls.columns.keys())])
         return select, cls.func_key
 
     @classmethod

@@ -105,7 +105,7 @@ class MigratorZip(migrator.Migrator):
             done_keys.add(key)
             to_upsert[key] = row
         if to_upsert:
-            cls.upsert_records(to_upsert.values(), **kwargs)
+            cls.upsert_records(list(to_upsert.values()), **kwargs)
         return to_upsert
 
 
@@ -225,8 +225,8 @@ class MigratorAddress(migrator.Migrator):
     @classmethod
     def select_remove_ids(cls, ids, excluded, **kwargs):
         table_name = cls.model.replace('.', '_')
-        existing_ids = tools.cache_from_query(table_name,
-            ('sequence', 'party')).keys()
+        existing_ids = list(tools.cache_from_query(table_name,
+            ('sequence', 'party')).keys())
         existing_ids = {'%s_%s' % (x[0], x[1]) for x in existing_ids}
         return list(set(ids) - set(excluded) - set(existing_ids))
 

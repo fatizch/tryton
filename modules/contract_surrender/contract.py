@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     can_surrender = fields.Function(
@@ -324,8 +323,7 @@ class Contract:
             self.activation_history = self.activation_history
 
 
-class Option:
-    __metaclass__ = PoolMeta
+class Option(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     @classmethod

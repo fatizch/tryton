@@ -17,8 +17,7 @@ __all__ = [
     ]
 
 
-class InvoiceSlipConfiguration:
-    __metaclass__ = PoolMeta
+class InvoiceSlipConfiguration(metaclass=PoolMeta):
     __name__ = 'account.invoice.slip.configuration'
 
     @classmethod
@@ -44,7 +43,7 @@ class InvoiceSlipConfiguration:
         '''
         per_account = super(InvoiceSlipConfiguration,
             cls)._retrieve_empty_slips(slip_parameters)
-        for account, data in per_account.iteritems():
+        for account, data in per_account.items():
             invoice = data['invoice']
             try:
                 data['positive_invoice_line'] = cls._find_slip_line(
@@ -77,11 +76,11 @@ class InvoiceSlipConfiguration:
 
         # TODO: We only need to browse in order to know the invoices states,
         # maybe we could include it in the select_invoices data query
-        per_id = {x.id: x for x in Invoice.browse(invoices_data.keys())}
+        per_id = {x.id: x for x in Invoice.browse(list(invoices_data.keys()))}
         remains = set(invoices_data.keys())
 
         for invoice_id, commission_id, date, account in \
-                cls._get_insurer_commissions(slip_parameters, per_id.keys()):
+                cls._get_insurer_commissions(slip_parameters, list(per_id.keys())):
             if invoice_id in remains:
                 remains.remove(invoice_id)
             if not date or not slip_date or date <= slip_date:
@@ -93,8 +92,8 @@ class InvoiceSlipConfiguration:
             else:
                 to_ignore[account].append(invoice_id)
 
-        for insurer_account, value in to_sum.iteritems():
-            for invoice_id, commissions in value.iteritems():
+        for insurer_account, value in to_sum.items():
+            for invoice_id, commissions in value.items():
                 if invoice_id not in to_ignore[insurer_account]:
                     per_account[insurer_account]['commissions'] += \
                         Commission.browse(commissions)
@@ -106,11 +105,11 @@ class InvoiceSlipConfiguration:
         if remains:
             # Invoices which must be included, but without any commissions
             # attached to them => just call super
-            inputs = {x: y for x, y in invoices_data.iteritems()
+            inputs = {x: y for x, y in invoices_data.items()
                 if x in remains}
             no_commission_data = super(InvoiceSlipConfiguration,
                 cls)._get_invoices_data(slip_parameters, inputs)
-            for account_id, data in no_commission_data.iteritems():
+            for account_id, data in no_commission_data.items():
                 per_account[account_id]['lines'] += data['lines']
 
         return per_account
@@ -129,8 +128,7 @@ class InvoiceSlipConfiguration:
         agent = pool.get('commission.agent').__table__()
         option = pool.get('offered.option.description').__table__()
 
-        insurers = filter(
-            None, [x.get('insurer', None) for x in slip_parameters])
+        insurers = [_f for _f in [x.get('insurer', None) for x in slip_parameters] if _f]
         if not insurers or not invoices_ids:
             return []
 
@@ -166,7 +164,7 @@ class InvoiceSlipConfiguration:
             current_slips):
         cursor = Transaction().connection.cursor()
         commission_table = Pool().get('commission').__table__()
-        for account, account_data in current_slips.iteritems():
+        for account, account_data in current_slips.items():
             account_invoice_data = invoices_data[account.id]
             if not account_invoice_data.get('commissions', None):
                 continue

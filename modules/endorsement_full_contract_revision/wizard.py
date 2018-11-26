@@ -51,7 +51,7 @@ class StartFullContractRevision(EndorsementWizardStepMixin):
         contracts = self._get_contracts()
         if len(contracts) != 1:
             self.raise_user_error('only_one_contract')
-        endorsement = contracts.values()[0]
+        endorsement = list(contracts.values())[0]
         defaults['current_start_date'] = endorsement.contract.start_date
         defaults['start_date'] = self.effective_date
         return defaults
@@ -66,7 +66,7 @@ class StartFullContractRevision(EndorsementWizardStepMixin):
         self.wizard.endorsement.in_progress([self.wizard.endorsement])
 
         # Clean up contract
-        contract = Contract(contracts.keys()[0])
+        contract = Contract(list(contracts.keys())[0])
         if self.start_date and (self.start_date != self.current_start_date):
             contract.start_date = self.start_date
             contract.save()
@@ -78,7 +78,7 @@ class StartFullContractRevision(EndorsementWizardStepMixin):
 
     def step_update(self):
         contracts = self._get_contracts()
-        endorsement = contracts.values()[0]
+        endorsement = list(contracts.values())[0]
         if self._update_values(self, endorsement.contract, endorsement.values,
                 ['start_date']):
             endorsement.save()
@@ -88,8 +88,7 @@ class StartFullContractRevision(EndorsementWizardStepMixin):
         return True
 
 
-class StartEndorsement:
-    __metaclass__ = PoolMeta
+class StartEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
     full_contract_revision_action = model.VoidStateAction()

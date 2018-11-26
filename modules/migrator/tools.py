@@ -37,7 +37,7 @@ CONNECT_SRC = connect_to_source()
 def diff_rows(row_a, row_b):
     """Return the delta dict between row_b and row_a
     """
-    return {k: v for k, v in row_b.iteritems() if row_a[k] != v}
+    return {k: v for k, v in row_b.items() if row_a[k] != v}
 
 
 def cache_from_search(model, key, clause=None):

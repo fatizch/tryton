@@ -21,8 +21,7 @@ __all__ = [
     ]
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     claims = fields.One2Many('claim', 'claimant', 'Claims', readonly=True)
@@ -43,8 +42,7 @@ class Party:
         return self.claims[-1].id if self.claims else None
 
 
-class Insurer:
-    __metaclass__ = PoolMeta
+class Insurer(metaclass=PoolMeta):
     __name__ = 'insurer'
 
     benefits = fields.One2Many('benefit', 'insurer', 'Benefits',
@@ -89,8 +87,7 @@ class SynthesisMenuClaim(model.CoogSQL):
         return coog_string.translate_label(ClaimSynthesis, 'name')
 
 
-class SynthesisMenu:
-    __metaclass__ = PoolMeta
+class SynthesisMenu(metaclass=PoolMeta):
     __name__ = 'party.synthesis.menu'
 
     @classmethod
@@ -147,8 +144,7 @@ class SynthesisMenuOpen(Wizard):
         return actions
 
 
-class InsurerDelegation:
-    __metaclass__ = PoolMeta
+class InsurerDelegation(metaclass=PoolMeta):
     __name__ = 'insurer.delegation'
 
     claim_create = fields.Boolean('Claim Creation')
@@ -163,8 +159,7 @@ class InsurerDelegation:
         return True
 
 
-class PartyReplace:
-    __metaclass__ = PoolMeta
+class PartyReplace(metaclass=PoolMeta):
     __name__ = 'party.replace'
 
     @classmethod

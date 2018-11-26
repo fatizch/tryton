@@ -95,7 +95,7 @@ class MigratorInvoice(migrator.Migrator):
 
         if to_create:
             ContractInvoice.create([x._save_values
-                for x in chain.from_iterable(to_create.values())])
+                for x in chain.from_iterable(list(to_create.values()))])
             for _migrator in cls.extra_migrator_names():
                 pool.get(_migrator).migrate([r['number'] for r in rows])
         return to_create
@@ -131,10 +131,10 @@ class MigratorInvoiceLine(migrator.Migrator):
         cls.cache_obj['contract'] = tools.cache_from_query('contract',
             ('contract_number', ), ('contract_number',
                 [x.contract.contract_number
-                    for x in Invoice.browse(cls.cache_obj['invoice'].values())
+                    for x in Invoice.browse(list(cls.cache_obj['invoice'].values()))
                     ]))
         cls.cache_obj['premium'] = tools.cache_from_query('contract_premium',
-            ('contract', ), ('contract', cls.cache_obj['contract'].values()))
+            ('contract', ), ('contract', list(cls.cache_obj['contract'].values())))
 
     @classmethod
     def populate(cls, row):
@@ -200,4 +200,4 @@ class MigratorInvoiceLine(migrator.Migrator):
                     detail.invoice_line = invoice_line
                     details.append(detail)
             InvoiceLineDetail.save(details)
-        return dict(zip(ids, vals))
+        return dict(list(zip(ids, vals)))

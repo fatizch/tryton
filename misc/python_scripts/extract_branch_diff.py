@@ -59,22 +59,22 @@ def extract_redmine_issues(issue_numbers, api_key):
             output.append(';'.join([str(issue), project, tracker, priority,
                         status, author, creation_date, due_date, subject]))
     except:
-        print 'Error contacting the redmine server %s' % URL
+        print('Error contacting the redmine server %s' % URL)
         sys.exit(0)
-    print '\n'.join(output)
+    print('\n'.join(output))
 
 
 if __name__ == '__main__':
     try:
         _, api_key_file, repo_path, base_branch, dest_branch = sys.argv
     except:
-        print 'Usage : extract_branch_diff.py api_key_file ' \
-            '/path/to/repo default prod'
-        print ''
-        print '    api_key_file must be a path to a readable file with a valid'
-        print '        redmine api key'
-        print '    default / prod must be branch names, tags, or changesets'
-        print '    The most up-to-date entry must be first'
+        print('Usage : extract_branch_diff.py api_key_file ' \
+            '/path/to/repo default prod')
+        print('')
+        print('    api_key_file must be a path to a readable file with a valid')
+        print('        redmine api key')
+        print('    default / prod must be branch names, tags, or changesets')
+        print('    The most up-to-date entry must be first')
         sys.exit(0)
     os.chdir(repo_path)
     try:
@@ -82,14 +82,14 @@ if __name__ == '__main__':
             with open(api_key_file, 'r') as api_file:
                 api_key = api_file.readlines()[0].strip()
         except:
-            print 'Could not get an api key from file %s' % api_key_file
+            print('Could not get an api key from file %s' % api_key_file)
             sys.exit(0)
         ancestor = get_ancestor(base_branch, dest_branch)
         base_issues = get_diff_issues(ancestor, base_branch)
         dest_issues = get_diff_issues(ancestor, dest_branch)
         diff = base_issues - dest_issues
         if not diff:
-            print 'No differential issues'
+            print('No differential issues')
             sys.exit(0)
         extract_redmine_issues(sorted(list(diff)), api_key)
     finally:

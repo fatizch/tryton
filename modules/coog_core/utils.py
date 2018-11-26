@@ -31,9 +31,10 @@ from trytond.config import config
 from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT
 from trytond.model.modelstorage import EvalEnvironment
 from trytond.modules.coog_core import coog_date
-import coog_string
+from . import coog_string
 
 from .model import fields
+from functools import reduce
 
 __all__ = []
 
@@ -267,7 +268,7 @@ def get_user_language():
 
 def pyson_result(pyson_expr, target):
     encoder = PYSONEncoder()
-    if isinstance(pyson_expr, basestring):
+    if isinstance(pyson_expr, str):
         the_pyson = encoder.encode(eval(pyson_expr, CONTEXT))
     else:
         the_pyson = encoder.encode(pyson_expr)
@@ -395,7 +396,7 @@ def get_history_instance(model_name, instance_id, at_date):
 def apply_dict(instance, data_dict):
     pool = Pool()
     Model = pool.get(instance.__name__)
-    for k, v in data_dict.iteritems():
+    for k, v in data_dict.items():
         if k in ('create_date', 'create_uid', 'write_date', 'write_uid'):
             continue
         field = Model._fields[k]
@@ -450,7 +451,7 @@ def apply_dict(instance, data_dict):
 
 
 def chunker(seq, size):
-    return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
+    return (seq[pos:pos + size] for pos in range(0, len(seq), size))
 
 
 def version_getter(instances, names, version_model, reverse_fname,
@@ -478,8 +479,8 @@ def version_getter(instances, names, version_model, reverse_fname,
 
     field_map = field_map or {}
     field_map = {x: field_map.get(x, x)
-        for x in field_map.keys() + [x for x in names if x not in
-            field_map.values()]}
+        for x in list(field_map.keys()) + [x for x in names if x not in
+            list(field_map.values())]}
 
     cursor = Transaction().connection.cursor()
     Target = Pool().get(version_model)
@@ -487,7 +488,7 @@ def version_getter(instances, names, version_model, reverse_fname,
 
     base_values = {x.id: None for x in instances}
     result, columns, to_convert = {}, [], set()
-    for version_name, master_name in field_map.iteritems():
+    for version_name, master_name in field_map.items():
         columns.append(Column(target, version_name))
         if isinstance(Target._fields[version_name], tryton_fields.Dict):
             to_convert.add(version_name)
@@ -510,7 +511,7 @@ def version_getter(instances, names, version_model, reverse_fname,
         cursor.execute(*view.select(where=view.start == view.max_start))
         for value in cursor_dict(cursor):
             base_id = value[reverse_fname]
-            for k, v in value.iteritems():
+            for k, v in value.items():
                 if k == reverse_fname or k not in field_map:
                     continue
                 if k in to_convert:
@@ -521,7 +522,7 @@ def version_getter(instances, names, version_model, reverse_fname,
 
 def clear_transaction_cache(model_name, ids):
     # Copied from ModelStorage::write
-    for cache in Transaction().cache.itervalues():
+    for cache in Transaction().cache.values():
         if model_name in cache:
             for id_ in ids:
                 if id_ in cache[model_name]:
@@ -570,7 +571,7 @@ class CustomRrule(object):
         self._iter_pos = self._base_iter_pos
         return self
 
-    def next(self):
+    def __next__(self):
         date = coog_date.add_month(self._base_date,
             self._interval * self._iter_pos,
             stick_to_end_of_month=self._follow_end_of_month)
@@ -712,7 +713,7 @@ def get_prorated_amount_on_period(start, end, frequency, value, sync_date,
         start_date = sync_date
         stick = (start_date.month, start_date.day) == (2, 29)
         return_value = 0
-        for year in xrange(end.year - start.year + 1):
+        for year in range(end.year - start.year + 1):
             new_date = coog_date.add_year(start_date, start.year -
                     start_date.year + year, stick)
             if start <= new_date <= end:
@@ -791,7 +792,7 @@ def get_prorated_amount_on_period(start, end, frequency, value, sync_date,
                     'half_yearly': 6,
                     'yearly': 12,
                     }
-                key_list = interval.keys()
+                key_list = list(interval.keys())
                 lower_frequency_idx = key_list[key_list.index(frequency) - 1]
                 return_value += get_prorated_amount_on_period(start, end,
                     lower_frequency_idx, value /
@@ -863,7 +864,7 @@ class DataExporter(object):
             elif (issubclass(data.__class__, fields.Boolean or
                     data) or type(data) is bool):
                 return self.format_boolean(data)
-            assert isinstance(data, (type(u''), type(None))), (
+            assert isinstance(data, (type(''), type(None))), (
                 attribute_path, data, type(data))
             return data
 
@@ -887,8 +888,8 @@ class DataExporter(object):
 
 
 def clear_transaction_cache_for(models):
-    for cache in Transaction().cache.values():
-        for model in [models] if isinstance(models, basestring) else models:
+    for cache in list(Transaction().cache.values()):
+        for model in [models] if isinstance(models, str) else models:
             cache.pop(model, None)
 
 

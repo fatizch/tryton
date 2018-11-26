@@ -288,7 +288,7 @@ class EndorsementWizardStepMixin(model.CoogView):
             ._get_model())
         endorsement.clean()
         new_values = {}
-        for k, v in data_dict.iteritems():
+        for k, v in data_dict.items():
             if k in endorsement._auto_update_ignore_fields():
                 continue
             field = Model._fields[k]
@@ -579,7 +579,7 @@ class ReactivateContract(EndorsementWizardStepMixin):
         Contract = pool.get('contract')
         contracts = self._get_contracts()
         assert contracts
-        for contract_id, endorsement in contracts.iteritems():
+        for contract_id, endorsement in contracts.items():
             contract = Contract(contract_id)
             if contract.status != 'hold':
                 self.wizard.endorsement.effective_date = contract.end_date
@@ -618,7 +618,7 @@ class ChangeContractExtraData(EndorsementWizardStepMixin):
         Contract = pool.get('contract')
         defaults = super(ChangeContractExtraData, self).step_default()
         contracts = self._get_contracts()
-        for contract_id, endorsement in contracts.iteritems():
+        for contract_id, endorsement in contracts.items():
             contract = Contract(contract_id)
             effective_date = self.wizard.endorsement.effective_date
             extra_data_at_date = utils.get_value_at_date(contract.extra_datas,
@@ -646,7 +646,7 @@ class ChangeContractExtraData(EndorsementWizardStepMixin):
         Contract = pool.get('contract')
         contracts = self._get_contracts()
 
-        for contract_id, endorsement in contracts.iteritems():
+        for contract_id, endorsement in contracts.items():
             EndorsementExtraData.delete(endorsement.extra_datas)
             contract = Contract(contract_id)
 
@@ -834,7 +834,7 @@ class ManageOptions(EndorsementWizardStepMixin):
             for x in possible_parents}
 
         all_options = []
-        for possible_parent, per_coverage in per_parent.iteritems():
+        for possible_parent, per_coverage in per_parent.items():
             all_options += self.generate_displayers(possible_parent,
                 per_coverage)
         defaults['all_options'] = [x._changed_values for x in all_options]
@@ -860,7 +860,7 @@ class ManageOptions(EndorsementWizardStepMixin):
             utils.apply_dict(contract, contract_endorsement.apply_values())
             contract_endorsements[contract.id] = contract
 
-        for parent, new_options in per_parent.iteritems():
+        for parent, new_options in per_parent.items():
             self.current_parent = parent
             parent = self.get_parent_endorsed(self._parent,
                 contract_endorsements)
@@ -997,7 +997,7 @@ class ManageOptions(EndorsementWizardStepMixin):
     def generate_displayers(self, parent, per_coverage):
         Displayer = Pool().get('contract.manage_options.option_displayer')
         all_options = []
-        for options in per_coverage.itervalues():
+        for options in per_coverage.values():
             for idx, option in enumerate(sorted(options,
                         key=lambda x: x.manual_start_date or x.start_date)):
                 save_values = option._values
@@ -1365,7 +1365,7 @@ class TerminateContract(EndorsementWizardStepMixin):
         Contract = pool.get('contract')
         defaults = super(TerminateContract, self).step_default()
         contracts = self._get_contracts()
-        for contract_id, endorsement in contracts.iteritems():
+        for contract_id, endorsement in contracts.items():
             if endorsement.values and 'end_date' in endorsement.values:
                 defaults['termination_date'] = endorsement.values['end_date']
             else:
@@ -1382,7 +1382,7 @@ class TerminateContract(EndorsementWizardStepMixin):
         EndorsementActivationHistory = pool.get(
             'endorsement.contract.activation_history')
         Contract = pool.get('contract')
-        contract_id, endorsement = self._get_contracts().items()[0]
+        contract_id, endorsement = list(self._get_contracts().items())[0]
 
         contract = Contract(contract_id)
         last_period = contract.activation_history[-1]
@@ -1444,7 +1444,7 @@ class VoidContract(EndorsementWizardStepMixin):
         Contract = pool.get('contract')
         defaults = super(VoidContract, self).step_default()
         contracts = self._get_contracts()
-        for contract_id, endorsement in contracts.iteritems():
+        for contract_id, endorsement in contracts.items():
             defaults['contract'] = contract_id
             defaults['current_end_date'] = Contract(contract_id).end_date
         return defaults
@@ -1455,7 +1455,7 @@ class VoidContract(EndorsementWizardStepMixin):
             'endorsement.contract.activation_history')
         EndorsementOption = pool.get('endorsement.contract.option')
         Contract = pool.get('contract')
-        contract_id, endorsement = self._get_contracts().items()[0]
+        contract_id, endorsement = list(self._get_contracts().items())[0]
 
         contract = Contract(contract_id)
         endorsement.values = {'status': 'void', 'sub_status':
@@ -1528,7 +1528,7 @@ class ChangeContractSubscriber(EndorsementWizardStepMixin):
     def step_default(self, name):
         defaults = super(ChangeContractSubscriber, self).step_default()
         contracts = self._get_contracts()
-        for contract_id, endorsement in contracts.iteritems():
+        for contract_id, endorsement in contracts.items():
             defaults['current_subscriber'] = \
                 endorsement.contract.subscriber.id
             defaults['new_subscriber'] = endorsement.values.get('subscriber',
@@ -1586,7 +1586,7 @@ class ChangeContractSubscriber(EndorsementWizardStepMixin):
         pool = Pool()
         EndorsementContract = pool.get('endorsement.contract')
         to_save = []
-        for contract_id, endorsement_contract in self._get_contracts().items():
+        for contract_id, endorsement_contract in list(self._get_contracts().items()):
             endorsement_contract.values = {
                 'subscriber': self.new_subscriber.id}
             self.update_subscriber_contact_to_values(endorsement_contract)
@@ -1681,7 +1681,7 @@ class ManageContacts(EndorsementWizardStepMixin, model.CoogView):
             for x in possible_contracts}
 
         all_contacts = []
-        for contract, contacts in per_contract.iteritems():
+        for contract, contacts in per_contract.items():
             all_contacts += self.generate_displayers(contract, contacts)
         defaults['all_contacts'] = [x._changed_values for x in all_contacts]
         if defaults['possible_contracts']:
@@ -1695,11 +1695,11 @@ class ManageContacts(EndorsementWizardStepMixin, model.CoogView):
         for contact in self.all_contacts:
             per_contract[contact.contract].append(contact)
 
-        for contract, contacts in per_contract.iteritems():
+        for contract, contacts in per_contract.items():
             self.update_endorsed_contacts(contract, contacts)
 
         new_endorsements = []
-        for contract_endorsement in per_contract.keys():
+        for contract_endorsement in list(per_contract.keys()):
             self._update_endorsement(contract_endorsement,
                 contract_endorsement.contract._save_values)
             if not contract_endorsement.clean_up():
@@ -1782,7 +1782,7 @@ class ManageContacts(EndorsementWizardStepMixin, model.CoogView):
 
     def generate_displayers(self, contract_endorsement, contacts):
         all_contacts = []
-        for (kind, party), (old, new) in contacts.items():
+        for (kind, party), (old, new) in list(contacts.items()):
             contact_displayer = self.new_contact_displayer(kind, party, old,
                 new)
             contact_displayer.contract = contract_endorsement
@@ -2318,7 +2318,7 @@ class StartEndorsement(Wizard):
         # Returns the endorsement wizard specific state views
         pool = Pool()
         result = {}
-        for state_name, state in cls.states.iteritems():
+        for state_name, state in cls.states.items():
             if not issubclass(state.__class__, StateView):
                 continue
             state_class = pool.get(state.model_name)
@@ -2370,7 +2370,7 @@ class StartEndorsement(Wizard):
     @classmethod
     def get_fields_to_get(cls, model, view_id):
         fields_def = Pool().get(model).fields_view_get(view_id)
-        return fields_def['fields'].keys()
+        return list(fields_def['fields'].keys())
 
     @classmethod
     def get_new_instance_fields(cls, base_instance, fields):
@@ -2420,7 +2420,7 @@ class StartEndorsement(Wizard):
         def filter_values(values):
             keys = [x.name for x in getattr(state.endorsement_part,
                     endorsed_field_name + '_fields')]
-            to_del = [k for k in values.iterkeys() if k not in keys]
+            to_del = [k for k in values.keys() if k not in keys]
             for k in to_del:
                 values.pop(k)
             return values

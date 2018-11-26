@@ -7,8 +7,7 @@ __all__ = [
     ]
 
 
-class Level:
-    __metaclass__ = PoolMeta
+class Level(metaclass=PoolMeta):
     __name__ = 'account.dunning.level'
 
     def get_contract_from_dunning(self):

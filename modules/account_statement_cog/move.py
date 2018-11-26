@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class Move:
-    __metaclass__ = PoolMeta
+class Move(metaclass=PoolMeta):
     __name__ = 'account.move'
 
     @classmethod
@@ -31,8 +30,7 @@ class Move:
         return super(Move, self).get_kind(name)
 
 
-class MoveLine:
-    __metaclass__ = PoolMeta
+class MoveLine(metaclass=PoolMeta):
     __name__ = 'account.move.line'
 
     def get_synthesis_rec_name(self, name):

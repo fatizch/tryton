@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class BenefitRule:
-    __metaclass__ = PoolMeta
+class BenefitRule(metaclass=PoolMeta):
     __name__ = 'benefit.rule'
 
     revaluation_on_basic_salary = fields.Boolean('Revaluation on basic salary',
@@ -84,8 +83,7 @@ class BenefitRule:
         return dates
 
 
-class ManageOptionBenefitsDisplayer:
-    __metaclass__ = PoolMeta
+class ManageOptionBenefitsDisplayer(metaclass=PoolMeta):
     __name__ = 'contract.manage_option_benefits.option'
 
     @classmethod

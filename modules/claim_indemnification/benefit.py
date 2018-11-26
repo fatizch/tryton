@@ -36,8 +36,7 @@ ANNUITY_FREQUENCIES = [
     ]
 
 
-class Benefit:
-    __metaclass__ = PoolMeta
+class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     indemnification_kind = fields.Selection(INDEMNIFICATION_KIND,
@@ -308,7 +307,7 @@ class BenefitRule(
                         tmp_benefit.update(reval_benefit)
                         extra_details_orig = benefit.get('extra_details', {})
                         if 'extra_details' in tmp_benefit:
-                            for key, value in extra_details_orig.items():
+                            for key, value in list(extra_details_orig.items()):
                                 if key not in tmp_benefit['extra_details']:
                                     tmp_benefit['extra_details'][key] = \
                                         value

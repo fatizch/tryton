@@ -130,7 +130,7 @@ class Mandate(model.CoogSQL, model.CoogView):
         for mandate in same_identifications:
             by_identification[mandate.identification].append(
                 mandate)
-        for identification, mandates in by_identification.iteritems():
+        for identification, mandates in by_identification.items():
             if len(set([x._get_origin() for x in mandates])) != 1:
                 cls.append_functional_error('origin_must_be_same', {
                         'identification': identification})
@@ -229,8 +229,7 @@ class Mandate(model.CoogSQL, model.CoogView):
             vals['identification'] = identification
 
 
-class Group:
-    __metaclass__ = PoolMeta
+class Group(metaclass=PoolMeta):
     __name__ = 'account.payment.group'
 
     main_sepa_message = fields.Function(
@@ -474,8 +473,7 @@ class Group:
         return result
 
 
-class Payment:
-    __metaclass__ = PoolMeta
+class Payment(metaclass=PoolMeta):
     __name__ = 'account.payment'
 
     bank_account = fields.Many2One('bank.account', 'Bank Account',
@@ -716,8 +714,7 @@ class Payment:
         return super(Payment, cls).get_journal_method_to_reset_date() + ['sepa']
 
 
-class InvoiceLine:
-    __metaclass__ = PoolMeta
+class InvoiceLine(metaclass=PoolMeta):
     __name__ = 'account.invoice.line'
 
     @classmethod
@@ -726,8 +723,7 @@ class InvoiceLine:
             'account.payment']
 
 
-class Journal:
-    __metaclass__ = PoolMeta
+class Journal(metaclass=PoolMeta):
     __name__ = 'account.payment.journal'
 
     last_sepa_receivable_payment_creation_date = fields.Date(
@@ -771,8 +767,7 @@ class Journal:
         return super(Journal, self).needs_bank_account()
 
 
-class Message:
-    __metaclass__ = PoolMeta
+class Message(metaclass=PoolMeta):
     __name__ = 'account.payment.sepa.message'
 
     @classmethod
@@ -834,9 +829,7 @@ class Message:
         return str(self.id)
 
 
-class MergedBySepaPartyMixin(object):
-    __metaclass__ = PoolMeta
-
+class MergedBySepaPartyMixin(object, metaclass=PoolMeta):
     @classmethod
     def _table_models(cls):
         return super(MergedBySepaPartyMixin, cls)._table_models() + \
@@ -878,8 +871,7 @@ class MergedPayments(MergedBySepaPartyMixin):
     __name__ = 'account.payment.merged'
 
 
-class PaymentCreationStart:
-    __metaclass__ = PoolMeta
+class PaymentCreationStart(metaclass=PoolMeta):
     __name__ = 'account.payment.payment_creation.start'
 
     bank_account = fields.Many2One('bank.account', 'Bank Account',
@@ -980,8 +972,7 @@ class PaymentCreationStart:
         return self.bank_account.id
 
 
-class PaymentCreation:
-    __metaclass__ = PoolMeta
+class PaymentCreation(metaclass=PoolMeta):
     __name__ = 'account.payment.creation'
 
     def init_payment(self, payment):

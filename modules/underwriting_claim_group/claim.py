@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Benefit:
-    __metaclass__ = PoolMeta
+class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     underwriting_rules = fields.Many2Many('benefit-underwriting_rule',

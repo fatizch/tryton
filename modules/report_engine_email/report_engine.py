@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
-from itertools import izip
+
 
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
@@ -68,8 +68,7 @@ class TemplateTemplateRelation(model.CoogSQL, model.CoogView):
         ondelete='RESTRICT', required=True, select=True)
 
 
-class ReportGenerate:
-    __metaclass__ = PoolMeta
+class ReportGenerate(metaclass=PoolMeta):
     __name__ = 'report.generate'
 
     @classmethod
@@ -184,8 +183,7 @@ class ReportGenerate:
 
 @model.genshi_evaluated_fields('email_sender', 'email_dest', 'email_cc',
     'email_bcc', 'email_subject', 'email_body')
-class ReportTemplate:
-    __metaclass__ = PoolMeta
+class ReportTemplate(metaclass=PoolMeta):
     __name__ = 'report.template'
 
     email_sender = fields.Char('Email Sender', states=EMAIL_REQUIRED_STATES,
@@ -323,8 +321,7 @@ class ReportGenerateEmail(Report):
             filenames]
 
 
-class ReportCreateSelectTemplate:
-    __metaclass__ = PoolMeta
+class ReportCreateSelectTemplate(metaclass=PoolMeta):
     __name__ = 'report.create.select_template'
 
     recipient_email = fields.Many2One('party.contact_mechanism',
@@ -348,8 +345,7 @@ class ReportCreateSelectTemplate:
             self.recipient_email = None
 
 
-class ReportCreate:
-    __metaclass__ = PoolMeta
+class ReportCreate(metaclass=PoolMeta):
     __name__ = 'report.create'
 
     open_email = StateAction('report_engine_email.generate_email')
@@ -423,7 +419,7 @@ class ReportCreate:
                 }
 
         _, base_path = ReportGenerate.create_shared_tmp_dir()
-        for content, filename in izip(attachments, filenames):
+        for content, filename in zip(attachments, filenames):
             with open(os.path.join(base_path, filename), 'wb') as _f:
                 _f.write(content)
         return action, {

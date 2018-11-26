@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class ClaimDeclareFindProcess:
-    __metaclass__ = PoolMeta
+class ClaimDeclareFindProcess(metaclass=PoolMeta):
     __name__ = 'claim.declare.find_process'
 
     legal_entity = fields.Many2One('party.party', 'Legal Entity',
@@ -30,8 +29,7 @@ class ClaimDeclareFindProcess:
                 self.legal_entity = None
 
 
-class ClaimDeclare:
-    __metaclass__ = PoolMeta
+class ClaimDeclare(metaclass=PoolMeta):
     __name__ = 'claim.declare'
 
     @classmethod

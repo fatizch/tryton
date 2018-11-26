@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Configuration:
-    __metaclass__ = PoolMeta
+class Configuration(metaclass=PoolMeta):
     __name__ = 'account.configuration'
 
     @classmethod
@@ -58,8 +57,7 @@ class Configuration:
                 configurations[0].check_taxes_included_option(company)
 
 
-class Fee:
-    __metaclass__ = PoolMeta
+class Fee(metaclass=PoolMeta):
     __name__ = 'account.fee'
 
     product = fields.Many2One('product.product', 'Product', required=True,

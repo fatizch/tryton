@@ -21,8 +21,7 @@ class EventTypeActionPlannedEventType(model.CoogSQL, model.CoogView):
         required=True)
 
 
-class EventTypeAction:
-    __metaclass__ = PoolMeta
+class EventTypeAction(metaclass=PoolMeta):
     __name__ = 'event.type.action'
 
     delay = fields.Integer('Planned In',

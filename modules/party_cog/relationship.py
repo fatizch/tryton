@@ -69,7 +69,7 @@ class PartyRelation(export.ExportImportMixin):
 
     def get_rec_name(self, name):
         if self.type and self.to:
-            return '%s %s %s' % (self.type.name, u'→', self.to.rec_name)
+            return '%s %s %s' % (self.type.name, '→', self.to.rec_name)
         return ''
 
     def get_summary_content(self, label, at_date=None, lang=None):

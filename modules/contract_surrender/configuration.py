@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Configuration:
-    __metaclass__ = PoolMeta
+class Configuration(metaclass=PoolMeta):
     __name__ = 'account.configuration'
 
     surrender_journal = fields.Many2One('account.journal', 'Surrender Journal',

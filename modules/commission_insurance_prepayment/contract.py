@@ -23,8 +23,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     has_prepayment = fields.Function(fields.Boolean('With Prepayment'),
@@ -476,13 +475,13 @@ class Contract:
                     adjusted, True)
 
         def _freeze(deviation):
-            deviation['codes'] = frozenset([frozenset(c.items()) for c in
+            deviation['codes'] = frozenset([frozenset(list(c.items())) for c in
                     deviation['codes']])
             if isinstance(deviation['dates'], list):
                 deviation['dates'] = frozenset(deviation['dates'])
             deviation['commissions'] = tuple(
                 [x.id for x in deviation['commissions']])
-            return frozenset(deviation.items())
+            return frozenset(list(deviation.items()))
 
         def _unfreeze(deviation):
             Commission = Pool().get('commission')
@@ -499,7 +498,7 @@ class Contract:
             return
 
         frozen_deviations = set(_freeze(dev) for dev in deviations)
-        frozen_adjusted = set(frozenset(a.items()) for a in adjusted)
+        frozen_adjusted = set(frozenset(list(a.items())) for a in adjusted)
         adjusted_set = [_unfreeze(s) for s in frozen_adjusted]
         non_adjusted_set = [_unfreeze(s) for s in
             set(dev for dev in frozen_deviations
@@ -515,7 +514,7 @@ class Contract:
         def _freeze(inconsistency):
             inconsistency['commissions'] = frozenset(
                 inconsistency['commissions'])
-            inconsistency = frozenset(inconsistency.items())
+            inconsistency = frozenset(list(inconsistency.items()))
             return inconsistency
 
         def _unfreeze(inconsistency):
@@ -556,13 +555,13 @@ class Contract:
                         if com2.redeemed_prepayment > 0
                         else com2.redeemed_prepayment)
                 per_obj[key].extend([com1, com2])
-        to_save = sum(per_obj.values(), [])
+        to_save = sum(list(per_obj.values()), [])
         if to_save:
             Commission.save(to_save)
 
-        return [_unfreeze(k) for k, v in per_obj.items() if v], [
-            _unfreeze(k) for k, v in per_obj.items() if not v], [
-            _unfreeze(x) for x in per_obj.keys()]
+        return [_unfreeze(k) for k, v in list(per_obj.items()) if v], [
+            _unfreeze(k) for k, v in list(per_obj.items()) if not v], [
+            _unfreeze(x) for x in list(per_obj.keys())]
 
     @classmethod
     def _add_prepayment_deviations_description(cls, deviations):
@@ -578,12 +577,11 @@ class Contract:
         super(Contract, cls).update_commissions_after_endorsement(
             contracts, endorsements, kind)
         per_contracts = Contract.get_prepayment_deviations(contracts)
-        for contract, deviations in per_contracts.items():
+        for contract, deviations in list(per_contracts.items()):
             contract.try_adjust_prepayments(deviations)
 
 
-class ContractOption:
-    __metaclass__ = PoolMeta
+class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     first_year_premium = fields.Function(

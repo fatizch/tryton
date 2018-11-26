@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class Commission:
-    __metaclass__ = PoolMeta
+class Commission(metaclass=PoolMeta):
     __name__ = 'commission'
 
     def _group_to_invoice_key(self):
@@ -37,8 +36,7 @@ class Commission:
             raise ValueError
 
 
-class Agent:
-    __metaclass__ = PoolMeta
+class Agent(metaclass=PoolMeta):
     __name__ = 'commission.agent'
 
     def get_rec_name(self, name):
@@ -62,8 +60,7 @@ class Agent:
             ]
 
 
-class PlanLines:
-    __metaclass__ = PoolMeta
+class PlanLines(metaclass=PoolMeta):
     __name__ = 'commission.plan.line'
 
     def get_cache_key(self, coverage_id, pattern):

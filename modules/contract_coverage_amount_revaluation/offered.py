@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     has_revaluated_coverage_amount = fields.Function(
@@ -30,8 +29,7 @@ class OptionDescription:
         return rule.calculate_revaluated_coverage_amount(args)
 
 
-class CoverageAmountRule:
-    __metaclass__ = PoolMeta
+class CoverageAmountRule(metaclass=PoolMeta):
     __name__ = 'offered.coverage_amount.rule'
 
     revaluation_rule = fields.Many2One('rule_engine', 'Revaluation Rule',

@@ -2,11 +2,11 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import party
-import bank
-import load_data
-import test_case
-import wizard
+from . import party
+from . import bank
+from . import load_data
+from . import test_case
+from . import wizard
 
 
 def register():

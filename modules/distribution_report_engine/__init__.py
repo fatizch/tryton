@@ -2,10 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import report_engine
-import offered
-import contract
-import event
+from . import report_engine
+from . import offered
+from . import contract
+from . import event
 
 
 def register():

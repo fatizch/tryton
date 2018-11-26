@@ -30,8 +30,7 @@ __all__ = [
     ]
 
 
-class ContractOptionVersion(object):
-    __metaclass__ = PoolMeta
+class ContractOptionVersion(object, metaclass=PoolMeta):
     __name__ = 'contract.option.version'
 
     @classmethod
@@ -60,14 +59,12 @@ class ContractOptionVersion(object):
             option_h.drop_column('extra_data')
 
 
-class CoveredElement(object):
-    __metaclass__ = PoolMeta
+class CoveredElement(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'contract.covered_element'
 
 
-class CoveredElementVersion(object):
-    __metaclass__ = PoolMeta
+class CoveredElementVersion(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'contract.covered_element.version'
 
@@ -114,20 +111,17 @@ class CoveredElementVersion(object):
             covered_history_h.drop_column('extra_data')
 
 
-class ExtraPremium(object):
-    __metaclass__ = PoolMeta
+class ExtraPremium(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'contract.option.extra_premium'
 
 
-class OptionExclusionRelation(object):
-    __metaclass__ = PoolMeta
+class OptionExclusionRelation(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'contract.option-exclusion.kind'
 
 
-class Endorsement:
-    __metaclass__ = PoolMeta
+class Endorsement(metaclass=PoolMeta):
     __name__ = 'endorsement'
 
     def new_endorsement(self, endorsement_part):
@@ -143,8 +137,7 @@ class Endorsement:
         return super(Endorsement, self).find_parts(endorsement_part)
 
 
-class EndorsementContract:
-    __metaclass__ = PoolMeta
+class EndorsementContract(metaclass=PoolMeta):
     __name__ = 'endorsement.contract'
 
     covered_elements = fields.One2Many('endorsement.contract.covered_element',
@@ -378,9 +371,8 @@ class EndorsementCoveredElement(relation_mixin(
 class EndorsementCoveredElementVersion(relation_mixin(
             'endorsement.contract.covered_element.version.field', 'version',
             'contract.covered_element.version', 'Versions'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Covered Element Version'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.covered_element.version'
 
     covered_element_endorsement = fields.Many2One(
@@ -420,9 +412,8 @@ class EndorsementCoveredElementVersion(relation_mixin(
 class EndorsementCoveredElementOption(relation_mixin(
             'endorsement.contract.option.field', 'option', 'contract.option',
             'Options'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Option'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.covered_element.option'
 
     covered_element_endorsement = fields.Many2One(
@@ -581,9 +572,8 @@ class EndorsementCoveredElementOption(relation_mixin(
 class EndorsementCoveredElementOptionVersion(relation_mixin(
             'endorsement.contract.option.version.field', 'version',
             'contract.option.version', 'Versions'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Option Version'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.covered_element.option.version'
 
     option_endorsement = fields.Many2One(
@@ -623,9 +613,8 @@ class EndorsementCoveredElementOptionVersion(relation_mixin(
 class EndorsementExtraPremium(relation_mixin(
             'endorsement.contract.extra_premium.field', 'extra_premium',
             'contract.option.extra_premium', 'Extra Premiums'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Extra Premium'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.extra_premium'
 
     covered_option_endorsement = fields.Many2One(
@@ -672,9 +661,8 @@ class EndorsementExtraPremium(relation_mixin(
 class EndorsementExclusion(relation_mixin(
             'endorsement.contract.option.exclusion.field', 'option_exclusion',
             'contract.option-exclusion.kind', 'Exclusion'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Exclusion'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.option.exclusion'
 
     covered_option_endorsement = fields.Many2One(

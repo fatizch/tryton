@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Benefit:
-    __metaclass__ = PoolMeta
+class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     is_group = fields.Boolean('Group Benefit')

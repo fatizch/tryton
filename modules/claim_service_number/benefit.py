@@ -24,8 +24,7 @@ SEQUENCE_REFERENCE = [
     ]
 
 
-class Benefit:
-    __metaclass__ = PoolMeta
+class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     define_sequence = fields.Selection(SEQUENCE_SELECTION, 'Defined Sequence',

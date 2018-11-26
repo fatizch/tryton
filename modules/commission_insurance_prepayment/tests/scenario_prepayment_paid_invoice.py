@@ -186,9 +186,9 @@ commissions = Commission.find([()])
 [(x.amount, x.commission_rate, x.is_prepayment, x.redeemed_prepayment,
     x.base_amount, x.agent.party.name) for x in commissions] == [
     (Decimal('720.0000'), Decimal('.6'), True, None, Decimal('1200.0000'),
-        u'Broker'),
+        'Broker'),
     (Decimal('360.0000'), Decimal('.3'), True, None, Decimal('1200.0000'),
-        u'Insurer')]
+        'Insurer')]
 # #Res# #True
 
 # #Comment# #Create invoices
@@ -214,9 +214,9 @@ len(line.commissions)
 [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     x.agent.party.name) for x in line.commissions] == [
     (Decimal('0.0000'), False, Decimal('60.0000'), Decimal('100.0000'),
-        u'Broker'),
+        'Broker'),
     (Decimal('0.0000'), False, Decimal('30.0000'), Decimal('100.0000'),
-        u'Insurer')]
+        'Insurer')]
 # #Res# #True
 
 # #Comment# #Validate last invoice of the year commissions
@@ -227,9 +227,9 @@ len(line.commissions)
 [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     x.agent.party.name) for x in line.commissions] == [
     (Decimal('0.0000'), False, Decimal('60.0000'), Decimal('100.0000'),
-        u'Broker'),
+        'Broker'),
     (Decimal('0.0000'), False, Decimal('30.0000'), Decimal('100.0000'),
-        u'Insurer')]
+        'Insurer')]
 # #Res# #True
 
 # #Comment# #Validate first invoice of next year commissions
@@ -240,9 +240,9 @@ len(line.commissions)
 [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     x.agent.party.name) for x in line.commissions] == [
     (Decimal('60.0000'), False, Decimal('0.0000'), Decimal('100.0000'),
-        u'Broker'),
+        'Broker'),
     (Decimal('30.0000'), False, Decimal('0.0000'), Decimal('100.0000'),
-        u'Insurer')]
+        'Insurer')]
 # #Res# #True
 
 # #Comment# # Nothing is paid, no broker invoice is generated
@@ -305,8 +305,8 @@ Invoice = Model.get('account.invoice')
 broker_invoice, = Invoice.find([
         ('business_kind', '=', 'broker_invoice')])
 sorted([(x.description, x.amount) for x in broker_invoice.lines]) == [
-    (u'Prepayment', Decimal('720.00')),
-    (u'Prepayment Amortization', Decimal('0.00'))]
+    ('Prepayment', Decimal('720.00')),
+    ('Prepayment Amortization', Decimal('0.00'))]
 # #Res# #True
 
 first_broker_invoice_id = broker_invoice.id
@@ -330,7 +330,7 @@ second_broker_invoice_id = new_broker_invoice.id
 # The contract invoice is not paid anymore, so we should cancel the
 # redeemed prepayment
 sorted([(x.description, x.amount) for x in new_broker_invoice.lines]) == [
-    (u'Prepayment Amortization', Decimal('0.00'))]
+    ('Prepayment Amortization', Decimal('0.00'))]
 # #Res# #True
 
 coms_in_second_broker_invoice, = Commission.find([('invoice_line.id', '=',
@@ -382,13 +382,13 @@ third_broker_invoice, = Invoice.find([
 # because we had a linear commission, that is now balanced by a new commission
 # with negative amount
 sorted([(x.description, x.amount) for x in third_broker_invoice.lines]) == [
-    (u'Broker Plan', Decimal('0.00')),
-    (u'Prepayment', Decimal('-600.00')),
-    (u'Prepayment Amortization', Decimal('0.00'))]
+    ('Broker Plan', Decimal('0.00')),
+    ('Prepayment', Decimal('-600.00')),
+    ('Prepayment Amortization', Decimal('0.00'))]
 # #Res# #True
 
 amort_line, = [x for x in third_broker_invoice.lines
-    if x.description == u'Prepayment Amortization']
+    if x.description == 'Prepayment Amortization']
 amort_coms = Commission.find([('invoice_line.id', '=', amort_line.id)])
 sum(amort_com.redeemed_prepayment
     for amort_com in amort_coms) == Decimal('60.00')
@@ -398,14 +398,14 @@ sum(amort_com.redeemed_prepayment
 # we must reimburse the whole prepayment except for
 # those 2 months
 prepayment_line, = [x for x in third_broker_invoice.lines
-    if x.description == u'Prepayment']
+    if x.description == 'Prepayment']
 prepayment_com, = Commission.find([
         ('invoice_line.id', '=', prepayment_line.id)])
 prepayment_com.amount == Decimal('-600.00')
 # #Res# #True
 
 linear_line, = [x for x in third_broker_invoice.lines
-    if x.description == u'Broker Plan']
+    if x.description == 'Broker Plan']
 linear_coms = Commission.find([
         ('invoice_line.id', '=', linear_line.id)])
 sorted([x.amount for x in linear_coms]) == [

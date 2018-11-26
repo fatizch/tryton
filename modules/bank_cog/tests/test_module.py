@@ -34,7 +34,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 'name': 'Bank 1', 'addresses': []
         }])
         bank1, = self.Bank.create([{'party': party1.id, 'bic': 'ABCDEFGH'}])
-        self.assert_(bank1.id)
+        self.assertTrue(bank1.id)
 
     @test_framework.prepare_test('bank_cog.test0010bank')
     def test0020bankaccount(self):
@@ -47,7 +47,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         currency, = self.Currency.create([{
                 'name': 'Euro',
                 'code': 'EUR',
-                'symbol': u'€',
+                'symbol': '€',
         }])
 
         bank_account = self.BankAccount()
@@ -60,7 +60,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         bank_account.numbers = [cur_iban]
         bank_account.save()
-        self.assert_(bank_account.id)
+        self.assertTrue(bank_account.id)
 
     def test0030IBAN(self):
         '''
@@ -76,7 +76,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             ('099100031044T8477', False),
         )
         for value, test in values:
-            self.assert_(iban.is_valid(value) == test)
+            self.assertTrue(iban.is_valid(value) == test)
 
     @test_framework.prepare_test('currency_cog.test0001_testCurrencyCreation',
         'bank_cog.test0010bank')
@@ -96,7 +96,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         number.number = 'FR7610096002350004089177136'
         bank_account.numbers = [number]
         bank_account.save()
-        self.assert_(bank_account.numbers[0].id)
+        self.assertTrue(bank_account.numbers[0].id)
 
         number = self.BankAccountNumber()
         number.type = 'iban'
@@ -108,7 +108,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             bank_account.save()
         except UserError:
             pass
-        self.assert_(bank_account.numbers[1].id is None)
+        self.assertTrue(bank_account.numbers[1].id is None)
 
 
 def suite():

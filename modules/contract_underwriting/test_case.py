@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class TestCaseModel:
-    __metaclass__ = PoolMeta
+class TestCaseModel(metaclass=PoolMeta):
     __name__ = 'ir.test_case'
 
     @classmethod

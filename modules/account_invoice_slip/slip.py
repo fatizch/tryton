@@ -375,7 +375,7 @@ class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView,
             customization in other modules (ex: commissions)
         '''
         per_account = defaultdict(lambda: {'lines': []})
-        for line, account in sum(invoices_data.values(), []):
+        for line, account in sum(list(invoices_data.values()), []):
             per_account[account]['lines'].append(line)
 
         return per_account
@@ -423,7 +423,7 @@ class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView,
     @classmethod
     def _update_move_lines(cls, slip_parameters, invoices_data,
             current_slips):
-        for account, account_data in current_slips.iteritems():
+        for account, account_data in current_slips.items():
             account_invoice_data = invoices_data[account.id]
             if account_invoice_data.get('lines', None):
                 cls._update_base_line(account_data['invoice_line'],
@@ -459,7 +459,7 @@ class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView,
         #
         # This forces to do the saves in the _finalize_*_lines methods rather
         # than only once at the end :'(
-        for account, account_data in slips_data.iteritems():
+        for account, account_data in slips_data.items():
             cls._finalize_invoice_lines(slip_parameters, account_data)
             slips.add(account_data['invoice'])
         Invoice.update_taxes(slips)

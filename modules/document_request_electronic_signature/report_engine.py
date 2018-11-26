@@ -7,8 +7,7 @@ __all__ = [
     ]
 
 
-class ReportTemplate:
-    __metaclass__ = PoolMeta
+class ReportTemplate(metaclass=PoolMeta):
     __name__ = 'report.template'
 
     def _create_attachment_from_report(self, report):

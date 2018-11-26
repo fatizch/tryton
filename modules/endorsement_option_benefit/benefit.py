@@ -7,8 +7,6 @@ __all__ = [
     ]
 
 
-class OptionBenefit:
-    __metaclass__ = PoolMeta
-
+class OptionBenefit(metaclass=PoolMeta):
     __name__ = 'contract.option.benefit'
     _history = True

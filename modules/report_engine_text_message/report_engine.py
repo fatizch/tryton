@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class ReportGenerate:
-    __metaclass__ = PoolMeta
+class ReportGenerate(metaclass=PoolMeta):
     __name__ = 'report.generate'
 
     @classmethod
@@ -92,8 +91,7 @@ class ReportGenerate:
 
 
 @model.genshi_evaluated_fields('message_sender', 'phone_number', 'message')
-class ReportTemplate:
-    __metaclass__ = PoolMeta
+class ReportTemplate(metaclass=PoolMeta):
     __name__ = 'report.template'
 
     message_sender = fields.Char('Message Sender',
@@ -151,8 +149,7 @@ class ReportTemplate:
         super(ReportTemplate, self).on_change_input_kind()
 
 
-class ReportCreate:
-    __metaclass__ = PoolMeta
+class ReportCreate(metaclass=PoolMeta):
     __name__ = 'report.create'
 
     def report_execute(self, ids, doc_template, report_context):

@@ -2,18 +2,18 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import batch
-import benefit
-import configuration
-import claim
-import rule_engine
-import invoice
-import event
-import move
-import party
-import wizard
-from benefit import BenefitRule
-import payment
+from . import batch
+from . import benefit
+from . import configuration
+from . import claim
+from . import rule_engine
+from . import invoice
+from . import event
+from . import move
+from . import party
+from . import wizard
+from .benefit import BenefitRule
+from . import payment
 
 __all__ = [
     'BenefitRule'

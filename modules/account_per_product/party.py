@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class Insurer:
-    __metaclass__ = PoolMeta
+class Insurer(metaclass=PoolMeta):
     __name__ = 'insurer'
 
     product = fields.Function(fields.Many2One('offered.product', 'Product'),

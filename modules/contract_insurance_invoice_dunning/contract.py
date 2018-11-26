@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     dunning_status = fields.Function(
@@ -107,8 +106,7 @@ class Contract:
         return super(Contract, self).can_be_invoiced()
 
 
-class SubStatus:
-    __metaclass__ = PoolMeta
+class SubStatus(metaclass=PoolMeta):
     __name__ = 'contract.sub_status'
 
     deactivate_dunnings = fields.Boolean('Deactivate Dunnings',

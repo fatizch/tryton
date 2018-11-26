@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class ClaimConfiguration:
-    __metaclass__ = PoolMeta
+class ClaimConfiguration(metaclass=PoolMeta):
     __name__ = 'claim.configuration'
 
     eckert_law_target_delay = fields.Integer('Eckert Law Target Delay',

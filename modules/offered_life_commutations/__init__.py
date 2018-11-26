@@ -2,8 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import commutation
-import rule_engine
+from . import commutation
+from . import rule_engine
 
 
 def register():

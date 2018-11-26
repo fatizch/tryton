@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     health_complement = fields.One2Many('health.party_complement', 'party',
@@ -55,8 +54,7 @@ class HealthPartyComplement(model._RevisionMixin, model.CoogSQL,
         values['_func_key'] = values['date'] if 'date' in values else None
 
 
-class PartyReplace:
-    __metaclass__ = PoolMeta
+class PartyReplace(metaclass=PoolMeta):
     __name__ = 'party.replace'
 
     @classmethod

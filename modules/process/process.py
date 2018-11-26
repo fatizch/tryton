@@ -126,7 +126,7 @@ class ProcessStepRelation(export.ExportImportMixin, ModelSQL, ModelView):
                 names.append('process_view_%s_%s' % (x.id, lang.code))
             return names
 
-        view_names = map(get_view_name, relations)
+        view_names = list(map(get_view_name, relations))
         views = View.search(
             [('name', 'in', [x for names in view_names for x in names])])
         View.delete(views)
@@ -596,7 +596,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         act_window['context'] = json.dumps(self.get_action_context())
         act_window['pyson_context'] = json.dumps(self.get_action_context())
         act_window['domain'] = '[["current_state", "in", (%s)]]' % (
-            ','.join(map(lambda x: str(x.id), self.all_steps)))
+            ','.join([str(x.id) for x in self.all_steps]))
         act_window['context_module'] = None
         act_window['type'] = 'ir.action.act_window'
         act_window['pyson_order'] = 'null'
@@ -894,7 +894,7 @@ class ProcessTransition(ModelSQL, ModelView):
     def get_pyson_authorizations(self):
         if not (hasattr(self, 'authorizations') and self.authorizations):
             return 'True'
-        auth_ids = map(lambda x: x.id, self.authorizations)
+        auth_ids = [x.id for x in self.authorizations]
         return "Eval('groups', []).contains(%s)" % auth_ids
 
     def get_pyson_readonly(self):
@@ -959,7 +959,7 @@ class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
         for steps, values in zip(actions, actions):
             for step in steps:
                 used_in = ProcessStepRelation.search([('step', '=', step)])
-                processes |= set(map(lambda x: x.process.id, used_in))
+                processes |= set([x.process.id for x in used_in])
         if not processes:
             return
         Process = Pool().get('process')
@@ -1027,7 +1027,7 @@ class GenerateGraph(Report):
 
     @classmethod
     def build_step(cls, process, step, graph, nodes):
-        name = unicode(unidecode(step.fancy_name))
+        name = str(unidecode(step.fancy_name))
         nodes[step.id] = pydot.Node(name, style='filled', shape='rect',
             fontname='Century Gothic')
 
@@ -1099,9 +1099,9 @@ class GenerateGraph(Report):
         nodes[the_process.first_step().step.id].set('style', 'filled')
         nodes[the_process.first_step().step.id].set('shape', 'octagon')
         nodes[the_process.first_step().step.id].set('fillcolor', '#0094d2')
-        for node in nodes.itervalues():
+        for node in nodes.values():
             graph.add_node(node)
-        for edge in edges.itervalues():
+        for edge in edges.values():
             graph.add_edge(edge)
         data = graph.create(prog='dot', format='pdf')
         return ('pdf', bytearray(data), False, action_report.name)

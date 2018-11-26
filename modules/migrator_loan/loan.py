@@ -152,16 +152,16 @@ class MigratorLoan(migrator.Migrator):
             to_create[row[cls.func_key]] = loan
 
         if to_create:
-            Loan.save(to_create.values())
-            Loan.calculate_loan(to_create.values())
+            Loan.save(list(to_create.values()))
+            Loan.calculate_loan(list(to_create.values()))
             increments = MigratorLoanIncrement.migrate(list(to_create.keys()))
-            for loan in to_create.values():
+            for loan in list(to_create.values()):
                 if increments and loan.number in increments:
                     loan.state = 'draft'
                     loan.increments = increments[loan.number]
                     loan.save()
                     loan.calculate()
-            Loan.save(to_create.values())
+            Loan.save(list(to_create.values()))
         return to_create
 
     @classmethod

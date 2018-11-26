@@ -87,7 +87,7 @@ class ManageBeneficiaries(EndorsementWizardStepMixin):
             for x in possible_contracts}
 
         all_options = []
-        for contract, options in per_contract.iteritems():
+        for contract, options in per_contract.items():
             all_options += self.generate_displayers(contract, options)
         defaults['all_options'] = [model.dictionarize(x,
                 field_names=self._fields_to_extract(), set_rec_names=True)
@@ -104,7 +104,7 @@ class ManageBeneficiaries(EndorsementWizardStepMixin):
         for option in self.all_options:
             per_contract[EndorsementContract(option.contract)].append(option)
 
-        for contract, options in per_contract.iteritems():
+        for contract, options in per_contract.items():
             utils.apply_dict(contract.contract,
                 contract.apply_values())
             self.update_endorsed_options(contract, options)
@@ -114,7 +114,7 @@ class ManageBeneficiaries(EndorsementWizardStepMixin):
                 contract.contract.covered_elements)
 
         new_endorsements = []
-        for contract_endorsement in per_contract.keys():
+        for contract_endorsement in list(per_contract.keys()):
             self._update_endorsement(contract_endorsement,
                 contract_endorsement.contract._save_values)
             if not contract_endorsement.clean_up():
@@ -268,7 +268,7 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
             if new_displayer.beneficiary_id:
                 existing_beneficiaries.pop(new_displayer.beneficiary_id)
             beneficiaries.append(new_displayer)
-        for removed in existing_beneficiaries.values():
+        for removed in list(existing_beneficiaries.values()):
             new_displayer = Beneficiary.init_from_beneficiary(removed)
             new_displayer.action = 'removed'
             beneficiaries.append(new_displayer)
@@ -290,8 +290,7 @@ class ManageBeneficiariesOptionDisplayer(model.CoogView):
         return ('accepting', 'address', 'party', 'reference', 'share')
 
 
-class ManageBeneficiariesOptionDisplayerPortfolio:
-    __metaclass__ = PoolMeta
+class ManageBeneficiariesOptionDisplayerPortfolio(metaclass=PoolMeta):
     __name__ = 'contract.manage_beneficiaries.option'
 
     # Override installed if distribution_portfolio is activated, to pass the
@@ -394,8 +393,7 @@ class ManageBeneficiariesDisplayer(model.CoogView):
         return new_displayer
 
 
-class StartEndorsement:
-    __metaclass__ = PoolMeta
+class StartEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
 
@@ -403,8 +401,7 @@ add_endorsement_step(StartEndorsement, ManageBeneficiaries,
     'manage_beneficiaries')
 
 
-class PartyErase:
-    __metaclass__ = PoolMeta
+class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
     def transition_erase(self):
@@ -414,7 +411,7 @@ class PartyErase:
         with Transaction().set_context(active_test=False):
             while replacing:
                 replacing = Party.search([
-                        ('replaced_by', 'in', map(int, replacing))
+                        ('replaced_by', 'in', list(map(int, replacing)))
                         ])
                 parties += replacing
         for party in parties:

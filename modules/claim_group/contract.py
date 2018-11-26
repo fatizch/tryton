@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     # TODO: move to claim_indemnification_group
@@ -39,8 +38,7 @@ class Contract:
         super(Contract, cls).clean_before_reactivate(contracts)
 
 
-class Option:
-    __metaclass__ = PoolMeta
+class Option(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     previous_claims_management_rule = fields.Selection([
@@ -61,8 +59,7 @@ class Option:
         return 'no_management'
 
 
-class CoveredElement:
-    __metaclass__ = PoolMeta
+class CoveredElement(metaclass=PoolMeta):
     __name__ = 'contract.covered_element'
 
     def find_options_for_covered(self, at_date):
@@ -84,8 +81,7 @@ class CoveredElement:
             at_date)
 
 
-class TerminateContract:
-    __metaclass__ = PoolMeta
+class TerminateContract(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.terminate'
 
     is_group = fields.Boolean('Is Group', readonly=True)
@@ -117,7 +113,7 @@ class TerminateContract:
     def step_update(self):
         super(TerminateContract, self).step_update()
         to_save = []
-        for (_, contract_endorsement) in self._get_contracts().items():
+        for (_, contract_endorsement) in list(self._get_contracts().items()):
             values = getattr(contract_endorsement, 'values', {})
             values['post_termination_claim_behaviour'] = \
                 self.post_termination_claim_behaviour

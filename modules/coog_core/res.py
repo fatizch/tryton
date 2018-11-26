@@ -8,7 +8,7 @@ from trytond.modules import get_module_info
 
 from trytond.modules.coog_core import fields
 
-from export import ExportImportMixin
+from .export import ExportImportMixin
 
 
 __all__ = [

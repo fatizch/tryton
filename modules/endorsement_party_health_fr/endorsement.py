@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class HealthComplement(object):
-    __metaclass__ = PoolMeta
+class HealthComplement(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'health.party_complement'
 
@@ -29,9 +28,8 @@ class HealthComplement(object):
 class EndorsementPartyHealthComplement(relation_mixin(
             'endorsement.party.health_complement.field', 'health_complement',
             'health.party_complement', 'Health Complement'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Health Complement'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.party.health_complement'
 
     party_endorsement = fields.Many2One(
@@ -66,8 +64,7 @@ class EndorsementPartyHealthComplement(relation_mixin(
         return {}
 
 
-class EndorsementParty:
-    __metaclass__ = PoolMeta
+class EndorsementParty(metaclass=PoolMeta):
     __name__ = 'endorsement.party'
 
     @classmethod

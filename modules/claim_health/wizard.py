@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class ModifyCoveredElement:
-    __metaclass__ = PoolMeta
+class ModifyCoveredElement(metaclass=PoolMeta):
     __name__ = 'contract.covered_element.modify'
 
     possible_claim_bank_owners = fields.Many2Many('party.party', None, None,
@@ -64,8 +63,7 @@ class ModifyCoveredElement:
                     new_covered_element.claim_bank_account
 
 
-class CoveredElementDisplayer:
-    __metaclass__ = PoolMeta
+class CoveredElementDisplayer(metaclass=PoolMeta):
     __name__ = 'contract.covered_element.modify.displayer'
 
     claim_bank_account = fields.Many2One('bank.account', 'Claim Bank Account')
@@ -117,8 +115,7 @@ class CoveredElementDisplayer:
         return result
 
 
-class ChangeContractSubscriber:
-    __metaclass__ = PoolMeta
+class ChangeContractSubscriber(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.subscriber_change'
 
     @classmethod
@@ -130,7 +127,7 @@ class ChangeContractSubscriber:
                 })
 
     def step_update(self):
-        for endorsement_contract in self._get_contracts().values():
+        for endorsement_contract in list(self._get_contracts().values()):
             if endorsement_contract.contract.is_health and \
                     not self.new_subscriber.bank_accounts:
                 self.raise_user_warning('check_party_bank_account',

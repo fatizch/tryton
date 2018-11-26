@@ -2,22 +2,22 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import contract
-import rule_engine
-import party
-import global_search
-import wizard
-import service
-import contact_type
-import configuration
-import offered
-import batch
-import event
-import notification
-import test_case
+from . import contract
+from . import rule_engine
+from . import party
+from . import global_search
+from . import wizard
+from . import service
+from . import contact_type
+from . import configuration
+from . import offered
+from . import batch
+from . import event
+from . import notification
+from . import test_case
 
-from contract import _STATES, _DEPENDS
-from contract import _CONTRACT_STATUS_STATES, _CONTRACT_STATUS_DEPENDS
+from .contract import _STATES, _DEPENDS
+from .contract import _CONTRACT_STATUS_STATES, _CONTRACT_STATUS_DEPENDS
 
 
 __all__ = [

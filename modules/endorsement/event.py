@@ -27,8 +27,7 @@ class EndorsementDefinitionReportTemplate(model.CoogSQL, model.CoogView):
         ondelete='RESTRICT', required=True, select=True)
 
 
-class EventTypeAction:
-    __metaclass__ = PoolMeta
+class EventTypeAction(metaclass=PoolMeta):
     __name__ = 'event.type.action'
 
     def get_contracts_from_object(self, object_):
@@ -56,8 +55,7 @@ class EventTypeAction:
             filtering_object)
 
 
-class EventLog:
-    __metaclass__ = PoolMeta
+class EventLog(metaclass=PoolMeta):
     __name__ = 'event.log'
 
     @classmethod

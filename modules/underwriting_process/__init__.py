@@ -2,10 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import underwriting
-import process
-import event
-import wizard
+from . import underwriting
+from . import process
+from . import event
+from . import wizard
 
 
 def register():

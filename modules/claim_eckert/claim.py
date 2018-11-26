@@ -19,8 +19,7 @@ __all__ = [
     ]
 
 
-class Claim:
-    __metaclass__ = PoolMeta
+class Claim(metaclass=PoolMeta):
     __name__ = 'claim'
 
     is_eckert = fields.Function(
@@ -83,8 +82,7 @@ class Claim:
                 having=Operator(Max(request_line.reception_date), operand)))
 
 
-class Service:
-    __metaclass__ = PoolMeta
+class Service(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     def get_beneficiaries_data(self, at_date):
@@ -97,8 +95,7 @@ class Service:
         return [x for x in data if x[0] in parties]
 
 
-class ClaimBeneficiary:
-    __metaclass__ = PoolMeta
+class ClaimBeneficiary(metaclass=PoolMeta):
     __name__ = 'claim.beneficiary'
 
     is_eckert = fields.Function(

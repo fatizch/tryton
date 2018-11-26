@@ -31,8 +31,7 @@ __all__ = [
     ]
 
 
-class BasicPreview:
-    __metaclass__ = PoolMeta
+class BasicPreview(metaclass=PoolMeta):
     __name__ = 'endorsement.start.preview_changes'
 
     previous_total_invoice_amount = fields.Numeric(
@@ -57,8 +56,8 @@ class BasicPreview:
             preview_values)
 
         # TODO : manage multi_contract
-        changes_old = preview_values['old'].values()[0]
-        changes_new = preview_values['new'].values()[0]
+        changes_old = list(preview_values['old'].values())[0]
+        changes_new = list(preview_values['new'].values())[0]
         result['previous_total_invoice_amount'] = changes_old[
             'total_invoice_amount']
         result['new_total_invoice_amount'] = changes_new[
@@ -188,7 +187,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
             if x.contract.id in possible_contracts]
         new_contracts_id = [x.contract.id for x in new_contracts]
         new_contracts += [Displayer(contract=x, to_propagate='nothing')
-            for x in possible_contracts.itervalues()
+            for x in possible_contracts.values()
             if x.id not in new_contracts_id]
         with Transaction().set_context(
                 contract_revision_date=self.effective_date):
@@ -271,7 +270,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
             defaults['new_billing_information'] = [previous_values]
         other_contracts = []
         for contract_id, contract_endorsement in \
-                self._get_contracts().iteritems():
+                self._get_contracts().items():
             if contract_id == defaults['contract']:
                 continue
             if not contract_endorsement.billing_informations:
@@ -555,8 +554,7 @@ class ContractDisplayer(model.CoogView):
                         'blue', 'black')))]
 
 
-class NewCoveredElement:
-    __metaclass__ = PoolMeta
+class NewCoveredElement(metaclass=PoolMeta):
     __name__ = 'contract.covered_element.new'
 
     @classmethod
@@ -578,10 +576,8 @@ class NewCoveredElement:
         return methods
 
 
-class NewOptionOnCoveredElement:
+class NewOptionOnCoveredElement(metaclass=PoolMeta):
     'New Covered Element Option'
-
-    __metaclass__ = PoolMeta
     __name__ = 'contract.covered_element.add_option'
 
     @classmethod
@@ -603,8 +599,7 @@ class NewOptionOnCoveredElement:
         return methods
 
 
-class RemoveOption:
-    __metaclass__ = PoolMeta
+class RemoveOption(metaclass=PoolMeta):
     __name__ = 'contract.covered_element.option.remove'
 
     @classmethod
@@ -626,8 +621,7 @@ class RemoveOption:
         return methods
 
 
-class ModifyCoveredElementInformation:
-    __metaclass__ = PoolMeta
+class ModifyCoveredElementInformation(metaclass=PoolMeta):
     __name__ = 'contract.covered_element.modify'
 
     @classmethod
@@ -651,8 +645,7 @@ class ModifyCoveredElementInformation:
         return methods
 
 
-class ManageExtraPremium:
-    __metaclass__ = PoolMeta
+class ManageExtraPremium(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.manage_extra_premium'
 
     @classmethod
@@ -674,8 +667,7 @@ class ManageExtraPremium:
         return methods
 
 
-class ChangeContractStartDate:
-    __metaclass__ = PoolMeta
+class ChangeContractStartDate(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.change_start_date'
 
     @classmethod
@@ -697,8 +689,7 @@ class ChangeContractStartDate:
         return methods
 
 
-class ChangeContractExtraData:
-    __metaclass__ = PoolMeta
+class ChangeContractExtraData(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.change_extra_data'
 
     @classmethod
@@ -720,10 +711,8 @@ class ChangeContractExtraData:
         return methods
 
 
-class TerminateContract:
+class TerminateContract(metaclass=PoolMeta):
     'Terminate Contract'
-
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.terminate'
 
     @classmethod
@@ -745,10 +734,8 @@ class TerminateContract:
         return methods
 
 
-class VoidContract:
+class VoidContract(metaclass=PoolMeta):
     'Void Contract'
-
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.void'
 
     @classmethod
@@ -770,8 +757,7 @@ class VoidContract:
         return methods
 
 
-class ChangeContractSubscriber:
-    __metaclass__ = PoolMeta
+class ChangeContractSubscriber(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.subscriber_change'
 
     @classmethod
@@ -793,8 +779,7 @@ class ChangeContractSubscriber:
         return methods
 
 
-class ManageOptions:
-    __metaclass__ = PoolMeta
+class ManageOptions(metaclass=PoolMeta):
     __name__ = 'contract.manage_options'
 
     @classmethod
@@ -816,8 +801,7 @@ class ManageOptions:
         return methods
 
 
-class StartEndorsement:
-    __metaclass__ = PoolMeta
+class StartEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
 

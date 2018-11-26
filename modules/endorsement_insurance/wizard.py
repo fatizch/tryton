@@ -146,7 +146,7 @@ class RemoveOption(EndorsementWizardStepMixin):
                 'effective_date': endorsement.endorsement.effective_date}
             updated_struct = endorsement.updated_struct
             for covered_element, values in (
-                    updated_struct['covered_elements'].iteritems()):
+                    iter(updated_struct['covered_elements'].items())):
                 for option in values['options']:
                     selector = template.copy()
                     if not option.__name__ ==\
@@ -223,7 +223,7 @@ class RemoveOption(EndorsementWizardStepMixin):
         CoveredElementEndorsement = pool.get(
             'endorsement.contract.covered_element')
         endorsed_cov_options_per_contract = defaultdict(list)
-        for endorsement in all_endorsements.values():
+        for endorsement in list(all_endorsements.values()):
             op_endorsement_to_delete = []
             cov_endorsement_to_delete = []
             updated_struct = endorsement.updated_struct
@@ -313,7 +313,7 @@ class RemoveOption(EndorsementWizardStepMixin):
 
             # Only end mandatory option if all options on covered_element
             # are also ended
-            for ce_id, ce_endorsement in ce_endorsements.iteritems():
+            for ce_id, ce_endorsement in ce_endorsements.items():
                 if [x for x in ce_endorsement.options if
                         (x.option.coverage.subscription_behaviour ==
                             'mandatory')]:
@@ -326,12 +326,12 @@ class RemoveOption(EndorsementWizardStepMixin):
                         [x.option for x in ce_endorsement.options])
 
         cov_options_per_contract = defaultdict(list)
-        for contract_endorsement in all_endorsements.values():
+        for contract_endorsement in list(all_endorsements.values()):
             for covered_elem in contract_endorsement.contract.covered_elements:
                 cov_options_per_contract[contract_endorsement.contract].extend(
                     covered_elem.options)
 
-        for contract, options in endorsed_cov_options_per_contract.iteritems():
+        for contract, options in endorsed_cov_options_per_contract.items():
             if set(cov_options_per_contract[contract]) == set(options):
                 self.raise_user_error('cannot_end_all_covered_elements')
             for option in options:
@@ -516,7 +516,7 @@ class NewOptionOnCoveredElement(EndorsementWizardStepMixin):
                 if isinstance(new_value, Model):
                     new_value = new_value.id
                 option_endorsement.values[field.name] = new_value
-        EndorsementCoveredElementOption.delete(option_endorsements.values())
+        EndorsementCoveredElementOption.delete(list(option_endorsements.values()))
         good_endorsement.options = new_option_endorsements
 
         good_endorsement.save()
@@ -623,7 +623,7 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
             for x in possible_parents}
 
         all_covered = []
-        for possible_parent, covered_elements in per_parent.iteritems():
+        for possible_parent, covered_elements in per_parent.items():
             for covered_element in covered_elements:
                 all_covered += self.generate_displayers(possible_parent,
                     covered_element)
@@ -647,7 +647,7 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
                 if getattr(x, 'id', 0) > 0]
             contract_endorsements[contract.id] = contract
 
-        for parent, new_covered_elements in per_parent.iteritems():
+        for parent, new_covered_elements in per_parent.items():
             self.current_parent = parent
             parent = self.get_parent_endorsed(self._parent,
                 contract_endorsements)
@@ -1196,12 +1196,12 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
             updated_struct = endorsement.updated_struct
             template['contract'] = endorsement.contract.id
             for covered_element, values in (
-                    updated_struct['covered_elements'].iteritems()):
+                    iter(updated_struct['covered_elements'].items())):
                 cls.update_dict(template, 'covered_element', covered_element)
-                for option, o_values in values['options'].iteritems():
+                for option, o_values in values['options'].items():
                     cls.update_dict(template, 'option', option)
                     for extra_premium, ex_values in (
-                            o_values['extra_premiums'].iteritems()):
+                            iter(o_values['extra_premiums'].items())):
                         displayers.append(cls.create_displayer(extra_premium,
                                 template))
         return {'extra_premiums': displayers}
@@ -1223,7 +1223,7 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
         else:
             all_endorsements = {x.contract.id: x
                 for x in wizard.endorsement.contract_endorsements}
-        for endorsement in all_endorsements.values():
+        for endorsement in list(all_endorsements.values()):
             for covered_endorsement in endorsement.covered_elements:
                 for option_endorsement in covered_endorsement.options:
                     option_endorsement.extra_premiums = []
@@ -1297,19 +1297,18 @@ class ManageExtraPremium(EndorsementWizardStepMixin):
             ExtraPremiumEndorsement.create([x._save_values for x in to_create])
         if new_options:
             OptionEndorsement.create([x._save_values
-                    for x in new_options.values()
+                    for x in list(new_options.values())
                     if getattr(x, 'covered_element_endorsement', None)])
         if new_covered_elements:
             CoveredElementEndorsement.create([x._save_values
-                    for x in new_covered_elements.values()
+                    for x in list(new_covered_elements.values())
                     if getattr(x, 'contract_endorsement', None)])
-        for endorsement in all_endorsements.itervalues():
+        for endorsement in all_endorsements.values():
             endorsement.clean_up()
-        ContractEndorsement.save(all_endorsements.values())
+        ContractEndorsement.save(list(all_endorsements.values()))
 
 
-class ManageOptions:
-    __metaclass__ = PoolMeta
+class ManageOptions(metaclass=PoolMeta):
     __name__ = 'contract.manage_options'
 
     def calculate_possible_parents(self):
@@ -1427,8 +1426,7 @@ class ManageOptions:
                 contract_endorsements)
 
 
-class OptionDisplayer:
-    __metaclass__ = PoolMeta
+class OptionDisplayer(metaclass=PoolMeta):
     __name__ = 'contract.manage_options.option_displayer'
 
     @property
@@ -1632,11 +1630,11 @@ class NewExtraPremium(model.CoogView):
                     if getattr(x, 'covered_element_endorsement', None)])
         if new_covered_elements:
             CoveredElementEndorsement.create([x._save_values
-                    for x in new_covered_elements.itervalues()
+                    for x in new_covered_elements.values()
                     if getattr(x, 'contract_endorsement', None)])
-        for endorsement in all_endorsements.itervalues():
+        for endorsement in all_endorsements.values():
             endorsement.clean_up()
-        ContractEndorsement.save(all_endorsements.values())
+        ContractEndorsement.save(list(all_endorsements.values()))
 
 
 class ManageExclusions(EndorsementWizardStepMixin):
@@ -1696,7 +1694,7 @@ class ManageExclusions(EndorsementWizardStepMixin):
             for x in possible_contracts}
 
         all_options = []
-        for contract, options in per_contract.iteritems():
+        for contract, options in per_contract.items():
             all_options += self.generate_displayers(contract, options)
         defaults['all_options'] = [model.dictionarize(x)
             for x in all_options]
@@ -1712,7 +1710,7 @@ class ManageExclusions(EndorsementWizardStepMixin):
         for option in self.all_options:
             per_contract[EndorsementContract(option.contract)].append(option)
 
-        for contract, options in per_contract.iteritems():
+        for contract, options in per_contract.items():
             utils.apply_dict(contract.contract,
                 contract.apply_values())
             self.update_endorsed_options(contract, options)
@@ -1722,7 +1720,7 @@ class ManageExclusions(EndorsementWizardStepMixin):
                 contract.contract.covered_elements)
 
         new_endorsements = []
-        for contract_endorsement in per_contract.keys():
+        for contract_endorsement in list(per_contract.keys()):
             self._update_endorsement(contract_endorsement,
                 contract_endorsement.contract._save_values)
             if not contract_endorsement.clean_up():
@@ -1844,8 +1842,7 @@ class ManageExclusionsDisplayer(model.CoogView):
         return 'added'
 
 
-class VoidContract:
-    __metaclass__ = PoolMeta
+class VoidContract(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.void'
 
     def step_update(self):
@@ -1855,7 +1852,7 @@ class VoidContract:
         CoveredElementEndorsement = pool.get(
             'endorsement.contract.covered_element')
         Contract = pool.get('contract')
-        contract_id, endorsement = self._get_contracts().items()[0]
+        contract_id, endorsement = list(self._get_contracts().items())[0]
         contract = Contract(contract_id)
         cov_elem_endorsements = []
         for cov in contract.covered_elements:
@@ -1873,8 +1870,7 @@ class VoidContract:
         super(VoidContract, self).step_update()
 
 
-class StartEndorsement:
-    __metaclass__ = PoolMeta
+class StartEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
     new_covered_element = StateView('contract.covered_element.new',
@@ -1972,7 +1968,7 @@ class StartEndorsement:
                 'item_desc': (result['possible_item_desc'] or [None])[0],
                 'contract': contract.id,
                 'product': result['product'],
-                } for _ in xrange(num_covered_elements)]
+                } for _ in range(num_covered_elements)]
         for covered_elem in result['covered_elements']:
             new_covered_element = Pool().get('contract.covered_element')(
                 **covered_elem)
@@ -2082,10 +2078,10 @@ class StartEndorsement:
         for endorsement in endorsements:
             updated_struct = endorsement.updated_struct
             for covered_element, values in (
-                    updated_struct['covered_elements'].iteritems()):
+                    iter(updated_struct['covered_elements'].items())):
                 default_values['covered_elements'].append(
                     CoveredElementSelector.new_selector(covered_element))
-                for option, o_values in values['options'].iteritems():
+                for option, o_values in values['options'].items():
                     default_values['options'].append(
                         OptionSelector.new_selector(option))
                     default_values['options'][-1].update(

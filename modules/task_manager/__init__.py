@@ -2,10 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import res
-import configuration
-import task_dispatcher
-import test_case
+from . import res
+from . import configuration
+from . import task_dispatcher
+from . import test_case
 
 
 def register():

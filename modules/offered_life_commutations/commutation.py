@@ -169,7 +169,7 @@ class CommutationManagerLine(model.CoogSQL, model.CoogView):
                 1 + self.rate) ** Decimal('0.5')
 
         cur_m, cur_n = 0, 0
-        for i in reversed(range(size)):
+        for i in reversed(list(range(size))):
             cur_m += vals['Cx'][i]
             vals['Mx'][i] = cur_m
             cur_n += vals['Dx'][i]
@@ -182,7 +182,7 @@ class CommutationManagerLine(model.CoogSQL, model.CoogView):
                 if vals['Dx'][i] else 0) + k
 
         cur_r = 0
-        for i in reversed(range(size)):
+        for i in reversed(list(range(size))):
             cur_r += vals['Mx'][i]
             vals['Rx'][i] = cur_r
 

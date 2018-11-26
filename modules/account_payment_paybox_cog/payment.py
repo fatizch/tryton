@@ -23,8 +23,7 @@ __all__ = [
     ]
 
 
-class Group:
-    __metaclass__ = PoolMeta
+class Group(metaclass=PoolMeta):
     __name__ = 'account.payment.group'
 
     def generate_paybox_url(self):
@@ -55,8 +54,7 @@ class Group:
         cls._failed(groups)
 
 
-class Payment:
-    __metaclass__ = PoolMeta
+class Payment(metaclass=PoolMeta):
     __name__ = 'account.payment'
 
     line_valid = fields.Function(fields.Boolean(
@@ -97,8 +95,7 @@ class Payment:
             return not self.line.reconciliation and self.line.amount
 
 
-class PaymentCreationStart:
-    __metaclass__ = PoolMeta
+class PaymentCreationStart(metaclass=PoolMeta):
     __name__ = 'account.payment.payment_creation.start'
 
     payment_url = fields.Char('Payment URL',
@@ -117,8 +114,7 @@ class PaymentCreationStart:
         cls.kind.depends.append('process_method')
 
 
-class PaymentCreation(model.FunctionalErrorMixIn):
-    __metaclass__ = PoolMeta
+class PaymentCreation(model.FunctionalErrorMixIn, metaclass=PoolMeta):
     __name__ = 'account.payment.creation'
 
     start_process_wizard = StateAction(
@@ -203,8 +199,7 @@ class ProcessPayboxUrl(model.CoogView):
     paybox_url = fields.Char('Click To Open', readonly=True)
 
 
-class ProcessPayment:
-    __metaclass__ = PoolMeta
+class ProcessPayment(metaclass=PoolMeta):
     __name__ = 'account.payment.process'
 
     paybox_url_view = StateView('account.payment.process.paybox_url',

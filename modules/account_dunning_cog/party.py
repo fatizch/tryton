@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     dunning_allowed = fields.Function(fields.Boolean(
@@ -38,6 +37,5 @@ class Party:
         return []
 
 
-class PartyDunningProcedure(export.ExportImportMixin):
-    __metaclass__ = PoolMeta
+class PartyDunningProcedure(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'party.party.dunning_procedure'

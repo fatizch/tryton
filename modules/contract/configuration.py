@@ -17,8 +17,7 @@ __all__ = [
     ]
 
 
-class Configuration(CompanyMultiValueMixin):
-    __metaclass__ = PoolMeta
+class Configuration(CompanyMultiValueMixin, metaclass=PoolMeta):
     __name__ = 'offered.configuration'
 
     default_quote_number_sequence = fields.MultiValue(fields.Many2One(

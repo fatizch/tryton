@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class MoveLine:
-    __metaclass__ = PoolMeta
+class MoveLine(metaclass=PoolMeta):
     __name__ = 'account.move.line'
 
     principal_invoice_line = fields.Many2One('account.invoice.line',
@@ -35,8 +34,7 @@ class MoveLine:
         return super(MoveLine, cls).copy(lines, default)
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     @classmethod
@@ -113,7 +111,7 @@ class Invoice:
         Move.save(reset_moves)
         Move.post(reset_moves)
 
-        move_line_ids = [x.id for x in sum(lines_per_invoice.values(), [])]
+        move_line_ids = [x.id for x in sum(list(lines_per_invoice.values()), [])]
         if move_line_ids:
             cursor = Transaction().connection.cursor()
             move_line = MoveLine.__table__()
@@ -131,7 +129,7 @@ class Invoice:
         journal, = Journal.search([('type', '=', 'principal_line_reset')])
 
         moves = []
-        for invoice, line_group in lines_per_invoice.iteritems():
+        for invoice, line_group in lines_per_invoice.items():
             description = cls.raise_user_error(
                 'reset_principal_line_description', (invoice.rec_name,),
                 raise_exception=False)

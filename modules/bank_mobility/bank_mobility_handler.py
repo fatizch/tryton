@@ -24,22 +24,22 @@ class FLOW5(BankMobilityHandler):
                 message_id = element.text
             if tag.localname == 'Mod':
                 d = {}
-                d['message_id'] = unicode(message_id, 'utf-8')
-                d['modification_id'] = unicode(element.findtext('{*}Id') or '',
+                d['message_id'] = str(message_id, 'utf-8')
+                d['modification_id'] = str(element.findtext('{*}Id') or '',
                     'utf-8')
-                d['date_of_signature'] = unicode(element.findtext(
+                d['date_of_signature'] = str(element.findtext(
                         '{*}AcctSwtchngRef/{*}DtOfSgntr') or '', "utf-8")
-                d['original_iban'] = unicode(element.findtext(
+                d['original_iban'] = str(element.findtext(
                         '{*}OrgnlPtyAndAcctId/{*}Acct/{*}IBAN') or '', "utf-8")
-                d['original_bic'] = unicode(element.findtext(
+                d['original_bic'] = str(element.findtext(
                         '{*}OrgnlPtyAndAcctId/{*}Agt/{*}FinInstnId/{*}BICFI')
                     or '', "utf-8")
-                d['updated_iban'] = unicode(element.findtext(
+                d['updated_iban'] = str(element.findtext(
                         '{*}UpdtdPtyAndAcctId/{*}Acct/{*}IBAN') or '', "utf-8")
-                d['updated_bic'] = unicode(element.findtext(
+                d['updated_bic'] = str(element.findtext(
                         '{*}UpdtdPtyAndAcctId/{*}Agt/{*}FinInstnId/{*}BICFI')
                     or '', "utf-8")
-                d['mandate_identification'] = [unicode(x.text, 'utf-8') for x in
+                d['mandate_identification'] = [str(x.text, 'utf-8') for x in
                         element.findall('{*}TxRprt/{*}TxDtls/{*}Refs/{*}MndtId')
                         ]
                 result.append([d])

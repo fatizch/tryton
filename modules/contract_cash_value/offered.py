@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     is_cash_value = fields.Function(
@@ -27,8 +26,7 @@ class Product:
 
 
 class OptionDescription(get_rule_mixin('buyback_rule', 'Buyback Rule',
-            extra_string='Buyback Rule Extra Data')):
-    __metaclass__ = PoolMeta
+            extra_string='Buyback Rule Extra Data'), metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     is_cash_value = fields.Function(

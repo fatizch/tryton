@@ -2,8 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import contract
-import clause
+from . import contract
+from . import clause
 
 
 def register():

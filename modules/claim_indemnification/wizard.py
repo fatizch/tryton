@@ -810,7 +810,7 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
         # Update initial extra_data with the current version if necessary
         with ServerContext().set_context(service=service):
             new_data = service.benefit.refresh_extra_data(extra_data)
-        for k, v in new_data.items():
+        for k, v in list(new_data.items()):
             if k not in extra_data:
                 extra_data[k] = v
         if end_date and start_date > end_date:

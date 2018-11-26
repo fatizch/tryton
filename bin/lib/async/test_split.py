@@ -30,7 +30,7 @@ def test_split_batch():
             [(1,), (2,), (3,), (4,), (5,)], 2)) == \
             [[(1,), (2,)], [(3,), (4,)], [(5,)]]
     assert list(split_batch(
-            (i for i in xrange(5)), 2)) == \
+            (i for i in range(5)), 2)) == \
             [[0, 1], [2, 3], [4]]
 
 

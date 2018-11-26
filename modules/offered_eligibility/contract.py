@@ -8,8 +8,7 @@ __all__ = [
 ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     @classmethod
@@ -32,8 +31,7 @@ class Contract:
                     option.check_eligibility()
 
 
-class ContractOption:
-    __metaclass__ = PoolMeta
+class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     @classmethod

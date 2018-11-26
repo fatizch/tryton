@@ -55,8 +55,7 @@ FREQUENCIES = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     block_invoicing_until = fields.Date('Block Invoicing Until', readonly=True,
@@ -446,7 +445,7 @@ class Contract:
             else:
                 ratio_taxes = 1
             taxes = {code: self.currency.round(amount * ratio_taxes)
-                for code, amount in taxes.iteritems()}
+                for code, amount in taxes.items()}
             return [invoices, sum(x['total_amount'] for x in invoices), taxes]
 
     def substract_balance_from_invoice_reports(self, invoice_reports):
@@ -654,7 +653,7 @@ class Contract:
 
     def _get_invoice_rrule_and_billing_information(self, start):
         billing_informations = iter(self.billing_informations)
-        billing_information = billing_informations.next()
+        billing_information = next(billing_informations)
         for next_billing_information in billing_informations:
             if billing_information.same_rule(next_billing_information):
                 continue
@@ -943,7 +942,7 @@ class Contract:
 
         account_invoices = []
         contract_invoices = []
-        for period in sorted(periods.iterkeys(), key=lambda x: x[0]):
+        for period in sorted(iter(periods.keys()), key=lambda x: x[0]):
             for contract in periods[period]:
                 invoice = contract.get_invoice(*period)
                 if not invoice.journal:
@@ -961,7 +960,7 @@ class Contract:
     def _finalize_invoices(cls, contract_invoices):
         for contract_invoice in contract_invoices:
             invoice = contract_invoice.invoice
-            invoice.taxes = [x for x in invoice._compute_taxes().values()]
+            invoice.taxes = [x for x in list(invoice._compute_taxes().values())]
             if getattr(invoice, 'invoice_address', None) is None:
                 invoice.invoice_address = \
                     contract_invoice.contract.get_contract_address(
@@ -1181,7 +1180,7 @@ class Contract:
             clause.append(('date', '<=', date))
 
         sub_clause = ['OR']
-        for subscriber, contract_group in subscribers.iteritems():
+        for subscriber, contract_group in subscribers.items():
             sub_clause.append([
                     ('party', '=', subscriber.id),
                     ('account', '=', subscriber.account_receivable_used.id),
@@ -1262,11 +1261,11 @@ class Contract:
         with Transaction().new_transaction() as transaction:
             try:
                 messages = cls.ws_subscribe_contracts(contract_dict)
-                if len(messages) == 1 and not messages.values()[0]['return']:
+                if len(messages) == 1 and not list(messages.values())[0]['return']:
                     # ws_subscribe_contracts failed, forward the message
                     return messages
                 quote_numbers = [message['quote_number']
-                    for root_message in messages.itervalues()
+                    for root_message in messages.values()
                     for message in root_message['messages']
                     if root_message['return'] and 'quote_number' in message]
                 new_contracts = cls.search([
@@ -1282,7 +1281,7 @@ class Contract:
                     }
             finally:
                 transaction.rollback()
-            return {contract_dict.keys()[0]: rating_message}
+            return {list(contract_dict.keys())[0]: rating_message}
 
     @classmethod
     def _ws_extract_rating_message(cls, contracts):
@@ -1492,8 +1491,7 @@ class Contract:
     ###########################################################################
 
 
-class ContractFee:
-    __metaclass__ = PoolMeta
+class ContractFee(metaclass=PoolMeta):
     __name__ = 'contract.fee'
 
     active = fields.Boolean('Active')
@@ -1520,11 +1518,10 @@ class ContractFee:
         if to_deactivate:
             cls.write(to_deactivate, {'active': False})
         if contract_fee_dict:
-            super(ContractFee, cls).delete(contract_fee_dict.values())
+            super(ContractFee, cls).delete(list(contract_fee_dict.values()))
 
 
-class ContractOption:
-    __metaclass__ = PoolMeta
+class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     @classmethod
@@ -1545,7 +1542,7 @@ class ContractOption:
         if to_decline:
             cls.write(to_decline, {'status': 'declined'})
         if option_dict:
-            super(ContractOption, cls).delete(option_dict.values())
+            super(ContractOption, cls).delete(list(option_dict.values()))
 
     def get_paid_amount_at_date(self, date):
         pool = Pool()
@@ -1566,8 +1563,7 @@ class ContractOption:
         return cursor.fetchone()[0]
 
 
-class ExtraPremium:
-    __metaclass__ = PoolMeta
+class ExtraPremium(metaclass=PoolMeta):
     __name__ = 'contract.option.extra_premium'
 
     active = fields.Boolean('Active')
@@ -1594,7 +1590,7 @@ class ExtraPremium:
         if to_deactivate:
             cls.write(to_deactivate, {'active': False})
         if extra_premium_dict:
-            super(ExtraPremium, cls).delete(extra_premium_dict.values())
+            super(ExtraPremium, cls).delete(list(extra_premium_dict.values()))
 
 
 class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
@@ -1712,7 +1708,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
         values = []
         if payments_per_billing:
             server_ctx = ServerContext()
-            for billing_id, payments in payments_per_billing.items():
+            for billing_id, payments in list(payments_per_billing.items()):
                 for payment in payments:
                     values.append(cls.suspension_values(
                             billing_id, payment,
@@ -1937,8 +1933,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
         return [('billing_mode.direct_debit',) + tuple(domain[1:])]
 
 
-class Premium:
-    __metaclass__ = PoolMeta
+class Premium(metaclass=PoolMeta):
     __name__ = 'contract.premium'
 
     account = fields.Many2One('account.account', 'Account', required=True,
@@ -2207,8 +2202,7 @@ class InvoiceContract(Wizard):
         return action, {}
 
 
-class DisplayContractPremium:
-    __metaclass__ = PoolMeta
+class DisplayContractPremium(metaclass=PoolMeta):
     __name__ = 'contract.premium.display'
 
     @classmethod
@@ -2220,8 +2214,7 @@ class DisplayContractPremium:
         return children
 
 
-class ContractSubStatus:
-    __metaclass__ = PoolMeta
+class ContractSubStatus(metaclass=PoolMeta):
     __name__ = 'contract.sub_status'
 
     hold_billing = fields.Boolean('Hold Billing', depends=['status'],

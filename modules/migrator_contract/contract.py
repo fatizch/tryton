@@ -3,7 +3,7 @@
 import datetime
 
 from collections import defaultdict
-from itertools import groupby, chain, tee, izip
+from itertools import groupby, chain, tee
 from sql import Table, Column
 from sql.aggregate import Count
 
@@ -75,7 +75,7 @@ class MigratorContractPremium(migrator.Migrator):
             """s -> (s0,s1), (s1,s2), (s2, s3), ..."""
             a, b = tee(iterable)
             next(b, None)
-            return izip(a, b)
+            return zip(a, b)
 
         def strip_fields(row):
             return {k: row[k]
@@ -254,7 +254,7 @@ class MigratorContract(migrator.Migrator):
         """
         pool = Pool()
         Contract = pool.get('contract')
-        for c in [c for c in contracts.values()
+        for c in [c for c in list(contracts.values())
                 if c.status != 'terminated']:
             try:
                 if migrate_premiums:
@@ -285,7 +285,7 @@ class MigratorContract(migrator.Migrator):
                 continue
             contract = Contract(**row)
             contracts[row[cls.func_key]] = contract
-        Contract.save(contracts.values())
+        Contract.save(list(contracts.values()))
 
         skip_extra_migrators = cls.extra_args.get('skip_extra_migrators',
             kwargs.get('skip_extra_migrators')).split(',')
@@ -296,9 +296,9 @@ class MigratorContract(migrator.Migrator):
             for _migrator in extra_migrators:
                 cls.logger.info('migrator ex: %s' % _migrator)
                 Migrator = Pool().get(_migrator)
-                contracts_done = Migrator.migrate(contracts.keys())
+                contracts_done = Migrator.migrate(list(contracts.keys()))
                 # Remove contracts deleted by extra migrator
-                for k in contracts.keys():
+                for k in list(contracts.keys()):
                     if k not in contracts_done:
                         contracts.pop(k, None)
                 if not contracts:
@@ -333,7 +333,7 @@ class MigratorContract(migrator.Migrator):
         BillingInformation = pool.get('contract.billing_information')
         billing_info = BillingInformation(date=row['version'])
         for billing_mode_id in [v for (k, v)
-                in cls.cache_obj['billing_mode'].iteritems()
+                in cls.cache_obj['billing_mode'].items()
                 if k[0] == row['product']]:
             billing_mode = BillingMode(billing_mode_id)
             if (billing_mode.frequency != row['frequency']) or (
@@ -450,8 +450,8 @@ class MigratorContractVersion(MigratorContract):
             if row['manual_end_date']:
                 delta['manual_end_date'] = row['manual_end_date']
         for key in delta:
-            if key in list(chain(*versioned_fields.values())):
-                key = [x for x in versioned_fields.keys()
+            if key in list(chain(*list(versioned_fields.values()))):
+                key = [x for x in list(versioned_fields.keys())
                     if key in versioned_fields[x]][0]
                 val = list(getattr(contract, key))
                 val = val + row[key]
@@ -514,8 +514,8 @@ class MigratorContractVersion(MigratorContract):
         if contracts:
             for _migrator in cls.extra_migrator_names():
                 Migrator = Pool().get(_migrator)
-                Migrator.migrate(contracts.keys())
-        cls.logger.info('%s contracts keys' % len(contracts.keys()))
+                Migrator.migrate(list(contracts.keys()))
+        cls.logger.info('%s contracts keys' % len(list(contracts.keys())))
         return contracts
 
 
@@ -607,10 +607,10 @@ class MigratorContractOption(migrator.Migrator):
             to_create[row['contract_id']] = contract
 
         CoveredElement.save([c.covered_elements[0]
-            for c in to_create.values()])
-        Contract.save(to_create.values())
+            for c in list(to_create.values())])
+        Contract.save(list(to_create.values()))
 
-        for c in to_create.values():
+        for c in list(to_create.values()):
             for covered_elem in c.covered_elements:
                 for option in covered_elem.options:
                     option.set_automatic_end_date()
@@ -618,7 +618,7 @@ class MigratorContractOption(migrator.Migrator):
         # Delete contracts with no options
         delete_numbers = [x['contract_number']
             for x in [cls.sanitize({'contract_id': k})
-                for k in set(ids).difference(to_create.keys())]
+                for k in set(ids).difference(list(to_create.keys()))]
                 ]
         for number in set(delete_numbers) - set(contracts_in_error):
             cls.logger.error(cls.error_message('no_option') % (number, ))
@@ -674,7 +674,7 @@ class MigratorContractWaiverPremium(migrator.Migrator):
             to_create[row[cls.func_key]].append({k: row[k]
                 for k in row if k in set(Model._fields) - {'id', }})
         if to_create:
-            waivers = Model.create(list(chain(*to_create.values())))
+            waivers = Model.create(list(chain(*list(to_create.values()))))
 
             waiver_options = []
             for waiver in waivers:
@@ -725,7 +725,7 @@ class MigratorContractEvent(migrator.Migrator):
             event_type_id = Event.get_event_type_data_from_code(
                 row['code'])['id']
             EventLog.create_event_logs([row['contract']], event_type_id,
-                u'n°%s %s' % (row['version'], row.get('motive', '')),
+                'n°%s %s' % (row['version'], row.get('motive', '')),
                 date=datetime.datetime(row['date'].year, row['date'].month,
                     row['date'].day))
         return {id: None for id in ids}

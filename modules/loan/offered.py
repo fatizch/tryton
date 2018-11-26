@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class ProductConfiguration:
-    __metaclass__ = PoolMeta
+class ProductConfiguration(metaclass=PoolMeta):
     __name__ = 'offered.configuration'
 
     loan_number_sequence = fields.Many2One('ir.sequence',
@@ -55,8 +54,7 @@ class ProductConfiguration:
                 values=[Literal(matches[0][0])]))
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     is_loan = fields.Function(
@@ -70,8 +68,7 @@ class Product:
         return False
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     is_loan = fields.Function(

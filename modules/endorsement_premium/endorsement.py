@@ -11,15 +11,13 @@ __all__ = [
     ]
 
 
-class ContractFee:
-    __metaclass__ = PoolMeta
+class ContractFee(metaclass=PoolMeta):
     _history = True
     __name__ = 'contract.fee'
 
 
-class Premium:
+class Premium(metaclass=PoolMeta):
     _history = True
-    __metaclass__ = PoolMeta
     __name__ = 'contract.premium'
 
     @classmethod
@@ -34,8 +32,7 @@ class Premium:
                 'contract_premium-account_tax__history', cascade=True)
 
 
-class EndorsementContract:
-    __metaclass__ = PoolMeta
+class EndorsementContract(metaclass=PoolMeta):
     __name__ = 'endorsement.contract'
 
     @classmethod

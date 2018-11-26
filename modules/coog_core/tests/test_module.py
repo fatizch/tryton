@@ -58,8 +58,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         assert issubclass(self.EventTypeAction, model.GlobalSearchLimitedMixin)
 
     def test0020get_module_path(self):
-        self.assert_(utils.get_module_path('coog_core'))
-        self.assert_(utils.get_module_path('dfsfsfsdf') is None)
+        self.assertTrue(utils.get_module_path('coog_core'))
+        self.assertTrue(utils.get_module_path('dfsfsfsdf') is None)
 
     def test0025_clear_history(self):
         transaction = Transaction()
@@ -160,51 +160,51 @@ class ModuleTestCase(test_framework.CoogTestCase):
     def test0030calculate_duration_between(self):
         start_date = datetime.date(2013, 1, 1)
         end_date = datetime.date(2013, 1, 31)
-        self.assert_(coog_date.duration_between(start_date, end_date, 'day')
+        self.assertTrue(coog_date.duration_between(start_date, end_date, 'day')
             == 31)
-        self.assert_(coog_date.duration_between(start_date, end_date, 'month')
+        self.assertTrue(coog_date.duration_between(start_date, end_date, 'month')
             == 1)
-        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
+        self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'month') == (1, True))
-        self.assert_(coog_date.duration_between(start_date, end_date,
+        self.assertTrue(coog_date.duration_between(start_date, end_date,
                 'quarter') == 0)
-        self.assert_(coog_date.duration_between(start_date, end_date, 'year')
+        self.assertTrue(coog_date.duration_between(start_date, end_date, 'year')
             == 0)
 
         end_date = datetime.date(2013, 3, 31)
-        self.assert_(coog_date.duration_between(start_date, end_date, 'day')
+        self.assertTrue(coog_date.duration_between(start_date, end_date, 'day')
             == 90)
-        self.assert_(coog_date.duration_between(start_date, end_date, 'month')
+        self.assertTrue(coog_date.duration_between(start_date, end_date, 'month')
             == 3)
-        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
+        self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'month') == (3, True))
-        self.assert_(coog_date.duration_between(start_date, end_date,
+        self.assertTrue(coog_date.duration_between(start_date, end_date,
                 'quarter') == 1)
-        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
+        self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'quarter') == (1, True))
-        self.assert_(coog_date.duration_between(start_date, end_date, 'year')
+        self.assertTrue(coog_date.duration_between(start_date, end_date, 'year')
             == 0)
 
         end_date = datetime.date(2013, 12, 31)
-        self.assert_(coog_date.duration_between(start_date, end_date, 'day')
+        self.assertTrue(coog_date.duration_between(start_date, end_date, 'day')
             == 365)
-        self.assert_(coog_date.duration_between(start_date, end_date, 'month')
+        self.assertTrue(coog_date.duration_between(start_date, end_date, 'month')
             == 12)
-        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
+        self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'month') == (12, True))
-        self.assert_(coog_date.duration_between(start_date, end_date,
+        self.assertTrue(coog_date.duration_between(start_date, end_date,
             'quarter') == 4)
-        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
+        self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'quarter') == (4, True))
-        self.assert_(coog_date.duration_between(start_date, end_date, 'year')
+        self.assertTrue(coog_date.duration_between(start_date, end_date, 'year')
             == 1)
-        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
+        self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'year') == (1, True))
 
         end_date = datetime.date(2014, 1, 1)
-        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
+        self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'month') == (12, False))
-        self.assert_(coog_date.duration_between_and_is_it_exact(start_date,
+        self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'year') == (1, False))
 
         start_date = datetime.date(2016, 2, 29)
@@ -284,7 +284,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 with model.error_manager():
                     for method_name in method_names:
                         getattr(PatchedView, method_name)()
-            except UserError, exc:
+            except UserError as exc:
                 return exc.message
             return None
 
@@ -870,13 +870,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
             test_table = self.TestHistoryTable._get_history_table()
             cursor.execute(*test_table.select(test_table.id, test_table.foo,
                     where=test_table.id == master.id))
-            self.assertEqual(cursor.fetchall(), [(master.id, u'1')])
+            self.assertEqual(cursor.fetchall(), [(master.id, '1')])
 
         with Transaction().set_context(_datetime=master.write_date):
             test_table = self.TestHistoryTable._get_history_table()
             cursor.execute(*test_table.select(test_table.id, test_table.foo,
                     where=test_table.id == master.id))
-            self.assertEqual(cursor.fetchall(), [(master.id, u'2')])
+            self.assertEqual(cursor.fetchall(), [(master.id, '2')])
 
         child_1 = self.TestHistoryChildTable(bar='1', parent=master)
         child_1.save()
@@ -894,7 +894,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     condition=(child_table.parent == test_table.id)
                 ).select(test_table.id, test_table.foo, child_table.bar,
                     where=test_table.id == master.id))
-            self.assertEqual(cursor.fetchall(), [(master.id, u'1', None)])
+            self.assertEqual(cursor.fetchall(), [(master.id, '1', None)])
 
         with Transaction().set_context(_datetime=child_date):
             test_table = self.TestHistoryTable._get_history_table()
@@ -903,7 +903,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     condition=(child_table.parent == test_table.id)
                 ).select(test_table.id, test_table.foo, child_table.bar,
                     where=test_table.id == master.id))
-            self.assertEqual(cursor.fetchall(), [(master.id, u'2', u'1')])
+            self.assertEqual(cursor.fetchall(), [(master.id, '2', '1')])
 
         with Transaction().set_context(_datetime=master.write_date):
             test_table = self.TestHistoryTable._get_history_table()
@@ -912,7 +912,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     condition=(child_table.parent == test_table.id)
                 ).select(test_table.id, test_table.foo, child_table.bar,
                     where=test_table.id == master.id))
-            self.assertEqual(cursor.fetchall(), [(master.id, u'2', None)])
+            self.assertEqual(cursor.fetchall(), [(master.id, '2', None)])
 
     def test_0115_calculate_periods_at_date(self):
         dates = [datetime.date(2012, 1, 1), datetime.date(2013, 1, 1),
@@ -1138,12 +1138,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(r, only_duplicates[-1])
 
     def test_string_replace(self):
-        s = u'café-THÉ:20$'
+        s = 'café-THÉ:20$'
 
-        self.assertEqual(coog_string.slugify(s, lower=False), u'cafe-THE_20_')
-        self.assertEqual(coog_string.slugify(s), u'cafe-the_20_')
-        self.assertEqual(coog_string.asciify(s), u'cafe-THE:20$')
-        self.assertEqual(coog_string.slugify(s, '-'), u'cafe-the-20-')
+        self.assertEqual(coog_string.slugify(s, lower=False), 'cafe-THE_20_')
+        self.assertEqual(coog_string.slugify(s), 'cafe-the_20_')
+        self.assertEqual(coog_string.asciify(s), 'cafe-THE:20$')
+        self.assertEqual(coog_string.slugify(s, '-'), 'cafe-the-20-')
 
     def test_event_type_action_pyson(self):
         good_obj = self.ExportTest(char='bingo',

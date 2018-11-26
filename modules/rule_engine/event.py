@@ -4,7 +4,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Bool, Or, Eval
 
-from rule_engine import get_rule_mixin
+from .rule_engine import get_rule_mixin
 from trytond.modules.coog_core import utils, fields
 
 
@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class EventTypeAction(get_rule_mixin('filter_rule', 'Filter Rule')):
-    __metaclass__ = PoolMeta
+class EventTypeAction(get_rule_mixin('filter_rule', 'Filter Rule'), metaclass=PoolMeta):
     __name__ = 'event.type.action'
 
     @classmethod

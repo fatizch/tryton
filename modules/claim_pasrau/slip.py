@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.model import ModelView, Workflow
 from trytond.pyson import Eval
 from trytond.modules.coog_core import utils
-import dsn
+from . import dsn
 
 __all__ = [
     'InvoiceSlipConfiguration',
@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class InvoiceSlipConfiguration:
-    __metaclass__ = PoolMeta
+class InvoiceSlipConfiguration(metaclass=PoolMeta):
     __name__ = 'account.invoice.slip.configuration'
 
     @classmethod
@@ -29,8 +28,7 @@ class InvoiceSlipConfiguration:
         return cls._event_code_from_slip_kind(slip_kind)
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     @classmethod

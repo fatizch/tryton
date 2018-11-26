@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class CreateStatement:
-    __metaclass__ = PoolMeta
+class CreateStatement(metaclass=PoolMeta):
     __name__ = 'account.statement.create'
 
     def get_line_values(self, statement, invoice, line):
@@ -39,8 +38,7 @@ class CreateStatement:
         return values
 
 
-class PartyErase:
-    __metaclass__ = PoolMeta
+class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
     def to_erase(self, party_id):

@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Party(Printable):
-    __metaclass__ = PoolMeta
+class Party(Printable, metaclass=PoolMeta):
     __name__ = 'party.party'
 
     def get_doc_template_kind(self):

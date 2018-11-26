@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     @classmethod
@@ -87,8 +86,7 @@ class Contract:
         self.billing_informations = [new_billing_information]
 
 
-class ContractBillingInformation:
-    __metaclass__ = PoolMeta
+class ContractBillingInformation(metaclass=PoolMeta):
     __name__ = 'contract.billing_information'
 
     sepa_mandate = fields.Many2One('account.payment.sepa.mandate',

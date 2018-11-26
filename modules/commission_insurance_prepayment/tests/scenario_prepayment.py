@@ -168,9 +168,9 @@ commissions = Commission.find([()])
 [(x.amount, x.commission_rate, x.is_prepayment, x.redeemed_prepayment,
     x.base_amount, x.agent.party.name) for x in commissions] == [
     (Decimal('720.0000'), Decimal('.6'), True, None, Decimal('1200.0000'),
-        u'Broker'),
+        'Broker'),
     (Decimal('360.0000'), Decimal('.3'), True, None, Decimal('1200.0000'),
-        u'Insurer')]
+        'Insurer')]
 # #Res# #True
 
 # #Comment# #Create invoices
@@ -196,9 +196,9 @@ len(line.commissions)
 [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     x.agent.party.name) for x in line.commissions] == [
     (Decimal('0.0000'), False, Decimal('60.0000'), Decimal('100.0000'),
-        u'Broker'),
+        'Broker'),
     (Decimal('0.0000'), False, Decimal('30.0000'), Decimal('100.0000'),
-        u'Insurer')]
+        'Insurer')]
 # #Res# #True
 
 # #Comment# #Validate last invoice of the year commissions
@@ -209,9 +209,9 @@ len(line.commissions)
 [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     x.agent.party.name) for x in line.commissions] == [
     (Decimal('0.0000'), False, Decimal('60.0000'), Decimal('100.0000'),
-        u'Broker'),
+        'Broker'),
     (Decimal('0.0000'), False, Decimal('30.0000'), Decimal('100.0000'),
-        u'Insurer')]
+        'Insurer')]
 # #Res# #True
 
 # #Comment# #Validate first invoice of next year commissions
@@ -222,9 +222,9 @@ len(line.commissions)
 [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     x.agent.party.name) for x in line.commissions] == [
     (Decimal('60.0000'), False, Decimal('0.0000'), Decimal('100.0000'),
-        u'Broker'),
+        'Broker'),
     (Decimal('30.0000'), False, Decimal('0.0000'), Decimal('100.0000'),
-        u'Insurer')]
+        'Insurer')]
 # #Res# #True
 
 # #Comment# #Generate insurer and broker invoice
@@ -242,13 +242,13 @@ line, = last_invoice.invoice.lines
 [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     x.agent.party.name) for x in line.commissions] == [
     (Decimal('0.0000'), False, Decimal('60.0000'), Decimal('100.0000'),
-        u'Broker'),
+        'Broker'),
     (Decimal('0.0000'), False, Decimal('30.0000'), Decimal('100.0000'),
-        u'Insurer'),
+        'Insurer'),
     (Decimal('0.0000'), False, Decimal('-30.0000'), Decimal('-100.0000'),
-        u'Insurer'),
+        'Insurer'),
     (Decimal('0.0000'), False, Decimal('-60.0000'), Decimal('-100.0000'),
-        u'Broker')]
+        'Broker')]
 # #Res# #True
 
 # #Comment# #Terminate Contract
@@ -277,10 +277,10 @@ commissions = Commission.find([('is_prepayment', '=', True)],
 # 720 : 12months * 60
 # base amount: -500: (12 - 7) * 100
 [(x.amount, x.base_amount, x.agent.party.name) for x in commissions] == [
-    (Decimal('360.00000000'), Decimal('1200.0000'), u'Insurer'),
-    (Decimal('720.00000000'), Decimal('1200.0000'), u'Broker'),
-    (Decimal('-300.00000000'), Decimal('-500.0000'), u'Broker'),
-    (Decimal('-150.00000000'), Decimal('-500.0000'), u'Insurer')]
+    (Decimal('360.00000000'), Decimal('1200.0000'), 'Insurer'),
+    (Decimal('720.00000000'), Decimal('1200.0000'), 'Broker'),
+    (Decimal('-300.00000000'), Decimal('-500.0000'), 'Broker'),
+    (Decimal('-150.00000000'), Decimal('-500.0000'), 'Insurer')]
 # #Res# #True
 
 # #Comment# #Reactivate Contract
@@ -288,12 +288,12 @@ Wizard('contract.reactivate', models=[contract]).execute('reactivate')
 commissions = Commission.find([('is_prepayment', '=', True)],
     order=[('create_date', 'ASC')])
 [(x.amount, x.base_amount, x.agent.party.name) for x in commissions] == [
-    (Decimal('360.00000000'), Decimal('1200.0000'), u'Insurer'),
-    (Decimal('720.00000000'), Decimal('1200.0000'), u'Broker'),
-    (Decimal('-300.00000000'), Decimal('-500.0000'), u'Broker'),
-    (Decimal('-150.00000000'), Decimal('-500.0000'), u'Insurer'),
-    (Decimal('300.00000000'), Decimal('500.0000'), u'Broker'),
-    (Decimal('150.00000000'), Decimal('500.0000'), u'Insurer')]
+    (Decimal('360.00000000'), Decimal('1200.0000'), 'Insurer'),
+    (Decimal('720.00000000'), Decimal('1200.0000'), 'Broker'),
+    (Decimal('-300.00000000'), Decimal('-500.0000'), 'Broker'),
+    (Decimal('-150.00000000'), Decimal('-500.0000'), 'Insurer'),
+    (Decimal('300.00000000'), Decimal('500.0000'), 'Broker'),
+    (Decimal('150.00000000'), Decimal('500.0000'), 'Insurer')]
 # #Res# #True
 
 # #Comment# #Add new premium version
@@ -344,9 +344,9 @@ last_year_invoice.total_amount
 [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     x.agent.party.name) for x in last_year_invoice.lines[0].commissions] == [
     (Decimal('18.0000'), False, Decimal('48.0000'), Decimal('110.0000'),
-        u'Broker'),
+        'Broker'),
     (Decimal('9.0000'), False, Decimal('24.0000'), Decimal('110.0000'),
-        u'Insurer')]
+        'Insurer')]
 # #Res# #True
 last_invoice, = Invoice.find([
         ('start', '=', datetime.date(2016, 1, 1)),
@@ -355,9 +355,9 @@ last_invoice, = Invoice.find([
 [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     x.agent.party.name) for x in last_invoice.lines[0].commissions] == [
     (Decimal('66.0000'), False, Decimal('0.0000'), Decimal('110.0000'),
-        u'Broker'),
+        'Broker'),
     (Decimal('33.0000'), False, Decimal('0.0000'), Decimal('110.0000'),
-        u'Insurer')]
+        'Insurer')]
 # #Res# #True
 
 # #Comment# #Terminate Contract
@@ -377,12 +377,12 @@ commissions = Commission.find([('is_prepayment', '=', True)])
 # base amount: -80: (12-11)*100 - (11 - 9)*(110-100)
 sorted([(x.amount, x.base_amount, x.agent.party.name) for x in commissions]) \
     == [
-    (Decimal('-300.00000000'), Decimal('-500.0000'), u'Broker'),
-    (Decimal('-150.00000000'), Decimal('-500.0000'), u'Insurer'),
-    (Decimal('-48.00000000'), Decimal('-80.0000'), u'Broker'),
-    (Decimal('-24.00000000'), Decimal('-80.0000'), u'Insurer'),
-    (Decimal('150.00000000'), Decimal('500.0000'), u'Insurer'),
-    (Decimal('300.00000000'), Decimal('500.0000'), u'Broker'),
-    (Decimal('360.00000000'), Decimal('1200.0000'), u'Insurer'),
-    (Decimal('720.00000000'), Decimal('1200.0000'), u'Broker')]
+    (Decimal('-300.00000000'), Decimal('-500.0000'), 'Broker'),
+    (Decimal('-150.00000000'), Decimal('-500.0000'), 'Insurer'),
+    (Decimal('-48.00000000'), Decimal('-80.0000'), 'Broker'),
+    (Decimal('-24.00000000'), Decimal('-80.0000'), 'Insurer'),
+    (Decimal('150.00000000'), Decimal('500.0000'), 'Insurer'),
+    (Decimal('300.00000000'), Decimal('500.0000'), 'Broker'),
+    (Decimal('360.00000000'), Decimal('1200.0000'), 'Insurer'),
+    (Decimal('720.00000000'), Decimal('1200.0000'), 'Broker')]
 # #Res# #True

@@ -6,26 +6,26 @@ from trytond.pool import Pool
 from trytond.config import config
 from trytond.cache import Cache, freeze
 
-import batch
-import export
-import ir
-import res
-import model
-import test_case_framework
-import models_for_tests
-import tag
-import event
-import attachment
-import diff_blame
-import note
-import access
-import extra_details
-import wizard_context
-import test_case
-import load_data
-import queue
+from . import batch
+from . import export
+from . import ir
+from . import res
+from . import model
+from . import test_case_framework
+from . import models_for_tests
+from . import tag
+from . import event
+from . import attachment
+from . import diff_blame
+from . import note
+from . import access
+from . import extra_details
+from . import wizard_context
+from . import test_case
+from . import load_data
+from . import queue
 
-from model import UnionMixin, expand_tree
+from .model import UnionMixin, expand_tree
 
 __all__ = [
     'UnionMixin',
@@ -244,8 +244,8 @@ def inject_class(pool, kind, source, target, model_list=None):
             model = pool._pool[pool.database_name].get('model').get(elem)
             patch_model(model)
     else:
-        for model in pool._pool[pool.database_name].get(
-                kind, {}).values():
+        for model in list(pool._pool[pool.database_name].get(
+                kind, {}).values()):
             patch_model(model)
 
 

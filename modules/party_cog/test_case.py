@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class GlobalSearchSet:
-    __metaclass__ = PoolMeta
+class GlobalSearchSet(metaclass=PoolMeta):
     __name__ = 'global_search.set'
 
     @classmethod
@@ -27,8 +26,7 @@ class GlobalSearchSet:
         return res
 
 
-class TestCaseModel:
-    __metaclass__ = PoolMeta
+class TestCaseModel(metaclass=PoolMeta):
     __name__ = 'ir.test_case'
 
     number_of_parties = fields.Integer('Number of Parties')

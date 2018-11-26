@@ -7,9 +7,8 @@ __all__ = [
     ]
 
 
-class Claim:
+class Claim(metaclass=PoolMeta):
     __name__ = 'claim'
-    __metaclass__ = PoolMeta
 
     def init_declaration_document_request(self):
         DocumentRequestLine = Pool().get('document.request.line')

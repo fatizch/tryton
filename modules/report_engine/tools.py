@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import re
 import zipfile
-from StringIO import StringIO
+from io import StringIO
 from collections import defaultdict
 
 from trytond.pool import Pool
@@ -73,7 +73,7 @@ class ConvertTemplate(Wizard):
             if match.to_update:
                 per_template[Version(match.template_id)].append((match.section,
                         match.match, match.new_value))
-        for template, matches in per_template.iteritems():
+        for template, matches in per_template.items():
             template.data = self.replace_in_file(StringIO(template.data),
                 matches)
             template.data = buffer(template.data.getvalue())
@@ -184,7 +184,7 @@ class SelectTemplatesForConversion(model.CoogView):
                     continue
                 all_matches = Converter.find_in_file(StringIO(version.data),
                     self.search_for)
-                for section, matches in all_matches.iteritems():
+                for section, matches in all_matches.items():
                     for match in set(matches):
                         match = Displayer(to_update=bool(self.replace_with),
                             model_name=template.on_model.name,

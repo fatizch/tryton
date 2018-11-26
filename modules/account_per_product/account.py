@@ -11,15 +11,13 @@ __all__ = [
     ]
 
 
-class AgedBalanceContext:
-    __metaclass__ = PoolMeta
+class AgedBalanceContext(metaclass=PoolMeta):
     __name__ = 'account.aged_balance.context'
 
     product = fields.Many2One('offered.product', 'Product')
 
 
-class AgedBalanceReport:
-    __metaclass__ = PoolMeta
+class AgedBalanceReport(metaclass=PoolMeta):
     __name__ = 'account.aged_balance'
 
     @classmethod

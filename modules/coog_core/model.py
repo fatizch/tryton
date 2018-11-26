@@ -31,13 +31,13 @@ from trytond.tools import reduce_ids, cursor_dict, memoize
 from trytond.config import config
 from trytond.pyson import Or
 
-from cache import CoogCache, get_cache_holder
-import fields
-import export
-import summary
-import exception
-import coog_sql
-import utils
+from .cache import CoogCache, get_cache_holder
+from . import fields
+from . import export
+from . import summary
+from . import exception
+from . import coog_sql
+from . import utils
 
 try:
     import async.broker as async_broker
@@ -303,7 +303,7 @@ def dictionarize(instance, field_names=None, set_rec_names=False):
         for fname in field_names[instance.__name__]}
     # Do NOT use iteritems, since if set_rec_names is True the dictionary size
     # will change during iteration
-    for k, v in res.items():
+    for k, v in list(res.items()):
         if isinstance(v, Model):
             res[k] = v.id
             if isinstance(instance._fields[k], tryton_fields.Reference):
@@ -321,7 +321,7 @@ def get_dictionarize_fields(model):
         return vals
     pool = Pool()
     res = {model.__name__: []}
-    for fname, field in model._fields.iteritems():
+    for fname, field in model._fields.items():
         if (isinstance(field, tryton_fields.Function) and not
                 isinstance(field, tryton_fields.MultiValue)):
             continue
@@ -429,7 +429,7 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
                 ' > 64 => ' + cls._table)
         pool = Pool()
         do_exit = False
-        for field_name, field in cls._fields.iteritems():
+        for field_name, field in cls._fields.items():
             if isinstance(field, fields.Many2One):
                 if getattr(field, '_on_delete_not_set', None):
                     logging.getLogger('fields').critical('Ondelete not set for'
@@ -484,7 +484,7 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
         #         [('write', [...], {'my_list': []})]
         values = super(CoogSQL, self)._save_values
         new_values = {}
-        for fname, fvalues in values.iteritems():
+        for fname, fvalues in values.items():
             field = self._fields[fname]
             if isinstance(field, fields.One2Many) and not fvalues:
                 continue
@@ -535,7 +535,7 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
             return
         # Handle O2M with fields.Reference backref
         to_delete = []
-        for field_name, field in cls._fields.iteritems():
+        for field_name, field in cls._fields.items():
             if not isinstance(field, tryton_fields.One2Many):
                 continue
             Target = Pool().get(field.model_name)
@@ -569,7 +569,7 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
         assert _datetime
 
         columns = []
-        for field_name in cls._fields.keys():
+        for field_name in list(cls._fields.keys()):
             field = cls._fields.get(field_name)
             if not field or hasattr(field, 'get'):
                 continue
@@ -698,7 +698,7 @@ class CoogView(ModelView, FunctionalErrorMixIn):
     def set_fields_readonly_condition(cls, pyson_condition, depends,
             to_skip=None):
         to_skip = to_skip or []
-        for field_ in cls._fields.values():
+        for field_ in list(cls._fields.values()):
             if field_.name in to_skip:
                 continue
             readonly_state = field_.states.get('readonly', False)
@@ -851,7 +851,7 @@ class CoogDictSchema(DictSchemaMixin):
                 continue
             if klass.table_query():
                 continue
-            for field_name, field in klass._fields.iteritems():
+            for field_name, field in klass._fields.items():
                 if not isinstance(field, tryton_fields.Dict):
                     continue
                 if field.schema_model != cls.__name__:
@@ -875,8 +875,7 @@ class ExpandTreeMixin(object):
 
 def expand_tree(name, test_field='must_expand_tree'):
 
-    class ViewTreeState:
-        __metaclass__ = PoolMeta
+    class ViewTreeState(metaclass=PoolMeta):
         __name__ = 'ir.ui.view_tree_state'
 
         @classmethod
@@ -1024,7 +1023,7 @@ class _RevisionMixin(object):
                         Coalesce(subquery.date, datetime.date.min))
                     ).select(*columns))
             for elem in cursor_dict(cursor):
-                for field_name, value in elem.iteritems():
+                for field_name, value in elem.items():
                     if field_name == cls._parent_name:
                         continue
                     values[field_name][elem[cls._parent_name]] = value
@@ -1341,7 +1340,7 @@ def view_only(model_name):
                 relation_name=target, origin=None, target=None,
                 readonly=True)
         elif isinstance(field, tryton_fields.Selection):
-            if isinstance(field.selection, basestring):
+            if isinstance(field.selection, str):
 
                 @classmethod
                 def selector(cls):

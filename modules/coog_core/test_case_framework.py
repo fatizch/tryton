@@ -15,9 +15,9 @@ from trytond.model import ModelSingleton
 from trytond.transaction import Transaction
 from trytond.cache import Cache
 from trytond.error import UserError
-import model
-import fields
-import export
+from . import model
+from . import fields
+from . import export
 
 
 __all__ = [
@@ -159,7 +159,7 @@ class TestCaseModel(ModelSingleton, model.CoogSQL, model.CoogView):
             if elem.__name__ not in group:
                 group[elem.__name__] = []
             group[elem.__name__].append(elem)
-        for class_name, elems in group.iteritems():
+        for class_name, elems in group.items():
             save_method_hook = '_save_%s' % (
                 class_name.replace('.', '_').replace('-', '_'))
             if hasattr(GoodModel, save_method_hook):
@@ -258,7 +258,7 @@ class TestCaseModel(ModelSingleton, model.CoogSQL, model.CoogView):
     def load_resources(cls, modules_to_load=None):
         if not hasattr(cls, '_loaded_resources'):
             cls._loaded_resources = {}
-        if isinstance(modules_to_load, basestring):
+        if isinstance(modules_to_load, str):
             modules_to_load = [modules_to_load]
         elif modules_to_load is None:
             Module = Pool().get('ir.module')
@@ -286,7 +286,7 @@ class TestCaseModel(ModelSingleton, model.CoogSQL, model.CoogView):
                     for entry in po.translated_entries():
                         result['translations'][entry.msgid] = entry.msgstr
                     continue
-                result['files'][u'%s' % file_name] = os.path.join(
+                result['files']['%s' % file_name] = os.path.join(
                     resource_path, file_name)
             cls._loaded_resources[module_name] = result
 
@@ -314,7 +314,7 @@ class TestCaseModel(ModelSingleton, model.CoogSQL, model.CoogView):
             for file_name in os.listdir(file_path):
                 if not file_name.endswith('.json'):
                     continue
-                result[u'%s' % file_name] = os.path.join(
+                result['%s' % file_name] = os.path.join(
                     file_path, file_name)
         return result
 
@@ -323,7 +323,7 @@ class TestCaseModel(ModelSingleton, model.CoogSQL, model.CoogView):
         if node_name is None:
             resolved = []
             unresolved = []
-            for name in nodes.iterkeys():
+            for name in nodes.keys():
                 cls.solve_graph(name, nodes, resolved, unresolved)
             return resolved
         unresolved.append(node_name)
@@ -371,7 +371,7 @@ class TestCaseModel(ModelSingleton, model.CoogSQL, model.CoogView):
 
         dependencies = {}
         final_dependencies = {}
-        for k, v in method_dependencies.iteritems():
+        for k, v in method_dependencies.items():
             final = dependencies.get(k, [[], []])[0]
             found = dependencies.get(k, [[], []])[1]
             for dep in v:
@@ -561,7 +561,7 @@ class TestCaseWizard(model.CoogWizard):
         test_files = []
         files = Pool().get(
             'ir.test_case').get_all_test_files()
-        for file_name, file_path in files.iteritems():
+        for file_name, file_path in files.items():
             test_files.append({
                     'filename': file_name,
                     'full_path': file_path})

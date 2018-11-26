@@ -17,8 +17,7 @@ __all__ = [
     ]
 
 
-class Plan:
-    __metaclass__ = PoolMeta
+class Plan(metaclass=PoolMeta):
     __name__ = 'commission.plan'
 
     prepayment_payment_rule = fields.Many2One(
@@ -116,8 +115,7 @@ class PrepaymentPaymentDateRule(
         return coog_string.slugify(self.name)
 
 
-class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule')):
-    __metaclass__ = PoolMeta
+class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule'), metaclass=PoolMeta):
     __name__ = 'commission.plan.line'
 
     is_prepayment = fields.Function(fields.Boolean('Is Prepayment'),

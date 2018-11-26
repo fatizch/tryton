@@ -17,8 +17,7 @@ __all__ = [
     ]
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
     _func_key = 'func_key'
 
@@ -190,8 +189,7 @@ class Party:
             values['_func_key'] += '|' + ssn
 
 
-class PartyRelation:
-    __metaclass__ = PoolMeta
+class PartyRelation(metaclass=PoolMeta):
     __name__ = 'party.relation'
 
     @classmethod
@@ -250,8 +248,7 @@ class PartyRelation:
         super(PartyRelation, cls).delete(relations)
 
 
-class HealthPartyComplement:
-    __metaclass__ = PoolMeta
+class HealthPartyComplement(metaclass=PoolMeta):
     __name__ = 'health.party_complement'
 
     department = fields.Function(
@@ -329,7 +326,7 @@ class HealthPartyComplement:
         if not outstanding_codes:
             return result
         cursor.execute(*fund.select(fund.id, fund.code,
-                where=(fund.code.in_(outstanding_codes.keys()))))
+                where=(fund.code.in_(list(outstanding_codes.keys())))))
         for fund_id, fund_code in cursor.fetchall():
             for complement in codes[outstanding_codes[fund_code]]:
                 result[complement.id] = fund_id

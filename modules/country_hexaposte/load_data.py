@@ -125,7 +125,7 @@ class HexaPostLoader(object):
             if not line['post_code'] or not line['delivery_wording']:
                 continue
             new_line = {}
-            for k, v in translation.iteritems():
+            for k, v in translation.items():
                 new_line[v] = line[k]
             res.append(new_line)
         return res
@@ -180,7 +180,7 @@ class HexaPostLoader(object):
         file_format = prefix['format']
         for line in lines:
             code_line = {}
-            for field, params in p[file_format].items():
+            for field, params in list(p[file_format].items()):
                 raw = line[params[1]:params[1] + params[0]]
                 clean = raw.strip()
                 code_line[field] = clean

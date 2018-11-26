@@ -81,28 +81,28 @@ def treat_changelog(chapter, changelog, release_report):
         if 'Version ' in line:
             break
         if not title_print:
-            print ''
-            print 'Module', module
+            print('')
+            print('Module', module)
             title_print = True
-        print line[:-1]
+        print(line[:-1])
         release_report[chapter] += '- ' + ' '.join(
             line[:-1].split(' ')[2:]) + '\n'
         nb_functionnality += 1
     return nb_functionnality
 
-print '-------------Back Office Coog ----------------'
+print('-------------Back Office Coog ----------------')
 for module in sorted(os.listdir(module_dir)):
     if not os.path.isfile(os.path.join(module_dir, module, 'doc', language,
             'CHANGELOG')):
-        print ''
-        print 'Module', module
-        print '   NO CHANGELOG FOUND'
+        print('')
+        print('Module', module)
+        print('   NO CHANGELOG FOUND')
         continue
     with open(os.path.join(module_dir, module, 'doc', language,
             'CHANGELOG'), 'r') as changelog:
         #  found chapter title
         chapter = ''
-        for key, value in conf.iteritems():
+        for key, value in conf.items():
             if module in value:
                 chapter = key
         if not chapter:
@@ -115,7 +115,7 @@ coog_api_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
     '..', '..', '..', 'api')
 with open(os.path.join(coog_api_dir, 'doc', language, 'CHANGELOG'),
         'r') as changelog:
-    print '\n------------- Coog API ----------------'
+    print('\n------------- Coog API ----------------')
     nb_version_functionnality += treat_changelog('COOG API', changelog,
         version_report)
 
@@ -123,17 +123,17 @@ coog_app_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
     '..', '..', '..', 'coog-app')
 with open(os.path.join(coog_app_dir, 'doc', language, 'CHANGELOG'),
         'r') as changelog:
-    print '\n------------- Coog APP ----------------'
+    print('\n------------- Coog APP ----------------')
     nb_version_functionnality += treat_changelog('COOG APP', changelog,
         version_report)
 
-print '\n\n----------%s New functionnalities------------------\n\n' % \
-    nb_version_functionnality
-print '\n\n----------Release note document------------------\n\n'
+print('\n\n----------%s New functionnalities------------------\n\n' % \
+    nb_version_functionnality)
+print('\n\n----------Release note document------------------\n\n')
 
-print 'COOG BACKEND' if language == 'en' else 'Back office COOG'
+print('COOG BACKEND' if language == 'en' else 'Back office COOG')
 
-for key in conf.keys():
+for key in list(conf.keys()):
     title = translation_fr[key] if language == 'fr' else key
-    print '### %s' % title
-    print version_report[key]
+    print('### %s' % title)
+    print(version_report[key])

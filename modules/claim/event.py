@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class EventLog:
-    __metaclass__ = PoolMeta
+class EventLog(metaclass=PoolMeta):
     __name__ = 'event.log'
 
     claim = fields.Many2One('claim', 'Claim', ondelete='SET NULL', select=True,
@@ -42,7 +41,7 @@ class EventLog:
     @classmethod
     def get_event_keys(cls, objects):
         cur_dicts = super(EventLog, cls).get_event_keys(objects)
-        for object_, log_dicts in cur_dicts.items():
+        for object_, log_dicts in list(cur_dicts.items()):
             claims = [x for x in
                 cls.get_related_instances(object_, 'claim') if x]
             if not claims:

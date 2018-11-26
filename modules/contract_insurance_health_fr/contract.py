@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class CoveredElement:
-    __metaclass__ = PoolMeta
+class CoveredElement(metaclass=PoolMeta):
     __name__ = 'contract.covered_element'
 
     @classmethod
@@ -23,8 +22,7 @@ class CoveredElement:
             covered_element.drop_column('is_law_madelin')
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     @classmethod

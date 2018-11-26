@@ -22,9 +22,8 @@ __all__ = [
     ]
 
 
-class Line:
+class Line(metaclass=PoolMeta):
     'Account Statement Line'
-    __metaclass__ = PoolMeta
     __name__ = 'account.statement.line'
 
     party_payer = fields.Many2One('party.party', 'Payer', required=True,
@@ -196,7 +195,7 @@ class Statement(export.ExportImportMixin):
         keys = dict(super(Statement, self)._group_key(line))
         # Keep party key as it us used in the odt report
         keys['party'] = line.party_payer
-        return tuple([(k, v) for (k, v) in keys.iteritems()])
+        return tuple([(k, v) for (k, v) in keys.items()])
 
     def _get_move(self, key):
         move = super(Statement, self)._get_move(key)
@@ -216,8 +215,7 @@ class Statement(export.ExportImportMixin):
         super(Statement, cls).validate_statement(statements)
 
 
-class LineGroup:
-    __metaclass__ = PoolMeta
+class LineGroup(metaclass=PoolMeta):
     __name__ = 'account.statement.line.group'
 
     cancel_motive = fields.Function(fields.Char('Cancel motive',

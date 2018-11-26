@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class CreateExtraPremium:
-    __metaclass__ = PoolMeta
+class CreateExtraPremium(metaclass=PoolMeta):
     __name__ = 'contract.option.extra_premium.create'
 
     def default_extra_premium_data(self, name):

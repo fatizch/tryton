@@ -2,10 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import endorsement
-import process
-import wizard
-import document
+from . import endorsement
+from . import process
+from . import wizard
+from . import document
 
 
 def register():

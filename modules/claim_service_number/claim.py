@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class ClaimService:
-    __metaclass__ = PoolMeta
+class ClaimService(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     number = fields.Char('Number', states={
@@ -50,8 +49,7 @@ class ClaimService:
             return str(self.benefit.sequence)
 
 
-class Claim:
-    __metaclass__ = PoolMeta
+class Claim(metaclass=PoolMeta):
     __name__ = 'claim'
 
     delivered_services_numbers = fields.Function(fields.Char(

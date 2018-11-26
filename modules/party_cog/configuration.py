@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Configuration:
-    __metaclass__ = PoolMeta
+class Configuration(metaclass=PoolMeta):
     __name__ = 'party.configuration'
 
     @classmethod
@@ -18,7 +17,7 @@ class Configuration:
         Sequence = Pool().get('ir.sequence')
         pattern = filter_pattern(pattern, Sequence)
         domain = [('code', '=', 'party.party')]
-        for key, value in pattern.iteritems():
+        for key, value in pattern.items():
             domain.append((str(key), '=', value))
         sequences = Pool().get('ir.sequence').search(domain)
         if len(sequences) == 1:

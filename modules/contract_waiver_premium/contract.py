@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     with_waiver_of_premium = fields.Function(
@@ -172,8 +171,7 @@ class Contract:
         return super(Contract, self)._calculate_final_invoice_end_date()
 
 
-class ContractOption:
-    __metaclass__ = PoolMeta
+class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     waivers = fields.One2Many('contract.waiver_premium-contract.option',

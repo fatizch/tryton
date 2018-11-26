@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class DocumentDescription:
-    __metaclass__ = PoolMeta
+class DocumentDescription(metaclass=PoolMeta):
     __name__ = 'document.description'
 
     digital_signature_required = fields.Boolean('Digital Signature Required',
@@ -27,8 +26,7 @@ class DocumentDescription:
             self.digital_signature_required = False
 
 
-class DocumentRequestLine:
-    __metaclass__ = PoolMeta
+class DocumentRequestLine(metaclass=PoolMeta):
     __name__ = 'document.request.line'
 
     digital_signature_required = fields.Function(
@@ -79,9 +77,9 @@ class DocumentRequestLine:
                 to_update[line] = line.attachment
         if to_update:
             Attachment.get_electronic_signature_transaction_info(
-                to_update.values())
+                list(to_update.values()))
         to_receive = []
-        for line, attachment in to_update.iteritems():
+        for line, attachment in to_update.items():
             if attachment.is_signed() and not \
                     line.reception_date:
                 to_receive.append(line)

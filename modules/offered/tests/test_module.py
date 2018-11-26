@@ -37,7 +37,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         ng.prefix = 'Ctr'
         ng.suffix = 'Y${year}'
         ng.save()
-        self.assert_(ng.id)
+        self.assertTrue(ng.id)
 
     @test_framework.prepare_test(
         'offered.test0001_testNumberGeneratorCreation',
@@ -57,7 +57,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         product_a.start_date = datetime.date(2010, 1, 1)
         product_a.save()
 
-        self.assert_(product_a.id)
+        self.assertTrue(product_a.id)
 
     @test_framework.prepare_test(
         'company_cog.test0001_testCompanyCreation',
@@ -73,7 +73,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         coverage_a.start_date = datetime.date(2010, 1, 1)
         coverage_a.save()
 
-        self.assert_(coverage_a.id)
+        self.assertTrue(coverage_a.id)
 
     @test_framework.prepare_test(
         'offered.test0010_testProductCreation',
@@ -102,11 +102,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         test_selection.save()
 
         self.assertEqual(test_selection._get_structure(),
-            {'code': u'test_selection', 'name': u'Test Selection',
-                'technical_kind': u'selection',
-                'business_kind': u'contract',
-                'sorted': True, 'default': u'2',
-                'selection': [(u'1', u'1'), (u'2', u'2'), (u'3', u'3')],
+            {'code': 'test_selection', 'name': 'Test Selection',
+                'technical_kind': 'selection',
+                'business_kind': 'contract',
+                'sorted': True, 'default': '2',
+                'selection': [('1', '1'), ('2', '2'), ('3', '3')],
                 })
 
         test_numeric = self.ExtraData()
@@ -118,9 +118,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         test_numeric.save()
 
         self.assertEqual(test_numeric._get_structure(),
-            {'code': u'test_numeric', 'name': u'Test Numeric',
-                'technical_kind': u'numeric',
-                'business_kind': u'contract',
+            {'code': 'test_numeric', 'name': 'Test Numeric',
+                'technical_kind': 'numeric',
+                'business_kind': 'contract',
                 'digits': (16, 4)})
 
         # Sub data
@@ -129,13 +129,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
         test_selection.save()
 
         self.assertEqual(test_selection._get_structure(),
-            {'code': u'test_selection', 'name': u'Test Selection',
-                'technical_kind': u'selection',
-                'business_kind': u'contract',
-                'sorted': True, 'default': u'2',
-                'selection': [(u'1', u'1'), (u'2', u'2'), (u'3', u'3')],
+            {'code': 'test_selection', 'name': 'Test Selection',
+                'technical_kind': 'selection',
+                'business_kind': 'contract',
+                'sorted': True, 'default': '2',
+                'selection': [('1', '1'), ('2', '2'), ('3', '3')],
                 'sub_data': [
-                    (u'=', u'2', test_numeric._get_structure())],
+                    ('=', '2', test_numeric._get_structure())],
                 })
 
         # Nested sub data
@@ -165,14 +165,14 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         self.maxDiff = None
         self.assertEqual(test_selection._get_structure(),
-            {'code': u'test_selection', 'name': u'Test Selection',
-                'technical_kind': u'selection',
-                'business_kind': u'contract',
-                'sorted': True, 'default': u'2',
-                'selection': [(u'1', u'1'), (u'2', u'2'), (u'3', u'3')],
+            {'code': 'test_selection', 'name': 'Test Selection',
+                'technical_kind': 'selection',
+                'business_kind': 'contract',
+                'sorted': True, 'default': '2',
+                'selection': [('1', '1'), ('2', '2'), ('3', '3')],
                 'sub_data': [
-                    (u'=', u'2', test_numeric._get_structure()),
-                    (u'=', u'1', test_selection_2._get_structure()),
+                    ('=', '2', test_numeric._get_structure()),
+                    ('=', '1', test_selection_2._get_structure()),
                     ],
                 })
 
@@ -201,29 +201,29 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 {'test_alpha': 'test',
                     'test_selection': '3'},
                 test_structure),
-            {'test_alpha': u'test',
-                'test_selection': u'3'})
+            {'test_alpha': 'test',
+                'test_selection': '3'})
         self.assertEqual(self.ExtraData._refresh_extra_data(
                 {'test_alpha': 'test',
                     'test_selection': '3',
                     'test_numeric': Decimal('15')},
                 test_structure),
-            {'test_alpha': u'test',
-                'test_selection': u'3'})
+            {'test_alpha': 'test',
+                'test_selection': '3'})
         self.assertEqual(self.ExtraData._refresh_extra_data(
                 {'test_alpha': 'test',
                     'test_selection': '2'},
                 test_structure),
-            {'test_alpha': u'test',
-                'test_selection': u'2',
+            {'test_alpha': 'test',
+                'test_selection': '2',
                 'test_numeric': None})
         self.assertEqual(self.ExtraData._refresh_extra_data(
                 {'test_alpha': 'test',
                     'test_selection': '2',
                     'test_numeric': Decimal('15')},
                 test_structure),
-            {'test_alpha': u'test',
-                'test_selection': u'2',
+            {'test_alpha': 'test',
+                'test_selection': '2',
                 'test_numeric': Decimal('15')})
         self.assertEqual(self.ExtraData._refresh_extra_data(
                 {'test_alpha': 'test',
@@ -231,8 +231,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'test_numeric': Decimal('15'),
                     'test_numeric_2': Decimal('11')},
                 test_structure),
-            {'test_alpha': u'test',
-                'test_selection': u'2',
+            {'test_alpha': 'test',
+                'test_selection': '2',
                 'test_numeric': Decimal('15')})
         self.assertEqual(self.ExtraData._refresh_extra_data(
                 {'test_alpha': 'test',
@@ -240,8 +240,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'test_numeric': Decimal('15'),
                     },
                 test_structure),
-            {'test_alpha': u'test',
-                'test_selection': u'1',
+            {'test_alpha': 'test',
+                'test_selection': '1',
                 'test_selection_2': None})
 
         # Test nested default matching
@@ -263,19 +263,19 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'test_numeric': Decimal('15'),
                     },
                 test_structure),
-            {'test_alpha': u'test',
-                'test_selection': u'1',
-                'test_selection_2': u'3',
+            {'test_alpha': 'test',
+                'test_selection': '1',
+                'test_selection_2': '3',
                 'test_numeric_2': None})
         self.assertEqual(self.ExtraData._refresh_extra_data(
                 {'test_alpha': 'test',
                     'test_selection': '2',
-                    'test_selection_2': u'3',
+                    'test_selection_2': '3',
                     'test_numeric_2': Decimal('11'),
                     },
                 test_structure),
-            {'test_alpha': u'test',
-                'test_selection': u'2',
+            {'test_alpha': 'test',
+                'test_selection': '2',
                 'test_numeric': None})
 
 

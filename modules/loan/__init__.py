@@ -1,14 +1,14 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-import offered
-import contract
-import rule_engine
-import loan
-import party
-import wizard
-import extra_data
-import commission
+from . import offered
+from . import contract
+from . import rule_engine
+from . import loan
+from . import party
+from . import wizard
+from . import extra_data
+from . import commission
 
 from trytond.modules.coog_core import model
 LoanShareTreeExpansion = model.expand_tree('loan.share')

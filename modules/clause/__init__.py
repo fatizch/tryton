@@ -2,8 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import clause
-import test_case
+from . import clause
+from . import test_case
 
 
 def register():

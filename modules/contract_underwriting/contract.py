@@ -167,7 +167,7 @@ class ContractUnderwriting(model.CoogSQL, model.CoogView,
                     for extra_data_def in extra_data_defs
                     if extra_data_def.kind == 'contract_underwriting' and
                     extra_data_def.name not in res})
-            res = {k: v for k, v in res.iteritems() if k in [x.name for x in
+            res = {k: v for k, v in res.items() if k in [x.name for x in
                     extra_data_defs]}
             instance.extra_data = res
 
@@ -324,7 +324,7 @@ class ContractUnderwritingOption(model.CoogSQL, model.CoogView,
                 for extra_data_def in extra_data_defs
                 if extra_data_def.kind == 'option_underwriting' and
                 extra_data_def.name not in res})
-        res = {k: v for k, v in res.iteritems() if k in [x.name for x in
+        res = {k: v for k, v in res.items() if k in [x.name for x in
                 extra_data_defs]}
         self.extra_data = res
         self.extra_data_summary = self.on_change_with_extra_data_summary()
@@ -347,8 +347,7 @@ class ContractUnderwritingOption(model.CoogSQL, model.CoogView,
             or not self.option.coverage.get_underwriting_rule().decisions)
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     underwritings = fields.One2Many('contract.underwriting',

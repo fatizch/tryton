@@ -10,8 +10,8 @@ def unfuzzy(lang, module):
     fuzzy_translations = []
     for translation in Translation.find(domain):
         fuzzy_translations.append(translation.id)
-        print('fuzzy:%s:%s:%s => %s' % (module, translation.name,
-                translation.src, translation.value))
+        print(('fuzzy:%s:%s:%s => %s' % (module, translation.name,
+                translation.src, translation.value)))
     Translation.write(fuzzy_translations, {'fuzzy': False}, {})
 
 
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     for module in args.modules:
         if module in ('ir', 'res'):
             continue
-        print('### start generating %s ###' % module)
+        print(('### start generating %s ###' % module))
         try:
             res = generate(lang, module)
         except Exception as e:
@@ -63,7 +63,7 @@ if __name__ == '__main__':
             po_path = os.path.join(po_dir, '%s.po' % lang.code)
             with open(po_path, 'w') as po_file:
                 po_file.write(res)
-            print('### generation done, saved to %s ###' % po_path)
+            print(('### generation done, saved to %s ###' % po_path))
         else:
             print('### generation failed ###')
         print('')

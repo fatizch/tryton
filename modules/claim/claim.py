@@ -692,7 +692,7 @@ class Loss(model.CoogSQL, model.CoogView,
             self.loss_desc = None
         if not kwargs:
             return
-        for arg, value in kwargs.iteritems():
+        for arg, value in kwargs.items():
             setattr(self, arg, value)
 
     def get_contracts(self):
@@ -1041,7 +1041,7 @@ class ClaimService(model.CoogSQL, model.CoogView,
 
         # Only use matching extra_data
         values = {x: base_values.get(x, None)
-            for x in extra_data.extra_data_values.keys() + new_data.keys()}
+            for x in list(extra_data.extra_data_values.keys()) + list(new_data.keys())}
         if (extra_data.extra_data_values != values):
             if (at_date == extra_data.date or
                     at_date == self.loss.start_date and not extra_data.date):

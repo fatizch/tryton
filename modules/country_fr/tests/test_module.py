@@ -19,43 +19,43 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # tests zip code
         self.assertEqual(country.Zip.
             replace_city_name_with_support_for_french_sna(
-                u"SAINT ÉVRY-SUR-L'EAU"), u'ST EVRY SUR L EAU')
+                "SAINT ÉVRY-SUR-L'EAU"), 'ST EVRY SUR L EAU')
 
         self.assertEqual(country.Zip.
-            replace_city_name_with_support_for_french_sna(u"SAINTE-ANNE"),
-            u"STE ANNE")
+            replace_city_name_with_support_for_french_sna("SAINTE-ANNE"),
+            "STE ANNE")
 
         # at least one space after
         self.assertEqual(country.Zip.
-            replace_city_name_with_support_for_french_sna(u"SAINT"), u"SAINT")
+            replace_city_name_with_support_for_french_sna("SAINT"), "SAINT")
 
         self.assertEqual(country.Zip.
-            replace_city_name_with_support_for_french_sna(u"AB SAINT CD"),
-            u"AB ST CD")
+            replace_city_name_with_support_for_french_sna("AB SAINT CD"),
+            "AB ST CD")
 
         self.assertEqual(country.Zip.
-            replace_city_name_with_support_for_french_sna(u"AB SAINTE CD"),
-            u"AB STE CD")
+            replace_city_name_with_support_for_french_sna("AB SAINTE CD"),
+            "AB STE CD")
 
         self.assertEqual(country.Zip.
-            replace_city_name_with_support_for_french_sna(u"ABSAINTE CD"),
-            u"ABSAINTE CD")
+            replace_city_name_with_support_for_french_sna("ABSAINTE CD"),
+            "ABSAINTE CD")
 
         self.assertEqual(country.Zip.
-            replace_city_name_with_support_for_french_sna(u"AB SAINTES"),
-            u"AB SAINTES")
+            replace_city_name_with_support_for_french_sna("AB SAINTES"),
+            "AB SAINTES")
 
         self.assertEqual(country.Zip.
-            replace_city_name_with_support_for_french_sna(u"%ab saint cd%"),
-            u"AB ST CD")
-
-        self.assertEqual(country.Zip.
-            replace_city_name_with_support_for_french_sna(
-                u"%SAINT JUST SAINTE MARIÉ%"), u"ST JUST STE MARIE")
+            replace_city_name_with_support_for_french_sna("%ab saint cd%"),
+            "AB ST CD")
 
         self.assertEqual(country.Zip.
             replace_city_name_with_support_for_french_sna(
-                u"%SAINT SAINT%"), u"ST SAINT")
+                "%SAINT JUST SAINTE MARIÉ%"), "ST JUST STE MARIE")
+
+        self.assertEqual(country.Zip.
+            replace_city_name_with_support_for_french_sna(
+                "%SAINT SAINT%"), "ST SAINT")
 
 
 def suite():

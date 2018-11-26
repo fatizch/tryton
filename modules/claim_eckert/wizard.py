@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class IndemnificationDefinition:
-    __metaclass__ = PoolMeta
+class IndemnificationDefinition(metaclass=PoolMeta):
     __name__ = 'claim.indemnification_definition'
 
     is_eckert = fields.Boolean('Is Eckert', states={'invisible': True})

@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Benefit:
-    __metaclass__ = PoolMeta
+class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     def calculate_ceiling(self, service):
@@ -25,9 +24,8 @@ class Benefit:
 
 class BenefitRule(
         get_rule_mixin('indemnification_ceiling_rule',
-            'Indemnification Ceiling Rule')):
+            'Indemnification Ceiling Rule'), metaclass=PoolMeta):
 
-    __metaclass__ = PoolMeta
     __name__ = 'benefit.rule'
 
     @classmethod

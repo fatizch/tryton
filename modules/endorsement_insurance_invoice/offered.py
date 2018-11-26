@@ -18,8 +18,7 @@ __all__ = [
     ]
 
 
-class EndorsementDefinition:
-    __metaclass__ = PoolMeta
+class EndorsementDefinition(metaclass=PoolMeta):
     __name__ = 'endorsement.definition'
 
     def requires_rebill(self):
@@ -81,8 +80,7 @@ class EndorsementDefinition:
         return last_posted[0].start
 
 
-class EndorsementPart:
-    __metaclass__ = PoolMeta
+class EndorsementPart(metaclass=PoolMeta):
     __name__ = 'endorsement.part'
 
     billing_information_fields = fields.One2Many(
@@ -128,8 +126,7 @@ class EndorsementBillingInformationField(
     __name__ = 'endorsement.contract.billing_information.field'
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     def get_contract_dates(self, dates, contract):

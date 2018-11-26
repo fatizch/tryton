@@ -181,8 +181,8 @@ quote_sequence.save()
 coverage = OptionDescription()
 coverage.company = company
 coverage.currency = currency
-coverage.name = u'Test Coverage'
-coverage.code = u'test_coverage'
+coverage.name = 'Test Coverage'
+coverage.code = 'test_coverage'
 coverage.start_date = product_start_date
 product_account, = Account.find([('code', '=', 'product_account')])
 coverage.account_for_billing = product_account

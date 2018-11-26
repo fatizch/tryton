@@ -43,8 +43,7 @@ __all__ = [
     ]
 
 
-class ExtraPremiumDisplayer:
-    __metaclass__ = PoolMeta
+class ExtraPremiumDisplayer(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.extra_premium.displayer'
 
     is_loan = fields.Boolean('Is Loan', readonly=True, states={
@@ -58,8 +57,7 @@ class ExtraPremiumDisplayer:
         cls.extra_premium.depends.append('is_loan')
 
 
-class ManageExtraPremium:
-    __metaclass__ = PoolMeta
+class ManageExtraPremium(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.manage_extra_premium'
 
     @classmethod
@@ -84,8 +82,7 @@ class ManageExtraPremium:
         return displayer
 
 
-class NewExtraPremium:
-    __metaclass__ = PoolMeta
+class NewExtraPremium(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.new_extra_premium'
 
     is_loan = fields.Boolean('Is Loan', readonly=True, states={
@@ -99,8 +96,7 @@ class NewExtraPremium:
         cls.new_extra_premium.depends.append('is_loan')
 
 
-class ManageOptions:
-    __metaclass__ = PoolMeta
+class ManageOptions(metaclass=PoolMeta):
     __name__ = 'contract.manage_options'
 
     def _update_added(self, new_option, parent, existing_options, per_id):
@@ -123,7 +119,7 @@ class ManageOptions:
                     < (share.end_date or datetime.date.max)):
                 shares_per_loan[share.loan].add(share.share)
         new_shares = []
-        for loan, shares in shares_per_loan.iteritems():
+        for loan, shares in shares_per_loan.items():
             if len(shares) > 1:
                 continue
             new_shares.append(LoanShare(loan=loan, share=shares.pop(),
@@ -131,8 +127,7 @@ class ManageOptions:
         good_option.loan_shares = new_shares
 
 
-class OptionDisplayer:
-    __metaclass__ = PoolMeta
+class OptionDisplayer(metaclass=PoolMeta):
     __name__ = 'contract.manage_options.option_displayer'
 
     @classmethod
@@ -290,7 +285,7 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoogView):
         defaults['possible_contracts'] = [x.id for x in all_contracts]
         current_matches = {x.id: [l.id for l in x.get_used_loans_at_date(
                     self.effective_date)] for x in all_contracts}
-        all_loans |= set(sum(current_matches.values(), []))
+        all_loans |= set(sum(list(current_matches.values()), []))
         displayers = []
         for loan in all_loans:
             if len(displayers):
@@ -344,7 +339,7 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoogView):
                 continue
             new_loans[action.contract.id].add(action.loan.id)
 
-        for contract_id in contracts.keys():
+        for contract_id in list(contracts.keys()):
             contract = contracts[contract_id]
             removed = set(existing_loans[contract_id]) - new_loans[contract_id]
             added = new_loans[contract_id] - set(existing_loans[contract_id])
@@ -375,7 +370,7 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoogView):
                                 for x in prev_option.loan_shares
                                 if x.loan.id == loan_id]
                     new_shares = []
-                    for loan_id, shares in per_loan.items():
+                    for loan_id, shares in list(per_loan.items()):
                         if loan_id in final_loans:
                             new_shares += {x for x in shares if x.share}
                             continue
@@ -404,7 +399,7 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoogView):
                 endorsements[contract_id] = new_endorsement
             self._update_endorsement(endorsements[contract_id],
                 contract._save_values)
-        endorsement.contract_endorsements = [x for x in endorsements.values()
+        endorsement.contract_endorsements = [x for x in list(endorsements.values())
             if not x.is_null()]
         endorsement.save()
 
@@ -544,11 +539,11 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoogView):
     def step_default(self, field_names):
         defaults = super(ChangeLoanAtDate, self).step_default()
         updated_loans = self.updated_loans(self.get_default_loans())
-        defaults['possible_loans'] = [x.id for x in updated_loans.itervalues()]
+        defaults['possible_loans'] = [x.id for x in updated_loans.values()]
         defaults['current_loan'] = defaults['possible_loans'][0]
 
         all_increments = []
-        for loan in updated_loans.itervalues():
+        for loan in updated_loans.values():
             for increment in sorted(loan.increments,
                     key=lambda x: x.start_date):
                 self.update_increment_displayer(increment, loan)
@@ -634,7 +629,7 @@ class ChangeLoanAtDate(EndorsementWizardStepMixin, model.CoogView):
 
     def updated_loans(self, loan_dicts):
         loans = {}
-        for loan, endorsement in loan_dicts.iteritems():
+        for loan, endorsement in loan_dicts.items():
             if endorsement:
                 utils.apply_dict(loan, endorsement.apply_values())
             loans[loan.id] = loan
@@ -1042,11 +1037,11 @@ class SelectLoanShares(EndorsementWizardStepMixin):
         for share in self.loan_share_selectors:
             per_contract[share.contract_endorsement].append(share)
 
-        for contract_endorsement, shares in per_contract.iteritems():
+        for contract_endorsement, shares in per_contract.items():
             self.update_endorsed_shares(contract_endorsement, shares)
 
         new_endorsements = []
-        for contract_endorsement in per_contract.keys():
+        for contract_endorsement in list(per_contract.keys()):
             self._update_endorsement(contract_endorsement,
                 contract_endorsement.contract._save_values)
             if not contract_endorsement.clean_up():
@@ -1068,11 +1063,11 @@ class SelectLoanShares(EndorsementWizardStepMixin):
 
         per_option = defaultdict(list)
         for share in shares:
-            ce_idx, opt_idx = map(int, share.parent.split(','))
+            ce_idx, opt_idx = list(map(int, share.parent.split(',')))
             option = contract.covered_elements[ce_idx].options[opt_idx]
             per_option[option].append(share)
         with model.error_manager():
-            for option, shares in per_option.items():
+            for option, shares in list(per_option.items()):
                 option.loan_shares = self.updated_option_shares(option, shares)
 
     def updated_option_shares(self, option, new_shares):
@@ -1167,8 +1162,7 @@ class SharePerLoan(model.CoogView):
             [('share', '<=', 1), ('share', '>=', 0)]])
 
 
-class SelectEndorsement:
-    __metaclass__ = PoolMeta
+class SelectEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start.select_endorsement'
 
     @fields.depends('endorsement_definition', 'effective_date', 'endorsement',
@@ -1217,7 +1211,7 @@ class PreviewLoanEndorsement(EndorsementWizardPreviewMixin, model.CoogView):
         loan_id = None
         for kind in ('old', 'new'):
             # Assume only one loan
-            values = preview_values[kind].values()[0]
+            values = list(preview_values[kind].values())[0]
             loan_id = loan_id or values['id']
             for field_name in ('amount', 'payments'):
                 result['%s_%s' % (kind, field_name)] = values.get(field_name,
@@ -1288,7 +1282,7 @@ class PreviewContractPayments(EndorsementWizardPreviewMixin,
                 'contract': None,
                 })
         for kind in ('old', 'new'):
-            for key, value in preview_values[kind].iteritems():
+            for key, value in preview_values[kind].items():
                 if not key.startswith('contract,'):
                     continue
                 contract_preview = contracts[value['id']]
@@ -1304,7 +1298,7 @@ class PreviewContractPayments(EndorsementWizardPreviewMixin,
                         elem)
                     contract_preview['%s_contract_amount' % kind] += \
                         elem['total_amount']
-        return {'contract_previews': contracts.values()}
+        return {'contract_previews': list(contracts.values())}
 
 
 class ContractPreview(model.CoogView):
@@ -1329,8 +1323,7 @@ class ContractPreview(model.CoogView):
         'Current Contract Payments', readonly=True)
 
 
-class StartEndorsement:
-    __metaclass__ = PoolMeta
+class StartEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
     change_loan_data = StateView('endorsement.loan.change',

@@ -40,8 +40,7 @@ __all__ = [
     ]
 
 
-class FiscalYear:
-    __metaclass__ = PoolMeta
+class FiscalYear(metaclass=PoolMeta):
     __name__ = 'account.fiscalyear'
 
     export_moves = fields.Boolean('Export Moves',
@@ -70,8 +69,7 @@ class FiscalYear:
                 values=[Literal(False)], where=(table.export_moves == Null)))
 
 
-class Journal:
-    __metaclass__ = PoolMeta
+class Journal(metaclass=PoolMeta):
     __name__ = 'account.journal'
     aggregate = fields.Boolean('Aggregate')
     aggregate_posting = fields.Boolean('Aggregate Posting',
@@ -85,8 +83,7 @@ class Journal:
         return True
 
 
-class Move:
-    __metaclass__ = PoolMeta
+class Move(metaclass=PoolMeta):
     __name__ = 'account.move'
     snapshot = fields.Many2One('account.move.snapshot', 'Snapshot',
         select=True, readonly=True)
@@ -116,7 +113,7 @@ class Move:
         if not move_groups:
             return
 
-        snapshots = Snapshot.create([{} for _ in xrange(len(move_groups))])
+        snapshots = Snapshot.create([{} for _ in range(len(move_groups))])
         to_write = sum([[move_group, {'snapshot': snapshot.id}]
             for move_group, snapshot in zip(move_groups, snapshots)], [])
 
@@ -137,15 +134,13 @@ class Move:
         return groups
 
 
-class Line:
-    __metaclass__ = PoolMeta
+class Line(metaclass=PoolMeta):
     __name__ = 'account.move.line'
     snapshot = fields.Function(fields.Many2One('account.move.snapshot',
             'Snapshot'), 'get_move_field', searcher='search_move_field')
 
 
-class Configuration(CompanyMultiValueMixin):
-    __metaclass__ = PoolMeta
+class Configuration(CompanyMultiValueMixin, metaclass=PoolMeta):
     __name__ = 'account.configuration'
 
     snapshot_sequence = fields.MultiValue(fields.Many2One('ir.sequence',
@@ -205,7 +200,7 @@ class ConfigurationSnapshotSequence(model.CoogSQL, CompanyValueMixin):
         Sequence = Pool().get('ir.sequence')
         pattern = filter_pattern(pattern, Sequence)
         domain = [('code', '=', 'account.move.snapshot')]
-        for key, value in pattern.iteritems():
+        for key, value in pattern.items():
             domain.append((str(key), '=', value))
         sequences = Pool().get('ir.sequence').search(domain)
         if len(sequences) == 1:

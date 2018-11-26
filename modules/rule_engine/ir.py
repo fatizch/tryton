@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class View:
-    __metaclass__ = PoolMeta
+class View(metaclass=PoolMeta):
     __name__ = 'ir.ui.view'
 
     @classmethod

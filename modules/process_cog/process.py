@@ -563,7 +563,7 @@ class CoogProcessFramework(ProcessFramework, model.CoogSQL, model.CoogView):
     def button_step_states(cls, process, step_data):
         pool = Pool()
         ProcessStep = pool.get('process.step')
-        from_step, to_step = ProcessStep.browse(map(int, step_data))
+        from_step, to_step = ProcessStep.browse(list(map(int, step_data)))
         result = {}
         if to_step.pyson:
             result['readonly'] = utils.pyson_encode(to_step.pyson, True)
@@ -904,7 +904,7 @@ class Process(model.CoogSQL, model.TaggedMixin):
                 step2_idx = idx
         if step1_rank > step2_rank:
             return []
-        return map(lambda x: x.step, self.all_steps[step1_idx:step2_idx + 1])
+        return [x.step for x in self.all_steps[step1_idx:step2_idx + 1]]
 
 
 class ProcessStepRelation(model.CoogSQL):
@@ -1049,7 +1049,7 @@ class ViewDescription(model.CoogSQL, model.CoogView):
         ViewModel = Pool().get(self.view_model.model)
         return [
             (field_name, field.string)
-            for field_name, field in ViewModel._fields.iteritems()
+            for field_name, field in ViewModel._fields.items()
             if isinstance(field, tryton_fields.One2Many)] + [('', '')]
 
     def get_func_key(self, name):
@@ -1499,8 +1499,7 @@ class ProcessResume(Wizard):
                 })
 
 
-class GenerateGraph:
-    __metaclass__ = PoolMeta
+class GenerateGraph(metaclass=PoolMeta):
     __name__ = 'process.generate_graph.report'
 
     @classmethod

@@ -29,8 +29,7 @@ __all__ = [
     ]
 
 
-class Configuration(CompanyMultiValueMixin):
-    __metaclass__ = PoolMeta
+class Configuration(CompanyMultiValueMixin, metaclass=PoolMeta):
     __name__ = 'offered.configuration'
 
     contract_set_number_sequence = fields.MultiValue(
@@ -79,7 +78,7 @@ class ConfigurationContractSetNumberSequence(model.CoogSQL, CompanyValueMixin):
         Sequence = Pool().get('ir.sequence')
         pattern = filter_pattern(pattern, Sequence)
         domain = [('code', '=', 'contract_set_number')]
-        for key, value in pattern.iteritems():
+        for key, value in pattern.items():
             domain.append((str(key), '=', value))
         sequences = Sequence.search(domain)
         if len(sequences) == 1:
@@ -255,8 +254,7 @@ class ContractSet(model.CoogSQL, model.CoogView, Printable):
         cls.check_contracts_unicity(contracts_sets)
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
     contract_set = fields.Many2One('contract.set', 'Contract Set',
         ondelete='SET NULL', states=_STATES, depends=_DEPENDS, select=True)
@@ -324,8 +322,7 @@ class ContractSetDecline(model.CoogWizard):
         return 'end'
 
 
-class ReportTemplate:
-    __metaclass__ = PoolMeta
+class ReportTemplate(metaclass=PoolMeta):
     __name__ = 'report.template'
 
     def get_possible_kinds(self):

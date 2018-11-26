@@ -186,8 +186,7 @@ class PrepaymentSync(model.CoogWizard):
             }
 
 
-class SimulateCommissionsParameters:
-    __metaclass__ = PoolMeta
+class SimulateCommissionsParameters(metaclass=PoolMeta):
     __name__ = 'commission.simulate.params'
 
     def add_commissions(self, line, invoice, contract):
@@ -230,8 +229,7 @@ class SimulateCommissionsParameters:
             commission, currency)
 
 
-class SimulateCommissionsLine:
-    __metaclass__ = PoolMeta
+class SimulateCommissionsLine(metaclass=PoolMeta):
     __name__ = 'commission.simulate.line'
 
     is_prepayment = fields.Boolean('Prepayment', readonly=True)

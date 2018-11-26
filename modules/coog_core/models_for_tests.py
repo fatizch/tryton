@@ -4,9 +4,9 @@
 from trytond.modules.company.model import (CompanyValueMixin,
     CompanyMultiValueMixin)
 
-import model
-import export
-import fields
+from . import model
+from . import export
+from . import fields
 
 
 __all__ = [

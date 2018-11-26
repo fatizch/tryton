@@ -7,8 +7,7 @@ __all__ = [
     ]
 
 
-class SimulateCommissionsParameters:
-    __metaclass__ = PoolMeta
+class SimulateCommissionsParameters(metaclass=PoolMeta):
     __name__ = 'commission.simulate.params'
 
     def mock_contract(self, product):

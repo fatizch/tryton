@@ -185,7 +185,7 @@ line = first_invoice.invoice.lines[0]
 len(line.commissions)
 # #Res# #1
 set([(x.amount, x.agent.party.name) for x in line.commissions]) == set([
-    (Decimal('60'), u'Insurer')])
+    (Decimal('60'), 'Insurer')])
 # #Res# #True
 
 # #Comment# #Pay invoice

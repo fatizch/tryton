@@ -19,8 +19,7 @@ __all__ = [
     ]
 
 
-class DocumentRequestLine:
-    __metaclass__ = PoolMeta
+class DocumentRequestLine(metaclass=PoolMeta):
     __name__ = 'document.request.line'
 
     contract = fields.Many2One('contract', 'Contract',
@@ -49,7 +48,7 @@ class DocumentRequestLine:
     @classmethod
     def update_values_from_target(cls, data_dict):
         super(DocumentRequestLine, cls).update_values_from_target(data_dict)
-        for target, values in data_dict.iteritems():
+        for target, values in data_dict.items():
             if not target or not target.startswith('contract,'):
                 continue
             contract_id = int(target.split(',')[1])
@@ -69,8 +68,7 @@ class DocumentRequestLine:
             ['contract']
 
 
-class DocumentRequest:
-    __metaclass__ = PoolMeta
+class DocumentRequest(metaclass=PoolMeta):
     __name__ = 'document.request'
 
     @classmethod
@@ -80,8 +78,7 @@ class DocumentRequest:
             ('contract', 'Contract'))
 
 
-class DocumentReception:
-    __metaclass__ = PoolMeta
+class DocumentReception(metaclass=PoolMeta):
     __name__ = 'document.reception'
 
     contract = fields.Many2One('contract', 'Contract', ondelete='SET NULL',
@@ -118,8 +115,7 @@ class DocumentReception:
         return list(contracts)
 
 
-class ReceiveDocument:
-    __metaclass__ = PoolMeta
+class ReceiveDocument(metaclass=PoolMeta):
     __name__ = 'document.receive'
 
     def get_possible_objects_from_document(self, document):

@@ -186,7 +186,7 @@ class EndorsementDefinition(model.CoogSQL, model.CoogView):
         pool = Pool()
         StartEndorsement = pool.get('endorsement.start', type='wizard')
         result = {}
-        for state_name, state in StartEndorsement.states.iteritems():
+        for state_name, state in StartEndorsement.states.items():
             if not issubclass(state.__class__, StateView):
                 continue
             state_class = pool.get(state.model_name)
@@ -197,7 +197,7 @@ class EndorsementDefinition(model.CoogSQL, model.CoogView):
             # endorsement_insurance_invoice override
             # result[state_name] = \
             #     coog_string.translate_model_name(state_class)
-        return [(k, v) for k, v in result.iteritems()] + [('', '')]
+        return [(k, v) for k, v in result.items()] + [('', '')]
 
     def get_methods_for_model(self, model_name):
         method_names = set()
@@ -296,7 +296,7 @@ class EndorsementPart(model.CoogSQL, model.CoogView):
     def get_possible_views(cls):
         EndorsementWizard = Pool().get('endorsement.start', type='wizard')
         return [(k, v) for k, v in
-            EndorsementWizard.get_endorsement_states().iteritems()]
+            EndorsementWizard.get_endorsement_states().items()]
 
     def get_methods_for_model(self, model_name):
         pool = Pool()
@@ -358,53 +358,45 @@ class EndorsementDefinitionPartRelation(model.CoogSQL, model.CoogView):
 
 
 class EndorsementContractField(field_mixin('contract'), model.CoogSQL,
-        model.CoogView):
+        model.CoogView, metaclass=PoolMeta):
     'Endorsement Contract Field'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.field'
 
 
 class EndorsementOptionField(field_mixin('contract.option'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Option Field'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.option.field'
 
 
 class EndorsementOptionVersionField(field_mixin('contract.option.version'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Option Version Field'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.option.version.field'
 
 
 class EndorsementActivationHistoryField(
         field_mixin('contract.activation_history'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Activation History Field'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.activation_history.field'
 
 
 class EndorsementContactField(field_mixin('contract.contact'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Contact Field'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.contact.field'
 
 
 class EndorsementExtraDataField(
         field_mixin('contract.extra_data'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Extra Data Field'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.extra_data.field'
 
 
-class Product:
+class Product(metaclass=PoolMeta):
     'Product'
-
-    __metaclass__ = PoolMeta
     __name__ = 'offered.product'
 
     endorsement_definitions = fields.Many2Many(

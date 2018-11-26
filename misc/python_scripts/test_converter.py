@@ -37,7 +37,7 @@ def convert_file(input_file, output_file):
 
 if __name__ == '__main__':
     if not len(sys.argv) == 3:
-        print 'Usage : python test_converter.py input_file output_file'
+        print('Usage : python test_converter.py input_file output_file')
     else:
         input_file = sys.argv[1]
         output_file = sys.argv[2]

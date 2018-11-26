@@ -2,12 +2,12 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import contract
-import invoice
-import move
-import payment
-import event
-import offered
+from . import contract
+from . import invoice
+from . import move
+from . import payment
+from . import event
+from . import offered
 
 
 def register():

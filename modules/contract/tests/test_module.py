@@ -64,7 +64,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         party.save()
 
         party, = self.Party.search([('name', '=', 'DOE')])
-        self.assert_(party.id)
+        self.assertTrue(party.id)
 
     @test_framework.prepare_test(
         'contract.test0001_testPersonCreation',
@@ -103,7 +103,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract.end_date = end_date
         contract.save()
         self.assertEqual(contract.status, 'active')
-        self.assert_(contract.contract_number)
+        self.assertTrue(contract.contract_number)
         self.assertEqual(contract.start_date, start_date)
         self.assertEqual(contract.end_date, end_date)
 

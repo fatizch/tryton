@@ -2,8 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import benefit
-import claim
+from . import benefit
+from . import claim
 
 
 def register():

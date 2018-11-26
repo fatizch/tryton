@@ -1,9 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-import questionnaire
-import extra_data
-import rule_engine
+from . import questionnaire
+from . import extra_data
+from . import rule_engine
 
 
 def register():

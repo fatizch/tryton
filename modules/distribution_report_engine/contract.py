@@ -7,9 +7,8 @@ __all__ = [
     ]
 
 
-class Contract:
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
-    __metaclass__ = PoolMeta
 
     def get_template_holders_sub_domains(self):
         result = super(Contract, self).get_template_holders_sub_domains()

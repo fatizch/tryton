@@ -1,6 +1,6 @@
 import sys
 import json
-import HTMLParser
+import html.parser
 
 
 def get_value(d, p):
@@ -12,9 +12,9 @@ def get_value(d, p):
 
 def print_value(v):
     if type(v) is dict:
-        print(json.dumps(v))
-    elif type(v) in (str, unicode):
-        print(HTMLParser.HTMLParser().unescape(v))
+        print((json.dumps(v)))
+    elif type(v) in (str, str):
+        print((html.parser.HTMLParser().unescape(v)))
     else:
         print(v)
 

@@ -9,6 +9,5 @@ __all__ = [
     ]
 
 
-class OptionDescription(planned_event.EventPlanningConfigurationMixin):
-    __metaclass__ = PoolMeta
+class OptionDescription(planned_event.EventPlanningConfigurationMixin, metaclass=PoolMeta):
     __name__ = 'offered.option.description'

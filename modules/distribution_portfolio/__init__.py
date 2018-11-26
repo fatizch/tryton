@@ -2,19 +2,19 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import distribution
-import configuration
-import party
-import contract
-import process
-import rule_engine
-import res
-import invoice
-import move
-import payment
-import claim
-import commission
-import statement
+from . import distribution
+from . import configuration
+from . import party
+from . import contract
+from . import process
+from . import rule_engine
+from . import res
+from . import invoice
+from . import move
+from . import payment
+from . import claim
+from . import commission
+from . import statement
 
 
 def register():

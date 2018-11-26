@@ -18,10 +18,8 @@ __all__ = [
     ]
 
 
-class CreateInstalmentPlan(model.CoogWizard):
+class CreateInstalmentPlan(model.CoogWizard, metaclass=PoolMeta):
     'Create Instalment Plan'
-
-    __metaclass__ = PoolMeta
     __name__ = 'contract.instalment_plan.create_instalment'
 
     start_state = 'start'
@@ -263,10 +261,8 @@ class CreateInstalmentPlan(model.CoogWizard):
         return 'end'
 
 
-class InstalmentSelectPeriod(model.CoogView):
+class InstalmentSelectPeriod(model.CoogView, metaclass=PoolMeta):
     'Select Invoice Period'
-
-    __metaclass__ = PoolMeta
     __name__ = 'contract.instalment_plan.select_period'
 
     contract = fields.Many2One('contract', 'Contract',
@@ -293,10 +289,8 @@ class InstalmentSelectPeriod(model.CoogView):
             instlament, raise_error)
 
 
-class InstalmentScheduledPayments(model.CoogView):
+class InstalmentScheduledPayments(model.CoogView, metaclass=PoolMeta):
     'Enter Scheduled Payments'
-
-    __metaclass__ = PoolMeta
     __name__ = 'contract.instalment_plan.scheduled_payments'
 
     contract = fields.Many2One('contract', 'Contract',

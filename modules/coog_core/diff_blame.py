@@ -13,10 +13,10 @@ from sql import Desc
 from sql.conditionals import Coalesce
 from sql.aggregate import Count
 
-from coog_string import translate_value, translate_label
+from .coog_string import translate_value, translate_label
 
-import model
-import fields
+from . import model
+from . import fields
 
 # CHANGELOG
 # 11/04/2016 - Changed method name _export_diff() to _diff_skip()
@@ -64,17 +64,17 @@ class Formatter(object):
 
     @staticmethod
     def newline(content):
-        return u'<div>{}</div>'.format(content)
+        return '<div>{}</div>'.format(content)
 
     @staticmethod
     def strong(content):
-        return u'<b>{}</b>'.format(content)
+        return '<b>{}</b>'.format(content)
 
     @staticmethod
     def color(content, color='blue'):
         if color not in ['red', 'green', 'blue']:
             return content
-        return u"<font color='{}'>{}</font>".format(color, content)
+        return "<font color='{}'>{}</font>".format(color, content)
 
     @staticmethod
     def indent(content, n=4):
@@ -82,7 +82,7 @@ class Formatter(object):
 
     @staticmethod
     def header(revision):
-        placeholder = u'#+ {0:<{align}}: {1}'
+        placeholder = '#+ {0:<{align}}: {1}'
         label = translate_label(
             RevisionFormatTranslator(), 'author_label')
         author = placeholder.format(label, revision.create_user(), align=17)
@@ -95,7 +95,7 @@ class Formatter(object):
 
     @staticmethod
     def format(diff_obj):
-        placeholder = u'|   {}: {} \u2192 {}'
+        placeholder = '|   {}: {} \u2192 {}'
         bvalue = Formatter.color(diff_obj._base_value)
         ovalue = Formatter.color(diff_obj._other_value)
         return Formatter.newline(
@@ -104,14 +104,14 @@ class Formatter(object):
     @staticmethod
     def format_target(difference):
         lines = []
-        subheader = u'@{} = [ {} : {} ]'
+        subheader = '@{} = [ {} : {} ]'
         label = translate_label(
             RevisionFormatTranslator(), 'target_label')
         header = subheader.format(label,
             difference.fname, difference.target_name)
         lines.append(Formatter.newline(Formatter.strong(
                 Formatter.indent(header))))
-        placeholder = u'| {:<{justify}}: {} \u2192 {}'
+        placeholder = '| {:<{justify}}: {} \u2192 {}'
         for diff in difference.diffs:
             bvalue = Formatter.color(diff._base_value, 'blue')
             ovalue = Formatter.color(diff._other_value, 'blue')
@@ -123,14 +123,14 @@ class Formatter(object):
 
     @staticmethod
     def format_added(difference):
-        placeholder = u'| + {}: {}'
+        placeholder = '| + {}: {}'
         value = Formatter.color(difference._base_value, 'green')
         return Formatter.newline(
             placeholder.format(difference._fname, value))
 
     @staticmethod
     def format_removed(difference):
-        placeholder = u'| - {}: {}'
+        placeholder = '| - {}: {}'
         value = Formatter.color(difference._base_value, 'red')
         return Formatter.newline(
             placeholder.format(difference._fname, value))
@@ -158,13 +158,13 @@ class Revision(object):
 
     def _exclude(self, fields, type_excludes):
         filtered = {}
-        for k, v in fields.iteritems():
+        for k, v in fields.items():
             if isinstance(v, tuple(type_excludes)):
                 continue
             elif k in self._Model._diff_skip():
                 continue
             filtered[k] = v
-        return filtered.iteritems()
+        return iter(filtered.items())
 
     def create_user(self):
         Model = Pool().get('res.user')
@@ -204,7 +204,7 @@ class Revisions(object):
     def __len__(self):
         return len(self._revisions)
 
-    def next(self):
+    def __next__(self):
         try:
             base = Revision(
                 self._instance.__name__,

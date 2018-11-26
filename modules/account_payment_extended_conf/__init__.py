@@ -2,9 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import payment
-import configuration
-import party
+from . import payment
+from . import configuration
+from . import party
 
 
 def register():

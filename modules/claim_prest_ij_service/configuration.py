@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class ClaimConfiguration:
-    __metaclass__ = PoolMeta
+class ClaimConfiguration(metaclass=PoolMeta):
     __name__ = 'claim.configuration'
 
     prest_ij_sequence = fields.Many2One('ir.sequence', 'IJ Flow Sequence',

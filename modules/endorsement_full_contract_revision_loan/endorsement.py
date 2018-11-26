@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Loan:
-    __metaclass__ = PoolMeta
+class Loan(metaclass=PoolMeta):
     __name__ = 'loan'
 
     @classmethod

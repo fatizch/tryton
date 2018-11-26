@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     claims = fields.Function(
@@ -33,8 +32,7 @@ class Contract:
         return list(set(res))
 
 
-class Option:
-    __metaclass__ = PoolMeta
+class Option(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     benefits = fields.Function(

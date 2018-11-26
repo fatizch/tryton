@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     portfolio = fields.Many2One('distribution.network', 'Portfolio',
@@ -35,8 +34,7 @@ class Party:
             return config.default_portfolio.id
 
 
-class ContactMechanism:
-    __metaclass__ = PoolMeta
+class ContactMechanism(metaclass=PoolMeta):
     __name__ = 'party.contact_mechanism'
 
     portfolio = fields.Function(
@@ -69,8 +67,7 @@ class ContactMechanism:
         return [('party.portfolio',) + tuple(clause[1:])]
 
 
-class PartyRelationAll:
-    __metaclass__ = PoolMeta
+class PartyRelationAll(metaclass=PoolMeta):
     __name__ = 'party.relation.all'
 
     portfolio = fields.Function(

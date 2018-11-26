@@ -15,8 +15,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     def get_default_contacts(self, type_=None, at_date=None):
@@ -34,8 +33,7 @@ class Contract:
         return contacts
 
 
-class ContractOption:
-    __metaclass__ = PoolMeta
+class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     has_beneficiary_clause = fields.Function(

@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class ClaimService:
-    __metaclass__ = PoolMeta
+class ClaimService(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     def init_from_loss(self, loss, benefit):
@@ -55,8 +54,7 @@ class ClaimService:
         return copies
 
 
-class Indemnification:
-    __metaclass__ = PoolMeta
+class Indemnification(metaclass=PoolMeta):
     __name__ = 'claim.indemnification'
 
     @classmethod

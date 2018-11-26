@@ -182,7 +182,7 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
             ordered_bil_infos = list(contract.billing_informations)
             ordered_bil_infos.sort(
                 key=lambda x: x.date if x.date else date.min)
-            for i in xrange(len(ordered_bil_infos) - 1, -1, -1):
+            for i in range(len(ordered_bil_infos) - 1, -1, -1):
                 if (ordered_bil_infos[i].date is None or
                         ordered_bil_infos[i].date <= date_of_signature):
                     ordered_bil_infos = ordered_bil_infos[i:]
@@ -198,7 +198,7 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
         # 2) endorse contracts
         endorsement_definition = cls.get_endorsement_definition()
         endorsements = []
-        for key, value in to_endorse.iteritems():
+        for key, value in to_endorse.items():
             endorsement, = Endorsement.create([{
                     'effective_date': date_of_signature,
                     'definition': endorsement_definition.id,

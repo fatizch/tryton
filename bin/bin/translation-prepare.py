@@ -9,11 +9,11 @@ module = sys.argv[1]
 
 
 def log_step(info):
-    print ' '
-    print '#' * 100
-    print '#%s#' % info.center(98, ' ')
-    print '#' * 100
-    print ' '
+    print(' ')
+    print('#' * 100)
+    print('#%s#' % info.center(98, ' '))
+    print('#' * 100)
+    print(' ')
 
 log_step('Starting trytond instance')
 

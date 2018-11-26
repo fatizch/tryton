@@ -15,8 +15,7 @@ __all__ = [
     ]
 
 
-class IndemnificationValidateElement:
-    __metaclass__ = PoolMeta
+class IndemnificationValidateElement(metaclass=PoolMeta):
     __name__ = 'claim.indemnification.assistant.validate.element'
 
     covered_person = fields.Many2One(
@@ -34,8 +33,7 @@ class IndemnificationValidateElement:
         return res
 
 
-class IndemnificationControlElement:
-    __metaclass__ = PoolMeta
+class IndemnificationControlElement(metaclass=PoolMeta):
     __name__ = 'claim.indemnification.assistant.control.element'
 
     covered_person = fields.Many2One(
@@ -53,9 +51,8 @@ class IndemnificationControlElement:
         return res
 
 
-class IndemnificationDefinition:
+class IndemnificationDefinition(metaclass=PoolMeta):
     'Indemnification Definition'
-    __metaclass__ = PoolMeta
     __name__ = 'claim.indemnification_definition'
 
     beneficiary_extra_data = fields.Dict('extra_data',
@@ -90,8 +87,7 @@ class IndemnificationDefinition:
         self.on_change_beneficiary()
 
 
-class CreateIndemnification:
-    __metaclass__ = PoolMeta
+class CreateIndemnification(metaclass=PoolMeta):
     __name__ = 'claim.create_indemnification'
 
     def default_definition(self, name):
@@ -121,8 +117,7 @@ class CreateIndemnification:
         return indemnifications
 
 
-class SelectService:
-    __metaclass__ = PoolMeta
+class SelectService(metaclass=PoolMeta):
     __name__ = 'claim.select_service'
 
     covered_person = fields.Many2One('party.party', 'Covered Person',
@@ -137,8 +132,7 @@ class SelectService:
             self.covered_person = None
 
 
-class PartyErase:
-    __metaclass__ = PoolMeta
+class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
     @classmethod

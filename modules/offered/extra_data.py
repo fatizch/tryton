@@ -238,7 +238,7 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
         translated_keys = TranslatedDict(name=field_name, type_='keys')
         trans_keys = translated_keys.__get__(instance,
             instance.__class__)
-        for k, v in field_value.items():
+        for k, v in list(field_value.items()):
             if expected_values is not None:
                 if k in expected_values:
                     del expected_values[k]
@@ -250,7 +250,7 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
                         coog_string.translate_label(instance, field_name),
                         instance.get_rec_name(None)))
         if expected_values is not None:
-            for k, v in expected_values.iteritems():
+            for k, v in expected_values.items():
                 # This is a serious error, as the user should have no way to
                 # manage it on his own
                 cls.raise_user_error('expected_value', (k, field_name,
@@ -265,7 +265,7 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
         res = {}
         for instance in instances:
             vals = []
-            for key, value in (getattr(instance, var_name) or {}).iteritems():
+            for key, value in (getattr(instance, var_name) or {}).items():
                 cached_value = cls._translation_cache.get((key, value), None)
                 if cached_value is not None:
                     vals.append(cached_value)
@@ -277,7 +277,7 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
                 trans_keys = translated_keys.__get__(instance,
                     instance.__class__)
                 vals = []
-                for k, v in getattr(instance, var_name).iteritems():
+                for k, v in getattr(instance, var_name).items():
                     if type(v) == bool:
                         vals.append((trans_keys[k], coog_string.translate_bool(
                                     v, lang)))
@@ -291,7 +291,7 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
     @classmethod
     def get_extra_data_summary(cls, instances, var_name, lang=None):
         res = cls.get_extra_data_per_instances(instances, var_name, lang)
-        for instance_id, vals in res.items():
+        for instance_id, vals in list(res.items()):
             res[instance_id] = '\n'.join(('%s : %s' % (x, y) for x, y in vals))
         return res
 
@@ -370,7 +370,7 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
     @classmethod
     def _refresh_extra_data(cls, base_data, structure):
         new_data = {}
-        for key, value in base_data.iteritems():
+        for key, value in base_data.items():
             if key not in structure:
                 continue
             new_data[key] = value
@@ -385,7 +385,7 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
                     new_data.update(cls._refresh_extra_data(sub_base,
                             {sub_data['code']: sub_data}))
         # Add root values which are not already in the data
-        for key, value in structure.iteritems():
+        for key, value in structure.items():
             if key in new_data:
                 continue
             base = cls._sub_data_init(value)
@@ -504,9 +504,9 @@ def with_extra_data_def(reverse_model_name, reverse_field_name, kind,
                 return res
 
             def filter_extra(extras):
-                return {k: extra for k, extra in extras.iteritems() if
+                return {k: extra for k, extra in extras.items() if
                         extra['business_kind'] == kind}
-            return {k: filter_extra(extras) for k, extras in res.iteritems()}
+            return {k: filter_extra(extras) for k, extras in res.items()}
 
         def _extra_data_structure(self):
             cache = Pool().get('extra_data')._extra_data_structure_cache

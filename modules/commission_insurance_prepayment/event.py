@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class Event:
-    __metaclass__ = PoolMeta
+class Event(metaclass=PoolMeta):
     __name__ = 'event'
 
     @classmethod

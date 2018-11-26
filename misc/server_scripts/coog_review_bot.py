@@ -32,11 +32,11 @@ repositories = /path/to/your/repos/directories
 import re
 import os.path
 import tempfile
-import urlparse
+import urllib.parse
 import shutil
 import json
-import anydbm
-import ConfigParser
+import dbm
+import configparser
 import sys
 import fileinput
 import argparse
@@ -145,7 +145,7 @@ class ReviewSession:
         self.xsrf_token = self.get_xsrf_token()
 
     def get_xsrf_token(self):
-        response = self.session.get(urlparse.urljoin(self.url, 'xsrf_token'),
+        response = self.session.get(urllib.parse.urljoin(self.url, 'xsrf_token'),
             headers={
                 'X-Requesting-XSRF-Token': 1,
                 })
@@ -188,7 +188,7 @@ def patch_repository(repo_dir, issue_id, email, password):
 
 
 def has_update(rietveld_db_path, entry_id, patchset):
-    db = anydbm.open(rietveld_db_path, 'c')
+    db = dbm.open(rietveld_db_path, 'c')
     if entry_id not in db:
         update_p = True
     else:
@@ -198,7 +198,7 @@ def has_update(rietveld_db_path, entry_id, patchset):
 
 
 def set_update(rietveld_db_path, entry_id, patchset):
-    db = anydbm.open(rietveld_db_path, 'c')
+    db = dbm.open(rietveld_db_path, 'c')
     new_entry = entry_id not in db
     db[entry_id] = str(patchset)
     db.close()
@@ -206,7 +206,7 @@ def set_update(rietveld_db_path, entry_id, patchset):
 
 
 def send_comments(session, issue_id, patchset, comments, repo_dir):
-    patchset_url = urlparse.urljoin(CODEREVIEW_URL,
+    patchset_url = urllib.parse.urljoin(CODEREVIEW_URL,
         '/'.join(['api', str(issue_id), str(patchset)]))
     patchset_info = session.get(patchset_url)
     if patchset_info.status_code != 200:
@@ -239,7 +239,7 @@ def send_comments(session, issue_id, patchset, comments, repo_dir):
                     w['patchset'] = patchset
                     w['patch'] = patchset_info['files'][w['filename']]['id']
         except Exception as e:
-            print e
+            print(e)
     if not commented:
         res = 'flake8 OK'
     if 'CHANGELOG' not in ''.join(patchset_info['files']):
@@ -396,7 +396,7 @@ def close_issue(session, issue_number):
     url = (session.url
         + '/'.join(['', str(issue_number), 'close']))
     r = session.post(url)
-    print r.text
+    print(r.text)
 
 
 if __name__ == '__main__':
@@ -405,12 +405,12 @@ if __name__ == '__main__':
         action='store_true')
     arguments = parser.parse_args()
 
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     try:
         with open(os.path.expanduser(CONF_FILE), 'r') as fconf:
                 config.readfp(fconf)
     except Exception as e:
-        print "Error while trying to read from %s file: %s" % (CONF_FILE, e)
+        print("Error while trying to read from %s file: %s" % (CONF_FILE, e))
         sys.exit(1)
 
     email = config.get('credentials', 'email')
@@ -430,7 +430,7 @@ if __name__ == '__main__':
             if mymatch:
                 close_issue(session, mymatch.groups()[1])
     for issue_url in issues_urls:
-        issue_id = urlparse.urlparse(issue_url).path.split('/')[1]
+        issue_id = urllib.parse.urlparse(issue_url).path.split('/')[1]
         issue_info = session.get('%s%s' % (CODEREVIEW_URL,
             '/'.join(['', 'api', str(issue_id)])))
         if issue_info.status_code != 200:

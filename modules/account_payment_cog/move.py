@@ -27,8 +27,7 @@ __all__ = [
     ]
 
 
-class Move:
-    __metaclass__ = PoolMeta
+class Move(metaclass=PoolMeta):
     __name__ = 'account.move'
 
     @classmethod
@@ -107,8 +106,7 @@ class Move:
         return move.origin.origin.merged_id
 
 
-class MoveLine:
-    __metaclass__ = PoolMeta
+class MoveLine(metaclass=PoolMeta):
     __name__ = 'account.move.line'
 
     payment_date = fields.Date('Payment Date',

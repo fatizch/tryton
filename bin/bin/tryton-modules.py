@@ -62,7 +62,7 @@ def depends(modules):
             modules_with_deps.update((m for m in get_parents(module)
                     if m.state == 'uninstalled'))
         for module in modules_with_deps:
-            print(module.name)
+            print((module.name))
 
 
 def modules_status(args):
@@ -71,14 +71,14 @@ def modules_status(args):
     for module_name in modules:
         for row in get_module_list(conn):
             if row[0] == module_name:
-                print('%s -> %s' % (row[0], row[1]))
+                print(('%s -> %s' % (row[0], row[1])))
 
 
 def modules_list(args):
     conn = database_connect()
     for row in get_module_list(conn, [
             'activated', 'to_upgrade', 'to_activate']):
-        print(row[0])
+        print((row[0]))
 
 
 def main():

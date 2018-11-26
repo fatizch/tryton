@@ -10,8 +10,7 @@ __all__ = [
 ]
 
 
-class Renew:
-    __metaclass__ = PoolMeta
+class Renew(metaclass=PoolMeta):
     __name__ = 'contract_term_renewal.renew'
 
     @classmethod

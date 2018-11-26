@@ -1,13 +1,13 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import contract
-import configuration
-import commission
-import invoice
-import event
-import rule_engine
-import wizard
-import batch
+from . import contract
+from . import configuration
+from . import commission
+from . import invoice
+from . import event
+from . import rule_engine
+from . import wizard
+from . import batch
 from trytond.pool import Pool
 
 

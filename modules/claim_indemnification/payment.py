@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class Payment:
-    __metaclass__ = PoolMeta
+class Payment(metaclass=PoolMeta):
     __name__ = 'account.payment'
 
     @classmethod
@@ -65,11 +64,10 @@ class Payment:
             for claim, service, details in \
                     invoice.get_invoice_indemn_details_per_claim_and_service():
                 all_details[(claim, service)] += details
-        return {(k[0], k[1], v) for k, v in all_details.items()}
+        return {(k[0], k[1], v) for k, v in list(all_details.items())}
 
 
-class PaymentCreation:
-    __metaclass__ = PoolMeta
+class PaymentCreation(metaclass=PoolMeta):
     __name__ = 'account.payment.creation'
 
     @classmethod

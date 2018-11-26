@@ -2,10 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import batch
-import planned_event
-import rule_engine
-import event
+from . import batch
+from . import planned_event
+from . import rule_engine
+from . import event
 
 
 def register():

@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     def get_doc_template_kind(self):

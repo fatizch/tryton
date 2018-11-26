@@ -2,15 +2,15 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import batch
-import country
-import payment
-import bank
-import test_case
-import account
-import party
-import move
-import wizard
+from . import batch
+from . import country
+from . import payment
+from . import bank
+from . import test_case
+from . import account
+from . import party
+from . import move
+from . import wizard
 
 
 def register():

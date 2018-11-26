@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class RenewContracts:
-    __metaclass__ = PoolMeta
+class RenewContracts(metaclass=PoolMeta):
     __name__ = 'contract.renew'
 
     @classmethod
@@ -29,6 +28,6 @@ class RenewContracts:
             contracts_without_set = contract_set_group.pop(None)
             res += [[(i, ) for i in contracts_without_set]]
         # add all contracts of a set in one task
-        for i in contract_set_group.values():
+        for i in list(contract_set_group.values()):
             res.append([(x, ) for x in i])
         return res

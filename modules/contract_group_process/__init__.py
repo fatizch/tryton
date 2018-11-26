@@ -1,9 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-import document
-import process
-import wizard
+from . import document
+from . import process
+from . import wizard
 
 
 def register():

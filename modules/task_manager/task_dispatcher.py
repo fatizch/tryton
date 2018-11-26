@@ -18,8 +18,7 @@ __all__ = [
     ]
 
 
-class ProcessLog:
-    __metaclass__ = PoolMeta
+class ProcessLog(metaclass=PoolMeta):
     __name__ = 'process.log'
 
     user_name = fields.Function(

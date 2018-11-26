@@ -2,9 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import offered
-import contract
-import loan
+from . import offered
+from . import contract
+from . import loan
 
 
 def register():

@@ -50,7 +50,7 @@ endorsement_effective_date = datetime.date(2014, 10, 21)
 # #Comment# #Create or fetch Currency
 currencies = Currency.find([('code', '=', 'USD')])
 if not currencies:
-    currency = Currency(name='US Dollar', symbol=u'$', code='USD',
+    currency = Currency(name='US Dollar', symbol='$', code='USD',
         rounding=Decimal('0.01'))
     currency.save()
     CurrencyRate(date=today + relativedelta(month=1, day=1),
@@ -115,7 +115,7 @@ new_data = {
 # #Comment# #Create john
 john = create_party_person(company=company)
 address1 = john.addresses[0]
-for k, v in original_data.iteritems():
+for k, v in original_data.items():
     setattr(address1, k, v)
 john.save()
 john, = Party.find(['name', '=', 'Doe'])
@@ -136,7 +136,7 @@ test_values_against_model(base_address, original_data)
 base_address.end_date = endorsement_effective_date + relativedelta(days=-1)
 
 new_displayer = new_endorsement.form.displayers.new()
-for k, v in new_data.iteritems():
+for k, v in new_data.items():
     setattr(new_displayer.new_address[0], k, v)
 new_endorsement.execute('change_party_address_next')
 new_endorsement.execute('apply_endorsement')

@@ -23,8 +23,7 @@ __all__ = [
     ]
 
 
-class Journal:
-    __metaclass__ = PoolMeta
+class Journal(metaclass=PoolMeta):
     __name__ = 'account.payment.journal'
 
     failure_billing_mode = fields.Many2One('offered.billing_mode',
@@ -37,8 +36,7 @@ class Journal:
         return super(Journal, cls)._export_light() | {'failure_billing_mode'}
 
 
-class JournalFailureAction:
-    __metaclass__ = PoolMeta
+class JournalFailureAction(metaclass=PoolMeta):
     __name__ = 'account.payment.journal.failure_action'
 
     @classmethod
@@ -49,8 +47,7 @@ class JournalFailureAction:
         cls._fail_actions_order.insert(0, 'move_to_manual_payment')
 
 
-class Payment:
-    __metaclass__ = PoolMeta
+class Payment(metaclass=PoolMeta):
     __name__ = 'account.payment'
 
     contract = fields.Function(
@@ -245,15 +242,15 @@ class MergedPaymentsByContracts(MergedPaymentsMixin):
         res = {(x.merged_id, x.contract.id): [x.id, []]
             for x in merged_payments}
         cursor.execute(*move_line.select(move_line.id, move_line.contract,
-                where=move_line.contract.in_([x[1] for x in res.keys()])))
+                where=move_line.contract.in_([x[1] for x in list(res.keys())])))
         lines_and_contracts = dict(cursor.fetchall())
         cursor.execute(*payment.select(
                 payment.id, payment.merged_id, payment.line,
-                where=((payment.merged_id.in_([x[0] for x in res.keys()]) &
-                    (payment.line.in_(lines_and_contracts.keys()))))))
+                where=((payment.merged_id.in_([x[0] for x in list(res.keys())]) &
+                    (payment.line.in_(list(lines_and_contracts.keys())))))))
         for payment_id, merged_id, line in cursor.fetchall():
             res[(merged_id, lines_and_contracts[line])][1].append(payment_id)
-        return {v[0]: v[1] for v in res.values()}
+        return {v[0]: v[1] for v in list(res.values())}
 
     def get_merged_payment(self, name):
         return Pool().get('account.payment.merged').search([
@@ -290,8 +287,7 @@ class MergedPaymentsByContracts(MergedPaymentsMixin):
         return clause
 
 
-class PaymentCreationStart:
-    __metaclass__ = PoolMeta
+class PaymentCreationStart(metaclass=PoolMeta):
     __name__ = 'account.payment.payment_creation.start'
 
     @fields.depends('journal', 'possible_journals')
@@ -306,8 +302,7 @@ class PaymentCreationStart:
             and x.contract.product.payment_journal == self.journal]
 
 
-class PaymentCreation:
-    __metaclass__ = PoolMeta
+class PaymentCreation(metaclass=PoolMeta):
     __name__ = 'account.payment.creation'
 
     @classmethod

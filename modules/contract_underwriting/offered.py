@@ -113,8 +113,7 @@ class UnderwritingDecisionUnderwritingDecision(model.CoogSQL, model.CoogView):
         'Contract Decision', ondelete='RESTRICT', required=True, select=True)
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     @classmethod
@@ -124,8 +123,7 @@ class Product:
         return kinds
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     underwriting_rules = fields.One2Many(

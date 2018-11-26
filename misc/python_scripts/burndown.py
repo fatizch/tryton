@@ -82,7 +82,7 @@ for issue_id in all_ids:
     issue = issue_data.json()['issue']
     estimated = issue.get('estimated_hours', 0)
     if not estimated:
-        print 'Ignoring issue %s, no estimated hours found' % issue['id']
+        print('Ignoring issue %s, no estimated hours found' % issue['id'])
         continue
     total_estimated += estimated
     spent += issue.get('spent_hours', 0)
@@ -101,20 +101,20 @@ for issue_id in all_ids:
             total_done += min(issue['spent_hours'], estimated / 2.0)
         number_todo += 1
 
-print '#' * 80
-print ' '
-print 'Number of Issue closed : %i' % number_done
-print 'Number of Issue still opened : %i' % number_todo
-print ' '
-print 'Total estimated : %.2f' % total_estimated
-print 'Total spent : %.2f' % spent
-print 'Total done (estimation) : %.2f' % total_done
-print 'Time remaining (estimation) : %.2f' % (total_estimated - total_done)
-print ' '
-print 'Good work, keep going !'
-print ' '
-print 'Remaining time is estimated as follow :'
-print '  0 for closed issues'
-print '  estimated time * (1 - done ratio) if done_ratio is set'
-print '  estimated time * 0.75 for issues in review status'
-print '  min(spent time, estimated time / 2) for other issues'
+print('#' * 80)
+print(' ')
+print('Number of Issue closed : %i' % number_done)
+print('Number of Issue still opened : %i' % number_todo)
+print(' ')
+print('Total estimated : %.2f' % total_estimated)
+print('Total spent : %.2f' % spent)
+print('Total done (estimation) : %.2f' % total_done)
+print('Time remaining (estimation) : %.2f' % (total_estimated - total_done))
+print(' ')
+print('Good work, keep going !')
+print(' ')
+print('Remaining time is estimated as follow :')
+print('  0 for closed issues')
+print('  estimated time * (1 - done ratio) if done_ratio is set')
+print('  estimated time * 0.75 for issues in review status')
+print('  min(spent time, estimated time / 2) for other issues')

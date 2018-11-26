@@ -20,8 +20,7 @@ __all__ = [
     ]
 
 
-class Benefit:
-    __metaclass__ = PoolMeta
+class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     company_products = fields.Many2Many('benefit-company_product', 'benefit',
@@ -58,8 +57,7 @@ class BenefitCompanyProduct(model.CoogSQL):
         ondelete='RESTRICT')
 
 
-class BenefitRule:
-    __metaclass__ = PoolMeta
+class BenefitRule(metaclass=PoolMeta):
     __name__ = 'benefit.rule'
 
     indemnification_rules = fields.Many2Many(

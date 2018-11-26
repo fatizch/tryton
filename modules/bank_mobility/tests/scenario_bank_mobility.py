@@ -190,7 +190,7 @@ bank_mobility_batch, = IrModel.find([('model', '=', 'bank.mobility')])
 
 
 def debug_print(to_print):
-    print >> sys.stderr, to_print
+    print(to_print, file=sys.stderr)
 
 
 def import_flow_5(file_name):
@@ -199,7 +199,7 @@ def import_flow_5(file_name):
     launcher.form.batch = bank_mobility_batch
     dir_ = os.path.join(module_folder, 'tests_imports/')
     file_path = dir_ + file_name
-    for i in xrange(0, len(launcher.form.parameters)):
+    for i in range(0, len(launcher.form.parameters)):
         if launcher.form.parameters[i].code == 'in_directory':
             launcher.form.parameters[i].value = file_path
         elif launcher.form.parameters[i].code == 'archive':

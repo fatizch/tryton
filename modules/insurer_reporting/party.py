@@ -21,9 +21,8 @@ class InsurerReportTemplate(model.CoogSQL):
         select=True, required=True, ondelete='CASCADE')
 
 
-class Insurer:
+class Insurer(metaclass=PoolMeta):
     __name__ = 'insurer'
-    __metaclass__ = PoolMeta
 
     stock_reports = fields.Many2Many('insurer-report.template', 'insurer',
         'report_template', 'Stock Reports', domain=[

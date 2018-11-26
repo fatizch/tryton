@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     @classmethod
@@ -45,8 +44,7 @@ class Product:
                         'products': ', '.join([p.rec_name for p in products])})
 
 
-class ProductOptionDescriptionRelation:
-    __metaclass__ = PoolMeta
+class ProductOptionDescriptionRelation(metaclass=PoolMeta):
     __name__ = 'offered.product-option.description'
 
     @classmethod

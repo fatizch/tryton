@@ -2,7 +2,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import copy
-import StringIO
+import io
 import datetime
 import json
 
@@ -522,7 +522,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             for k in cls.get_key_for_search_rec_name_domain()]
         # We do not want to search on full_name for too short strings since the
         # search is rather expensive
-        if (not isinstance(clause[2], basestring) or
+        if (not isinstance(clause[2], str) or
                 ' ' not in clause[2].strip(' %')):
             return domain + [('name',) + tuple(clause[1:])]
         return domain + [('full_name',) + tuple(clause[1:])]
@@ -649,7 +649,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             result['main_address'] = self.addresses[0]
         except IndexError:
             pass
-        result['logo'] = StringIO.StringIO(str(self.logo)) if self.logo else ''
+        result['logo'] = io.StringIO(str(self.logo)) if self.logo else ''
         return result
 
     @classmethod
@@ -754,8 +754,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
             'extra_data': None}
 
 
-class PartyLang(export.ExportImportMixin):
-    __metaclass__ = PoolMeta
+class PartyLang(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'party.party.lang'
 
 
@@ -1357,8 +1356,7 @@ class ExtractGPDRData(Wizard):
             }
 
 
-class PartyReplace:
-    __metaclass__ = PoolMeta
+class PartyReplace(metaclass=PoolMeta):
     __name__ = 'party.replace'
 
     @classmethod
@@ -1390,8 +1388,7 @@ class PartyReplace:
                     })
 
 
-class PartyReplaceAsk:
-    __metaclass__ = PoolMeta
+class PartyReplaceAsk(metaclass=PoolMeta):
     __name__ = 'party.replace.ask'
 
     is_person = fields.Function(
@@ -1430,8 +1427,7 @@ class PartyReplaceAsk:
             self.destination = None
 
 
-class PartyErase:
-    __metaclass__ = PoolMeta
+class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
     def get_transform(self, fname):
@@ -1449,8 +1445,8 @@ class PartyErase:
         ContactHistory = pool.get('party.interaction')
         to_erase.extend([
                 (Party, [('id', '=', party_id)], True,
-                    Party.get_values_to_erase().keys(),
-                    Party.get_values_to_erase().values()),
+                    list(Party.get_values_to_erase().keys()),
+                    list(Party.get_values_to_erase().values())),
                 (ContactHistory, [('party', '=', party_id)], True,
                     ['address', 'comment', 'attachment', 'for_object_ref'],
                     [None, None, None, None])
@@ -1475,7 +1471,7 @@ class PartyErase:
         with Transaction().set_context(active_test=False):
             while replacing:
                 replacing = Party.search([
-                        ('replaced_by', 'in', map(int, replacing))])
+                        ('replaced_by', 'in', list(map(int, replacing)))])
                 parties += replacing
         for party in parties:
             self.check_erase(party)

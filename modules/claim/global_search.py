@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class GlobalSearchSet:
-    __metaclass__ = PoolMeta
+class GlobalSearchSet(metaclass=PoolMeta):
     __name__ = 'global_search.set'
 
     @classmethod

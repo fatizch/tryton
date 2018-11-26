@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class OptionDisplayer:
-    __metaclass__ = PoolMeta
+class OptionDisplayer(metaclass=PoolMeta):
     __name__ = 'contract.manage_options.option_displayer'
 
     @classmethod
@@ -96,7 +95,7 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
             for x in possible_contracts}
 
         all_options = []
-        for contract, options in per_contract.iteritems():
+        for contract, options in per_contract.items():
             all_options += self.generate_displayers(contract, options)
         fields = self.get_displayer_fields()
         defaults['all_options'] = [model.dictionarize(x, fields)
@@ -113,7 +112,7 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
         for option in self.all_options:
             per_contract[EndorsementContract(option.contract)].append(option)
 
-        for contract, options in per_contract.iteritems():
+        for contract, options in per_contract.items():
             utils.apply_dict(contract.contract, contract.apply_values())
             self.update_endorsed_options(contract, options)
             for covered_element in contract.contract.covered_elements:
@@ -122,7 +121,7 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
                 contract.contract.covered_elements)
 
         new_endorsements = []
-        for contract_endorsement in per_contract.keys():
+        for contract_endorsement in list(per_contract.keys()):
             self._update_endorsement(contract_endorsement,
                 contract_endorsement.contract._save_values)
             if not contract_endorsement.clean_up():
@@ -269,8 +268,7 @@ class ManageOptionBenefitsDisplayer(model.CoogView):
             'revaluation_rule_extra_data')
 
 
-class StartEndorsement:
-    __metaclass__ = PoolMeta
+class StartEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
 

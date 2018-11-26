@@ -17,8 +17,7 @@ __all__ = [
     ]
 
 
-class Process:
-    __metaclass__ = PoolMeta
+class Process(metaclass=PoolMeta):
     __name__ = 'process'
 
     underwriting_types = fields.Many2Many('process-underwriting.type',

@@ -20,8 +20,7 @@ __all__ = [
     ]
 
 
-class Payment:
-    __metaclass__ = PoolMeta
+class Payment(metaclass=PoolMeta):
     __name__ = 'account.payment'
 
     @fields.depends('contract', 'date')
@@ -145,8 +144,7 @@ class Payment:
         return contract
 
 
-class Journal:
-    __metaclass__ = PoolMeta
+class Journal(metaclass=PoolMeta):
     __name__ = 'account.payment.journal'
 
     def process_actions_when_payments_failed(self, payments):
@@ -164,8 +162,7 @@ class Journal:
             self.apply_payment_suspension = True
 
 
-class JournalFailureAction:
-    __metaclass__ = PoolMeta
+class JournalFailureAction(metaclass=PoolMeta):
     __name__ = 'account.payment.journal.failure_action'
 
     @classmethod
@@ -186,8 +183,7 @@ class MergedPaymentsByContracts(MergedBySepaPartyMixin):
     __name__ = 'account.payment.merged.by_contract'
 
 
-class Mandate:
-    __metaclass__ = PoolMeta
+class Mandate(metaclass=PoolMeta):
     __name__ = 'account.payment.sepa.mandate'
 
     @classmethod
@@ -247,8 +243,7 @@ class Mandate:
         return Invoice.search(domain)
 
 
-class PaymentCreationStart:
-    __metaclass__ = PoolMeta
+class PaymentCreationStart(metaclass=PoolMeta):
     __name__ = 'account.payment.payment_creation.start'
 
     def update_available_payers(self):

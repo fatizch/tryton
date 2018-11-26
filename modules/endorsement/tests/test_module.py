@@ -73,12 +73,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         add_endorsement_step(FakeEndorsement, TestStep, 'test_endorsement')
 
-        self.assert_(isinstance(FakeEndorsement.test_endorsement, StateView))
-        self.assert_(isinstance(FakeEndorsement.test_endorsement_previous,
+        self.assertTrue(isinstance(FakeEndorsement.test_endorsement, StateView))
+        self.assertTrue(isinstance(FakeEndorsement.test_endorsement_previous,
                 StateTransition))
-        self.assert_(isinstance(FakeEndorsement.test_endorsement_next,
+        self.assertTrue(isinstance(FakeEndorsement.test_endorsement_next,
                 StateTransition))
-        self.assert_(isinstance(FakeEndorsement.test_endorsement_suspend,
+        self.assertTrue(isinstance(FakeEndorsement.test_endorsement_suspend,
                 StateTransition))
 
         TestStep.__setup__()
@@ -221,8 +221,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 ('contracts', '=', contract.id),
                 ])
         self.assertEqual(endorsement.endorsement_summary,
-            u'<div><b>Change Contract Number</b></div>'
-            u'<div><u>Contract Number</u>: %s → 1234</div>'
+            '<div><b>Change Contract Number</b></div>'
+            '<div><u>Contract Number</u>: %s → 1234</div>'
                          % contract.contract_number)
 
     @test_framework.prepare_test(
@@ -275,7 +275,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         }},
                 'new': {
                     'contract,%i' % contract_id: {
-                        'contract_number': u'1234',
+                        'contract_number': '1234',
                         }}})
 
         endorsement.in_progress([endorsement])
@@ -289,7 +289,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         contract = endorsement.contracts[0]
         contract_endorsement, = endorsement.contract_endorsements
-        self.assert_(endorsement.rollback_date)
+        self.assertTrue(endorsement.rollback_date)
         self.assertEqual(endorsement.application_date, None)
         self.assertEqual(contract.contract_number, 'in_progress')
         endorsement.apply([endorsement])
@@ -297,7 +297,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         contract = endorsement.contracts[0]
         contract_endorsement, = endorsement.contract_endorsements
-        self.assert_(endorsement.application_date)
+        self.assertTrue(endorsement.application_date)
         self.assertEqual(endorsement.state, 'applied')
         self.assertEqual(contract_endorsement.state, 'applied')
         self.assertEqual(contract.contract_number, '1234')

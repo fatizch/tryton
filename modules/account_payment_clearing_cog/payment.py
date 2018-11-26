@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Journal:
-    __metaclass__ = PoolMeta
+class Journal(metaclass=PoolMeta):
     __name__ = 'account.payment.journal'
     post_clearing_move = fields.Boolean('Post Clearing Move')
     always_create_clearing_move = fields.Boolean(
@@ -34,8 +33,7 @@ class Journal:
             'clearing_journal'}
 
 
-class Payment:
-    __metaclass__ = PoolMeta
+class Payment(metaclass=PoolMeta):
     __name__ = 'account.payment'
 
     @classmethod

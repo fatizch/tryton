@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     sepa_mandate_sequence = fields.Many2One('ir.sequence',

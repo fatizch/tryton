@@ -82,7 +82,7 @@ class PreviewContractPremiums(EndorsementWizardPreviewMixin,
                 'new_contract_premiums': [],
                 })
         for kind in ('old', 'new'):
-            for key, value in preview_values[kind].iteritems():
+            for key, value in preview_values[kind].items():
                 if not key.startswith('contract,'):
                     continue
                 contract_preview = contracts[value['id']]
@@ -96,7 +96,7 @@ class PreviewContractPremiums(EndorsementWizardPreviewMixin,
                     elem['currency_symbol'] = value['currency_symbol']
                     contract_preview['%s_contract_premiums' % kind].append(
                         elem)
-        return {'contract_previews': contracts.values()}
+        return {'contract_previews': list(contracts.values())}
 
 
 class ContractPreview(model.CoogView):
@@ -134,8 +134,7 @@ class ContractPreviewPremium(model.CoogView):
         return ['contract', 'start', 'end', 'amount', 'frequency']
 
 
-class StartEndorsement:
-    __metaclass__ = PoolMeta
+class StartEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
     preview_contract_premiums = StateView(

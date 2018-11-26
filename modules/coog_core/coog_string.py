@@ -6,7 +6,7 @@ from unidecode import unidecode
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-import utils
+from . import utils
 
 import logging
 LOG = logging.getLogger(__name__)
@@ -35,7 +35,7 @@ def get_field_summary(instance, var_name, label, at_date=None, lang=None):
     if value is None:
         return None
     if type(value) is tuple:
-        if not isinstance(label, basestring):
+        if not isinstance(label, str):
             label = translate_label(instance, var_name, lang)
             values = utils.get_good_versions_at_date(instance, var_name,
                                                      at_date)
@@ -62,23 +62,23 @@ def generate_summary(desc, level=0):
     assert type(desc) in node_types and len(desc) == 2, desc
     label, value = desc
     assert not (label is None and type(value) in node_types)
-    res = u'<div>%s' % (max(level - 1, 0) * 4 * ' ')
+    res = '<div>%s' % (max(level - 1, 0) * 4 * ' ')
     if label is not None:
         if level_fmt is None:
             res += label
         else:
-            res += u'<%s>%s</%s>' % (level_fmt, label, level_fmt)
+            res += '<%s>%s</%s>' % (level_fmt, label, level_fmt)
 
     if not (label is None or type(value) in node_types):
-        res += u': '
+        res += ': '
     if type(value) in node_types:
         if len(value) > 0:
-            res += u'</div>%s' % ''.join([generate_summary(i, level + 1)
+            res += '</div>%s' % ''.join([generate_summary(i, level + 1)
                     for i in value if i is not None])
         else:
-            res += u'</div>'
+            res += '</div>'
     else:
-        res += u'%s</div>' % value
+        res += '%s</div>' % value
     return res
 
 
@@ -112,7 +112,7 @@ def translate_value(instance, var_name, lang=None):
         res = CDataDef.get_extra_data_summary([instance],
             var_name)[instance.id]
     else:
-        res = u'%s' % getattr(instance, var_name)
+        res = '%s' % getattr(instance, var_name)
     if (hasattr(field, 'translate') and field.translate
             or (hasattr(field, 'translate_selection')
                 and field.translate_selection)):
@@ -165,7 +165,7 @@ def selection_as_string(cls, var_name, value):
 def asciify(text):
     if type(text) == str:
         return text
-    return unicode(unidecode(text)) if text else ''
+    return str(unidecode(text)) if text else ''
 
 
 def slugify(text, char='_', lower=True):

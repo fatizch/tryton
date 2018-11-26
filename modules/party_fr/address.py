@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Address:
-    __metaclass__ = PoolMeta
+class Address(metaclass=PoolMeta):
     __name__ = 'party.address'
 
     @classmethod
@@ -81,8 +80,7 @@ class Address:
         return res
 
 
-class Zip:
-    __metaclass__ = PoolMeta
+class Zip(metaclass=PoolMeta):
     __name__ = 'country.zip'
 
     @classmethod

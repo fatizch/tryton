@@ -17,10 +17,8 @@ __all__ = [
     ]
 
 
-class Endorsement(CoogProcessFramework):
+class Endorsement(CoogProcessFramework, metaclass=ClassAttr):
     'Endorsement'
-
-    __metaclass__ = ClassAttr
     __name__ = 'endorsement'
 
     endorsement_parts_union = fields.One2Many('endorsement.part.union',

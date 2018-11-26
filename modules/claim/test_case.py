@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class TestCaseModel:
-    __metaclass__ = PoolMeta
+class TestCaseModel(metaclass=PoolMeta):
     __name__ = 'ir.test_case'
 
     _get_event_desc_cache = Cache('get_event_desc')

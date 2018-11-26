@@ -1,14 +1,14 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-import rule_engine
-import offered
-import coverage
-import test_case
-import batch
-import exclusion
-import extra_premium
-import party
+from . import rule_engine
+from . import offered
+from . import coverage
+from . import test_case
+from . import batch
+from . import exclusion
+from . import extra_premium
+from . import party
 
 
 def register():

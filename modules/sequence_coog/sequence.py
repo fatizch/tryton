@@ -19,8 +19,7 @@ __all__ = [
     ]
 
 
-class Sequence(model.CoogSQL):
-    __metaclass__ = PoolMeta
+class Sequence(model.CoogSQL, metaclass=PoolMeta):
     __name__ = 'ir.sequence'
 
     sub_order = fields.Integer('Sub order')
@@ -198,6 +197,5 @@ class Sequence(model.CoogSQL):
         return '%s%s%s' % (prefix, value, suffix)
 
 
-class SequenceStrict(Sequence):
-    __metaclass__ = PoolMeta
+class SequenceStrict(Sequence, metaclass=PoolMeta):
     __name__ = 'ir.sequence.strict'

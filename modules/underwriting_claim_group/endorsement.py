@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class ManageOptionBenefits:
-    __metaclass__ = PoolMeta
+class ManageOptionBenefits(metaclass=PoolMeta):
     __name__ = 'contract.manage_option_benefits'
 
     @classmethod
@@ -26,8 +25,7 @@ class ManageOptionBenefits:
         return res
 
 
-class ManageOptionBenefitsDisplayer:
-    __metaclass__ = PoolMeta
+class ManageOptionBenefitsDisplayer(metaclass=PoolMeta):
     __name__ = 'contract.manage_option_benefits.option'
 
     @classmethod

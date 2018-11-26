@@ -9,9 +9,8 @@ __all__ = [
     ]
 
 
-class ClaimService(Printable):
+class ClaimService(Printable, metaclass=PoolMeta):
     __name__ = 'claim.service'
-    __metaclass__ = PoolMeta
 
     def get_contact(self):
         return self.claim.claimant if self.claim else None

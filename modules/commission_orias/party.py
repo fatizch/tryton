@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     orias = fields.Function(
@@ -21,8 +20,7 @@ class Party:
         'get_identifier', searcher='search_identifier')
 
 
-class PartyIdentifier:
-    __metaclass__ = PoolMeta
+class PartyIdentifier(metaclass=PoolMeta):
     __name__ = 'party.identifier'
 
     @classmethod

@@ -2,11 +2,11 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import res
-import distribution
-import offered
-import contract
-import process
+from . import res
+from . import distribution
+from . import offered
+from . import contract
+from . import process
 
 
 def register():

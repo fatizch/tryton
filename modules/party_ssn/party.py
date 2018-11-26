@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     ssn = fields.EmptyNullChar('SSN', states={

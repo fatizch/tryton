@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Line:
-    __metaclass__ = PoolMeta
+class Line(metaclass=PoolMeta):
     __name__ = 'account.statement.line'
 
     contract = fields.Many2One('contract', 'Contract',

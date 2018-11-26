@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class CommissionPlan:
-    __metaclass__ = PoolMeta
+class CommissionPlan(metaclass=PoolMeta):
     __name__ = 'commission.plan'
 
     fees = fields.Many2Many('commission.plan-account.fee', 'plan', 'fee',
@@ -33,8 +32,7 @@ class CommissionPlanFee(model.CoogSQL):
         required=True)
 
 
-class Agent:
-    __metaclass__ = PoolMeta
+class Agent(metaclass=PoolMeta):
     __name__ = 'commission.agent'
 
     fees = fields.Many2Many('commission.agent-account.fee', 'agent', 'fee',
@@ -52,8 +50,7 @@ class AgentFee(model.CoogSQL):
         required=True)
 
 
-class CreateAgents:
-    __metaclass__ = PoolMeta
+class CreateAgents(metaclass=PoolMeta):
     __name__ = 'commission.create_agents'
 
     def new_agent(self, party, plan):
@@ -67,8 +64,7 @@ class CreateAgents:
         return vals
 
 
-class CreateAgentsAsk:
-    __metaclass__ = PoolMeta
+class CreateAgentsAsk(metaclass=PoolMeta):
     __name__ = 'commission.create_agents.ask'
 
     fees = fields.Many2Many('account.fee', None, None, 'Fees')

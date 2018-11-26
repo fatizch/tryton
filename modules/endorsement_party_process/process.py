@@ -16,9 +16,8 @@ __all__ = [
     ]
 
 
-class Process:
+class Process(metaclass=PoolMeta):
     __name__ = 'process'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
@@ -94,8 +93,7 @@ class EndorsementPartyStartProcess(ProcessFinder):
         return res, errs
 
 
-class EndorsementFindProcess:
-    __metaclass__ = PoolMeta
+class EndorsementFindProcess(metaclass=PoolMeta):
     __name__ = 'endorsement.start.find_process'
 
     @classmethod
@@ -104,8 +102,7 @@ class EndorsementFindProcess:
         cls.definition.domain.extend([('is_party', '=', False)])
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     @classmethod

@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Token:
-    __metaclass__ = PoolMeta
+class Token(metaclass=PoolMeta):
     __name__ = 'api.token'
 
     request_hash = fields.Char('Request Hash', help='Allow user to create'

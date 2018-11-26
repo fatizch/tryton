@@ -166,7 +166,7 @@ class DefaultPasrauRate(model.CoogSQL, model.CoogView):
             'grm': ('971', '974', '972'),
             'gm': ('973', '976')
             }
-        for key, prefixes in mapping.iteritems():
+        for key, prefixes in mapping.items():
             if any(zip_code.startswith(prefix) for prefix in prefixes):
                 return key
         cls.raise_user_error('no_pasrau_region', zip_code)

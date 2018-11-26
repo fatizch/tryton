@@ -1,6 +1,6 @@
 from trytond.pool import Pool
 
-import contract
+from . import contract
 
 
 def register():

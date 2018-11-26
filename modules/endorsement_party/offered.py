@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class EndorsementDefinition:
-    __metaclass__ = PoolMeta
+class EndorsementDefinition(metaclass=PoolMeta):
     __name__ = 'endorsement.definition'
 
     is_party = fields.Function(
@@ -33,8 +32,7 @@ class EndorsementDefinition:
             tuple(clause[1:])]
 
 
-class EndorsementPart:
-    __metaclass__ = PoolMeta
+class EndorsementPart(metaclass=PoolMeta):
     __name__ = 'endorsement.part'
 
     is_party = fields.Function(

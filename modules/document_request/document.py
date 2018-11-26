@@ -29,8 +29,7 @@ __all__ = [
     ]
 
 
-class DocumentDescription:
-    __metaclass__ = PoolMeta
+class DocumentDescription(metaclass=PoolMeta):
     __name__ = 'document.description'
 
     reception_requires_attachment = fields.Boolean(
@@ -336,9 +335,9 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     def update_and_notify_reminders(cls, to_remind_per_object,
             force_remind, event_code, treatment_date):
         pool = Pool()
-        pool.get('event').notify_events(to_remind_per_object.keys(),
+        pool.get('event').notify_events(list(to_remind_per_object.keys()),
             event_code)
-        document_lines = [x for sublist in to_remind_per_object.values()
+        document_lines = [x for sublist in list(to_remind_per_object.values())
                 for x in sublist]
         cls.update_reminder(document_lines, treatment_date,
             increment=not force_remind)
@@ -456,7 +455,7 @@ class DocumentRequest(Printable, model.CoogSQL, model.CoogView):
         existing_docs = self.get_current_docs()
         id_docs = [(d.id, utils.convert_to_reference(o)) for d, o in docs]
         to_del = []
-        for k, v in existing_docs.iteritems():
+        for k, v in existing_docs.items():
             if k not in id_docs:
                 to_del.append(v)
         Document = Pool().get('document.request.line')
@@ -587,7 +586,7 @@ class RemindableInterface(object):
                 return True
         delta = (relativedelta(days=+delay) if unit == 'day'
             else relativedelta(months=+delay))
-        if doc.document_desc.code not in documents.keys():
+        if doc.document_desc.code not in list(documents.keys()):
             return False
         doc_max_reminders = documents[
             doc.document_desc.code]['max_reminders']
@@ -599,8 +598,7 @@ class RemindableInterface(object):
         return True
 
 
-class DocumentReception:
-    __metaclass__ = PoolMeta
+class DocumentReception(metaclass=PoolMeta):
     __name__ = 'document.reception'
 
     party = fields.Many2One('party.party', 'Party', ondelete='CASCADE',
@@ -614,8 +612,7 @@ class DocumentReception:
         depends=['document_desc', 'party', 'state'])
 
 
-class ReceiveDocument:
-    __metaclass__ = PoolMeta
+class ReceiveDocument(metaclass=PoolMeta):
     __name__ = 'document.receive'
 
     def transition_decide(self):
@@ -643,7 +640,7 @@ class ReceiveDocument:
                 self.set_object_line(line, per_object)
             final_lines = []
             matching_sub_line = None
-            for record, lines in per_object.items():
+            for record, lines in list(per_object.items()):
                 final_lines.append(self.new_line(record))
                 for sub_line in lines:
                     final_lines.append(self.new_line(sub_line))
@@ -695,8 +692,7 @@ class ReceiveDocument:
         return state
 
 
-class ReattachDocument:
-    __metaclass__ = PoolMeta
+class ReattachDocument(metaclass=PoolMeta):
     __name__ = 'document.receive.reattach'
 
     lines = fields.One2Many('document.receive.line', None, 'Lines',
@@ -779,7 +775,7 @@ class DocumentRuleMixin(
     def merge_results(cls, *args):
         final_result = {}
         for data in args:
-            for code, values in data.iteritems():
+            for code, values in data.items():
                 if code not in final_result:
                     final_result[code] = values
                     continue
@@ -788,7 +784,7 @@ class DocumentRuleMixin(
 
     @classmethod
     def merge_lines(cls, final, to_merge):
-        for k, v in to_merge.iteritems():
+        for k, v in to_merge.items():
             if k not in final:
                 final[k] = v
                 continue

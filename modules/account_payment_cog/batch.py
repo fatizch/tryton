@@ -90,7 +90,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
                 key = cls.select_ids_regroup_key(payment, payment_kind)
                 groups[key].append((payment.id,))
         res = []
-        for k, v in groups.iteritems():
+        for k, v in groups.items():
             if not k:
                 res.extend(v)
             else:

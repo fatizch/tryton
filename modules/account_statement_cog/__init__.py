@@ -2,12 +2,12 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import journal
-import move
-import statement
-import test_case
-import wizard
-import party
+from . import journal
+from . import move
+from . import statement
+from . import test_case
+from . import wizard
+from . import party
 
 
 def register():

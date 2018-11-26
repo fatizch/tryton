@@ -12,4 +12,4 @@ with Transaction().start(database, 0, readonly=True):
     for name, kls in pool.iterobject():
         if issubclass(kls, batch.BatchRoot) or issubclass(kls,
                 queue.QueueMixin):
-            print name
+            print(name)

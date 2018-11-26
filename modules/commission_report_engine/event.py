@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class EventTypeAction:
-    __metaclass__ = PoolMeta
+class EventTypeAction(metaclass=PoolMeta):
     __name__ = 'event.type.action'
 
     @classmethod

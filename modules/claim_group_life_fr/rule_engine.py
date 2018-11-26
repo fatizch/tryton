@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class RuleEngineRuntime:
-    __metaclass__ = PoolMeta
+class RuleEngineRuntime(metaclass=PoolMeta):
     __name__ = 'rule_engine.runtime'
 
     @classmethod
@@ -33,7 +32,7 @@ class RuleEngineRuntime:
             if 'ijss' in e.extra_data_values else 0
             for e in delivered.extra_datas
             if (e.date or delivered.loss.start_date) < at_date}
-        dates = sorted(ijss.keys(), reverse=True)
+        dates = sorted(list(ijss.keys()), reverse=True)
         part_times = [x for x in delivered.loss.deduction_periods
             if x.deduction_kind.code == 'part_time' and x.start_date
             and x.start_date < at_date]

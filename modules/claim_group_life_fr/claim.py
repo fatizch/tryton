@@ -15,8 +15,7 @@ __all__ = [
     ]
 
 
-class Loss:
-    __metaclass__ = PoolMeta
+class Loss(metaclass=PoolMeta):
     __name__ = 'claim.loss'
 
     hospitalisation_periods = fields.One2Many(
@@ -57,8 +56,7 @@ class Loss:
                         cls.raise_user_error('period_overlap')
 
 
-class IndemnificationDetail:
-    __metaclass__ = PoolMeta
+class IndemnificationDetail(metaclass=PoolMeta):
     __name__ = 'claim.indemnification.detail'
 
     part_time_amount = fields.Numeric('Part Time Amount',

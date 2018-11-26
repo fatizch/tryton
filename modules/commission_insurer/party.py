@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Insurer:
-    __metaclass__ = PoolMeta
+class Insurer(metaclass=PoolMeta):
     __name__ = 'insurer'
 
     group_insurer_invoices = fields.Boolean('Group Insurer Invoices',

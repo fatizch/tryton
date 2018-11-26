@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class UnderwritingDecisionType:
-    __metaclass__ = PoolMeta
+class UnderwritingDecisionType(metaclass=PoolMeta):
     __name__ = 'underwriting.decision.type'
 
     @classmethod
@@ -22,8 +21,7 @@ class UnderwritingDecisionType:
         cls.model.selection.append(('claim.service', 'Claim Service'))
 
 
-class Underwriting:
-    __metaclass__ = PoolMeta
+class Underwriting(metaclass=PoolMeta):
     __name__ = 'underwriting'
 
     insurers = fields.Function(
@@ -61,8 +59,7 @@ class Underwriting:
         return line
 
 
-class UnderwritingResult:
-    __metaclass__ = PoolMeta
+class UnderwritingResult(metaclass=PoolMeta):
     __name__ = 'underwriting.result'
 
     claim = fields.Function(

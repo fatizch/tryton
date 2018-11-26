@@ -40,11 +40,11 @@ class MigratorInvoiceMoveLine(migrator.Migrator):
 
         cls.cache_obj['invoice'] = {k: Invoice(v) for (k, v) in
             tools.cache_from_query('account_invoice', ('number', ),
-                ('number', [r['invoice_number'] for r in rows])).iteritems()}
+                ('number', [r['invoice_number'] for r in rows])).items()}
         cls.cache_obj['contract'] = tools.cache_from_query('contract',
             ('contract_number', ),
             ('contract_number', [x.contract.contract_number
-                    for x in cls.cache_obj['invoice'].values()]))
+                    for x in list(cls.cache_obj['invoice'].values())]))
 
     @classmethod
     def query_data(cls, ids):

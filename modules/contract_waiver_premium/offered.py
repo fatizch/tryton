@@ -23,8 +23,7 @@ __all__ = [
     ]
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     _must_invoice_after_contract_end_cache = Cache(
@@ -85,8 +84,7 @@ class Product:
         return False
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     with_waiver_of_premium = fields.Function(

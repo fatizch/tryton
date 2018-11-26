@@ -121,11 +121,11 @@ def get_issue_id(issue):
         '">%i</a>' % issue['id']
 
 
-print '<html>'
-print '<head>'
-print '<meta charset="utf-8"/>'
-print '<style>'
-print '''
+print('<html>')
+print('<head>')
+print('<meta charset="utf-8"/>')
+print('<style>')
+print('''
 h1 {
     font-size: 150%;
 }
@@ -165,77 +165,77 @@ tr td:first-child {
 tr td:last-child {
     width: 40px;
 }
-'''
-print '</style>'
-print '</head>'
-print '<body>'
+''')
+print('</style>')
+print('</head>')
+print('<body>')
 
 count = 1
-print '<h2>Version: %s</h2>' % version_name
-print '<p>Livraison en recette: %s</p>' % version['custom_fields'][5]
-print '<p>Livraison en production: %s</p>' % version['custom_fields'][6]
+print('<h2>Version: %s</h2>' % version_name)
+print('<p>Livraison en recette: %s</p>' % version['custom_fields'][5])
+print('<p>Livraison en production: %s</p>' % version['custom_fields'][6])
 if features:
-    print '<h2>%i. Fonctionnalités</h2>' % count
+    print('<h2>%i. Fonctionnalités</h2>' % count)
     count += 1
-    print '<table>'
-    print '    <tr><th>#</th><th>Priorité</th><th>Sujet</th>' + \
-        '<th>Version</th></tr>'
+    print('<table>')
+    print('    <tr><th>#</th><th>Priorité</th><th>Sujet</th>' + \
+        '<th>Version</th></tr>')
     for priority in ('Immediate', 'High', 'Normal', 'Low'):
         issues = features[priority]
         if not issues:
             continue
         for issue in sorted(issues, key=lambda x: x['custom_fields'][11]):
-            print '    <tr><td>' + '</td><td>'.join([get_issue_id(issue),
+            print('    <tr><td>' + '</td><td>'.join([get_issue_id(issue),
                     issue['priority']['name'].encode('utf-8'),
                     issue['subject'],
                     issue['custom_fields'][11],
-                    ]) + '</td></tr>'
-    print '</table>'
+                    ]) + '</td></tr>')
+    print('</table>')
 
 if bugs:
-    print '<h2>%i. Anomalies</h2>' % count
+    print('<h2>%i. Anomalies</h2>' % count)
     count += 1
-    print '<table>'
-    print '    <tr><th>#</th><th>Priorité</th><th>Sujet</th>' + \
-        '<th>Version</th></tr>'
+    print('<table>')
+    print('    <tr><th>#</th><th>Priorité</th><th>Sujet</th>' + \
+        '<th>Version</th></tr>')
     for priority in ('Immediate', 'High', 'Normal', 'Low'):
         issues = bugs[priority]
         if not issues:
             continue
         for issue in sorted(issues, key=lambda x: x['custom_fields'][11]):
-            print '    <tr><td>' + '</td><td>'.join([get_issue_id(issue),
+            print('    <tr><td>' + '</td><td>'.join([get_issue_id(issue),
                     issue['priority']['name'].encode('utf-8'),
                     issue['subject'],
                     issue['custom_fields'][11],
-                    ]) + '</td></tr>'
-    print '</table>'
+                    ]) + '</td></tr>')
+    print('</table>')
 
 
 if params:
-    print '<h2>%i. Params</h2>' % count
+    print('<h2>%i. Params</h2>' % count)
     count += 1
-    print '<table>'
-    print '    <tr><th>#</th><th>Subject</th><th width="200">Param</th> ' + \
-        '<th>Version</th></tr>'
+    print('<table>')
+    print('    <tr><th>#</th><th>Subject</th><th width="200">Param</th> ' + \
+        '<th>Version</th></tr>')
     for issue in sorted(params, key=lambda x: x['custom_fields'][11]):
-        print '    <tr><td>' + get_issue_id(issue) + '</td><td>' + \
+        print('    <tr><td>' + get_issue_id(issue) + '</td><td>' + \
             issue['subject'] + '</td><td>' + \
             issue['custom_fields'][7] + '</td><td>' + \
-            issue['custom_fields'][11] + '</td></tr>'
-    print '</table>'
+            issue['custom_fields'][11] + '</td></tr>')
+    print('</table>')
 
 
 if scripts:
-    print '<h2>%i. Scripts</h2>' % count
+    print('<h2>%i. Scripts</h2>' % count)
     count += 1
-    print '<table>'
-    print '    <tr><th>#</th><th>Subject</th><th width="200">Script</th>' + \
-        '<th>Version</th></tr>'
+    print('<table>')
+    print('    <tr><th>#</th><th>Subject</th><th width="200">Script</th>' + \
+        '<th>Version</th></tr>')
     for issue in sorted(scripts, key=lambda x: x['custom_fields'][11]):
-        print '    <tr><td>' + get_issue_id(issue) + '</td><td>' + \
+        print('    <tr><td>' + get_issue_id(issue) + '</td><td>' + \
             issue['subject'] + '</td><td>' + \
             issue['custom_fields'][9] + '</td><td>' + \
-            issue['custom_fields'][11] + '</td></tr>'
-    print '</table>'
-print '</body>'
-print '</html>'
+            issue['custom_fields'][11] + '</td></tr>')
+    print('</table>')
+print('</body>')
+print('</html>')

@@ -18,8 +18,7 @@ __all__ = [
     ]
 
 
-class Process:
-    __metaclass__ = PoolMeta
+class Process(metaclass=PoolMeta):
     __name__ = 'process'
 
     for_products = fields.Many2Many('process-offered.product',
@@ -46,8 +45,7 @@ class ProcessProductRelation(model.CoogSQL):
         ondelete='CASCADE')
 
 
-class ProcessAction:
-    __metaclass__ = PoolMeta
+class ProcessAction(metaclass=PoolMeta):
     __name__ = 'process.action'
 
     @classmethod
@@ -223,8 +221,7 @@ class ContractSubscribe(ProcessFinder):
         document.transfer(obj)
 
 
-class ProcessResume:
-    __metaclass__ = PoolMeta
+class ProcessResume(metaclass=PoolMeta):
     __name__ = 'process.resume'
 
     def do_resume(self, action):

@@ -5,9 +5,9 @@ from trytond.cache import Cache
 from trytond.model import Model, Unique
 from trytond.model.fields.dict import TranslatedDict
 
-import coog_string
-import fields
-import model
+from . import coog_string
+from . import fields
+from . import model
 
 
 class WithExtraDetails(Model):
@@ -134,7 +134,7 @@ class ExtraDetailsConfiguration(model.CoogSQL, model.CoogView):
         res = {}
         for instance in instances:
             vals = []
-            for key, value in getattr(instance, var_name).iteritems():
+            for key, value in getattr(instance, var_name).items():
                 cached_value = cls._translation_cache.get((key, value), None)
                 if cached_value is not None:
                     vals.append(cached_value)
@@ -146,7 +146,7 @@ class ExtraDetailsConfiguration(model.CoogSQL, model.CoogView):
                 trans_keys = translated_keys.__get__(instance,
                     instance.__class__)
                 vals = []
-                for k, v in getattr(instance, var_name).iteritems():
+                for k, v in getattr(instance, var_name).items():
                     if type(v) == bool:
                         vals.append((trans_keys[k], coog_string.translate_bool(
                                     v, lang)))

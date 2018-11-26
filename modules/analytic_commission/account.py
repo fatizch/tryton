@@ -18,8 +18,7 @@ __all__ = [
     ]
 
 
-class Account:
-    __metaclass__ = PoolMeta
+class Account(metaclass=PoolMeta):
     __name__ = 'analytic_account.account'
 
     def distribute_over_extra_details(self, amount):
@@ -84,8 +83,7 @@ class Account:
         return return_list
 
 
-class Configuration:
-    __metaclass__ = PoolMeta
+class Configuration(metaclass=PoolMeta):
     __name__ = 'account.configuration'
 
     broker_analytic_account_to_use = fields.Many2One('analytic_account.account',

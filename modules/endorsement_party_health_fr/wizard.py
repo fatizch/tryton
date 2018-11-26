@@ -55,7 +55,7 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
         PartyComplement = pool.get('health.party_complement')
         defaults = super(ChangePartyHealthComplement, self).step_default()
         parties = self._get_parties()
-        for _, party_endorsement in parties.iteritems():
+        for _, party_endorsement in parties.items():
             updated_struct = party_endorsement.updated_struct
             # init with saved modified data
             for health_complement in updated_struct['health_complement']:
@@ -91,7 +91,7 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
             'endorsement.party.health_complement')
         PartyComplement = pool.get('health.party_complement')
         parties = self._get_parties()
-        for party_id, party_endorsement in parties.iteritems():
+        for party_id, party_endorsement in parties.items():
             EndorsementHealthComplement.delete(
                 party_endorsement.health_complement)
             party = Party(party_id)
@@ -101,11 +101,11 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
                 action = 'update' if 'date' not in save_values or \
                     save_values['date'] in dates else 'add'
                 if action == 'update':
-                    new_values = {k: v for k, v in save_values.iteritems()
+                    new_values = {k: v for k, v in save_values.items()
                         if k in self._health_complement_fields_to_extract() and
                         v != getattr(self.current_health_complement[0], k)}
                 else:
-                    new_values = {k: v for k, v in save_values.iteritems()
+                    new_values = {k: v for k, v in save_values.items()
                         if k in self._health_complement_fields_to_extract()}
                 new_values.pop('party', None)
                 if (action == 'update' and 'hc_system' in new_values and
@@ -121,8 +121,8 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
                 all_values.update(new_values)
                 test_complement = PartyComplement(**all_values)
                 test_complement.insurance_fund = \
-                    PartyComplement.get_insurance_fund(
-                        [test_complement]).values()[0]
+                    list(PartyComplement.get_insurance_fund(
+                        [test_complement]).values())[0]
                 test_complement.check_insurance_fund_number()
 
                 h_complement_endorsement = EndorsementHealthComplement(
@@ -150,8 +150,7 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
                     })
 
 
-class StartEndorsement:
-    __metaclass__ = PoolMeta
+class StartEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
 

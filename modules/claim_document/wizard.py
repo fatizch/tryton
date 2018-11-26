@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class PartyErase:
-    __metaclass__ = PoolMeta
+class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
     def transition_erase(self):
@@ -19,7 +18,7 @@ class PartyErase:
         with Transaction().set_context(active_test=False):
             while replacing:
                 replacing = Party.search([
-                        ('replaced_by', 'in', map(int, replacing))])
+                        ('replaced_by', 'in', list(map(int, replacing)))])
                 parties += replacing
         DocumentRequestLine = pool.get('document.request.line')
         for party in parties:

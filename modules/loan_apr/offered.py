@@ -18,8 +18,7 @@ FEE_ACTIONS = [
     ]
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     average_loan_premium_rule = fields.Many2One('loan.average_premium_rule',
@@ -86,7 +85,7 @@ class LoanAveragePremiumRule(model.CoogSQL, model.CoogView):
         Option = pool.get('contract.option')
         ExtraPremium = pool.get('contract.option.extra_premium')
         loan_amount, insured_amount = 0, 0
-        for k, v in contract.extract_premium('contract').iteritems():
+        for k, v in contract.extract_premium('contract').items():
             if loan.id not in v:
                 continue
             if k[0] == 'contract.option':
@@ -115,7 +114,7 @@ class LoanAveragePremiumRule(model.CoogSQL, model.CoogView):
         # the secondary rule is used (i.e. : discriminate on amount). In case
         # of another duplicate (tough luck...) the first loan in order on the
         # contract is used.
-        biggest_loans = {k for k, v in loan_insured.items()
+        biggest_loans = {k for k, v in list(loan_insured.items())
             if max_insured == v}
         longest_duration = max([coog_date.number_of_days_between(
                     x.funds_release_date,
@@ -162,7 +161,7 @@ class LoanAveragePremiumRule(model.CoogSQL, model.CoogView):
             'prorata': prorata_ratio,
             }
         rule_fees = dict([(x.fee, x.action) for x in self.fee_rules])
-        for k, v in contract.extract_premium('offered').iteritems():
+        for k, v in contract.extract_premium('offered').items():
             if k[0] != 'account.fee':
                 continue
             action = rule_fees.get(Fee(k[1]), self.default_fee_action)

@@ -56,7 +56,7 @@ class ContractRenew(EndorsementWizardStepMixin):
         Contract = pool.get('contract')
         defaults = super(ContractRenew, self).step_default()
         contracts = self._get_contracts()
-        contract_id, endorsement = contracts.items()[0]
+        contract_id, endorsement = list(contracts.items())[0]
         contract = Contract(contract_id)
         new_period_start_date = contract.end_date + relativedelta(days=1)
         defaults['current_start_date'] = contract.start_date
@@ -122,8 +122,7 @@ class ContractRenew(EndorsementWizardStepMixin):
         return 'endorsement_renewal.endorsement_contract_renewal_view_form'
 
 
-class StartEndorsement:
-    __metaclass__ = PoolMeta
+class StartEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
 

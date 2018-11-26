@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class Claim:
-    __metaclass__ = PoolMeta
+class Claim(metaclass=PoolMeta):
     __name__ = 'claim'
 
     indemnifications = fields.Function(

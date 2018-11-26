@@ -16,14 +16,12 @@ __all__ = [
     ]
 
 
-class Beneficiary(object):
-    __metaclass__ = PoolMeta
+class Beneficiary(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'contract.option.beneficiary'
 
 
-class EndorsementContract:
-    __metaclass__ = PoolMeta
+class EndorsementContract(metaclass=PoolMeta):
     __name__ = 'endorsement.contract'
 
     @classmethod
@@ -47,8 +45,7 @@ class EndorsementContract:
                         option.beneficiaries
 
 
-class EndorsementCoveredElementOption:
-    __metaclass__ = PoolMeta
+class EndorsementCoveredElementOption(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.covered_element.option'
 
     beneficiaries = fields.One2Many('endorsement.contract.beneficiary',
@@ -123,9 +120,8 @@ class EndorsementCoveredElementOption:
 class EndorsementBeneficiary(relation_mixin(
             'endorsement.contract.beneficiary.field', 'beneficiary',
             'contract.option.beneficiary', 'Beneficiary'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Beneficiary'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.beneficiary'
 
     covered_option_endorsement = fields.Many2One(

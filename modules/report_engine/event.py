@@ -36,8 +36,7 @@ class EventTypeActionReportTemplate(model.CoogSQL, model.CoogView):
             ondelete='CASCADE', required=True, select=True)
 
 
-class EventTypeAction:
-    __metaclass__ = PoolMeta
+class EventTypeAction(metaclass=PoolMeta):
     __name__ = 'event.type.action'
 
     report_templates = fields.Many2Many('event.type.action-report.template',
@@ -98,7 +97,7 @@ class EventTypeAction:
                     ReportProductionRequest.create_report_production_requests(
                         template, objects_to_report, context_)
                 requests_per_template[template.id].extend(requests)
-        for template, requests in requests_per_template.items():
+        for template, requests in list(requests_per_template.items()):
             if not requests:
                 continue
             ProductionRequestBatch.enqueue([(x.id,) for x in requests], {},
@@ -180,7 +179,7 @@ class EventTypeAction:
         obj_orig_templates = []
         for template, objs in \
                 self.get_templates_and_objs_for_event_type(
-                    event_objects).iteritems():
+                    event_objects).items():
             for obj in objs:
                 to_print, origin = \
                     self.get_targets_and_origin_from_object_and_template(

@@ -136,9 +136,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 ('loans', '=', loan.id),
                 ])
         self.assertEqual(endorsement.endorsement_summary,
-            u'<div><b>Change Loan Amount</b></div>'
-            u'<div><u>Loan Modifications :</u></div>'
-            u'<div>    <i>Amount</i>: %s → 150000</div>' % loan.amount)
+            '<div><b>Change Loan Amount</b></div>'
+            '<div><u>Loan Modifications :</u></div>'
+            '<div>    <i>Amount</i>: %s → 150000</div>' % loan.amount)
 
     @test_framework.prepare_test(
         'endorsement_loan.test0030_create_endorsement',
@@ -174,13 +174,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         loan = endorsement.loans[0]
         loan_endorsement, = endorsement.loan_endorsements
-        self.assert_(endorsement.application_date)
+        self.assertTrue(endorsement.application_date)
         self.assertEqual(endorsement.state, 'applied')
         self.assertEqual(loan_endorsement.state, 'applied')
         self.assertEqual(loan.amount, Decimal('150000'))
         self.assertEqual(loan_endorsement.base_instance.amount,
             previous_loan_amount)
-        self.assert_(endorsement.rollback_date)
+        self.assertTrue(endorsement.rollback_date)
         endorsement.cancel([endorsement])
         Transaction().commit()
 

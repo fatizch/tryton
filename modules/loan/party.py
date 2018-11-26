@@ -42,8 +42,7 @@ class Lender(model.CoogSQL, model.CoogView):
         return self.party.rec_name
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     lender_role = fields.One2Many('lender', 'party', 'Lender', states={
@@ -199,8 +198,7 @@ class SynthesisMenuLoan(model.CoogSQL):
         return coog_string.translate_label(LoanSynthesis, 'name')
 
 
-class SynthesisMenu:
-    __metaclass__ = PoolMeta
+class SynthesisMenu(metaclass=PoolMeta):
     __name__ = 'party.synthesis.menu'
 
     @classmethod
@@ -305,11 +303,11 @@ class DisplayInsuredOutstandingLoanBalance(Wizard):
         aggregate_amounts = party.get_insured_outstanding_loan_balances(date,
             currency)
         res = []
-        for insurer_id, values in aggregate_amounts.iteritems():
+        for insurer_id, values in aggregate_amounts.items():
             insurer = Insurer(insurer_id)
             max_amount, childs = 0, []
             for insurance_kind, [amount, insurance_kind_string] \
-                    in values.iteritems():
+                    in values.items():
                 childs.append({
                         'name': insurance_kind_string,
                         'currency_symbol': currency.symbol,
@@ -388,8 +386,7 @@ class InsuredOutstandingLoanBalanceSelectDate(model.CoogView):
              None, None, 'Possible Currencies')
 
 
-class PartyReplace:
-    __metaclass__ = PoolMeta
+class PartyReplace(metaclass=PoolMeta):
     __name__ = 'party.replace'
 
     @classmethod

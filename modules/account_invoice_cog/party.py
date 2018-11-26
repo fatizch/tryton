@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     @classmethod
@@ -33,13 +32,11 @@ class Party:
                 original_domain[0]], original_domain[1]]
 
 
-class PartyPaymentTerm(export.ExportImportMixin):
-    __metaclass__ = PoolMeta
+class PartyPaymentTerm(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'party.party.payment_term'
 
 
-class PartyAccount:
-    __metaclass__ = PoolMeta
+class PartyAccount(metaclass=PoolMeta):
     __name__ = 'party.party.account'
 
     @classmethod

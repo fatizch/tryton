@@ -80,7 +80,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             begin_balance=None, amount=None, principal=None, interest=None,
             outstanding_balance=None):
         payment = loan.get_payment(at_date)
-        self.assert_(payment)
+        self.assertTrue(payment)
         if number:
             self.assertEqual(payment.number, number)
         if begin_balance:
@@ -127,12 +127,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
             Decimal('778.35'))
         self.assertEqual(len(loan.increments), 2)
         increment_1 = loan.increments[0]
-        self.assert_(increment_1)
+        self.assertTrue(increment_1)
         self.assertEqual(increment_1.deferral, 'partially')
         self.assertEqual(increment_1.number_of_payments, 12)
         self.assertEqual(increment_1.payment_amount, Decimal('333.33'))
         increment_2 = loan.increments[-1]
-        self.assert_(increment_2)
+        self.assertTrue(increment_2)
         self.assertEqual(increment_2.payment_amount, Decimal('778.35'))
 
         self.assertEqual(len(loan.payments), loan.duration + 1)
@@ -182,13 +182,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
             Decimal(0))
         self.assertEqual(len(loan.increments), 2)
         increment_1 = loan.increments[0]
-        self.assert_(increment_1)
+        self.assertTrue(increment_1)
         self.assertEqual(increment_1.deferral, 'fully')
         self.assertEqual(increment_1.number_of_payments, 8)
         self.assertEqual(increment_1.start_date, datetime.date(2014, 6, 5))
         self.assertEqual(increment_1.begin_balance, Decimal(134566))
         increment_2 = loan.increments[-1]
-        self.assert_(increment_2)
+        self.assertTrue(increment_2)
         self.assertEqual(increment_2.number_of_payments, 48)
         self.assertEqual(increment_2.start_date, datetime.date(2016, 6, 5))
         self.assertEqual(increment_2.begin_balance, Decimal('156187.70'))
@@ -209,7 +209,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             Decimal('4876.68'), Decimal('4968.36'), Decimal('4876.68'),
             Decimal('91.68'), Decimal('0'))
         loan.save()
-        self.assert_(loan.end_date == datetime.date(2028, 3, 5))
+        self.assertTrue(loan.end_date == datetime.date(2028, 3, 5))
         self.assertEqual(loan.get_outstanding_loan_balance(
                 at_date=loan.funds_release_date), loan.amount)
         self.assertEqual(loan.get_outstanding_loan_balance(
@@ -237,14 +237,14 @@ class ModuleTestCase(test_framework.CoogTestCase):
             Decimal('8240.95'))
         self.assertEqual(len(loan.increments), 2)
         increment_1 = loan.increments[0]
-        self.assert_(increment_1)
+        self.assertTrue(increment_1)
         self.assertEqual(increment_1.deferral, 'partially')
         self.assertIsNone(loan.deferral)
         self.assertEqual(increment_1.number_of_payments, 29)
         self.assertEqual(increment_1.start_date, datetime.date(2014, 9, 5))
         self.assertEqual(increment_1.begin_balance, loan.amount)
         increment_2 = loan.increments[-1]
-        self.assert_(increment_2)
+        self.assertTrue(increment_2)
         self.assertEqual(increment_2.number_of_payments, 1)
         self.assertEqual(increment_2.start_date, datetime.date(2029, 3, 5))
         self.assertEqual(increment_2.begin_balance, loan.amount)
@@ -276,18 +276,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
             Decimal('8240.95'))
         self.assertEqual(len(loan.increments), 3)
         increment_1 = loan.increments[0]
-        self.assert_(increment_1)
+        self.assertTrue(increment_1)
         self.assertEqual(increment_1.deferral, 'partially')
         self.assertEqual(loan.deferral, 'partially')
         self.assertEqual(loan.deferral_duration, 2)
         self.assertEqual(increment_1.start_date, datetime.date(2014, 9, 5))
         self.assertEqual(increment_1.begin_balance, loan.amount)
         increment_2 = loan.increments[1]
-        self.assert_(increment_2)
+        self.assertTrue(increment_2)
         self.assertEqual(increment_2.number_of_payments, 27)
         self.assertEqual(increment_2.begin_balance, loan.amount)
         increment_3 = loan.increments[-1]
-        self.assert_(increment_3)
+        self.assertTrue(increment_3)
         self.assertEqual(increment_3.number_of_payments, 1)
         self.assertEqual(increment_3.start_date, datetime.date(2029, 3, 5))
         self.assertEqual(increment_3.begin_balance, loan.amount)
@@ -522,7 +522,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             lender_address=address,
             kind='graduated',
             funds_release_date=datetime.date(2013, 3, 22),
-            first_payment_date=datetime.date(2015, 04, 22),
+            first_payment_date=datetime.date(2015, 0o4, 22),
             rate=Decimal('0.0395'),
             amount=Decimal(101948),
             duration=360,
@@ -668,7 +668,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 share=Decimal(share))
             loan_share.save()
 
-        base_date = datetime.date(2014, 01, 15)
+        base_date = datetime.date(2014, 0o1, 15)
         john = self.Party.search([('name', '=', 'DOE')])[0]
 
         account_product = create_account()

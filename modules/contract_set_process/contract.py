@@ -12,9 +12,8 @@ __all__ = [
     ]
 
 
-class ContractSet(CoogProcessFramework):
+class ContractSet(CoogProcessFramework, metaclass=ClassAttr):
     __name__ = 'contract.set'
-    __metaclass__ = ClassAttr
 
     covered_parties = fields.Function(
         fields.One2Many('party.party', None, 'Covered Parties'),

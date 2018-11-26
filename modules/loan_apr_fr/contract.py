@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     _premium_per_loan_cache = Cache('premiums_per_loan')
@@ -49,7 +48,7 @@ class Contract:
                     specific_data['amount'] += line['amount']
                     specific_data['tax'] += line['tax_amount']
 
-        for (period_start, loan, fee), data in per_period.iteritems():
+        for (period_start, loan, fee), data in per_period.items():
             premiums['per_period'].append({
                     'loan': loan.id if loan else None,
                     'fee': fee.id if fee else None,
@@ -70,13 +69,13 @@ class Contract:
             loan_data[loan.id]['max_insured'] = loan.amount * max(
                 [share.share for share in loan.current_loan_shares])
         ratios = {}
-        for loan_id, data in loan_data.iteritems():
+        for loan_id, data in loan_data.items():
             ratios[loan_id] = {
                 'longest': data['duration'] == max(
-                    [x['duration'] for x in loan_data.values()]),
+                    [x['duration'] for x in list(loan_data.values())]),
                 'biggest': data['max_insured'] == max(
-                    [x['max_insured'] for x in loan_data.values()]),
+                    [x['max_insured'] for x in list(loan_data.values())]),
                 'prorata': data['max_insured'] / sum(
-                    [x['max_insured'] for x in loan_data.values()]),
+                    [x['max_insured'] for x in list(loan_data.values())]),
                 }
         return ratios

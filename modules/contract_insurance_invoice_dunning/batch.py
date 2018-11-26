@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class DunningCreationBatch:
-    __metaclass__ = PoolMeta
+class DunningCreationBatch(metaclass=PoolMeta):
     __name__ = 'account.dunning.create'
 
     @classmethod
@@ -43,8 +42,7 @@ class DunningCreationBatch:
             (line_amount > 0))
 
 
-class DunningTreatmentBatch:
-    __metaclass__ = PoolMeta
+class DunningTreatmentBatch(metaclass=PoolMeta):
     __name__ = 'account.dunning.treat'
 
     @classmethod

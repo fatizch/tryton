@@ -756,8 +756,7 @@ class ContractOption(Printable):
                 return option
 
 
-class ContractOptionVersion:
-    __metaclass__ = PoolMeta
+class ContractOptionVersion(metaclass=PoolMeta):
     __name__ = 'contract.option.version'
 
     @classmethod
@@ -1177,15 +1176,14 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
                 return '%s (%s)' % (res, relations)
             return res
         if self.item_desc:
-            res = ': '.join(filter(None,
-                    [self.item_desc.rec_name, self.name]))
+            res = ': '.join([_f for _f in [self.item_desc.rec_name, self.name] if _f])
         extra_data = self.item_desc.extra_data_rec_name
         if extra_data:
             separator = ' ' if self.name else ': '
-            res = separator.join(filter(None, [
-                        res, unicode(
+            res = separator.join([_f for _f in [
+                        res, str(
                             self.current_extra_data.get(extra_data, None))
-                        ]))
+                        ] if _f])
         return res or self.name
 
     @classmethod
@@ -1262,11 +1260,11 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         # No need to look for the contrat's end date since the option's already
         # takes it into account
         options_end = defaultdict(list)
-        for option in Option.browse(options.keys()):
+        for option in Option.browse(list(options.keys())):
             for covered in options[option.id]:
                 options_end[covered].append(option.end_date)
 
-        for k, v in per_covered.iteritems():
+        for k, v in per_covered.items():
             option_end = max([x for x in options_end[k] if x] or [None])
             result[k] = min(([x for x in v if x] +
                     ([option_end] if option_end else [])) or [None])
@@ -1282,7 +1280,7 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
                 continue
             covered.party.extra_data = covered.party.extra_data or {}
             covered.party.extra_data.update({
-                    k: v for k, v in vals.iteritems() if v})
+                    k: v for k, v in vals.items() if v})
             to_save.append(covered.party)
         if to_save:
             Party.save(to_save)
@@ -1433,14 +1431,14 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             version.extra_data = {}
             return
 
-        for k, v in self.party_extra_data.iteritems():
+        for k, v in self.party_extra_data.items():
             if k not in version.extra_data:
                 version.extra_data[k] = v
         version.extra_data = self.item_desc.refresh_extra_data(
             version.extra_data)
         if self.party:
             self.party_extra_data = {k: v
-                for k, v in version.extra_data.iteritems()}
+                for k, v in version.extra_data.items()}
 
     def get_relation_with_subscriber(self):
         if not self.party or not self.contract:

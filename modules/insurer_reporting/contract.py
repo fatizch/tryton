@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     paid_amount_incl_tax = fields.Function(
@@ -89,8 +88,7 @@ class Contract:
         return {key: result[key] for key in names}
 
 
-class CoveredElement:
-    __metaclass__ = PoolMeta
+class CoveredElement(metaclass=PoolMeta):
     __name__ = 'contract.covered_element'
 
     def get_covered_element_options_premiums(self):

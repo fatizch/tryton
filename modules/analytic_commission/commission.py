@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Commission:
-    __metaclass__ = PoolMeta
+class Commission(metaclass=PoolMeta):
     __name__ = 'commission'
 
     @classmethod

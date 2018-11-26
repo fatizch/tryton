@@ -20,9 +20,8 @@ __all__ = [
     ]
 
 
-class MergedPayments:
+class MergedPayments(metaclass=PoolMeta):
 
-    __metaclass__ = PoolMeta
     __name__ = 'account.payment.merged'
 
     formatted_string_amount = fields.Function(
@@ -48,8 +47,7 @@ class MergedPayments:
             for x in payments}
 
 
-class Payment:
-    __metaclass__ = PoolMeta
+class Payment(metaclass=PoolMeta):
     __name__ = 'account.payment'
 
     is_cheque_letter = fields.Function(
@@ -118,8 +116,7 @@ class Payment:
         return context
 
 
-class Journal:
-    __metaclass__ = PoolMeta
+class Journal(metaclass=PoolMeta):
     __name__ = 'account.payment.journal'
 
     validate_process = fields.Boolean('Validate on processing', states={
@@ -137,8 +134,7 @@ class Journal:
         return False
 
 
-class Group:
-    __metaclass__ = PoolMeta
+class Group(metaclass=PoolMeta):
     __name__ = 'account.payment.group'
 
     @classmethod
@@ -203,8 +199,7 @@ class Group:
             yield dict(key), grouped_payments
 
 
-class ProcessPaymentStart:
-    __metaclass__ = PoolMeta
+class ProcessPaymentStart(metaclass=PoolMeta):
     __name__ = 'account.payment.process.start'
 
     is_cheque_letter = fields.Boolean('Cheque letter payment',
@@ -227,8 +222,7 @@ class ProcessPaymentStart:
                     {'invisible': ~Eval('is_cheque_letter')})]
 
 
-class ProcessPayment:
-    __metaclass__ = PoolMeta
+class ProcessPayment(metaclass=PoolMeta):
     __name__ = 'account.payment.process'
 
     process_with_cheque_letter = StateAction(
@@ -242,7 +236,7 @@ class ProcessPayment:
             _, context = super(ProcessPayment, self).do_process(action)
             context = Payment.finalize_cheque_letter_processing(
                 context['res_id'])
-            domain = [('merged_id', 'in', context.keys())]
+            domain = [('merged_id', 'in', list(context.keys()))]
             action.update({'pyson_domain': PYSONEncoder().encode(domain)})
         return action, {}
 

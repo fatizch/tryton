@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Zip:
-    __metaclass__ = PoolMeta
+class Zip(metaclass=PoolMeta):
     __name__ = 'country.zip'
 
     hexa_post_id = fields.Char('Hexa Post Id', select=True)

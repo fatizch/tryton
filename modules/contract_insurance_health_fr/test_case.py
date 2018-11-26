@@ -12,9 +12,8 @@ __all__ = [
     ]
 
 
-class TestCaseModel:
+class TestCaseModel(metaclass=PoolMeta):
     __name__ = 'ir.test_case'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def create_hc_system(cls, **kwargs):
@@ -84,8 +83,8 @@ class TestCaseModel:
                     name=fund_data[3],
                     hc_system=systems[fund_data[0]],
                     department=fund_data[10][0:2]))
-                print 'code ', fund_data[0] + fund_data[1] + fund_data[2],\
+                print('code ', fund_data[0] + fund_data[1] + fund_data[2],\
                     ' name ', fund_data[3],\
                     ' hc_system', systems[fund_data[0]],\
-                    'department', fund_data[10][0:2]
+                    'department', fund_data[10][0:2])
             Fund.create([x._save_values for x in funds])

@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Model:
-    __metaclass__ = PoolMeta
+class Model(metaclass=PoolMeta):
     __name__ = 'ir.model'
 
     perm_read = fields.Function(fields.Boolean('Read Access'), 'get_perms')
@@ -52,8 +51,7 @@ class Model:
                 for i in instances}
 
 
-class ModelField:
-    __metaclass__ = PoolMeta
+class ModelField(metaclass=PoolMeta):
     __name__ = 'ir.model.field'
 
     perm_field_read = fields.Function(fields.Boolean('Read Access'),
@@ -84,8 +82,8 @@ class ModelField:
                 [i.model.model for i in instances])
         perms = {}
         for i in instances:
-            if (i.model.model in model_rights.keys() and
-                    i.name in model_rights[i.model.model].keys()):
+            if (i.model.model in list(model_rights.keys()) and
+                    i.name in list(model_rights[i.model.model].keys())):
                 perm = name[11:]
                 if perm != 'default':
                     perms[i.id] = model_rights[i.model.model][i.name][perm]
@@ -96,8 +94,7 @@ class ModelField:
         return perms
 
 
-class UIMenuAccess:
-    __metaclass__ = PoolMeta
+class UIMenuAccess(metaclass=PoolMeta):
     __name__ = 'ir.ui.menu'
 
     perm_menu = fields.Function(fields.Boolean('Access To Menu'), 'get_perms')

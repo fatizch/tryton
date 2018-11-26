@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class OfferedConfiguration:
-    __metaclass__ = PoolMeta
+class OfferedConfiguration(metaclass=PoolMeta):
     __name__ = 'offered.configuration'
 
     prorate_premiums = fields.Boolean('Prorate Premiums', help='If checked, '

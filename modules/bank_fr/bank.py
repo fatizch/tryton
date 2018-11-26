@@ -15,8 +15,7 @@ __all__ = [
     ]
 
 
-class Bank:
-    __metaclass__ = PoolMeta
+class Bank(metaclass=PoolMeta):
     __name__ = 'bank'
 
     agencies = fields.One2Many('bank.agency', 'bank', 'Agencies',
@@ -80,8 +79,7 @@ class Agency(model.CoogSQL, model.CoogView):
         return self.bank.party.id if self.bank else None
 
 
-class BankAccount:
-    __metaclass__ = PoolMeta
+class BankAccount(metaclass=PoolMeta):
     __name__ = 'bank.account'
 
     @classmethod

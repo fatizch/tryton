@@ -34,11 +34,11 @@ def set_python_path_if_necessary():
 if __name__ == '__main__':
     is_v, path = is_virtual_env()
     if is_v:
-        print 'Virtual Env detected ! Path => %s' % path
+        print('Virtual Env detected ! Path => %s' % path)
     else:
-        print 'Normal env detected'
+        print('Normal env detected')
     set_python_path_if_necessary()
-    print 'Python path :'
-    print '\n\t'.join([''] + sys.path)
-    print ''
-    print sys.argv[1:]
+    print('Python path :')
+    print('\n\t'.join([''] + sys.path))
+    print('')
+    print(sys.argv[1:])

@@ -10,9 +10,8 @@ __all__ = [
     ]
 
 
-class Account:
+class Account(metaclass=PoolMeta):
     __name__ = 'account.account'
-    __metaclass__ = PoolMeta
 
     waiting_for_account = fields.Many2One(
         'account.account', 'Waiting Account For',

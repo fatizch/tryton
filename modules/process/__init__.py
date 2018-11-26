@@ -2,11 +2,11 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import ir
-import process
-import configuration
+from . import ir
+from . import process
+from . import configuration
 
-from process_framework import ProcessFramework, ClassAttr  # NOQA
+from .process_framework import ProcessFramework, ClassAttr  # NOQA
 
 
 def register():

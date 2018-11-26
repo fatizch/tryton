@@ -18,8 +18,7 @@ __all__ = [
     ]
 
 
-class ContractHold:
-    __metaclass__ = PoolMeta
+class ContractHold(metaclass=PoolMeta):
     __name__ = 'contract.hold'
 
     def default_select_hold_status(self, name):
@@ -43,8 +42,7 @@ class ContractHold:
         return super(ContractHold, self).transition_apply()
 
 
-class ContractSelectHoldReason:
-    __metaclass__ = PoolMeta
+class ContractSelectHoldReason(metaclass=PoolMeta):
     __name__ = 'contract.hold.select_hold_status'
 
     suspension_start_date = fields.Date('Suspension Start Date', states={
@@ -55,8 +53,7 @@ class ContractSelectHoldReason:
     show_suspension_date = fields.Boolean('Show Suspension Date')
 
 
-class ContractActivate:
-    __metaclass__ = PoolMeta
+class ContractActivate(metaclass=PoolMeta):
     __name__ = 'contract.activate'
 
     def transition_apply(self):
@@ -77,8 +74,7 @@ class ContractActivate:
         return res
 
 
-class ContractActivateConfirm:
-    __metaclass__ = PoolMeta
+class ContractActivateConfirm(metaclass=PoolMeta):
     __name__ = 'contract.activate.confirm'
 
     suspension_end_date = fields.Date('Suspension End Date', states={

@@ -152,8 +152,8 @@ class Product(model.CoogSQL, model.CoogView,
     @classmethod
     def search_rec_name(cls, name, clause):
         return ['OR',
-            [(u'name',) + tuple(clause[1:])],
-            [(u'code',) + tuple(clause[1:])]
+            [('name',) + tuple(clause[1:])],
+            [('code',) + tuple(clause[1:])]
             ]
 
     @classmethod
@@ -384,8 +384,8 @@ class OptionDescription(model.CoogSQL, model.CoogView,
     @classmethod
     def search_rec_name(cls, name, clause):
         return ['OR',
-            [(u'name',) + tuple(clause[1:])],
-            [(u'code',) + tuple(clause[1:])]
+            [('name',) + tuple(clause[1:])],
+            [('code',) + tuple(clause[1:])]
             ]
 
     @classmethod

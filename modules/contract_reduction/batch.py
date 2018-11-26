@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class CreateInvoiceContractBatch:
-    __metaclass__ = PoolMeta
+class CreateInvoiceContractBatch(metaclass=PoolMeta):
     __name__ = 'contract.invoice.create'
 
     @classmethod

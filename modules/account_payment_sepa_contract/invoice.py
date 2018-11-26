@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     sepa_mandate = fields.Function(fields.Many2One(

@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Loss:
-    __metaclass__ = PoolMeta
+class Loss(metaclass=PoolMeta):
     __name__ = 'claim.loss'
 
     main_services = fields.Function(
@@ -24,8 +23,7 @@ class Loss:
         return [x for x in self.services if x.is_main_service]
 
 
-class Service:
-    __metaclass__ = PoolMeta
+class Service(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     sub_services = fields.Function(

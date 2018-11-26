@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class Benefit(get_rule_mixin('underwriting_rule', 'Underwriting Rule')):
-    __metaclass__ = PoolMeta
+class Benefit(get_rule_mixin('underwriting_rule', 'Underwriting Rule'), metaclass=PoolMeta):
     __name__ = 'benefit'
 
     @classmethod
@@ -36,8 +35,7 @@ class Benefit(get_rule_mixin('underwriting_rule', 'Underwriting Rule')):
         return type_, date
 
 
-class Claim:
-    __metaclass__ = PoolMeta
+class Claim(metaclass=PoolMeta):
     __name__ = 'claim'
 
     underwritings = fields.Function(
@@ -123,11 +121,11 @@ class Claim:
                         missing[type_].append(
                             (date, service))
         to_create, to_save = [], []
-        for underwriting_type, services in missing.iteritems():
+        for underwriting_type, services in missing.items():
             new_underwriting = underwriting_type.new_underwriting(self,
                 self.claimant, services)
             to_create.append(new_underwriting)
-        for underwriting, services in update.iteritems():
+        for underwriting, services in update.items():
             to_add = []
             for date, service in services:
                 new_decision = Result()
@@ -195,8 +193,7 @@ class Claim:
         cur_dict['claim'] = self
 
 
-class ClaimService:
-    __metaclass__ = PoolMeta
+class ClaimService(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     underwritings = fields.Function(
@@ -238,8 +235,7 @@ class ClaimService:
         return self.benefit.do_calculate_underwritings(data_dict)
 
 
-class DeliverBenefit:
-    __metaclass__ = PoolMeta
+class DeliverBenefit(metaclass=PoolMeta):
     __name__ = 'claim.deliver_benefits'
 
     def transition_deliver(self):

@@ -5,9 +5,9 @@
 import sys
 import argparse
 import smtplib
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
-from urlparse import parse_qs, urlparse
+from urllib.parse import parse_qs, urlparse
 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -22,7 +22,7 @@ def get_smtp_server(uri=None):
     extra = {}
     if uri.query:
         cast = {'timeout': int}
-        for key, value in parse_qs(uri.query, strict_parsing=True).iteritems():
+        for key, value in parse_qs(uri.query, strict_parsing=True).items():
             extra[key] = cast.get(key, lambda a: a)(value[0])
     if uri.scheme.startswith('smtps'):
         server = smtplib.SMTP_SSL(uri.hostname, uri.port, **extra)
@@ -34,8 +34,8 @@ def get_smtp_server(uri=None):
 
     if uri.username and uri.password:
         server.login(
-            urllib.unquote_plus(uri.username),
-            urllib.unquote_plus(uri.password))
+            urllib.parse.unquote_plus(uri.username),
+            urllib.parse.unquote_plus(uri.password))
     return server
 
 
@@ -48,7 +48,7 @@ def sendmail(from_addr, to_addrs, msg, server=None):
     try:
         senderrs = server.sendmail(from_addr, to_addrs, msg.as_string())
     except Exception as e:
-        print >> sys.stderr, str(e)
+        print(str(e), file=sys.stderr)
     if quit:
         server.quit()
     return senderrs
@@ -79,7 +79,7 @@ def main():
             args.toemail or '' + args.ccemail or '' + args.bccemail or '',
             msg)
     except Exception as e:
-        print >> sys.stderr, str(e)
+        print(str(e), file=sys.stderr)
         sys.exit(2)
 
 if __name__ == '__main__':

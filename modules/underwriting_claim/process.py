@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class UnderwritingStart:
-    __metaclass__ = PoolMeta
+class UnderwritingStart(metaclass=PoolMeta):
     __name__ = 'underwriting.start'
 
     @classmethod
@@ -37,8 +36,7 @@ class UnderwritingStart:
         return defaults
 
 
-class UnderwritingStartFindProcess:
-    __metaclass__ = PoolMeta
+class UnderwritingStartFindProcess(metaclass=PoolMeta):
     __name__ = 'underwriting.start.find_process'
 
     @fields.depends('parent', 'results')

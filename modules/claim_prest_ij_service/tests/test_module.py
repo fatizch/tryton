@@ -36,11 +36,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         company = Party(name='Company', siren=siren)
         company.save()
-        person = Party(name=u'ééé', first_name='joe', ssn=ssn)
+        person = Party(name='ééé', first_name='joe', ssn=ssn)
         person.save()
-        person = Party(name=u'doe', first_name='jane', ssn=ssn2)
+        person = Party(name='doe', first_name='jane', ssn=ssn2)
         person.save()
-        person = Party(name=u'dane', first_name='jane', ssn=ssn3)
+        person = Party(name='dane', first_name='jane', ssn=ssn3)
         person.save()
 
         class Req(object):

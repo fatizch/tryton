@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     default_termination_claim_behaviour = fields.Selection([
@@ -26,8 +25,7 @@ class Product:
         depends=['is_group'])
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     @classmethod

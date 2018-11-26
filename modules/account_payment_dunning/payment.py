@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class JournalFailureAction:
-    __metaclass__ = PoolMeta
+class JournalFailureAction(metaclass=PoolMeta):
     __name__ = 'account.payment.journal.failure_action'
 
     dunning_configurations = fields.One2Many(
@@ -64,8 +63,7 @@ class JournalFailureDunning(model.CoogSQL, model.CoogView):
             ]
 
 
-class Payment:
-    __metaclass__ = PoolMeta
+class Payment(metaclass=PoolMeta):
     __name__ = 'account.payment'
 
     @classmethod

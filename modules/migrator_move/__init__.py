@@ -1,7 +1,7 @@
 from trytond.pool import Pool
 
-import move
-import invoice
+from . import move
+from . import invoice
 
 
 def register():

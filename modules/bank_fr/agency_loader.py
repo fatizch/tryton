@@ -42,7 +42,7 @@ class AgenciesLoader:
         addresses_by_name_and_party_bank = {}
 
         def identical(record, new_values):
-            for k, v in new_values.iteritems():
+            for k, v in new_values.items():
                 old_value = getattr(record, k, None)
                 if k == 'party':
                     old_value = old_value.id
@@ -151,7 +151,7 @@ class AgenciesLoader:
                 if logger:
                     logger.info('Updated %s agencies', str(len(to_save)))
             if missing_bics:
-                for bic, number in missing_bics.iteritems():
+                for bic, number in missing_bics.items():
                     logger.info('Bic %s is missing, %s agencie(s) not created'
                         % (bic, number))
                 logger.info('%s bics missing, %s agencies not created' %

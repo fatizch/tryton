@@ -34,9 +34,8 @@ __all__ = [
     ]
 
 
-class Loan:
+class Loan(metaclass=PoolMeta):
     _history = True
-    __metaclass__ = PoolMeta
     __name__ = 'loan'
 
     previous_frequency = fields.Function(
@@ -127,9 +126,8 @@ class Loan:
         return super(Loan, self).get_loan_amount()
 
 
-class LoanIncrement:
+class LoanIncrement(metaclass=PoolMeta):
     _history = True
-    __metaclass__ = PoolMeta
     __name__ = 'loan.increment'
 
     calculated_amount = fields.Function(
@@ -229,19 +227,16 @@ class LoanIncrement:
         self.calculated_amount = new_amount
 
 
-class LoanPayment:
-    __metaclass__ = PoolMeta
+class LoanPayment(metaclass=PoolMeta):
     __name__ = 'loan.payment'
 
 
-class LoanShare:
+class LoanShare(metaclass=PoolMeta):
     _history = True
-    __metaclass__ = PoolMeta
     __name__ = 'loan.share'
 
 
-class ExtraPremium:
-    __metaclass__ = PoolMeta
+class ExtraPremium(metaclass=PoolMeta):
     __name__ = 'contract.option.extra_premium'
 
     @classmethod
@@ -265,14 +260,12 @@ class ExtraPremium:
         return Transaction().context.get('is_loan', False)
 
 
-class ContractLoan:
+class ContractLoan(metaclass=PoolMeta):
     _history = True
-    __metaclass__ = PoolMeta
     __name__ = 'contract-loan'
 
 
-class Endorsement:
-    __metaclass__ = PoolMeta
+class Endorsement(metaclass=PoolMeta):
     __name__ = 'endorsement'
 
     loan_endorsements = fields.One2Many('endorsement.loan', 'endorsement',
@@ -346,8 +339,7 @@ class Endorsement:
         super(Endorsement, cls).reset(endorsements)
 
 
-class EndorsementContract:
-    __metaclass__ = PoolMeta
+class EndorsementContract(metaclass=PoolMeta):
     __name__ = 'endorsement.contract'
 
     ordered_loans = fields.One2Many('endorsement.contract.loan',
@@ -402,9 +394,8 @@ class EndorsementContract:
 
 
 class EndorsementLoan(values_mixin('endorsement.loan.field'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Loan'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.loan'
 
     loan = fields.Many2One('loan', 'Loan', required=True, ondelete='CASCADE',
@@ -573,8 +564,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         return super(EndorsementLoan, self).clean_up(instance)
 
 
-class EndorsementCoveredElementOption:
-    __metaclass__ = PoolMeta
+class EndorsementCoveredElementOption(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.covered_element.option'
 
     loan_shares = fields.One2Many('endorsement.loan.share',
@@ -646,9 +636,8 @@ class EndorsementCoveredElementOption:
 class EndorsementLoanShare(relation_mixin(
             'endorsement.loan.share.field', 'loan_share', 'loan.share',
             'Loan Shares'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Loan Share'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.loan.share'
 
     option_endorsement = fields.Many2One(
@@ -719,9 +708,8 @@ class EndorsementLoanShare(relation_mixin(
 class EndorsementLoanIncrement(relation_mixin(
             'endorsement.loan.increment.field', 'increment', 'loan.increment',
             'Loan Increments'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Loan Increment'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.loan.increment'
 
     loan_endorsement = fields.Many2One('endorsement.loan', 'Loan Endorsement',
@@ -755,9 +743,8 @@ class EndorsementLoanIncrement(relation_mixin(
 class EndorsementContractLoan(relation_mixin(
             'endorsement.contract.loan.field', 'contract_loan',
             'contract-loan', 'Contract Loan'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Contract Loan'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.loan'
 
     contract_endorsement = fields.Many2One('endorsement.contract',

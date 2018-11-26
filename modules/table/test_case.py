@@ -12,9 +12,8 @@ __all__ = [
     ]
 
 
-class TestCaseModel:
+class TestCaseModel(metaclass=PoolMeta):
     __name__ = 'ir.test_case'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def create_table_from_filename(cls, filename):
@@ -63,7 +62,7 @@ class TestCaseModel:
             res = Dimension()
             res.type = 'dimension%s' % n
             if getattr(table, 'dimension_kind%s' % n) == 'value':
-                res.value = u'%s' % elem
+                res.value = '%s' % elem
             if getattr(table, 'dimension_kind%s' % n) == 'date':
                 res.date = elem
             if getattr(table, 'dimension_kind%s' % n) == 'range':

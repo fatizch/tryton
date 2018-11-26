@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     @classmethod
@@ -78,8 +77,7 @@ class DisplayContractSetPremium(Wizard):
         }
 
 
-class ContractSet:
-    __metaclass__ = PoolMeta
+class ContractSet(metaclass=PoolMeta):
     __name__ = 'contract.set'
 
     def invoice_contracts_to_end_date(self):
@@ -133,10 +131,10 @@ class ContractSet:
                     tmp_aggregated[date] = dict(invoice)
                     tmp_aggregated[date]['base_invoices'] = [invoice]
 
-        ordered = OrderedDict(sorted(tmp_aggregated.items(),
+        ordered = OrderedDict(sorted(list(tmp_aggregated.items()),
                 key=operator.itemgetter(0)))
 
-        aggregated['invoices'] = ordered.values()
+        aggregated['invoices'] = list(ordered.values())
         aggregated['total'] = sum(
             [x['total_amount'] for x in aggregated['invoices']])
         aggregated['billing_mode'] = bill_info.billing_mode.name
@@ -168,9 +166,9 @@ class ContractSet:
                 total += report['total_amount']
         taxes = defaultdict(int)
         for report in invoices_reports:
-            for key, value in report[2].iteritems():
+            for key, value in report[2].items():
                 taxes[key] += value
-        return [sorted(reports_per_date.values(), key=keyfunc), total,
+        return [sorted(list(reports_per_date.values()), key=keyfunc), total,
             dict(taxes)]
 
     def get_report_functional_date(self, event_code):

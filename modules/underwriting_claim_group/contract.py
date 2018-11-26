@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class OptionBenefit(get_rule_mixin('underwriting_rule', 'Underwriting Rule')):
-    __metaclass__ = PoolMeta
+class OptionBenefit(get_rule_mixin('underwriting_rule', 'Underwriting Rule'), metaclass=PoolMeta):
     __name__ = 'contract.option.benefit'
 
     available_underwriting_rules = fields.Function(

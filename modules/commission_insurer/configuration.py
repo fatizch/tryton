@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class Configuration:
-    __metaclass__ = PoolMeta
+class Configuration(metaclass=PoolMeta):
     __name__ = 'account.configuration'
 
     insurer_payment_journal = fields.Many2One('account.payment.journal',

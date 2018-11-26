@@ -101,7 +101,7 @@ class DsnMessage(Workflow, model.CoogSQL, model.CoogView):
 
     def get_text_message(self, name):
         if not self.message:
-            return u''
+            return ''
         return self.message.decode('latin1')
 
     @classmethod

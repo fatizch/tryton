@@ -13,7 +13,7 @@ from trytond.modules.coog_core import fields, model, coog_string, utils
 
 from trytond.server_context import ServerContext
 
-import func_library
+from . import func_library
 
 
 __all__ = [
@@ -240,8 +240,7 @@ class FlowVariable(model.CoogSQL, model.CoogView):
         return output
 
 
-class ReportGenerate:
-    __metaclass__ = PoolMeta
+class ReportGenerate(metaclass=PoolMeta):
     __name__ = 'report.generate'
 
     @classmethod
@@ -271,8 +270,7 @@ class ReportGenerate:
         return ext[1:], bytearray(result, 'utf-8'), False, filename
 
 
-class ReportTemplate:
-    __metaclass__ = PoolMeta
+class ReportTemplate(metaclass=PoolMeta):
     __name__ = 'report.template'
 
     variables_relation = fields.One2Many(
@@ -402,8 +400,7 @@ class ReportFlowSucceedGenerated(model.CoogView):
     template_name = fields.Char('template', readonly=True)
 
 
-class ReportCreate:
-    __metaclass__ = PoolMeta
+class ReportCreate(metaclass=PoolMeta):
     __name__ = 'report.create'
 
     flow_succeed_generated = StateView('report.create.flow_succeed_generated',

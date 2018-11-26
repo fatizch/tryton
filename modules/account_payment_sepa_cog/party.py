@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     @classmethod
@@ -25,8 +24,7 @@ class Party:
         return super(Party, cls)._export_light() | {'sepa_mandates'}
 
 
-class Address:
-    __metaclass__ = PoolMeta
+class Address(metaclass=PoolMeta):
     __name__ = 'party.address'
 
     def street_for_sepa(self):
@@ -37,12 +35,12 @@ class Address:
         address = []
         if self.street:
             address.extend(self.street.splitlines())
-        return unicodedata.normalize('NFKD', u' '.join(
+        return unicodedata.normalize('NFKD', ' '.join(
                 [x.strip() for x in address if x.strip()])
             ).encode('ascii', 'replace')[:70]
 
     @property
     def sepa_adrline_2(self):
-        return unicodedata.normalize('NFKD', u' '.join(
+        return unicodedata.normalize('NFKD', ' '.join(
                 [self.zip or '', self.city or '']).strip()
             ).encode('ascii', 'replace')[:70]

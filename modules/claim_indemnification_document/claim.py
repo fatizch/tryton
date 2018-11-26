@@ -19,8 +19,7 @@ __all__ = [
     ]
 
 
-class DocumentRequestLine:
-    __metaclass__ = PoolMeta
+class DocumentRequestLine(metaclass=PoolMeta):
     __name__ = 'document.request.line'
 
     @classmethod
@@ -29,8 +28,7 @@ class DocumentRequestLine:
             ['claim.indemnification']
 
 
-class Claim:
-    __metaclass__ = PoolMeta
+class Claim(metaclass=PoolMeta):
     __name__ = 'claim'
 
     required_indemnification_docs = fields.Function(
@@ -47,8 +45,7 @@ class Claim:
         return requests
 
 
-class ClaimIndemnification:
-    __metaclass__ = PoolMeta
+class ClaimIndemnification(metaclass=PoolMeta):
     __name__ = 'claim.indemnification'
 
     document_request_lines = fields.One2Many('document.request.line',
@@ -139,7 +136,7 @@ class ClaimIndemnification:
         if not required_documents:
             return
         documents = DocumentDesc.search([
-                ('code', 'in', required_documents.keys())
+                ('code', 'in', list(required_documents.keys()))
                 ])
         requests = []
         already_created = [d.document_desc
@@ -151,7 +148,7 @@ class ClaimIndemnification:
                 document_desc=document,
                 for_object=self,
                 claim=self.service.claim)
-            for k, v in required_documents[document.code].iteritems():
+            for k, v in required_documents[document.code].items():
                 setattr(request, k, v)
             requests.append(request)
         DocumentRequestLine.save(requests)

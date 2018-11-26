@@ -1,8 +1,7 @@
 from trytond.pool import PoolMeta
 
 
-class StartEndorsement:
-    __metaclass__ = PoolMeta
+class StartEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
     def get_next_state(self, current_state):

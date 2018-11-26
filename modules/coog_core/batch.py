@@ -3,7 +3,7 @@
 import os
 import shutil
 import logging
-import ConfigParser
+import configparser
 from datetime import datetime, date
 import uuid
 import itertools
@@ -15,8 +15,8 @@ from trytond.transaction import Transaction
 from trytond.model import ModelView, ModelSQL, Model, fields
 from trytond.perf_analyzer import PerfLog, profile, logger as perf_logger
 
-import model
-import coog_string
+from . import model
+from . import coog_string
 
 DatabaseOperationalError = backend.get('DatabaseOperationalError')
 
@@ -60,7 +60,7 @@ def analyze(meth):
             uuid.uuid4().hex, m, args, kwargs)
         ret = m(cls, *args, **kwargs)
         try:
-            PerfLog().on_leave(unicode(
+            PerfLog().on_leave(str(
                     {'args': args, 'kwargs': kwargs, 'return': ret}))
         except DatabaseOperationalError:
             raise
@@ -71,7 +71,7 @@ def analyze(meth):
 
 
 def load_batch_config():
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
     config_file = os.environ.get('TRYTOND_BATCH_CONFIG')
     if config_file:
         try:
@@ -112,7 +112,7 @@ class BatchRoot(ModelView):
     def serializable_params(cls, params):
         serializable = {}
 
-        for key, value in params.items():
+        for key, value in list(params.items()):
             if isinstance(value, date):
                 serializable[key] = value.strftime('%Y-%m-%d')
             else:
@@ -170,7 +170,7 @@ class BatchRoot(ModelView):
                 table = table.join(right, 'LEFT', condition)
             else:
                 table = right
-            for k, sub_tables in tables.iteritems():
+            for k, sub_tables in tables.items():
                 if k is None:
                     continue
                 table = convert_from(table, sub_tables)
@@ -242,7 +242,7 @@ class BatchRoot(ModelView):
     @classmethod
     def archive_treated_files(cls, files, archive_path, treatment_date,
             prefix='treated'):
-        assert isinstance(prefix, basestring)
+        assert isinstance(prefix, str)
         for file_name, file_path in files:
             treated_file_name = '%s_%s_%s' % (prefix, str(treatment_date),
                 file_name)
@@ -375,8 +375,8 @@ class CleanDatabaseBatch(BatchRoot):
     def __setup__(cls):
         super(CleanDatabaseBatch, cls).__setup__()
         cls._default_config_items.update({
-                'filepath_template': u'%{BATCHNAME}/%{FILENAME}',
-                'filepath_timestamp_format': u'%Y%m%d_%Hh%Mm%Ss',
+                'filepath_template': '%{BATCHNAME}/%{FILENAME}',
+                'filepath_timestamp_format': '%Y%m%d_%Hh%Mm%Ss',
                 })
 
     @classmethod
@@ -451,7 +451,7 @@ class CleanDatabaseBatch(BatchRoot):
             if c.table_query():
                 cls.logger.debug('model is table_query: %s' % cur_model)
                 continue
-            fields = [k for k, v in c._fields.iteritems()
+            fields = [k for k, v in c._fields.items()
                 if cls.check_field(v)]
             table = TableHandler(c)
             cls.check_model(buf, cur_model.model, fields, table)
@@ -480,7 +480,7 @@ class BatchParamsConfig(Model):
             c_params['treatment_date'] = datetime.strptime(
                 params['treatment_date'], '%Y-%m-%d').date()
         connection_date = params.get('connection_date')
-        if connection_date and isinstance(connection_date, basestring):
+        if connection_date and isinstance(connection_date, str):
             c_params['connection_date'] = datetime.strptime(
                 params['connection_date'], '%Y-%m-%d').date()
         if params.get('job_size'):

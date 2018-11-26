@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class CancelLineGroup:
-    __metaclass__ = PoolMeta
+class CancelLineGroup(metaclass=PoolMeta):
     __name__ = 'account.statement.line.group.cancel'
 
     def do_cancel(self, action):
@@ -23,8 +22,7 @@ class CancelLineGroup:
         return super(CancelLineGroup, self).do_cancel(action)
 
 
-class StatementJournal:
-    __metaclass__ = PoolMeta
+class StatementJournal(metaclass=PoolMeta):
     __name__ = 'account.statement.journal'
 
     outstandings_waiting_account = fields.Many2One('account.account',

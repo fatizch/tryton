@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     @classmethod
@@ -47,8 +46,7 @@ class Contract:
         self.compute_missing_options_details(caller.endorsement.effective_date)
 
 
-class ContractOption:
-    __metaclass__ = PoolMeta
+class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     current_extra_details = fields.Function(
@@ -95,8 +93,7 @@ class ContractOption:
         self.versions = self.versions
 
 
-class ContractOptionVersion(WithExtraDetails):
-    __metaclass__ = PoolMeta
+class ContractOptionVersion(WithExtraDetails, metaclass=PoolMeta):
     __name__ = 'contract.option.version'
 
     @classmethod

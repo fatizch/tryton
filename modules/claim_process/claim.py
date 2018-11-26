@@ -13,10 +13,8 @@ __all__ = [
     ]
 
 
-class Claim(CoogProcessFramework):
+class Claim(CoogProcessFramework, metaclass=ClassAttr):
     'Claim'
-
-    __metaclass__ = ClassAttr
     __name__ = 'claim'
 
     contact_history = fields.Function(
@@ -68,17 +66,17 @@ class Claim(CoogProcessFramework):
                 delivered.init_dict_for_rule_engine(args)
                 default_docs_per_loss[loss].update(
                     delivered.benefit.calculate_required_documents(args))
-            for loss, default_docs in default_docs_per_loss.items():
+            for loss, default_docs in list(default_docs_per_loss.items()):
                 if not default_docs:
                     continue
                 descs = {x for x in [DocumentDescription.get_document_per_code(
-                        c) for c in default_docs.keys()]}
+                        c) for c in list(default_docs.keys())]}
                 documents[loss] |= descs
         existing_document_desc = defaultdict(list)
         for line in self.document_request_lines:
             existing_document_desc[line.for_object].append(line.document_desc)
         to_save = []
-        for loss, docs in documents.items():
+        for loss, docs in list(documents.items()):
             for desc in docs:
                 if desc in existing_document_desc[loss]:
                     existing_document_desc[loss].remove(desc)
@@ -109,7 +107,7 @@ class Claim(CoogProcessFramework):
             if loss.services:
                 continue
             option_benefit = loss.get_possible_benefits()
-            for option_id, benefits in option_benefit.iteritems():
+            for option_id, benefits in option_benefit.items():
                 for benefit in benefits:
                     loss.init_services(Option(option_id), [benefit])
                     to_save.extend(loss.services)

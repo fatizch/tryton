@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class Loss:
-    __metaclass__ = PoolMeta
+class Loss(metaclass=PoolMeta):
     __name__ = 'claim.loss'
 
     deduction_kinds = fields.Function(

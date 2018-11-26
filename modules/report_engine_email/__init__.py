@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import report_engine
+from . import report_engine
 
 
 def register():

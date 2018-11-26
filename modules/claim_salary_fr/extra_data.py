@@ -7,10 +7,8 @@ __all__ = [
     ]
 
 
-class ExtraData:
+class ExtraData(metaclass=PoolMeta):
     'Extra Data'
-
-    __metaclass__ = PoolMeta
     __name__ = 'extra_data'
 
     @classmethod

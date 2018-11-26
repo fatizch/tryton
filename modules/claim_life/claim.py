@@ -30,8 +30,7 @@ __all__ = [
     ]
 
 
-class Claim:
-    __metaclass__ = PoolMeta
+class Claim(metaclass=PoolMeta):
     __name__ = 'claim'
 
     beneficiaries = fields.Function(
@@ -110,8 +109,7 @@ class Claim:
                 break
 
 
-class Loss:
-    __metaclass__ = PoolMeta
+class Loss(metaclass=PoolMeta):
     __name__ = 'claim.loss'
 
     possible_covered_persons = fields.Function(
@@ -403,8 +401,7 @@ class Loss:
         return [l.id for l in possible_relapse_losses if l.id != self.id]
 
 
-class ClaimService:
-    __metaclass__ = PoolMeta
+class ClaimService(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     beneficiaries = fields.One2Many('claim.beneficiary', 'service',
@@ -432,7 +429,7 @@ class ClaimService:
         values = self.extra_datas[-1].extra_data_values
         old_values = self.loss.relapse_initial_loss.claim. \
             delivered_services[0].extra_datas[-1].extra_data_values
-        for key, value in old_values.iteritems():
+        for key, value in old_values.items():
             if key in values:
                 values[key] = value
         self.extra_datas[-1].extra_data_values = values
@@ -677,8 +674,7 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView,
         return None
 
 
-class Indemnification:
-    __metaclass__ = PoolMeta
+class Indemnification(metaclass=PoolMeta):
     __name__ = 'claim.indemnification'
 
     beneficiary_definition = fields.Function(
@@ -690,7 +686,7 @@ class Indemnification:
             self.beneficiary) if self.service else None
 
     def invoice_line_description(self):
-        return u'%s - %s- %s - %s' % (
+        return '%s - %s- %s - %s' % (
             self.service.loss.covered_person.rec_name
             if self.service.loss.covered_person
             else self.service.loss.claim.claimant.rec_name,
@@ -715,8 +711,7 @@ class Indemnification:
         return [('loss.covered_person', '=', party)]
 
 
-class DocumentRequestLine:
-    __metaclass__ = PoolMeta
+class DocumentRequestLine(metaclass=PoolMeta):
     __name__ = 'document.request.line'
 
     @classmethod

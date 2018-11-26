@@ -38,8 +38,8 @@ def main():
             lines = f.readlines()
             sh_lines += extract_sh(lines)
 
-    print '#!/bin/sh\n'
-    print ''.join(sh_lines)
+    print('#!/bin/sh\n')
+    print(''.join(sh_lines))
 
 
 if __name__ == '__main__':

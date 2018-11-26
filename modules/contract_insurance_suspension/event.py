@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class EventLog:
-    __metaclass__ = PoolMeta
+class EventLog(metaclass=PoolMeta):
     __name__ = 'event.log'
 
     @classmethod

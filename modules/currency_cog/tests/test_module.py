@@ -22,10 +22,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
     def test0001_testCurrencyCreation(self):
         euro = self.Currency()
         euro.name = 'Euro'
-        euro.symbol = u'€'
+        euro.symbol = '€'
         euro.code = 'EUR'
         euro.save()
-        self.assert_(euro.id)
+        self.assertTrue(euro.id)
 
 
 def suite():

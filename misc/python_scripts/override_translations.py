@@ -76,7 +76,7 @@ def get_translation_file(path_to_coog, module, language):
 
 if __name__ == '__main__':
     if not len(sys.argv) == 3:
-        print 'Usage : python override_translations.py input_file \
-        path_to_coog'
+        print('Usage : python override_translations.py input_file \
+        path_to_coog')
     else:
         override_translation(sys.argv[1], sys.argv[2])

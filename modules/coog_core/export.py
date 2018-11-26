@@ -20,9 +20,9 @@ from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 
-import fields
-import coog_string
-from historizable import Historizable
+from . import fields
+from . import coog_string
+from .historizable import Historizable
 
 __all__ = [
     'NotExportImport',
@@ -149,7 +149,7 @@ class ExportImportMixin(Historizable):
         for value in already_exported:
             instances[value.__name__].append((value.rec_name,
                 getattr(value, value._func_key)))
-        for k, v in instances.iteritems():
+        for k, v in instances.items():
             export_log += '<div><b>%s</b></div>' % k
             for elem in v:
                 export_log += '<div>    %s - %s</div>' % elem
@@ -194,7 +194,7 @@ class ExportImportMixin(Historizable):
         pool = Pool()
         new_values = {}
         lines = {}
-        for field_name, value in values.iteritems():
+        for field_name, value in values.items():
             if field_name in ('__name__', '_func_key'):
                 continue
             field = cls._fields[field_name]
@@ -223,7 +223,7 @@ class ExportImportMixin(Historizable):
             else:
                 new_values[field_name] = value
 
-        for field_name, value in lines.iteritems():
+        for field_name, value in lines.items():
             field = cls._fields[field_name]
             Target = field.get_target()
             if main_object:
@@ -259,11 +259,11 @@ class ExportImportMixin(Historizable):
                 if isinstance(field, tryton_fields.Many2Many):
                     to_remove.append(
                         ('remove', [l.id for l in
-                                existing_lines.itervalues()]))
+                                existing_lines.values()]))
                 else:
                     to_delete.append(
                         ('delete', [l.id for l in
-                                existing_lines.itervalues()]))
+                                existing_lines.values()]))
 
             new_values[field_name] = []
             if to_create:
@@ -288,7 +288,7 @@ class ExportImportMixin(Historizable):
 
         pool = Pool()
         was_list = True
-        if isinstance(values, basestring):
+        if isinstance(values, str):
             values = json.loads(values, object_hook=JSONDecoder())
         if isinstance(values, dict):
             was_list = False
@@ -424,7 +424,7 @@ class ExportImportMixin(Historizable):
         else:
             model_configuration = None
 
-        for field_name, field in self._fields.iteritems():
+        for field_name, field in self._fields.items():
             if isinstance(field, tryton_fields.MultiValue):
                 field = field._field
             if field_name in skip_fields:
@@ -502,7 +502,7 @@ class ExportImportMixin(Historizable):
                 cls.raise_user_error('missing_export_configuration',
                     configuration_code,
                     error_description='missing_export_configuration')
-        for ext_id, values in objects.iteritems():
+        for ext_id, values in objects.items():
             try:
                 possible_objects = cls.search_for_export_import(values)
                 if not possible_objects:
@@ -542,7 +542,7 @@ class ExportImportMixin(Historizable):
                         }
         """
         return_values = {}
-        for ext_id, to_create in objects.iteritems():
+        for ext_id, to_create in objects.items():
             try:
                 entity = cls.import_json(to_create)
             except UserError as exc:
@@ -593,7 +593,7 @@ class FileSelector(ModelView):
                     instances[value['__name__']] = []
                 instances[value['__name__']].append(value['_func_key'])
             result = ''
-            for k, v in instances.iteritems():
+            for k, v in instances.items():
                 result += '<div><b>%s</b></div>' % k
                 for elem in v:
                     result += '<div>    %s</div>' % elem

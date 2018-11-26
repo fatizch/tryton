@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Period:
-    __metaclass__ = PoolMeta
+class Period(metaclass=PoolMeta):
     __name__ = 'account.period'
 
     def get_invoice_sequence(self, invoice_type):

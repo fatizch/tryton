@@ -4,19 +4,19 @@ from proteus import Model
 
 
 def write_header(f):
-    f.write(u'<?xml version="1.0"?>\n')
-    f.write(u'<tryton>\n')
-    f.write(u'    <data>\n')
+    f.write('<?xml version="1.0"?>\n')
+    f.write('<tryton>\n')
+    f.write('    <data>\n')
 
 
 def write_footer(f):
-    f.write(u'    </data>\n')
-    f.write(u'</tryton>\n')
+    f.write('    </data>\n')
+    f.write('</tryton>\n')
 
 
 def write_record(f, te, parent=None):
     id = te.translated_technical_name
-    record = u'''        <record model="rule_engine.function" id="%s">
+    record = '''        <record model="rule_engine.function" id="%s">
             <field name="translated_technical_name">%s</field>
             <field name="description">%s</field>
             <field name="type">%s</field>
@@ -27,25 +27,25 @@ def write_record(f, te, parent=None):
         te.type,
         te.language.code[0:2])
     if te.namespace:
-        record += u'\n            '
-        record += u'<field name="namespace">%s</field>' % te.namespace
+        record += '\n            '
+        record += '<field name="namespace">%s</field>' % te.namespace
     if te.name:
-        record += u'\n            '
-        record += u'<field name="name">%s</field>' % te.name
+        record += '\n            '
+        record += '<field name="name">%s</field>' % te.name
     if te.fct_args:
-        record += u'\n            '
-        record += u'<field name="fct_args">%s</field>' % te.fct_args
+        record += '\n            '
+        record += '<field name="fct_args">%s</field>' % te.fct_args
     if te.long_description:
-        record += u'\n            '
-        record += u'<field name="long_description">%s</field>' % \
+        record += '\n            '
+        record += '<field name="long_description">%s</field>' % \
             te.long_description
     if parent:
-        record += u'\n            '
-        record += u'<field name="parent" ref="%s"/>' % parent
+        record += '\n            '
+        record += '<field name="parent" ref="%s"/>' % parent
     record += '\n        </record>\n'
     f.write(record.encode('utf-8'))
     if not parent:
-        record = u'''        <record model="rule_engine.context-function" id="cte_default_%s">
+        record = '''        <record model="rule_engine.context-function" id="cte_default_%s">
             <field name="context" ref="rule_engine.default_context"/>
             <field name="tree_element" ref="%s"/>
         </record>\n''' % (id, id)

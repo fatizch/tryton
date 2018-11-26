@@ -177,7 +177,7 @@ class MigratorContactMechanism(migrator.Migrator):
         mechanisms = ['phone', 'fax', 'email', 'mobile']
         for row in rows:
             row_mech = {k: row.pop(k) for k in mechanisms}
-            for k, v in row_mech.items():
+            for k, v in list(row_mech.items()):
                 if v:
                     new_row = dict(**row)
                     new_row['value'] = v
@@ -210,8 +210,8 @@ class MigratorContactMechanism(migrator.Migrator):
     @classmethod
     def select_remove_ids(cls, ids, excluded, **kwargs):
         table_name = cls.model.replace('.', '_')
-        existing_ids = tools.cache_from_query(table_name,
-            ('party', 'sequence', 'type')).keys()
+        existing_ids = list(tools.cache_from_query(table_name,
+            ('party', 'sequence', 'type')).keys())
         existing = []
         for id_ in existing_ids:
             existing.append('%s_%s_%s' % (id_[0], id_[1], id_[2]))
@@ -403,7 +403,7 @@ class MigratorInterlocutor(migrator.Migrator):
             'party.party', 'code',
             ('code', 'in', [r['company'] for r in rows]))
         addresses = Address.search([
-                ('party', 'in', cls.cache_obj['company'].values())
+                ('party', 'in', list(cls.cache_obj['company'].values()))
                 ])
         cls.cache_obj['address'] = {
             '%s:%s' % (x.party.code, x.sequence): x
@@ -428,7 +428,7 @@ class MigratorInterlocutor(migrator.Migrator):
         mechanisms = ['phone', 'email']
         row_mech = {k: row.pop(k) for k in mechanisms}
         contacts = []
-        for k, v in row_mech.items():
+        for k, v in list(row_mech.items()):
             if v:
                 new_contact = {
                     'party': party,
@@ -480,7 +480,7 @@ class MigratorInterlocutor(migrator.Migrator):
     @classmethod
     def select(cls, **kwargs):
         select = cls.table.select(
-            *[Column(cls.table, x) for x in cls.columns.keys()])
+            *[Column(cls.table, x) for x in list(cls.columns.keys())])
         return select, cls.func_key
 
     @classmethod
@@ -488,7 +488,7 @@ class MigratorInterlocutor(migrator.Migrator):
         ids = []
         cls.init_cache(rows)
         for row in rows:
-            ids.append(u'{}_{}'.format(
+            ids.append('{}_{}'.format(
                 row['interlocutor'] or '',
                 row['company'] or ''))
         return set(ids)

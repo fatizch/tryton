@@ -1,12 +1,12 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import ir
-import batch
-import rule_engine
-import event
-import linter
+from . import ir
+from . import batch
+from . import rule_engine
+from . import event
+from . import linter
 from trytond.pool import Pool
-from rule_engine import get_rule_mixin, check_args, RuleTools
+from .rule_engine import get_rule_mixin, check_args, RuleTools
 
 __all__ = [
     'get_rule_mixin',

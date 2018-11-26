@@ -26,8 +26,7 @@ __all__ = [
     ]
 
 
-class Configuration(CompanyMultiValueMixin):
-    __metaclass__ = PoolMeta
+class Configuration(CompanyMultiValueMixin, metaclass=PoolMeta):
     __name__ = 'endorsement.configuration'
 
     endorsement_set_sequence = fields.MultiValue(
@@ -250,8 +249,7 @@ class EndorsementSet(model.CoogSQL, model.CoogView, Printable):
         return super(Endorsement, self).get_report_functional_date(event_code)
 
 
-class Endorsement:
-    __metaclass__ = PoolMeta
+class Endorsement(metaclass=PoolMeta):
     __name__ = 'endorsement'
 
     endorsement_set = fields.Many2One('endorsement.set', 'Endorsement Set',
@@ -342,7 +340,7 @@ class Endorsement:
             if contract_set:
                 contract_sets[contract_set].append(endorsement)
 
-        for grouped_endorsements in contract_sets.values():
+        for grouped_endorsements in list(contract_sets.values()):
             endorsement_set = EndorsementSet()
             for endorsement in grouped_endorsements:
                 endorsement.endorsement_set = endorsement_set

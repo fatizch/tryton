@@ -1,10 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-import slip
-import wizard
-import account
-import batch
+from . import slip
+from . import wizard
+from . import account
+from . import batch
 
 
 def register():

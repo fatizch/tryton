@@ -23,8 +23,7 @@ __all__ = [
     ]
 
 
-class IndemnificationDefinition:
-    __metaclass__ = PoolMeta
+class IndemnificationDefinition(metaclass=PoolMeta):
     __name__ = 'claim.indemnification_definition'
 
     @fields.depends('beneficiary')
@@ -43,8 +42,7 @@ class IndemnificationDefinition:
         return self.service.benefit.company_products if self.service else []
 
 
-class CreateIndemnification:
-    __metaclass__ = PoolMeta
+class CreateIndemnification(metaclass=PoolMeta):
     __name__ = 'claim.create_indemnification'
 
     @classmethod
@@ -145,7 +143,7 @@ class TransferServices(Wizard):
         lines = []
         source_data = TransferServicesContracts.benefit_data(source,
             source.end_date)
-        for benefit, option_list in source_data.iteritems():
+        for benefit, option_list in source_data.items():
             for option, number in option_list:
                 lines.append({
                         'number': number,
@@ -240,7 +238,7 @@ class TransferServicesContracts(model.CoogView):
             self.target_contract.end_date)
         self.source_benefits = '\n'.join([self.raise_user_error(
                     'benefit_displayer', (b.rec_name, len(o)),
-                    raise_exception=False) for b, o in benefit_data.items()])
+                    raise_exception=False) for b, o in list(benefit_data.items())])
 
     @fields.depends('target_contract', 'target_benefits', 'target_product')
     def on_change_target_contract(self):
@@ -253,7 +251,7 @@ class TransferServicesContracts(model.CoogView):
             self.target_contract.end_date)
         self.target_benefits = '\n'.join([self.raise_user_error(
                     'benefit_displayer', (b.rec_name, len(o)),
-                    raise_exception=False) for b, o in benefit_data.items()])
+                    raise_exception=False) for b, o in list(benefit_data.items())])
 
 
 class TransferServicesBenefits(model.CoogView):

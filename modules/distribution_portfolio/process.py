@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class ContractSubscribe:
-    __metaclass__ = PoolMeta
+class ContractSubscribe(metaclass=PoolMeta):
     __name__ = 'contract.subscribe'
 
     def default_process_parameters(self, name):

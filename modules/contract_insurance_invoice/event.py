@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class Event:
-    __metaclass__ = PoolMeta
+class Event(metaclass=PoolMeta):
     __name__ = 'event'
 
     @classmethod
@@ -29,8 +28,7 @@ class Event:
             **kwargs)
 
 
-class EventLog:
-    __metaclass__ = PoolMeta
+class EventLog(metaclass=PoolMeta):
     __name__ = 'event.log'
 
     @classmethod
@@ -68,8 +66,7 @@ class EventLog:
         return super(EventLog, cls).get_related_instances(object_, model_name)
 
 
-class EventTypeAction:
-    __metaclass__ = PoolMeta
+class EventTypeAction(metaclass=PoolMeta):
     __name__ = 'event.type.action'
 
     @classmethod

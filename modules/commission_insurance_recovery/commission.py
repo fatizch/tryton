@@ -18,8 +18,7 @@ __all__ = [
     ]
 
 
-class Plan:
-    __metaclass__ = PoolMeta
+class Plan(metaclass=PoolMeta):
     __name__ = 'commission.plan'
 
     commission_recovery = fields.Many2One('commission.plan.recovery_rule',
@@ -72,8 +71,7 @@ class CommissionRecoveryRule(
         return coog_string.slugify(self.name)
 
 
-class Commission:
-    __metaclass__ = PoolMeta
+class Commission(metaclass=PoolMeta):
     __name__ = 'commission'
 
     is_recovery = fields.Boolean('Is Recovery Commission', readonly=True)
@@ -103,8 +101,7 @@ class Commission:
         return invoice_line
 
 
-class Agent:
-    __metaclass__ = PoolMeta
+class Agent(metaclass=PoolMeta):
     __name__ = 'commission.agent'
 
     @classmethod

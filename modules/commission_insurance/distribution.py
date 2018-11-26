@@ -15,8 +15,7 @@ __all__ = [
     ]
 
 
-class DistributionNetwork:
-    __metaclass__ = PoolMeta
+class DistributionNetwork(metaclass=PoolMeta):
     __name__ = 'distribution.network'
 
     is_broker = fields.Boolean('Broker',

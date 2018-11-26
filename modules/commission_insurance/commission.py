@@ -54,8 +54,7 @@ COMMISSION_AMOUNT_DIGITS = 8
 COMMISSION_RATE_DIGITS = 4
 
 
-class Commission:
-    __metaclass__ = PoolMeta
+class Commission(metaclass=PoolMeta):
     __name__ = 'commission'
 
     commissioned_contract = fields.Many2One('contract',
@@ -1025,7 +1024,7 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
         target_keys = {agent.get_hash(): agent
             for agent in target_broker.agents}
         matches = {}
-        for source_agent, source_key in source_keys.iteritems():
+        for source_agent, source_key in source_keys.items():
             matches[source_agent] = target_keys.get(source_key, None)
         return matches
 
@@ -1189,8 +1188,7 @@ class CreateAgentsAsk(model.CoogView):
         return Transaction().context.get('company')
 
 
-class CreateInvoice:
-    __metaclass__ = PoolMeta
+class CreateInvoice(metaclass=PoolMeta):
     __name__ = 'commission.create_invoice'
 
     def do_create_(self, action):
@@ -1250,8 +1248,7 @@ class CreateInvoice:
         return pool.get('commission').browse([x for x, in cursor.fetchall()])
 
 
-class CreateInvoiceAsk:
-    __metaclass__ = PoolMeta
+class CreateInvoiceAsk(metaclass=PoolMeta):
     __name__ = 'commission.create_invoice.ask'
 
     post_invoices = fields.Boolean('Post Invoices')

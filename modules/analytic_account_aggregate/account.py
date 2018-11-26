@@ -20,8 +20,7 @@ __all__ = [
     ]
 
 
-class Line:
-    __metaclass__ = PoolMeta
+class Line(metaclass=PoolMeta):
     __name__ = 'analytic_account.line'
 
     snapshot = fields.Function(fields.Many2One('account.move.snapshot',

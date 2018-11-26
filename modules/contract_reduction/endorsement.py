@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class StartEndorsement:
-    __metaclass__ = PoolMeta
+class StartEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
     @classmethod
@@ -54,8 +53,7 @@ class StartEndorsement:
                         })
 
 
-class Endorsement:
-    __metaclass__ = PoolMeta
+class Endorsement(metaclass=PoolMeta):
     __name__ = 'endorsement'
 
     @classmethod

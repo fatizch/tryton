@@ -2,10 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import company
-import res
-import ir
-import test_case
+from . import company
+from . import res
+from . import ir
+from . import test_case
 
 
 def register():

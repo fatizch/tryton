@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class CommercialProduct:
-    __metaclass__ = PoolMeta
+class CommercialProduct(metaclass=PoolMeta):
     __name__ = 'distribution.commercial_product'
 
     report_templates = fields.Many2Many(

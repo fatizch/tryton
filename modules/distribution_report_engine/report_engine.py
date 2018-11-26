@@ -11,9 +11,8 @@ __all__ = [
     ]
 
 
-class ReportComProductRelation(model.CoogSQL):
+class ReportComProductRelation(model.CoogSQL, metaclass=PoolMeta):
     'Report template to Commercial Product relation'
-    __metaclass__ = PoolMeta
     __name__ = 'report.template-distribution.commercial_product'
 
     report_template = fields.Many2One('report.template', 'Document',
@@ -22,9 +21,8 @@ class ReportComProductRelation(model.CoogSQL):
         'Commercial Product', ondelete='CASCADE')
 
 
-class ReportTemplate:
+class ReportTemplate(metaclass=PoolMeta):
     __name__ = 'report.template'
-    __metaclass__ = PoolMeta
 
     com_products = fields.Many2Many(
         'report.template-distribution.commercial_product',

@@ -111,9 +111,8 @@ class PaymentSuspension(model.CoogSQL, model.CoogView):
         return not self.payment_line_due.is_reconciled
 
 
-class JournalFailureAction:
+class JournalFailureAction(metaclass=PoolMeta):
     __name__ = 'account.payment.journal.failure_action'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
@@ -125,9 +124,8 @@ class JournalFailureAction:
         cls._fail_actions_order += ['suspend', 'suspend_manual']
 
 
-class Payment:
+class Payment(metaclass=PoolMeta):
     __name__ = 'account.payment'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def fail_suspend_manual(cls, *args):
@@ -145,8 +143,7 @@ class Payment:
             payments_billing)
 
 
-class Journal:
-    __metaclass__ = PoolMeta
+class Journal(metaclass=PoolMeta):
     __name__ = 'account.payment.journal'
 
     apply_payment_suspension = fields.Boolean('Apply Payment Suspension',

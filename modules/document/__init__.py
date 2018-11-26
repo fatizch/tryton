@@ -2,8 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import document
-import attachment
+from . import document
+from . import attachment
 
 
 def register():

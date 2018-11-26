@@ -280,9 +280,8 @@ class BankAccountNumber(export.ExportImportMixin):
         return None
 
 
-class BankAccountParty(export.ExportImportMixin):
+class BankAccountParty(export.ExportImportMixin, metaclass=PoolMeta):
     'Bank Account - Party'
-    __metaclass__ = PoolMeta
     __name__ = 'bank.account-party.party'
 
     @classmethod

@@ -20,7 +20,7 @@ __all__ = [
 
 
 def test_values_against_model(model_, expected_values):
-    for k, v in expected_values.iteritems():
+    for k, v in expected_values.items():
         value = getattr(model_, k)
         assert value == v, '"%s" should be "%s"' % (value, v)
 
@@ -129,13 +129,13 @@ class CoogTestCase(ModuleTestCase):
             'TestCaseModel': 'ir.test_case',
             'Lang': 'ir.lang',
             }
-        for module in modules.itervalues():
+        for module in modules.values():
             models.update(module.ModuleTestCase.get_models())
 
         self._models = {}
         with Transaction().start(DB_NAME, 1):
             pool = Pool()
-            for k, v in models.iteritems():
+            for k, v in models.items():
                 try:
                     good_model = pool.get(v)
                 except KeyError:
@@ -154,16 +154,16 @@ class CoogTestCase(ModuleTestCase):
                 '..', '..', self.__class__.module))
         doc_folder = os.path.join(module_path, 'doc')
         for lang in ('fr', 'en'):
-            self.assert_(os.path.isdir(os.path.join(doc_folder, lang)),
+            self.assertTrue(os.path.isdir(os.path.join(doc_folder, lang)),
                 'Missing %s doc folder' % lang)
             log = os.path.join(doc_folder, lang, 'CHANGELOG')
-            self.assert_(os.path.isfile(log),
+            self.assertTrue(os.path.isfile(log),
                 'Missing %s CHANGELOG file' % (lang,))
             self.assertNotEqual(os.stat(log).st_size, 0,
                 'File CHANGELOG for %s looks empty' % (lang,))
             for filename in ('index', 'summary', 'features'):
                 filepath = os.path.join(doc_folder, lang, '%s.rst' % filename)
-                self.assert_(os.path.isfile(filepath),
+                self.assertTrue(os.path.isfile(filepath),
                     'Missing %s %s.rst doc file' % (lang, filename))
                 self.assertNotEqual(os.stat(filepath).st_size, 0,
                     'File %s.rst for %s doc looks empty' % (filename, lang))

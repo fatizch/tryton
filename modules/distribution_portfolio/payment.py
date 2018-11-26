@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Payment:
-    __metaclass__ = PoolMeta
+class Payment(metaclass=PoolMeta):
     __name__ = 'account.payment'
 
     portfolio = fields.Function(
@@ -46,8 +45,7 @@ class Payment:
         return [('party.portfolio',) + tuple(clause[1:])]
 
 
-class Mandate:
-    __metaclass__ = PoolMeta
+class Mandate(metaclass=PoolMeta):
     __name__ = 'account.payment.sepa.mandate'
 
     portfolio = fields.Function(
@@ -80,8 +78,7 @@ class Mandate:
         return [('party.portfolio',) + tuple(clause[1:])]
 
 
-class MergedPayment:
-    __metaclass__ = PoolMeta
+class MergedPayment(metaclass=PoolMeta):
     __name__ = 'account.payment.merged'
 
     portfolio = fields.Function(

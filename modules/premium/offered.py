@@ -106,8 +106,7 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
                 until=max_date)
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     fees = fields.Many2Many('offered.product-account.fee', 'product', 'fee',
@@ -256,7 +255,7 @@ class OptionDescriptionPremiumRule(
         rule_dict_template = self.get_base_premium_dict(rated_instance)
         dict_len = len(rule_dict_template)
         all_lines = []
-        for date in lines.iterkeys():
+        for date in lines.keys():
             if len(rule_dict_template) == dict_len:
                 rated_instance.init_dict_for_rule_engine(rule_dict_template)
             rule_dict = rule_dict_template.copy()
@@ -281,8 +280,7 @@ class OptionDescriptionPremiumRule(
         return [cls._premium_result_class(0, rule_dict)]
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     fees = fields.Many2Many('offered.option.description-account.fee',

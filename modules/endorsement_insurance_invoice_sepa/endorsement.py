@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Endorsement:
-    __metaclass__ = PoolMeta
+class Endorsement(metaclass=PoolMeta):
     __name__ = 'endorsement'
 
     @classmethod
@@ -40,8 +39,7 @@ class Endorsement:
         cls.handle_sepa_change(contract_endorsements)
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     @classmethod

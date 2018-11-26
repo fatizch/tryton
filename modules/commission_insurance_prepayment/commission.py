@@ -94,8 +94,7 @@ class Commission(WithExtraDetails):
             self.redeemed_prepayment *= -1
 
 
-class PlanLines:
-    __metaclass__ = PoolMeta
+class PlanLines(metaclass=PoolMeta):
     __name__ = 'commission.plan.line'
 
     prepayment_formula = fields.Char('Prepayment Formula',
@@ -116,8 +115,7 @@ class PlanLines:
         return ' \n'.join(lines)
 
 
-class Plan:
-    __metaclass__ = PoolMeta
+class Plan(metaclass=PoolMeta):
     __name__ = 'commission.plan'
 
     is_prepayment = fields.Function(fields.Boolean('Is Prepayment'),
@@ -181,8 +179,7 @@ class Plan:
         return []
 
 
-class Agent:
-    __metaclass__ = PoolMeta
+class Agent(metaclass=PoolMeta):
     __name__ = 'commission.agent'
 
     @classmethod
@@ -280,12 +277,12 @@ class Agent:
         redeemed_prepayments = cls.sum_of_redeemed_prepayment(agents)
         # TODO: improve this condition
         if not redeemed_prepayments:
-            for key, _ in result.iteritems():
+            for key, _ in result.items():
                 if key not in result:
                     continue
                 result[key] += [{'sum_of_prepayments': result[key][0]}, ]
         else:
-            for key, prepayment_amount_base in redeemed_prepayments.iteritems():
+            for key, prepayment_amount_base in redeemed_prepayments.items():
                 if key not in result:
                     continue
                 result[key] += [{'sum_of_redeemed_prepayments':
@@ -296,8 +293,7 @@ class Agent:
         return result
 
 
-class FilterCommissions:
-    __metaclass__ = PoolMeta
+class FilterCommissions(metaclass=PoolMeta):
     __name__ = 'commission.filter_commission'
 
     def do_aggregated_commissions(self, action):
@@ -318,8 +314,7 @@ class FilterCommissions:
         return act, ctx
 
 
-class FilterAggregatedCommissions:
-    __metaclass__ = PoolMeta
+class FilterAggregatedCommissions(metaclass=PoolMeta):
     __name__ = 'commission.aggregated.open_detail'
 
     def do_filter_commission(self, action):
@@ -337,9 +332,8 @@ class FilterAggregatedCommissions:
         return action, {}
 
 
-class AggregatedCommission:
+class AggregatedCommission(metaclass=PoolMeta):
 
-    __metaclass__ = PoolMeta
     __name__ = 'commission.aggregated'
 
     @classmethod

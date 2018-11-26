@@ -2,8 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import configuration
-import batch
+from . import configuration
+from . import batch
 
 
 def register():

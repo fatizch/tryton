@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     is_group = fields.Boolean('Group Product')
@@ -28,15 +27,13 @@ class Product:
         cls.coverages.depends.append('is_group')
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     is_group = fields.Boolean('Group Coverage')
 
 
-class ItemDesc:
-    __metaclass__ = PoolMeta
+class ItemDesc(metaclass=PoolMeta):
     __name__ = 'offered.item.description'
 
     @classmethod

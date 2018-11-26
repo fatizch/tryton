@@ -29,10 +29,8 @@ __all__ = [
     ]
 
 
-class OptionSubscription:
+class OptionSubscription(metaclass=PoolMeta):
     'Option Subscription'
-
-    __metaclass__ = PoolMeta
     __name__ = 'contract.wizard.option_subscription'
 
     def default_options_displayer(self, values):
@@ -68,10 +66,8 @@ class OptionSubscription:
         return 'end'
 
 
-class OptionsDisplayer:
+class OptionsDisplayer(metaclass=PoolMeta):
     'Select Covered Element'
-
-    __metaclass__ = PoolMeta
     __name__ = 'contract.wizard.option_subscription.options_displayer'
 
     covered_element = fields.Many2One('contract.covered_element',
@@ -114,8 +110,7 @@ class OptionsDisplayer:
             coverages)
 
 
-class WizardOption:
-    __metaclass__ = PoolMeta
+class WizardOption(metaclass=PoolMeta):
     __name__ = 'contract.wizard.option_subscription.options_displayer.option'
 
     def init_subscribed_option(self, displayer, option):
@@ -434,7 +429,7 @@ class CreateExtraPremiumOptionSelector(model.CoogView):
             to_create[0]['selected'] = True
         result = {'add': [(-1, x) for x in to_create]}
         if existing_options:
-            result['remove'] = [x.id for x in existing_options.itervalues()]
+            result['remove'] = [x.id for x in existing_options.values()]
         return result
 
 
@@ -492,7 +487,7 @@ class ManageExclusion(Wizard):
                     exclusions[exclusion.id].append(option)
             all_exclusions += [model.dictionarize(Displayer.new_displayer(
                         cur_covered, exclusion, options))
-                for exclusion, options in exclusions.iteritems()]
+                for exclusion, options in exclusions.items()]
 
         defaults['all_exclusions'] = all_exclusions
         if covered_element:
@@ -512,7 +507,7 @@ class ManageExclusion(Wizard):
                 if option.selected:
                     per_option[option.option].append(exclusion.exclusion)
         to_save = []
-        for option, exclusions in per_option.iteritems():
+        for option, exclusions in per_option.items():
             if {x.id for x in exclusions} != {x.id for x in option.exclusions}:
                 option.exclusions = exclusions
                 to_save.append(option)
@@ -666,8 +661,7 @@ class ExclusionOptionSelector(model.CoogView):
     selected = fields.Boolean('Selected')
 
 
-class PartyErase:
-    __metaclass__ = PoolMeta
+class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
     @classmethod

@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class Move:
-    __metaclass__ = PoolMeta
+class Move(metaclass=PoolMeta):
     __name__ = 'account.move'
 
     def _create_waiting_account_move(self, cancel):

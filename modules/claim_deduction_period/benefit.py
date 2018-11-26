@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class LossDescription:
-    __metaclass__ = PoolMeta
+class LossDescription(metaclass=PoolMeta):
     __name__ = 'benefit.loss.description'
 
     deduction_period_kinds = fields.Many2Many(
@@ -63,8 +62,7 @@ class LossDescriptionDeductionPeriodKindRelation(model.CoogSQL):
         ondelete='RESTRICT')
 
 
-class BenefitRule:
-    __metaclass__ = PoolMeta
+class BenefitRule(metaclass=PoolMeta):
     __name__ = 'benefit.rule'
 
     @classmethod

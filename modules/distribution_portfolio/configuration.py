@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Configuration(CompanyMultiValueMixin):
-    __metaclass__ = PoolMeta
+class Configuration(CompanyMultiValueMixin, metaclass=PoolMeta):
     __name__ = 'party.configuration'
 
     default_portfolio = fields.MultiValue(

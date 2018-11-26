@@ -70,7 +70,7 @@ class EventLog(model.CoogSQL, model.CoogView):
             date = datetime.datetime.now()
         log_keys = cls.get_event_keys(objects)
         log_dicts = []
-        for key in sum(log_keys.values(), []):
+        for key in sum(list(log_keys.values()), []):
             key.update({
                     'date': date,
                     'user': user_id,
@@ -116,9 +116,8 @@ class EventLog(model.CoogSQL, model.CoogView):
             return []
 
 
-class Event:
+class Event(metaclass=PoolMeta):
     __name__ = 'event'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def notify_events(cls, objects, event_code, description=None, **kwargs):
@@ -133,8 +132,7 @@ class Event:
             description, **kwargs)
 
 
-class Trigger:
+class Trigger(metaclass=PoolMeta):
     __name__ = 'ir.trigger'
-    __metaclass__ = PoolMeta
 
     event_type = fields.Many2One('event.type', 'Event Type')

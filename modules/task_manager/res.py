@@ -19,8 +19,7 @@ __all__ = [
     ]
 
 
-class User:
-    __metaclass__ = PoolMeta
+class User(metaclass=PoolMeta):
     __name__ = 'res.user'
 
     teams = fields.Many2Many('res.user-res.team', 'user', 'team', 'Teams')
@@ -226,8 +225,7 @@ class UserTeamRelation(model.CoogSQL, model.CoogView):
                 ('user', '=', self.user)])
 
 
-class ProcessStepRelation:
-    __metaclass__ = PoolMeta
+class ProcessStepRelation(metaclass=PoolMeta):
     __name__ = 'process-process.step'
 
     teams = fields.Many2Many('res.team.priority', 'process_step', 'team',

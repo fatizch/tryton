@@ -21,8 +21,7 @@ SUSPENSION_STATES = {
     }
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     actives_rights_suspensions = fields.One2Many('contract.right_suspension',

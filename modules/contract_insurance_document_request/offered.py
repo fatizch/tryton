@@ -119,8 +119,7 @@ class RuleDocumentDescriptionRelation(model.CoogSQL, model.CoogView):
         return {x[1]: getattr(self, x[0]) for x in self.rule_result_fields}
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     document_rules = fields.One2Many('document.rule', 'product',
@@ -147,8 +146,7 @@ class Product:
             return self.document_rules[0].reception_requires_attachment
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     document_rules = fields.One2Many('document.rule', 'option',

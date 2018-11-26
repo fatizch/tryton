@@ -95,7 +95,7 @@ class DesynchronizedPrepaymentReport(CommissionBaseBatch):
         for sliced_objects in grouped_slice(objects):
             lines_to_write = []
             per_contracts = Contract.get_prepayment_deviations(sliced_objects)
-            for contract, deviations in per_contracts.items():
+            for contract, deviations in list(per_contracts.items()):
                 if auto_adjust:
                     _, _, deviations = contract.try_adjust_prepayments(
                         deviations)
@@ -142,7 +142,7 @@ class DesynchronizedRedeemedReport(CommissionBaseBatch):
         for sliced_objects in grouped_slice(objects):
             lines_to_write = []
             per_contracts = Contract.get_prepayment_deviations(sliced_objects)
-            for contract, deviations in per_contracts.items():
+            for contract, deviations in list(per_contracts.items()):
                 inconsistencies = \
                     contract.check_for_redeemned_inconsistencies(deviations)
                 if auto_adjust:

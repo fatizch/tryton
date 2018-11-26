@@ -141,7 +141,7 @@ class Move(export.ExportImportMixin):
         for line in self.lines + cancel_move.lines:
             if line.account.reconcile:
                 to_reconcile[(line.account, line.party)].append(line)
-        Line.reconcile(*to_reconcile.itervalues())
+        Line.reconcile(*iter(to_reconcile.values()))
 
     def cancel(self, default=None):
         if self.cancel_move:
@@ -238,7 +238,7 @@ class Line(export.ExportImportMixin):
         Finally, this method will generate split lines if necessary
         """
         reconciliations = {}
-        for object_, possible_lines in lines_per_object.iteritems():
+        for object_, possible_lines in lines_per_object.items():
             reconciliations[object_], possible_lines = \
                 cls.reconcile_perfect_lines(possible_lines)
 
@@ -251,11 +251,11 @@ class Line(export.ExportImportMixin):
 
         # Split lines if necessary
         splits = cls.split_lines([(lines[-1], split_amount)
-                for (lines, split_amount) in sum(reconciliations.values(), [])
+                for (lines, split_amount) in sum(list(reconciliations.values()), [])
                 if split_amount != 0])
 
         reconciliation_lines = []
-        for object_, groups in reconciliations.iteritems():
+        for object_, groups in reconciliations.items():
             for lines, split_amount in groups:
                 reconciliation_lines.append(lines)
                 if split_amount == 0:
@@ -427,10 +427,10 @@ class Line(export.ExportImportMixin):
             split_moves[line] = line.split(amount_to_split, journal)
             split_moves[line].description = cls.get_split_move_description(
                 line)
-        Move.save(split_moves.values())
-        Move.post(split_moves.values())
+        Move.save(list(split_moves.values()))
+        Move.post(list(split_moves.values()))
         split_lines = {}
-        for source_line, split_move in split_moves.iteritems():
+        for source_line, split_move in split_moves.items():
             # Order of move.lines may not always be keep after saving / posting
             split_amount = split_amounts[source_line]
             split, remaining, compensation = None, None, None
@@ -498,8 +498,7 @@ class Line(export.ExportImportMixin):
     order_post_date = _order_move_field('post_date')
 
 
-class CreateMove:
-    __metaclass__ = PoolMeta
+class CreateMove(metaclass=PoolMeta):
     __name__ = 'account.move.template.create'
 
     def create_move(self):
@@ -521,8 +520,7 @@ class CreateMove:
             return 'reload'
 
 
-class Reconciliation:
-    __metaclass__ = PoolMeta
+class Reconciliation(metaclass=PoolMeta):
     __name__ = 'account.move.reconciliation'
 
     @classmethod
@@ -583,8 +581,7 @@ class Reconciliation:
             Line.reconcile(*split_lines, date=today)
 
 
-class Reconcile:
-    __metaclass__ = PoolMeta
+class Reconcile(metaclass=PoolMeta):
     __name__ = 'account.reconcile'
 
     def get_accounts(self):
@@ -676,8 +673,7 @@ class Reconcile:
         return next_state
 
 
-class ReconcileShow:
-    __metaclass__ = PoolMeta
+class ReconcileShow(metaclass=PoolMeta):
     __name__ = 'account.reconcile.show'
 
     post_leftovers = fields.Boolean('Post Left Over Moves')
@@ -689,8 +685,7 @@ class ReconcileShow:
             [('move_state', '!=', 'draft')]]
 
 
-class ReconcileLines:
-    __metaclass__ = PoolMeta
+class ReconcileLines(metaclass=PoolMeta):
     __name__ = 'account.move.reconcile_lines'
 
     def transition_reconcile(self):
@@ -714,8 +709,7 @@ class ReconcileLines:
         return next_state
 
 
-class ReconcileLinesWriteOff:
-    __metaclass__ = PoolMeta
+class ReconcileLinesWriteOff(metaclass=PoolMeta):
     __name__ = 'account.move.reconcile_lines.writeoff'
 
     post_writeoff = fields.Boolean('Post Writeoff Move')

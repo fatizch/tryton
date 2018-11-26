@@ -63,8 +63,7 @@ class RuleEngineExtraData(model.CoogSQL):
                 'rule_engine_parameter_backup')
 
 
-class RuleEngine:
-    __metaclass__ = PoolMeta
+class RuleEngine(metaclass=PoolMeta):
     __name__ = 'rule_engine'
 
     extra_data_used = fields.Many2Many(
@@ -141,8 +140,7 @@ class RuleEngine:
             self.as_context(elem, 'compl', base_context)
 
 
-class RuleEngineRuntime:
-    __metaclass__ = PoolMeta
+class RuleEngineRuntime(metaclass=PoolMeta):
     __name__ = 'rule_engine.runtime'
 
     @classmethod

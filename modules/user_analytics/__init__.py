@@ -2,11 +2,11 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import configuration
-import ir
-import report_engine
-import user_analytic
-import wizard
+from . import configuration
+from . import ir
+from . import report_engine
+from . import user_analytic
+from . import wizard
 
 
 def register():

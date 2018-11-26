@@ -21,9 +21,8 @@ __all__ = [
     ]
 
 
-class Contract(RemindableInterface):
+class Contract(RemindableInterface, metaclass=PoolMeta):
     __name__ = 'contract'
-    __metaclass__ = PoolMeta
 
     attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments',
         delete_missing=True, target_not_required=True)
@@ -162,12 +161,12 @@ class Contract(RemindableInterface):
         documents = self.get_calculated_required_documents([self])[self]
         with Transaction().set_context(remove_document_desc_filter=True):
             rule_doc_descs_by_code = {x.code: x for x in
-                DocumentDesc.search([('code', 'in', documents.keys())])}
+                DocumentDesc.search([('code', 'in', list(documents.keys()))])}
             existing_document_desc_code = [request.document_desc.code
                 for request in DocumentRequestLine.search([
                     ('for_object', '=', str(self))])]
         to_save = []
-        for code, rule_result_values in documents.iteritems():
+        for code, rule_result_values in documents.items():
             if code in existing_document_desc_code:
                 existing_document_desc_code.remove(code)
                 continue
@@ -175,7 +174,7 @@ class Contract(RemindableInterface):
             line.document_desc = rule_doc_descs_by_code[code]
             line.for_object = '%s,%s' % (self.__name__, self.id)
             line.contract = self
-            for k, v in rule_result_values.iteritems():
+            for k, v in rule_result_values.items():
                 setattr(line, k, v)
             to_save.append(line)
         if to_save:

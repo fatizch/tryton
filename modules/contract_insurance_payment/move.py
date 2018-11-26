@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class MoveLine:
-    __metaclass__ = PoolMeta
+class MoveLine(metaclass=PoolMeta):
     __name__ = 'account.move.line'
 
     @classmethod

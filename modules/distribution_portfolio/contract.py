@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     allowed_portfolios = fields.Function(
@@ -70,8 +69,7 @@ class Contract:
         return [('subscriber.portfolio',) + tuple(clause[1:])]
 
 
-class CoveredElement:
-    __metaclass__ = PoolMeta
+class CoveredElement(metaclass=PoolMeta):
     __name__ = 'contract.covered_element'
 
     allowed_portfolios = fields.Function(
@@ -105,8 +103,7 @@ class CoveredElement:
         self.allowed_portfolios = self.get_allowed_portfolios()
 
 
-class Beneficiary:
-    __metaclass__ = PoolMeta
+class Beneficiary(metaclass=PoolMeta):
     __name__ = 'contract.option.beneficiary'
 
     allowed_portfolios = fields.Function(
@@ -135,8 +132,7 @@ class Beneficiary:
             self.allowed_portfolios = self.getter_allowed_portfolios()
 
 
-class ContractBillingInformation:
-    __metaclass__ = PoolMeta
+class ContractBillingInformation(metaclass=PoolMeta):
     __name__ = 'contract.billing_information'
 
     allowed_portfolios = fields.Function(

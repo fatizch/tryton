@@ -7,8 +7,8 @@ from sql.conditionals import Coalesce
 
 from trytond.pool import Pool
 
-import address
-import party
+from . import address
+from . import party
 
 
 def register():
@@ -32,7 +32,7 @@ def migrate_1_10_include_line3_in_street(pool, update):
 
     logging.getLogger('modules').info('Running post init hook %s' %
         'migrate_1_10_include_line3_in_street')
-    previous_register = Address.__register__.im_func
+    previous_register = Address.__register__.__func__
 
     @classmethod
     def patched_register(cls, module_name):

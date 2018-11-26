@@ -17,9 +17,8 @@ __all__ = [
     ]
 
 
-class Claim(RemindableInterface):
+class Claim(RemindableInterface, metaclass=PoolMeta):
     __name__ = 'claim'
-    __metaclass__ = PoolMeta
 
     document_request_lines = fields.One2Many('document.request.line',
         'claim', 'Required Documents', delete_missing=True,
@@ -140,7 +139,7 @@ class Claim(RemindableInterface):
                 'date': c.declaration_date,
                 } for c in claims}
         documents_per_claim = {c: {} for c in claims}
-        for claim, claim_args in claims_args.iteritems():
+        for claim, claim_args in claims_args.items():
             delivered_services = [x for loss in claim.losses
                 for x in loss.services]
             for delivered in delivered_services:

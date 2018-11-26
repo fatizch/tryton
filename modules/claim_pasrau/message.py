@@ -6,8 +6,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
 
-class DsnMessage:
-    __metaclass__ = PoolMeta
+class DsnMessage(metaclass=PoolMeta):
     __name__ = 'dsn.message'
 
     @classmethod

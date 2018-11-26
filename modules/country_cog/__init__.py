@@ -2,9 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import country
-import zipcode
-import test_case
+from . import country
+from . import zipcode
+from . import test_case
 
 
 def register():

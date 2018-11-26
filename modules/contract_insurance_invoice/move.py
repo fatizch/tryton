@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class Move:
-    __metaclass__ = PoolMeta
+class Move(metaclass=PoolMeta):
     __name__ = 'account.move'
 
     @classmethod
@@ -43,8 +42,7 @@ class Move:
         return super(Move, self).get_icon(name)
 
 
-class MoveLine:
-    __metaclass__ = PoolMeta
+class MoveLine(metaclass=PoolMeta):
     __name__ = 'account.move.line'
 
     contract = fields.Many2One('contract', 'Contract', select=True,
@@ -185,8 +183,7 @@ WHERE
         return split_move
 
 
-class ReconcileShow:
-    __metaclass__ = PoolMeta
+class ReconcileShow(metaclass=PoolMeta):
     __name__ = 'account.reconcile.show'
 
     remaining_repartition_method = fields.Selection([
@@ -272,8 +269,7 @@ class ReconcileShow:
             self.journal = None
 
 
-class Reconcile:
-    __metaclass__ = PoolMeta
+class Reconcile(metaclass=PoolMeta):
     __name__ = 'account.reconcile'
 
     def transition_reconcile(self):
@@ -332,8 +328,7 @@ class Reconcile:
         self.show.lines = list(self.show.lines) + [move.lines[1]]
 
 
-class Reconciliation:
-    __metaclass__ = PoolMeta
+class Reconciliation(metaclass=PoolMeta):
     __name__ = 'account.move.reconciliation'
 
     @classmethod

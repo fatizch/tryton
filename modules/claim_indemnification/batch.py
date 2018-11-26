@@ -60,7 +60,7 @@ class CreateClaimIndemnificationBatch(batch.BatchRoot):
         indemn_by_service = defaultdict(list)
         for indemnification in indemnifications:
             indemn_by_service[indemnification.service].append(indemnification)
-        for service_indemnifications in indemn_by_service.values():
+        for service_indemnifications in list(indemn_by_service.values()):
             sorted_indemnifications = sorted(service_indemnifications,
                 key=lambda x: x.start_date)
             try:

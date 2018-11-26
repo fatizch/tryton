@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class ReportTemplate:
-    __metaclass__ = PoolMeta
+class ReportTemplate(metaclass=PoolMeta):
     __name__ = 'report.template'
 
     generate_event = fields.Boolean('Generate Event', help='If true, an event'
@@ -36,8 +35,7 @@ class ReportTemplate:
                 report_template.name)
 
 
-class ReportGenerate:
-    __metaclass__ = PoolMeta
+class ReportGenerate(metaclass=PoolMeta):
     __name__ = 'report.generate'
 
     @classmethod
@@ -48,8 +46,7 @@ class ReportGenerate:
         return result
 
 
-class ReportGenerateFromFile:
-    __metaclass__ = PoolMeta
+class ReportGenerateFromFile(metaclass=PoolMeta):
     __name__ = 'report.generate_from_file'
 
     @classmethod

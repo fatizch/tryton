@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import export, utils
 
-import string_utils
+from . import string_utils
 
 
 __all__ = [

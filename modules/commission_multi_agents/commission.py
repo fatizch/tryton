@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class Commission:
-    __metaclass__ = PoolMeta
+class Commission(metaclass=PoolMeta):
     __name__ = 'commission'
 
     def update_agent_from_contract(self):
@@ -26,8 +25,7 @@ class Commission:
         super(Commission, self).update_agent_from_contract()
 
 
-class Agent:
-    __metaclass__ = PoolMeta
+class Agent(metaclass=PoolMeta):
     __name__ = 'commission.agent'
 
     second_level_commission = fields.Function(
@@ -124,8 +122,7 @@ class AgentAgentRelation(model.CoogSQL, model.CoogView):
         'To Second Level Agent', ondelete='RESTRICT')
 
 
-class Plan:
-    __metaclass__ = PoolMeta
+class Plan(metaclass=PoolMeta):
     __name__ = 'commission.plan'
 
     second_level_commission = fields.Boolean('Second level commission',
@@ -159,8 +156,7 @@ class PlanAgentRelation(model.CoogSQL, model.CoogView):
     agent = fields.Many2One('commission.agent', 'Agent', ondelete='RESTRICT')
 
 
-class SimulateCommissionsParameters:
-    __metaclass__ = PoolMeta
+class SimulateCommissionsParameters(metaclass=PoolMeta):
     __name__ = 'commission.simulate.params'
 
     @classmethod

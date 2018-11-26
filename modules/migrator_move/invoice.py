@@ -5,8 +5,7 @@ __all__ = [
     ]
 
 
-class MigratorInvoice:
-    __metaclass__ = PoolMeta
+class MigratorInvoice(metaclass=PoolMeta):
     __name__ = 'migrator.invoice'
 
     @classmethod

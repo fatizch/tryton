@@ -21,9 +21,7 @@ __all__ = [
 
 
 class EventPlanningConfigurationMixin(get_rule_mixin('planning_rule',
-            'Planning Rule')):
-    __metaclass__ = PoolMeta
-
+            'Planning Rule'), metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(EventPlanningConfigurationMixin, cls).__setup__()

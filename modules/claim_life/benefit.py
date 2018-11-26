@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class Benefit:
-    __metaclass__ = PoolMeta
+class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     beneficiary_documents = fields.Many2Many('benefit-beneficiary_document',
@@ -74,8 +73,7 @@ class BenefitBeneficiaryDocument(model.CoogSQL):
         required=True, ondelete='RESTRICT', select=True)
 
 
-class LossDescription:
-    __metaclass__ = PoolMeta
+class LossDescription(metaclass=PoolMeta):
     __name__ = 'benefit.loss.description'
 
     @classmethod
@@ -104,8 +102,7 @@ class BeneficiaryExtraDataRelation(model.CoogSQL):
         ondelete='RESTRICT')
 
 
-class ExtraData:
-    __metaclass__ = PoolMeta
+class ExtraData(metaclass=PoolMeta):
     __name__ = 'extra_data'
 
     @classmethod

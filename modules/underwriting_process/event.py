@@ -7,8 +7,7 @@ __all__ = [
     ]
 
 
-class EventTypeAction:
-    __metaclass__ = PoolMeta
+class EventTypeAction(metaclass=PoolMeta):
     __name__ = 'event.type.action'
 
     def get_objects_for_process(self, objects, target_model_name):

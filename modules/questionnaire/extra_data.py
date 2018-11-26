@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class ExtraData:
-    __metaclass__ = PoolMeta
+class ExtraData(metaclass=PoolMeta):
     __name__ = 'extra_data'
 
     @classmethod
@@ -21,10 +20,8 @@ class ExtraData:
         cls.kind.selection.append(('questionnaire', 'Questionnaire'))
 
 
-class QuestionnaireExtraDataRelation(model.CoogSQL):
+class QuestionnaireExtraDataRelation(model.CoogSQL, metaclass=PoolMeta):
     'Relation between Questionnaire and Extra Data'
-
-    __metaclass__ = PoolMeta
     __name__ = 'questionnaire-extra_data'
 
     questionnaire = fields.Many2One('questionnaire', 'Questionnaire',

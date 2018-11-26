@@ -16,14 +16,14 @@ old_populate = popup_menu.populate
 def new_populate(menu, model, record, title='', field=None, context=None):
     if record is None:
         return
-    elif isinstance(record, (int, long)):
+    elif isinstance(record, int):
         if record < 0:
             return
     elif record.id < 0:
         return
 
     def id_(record):
-        if not isinstance(record, (int, long)):
+        if not isinstance(record, int):
             return record.id
         return record
 
@@ -61,7 +61,7 @@ popup_menu.populate = new_populate
 tryton_list.populate = new_populate
 
 
-old_popup = Many2One._populate_popup.im_func
+old_popup = Many2One._populate_popup.__func__
 
 
 def new_popup(self, widget, menu):
@@ -89,7 +89,7 @@ def new_popup(self, widget, menu):
 Many2One._populate_popup = new_popup
 
 
-old_toolbar = Form.create_toolbar.im_func
+old_toolbar = Form.create_toolbar.__func__
 
 
 def new_create_toolbar(self, toolbars):

@@ -24,9 +24,8 @@ __all__ = [
     ]
 
 
-class NetCalculationRuleFixExtraData(model.CoogSQL):
+class NetCalculationRuleFixExtraData(model.CoogSQL, metaclass=PoolMeta):
     'Net Calculation Rule - Extra Data'
-    __metaclass__ = PoolMeta
     __name__ = 'net_calculation_rule-fix_extra_data'
 
     calculation_rule = fields.Many2One('claim.net_calculation_rule',
@@ -35,9 +34,8 @@ class NetCalculationRuleFixExtraData(model.CoogSQL):
         required=True, ondelete='CASCADE')
 
 
-class NetCalculationRuleExtraData(model.CoogSQL):
+class NetCalculationRuleExtraData(model.CoogSQL, metaclass=PoolMeta):
     'Net Calculation Rule - Extra Data'
-    __metaclass__ = PoolMeta
     __name__ = 'net_calculation_rule-extra_data'
 
     calculation_rule = fields.Many2One('claim.net_calculation_rule',
@@ -47,9 +45,8 @@ class NetCalculationRuleExtraData(model.CoogSQL):
 
 
 class NetCalculationRule(model.CoogSQL, model.CoogView,
-        get_rule_mixin('rule', 'Rule')):
+        get_rule_mixin('rule', 'Rule'), metaclass=PoolMeta):
     'Net Calculation Rule'
-    __metaclass__ = PoolMeta
     __name__ = 'claim.net_calculation_rule'
     _func_key = 'name'
 
@@ -74,9 +71,8 @@ class NetCalculationRule(model.CoogSQL, model.CoogView,
             ]
 
 
-class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
+class Salary(model.CoogSQL, model.CoogView, ModelCurrency, metaclass=PoolMeta):
     'Claim Salary'
-    __metaclass__ = PoolMeta
     __name__ = 'claim.salary'
 
     delivered_service = fields.Many2One('claim.service', 'Delivered Service',
@@ -146,7 +142,7 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
     @classmethod
     def update_contributions_table(cls, contributions, tables, key):
         ExtraData = Pool().get('extra_data')
-        for k, v in contributions.items():
+        for k, v in list(contributions.items()):
             data_def = ExtraData._extra_data_struct(k)
             tables[k]['extra_data'] = data_def['id']
             tables[k][key] = v
@@ -179,7 +175,7 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
                 'fixed_amount')
 
         missing_rates = [x for x in extra_datas if x.id not in
-            [v['extra_data'] for k, v in tables.items()]]
+            [v['extra_data'] for k, v in list(tables.items())]]
         for missing in missing_rates:
             tables[missing.name] = {
                 'ta': 0,
@@ -188,7 +184,7 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
                 'fixed_amount': 0,
                 'extra_data': missing.id,
                 }
-        return sorted(tables.values(),
+        return sorted(list(tables.values()),
             key=lambda x: ExtraData(x['extra_data']).name)
 
     @fields.depends('ta_contributions', 'tb_contributions', 'tc_contributions',
@@ -242,8 +238,7 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency):
         self.save()
 
 
-class ClaimLoss:
-    __metaclass__ = PoolMeta
+class ClaimLoss(metaclass=PoolMeta):
     __name__ = 'claim.loss'
 
     @classmethod
@@ -262,8 +257,7 @@ class ClaimLoss:
         return self.start_date
 
 
-class ClaimService:
-    __metaclass__ = PoolMeta
+class ClaimService(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     salary = fields.One2Many('claim.salary', 'delivered_service', 'Salary',
@@ -523,8 +517,7 @@ class ClaimService:
         return res
 
 
-class Claim:
-    __metaclass__ = PoolMeta
+class Claim(metaclass=PoolMeta):
     __name__ = 'claim'
 
     @classmethod

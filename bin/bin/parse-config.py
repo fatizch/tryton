@@ -1,6 +1,6 @@
 import sys
-from ConfigParser import ConfigParser
-from StringIO import StringIO
+from configparser import ConfigParser
+from io import StringIO
 
 assert len(sys.argv) == 3, 'bad usage'
 
@@ -12,4 +12,4 @@ data = sys.stdin.read()
 buf = StringIO(data)
 config = ConfigParser()
 config.readfp(buf)
-print(config.get(SECTION, OPTION))
+print((config.get(SECTION, OPTION)))

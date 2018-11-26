@@ -18,8 +18,7 @@ __all__ = [
     ]
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     @classmethod
@@ -87,11 +86,10 @@ class Invoice:
                     claim_detail.indemnification.details[0
                         ].indemnification.service)] += \
                     claim_detail.indemnification.details
-        return {(k[0], k[1], v) for k, v in ind_details_claim.items()}
+        return {(k[0], k[1], v) for k, v in list(ind_details_claim.items())}
 
 
-class InvoiceLine:
-    __metaclass__ = PoolMeta
+class InvoiceLine(metaclass=PoolMeta):
     __name__ = 'account.invoice.line'
 
     claim_details = fields.One2Many('account.invoice.line.claim_detail',

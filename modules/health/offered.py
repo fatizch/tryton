@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     is_health = fields.Function(
@@ -36,8 +35,7 @@ class Product:
                     dates.add(complement.date)
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     is_health = fields.Function(

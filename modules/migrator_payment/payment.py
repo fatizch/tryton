@@ -125,9 +125,9 @@ class MigratorPayment(migrator.Migrator):
                 for k in row if k in set(Model._fields) - {'id', }}, row)
         if to_create:
             payments = Payment.browse(Model.create(
-                [x[0] for x in to_create.values()]))
+                [x[0] for x in list(to_create.values())]))
             for payment, row in zip(
-                    payments, [x[1] for x in to_create.values()]):
+                    payments, [x[1] for x in list(to_create.values())]):
                 if payment.kind == 'payable':
                     payment.state = 'succeeded'
                     row['payment'] = payment.id

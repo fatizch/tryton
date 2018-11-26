@@ -7,8 +7,7 @@ __all__ = [
     ]
 
 
-class RuleEngineRuntime:
-    __metaclass__ = PoolMeta
+class RuleEngineRuntime(metaclass=PoolMeta):
     __name__ = 'rule_engine.runtime'
 
     @classmethod

@@ -16,8 +16,7 @@ __all__ = [
     ]
 
 
-class Account(export.ExportImportMixin):
-    __metaclass__ = PoolMeta
+class Account(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'analytic_account.account'
     _func_key = 'code'
 
@@ -69,8 +68,7 @@ class Account(export.ExportImportMixin):
         return [(self, amount, {})]
 
 
-class AccountDistribution(export.ExportImportMixin):
-    __metaclass__ = PoolMeta
+class AccountDistribution(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'analytic_account.account.distribution'
     _func_key = 'code'
 
@@ -96,8 +94,7 @@ class AccountDistribution(export.ExportImportMixin):
         return coog_string.slugify(self.name)
 
 
-class AnalyticAccountEntry:
-    __metaclass__ = PoolMeta
+class AnalyticAccountEntry(metaclass=PoolMeta):
     __name__ = 'analytic.account.entry'
 
     @classmethod
@@ -136,8 +133,7 @@ class AnalyticAccountEntry:
                 yield analytic_line
 
 
-class MoveLine:
-    __metaclass__ = PoolMeta
+class MoveLine(metaclass=PoolMeta):
     __name__ = 'account.move.line'
 
     analytic_lines = fields.One2Many('analytic_account.line', 'move_line',

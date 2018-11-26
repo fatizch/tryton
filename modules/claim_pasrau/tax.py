@@ -15,8 +15,7 @@ __all__ = [
     ]
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     def _build_pasrau_dict(self):
@@ -54,8 +53,7 @@ class Invoice:
         return super(Invoice, self).get_move()
 
 
-class Tax:
-    __metaclass__ = PoolMeta
+class Tax(metaclass=PoolMeta):
     __name__ = 'account.tax'
 
     @classmethod
@@ -96,16 +94,14 @@ class Tax:
         return super(Tax, self)._reverse_rate_amount_from_type()
 
 
-class MoveLine:
-    __metaclass__ = PoolMeta
+class MoveLine(metaclass=PoolMeta):
     __name__ = 'account.move.line'
 
     pasrau_rates_info = fields.One2Many('account.move.line.pasrau.rate',
         'move_line', 'Pasrau Rates Information', readonly=True)
 
 
-class InvoiceTax:
-    __metaclass__ = PoolMeta
+class InvoiceTax(metaclass=PoolMeta):
     __name__ = 'account.invoice.tax'
 
     def get_move_lines(self):

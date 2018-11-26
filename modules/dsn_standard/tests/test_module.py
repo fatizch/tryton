@@ -25,9 +25,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     def test_validate(self):
         D = dsn.NEODeSTemplate(None)
-        bad_iban = dsn.Entry(u'S21.G00.20.004', u'tééé')
-        good_iban = dsn.Entry(u'S21.G00.20.004',
-            u'64G1DFR14DRF514GDF54GD')
+        bad_iban = dsn.Entry('S21.G00.20.004', 'tééé')
+        good_iban = dsn.Entry('S21.G00.20.004',
+            '64G1DFR14DRF514GDF54GD')
 
         D.message = [good_iban]
         self.assertTrue(D.validate)
@@ -63,31 +63,31 @@ class ModuleTestCase(test_framework.CoogTestCase):
         s = D.generate()
         version = get_module_info('dsn_standard').get('version')
         expected_file = '\n'.join([
-            u"S10.G00.00.001,'Coog'",
-            u"S10.G00.00.002,'Coopengo'",
-            u"S10.G00.00.003,'%s'" % version,
-            u"S10.G00.00.005,'02'",
-            u"S10.G00.00.006,'201710'",
-            u"S10.G00.00.008,'01'",
-            u"S10.G00.01.001,'379158322'",
-            u"S10.G00.01.002,'12345'",
-            u"S10.G00.01.003,'Corp'",
-            u"S10.G00.01.004,'2 Common Street'",
-            u"S10.G00.01.005,'75000'",
-            u"S10.G00.01.006,'Emerald'",
-            u"S10.G00.02.001,'01'",
-            u"S10.G00.02.002,'Joe Doe'",
-            u"S10.G00.02.004,'joe@corp.com'",
-            u"S10.G00.02.005,'0101010101'",
-            u"S20.G00.05.001,'21'",
-            u"S20.G00.05.002,'01'",
-            u"S20.G00.05.003,'11'",
-            u"S20.G00.05.004,'24'",
-            u"S20.G00.05.005,'%s'" % utils.today().strftime('01%m%Y'),
-            u"S20.G00.05.007,'%s'" % utils.today().strftime('%d%m%Y'),
-            u"S20.G00.05.010,'01'",
-            u"S90.G00.90.001,'25'",
-            u"S90.G00.90.002,'1'"
+            "S10.G00.00.001,'Coog'",
+            "S10.G00.00.002,'Coopengo'",
+            "S10.G00.00.003,'%s'" % version,
+            "S10.G00.00.005,'02'",
+            "S10.G00.00.006,'201710'",
+            "S10.G00.00.008,'01'",
+            "S10.G00.01.001,'379158322'",
+            "S10.G00.01.002,'12345'",
+            "S10.G00.01.003,'Corp'",
+            "S10.G00.01.004,'2 Common Street'",
+            "S10.G00.01.005,'75000'",
+            "S10.G00.01.006,'Emerald'",
+            "S10.G00.02.001,'01'",
+            "S10.G00.02.002,'Joe Doe'",
+            "S10.G00.02.004,'joe@corp.com'",
+            "S10.G00.02.005,'0101010101'",
+            "S20.G00.05.001,'21'",
+            "S20.G00.05.002,'01'",
+            "S20.G00.05.003,'11'",
+            "S20.G00.05.004,'24'",
+            "S20.G00.05.005,'%s'" % utils.today().strftime('01%m%Y'),
+            "S20.G00.05.007,'%s'" % utils.today().strftime('%d%m%Y'),
+            "S20.G00.05.010,'01'",
+            "S90.G00.90.001,'25'",
+            "S90.G00.90.002,'1'"
         ])
 
         for line, expected in zip(s.split('\n'), expected_file.split('\n')):

@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Company:
-    __metaclass__ = PoolMeta
+class Company(metaclass=PoolMeta):
     __name__ = 'company.company'
 
     fiscal_years = fields.One2Many('account.fiscalyear', 'company',

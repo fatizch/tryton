@@ -7,8 +7,7 @@ __all__ = [
     ]
 
 
-class TerminateContract:
-    __metaclass__ = PoolMeta
+class TerminateContract(metaclass=PoolMeta):
     __name__ = 'endorsement.contract.terminate'
 
     def endorsement_values(self):

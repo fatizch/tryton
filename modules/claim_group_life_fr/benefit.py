@@ -7,8 +7,7 @@ __all__ = [
     ]
 
 
-class BenefitRule:
-    __metaclass__ = PoolMeta
+class BenefitRule(metaclass=PoolMeta):
     __name__ = 'benefit.rule'
 
     def calculate(self, args):

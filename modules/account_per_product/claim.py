@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Indemnification:
-    __metaclass__ = PoolMeta
+class Indemnification(metaclass=PoolMeta):
     __name__ = 'claim.indemnification'
 
     def _group_to_claim_invoice_key(self):

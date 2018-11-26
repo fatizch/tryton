@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Move:
-    __metaclass__ = PoolMeta
+class Move(metaclass=PoolMeta):
     __name__ = 'account.move'
 
     is_invoice_canceled = fields.Function(
@@ -48,8 +47,7 @@ class Move:
         return result
 
 
-class MoveLine:
-    __metaclass__ = PoolMeta
+class MoveLine(metaclass=PoolMeta):
     __name__ = 'account.move.line'
 
     is_invoice_canceled = fields.Function(
@@ -102,7 +100,7 @@ class MoveLine:
             unmatched.append(line)
 
         matched = []
-        for data in per_invoice.values():
+        for data in list(per_invoice.values()):
             base_lines, cancel_lines, pay_lines = [data[x] for x in
                 sections]
             if cancel_lines:
@@ -124,7 +122,7 @@ class MoveLine:
                         unmatched.extend([line, per_line.pop(line)])
                         continue
                     matched.append(([line, per_line.pop(line)], 0))
-                unmatched.extend(per_line.values())
+                unmatched.extend(list(per_line.values()))
             if base_lines and not cancel_lines and not pay_lines:
                 unmatched.extend(base_lines)
         return (matched, unmatched)

@@ -92,10 +92,8 @@ class ClassAttr(PoolMeta):
         return super(ClassAttr, self).__getattribute__(name)
 
 
-class ProcessFramework(ModelSQL, ModelView):
+class ProcessFramework(ModelSQL, ModelView, metaclass=ClassAttr):
     'Process Framework'
-
-    __metaclass__ = ClassAttr
     __allowed_buttons__ = '_button_'
 
     # The current state is used to store which process is currently being
@@ -274,7 +272,7 @@ class ProcessFramework(ModelSQL, ModelView):
         for the_error in errors:
             # TODO : Remove this cast which exists only for backward
             # compatibility
-            if isinstance(the_error, (str, unicode)):
+            if isinstance(the_error, str):
                 error = the_error
                 error_args = error_args
             else:

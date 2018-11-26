@@ -26,8 +26,7 @@ __all__ = [
     ]
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     item_descriptors = fields.Function(
@@ -236,8 +235,7 @@ class ItemDescriptionEndReasonRelation(model.CoogSQL):
         ondelete='RESTRICT', select=True, required=True)
 
 
-class ExtraData:
-    __metaclass__ = PoolMeta
+class ExtraData(metaclass=PoolMeta):
     __name__ = 'extra_data'
 
     @classmethod
@@ -258,7 +256,7 @@ class ExtraData:
                     targets.append(context[match])
         if not targets:
             providers = cls._extra_data_providers[data['kind']]
-            for k, v in context.iteritems():
+            for k, v in context.items():
                 if getattr(v, '__name__', None) in providers:
                     targets.append((v, providers[v.__name__]))
         for target, finders in targets:

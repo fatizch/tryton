@@ -2,9 +2,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 try:
-    import cStringIO as StringIO
+    import io as StringIO
 except ImportError:
-    import StringIO
+    import io
 from decimal import Decimal, ROUND_HALF_UP
 import stat
 import sys
@@ -89,7 +89,7 @@ class TemplateParameter(model.CoogDictSchema, model.CoogSQL, model.CoogView):
 
     @classmethod
     def get_data_for_report(cls, parameters):
-        return {'param_' + k: v for k, v in parameters.iteritems()}
+        return {'param_' + k: v for k, v in parameters.items()}
 
 
 class TemplateTemplateParameterRelation(model.CoogSQL):
@@ -180,10 +180,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 'produce_reports': RPC(instantiate=0,
                     readonly=False, result=lambda res: (
                         [{k: v for k, v in chain(
-                                {key: value for key, value in report.iteritems()
-                                    if key in ('report_name',)}.iteritems(),
-                                {'data': base64.b64encode(report['data'])
-                                    }.iteritems())}
+                                iter({key: value for key, value in report.items()
+                                    if key in ('report_name',)}.items()),
+                                iter({'data': base64.b64encode(report['data'])
+                                    }.items()))}
                             for report in res[0]],
                         [attachment.id for attachment in res[1]])
                     ),
@@ -633,8 +633,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             self.pyson_condition, object_)
 
 
-class ReportLightTemplate:
-    __metaclass__ = PoolMeta
+class ReportLightTemplate(metaclass=PoolMeta):
     __name__ = 'report.template'
 
     @classmethod
@@ -650,7 +649,7 @@ class ReportLightTemplate:
         target = cls._instantiate_from_data(data)
         result = template._generate_report(
             [target], {'resource': target})['data']
-        if isinstance(result, basestring):
+        if isinstance(result, str):
             return base64.b64encode(result)
         return result
 
@@ -680,22 +679,22 @@ class ReportData(object):
         return self.__data.__contains__(item)
 
     def keys(self):
-        return list(self.iterkeys())
+        return list(self.keys())
 
     def iterkeys(self):
-        return self.__data.iterkeys()
+        return iter(self.__data.keys())
 
     def values(self):
-        return list(self.itervalues())
+        return list(self.values())
 
     def itervalues(self):
         return (getattr(self, k) for k in self.__data)
 
     def items(self):
-        return list(self.iteritems())
+        return list(self.items())
 
     def iteritems(self):
-        return ((k, getattr(self, k)) for k in self.__data.iterkeys())
+        return ((k, getattr(self, k)) for k in self.__data.keys())
 
     def __iter__(self):
         return self.__data.__iter__()
@@ -931,7 +930,7 @@ class Printable(Model):
         good_logo = self.get_appliable_logo()
         if not good_logo:
             return ''
-        return StringIO.StringIO(str(good_logo))
+        return io.StringIO(str(good_logo))
 
     def get_sender(self):
         return self.get_object_for_contact().get_sender()
@@ -965,7 +964,7 @@ class Printable(Model):
             return
         templates = Template.find_templates_for_objects_and_kind(objects,
             cls.__name__, template_kind)
-        for template, group_objects in templates.iteritems():
+        for template, group_objects in templates.items():
             reports, attachments = template.produce_reports(objects, context_)
             all_reports.extend(reports)
             all_attachments.extend(attachments)
@@ -1170,7 +1169,7 @@ class ReportGenerate(CoogReport):
         report_context['setVar'] = setVar
         report_context['getVar'] = getVar
 
-        report_context.update({k: v for k, v in data.iteritems() if k not in
+        report_context.update({k: v for k, v in data.items() if k not in
                 ['party', 'address', 'sender', 'sender_address']})
 
         def copy_groupby(*args, **kwargs):
@@ -1300,7 +1299,7 @@ class ReportGenerate(CoogReport):
             prefix='trytond_')
         outzip = zipfile.ZipFile(path, mode='w')
 
-        content_io = StringIO.StringIO()
+        content_io = io.StringIO()
         content_io.write(report_content)
         content_z = zipfile.ZipFile(content_io, mode='r')
 
@@ -1323,7 +1322,7 @@ class ReportGenerate(CoogReport):
             # cStringIO difference:
             # calling StringIO() with a string parameter creates a read-only
             # object
-            new_style_io = StringIO.StringIO()
+            new_style_io = io.StringIO()
             new_style_io.write(style_content)
             new_style_z = zipfile.ZipFile(new_style_io, mode='r')
             new_style_xml = new_style_z.read('styles.xml')
@@ -1336,10 +1335,10 @@ class ReportGenerate(CoogReport):
             new_style_z.close()
             new_style_io.close()
 
-            style_tree = lxml.etree.parse(StringIO.StringIO(style_xml))
+            style_tree = lxml.etree.parse(io.StringIO(style_xml))
             style_root = style_tree.getroot()
 
-            new_style_tree = lxml.etree.parse(StringIO.StringIO(new_style_xml))
+            new_style_tree = lxml.etree.parse(io.StringIO(new_style_xml))
             new_style_root = new_style_tree.getroot()
 
             for style in ('master-styles', 'automatic-styles', 'styles'):

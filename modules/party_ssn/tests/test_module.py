@@ -53,7 +53,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 ('176209939705448', True)
         )
         for i, (value, test) in enumerate(values):
-            if int(value[3:5]) not in range(1, 13):
+            if int(value[3:5]) not in list(range(1, 13)):
                 month = '1'
             else:
                 month = value[3:5]

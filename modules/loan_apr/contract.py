@@ -19,8 +19,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     @classmethod
@@ -75,7 +74,7 @@ class Contract:
         if model_name:
             result = sum([self.extract_premium(kind, start, end, values=k,
                         loan=loan)
-                    for k in values.iterkeys() if k[0] == model_name])
+                    for k in values.keys() if k[0] == model_name])
             return result
         return values
 
@@ -95,8 +94,7 @@ class Contract:
         return active_share
 
 
-class LoanShare:
-    __metaclass__ = PoolMeta
+class LoanShare(metaclass=PoolMeta):
     __name__ = 'loan.share'
 
     average_premium_rate = fields.Function(

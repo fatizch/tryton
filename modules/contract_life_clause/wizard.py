@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class PartyErase:
-    __metaclass__ = PoolMeta
+class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
     def to_erase(self, party_id):

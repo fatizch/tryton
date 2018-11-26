@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     agents = fields.Function(
@@ -26,8 +25,7 @@ class Product:
         return [a.id for a in agents]
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     commission_plan_lines = fields.Many2Many(

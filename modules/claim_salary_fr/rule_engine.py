@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class RuleEngine:
-    __metaclass__ = PoolMeta
+class RuleEngine(metaclass=PoolMeta):
     __name__ = 'rule_engine'
 
     @classmethod
@@ -22,8 +21,7 @@ class RuleEngine:
                 'Benefit: Net Salary Calculation'))
 
 
-class RuleEngineRuntime:
-    __metaclass__ = PoolMeta
+class RuleEngineRuntime(metaclass=PoolMeta):
     __name__ = 'rule_engine.runtime'
 
     @classmethod

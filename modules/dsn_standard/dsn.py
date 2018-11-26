@@ -21,10 +21,10 @@ class Entry(namedtuple("DSNEntry", ['id_', 'value'])):
 
     def __str__(self):
         # prepare for python3
-        return u','.join([self.id_, u"'%s'" % self.value])
+        return ','.join([self.id_, "'%s'" % self.value])
 
     def __unicode__(self):
-        return u','.join([self.id_, u"'%s'" % self.value])
+        return ','.join([self.id_, "'%s'" % self.value])
 
 
 class NEODeSTemplate(utils.DataExporter):
@@ -93,17 +93,17 @@ class NEODeSTemplate(utils.DataExporter):
         self.spec = NEODES()
 
     def format_amount(self, amount):
-        return u'%s' % str(amount.quantize(Decimal(10) ** -2))
+        return '%s' % str(amount.quantize(Decimal(10) ** -2))
 
     def format_date(self, date):
-        return u'%s' % date.strftime('%d%m%Y')
+        return '%s' % date.strftime('%d%m%Y')
 
     def generate(self):
         self._generate()
         self.validate()
         # We must add a \n at the end because the specifications
         # says that every line must end with a '0A' byte
-        return (u'\n'.join([unicode(x) for x in self.message]) + u'\n').encode(
+        return ('\n'.join([str(x) for x in self.message]) + '\n').encode(
             'latin1')
 
     def _generate(self):
@@ -112,7 +112,7 @@ class NEODeSTemplate(utils.DataExporter):
 
     def generate_structure(self, structure_name):
         # header here is whole block id, eg: S10.G00.02
-        headers = [x for x in self.spec.header_defs.keys()
+        headers = [x for x in list(self.spec.header_defs.keys())
             if x.startswith(structure_name)]
         self.generate_message(headers)
 
@@ -125,7 +125,7 @@ class NEODeSTemplate(utils.DataExporter):
                     self.generate_message(child_block_ids, instance)
 
     def get_child_block_ids(self, parent_id):
-        return sorted([k for k, v in self.spec.block_defs.iteritems()
+        return sorted([k for k, v in self.spec.block_defs.items()
                 if v['ParentId'] == parent_id])
 
     def generate_block_message(self, instance, block_id, parent):
@@ -134,13 +134,13 @@ class NEODeSTemplate(utils.DataExporter):
             val = self.get_value(instance, field_def, parent)
             if val == -1 or val is None:
                 continue
-            assert isinstance(val, type(u'')), ('Value of %s is %s , type %s'
+            assert isinstance(val, type('')), ('Value of %s is %s , type %s'
                 % (field_def[0], val, type(val)))
             assert val
             self.message.append(Entry(field_def[0], val))
 
     def get_field_defs(self, block_id):
-        return sorted([(k, v) for k, v in self.spec.field_defs.iteritems()
+        return sorted([(k, v) for k, v in self.spec.field_defs.items()
             if k.startswith(block_id)], key=lambda x: x[0])
 
     def get_value(self, instance, field_def, parent):
@@ -164,10 +164,10 @@ class NEODeSTemplate(utils.DataExporter):
 
     def check_encodable(self, entry):
         try:
-            unicode(entry).encode('latin1')
+            str(entry).encode('latin1')
         except UnicodeEncodeError:
             raise DSNValidationError(
-                'Cannot encode %s to latin1' % unicode(entry).encode('utf8'))
+                'Cannot encode %s to latin1' % str(entry).encode('utf8'))
 
     def check_value(self, entry):
         field_def = self.spec.field_defs[entry.id_]
@@ -181,7 +181,7 @@ class NEODeSTemplate(utils.DataExporter):
             # TODO : check that entire value matches (not a substring)
             valid_ = bool(exp.match(entry.value))
             if not valid_:
-                msg = ((u"The value \"%s\" for entry \"%s\" (%s) does "
+                msg = (("The value \"%s\" for entry \"%s\" (%s) does "
                 "not match regexp \"%s\". The DataType is \"%s\".") % (
                     entry.value, entry.id_, field_def["Comment"],
                     data_def['Regexp'], data_def['Name']))
@@ -193,11 +193,11 @@ class NEODeSTemplate(utils.DataExporter):
         len_ = len(entry.value)
         valid_ = (len_ >= min_length) and (len_ <= max_length)
         if not valid_:
-            msg = ((u"The value \"%s\" for entry \"%s\" (%s) , length %s does "
+            msg = (("The value \"%s\" for entry \"%s\" (%s) , length %s does "
             "not match Min Length \"%s\" or Max Length \"%s\" ."
             "The DataType is \"%s\".") % (
                 entry.value, entry.id_, field_def["Comment"],
-                unicode(len_), data_def['Lg Min'],
+                str(len_), data_def['Lg Min'],
                 data_def['Lg Max'], data_def['Name']))
             self.errors.append(msg)
 
@@ -219,11 +219,11 @@ class NEODeSTemplate(utils.DataExporter):
 
     @property
     def software_name(self):
-        return u'Coog'
+        return 'Coog'
 
     @property
     def software_editor_name(self):
-        return u'Coopengo'
+        return 'Coopengo'
 
     @property
     def software_version_number(self):
@@ -232,61 +232,61 @@ class NEODeSTemplate(utils.DataExporter):
 
     @property
     def dispatch_kind(self):
-        return u'01' if not self.void else u'02'
+        return '01' if not self.void else '02'
 
     @property
     def dispatch_test_code(self):
-        return u'01' if self.testing else u'02'  # sic!
+        return '01' if self.testing else '02'  # sic!
 
     @property
     def norm_version(self):
-        return u'201710'  # not sure
+        return '201710'  # not sure
 
     def get_conf_item(self, item):
         conf_item = config.get('dsn', item)
         assert conf_item, "Please set %s in the dsn section of "\
             "the configuration" % item
-        return unicode(config.get('dsn', item))
+        return str(config.get('dsn', item))
 
     @property
     def declaration_nature(self):
         if config.getboolean('env', 'testing') is True:
-            return u'21'
+            return '21'
         raise NotImplementedError
 
     @property
     def declaration_kind(self):
         if not self.replace:
-            return u'01' if not self.void else u'02'
-        return u'03' if not self.void else u'05'
+            return '01' if not self.void else '02'
+        return '03' if not self.void else '05'
 
     @property
     def declaration_rank(self):
         if config.getboolean('env', 'testing') is True:
-            return u'24'
+            return '24'
         raise NotImplementedError
 
     @property
     def declaration_month(self):
         if config.getboolean('env', 'testing') is True:
-            return unicode(utils.today().strftime('01%m%Y'))
+            return str(utils.today().strftime('01%m%Y'))
         raise NotImplementedError
 
     @property
     def file_date(self):
-        return unicode(utils.today().strftime('%d%m%Y'))
+        return str(utils.today().strftime('%d%m%Y'))
 
     @property
     def declaration_currency(self):
-        return u'01'
+        return '01'
 
     @property
     def total_entries(self):
-        return u'%s' % (len(self.message) + 2)
+        return '%s' % (len(self.message) + 2)
 
     @property
     def declaration_number(self):
-        return u'1'
+        return '1'
 
     def custom_main_address_country_code(self, party):
         # if S10.G00.01.005 defined country must be empty

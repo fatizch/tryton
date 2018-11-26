@@ -4,11 +4,11 @@ from sql.functions import CurrentDate
 
 from trytond.pool import Pool
 
-import offered
-import contract
-import party
-import wizard
-import rule_engine
+from . import offered
+from . import contract
+from . import party
+from . import wizard
+from . import rule_engine
 
 
 def get_organization_hierarchy():
@@ -56,10 +56,10 @@ def get_organization_hierarchy():
         'main_field': 'party',
         'type': 'data',
         'domain': [('manual_end_date', '<', CurrentDate)],
-        'name_func': lambda x: ' - '.join(filter(None, [
+        'name_func': lambda x: ' - '.join([_f for _f in [
                     x.name,
                     x.contract.get_synthesis_rec_name(None),
-                    ])),
+                    ] if _f]),
         'order_fields': [('name', 'ASC')],
         }
     subsidiary_terminated = {
@@ -83,10 +83,10 @@ def get_organization_hierarchy():
         'type': 'data',
         'domain': ['OR', ('manual_end_date', '=', None),
             ('manual_end_date', '>=', CurrentDate)],
-        'name_func': lambda x: ' - '.join(filter(None, [
+        'name_func': lambda x: ' - '.join([_f for _f in [
                     x.name,
                     x.contract.get_synthesis_rec_name(None),
-                    ])),
+                    ] if _f]),
 
         'order_fields': [('name', 'ASC')],
         }
@@ -124,9 +124,9 @@ def get_organization_hierarchy():
         'main_field': 'party',
         'type': 'data',
         'domain': [('manual_end_date', '<', CurrentDate)],
-        'name_func': lambda x: ' - '.join(filter(None, [
+        'name_func': lambda x: ' - '.join([_f for _f in [
                     x.contract.rec_name,
-                    ])),
+                    ] if _f]),
         'order_fields': [('name', 'ASC')],
         }
     terminated_covered_root = {
@@ -146,9 +146,9 @@ def get_organization_hierarchy():
         'type': 'data',
         'domain': ['OR', ('manual_end_date', '=', None),
             ('manual_end_date', '>=', CurrentDate)],
-        'name_func': lambda x: ' - '.join(filter(None, [
+        'name_func': lambda x: ' - '.join([_f for _f in [
                     x.contract.rec_name,
-                    ])),
+                    ] if _f]),
         'order_fields': [('name', 'ASC')],
         }
     terminated_contracts_covereds = {
@@ -158,9 +158,9 @@ def get_organization_hierarchy():
         'parent_field': 'contract',
         'type': 'data',
         'domain': [('item_desc.kind', '=', 'subsidiary')],
-        'name_func': lambda x: ' - '.join(filter(None, [
+        'name_func': lambda x: ' - '.join([_f for _f in [
                     x.rec_name, x.name, x.get_synthesis_dates(),
-                    ])),
+                    ] if _f]),
         'order_fields': [('name', 'ASC')],
         }
     terminated_contracts = {
@@ -190,9 +190,9 @@ def get_organization_hierarchy():
         'type': 'data',
         'domain': [('item_desc.kind', '=', 'subsidiary'),
             ('manual_end_date', '<', CurrentDate)],
-        'name_func': lambda x: ' - '.join(filter(None, [
+        'name_func': lambda x: ' - '.join([_f for _f in [
                     x.rec_name, x.name, x.get_synthesis_dates(),
-                    ])),
+                    ] if _f]),
         'order_fields': [('name', 'ASC')],
         }
     contracts_terminated_covered_root = {
@@ -216,9 +216,9 @@ def get_organization_hierarchy():
         'domain': [('item_desc.kind', '=', 'subsidiary'),
             ['OR', ('manual_end_date', '=', None),
                 ('manual_end_date', '>=', CurrentDate)]],
-        'name_func': lambda x: ' - '.join(filter(None, [
+        'name_func': lambda x: ' - '.join([_f for _f in [
                     x.rec_name, x.name, x.get_synthesis_dates(),
-                    ])),
+                    ] if _f]),
         'order_fields': [('name', 'ASC')],
         }
     contracts = {
@@ -228,10 +228,10 @@ def get_organization_hierarchy():
         'type': 'data',
         'domain': [('status', 'not in', ['void', 'terminated'])],
         'childs': [contracts_covereds, contracts_terminated_covered_root],
-        'name_func': lambda x: ' - '.join(filter(None, [
+        'name_func': lambda x: ' - '.join([_f for _f in [
                     x.contract_number, x.product.rec_name,
                     x.get_synthesis_dates(), x.get_synthesis_status(),
-                    ])),
+                    ] if _f]),
         'order_fields': [('contract_number', 'ASC')],
         }
     contract_root = {

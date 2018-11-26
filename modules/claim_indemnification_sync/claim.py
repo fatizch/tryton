@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Service:
-    __metaclass__ = PoolMeta
+class Service(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     def calculate(self):
@@ -33,8 +32,7 @@ class Service:
                     for x in self.sub_services], indemnifications)
 
 
-class Indemnification:
-    __metaclass__ = PoolMeta
+class Indemnification(metaclass=PoolMeta):
     __name__ = 'claim.indemnification'
 
     @classmethod
@@ -53,7 +51,7 @@ class Indemnification:
             per_service[indemnification.service].append(indemnification)
 
         master_slave = {}
-        for service, values in per_service.items():
+        for service, values in list(per_service.items()):
             if not service.is_main_service:
                 continue
             subs = []
@@ -92,7 +90,7 @@ class Indemnification:
                 cls.raise_user_error('bad_subs')
 
         result = []
-        for master, slaves in master_slave.iteritems():
+        for master, slaves in master_slave.items():
             super(Indemnification, cls).do_calculate([master])
             with ServerContext().set_context(master_indemnification=master):
                 cls.do_calculate(slaves)

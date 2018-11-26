@@ -22,8 +22,7 @@ SALARY_MODES = [
     ]
 
 
-class OptionBenefit:
-    __metaclass__ = PoolMeta
+class OptionBenefit(metaclass=PoolMeta):
     __name__ = 'contract.option.benefit'
 
     salary_mode = fields.Selection(SALARY_MODES, 'Salary Mode')

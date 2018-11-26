@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     @classmethod
@@ -31,8 +30,7 @@ class Invoice:
         return res
 
 
-class InvoiceLineDetail:
-    __metaclass__ = PoolMeta
+class InvoiceLineDetail(metaclass=PoolMeta):
     __name__ = 'account.invoice.line.detail'
 
     waiver = fields.Many2One('contract.waiver_premium', 'Waiver Of Premium',

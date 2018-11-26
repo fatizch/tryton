@@ -14,8 +14,7 @@ provider_name = config.get('electronic_signature', 'provider') \
 signature_status_field = provider_name + '_status'
 
 
-class Attachment:
-    __metaclass__ = PoolMeta
+class Attachment(metaclass=PoolMeta):
     __name__ = 'ir.attachment'
 
     @fields.depends(signature_status_field)

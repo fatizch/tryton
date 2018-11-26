@@ -17,8 +17,7 @@ __all__ = [
     ]
 
 
-class Address(export.ExportImportMixin):
-    __metaclass__ = PoolMeta
+class Address(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'party.address'
     _func_key = 'func_key'
 
@@ -299,7 +298,7 @@ class Address(export.ExportImportMixin):
     @classmethod
     def _format_address_FR(cls, lines):
         res = {}
-        for k, v in lines.iteritems():
+        for k, v in lines.items():
             res[k] = (v or '').upper()
         return res
 
@@ -374,8 +373,8 @@ class Address(export.ExportImportMixin):
     def _import_json(cls, values, main_object=None):
         # Update the address with zipcode repository
         equivalents = cls._get_address_zipcode_equivalent_for_import()
-        address_fnames = equivalents.keys()
-        if all([x in values for x in equivalents.keys()]):
+        address_fnames = list(equivalents.keys())
+        if all([x in values for x in list(equivalents.keys())]):
             zip_and_city = cls.find_zip_and_city({
                     f: values.get(f, None)
                     for f in address_fnames
@@ -388,16 +387,15 @@ class Address(export.ExportImportMixin):
     def on_change_with_one_line_street(self, name=None):
         if not self.street:
             return ''
-        return ' '.join(filter(None, (x.strip() for x in
-                        self.street.splitlines())))
+        return ' '.join([_f for _f in (x.strip() for x in
+                        self.street.splitlines()) if _f])
 
     @classmethod
     def setter_void(cls, objects, name, values):
         pass
 
 
-class Zip:
-    __metaclass__ = PoolMeta
+class Zip(metaclass=PoolMeta):
     __name__ = 'country.zip'
 
     @classmethod

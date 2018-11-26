@@ -18,8 +18,7 @@ __all__ = [
     ]
 
 
-class EventTypeAction:
-    __metaclass__ = PoolMeta
+class EventTypeAction(metaclass=PoolMeta):
     __name__ = 'event.type.action'
 
     notification_delay = fields.Integer(
@@ -116,8 +115,7 @@ class EventTypeAction:
             ContractNotification.save(notifications)
 
 
-class EventLog:
-    __metaclass__ = PoolMeta
+class EventLog(metaclass=PoolMeta):
     __name__ = 'event.log'
 
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
@@ -149,7 +147,7 @@ class EventLog:
     @classmethod
     def get_event_keys(cls, objects):
         cur_dicts = super(EventLog, cls).get_event_keys(objects)
-        for object_, log_dicts in cur_dicts.items():
+        for object_, log_dicts in list(cur_dicts.items()):
             contracts = [x for x in
                 cls.get_related_instances(object_, 'contract') if x]
             if not contracts:

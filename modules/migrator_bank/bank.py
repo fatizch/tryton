@@ -61,8 +61,8 @@ class MigratorBank(migrator.Migrator):
     def select_remove_ids(cls, ids, excluded, extra_args=None):
         """Return ids without those of objects already present in coog."""
         table_name = cls.model.replace('.', '_')
-        existing_ids = tools.cache_from_query(table_name,
-            (cls.func_key,)).keys()
+        existing_ids = list(tools.cache_from_query(table_name,
+            (cls.func_key,)).keys())
         # bis is 11 chars wide but 3 last are optional
         existing_ids += [bic[:8] for bic in existing_ids]
         return list(set(ids) - set(excluded) - set(existing_ids))
@@ -126,7 +126,7 @@ class MigratorBankAgency(migrator.Migrator):
                 to_create.append(BankAgency(**row)._save_values)
         if to_create:
             ids = BankAgency.create(to_create)
-            return dict(zip(ids, to_create))
+            return dict(list(zip(ids, to_create)))
 
 
 class MigratorBankAccount(migrator.Migrator):
@@ -230,7 +230,7 @@ class MigratorBankAccount(migrator.Migrator):
                 row = {k: row[k] for k in row
                     if k in set(Model._fields) - {'id', }}
                 to_update[func_key] = [[obj], row]
-            Model.write(*sum(to_update.values(), []))
+            Model.write(*sum(list(to_update.values()), []))
             return rows
         return []
 
@@ -275,7 +275,7 @@ class MigratorBankAccount(migrator.Migrator):
                         'state': 'validated',
                         }
         if sepa_to_create:
-            SepaMandate.create(sepa_to_create.values())
+            SepaMandate.create(list(sepa_to_create.values()))
             cls.cache_obj['sepa_mandate'].update(sepa_to_create)
 
     @classmethod

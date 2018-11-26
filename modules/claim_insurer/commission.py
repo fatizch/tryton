@@ -7,8 +7,7 @@ __all__ = [
     ]
 
 
-class CreateInvoicePrincipalAsk:
-    __metaclass__ = PoolMeta
+class CreateInvoicePrincipalAsk(metaclass=PoolMeta):
     __name__ = 'commission.create_invoice_principal.ask'
 
     @classmethod

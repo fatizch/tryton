@@ -2,7 +2,7 @@ import os
 import json
 import redis
 
-from urlparse import urlparse
+from urllib.parse import urlparse
 from rq import Queue
 
 import async.config as config
@@ -34,7 +34,7 @@ def log_result(job, result):
 
 
 def enqueue(queue, fname, args, **kwargs):
-    if isinstance(fname, basestring):
+    if isinstance(fname, str):
         func = tasks[fname]
     else:
         func = fname

@@ -17,8 +17,7 @@ __all__ = [
     ]
 
 
-class Plan(with_extra_data_def('commission-plan-extra_data', 'plan', 'agent')):
-    __metaclass__ = PoolMeta
+class Plan(with_extra_data_def('commission-plan-extra_data', 'plan', 'agent'), metaclass=PoolMeta):
     __name__ = 'commission.plan'
 
     rule_engine_key = fields.Char('Rule Engine Key',
@@ -39,8 +38,7 @@ class Plan(with_extra_data_def('commission-plan-extra_data', 'plan', 'agent')):
 
 class PlanLines(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
-        model.CoogSQL, model.CoogView):
-    __metaclass__ = PoolMeta
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     __name__ = 'commission.plan.line'
 
     use_rule_engine = fields.Boolean('Use Rule Engine')
@@ -88,8 +86,7 @@ class PlanLines(
         return self.options_extract
 
 
-class Agent(with_extra_data(['agent'], schema='plan')):
-    __metaclass__ = PoolMeta
+class Agent(with_extra_data(['agent'], schema='plan'), metaclass=PoolMeta):
     __name__ = 'commission.agent'
 
     @classmethod
@@ -100,5 +97,5 @@ class Agent(with_extra_data(['agent'], schema='plan')):
 
     def get_hash(self):
         return super(Agent, self).get_hash() + (
-            ('extra_data', tuple([x for x in sorted(self.extra_data.items(),
+            ('extra_data', tuple([x for x in sorted(list(self.extra_data.items()),
                             key=lambda x: x[0])])),)

@@ -17,9 +17,8 @@ __all__ = [
     ]
 
 
-class Move:
+class Move(metaclass=PoolMeta):
     __name__ = 'account.move'
-    __metaclass__ = PoolMeta
 
     product = fields.Many2One('offered.product', 'Product',
         ondelete='RESTRICT', states={
@@ -38,8 +37,7 @@ class Move:
         return moves
 
 
-class MoveLine:
-    __metaclass__ = PoolMeta
+class MoveLine(metaclass=PoolMeta):
     __name__ = 'account.move.line'
 
     product = fields.Function(fields.Many2One('offered.product',
@@ -74,8 +72,7 @@ class MoveLine:
         return move
 
 
-class Reconcile:
-    __metaclass__ = PoolMeta
+class Reconcile(metaclass=PoolMeta):
     __name__ = 'account.reconcile'
 
     def transition_reconcile(self):
@@ -89,15 +86,13 @@ class Reconcile:
         return super(Reconcile, self).transition_reconcile()
 
 
-class ReconcileShow:
-    __metaclass__ = PoolMeta
+class ReconcileShow(metaclass=PoolMeta):
     __name__ = 'account.reconcile.show'
 
     product = fields.Many2One('offered.product', 'Product', required=True)
 
 
-class MoveTemplate:
-    __metaclass__ = PoolMeta
+class MoveTemplate(metaclass=PoolMeta):
     __name__ = 'account.move.template'
 
     def get_move(self, values):
@@ -106,8 +101,7 @@ class MoveTemplate:
         return move
 
 
-class MoveTemplateKeyword:
-    __metaclass__ = PoolMeta
+class MoveTemplateKeyword(metaclass=PoolMeta):
     __name__ = 'account.move.template.keyword'
 
     @classmethod
@@ -129,8 +123,7 @@ class MoveTemplateKeyword:
             return ''
 
 
-class MoveLineTemplate:
-    __metaclass__ = PoolMeta
+class MoveLineTemplate(metaclass=PoolMeta):
     __name__ = 'account.move.line.template'
 
     product = fields.Char('Product', required=True)

@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class InvoiceLineDetail:
-    __metaclass__ = PoolMeta
+class InvoiceLineDetail(metaclass=PoolMeta):
     __name__ = 'account.invoice.line.detail'
 
     loan = fields.Many2One('loan', 'Loan', readonly=True, ondelete='RESTRICT')
@@ -27,8 +26,7 @@ class InvoiceLineDetail:
         return new_detail
 
 
-class InvoiceLine:
-    __metaclass__ = PoolMeta
+class InvoiceLine(metaclass=PoolMeta):
     __name__ = 'account.invoice.line'
 
     loan = fields.Function(

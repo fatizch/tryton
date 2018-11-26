@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class ExtractAggregatedMove:
-    __metaclass__ = PoolMeta
+class ExtractAggregatedMove(metaclass=PoolMeta):
     __name__ = 'account.move.aggregated.extract'
 
     @classmethod

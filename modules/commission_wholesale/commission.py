@@ -15,8 +15,7 @@ __all__ = [
     ]
 
 
-class Agent:
-    __metaclass__ = PoolMeta
+class Agent(metaclass=PoolMeta):
     __name__ = 'commission.agent'
 
     wholesale_broker = fields.Boolean('Wholesale Broker',
@@ -34,8 +33,7 @@ class Agent:
         return super(Agent, self).account
 
 
-class Commission:
-    __metaclass__ = PoolMeta
+class Commission(metaclass=PoolMeta):
     __name__ = 'commission'
 
     @fields.depends('agent')
@@ -83,8 +81,7 @@ class Commission:
         return invoice
 
 
-class CreateInvoicePrincipal:
-    __metaclass__ = PoolMeta
+class CreateInvoicePrincipal(metaclass=PoolMeta):
     __name__ = 'commission.create_invoice_principal'
 
     @classmethod
@@ -127,7 +124,7 @@ class CreateInvoicePrincipal:
         for commission_invoice in commission_invoices:
             accounts = [x for y in Insurer.get_insurers_waiting_accounts(
                     [commission_invoice.insurer_role],
-                    notice_kind).itervalues()
+                    notice_kind).values()
                 for x in y]
             if not accounts:
                 continue
@@ -167,8 +164,7 @@ class CreateInvoicePrincipal:
         return line
 
 
-class FilterCommissions:
-    __metaclass__ = PoolMeta
+class FilterCommissions(metaclass=PoolMeta):
     __name__ = 'commission.filter_commission'
 
     def get_domain_from_invoice_business_kind(self, ids, kinds):

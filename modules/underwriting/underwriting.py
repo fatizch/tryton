@@ -400,7 +400,7 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
             if not elem or str(elem) in existing:
                 continue
             possible[str(elem)] = elem.rec_name
-        return [(k, v) for k, v in possible.items()]
+        return [(k, v) for k, v in list(possible.items())]
 
     def get_possible_result_targets(self):
         result = [self.party] if self.party else []
@@ -597,7 +597,7 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
             existing = {x.document_desc.code
                 for x in underwriting.requested_documents}
             for key, data in underwriting.type_.calculate_documents(
-                    underwriting).iteritems():
+                    underwriting).items():
                 if key in existing:
                     # TODO : Handle update / deletion ?
                     continue
@@ -612,7 +612,7 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
         line = pool.get('document.request.line')()
         line.document_desc = doc_desc
         line.for_object = self
-        for k, v in data.iteritems():
+        for k, v in data.items():
             setattr(line, k, v)
         return line
 
@@ -644,7 +644,7 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
                         (x.effective_decision_end or datetime.date.min)
                         for x in underwriting.results)
                     ].append(underwriting)
-        for date, underwritings in copies_per_date.iteritems():
+        for date, underwritings in copies_per_date.items():
             cls.plan_underwriting(underwritings, coog_date.add_day(date, 1))
         Event.notify_events(underwritings, 'underwriting_completed')
 

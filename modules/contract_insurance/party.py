@@ -13,8 +13,7 @@ _all_ = [
     ]
 
 
-class Party(with_extra_data(['covered_element'])):
-    __metaclass__ = PoolMeta
+class Party(with_extra_data(['covered_element']), metaclass=PoolMeta):
     __name__ = 'party.party'
 
     covered_elements = fields.One2Many('contract.covered_element', 'party',
@@ -75,8 +74,7 @@ class Party(with_extra_data(['covered_element'])):
         return result
 
 
-class PartyReplace:
-    __metaclass__ = PoolMeta
+class PartyReplace(metaclass=PoolMeta):
     __name__ = 'party.replace'
 
     @classmethod

@@ -9,6 +9,5 @@ __all__ = [
     ]
 
 
-class Line(WithExtraDetails):
-    __metaclass__ = PoolMeta
+class Line(WithExtraDetails, metaclass=PoolMeta):
     __name__ = 'analytic_account.line'

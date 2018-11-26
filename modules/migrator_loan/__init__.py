@@ -2,8 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import loan
-import party
+from . import loan
+from . import party
 
 
 def register():

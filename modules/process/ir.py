@@ -9,13 +9,11 @@ __all__ = [
     ]
 
 
-class Model:
+class Model(metaclass=PoolMeta):
     '''
         We need to override the Model Class in order to add the is_workflow
         field so we can find which classes are workflow compatible.
     '''
-
-    __metaclass__ = PoolMeta
     __name__ = 'ir.model'
 
     is_workflow = fields.Boolean('Is Workflow')

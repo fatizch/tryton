@@ -1,10 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-import endorsement
-import offered
-import wizard
-import configuration
-import batch
+from . import endorsement
+from . import offered
+from . import wizard
+from . import configuration
+from . import batch
 from trytond.pool import Pool
 
 

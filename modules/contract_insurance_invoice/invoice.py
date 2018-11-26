@@ -32,8 +32,7 @@ _STATES = {'invisible': ~Eval('contract_invoice')}
 _DEPENDS = ['contract_invoice']
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     start = fields.Function(
@@ -465,8 +464,7 @@ class Invoice:
             if self.contract_invoice else None
 
 
-class InvoiceLine:
-    __metaclass__ = PoolMeta
+class InvoiceLine(metaclass=PoolMeta):
     __name__ = 'account.invoice.line'
     # XXX maybe change for the description
     coverage_start = fields.Date('Start Date')
@@ -544,8 +542,7 @@ class InvoiceLine:
             'contract']
 
 
-class InvoiceTax:
-    __metaclass__ = PoolMeta
+class InvoiceTax(metaclass=PoolMeta):
     __name__ = 'account.invoice.tax'
 
     def get_move_lines(self):
@@ -711,7 +708,7 @@ class InvoiceLineAggregates(Wizard):
             lines[line.detail.rated_entity]['base_amount'] += line.amount
             lines[line.detail.rated_entity]['tax_amount'] += line.tax_amount
 
-        for k, v in lines.iteritems():
+        for k, v in lines.items():
             v['rated_entity'] = k.rec_name
             v['total_amount'] = v['base_amount'] + v['tax_amount']
 
@@ -730,7 +727,7 @@ class InvoiceLineAggregates(Wizard):
             return '9_' + key.rec_name
 
         return {
-            'lines': [lines[x] for x in sorted(lines.keys(),
+            'lines': [lines[x] for x in sorted(list(lines.keys()),
                     key=order_lines)]}
 
 

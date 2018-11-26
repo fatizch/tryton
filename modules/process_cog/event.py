@@ -14,9 +14,8 @@ __all__ = [
     ]
 
 
-class EventTypeAction:
+class EventTypeAction(metaclass=PoolMeta):
 
-    __metaclass__ = PoolMeta
     __name__ = 'event.type.action'
 
     process_to_initiate = fields.Many2One('process', 'Process To Initiate',

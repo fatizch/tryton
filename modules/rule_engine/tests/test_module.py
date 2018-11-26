@@ -248,12 +248,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
         func_code = rule.execution_code.split('\n')
         func_id = ('%s' % hash(rule.name)).replace('-', '_')
         self.assertEqual(func_code, [
-                u'',
-                u'def fct_%s ():' % func_id,
-                u' return Decimal (u\'10.0\')',
-                u'',
-                u'result_%s =fct_%s ()' % (func_id, func_id),
-                u''])
+                '',
+                'def fct_%s ():' % func_id,
+                ' return Decimal (u\'10.0\')',
+                '',
+                'result_%s =fct_%s ()' % (func_id, func_id),
+                ''])
 
     @test_framework.prepare_test('table.test0060table_2dim',
         'rule_engine.test0014_testRuleEngineCreation')
@@ -279,11 +279,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'translated': '',
             'type': 'folder',
             'children': [{'children': [],
-                          'description': u'Test',
-                          'fct_args': u'Value, Range',
-                          'long_description': u'Test (table)',
+                          'description': 'Test',
+                          'fct_args': 'Value, Range',
+                          'long_description': 'Test (table)',
                           'name': 'UnusedVariable',
-                          'translated': u'table_test_code',
+                          'translated': 'table_test_code',
                           'type': 'function'}]})
 
         with Transaction().set_user(1):
@@ -315,11 +315,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'translated': '',
             'type': 'folder',
             'children': [{'children': [],
-                          'description': u'Test Parameter',
+                          'description': 'Test Parameter',
                           'fct_args': '',
-                          'long_description': u'Test Parameter (param)',
+                          'long_description': 'Test Parameter (param)',
                           'name': 'UnusedVariable',
-                          'translated': u'param_test_parameter',
+                          'translated': 'param_test_parameter',
                           'type': 'function'}]})
 
         with Transaction().set_user(1):
@@ -351,11 +351,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'translated': '',
             'type': 'folder',
             'children': [{'children': [],
-                          'description': u'Test Parameter',
+                          'description': 'Test Parameter',
                           'fct_args': '',
-                          'long_description': u'Test Parameter (param)',
+                          'long_description': 'Test Parameter (param)',
                           'name': 'UnusedVariable',
-                          'translated': u'param_test_parameter',
+                          'translated': 'param_test_parameter',
                           'type': 'function'}]})
         tree_structure = full_tree_structure[nbnode - 2]
         self.assertEqual(tree_structure, {
@@ -366,11 +366,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'translated': '',
             'type': 'folder',
             'children': [{'children': [],
-                          'description': u'Test Rule',
-                          'fct_args': u'test_parameter=',
-                          'long_description': u'Test Rule (rule)',
+                          'description': 'Test Rule',
+                          'fct_args': 'test_parameter=',
+                          'long_description': 'Test Rule (rule)',
                           'name': 'UnusedVariable',
-                          'translated': u'rule_test_rule',
+                          'translated': 'rule_test_rule',
                           'type': 'function'}]})
         with Transaction().set_user(1):
             self.assertEqual(rule.check_code(), True)
@@ -461,7 +461,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             self.maxDiff = None
             tc.run_test()
             self.assertEqual(tc.low_debug,
-                u"Entering table_test_code\n\t"
+                "Entering table_test_code\n\t"
                 "args : ('test', 30)\n\t"
                 "result = None\n"
                 "Entering add_error\n\t"
@@ -480,19 +480,19 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 "kwargs : {'test_parameter': 20}\n\t"
                 "result = 20")
             self.assertEqual(tc.debug, '')
-            self.assertEqual(tc.result_errors, u'test error')
+            self.assertEqual(tc.result_errors, 'test error')
             self.assertEqual(tc.expected_result,
                 '[20, [test error], [test warning], [test info]]')
-            self.assertEqual(tc.result_info, u'test info')
-            self.assertEqual(tc.result_value, u'20')
-            self.assertEqual(tc.result_warning, u'test warning')
+            self.assertEqual(tc.result_info, 'test info')
+            self.assertEqual(tc.result_value, '20')
+            self.assertEqual(tc.result_warning, 'test warning')
             tc.test_values = [tcv1]
             tc.run_test()
             self.assertEqual(tc.low_debug,
-                u"Entering table_test_code\n\targs : "
+                "Entering table_test_code\n\targs : "
                 "('test', 30)\n\tresult = something")
             self.assertEqual(tc.result_warning, '')
-            self.assertEqual(tc.result_value, u'10')
+            self.assertEqual(tc.result_value, '10')
             self.assertEqual(tc.debug, '')
             self.assertEqual(tc.result_errors, '')
             self.assertEqual(tc.expected_result, '[10, [], [], []]')

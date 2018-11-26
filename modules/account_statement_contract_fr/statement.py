@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Line:
-    __metaclass__ = PoolMeta
+class Line(metaclass=PoolMeta):
     __name__ = 'account.statement.line'
 
     bank = fields.Many2One('bank', 'Bank',
@@ -24,8 +23,7 @@ class Line:
             }, depends=['in_bank_deposit_ticket', 'statement_state'])
 
 
-class Statement:
-    __metaclass__ = PoolMeta
+class Statement(metaclass=PoolMeta):
     __name__ = 'account.statement'
 
     @classmethod
@@ -54,8 +52,7 @@ class Statement:
         return LineWithBank
 
 
-class PaymentInformations:
-    __metaclass__ = PoolMeta
+class PaymentInformations(metaclass=PoolMeta):
     __name__ = 'account_statement.payment_informations'
 
     bank = fields.Many2One('bank', 'Bank', states={
@@ -63,8 +60,7 @@ class PaymentInformations:
         depends=['process_method'])
 
 
-class CreateStatement:
-    __metaclass__ = PoolMeta
+class CreateStatement(metaclass=PoolMeta):
     __name__ = 'account.statement.create'
 
     def get_line_values(self, statement, invoice, line):

@@ -116,7 +116,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
     }
 
     translations = {
-        'gender': {'male': u'01', 'female': u'02'}
+        'gender': {'male': '01', 'female': '02'}
         }
 
     def __init__(self, origin, testing=False, void=False, replace=False):
@@ -193,7 +193,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
 
         # manage person modification
         from_date = DSNMessage.last_dsn_message_create_date()
-        for party in data['individuals'].keys():
+        for party in list(data['individuals'].keys()):
             modifications = []
             for modification in party.pasrau_modified_fields(from_date,
                     self.origin.create_date):
@@ -285,7 +285,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         elif block_id == 'S21.G00.20':  # total amount + banking info
             return [self.origin]
         elif block_id == 'S21.G00.30':
-            return self.data['individuals'].keys()
+            return list(self.data['individuals'].keys())
         elif block_id == 'S21.G00.31':
             return self.data['individuals'][parent]['modifications']
         elif block_id == 'S21.G00.50':
@@ -310,7 +310,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
 
     @property
     def declaration_nature(self):
-        return u'11'
+        return '11'
 
     @property
     def declaration_rank(self):
@@ -319,14 +319,14 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
                 ('origin', '=', str(self.origin)),
                 ('state', '=', 'done')],
             order=[('create_date', 'ASC')])
-        return unicode(len(messages) + 1)
+        return str(len(messages) + 1)
 
     @property
     def declaration_month(self):
-        return unicode(self.origin.invoice_date.strftime('01%m%Y'))
+        return str(self.origin.invoice_date.strftime('01%m%Y'))
 
     def custom_dgfip(self, slip):
-        return u'DGFiP'
+        return 'DGFiP'
 
     def custom_pasrau_bic(self, slip):
         return slip.company.party.bank_accounts[0].bank.bic
@@ -341,16 +341,16 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         return slip.invoice_date + relativedelta(months=1, days=-1)
 
     def custom_pasrau_payment_mode(self, slip):
-        return u'05'  # This means sepa direct debit
+        return '05'  # This means sepa direct debit
 
     def custom_gender(self, party):
         return self.translations['gender'][party.gender]
 
     def custom_birth_place(self, party):
-        return u'SLN'
+        return 'SLN'
 
     def custom_birth_department(self, party):
-        return u'00'
+        return '00'
 
     def get_pasrau_tax_line(self, line):
         invoice = self.get_invoice_from_move_line(line)
@@ -390,22 +390,22 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         else:
             region = line.pasrau_rates_info[0].pasrau_rate_region
         if not region:
-            return u'01'
+            return '01'
         return {
-            'metropolitan': u'17',
-            'grm': u'27',
-            'gm': u'37',
+            'metropolitan': '17',
+            'grm': '27',
+            'gm': '37',
             }.get(region)
 
     def custom_pasrau_rate_id(self, line):
-        return u'-1'  # TODO : should be stored on perso rate from DGFIP crm
+        return '-1'  # TODO : should be stored on perso rate from DGFIP crm
 
     def custom_pasrau_error_month(self, line):
         # todo : what is the date of the error ?
-        return unicode(self.origin.invoice_date.strftime('%m%Y'))
+        return str(self.origin.invoice_date.strftime('%m%Y'))
 
     def custom_pasrau_error_type(self, line):
-        return u'03'
+        return '03'
 
     def custom_pasrau_regularization_base(self, line):
         return self.get_pasrau_tax_line(line).base

@@ -2,10 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import currency
-import test_case
+from . import currency
+from . import test_case
 
-from model import ModelCurrency
+from .model import ModelCurrency
 
 __all__ = [
     'ModelCurrency',

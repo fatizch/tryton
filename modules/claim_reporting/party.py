@@ -9,9 +9,8 @@ __all__ = [
     ]
 
 
-class Insurer:
+class Insurer(metaclass=PoolMeta):
     __name__ = 'insurer'
-    __metaclass__ = PoolMeta
 
     # Use function field for Export/import purpose as data are already included
     # in stock_reports fields

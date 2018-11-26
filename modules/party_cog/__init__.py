@@ -8,16 +8,16 @@ from sql.conditionals import Coalesce
 
 from trytond.pool import Pool
 
-import party
-import category
-import contact_mechanism
-import country
-import address
-import test_case
-import relationship
-import res
-import attachment
-import configuration
+from . import party
+from . import category
+from . import contact_mechanism
+from . import country
+from . import address
+from . import test_case
+from . import relationship
+from . import res
+from . import attachment
+from . import configuration
 
 
 from trytond.modules.coog_core import expand_tree
@@ -80,7 +80,7 @@ def migrate_1_10_include_name_in_street(pool, update):
 
     logging.getLogger('modules').info('Running post init hook %s' %
         'migrate_1_10_include_name_in_street')
-    previous_register = Address.__register__.im_func
+    previous_register = Address.__register__.__func__
 
     @classmethod
     def patched_register(cls, module_name):

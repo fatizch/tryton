@@ -229,7 +229,7 @@ class RelaunchPartySubscription(Wizard):
             else:
                 to_write_per_state['declaration_confirmed'].append(sub)
         to_write = []
-        for state, subscriptions in to_write_per_state.items():
+        for state, subscriptions in list(to_write_per_state.items()):
             to_write.extend([subscriptions, {'state': state}])
         if to_write:
             Subscription.write(*to_write)
@@ -492,8 +492,7 @@ class TreatIjPeriodSelectLine(model.view_only('claim.ij.period')):
     period_id = fields.Integer('Period Id')
 
 
-class CreateIndemnification:
-    __metaclass__ = PoolMeta
+class CreateIndemnification(metaclass=PoolMeta):
     __name__ = 'claim.create_indemnification'
 
     @classmethod
@@ -549,13 +548,12 @@ class CreateIndemnification:
         if cancelled is not None:
             periods.update({x.id: x for x in cancelled})
 
-        Period.add_to_indemnifications(periods.values(), indemnifications)
+        Period.add_to_indemnifications(list(periods.values()), indemnifications)
 
         return indemnifications
 
 
-class IndemnificationDefinition:
-    __metaclass__ = PoolMeta
+class IndemnificationDefinition(metaclass=PoolMeta):
     __name__ = 'claim.indemnification_definition'
 
     prestij_periods = fields.Many2Many('claim.ij.period', None, None,
@@ -590,8 +588,7 @@ class IndemnificationDefinition:
         return result
 
 
-class PartyErase:
-    __metaclass__ = PoolMeta
+class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
     def to_erase(self, party_id):

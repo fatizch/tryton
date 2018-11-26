@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class CreateIndemnification:
-    __metaclass__ = PoolMeta
+class CreateIndemnification(metaclass=PoolMeta):
     __name__ = 'claim.create_indemnification'
 
     def possible_services(self, claim):
@@ -40,7 +39,7 @@ class CreateIndemnification:
                 values['start_date']).extra_data_values
             with ServerContext().set_context(service=sub_service):
                 new_data = sub_service.benefit.refresh_extra_data(extra_data)
-            for k, v in new_data.items():
+            for k, v in list(new_data.items()):
                 if k not in extra_data:
                     extra_data[k] = v
             new_extra_data.update(extra_data)

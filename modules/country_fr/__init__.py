@@ -4,7 +4,7 @@ import logging
 
 from trytond.pool import Pool
 
-import country
+from . import country
 
 
 def register():

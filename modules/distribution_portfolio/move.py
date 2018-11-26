@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class Line:
-    __metaclass__ = PoolMeta
+class Line(metaclass=PoolMeta):
     __name__ = 'account.move.line'
 
     portfolio = fields.Function(

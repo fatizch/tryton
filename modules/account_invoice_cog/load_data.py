@@ -8,9 +8,8 @@ __all__ = [
     ]
 
 
-class FiscalYearSetWizard:
+class FiscalYearSetWizard(metaclass=PoolMeta):
 
-    __metaclass__ = PoolMeta
     __name__ = 'fiscal_year.set.wizard'
 
     @classmethod

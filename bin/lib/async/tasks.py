@@ -117,7 +117,7 @@ def split_job(l, n):
     elif n == 0 or n >= len(l):
         yield l
     else:
-        for i in xrange(0, len(l), n):
+        for i in range(0, len(l), n):
             yield l[i:i + n]
 
 
@@ -158,7 +158,7 @@ def batch_exec(name, ids, params, **kwargs):
 
     res = []
     if retry >= 0:
-        loop = range(retry, -1, -1)
+        loop = list(range(retry, -1, -1))
     else:
         def infinite():
             while True:

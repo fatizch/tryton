@@ -2,11 +2,11 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import batch
-import document
-import attachment
-import report_engine
-import party
+from . import batch
+from . import document
+from . import attachment
+from . import report_engine
+from . import party
 
 
 def register():

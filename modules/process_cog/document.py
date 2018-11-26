@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class ReceiveDocument:
-    __metaclass__ = PoolMeta
+class ReceiveDocument(metaclass=PoolMeta):
     __name__ = 'document.receive'
 
     attach_and_resume = StateTransition()
@@ -45,8 +44,7 @@ class ReceiveDocument:
             }
 
 
-class ReattachDocument:
-    __metaclass__ = PoolMeta
+class ReattachDocument(metaclass=PoolMeta):
     __name__ = 'document.receive.reattach'
 
     current_process = fields.Reference('Current Process', 'get_models')

@@ -48,7 +48,7 @@ def fields_to_check(klass):
     pool = Pool()
     to_check = {}
     skips = klass._export_skips()
-    for fname, field in klass._fields.iteritems():
+    for fname, field in klass._fields.items():
         if not isinstance(field, tryton_fields.One2Many):
             continue
         if fname in skips:
@@ -104,7 +104,7 @@ def handle_field(live_parents, dead_parents, data_dict, ignore_before,
 
     # Manage sub fields
     data_dict['sub_fields'] = fields_to_check(target)
-    for fname, sub_data in data_dict['sub_fields'].items():
+    for fname, sub_data in list(data_dict['sub_fields'].items()):
         handle_field(living, dead, sub_data, ignore_before, include_ignore,
             checks=checks)
 

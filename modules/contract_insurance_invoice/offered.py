@@ -84,7 +84,7 @@ class BillingMode(model.CoogSQL, model.CoogView):
         order=[('order', 'ASC')], delete_missing=True,
         states={'invisible': ~Eval('change_payment_terms_order')})
     sync_day = fields.Selection([('', '')] + [(str(x), str(x))
-            for x in xrange(1, 29)], 'Sync Day', states={
+            for x in range(1, 29)], 'Sync Day', states={
             'required': Bool(Eval('sync_month', False))},
         depends=['sync_month', 'frequency'], sort=False,
         translate=False)
@@ -142,7 +142,7 @@ class BillingMode(model.CoogSQL, model.CoogView):
         if not self.direct_debit:
             return [('', '')]
         if not self.allowed_direct_debit_days:
-            return [(str(x), str(x)) for x in xrange(1, 28)]
+            return [(str(x), str(x)) for x in range(1, 28)]
         return [(str(x), str(x)) for x in
             self.allowed_direct_debit_days.split(',')]
 
@@ -289,8 +289,7 @@ class PaymentTermLineRelativeDelta(export.ExportImportMixin):
             return [('id', '=', None)]
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     billing_modes = fields.Many2Many('offered.product-offered.billing_mode',
@@ -431,8 +430,7 @@ class BillingModePaymentTermRelation(model.CoogSQL, model.CoogView):
             'payment_term'}
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     account_for_billing = fields.Many2One('account.account',
@@ -465,8 +463,7 @@ class OptionDescription:
         return self.account_for_billing
 
 
-class OptionDescriptionPremiumRule:
-    __metaclass__ = PoolMeta
+class OptionDescriptionPremiumRule(metaclass=PoolMeta):
     __name__ = 'offered.option.description.premium_rule'
 
     match_contract_frequency = fields.Boolean('Match Contract Frequency',

@@ -24,8 +24,8 @@ class DocumentRequestBatch(batch.BatchRoot):
     def __setup__(cls):
         super(DocumentRequestBatch, cls).__setup__()
         cls._default_config_items.update({
-                'filepath_template': u'%{BATCHNAME}/%{FILENAME}',
-                'filepath_timestamp_format': u'%Y%m%d_%Hh%Mm%Ss',
+                'filepath_template': '%{BATCHNAME}/%{FILENAME}',
+                'filepath_timestamp_format': '%Y%m%d_%Hh%Mm%Ss',
                 })
 
     @classmethod

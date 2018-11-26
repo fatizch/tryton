@@ -4,7 +4,7 @@ import json
 import redis
 import traceback
 
-from urlparse import urlparse
+from urllib.parse import urlparse
 from celery import Celery
 from celery import Task
 from celery.utils.log import get_task_logger
@@ -85,7 +85,7 @@ class CoogBatchTask(Task):
             retval, **extra_args)
 
 
-for name, func in batch_tasks.iteritems():
+for name, func in batch_tasks.items():
     app.task(func, base=CoogBatchTask, name=name, serializer='json')
 
 

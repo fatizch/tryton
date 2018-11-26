@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class Commission:
-    __metaclass__ = PoolMeta
+class Commission(metaclass=PoolMeta):
     __name__ = 'commission'
 
     portfolio = fields.Function(
@@ -34,8 +33,7 @@ class Commission:
             ]
 
 
-class AggregatedCommission:
-    __metaclass__ = PoolMeta
+class AggregatedCommission(metaclass=PoolMeta):
     __name__ = 'commission.aggregated'
 
     portfolio = fields.Function(

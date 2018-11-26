@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Journal:
-    __metaclass__ = PoolMeta
+class Journal(metaclass=PoolMeta):
     __name__ = 'account.payment.journal'
 
     outstandings_waiting_account = fields.Many2One('account.account',
@@ -31,8 +30,7 @@ class Journal:
             'outstandings_journal'}
 
 
-class Payment:
-    __metaclass__ = PoolMeta
+class Payment(metaclass=PoolMeta):
     __name__ = 'account.payment'
 
     @classmethod

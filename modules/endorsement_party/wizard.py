@@ -136,7 +136,7 @@ class ChangePartyAddress(EndorsementWizardStepMixin):
         defaults = super(ChangePartyAddress, self).step_default()
         parties = self._get_parties()
         defaults.update({'displayers': []})
-        for party_id, party_endorsement in parties.iteritems():
+        for party_id, party_endorsement in parties.items():
             updated_struct = party_endorsement.updated_struct
             addresses = updated_struct['addresses']
             for address in addresses:
@@ -196,13 +196,13 @@ class ChangePartyAddress(EndorsementWizardStepMixin):
                 # This is needed because a None field is a void string
                 # in _save_values
                 new_values = {k: v for k, v in
-                    address._save_values.iteritems() if k in
+                    address._save_values.items() if k in
                     self._address_fields_to_extract() and
                     (v or getattr(prev_address, k, False))}
                 new_values.pop('zip_and_city', None)
             return new_values
 
-        for party_id, party_endorsement in parties.iteritems():
+        for party_id, party_endorsement in parties.items():
             party = Party(party_id)
             addresses_added = None
             if party_endorsement.addresses:
@@ -241,7 +241,7 @@ class ChangePartyAddress(EndorsementWizardStepMixin):
                                 action='add',
                                 party_endorsement=party_endorsement,
                                 definition=self.endorsement_definition,
-                                values={k: v for k, v in new_values.iteritems()
+                                values={k: v for k, v in new_values.items()
                                     if v},
                                 )
                         else:
@@ -290,8 +290,8 @@ class ChangePartyBirthDate(EndorsementWizardStepMixin):
         Party = pool.get('party.party')
         defaults = super(ChangePartyBirthDate, self).step_default()
         parties = self._get_parties()
-        party = Party(parties.keys()[0])
-        party_endorsement = parties.values()[0]
+        party = Party(list(parties.keys())[0])
+        party_endorsement = list(parties.values())[0]
         values = party_endorsement.values
         if 'birth_date' in values:
             defaults['new_birth_date'] = values['birth_date']
@@ -302,7 +302,7 @@ class ChangePartyBirthDate(EndorsementWizardStepMixin):
 
     def step_update(self):
         parties = self._get_parties()
-        party_endorsement = parties.values()[0]
+        party_endorsement = list(parties.values())[0]
         party_endorsement.values = {'birth_date': self.new_birth_date}
         party_endorsement.save()
 
@@ -337,8 +337,8 @@ class ChangePartySSN(EndorsementWizardStepMixin):
         Party = pool.get('party.party')
         defaults = super(ChangePartySSN, self).step_default()
         parties = self._get_parties()
-        party = Party(parties.keys()[0])
-        party_endorsement = parties.values()[0]
+        party = Party(list(parties.keys())[0])
+        party_endorsement = list(parties.values())[0]
         values = party_endorsement.values
         if 'ssn' in values:
             defaults['new_ssn'] = values['ssn']
@@ -353,7 +353,7 @@ class ChangePartySSN(EndorsementWizardStepMixin):
         test_party = Party(ssn=self.new_ssn)
         test_party.check_ssn()
         parties = self._get_parties()
-        party_endorsement = parties.values()[0]
+        party_endorsement = list(parties.values())[0]
         party_endorsement.values = {'ssn': self.new_ssn}
         party_endorsement.save()
 
@@ -420,7 +420,7 @@ class ChangePartyName(EndorsementWizardStepMixin):
         displayers = []
         defaults = super(ChangePartyName, self).step_default()
         for party, party_endorsement in zip(Party.browse(
-                    self._get_parties().keys()), self._get_parties().values()):
+                    list(self._get_parties().keys())), list(self._get_parties().values())):
             displayer = {'party_rec_name': party.rec_name}
             values = party_endorsement.values
             for fname in self._party_fields_to_extract():
@@ -434,8 +434,8 @@ class ChangePartyName(EndorsementWizardStepMixin):
         pool = Pool()
         Party = pool.get('party.party')
         for party, party_endorsement, displayer in zip(
-                Party.browse(self._get_parties().keys()),
-                self._get_parties().values(), self.parties):
+                Party.browse(list(self._get_parties().keys())),
+                list(self._get_parties().values()), self.parties):
             new_values = {}
             for fname in self._party_fields_to_extract():
                 if getattr(displayer, fname) != getattr(
@@ -498,7 +498,7 @@ class ChangePartyRelationship(EndorsementWizardStepMixin):
         defaults = super(ChangePartyRelationship, self).step_default()
         parties = self._get_parties()
         defaults.update({'displayers': []})
-        for party_id, party_endorsement in parties.iteritems():
+        for party_id, party_endorsement in parties.items():
             updated_struct = party_endorsement.updated_struct
             relations = updated_struct['relations']
             for relation in relations:
@@ -554,7 +554,7 @@ class ChangePartyRelationship(EndorsementWizardStepMixin):
                     res[field] = relation_save_values[field]
             return res
 
-        for party_id, party_endorsement in parties.iteritems():
+        for party_id, party_endorsement in parties.items():
             party = Party(party_id)
             relations_added = None
             if party_endorsement.relations:
@@ -603,7 +603,7 @@ class ChangePartyRelationship(EndorsementWizardStepMixin):
                                 action='add',
                                 party_endorsement=party_endorsement,
                                 definition=self.endorsement_definition,
-                                values={k: v for k, v in new_values.iteritems()
+                                values={k: v for k, v in new_values.items()
                                     if v},
                                 )
                         else:
@@ -682,8 +682,7 @@ class SelectEndorsement(model.CoogView):
         return endorsement
 
 
-class StartEndorsement:
-    __metaclass__ = PoolMeta
+class StartEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
     def transition_start(self):
@@ -713,8 +712,7 @@ add_endorsement_step(StartEndorsement, ChangePartyRelationship,
     'change_party_relationship')
 
 
-class StartEndorsementSSN:
-    __metaclass__ = PoolMeta
+class StartEndorsementSSN(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
 
@@ -722,8 +720,7 @@ add_endorsement_step(StartEndorsementSSN, ChangePartySSN,
     'change_party_ssn')
 
 
-class PartyErase:
-    __metaclass__ = PoolMeta
+class PartyErase(metaclass=PoolMeta):
     __name__ = 'party.erase'
 
     def transition_erase(self):
@@ -733,7 +730,7 @@ class PartyErase:
         with Transaction().set_context(active_test=False):
             while replacing:
                 replacing = Party.search([
-                        ('replaced_by', 'in', map(int, replacing))
+                        ('replaced_by', 'in', list(map(int, replacing)))
                         ])
                 parties += replacing
         for party in parties:

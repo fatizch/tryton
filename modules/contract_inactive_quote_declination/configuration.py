@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class Configuration:
-    __metaclass__ = PoolMeta
+class Configuration(metaclass=PoolMeta):
     __name__ = 'offered.configuration'
 
     inactivity_delay = fields.Integer('Inactivity Delay',

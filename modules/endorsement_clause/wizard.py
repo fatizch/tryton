@@ -106,7 +106,7 @@ class ManageClauses(EndorsementWizardStepMixin):
             for x in possible_contracts}
 
         all_clauses = []
-        for contract, clauses in per_contract.iteritems():
+        for contract, clauses in per_contract.items():
             all_clauses += self.generate_displayers(contract, clauses)
         defaults['all_clauses'] = [x._changed_values for x in all_clauses]
         if defaults['possible_contracts']:
@@ -121,11 +121,11 @@ class ManageClauses(EndorsementWizardStepMixin):
         for clause in self.all_clauses:
             per_contract[clause.contract].append(clause)
 
-        for contract, clauses in per_contract.iteritems():
+        for contract, clauses in per_contract.items():
             self.update_endorsed_clauses(contract, clauses)
 
         new_endorsements = []
-        for contract_endorsement in per_contract.keys():
+        for contract_endorsement in list(per_contract.keys()):
             self._update_endorsement(contract_endorsement,
                 contract_endorsement.contract._save_values)
             if not contract_endorsement.clean_up():
@@ -204,7 +204,7 @@ class ManageClauses(EndorsementWizardStepMixin):
                     displayer.action = 'nothing'
             all_clauses.append(displayer)
 
-        for clause in existing_clauses.values():
+        for clause in list(existing_clauses.values()):
             displayer = Clause. new_displayer(clause)
             displayer.contract = contract_endorsement
             displayer.contract_rec_name = contract.rec_name
@@ -316,8 +316,7 @@ class ClauseDisplayer(model.CoogView):
             }
 
 
-class StartEndorsement:
-    __metaclass__ = PoolMeta
+class StartEndorsement(metaclass=PoolMeta):
     __name__ = 'endorsement.start'
 
 

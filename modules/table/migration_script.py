@@ -9,7 +9,7 @@ from trytond.cache import Cache
 from trytond.transaction import Transaction
 
 if len(sys.argv) != 2:
-    print "Please provide database name as argument"
+    print("Please provide database name as argument")
     sys.exit()
 else:
     dbname = sys.argv[1]

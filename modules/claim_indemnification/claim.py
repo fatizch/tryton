@@ -43,8 +43,7 @@ __all__ = [
     ]
 
 
-class Claim:
-    __metaclass__ = PoolMeta
+class Claim(metaclass=PoolMeta):
     __name__ = 'claim'
 
     invoices = fields.Function(
@@ -142,8 +141,7 @@ class Claim:
         Indemnification.schedule(claims[0].indemnifications_to_schedule)
 
 
-class Loss:
-    __metaclass__ = PoolMeta
+class Loss(metaclass=PoolMeta):
     __name__ = 'claim.loss'
 
     @classmethod
@@ -255,8 +253,7 @@ class Loss:
         super(Loss, cls).activate(losses)
 
 
-class ClaimService:
-    __metaclass__ = PoolMeta
+class ClaimService(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
     indemnifications = fields.One2Many('claim.indemnification',
@@ -1069,7 +1066,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             self.amount = self.get_amount(None)
         else:
             self.total_amount = self.amount + sum(x['amount']
-                for x in self._get_taxes().values())
+                for x in list(self._get_taxes().values()))
 
     def get_rec_name(self, name):
         payment_line = None
@@ -1079,7 +1076,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 and not x.is_regularisation]
             if payment_lines:
                 payment_line = payment_lines[0]
-        return u'%s - %s: %s [%s] %s %s' % (
+        return '%s - %s: %s [%s] %s %s' % (
             coog_string.translate_value(self, 'start_date')
             if self.start_date else '',
             coog_string.translate_value(self, 'end_date')
@@ -1213,7 +1210,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             for cov_service in cov_services:
                 services_per_claim[cov_service.claim].append(cov_service)
             overlapping = []
-            for claim, services in services_per_claim.items():
+            for claim, services in list(services_per_claim.items()):
                 overlapping += cls._check_indemnifications_periods_for_covered(
                     covered, claim, services, cov_indemnifications)
         with_different_loss = [x for x in overlapping if
@@ -1365,12 +1362,12 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         if not indemnifications_with_values:
             return
         to_write = []
-        for indemnification, values in indemnifications_with_values.items():
+        for indemnification, values in list(indemnifications_with_values.items()):
             values.update({'status': 'rejected'})
             to_write.extend([[indemnification], values])
         cls.write(*to_write)
         Event = Pool().get('event')
-        Event.notify_events(indemnifications_with_values.keys(),
+        Event.notify_events(list(indemnifications_with_values.keys()),
             'reject_indemnification')
 
     @classmethod
@@ -1436,7 +1433,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             )
 
     def invoice_line_description(self):
-        return u'%s - %s- %s - %s' % (
+        return '%s - %s- %s - %s' % (
             self.service.loss.claim.claimant.rec_name,
             self.service.loss.rec_name,
             coog_string.translate_value(self, 'start_date')
@@ -1800,8 +1797,7 @@ class IndemnificationPaybackReason(model.CoogSQL, model.CoogView,
         return coog_string.slugify(self.name)
 
 
-class ClaimSubStatus:
-    __metaclass__ = PoolMeta
+class ClaimSubStatus(metaclass=PoolMeta):
     __name__ = 'claim.sub_status'
 
     block_indemnifications = fields.Boolean('Block Indemnifications Scheduling',

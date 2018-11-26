@@ -15,8 +15,7 @@ __all__ = [
     ]
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     deposits = fields.Function(
@@ -77,11 +76,10 @@ class Invoice:
                     invoice.deposits
         if deposits_by_date:
             Deposit.write(*sum([[v, {'date': k, 'state': 'received'}]
-                        for k, v in deposits_by_date.items()], []))
+                        for k, v in list(deposits_by_date.items())], []))
 
 
-class InvoiceLine:
-    __metaclass__ = PoolMeta
+class InvoiceLine(metaclass=PoolMeta):
     __name__ = 'account.invoice.line'
 
     def new_deposit(self):

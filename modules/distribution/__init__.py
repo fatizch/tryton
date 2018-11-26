@@ -2,10 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import distribution
-import test_case
-import party
-import res
+from . import distribution
+from . import test_case
+from . import party
+from . import res
 
 
 def register():

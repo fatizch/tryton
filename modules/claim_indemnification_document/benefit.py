@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class Benefit:
-    __metaclass__ = PoolMeta
+class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     def calculate_required_docs_for_indemnification(self, args):
@@ -24,6 +23,5 @@ class Benefit:
 class DocumentRule(
         get_rule_mixin('indemnification_doc_rule',
             'Rule Engine for indemnifications',
-            extra_string='Rule Extra Data')):
-    __metaclass__ = PoolMeta
+            extra_string='Rule Extra Data'), metaclass=PoolMeta):
     __name__ = 'document.rule'

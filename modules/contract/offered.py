@@ -21,9 +21,8 @@ __all__ = [
     ]
 
 
-class Product(CompanyMultiValueMixin):
+class Product(CompanyMultiValueMixin, metaclass=PoolMeta):
     __name__ = 'offered.product'
-    __metaclass__ = PoolMeta
 
     quote_number_sequence = fields.MultiValue(fields.Many2One('ir.sequence',
             'Quote number sequence', domain=[
@@ -71,7 +70,7 @@ class Product(CompanyMultiValueMixin):
         else:
             result = res
         auth_fields = rule._get_authorized_fields()
-        for k, v in result.items():
+        for k, v in list(result.items()):
             if k not in auth_fields:
                 self.raise_user_error('data_rule_misconfigured',
                     {'field': k, 'product': self.name})

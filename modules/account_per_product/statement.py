@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Statement:
-    __metaclass__ = PoolMeta
+class Statement(metaclass=PoolMeta):
     __name__ = 'account.statement'
 
     product = fields.Many2One('offered.product', 'Product',
@@ -25,8 +24,7 @@ class Statement:
         return move
 
 
-class Line:
-    __metaclass__ = PoolMeta
+class Line(metaclass=PoolMeta):
     __name__ = 'account.statement.line'
 
     @classmethod

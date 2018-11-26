@@ -31,19 +31,19 @@ class PoolObjectEncoder(JSONEncoder):
             return {'__function__': True, 'data': pickle.dumps(obj)}
         elif isinstance(obj, types.MethodType):
             return {'__method__': True, 'data': '%s,%s' % (
-                    obj.im_class.__name__, obj.__name__)}
+                    obj.__self__.__class__.__name__, obj.__name__)}
         return super(PoolObjectEncoder, self).default(obj)
 
 
 class PoolObjectDecoder(JSONDecoder):
 
     def __call__(self, obj_):
-        if isinstance(obj_, dict) and '__pool__' in obj_.keys():
+        if isinstance(obj_, dict) and '__pool__' in list(obj_.keys()):
             model_name, id_ = obj_['data'].split(',')
             return Pool().get(model_name)(eval(id_))
-        elif isinstance(obj_, dict) and '__function__' in obj_.keys():
+        elif isinstance(obj_, dict) and '__function__' in list(obj_.keys()):
             return pickle.loads(obj_['data'])
-        elif isinstance(obj_, dict) and '__method__' in obj_.keys():
+        elif isinstance(obj_, dict) and '__method__' in list(obj_.keys()):
             model_name, method_name = obj_['data'].split(',')
             return getattr(Pool().get(model_name), method_name)
         return super(PoolObjectDecoder, self).__call__(obj_)

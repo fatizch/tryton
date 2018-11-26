@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class User:
-    __metaclass__ = PoolMeta
+class User(metaclass=PoolMeta):
     __name__ = 'res.user'
 
     network_portfolios = fields.Function(

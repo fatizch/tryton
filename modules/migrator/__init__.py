@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 from .migrator import Migrator
-import create_staging
+from . import create_staging
 
 __all__ = [
     'Migrator'

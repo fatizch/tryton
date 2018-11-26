@@ -10,8 +10,7 @@ __all__ = [
     ]
 
 
-class Rule(export.ExportImportMixin):
-    __metaclass__ = PoolMeta
+class Rule(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'analytic_account.rule'
     _func_key = 'code'
 

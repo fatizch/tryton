@@ -165,7 +165,7 @@ class Fee(model.CoogSQL, model.CoogView, ModelCurrency):
         rule_dict_template = self.get_base_premium_dict(rated_instance)
         dict_len = len(rule_dict_template)
         all_lines = []
-        for date in lines.iterkeys():
+        for date in lines.keys():
             if not self.must_be_rated(rated_instance, date):
                 continue
             if len(rule_dict_template) == dict_len:

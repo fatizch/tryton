@@ -12,8 +12,7 @@ __all__ = [
     ]
 
 
-class Journal:
-    __metaclass__ = PoolMeta
+class Journal(metaclass=PoolMeta):
     __name__ = 'account.payment.journal'
 
     product = fields.Function(
@@ -36,8 +35,7 @@ class Journal:
         return super(Journal, cls)._export_skips() | {'products'}
 
 
-class Payment:
-    __metaclass__ = PoolMeta
+class Payment(metaclass=PoolMeta):
     __name__ = 'account.payment'
 
     def create_clearing_move(self, date=None):

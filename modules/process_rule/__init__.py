@@ -2,8 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 
-import rule_engine
-import process
+from . import rule_engine
+from . import process
 
 
 def register():

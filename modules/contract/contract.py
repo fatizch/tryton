@@ -694,7 +694,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         def convert(value):
             if value:
                 if not isinstance(value, datetime.date):
-                    return datetime.date(*map(int, value.split('-')))
+                    return datetime.date(*list(map(int, value.split('-'))))
                 return value
             return value
 
@@ -711,7 +711,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         if backend.name() == 'sqlite':
             for fname in ('start_date', 'end_date'):
                 values[fname] = {x: convert(y)
-                    for x, y in values[fname].iteritems()}
+                    for x, y in values[fname].items()}
         return values
 
     @classmethod
@@ -1076,7 +1076,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         result = cls.get_revision_value(contracts, names,
             ContractExtraData)
         # Dict fields must be cast
-        for k, v in result.get('extra_data_values', {}).iteritems():
+        for k, v in result.get('extra_data_values', {}).items():
             result['extra_data_values'][k] = json.loads(v or '{}',
                 object_hook=JSONDecoder())
         return result
@@ -1131,7 +1131,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
     def ws_subscribe_contracts(cls, contract_dict):
         'This method is a standard API for webservice use'
         return_values = {}
-        for ext_id, objects in contract_dict.iteritems():
+        for ext_id, objects in contract_dict.items():
             new_message = []
             return_values[ext_id] = {'return': True, 'messages': new_message}
             try:
@@ -1973,7 +1973,7 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
     def get_end_date(self, name):
         if self.status in ['void', 'declined']:
             return None
-        dates = [x for x in self.get_possible_end_date().itervalues()]
+        dates = [x for x in self.get_possible_end_date().values()]
         if self.parent_contract.end_date:
             dates.append(self.parent_contract.end_date)
         return min(dates) if dates else None

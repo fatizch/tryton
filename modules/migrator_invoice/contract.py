@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class MigratorContract:
-    __metaclass__ = PoolMeta
+class MigratorContract(metaclass=PoolMeta):
     __name__ = 'migrator.contract'
 
     @classmethod

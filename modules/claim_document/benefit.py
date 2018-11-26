@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Benefit:
-    __metaclass__ = PoolMeta
+class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     documents_rules = fields.One2Many('document.rule', 'benefit',
@@ -27,8 +26,7 @@ class Benefit:
         return self.documents_rules[0].calculate_required_documents(args)
 
 
-class DocumentRule:
-    __metaclass__ = PoolMeta
+class DocumentRule(metaclass=PoolMeta):
     __name__ = 'document.rule'
 
     benefit = fields.Many2One('benefit', 'Benefit', ondelete='CASCADE',
@@ -38,8 +36,7 @@ class DocumentRule:
         return getattr(self.benefit, self.benefit._func_key)
 
 
-class LossDescription:
-    __metaclass__ = PoolMeta
+class LossDescription(metaclass=PoolMeta):
     __name__ = 'benefit.loss.description'
 
     documents = fields.Many2Many(

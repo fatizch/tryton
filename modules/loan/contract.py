@@ -29,8 +29,7 @@ __all__ = [
     ]
 
 
-class Contract:
-    __metaclass__ = PoolMeta
+class Contract(metaclass=PoolMeta):
     __name__ = 'contract'
 
     is_loan = fields.Function(
@@ -140,7 +139,7 @@ class Contract:
                 for option in covered_element.options
                 for share in option.loan_shares]
             return [share.id
-                for loan in sorted(per_loan.keys(), key=lambda x: x.order)
+                for loan in sorted(list(per_loan.keys()), key=lambda x: x.order)
                 for share in per_loan[loan]]
 
     @classmethod
@@ -247,8 +246,7 @@ class ContractLoan(model.CoogSQL, model.CoogView):
         return self.loan.state if self.loan else ''
 
 
-class ContractOption:
-    __metaclass__ = PoolMeta
+class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     is_loan = fields.Function(
@@ -287,7 +285,7 @@ class ContractOption:
             for loan in self.parent_contract.ordered_loans
             if loan.loan.id in all_shares_per_loan]
         active_loans = [x.loan.id for x in shares]
-        for loan_id, cur_shares in all_shares_per_loan.items():
+        for loan_id, cur_shares in list(all_shares_per_loan.items()):
             if loan_id in active_loans:
                 continue
             shares.append(cur_shares[-1])
@@ -300,7 +298,7 @@ class ContractOption:
         shares = []
         current_loans = {x.loan.id: x.number
             for x in self.parent_contract.ordered_loans}
-        for loan, cur_shares in self.get_shares_per_loan().items():
+        for loan, cur_shares in list(self.get_shares_per_loan().items()):
             if not include_removed and loan not in current_loans:
                 continue
             for share in reversed(cur_shares):
@@ -331,7 +329,7 @@ class ContractOption:
             date_max = max([
                     x[-1].loan.end_date if x[-1].share else
                     coog_date.add_day(x[-1].start_date, -1)
-                    for x in self.get_shares_per_loan().values()])
+                    for x in list(self.get_shares_per_loan().values())])
 
             if date_max:
                 dates['loan'] = date_max
@@ -395,8 +393,7 @@ class ContractOption:
             return outstanding + self.get_option_loan_balance(date)
 
 
-class ExtraPremium:
-    __metaclass__ = PoolMeta
+class ExtraPremium(metaclass=PoolMeta):
     __name__ = 'contract.option.extra_premium'
 
     capital_per_mil_rate = fields.Numeric('Rate on Capital', states={
@@ -476,7 +473,7 @@ class ExtraPremium:
     def get_value_as_string(self, name):
         if self.calculation_kind in ('initial_capital_per_mil',
                 'remaining_capital_per_mil') and self.capital_per_mil_rate:
-            return u'%s ‰' % coog_string.format_number('%.2f',
+            return '%s ‰' % coog_string.format_number('%.2f',
                 self.capital_per_mil_rate * 1000)
         return super(ExtraPremium, self).get_value_as_string(name)
 
@@ -648,8 +645,7 @@ class LoanShare(model.CoogSQL, model.CoogView, model.ExpandTreeMixin):
         return True
 
 
-class OptionSubscription:
-    __metaclass__ = PoolMeta
+class OptionSubscription(metaclass=PoolMeta):
     __name__ = 'contract.wizard.option_subscription'
 
     def default_options_displayer(self, values):
@@ -670,8 +666,7 @@ class OptionSubscription:
         return updated_options
 
 
-class OptionsDisplayer:
-    __metaclass__ = PoolMeta
+class OptionsDisplayer(metaclass=PoolMeta):
     __name__ = 'contract.wizard.option_subscription.options_displayer'
 
     is_loan = fields.Boolean('Is Loan')
@@ -731,8 +726,7 @@ class OptionsDisplayer:
         return res
 
 
-class WizardOption:
-    __metaclass__ = PoolMeta
+class WizardOption(metaclass=PoolMeta):
     __name__ = 'contract.wizard.option_subscription.options_displayer.option'
 
     share = fields.Numeric('Loan Share', digits=(16, 4),
@@ -781,8 +775,7 @@ class WizardOption:
             option.save()
 
 
-class DisplayContractPremium:
-    __metaclass__ = PoolMeta
+class DisplayContractPremium(metaclass=PoolMeta):
     __name__ = 'contract.premium.display'
 
     def new_line(self, name, line=None):

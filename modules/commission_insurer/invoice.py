@@ -13,8 +13,7 @@ __all__ = [
     ]
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     insurer_role = fields.Many2One('insurer', 'Insurer', ondelete='RESTRICT',

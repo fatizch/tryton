@@ -41,7 +41,7 @@ with open(bic_file_name, 'w') as bic_file:
             site = 'http://www.swiftcodes.info/%s/page/%s/' % (country, i)
             r = requests.get(site)
 
-    for key, values in bics.iteritems():
+    for key, values in bics.items():
         for bic in values:
             site = 'http://www.swiftcodes.info/%s/swift-code-%s' % (key,
                 bic['swift_code'])
@@ -61,4 +61,4 @@ with open(bic_file_name, 'w') as bic_file:
                 table_dic['City'],
                 table_dic['Country'],
                 ))
-            print '%s exported' % bic
+            print('%s exported' % bic)

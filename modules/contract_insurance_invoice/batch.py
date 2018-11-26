@@ -495,13 +495,13 @@ class RebillBatch(batch.BatchRoot):
                     raise Exception('Invalid date %s' % date)
                 res[number] = date
         cursor.execute(*contract.select(contract.id, contract.contract_number,
-                where=contract.contract_number.in_(res.keys())))
+                where=contract.contract_number.in_(list(res.keys()))))
         result = []
         for contract_id, contract_number in cursor.fetchall():
             result.append((contract_id, res.pop(contract_number)))
         if res:
             raise Exception('Could not found contracts ' +
-                ', '.join(res.keys()))
+                ', '.join(list(res.keys())))
         return result
 
     @classmethod
@@ -519,8 +519,7 @@ class RebillBatch(batch.BatchRoot):
             Contract.reconcile(Contract.browse([x[0] for x in objects]))
 
 
-class RenewContracts:
-    __metaclass__ = PoolMeta
+class RenewContracts(metaclass=PoolMeta):
     __name__ = 'contract.renew'
 
     @classmethod

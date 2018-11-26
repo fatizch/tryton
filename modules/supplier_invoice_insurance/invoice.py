@@ -14,8 +14,7 @@ __all__ = [
 IS_IN_INVOICE_INSURANCE = Eval('business_kind') == 'in_invoice_insurance'
 
 
-class Invoice:
-    __metaclass__ = PoolMeta
+class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
     insurer = fields.Many2One('insurer', 'Insurer', states={
@@ -149,8 +148,7 @@ class Invoice:
         super(Invoice, cls).post(invoices)
 
 
-class InvoiceLine:
-    __metaclass__ = PoolMeta
+class InvoiceLine(metaclass=PoolMeta):
     __name__ = 'account.invoice.line'
 
     @classmethod

@@ -14,8 +14,7 @@ __all__ = [
     ]
 
 
-class UnderwritingDecisionType:
-    __metaclass__ = PoolMeta
+class UnderwritingDecisionType(metaclass=PoolMeta):
     __name__ = 'underwriting.decision.type'
 
     reduction_percentage = fields.Numeric('Reduction Percentage',
@@ -42,8 +41,7 @@ class UnderwritingDecisionType:
             self.reduction_percentage = Decimal('0.5')
 
 
-class UnderwritingResult:
-    __metaclass__ = PoolMeta
+class UnderwritingResult(metaclass=PoolMeta):
     __name__ = 'underwriting.result'
 
     last_indemnification_date = fields.Function(

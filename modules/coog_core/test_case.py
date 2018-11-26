@@ -12,9 +12,8 @@ __all__ = [
     ]
 
 
-class TestCaseModel:
+class TestCaseModel(metaclass=PoolMeta):
     __name__ = 'ir.test_case'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
@@ -34,9 +33,9 @@ class TestCaseModel:
     def create_or_update_users_groups(cls):
         pool = Pool()
         user_group_dict = cls.get_user_group_dict()
-        dict_authorization_users = user_group_dict.keys()
+        dict_authorization_users = list(user_group_dict.keys())
         dict_authorization_groups = list(set(
-            [x for y in user_group_dict.values() for x in y]))
+            [x for y in list(user_group_dict.values()) for x in y]))
         Group = pool.get('res.group')
         User = pool.get('res.user')
         UserGroup = pool.get('res.user-res.group')

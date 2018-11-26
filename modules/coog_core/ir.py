@@ -16,11 +16,11 @@ from trytond.model import fields as tryton_fields, ModelView, Model
 from trytond.wizard import Wizard, StateView, Button, StateAction
 from trytond.tools import memoize
 
-import fields
-import utils
-import model
-from historizable import Historizable
-from export import ExportImportMixin
+from . import fields
+from . import utils
+from . import model
+from .historizable import Historizable
+from .export import ExportImportMixin
 
 __all__ = [
     'Sequence',
@@ -139,8 +139,7 @@ TREE_ATTRIBUTES = """
 """
 
 
-class Sequence(ExportImportMixin, model.TaggedMixin):
-    __metaclass__ = PoolMeta
+class Sequence(ExportImportMixin, model.TaggedMixin, metaclass=PoolMeta):
     __name__ = 'ir.sequence'
     _func_key = 'func_key'
 
@@ -179,8 +178,7 @@ class Sequence(ExportImportMixin, model.TaggedMixin):
         return True
 
 
-class SequenceStrict(ExportImportMixin, model.TaggedMixin):
-    __metaclass__ = PoolMeta
+class SequenceStrict(ExportImportMixin, model.TaggedMixin, metaclass=PoolMeta):
     __name__ = 'ir.sequence.strict'
 
     @classmethod
@@ -194,10 +192,8 @@ class SequenceStrict(ExportImportMixin, model.TaggedMixin):
         return True
 
 
-class DateClass:
+class DateClass(metaclass=PoolMeta):
     '''Overriden ir.date class for more accurate date management'''
-
-    __metaclass__ = PoolMeta
     __name__ = 'ir.date'
 
     @classmethod
@@ -227,8 +223,7 @@ class DateClass:
         return lang.strftime(date, lang.date + ' %H:%M:%S')
 
 
-class View(ExportImportMixin):
-    __metaclass__ = PoolMeta
+class View(ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'ir.ui.view'
     _func_key = 'name'
 
@@ -306,14 +301,12 @@ class UIMenu(ExportImportMixin):
         return name
 
 
-class Rule(ExportImportMixin):
-    __metaclass__ = PoolMeta
+class Rule(ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'ir.rule'
     _func_key = 'domain'
 
 
-class RuleGroup(ExportImportMixin):
-    __metaclass__ = PoolMeta
+class RuleGroup(ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'ir.rule.group'
 
     @classmethod
@@ -330,8 +323,7 @@ class RuleGroup(ExportImportMixin):
         return result
 
 
-class Action(ExportImportMixin):
-    __metaclass__ = PoolMeta
+class Action(ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'ir.action'
     _func_key = 'xml_id'
 
@@ -348,10 +340,10 @@ class Action(ExportImportMixin):
         # Possible actions
         action_model_names = ['ir.action.wizard', 'ir.action.act_window',
             'ir.action.report']
-        ActionModels = map(pool.get, action_model_names)
+        ActionModels = list(map(pool.get, action_model_names))
         data_table = ModelData.__table__()
         action_table = Action.__table__()
-        action_tables = map(lambda x: x.__table__(), ActionModels)
+        action_tables = [x.__table__() for x in ActionModels]
 
         query_table = action_table.join(data_table, type_='LEFT', condition=(
                 data_table.model == action_table.type))
@@ -387,10 +379,10 @@ class Action(ExportImportMixin):
         # Possible actions
         action_model_names = ['ir.action.wizard', 'ir.action.act_window',
             'ir.action.report']
-        ActionModels = map(pool.get, action_model_names)
+        ActionModels = list(map(pool.get, action_model_names))
         data_table = ModelData.__table__()
         action_table = Action.__table__()
-        action_tables = map(lambda x: x.__table__(), ActionModels)
+        action_tables = [x.__table__() for x in ActionModels]
 
         query_table = action_table.join(data_table, type_='LEFT', condition=(
                 data_table.model == action_table.type))
@@ -429,13 +421,11 @@ class Action(ExportImportMixin):
         return result
 
 
-class ActionKeyword(ExportImportMixin):
-    __metaclass__ = PoolMeta
+class ActionKeyword(ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'ir.action.keyword'
 
 
-class IrModule:
-    __metaclass__ = PoolMeta
+class IrModule(metaclass=PoolMeta):
     __name__ = 'ir.module'
 
     _is_module_installed_cache = Cache('is_module_installed')
@@ -469,8 +459,7 @@ class IrModule:
                         'black')))]
 
 
-class IrModel(ExportImportMixin):
-    __metaclass__ = PoolMeta
+class IrModel(ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'ir.model'
     _func_key = 'model'
 
@@ -617,8 +606,7 @@ class IrModel(ExportImportMixin):
             return super(IrModel, cls).global_search(text, limit, menu)
 
 
-class IrModelField(ExportImportMixin):
-    __metaclass__ = PoolMeta
+class IrModelField(ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'ir.model.field'
     _func_key = 'func_key'
 
@@ -647,8 +635,7 @@ class IrModelField(ExportImportMixin):
                 ]
 
 
-class IrModelFieldAccess(ExportImportMixin):
-    __metaclass__ = PoolMeta
+class IrModelFieldAccess(ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'ir.model.field.access'
 
     @classmethod
@@ -658,8 +645,7 @@ class IrModelFieldAccess(ExportImportMixin):
         return result
 
 
-class ModelAccess(ExportImportMixin):
-    __metaclass__ = PoolMeta
+class ModelAccess(ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'ir.model.access'
 
     @classmethod
@@ -669,8 +655,7 @@ class ModelAccess(ExportImportMixin):
         return result
 
 
-class Lang(ExportImportMixin):
-    __metaclass__ = PoolMeta
+class Lang(ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'ir.lang'
     _func_key = 'code'
 
@@ -684,15 +669,12 @@ class Lang(ExportImportMixin):
         return res
 
 
-class Icon(ExportImportMixin):
-    __metaclass__ = PoolMeta
+class Icon(ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'ir.ui.icon'
 
 
-class TranslationOverrideStart(ModelView):
+class TranslationOverrideStart(ModelView, metaclass=PoolMeta):
     """Select translation override method"""
-
-    __metaclass__ = PoolMeta
     __name__ = 'ir.translation.override.start'
 
     language = fields.Many2One('ir.lang', 'Language', required=True,
@@ -709,10 +691,8 @@ class TranslationOverrideStart(ModelView):
             })
 
 
-class TranslationOverride(Wizard):
+class TranslationOverride(Wizard, metaclass=PoolMeta):
     """Override translations Wizard"""
-
-    __metaclass__ = PoolMeta
     __name__ = 'ir.translation.override'
 
     start = StateView('ir.translation.override.start',
@@ -735,8 +715,7 @@ class TranslationOverride(Wizard):
         return action, {}
 
 
-class Translation:
-    __metaclass__ = PoolMeta
+class Translation(metaclass=PoolMeta):
     __name__ = 'ir.translation'
 
     @classmethod
@@ -840,6 +819,6 @@ class Translation:
                 flags=flags)
             pofile.append(entry)
 
-        noheader_pofile = '\n'.join(unicode(pofile).split('\n')[3:])
+        noheader_pofile = '\n'.join(str(pofile).split('\n')[3:])
         msg = '\n# Custom translations below\n'
         return res + (msg + noheader_pofile).encode('utf-8')

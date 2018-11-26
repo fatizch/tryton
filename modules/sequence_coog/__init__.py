@@ -3,7 +3,7 @@
 
 from trytond.pool import Pool
 
-import sequence
+from . import sequence
 
 
 def register():

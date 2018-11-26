@@ -5,8 +5,7 @@ from trytond.pool import PoolMeta
 __all__ = ['OptionDescription']
 
 
-class OptionDescription:
-    __metaclass__ = PoolMeta
+class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     @classmethod

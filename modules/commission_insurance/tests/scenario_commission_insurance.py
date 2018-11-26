@@ -236,7 +236,7 @@ first_invoice.invoice.total_amount == Decimal('120')
 # #Res# #True
 set([(x.amount, x.account.code)
     for x in first_invoice.invoice.lines]) == set([
-            (Decimal('20'), u'broker_fee_account'),
+            (Decimal('20'), 'broker_fee_account'),
             (Decimal('100'), None)])
 # #Res# #True
 
@@ -247,8 +247,8 @@ len(line.commissions)
 # #Res# #2
 set([(x.amount, x.commission_rate, x.agent.party.name, x.line_amount)
     for x in line.commissions]) == set([
-            (Decimal('10'), Decimal('.1'), u'Broker', Decimal('100')),
-            (Decimal('60'), Decimal('.6'), u'Insurer', Decimal('100'))])
+            (Decimal('10'), Decimal('.1'), 'Broker', Decimal('100')),
+            (Decimal('60'), Decimal('.6'), 'Insurer', Decimal('100'))])
 # #Res# #True
 
 # #Comment# #Pay invoice

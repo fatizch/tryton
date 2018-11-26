@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class Session:
-    __metaclass__ = PoolMeta
+class Session(metaclass=PoolMeta):
     __name__ = 'ir.session'
 
     @classmethod

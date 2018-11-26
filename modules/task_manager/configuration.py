@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 
-class ProcessConfiguration:
-    __metaclass__ = PoolMeta
+class ProcessConfiguration(metaclass=PoolMeta):
     __name__ = 'process.configuration'
 
     share_tasks = fields.Boolean('Share tasks among users',

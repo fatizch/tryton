@@ -8,8 +8,7 @@ __all__ = [
     ]
 
 
-class Underwriting(CoogProcessFramework):
-    __metaclass__ = ClassAttr
+class Underwriting(CoogProcessFramework, metaclass=ClassAttr):
     __name__ = 'underwriting'
 
     def get_task_name(self, name=None):

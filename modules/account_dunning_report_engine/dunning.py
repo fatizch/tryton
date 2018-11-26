@@ -43,8 +43,7 @@ class Dunning(Printable):
         return super(Dunning, self).get_object_for_contact()
 
 
-class Level:
-    __metaclass__ = PoolMeta
+class Level(metaclass=PoolMeta):
     __name__ = 'account.dunning.level'
 
     report_template = fields.Many2One('report.template', 'Report Template',

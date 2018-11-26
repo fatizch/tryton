@@ -9,10 +9,8 @@ __all__ = [
     ]
 
 
-class ContractSubscribeFindProcess:
+class ContractSubscribeFindProcess(metaclass=PoolMeta):
     'Contract Subscribe Find Process'
-
-    __metaclass__ = PoolMeta
     __name__ = 'contract.subscribe.find_process'
 
     @classmethod
@@ -24,10 +22,8 @@ class ContractSubscribeFindProcess:
             [('is_group', '=', False)]]
 
 
-class ContractSubscribe:
+class ContractSubscribe(metaclass=PoolMeta):
     'Contract Subscribe'
-
-    __metaclass__ = PoolMeta
     __name__ = 'contract.subscribe'
 
     def init_main_object_from_process(self, obj, process_param):

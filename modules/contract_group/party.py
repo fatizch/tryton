@@ -11,8 +11,7 @@ __all__ = [
     ]
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     parent_company = fields.Many2One('party.party', 'Parent Company',

@@ -40,8 +40,8 @@ def main():
     mail = Mail(f, subject, t, content)
     response = sg.client.mail.send.post(request_body=mail.get())
     if response.status_code >= 300:
-        print response.body
-        print response.headers
+        print(response.body)
+        print(response.headers)
         sys.exit(1)
 
 

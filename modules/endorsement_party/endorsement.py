@@ -22,8 +22,7 @@ __all__ = [
     ]
 
 
-class Address(object):
-    __metaclass__ = PoolMeta
+class Address(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'party.address'
 
@@ -31,9 +30,8 @@ class Address(object):
 class EndorsementPartyAddress(relation_mixin(
             'endorsement.party.address.field', 'address', 'party.address',
             'Addresses'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Address'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.party.address'
 
     party_endorsement = fields.Many2One(
@@ -69,9 +67,8 @@ class EndorsementPartyAddress(relation_mixin(
 class EndorsementPartyRelation(relation_mixin(
             'endorsement.party.relation.field', 'relationship',
             'party.relation.all', 'Relation'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Relations'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.party.relation'
 
     party_endorsement = fields.Many2One('endorsement.party',
@@ -98,9 +95,8 @@ class EndorsementPartyRelation(relation_mixin(
         return {}
 
 
-class Party:
+class Party(metaclass=PoolMeta):
     _history = True
-    __metaclass__ = PoolMeta
     __name__ = 'party.party'
 
     @classmethod
@@ -123,14 +119,12 @@ class Party:
         pass
 
 
-class Relation:
-    __metaclass__ = PoolMeta
+class Relation(metaclass=PoolMeta):
     __name__ = 'party.relation'
     _history = True
 
 
-class Endorsement:
-    __metaclass__ = PoolMeta
+class Endorsement(metaclass=PoolMeta):
     __name__ = 'endorsement'
 
     party_endorsements = fields.One2Many('endorsement.party', 'endorsement',
@@ -199,9 +193,8 @@ class Endorsement:
 
 
 class EndorsementParty(values_mixin('endorsement.party.field'),
-        model.CoogSQL, model.CoogView):
+        model.CoogSQL, model.CoogView, metaclass=PoolMeta):
     'Endorsement Party'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.party'
     _func_key = 'func_key'
 
