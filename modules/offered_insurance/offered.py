@@ -255,9 +255,10 @@ class ExtraData(metaclass=PoolMeta):
         data = cls._extra_data_struct(name)
         targets = []
         if data['kind'] in cls._hardcoded_rule_context_matches:
-            for match in cls._hardcoded_rule_context_matches[data['kind']]:
-                if match in context:
-                    targets.append(context[match])
+            for match_key, match_method in \
+                    cls._hardcoded_rule_context_matches[data['kind']]:
+                if match_key in context:
+                    targets.append((context[match_key], match_method))
         if not targets:
             providers = cls._extra_data_providers[data['kind']]
             for k, v in context.items():
