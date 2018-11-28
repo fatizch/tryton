@@ -299,8 +299,8 @@ event_desc = EventDesc(event_desc.id)
 loss_desc = LossDesc(loss_desc.id)
 
 loss = claim.losses.new()
-loss.start_date = datetime.date(2016, 1, 0o1)
-loss.end_date = datetime.date(2017, 1, 0o1)
+loss.start_date = datetime.date(2016, 1, 1)
+loss.end_date = datetime.date(2017, 1, 1)
 loss.loss_desc = loss_desc
 loss.event_desc = event_desc
 loss.save()
@@ -446,8 +446,8 @@ event_desc = EventDesc(event_desc.id)
 loss_desc = LossDesc(loss_desc.id)
 
 loss = claim.losses.new()
-loss.start_date = datetime.date(2016, 1, 0o1)
-loss.end_date = datetime.date(2017, 1, 0o1)
+loss.start_date = datetime.date(2016, 1, 1)
+loss.end_date = datetime.date(2017, 1, 1)
 loss.loss_desc = loss_desc
 loss.event_desc = event_desc
 loss.save()

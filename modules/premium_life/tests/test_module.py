@@ -28,10 +28,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         contract = Mock()
         period = Mock()
-        contract.start_date = datetime.date(2014, 0o3, 0o1)
-        contract.initial_start_date = datetime.date(2014, 0o3, 0o1)
+        contract.start_date = datetime.date(2014, 3, 1)
+        contract.initial_start_date = datetime.date(2014, 3, 1)
         contract.end_date = datetime.date(2016, 12, 31)
-        period.start_date = datetime.date(2014, 0o3, 0o1)
+        period.start_date = datetime.date(2014, 3, 1)
         period.end_date = datetime.date(2016, 12, 31)
         contract.activation_history = [period]
         contract.options = []
@@ -54,7 +54,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         dates = product.get_dates(contract)
         dates = sorted(list(set(dates)))
-        self.assertEqual(dates, [datetime.date(2014, 0o3, 0o1),
+        self.assertEqual(dates, [datetime.date(2014, 3, 1),
                 datetime.date(2014, 10, 21), datetime.date(2014, 12, 31),
                 datetime.date(2015, 10, 21), datetime.date(2016, 10, 21)])
 

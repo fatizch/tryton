@@ -58,10 +58,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 {'to': party_mother, 'type': relation_child}])
         party_child2.save()
 
-        contract1 = self.Contract(start_date=datetime.date(2014, 0o1, 0o1),
+        contract1 = self.Contract(start_date=datetime.date(2014, 1, 1),
             subscriber=party_father,
             status='active',
-            activation_history=[{'start_date': datetime.date(2014, 0o1, 1),
+            activation_history=[{'start_date': datetime.date(2014, 1, 1),
                     'end_date': datetime.date(2016, 12, 31)}],
             covered_elements=[{
                     'party': party_father,
@@ -82,10 +82,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
                             }],
                     'sub_covered_elements': [],
                     }])
-        contract2 = self.Contract(start_date=datetime.date(2014, 0o1, 0o1),
+        contract2 = self.Contract(start_date=datetime.date(2014, 1, 1),
             subscriber=party_mother,
             status='active',
-            activation_history=[{'start_date': datetime.date(2014, 0o1, 1),
+            activation_history=[{'start_date': datetime.date(2014, 1, 1),
                     'end_date': datetime.date(2016, 12, 31)}],
             covered_elements=[{
                     'party': party_mother,

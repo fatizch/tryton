@@ -42,22 +42,22 @@ class ModuleTestCase(test_framework.CoogTestCase):
         payment_journal = self.PaymentJournal()
         payment_journal.process_method = 'sepa'
         payment_journal.last_sepa_receivable_payment_creation_date = \
-            datetime.date(year, 0o1, 0o1)
+            datetime.date(year, 1, 1)
 
         line = self.MoveLine()
-        line.maturity_date = datetime.date(year, 0o1, 0o1)
+        line.maturity_date = datetime.date(year, 1, 1)
         payment_date = payment_journal.get_next_possible_payment_date(line, 5)
-        self.assertEqual(payment_date, datetime.date(year, 0o1, 0o5))
+        self.assertEqual(payment_date, datetime.date(year, 1, 5))
 
         payment_journal.last_sepa_receivable_payment_creation_date = \
-            datetime.date(year, 0o1, 0o5)
+            datetime.date(year, 1, 5)
         payment_date = payment_journal.get_next_possible_payment_date(line, 5)
-        self.assertEqual(payment_date, datetime.date(year, 0o2, 0o5))
+        self.assertEqual(payment_date, datetime.date(year, 2, 5))
 
         payment_journal.last_sepa_receivable_payment_creation_date = \
-            datetime.date(year, 0o4, 0o6)
+            datetime.date(year, 4, 6)
         payment_date = payment_journal.get_next_possible_payment_date(line, 5)
-        self.assertEqual(payment_date, datetime.date(year, 0o5, 0o5))
+        self.assertEqual(payment_date, datetime.date(year, 5, 5))
 
     def handle_camt054(self, flavor):
         'Handle camt.054'

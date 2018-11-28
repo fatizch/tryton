@@ -764,7 +764,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
         rule.save()
         self.assertRaises(UserError, rule.execute, {})
 
-    #@test_framework.prepare_test('rule_engine.test0060_testRuleEngineDebugging')
     def test0061_testTestCaseCreationFromLog(self):
         rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
         rule.debug_mode = True

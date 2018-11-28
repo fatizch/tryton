@@ -522,7 +522,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             lender_address=address,
             kind='graduated',
             funds_release_date=datetime.date(2013, 3, 22),
-            first_payment_date=datetime.date(2015, 0o4, 22),
+            first_payment_date=datetime.date(2015, 4, 22),
             rate=Decimal('0.0395'),
             amount=Decimal(101948),
             duration=360,
@@ -668,7 +668,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 share=Decimal(share))
             loan_share.save()
 
-        base_date = datetime.date(2014, 0o1, 15)
+        base_date = datetime.date(2014, 1, 15)
         john = self.Party.search([('name', '=', 'DOE')])[0]
 
         account_product = create_account()

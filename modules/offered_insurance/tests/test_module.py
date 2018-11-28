@@ -115,7 +115,7 @@ return True'''
 
         tcv = self.TestCaseValue()
         tcv.name = 'date_de_naissance_souscripteur'
-        tcv.value = 'datetime.date(2000, 11, 0o2)'
+        tcv.value = 'datetime.date(2000, 11, 2)'
 
         tc = self.TestCase()
         tc.description = 'Test'
@@ -124,7 +124,7 @@ return True'''
 
         tcv1 = self.TestCaseValue()
         tcv1.name = 'date_de_naissance_souscripteur'
-        tcv1.value = 'datetime.date(1950, 11, 0o2)'
+        tcv1.value = 'datetime.date(1950, 11, 2)'
 
         tc1 = self.TestCase()
         tc1.description = 'Test1'
