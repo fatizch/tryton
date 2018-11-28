@@ -1033,7 +1033,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         Tax = pool.get('account.tax')
         if self.total_amount:
             amount = Tax.reverse_compute(self.total_amount,
-                self.product.supplier_taxes, self.start_date)
+                self.product.account_category.supplier_taxes, self.start_date)
             amount = amount.quantize(Decimal(1) / 10 ** self.currency_digits)
         else:
             amount = Decimal('0.0')
