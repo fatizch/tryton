@@ -1,9 +1,12 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.model import ModelView, Workflow
 from trytond.pyson import Eval
-from trytond.modules.coog_core import utils
+from trytond.modules.coog_core import utils, coog_date
+
 from . import dsn
 
 __all__ = [
@@ -89,7 +92,9 @@ class Invoice(metaclass=PoolMeta):
         if pasrau_invoices:
             cls.generate_dsn_message(pasrau_invoices)
 
-    @classmethod
-    def check_date_dsn_message_generation(cls):
-        if utils.today().day >= 10:
-            cls.raise_user_error('message_dsn_do_not_be_generated')
+    def check_date_dsn_message_generation(self):
+        max_date = datetime.date(self.invoice_date.year,
+            self.invoice_date.month, 10)
+        max_date = coog_date.add_month(max_date, 1)
+        if utils.today() > max_date:
+            self.raise_user_error('message_dsn_do_not_be_generated')
