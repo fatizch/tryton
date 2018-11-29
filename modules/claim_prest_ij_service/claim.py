@@ -678,7 +678,7 @@ class ClaimIjSubscription(CoogProcessFramework, model.CoogView):
 
     def get_rec_name(self, name):
         return ' - '.join([self.subscriber.full_name if self.subscriber else '',
-                self.parties[0].full_name])
+                self.parties[0].full_name if self.parties else ''])
 
     @classmethod
     def search_rec_name(cls, name, clause):
@@ -710,18 +710,19 @@ class ClaimIjSubscription(CoogProcessFramework, model.CoogView):
         Party = Pool().get('party.party')
         matches = {}
         sirens = []
+        res = {}
 
         for subscription in subscriptions:
             matches[subscription.siren] = subscription.id
+            res[subscription.id] = None
             sirens.append(subscription.siren)
 
         parties = Party.search([('siren', 'in', sirens)])
 
-        subscriptions = {}
         for party in parties:
-            subscriptions[matches[party.siren]] = party.id
+            res[matches[party.siren]] = party.id
 
-        return subscriptions
+        return res
 
     def getter_party(self, name):
         if self.parties:

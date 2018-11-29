@@ -1,3 +1,4 @@
+* BUG#10443: Correction d'un crash lors de l'ouverture de la vue des tâches lorsque des tâches prestij sont présentes
 * FEA#10393: Amélioration de l'affichage des tâches BPIJ avec possibilités de filtrer par Société/Assurés
 
 Version 2.2 - 2018-10-12
