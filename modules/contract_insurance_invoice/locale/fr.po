@@ -19,6 +19,10 @@ msgstr ""
 "\"%(contract)s\" au statut \"%(status)s\""
 
 msgctxt "error:account.invoice:"
+msgid "The copy of periodic invoices is forbidden."
+msgstr "La copie de quittances périodiques est interdites."
+
+msgctxt "error:account.invoice:"
 msgid ""
 "There are %s invoices with a start date before %s on contract %s. Proceeding further will post those as well.\n"
 "\n"

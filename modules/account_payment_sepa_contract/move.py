@@ -38,6 +38,8 @@ class MoveLine(metaclass=PoolMeta):
         if mandate:
             payment['sepa_mandate'] = mandate.id
             payment['bank_account'] = mandate.account_number.account.id
+        elif journal.process_method == 'sepa':
+            payment['state'] = 'draft'
         return super(MoveLine, self).init_payment_information(journal, kind,
             amount, payment)
 

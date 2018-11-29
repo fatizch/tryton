@@ -1261,7 +1261,8 @@ class Contract(metaclass=PoolMeta):
         with Transaction().new_transaction() as transaction:
             try:
                 messages = cls.ws_subscribe_contracts(contract_dict)
-                if len(messages) == 1 and not list(messages.values())[0]['return']:
+                if len(messages) == 1 and not list(
+                        messages.values())[0]['return']:
                     # ws_subscribe_contracts failed, forward the message
                     return messages
                 quote_numbers = [message['quote_number']

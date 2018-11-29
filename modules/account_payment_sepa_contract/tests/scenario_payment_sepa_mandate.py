@@ -444,7 +444,12 @@ billing_information_no_sepa.sepa_mandate = None
 billing_information_no_sepa.direct_debit_account = None
 billing_information_no_sepa.save()
 
+
 # #Comment# Process payment
+
+# The payment state is draft as no mandate was found on creation
+payment.state = 'approved'
+payment.save()
 process_payment = Wizard('account.payment.process', [payment])
 process_payment.execute('pre_process')
 

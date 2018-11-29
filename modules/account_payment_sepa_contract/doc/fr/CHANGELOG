@@ -1,3 +1,5 @@
+* BUG#10116 Set state of new payment to draft if no mandate was found
+
 Version 2.2 - 2018-10-12
 * BUG#10133 Correction d'un crash sur le processus de souscription de contrat lorsque le champ identification sur le mandat n'est pas défini
 * BUG#9635 Initialisation du payeur et du compte bancaire lors de la souscription d'un contrat

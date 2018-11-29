@@ -457,6 +457,8 @@ used to generate the previous payment just before processing it::
     >>> billing_information_no_sepa.sepa_mandate = None
     >>> billing_information_no_sepa.direct_debit_account = None
     >>> billing_information_no_sepa.save()
+    >>> payment.state = 'approved'
+    >>> payment.save()
     >>> process_payment = Wizard('account.payment.process', [payment])
     >>> process_payment.execute('pre_process')
 

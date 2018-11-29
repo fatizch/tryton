@@ -195,6 +195,7 @@ Create Contract::
     >>> contract.billing_information.billing_mode = monthly
     >>> contract.billing_information. payment_term = monthly.allowed_payment_terms[0]
     >>> contract.billing_information.payer = subscriber
+    >>> contract.billing_information.sepa_mandate = mandate
     >>> contract.billing_information.save()
     >>> contract, = Contract.find([])
     >>> Wizard('contract.activate', models=[contract]).execute('apply')

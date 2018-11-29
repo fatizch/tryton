@@ -77,6 +77,8 @@ class Invoice(metaclass=PoolMeta):
                 'There are %(number_invoices)s invoice(s) with a start date '
                 'after %(start_date)s on contract %(contract)s.'
                 '\n\n\t%(invoices)s',
+                'no_copy_periodic_invoices': 'The copy of periodic invoices '
+                'is forbidden.',
                 })
         cls.untaxed_amount.states = {
             'invisible': Bool(Eval('contract_invoice')),
@@ -111,6 +113,20 @@ class Invoice(metaclass=PoolMeta):
                 columns=[to_update.business_kind],
                 values=[Literal('contract_invoice')],
                 where=to_update.id.in_(query)))
+
+    @classmethod
+    def copy(cls, invoices, default=None):
+        pool = Pool()
+        ContractInvoice = pool.get('contract.invoice')
+        if any(x.start for x in invoices):
+            cls.raise_user_error('no_copy_periodic_invoices')
+        copies = super(Invoice, cls).copy(invoices, default=default)
+        for new_invoice, old_invoice in zip(copies, invoices):
+                if not old_invoice.contract:
+                    continue
+                ContractInvoice.copy([old_invoice.contract_invoice],
+                    default={'invoice': new_invoice.id})
+        return copies
 
     @classmethod
     def validate(cls, *args, **kwargs):

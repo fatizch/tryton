@@ -1,3 +1,4 @@
+* BUG#10116 Copier aussi le lien vers le contrat lors de la copie d'une quittance
 * BUG#10223 Correction d'un cas où des périodes de quittancement invalides pouvaient être générées
 * BUG#10168 Correction d'un cas aux limite dans get_invoice_periods qui pouvait donner lieu à une boucle infinie
 
