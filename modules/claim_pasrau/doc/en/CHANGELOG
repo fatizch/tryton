@@ -1,3 +1,4 @@
+* OTH#0000 Fix crash when generating empty pasrau message on no line pasrau slip
 * FEA#10394 handle matricule with party code in pasrau file
 * OTH#0000 Improve pasrau file import wizard and batch 
 * FEA#10343 Include party modifications in pasrau dsn

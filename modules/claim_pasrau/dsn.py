@@ -188,7 +188,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
             data['individuals'])
         assert not any(x in data['individuals'] for x in individuals_at_zero)
 
-        data['individuals'].update({x: {'lines': [ZeroLine(party)]}
+        data['individuals'].update({x: {'lines': [ZeroLine(x)]}
             for x in individuals_at_zero})
 
         # manage person modification
