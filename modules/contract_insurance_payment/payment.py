@@ -103,11 +103,12 @@ class Payment(metaclass=PoolMeta):
             payments = sorted(payments, key=cls._group_per_contract_key)
             for contracts, _grouped_payments in groupby(payments,
                     key=cls._group_per_contract_key):
+                grouped_payments = list(_grouped_payments)
                 if not contracts:
                     continue
                 for contract in contracts:
                     to_save = cls.move_contract_to_manual_payment(contract,
-                        _grouped_payments)
+                        grouped_payments)
                     if to_save:
                         contracts_to_save.append(to_save)
 
@@ -130,7 +131,7 @@ class Payment(metaclass=PoolMeta):
                 for contract_invoice in invoices])
 
     @classmethod
-    def move_contract_to_manual_payment(cls, contract, payments):
+    def move_contract_to_manual_payment(cls, contract, grouped_payments):
         pool = Pool()
         ContractBillingInformation = pool.get('contract.billing_information')
         Date = pool.get('ir.date')
@@ -138,7 +139,6 @@ class Payment(metaclass=PoolMeta):
         if contract is None or contract.status not in ('active', 'terminated',
                 'hold'):
             return
-        grouped_payments = list(payments)
         current_billing_mode = contract.billing_information.billing_mode
         if not current_billing_mode.direct_debit:
             return
@@ -246,7 +246,8 @@ class MergedPaymentsByContracts(MergedPaymentsMixin):
         lines_and_contracts = dict(cursor.fetchall())
         cursor.execute(*payment.select(
                 payment.id, payment.merged_id, payment.line,
-                where=((payment.merged_id.in_([x[0] for x in list(res.keys())]) &
+                where=((payment.merged_id.in_([x[0]
+                                for x in list(res.keys())]) &
                     (payment.line.in_(list(lines_and_contracts.keys())))))))
         for payment_id, merged_id, line in cursor.fetchall():
             res[(merged_id, lines_and_contracts[line])][1].append(payment_id)

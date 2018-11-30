@@ -1,3 +1,5 @@
+* BUG#10390 The date of the manual payment billing mode is incorrectly positioned for contracts that belong to the same contract set (contract_set module), and whose payments are failed at the same time.
+
 Version 2.2 - 2018-10-12
 Version 2.0 - 2018-04-13
 * FEA#8449 Allow automatic billing information changes when contract is also in the hold or terminated status
