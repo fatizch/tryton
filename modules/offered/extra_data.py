@@ -75,6 +75,8 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
         cls.name.string = 'Code'
         cls.string.string = 'Name'
         cls.type_.selection.insert(0, ('', ''))
+        cls.domain.help = "Example: [['my_code', '>=', 5]," \
+            " ['my_code', '<', 12]]"
         t = cls.__table__()
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.name), 'The code must be unique!'),
