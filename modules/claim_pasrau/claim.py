@@ -18,7 +18,7 @@ class Indemnification(metaclass=PoolMeta):
         pasrau_dict['party'] = self.beneficiary
         pasrau_dict['period_start'] = self.start_date
         pasrau_dict['period_end'] = self.end_date
-        pasrau_dict['income'] = self.total_amount
+        pasrau_dict['income'] = sum([d.amount for d in self.details])
         pasrau_dict['invoice_date'] = utils.today()
         with ServerContext().set_context(pasrau_data=pasrau_dict):
             return super(Indemnification, self).get_amount(name)
@@ -28,7 +28,7 @@ class Indemnification(metaclass=PoolMeta):
         pasrau_dict['party'] = self.beneficiary
         pasrau_dict['period_start'] = self.start_date
         pasrau_dict['period_end'] = self.end_date
-        pasrau_dict['income'] = self.amount
+        pasrau_dict['income'] = sum([d.amount for d in self.details])
         pasrau_dict['invoice_date'] = utils.today()
         with ServerContext().set_context(pasrau_data=pasrau_dict):
             return super(Indemnification, self)._get_taxes()

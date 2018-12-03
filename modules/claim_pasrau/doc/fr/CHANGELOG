@@ -1,3 +1,4 @@
+* BUG#10454: Correction du montant affiché sur une indemnisation dans le cas ou une taxe pasrau s'applique et où le taux par défaut retourné par la table des taux par défaut est différent entre le montant TTC et HT. Cela génère alors un remboursement erroné.
 * BUG#10442: Une erreur est levée lorsque l'on génère un message pasrau si le 10 du mois est passé, indépendamment de la date de facturation du bordereau. Cependant cette erreur ne doit être levée que si la date du jour est postérieure au 10 du mois suivant la date de facturation du bordereau Pasrau.
 * OTH#0000 Correction d'un crash lorsque l'on génère un message Pasrau sur un bordereau sans prélèvement
 * FEA#10394 Gérer le matricule avec le code de l'assuré dans les fichier pasrau
