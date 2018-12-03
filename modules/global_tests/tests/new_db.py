@@ -325,6 +325,7 @@ TestCase = Model.get('ir.test_case')
 TestCaseInstance = Model.get('ir.test_case.instance')
 UnderwritingDecision = Model.get('underwriting.decision')
 UnderwritingRule = Model.get('underwriting.rule')
+DSNMessage = Model.get('dsn.message')
 User = Model.get('res.user')
 # }}}
 
@@ -4886,6 +4887,12 @@ if CREATE_CONTRACTS:  # {{{
             employee.gender = {0: 'male', 1: 'female'}[jdx % 2]
             employee.birth_date = datetime.date(
                 1960, idx + 1, (jdx + 1) * 3 + idx)
+            ssn = {'male': '1', 'female': '2'}[employee.gender] +\
+                str(employee.birth_date.year)[2:] + '75461210' + str(jdx + 1) +\
+                str(idx + 1)
+            ssn_key = 97 - int(ssn) % 97
+            employee.ssn = ssn + (str(ssn_key) if ssn_key >= 10
+                else '0' + str(ssn_key))
             employee.save()
 
             if idx == 1 and jdx == 1:
@@ -4897,7 +4904,9 @@ if CREATE_CONTRACTS:  # {{{
                     [('bic', '=', _company_bank_bic)])
                 employee_account.start_date = None
                 employee_account.save()
+                employee.addresses[0].street = '\n\n12 rue du lac'
                 employee.addresses[0].zip = '75010'
+                employee.addresses[0].city = 'PARIS'
                 employee.addresses[0].save()
 
     group_life_subscriber_account = BankAccount()
@@ -5465,9 +5474,11 @@ if GENERATE_REPORTINGS:  # {{{
     CreateSlip.form.slip_date = _slip_generation_date
     CreateSlip.execute('open_slip')
 
-    slip, = Invoice.find(
-        [('business_kind', '=', 'pasrau')])
+    slip, = Invoice.find([('business_kind', '=', 'pasrau')])
     assert_eq(slip.total_amount, Decimal('24.09'))
+    slip.click('post')
+    messages = DSNMessage.find([])
+    assert_eq(len(messages), 1)
     # }}}
 # }}}
 

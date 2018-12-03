@@ -224,7 +224,8 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
             ).__table__()
         product = pool.get('product.product').__table__()
         template = pool.get('product.template').__table__()
-        supplier_tax = pool.get('product.template-supplier-account.tax'
+        category = pool.get('product.category').__table__()
+        supplier_tax = pool.get('product.category-supplier-account.tax'
             ).__table__()
 
         query_table = move_line.join(move, condition=(
@@ -249,8 +250,10 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
                 invoice_line.product == product.id)
             ).join(template, condition=(
                 product.template == template.id)
+            ).join(category, condition=(
+                template.account_category == category.id)
             ).join(supplier_tax, condition=(
-                template.id == supplier_tax.product)
+                category.id == supplier_tax.category)
             ).join(account_tax, condition=(
                 supplier_tax.tax == account_tax.id)
             )
