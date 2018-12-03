@@ -24,3 +24,4 @@ Fonctionnalités prévoyance collective
    parametrer_calcul_salaire_net_tuto
    claim_deduction_period_tuto
    prest_IJ_tuto
+   pasrau_tuto
