@@ -1,3 +1,4 @@
+* OTH#00000: Iteration sur #10393: afficher les informations détailléés de la personne dans le nom de la tâche
 * BUG#10443: Correction d'un crash lors de l'ouverture de la vue des tâches lorsque des tâches prestij sont présentes
 * FEA#10393: Amélioration de l'affichage des tâches BPIJ avec possibilités de filtrer par Société/Assurés
 

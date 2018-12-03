@@ -1,3 +1,4 @@
+* OTH#00000: Iteration on #10393: display all party information in task name
 * BUG#10443: Fix crash in task view if prest ij task are present
 * FEA#10393: Improve task display and allow to search according legal entity name or 
 

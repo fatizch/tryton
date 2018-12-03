@@ -633,6 +633,9 @@ class ClaimIjSubscription(CoogProcessFramework, model.CoogView):
         fields.Many2Many('claim', None, None, 'Claims',
             states={'invisible': ~Eval('claims')}),
         'getter_claims')
+    synthesis_rec_name = fields.Function(
+        fields.Char('Information'),
+        'get_synthesis_rec_name')
 
     @classmethod
     def __setup__(cls):
@@ -675,6 +678,9 @@ class ClaimIjSubscription(CoogProcessFramework, model.CoogView):
     @classmethod
     def default_state(cls):
         return 'undeclared'
+
+    def get_synthesis_rec_name(self, name):
+        return self.parties[0].rec_name if self.parties else ''
 
     def get_rec_name(self, name):
         return ' - '.join([self.subscriber.full_name if self.subscriber else '',
