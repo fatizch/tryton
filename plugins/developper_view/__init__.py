@@ -2,6 +2,7 @@ import gtk
 import gettext
 
 from tryton.common import popup_menu
+import tryton.common as common
 from tryton.gui.window import Window
 from tryton.gui.window.view_form.view.form_gtk.many2one import Many2One
 from tryton.gui.window.view_form.view import list as tryton_list
@@ -61,7 +62,7 @@ popup_menu.populate = new_populate
 tryton_list.populate = new_populate
 
 
-old_popup = Many2One._populate_popup.__func__
+old_popup = Many2One._populate_popup
 
 
 def new_popup(self, widget, menu):
@@ -89,7 +90,7 @@ def new_popup(self, widget, menu):
 Many2One._populate_popup = new_popup
 
 
-old_toolbar = Form.create_toolbar.__func__
+old_toolbar = Form.create_toolbar
 
 
 def new_create_toolbar(self, toolbars):
@@ -110,7 +111,11 @@ def new_create_toolbar(self, toolbars):
                     })
 
     toolbar = old_toolbar(self, toolbars)
-    qbutton = gtk.ToolButton('tryton-settings')
+    icon = 'tryton-settings'
+    qbutton = gtk.ToolButton()
+    qbutton.set_icon_widget(
+        common.IconFactory.get_image(
+            icon, gtk.ICON_SIZE_LARGE_TOOLBAR))
     qbutton.set_label('Dev Edit...')
     qbutton.connect('clicked', lambda b: dev_edit())
     toolbar.insert(qbutton, -1)
