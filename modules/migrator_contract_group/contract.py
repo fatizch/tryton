@@ -125,6 +125,7 @@ class BaseMigratorContractGroup(Migrator):
             'item_desc': item_desc.id,
             'name': row['external_number'] if row['external_number'] else None,
             'manual_start_date': row['start_date'],
+            'manual_end_date': row['end_date'],
             'end_reason': cls.cache_obj['end_reason'][
                 row['end_reason']]
             if row['end_reason'] else None,
@@ -233,9 +234,12 @@ class MigratorContractGroup(BaseMigratorContractGroup):
                 coverage = cls.cache_obj['coverage'][option_row['coverage']]
                 option = {
                     'item_desc': item_desc.id,
+                    'status': 'active' if not option_row['end_date'] else
+                    'terminated',
                     'manual_start_date': option_row['start_date'],
                     'manual_end_date': option_row['end_date'],
-                    'sub_status': terminated_sub_status,
+                    'sub_status': terminated_sub_status
+                    if option_row['end_date'] else None,
                     'coverage': coverage.id,
                     'versions': [
                         ('create', [{'start': option_row['start_date']}])]
@@ -364,7 +368,7 @@ class MigratorContractSubsidiary(BaseMigratorContractGroup):
                 if parent_covered.name == parent_code or parent_code in \
                         list(parent_covered.current_extra_data.values()):
                     cls.cache_obj['covered_element'][
-                        parent_key] = parent_covered.id
+                        parent_key] = parent_covered
                     break
             else:
                 assert False, "Parent covered not found with code %s (%s)" % (
@@ -379,6 +383,7 @@ class MigratorContractSubsidiary(BaseMigratorContractGroup):
             row['contract_number']]
         res['parent'] = cls.cache_obj['covered_element'][
             parent_key]
+        assert res['parent'].start_date <= row['start_date']
         res['party'] = cls.cache_obj['party'][row['party']]
         return res
 
@@ -575,11 +580,12 @@ class MigratorSubsidiaryAffiliated(Migrator):
     @classmethod
     def sanitize(cls, row):
         row = super(MigratorSubsidiaryAffiliated, cls).sanitize(row)
-        row['manual_start_date'] = datetime.datetime.strptime(
-            row['start'], '%Y-%m-%d')
+
+        row['start'] = row['manual_start_date'] = datetime.datetime.strptime(
+            row['start'], '%Y-%m-%d').date()
         if row['end']:
             row['end'] = datetime.datetime.strptime(
-                row['end'], '%Y-%m-%d')
+                row['end'], '%Y-%m-%d').date()
         return row
 
     @classmethod
@@ -594,8 +600,14 @@ class MigratorSubsidiaryAffiliated(Migrator):
             ]
         if coverage:
             parent_search += [('parent.all_options.coverage', '=', coverage)]
-        parent_covered, = Pool().get('contract.covered_element').search(
-            parent_search, limit=1)
+        all_covered = Pool().get('contract.covered_element').search(
+            parent_search)
+        all_covered = sorted(
+            [x for x in all_covered if x.start_date <= row['start']],
+            key=lambda x: x.start_date)
+        parent_covered = [x for x in all_covered if not x.end_date or
+            (x.end_date >= row['start'])][-1]
+
         row['parent'] = parent_covered
         row['party'] = cls.cache_obj['person'][row['person']]
         row['manual_end_date'] = row['end']
