@@ -1,9 +1,10 @@
 # encoding: utf8
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
+
 from itertools import groupby
 from decimal import Decimal
-from dateutil.relativedelta import relativedelta
 from sql import Null
 from sql.operators import Not
 
@@ -56,16 +57,16 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         'S21.G00.20.003': 'pasrau_bic',
         'S21.G00.20.004': 'pasrau_iban',
         'S21.G00.20.005': 'pasrau_total_amount',
-        'S21.G00.20.006': 'invoice_date',
-        'S21.G00.20.007': 'pasrau_slip_end_date',
+        'S21.G00.20.006': 'pasrau_slip_start_date',
+        'S21.G00.20.007': 'invoice_date',
         'S21.G00.20.010': 'pasrau_payment_mode',
         # 'S21.G00.20.012': '',  # SIRET Payeur
 
         # BLOC INDIVIDU
 
         'S21.G00.30.001': 'ssn_no_key',
-        'S21.G00.30.002': 'name',
-        # 'S21.G00.30.003': '',  # Nom d'usage
+        'S21.G00.30.002': 'birth_name_or_name',
+        'S21.G00.30.003': 'usage_name',
         'S21.G00.30.004': 'first_name',
         'S21.G00.30.005': 'gender',
         'S21.G00.30.006': 'birth_date',
@@ -334,11 +335,19 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
     def custom_pasrau_iban(self, slip):
         return slip.company.party.bank_accounts[0].numbers[0].number_compact
 
+    def custom_birth_name_or_name(self, party):
+        return party.birth_name if party.birth_name else party.name
+
+    def custom_usage_name(self, party):
+        # fill S21.G00.30.003 only if birth name is empty
+        return party.name if party.birth_name else None
+
     def custom_pasrau_total_amount(self, slip):
         return slip.total_amount if slip.total_amount else Decimal('0')
 
-    def custom_pasrau_slip_end_date(self, slip):
-        return slip.invoice_date + relativedelta(months=1, days=-1)
+    def custom_pasrau_slip_start_date(self, slip):
+        return datetime.date(slip.invoice_date.year, slip.invoice_date.month,
+            1)
 
     def custom_pasrau_payment_mode(self, slip):
         return '05'  # This means sepa direct debit
