@@ -174,5 +174,6 @@ class ContractSet(metaclass=PoolMeta):
     def get_report_functional_date(self, event_code):
         if event_code == 'renew_contract_set':
             return max(
-                [c.activation_history[-1].start_date for c in self.contracts])
+                [c.activation_history[-1].start_date for c in self.contracts
+                    if c.activation_history])
         return super(ContractSet, self).get_report_functional_date(event_code)

@@ -1,3 +1,5 @@
+* BUG#10446 Correction d'un crash lors de la génération d'un document lors d'un renouvellement sur un ensemble de contrats dont un des contrats est sans effet.
+
 Version 2.2 - 2018-10-12
 * BUG#9814 Le calcul des primes sur tout l'ensemble, en avenant, se fait avenant par avenant
 

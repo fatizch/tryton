@@ -1,3 +1,5 @@
+* BUG#10446 Fix crash when generating renewal document on a contract set with at least a contract void 
+
 Version 2.2 - 2018-10-12
 * BUG#9814 The premium calculation on all set, during endorsement, is done endorsement by endorsement
 
