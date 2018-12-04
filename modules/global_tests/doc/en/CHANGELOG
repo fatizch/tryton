@@ -1,3 +1,4 @@
+* OTH#0000 Post Pasrau slip to generate dsn message: Add dsn configuration
 * FEA#10308 Do not install contract set and endorsement process related modules
 * FEA#10145 Use psycopg2 for database operations
 

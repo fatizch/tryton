@@ -219,6 +219,18 @@ if not TESTING:
 else:
     from trytond.config import config
     config.set('database', 'language', 'fr')
+    # Pasrau configuration
+    config.add_section('dsn')
+    config.set('dsn', 'sender_code', '1')
+    config.set('dsn', 'sender_nic', '00029')
+    config.set('dsn', 'sender_contact_civility', '01')
+    config.set('dsn', 'sender_contact_full_name', 'Admin Coopengo')
+    config.set('dsn', 'sender_contact_email', 'admin@coopengo.com')
+    config.set('dsn', 'sender_contact_phone', '0101010101')
+    config.set('dsn', 'code_apen', '5829C')
+    config.set('dsn', 'nic_etablissement', '00029')
+    config.set('dsn', 'apet_etablissement', '5829C')
+    config.set('dsn', 'fraction_number', '10')
 
     import trytond.modules as modules
     from trytond.tests.tools import activate_modules
