@@ -175,6 +175,10 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         cls.append_error(args, 'Cannot find a person to get')
 
     @classmethod
+    def _re_person_gender(cls, args):
+        return cls.get_person(args).gender
+
+    @classmethod
     def _re_get_person_birthdate(cls, args):
         person = cls.get_person(args)
         if hasattr(person, 'birth_date'):
@@ -260,6 +264,11 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         matches.sort()
         return matches and (contract.id not in matches or
             matches.index(contract.id) != 0)
+
+    @classmethod
+    @check_args('option')
+    def _re_option_has_extra_premiums(cls, args):
+        return bool(args['option'].extra_premiums)
 
     @classmethod
     def get_all_contracts(cls, party, at_date=None):

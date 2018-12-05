@@ -1,3 +1,5 @@
+* OTH#0000 Remplacement de données "champs_technique" du moteur de règle par des vrais données métier
+
 Version 2.2 - 2018-10-12
 * FEA#10080 Ajout de paramétrage dans la description de risque afin d'afficher la valeur d'une donnée complémentaire dans le nom d'enregistrement des éléments couverts
 * OTH#0000 Remplacement des petites listes par des onglets sur la vue formulaire d'un assureur

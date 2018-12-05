@@ -1,3 +1,5 @@
+* OTH#0000 Replace some "technical_field" rule engine functions by real business entries
+
 Version 2.2 - 2018-10-12
 * FEA#10080 Add item description configuration to show extra data value in the covered element rec name 
 * OTH#0000 Replace multiple small list to notebook view on insurer view form

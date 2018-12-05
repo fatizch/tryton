@@ -79,3 +79,10 @@ class RuleEngineRuntime(metaclass=PoolMeta):
             options += [x for x in option.contract.options]
         return list({x.coverage.code for x in options
                 if x.is_active_at_date(date or args['date'])})
+
+    @classmethod
+    @check_args('contract')
+    def _re_contract_process_state(cls, args):
+        if not args['contract'].current_state:
+            return None
+        return args['contract'].current_state.step.technical_name

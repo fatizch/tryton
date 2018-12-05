@@ -69,5 +69,18 @@ ayant souscrit à la garantie indépendamment d'une date</field>
             <field name="fct_args">date</field>
             <field name="parent" ref="offered_insurance.dossier_garantie"/>
         </record>
+        <record model="rule_engine.function" id="etape_du_processus_contrat">
+            <field name="translated_technical_name">etape_du_processus_contrat</field>
+            <field name="description">État du contrat dans le processus</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_contract_process_state</field>
+            <field name="long_description">
+Indique l'état dans lequel est le contrat dans le processus en cours. Il s'agit
+du nom technique de l'étape actuelle. Si aucun processus n'est actif, retourne
+'None'</field>
+            <field name="parent" ref="contract.te_contract"/>
+        </record>
     </data>
 </tryton>

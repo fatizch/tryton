@@ -188,6 +188,30 @@ souscrite sur un autre contrat et faux si l'option n'a jamais été souscrite ou
 si ce contrat est le premier à l'avoir souscrit</field>
             <field name="parent" ref="dossier_garantie"/>
         </record>
+        <record model="rule_engine.function" id="option_avec_surprimes">
+            <field name="translated_technical_name">option_avec_surprimes</field>
+            <field name="description">Option avec surprime</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_option_has_extra_premiums</field>
+            <field name="long_description">
+Permet de savoir si une option a des surprimes qui lui sont rattachées.
+Retourne 'True' ou 'False'</field>
+            <field name="parent" ref="dossier_garantie"/>
+        </record>
+        <record model="rule_engine.function" id="genre_assure">
+            <field name="translated_technical_name">genre_assure</field>
+            <field name="description">Genre de l'assuré</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_person_gender</field>
+            <field name="long_description">Retourne le genre de la personne assurée.
+
+Valeurs possibles : 'male', 'female'</field>
+            <field name="parent" ref="dossier_personne_couverte"/>
+        </record>
     </data>
     <data noupdate="1">
         <record model="rule_engine.context-function" id="cte_default_dossier_personne_couverte">

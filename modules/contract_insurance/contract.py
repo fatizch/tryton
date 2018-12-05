@@ -1176,7 +1176,8 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
                 return '%s (%s)' % (res, relations)
             return res
         if self.item_desc:
-            res = ': '.join([_f for _f in [self.item_desc.rec_name, self.name] if _f])
+            res = ': '.join(
+                [_f for _f in [self.item_desc.rec_name, self.name] if _f])
         extra_data = self.item_desc.extra_data_rec_name
         if extra_data:
             separator = ' ' if self.name else ': '
