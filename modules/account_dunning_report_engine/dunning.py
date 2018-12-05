@@ -1,7 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
+from trytond.server_context import ServerContext
 from trytond.modules.coog_core import fields
 from trytond.modules.report_engine import Printable
 
@@ -51,7 +52,13 @@ class Level(metaclass=PoolMeta):
         ondelete='RESTRICT')
 
     def process_report_template(self, dunnings):
-        self.report_template.produce_reports(dunnings)
+        from_batch = ServerContext().get('from_batch', None)
+        if from_batch:
+            ReportProductionRequest = Pool().get('report_production.request')
+            ReportProductionRequest.create_report_production_requests(
+                self.report_template, dunnings, {})
+        else:
+            self.report_template.produce_reports(dunnings)
 
     def process_dunnings(self, dunnings):
         if self.report_template:

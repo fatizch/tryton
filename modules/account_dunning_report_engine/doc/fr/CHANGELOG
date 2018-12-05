@@ -1,3 +1,5 @@
+* BUG#10336 Des courriers de relances pouvaient être produit même en cas d'erreur dans le traitement des relances
+
 Version 2.2 - 2018-10-12
 Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09
