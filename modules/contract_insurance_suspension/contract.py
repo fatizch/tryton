@@ -79,6 +79,10 @@ class Contract(metaclass=PoolMeta):
             definitive_suspensions = [x for x in suspensions_to_disable if
                 x.type_ == 'definitive']
             if temporary_suspensions:
+                last_paid_invoice = self.last_paid_invoice
+                last_payment_date = last_paid_invoice.reconciliation_date if \
+                    last_paid_invoice else datetime.date.max
+                to_date = min(last_payment_date, utils.today(), to_date)
                 to_write.extend([temporary_suspensions,
                     {'end_date': utils.today() + relativedelta(days=days_delta)
                         if not due_invoices
@@ -89,6 +93,8 @@ class Contract(metaclass=PoolMeta):
                     suspension = self.get_suspension('temporary', to_date +
                         relativedelta(days=1))
                     suspension.save()
+                    Event.notify_events([suspension],
+                        'contract_right_suspension_creation')
             if definitive_suspensions:
                 to_write.extend([definitive_suspensions,
                     {'end_date': to_date}])

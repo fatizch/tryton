@@ -1,3 +1,5 @@
+* BUG#10046 Au moment de la désactivation d'une suspension, définir la fin d'une suspension temporaire comme le minimum entre aujourd'hui et la date calculée
+
 Version 2.2 - 2018-10-12
 Version 2.0 - 2018-04-13
 * BUG#7582 Correction de la clé fonctionnelle (_func_key) d'une suspension de contrat utilisée par les export/import JSON
