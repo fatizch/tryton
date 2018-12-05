@@ -306,6 +306,7 @@ class Address(export.ExportImportMixin, metaclass=PoolMeta):
         sep = '\n' if with_return_carriage else ' '
         return sep.join(self.get_full_address(None).splitlines())
 
+    @fields.depends('name', 'street', 'subdivision', 'country')
     def get_rec_name(self, name):
         return self.get_address_as_char(name)
 

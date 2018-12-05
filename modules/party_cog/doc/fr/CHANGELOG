@@ -1,3 +1,5 @@
+* BUG#10480 Erreur au re-démarrage d'un avenant de changement d'adresse
+
 Version 2.2 - 2018-10-12
 * FEA#5633 Fusion de party_cog et country_address_configuration ainsi qu'une amélioration graphique de le vue formulaire d'une adresse
 * FEA#10057 Ajout du téléphone portable et du mail dans la synthèse textuelle d'un tiers
