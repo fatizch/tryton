@@ -1,3 +1,4 @@
+* BUG#10422 Several eligibility rules can be added to a benefit but only the first is used
 * BUG#10335 Fix deductible end date computation when using eligibility datas
 * BUG#10247 Fix default eligibility decision when no eligibility rule is set
 

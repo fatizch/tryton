@@ -1,3 +1,4 @@
+* BUG#10422 Plusieurs règles d'éligibilité peuvent être ajoutées à une prestation mais seule la première est utilisée
 * BUG#10335 Correctif du crash sur le calcul de la date de fin de franchise utilisant les données d'éligibilité
 * BUG#10247 Correctif sur l'éligibilité par défaut lorsque qu'aucune règle d'eligibilité n'est définie
 

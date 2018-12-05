@@ -23,7 +23,7 @@ class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     eligibility_rules = fields.One2Many('benefit.eligibility.rule', 'benefit',
-        'Benefit Eligibility Rules', delete_missing=True)
+        'Benefit Eligibility Rules', delete_missing=True, size=1)
     refuse_from_rules = fields.Boolean('Refuse From Eligibility Rules',
         help='If True, a non-eligible service will be refused. Else it will '
         'still require a manual analysis')
