@@ -103,11 +103,12 @@ class Contract(metaclass=PoolMeta):
         fields.Date('Last Invoice End Date'), 'get_last_invoice',
         searcher='search_last_invoice')
     last_posted_invoice_end = fields.Function(
-        fields.Date('Last Post Invoice End Date'), 'get_last_invoice',
-        searcher='search_last_invoice')
+        fields.Date('Last Post Invoice End Date'), 'get_last_invoice')
     last_paid_invoice_end = fields.Function(
-        fields.Date('Last Paid Invoice End Date'), 'get_last_invoice',
-        searcher='search_last_invoice')
+        fields.Date('Last Paid Invoice End Date'), 'get_last_invoice')
+    last_paid_invoice = fields.Function(
+        fields.Many2One('contract.invoice', 'Last Paid Invoice'),
+        'get_last_invoice')
     account_invoices = fields.Many2Many('contract.invoice', 'contract',
         'invoice', 'Invoices', order=[('start', 'ASC')], readonly=True)
     current_term_invoices = fields.Function(
@@ -590,6 +591,9 @@ class Contract(metaclass=PoolMeta):
                 (state_column == 'paid')
         elif name == 'last_paid_invoice_end':
             column = 'end'
+            where_clause = (state_column == 'paid')
+        elif name == 'last_paid_invoice':
+            column = 'id'
             where_clause = (state_column == 'paid')
         else:
             raise NotImplementedError

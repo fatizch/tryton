@@ -221,11 +221,10 @@ Temporary suspension should now have a end_date and be inactive::
 
 Definitive suspension should now have an end_date::
 
-    >>> active_suspensions[0].end_date == datetime.date.today() + relativedelta(days=1)
+    >>> active_suspensions[0].end_date == datetime.date.today()
     True
 
 Definitive suspension should now have an end_date::
 
-    >>> inactive_suspensions[0].end_date == datetime.date.today() + \
-    ...     relativedelta(days=1)
+    >>> inactive_suspensions[0].end_date == datetime.date.today()
     True

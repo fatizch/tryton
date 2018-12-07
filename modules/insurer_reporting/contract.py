@@ -27,9 +27,6 @@ class Contract(metaclass=PoolMeta):
     first_not_null_invoice = fields.Function(
         fields.Many2One('contract.invoice', 'First Not Null Invoice'),
         'get_first_not_null_invoice')
-    last_paid_invoice = fields.Function(
-        fields.Many2One('contract.invoice', 'Last Paid Invoice'),
-        'get_last_paid_invoice')
     number_paid_premiums = fields.Function(
         fields.Integer('Number of Paid Premiums'),
         'get_number_paid_premiums')
@@ -44,18 +41,6 @@ class Contract(metaclass=PoolMeta):
                 order=[('start', 'ASC')], limit=1)
             if first_not_null_invoice:
                 res[contract.id] = first_not_null_invoice[0].id
-        return res
-
-    @classmethod
-    def get_last_paid_invoice(cls, contracts, name):
-        res = {c.id: None for c in contracts}
-        for contract in contracts:
-            last_paid_invoice = Pool().get('contract.invoice').search([
-                    ('contract', '=', contract.id),
-                    ('invoice_state', '=', 'paid')],
-                order=[('start', 'DESC')], limit=1)
-            if last_paid_invoice:
-                res[contract.id] = last_paid_invoice[0].id
         return res
 
     @classmethod

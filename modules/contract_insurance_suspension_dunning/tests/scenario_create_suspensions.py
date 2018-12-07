@@ -212,10 +212,9 @@ active_suspensions[-1].start_date - relativedelta(days=1) == \
 # #Res# #True
 
 # #Comment# #Definitive suspension should now have an end_date
-active_suspensions[0].end_date == datetime.date.today() + relativedelta(days=1)
+active_suspensions[0].end_date == datetime.date.today()
 # #Res# #True
 
 # #Comment# #Definitive suspension should now have an end_date
-inactive_suspensions[0].end_date == datetime.date.today() + \
-    relativedelta(days=1)
+inactive_suspensions[0].end_date == datetime.date.today()
 # #Res# #True
