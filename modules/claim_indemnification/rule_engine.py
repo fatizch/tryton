@@ -185,10 +185,9 @@ class RuleEngineRuntime(metaclass=PoolMeta):
     def _re_revaluation_pivot_dates(cls, args, start_date, end_date, frequency,
             month_sync=0, day_sync=0):
         assert frequency in ('YEARLY', 'MONTHLY', 'WEEKLY', 'DAILY')
-        if month_sync:
-            start_date = start_date.replace(month=month_sync)
-        if day_sync:
-            start_date = start_date.replace(day=day_sync)
+        start_date = start_date.replace(
+            month=month_sync if month_sync else start_date.month,
+            day=day_sync if day_sync else start_date.day)
         dates = list(rrule.rrule(getattr(rrule, frequency), dtstart=start_date,
                 until=end_date))
         dates.sort()

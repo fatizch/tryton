@@ -1,3 +1,4 @@
+* BUG#10477 La fonction de calcul des dates pivots pouvait échouer avec un jour de synchronisation au 30 du mois
 * BUG#10275 Empêcher le retro-calcul de taxes quand le montant de l'indemnisation est zéro
 * BUG#10270 Correctif sur le calcul de la revalorisation qui écrase les détails d'indémnisation
 * BUG#10087 Correction de la détection du caractère périodique d'une indemnisation
