@@ -532,10 +532,16 @@ class PaymentSucceedBatch(PaymentValidationBatchBase):
             super(PaymentSucceedBatch, cls).select_ids(**kwargs)]
 
         if group_ids:
-            cursor.execute(*payment.select(payment.id,
+            cursor.execute(*payment.select(payment.id, payment.party,
                     where=payment.group.in_(group_ids) &
-                    (payment.state == 'processing')))
-            return cursor.fetchall()
+                    (payment.state == 'processing'),
+                    order_by=payment.party))
+            ordered_payments = cursor.fetchall()
+            res = []
+            for _, grouped_payments in groupby(
+                    ordered_payments, lambda x: x[1]):
+                res.append([(x[0],) for x in grouped_payments])
+            return res
         if not group_ids:
             return []
 
