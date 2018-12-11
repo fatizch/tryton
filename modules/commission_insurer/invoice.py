@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields, utils
+from trytond.modules.coog_core import fields, utils, model
 
 
 __all__ = [
@@ -76,3 +76,14 @@ class Invoice(metaclass=PoolMeta):
                 and insurer_journal is not None):
             line.payment_date = line.maturity_date or utils.today()
         return line
+
+    def insurer_reporting_lines(self, **kwargs):
+        domain = [
+            ('amount', '!=', 0),
+            ('invoice_line.invoice', '=', self),
+            ]
+        return model.order_data_stream(
+            model.search_and_stream(Pool().get('commission'), domain,
+                **kwargs),
+            lambda x: ((x.commissioned_contract.id if x.commissioned_contract
+                else None), str(x.origin)))

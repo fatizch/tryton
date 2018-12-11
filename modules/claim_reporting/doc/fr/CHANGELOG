@@ -1,3 +1,5 @@
+* FEA#10435 Permettre l'utilisation de rapports de sinistres sans l'obligation d'installer les modules liés aux commissions pas forcément nécessaires
+
 Version 2.2 - 2018-10-12
 * BUG#9290 Rendre les prestations imprimables
 * BUG#9019 Correction du commit d5f56ad: mauvaise cible sur le champ Many2Many claim_stock_reports

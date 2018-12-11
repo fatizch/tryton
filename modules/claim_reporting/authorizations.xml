@@ -3,15 +3,15 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <!-- Contract Management Group -->
+        <!-- Claim Management Group -->
         <!-- Report Engine -->
-        <record model="ir.ui.menu-res.group" id="menu_report_insurer_contract_manage">
+        <record model="ir.ui.menu-res.group" id="menu_report_insurer_claim_manage">
             <field name="menu" ref="insurer_reporting.menu_report_insurer"/>
-            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="group" ref="claim.group_claim_manage"/>
         </record>
-        <record model="ir.ui.menu-res.group" id="menu_report_insurer_contract_contract_manage">
+        <record model="ir.ui.menu-res.group" id="menu_report_insurer_contract_claim_manage">
             <field name="menu" ref="insurer_reporting.menu_report_insurer_contract"/>
-            <field name="group" ref="contract.group_contract_manage"/>
+            <field name="group" ref="claim.group_claim_manage"/>
         </record>
     </data>
 </tryton>

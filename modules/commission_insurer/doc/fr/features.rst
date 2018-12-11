@@ -14,3 +14,6 @@
   bordereaux assureurs peut être assez longue, en particulier pour les
   assureurs rattachés à des milliers de contrats. Des batchs sont à disposition
   pour effectuer ces traitements de manière optimisée
+
+- **Rapport assureur : commissions:**  Permet de générer les rapports assureurs
+  concernant les factures fournisseurs.

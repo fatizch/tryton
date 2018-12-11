@@ -80,7 +80,8 @@ class InvoiceSlipConfiguration(metaclass=PoolMeta):
         remains = set(invoices_data.keys())
 
         for invoice_id, commission_id, date, account in \
-                cls._get_insurer_commissions(slip_parameters, list(per_id.keys())):
+                cls._get_insurer_commissions(slip_parameters,
+                    list(per_id.keys())):
             if invoice_id in remains:
                 remains.remove(invoice_id)
             if not date or not slip_date or date <= slip_date:
@@ -128,7 +129,8 @@ class InvoiceSlipConfiguration(metaclass=PoolMeta):
         agent = pool.get('commission.agent').__table__()
         option = pool.get('offered.option.description').__table__()
 
-        insurers = [_f for _f in [x.get('insurer', None) for x in slip_parameters] if _f]
+        insurers = [_f for _f in
+            [x.get('insurer', None) for x in slip_parameters] if _f]
         if not insurers or not invoices_ids:
             return []
 

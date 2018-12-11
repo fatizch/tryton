@@ -12,3 +12,6 @@
   consuming, especially for large insurers which may be related to thousands of
   contracts. So batches are available to perform this in a performance
   optimized way
+
+- **Insurer reporting: commissions:** Allows generating insurer reports about
+  supplier invoices.

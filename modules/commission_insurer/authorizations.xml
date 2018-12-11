@@ -25,5 +25,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <!-- Report Engine -->
+        <record model="ir.ui.menu-res.group" id="menu_report_insurer_commission_manage">
+            <field name="menu" ref="insurer_reporting.menu_report_insurer"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_report_insurer_contract_commission_manage">
+            <field name="menu" ref="insurer_reporting.menu_report_insurer_contract"/>
+            <field name="group" ref="commission_insurance.group_commission_manage"/>
+        </record>
     </data>
 </tryton>

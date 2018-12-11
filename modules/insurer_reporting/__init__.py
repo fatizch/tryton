@@ -4,7 +4,6 @@ from trytond.pool import Pool
 
 from . import wizard
 from . import report_engine
-from . import account
 from . import contract
 from . import party
 from . import batch
@@ -15,7 +14,6 @@ def register():
         wizard.InsurerReportContractConfigure,
         wizard.InsurerReportResult,
         report_engine.ReportTemplate,
-        account.Invoice,
         contract.Contract,
         contract.CoveredElement,
         party.InsurerReportTemplate,
