@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Len, Bool
+from trytond.pyson import Eval, Len, Bool, Or
 
 from trytond.modules.coog_core import fields, model
 from trytond.modules.rule_engine import get_rule_mixin
@@ -14,6 +14,12 @@ __all__ = [
     'OptionVersion',
     'OptionBenefit',
     ]
+
+_CONTRACT_STATUS_STATES = {
+    'readonly': Bool(Eval('contract_status')) & (
+        Eval('contract_status') != 'quote'),
+    }
+_CONTRACT_STATUS_DEPENDS = ['contract_status']
 
 
 class Option(metaclass=PoolMeta):
@@ -82,8 +88,12 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
 
     version = fields.Many2One('contract.option.version', 'Version',
         required=True, ondelete='CASCADE', select=True)
+    contract_status = fields.Function(
+        fields.Char('Contract Status'),
+        'on_change_with_contract_status')
     benefit = fields.Many2One('benefit', 'Benefit', required=True,
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', states=_CONTRACT_STATUS_STATES,
+        depends=_CONTRACT_STATUS_DEPENDS)
     available_deductible_rules = fields.Function(
         fields.Many2Many('rule_engine', None, None,
             'Available Deductible Rule'),
@@ -94,10 +104,12 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         'get_available_rule')
     annuity_frequency = fields.Selection(ANNUITY_FREQUENCIES,
         'Annuity Frequency', states={
-            'readonly': Bool(Eval('annuity_frequency_forced')),
+            'readonly': Or(Bool(Eval('annuity_frequency_forced')),
+                Eval('contract_status') != 'quote'),
             'invisible': ~Eval('annuity_frequency_required'),
             'required': Bool(Eval('annuity_frequency_required'))},
-        depends=['annuity_frequency_forced', 'annuity_frequency_required'])
+        depends=['annuity_frequency_forced', 'annuity_frequency_required',
+            'contract_status'])
     annuity_frequency_forced = fields.Function(
         fields.Boolean('Annuity frequency Forced'),
         'on_change_with_annuity_frequency_forced')
@@ -114,25 +126,45 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
         super(OptionBenefit, cls).__setup__()
         cls.deductible_rule.domain = [
             ('id', 'in', Eval('available_deductible_rules'))]
-        cls.deductible_rule.states['readonly'] = Len(Eval(
-                'available_deductible_rules')) == 1
+        cls.deductible_rule.states['readonly'] = Or(
+            Len(Eval('available_deductible_rules')) == 1,
+            Eval('contract_status') != 'quote')
         cls.deductible_rule.states['invisible'] = Len(Eval(
                 'available_deductible_rules')) == 0
-        cls.deductible_rule.depends = ['available_deductible_rules']
+        cls.deductible_rule.depends = ['available_deductible_rules',
+            'contract_status']
         cls.indemnification_rule.domain = [
             ('id', 'in', Eval('available_indemnification_rules'))]
-        cls.indemnification_rule.states['readonly'] = Len(Eval(
-                'available_indemnification_rules')) == 1
+        cls.indemnification_rule.states['readonly'] = Or(
+            Len(Eval('available_indemnification_rules')) == 1,
+            Eval('contract_status') != 'quote')
         cls.indemnification_rule.states['invisible'] = Len(Eval(
                 'available_indemnification_rules')) == 0
-        cls.indemnification_rule.depends = ['available_indemnification_rules']
+        cls.indemnification_rule.depends = ['available_indemnification_rules',
+            'contract_status']
         cls.revaluation_rule.domain = [
             ('id', 'in', Eval('available_revaluation_rules'))]
-        cls.revaluation_rule.states['readonly'] = Len(Eval(
-                'available_revaluation_rules')) == 1
+        cls.revaluation_rule.states['readonly'] = Or(
+            Len(Eval('available_revaluation_rules')) == 1,
+            Eval('contract_status') != 'quote')
         cls.revaluation_rule.states['invisible'] = Len(Eval(
                 'available_revaluation_rules')) == 0
-        cls.revaluation_rule.depends = ['available_revaluation_rules']
+        cls.revaluation_rule.depends = ['available_revaluation_rules',
+            'contract_status']
+        cls.indemnification_rule_extra_data.states['readonly'] = Eval(
+            'contract_status') != 'quote'
+        cls.indemnification_rule_extra_data.depends += ['contract_status']
+        cls.revaluation_rule_extra_data.states['readonly'] = Eval(
+            'contract_status') != 'quote'
+        cls.revaluation_rule_extra_data.depends += ['contract_status']
+        cls.deductible_rule_extra_data.states['readonly'] = Eval(
+            'contract_status') != 'quote'
+        cls.deductible_rule_extra_data.depends += ['contract_status']
+
+    @fields.depends('version')
+    def on_change_with_contract_status(self, name=None):
+        return (self.version.contract_status
+            if self.version else '')
 
     @fields.depends('benefit', 'available_deductible_rules',
         'available_indemnification_rules', 'available_revaluation_rules',

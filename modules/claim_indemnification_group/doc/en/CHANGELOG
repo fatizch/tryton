@@ -1,3 +1,4 @@
+* BUG#10424 The option benefit fields were not readonly on an active contract
 * BUG#10285 Properly clear cache when modifying benefits on group contracts
 * BUG#10215 Fix display and requireness issues of annuity frequency field
 * BUG#10198 Fix automatic rules input when only one rule is available

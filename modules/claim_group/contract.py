@@ -46,13 +46,16 @@ class Option(metaclass=PoolMeta):
             ('full_management', 'Full management'),
             ('in_complement', 'In Complement of Previous Insurer')],
         'Previous Claims Management Rule',
-        states={'invisible': ~Eval('is_group')}, depends=['is_group'])
+        states={'invisible': ~Eval('is_group'),
+            'readonly': Eval('contract_status') != 'quote'},
+        depends=['is_group', 'contract_status'])
     full_management_start_date = fields.Date('Full Management Start Date',
         states={'invisible': (
                 Eval('previous_claims_management_rule') != 'full_management'),
             'required': Eval('previous_claims_management_rule') ==
-            'full_management'},
-        depends=['previous_claims_management_rule'])
+            'full_management',
+            'readonly': Eval('contract_status') != 'quote'},
+        depends=['previous_claims_management_rule', 'contract_status'])
 
     @classmethod
     def default_previous_claims_management_rule(cls):

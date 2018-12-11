@@ -8,6 +8,11 @@ __all__ = [
     'OptionBenefit',
     ]
 
+_CONTRACT_STATUS_STATES = {
+    'readonly': Bool(Eval('contract_status')) & (
+        Eval('contract_status') != 'quote'),
+    }
+_CONTRACT_STATUS_DEPENDS = ['contract_status']
 
 SALARY_MODES = [
     ('', ''),
@@ -25,16 +30,20 @@ SALARY_MODES = [
 class OptionBenefit(metaclass=PoolMeta):
     __name__ = 'contract.option.benefit'
 
-    salary_mode = fields.Selection(SALARY_MODES, 'Salary Mode')
-    net_salary_mode = fields.Boolean('Calculate Net Salary')
+    salary_mode = fields.Selection(SALARY_MODES, 'Salary Mode',
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
+    net_salary_mode = fields.Boolean('Calculate Net Salary',
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     net_calculation_rule = fields.Many2One('claim.net_calculation_rule',
         'Net Calculation Rule', ondelete='RESTRICT', states={
+            'readonly': Eval('contract_status') != 'quote',
             'required': Bool(Eval('net_salary_mode')),
             'invisible': ~Bool(Eval('net_salary_mode')),
-            }, depends=['net_salary_mode'])
+            }, depends=['net_salary_mode', 'contract_status'])
     revaluation_on_basic_salary = fields.Boolean('Revaluation on basic salary',
-        states={'invisible': Bool(Eval('revaluation_on_basic_salary_forced'))},
-        depends=['revaluation_on_basic_salary_forced'])
+        states={'invisible': Bool(Eval('revaluation_on_basic_salary_forced')),
+            'readonly': Eval('contract_status') != 'quote'},
+        depends=['revaluation_on_basic_salary_forced', 'contract_status'])
     revaluation_on_basic_salary_forced = fields.Function(
         fields.Boolean('Revaluation on basic salary forced'),
         'get_revaluation_forced')

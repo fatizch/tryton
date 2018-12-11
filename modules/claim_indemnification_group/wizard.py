@@ -238,7 +238,8 @@ class TransferServicesContracts(model.CoogView):
             self.target_contract.end_date)
         self.source_benefits = '\n'.join([self.raise_user_error(
                     'benefit_displayer', (b.rec_name, len(o)),
-                    raise_exception=False) for b, o in list(benefit_data.items())])
+                    raise_exception=False)
+                for b, o in list(benefit_data.items())])
 
     @fields.depends('target_contract', 'target_benefits', 'target_product')
     def on_change_target_contract(self):
@@ -251,7 +252,8 @@ class TransferServicesContracts(model.CoogView):
             self.target_contract.end_date)
         self.target_benefits = '\n'.join([self.raise_user_error(
                     'benefit_displayer', (b.rec_name, len(o)),
-                    raise_exception=False) for b, o in list(benefit_data.items())])
+                    raise_exception=False)
+                for b, o in list(benefit_data.items())])
 
 
 class TransferServicesBenefits(model.CoogView):
