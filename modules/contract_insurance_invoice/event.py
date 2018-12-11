@@ -74,13 +74,19 @@ class EventTypeAction(metaclass=PoolMeta):
         super(EventTypeAction, cls).__setup__()
         cls._error_messages.update({
                 'cancel_or_delete_non_periodic_invoices':
-                'Cancel or Delete Non Periodic Invoices'})
+                'Cancel or Delete Non Periodic Invoices',
+                'create_non_periodic_invoices':
+                'Create Non Periodic Invoices',
+                })
 
     @classmethod
     def get_action_types(cls):
         return super(EventTypeAction, cls).get_action_types() + [
             ('cancel_or_delete_non_periodic_invoices', cls.raise_user_error(
                     'cancel_or_delete_non_periodic_invoices',
+                    raise_exception=False)),
+            ('create_non_periodic_invoices', cls.raise_user_error(
+                    'create_non_periodic_invoices',
                     raise_exception=False))]
 
     def filter_objects(self, objects):
@@ -101,7 +107,11 @@ class EventTypeAction(metaclass=PoolMeta):
     def execute(self, objects, event_code, description=None, **kwargs):
         pool = Pool()
         Contract = pool.get('contract')
-        if self.action != 'cancel_or_delete_non_periodic_invoices':
-            return super(EventTypeAction, self).execute(objects, event_code,
-                description, **kwargs)
-        Contract.clean_up_contract_invoices(objects, non_periodic=True)
+        if self.action == 'cancel_or_delete_non_periodic_invoices':
+            Contract.clean_up_contract_invoices(objects, non_periodic=True)
+        elif self.action == 'create_non_periodic_invoices':
+            Contract.invoice_non_periodic_premiums(objects,
+                'at_contract_signature')
+        else:
+            return super(EventTypeAction, self).execute(objects,
+                    event_code, description, **kwargs)

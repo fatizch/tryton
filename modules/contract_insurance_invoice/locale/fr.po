@@ -68,6 +68,10 @@ msgctxt "error:event.type.action:"
 msgid "Cancel or Delete Non Periodic Invoices"
 msgstr "Annuler ou supprimer les quittances non périodiques"
 
+msgctxt "error:event.type.action:"
+msgid "Create Non Periodic Invoices"
+msgstr "Créer les quittances non périodiques"
+
 msgctxt "error:offered.billing_mode:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
