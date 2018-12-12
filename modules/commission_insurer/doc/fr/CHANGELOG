@@ -1,3 +1,5 @@
+* OTH#0000 Conversion en liste des valeurs de dictionnaire (python 3)
+
 Version 2.2 - 2018-10-12
 * FEA#9745 Possibilité de générer des bordereaux assureurs regroupant toutes les opérations
 * BUG#9597 Permettre la surcharge du comportement en cas de changement de protocole

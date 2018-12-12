@@ -37,7 +37,7 @@ class ReportTemplate(metaclass=PoolMeta):
                 [model_data.module],
                 ['commission_insurer'],
                 where=(
-                    model_data.id.in_(existing.values())
+                    model_data.id.in_(list(existing.values()))
                     )))
         # Migration from 1.14: Change invoice kinds
         super(ReportTemplate, cls).__register__(module_name)

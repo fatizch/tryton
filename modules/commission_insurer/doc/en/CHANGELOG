@@ -1,3 +1,5 @@
+* OTH#0000 Cast dictionary values to list (python 3)
+
 Version 2.2 - 2018-10-12
 * FEA#9745 Allow to generate merged insurer invoices for different operations
 * BUG#9597 Allow overloading of behavior when changing plan
