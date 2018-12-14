@@ -53,6 +53,23 @@ class ClaimService(metaclass=PoolMeta):
             Event.notify_events(copies, 'transferred_claim_service')
         return copies
 
+    def get_beneficiaries_data(self, at_date):
+        covered = self.theoretical_covered_element
+        if self.benefit.beneficiary_kind == 'subsidiaries_then_covered':
+            if covered.contract_exit_date and \
+                    covered.contract_exit_date > at_date:
+                return [(x.party, 1)
+                    for x in covered.all_parents if x.party is not None] or \
+                    [(covered.party, 1)]
+            else:
+                return [(covered.party, 1)]
+        if self.benefit.beneficiary_kind == 'subsidiaries_covered_subscriber':
+            return [(x.party, 1)
+                for x in covered.all_parents if x.party is not None] \
+                + [(self.option.parent_contract.subscriber, 1)] \
+                + [(covered.party, 1)]
+        return super(ClaimService, self).get_beneficiaries_data(at_date)
+
 
 class Indemnification(metaclass=PoolMeta):
     __name__ = 'claim.indemnification'

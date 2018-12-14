@@ -27,6 +27,25 @@ class Benefit(metaclass=PoolMeta):
         'product', 'Company Products', help='Products available when '
         'paying a company')
 
+    @classmethod
+    def __setup__(cls):
+        super(Benefit, cls).__setup__()
+        cls._error_messages.update({
+                'subsidiaries_then_covered_enum': 'Subsidiaries then Covered',
+                'subsidiaries_covered_subscriber_enum': 'Subsidiaries, Covered'
+                ' and Subscriber',
+                })
+
+    @classmethod
+    def get_beneficiary_kind(cls):
+        return super(Benefit, cls).get_beneficiary_kind() + [
+            ('subsidiaries_then_covered', cls.raise_user_error(
+                    'subsidiaries_then_covered_enum', raise_exception=False)),
+            ('subsidiaries_covered_subscriber', cls.raise_user_error(
+                    'subsidiaries_covered_subscriber_enum',
+                    raise_exception=False)),
+            ]
+
     def _extra_data_structure(self):
         base = super(Benefit, self)._extra_data_structure()
         service = ServerContext().get('service', None)

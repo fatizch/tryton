@@ -935,6 +935,11 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             help='The company which is the closest (in terms of parent '
             'covered elements / subscribers) to the covered'),
         'getter_affiliated_to', searcher='search_affiliated_to')
+    all_parents = fields.Function(
+        fields.Many2Many('contract.covered_element', None, None, 'All Parents',
+            help='All parents of the covered element linked to the same '
+            'contract'),
+        'getter_all_parents', searcher='search_all_parents')
 
     multi_mixed_view = options
 
@@ -1228,6 +1233,37 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             for covered_id, party_id in cursor.fetchall():
                 result[covered_id] = party_id
         return result
+
+    @classmethod
+    def getter_all_parents(cls, instances, name):
+        pool = Pool()
+        contract = pool.get('contract').__table__()
+        covered = cls.__table__()
+        parent_covered = cls.__table__()
+        party = pool.get('party.party').__table__()
+
+        cursor = Transaction().connection.cursor()
+
+        result = {x.id: [] for x in instances}
+
+        query = covered.join(parent_covered, 'LEFT OUTER',
+            condition=(parent_covered.left < covered.left) & (
+                parent_covered.right > covered.right) & (
+                parent_covered.contract == covered.contract)
+            ).join(contract, condition=covered.contract == contract.id
+            ).join(party, condition=contract.subscriber == party.id)
+
+        cursor.execute(*query.select(covered.id, parent_covered.id,
+                where=(covered.id.in_([x.id for x in instances]) &
+                    (parent_covered.party != Null))))
+
+        for covered_id, parent_id in cursor.fetchall():
+            result[covered_id].append(parent_id)
+        return result
+
+    @classmethod
+    def search_all_parents(cls, name, clause):
+        return []
 
     @classmethod
     def getter_end_date(cls, instances, name):

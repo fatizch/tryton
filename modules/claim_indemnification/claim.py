@@ -603,7 +603,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     __name__ = 'claim.indemnification'
 
     beneficiary = fields.Many2One('party.party', 'Beneficiary',
-        ondelete='RESTRICT', required=True)
+        ondelete='RESTRICT', required=True,
+        states={'readonly': Eval('status') != 'calculated'},
+        depends=['status'])
     service = fields.Many2One('claim.service', 'Claim Service',
         ondelete='CASCADE', select=True, required=True)
     kind = fields.Function(

@@ -194,6 +194,10 @@ msgctxt "field:contract.covered_element,all_options:"
 msgid "Options"
 msgstr "Options"
 
+msgctxt "field:contract.covered_element,all_parents:"
+msgid "All Parents"
+msgstr "Tous les parents"
+
 msgctxt "field:contract.covered_element,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -910,6 +914,10 @@ msgid ""
 msgstr ""
 "La société la plus proche (en termes de relations entre éléments couverts / "
 "souscripteur) du risque"
+
+msgctxt "help:contract.covered_element,all_parents:"
+msgid "All parents of the covered element linked to the same contract"
+msgstr "Tous les parents de l'élément couvert liés au même contrat"
 
 msgctxt "model:contract,name:"
 msgid "Contract"

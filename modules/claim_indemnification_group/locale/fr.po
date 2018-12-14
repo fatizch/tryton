@@ -6,6 +6,14 @@ msgctxt "error:benefit.rule:"
 msgid "Multiple indemnification rules allowed"
 msgstr "Plusieurs règles d'indemnisation autorisées"
 
+msgctxt "error:benefit:"
+msgid "Subsidiaries then Covered"
+msgstr "Filiales puis élément couvert"
+
+msgctxt "error:benefit:"
+msgid "Subsidiaries, Covered and Subscriber"
+msgstr "Filiales, assuré et souscripteur"
+
 msgctxt "error:claim.create_indemnification:"
 msgid ""
 "The contract was terminated on the %(contract_end)s, a new indemnification "

@@ -1,3 +1,4 @@
+* FEA#10284 Élargir les bénéficiaires possibles à tous les tiers hiérarchiquement supérieurs dans les éléments couverts et au souscripteur du contrat
 * BUG#10424 Les champs des prestations sur les garanties n'étaient pas en lecture seule sur un contrat actif
 * BUG#10285 Nettoyage du cache lors des modifications de prestations sur un contrat collectif
 * BUG#10215 Correctif sur les problèmes d'affichage et champ requis concernant la fréquence d'indemnisation
