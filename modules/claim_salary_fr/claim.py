@@ -12,6 +12,7 @@ from trytond.model import Unique, ModelView
 from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.currency_cog import ModelCurrency
+from trytond.modules.claim_salary_fr.contract import SALARY_MODES
 
 __all__ = [
     'Claim',
@@ -298,6 +299,9 @@ class ClaimService(metaclass=PoolMeta):
             digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
         'get_salary_range')
+    specific_salary_mode = fields.Selection(SALARY_MODES,
+        'Specified Salary Mode',
+        states={'invisible': True})
 
     def get_salary_reference_date(self):
         Covered = Pool().get('contract.covered_element')
@@ -375,12 +379,15 @@ class ClaimService(metaclass=PoolMeta):
 
     def get_salary_mode(self, name=None):
         if self.benefit.is_group:
+            if self.specific_salary_mode:
+                return self.specific_salary_mode
             return self.benefit.benefit_rules[0].option_benefit_at_date(
                 self.option, self.loss.start_date).salary_mode
         return ''
 
     def init_from_loss(self, loss, benefit):
         super(ClaimService, self).init_from_loss(loss, benefit)
+        self.specific_salary_mode = ''
         self.salary_mode = self.get_salary_mode()
         self.init_salaries()
 

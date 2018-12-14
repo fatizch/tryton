@@ -254,6 +254,10 @@ msgctxt "field:claim.service,tc_gross_salary:"
 msgid "TC Gross Salary"
 msgstr "Tranche TC brute"
 
+msgctxt "field:claim.service,specific_salary_mode:"
+msgid "Specified Salary Mode"
+msgstr "Mode de salaire spécifique"
+
 msgctxt "field:claim.start_set_contributions,fixed_amounts:"
 msgid "Fixed Amounts"
 msgstr "Montants fixes"

@@ -1,3 +1,4 @@
+* FEA#10532 Add field on delivered service to override the salary mode per delivered service
 * BUG#10396 Regression of field net_salary_bonus
 * BUG#10392 Remove accent on "indemnification" in revaluation frquency values
 * BUG#10083 Remove unused "Net bonuses" column
