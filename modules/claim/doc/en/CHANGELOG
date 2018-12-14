@@ -1,3 +1,4 @@
+* BUG#10598 Translate declaration date error message
 * FEA#10291 Allow to deliver the same benefit several times on the same claim
 * BUG#10120 Improve error message when setting an invalid declaration date
 
