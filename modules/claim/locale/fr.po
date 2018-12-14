@@ -143,6 +143,10 @@ msgctxt "field:benefit,automatically_deliver:"
 msgid "Automatically Deliver"
 msgstr "Exercer la prestation automatiquement"
 
+msgctxt "field:benefit,several_delivered:"
+msgid "Several delivered"
+msgstr "Délivrer la prestation plusieurs fois"
+
 msgctxt "field:benefit,beneficiary_kind:"
 msgid "Beneficiary Kind"
 msgstr "Type de bénéficiaire"
@@ -1249,6 +1253,12 @@ msgid ""
 msgstr ""
 "Si cochée, la prestation sera exercée automatiquement une fois le préjudice "
 "déclaré"
+
+msgctxt "help:benefit,several_delivered:"
+msgid ""
+"If true, it will be possible to deliver the same benefit several times'"
+msgstr ""
+"Si cochée, la prestation peut être délivrée plusieurs fois "
 
 msgctxt "help:benefit.loss.description,contract_hold_sub_status:"
 msgid ""

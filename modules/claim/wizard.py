@@ -77,7 +77,7 @@ class DeliverBenefits(Wizard):
             deliver = [service.benefit for service in loss.services]
             for contract in claim.possible_contracts:
                 for benefit, option in contract.get_possible_benefits(loss):
-                    if benefit in deliver:
+                    if not benefit.several_delivered and benefit in deliver:
                         continue
                     description = '<div><b>%s</b></div>' % \
                         self.raise_user_error('coverage_information',

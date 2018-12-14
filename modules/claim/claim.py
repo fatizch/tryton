@@ -670,12 +670,13 @@ class Loss(model.CoogSQL, model.CoogView,
             self.services = list(self.services)
         for benefit in benefits:
             del_service = None
-            for other_del_service in self.services:
-                if (other_del_service.benefit == benefit
-                        and other_del_service.option == option):
-                    del_service = other_del_service
-            if del_service:
-                continue
+            if not benefit.several_delivered:
+                for other_del_service in self.services:
+                    if (other_del_service.benefit == benefit
+                            and other_del_service.option == option):
+                        del_service = other_del_service
+                if del_service:
+                    continue
 
             service = self.init_service(option, benefit)
             if service:
@@ -1041,7 +1042,8 @@ class ClaimService(model.CoogSQL, model.CoogView,
 
         # Only use matching extra_data
         values = {x: base_values.get(x, None)
-            for x in list(extra_data.extra_data_values.keys()) + list(new_data.keys())}
+            for x in list(extra_data.extra_data_values.keys()) +
+                    list(new_data.keys())}
         if (extra_data.extra_data_values != values):
             if (at_date == extra_data.date or
                     at_date == self.loss.start_date and not extra_data.date):

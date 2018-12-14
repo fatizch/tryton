@@ -256,6 +256,9 @@ class Benefit(model.CoogSQL, model.CoogView,
         required=True, select=True)
     options = fields.Many2Many('option.description-benefit', 'benefit',
         'coverage', 'Options', readonly=True)
+    several_delivered = fields.Boolean('Several delivered',
+        help='If true, it will be possible to deliver the same benefit '
+        'several times')
 
     @classmethod
     def __setup__(cls):

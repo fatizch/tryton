@@ -29,6 +29,8 @@ this repository contains the full copyright notices and license terms. -->
             <group id="left">
                 <label name="beneficiary_kind"/>
                 <field name="beneficiary_kind"/>
+                <label name="several_delivered"/>
+                <field name="several_delivered"/>
                 <newline/>
                 <field name="loss_descs" colspan="4"/>
             </group>
