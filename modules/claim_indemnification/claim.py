@@ -728,6 +728,14 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     has_end_date = fields.Function(
         fields.Boolean('With End Date'),
         'getter_has_end_date')
+    forced_base_amount = fields.Numeric('Forced Base Amount',
+        help='This amount is a daily amount if indemnification kind is period, '
+        'annual if the kind is annuity, and the capital\'s amount if the kind '
+        'is a capital',
+        domain=['OR', [('forced_base_amount', '=', None)],
+            [('forced_base_amount', '>=', 0)]],
+        digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
+        depends=['currency_digits'], readonly=True)
 
     @classmethod
     def __setup__(cls):
@@ -1666,6 +1674,13 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
     is_manual_indemnification = fields.Function(
         fields.Boolean('Manual Calculation'),
         'getter_is_manual_indemnification')
+    forced_base_amount = fields.Numeric('Forced Base Amount',
+        states={
+            'readonly': True,
+            'invisible': ~Bool(Eval('forced_base_amount'))
+        },
+        digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
+        depends=['currency_digits'], readonly=True)
 
     @classmethod
     def __setup__(cls):

@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from decimal import Decimal, ROUND_HALF_UP
 from dateutil.relativedelta import relativedelta
 
 from trytond import backend
@@ -7,9 +8,11 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 from trytond.cache import Cache
 
-from trytond.modules.coog_core import model, fields, coog_date
+from trytond.modules.coog_core import model, fields, coog_date, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.currency_cog import ModelCurrency
+
+from trytond.modules.coog_core.coog_date import FREQUENCY_CONVERSION_TABLE
 
 __all__ = [
     'Benefit',
@@ -165,6 +168,20 @@ class BenefitRule(
                 '%(share)s %%',
                 'msg_final_result': 'Total after share : %(amount).2f',
                 'no_indemnification_rule': 'No indemnification rule defined',
+                'period_description': 'Indemnification computed with forced '
+                'base amount %(forced_amount)s\nIndemnification amount is'
+                ' %(forced_amount)s * %(nb_of_unit)s = %(amount)s\n',
+                'capital_description': 'Capital forced amount '
+                '%(forced_amount)s\n',
+                'annuity_general_description': 'Annuities generated with forced'
+                ' base amount %(forced_amount)s on a %(frequency)s frequency'
+                '\nTherefore, annual annuity amount is '
+                '%(annual_forced_amount)s\n',
+                'annuity_description': 'The prorata for this period is '
+                '%(prorata)s / %(ratio)s = %(prorata_on_ratio)s\nThe '
+                'amount per day is %(annual_forced_amount)s / %(ratio)s = '
+                '%(amount_per_unit)s \nThe annuity amount is '
+                '%(amount_per_unit)s * %(prorata)s = %(annuity_amount)s \n',
                 })
         cls.indemnification_rule.domain = [('type_', '=', 'benefit')]
         cls.deductible_rule.domain = [('type_', '=', 'benefit_deductible')]
@@ -290,7 +307,10 @@ class BenefitRule(
             new_args['date'] = start_date
             new_args['indemnification_detail_start_date'] = start_date
             new_args['indemnification_detail_end_date'] = end_date
-            benefits = self.do_calculate_indemnification_rule(new_args)
+            if indemnification.forced_base_amount is not None:
+                benefits = self.get_forced_amount_benefits(indemnification)
+            else:
+                benefits = self.do_calculate_indemnification_rule(new_args)
             new_args['indemnification_periods'] = benefits
             if must_revaluate:
                 for benefit in benefits:
@@ -339,6 +359,139 @@ class BenefitRule(
                 'msg_final_result', {'amount': elem.get('amount')},
                 raise_exception=False).encode('utf-8')
         return result
+
+    def get_forced_amount_benefits(self, indemnification):
+        res = []
+        start_date = indemnification.start_date
+        end_date = indemnification.end_date
+        forced_base_amount = indemnification.forced_base_amount
+        str_forced_base_amount = coog_string.format_number('%.2f',
+            forced_base_amount)
+        description = ''
+
+        if self.benefit.indemnification_kind == 'period':
+            nb_of_unit = (end_date - start_date).days + 1
+            amount = forced_base_amount * nb_of_unit
+
+            str_nb_of_unit = coog_string.format_number('%.2f', nb_of_unit)
+            str_amount = coog_string.format_number('%.2f', amount)
+
+            description += self.raise_user_error('period_description', {
+                    'forced_amount': str_forced_base_amount,
+                    'nb_of_unit': str_nb_of_unit,
+                    'amount': str_amount
+                    },
+                raise_exception=False)
+
+            res.append({
+                    'start_date': start_date,
+                    'end_date': end_date,
+                    'nb_of_unit': nb_of_unit,
+                    'unit': 'day',
+                    'amount': amount,
+                    'base_amount': forced_base_amount,
+                    'amount_per_unit': forced_base_amount,
+                    'description': description,
+                    'forced_base_amount': forced_base_amount,
+                    'limit_date': None,
+                    'extra_details': {}
+                    })
+        elif self.benefit.indemnification_kind == 'capital':
+            nb_of_unit = 1
+            end_date = None
+
+            description += self.raise_user_error('capital_description', {
+                    'forced_amount': str_forced_base_amount
+                    }, raise_exception=False)
+
+            res.append({
+                    'start_date': start_date,
+                    'end_date': end_date,
+                    'nb_of_unit': nb_of_unit,
+                    'amount': forced_base_amount,
+                    'base_amount': forced_base_amount,
+                    'amount_per_unit': forced_base_amount,
+                    'forced_base_amount': forced_base_amount,
+                    'description': description
+                    })
+        elif self.benefit.indemnification_kind == 'annuity':
+            frequency = indemnification.service.annuity_frequency
+            annual_forced_base_amount = forced_base_amount * 12 / \
+                FREQUENCY_CONVERSION_TABLE[frequency]
+
+            str_annual_forced_amount = coog_string.format_number('%.2f',
+                annual_forced_base_amount)
+            description += self.raise_user_error('annuity_general_description',
+                {
+                    'forced_amount': str_forced_base_amount,
+                    'frequency': frequency,
+                    'annual_forced_amount': str_annual_forced_amount
+                }, raise_exception=False)
+
+            periods = indemnification.service.calculate_annuity_periods(
+                start_date, end_date)
+            rounding_factor = Decimal(1) / 10 ** indemnification.currency_digits
+            res = self.get_ltd_periods(periods, annual_forced_base_amount,
+                frequency, description, rounding_factor, forced_base_amount)
+        return res
+
+    def get_ltd_periods(self, periods, annual_forced_base_amount, frequency,
+            description, rounding_factor, forced_base_amount):
+        description_copy = description
+        res = []
+        for start_date, end_date, full_period, prorata, unit in periods:
+            description = description_copy
+            ratio = 365
+            if full_period:
+                if unit == 'month':
+                    ratio = 12
+                elif unit == 'quarter':
+                    ratio = 4
+                elif unit == 'half-year':
+                    ratio = 2
+            amount_per_unit = annual_forced_base_amount / ratio
+            annuity_amount = amount_per_unit * prorata
+
+            rounded_annuity_amount = (annuity_amount / rounding_factor
+                ).quantize(Decimal('1.'), rounding=ROUND_HALF_UP
+                ) * rounding_factor
+            rounded_amount_per_unit = (amount_per_unit / rounding_factor
+                ).quantize(Decimal('1.'), rounding=ROUND_HALF_UP
+                ) * rounding_factor
+
+            str_prorata = coog_string.format_number('%.2f', prorata)
+            str_ratio = coog_string.format_number('%.2f', ratio)
+            str_prorata_on_ratio = coog_string.format_number('%.2f',
+                prorata / Decimal(ratio))
+            str_annual_forced_amount = coog_string.format_number('%.2f',
+                annual_forced_base_amount)
+            str_amount_per_unit = coog_string.format_number('%.2f',
+                amount_per_unit)
+            str_annuity_amount = coog_string.format_number('%.2f',
+                annuity_amount)
+
+            description += self.raise_user_error('annuity_description', {
+                    'prorata': str_prorata,
+                    'ratio': str_ratio,
+                    'prorata_on_ratio': str_prorata_on_ratio,
+                    'annual_forced_amount': str_annual_forced_amount,
+                    'amount_per_unit': str_amount_per_unit,
+                    'annuity_amount': str_annuity_amount
+                    }, raise_exception=False)
+
+            res.append({
+                    'start_date': start_date,
+                    'end_date': end_date,
+                    'nb_of_unit': prorata if not full_period else 1,
+                    'unit': unit,
+                    'amount': rounded_annuity_amount,
+                    'base_amount': rounded_amount_per_unit,
+                    'amount_per_unit': rounded_amount_per_unit,
+                    'description': description,
+                    'forced_base_amount': forced_base_amount,
+                    'extra_details': {}
+                    })
+        return res
 
     def do_calculate_deductible_rule(self, args):
         return self.calculate_deductible_rule(args)

@@ -10,6 +10,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="indemnification_date"/>
     <field name="extra_data" colspan="4" no_command="1"/>
     <newline/>
+    <label name="forced_base_amount"/>
+    <field name="forced_base_amount"/>
     <label name="beneficiary"/>
     <field name="beneficiary"/>
     <label name="product"/>
@@ -21,5 +23,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="is_period" invisible="1"/>
     <field name="possible_beneficiaries" invisible="1"/>
     <field name="beneficiary_share" invisible="1"/>
+    <field name="forced_base_amount_display_access" invisible="1"/>
     <newline/>
 </form>

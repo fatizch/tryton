@@ -107,9 +107,9 @@ class RuleEngineRuntime(metaclass=PoolMeta):
                 rule_res = annex_rule.execute(
                     arguments=args, parameters=annex_rule_args)
                 if rule_res.result:
-                    rouned_annuity_amount, annex_description = rule_res.result
+                    rounded_annuity_amount, annex_description = rule_res.result
                     description += annex_description
-            unit_annuity = cls._re_round(args, rouned_annuity_amount / prorata,
+            unit_annuity = cls._re_round(args, rounded_annuity_amount / prorata,
                 rounding_factor)
             res.append({
                     'start_date': start_date,

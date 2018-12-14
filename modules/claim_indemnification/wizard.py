@@ -476,6 +476,22 @@ class IndemnificationDefinition(model.CoogView):
         'Possible Products')
     possible_journals = fields.Many2Many('account.payment.journal', None, None,
         'Possible Journals')
+    currency_digits = fields.Integer(
+        'Currency Digits', states={'invisible': True})
+    forced_base_amount = fields.Numeric('Forced Base Amount',
+        help='This amount is a daily amount if indemnification kind is period, '
+        'annual if the kind is annuity, and the capital\'s amount if the kind '
+        'is a capital',
+        domain=['OR', [('forced_base_amount', '=', None)],
+            [('forced_base_amount', '>=', 0)]],
+        digits=(16, Eval('currency_digits', 2)),
+        states={'invisible': ~Bool(Eval('forced_base_amount_display_access'))},
+        depends=['currency_digits', 'forced_base_amount_display_access'])
+    forced_base_amount_display_access = fields.Function(
+        fields.Boolean('Forced Base Amount Display Access',
+            help='This field determines if the current user has the right to '
+            'see the field \"Forced Base Amount\"', readonly=True),
+        'on_change_with_forced_base_amount_display_access')
 
     @fields.depends('beneficiary', 'beneficiary_share', 'is_period',
         'possible_beneficiaries', 'possible_products', 'product', 'start_date',
@@ -544,6 +560,17 @@ class IndemnificationDefinition(model.CoogView):
     def period_definitions_dates(self):
         return []
 
+    @fields.depends('start_date')
+    def on_change_with_forced_base_amount_display_access(self, name=None):
+        # The structure of this field and the depends are only made to
+        # trigger the evaluation of the field. It seems that function fields
+        # only work under on_change/on_change_with in views.
+        # It doesn't work with a getter and adding the field in the view in
+        # invisible mode
+        IrModelField = Pool().get('ir.model.field')
+        return IrModelField.get_field_display_access_for_model(
+            'forced_base_amount', self.__class__.__name__)
+
 
 class IndemnificationCalculationResult(model.CoogView):
     'Indemnification Calculation Result'
@@ -601,6 +628,20 @@ class IndemnificationRegularisation(model.CoogView):
         'Currency Digits', states={'invisible': True})
     payback_reason = fields.Many2One('claim.indemnification.payback_reason',
         'Payback Reason', required=True)
+    forced_base_amount = fields.Numeric('Forced Base Amount',
+        help='This amount is a daily amount if indemnification kind is period, '
+        'annual if the kind is annuity, and the capital\'s amount if the kind '
+        'is a capital',
+        domain=['OR', [('forced_base_amount', '=', None)],
+            [('forced_base_amount', '>=', 0)]],
+        digits=(16, Eval('currency_digits', 2)),
+        states={'invisible': ~Bool(Eval('forced_base_amount_display_access'))},
+        depends=['currency_digits', 'forced_base_amount_display_access'])
+    forced_base_amount_display_access = fields.Function(
+        fields.Boolean('Forced Base Amount Display Access',
+            help='This field determines if the current user has the right to '
+            'see the field \"Forced Base Amount\"', readonly=True),
+        'on_change_with_forced_base_amount_display_access')
 
     @fields.depends('remaining_amount')
     def on_change_with_payback_required(self):
@@ -610,6 +651,17 @@ class IndemnificationRegularisation(model.CoogView):
     def on_change_with_payment_term_required(self):
         return (self.payback_required is True and
             self.payback_method == 'planned')
+
+    @fields.depends('start_date')
+    def on_change_with_forced_base_amount_display_access(self, name=None):
+        # The structure of this field and the depends are only made to
+        # trigger the evaluation of the field. It seems that function fields
+        # only work under on_change/on_change_with in views.
+        # It doesn't work with a getter and adding the field in the view in
+        # invisible mode
+        IrModelField = Pool().get('ir.model.field')
+        return IrModelField.get_field_display_access_for_model(
+            'forced_base_amount', self.__class__.__name__)
 
 
 class CreateIndemnification(wizard_context.PersistentContextWizard):
@@ -913,6 +965,7 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
         indemnification.share = self.definition.beneficiary_share
         indemnification.init_from_service(indemnification.service)
         indemnification.product = self.definition.product
+        indemnification.forced_base_amount = self.definition.forced_base_amount
 
     def clear_indemnifications(self):
         ClaimService = Pool().get('claim.service')
@@ -989,6 +1042,8 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
         pool = Pool()
         Indemnification = pool.get('claim.indemnification')
         indemnification = self.select_regularisation.indemnification[0]
+        indemnification.forced_base_amount = \
+            self.select_regularisation.forced_base_amount
         indemnification.save()
         cancelled = self.select_regularisation.cancelled
         payback_method = self.select_regularisation.payback_method

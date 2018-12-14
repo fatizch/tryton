@@ -223,13 +223,43 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_delete" eval="True"/>
         </record>
         <!-- Claim Super Manager Group -->
-        <record model="ir.model.field.access" id="access_manual_indemnification_claim super_group">
+        <record model="ir.model.field.access" id="access_manual_indemnification_claim_super_group">
             <field name="field" search="[('model.model', '=', 'claim.indemnification'), ('name', '=', 'manual')]"/>
             <field name="group" ref="claim.group_claim_super_manager"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.field.access" id="access_forced_base_amount_regularisation_claim_super_group">
+            <field name="field" search="[('model.model', '=', 'claim.indemnification_regularisation'), ('name', '=', 'forced_base_amount')]"/>
+            <field name="group" ref="claim.group_claim_super_manager"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.field.access" id="access_forced_base_amount_regularisation_default">
+            <field name="field" search="[('model.model', '=', 'claim.indemnification_regularisation'), ('name', '=', 'forced_base_amount')]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.field.access" id="access_forced_base_amount_definition_claim_super_group">
+            <field name="field" search="[('model.model', '=', 'claim.indemnification_definition'), ('name', '=', 'forced_base_amount')]"/>
+            <field name="group" ref="claim.group_claim_super_manager"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.field.access" id="access_forced_base_amount_definition_default">
+            <field name="field" search="[('model.model', '=', 'claim.indemnification_definition'), ('name', '=', 'forced_base_amount')]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
         </record>
         <!--control rule -->
         <!-- Default Control Rule Access -->

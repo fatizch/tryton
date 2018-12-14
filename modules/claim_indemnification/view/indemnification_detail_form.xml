@@ -28,6 +28,11 @@ this repository contains the full copyright notices and license terms. -->
         <field name="amount" xexpand="0"/>
         <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
     </group>
+    <label name="forced_base_amount"/>
+    <group id="forced_base_amount">
+        <field name="forced_base_amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
     <newline/>
     <field name="description" colspan="2" yexpand="1" yfill="1"/>
     <field name="extra_details" colspan="2" yexpand="1" yfill="1"/>

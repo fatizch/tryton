@@ -1,5 +1,9 @@
 # This file is part of Coog.  The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from sql import Null
+from sql.aggregate import Max
+from sql.conditionals import Case
+
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
@@ -92,6 +96,40 @@ class ModelField(metaclass=PoolMeta):
             else:
                 perms[i.id] = True
         return perms
+
+    @classmethod
+    def get_field_display_access_for_model(cls, field_name, model_name):
+        res = False
+        user = Transaction().user
+        if user == 0:
+            return True
+
+        pool = Pool()
+        ir_model = pool.get('ir.model').__table__()
+        model_field = cls.__table__()
+        field_access = pool.get('ir.model.field.access').__table__()
+        user_group = pool.get('res.user-res.group').__table__()
+
+        cursor = Transaction().connection.cursor()
+
+        cursor.execute(*field_access.join(model_field,
+                condition=field_access.field == model_field.id
+                ).join(ir_model,
+                condition=model_field.model == ir_model.id
+                ).join(user_group, 'LEFT',
+                condition=user_group.group == field_access.group
+                ).select(
+                ir_model.model,
+                model_field.name,
+                Max(Case((field_access.perm_read == True, 1), else_=0)),
+                where=((ir_model.model == model_name)
+                    & (model_field.name == field_name)
+                    & ((user_group.user == user) | (field_access.group == Null)
+                        )), group_by=[ir_model.model, model_field.name]))
+        for model, field, perm_read in cursor.fetchall():
+            if perm_read == 1:
+                res |= True
+        return res
 
 
 class UIMenuAccess(metaclass=PoolMeta):
