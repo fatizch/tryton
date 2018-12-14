@@ -442,14 +442,10 @@ class BenefitRule(
         for start_date, end_date, full_period, prorata, unit in periods:
             description = description_copy
             ratio = 365
-            if full_period:
-                if unit == 'month':
-                    ratio = 12
-                elif unit == 'quarter':
-                    ratio = 4
-                elif unit == 'half-year':
-                    ratio = 2
-            amount_per_unit = annual_forced_base_amount / ratio
+            if unit == 'day':
+                amount_per_unit = annual_forced_base_amount / ratio
+            else:
+                amount_per_unit = annual_forced_base_amount / 12
             annuity_amount = amount_per_unit * prorata
 
             rounded_annuity_amount = (annuity_amount / rounding_factor
