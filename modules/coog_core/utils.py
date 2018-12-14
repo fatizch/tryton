@@ -796,7 +796,8 @@ def get_prorated_amount_on_period(start, end, frequency, value, sync_date,
                 lower_frequency_idx = key_list[key_list.index(frequency) - 1]
                 return_value += get_prorated_amount_on_period(start, end,
                     lower_frequency_idx, value /
-                    Decimal((interval[frequency] / interval[lower_frequency_idx])),
+                    Decimal(
+                        (interval[frequency] / interval[lower_frequency_idx])),
                     sync_date, interval_start, proportion, recursion=True)
             else:
                 # Do not add parenthesis anywhere here. We want to first

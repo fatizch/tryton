@@ -162,42 +162,42 @@ class ModuleTestCase(test_framework.CoogTestCase):
         end_date = datetime.date(2013, 1, 31)
         self.assertTrue(coog_date.duration_between(start_date, end_date, 'day')
             == 31)
-        self.assertTrue(coog_date.duration_between(start_date, end_date, 'month')
-            == 1)
+        self.assertTrue(coog_date.duration_between(
+            start_date, end_date, 'month') == 1)
         self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'month') == (1, True))
         self.assertTrue(coog_date.duration_between(start_date, end_date,
                 'quarter') == 0)
-        self.assertTrue(coog_date.duration_between(start_date, end_date, 'year')
-            == 0)
+        self.assertTrue(
+            coog_date.duration_between(start_date, end_date, 'year') == 0)
 
         end_date = datetime.date(2013, 3, 31)
         self.assertTrue(coog_date.duration_between(start_date, end_date, 'day')
             == 90)
-        self.assertTrue(coog_date.duration_between(start_date, end_date, 'month')
-            == 3)
+        self.assertTrue(
+            coog_date.duration_between(start_date, end_date, 'month') == 3)
         self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'month') == (3, True))
         self.assertTrue(coog_date.duration_between(start_date, end_date,
                 'quarter') == 1)
         self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'quarter') == (1, True))
-        self.assertTrue(coog_date.duration_between(start_date, end_date, 'year')
-            == 0)
+        self.assertTrue(coog_date.duration_between(
+            start_date, end_date, 'year') == 0)
 
         end_date = datetime.date(2013, 12, 31)
         self.assertTrue(coog_date.duration_between(start_date, end_date, 'day')
             == 365)
-        self.assertTrue(coog_date.duration_between(start_date, end_date, 'month')
-            == 12)
+        self.assertTrue(
+            coog_date.duration_between(start_date, end_date, 'month') == 12)
         self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'month') == (12, True))
         self.assertTrue(coog_date.duration_between(start_date, end_date,
             'quarter') == 4)
         self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'quarter') == (4, True))
-        self.assertTrue(coog_date.duration_between(start_date, end_date, 'year')
-            == 1)
+        self.assertTrue(
+            coog_date.duration_between(start_date, end_date, 'year') == 1)
         self.assertTrue(coog_date.duration_between_and_is_it_exact(start_date,
             end_date, 'year') == (1, True))
 

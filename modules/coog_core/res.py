@@ -79,7 +79,8 @@ class User(ExportImportMixin):
 
     @classmethod
     def _export_light(cls):
-        return super(User, cls)._export_light() | {'groups', 'rule_groups'}
+        return super(User, cls)._export_light() | {'groups', 'rule_groups',
+            'applications'}
 
 
 class UserGroup(ExportImportMixin):
