@@ -1,3 +1,4 @@
+* BUG#10596 Correctif sur le calcul des périodes d'annuité
 * BUG#10307 Correctifs sur la règle de déduction par défaut
 * OTH#00000 Utilisation de champs numérique pour les taux TA, TB, TC
 * FEA#10124 Ajout de règles de rente par défaut

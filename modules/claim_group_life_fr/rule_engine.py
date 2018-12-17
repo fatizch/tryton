@@ -81,16 +81,18 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         for start_date, end_date, full_period, prorata, unit in periods:
             description = description_copy
             ratio = 365
-            if full_period:
-                ratio = 12
             rounded_annuity_amount = cls._re_round(args, annuity_amount,
                 rounding_factor)
             rounded_reference_salary = cls._re_round(args, reference_salary,
                 rounding_factor)
             rounded_net_reference_salary = cls._re_round(args,
                 net_reference_salary, rounding_factor)
-            period_ss_annuity = cls._re_round(args,
-                ss_annuity_amount / ratio * prorata, rounding_factor)
+            if unit == 'day':
+                period_ss_annuity = cls._re_round(args,
+                    ss_annuity_amount / ratio * prorata, rounding_factor)
+            else:
+                period_ss_annuity = cls._re_round(args,
+                    ss_annuity_amount / 12 * prorata, rounding_factor)
             if rounded_annuity_amount < 0:
                 rounded_annuity_amount = Decimal('0.0')
             if annex_rules:
@@ -114,7 +116,7 @@ class RuleEngineRuntime(metaclass=PoolMeta):
             res.append({
                     'start_date': start_date,
                     'end_date': end_date,
-                    'nb_of_unit': prorata,
+                    'nb_of_unit': prorata if not full_period else 1,
                     'unit': unit,
                     'amount': rounded_annuity_amount,
                     'base_amount': unit_annuity,

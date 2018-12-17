@@ -1,3 +1,4 @@
+* BUG#10596 Fix annuities periods computation
 * BUG#10307 Fix in default deduction rule
 * OTH#00000 Use numeric instead of integer for TA, TB, TC rates
 * FEA#10124 Add default LTD rules
