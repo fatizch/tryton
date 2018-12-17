@@ -708,7 +708,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                     ['cancelled', 'cancel_paid'])),
             'readonly': Eval('status') == 'cancel_paid'
             }, ondelete='RESTRICT', depends=['status'])
-    is_paid = fields.Function(fields.Boolean('Paid'), 'get_is_paid')
+    is_paid = fields.Function(fields.Boolean('Paid'),
+        'getter_is_paid')
     share = fields.Numeric('Share', domain=['OR', [('share', '=', None)],
             [('share', '>', 0), ('share', '<=', 1)]])
     note = fields.Char('Note', states={
@@ -918,23 +919,35 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     def is_removable(self):
         return self.status in ('calculated', 'scheduled')
 
-    def get_is_paid(self, name):
+    @classmethod
+    def getter_is_paid(cls, indemnifications, name):
         pool = Pool()
         cursor = Transaction().connection.cursor()
+
         AccountInvoice = pool.get('account.invoice')
-        invoice_detail = pool.get(
+        claim_detail = pool.get(
             'account.invoice.line.claim_detail').__table__()
         invoice_line = pool.get('account.invoice.line').__table__()
-        query_table = invoice_detail.join(invoice_line, condition=(
-                invoice_detail.invoice_line == invoice_line.id))
-        cursor.execute(*query_table.select(invoice_line.invoice, where=(
-                    invoice_detail.indemnification == self.id)))
-        ids = [x for x, in cursor.fetchall()]
-        invoices = AccountInvoice.search([('id', 'in', list(ids))])
-        for invoice in invoices:
-            if invoice.state == 'paid' and invoice.reconciliation_date:
-                return True
-        return False
+
+        query_table = claim_detail.join(invoice_line, condition=(
+                claim_detail.invoice_line == invoice_line.id))
+        cursor.execute(*query_table.select(claim_detail.indemnification,
+                invoice_line.invoice,
+                where=claim_detail.indemnification.in_([x.id for x in
+                            indemnifications])))
+        indemns2invoices = defaultdict(set)
+        invoices = set()
+        for indemnification, invoice in cursor.fetchall():
+            indemns2invoices[indemnification].add(invoice)
+            invoices.add(invoice)
+
+        result = {x.id: False for x in indemnifications}
+        invoices = {x.id: x for x in AccountInvoice.browse(list(invoices))}
+        for indemnification, cur_invoices in indemns2invoices.items():
+            if all(invoices[x].state == 'paid' and
+                    invoices[x].reconciliation_date for x in cur_invoices):
+                result[indemnification] = True
+        return result
 
     def get_benefit_description(self, name):
         if self.service and self.service.benefit:

@@ -1,3 +1,4 @@
+* BUG#10587 Improve performances when detecting payment status of an indemnification
 * OTH#0000 Fix annuity rule
 * FEA#10383 Allow to override an indemnification base amount
 * BUG#10477 The pivot dates calculation function could fail with a synchronization day on the 30th
