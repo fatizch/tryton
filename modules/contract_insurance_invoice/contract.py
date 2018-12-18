@@ -1005,10 +1005,10 @@ class Contract(metaclass=PoolMeta):
         if tree is not None:
             if cls.prorate_premiums():
                 return [contract.all_premiums[x.data]
-                    for x in tree.search(start, coog_date.add_day(end, 1))]
+                    for x in tree.overlap(start, coog_date.add_day(end, 1))]
             else:
                 return [contract.all_premiums[x.data]
-                    for x in tree.search(start, coog_date.add_day(start, 1))]
+                    for x in tree.overlap(start, coog_date.add_day(start, 1))]
 
     @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):

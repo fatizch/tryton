@@ -1,3 +1,4 @@
+* OTH#00000 Update intervaltree to version 3.0
 * BUG#10522 It was not possible to configure an event type action to re-generate non periodic invoices
 * BUG#10116 Also copy contract link when copying an invoice
 * BUG#10223 Fix a case where invalid invoice periods could be computed
