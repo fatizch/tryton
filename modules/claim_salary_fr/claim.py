@@ -111,6 +111,9 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency, metaclass=PoolMeta):
     has_contributions = fields.Function(
         fields.Boolean('Has Contributions'),
         'get_has_contributions')
+    claim = fields.Function(
+        fields.Many2One('claim', 'Claim'),
+        'get_claim', searcher='search_claim')
 
     @classmethod
     def __setup__(cls):
@@ -139,6 +142,13 @@ class Salary(model.CoogSQL, model.CoogView, ModelCurrency, metaclass=PoolMeta):
     def get_currency(self):
         if self.delivered_service:
             return self.delivered_service.currency
+
+    def get_claim(self, name):
+        return self.delivered_service.loss.claim.id
+
+    @classmethod
+    def search_claim(cls, name, clause):
+        return [('delivered_service.loss.claim',) + tuple(clause[1:])]
 
     @classmethod
     def update_contributions_table(cls, contributions, tables, key):
