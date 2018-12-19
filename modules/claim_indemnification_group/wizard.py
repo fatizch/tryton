@@ -150,6 +150,7 @@ class TransferServices(Wizard):
                         'source_benefit': benefit.id,
                         'source_covered': option.covered_element.id,
                         'source_option': option.id,
+                        'insurance_kind': option.coverage.insurance_kind,
                         })
         return {
             'possible_covered': possible_covered,
@@ -284,13 +285,15 @@ class TransferServicesBenefitLine(model.CoogView):
         readonly=True)
     source_benefit = fields.Many2One('benefit', 'Source Benefit',
         readonly=True)
+    insurance_kind = fields.Char('Insurance Kind', readonly=True)
     target_covered = fields.Many2One('contract.covered_element',
         'Target Covered', required=True)
     target_option = fields.Many2One('contract.option', 'Target Option',
         domain=[If(~Eval('target_covered'), [], [
-                    ('covered_element', '=', Eval('target_covered'))])],
+                    ('covered_element', '=', Eval('target_covered'))]),
+            ('coverage.insurance_kind', '=', Eval('insurance_kind'))],
         states={'invisible': ~Eval('target_covered')},
-        depends=['target_covered'], required=True)
+        depends=['target_covered', 'insurance_kind'], required=True)
     target_benefit = fields.Many2One('benefit', 'Target Benefit', domain=[
             ('id', 'in', Eval('possible_benefits'))], states={
             'readonly': ~Eval('target_option')}, required=True,
