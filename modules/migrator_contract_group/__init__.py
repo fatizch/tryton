@@ -11,3 +11,7 @@ def register():
         contract.MigratorSubsidiaryAffiliated,
         contract.MigratorContractGroupConfiguration,
         module='migrator_contract_group', type_='model')
+    Pool.register(
+        contract.MigratorContractGroupManagement,
+        module='migrator_contract_group', type_='model', depends=[
+            'claim_group'])

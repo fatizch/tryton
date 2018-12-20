@@ -10,7 +10,7 @@ from itertools import groupby
 from sql import Table, Column, Literal, Null
 
 from trytond.modules.migrator import Migrator, tools
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.tools import grouped_slice
 from trytond.transaction import Transaction
 
@@ -215,6 +215,23 @@ class MigratorContractGroup(BaseMigratorContractGroup):
         return (line['code'], line['item_desc'])
 
     @classmethod
+    def create_option_from_row(cls, option_row, coverage, item_desc,
+            terminated_sub_status):
+        option = {
+            'item_desc': item_desc.id,
+            'status': 'active' if not option_row['end_date'] else
+            'terminated',
+            'manual_start_date': option_row['start_date'],
+            'manual_end_date': option_row['end_date'],
+            'sub_status': terminated_sub_status
+            if option_row['end_date'] else None,
+            'coverage': coverage.id,
+            'versions': [
+                ('create', [{'start': option_row['start_date']}])]
+            }
+        return option
+
+    @classmethod
     def init_options_from_row(cls, contract_lines):
         contract_lines = sorted(contract_lines, key=cls._group_by_population)
         covered_elements = []
@@ -232,18 +249,8 @@ class MigratorContractGroup(BaseMigratorContractGroup):
             for option_row in rows:
                 item_desc = cls.cache_obj['item_desc'][option_row['item_desc']]
                 coverage = cls.cache_obj['coverage'][option_row['coverage']]
-                option = {
-                    'item_desc': item_desc.id,
-                    'status': 'active' if not option_row['end_date'] else
-                    'terminated',
-                    'manual_start_date': option_row['start_date'],
-                    'manual_end_date': option_row['end_date'],
-                    'sub_status': terminated_sub_status
-                    if option_row['end_date'] else None,
-                    'coverage': coverage.id,
-                    'versions': [
-                        ('create', [{'start': option_row['start_date']}])]
-                    }
+                option = cls.create_option_from_row(option_row, coverage,
+                    item_desc, terminated_sub_status,)
                 options.append(option)
             parent_covered['options'] = [('create', options)]
             covered_elements.append(parent_covered)
@@ -519,6 +526,7 @@ class MigratorSubsidiaryAffiliated(Migrator):
         cls.cache_obj['person'] = tools.cache_from_search(
             'party.party', 'code',
             ('code', 'in', [r['person'] for r in rows]))
+
         cls.cache_obj['company'] = tools.cache_from_search(
             'party.party', 'code',
             ('code', 'in', [r['company'] for r in rows]))
@@ -573,7 +581,9 @@ class MigratorSubsidiaryAffiliated(Migrator):
             [x[0] for x in cursor.fetchall()])
         for covered in existing_covereds:
             uid = ':'.join(
-                [covered.party.code, str(covered.parent.id)])
+                [covered.party.code, str(covered.parent.id),
+                    covered.parent.start_date.strftime('%Y-%m-%d'),
+                    covered.start_date.strftime('%Y-%m-%d')])
             update[uid] = covered
         cls.cache_obj['update'] = update
 
@@ -611,7 +621,9 @@ class MigratorSubsidiaryAffiliated(Migrator):
         row['parent'] = parent_covered
         row['party'] = cls.cache_obj['person'][row['person']]
         row['manual_end_date'] = row['end']
-        row['uid'] = ':'.join([row['person'], str(row['parent'])])
+        row['uid'] = ':'.join([row['person'], str(row['parent'].id),
+            row['start'].strftime('%Y-%m-%d'),
+            parent_covered.start_date.strftime('%Y-%m-%d')])
         if row['end']:
             row['end_reason'] = cls.cache_obj['end_reason'][row['end_reason']]
         else:
@@ -645,21 +657,38 @@ class MigratorSubsidiaryAffiliated(Migrator):
             if coverage:
                 parent_search += [
                     ('parent.all_options.coverage', '=', coverage)]
-            parent_covered, = Pool().get('contract.covered_element').search(
-                parent_search, limit=1)
-            ids.append('{}_{}'.format(
-                row.get('person'),
-                parent_covered.id,
-                ))
+            try:
+                parent_covereds = [x for x in
+                    Pool().get('contract.covered_element').search(
+                        parent_search) if x.start_date <=
+                    datetime.datetime.strptime(row['start'], '%Y-%m-%d').date()
+                    ]
+                parent_covered = sorted(parent_covereds, reverse=True,
+                    key=lambda x: x.start_date)[0]
+
+                ids.append('{}_{}_{}_{}_{}'.format(
+                    row.get('contract'),
+                    row.get('person'),
+                    str(parent_covered.id),
+                    row.get('start'),
+                    parent_covered.start_date.strftime('%Y-%m-%d')
+                    ))
+            except Exception:
+                print("Could not retrieve parent properly for %s" % str(row))
         return set(ids)
 
     @classmethod
     def select_remove_ids(cls, ids, excluded, **kwargs):
-        table_name = cls.model.replace('.', '_')
-        existing_ids = list(tools.cache_from_query(table_name,
-            ('party', 'parent')).keys())
-        existing_ids = {
-            '%s_%s' % (party, parent) for party, parent in existing_ids}
+        existing_ids = []
+        for covered_element in Pool().get('contract.covered_element'
+                ).search([('parent', '!=', None)]):
+            existing_ids.append('_'.join([
+                        covered_element.contract.contract_number,
+                        str(covered_element.party.code),
+                        str(covered_element.parent.id),
+                        covered_element.start_date.strftime('%Y-%d-%m'),
+                        covered_element.parent.start_date.strftime('%Y-%d-%m'),
+                        ]))
         return list(set(ids) - set(excluded) - set(existing_ids))
 
     @classmethod
@@ -667,7 +696,7 @@ class MigratorSubsidiaryAffiliated(Migrator):
         Covered = Pool().get('contract.covered_element')
         where_clause = Literal(False)
         for id_ in ids:
-            person, parent_covered_id = id_.split('_')
+            _, person, parent_covered_id, _, _ = id_.split('_')
             parent_covered = Covered(int(parent_covered_id))
             company_code = parent_covered.party.code
             contract = parent_covered.contract.contract_number
@@ -687,14 +716,15 @@ class MigratorSubsidiaryAffiliated(Migrator):
         res = super(MigratorSubsidiaryAffiliated, cls).migrate(ids, **kwargs)
         if not res:
             return []
-
         ids = [(res[r]['party'].code, res[r]['parent'].party.code,
                 res[r]['parent'].contract.contract_number) for r in res]
         clause = Literal(False)
         for id_ in ids:
             clause |= ((cls.table.person == id_[0]) &
                 (cls.table.company == id_[1]) &
-                (cls.table.contract == id_[2])
+                (cls.table.contract == id_[2]) &
+                ((cls.table.start == id_[3]) |
+                    (cls.table.start == id_[4]))
                 )
         cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
 
@@ -1010,3 +1040,36 @@ class MigratorContractGroupConfiguration(Migrator):
                     start_date.strftime('%Y-%m-%d') if start_date else Null)))
         cls.delete_rows(tools.CONNECT_SRC, cls.table, clause)
         return res
+
+
+class MigratorContractGroupManagement(metaclass=PoolMeta):
+    __name__ = 'migrator.contract.group'
+
+    @classmethod
+    def __setup__(cls):
+        super(MigratorContractGroupManagement, cls).__setup__()
+        cls.columns.update({
+                'full_management_start': 'full_management_start',
+                })
+
+    @classmethod
+    def sanitize(cls, row):
+        row = super(MigratorContractGroupManagement, cls).sanitize(row)
+        if row['full_management_start']:
+            row['full_management_start'] = datetime.datetime.strptime(
+                row['full_management_start'], '%Y-%m-%d').date()
+        else:
+            row['full_management_start'] = None
+        return row
+
+    @classmethod
+    def create_option_from_row(cls, row, coverage, item_desc,
+            terminated_sub_status):
+        option = super(MigratorContractGroupManagement, cls
+            ).create_option_from_row(row, coverage, item_desc,
+            terminated_sub_status)
+        if row['full_management_start']:
+            option['full_management_start_date'] = row[
+                'full_management_start']
+            option['previous_claims_management_rule'] = 'full_management'
+        return option
