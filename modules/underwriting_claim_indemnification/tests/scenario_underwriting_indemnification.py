@@ -397,7 +397,7 @@ result, = processing_underwriting.results
 UnderwritingDecisionType = Model.get('underwriting.decision.type')
 result.final_decision = UnderwritingDecisionType(reduce_decision.id)
 values, = result.click('finalize')
-for k, val in values.items():
+for k, val in list(values.items()):
     setattr(result, k, val)
 
 # #Comment# #Create warning to simulate clicking yes
@@ -544,7 +544,7 @@ result, = processing_underwriting.results
 UnderwritingDecisionType = Model.get('underwriting.decision.type')
 result.final_decision = UnderwritingDecisionType(nothing_decision.id)
 values, = result.click('finalize')
-for k, val in values.items():
+for k, val in list(values.items()):
     setattr(result, k, val)
 
 # #Comment# #Create warning to simulate clicking yes

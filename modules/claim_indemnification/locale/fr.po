@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.invoice:"
+msgid "The copy of periodic invoices is forbidden."
+msgstr "La copie de quittances périodiques est interdites."
+
 msgctxt "error:account.move.line:"
 msgid ""
 "Please check whether the lines to pay are all related to a claim invoice."
@@ -266,6 +270,38 @@ msgid ""
 msgstr ""
 "Il ne peut pas y avoir plusieurs indemnisations de type capital pour un "
 "bénéficiaire donné, l'existante sera annulée"
+
+msgctxt "error:claim.simulate.indemnification:"
+msgid ""
+"A crash occurs while computing the indemnification, see stack trace for more"
+" informations."
+msgstr ""
+"Un crash est apparu lors du calcul de l'indemnisation, voir la trace de la "
+"pile pour plus d'informations."
+
+msgctxt "error:claim.simulate.indemnification:"
+msgid "No ijss defined in previous indemnification details"
+msgstr "Appliquer la réduction"
+
+msgctxt "error:claim.simulate.indemnification:"
+msgid "No indemnifications on the claim to compare with."
+msgstr "Aucune indemnisation présente sur le dossier pour comparer. "
+
+msgctxt "error:claim.simulate.indemnification:"
+msgid "No salary defined on the claim %(claim)s"
+msgstr "Aucun salaire défini sur le sinistre %(claim)s"
+
+msgctxt "error:claim.simulate.indemnification:"
+msgid ""
+"The computed amount is different from the last indemnfication. We should "
+"have %(amount)s, got %(computed)s instead."
+msgstr ""
+"Le montant calculé est différent de la dernière indemnisation connue. Nous "
+"devrions avoir %(amount)s, nous avons %(computed)s à la place."
+
+msgctxt "error:claim.simulate.indemnification:"
+msgid "The indemnification rule returns no indemnification."
+msgstr "La règle d'indemnisation n'a retourné aucune indemnisation."
 
 msgctxt "error:event.type.action:"
 msgid "Create Non Periodic Invoices"
@@ -1198,6 +1234,10 @@ msgctxt "field:claim.indemnification.select_cancel_reason,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt "field:claim.indemnification.simulate,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:claim.indemnification_calculation_result,id:"
 msgid "ID"
 msgstr "ID"
@@ -1421,6 +1461,50 @@ msgctxt "field:claim.service,payment_accepted_until_date:"
 msgid "Payments Accepted Until:"
 msgstr "Périodes validées jusqu'à"
 
+msgctxt "field:claim.simulate.indemnification.displayer,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.simulate.indemnification.displayer,identifier:"
+msgid "Identifier"
+msgstr "Identifiant"
+
+msgctxt "field:claim.simulate.indemnification.displayer,message:"
+msgid "message"
+msgstr "Message"
+
+msgctxt "field:claim.simulate.indemnification.displayer,stack_info:"
+msgid "Stack Informations"
+msgstr "Informations de la pile"
+
+msgctxt "field:claim.simulate.indemnification.displayer,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:claim.simulate.indemnification.result,displayers:"
+msgid "Simulated Indemnifications"
+msgstr "Indemnisations simulées"
+
+msgctxt "field:claim.simulate.indemnification.result,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.simulate.indemnification.start,duration:"
+msgid "Duration"
+msgstr "Durée"
+
+msgctxt "field:claim.simulate.indemnification.start,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.simulate.indemnification.start,no_revaluation:"
+msgid "Without Revaluation"
+msgstr "Sans revalorisation"
+
+msgctxt "field:claim.simulate.indemnification.start,unit:"
+msgid "Duration Unit"
+msgstr "Unité de la Durée"
+
 msgctxt "field:claim.sub_status,block_indemnifications:"
 msgid "Block Indemnifications Scheduling"
 msgstr "Bloque l'ordonnancement des indemnisations"
@@ -1522,6 +1606,12 @@ msgctxt "help:claim.service,can_be_indemnified:"
 msgid "Indicates if a service can be used to create indemnifications"
 msgstr "Indique si un service peut être utilisé pour créer des indemnisations"
 
+msgctxt "help:claim.simulate.indemnification.start,no_revaluation:"
+msgid ""
+"If set, the simulated indemnification will not use the revaluation rule"
+msgstr ""
+"Si coché, l'indemnisation simulé n'utilisera pas la règle de revalorisation"
+
 msgctxt "help:claim.sub_status,block_indemnifications:"
 msgid "If true, all claim's indemnifications scheduling will be blocked"
 msgstr ""
@@ -1582,7 +1672,7 @@ msgstr "Elément de validation des prestations"
 
 msgctxt "model:claim.indemnification.assistant.view,name:"
 msgid "Indemnification Assistant View"
-msgstr "Vue d'aide des prestations"
+msgstr "La règle d'indemnisation n'a retourné aucune indemnisation."
 
 msgctxt "model:claim.indemnification.control.rule,name:"
 msgid "Indemnification Control Rule"
@@ -1604,6 +1694,10 @@ msgctxt "model:claim.indemnification.select_cancel_reason,name:"
 msgid "Cancel Indemnification Reason"
 msgstr "Motif d'annulation d'une indemnisation"
 
+msgctxt "model:claim.indemnification.simulate,name:"
+msgid "Simulate Indemnification Batch"
+msgstr "Batch Simulation Indemnisation"
+
 msgctxt "model:claim.indemnification_calculation_result,name:"
 msgid "Indemnification Calculation Result"
 msgstr "Resultat du calcul"
@@ -1619,6 +1713,18 @@ msgstr "Régularisation"
 msgctxt "model:claim.select_service,name:"
 msgid "Select Service"
 msgstr "Sélectionner la prestation"
+
+msgctxt "model:claim.simulate.indemnification.displayer,name:"
+msgid "Simulation Displayer"
+msgstr "Affichage Simulation"
+
+msgctxt "model:claim.simulate.indemnification.result,name:"
+msgid "Simulate Indemnification Result"
+msgstr "Résultat de simulation d'indemnisation"
+
+msgctxt "model:claim.simulate.indemnification.start,name:"
+msgid "Simulate Indemnification Start"
+msgstr "Simuler Indemnisation"
 
 msgctxt "model:event.type,name:event_cancel_indemnification"
 msgid "Cancel Indemnification"
@@ -1679,6 +1785,10 @@ msgstr "Règle de contrôle des prestations"
 msgctxt "model:ir.action,name:act_indemnification_payback_reason_form"
 msgid "Payback Reason"
 msgstr "Raison d'annulation"
+
+msgctxt "model:ir.action,name:act_simulate_indemnification_wizard"
+msgid "Simulate Indemnification Wizard"
+msgstr "Assitant de simulation d'indemnisation"
 
 msgctxt "model:ir.action,name:indemnification_control_wizard"
 msgid "Indemnification Control Wizard"
@@ -1990,6 +2100,14 @@ msgctxt "selection:claim.service,annuity_frequency:"
 msgid "Yearly"
 msgstr "Annuelle"
 
+msgctxt "selection:claim.simulate.indemnification.start,unit:"
+msgid "Day"
+msgstr "Jour"
+
+msgctxt "selection:claim.simulate.indemnification.start,unit:"
+msgid "Month"
+msgstr "Mois"
+
 msgctxt "selection:insurer.delegation,insurance_kind:"
 msgid "Death"
 msgstr "Décès"
@@ -2211,3 +2329,19 @@ msgstr "Appliquer"
 msgctxt "wizard_button:claim.indemnification.cancel,cancel_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "wizard_button:claim.simulate.indemnification,result,end:"
+msgid "End"
+msgstr "Terminer"
+
+msgctxt "wizard_button:claim.simulate.indemnification,result,start:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:claim.simulate.indemnification,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:claim.simulate.indemnification,start,simulate:"
+msgid "Simulate"
+msgstr "Simuler"

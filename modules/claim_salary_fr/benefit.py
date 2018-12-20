@@ -4,6 +4,7 @@ from trytond.pool import PoolMeta
 
 from trytond.modules.coog_core import fields
 from trytond.pyson import Eval, And, Bool
+from trytond.transaction import Transaction
 
 __all__ = [
     'BenefitRule',
@@ -65,6 +66,8 @@ class BenefitRule(metaclass=PoolMeta):
         dates = super(BenefitRule, cls).calculation_dates(indemnification,
             start_date, end_date)
         benefit_rule = indemnification.service.benefit.benefit_rules[0]
+        if Transaction().context.get('force_no_revaluation', False):
+            return dates
         if not benefit_rule.process_revaluation_on_basic_salary(
                 indemnification.service):
             return dates

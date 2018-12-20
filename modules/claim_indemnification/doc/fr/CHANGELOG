@@ -1,3 +1,4 @@
+* FEA#10531 Ajout d'un assistant et d'un batch de vérification de données sinistres migrées (recalcul d'indemnisations)
 * BUG#10587 Améliorations des performances de la détection du statut du règlement des indemnisations
 * OTH#0000 Réparer la règle de rente
 * FEA#10383 Permettre de déroger au montant de l'indemnisation calculée par COOG

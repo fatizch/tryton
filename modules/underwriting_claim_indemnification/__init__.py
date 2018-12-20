@@ -5,6 +5,8 @@ from trytond.pool import Pool
 from . import underwriting
 from . import claim
 from . import rule_engine
+from . import wizard
+from . import batch
 
 
 def register():
@@ -16,7 +18,10 @@ def register():
         claim.Indemnification,
         claim.IndemnificationDefinition,
         rule_engine.RuleEngineRuntime,
+        wizard.SimulateIndemnificationStart,
+        batch.SimulateIndemnificationBatch,
         module='underwriting_claim_indemnification', type_='model')
     Pool.register(
         claim.CreateIndemnification,
+        wizard.SimulateIndemnification,
         module='underwriting_claim_indemnification', type_='wizard')

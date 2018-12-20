@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <group id="duration" col="3">
+        <label name="duration"/>
+        <field name="duration"/>
+        <field name="unit"/>
+    </group>
+    <label name="no_revaluation"/>
+    <field name="no_revaluation"/>
+</form>

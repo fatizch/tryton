@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="identifier"/>
+    <field name="identifier"/>
+    <label name="state"/>
+    <field name="state"/>
+    <label name="message"/>
+    <field name="message" colspan="3"/>
+    <field name="stack_info" colspan="4"/>
+</form>

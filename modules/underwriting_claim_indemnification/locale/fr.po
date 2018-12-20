@@ -64,6 +64,11 @@ msgctxt "field:claim.indemnification_definition,underwritings:"
 msgid "Underwritings"
 msgstr "Demandes de décisions"
 
+msgctxt ""
+"field:claim.simulate.indemnification.start,apply_underwriting_reduction:"
+msgid "Apply Underwriting Reduction"
+msgstr "Appliquer la réduction"
+
 msgctxt "field:underwriting.decision.type,reduction_percentage:"
 msgid "Reduction Percentage"
 msgstr "Pourcentage de réduction"

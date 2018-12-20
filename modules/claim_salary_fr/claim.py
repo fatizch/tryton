@@ -8,6 +8,7 @@ from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 from trytond.model import Unique, ModelView
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.rule_engine import get_rule_mixin
@@ -353,7 +354,7 @@ class ClaimService(metaclass=PoolMeta):
             1) - relativedelta(days=1)
         for i in range(0, 12):
             if (self.salary_mode in ('last_4_quarters', 'last_year')
-                    and nb_iteration <= i):
+                   and nb_iteration <= i):
                 break
             if self.salary_mode == 'last_year':
                 start_month = end_month + relativedelta(days=1,
@@ -502,6 +503,8 @@ class ClaimService(metaclass=PoolMeta):
         return salary_range
 
     def apply_revaluation_if_needed(self, salary, args):
+        if Transaction().context.get('force_no_revaluation', False):
+            return salary
         if (not args or
                 not self.benefit.benefit_rules or
                 not self.benefit.benefit_rules[

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ##################### -->
+        <!-- # Simulation Wizard # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="simulate_indemnification_start_view_form">
+            <field name="model">claim.simulate.indemnification.start</field>
+            <field name="inherit" ref="claim_indemnification.simulate_indemnification_start_view_form"/>
+            <field name="name">simulate_indemnification_start_form</field>
+        </record>
+    </data>
+</tryton>

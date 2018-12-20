@@ -7,6 +7,7 @@ from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 from trytond.cache import Cache
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import model, fields, coog_date, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
@@ -496,4 +497,6 @@ class BenefitRule(
         return self.calculate_revaluation_rule(args)
 
     def must_revaluate(self):
+        if Transaction().context.get('force_no_revaluation', False):
+            return False
         return self.revaluation_rule is not None

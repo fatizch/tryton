@@ -16,6 +16,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">extra_data_displayer_list</field>
         </record>
+        <record model="ir.ui.view" id="indemnification_simulate_displayer_form">
+            <field name="model">claim.simulate.indemnification.displayer</field>
+            <field name="type">form</field>
+            <field name="name">indemnification_simulation_displayer_form</field>
+        </record>
+        <record model="ir.ui.view" id="indemnification_simulate_displayer_list">
+            <field name="model">claim.simulate.indemnification.displayer</field>
+            <field name="type">tree</field>
+            <field name="name">indemnification_simulation_displayer_list</field>
+        </record>
         <!-- ############################################################ -->
         <!-- ######## Indemnification Control & Validate Display ######## -->
         <!-- ############################################################ -->
@@ -154,6 +164,28 @@ this repository contains the full copyright notices and license terms. -->
             <field name="keyword">form_action</field>
             <field name="model">claim.indemnification,-1</field>
             <field name="action" ref="act_cancel_indemnification_wizard"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ############ Indemnification Simulation Wizard ############# -->
+        <!-- ############################################################ -->
+        <record model="ir.action.wizard" id="act_simulate_indemnification_wizard">
+            <field name="name">Simulate Indemnification Wizard</field>
+            <field name="wiz_name">claim.simulate.indemnification</field>
+        </record>
+        <record model="ir.action.keyword" id="act_simulate_indemnification_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">claim,-1</field>
+            <field name="action" ref="act_simulate_indemnification_wizard"/>
+        </record>
+        <record model="ir.ui.view" id="simulate_indemnification_start_view_form">
+            <field name="model">claim.simulate.indemnification.start</field>
+            <field name="type">form</field>
+            <field name="name">simulate_indemnification_start_form</field>
+        </record>
+        <record model="ir.ui.view" id="simulate_indemnification_result_view_form">
+            <field name="model">claim.simulate.indemnification.result</field>
+            <field name="type">form</field>
+            <field name="name">simulate_indemnification_result_form</field>
         </record>
     </data>
 </tryton>

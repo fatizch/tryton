@@ -943,7 +943,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
 
         result = {x.id: False for x in indemnifications}
         invoices = {x.id: x for x in AccountInvoice.browse(list(invoices))}
-        for indemnification, cur_invoices in indemns2invoices.items():
+        for indemnification, cur_invoices in list(indemns2invoices.items()):
             if all(invoices[x].state == 'paid' and
                     invoices[x].reconciliation_date for x in cur_invoices):
                 result[indemnification] = True

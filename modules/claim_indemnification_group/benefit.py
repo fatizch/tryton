@@ -5,6 +5,7 @@ import datetime
 from trytond.pool import PoolMeta
 from trytond.pyson import And, Eval, Or, Bool
 from trytond.server_context import ServerContext
+from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, model
 from trytond.modules.claim_indemnification \
@@ -241,6 +242,8 @@ class BenefitRule(metaclass=PoolMeta):
         return self._calculate_rule('revaluation_rule', args, [], **kwargs)
 
     def must_revaluate(self):
+        if Transaction().context.get('force_no_revaluation', False):
+            return False
         if self.force_indemnification_rule:
             return super(BenefitRule, self).must_revaluate()
         return bool(self.revaluation_rules)

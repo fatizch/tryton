@@ -6,12 +6,14 @@ from collections import defaultdict
 
 from trytond.pool import Pool
 from trytond.error import UserError
+from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import batch
+from trytond.modules.coog_core import batch, utils
 
 
 __all__ = [
     'CreateClaimIndemnificationBatch',
+    'SimulateIndemnificationBatch',
     ]
 
 
@@ -69,3 +71,56 @@ class CreateClaimIndemnificationBatch(batch.BatchRoot):
             except UserError:
                 continue
         Indemnification.do_schedule(indemnifications_to_schedule)
+
+
+class SimulateIndemnificationBatch(batch.BatchRoot):
+    'Simulate Indemnification Batch'
+
+    __name__ = 'claim.indemnification.simulate'
+
+    logger = logging.getLogger(__name__)
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'claim'
+
+    @classmethod
+    def get_batch_search_model(cls):
+        return 'claim'
+
+    @classmethod
+    def get_batch_domain(cls, **kwargs):
+        return []
+
+    @classmethod
+    def parse_params(cls, params):
+        params = super(SimulateIndemnificationBatch, cls).parse_params(params)
+        assert params.get('unit') in ('day', 'month')
+        assert params.get('duration'), 'duration is required'
+        assert params.get('filename'), 'filename is required'
+        return params
+
+    @classmethod
+    def _get_simulation_wizard(cls, treatment_date, **kwargs):
+        SimulateIndemnification = Pool().get('claim.simulate.indemnification',
+            type='wizard')
+        wizard_id, _, _ = SimulateIndemnification.create()
+        wizard = SimulateIndemnification(wizard_id)
+        wizard.start.duration = kwargs.get('duration')
+        wizard.start.unit = kwargs.get('unit')
+        wizard.start.no_revaluation = not kwargs.get('revaluation', False)
+        return wizard
+
+    @classmethod
+    def flush(cls, lines, filename):
+        with utils.safe_open(filename, 'a') as fo_:
+            fo_.write('\n'.join(lines))
+
+    @classmethod
+    def execute(cls, objects, ids, treatment_date, **kwargs):
+        wizard = cls._get_simulation_wizard(treatment_date, **kwargs)
+        with Transaction().set_context(active_model='claim', active_ids=ids):
+            wizard.transition_simulate()
+        cls.flush(
+            [str(res) for res in wizard.result.displayers],
+            kwargs.get('filename'))

@@ -2,6 +2,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 
+import traceback
 import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -13,6 +14,7 @@ from trytond.server_context import ServerContext
 
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 from trytond.modules.coog_core import fields, model, utils, wizard_context
+from trytond.modules.coog_core import coog_date
 from trytond.modules.coog_core.coog_date import FREQUENCY_CONVERSION_TABLE
 
 
@@ -33,7 +35,13 @@ __all__ = [
     'CancelIndemnification',
     'CancelIndemnificationReason',
     'ScheduleIndemnifications',
+    'SimulateIndemnificationDisplayer',
+    'SimulateIndemnificationStart',
+    'SimulateIndemnificationResult',
+    'SimulateIndemnification',
     ]
+
+OK, KO = 'success', 'fail'
 
 
 class IndemnificationElement(model.CoogView):
@@ -889,6 +897,8 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
             }
 
     def check_input(self):
+        if Transaction().context.get('bypass_checks', False):
+            return
         if self.definition.is_period:
             input_start_date = self.definition.start_date
         else:
@@ -1134,3 +1144,189 @@ class DeleteIndemnification(Wizard):
         details = IndemnificationDetail.browse(ids)
         IndemnificationDetail.remove_indemnifications(details)
         return 'end'
+
+
+class SimulateIndemnificationDisplayer(model.CoogView):
+    'Simulation Displayer'
+
+    __name__ = 'claim.simulate.indemnification.displayer'
+
+    identifier = fields.Char('Identifier', required=True)
+    state = fields.Char('State', required=True)
+    message = fields.Char('message')
+    stack_info = fields.Text('Stack Informations')
+
+    def __str__(self):
+        return ';'.join(
+            [self.identifier, self.state, self.message,
+            self.stack_info]).replace('\n', '\t')
+
+
+class SimulateIndemnificationStart(model.CoogView):
+    'Simulate Indemnification Start'
+
+    __name__ = 'claim.simulate.indemnification.start'
+
+    duration = fields.Integer('Duration', required=True)
+    unit = fields.Selection([('day', 'Day'), ('month', 'Month')],
+        'Duration Unit', required=True)
+    no_revaluation = fields.Boolean('Without Revaluation',
+        help='If set, the simulated indemnification will not use the '
+        'revaluation rule')
+
+    @classmethod
+    def default_no_revaluation(cls):
+        return True
+
+
+class SimulateIndemnificationResult(model.CoogView):
+    'Simulate Indemnification Result'
+
+    __name__ = 'claim.simulate.indemnification.result'
+
+    displayers = fields.One2Many('claim.simulate.indemnification.displayer',
+        None, 'Simulated Indemnifications')
+
+
+class SimulateIndemnification(Wizard):
+    'Simulate Indemnification'
+
+    __name__ = 'claim.simulate.indemnification'
+
+    start_state = 'start'
+    start = StateView('claim.simulate.indemnification.start',
+        'claim_indemnification.simulate_indemnification_start_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Simulate', 'simulate', 'tryton-go-next',
+                default=True)])
+    simulate = StateTransition()
+    result = StateView('claim.simulate.indemnification.result',
+        'claim_indemnification.simulate_indemnification_result_view_form', [
+            Button('Previous', 'start', 'tryton-go-previous'),
+            Button('End', 'end', 'tryton-go-next', default=True)])
+
+    @classmethod
+    def __setup__(cls):
+        super(SimulateIndemnification, cls).__setup__()
+        cls._error_messages.update({
+                'no_salary': 'No salary defined on the claim %(claim)s',
+                'no_previous_indemn': 'No indemnifications on the claim to '
+                'compare with.',
+                'compute_crash': 'A crash occurs while computing the '
+                'indemnification, see stack trace for more informations.',
+                'amount_different': 'The computed amount is different from '
+                'the last indemnfication. We should have %(amount)s, got '
+                '%(computed)s instead.',
+                'no_computed_indemn': 'The indemnification rule returns no '
+                'indemnification.',
+                'no_ijss': 'No ijss defined in previous indemnification '
+                'details',
+                })
+
+    def default_result(self, name):
+        return {'displayers': [x._values for x in self.result.displayers]}
+
+    def _create_displayer(self, **kwargs):
+        if 'stack_info' not in kwargs or not kwargs['stack_info']:
+            kwargs['stack_info'] = ''
+        return kwargs
+
+    def _create_indemnification(self, service, start_date, end_date,
+            previous_indemn):
+        pool = Pool()
+        Indemnification = pool.get('claim.indemnification')
+        Journal = pool.get('account.payment.journal')
+        journals = Journal.search([])
+        indemnification = Indemnification(service=service,
+            start_date=start_date, end_date=end_date)
+        indemnification.journal = previous_indemn.journal or journals[0]
+        indemnification.amount = 0
+        indemnification.total_amount = 0
+        indemnification.currency = service.get_currency()
+        indemnification.currency_digits = indemnification.currency.digits
+        indemnification.beneficiary = None
+        indemnification.share = previous_indemn.share
+        indemnification.init_from_service(service)
+        indemnification.forced_base_amount = previous_indemn.forced_base_amount
+        if not indemnification.product:
+            indemnification.product = previous_indemn.product
+        return indemnification
+
+    def _compute_indemnification_period(self, identifier, start_date, end_date,
+            service, previous_indemn):
+        state = OK
+        trace = None
+        msg = ''
+        try:
+            # Here we only consider the first period benefit period
+            indemnification = self._create_indemnification(service,
+                start_date, end_date, previous_indemn)
+            indemnifications = indemnification.do_calculate(
+                [indemnification])
+            if not indemnifications:
+                msg = self.raise_user_error('no_computed_indemn',
+                    raise_exception=False)
+                state = KO
+            else:
+                indemnification = indemnifications[0]
+                prev_detail = previous_indemn.details[-1]
+                if indemnification.details[0].base_amount != \
+                        prev_detail.base_amount:
+                    state = KO
+                    msg = self.raise_user_error('amount_different', {
+                            'amount': prev_detail.base_amount,
+                            'computed': indemnification.details[0].base_amount,
+                            }, raise_exception=False)
+        except Exception:
+            msg = self.raise_user_error('compute_crash', raise_exception=False)
+            trace = traceback.format_exc()
+            state = KO
+        if (not previous_indemn.details or not
+                previous_indemn.details[0].extra_details.get('ijss', 0)):
+            msg = self.raise_user_error('no_ijss', raise_exception=False)
+        return self._create_displayer(
+            identifier=identifier, state=state, message=msg, stack_info=trace)
+
+    def transition_simulate(self):
+        pool = Pool()
+        Claim = pool.get('claim')
+        transaction = Transaction()
+        claim_ids = transaction.context.get('active_ids', [])
+        active_model = transaction.context.get('active_model')
+        assert active_model == 'claim'
+        claims = Claim.browse(claim_ids)
+        duration = self.start.duration
+        unit = self.start.unit
+        displayers = []
+
+        for claim in claims:
+            if (claim.delivered_services and not
+                    claim.delivered_services[0].gross_salary):
+                test_id = claim.name
+                msg = self.raise_user_error('no_salary', {'claim': claim.name},
+                    raise_exception=False)
+                displayers.append(self._create_displayer(
+                        identifier=test_id, message=msg, state=KO))
+                continue
+            for service in claim.delivered_services:
+                test_id = ':'.join([claim.name, service.loss.loss_desc.code,
+                        service.loss.covered_person.code,
+                        service.loss.start_date.strftime('%Y-%m-%d')])
+                indemnifications = [x for x in service.indemnifications
+                    if any(d.kind != 'deductible' for d in x.details)]
+                if not indemnifications:
+                    msg = self.raise_user_error('no_previous_indemn',
+                        raise_exception=False)
+                    displayers.append(self._create_displayer(
+                            identifier=test_id, message=msg, state=KO))
+                    continue
+                start_date = coog_date.add_day(
+                    indemnifications[-1].end_date, 1)
+                to_date = coog_date.add_duration(start_date, unit, duration)
+                with transaction.set_context(client_defined_date=to_date,
+                        force_no_revaluation=self.start.no_revaluation):
+                    displayers.append(self._compute_indemnification_period(
+                            test_id, start_date, to_date, service,
+                            indemnifications[-1]))
+        self.result.displayers = displayers
+        return 'result'
