@@ -1,3 +1,6 @@
+* FEA#10506 Modification de l'affichage des listes d'analyses de risques: ajout d'un onglet pour les analyses en brouillons.
+* FEA#10506 Ajout d'un assistant qui propose à l'utilisateur de consulter immédiatement une analyse de risque générée automatiquement.
+
 Version 2.2 - 2018-10-12
 Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09

@@ -34,10 +34,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="underwriting.menu_underwritings"/>
             <field name="group" ref="underwriting.group_claim_underwriting"/>
         </record>
-        <record model="ir.ui.menu-res.group" id="menu_planned_underwritings_claim_underwriting">
-            <field name="menu" ref="underwriting.menu_planned_underwritings"/>
-            <field name="group" ref="underwriting.group_claim_underwriting"/>
-        </record>
         <record model="ir.ui.menu-res.group" id="menu_underwriting_configuration_claim_underwriting">
             <field name="menu" ref="underwriting.menu_underwriting_configuration"/>
             <field name="group" ref="offered.group_product_manage"/>

@@ -22,6 +22,11 @@ this repository contains the full copyright notices and license terms. -->
         <!-- ################ -->
         <!-- # Claim Relate # -->
         <!-- ################ -->
+        <record model="ir.ui.view" id="underwriting_claim_relate_view_list">
+            <field name="model">underwriting</field>
+            <field name="inherit" ref="underwriting.underwriting_view_list"/>
+            <field name="name">underwriting_claim_relate_list</field>
+        </record>
         <record model="ir.action.act_window" id="act_claim_underwritings">
             <field name="name">Underwritings</field>
             <field name="res_model">underwriting</field>
@@ -29,7 +34,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.action.act_window.view" id="act_claim_underwritings_view1">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="underwriting.underwriting_view_list"/>
+            <field name="view" ref="underwriting_claim_relate_view_list"/>
             <field name="act_window" ref="act_claim_underwritings"/>
         </record>
         <record model="ir.action.act_window.view" id="act_claim_underwritings_view2">

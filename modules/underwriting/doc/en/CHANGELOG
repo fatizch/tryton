@@ -1,3 +1,6 @@
+* FEA#10506 Change the display of underwriting lists: add a new tab for draft underwritings
+* FEA#10506 Add a wizard that allows the user to immediatly see an underwriting that was automatically generated
+
 Version 2.2 - 2018-10-12
 Version 2.0 - 2018-04-13
 Version 1.14 - 2017-11-09

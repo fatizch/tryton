@@ -111,6 +111,8 @@ def translate_value(instance, var_name, lang=None):
         CDataDef = Pool().get('extra_data')
         res = CDataDef.get_extra_data_summary([instance],
             var_name)[instance.id]
+    elif _type == 'boolean':
+        res = translate_bool(getattr(instance, var_name))
     else:
         res = '%s' % getattr(instance, var_name)
     if (hasattr(field, 'translate') and field.translate

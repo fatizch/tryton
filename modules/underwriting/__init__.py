@@ -19,11 +19,13 @@ def register():
         underwriting.Underwriting,
         underwriting.UnderwritingResult,
         underwriting.PlanUnderwritingDate,
+        underwriting.OpenGeneratedUnderwritingChoice,
         batch.UnderwritingActivationBatch,
         test_case.TestCaseModel,
         module='underwriting', type_='model')
 
     Pool.register(
         underwriting.PlanUnderwriting,
+        underwriting.OpenGeneratedUnderwriting,
         party.PartyReplace,
         module='underwriting', type_='wizard')

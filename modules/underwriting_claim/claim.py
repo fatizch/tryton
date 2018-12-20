@@ -16,7 +16,8 @@ __all__ = [
     ]
 
 
-class Benefit(get_rule_mixin('underwriting_rule', 'Underwriting Rule'), metaclass=PoolMeta):
+class Benefit(get_rule_mixin('underwriting_rule', 'Underwriting Rule'),
+        metaclass=PoolMeta):
     __name__ = 'benefit'
 
     @classmethod

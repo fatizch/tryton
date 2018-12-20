@@ -1,3 +1,5 @@
+* FEA#10506 Modification de l'affichage de la liste d'analyses de risques depuis un dossier de sinistre: ajout d'informations sur les demandes de documents et les résultats d'analyses.
+
 Version 2.2 - 2018-10-12
 * BUG#9223 Correction du domaine sur le relate des demandes de décisions
 

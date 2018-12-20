@@ -1,3 +1,5 @@
+* FEA#10506 Change the display of underwriting list from claim: add informations on document requests and underwriting results.
+
 Version 2.2 - 2018-10-12
 * BUG#9223 Fix domain of underwriting relate
 

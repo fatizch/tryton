@@ -883,6 +883,73 @@ class UnderwritingResult(model.CoogSQL, model.CoogView):
             self.target.init_dict_for_rule_engine(data)
 
 
+class OpenGeneratedUnderwritingChoice(model.CoogView):
+    'Open Generated Underwriting Choice'
+
+    __name__ = 'underwriting.generated.open.choice'
+
+    generated_underwriting = fields.Many2One('underwriting',
+        'Generated Underwriting', readonly=True)
+    info = fields.Text('Info', readonly=True)
+
+
+class OpenGeneratedUnderwriting(Wizard):
+    'Open Generated Underwriting'
+
+    __name__ = 'underwriting.generated.open'
+
+    start_state = 'detect'
+    detect = StateTransition()
+    choice = StateView('underwriting.generated.open.choice',
+        'underwriting.underwriting_generated_open_choice_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Open', 'open_generated', 'tryton-go-next',
+                default=True)])
+    open_generated = StateAction('underwriting.act_generated_underwriting')
+
+    @classmethod
+    def __setup__(cls):
+        super(OpenGeneratedUnderwriting, cls).__setup__()
+        cls._error_messages.update({
+                'ask_open_generated':
+                'Do you want to open the generated underwriting?'
+                })
+
+    def get_generated(self):
+        current = Transaction().context.get('active_id')
+        if not current:
+            return
+        Underwriting = Pool().get('underwriting')
+        current = Underwriting(current)
+        return Underwriting.search([
+                ('on_object', '=', str(current.on_object)),
+                ('create_date', '>=', current.write_date),
+                ('create_uid', '=', Transaction().user)],
+            order=[('id', 'DESC')])
+
+    def transition_detect(self):
+        res = self.get_generated()
+        if not res:
+            return 'end'
+        return 'choice'
+
+    def default_choice(self, name):
+        res = self.get_generated()
+        info = self.raise_user_error('ask_open_generated',
+            raise_exception=False)
+        return {
+            'generated_underwriting': res[0].id,
+            'info': info,
+            }
+
+    def do_open_generated(self, action):
+        return action, {
+            'res_ids': [self.choice.generated_underwriting.id],
+            'res_id': self.choice.generated_underwriting.id,
+            'res_model': 'underwriting',
+            }
+
+
 class PlanUnderwriting(Wizard):
     'Plan Underwriting'
 

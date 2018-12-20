@@ -90,6 +90,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Underwritings</field>
             <field name="res_model">underwriting</field>
         </record>
+        <record model="ir.action.act_window.domain" id="act_draft_underwriting">
+            <field name="name">Draft</field>
+            <field name="sequence" eval="15"/>
+            <field name="domain" eval="[['state', '=', 'draft']]" pyson="1"/>
+            <field name="act_window" ref="act_underwriting"/>
+        </record>
         <record model="ir.action.act_window.domain" id="act_pending_underwriting">
             <field name="name">Pending</field>
             <field name="sequence" eval="10"/>
@@ -119,35 +125,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_underwriting"/>
         </record>
         <menuitem parent="menu_underwriting" sequence="10" action="act_underwriting" id="menu_underwritings"/>
-        <!-- Future entry point -->
-        <record model="ir.action.act_window" id="act_planned_underwriting">
-            <field name="name">Planned Underwritings</field>
-            <field name="res_model">underwriting</field>
-            <field name="order" eval="[['effective_date', 'ASC']]" pyson="1"/>
-        </record>
-        <record model="ir.action.act_window.domain" id="act_manual_planned_underwriting">
-            <field name="name">Manual</field>
-            <field name="sequence" eval="10"/>
-            <field name="domain" eval="[['state', '=', 'draft'], ['type_.manual_activation', '=', True]]" pyson="1"/>
-            <field name="act_window" ref="act_planned_underwriting"/>
-        </record>
-        <record model="ir.action.act_window.domain" id="act_automatic_planned_underwriting">
-            <field name="name">Automatic</field>
-            <field name="sequence" eval="20"/>
-            <field name="domain" eval="[['state', '=', 'draft'], ['type_.manual_activation', '=', False]]" pyson="1"/>
-            <field name="act_window" ref="act_planned_underwriting"/>
-        </record>
-        <record model="ir.action.act_window.view" id="act_planned_underwriting_view1">
-            <field name="sequence" eval="10"/>
-            <field name="view" ref="underwriting_view_list"/>
-            <field name="act_window" ref="act_planned_underwriting"/>
-        </record>
-        <record model="ir.action.act_window.view" id="act_planned_underwriting_view2">
-            <field name="sequence" eval="11"/>
-            <field name="view" ref="underwriting_view_form"/>
-            <field name="act_window" ref="act_planned_underwriting"/>
-        </record>
-        <menuitem parent="menu_underwriting" sequence="15" action="act_planned_underwriting" id="menu_planned_underwritings"/>
         <!-- Documents -->
         <record model="ir.action.keyword" id="letter_generation_underwriting_keyword">
             <field name="keyword">form_print</field>
@@ -209,6 +186,27 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">underwriting.plan.date</field>
             <field name="type">form</field>
             <field name="name">underwriting_plan_date_form</field>
+        </record>
+        <!-- ############################### -->
+        <!-- # Open Generated Underwriting # -->
+        <!-- ############################### -->
+        <record model="ir.action.wizard" id="act_open_generated_underwriting">
+            <field name="name">Open Generated Underwriting</field>
+            <field name="wiz_name">underwriting.generated.open</field>
+        </record>
+        <record model="ir.action.act_window" id="act_generated_underwriting">
+            <field name="name">Generated Underwriting</field>
+            <field name="res_model">underwriting</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_generated_underwriting_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="underwriting_view_form"/>
+            <field name="act_window" ref="act_generated_underwriting"/>
+        </record>
+        <record model="ir.ui.view" id="underwriting_generated_open_choice_view_form">
+            <field name="model">underwriting.generated.open.choice</field>
+            <field name="type">form</field>
+            <field name="name">underwriting_generated_open_choice_form</field>
         </record>
         <!-- ########################### -->
         <!-- # Underwriting Buttons    # -->

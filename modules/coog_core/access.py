@@ -1,6 +1,6 @@
 # This file is part of Coog.  The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from sql import Null
+from sql import Null, Literal
 from sql.aggregate import Max
 from sql.conditionals import Case
 
@@ -121,7 +121,8 @@ class ModelField(metaclass=PoolMeta):
                 ).select(
                 ir_model.model,
                 model_field.name,
-                Max(Case((field_access.perm_read == True, 1), else_=0)),
+                Max(Case((field_access.perm_read == Literal(True), 1),
+                        else_=0)),
                 where=((ir_model.model == model_name)
                     & (model_field.name == field_name)
                     & ((user_group.user == user) | (field_access.group == Null)

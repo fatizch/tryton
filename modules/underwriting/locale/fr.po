@@ -7,6 +7,10 @@ msgid "There may be only one document rule per underwriting type"
 msgstr ""
 "Il ne doit y avoir qu'une règle de document par type de demande décision"
 
+msgctxt "error:underwriting.generated.open:"
+msgid "Do you want to open the generated underwriting?"
+msgstr "Voulez-vous ouvrir l'analyse de risque générée ?"
+
 msgctxt "error:underwriting.result:"
 msgid ""
 "The underwriting result '%s' should be in 'waiting' state instead of '%s'"
@@ -216,6 +220,18 @@ msgctxt "field:underwriting.document_rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:underwriting.generated.open.choice,generated_underwriting:"
+msgid "Generated Underwriting"
+msgstr "Analyse de risque générée"
+
+msgctxt "field:underwriting.generated.open.choice,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:underwriting.generated.open.choice,info:"
+msgid "Info"
+msgstr "Info"
+
 msgctxt "field:underwriting.plan.date,date:"
 msgid "Date"
 msgstr "Date"
@@ -226,7 +242,7 @@ msgstr "Identifiant"
 
 msgctxt "field:underwriting.plan.date,planned_copy:"
 msgid "Planned Copy"
-msgstr "Copie plannifiée"
+msgstr "Copie planifiée"
 
 msgctxt "field:underwriting.plan.date,underwriting:"
 msgid "Underwriting"
@@ -452,17 +468,25 @@ msgctxt "model:event.type,name:event_underwriting_validated"
 msgid "Underwriting Validated"
 msgstr "Demande de décision validée"
 
+msgctxt "model:ir.action,name:"
+msgid "Planned Underwritings"
+msgstr "Demande de décision planifiées"
+
+msgctxt "model:ir.action,name:act_generated_underwriting"
+msgid "Generated Underwriting"
+msgstr "Analyse de risque générée"
+
+msgctxt "model:ir.action,name:act_open_generated_underwriting"
+msgid "Open Generated Underwriting"
+msgstr "Ouvir l'analyse de risque générée"
+
 msgctxt "model:ir.action,name:act_party_underwritings"
 msgid "Underwritings"
 msgstr "Demandes de décisions"
 
 msgctxt "model:ir.action,name:act_plan_underwriting"
 msgid "Plan Underwriting"
-msgstr "Plannifier une demande de décision"
-
-msgctxt "model:ir.action,name:act_planned_underwriting"
-msgid "Planned Underwritings"
-msgstr "Demande de décision plannifiées"
+msgstr "Planifier une demande de décision"
 
 msgctxt "model:ir.action,name:act_underwriting"
 msgid "Underwritings"
@@ -476,31 +500,29 @@ msgctxt "model:ir.action,name:act_underwriting_type"
 msgid "Underwriting Types"
 msgstr "Types de demandes de décisions"
 
+msgctxt "model:ir.action.act_window.domain,name:"
+msgid "Automatic"
+msgstr "Automatique"
+
 msgctxt "model:ir.action.act_window.domain,name:act_all_underwriting"
 msgid "All"
 msgstr "Toutes"
-
-msgctxt ""
-"model:ir.action.act_window.domain,name:act_automatic_planned_underwriting"
-msgid "Automatic"
-msgstr "Automatique"
 
 msgctxt "model:ir.action.act_window.domain,name:act_completed_underwriting"
 msgid "Completed"
 msgstr "Complété"
 
-msgctxt ""
-"model:ir.action.act_window.domain,name:act_manual_planned_underwriting"
-msgid "Manual"
-msgstr "Manuelle"
+msgctxt "model:ir.action.act_window.domain,name:act_draft_underwriting"
+msgid "Draft"
+msgstr "Brouillon"
 
 msgctxt "model:ir.action.act_window.domain,name:act_pending_underwriting"
 msgid "Pending"
 msgstr "En cours"
 
-msgctxt "model:ir.ui.menu,name:menu_planned_underwritings"
+msgctxt "model:ir.ui.menu,name:"
 msgid "Planned Underwritings"
-msgstr "Demandes de décision plannifiées"
+msgstr "Demandes de décision planifiées"
 
 msgctxt "model:ir.ui.menu,name:menu_underwriting"
 msgid "Underwriting"
@@ -542,9 +564,13 @@ msgctxt "model:underwriting.document_rule,name:"
 msgid "Underwriting Document Rule"
 msgstr "Règle de demande de documet des demande de décision"
 
+msgctxt "model:underwriting.generated.open.choice,name:"
+msgid "Open Generated Underwriting Choice"
+msgstr "Choix de l'ouverture de l'analyse de risque générée"
+
 msgctxt "model:underwriting.plan.date,name:"
 msgid "Underwriting Plan Date"
-msgstr "Date de plannification de la demande de décision"
+msgstr "Date de planification de la demande de décision"
 
 msgctxt "model:underwriting.result,name:"
 msgid "Underwriting Result"
@@ -568,7 +594,7 @@ msgstr "Complété"
 
 msgctxt "selection:underwriting,state:"
 msgid "Draft"
-msgstr "Brouillons"
+msgstr "Brouillon"
 
 msgctxt "selection:underwriting,state:"
 msgid "Processing"
@@ -657,6 +683,14 @@ msgstr "Brouillons"
 msgctxt "view:underwriting:"
 msgid "Validate"
 msgstr "Valider"
+
+msgctxt "wizard_button:underwriting.generated.open,choice,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:underwriting.generated.open,choice,open_generated:"
+msgid "Open"
+msgstr "Ouvrir"
 
 msgctxt "wizard_button:underwriting.plan,select_date,end:"
 msgid "Cancel"
