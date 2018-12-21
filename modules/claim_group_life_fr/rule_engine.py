@@ -111,8 +111,13 @@ class RuleEngineRuntime(metaclass=PoolMeta):
                 if rule_res.result:
                     rounded_annuity_amount, annex_description = rule_res.result
                     description += annex_description
-            unit_annuity = cls._re_round(args, rounded_annuity_amount / prorata,
-                rounding_factor)
+            if full_period:
+                unit_annuity = cls._re_round(args, rounded_annuity_amount /
+                    12 * prorata, rounding_factor)
+            else:
+                unit_annuity = cls._re_round(args, rounded_annuity_amount /
+                   ratio, rounding_factor)
+
             res.append({
                     'start_date': start_date,
                     'end_date': end_date,
