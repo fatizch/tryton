@@ -40,7 +40,7 @@ class ClaimPasrauUploadWizard(Wizard):
             self.raise_user_error('invalid_file')
         filepath = pjoin('/tmp', self.file_selection.file_name)
         tmp_file = open(filepath, 'w')
-        tmp_file.write(self.file_selection.file)
+        tmp_file.write(self.file_selection.file.decode('utf-8'))
         tmp_file.close()
         PartyCustomPasrauRate = Pool().get('party.pasrau.rate')
         self.file_selection.created_rates, self.file_selection.errors = \

@@ -44,7 +44,7 @@ msgstr ""
 
 msgctxt "error:party.pasrau.rate:"
 msgid "No party found for NIR %(ssn)s and matricule %(matricule)s"
-msgstr "Aucun tiers rattaché au NIR %(ssn)s et le matricule %(ssn)s"
+msgstr "Aucun tiers rattaché au NIR %(ssn)s et le matricule %(matricule)s"
 
 msgctxt "error:party.pasrau.rate:"
 msgid "No pasrau rate found for NIR %(ssn)s"

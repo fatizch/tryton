@@ -73,7 +73,7 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
         pool = Pool()
         Party = pool.get('party.party')
         errors = []
-        with open(path, 'r') as f:
+        with open(path, 'rb') as f:
             root_element = etree.fromstring(f.read())
             if root_element is None:
                 return False
@@ -101,9 +101,9 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
                         matricule = node_func(salarie, 'matricule', True)
                         party = []
                         if ssn:
-                            party = Party.search([('ssn', 'like', ssn + '%')])
-                        if not party and matricule:
-                            party = Party.search([('code', '=', matricule)])
+                            party = Party.search([
+                                ('ssn', 'like', ssn + '%'),
+                                ('is_person', '=', True)])
                         if not party:
                             errors.append(cls.raise_user_error(
                                     'no_party_found', {'ssn': ssn,

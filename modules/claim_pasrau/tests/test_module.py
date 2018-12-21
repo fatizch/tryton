@@ -51,11 +51,16 @@ class ModuleTestCase(test_framework.CoogTestCase):
         Party = self.Party
         PartyCustomPasrauRate = self.PartyCustomPasrauRate
 
-        person1 = Party(name='doe', first_name='joe', ssn=self.ssn1)
+        person1 = Party(name=u'doe', first_name=u'joe', ssn=self.ssn1,
+            is_person=True, birth_date=datetime.date(1980, 1, 1), gender='male')
         person1.save()
-        person2 = Party(name='doe', first_name='jane', ssn=self.ssn2)
+        person2 = Party(name=u'doe', first_name=u'jane', ssn=self.ssn2,
+            is_person=True, birth_date=datetime.date(1980, 1, 2),
+            gender='female')
         person2.save()
-        person3 = Party(name='dane', first_name='jane', ssn=self.ssn3)
+        person3 = Party(name=u'dane', first_name=u'jane', ssn=self.ssn3,
+            is_person=True, birth_date=datetime.date(1980, 1, 3),
+            gender='female')
         person3.save()
 
         dir_path = os.path.dirname(os.path.realpath(__file__))

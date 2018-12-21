@@ -1,3 +1,5 @@
+* BUG#10632 Matricule information must not be used to search insured (only ssn must be used)
+* BUG#10632 Fix CRM nominatif file import following python 3 change
 * OTH#00000: Fix pasrau file generation error due to accounting change in 5.0
 * BUG#10466: Error in pasrau file data. Slip is generated the last day of the month: S21.G00.20.006 must be the first day of the month and S21.G00.20.007 the last day of the month. S21.G00.30.002 must be the birth name if defined else the name and S21.G00.30.003 must be the name if birth name defined else do not send it
 * BUG#10454: The amount displayed on indemnification is incorrect when a parsrau tax is applied and default pasrau rate is different between with and whithout tax amount. This generate an incorrect claim invoice.
