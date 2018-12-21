@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, Len, Or
+from trytond.pyson import Eval, Len, Or, Bool
 
 from trytond.modules.coog_core import fields
 from trytond.modules.rule_engine import get_rule_mixin
@@ -28,7 +28,8 @@ class OptionBenefit(get_rule_mixin('underwriting_rule', 'Underwriting Rule'),
             ('id', 'in', Eval('available_underwriting_rules'))]
         cls.underwriting_rule.states['readonly'] = Or(
             Len('available_underwriting_rules') <= 1,
-            Eval('contract_status') != 'quote')
+            ((Eval('contract_status') != 'quote') &
+                (Bool(Eval('contract_status')))))
         cls.underwriting_rule.depends = ['available_underwriting_rules',
             'contract_status']
 

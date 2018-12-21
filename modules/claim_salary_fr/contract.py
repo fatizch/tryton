@@ -42,7 +42,8 @@ class OptionBenefit(metaclass=PoolMeta):
             }, depends=['net_salary_mode', 'contract_status'])
     revaluation_on_basic_salary = fields.Boolean('Revaluation on basic salary',
         states={'invisible': Bool(Eval('revaluation_on_basic_salary_forced')),
-            'readonly': Eval('contract_status') != 'quote'},
+            'readonly': Bool(Eval('contract_status')) & (
+                Eval('contract_status') != 'quote')},
         depends=['revaluation_on_basic_salary_forced', 'contract_status'])
     revaluation_on_basic_salary_forced = fields.Function(
         fields.Boolean('Revaluation on basic salary forced'),

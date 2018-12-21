@@ -1,3 +1,4 @@
+* BUG#10629 Fix on readonly states of contract benefit options fields
 * FEA#10562 Filter compatible option in insurer claim service transfer
 * FEA#10284 Extend possible beneficiaries to allow parties higher in the covered element's tree and the contract subscriber
 * BUG#10424 The option benefit fields were not readonly on an active contract

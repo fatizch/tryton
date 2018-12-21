@@ -1,3 +1,4 @@
+* BUG#10629 Correctif sur les états en lecture seule des champs des options de prestation
 * FEA#10562 Filtrer les garanties compatibles en fonction du type d'assurance de l'option source dans l'assistant de tansfert de prestations
 * FEA#10284 Élargir les bénéficiaires possibles à tous les tiers hiérarchiquement supérieurs dans les éléments couverts et au souscripteur du contrat
 * BUG#10424 Les champs des prestations sur les garanties n'étaient pas en lecture seule sur un contrat actif

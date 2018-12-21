@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If
+from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.coog_core import fields
 
@@ -47,14 +47,16 @@ class Option(metaclass=PoolMeta):
             ('in_complement', 'In Complement of Previous Insurer')],
         'Previous Claims Management Rule',
         states={'invisible': ~Eval('is_group'),
-            'readonly': Eval('contract_status') != 'quote'},
+            'readonly': Bool(Eval('contract_status')) &
+            (Eval('contract_status') != 'quote')},
         depends=['is_group', 'contract_status'])
     full_management_start_date = fields.Date('Full Management Start Date',
         states={'invisible': (
                 Eval('previous_claims_management_rule') != 'full_management'),
             'required': Eval('previous_claims_management_rule') ==
             'full_management',
-            'readonly': Eval('contract_status') != 'quote'},
+            'readonly': Bool(Eval('contract_status')) &
+            (Eval('contract_status') != 'quote')},
         depends=['previous_claims_management_rule', 'contract_status'])
 
     @classmethod

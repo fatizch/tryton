@@ -105,7 +105,8 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
     annuity_frequency = fields.Selection(ANNUITY_FREQUENCIES,
         'Annuity Frequency', states={
             'readonly': Or(Bool(Eval('annuity_frequency_forced')),
-                Eval('contract_status') != 'quote'),
+                (Bool(Eval('contract_status')) &
+                    (Eval('contract_status') != 'quote'))),
             'invisible': ~Eval('annuity_frequency_required'),
             'required': Bool(Eval('annuity_frequency_required'))},
         depends=['annuity_frequency_forced', 'annuity_frequency_required',
@@ -128,7 +129,8 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
             ('id', 'in', Eval('available_deductible_rules'))]
         cls.deductible_rule.states['readonly'] = Or(
             Len(Eval('available_deductible_rules')) == 1,
-            Eval('contract_status') != 'quote')
+            (Bool(Eval('contract_status')) &
+                (Eval('contract_status') != 'quote')))
         cls.deductible_rule.states['invisible'] = Len(Eval(
                 'available_deductible_rules')) == 0
         cls.deductible_rule.depends = ['available_deductible_rules',
@@ -137,7 +139,8 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
             ('id', 'in', Eval('available_indemnification_rules'))]
         cls.indemnification_rule.states['readonly'] = Or(
             Len(Eval('available_indemnification_rules')) == 1,
-            Eval('contract_status') != 'quote')
+            (Bool(Eval('contract_status')) &
+                (Eval('contract_status') != 'quote')))
         cls.indemnification_rule.states['invisible'] = Len(Eval(
                 'available_indemnification_rules')) == 0
         cls.indemnification_rule.depends = ['available_indemnification_rules',
@@ -146,19 +149,23 @@ class OptionBenefit(get_rule_mixin('deductible_rule', 'Deductible Rule'),
             ('id', 'in', Eval('available_revaluation_rules'))]
         cls.revaluation_rule.states['readonly'] = Or(
             Len(Eval('available_revaluation_rules')) == 1,
-            Eval('contract_status') != 'quote')
+            (Bool(Eval('contract_status')) &
+                (Eval('contract_status') != 'quote')))
         cls.revaluation_rule.states['invisible'] = Len(Eval(
                 'available_revaluation_rules')) == 0
         cls.revaluation_rule.depends = ['available_revaluation_rules',
             'contract_status']
-        cls.indemnification_rule_extra_data.states['readonly'] = Eval(
-            'contract_status') != 'quote'
+        cls.indemnification_rule_extra_data.states['readonly'] = (Eval(
+                'contract_status') != 'quote') & (
+                Bool(Eval('contract_status')))
         cls.indemnification_rule_extra_data.depends += ['contract_status']
-        cls.revaluation_rule_extra_data.states['readonly'] = Eval(
-            'contract_status') != 'quote'
+        cls.revaluation_rule_extra_data.states['readonly'] = (Eval(
+                'contract_status') != 'quote') & (
+                Bool(Eval('contract_status')))
         cls.revaluation_rule_extra_data.depends += ['contract_status']
-        cls.deductible_rule_extra_data.states['readonly'] = Eval(
-            'contract_status') != 'quote'
+        cls.deductible_rule_extra_data.states['readonly'] = (Eval(
+                'contract_status') != 'quote') & (
+                Bool(Eval('contract_status')))
         cls.deductible_rule_extra_data.depends += ['contract_status']
 
     @fields.depends('version')
