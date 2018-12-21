@@ -1,3 +1,4 @@
+* BUG#10576 When in the same CR file there is cr for a SIREN and CR for insured affiliated to this SIREN, legal entity CR information will be propagated to all insured affiliated to this siren. Moreover CR integration for insured could be different from CR integration for insured period (that was not managed)
 * OTH#00000: Iteration on #10393: display all party information in task name
 * BUG#10443: Fix crash in task view if prest ij task are present
 * FEA#10393: Improve task display and allow to search according legal entity name or 

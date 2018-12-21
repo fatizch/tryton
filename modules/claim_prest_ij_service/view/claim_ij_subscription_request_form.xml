@@ -19,6 +19,10 @@ this repository contains the full copyright notices and license terms. -->
     <label name="retro_date"/>
     <field name="retro_date"/>
     <newline/>
+    <label name="error_code"/>
+    <field name="error_code" colspan="3"/>
+    <field name="error_message" colspan="4"/>
+    <newline/>
     <group id="footer" colspan="4" col="6">
         <group id="footer_left_pad" colspan="2"/>
         <group id="footer_center" colspan="2">

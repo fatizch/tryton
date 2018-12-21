@@ -413,7 +413,7 @@ class ClaimIjSubscriptionRequestGroup(Workflow, model.CoogSQL, model.CoogView):
     def get_requests_from_diagnostic_data(self, siren, ssn):
         def match(x):
             return (x.subscription.siren == siren) and (
-                (not ssn) or (x.ssn and x.ssn[:-2] == ssn))
+                (not ssn and not x.ssn) or (x.ssn and x.ssn[:-2] == ssn))
         return [x for x in self.requests if match(x)]
 
 
@@ -489,6 +489,7 @@ class ClaimIjSubscriptionRequest(Workflow, model.CoogSQL, model.CoogView):
                 ('unprocessed', 'processing'),
                 ('processing', 'failed'),
                 ('processing', 'confirmed'),
+                ('confirmed', 'failed'),
                 ))
 
     @classmethod
