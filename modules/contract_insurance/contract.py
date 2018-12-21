@@ -13,7 +13,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.tools import grouped_slice
 from trytond.pyson import Eval, If, Or, Bool, Len
 from trytond.transaction import Transaction
-from trytond.model import ModelView, Unique
+from trytond.model import ModelView
 
 from trytond.modules.coog_core import model, fields
 from trytond.modules.coog_core import utils
@@ -946,14 +946,12 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
     @classmethod
     def __setup__(cls):
         super(CoveredElement, cls).__setup__()
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('party_unique', Unique(t, t.party, t.contract, t.parent),
-                'The party cannot be added more than once on the same '
-                'contract')]
         cls.current_extra_data.states['readonly'] = COVERED_READ_ONLY
         cls.current_extra_data.depends += ['contract_status', 'versions',
             'parent']
+        cls._error_messages.update({
+                'duplicate_covered': 'You are trying to create duplicate '
+                'covered elements on contracts:\n %s'})
 
     @classmethod
     def __register__(cls, module_name):
@@ -974,6 +972,9 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             cursor.execute(*contract.select(contract.id))
             for contract, in cursor.fetchall():
                 cls._update_local_mptt_one(contract, None)
+
+        # Migration from 1.12
+        table.drop_constraint('party_unique')
 
     @classmethod
     def __post_setup__(cls):
@@ -1038,6 +1039,30 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             for x in skips:
                 default.setdefault(x, None)
         return super(CoveredElement, cls).copy(instances, default=default)
+
+    @classmethod
+    def validate(cls, covered_elements):
+        Contract = Pool().get('contract')
+        contracts = []
+        for cov in covered_elements:
+            if cov.parent or not cov.party or not cov.contract:
+                continue
+            contracts.append(cov.contract.id)
+        if not contracts:
+            return
+        covered = cls.__table__()
+        cursor = Transaction().connection.cursor()
+
+        query = covered.select(covered.contract,
+                where=((covered.parent == Null) & (covered.party != Null
+                    ) & (covered.contract.in_(contracts))),
+                group_by=[covered.contract, covered.party],
+                having=Count(covered.contract) > 1)
+        cursor.execute(*query)
+        res = [x for (x,) in cursor.fetchall()]
+        if res:
+            cls.raise_user_error('duplicate_covered', '\n'.join([x.rec_name
+                    for x in Contract.browse(res)]))
 
     @classmethod
     def default_versions(cls):
