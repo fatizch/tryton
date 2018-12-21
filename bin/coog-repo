@@ -120,7 +120,7 @@ _coog_repo_link_app() {
 }
 
 coog_repo_link_app() { # link repos modules - <repos> - default: all
-    ([ -d "$COOG_API" ] \
+    ([ -d "$COOG_APP" ] \
         && mkdir -p "$COOG_APP/src/custom" \
         && cd "$COOG_APP/src/custom" \
         && _coog_repo_rm \
