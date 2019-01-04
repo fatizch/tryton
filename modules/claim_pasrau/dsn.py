@@ -5,7 +5,7 @@ import datetime
 
 from itertools import groupby
 from decimal import Decimal
-from sql import Null
+from sql import Null, Literal
 from sql.operators import Not
 
 from trytond.pool import Pool
@@ -209,37 +209,22 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
     def fetch_individuals_at_zero(self, associated_lines, slip_parties):
         cursor = Transaction().connection.cursor()
         pool = Pool()
-        move = pool.get('account.move').__table__()
-        move_line = pool.get('account.move.line').__table__()
         Party = pool.get('party.party')
         party = Party.__table__()
-        invoice = pool.get('account.invoice').__table__()
-        invoice_line = pool.get('account.invoice.line').__table__()
         account_tax = pool.get('account.tax').__table__()
         claim = pool.get('claim').__table__()
         indemnification = pool.get('claim.indemnification').__table__()
         loss = pool.get('claim.loss').__table__()
         service = pool.get('claim.service').__table__()
-        line_claim_detail = pool.get('account.invoice.line.claim_detail'
-            ).__table__()
         product = pool.get('product.product').__table__()
         template = pool.get('product.template').__table__()
         category = pool.get('product.category').__table__()
         supplier_tax = pool.get('product.category-supplier-account.tax'
             ).__table__()
 
-        query_table = move_line.join(move, condition=(
-                move_line.move == move.id)
-            ).join(invoice, condition=(
-                invoice.move == move.id)
-            ).join(invoice_line, condition=(
-                invoice_line.invoice == invoice.id)
-            ).join(line_claim_detail, condition=(
-                line_claim_detail.invoice_line == invoice_line.id)
-            ).join(indemnification, condition=(
-                line_claim_detail.indemnification == indemnification.id)
-            ).join(party, condition=(
-                indemnification.beneficiary == party.id)
+        query_table = indemnification.join(party, condition=(
+                (indemnification.beneficiary == party.id)
+                & (indemnification.status == 'paid'))
             ).join(service, condition=(
                 indemnification.service == service.id)
             ).join(loss, condition=(
@@ -247,7 +232,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
             ).join(claim, condition=(
                 loss.claim == claim.id)
             ).join(product, condition=(
-                invoice_line.product == product.id)
+                indemnification.product == product.id)
             ).join(template, condition=(
                 product.template == template.id)
             ).join(category, condition=(
@@ -259,17 +244,9 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
             )
 
         where_clause = ((claim.status.in_(['open', 'reopen']))
-            & (invoice.state == 'paid')
-            & (invoice.business_kind == 'claim_invoice')
             & (account_tax.type == 'pasrau_rate')
-            & (party.is_person == True)
+            & (party.is_person == Literal(True))
             & (service.annuity_frequency != Null))
-
-        associated_move_lines = [x.id for x in associated_lines]
-
-        if associated_move_lines:
-            where_clause &= (Not(
-                move_line.id.in_([x.id for x in associated_lines])))
 
         slip_parties_ids = [x.id for x in slip_parties]
 

@@ -1,3 +1,5 @@
+* BUG#10694 Le fichier CRM peut contenir des blocs en doulons
+* BUG#10698 L'identification des tiers à déclarer doit reposer sur les données d'indemnisations seulement, et non sur les données de quittances
 * BUG#10632 L'information du matricule ne doit pas être utilisée pour rechercher un assuré
 * BUG#10632 Correction du traitement du fichier CRM nominatif suite au passage à python 3
 * OTH#00000: Correction d'un crash à la génération d'un fichier Pasrau suite à la modification du paramétrage de la comptabilité dans tryton 5.0.

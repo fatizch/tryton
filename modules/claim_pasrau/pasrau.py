@@ -88,6 +88,7 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
 
             to_save = []
             effective_date = utils.today()
+            treated_parties = []
             for declaration in node_func(root_element, 'declaration'):
                 for declaration_identification in node_func(declaration,
                         'declaration_identification'):
@@ -110,6 +111,9 @@ class PartyCustomPasrauRate(model.CoogSQL, model.CoogView):
                                         'matricule': matricule},
                                     raise_exception=False))
                             continue
+                        if party in treated_parties:
+                            continue
+                        treated_parties.append(party)
                         pasrau_tax_rate = node_func(salarie,
                             'taux_imposition_PAS', True)
                         if not pasrau_tax_rate:

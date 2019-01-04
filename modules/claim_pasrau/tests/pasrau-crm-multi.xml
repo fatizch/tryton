@@ -29,6 +29,11 @@
             <taux_imposition_PAS>14.00</taux_imposition_PAS>
          </salarie>
          <salarie>
+            <NIR>180104161674907</NIR>
+            <matricule>MAT0000XXXX</matricule>
+            <taux_imposition_PAS>14.00</taux_imposition_PAS>
+         </salarie>
+         <salarie>
             <NIR>180106741921625</NIR>
             <taux_imposition_PAS>2.00</taux_imposition_PAS>
          </salarie>
@@ -38,6 +43,10 @@
             <matricule>MAT000XXXXX</matricule>
             <taux_imposition_PAS></taux_imposition_PAS>
          </salarie>      
+         <salarie>
+            <NIR>180106741921625</NIR>
+            <taux_imposition_PAS>2.00</taux_imposition_PAS>
+         </salarie>
       </declaration_bilan>
       <declaration_anomalie>
          <description>

@@ -134,9 +134,8 @@ class NEODeSTemplate(utils.DataExporter):
             val = self.get_value(instance, field_def, parent)
             if val == -1 or val is None:
                 continue
-            assert isinstance(val, type('')), ('Value of %s is %s , type %s'
-                % (field_def[0], val, type(val)))
-            assert val
+            assert val and isinstance(val, type('')), (
+                'Value of %s is %s , type %s' % (field_def[0], val, type(val)))
             self.message.append(Entry(field_def[0], val))
 
     def get_field_defs(self, block_id):
