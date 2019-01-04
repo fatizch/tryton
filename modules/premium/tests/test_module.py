@@ -39,6 +39,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract.start_date = datetime.date(2014, 2, 12)
         contract.initial_start_date = datetime.date(2014, 2, 12)
         contract.end_date = datetime.date(2015, 4, 25)
+        contract.final_end_date = datetime.date(2015, 4, 25)
         period.start_date = datetime.date(2014, 2, 12)
         period.end_date = datetime.date(2015, 4, 25)
         contract.activation_history = [period]
@@ -55,6 +56,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract.start_date = datetime.date(2014, 3, 1)
         contract.initial_start_date = datetime.date(2014, 3, 1)
         contract.end_date = datetime.date(2015, 12, 31)
+        contract.final_end_date = datetime.date(2015, 12, 31)
         period.start_date = datetime.date(2014, 3, 1)
         period.end_date = datetime.date(2015, 12, 31)
         contract.activation_history = [period]

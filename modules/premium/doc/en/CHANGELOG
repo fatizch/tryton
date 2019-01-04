@@ -1,3 +1,5 @@
+* BUG#10625 Compute premium dates based on the initial start date rather than that of the current term
+
 Version 2.2 - 2018-10-12
 * BUG#9621 Properly recalculate aperiodic premiums when forced
 

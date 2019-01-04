@@ -1,3 +1,5 @@
+* BUG#10625 Calcul des dates de requittancement sur la base de la date d'effet initiale du contrat et pas de la date de début du terme courant
+
 Version 2.2 - 2018-10-12
 * BUG#9621 Recalcul des primes non périodiques lors du calcul forcé dans les processus
 
