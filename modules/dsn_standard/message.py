@@ -127,7 +127,7 @@ class DsnMessage(Workflow, model.CoogSQL, model.CoogView):
         for message in messages:
             if message.type == 'out':
                 filepath = os.path.join(archive_dir, message.filename)
-                with open(filepath, 'w') as _f:
+                with open(filepath, 'wb') as _f:
                     _f.write(message.message)
         Event.notify_events(messages, 'dsn_message_sent')
 
