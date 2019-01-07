@@ -1,3 +1,4 @@
+* BUG#10526 Reset direct debit day when fail moving a contract to manual payment
 * BUG#10379 Manage the value of the contract billing information effective date after a payment fail and moving on manual mode
 * BUG#10390 The date of the manual payment billing mode is incorrectly positioned for contracts that belong to the same contract set (contract_set module), and whose payments are failed at the same time.
 

@@ -167,6 +167,9 @@ class Payment(metaclass=PoolMeta):
                 billing_info.billing_mode = failure_billing_mode
                 billing_info.payment_term = \
                     failure_billing_mode.allowed_payment_terms[0]
+                direct_debit_day = int(failure_billing_mode.sync_day) if \
+                    failure_billing_mode.sync_day else None
+                billing_info.direct_debit_day = direct_debit_day
                 date = billing_info.date
                 break
         else:
