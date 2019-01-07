@@ -4,6 +4,7 @@
 import os
 import csv
 import re
+import unicodedata
 
 from collections import namedtuple
 from decimal import Decimal
@@ -134,6 +135,7 @@ class NEODeSTemplate(utils.DataExporter):
             val = self.get_value(instance, field_def, parent)
             if val == -1 or val is None:
                 continue
+            val = self.dsn_field_format(val, field_def)
             assert val and isinstance(val, type('')), (
                 'Value of %s is %s , type %s' % (field_def[0], val, type(val)))
             self.message.append(Entry(field_def[0], val))
@@ -150,6 +152,23 @@ class NEODeSTemplate(utils.DataExporter):
             return self.instance_field_getter(instance, name)
         # ignore undefined fields
         return -1
+
+    def ascii_alpha_num(self, value):
+        # Normalize to NFKD, then ignore non ascii,
+        # which converts accented to non accented.
+        # Then remove all non alphanumeric characters
+        return re.sub(r'[\W_]+', ' ',
+            unicodedata.normalize('NFKD', value).encode(
+                'ascii', 'ignore').decode('ascii')).strip()
+
+    def dsn_field_format(self, val, field_def):
+        formats = {
+            'N4DS_Adresse_Localite': self.ascii_alpha_num
+            }
+        formatting = formats.get(field_def[1]['DataType Id'])
+        if formatting:
+            val = formatting(val)
+        return val
 
     def validate(self):
         for entry in self.message:
@@ -177,9 +196,8 @@ class NEODeSTemplate(utils.DataExporter):
     def check_regexp(self, entry, data_def, field_def):
         exp = data_def.get("CompiledRegex")
         if exp:
-            # TODO : check that entire value matches (not a substring)
-            valid_ = bool(exp.match(entry.value))
-            if not valid_:
+            match = exp.fullmatch(entry.value)
+            if not match:
                 msg = (("The value \"%s\" for entry \"%s\" (%s) does "
                 "not match regexp \"%s\". The DataType is \"%s\".") % (
                     entry.value, entry.id_, field_def["Comment"],

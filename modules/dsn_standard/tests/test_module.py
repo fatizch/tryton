@@ -34,6 +34,16 @@ class ModuleTestCase(test_framework.CoogTestCase):
         D.message.append(bad_iban)
         self.assertRaises(dsn.DSNValidationError, D.validate)
 
+        D = dsn.NEODeSTemplate(None)
+        bad_locality = dsn.Entry('S21.G00.30.010', 'SAINT ESTÈVE')
+        D.message = [bad_locality]
+        self.assertRaises(dsn.DSNValidationError, D.validate)
+
+        D = dsn.NEODeSTemplate(None)
+        bad_locality = dsn.Entry('S21.G00.30.010', 'SAINT ESTEVE')
+        D.message = [bad_locality]
+        self.assertTrue(D.validate)
+
     def test_generate(self):
         sender = self.Party()
         sender.is_person = False
@@ -45,7 +55,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         country = self.Country(name="Oz", code='OZ')
         country.save()
         address = self.Address(party=sender, zip="75000", country=country,
-            city="Emerald", street='2 Common Street')
+            city="SAINT-ESTÈVE à_SÊVRES.", street='2 Common Street')
         address.save()
         sender.addresses = [address.id]
         sender.save()
@@ -74,7 +84,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             "S10.G00.01.003,'Corp'",
             "S10.G00.01.004,'2 Common Street'",
             "S10.G00.01.005,'75000'",
-            "S10.G00.01.006,'Emerald'",
+            "S10.G00.01.006,'SAINT ESTEVE a SEVRES'",
             "S10.G00.02.001,'01'",
             "S10.G00.02.002,'Joe Doe'",
             "S10.G00.02.004,'joe@corp.com'",

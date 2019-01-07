@@ -1,2 +1,3 @@
+* BUG#10714 Le champ de la localité doit être normalisé en ascii alphanumérique uniquement
 * OTH#0000 Correction d'anomalies suite à des tests sur le portail NetEntreprise
 * Création du module
