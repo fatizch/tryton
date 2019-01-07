@@ -72,7 +72,7 @@ class InsurerReportContractBatch(batch.BatchRoot):
             ).select(insurer_table.id,
                where=where_clause)
         cursor.execute(*query)
-        return cursor.fetchall()
+        return list(set(cursor.fetchall()))
 
     @classmethod
     def get_reporting_wizard(cls):
