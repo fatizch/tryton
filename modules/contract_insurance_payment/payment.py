@@ -157,8 +157,8 @@ class Payment(metaclass=PoolMeta):
         else:
             # case when only non periodic invoice payment is failed
             billing_change_date = max(contract.initial_start_date,
-                contract.last_paid_invoice_end or datetime.date.min)\
-                + relativedelta(days=1)
+                contract.last_paid_invoice_end + relativedelta(days=1)
+                if contract.last_paid_invoice_end else datetime.date.min)
 
         for billing_info in contract.billing_informations:
             if billing_info.date == billing_change_date or (
