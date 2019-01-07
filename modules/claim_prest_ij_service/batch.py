@@ -201,15 +201,18 @@ class CreatePrestIjSubscription(BaseSelectPrestIj):
         pool = Pool()
         Subscription = pool.get('claim.ij.subscription')
         for sliced_objects in grouped_slice(objects):
+            values = []
             if kind == 'company':
-                values = [{'siren': siren}
-                    for siren, in sliced_objects]
+                for siren, in sliced_objects:
+                    if siren:
+                        values.append({'siren': siren})
             else:
-                values = [{
-                        'siren': siren,
-                        'ssn': ssn,
-                        }
-                    for ssn, siren in sliced_objects]
+                for ssn, siren in sliced_objects:
+                    if ssn:
+                        values.append({
+                            'siren': siren,
+                            'ssn': ssn,
+                            })
             Subscription.create(values)
 
 
