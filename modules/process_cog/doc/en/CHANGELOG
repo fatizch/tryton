@@ -1,3 +1,5 @@
+* BUG#10594 Handle case where no process log exists when resuming a process
+
 Version 2.2 - 2018-10-12
 * FEA#8975 Improve activation step in quote processing
 

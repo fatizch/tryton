@@ -1468,6 +1468,7 @@ class ProcessResume(Wizard):
             cls.raise_user_error('no_process_found')
 
         Log = pool.get('process.log')
+        active_log = None
         active_logs = Log.search([
                 ('latest', '=', True),
                 ('task', '=', '%s,%i' % (active_model, active_id))])
