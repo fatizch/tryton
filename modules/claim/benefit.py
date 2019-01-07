@@ -316,6 +316,12 @@ class Benefit(model.CoogSQL, model.CoogView,
             cls.write(*to_write)
 
     @classmethod
+    def copy(cls, instances, default=None):
+        default = {} if default is None else default.copy()
+        default.setdefault('options', None)
+        return super(Benefit, cls).copy(instances, default=default)
+
+    @classmethod
     def get_beneficiary_kind(cls):
         return [
             ('subscriber', cls.raise_user_error(
