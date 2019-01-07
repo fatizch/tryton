@@ -349,10 +349,10 @@ class Endorsement(metaclass=PoolMeta):
         return endorsements
 
     def get_contact(self):
-        if self.contract_set:
-            return self.contract_set.get_contact()
-        else:
-            return super(Endorsement, self).get_contact()
+        contact = super(Endorsement, self).get_contact()
+        if contact is None and self.contract_set is not None:
+            contact = self.contract_set.get_contact()
+        return contact
 
 
 class EndorsementSetSelectDeclineReason(model.CoogView):

@@ -1,3 +1,5 @@
+* BUG#10356 An endorsement contact should always be the main contract contact if it exists, otherwise it is the contract set contact
+
 Version 2.2 - 2018-10-12
 * OTH#0000 Properly preview premiums for endorsements outside of sets
 * BUG#9437 Fix crash when getting the endorsement summary

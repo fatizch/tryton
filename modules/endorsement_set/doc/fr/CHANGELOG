@@ -1,3 +1,5 @@
+* BUG#10356 Le contact sur un avenant doit être celui du contrat principal s'il existe, autrement c'est celui de l'ensemble de contrats
+
 Version 2.2 - 2018-10-12
 * OTH#0000 Prévisualisation des primes pour les avenants hors ensemble d'avenants
 * BUG#9437 Correction d'un crash sur la récupération du résumé de l'avenant
