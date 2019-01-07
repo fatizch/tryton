@@ -15,10 +15,7 @@ this repository contains the full copyright notices and license terms. -->
     </group>
     <newline/>
     <group id="indemnification_list" colspan="4" yexpand="1" yfill="1">
-        <field name="validate" mode="tree" group="validate"/>
-        <field name="control" mode="tree" group="control"/>
-        <newline/>
-        <field name="validate" mode="form" group="validate" expand_toolbar="0"/>
-        <field name="control" mode="form" group="control" expand_toolbar="0"/>
+        <field name="validate" mode="tree"/>
+        <field name="control" mode="tree"/>
     </group>
 </form>

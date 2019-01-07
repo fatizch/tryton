@@ -1,3 +1,4 @@
+* OTH#0000 Remove mixed view in claim control / validation wizards for performances purposes
 * FEA#10531 Add wizard and batch to check claim migrated datas (indemnification computation)
 * BUG#10587 Improve performances when detecting payment status of an indemnification
 * OTH#0000 Fix annuity rule

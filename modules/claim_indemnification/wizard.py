@@ -75,9 +75,6 @@ class IndemnificationElement(model.CoogView):
     status = fields.Char('Status', readonly=True)
     benefit = fields.Many2One('benefit', 'Benefit', readonly=True)
     contract = fields.Many2One('contract', 'Contract', readonly=True)
-    indemnification_details = fields.Many2Many(
-        'claim.indemnification', '', None, 'Details',
-        states={'readonly': True})
 
     @classmethod
     def from_indemnification(cls, indemnification):
@@ -100,7 +97,6 @@ class IndemnificationElement(model.CoogView):
             'claim.rec_name': service.loss.claim.rec_name,
             'recipient': indemnification.beneficiary,
             'loss_date': service.loss.start_date,
-            'indemnification_details': [indemnification.id]
             }
 
 

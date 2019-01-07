@@ -39,16 +39,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">indemnification_control_tree</field>
         </record>
-        <record model="ir.ui.view" id="indemnification_validate_form_view">
-            <field name="model">claim.indemnification.assistant.validate.element</field>
-            <field name="type">form</field>
-            <field name="name">indemnification_element_form</field>
-        </record>
-        <record model="ir.ui.view" id="indemnification_control_form_view">
-            <field name="model">claim.indemnification.assistant.control.element</field>
-            <field name="type">form</field>
-            <field name="name">indemnification_element_form</field>
-        </record>
         <record model="ir.ui.view" id="indemnification_assistant_view_form">
             <field name="model">claim.indemnification.assistant.view</field>
             <field name="type">form</field>

@@ -881,11 +881,6 @@ msgctxt ""
 msgid "Indemnification"
 msgstr "Prestation"
 
-msgctxt ""
-"field:claim.indemnification.assistant.control.element,indemnification_details:"
-msgid "Details"
-msgstr "Détails"
-
 msgctxt "field:claim.indemnification.assistant.control.element,loss_date:"
 msgid "Loss Date"
 msgstr "Date de l'événement"
@@ -952,11 +947,6 @@ msgctxt ""
 "field:claim.indemnification.assistant.validate.element,indemnification:"
 msgid "Indemnification"
 msgstr "Prestations"
-
-msgctxt ""
-"field:claim.indemnification.assistant.validate.element,indemnification_details:"
-msgid "Details"
-msgstr "Détails"
 
 msgctxt "field:claim.indemnification.assistant.validate.element,loss_date:"
 msgid "Loss Date"
