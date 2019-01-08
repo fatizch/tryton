@@ -243,7 +243,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
                 supplier_tax.tax == account_tax.id)
             )
 
-        where_clause = ((claim.status.in_(['open', 'reopen']))
+        where_clause = ((claim.status.in_(['open', 'reopened']))
             & (account_tax.type == 'pasrau_rate')
             & (party.is_person == Literal(True))
             & (service.annuity_frequency != Null))
