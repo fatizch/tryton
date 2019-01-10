@@ -801,6 +801,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 'scheduling_blocked': 'Scheduling is blocked for '
                 'indemnification %(indemnification)s, claim\'s '
                 'sub status is %(sub_status)s',
+                'quote_contract': 'Scheduling is blocked for '
+                'indemnification %(indemnification)s, contract %(contract)s is '
+                'not activated',
                 })
         cls._order = [('start_date', 'ASC')]
 
@@ -1139,6 +1142,10 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             for i in cancel_indemnifications]
         to_schedule = []
         for indemnification in indemnifications:
+            if (indemnification.service.contract.status == 'quote'):
+                cls.append_functional_error('quote_contract',
+                    {'indemnification': indemnification.rec_name,
+                        'contract': indemnification.service.contract.rec_name})
             if (indemnification.service.claim.sub_status and indemnification.
                     service.claim.sub_status.block_indemnifications):
                 cls.append_functional_error('scheduling_blocked',

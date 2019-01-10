@@ -1,3 +1,4 @@
+* BUG#10708 Ne pas permettre d'ordonnancer un contrat avec un statut devis (en cas de migration)
 * OTH#0000 Suppression de la vue mixte dans les assistants de contrôle / validation d'indemnisations pour résoudre des problèmes de performance
 * FEA#10531 Ajout d'un assistant et d'un batch de vérification de données sinistres migrées (recalcul d'indemnisations)
 * BUG#10587 Améliorations des performances de la détection du statut du règlement des indemnisations
