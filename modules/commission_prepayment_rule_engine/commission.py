@@ -115,7 +115,8 @@ class PrepaymentPaymentDateRule(
         return coog_string.slugify(self.name)
 
 
-class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule'), metaclass=PoolMeta):
+class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule'),
+        metaclass=PoolMeta):
     __name__ = 'commission.plan.line'
 
     is_prepayment = fields.Function(fields.Boolean('Is Prepayment'),
@@ -171,6 +172,6 @@ class PlanLines(get_rule_mixin('prepayment_rule', 'Prepayment Rule'), metaclass=
         return self.prepayment_rule.get_extra_data_for_on_change(
             self.prepayment_rule_extra_data)
 
-    @fields.depends('plan', 'use_rule_engine', 'is_prepayment')
+    @fields.depends('plan', 'use_rule_engine')
     def on_change_with_is_prepayment(self, name=None):
         return self.plan.is_prepayment if self.plan else None
