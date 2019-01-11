@@ -1,3 +1,4 @@
+* BUG#10748 Amélioration des performances du getter de service->claim
 * BUG#10572 Ne pas copier le lien vers les garanties lors de la duplication d'une prestation
 * BUG#10598 Traduction du message d'erreur de la date de déclaration.
 * FEA#10291 Avoir la possibilité de délivrer une prestation plusieurs fois dans le même sinistre

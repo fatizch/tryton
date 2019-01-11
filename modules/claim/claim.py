@@ -11,6 +11,7 @@ from trytond.transaction import Transaction
 from trytond.model import Unique
 from trytond.cache import Cache
 from trytond.server_context import ServerContext
+from trytond.tools import grouped_slice
 
 from trytond.modules.coog_core import model, utils, fields, export, coog_string
 from trytond.modules.report_engine import Printable
@@ -853,7 +854,7 @@ class ClaimService(model.CoogSQL, model.CoogView,
             }, depends=['extra_datas'])
     claim = fields.Function(
         fields.Many2One('claim', 'Claim'),
-        'get_claim', searcher='search_claim')
+        'getter_claim', searcher='search_claim')
     summary = fields.Function(
         fields.Text('Service Summary'),
         'get_summary')
@@ -901,9 +902,26 @@ class ClaimService(model.CoogSQL, model.CoogView,
         if self.claim:
             return self.claim.status
 
-    def get_claim(self, name):
-        if self.loss:
-            return self.loss.claim.id
+    @classmethod
+    def getter_claim(cls, instances, name):
+        loss = Pool().get('claim.loss').__table__()
+        table = cls.__table__()
+
+        result = {x.id: None for x in instances}
+        cursor = Transaction().connection.cursor()
+        query = table.join(loss, 'LEFT OUTER',
+            condition=table.loss == loss.id
+            )
+
+        for cur_slice in grouped_slice(instances):
+            cursor.execute(*query.select(table.id, loss.claim,
+                    where=table.id.in_([x.id for x in cur_slice])
+                    ))
+
+            for table_id, value in cursor.fetchall():
+                result[table_id] = value
+
+        return result
 
     def get_icon(self, name):
         if self.insurer_delegations:
