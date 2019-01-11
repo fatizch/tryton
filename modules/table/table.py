@@ -69,7 +69,6 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
 
     __name__ = 'table'
     _func_key = 'code'
-    _get_dimension_dates_cache = Cache('get_dates_from_table_dimension')
 
     name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
@@ -83,6 +82,9 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
     number_of_dimensions = fields.Function(
         fields.Integer('Number of dimension'),
         'get_number_of_dimensions')
+
+    _get_dimension_dates_cache = Cache('get_dates_from_table_dimension')
+    _get_table_by_code_cache = Cache('get_table_by_code')
 
     @classmethod
     def __setup__(cls):
@@ -147,6 +149,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         Cell.delete(sum([list(x.cells) for x in tables], []))
         super(TableDefinition, cls).delete(tables)
         cls._get_dimension_dates_cache.clear()
+        cls._get_table_by_code_cache.clear()
 
     @classmethod
     def is_master_object(cls):
@@ -274,6 +277,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         TableDefinitionDimension = pool.get('table.dimension.value')
         super(TableDefinition, cls).write(*args)
         cls._get_dimension_dates_cache.clear()
+        cls._get_table_by_code_cache.clear()
 
         actions = iter(args)
         for records, values in zip(actions, actions):
@@ -336,6 +340,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
     def create(cls, vlist):
         tables = super(TableDefinition, cls).create(vlist)
         cls._get_dimension_dates_cache.clear()
+        cls._get_table_by_code_cache.clear()
         return tables
 
     @classmethod
@@ -350,6 +355,16 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         date_list = [(x.start_date, x.end_date) for x in dimension]
         cls._get_dimension_dates_cache.set(key, date_list)
         return date_list
+
+    @classmethod
+    def get_table_by_code(cls, code):
+        table_id = cls._get_table_by_code_cache.get(code, -1)
+        if table_id != -1:
+            return cls(table_id) if table_id else None
+        table = cls.search([('code', '=', code)])
+        table_id = table[0].id if table else None
+        cls._get_table_by_code_cache.set(code, table_id)
+        return cls(table_id) if table_id else None
 
 
 for i in range(1, DIMENSION_MAX + 1):

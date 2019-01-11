@@ -429,7 +429,7 @@ class ClaimService(metaclass=PoolMeta):
                         salary - Decimal(4) * pmss)
             return salary_range
 
-        pmss_table, = Table.search([('code', '=', 'pmss')])
+        pmss_table = Table.get_table_by_code('pmss')
         salary_range = {'TA': Decimal(0), 'TB': Decimal(0), 'TC': Decimal(0)}
         salaries = self.claim.delivered_services[0].salary \
             if not current_salary else [current_salary]
