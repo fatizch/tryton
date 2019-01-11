@@ -244,6 +244,7 @@ class ManageOptionBenefitsDisplayer(model.CoogView):
         for benefit in version.benefits:
             values = model.dictionarize(benefit)
             values.pop('version')
+            values['contract_status'] = 'quote'
             option_benefits.append(OptionBenefit(**values))
             option_benefits[-1].on_change_benefit()
         displayer.option_benefits = option_benefits
@@ -265,7 +266,7 @@ class ManageOptionBenefitsDisplayer(model.CoogView):
             'deductible_rule', 'indemnification_rule', 'revaluation_rule',
             'indemnification_rule_extra_data',
             'deductible_rule_extra_data',
-            'revaluation_rule_extra_data')
+            'revaluation_rule_extra_data', 'contract_status')
 
 
 class StartEndorsement(metaclass=PoolMeta):

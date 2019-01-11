@@ -9,8 +9,7 @@ __all__ = [
     ]
 
 _CONTRACT_STATUS_STATES = {
-    'readonly': Bool(Eval('contract_status')) & (
-        Eval('contract_status') != 'quote'),
+    'readonly': Eval('contract_status') != 'quote',
     }
 _CONTRACT_STATUS_DEPENDS = ['contract_status']
 
