@@ -38,6 +38,10 @@ class MoveLine(metaclass=PoolMeta):
 class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
+    is_slip = fields.Function(
+        fields.Boolean('Is Slip'),
+        'getter_is_slip', searcher='search_is_slip')
+
     @classmethod
     def __setup__(cls):
         super(Invoice, cls).__setup__()
@@ -46,6 +50,17 @@ class Invoice(metaclass=PoolMeta):
                 'following unreconciliation of invoice %s'
                 })
         cls.business_kind.selection.append(('slip', 'Slip'))
+        cls._slip_kinds = {'slip'}
+
+    @classmethod
+    def getter_is_slip(cls, invoices, name):
+        return {x.id: x.business_kind in cls._slip_kinds
+            for x in invoices}
+
+    @classmethod
+    def search_is_slip(cls, name, clause):
+        operator = 'in' if utils.clause_is_true(clause) else 'not in'
+        return [('business_kind', operator, list(cls._slip_kinds))]
 
     @classmethod
     @ModelView.button
@@ -112,7 +127,7 @@ class Invoice(metaclass=PoolMeta):
         Move.save(reset_moves)
         Move.post(reset_moves)
 
-        move_line_ids = [x.id for x in sum(list(lines_per_invoice.values()), [])]
+        move_line_ids = [x.id for x in sum(lines_per_invoice.values(), [])]
         if move_line_ids:
             cursor = Transaction().connection.cursor()
             move_line = MoveLine.__table__()

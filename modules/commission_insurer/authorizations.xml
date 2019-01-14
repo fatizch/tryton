@@ -6,7 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- Commission Management Group -->
         <!-- Commission -->
         <record model="ir.ui.menu-res.group" id="menu_commission_create_invoice_principal_commission_manage">
-            <field name="menu" ref="commission_insurer.menu_commission_create_invoice_principal"/>
+            <field name="menu" ref="account_invoice_slip.menu_create_insurer_slip"/>
             <field name="group" ref="commission_insurance.group_commission_manage"/>
         </record>
         <record model="ir.model.access" id="access_account_invoice_group_commission_manage">

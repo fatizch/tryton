@@ -5439,7 +5439,7 @@ if GENERATE_REPORTINGS:  # {{{
     # }}}
 
     do_print('    Generating insurer invoices')  # {{{
-    InsurerInvoiceCreate = Wizard('commission.create_invoice_principal')
+    InsurerInvoiceCreate = Wizard('account.invoice.create.insurer_slip')
     InsurerInvoiceCreate.form.until_date = _illness_claim_end_date_2
     InsurerInvoiceCreate.form.insurers.append(Party(insurer.party.id))
     InsurerInvoiceCreate.form.notice_kind = 'options'
@@ -5452,7 +5452,7 @@ if GENERATE_REPORTINGS:  # {{{
     ReportCreation.execute('generate')
     Invoice.delete([insurer_invoice])
 
-    InsurerInvoiceCreate = Wizard('commission.create_invoice_principal')
+    InsurerInvoiceCreate = Wizard('account.invoice.create.insurer_slip')
     InsurerInvoiceCreate.form.until_date = _illness_claim_end_date_2
     InsurerInvoiceCreate.form.insurers.append(Party(insurer.party.id))
     InsurerInvoiceCreate.form.notice_kind = 'benefits'
@@ -5465,7 +5465,7 @@ if GENERATE_REPORTINGS:  # {{{
 
     insurer.group_insurer_invoices = True
     insurer.save()
-    InsurerInvoiceCreate = Wizard('commission.create_invoice_principal')
+    InsurerInvoiceCreate = Wizard('account.invoice.create.insurer_slip')
     InsurerInvoiceCreate.form.until_date = _illness_claim_end_date_2
     InsurerInvoiceCreate.form.insurers.append(Party(insurer.party.id))
     InsurerInvoiceCreate.form.notice_kind = 'all'

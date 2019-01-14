@@ -89,21 +89,21 @@ coog_daily_run() {
 
             (
             _coog_daily_check_modules "commission_insurer" || return 0 &&       \
-                coog_chain_main commission_insurer commission                   \
+                coog_chain_main account_invoice_slip insurer_invoice                   \
                 --treatment_date="$LAST_DAY_OF_THE_MONTH"                       \
                 --notice_kind="options"
             )
             [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
             (
             _coog_daily_check_modules "claim_insurer" || return 0 &&            \
-                coog_chain_main commission_insurer commission                   \
+                coog_chain_main account_invoice_slip insurer_invoice                   \
                 --treatment_date="$LAST_DAY_OF_THE_MONTH"                       \
                 --notice_kind="benefits"
             )
             [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
             (
             _coog_daily_check_modules "claim_insurer" || return 0 &&            \
-                coog_chain_main commission_insurer commission                   \
+                coog_chain_main account_invoice_slip insurer_invoice                   \
                 --treatment_date="$LAST_DAY_OF_THE_MONTH"                       \
                 --notice_kind="all"
             )

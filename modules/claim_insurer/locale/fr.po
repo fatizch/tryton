@@ -10,13 +10,13 @@ msgctxt "field:account.invoice.line,invoice_business_kind:"
 msgid "Invoice Business Kind"
 msgstr "Type métier de la quittance"
 
+msgctxt "model:event.type,name:event_claim_insurer_invoice_generated"
+msgid "Claim Insurer Invoice Generated"
+msgstr "Bordereau prestation généré"
+
 msgctxt "model:ir.action,name:act_invoice_claim_insurer_invoice_form"
 msgid "Claim Insurer Invoices"
 msgstr "Bordereaux assureur prestation"
-
-msgctxt "model:ir.ui.menu,name:menu_commission_create_invoice_principal"
-msgid "Create Commission Invoice Principal"
-msgstr "Générer les bordereaux assureurs"
 
 msgctxt "model:ir.ui.menu,name:menu_invoice_claim_insurer_invoice"
 msgid "Claim Insurer Invoices"
@@ -26,7 +26,7 @@ msgctxt "selection:account.invoice,business_kind:"
 msgid "Claim Insurer Invoice"
 msgstr "Bordereau assureur prestation"
 
-msgctxt "selection:commission.create_invoice_principal.ask,notice_kind:"
+msgctxt "selection:account.invoice.create.insurer_slip,notice_kind:"
 msgid "Benefit"
 msgstr "Prestation"
 

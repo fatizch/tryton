@@ -14,17 +14,12 @@ from trytond.modules.coog_core import coog_sql
 
 __all__ = [
     'InvoiceSlipConfiguration',
+    'CreateInsurerSlipParameters',
     ]
 
 
 class InvoiceSlipConfiguration(metaclass=PoolMeta):
     __name__ = 'account.invoice.slip.configuration'
-
-    @classmethod
-    def _get_new_slip(cls, parameters):
-        invoice = super(InvoiceSlipConfiguration, cls)._get_new_slip(parameters)
-        invoice.insurer_role = parameters.get('insurer', None)
-        return invoice
 
     @classmethod
     def _get_slip_lines(cls, account, parameters):
@@ -259,3 +254,22 @@ class InvoiceSlipConfiguration(metaclass=PoolMeta):
             return 'commission_invoice_generated'
         return super(InvoiceSlipConfiguration,
             cls)._event_code_from_slip_kind(slip_kind)
+
+
+class CreateInsurerSlipParameters(metaclass=PoolMeta):
+    __name__ = 'account.invoice.create.insurer_slip'
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls.notice_kind.selection.append(('options', 'Options'))
+
+    @staticmethod
+    def default_journal():
+        pool = Pool()
+        Journal = pool.get('account.journal')
+        journals = Journal.search([
+                ('type', '=', 'commission'),
+                ], limit=1)
+        if journals:
+            return journals[0].id

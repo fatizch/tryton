@@ -23,6 +23,7 @@ class Invoice(metaclass=PoolMeta):
         cls.business_kind.selection += [
             ('claim_insurer_invoice', 'Claim Insurer Invoice'),
             ]
+        cls._slip_kinds.add('claim_insurer_invoice')
 
     @classmethod
     def get_claim_invoice_types(cls):

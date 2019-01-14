@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="offered_insurance">
+        <record model="ir.action.wizard" id="act_create_insurer_slip">
+            <field name="name">Create Insurer Slip</field>
+            <field name="wiz_name">account.invoice.create.insurer_slip</field>
+        </record>
+        <record model="ir.ui.view" id="create_insurer_slip_parameters_view_form">
+            <field name="model">account.invoice.create.insurer_slip</field>
+            <field name="type">form</field>
+            <field name="name">create_insurer_slip_parameters_form</field>
+        </record>
+        <menuitem parent="account_invoice_slip.menu_slip" sequence="50" action="act_create_insurer_slip" id="menu_create_insurer_slip"/>
+    </data>
+</tryton>

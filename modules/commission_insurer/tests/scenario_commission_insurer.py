@@ -218,14 +218,14 @@ pay.execute('choice')
 
 # #Comment# #Create insurer commission invoice
 Invoice = Model.get('account.invoice')
-create_invoice = Wizard('commission.create_invoice_principal')
+create_invoice = Wizard('account.invoice.create.insurer_slip')
 create_invoice.form.insurers.append(agent.party)
 create_invoice.form.until_date = None
 create_invoice.form.notice_kind = 'options'
 create_invoice.execute('create_')
 invoice, = Invoice.find([('type', '=', 'in')])
-invoice.total_amount == Decimal('40')
-# #Res# #True
+assert invoice.total_amount == Decimal('40'), 'Expected base invoice amount ' \
+    'to be 40.0, got %.2f' % invoice.total_amount
 
 # #Comment# #Cancel commission invoice
 invoice.click('cancel')
@@ -237,14 +237,15 @@ MoveLine.find([('principal_invoice_line', 'in', [x.id for x in invoice.lines])])
 # #Comment# #Recreate insurer commission invoice
 agent.reload()
 Invoice = Model.get('account.invoice')
-create_invoice = Wizard('commission.create_invoice_principal')
+create_invoice = Wizard('account.invoice.create.insurer_slip')
 create_invoice.form.insurers.append(agent.party)
 create_invoice.form.until_date = None
+create_invoice.form.notice_kind = 'options'
 create_invoice.execute('create_')
 invoice, = Invoice.find([('type', '=', 'in'),
         ('state', '!=', 'cancel')])
-invoice.total_amount == Decimal('40')
-# #Res# #True
+assert invoice.total_amount == Decimal('40'), 'Expected re-generated invoice' \
+    ' amount to be 40.0, got %.2f' % invoice.total_amount
 invoice.click('post')
 
 # #Comment# #Cancel Invoice
@@ -255,11 +256,12 @@ first_invoice.invoice.state
 # #Comment# #Create commission invoice
 agent.reload()
 Invoice = Model.get('account.invoice')
-create_invoice = Wizard('commission.create_invoice_principal')
+create_invoice = Wizard('account.invoice.create.insurer_slip')
 create_invoice.form.insurers.append(agent.party)
 create_invoice.form.until_date = None
+create_invoice.form.notice_kind = 'options'
 create_invoice.execute('create_')
 invoice = Invoice.find([('type', '=', 'in'),
         ('state', '!=', 'cancel')])[0]
-invoice.total_amount == Decimal('-40')
-# #Res# #True
+assert invoice.total_amount == Decimal('-40'), 'Expected cancelled invoice ' \
+    'amount to be -40.0, got %.2f' % invoice.total_amount

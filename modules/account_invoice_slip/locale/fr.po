@@ -26,6 +26,38 @@ msgctxt "error:account.invoice:"
 msgid "Principal line reset following unreconciliation of invoice %s"
 msgstr "Ligne de bordereau suite à la dé-réconciliation de la quittance %s"
 
+msgctxt "field:account.invoice,is_slip:"
+msgid "Is Slip"
+msgstr "Est un bordereau"
+
+msgctxt "field:account.invoice.create.insurer_slip,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:account.invoice.create.insurer_slip,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:account.invoice.create.insurer_slip,insurers:"
+msgid "Insurers"
+msgstr "Assureurs"
+
+msgctxt "field:account.invoice.create.insurer_slip,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:account.invoice.create.insurer_slip,notice_kind:"
+msgid "Notice Kind"
+msgstr "Type de bordereau"
+
+msgctxt "field:account.invoice.create.insurer_slip,post_invoices:"
+msgid "Post Invoices"
+msgstr "Emettre les bordereaux"
+
+msgctxt "field:account.invoice.create.insurer_slip,until_date:"
+msgid "Until Date"
+msgstr "Jusqu'au"
+
 msgctxt "field:account.invoice.slip.account,account:"
 msgid "Account"
 msgstr "Compte"
@@ -174,6 +206,10 @@ msgstr ""
 "La valeur de ce champ sera utilisée comme description pour le bordereau "
 "généré"
 
+msgctxt "model:account.invoice.create.insurer_slip,name:"
+msgid "Create Insurer Slip Parameters"
+msgstr "Paramètres du bordereau"
+
 msgctxt "model:account.invoice.slip.account,name:"
 msgid "Invoice Slip Account Relation"
 msgstr "Comptes à intégrer dans les bordereaux"
@@ -202,10 +238,6 @@ msgctxt "model:account.journal,name:journal_principal_line_reset"
 msgid "Principal Line Reset"
 msgstr "Cohérence des bordereaux"
 
-msgctxt "model:account.journal.type,name:journal_type_principal_line_reset"
-msgid "Principal Line Reset"
-msgstr "Cohérence des bordereaux"
-
 msgctxt "model:event.type,name:event_slips_generated"
 msgid "Slips Generated"
 msgstr "Bordereau généré"
@@ -213,6 +245,10 @@ msgstr "Bordereau généré"
 msgctxt "model:ir.action,name:act_account_invoice_create_slip"
 msgid "Create Slip"
 msgstr "Générer un bordereau"
+
+msgctxt "model:ir.action,name:act_create_insurer_slip"
+msgid "Create Insurer Slip"
+msgstr "Générer un bordereau assureur"
 
 msgctxt "model:ir.action,name:act_related_lines_relate"
 msgid "Related Lines"
@@ -225,6 +261,10 @@ msgstr "Configuration de bordereau"
 msgctxt "model:ir.action,name:act_window_slip"
 msgid "Slips"
 msgstr "Bordereaux"
+
+msgctxt "model:ir.ui.menu,name:menu_create_insurer_slip"
+msgid "Create Insurer Slip"
+msgstr "Générer un bordereau assureur"
 
 msgctxt "model:ir.ui.menu,name:menu_generated_slip"
 msgid "Slips"
@@ -242,6 +282,10 @@ msgctxt "selection:account.invoice,business_kind:"
 msgid "Slip"
 msgstr "Bordereau"
 
+msgctxt "selection:account.invoice.create.insurer_slip,notice_kind:"
+msgid "All"
+msgstr "Tous"
+
 msgctxt "selection:account.invoice.slip.configuration,slip_kind:"
 msgid "Slip"
 msgstr "Bordereau"
@@ -249,6 +293,18 @@ msgstr "Bordereau"
 msgctxt "selection:account.invoice.slip.parameters,slip_kind:"
 msgid "Slip"
 msgstr "Bordereau"
+
+msgctxt "selection:account.journal,type:"
+msgid "Principal Line Reset"
+msgstr "Cohérence des bordereaux"
+
+msgctxt "wizard_button:account.invoice.create.insurer_slip,ask,create_:"
+msgid "OK"
+msgstr "Ok"
+
+msgctxt "wizard_button:account.invoice.create.insurer_slip,ask,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt "wizard_button:account.invoice.create.slip,start,end:"
 msgid "Cancel"

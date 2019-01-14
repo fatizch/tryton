@@ -15,7 +15,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">account.invoice.slip.configuration</field>
             <field name="type">form</field>
             <field name="name">slip_configuration_form</field>
-        </record>        
+        </record>
         <record model="ir.action.act_window" id="act_slip_configuration_form">
             <field name="name">Slip Configuration</field>
             <field name="res_model">account.invoice.slip.configuration</field>

@@ -30,6 +30,7 @@ class Invoice(metaclass=PoolMeta):
         cls.business_kind.selection += [
             ('all_insurer_invoices', 'All Insurer Invoices'),
             ]
+        cls._slip_kinds.add('all_insurer_invoices')
 
     @classmethod
     def __register__(cls, module_name):

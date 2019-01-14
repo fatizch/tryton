@@ -5,6 +5,8 @@ from . import slip
 from . import wizard
 from . import account
 from . import batch
+from . import account_insurer_batch
+from . import insurer
 
 
 def register():
@@ -22,3 +24,16 @@ def register():
     Pool.register(
         wizard.CreateSlip,
         module='account_invoice_slip', type_='wizard')
+    Pool.register(
+        insurer.Insurer,
+        insurer.InsurerSlipConfiguration,
+        insurer.CreateInsurerSlipParameters,
+        account_insurer_batch.CreateEmptyInvoicePrincipalBatch,
+        account_insurer_batch.LinkInvoicePrincipalBatch,
+        account_insurer_batch.FinalizeInvoicePrincipalBatch,
+        module='account_invoice_slip', type_='model',
+        depends=['offered_insurance'])
+    Pool.register(
+        insurer.CreateInsurerSlip,
+        module='account_invoice_slip', type_='wizard',
+        depends=['offered_insurance'])

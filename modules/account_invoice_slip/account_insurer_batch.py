@@ -16,7 +16,7 @@ __all__ = [
 class CreateEmptyInvoicePrincipalBatch(batch.BatchRootNoSelect):
     'Insurer Empty Invoice Principal Creation Batch'
 
-    __name__ = 'commission.invoice_principal.create_empty'
+    __name__ = 'account.insurer_invoice.create_empty'
 
     logger = logging.getLogger(__name__)
 
@@ -59,7 +59,7 @@ class CreateEmptyInvoicePrincipalBatch(batch.BatchRootNoSelect):
 class LinkInvoicePrincipalBatch(batch.BatchRoot):
     'Insurer Invoice Principal Link Batch'
 
-    __name__ = 'commission.invoice_principal.link'
+    __name__ = 'account.insurer_invoice.link'
 
     logger = logging.getLogger(__name__)
 
@@ -67,7 +67,7 @@ class LinkInvoicePrincipalBatch(batch.BatchRoot):
     def parse_params(cls, params):
         params = super(LinkInvoicePrincipalBatch, cls).parse_params(
             params)
-        CreateEmpty = Pool().get('commission.invoice_principal.create_empty')
+        CreateEmpty = Pool().get('account.insurer_invoice.create_empty')
         assert params.get('notice_kind') in CreateEmpty.possible_notice_kinds()
         return params
 
@@ -78,7 +78,7 @@ class LinkInvoicePrincipalBatch(batch.BatchRoot):
     @classmethod
     def select_ids(cls, treatment_date, notice_kind=None):
         pool = Pool()
-        CreateEmpty = pool.get('commission.invoice_principal.create_empty')
+        CreateEmpty = pool.get('account.insurer_invoice.create_empty')
         Slip = pool.get('account.invoice.slip.configuration')
 
         parameters = CreateEmpty.get_slip_configurations(treatment_date,
@@ -89,7 +89,7 @@ class LinkInvoicePrincipalBatch(batch.BatchRoot):
     @classmethod
     def execute(cls, objects, ids, treatment_date, notice_kind=None):
         pool = Pool()
-        CreateEmpty = pool.get('commission.invoice_principal.create_empty')
+        CreateEmpty = pool.get('account.insurer_invoice.create_empty')
         Slip = pool.get('account.invoice.slip.configuration')
 
         parameters = CreateEmpty.get_slip_configurations(treatment_date,
@@ -101,7 +101,7 @@ class LinkInvoicePrincipalBatch(batch.BatchRoot):
 class FinalizeInvoicePrincipalBatch(batch.BatchRootNoSelect):
     'Insurer Invoice Principal Finalize Batch'
 
-    __name__ = 'commission.invoice_principal.finalize'
+    __name__ = 'account.insurer_invoice.finalize'
 
     logger = logging.getLogger(__name__)
 
@@ -109,14 +109,14 @@ class FinalizeInvoicePrincipalBatch(batch.BatchRootNoSelect):
     def parse_params(cls, params):
         params = super(FinalizeInvoicePrincipalBatch, cls).parse_params(
             params)
-        CreateEmpty = Pool().get('commission.invoice_principal.create_empty')
+        CreateEmpty = Pool().get('account.insurer_invoice.create_empty')
         assert params.get('notice_kind') in CreateEmpty.possible_notice_kinds()
         return params
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, notice_kind):
         pool = Pool()
-        CreateEmpty = pool.get('commission.invoice_principal.create_empty')
+        CreateEmpty = pool.get('account.insurer_invoice.create_empty')
         Slip = pool.get('account.invoice.slip.configuration')
 
         parameters = CreateEmpty.get_slip_configurations(treatment_date,

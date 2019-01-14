@@ -9,9 +9,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="domain" eval="[('business_kind', '=', 'claim_insurer_invoice')]" pyson="1"/>
             <field name="search_value"></field>
         </record>
-            <menuitem parent="claim.menu_claim" sequence="13" action="commission_insurer.act_commission_create_invoice_principal" id="menu_commission_create_invoice_principal"/>
-        <menuitem parent="claim.menu_claim" action="act_invoice_claim_insurer_invoice_form"
-            id="menu_invoice_claim_insurer_invoice" sequence="14"/>
+        <menuitem parent="claim.menu_claim" action="act_invoice_claim_insurer_invoice_form" id="menu_invoice_claim_insurer_invoice" sequence="14"/>
         </data>
         <record model="ir.ui.view" id="invoice_view_form">
             <field name="model">account.invoice</field>

@@ -21,7 +21,7 @@ msgstr ""
 
 msgctxt "error:received_premiums:"
 msgid "Received Premium"
-msgstr "Primes reçues"
+msgstr ""
 
 msgctxt "error:report.template:"
 msgid "All Insurer Invoice"
@@ -63,46 +63,6 @@ msgctxt "field:commission.agent,is_for_insurer:"
 msgid "For insurer"
 msgstr "Pour assureur"
 
-msgctxt "field:commission.create_invoice_principal.ask,company:"
-msgid "Company"
-msgstr "Société"
-
-msgctxt "field:commission.create_invoice_principal.ask,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:commission.create_invoice_principal.ask,insurers:"
-msgid "Insurers"
-msgstr "Assureurs"
-
-msgctxt "field:commission.create_invoice_principal.ask,journal:"
-msgid "Journal"
-msgstr "Journal"
-
-msgctxt "field:commission.create_invoice_principal.ask,notice_kind:"
-msgid "Notice Kind"
-msgstr "Type de bordereau"
-
-msgctxt "field:commission.create_invoice_principal.ask,post_invoices:"
-msgid "Post Invoices"
-msgstr "Emettre les bordereaux"
-
-msgctxt "field:commission.create_invoice_principal.ask,until_date:"
-msgid "Until Date"
-msgstr "Jusqu'au"
-
-msgctxt "field:commission.invoice_principal.create_empty,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:commission.invoice_principal.finalize,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:commission.invoice_principal.link,id:"
-msgid "ID"
-msgstr "ID"
-
 msgctxt "field:insurer,group_insurer_invoices:"
 msgid "Group Insurer Invoices"
 msgstr "Regrouper les bordereaux"
@@ -137,37 +97,9 @@ msgctxt "model:account.journal,name:"
 msgid "Commission Reset Journal"
 msgstr "Journal de reprise de prime suite à délettrage"
 
-msgctxt "model:account.journal.type,name:"
-msgid "Commission Reset"
-msgstr "Reprise de prime suite à délettrage"
-
-msgctxt "model:commission.create_invoice_principal.ask,name:"
-msgid "Create Invoice Principal"
-msgstr "Génération des bordereaux"
-
-msgctxt "model:commission.invoice_principal.create_empty,name:"
-msgid "Insurer Empty Invoice Principal Creation Batch"
-msgstr "Batch de création des bordereaux assureur"
-
-msgctxt "model:commission.invoice_principal.finalize,name:"
-msgid "Insurer Invoice Principal Finalize Batch"
-msgstr "Batch de finalisation des bordereaux assureur"
-
-msgctxt "model:commission.invoice_principal.link,name:"
-msgid "Insurer Invoice Principal Link Batch"
-msgstr "Batch de constitution des bordereaux assureur"
-
 msgctxt "model:ir.action,name:"
 msgid "Related Lines"
 msgstr "Lignes associées"
-
-msgctxt "model:ir.action,name:act_commission_create_invoice_principal"
-msgid "Create Commission Invoice Principal"
-msgstr "Générer les bordereaux assureurs"
-
-msgctxt "model:ir.ui.menu,name:menu_commission_create_invoice_principal"
-msgid "Create Commission Invoice Principal"
-msgstr "Générer les bordereaux assureurs"
 
 msgctxt "model:report.template,name:default_commission_reporting_template"
 msgid "Commission Reporting"
@@ -181,26 +113,10 @@ msgctxt "selection:account.invoice,business_kind:"
 msgid "All Insurer Invoices"
 msgstr "Bordereau Assureur"
 
-msgctxt "selection:commission.create_invoice_principal.ask,notice_kind:"
-msgid "All"
-msgstr "Tous"
-
-msgctxt "selection:commission.create_invoice_principal.ask,notice_kind:"
-msgid "Premiums"
+msgctxt "selection:account.invoice.create.insurer_slip,notice_kind:"
+msgid "Options"
 msgstr "Primes"
 
 msgctxt "view:account.configuration:"
 msgid "Insurers"
 msgstr "Assureurs"
-
-msgctxt "view:commission.create_invoice_principal.ask:"
-msgid "Create Commission Invoice Principal"
-msgstr "Générer les bordereaux assureurs"
-
-msgctxt "wizard_button:commission.create_invoice_principal,ask,create_:"
-msgid "OK"
-msgstr "OK"
-
-msgctxt "wizard_button:commission.create_invoice_principal,ask,end:"
-msgid "Cancel"
-msgstr "Annuler"

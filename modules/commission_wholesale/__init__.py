@@ -16,5 +16,4 @@ def register():
         module='commission_wholesale', type_='model')
     Pool.register(
         commission.FilterCommissions,
-        commission.CreateInvoicePrincipal,
         module='commission_wholesale', type_='wizard')

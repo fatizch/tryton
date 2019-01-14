@@ -510,8 +510,7 @@ class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView,
 
     @classmethod
     def _event_code_from_slip_kind(cls, slip_kind):
-        if slip_kind == 'slip':
-            return 'slips_generated'
+        return 'slips_generated'
 
 
 class InvoiceSlipAccount(model.CoogSQL):

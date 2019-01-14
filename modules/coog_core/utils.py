@@ -172,6 +172,11 @@ def now():
     return datetime.datetime.combine(today(), datetime.datetime.now().time())
 
 
+def clause_is_true(clause):
+    return (clause[1] == '=' and bool(clause[2])) or (
+        clause[1] == '!=' and not bool(clause[2]))
+
+
 def is_effective_at_date(instance, at_date=None, start_var_name='start_date',
         end_var_name='end_date'):
     if not at_date:

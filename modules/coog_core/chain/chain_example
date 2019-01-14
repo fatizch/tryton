@@ -42,12 +42,12 @@ chain_wait commission.invoice.create || chain_end
     --with_draft="$WITH_DRAFT"
 chain_wait commission.invoice.post || chain_end
 
-chain_step commission.invoice_principal.create_empty --treatment-date="$TREATMENT_DATE"
-chain_wait commission.invoice_principal.create_empty || chain_end
-chain_step commission.invoice_principal.link --treatment-date="$TREATMENT_DATE" 
-chain_wait commission.invoice_principal.link || chain_end
-chain_step commission.invoice_principal.finalize --treatment-date="$TREATMENT_DATE"
-chain_wait commission.invoice_principal.finalize || chain_end
+chain_step account.insurer_invoice.create_empty --treatment-date="$TREATMENT_DATE"
+chain_wait account.insurer_invoice.create_empty || chain_end
+chain_step account.insurer_invoice.link --treatment-date="$TREATMENT_DATE" 
+chain_wait account.insurer_invoice.link || chain_end
+chain_step account.insurer_invoice.finalize --treatment-date="$TREATMENT_DATE"
+chain_wait account.insurer_invoice.finalize || chain_end
 
 ###########
 

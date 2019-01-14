@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ##################################################### -->
+        <!-- # Triggered when generating a claim insurer invoice # -->
+        <!-- ##################################################### -->
+        <record model="event.type" id="event_claim_insurer_invoice_generated">
+            <field name="name">Claim Insurer Invoice Generated</field>
+            <field name="code">claim_insurer_invoice_generated</field>
+            <field name="icon" ref="account_invoice_cog.invoice_icon"/>
+        </record>
+    </data>
+</tryton>
