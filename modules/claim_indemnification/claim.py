@@ -552,6 +552,7 @@ class ClaimService(metaclass=PoolMeta):
         indemnification.product = self.indemnifications[-1].product
         indemnification.share = self.indemnifications[-1].share
         indemnification.currency = self.indemnifications[-1].currency
+        indemnification.forced_base_amount = None
         return [indemnification]
 
     def calculate_annuity_periods(self, from_date, to_date):

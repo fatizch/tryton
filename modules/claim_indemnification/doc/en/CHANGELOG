@@ -1,3 +1,4 @@
+* BUG#10687 Fix casual crash of the attribute "forced_base_amount"
 * BUG#10708 Don't allow to schedule indemnification linked to a contract in quote status (in case of migration)
 * OTH#0000 Remove mixed view in claim control / validation wizards for performances purposes
 * FEA#10531 Add wizard and batch to check claim migrated datas (indemnification computation)
