@@ -56,8 +56,9 @@ class ClaimService(metaclass=PoolMeta):
     def get_beneficiaries_data(self, at_date):
         covered = self.theoretical_covered_element
         if self.benefit.beneficiary_kind == 'subsidiaries_then_covered':
-            if covered.contract_exit_date and \
-                    covered.contract_exit_date > at_date:
+            if not covered.contract_exit_date or (
+                        covered.contract_exit_date and
+                        covered.contract_exit_date > at_date):
                 return [(x.party, 1)
                     for x in covered.all_parents if x.party is not None] or \
                     [(covered.party, 1)]

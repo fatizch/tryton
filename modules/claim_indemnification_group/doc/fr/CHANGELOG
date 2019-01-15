@@ -1,3 +1,4 @@
+* BUG#10733 Correctif sur l'inversion du bénéficiaire automatiquement selectionné "Filiale puis assuré"
 * BUG#10634 Correction des états de lecture seule des prestations
 * BUG#10629 Correctif sur les états en lecture seule des champs des options de prestation
 * FEA#10562 Filtrer les garanties compatibles en fonction du type d'assurance de l'option source dans l'assistant de tansfert de prestations

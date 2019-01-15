@@ -1,3 +1,4 @@
+* BUG#10733 Fix automatically selected benefit "Subsidiaries then covered" which is inverted
 * BUG#10634 Fix readonly states of contract benefit options
 * BUG#10629 Fix on readonly states of contract benefit options fields
 * FEA#10562 Filter compatible option in insurer claim service transfer
