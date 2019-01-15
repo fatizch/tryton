@@ -1,3 +1,4 @@
+* OTH#00000 Fix super call following #10638
 * BUG#10694 CRM file can contain duplicate blocks
 * BUG#10698 Only rely on indemnification data to identify parties to declare, and not on invoice data
 * BUG#10632 Matricule information must not be used to search insured (only ssn must be used)

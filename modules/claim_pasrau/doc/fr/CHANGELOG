@@ -1,3 +1,4 @@
+* OTH#00000 Correction d'un call à super suite à #10638
 * BUG#10694 Le fichier CRM peut contenir des blocs en doulons
 * BUG#10698 L'identification des tiers à déclarer doit reposer sur les données d'indemnisations seulement, et non sur les données de quittances
 * BUG#10632 L'information du matricule ne doit pas être utilisée pour rechercher un assuré

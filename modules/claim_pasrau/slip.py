@@ -28,7 +28,8 @@ class InvoiceSlipConfiguration(metaclass=PoolMeta):
     def _event_code_from_slip_kind(cls, slip_kind):
         if slip_kind == 'pasrau':
             return 'pasrau_slips_generated'
-        return cls._event_code_from_slip_kind(slip_kind)
+        return super(InvoiceSlipConfiguration, cls)._event_code_from_slip_kind(
+            slip_kind)
 
 
 class Invoice(metaclass=PoolMeta):
