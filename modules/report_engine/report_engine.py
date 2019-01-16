@@ -1,10 +1,7 @@
 # -*- coding:utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-try:
-    import io as StringIO
-except ImportError:
-    import io
+import io
 from decimal import Decimal, ROUND_HALF_UP
 import stat
 import sys
@@ -180,8 +177,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 'produce_reports': RPC(instantiate=0,
                     readonly=False, result=lambda res: (
                         [{k: v for k, v in chain(
-                                iter({key: value for key, value in report.items()
-                                    if key in ('report_name',)}.items()),
+                                iter({
+                                        key: value for key, value
+                                        in report.items()
+                                        if key in ('report_name',)}.items()),
                                 iter({'data': base64.b64encode(report['data'])
                                     }.items()))}
                             for report in res[0]],
@@ -491,7 +490,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             filename += ext
             out_path = os.path.join(export_dirname, filename)
             report['export_filename'] = out_path
-            with open(out_path, 'a') as out:
+            with open(out_path, 'ab') as out:
                 out.write(report['data'])
 
     def convert(self, data, to_ext, from_ext=None):
@@ -1281,13 +1280,12 @@ class ReportGenerate(CoogReport):
         Override the trytond method in order to apply template style
         if style_content defined in report
         '''
-        # Convert to str as value from DB is not supported by StringIO
 
         style_content = getattr(report, 'style_content', None)
         if not style_content:
             return super(ReportGenerate, cls)._prepare_template_file(report)
 
-        report_content = (bytes(report.report_content) if report.report_content
+        report_content = (report.report_content if report.report_content
             else None)
         if not report_content:
             raise Exception('Error', 'Missing report file!')
@@ -1299,7 +1297,7 @@ class ReportGenerate(CoogReport):
             prefix='trytond_')
         outzip = zipfile.ZipFile(path, mode='w')
 
-        content_io = io.StringIO()
+        content_io = io.BytesIO()
         content_io.write(report_content)
         content_z = zipfile.ZipFile(content_io, mode='r')
 
@@ -1319,10 +1317,7 @@ class ReportGenerate(CoogReport):
         if style_content:
             pictures = []
 
-            # cStringIO difference:
-            # calling StringIO() with a string parameter creates a read-only
-            # object
-            new_style_io = io.StringIO()
+            new_style_io = io.BytesIO()
             new_style_io.write(style_content)
             new_style_z = zipfile.ZipFile(new_style_io, mode='r')
             new_style_xml = new_style_z.read('styles.xml')
@@ -1335,10 +1330,10 @@ class ReportGenerate(CoogReport):
             new_style_z.close()
             new_style_io.close()
 
-            style_tree = lxml.etree.parse(io.StringIO(style_xml))
+            style_tree = lxml.etree.parse(io.BytesIO(style_xml))
             style_root = style_tree.getroot()
 
-            new_style_tree = lxml.etree.parse(io.StringIO(new_style_xml))
+            new_style_tree = lxml.etree.parse(io.BytesIO(new_style_xml))
             new_style_root = new_style_tree.getroot()
 
             for style in ('master-styles', 'automatic-styles', 'styles'):
@@ -1358,7 +1353,7 @@ class ReportGenerate(CoogReport):
                 outzip.writestr(file, picture)
 
         if manifest:
-            outzip.writestr(MANIFEST, bytes(manifest))
+            outzip.writestr(MANIFEST, bytes(str(manifest), 'utf-8'))
 
         content_z.close()
         content_io.close()

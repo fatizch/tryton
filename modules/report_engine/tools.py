@@ -76,7 +76,7 @@ class ConvertTemplate(Wizard):
         for template, matches in per_template.items():
             template.data = self.replace_in_file(StringIO(template.data),
                 matches)
-            template.data = buffer(template.data.getvalue())
+            template.data = memoryview(template.data.getvalue())
             to_save.append(template)
         if to_save:
             Version.save(to_save)

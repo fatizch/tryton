@@ -1,3 +1,4 @@
+* BUG#10789 Fix encoding crashes when generating report templates
 * FEA#10315 Add possibility to sort rules parameters
 * OTH#0000 Raise the technical error if it is not caused by the template's syntax
 
