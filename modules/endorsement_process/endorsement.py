@@ -123,7 +123,7 @@ class EndorsementPartUnion(model.CoogSQL, model.CoogView):
         good_endorsements = None
         active_ids = Transaction().context.get('active_ids')
         if active_model == 'endorsement.part.union':
-            good_endorsements = [x / 100 for x in active_ids]
+            good_endorsements = [x // 100 for x in active_ids]
         elif ctx_endorsement:
             good_endorsements = ctx_endorsement
         elif active_model == 'endorsement':
