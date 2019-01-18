@@ -1,3 +1,4 @@
+* BUG#10811 Allow claim manage right profile to delete claim extra data
 * BUG#10748 Improve performances of service->claim getter
 * BUG#10572 Do not copy link to coverages when copying a benefit
 * BUG#10598 Translate declaration date error message

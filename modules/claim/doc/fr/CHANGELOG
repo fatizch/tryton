@@ -1,3 +1,4 @@
+* BUG#10811 Permettre au profil de droit gestion sinistre de supprimer les données complémentaires sur un sinistre
 * BUG#10748 Amélioration des performances du getter de service->claim
 * BUG#10572 Ne pas copier le lien vers les garanties lors de la duplication d'une prestation
 * BUG#10598 Traduction du message d'erreur de la date de déclaration.
