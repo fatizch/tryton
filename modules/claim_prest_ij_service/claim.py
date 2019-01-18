@@ -1298,7 +1298,8 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
                     for party in node_func(sub_instit, 'Assure'):
                         ssn = node_func(party, 'NIR', True)
                         domain = [('ssn', 'like', '%s%%' % ssn),
-                            ('state', '!=', 'deletion_confirmed')]
+                            ('state', 'not in', ('deletion_confirmed',
+                                    'undeclared'))]
                         if siren != '999999999':
                             # SIRET 9999999999 means payment to the person
                             # instead of the legal entity or
