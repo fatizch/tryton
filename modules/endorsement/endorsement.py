@@ -273,12 +273,12 @@ def values_mixin(value_model):
                         continue
                     field = copy.copy(values)
                     field.set('name', vfield.rec_name)
-                    field.set('colspan', str(int(values.get('colspan')) / 2))
+                    field.set('colspan', str(int(values.get('colspan')) // 2))
                     values.addnext(field)
                     label = copy.copy(values)
                     label.tag = 'label'
                     label.set('name', vfield.rec_name)
-                    label.set('colspan', str(int(values.get('colspan')) / 2))
+                    label.set('colspan', str(int(values.get('colspan')) // 2))
                     values.addnext(label)
                     used_ids.append(vfield.field.id)
             return super(Mixin, cls)._view_look_dom_arch(tree, type,

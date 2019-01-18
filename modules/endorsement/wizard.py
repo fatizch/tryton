@@ -1586,7 +1586,8 @@ class ChangeContractSubscriber(EndorsementWizardStepMixin):
         pool = Pool()
         EndorsementContract = pool.get('endorsement.contract')
         to_save = []
-        for contract_id, endorsement_contract in list(self._get_contracts().items()):
+        for contract_id, endorsement_contract in list(
+                self._get_contracts().items()):
             endorsement_contract.values = {
                 'subscriber': self.new_subscriber.id}
             self.update_subscriber_contact_to_values(endorsement_contract)

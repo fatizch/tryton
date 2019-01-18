@@ -1,3 +1,5 @@
+* BUG#10809 Correction de l'affichage des sous éléments d'avenants
+
 Version 2.2 - 2018-10-12
 * BUG#9032 Correctif pour supporter la surcharge d'application d'avenant en asynchrone
 * BUG#8822 Pouvoir récuperer la date d'effet initiale d'un contrat suite à l'application d'un avenant
