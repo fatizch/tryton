@@ -8,7 +8,7 @@ _coog_dep_proxy() {
 }
 
 coog_dep_main() { # install base deps
-        pip install $(_coog_dep_proxy) "$@" \
+        pip install --upgrade $(_coog_dep_proxy) "$@" \
                 "pyflakes" \
                 "dateutils" \
                 "lxml" \
