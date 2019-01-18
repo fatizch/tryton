@@ -734,7 +734,12 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
                     for x in delivered.indemnifications
                     if 'cancel' not in x.status],
                 key=lambda x: x.start_date)
-            if sorted_indemnifications[-1].end_date < delivered.loss.end_date:
+            if sorted_indemnifications:
+                if (sorted_indemnifications[-1].end_date <
+                        delivered.loss.end_date):
+                    res.append(delivered)
+                    continue
+            else:
                 res.append(delivered)
                 continue
             for idx, indemn in enumerate(sorted_indemnifications):
