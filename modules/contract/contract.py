@@ -1899,8 +1899,8 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
             return
         if not self.sub_status:
             return SubStatus.search([('xml_id', '=',
-                        'contract.sub_status_terminated')])[0]
-        return self.sub_status
+                        'contract.sub_status_terminated')])[0].id
+        return self.sub_status.id
 
     @fields.depends('contract', 'start_date')
     def on_change_with_appliable_conditions_date(self, name=None):
