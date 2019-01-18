@@ -13,7 +13,8 @@ __all__ = [
     ]
 
 
-class EventTypeAction(get_rule_mixin('filter_rule', 'Filter Rule'), metaclass=PoolMeta):
+class EventTypeAction(get_rule_mixin('filter_rule', 'Filter Rule'),
+        metaclass=PoolMeta):
     __name__ = 'event.type.action'
 
     @classmethod

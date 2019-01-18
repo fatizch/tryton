@@ -1,3 +1,4 @@
+* BUG#10786 Correction de la mécanique des avertissements dans les règles
 * BUG#10287 Mise à jour des paramètres de règles en fonction de la règle sélectionnée
 * BUG#10221 Correction du formattage des erreurs
 

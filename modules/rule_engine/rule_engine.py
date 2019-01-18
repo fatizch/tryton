@@ -210,8 +210,9 @@ def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
                 for error in result.print_errors():
                     self.append_functional_error(error)
             if result.warnings:
-                self.raise_user_warning(str((self.__name__, self.id)),
-                    '\r\r'.join(result.print_warnings()))
+                msg = '\r\r'.join(result.print_warnings())
+                self.raise_user_warning(str((self.__name__, self.id, msg)),
+                    msg)
 
     if not extra_name:
         extra_name = field_name + '_extra_data'
@@ -1065,7 +1066,8 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         # JCA : Do not crash if the user is 0, for tests and module updates
         if Transaction().user == 0:
             return True
-        errors = [m for m in check_code(self.execution_code) if self.filter_errors(m)]
+        errors = [m for m in check_code(self.execution_code)
+            if self.filter_errors(m)]
         if not errors:
             return True
         logging.getLogger('rule_engine').warning([
