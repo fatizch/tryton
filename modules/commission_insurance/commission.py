@@ -566,16 +566,28 @@ class Plan(model.CoogSQL, model.CoogView, model.TaggedMixin):
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
+        cls.commission_method.selection.append(('payment_and_accounted',
+                'On Payment And Accounted'))
+        cls.commission_method.help = cls.commission_method.help + \
+            '. If "On Payment And Accounted"' \
+            ' is selected, a commission is due after its invoice\'s' \
+            ' accounting date, if the invoice is paid.'
 
     @classmethod
     def create(cls, vlist):
-        Contract = Pool().get('contract')
+        pool = Pool()
+        Contract = pool.get('contract')
+        Invoice = pool.get('account.invoice')
+        Invoice._agent_commission_method_cache.clear()
         Contract.insurer_agent_cache.clear()
         return super(Plan, cls).create(vlist)
 
     @classmethod
     def write(cls, *args):
-        Contract = Pool().get('contract')
+        pool = Pool()
+        Contract = pool.get('contract')
+        Invoice = pool.get('account.invoice')
+        Invoice._agent_commission_method_cache.clear()
         Contract.insurer_agent_cache.clear()
         super(Plan, cls).write(*args)
 
@@ -593,6 +605,10 @@ class Plan(model.CoogSQL, model.CoogView, model.TaggedMixin):
             clone.code = original.code + '_1'
             clone.save()
         return clones
+
+    @staticmethod
+    def default_commission_method():
+        return 'payment_and_accounted'
 
     @staticmethod
     def default_type_():
@@ -941,13 +957,19 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
 
     @classmethod
     def create(cls, vlist):
-        Contract = Pool().get('contract')
+        pool = Pool()
+        Contract = pool.get('contract')
+        Invoice = pool.get('account.invoice')
+        Invoice._agent_commission_method_cache.clear()
         Contract.insurer_agent_cache.clear()
         return super(Agent, cls).create(vlist)
 
     @classmethod
     def write(cls, *args):
-        Contract = Pool().get('contract')
+        pool = Pool()
+        Contract = pool.get('contract')
+        Invoice = pool.get('account.invoice')
+        Invoice._agent_commission_method_cache.clear()
         Contract.insurer_agent_cache.clear()
         super(Agent, cls).write(*args)
 

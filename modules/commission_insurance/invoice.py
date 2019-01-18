@@ -3,6 +3,8 @@
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 from sql import Cast, Null, Literal
+from sql.conditionals import Case
+from itertools import groupby
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or, In, Not
@@ -10,6 +12,7 @@ from trytond.transaction import Transaction
 from trytond.model import ModelView, Workflow
 from trytond.server_context import ServerContext
 from trytond.tools import grouped_slice
+from trytond.cache import Cache
 
 from trytond.modules.coog_core import utils, fields, coog_sql
 from .commission import COMMISSION_AMOUNT_DIGITS, COMMISSION_RATE_DIGITS
@@ -155,6 +158,7 @@ class InvoiceLine(metaclass=PoolMeta):
 
 class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
+    _agent_commission_method_cache = Cache('agent_commission_method_cache')
 
     is_insurer_invoice = fields.Function(fields.Boolean('Is insurer commission '
         'invoice'), 'get_is_insurer_invoice',
@@ -305,6 +309,70 @@ class Invoice(metaclass=PoolMeta):
 
         if paid_invoices:
             cls.reset_commissions(paid_invoices)
+
+    @classmethod
+    def _set_paid_commissions_dates(cls, invoices):
+        """For commissions whose plan has the payment_and_accounted
+        commission_method, set the commission date as the max between
+        today and the commissioned invoice's accounting date"""
+
+        pool = Pool()
+        Date = pool.get('ir.date')
+        today = Date.today()
+        Commission = pool.get('commission')
+        InvoiceLine = pool.get('account.invoice.line')
+        commission = Commission.__table__()
+        invoice = cls.__table__()
+        invoice_line = InvoiceLine.__table__()
+        cursor = Transaction().connection.cursor()
+        method_agents = cls._get_agents_for_method('payment_and_accounted')
+        if not method_agents:
+            return super(Invoice, cls)._set_paid_commissions_dates(invoices)
+
+        query_table = commission.join(invoice_line,
+                condition=(
+                    (commission.origin == coog_sql.TextCat(
+                        'account.invoice.line,',
+                        Cast(invoice_line.id, 'VARCHAR'))
+                    ) & commission.agent.in_(method_agents))
+            ).join(invoice,
+                condition=(
+                    (invoice.id == invoice_line.invoice
+                        ) & (invoice.id.in_([x.id for x in invoices]))
+                    ))
+
+        where_clause = (commission.date == Null)
+
+        date_case = Case(
+                    (invoice.accounting_date >= today,
+                        invoice.accounting_date),
+                    else_=today).as_('commission_date')
+
+        cursor.execute(*query_table.select(commission.id,
+                date_case,
+                where=where_clause,
+                order_by=[date_case]))
+
+        res = list(cursor.fetchall())
+
+        for date, res_lines in groupby(res, key=lambda x: x[1]):
+            Commission.write(Commission.browse([x[0] for x in res_lines]),
+                {'date': date})
+
+        return super(Invoice, cls)._set_paid_commissions_dates(invoices)
+
+    @classmethod
+    def _get_agents_for_method(cls, method):
+        Agent = Pool().get('commission.agent')
+        cached = cls._agent_commission_method_cache.get(
+            method, None)
+        if cached is not None:
+            return cached
+        agents = [x.id for x in Agent.search(
+                [('plan.commission_method', '=', method)])]
+
+        cls._agent_commission_method_cache.set(method, agents)
+        return agents
 
     @classmethod
     def reset_commissions(cls, invoices):

@@ -118,7 +118,7 @@ Create insurer commission plan::
     >>> Plan = Model.get('commission.plan')
     >>> insurer_plan = Plan(name='Insurer Plan')
     >>> insurer_plan.commission_product = commission_product
-    >>> insurer_plan.commission_method = 'payment'
+    >>> insurer_plan.commission_method = 'payment_and_accounted'
     >>> insurer_plan.type_ = 'principal'
     >>> coverage = product.coverages[0].id
     >>> line = insurer_plan.lines.new()
@@ -148,7 +148,7 @@ Create broker commission plan::
     >>> Plan = Model.get('commission.plan')
     >>> broker_plan = Plan(name='Broker Plan')
     >>> broker_plan.commission_product = commission_product
-    >>> broker_plan.commission_method = 'payment'
+    >>> broker_plan.commission_method = 'payment_and_accounted'
     >>> broker_plan.type_ = 'agent'
     >>> coverage = product.coverages[0].id
     >>> line = broker_plan.lines.new()
@@ -166,10 +166,10 @@ Create broker and broker agent::
     >>> broker_party = Party(name='Broker')
     >>> broker_party.supplier_payment_term, = PaymentTerm.find([])
     >>> broker_party.save()
-    >>> broker = DistributionNetwork(name='Broker', code='broker', party=broker_party,
-    ...     is_broker=True)
+    >>> broker = DistributionNetwork(name='Broker', code='broker', party=broker_party)
+    >>> broker.is_broker = True
     >>> broker.save()
-    >>> broker_agent = Agent(party=broker_party)
+    >>> broker_agent = Agent(party=Party(broker_party.id))
     >>> broker_agent.type_ = 'agent'
     >>> broker_agent.plan = broker_plan
     >>> broker_agent.currency = company.currency

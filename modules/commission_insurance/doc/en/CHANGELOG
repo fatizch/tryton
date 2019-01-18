@@ -1,3 +1,4 @@
+* BUG#10540 Add "On payment and accounted" commission method to allow broker invoice to behave as insurer invoice
 * OTH#0000 Add reporting fields with prorated tax amounts / full amounts on commissions
 
 Version 2.2 - 2018-10-12

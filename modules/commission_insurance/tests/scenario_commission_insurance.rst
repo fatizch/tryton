@@ -5,6 +5,7 @@ Commission Insurance Scenario
 Imports::
 
     >>> import datetime
+    >>> from dateutil.relativedelta import relativedelta
     >>> from proteus import Model, Wizard
     >>> from decimal import Decimal
     >>> from trytond.tests.tools import activate_modules
@@ -176,7 +177,7 @@ Create broker commission plan::
     >>> Coverage = Model.get('offered.option.description')
     >>> broker_plan = Plan(name='Broker Plan')
     >>> broker_plan.commission_product = commission_product
-    >>> broker_plan.commission_method = 'payment'
+    >>> broker_plan.commission_method = 'payment_and_accounted'
     >>> broker_plan.type_ = 'agent'
     >>> line = broker_plan.lines.new()
     >>> coverage = offered_product.coverages[0].id
@@ -189,7 +190,7 @@ Create insurer commission plan::
     >>> Plan = Model.get('commission.plan')
     >>> insurer_plan = Plan(name='Insurer Plan')
     >>> insurer_plan.commission_product = commission_product
-    >>> insurer_plan.commission_method = 'payment'
+    >>> insurer_plan.commission_method = 'payment_and_accounted'
     >>> insurer_plan.type_ = 'principal'
     >>> coverage = offered_product.coverages[0].id
     >>> line = insurer_plan.lines.new()
@@ -206,10 +207,10 @@ Create broker agent::
     >>> broker_party.supplier_payment_term, = PaymentTerm.find([])
     >>> broker_party.save()
     >>> DistributionNetwork = Model.get('distribution.network')
-    >>> broker = DistributionNetwork(name='Broker', code='broker', party=broker_party,
-    ...     is_broker=True)
+    >>> broker = DistributionNetwork(name='Broker', code='broker', party=broker_party)
+    >>> broker.is_broker = True
     >>> broker.save()
-    >>> agent_broker = Agent(party=broker_party)
+    >>> agent_broker = Agent(party=Party(broker_party.id))
     >>> agent_broker.type_ = 'agent'
     >>> agent_broker.plan = Plan(broker_plan.id)
     >>> agent_broker.currency = company.currency
@@ -343,4 +344,56 @@ Create commission invoice::
     >>> invoices[0].total_amount == Decimal('-30')
     True
     >>> len(invoices[0].lines[1].broker_fee_lines)
+    1
+
+Invoice next period and pay::
+
+    >>> two_months = contract_start_date + relativedelta(months=2)
+    >>> fist_two_month = datetime.date(two_months.year, two_months.month, 1)
+    >>> end_next_month = fist_two_month + relativedelta(days=-1)
+    >>> generate_invoice = Wizard('contract.do_invoice', models=[contract])
+    >>> generate_invoice.form.up_to_date = end_next_month
+    >>> generate_invoice.execute('invoice')
+    >>> first_invoice, second_invoice = sorted(ContractInvoice.find([
+    ...         ('contract', '=', contract.id),
+    ...         ('invoice_state', '=', 'validated')]),
+    ...     key=lambda x: x.start)
+    >>> first_invoice.invoice.click('post')
+    >>> second_invoice.invoice.click('post')
+
+Pay invoice::
+
+    >>> Journal = Model.get('account.journal')
+    >>> PaymentMethod = Model.get('account.invoice.payment.method')
+    >>> pay = Wizard('account.invoice.pay', [first_invoice.invoice])
+    >>> pay.form.payment_method = PaymentMethod(payment_method.id)
+    >>> pay.execute('choice')
+    >>> pay = Wizard('account.invoice.pay', [second_invoice.invoice])
+    >>> pay.form.payment_method = PaymentMethod(payment_method.id)
+    >>> pay.execute('choice')
+
+Create commission invoice::
+
+    >>> Invoice = Model.get('account.invoice')
+    >>> create_invoice = Wizard('commission.create_invoice')
+    >>> create_invoice.form.from_ = None
+    >>> create_invoice.form.to = first_invoice.end
+    >>> create_invoice.execute('create_')
+    >>> invoices = Invoice.find([('type', '=', 'in')])
+    >>> invoices[0].total_amount == Decimal('30')
+    True
+    >>> len(invoices[0].lines[1].broker_fee_lines)
+    1
+
+Create commission invoice::
+
+    >>> Invoice = Model.get('account.invoice')
+    >>> create_invoice = Wizard('commission.create_invoice')
+    >>> create_invoice.form.from_ = None
+    >>> create_invoice.form.to = end_next_month
+    >>> create_invoice.execute('create_')
+    >>> invoices = Invoice.find([('type', '=', 'in')])
+    >>> invoices[0].total_amount == Decimal('10')
+    True
+    >>> len(invoices[0].lines)
     1
