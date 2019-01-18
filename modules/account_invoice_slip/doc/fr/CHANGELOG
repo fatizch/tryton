@@ -1,3 +1,4 @@
+* BUG#10790 Correction de la compatibilité avec le module account_per_product
 * FEA#10638 Suppression de la dépendance entre claim_insurer et commission_insurer
 * BUG#10337 Correction d'un crash au lancement de l'assistant de génération des bordereaux si aucune configuration n'est choisie
 * OTH#000 Correction du relate depuis un bordereau vers les lignes associées

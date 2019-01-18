@@ -48,9 +48,7 @@ class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView,
     def __setup__(cls):
         super(InvoiceSlipConfiguration, cls).__setup__()
         cls._error_messages.update({
-                'duplicate_slip': 'More than one draft slip for parameters:'
-                '\nParty: %(party)s\nKind: %(business_kind)s'
-                '\nDate: %(invoice_date)s',
+                'duplicate_slip': 'More than one draft slip with domain %s'
                 })
 
     @classmethod
@@ -172,30 +170,29 @@ class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView,
     def _get_slip(cls, parameters):
         pool = Pool()
         Invoice = pool.get('account.invoice')
-
-        party = parameters['party']
-        invoice_type = cls._get_invoice_type(parameters)
-        business_kind = cls._get_invoice_business_kind(parameters)
-        matches = Invoice.search([
-                ('party', '=', party),
-                ('journal', '=', parameters['journal']),
-                ('invoice_date', '=', parameters['date'] or utils.today()),
-                ('type', '=', invoice_type),
-                ('business_kind', '=', business_kind),
-                ('state', '=', 'draft')
-                ], limit=2)
+        domain_ = cls._get_slip_domain_from_parameters(parameters)
+        matches = Invoice.search(domain_, limit=2)
         if matches:
             # If there already is a slip matching the given configuration, we
             # return it. If there is more than one, there probably is a problem
             # somewhere
             if len(matches) > 1:
-                cls.raise_user_error('duplicate_slip', {
-                        'business_kind': business_kind,
-                        'invoice_date': parameters['date'] or utils.today(),
-                        'party': party.rec_name,
-                        })
+                cls.raise_user_error('duplicate_slip', str(domain_))
             return matches[0]
         return cls._get_new_slip(parameters)
+
+    @classmethod
+    def _get_slip_domain_from_parameters(cls, parameters):
+        party = parameters['party']
+        invoice_type = cls._get_invoice_type(parameters)
+        business_kind = cls._get_invoice_business_kind(parameters)
+        return [
+            ('party', '=', party),
+            ('journal', '=', parameters['journal']),
+            ('invoice_date', '=', parameters['date'] or utils.today()),
+            ('type', '=', invoice_type),
+            ('business_kind', '=', business_kind),
+            ('state', '=', 'draft')]
 
     @classmethod
     def _get_new_slip(cls, parameters):

@@ -25,16 +25,6 @@ class Commission(metaclass=PoolMeta):
         invoice.product = key['product']
         return invoice
 
-    @classmethod
-    def _get_new_slip(cls, parameters):
-        invoice = super(Commission, cls)._get_new_slip(parameters)
-        if parameters.get('insurer', None):
-            invoice.product = parameters['insurer'].product
-        else:
-            # No idea of what to do in this case, since the configuration has
-            # no reason to be linked to a particular insurer
-            raise ValueError
-
 
 class Agent(metaclass=PoolMeta):
     __name__ = 'commission.agent'

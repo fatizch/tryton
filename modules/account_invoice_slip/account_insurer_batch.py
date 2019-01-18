@@ -22,7 +22,7 @@ class CreateEmptyInvoicePrincipalBatch(batch.BatchRootNoSelect):
 
     @classmethod
     def possible_notice_kinds(cls):
-        CreateNoticeAsk = Pool().get('commission.create_invoice_principal.ask')
+        CreateNoticeAsk = Pool().get('account.invoice.create.insurer_slip')
         return [x[0] for x in CreateNoticeAsk.notice_kind.selection]
 
     @classmethod

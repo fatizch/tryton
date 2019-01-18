@@ -11,6 +11,7 @@ from . import payment
 from . import statement
 from . import commission
 from . import claim
+from . import insurer
 
 
 def register():
@@ -48,6 +49,10 @@ def register():
         claim.Indemnification,
         module='account_per_product', type_='model',
         depends=['claim_indemnification'])
+    Pool.register(
+        insurer.InsurerSlipConfiguration,
+        module='account_per_product', type_='model',
+        depends=['commission_insurer'])
     Pool.register(
         account.AgedBalanceReport,
         module='account_per_product', type_='report')
