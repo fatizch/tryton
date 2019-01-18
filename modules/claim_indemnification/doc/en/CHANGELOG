@@ -1,3 +1,4 @@
+* FEA#10812 Display indemnification validation/control wizard in dedicated tab. Add relate to claim
 * BUG#10791 Fixed a crash when trying to retrieve the list of possible benefits while all the indemnifications are canceled
 * BUG#10687 Fix casual crash of the attribute "forced_base_amount"
 * BUG#10708 Don't allow to schedule indemnification linked to a contract in quote status (in case of migration)

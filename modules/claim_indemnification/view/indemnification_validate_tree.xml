@@ -13,5 +13,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="loss_date"/>
     <field name="contract"/>
     <field name="benefit" width="200"/>
+    <field name="claim"/>
     <field name="note" expand="1"/>
 </tree>

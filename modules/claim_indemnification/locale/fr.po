@@ -1624,10 +1624,6 @@ msgctxt "model:account.journal,name:journal_claim"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "model:account.journal.type,name:journal_type_claim"
-msgid "Claim"
-msgstr "Sinistre"
-
 msgctxt "model:benefit-account.payment.journal,name:"
 msgid "Benefit Payment Journal relation"
 msgstr "Relation prestation journaux de paiement"
@@ -1857,6 +1853,10 @@ msgstr "Postée"
 msgctxt "selection:account.invoice.line.claim_detail,invoice_line_state:"
 msgid "Validated"
 msgstr "Validée"
+
+msgctxt "selection:account.journal,type:"
+msgid "Claim"
+msgstr "Sinistre"
 
 msgctxt "selection:benefit,indemnification_kind:"
 msgid "Annuity"

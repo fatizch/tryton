@@ -64,8 +64,7 @@ class IndemnificationElement(model.CoogView):
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
         depends=['currency_digits'], readonly=True)
     currency_symbol = fields.Char('Currency Symbol')
-    claim = fields.Many2One(
-        'claim', 'Claim', readonly=True)
+    claim = fields.Many2One('claim', 'Claim', readonly=True)
     indemnification = fields.Many2One(
         'claim.indemnification', 'Indemnification',
         states={'invisible': True, 'readonly': True})

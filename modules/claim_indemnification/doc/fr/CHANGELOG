@@ -1,3 +1,4 @@
+* FEA#10812 Afficher l'assistant de validation/controle des indemnisations dans un onglet dédié. Ajout d'un lien vers le sinistre à partir d'une indemnisation
 * BUG#10791 Correction d'un crash lorsque l'on essaie de récupérer la liste des prestations à délivrer alors que toutes les indemnisations sont annulées
 * BUG#10687 Correctif d'un crash occasionnel sur la présence de l'attribut "forced_base_amount"
 * BUG#10708 Ne pas permettre d'ordonnancer un contrat avec un statut devis (en cas de migration)
