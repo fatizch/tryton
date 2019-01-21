@@ -38,8 +38,7 @@ class MigratorParty(migrator.Migrator):
                 'existing_code': "a party already exists with code '%s'",
                 })
         cls.columns = {k: k for k in ('code', 'name', 'first_name',
-                'birth_name', 'ssn', 'ssn_key', 'gender', 'birth_date',
-                'extra_data'
+                'birth_name', 'gender', 'birth_date', 'extra_data'
                 )}
 
     @classmethod
@@ -74,8 +73,6 @@ class MigratorParty(migrator.Migrator):
         row['all_addresses'] = []
         row['is_person'] = True
         row['extra_data'] = eval(row['extra_data'] or '{}')
-        if row['ssn'] and row['ssn_key']:
-            row['ssn'] += row['ssn_key']
         return row
 
     @classmethod
