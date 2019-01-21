@@ -427,11 +427,11 @@ class ClaimService(metaclass=PoolMeta):
         if not loss.is_a_relapse:
             return
         values = self.extra_datas[-1].extra_data_values
-        old_values = self.loss.relapse_initial_loss.claim. \
-            delivered_services[0].extra_datas[-1].extra_data_values
-        for key, value in old_values.items():
-            if key in values:
-                values[key] = value
+        for old_service in self.loss.relapse_initial_loss.services:
+            old_values = old_service.extra_datas[-1].extra_data_values
+            for key, value in old_values.items():
+                if key in values:
+                    values[key] = value
         self.extra_datas[-1].extra_data_values = values
 
     def get_theoretical_covered_element(self, name):

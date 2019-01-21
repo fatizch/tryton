@@ -1,3 +1,4 @@
+* BUG#10739 Ne pas initialiser la rechute avec les données du préjudice initial si elles ne sont pas renseignées
 * BUG#10353 Correction du calcul de la date de réception des documents d'un bénéficiaire
 * BUG#10280 Correction d'une boucle infinie lors de la saisie de données complémentaires sur les prestations
 * BUG#10172 Ajout de la donnée personne dans le contexte de la règle de paramétrage afin de calculer la date de naissance des affiliés
