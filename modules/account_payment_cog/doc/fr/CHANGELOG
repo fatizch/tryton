@@ -1,3 +1,4 @@
+* BUG#10725 Prise en compte des valeurs par défaut des comptes comptables des tiers lors des tentatives de réconciliation
 * BUG#10537 Des erreurs d'accès concurrent pouvaient se produire pour le batch de réussite des paiements si la taille de la tâche était petite
 * FEA#10193 Lors de la création de paiement par l'assistant, toutes les lignes pouvant affecter le montant total du paiement sont affichées et l'utilisateur a la possibilité d'en ignorer certaines
 * BUG#10191 Possibilité d'échouer un groupe dont tous les paiements sont échoués

@@ -48,7 +48,7 @@ class Party(metaclass=PoolMeta):
             sub_clause.append([
                     ('party', '=', party.id),
                     ('account', '=', getattr(
-                        party, 'account_%s' % account_kind).id),
+                        party, 'account_%s_used' % account_kind).id),
                     ])
         clause.append(sub_clause)
         may_be_reconciled = MoveLine.search(clause,

@@ -1,3 +1,4 @@
+* BUG#10725 Check default party accounts when trying to reconcile
 * BUG#10537 Concurrent update errors could happen for the succeed payment batch if the job size was low
 * FEA#10193 When creating payment using the payment wizard, all pending lines that could modify the total payment amount are displayed to the user and he could choose to bypass some
 * BUG#10191 Allow to fail a group for which all payments already failed
