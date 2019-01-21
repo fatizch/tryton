@@ -117,7 +117,7 @@ class ContractOption(metaclass=PoolMeta):
                     commission.is_recovery = True
                     commission.product = plan.commission_product
                     commission.commissioned_option = option
-                    commission.commissioned_contract = option.contract
+                    commission.commissioned_contract = option.parent_contract
                     commission.amount = -recovery_amount + \
                         existing_recovery_amount
                     commissions.append(commission)

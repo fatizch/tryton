@@ -1,3 +1,5 @@
+* OTH#0000 Le contrat commissionné est le contrat parent de l'option lors du calcul des reprises de commission
+
 Version 2.2 - 2018-10-12
 * FEA#9492 Stocker le contrat sur les commissions
 
