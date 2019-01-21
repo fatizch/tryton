@@ -1,3 +1,5 @@
+* BUG#10683 Le compte de remboursement de sinistres est le compte de prélèvement du mode de quittancement du contrat s'il existe, sinon c'est l'un des comptes actifs du souscripteur, contrairement à avant où c'était l'opposé.
+
 Version 2.2 - 2018-10-12
 * BUG#8957 Rendre le champ compte bancaire visible sur les élements couverts seulement s'ils ont une option santé
 

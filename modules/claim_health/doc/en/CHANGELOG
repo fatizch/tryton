@@ -1,3 +1,5 @@
+* BUG#10683 Default claim bank account is the contract's billing information direct debit account if it exists, otherwise it is one of the subscriber's active account, contrary to before where it was the opposite.
+
 Version 2.2 - 2018-10-12
 * BUG#8957 Make claim_bank_account field visible on covered elements only if it has a health related option
 
