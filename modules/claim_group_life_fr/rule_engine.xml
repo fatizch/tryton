@@ -920,60 +920,42 @@ tauxTC = param_tauxTC()
 ta = param_ta()
 tb = param_tb()
 tc = param_tc()
-ta_net = param_ta_net()
-tb_net = param_tb_net()
-tc_net = param_tc_net()
+
 salaire_de_reference = param_salaire_de_reference()
-salaire_de_reference_net = param_salaire_de_reference_net()
 rente_SS = param_rente_ss()
 rente_de_base = param_rente_de_base()
-categorie = param_categorie()
-taux_incapacite_permanente = param_taux_incapacite_permanente()
 
 trancheTA, trancheTB, trancheTC = 0, 0, 0
 if tauxTA:
     trancheTA = arrondir(tauxTA * ta / 100.0, 0.01)
     salaire_de_reference += ta
-    salaire_de_reference_net += ta_net
-    rente_de_base += ta
+    rente_de_base += trancheTA
     description += u'Salaire de base (TA): %s * %s = %s\n' % (tauxTA, ta, trancheTA)
 if tauxTB:
     trancheTB = arrondir(tauxTB * tb / 100.0, 0.01)
     salaire_de_reference += tb
-    salaire_de_reference_net += tb_net
     rente_de_base += trancheTB
     description += u'Salaire de base (TB): %s * %s = %s\n' % (tauxTB, tb, trancheTB)
 if tauxTC:
     trancheTC = arrondir(tauxTC * tc / 100.0, 0.01)
     salaire_de_reference += tc
-    salaire_de_reference_net += tc_net
     rente_de_base += trancheTC
     description += u'Salaire de base (TC): %s * %s = %s\n' % (tauxTC, tc, trancheTC)
 
 salaire_de_reference = arrondir(salaire_de_reference, 0.01)
-salaire_de_reference_net = arrondir(salaire_de_reference_net, 0.01)
 rente_de_base = arrondir(rente_de_base, 0.01)
 
 
-description += u'Rente Securite Sociale: %s\n' % rente_SS
-rente_de_base -= rente_SS
-
-
-if categorie =='rat':
-    description += u'Taux Incapacite : %s\n' %(taux_incapacite_permanente)
-    description += u'Rente de base - detail du calcul :  %s=(%s-%s)*%s\n' % (rente_de_base,salaire_de_reference,rente_SS,taux_incapacite_permanente)
-else:
-    description += u'Rente de base - detail du calcul :  %s=(%s-%s)\n' % (rente_de_base,salaire_de_reference,rente_SS)
+description += u'Rente Securite Sociale pour la période: %s\n' % rente_SS
 
 return [{
     'trancheTA': trancheTA,
     'trancheTB': trancheTB,
     'trancheTC': trancheTC,
     'salaire_de_reference': salaire_de_reference,
-    'salaire_de_reference_net': salaire_de_reference_net,
     'rente_de_base': rente_de_base,
     'description': description
-}]</field>
+    }]</field>
             <field name="status">validated</field>
             <field name="type_">benefit</field>
             <field name="context" ref="rule_engine.default_context"/>
@@ -1005,37 +987,9 @@ return [{
             <field name="digits" eval="2"/>
             <field name="parent_rule" ref="calcul_tranches"/>
         </record>
-        <record model="rule_engine.rule_parameter" id="calcul_tranches_TA_net">
-            <field name="string">TA Net</field>
-            <field name="name">ta_net</field>
-            <field name="type_">numeric</field>
-            <field name="digits" eval="2"/>
-            <field name="parent_rule" ref="calcul_tranches"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="calcul_tranches_TB_net">
-            <field name="string">TB Net</field>
-            <field name="name">tb_net</field>
-            <field name="type_">numeric</field>
-            <field name="digits" eval="2"/>
-            <field name="parent_rule" ref="calcul_tranches"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="calcul_tranches_TC_net">
-            <field name="string">TC Net</field>
-            <field name="name">tc_net</field>
-            <field name="type_">numeric</field>
-            <field name="digits" eval="2"/>
-            <field name="parent_rule" ref="calcul_tranches"/>
-        </record>
         <record model="rule_engine.rule_parameter" id="calcul_tranches_salaire_de_reference">
             <field name="string">Salaire de référence</field>
             <field name="name">salaire_de_reference</field>
-            <field name="type_">numeric</field>
-            <field name="digits" eval="2"/>
-            <field name="parent_rule" ref="calcul_tranches"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="calcul_tranches_salaire_de_reference_net">
-            <field name="string">Salaire de référence net</field>
-            <field name="name">salaire_de_reference_net</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="parent_rule" ref="calcul_tranches"/>
@@ -1092,7 +1046,7 @@ return [{
         <record model="rule_engine" id="rente_invalidite_par_tranche_salaire_categorie_taux">
             <field name="name">Traitement rente invalidité par tranche de salaire (par catégorie et par taux)</field>
             <field name="short_name">coog_traitement_rente_invalidite_par_tranche_salaire_categorie_taux</field>
-            <field name="algorithm">rente_SS = compl_rente_securite_sociale_annuelle()
+            <field name="algorithm">rente_SS = compl_rente_securite_sociale_periode()
 traitement_de_reference = param_0_traitement_de_reference()
 categorie = compl_categorie_de_rente_d_invalidite()
 taux_incapacite_permanente = compl_taux_incapacite_permanente()
@@ -1106,9 +1060,7 @@ elif traitement_de_reference == 'salaire_brut_prime':
 elif traitement_de_reference == 'salaire_net_prime':
     tranches = tranche_salaire(['net_salary', 'net_salary_bonus'])
 
-tranches_net = tranche_salaire(['net_salary'])
 salaire_de_reference = 0 
-salaire_de_reference_net = 0
 rente_de_base = 0
 description = u''
 annex_rule_code = 'coog_prestations_annexes_rente'
@@ -1130,7 +1082,7 @@ pourcentage_ta_r3 = param_7_pourcentage_ta_r3()
 pourcentage_tb_r3 = param_8_pourcentage_tb_r3()
 pourcentage_tc_r3 = param_9_pourcentage_tc_r3()
 
-taux_tranches = rule_calcul_taux(categorie=compl_categorie_de_rente_d_invalidite(), pourcentage_ta_r1=pourcentage_ta_r1, pourcentage_tb_r1=pourcentage_tb_r1, pourcentage_tc_r1=pourcentage_tc_r1, pourcentage_ta_r2=pourcentage_ta_r2, pourcentage_tb_r2=pourcentage_tb_r2, pourcentage_tc_r2=pourcentage_tc_r2, pourcentage_ta_r3=pourcentage_ta_r3, pourcentage_tb_r3=pourcentage_tb_r3, pourcentage_tc_r3=pourcentage_tc_r3, taux_incapacite_permanente=taux_incapacite_permanente)
+taux_tranches = rule_calcul_taux(categorie=categorie, pourcentage_ta_r1=pourcentage_ta_r1, pourcentage_tb_r1=pourcentage_tb_r1, pourcentage_tc_r1=pourcentage_tc_r1, pourcentage_ta_r2=pourcentage_ta_r2, pourcentage_tb_r2=pourcentage_tb_r2, pourcentage_tc_r2=pourcentage_tc_r2, pourcentage_ta_r3=pourcentage_ta_r3, pourcentage_tb_r3=pourcentage_tb_r3, pourcentage_tc_r3=pourcentage_tc_r3, taux_incapacite_permanente=taux_incapacite_permanente)
 if len(taux_tranches) != 1:
     ajouter_erreur('Taux tranches invalide')
 tauxTA = taux_tranches[0]['tauxTA']
@@ -1139,23 +1091,23 @@ tauxTC = taux_tranches[0]['tauxTC']
 TA = tranches['TA']
 TB = tranches['TB']
 TC = tranches['TC']
-TA_net = tranches_net['TA']
-TB_net = tranches_net['TB']
-TC_net = tranches_net['TC']
 
-salaires = rule_calcul_tranches(description=description, ta=TA, tb=TB, tc=TC, ta_net=TA_net, tb_net=TB_net, tc_net=TC_net, salaire_de_reference=salaire_de_reference, salaire_de_reference_net=salaire_de_reference_net, rente_ss=rente_SS, rente_de_base=rente_de_base, tauxTA=tauxTA, tauxTB=tauxTB, tauxTC=tauxTC,
+salaires = rule_calcul_tranches(description=description, ta=TA, tb=TB, tc=TC, salaire_de_reference=salaire_de_reference, rente_ss=rente_SS, rente_de_base=rente_de_base, tauxTA=tauxTA, tauxTB=tauxTB, tauxTC=tauxTC,
 taux_incapacite_permanente=taux_incapacite_permanente, categorie=categorie)
 assert len(salaires) == 1
 trancheTA = salaires[0]['trancheTA']
 trancheTB = salaires[0]['trancheTB']
 trancheTC = salaires[0]['trancheTC']
 salaire_de_reference = salaires[0]['salaire_de_reference']
-salaire_de_reference_net = salaires[0]['salaire_de_reference_net']
 rente_de_base = salaires[0]['rente_de_base']
 description = salaires[0]['description']
 
+if categorie =='rat':
+    rente_de_base = rente_de_base * taux_incapacite_permanente
+    description += u'Taux Incapacite : %s\n' %(taux_incapacite_permanente)
+
 periodes = periode_de_rente(date_debut_periode, date_fin_periode)
-annuites = calcul_annuites(periods=periodes, description=description, annuity_amount=rente_de_base, ss_annuity_amount=rente_SS, reference_salary=salaire_de_reference, net_reference_salary=salaire_de_reference_net, trancheTA=trancheTA, trancheTB=trancheTB, trancheTC=trancheTC, annex_rule_code=annex_rule_code)
+annuites = calcul_annuites(periods=periodes, description=description, annuity_amount=rente_de_base, ss_annuity_amount=rente_SS, reference_salary=salaire_de_reference, trancheTA=trancheTA, trancheTB=trancheTB, trancheTC=trancheTC, annex_rule_code=annex_rule_code)
 return annuites</field>
             <field name="status">validated</field>
             <field name="type_">benefit</field>
@@ -1163,8 +1115,8 @@ return annuites</field>
         </record>
         <record model="extra_data" id="rente_securite_sociale_annuelle_extra_data">
             <field name="has_default_value" eval="False"/>
-            <field name="string">Rente annuelle de la sécurité sociale</field>
-            <field name="name">rente_securite_sociale_annuelle</field>
+            <field name="string">Rente de la sécurité sociale pour la période</field>
+            <field name="name">rente_securite_sociale_periode</field>
             <field name="kind">benefit</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
@@ -1189,14 +1141,6 @@ rat: Rente Accident Travail</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
         </record>
-        <record model="extra_data" id="rente_SS_percue_prestations_annexes_extra_data">
-            <field name="has_default_value" eval="False"/>
-            <field name="string">Rente SS mensuelle réellement perçue (si PA)</field>
-            <field name="name">rente_SS_percue_prestations_annexes</field>
-            <field name="kind">benefit</field>
-            <field name="type_">numeric</field>
-            <field name="digits" eval="2"/>
-        </record>
         <record model="extra_data" id="salaire_journalier_mi_temps_therapeutique_extra_data">
             <field name="has_default_value" eval="False"/>
             <field name="string">Salaire journalier mi-temps thérapeutique</field>
@@ -1217,10 +1161,6 @@ rat: Rente Accident Travail</field>
         <record model="rule_engine-extra_data" id="rule_extra_data_taux_incapacite_permanent">
             <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
             <field name="extra_data" ref="taux_incapacite_extra_data"/>
-        </record>
-        <record model="rule_engine-extra_data" id="rule_extra_data_rente_SS_percue_prestations_annexes">
-            <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
-            <field name="extra_data" ref="rente_SS_percue_prestations_annexes_extra_data"/>
         </record>
         <!-- Rule Parameters -->
         <record model="rule_engine.rule_parameter" id="0_traitement_de_reference_rente_invalidite_par_tranche_salaire_categorie_taux">
@@ -1296,230 +1236,46 @@ salaire_net_prime:Salaire Net + Primes</field>
             <field name="string">Pourcentage TC R3</field>
             <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
         </record>
-        <!-- Default pole emploi deduction rule -->
-        <record model="rule_engine" id="deduire_pole_emploi">
-            <field name="name">Déduire pôle emploi</field>
-            <field name="short_name">deduire_pole_emploi</field>
-            <field name="algorithm">date_debut_periode = param_date_debut_periode()
-date_fin_periode = param_date_fin_periode()
-salaire_de_reference = param_salaire_de_reference()
-description = param_description()
-rente_de_base = param_rente_de_base()
-libelle_salaire = param_libelle_salaire()
-
-prestation_pole_emploi_journalier = montant_de_deduction('pole_emploi', date_debut_periode, date_fin_periode)
-if prestation_pole_emploi_journalier:
-    prestation_pole_emploi = arrondir(prestation_pole_emploi_journalier * ((date_fin_periode - date_debut_periode).days + 1), 0.01)
-    limite = salaire_de_reference - prestation_pole_emploi
-    description += u'Calcul de la limite en cas de versement pôle emploi\n'
-    description += u'%s - rente de la securite sociale - versement pole emploi\n' % libelle_salaire
-    description += u'%s - %s - %s = %s\n' % (salaire_de_reference, prestation_pole_emploi, limite)
-    if rente_de_base > limite:
-        if limite &lt; 0:
-            limite = 0
-        rente_de_base = limite
-        description += u'Application de la limite: la nouvelle rente de base est %s\n' % rente_de_base
-    else:
-        description += u'Le cumul des prestations etant superieur au salaire de reference, notre rente complementaire est limitee a notre rente de base soit : %s.' % rente_de_base
-    return [{
-        'rente_de_base': rente_de_base,
-        'description': description,
-        'libelle_salaire': libelle_salaire
-        }]
-return [{
-        'rente_de_base': rente_de_base,
-        'description': description,
-        'libelle_salaire': libelle_salaire
-        }]</field>
-            <field name="status">validated</field>
-            <field name="type_">benefit</field>
-            <field name="context" ref="rule_engine.default_context"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="deduire_pole_emploi_description">
-            <field name="string">Description</field>
-            <field name="name">description</field>
-            <field name="type_">char</field>
-            <field name="parent_rule" ref="deduire_pole_emploi"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="deduire_pole_emploi_libelle_salaire">
-            <field name="string">Libellé salaire</field>
-            <field name="name">libelle_salaire</field>
-            <field name="type_">char</field>
-            <field name="parent_rule" ref="deduire_pole_emploi"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="deduire_pole_emploi_salaire_de_reference">
-            <field name="string">Salaire de référence</field>
-            <field name="name">salaire_de_reference</field>
-            <field name="type_">numeric</field>
-            <field name="digits" eval="2"/>
-            <field name="parent_rule" ref="deduire_pole_emploi"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="deduire_pole_emploi_rente_de_base">
-            <field name="string">Rente de base</field>
-            <field name="name">rente_de_base</field>
-            <field name="type_">numeric</field>
-            <field name="digits" eval="2"/>
-            <field name="parent_rule" ref="deduire_pole_emploi"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="deduire_pole_emploi_date_debut_periode">
-            <field name="string">Date de début de période</field>
-            <field name="name">date_debut_periode</field>
-            <field name="type_">date</field>
-            <field name="parent_rule" ref="deduire_pole_emploi"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="deduire_pole_emploi_date_fin_periode">
-            <field name="string">Date de fin de période</field>
-            <field name="name">date_fin_periode</field>
-            <field name="type_">date</field>
-            <field name="parent_rule" ref="deduire_pole_emploi"/>
-        </record>
-        <!-- Default half time rule -->
-        <record model="rule_engine" id="deduire_mtt">
-            <field name="name">Déduire mi-temps thérapeutique</field>
-            <field name="short_name">deduire_mtt</field>
-            <field name="algorithm">type_regle_mtt = param_type_regle_mtt()
-taux_d_activite_mtt = param_taux_d_activite_mtt()
-description = param_description()
-rente_de_base = param_rente_de_base()
-rente_ss = param_rente_ss()
-salaire_de_reference = param_salaire_de_reference()
-libelle_salaire = param_libelle_salaire()
-
-if (taux_d_activite_mtt and type_regle_mtt == 'taux_activite*salaire'):
-    salaire_mi_temps = ((taux_d_activite_mtt or 0) * salaire_de_reference)
-    salaire_mi_temps = arrondir(salaire_mi_temps, 0.01)
-    limite = salaire_de_reference - rente_ss - salaire_mi_temps
-    description += u'Calcul de la limite en cas de temps partiel\n'
-    description += u'%s - rente de la securite sociale - (taux d\'activite * salaire de reference)\n' % libelle_salaire
-    description += u'%s - %s - (%s * %s) = %s\n' % (salaire_de_reference, rente_ss, taux_d_activite_mtt, salaire_de_reference, limite)
-    if rente_de_base > limite:
-        # On verifie que la limite est positive sinon elle est egale a 0, donc elle ne peux pas etre strictement negative.
-        limite = max(limite,0)
-        # On limite rente_de_base a la la valeur de la limite.
-        rente_de_base = min(rente_de_base, limite)
-        description += u'Application de la limite : la nouvelle rente de base est %s\n' % rente_de_base
-    else:
-        description += u'Le cumul des prestations etant superieur au salaire de reference, notre rente complementaire est limitee a notre rente de base soit : %s' % rente_de_base
-return [{'rente_de_base': rente_de_base,
-        'description': description,
-        'libelle_salaire': libelle_salaire}]</field>
-            <field name="status">validated</field>
-            <field name="type_">benefit</field>
-            <field name="context" ref="rule_engine.default_context"/>
-        </record>
-
-        <record model="rule_engine.rule_parameter" id="deduire_mtt_type_regle_mtt">
-            <field name="string">Type de règle de mi-temps thérapeutique</field>
-            <field name="name">type_regle_mtt</field>
-            <field name="type_">char</field>
-            <field name="parent_rule" ref="deduire_mtt"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="deduire_mtt_description">
-            <field name="string">Description</field>
-            <field name="name">description</field>
-            <field name="type_">char</field>
-            <field name="parent_rule" ref="deduire_mtt"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="deduire_mtt_libelle_salaire">
-            <field name="string">Libellé salaire</field>
-            <field name="name">libelle_salaire</field>
-            <field name="type_">char</field>
-            <field name="parent_rule" ref="deduire_mtt"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="deduire_mtt_taux_d_activite_mtt">
-            <field name="string">Taux d'activité mi-temps thérapeutique</field>
-            <field name="name">taux_d_activite_mtt</field>
-            <field name="type_">numeric</field>
-            <field name="digits" eval="2"/>
-            <field name="parent_rule" ref="deduire_mtt"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="deduire_mtt_rente_de_base">
-            <field name="string">Rente de base</field>
-            <field name="name">rente_de_base</field>
-            <field name="type_">numeric</field>
-            <field name="digits" eval="2"/>
-            <field name="parent_rule" ref="deduire_mtt"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="deduire_mtt_rente_ss">
-            <field name="string">Rente SS</field>
-            <field name="name">rente_ss</field>
-            <field name="type_">numeric</field>
-            <field name="digits" eval="2"/>
-            <field name="parent_rule" ref="deduire_mtt"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="deduire_mtt_salaire_de_reference">
-            <field name="string">Salaire de référence</field>
-            <field name="name">salaire_de_reference</field>
-            <field name="type_">numeric</field>
-            <field name="digits" eval="2"/>
-            <field name="parent_rule" ref="deduire_mtt"/>
-        </record>
         <!-- Default side benefits rule -->
         <record model="rule_engine" id="prestations_annexes_rente">
             <field name="name">Prestations annexes rente</field>
             <field name="short_name">coog_prestations_annexes_rente</field>
             <field name="algorithm">rente_de_base = param_rente_de_base()
+salaire_de_reference = param_salaire_de_reference()
 if limite_au_net():
     libelle_salaire = u'Salaire de reference net'
-    salaire_de_reference = param_salaire_de_reference_net()
 else:
-    if param_salaire_de_reference() == param_salaire_de_reference_net():
-        libelle_salaire = u'Salaire de reference net'
-    else:
-        libelle_salaire = u'Salaire de reference brut'
-    salaire_de_reference = param_salaire_de_reference()
+    libelle_salaire = u'Salaire de reference brut'
 
 date_debut_periode = param_date_debut_periode()
 date_fin_periode = param_date_fin_periode()
 description = u''
-rente_de_base = param_rente_de_base()
 rente_ss = param_rente_ss()
-type_regle_mtt = compl_type_regle_mtt()
+rente_de_base = param_rente_de_base() - rente_ss 
+description += 'Déduction de la rente SS: %s - %s = %s\n' % (param_rente_de_base(), rente_ss, rente_de_base)
 
-# Prestations pole emploi
-apres_pole_emploi = rule_deduire_pole_emploi(date_debut_periode=date_debut_periode, date_fin_periode=date_fin_periode, salaire_de_reference=salaire_de_reference, description=description, libelle_salaire=libelle_salaire, rente_de_base=rente_de_base)
-if len(apres_pole_emploi) == 1:
-    rente_de_base = apres_pole_emploi[0]['rente_de_base']
-    description = apres_pole_emploi[0]['description']
-    libelle_salaire = apres_pole_emploi[0]['libelle_salaire']
+# Déduction des prestations annexes si applicable
+montant_prestations_annexes = montant_de_deduction(None, date_debut_periode, date_fin_periode)
+if montant_prestations_annexes:
+    montant_prestations_annexes = arrondir(montant_prestations_annexes * jours_entre(date_debut_periode,
+        date_fin_periode), 0.01)
+    limite = salaire_de_reference - montant_prestations_annexes
+    description += u'Calcul de la limite en cas de prestations annexes (%s)\n' % montant_prestations_annexes 
+    description += 'Limite = %s\n' % limite
+    if rente_de_base > limite:
+        # On verifie que la limite est positive sinon elle est egale a 0, donc elle ne peux pas etre strictement negative.
+        limite = max(limite, Decimal(0))
+        # On limite rente_de_base a la la valeur de la limite.
+        rente_de_base = min(rente_de_base, limite)
+        description += u'Application de la limite : la nouvelle rente de base est %s\n' % rente_de_base
+    else:
+        description += 'Limite non depassée: rente de base = %s\n' % rente_de_base
 
-taux_d_activite_mtt = compl_taux_d_activite_mi_temps_therapeuthique()
-type_regle_mtt = compl_type_regle_mtt()
-
-# Mi temps therapeutique
-apres_mtt = rule_deduire_mtt(taux_d_activite_mtt=taux_d_activite_mtt, type_regle_mtt=type_regle_mtt, salaire_de_reference=salaire_de_reference, description=description, rente_de_base=rente_de_base, rente_ss=rente_ss, libelle_salaire=libelle_salaire)
-if len(apres_mtt) == 1:
-    rente_de_base = apres_mtt[0]['rente_de_base']
-    description = apres_mtt[0]['description']
 return rente_de_base, description</field>
             <field name="status">validated</field>
             <field name="type_">tool</field>
             <field name="context" ref="rule_engine.default_context"/>
         </record>        
-        <record model="extra_data" id="taux_d_activite_mi_temps_therapeuthique_extra_data">
-            <field name="has_default_value" eval="False"/>
-            <field name="string">Taux d'activité mi-temps thérapeutique</field>
-            <field name="name">taux_d_activite_mi_temps_therapeuthique</field>
-            <field name="kind">benefit</field>
-            <field name="type_">numeric</field>
-            <field name="digits" eval="2"/>
-        </record>
-        <record model="extra_data" id="type_regle_mtt_extra_data">
-            <field name="string">Type de règle de mi-temps thérapeutique</field>
-            <field name="name">type_regle_mtt</field>
-            <field name="kind">benefit</field>
-            <field name="type_">selection</field>
-            <field name="selection">taux_activite*salaire:Taux d'activité * Salaire de référence</field>
-            <field name="selection_sorted">True</field>
-        </record>
-        <record model="rule_engine-extra_data" id="rule_extra_data_taux_d_activite_mi_temps_therapeuthique">
-            <field name="parent_rule" ref="prestations_annexes_rente"/>
-            <field name="extra_data" ref="type_regle_mtt_extra_data"/>
-        </record>
-        <record model="rule_engine-extra_data" id="rule_extra_data_taux_mtt">
-            <field name="parent_rule" ref="prestations_annexes_rente"/>
-            <field name="extra_data" ref="taux_d_activite_mi_temps_therapeuthique_extra_data"/>
-        </record>
         <record model="rule_engine.rule_parameter" id="rente_de_base_prestations_annexes_rente">
             <field name="name">rente_de_base</field>
             <field name="type_">numeric</field>
@@ -1532,13 +1288,6 @@ return rente_de_base, description</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Rente SS</field>
-            <field name="parent_rule" ref="prestations_annexes_rente"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="salaire_de_reference_net_prestations_annexes_rente">
-            <field name="name">salaire_de_reference_net</field>
-            <field name="type_">numeric</field>
-            <field name="digits" eval="2"/>
-            <field name="string">Salaire de réference net</field>
             <field name="parent_rule" ref="prestations_annexes_rente"/>
         </record>
         <record model="rule_engine.rule_parameter" id="salaire_de_reference_prestations_annexes_rente">
@@ -1572,14 +1321,6 @@ return rente_de_base, description</field>
         <record model="rule_engine-rule_engine" id="rule_used_rente_invalidite_par_tranche_salaire_categorie_taux_calcul_tranches">
             <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
             <field name="rule" ref="calcul_tranches"/>
-        </record>
-        <record model="rule_engine-rule_engine" id="rule_used_prestations_annexes_rente_deduire_pole_emploi">
-            <field name="parent_rule" ref="prestations_annexes_rente"/>
-            <field name="rule" ref="deduire_pole_emploi"/>
-        </record>
-        <record model="rule_engine-rule_engine" id="rule_used_prestations_annexes_rente_deduire_mtt">
-            <field name="parent_rule" ref="prestations_annexes_rente"/>
-            <field name="rule" ref="deduire_mtt"/>
         </record>
     </data>
     <data noupdate="1">

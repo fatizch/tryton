@@ -13,5 +13,6 @@ def register():
         claim.Loss,
         claim.IndemnificationDetail,
         claim.HospitalisationPeriod,
+        rule_engine.RuleEngine,
         rule_engine.RuleEngineRuntime,
         module='claim_group_life_fr', type_='model')

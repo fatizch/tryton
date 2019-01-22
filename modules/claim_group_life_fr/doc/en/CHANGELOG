@@ -1,3 +1,4 @@
+* BUG#10783 The default ltd rule now takes the SS amount for the period instead of annual amount
 * BUG#10631 Fix computation of annuities periods amounts
 * BUG#10596 Fix annuities periods computation
 * BUG#10307 Fix in default deduction rule

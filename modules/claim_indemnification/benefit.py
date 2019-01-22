@@ -305,6 +305,8 @@ class BenefitRule(
         for start_date, end_date in coog_date.calculate_periods_from_dates(
                 list(dates), previous_date, args['end_date']):
             new_args = args.copy()
+            new_args['indemnification_full_start'] = indemnification.start_date
+            new_args['indemnification_full_end'] = indemnification.end_date
             new_args['date'] = start_date
             new_args['indemnification_detail_start_date'] = start_date
             new_args['indemnification_detail_end_date'] = end_date

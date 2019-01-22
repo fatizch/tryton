@@ -2,12 +2,14 @@
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 
 from trytond.modules.rule_engine import check_args
 from trytond.modules.coog_core import coog_date
 
 
 __all__ = [
+    'RuleEngine',
     'RuleEngineRuntime',
     ]
 
@@ -49,9 +51,8 @@ class RuleEngineRuntime(metaclass=PoolMeta):
 
     @classmethod
     def _re_ltd_periods(cls, args, periods, description, annuity_amount,
-            ss_annuity_amount, reference_salary, net_reference_salary,
-            trancheTA, trancheTB, trancheTC, rounding_factor=None,
-            annex_rule_code=None):
+            ss_annuity_amount, reference_salary, trancheTA, trancheTB,
+            trancheTC, rounding_factor=None, annex_rule_code=None):
         '''
             This method computes annuity periods given an initial annuity
             amount, social security amount to deduce, salary values and
@@ -78,52 +79,82 @@ class RuleEngineRuntime(metaclass=PoolMeta):
                 raise Exception('No rule found for code %s' % annex_rule_code)
         res = []
         description_copy = description
+        full_start_date = args.get('indemnification_full_start', periods[0][0])
+        full_end_date = args.get('indemnification_full_end', periods[-1][1])
+        ratio = coog_date.number_of_days_between(full_start_date,
+            full_end_date)
         for start_date, end_date, full_period, prorata, unit in periods:
             description = description_copy
-            ratio = 365
+
+            # SS annuity is defined on full period, we must prorate using
+            # days as factor
+            ratio_sub_period = coog_date.number_of_days_between(start_date,
+                end_date)
+            period_ss_annuity = cls._re_round(args,
+                ss_annuity_amount / ratio * ratio_sub_period,
+                rounding_factor)
+            description += 'Rente SS sur la sous période: ' \
+                '%s (%s / %s * %s)\n' \
+                % (period_ss_annuity, ss_annuity_amount, ratio,
+                    ratio_sub_period)
+
+            # Round amounts
             rounded_annuity_amount = cls._re_round(args, annuity_amount,
                 rounding_factor)
             rounded_reference_salary = cls._re_round(args, reference_salary,
                 rounding_factor)
-            rounded_net_reference_salary = cls._re_round(args,
-                net_reference_salary, rounding_factor)
-            if unit == 'day':
-                period_ss_annuity = cls._re_round(args,
-                    ss_annuity_amount / ratio * prorata, rounding_factor)
-            else:
-                period_ss_annuity = cls._re_round(args,
-                    ss_annuity_amount / 12 * prorata, rounding_factor)
+
             if rounded_annuity_amount < 0:
                 rounded_annuity_amount = Decimal('0.0')
+
+            # Prorate annuity amounts on sub periods
+            if full_period:
+                unit_annuity = cls._re_round(args, rounded_annuity_amount /
+                    Decimal('12') * prorata, rounding_factor)
+                description += 'Montant de l\'unité: %s (%s / %s * %s)\n' \
+                    % (unit_annuity, rounded_annuity_amount, 12,
+                        prorata)
+                unit_reference_salary = cls._re_round(args,
+                    rounded_reference_salary / Decimal('12') * prorata,
+                    rounding_factor)
+            else:
+                unit_annuity = cls._re_round(args, rounded_annuity_amount /
+                   Decimal('365') * ratio_sub_period, rounding_factor)
+                description += 'Montant de l\'unité: %s (%s / 365 * %s)\n' % (
+                    unit_annuity, rounded_annuity_amount, prorata)
+                unit_reference_salary = cls._re_round(args,
+                    rounded_reference_salary / Decimal('365') *
+                    ratio_sub_period, rounding_factor)
+
+            # Call limitations rules with prorated amounts
             if annex_rules:
                 annex_rule = annex_rules[0]
                 annex_rule_args = {
                     'type_de_regle': annex_rule_code,
                     'date_debut_periode': start_date,
                     'date_fin_periode': end_date,
-                    'rente_de_base': rounded_annuity_amount,
-                    'salaire_de_reference': rounded_reference_salary,
+                    'rente_de_base': unit_annuity,
+                    'salaire_de_reference': unit_reference_salary,
                     'rente_ss': period_ss_annuity,
-                    'salaire_de_reference_net': rounded_net_reference_salary
                     }
                 rule_res = annex_rule.execute(
                     arguments=args, parameters=annex_rule_args)
                 if rule_res.result:
-                    rounded_annuity_amount, annex_description = rule_res.result
+                    rounded_unit_annuity, annex_description = rule_res.result
                     description += annex_description
-            if full_period:
-                unit_annuity = cls._re_round(args, rounded_annuity_amount /
-                    12 * prorata, rounding_factor)
+
+            if not full_period:
+                unit_annuity = (Decimal(rounded_unit_annuity) /
+                    Decimal(ratio_sub_period))
             else:
-                unit_annuity = cls._re_round(args, rounded_annuity_amount /
-                   ratio, rounding_factor)
+                unit_annuity = rounded_unit_annuity
 
             res.append({
                     'start_date': start_date,
                     'end_date': end_date,
                     'nb_of_unit': prorata if not full_period else 1,
                     'unit': unit,
-                    'amount': rounded_annuity_amount,
+                    'amount': rounded_unit_annuity,
                     'base_amount': unit_annuity,
                     'amount_per_unit': unit_annuity,
                     'description': description,
@@ -131,6 +162,36 @@ class RuleEngineRuntime(metaclass=PoolMeta):
                         'tranche_a': trancheTA,
                         'tranche_b': trancheTB,
                         'tranche_c': trancheTC
-                    }
+                        }
                     })
         return res
+
+
+class RuleEngine(metaclass=PoolMeta):
+    __name__ = 'rule_engine'
+
+    @classmethod
+    def __register__(cls, module_name):
+        cursor = Transaction().connection.cursor()
+        pool = Pool()
+        model_data = pool.get('ir.model.data').__table__()
+        table = pool.get('rule_engine-rule_engine').__table__()
+        # Migration from 2.2: Removing default rules
+        query = model_data.select(model_data.id, model_data.db_id,
+            where=model_data.fs_id.in_(
+                ['deduire_pole_emploi', 'deduire_mtt']))
+        cursor.execute(*query)
+        set_ids = [(id_, db_id) for id_, db_id in cursor.fetchall()]
+        if set_ids:
+            ids = [x for _, x in set_ids]
+            data_ids = [x for x, _ in set_ids]
+            sub_select = table.select(
+                table.id,
+                where=table.rule.in_(ids))
+            cursor.execute(*table.select(table.parent_rule,
+                    where=table.id.in_(sub_select)))
+            cursor.execute(*table.delete(
+                    where=table.id.in_(sub_select)))
+            cursor.execute(*model_data.delete(
+                where=model_data.id.in_(data_ids)))
+        super(RuleEngine, cls).__register__(module_name)
