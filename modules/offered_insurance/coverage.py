@@ -42,7 +42,7 @@ class OptionDescription(metaclass=PoolMeta):
 
     @classmethod
     def kind_list_for_extra_data_domain(cls):
-        return ['contract', 'covered_element', 'option']
+        return ['option']
 
     @classmethod
     def __setup__(cls):

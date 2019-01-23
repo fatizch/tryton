@@ -1,3 +1,4 @@
+* BUG#10779 Correction du domaine sur les données complémentaires
 * OTH#0000 Remplacement de données "champs_technique" du moteur de règle par des vrais données métier
 
 Version 2.2 - 2018-10-12
