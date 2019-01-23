@@ -192,7 +192,7 @@ class MigratorAddress(migrator.Migrator):
     @classmethod
     def sanitize(cls, row, parent=None):
         row = super(MigratorAddress, cls).sanitize(row)
-        street = '\n'.join([row['line1']or '', row['line2']or '',
+        street = '\n'.join([row['line2'] or '',
             row['line3'] or '', row['line4'] or '', row['line5'] or ''])
         row.pop('line1')
         row.pop('line2')
