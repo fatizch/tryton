@@ -354,7 +354,7 @@ class Invoice(metaclass=PoolMeta):
                     self.start),
                 'previous_invoices_not_posted', (str(len(old_invoices)),
                     str(self.start), self.contract.rec_name,
-                    '\n\t'.join([x.description for x in old_invoices])))
+                    '\n\t'.join([x.description or '' for x in old_invoices])))
             return old_invoices
         return []
 

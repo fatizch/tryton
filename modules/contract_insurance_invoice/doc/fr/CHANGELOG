@@ -1,3 +1,4 @@
+* OTH#00000 Correction d'un plantage lors de la vérification des quittances précédemment postées
 * OTH#00000 Mise à jour de intervaltree en version 3.0
 * BUG#10522 Il n'était pas possible de paramétrer une action par type d'évènement pour la re-génération des quittances non-périodiques
 * BUG#10116 Copier aussi le lien vers le contrat lors de la copie d'une quittance
