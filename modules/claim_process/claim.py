@@ -81,7 +81,7 @@ class Claim(CoogProcessFramework, metaclass=ClassAttr):
                 if desc in existing_document_desc[loss]:
                     existing_document_desc[loss].remove(desc)
                     continue
-                params = default_docs.get(desc.code, {})
+                params = default_docs_per_loss[loss].get(desc.code, {})
                 line = DocumentRequestLine(**params)
                 line.document_desc = desc
                 if loss:

@@ -1,3 +1,5 @@
+* BUG#10646 Correction d'un crash sur les demandes de documents liées à des préjudices lorsqu'il n'y a pas de documents à initialiser
+
 Version 2.2 - 2018-10-12
 * FEA#9423 Lancer un processus depuis un sinistre
 

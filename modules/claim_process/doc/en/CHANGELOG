@@ -1,3 +1,5 @@
+* BUG#10646 Fix document request on losses crash when there are no documents to initialize
+
 Version 2.2 - 2018-10-12
 * FEA#9423 Allow to start process from a claim
 
