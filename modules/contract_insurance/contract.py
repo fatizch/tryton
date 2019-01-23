@@ -355,7 +355,7 @@ class Contract(Printable):
     def get_parties(self, name):
         parties = super(Contract, self).get_parties(name)
         parties += [x.party.id for x in self.covered_elements if x.party]
-        return parties
+        return list(set(parties))
 
     def do_activate(self):
         super(Contract, self).do_activate()

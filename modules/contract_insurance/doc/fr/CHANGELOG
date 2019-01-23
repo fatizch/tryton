@@ -1,3 +1,4 @@
+* BUG#10618 La liste des tiers d'un contract ne doit contenir qu'une seule fois un même tiers.
 * BUG#10418 La contrainte d'unicité sur les tiers des éléments couverts par contrat bloque certains cas métier
 
 Version 2.2 - 2018-10-12
