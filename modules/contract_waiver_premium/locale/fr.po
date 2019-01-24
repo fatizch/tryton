@@ -2,6 +2,18 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.option:"
+msgid "The option %(option)s has overlapping waivers"
+msgstr "La garantie %(option)s a des exonérations qui se chevauchent"
+
+msgctxt "error:contract.option:"
+msgid ""
+"The option %(option)s has too many waivers on the period [%(start)s - "
+"%(end)s]"
+msgstr ""
+"La garantie %(option)s a trop d'exonérations sur la période [%(start)s - "
+"%(end)s]"
+
 msgctxt "error:contract.waiver_premium.create:"
 msgid "You are trying to create overlapping waivers"
 msgstr "Vous essayez de créer des exonérations qui se chevauchent."

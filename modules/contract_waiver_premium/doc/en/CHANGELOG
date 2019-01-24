@@ -1,3 +1,5 @@
+* BUG#10612 Add check on overlapping waivers on an option
+
 Version 2.2 - 2018-10-12
 * BUG#9550 Fix calculation of prorata when the period is fully exonerated
 * BUG#9358 Fix edge case when using prorated waivers on non prorated premiums

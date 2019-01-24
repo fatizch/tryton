@@ -1,3 +1,5 @@
+* BUG#10612 Ajout d'une vérification lorsque des exonérations se chevauchent sur une même option
+
 Version 2.2 - 2018-10-12
 * BUG#9550 Correction du calcul du prorata proportionnel en cas de période entièrement exonérées
 * BUG#9358 Correction d'un cas aux limites en cas de combinaison de primes non proratées et d'exonération proratées

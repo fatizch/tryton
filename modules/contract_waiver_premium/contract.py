@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or
 from trytond.modules.coog_core import fields, model
@@ -175,25 +177,72 @@ class ContractOption(metaclass=PoolMeta):
     __name__ = 'contract.option'
 
     waivers = fields.One2Many('contract.waiver_premium-contract.option',
-        'option', 'Waivers', delete_missing=True)
+        'option', 'Waivers', delete_missing=True,
+        order=[('start_date', 'ASC NULLS FIRST')])
     with_waiver_of_premium = fields.Function(
         fields.Boolean('With Waiver Of Premium'),
         'get_with_waiver_of_premium')
+
+    @classmethod
+    def __setup__(cls):
+        super(ContractOption, cls).__setup__()
+        cls._error_messages.update({
+                'overlapping_waivers': 'The option %(option)s has overlapping '
+                'waivers',
+                'too_many_waivers': 'The option %(option)s has too many '
+                'waivers on the period [%(start)s - %(end)s]',
+                })
+
+    @classmethod
+    def validate(cls, options):
+        with model.error_manager():
+            super(ContractOption, cls).validate(options)
+            for option in options:
+                if option.has_overlapping_waivers():
+                    cls.append_functional_error('overlapping_waivers',
+                        {'option': option.rec_name})
+
+    def has_overlapping_waivers(self):
+        previous_waiver = None
+        for waiver in self.waivers:
+            if previous_waiver is not None and (
+                    waiver.start_date is None
+                    or previous_waiver.end_date is None
+                    or previous_waiver.start_date == waiver.start_date
+                    or previous_waiver.end_date >= waiver.start_date):
+                return True
+            previous_waiver = waiver
+        return False
+
+    def get_waivers_for_period(self, from_date, to_date):
+        matching_waivers = []
+        from_date = from_date or datetime.date.max
+        to_date = to_date or datetime.date.min
+        for waiver in self.waivers:
+            if (not waiver.start_date or waiver.start_date <= to_date) and (
+                    not waiver.end_date or waiver.end_date >= from_date):
+                matching_waivers.append(waiver)
+        return matching_waivers
 
     def get_with_waiver_of_premium(self, name):
         return self.coverage.with_waiver_of_premium
 
     def get_waiver_at_date(self, from_date, to_date):
         waiver_option = None
-        overlap_waivers = []
-        for waiver in self.waivers:
-            if (not waiver.start_date or waiver.start_date <= to_date) and (
-                    not waiver.end_date or waiver.end_date >= from_date):
-                overlap_waivers.append(waiver)
-        if not overlap_waivers:
+        from_date = from_date or datetime.date.max
+        to_date = to_date or datetime.date.min
+        matching_waivers = self.get_waivers_for_period(from_date, to_date)
+        if not matching_waivers:
             return
-        assert len(overlap_waivers) == 1
-        waiver_option = overlap_waivers[0]
+        if len(matching_waivers) != 1:
+            Date = Pool().get('ir.date')
+            self.append_functional_error('too_many_waivers', {
+                    'option': self.rec_name,
+                    'start': Date.date_as_string(from_date),
+                    'end': Date.date_as_string(to_date)
+                    })
+            return None
+        waiver_option = matching_waivers[0]
         behaviour = \
             self.coverage.waiver_premium_rule[0].invoice_line_period_behaviour
         assert behaviour in ['one_day_overlap', 'proportion', 'total_overlap']
