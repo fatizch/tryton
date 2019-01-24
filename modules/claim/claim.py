@@ -422,6 +422,12 @@ class Claim(model.CoogSQL, model.CoogView, Printable):
     def get_losses_description(self, name):
         return ' - '.join([loss.rec_name for loss in self.losses])
 
+    def get_gdpr_data(self):
+        return {
+            coog_string.translate_label(self, 'losses'): [
+                x.get_gdpr_data() for x in self.losses],
+            }
+
 
 class Loss(model.CoogSQL, model.CoogView,
         with_extra_data(['loss'], schema='loss_desc')):
@@ -824,6 +830,21 @@ class Loss(model.CoogSQL, model.CoogView,
                         key=_group_by_sub_status):
                     Claim.hold_contracts([x[0] for x in payers], sub_status)
             pool.get('event').notify_events(to_write, 'activate_loss')
+
+    def get_gdpr_data(self):
+        Party = Pool().get('party.party')
+        label_ = Party._label_gdpr
+        value_ = coog_string.translate_value
+        return {
+            label_(self, 'loss_desc'):
+                value_(self.loss_desc, 'name'),
+            label_(self, 'start_date'):
+                value_(self, 'start_date'),
+            label_(self, 'end_date'):
+                value_(self, 'end_date'),
+            label_(self, 'event_desc'):
+                value_(self.event_desc, 'name'),
+            }
 
 
 class ClaimService(model.CoogSQL, model.CoogView,

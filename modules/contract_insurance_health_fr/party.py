@@ -8,7 +8,7 @@ from trytond import backend
 from trytond.pyson import Eval, Bool, Or
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, coog_string
 
 __all__ = [
     'Party',
@@ -187,6 +187,21 @@ class Party(metaclass=PoolMeta):
                     break
         if ssn:
             values['_func_key'] += '|' + ssn
+
+    def get_gdpr_data(self):
+        res = super(Party, self).get_gdpr_data()
+        label_ = self.__class__._label_gdpr
+        value_ = coog_string.translate_value
+        if self.main_health_complement:
+            res.update({
+                    label_(self.main_health_complement, 'hc_system'): value_(
+                        self.main_health_complement.hc_system, 'name'),
+                    label_(self.main_health_complement,
+                        'insurance_fund_number'):
+                    value_(self.main_health_complement,
+                            'insurance_fund_number'),
+                    })
+        return res
 
 
 class PartyRelation(metaclass=PoolMeta):

@@ -221,15 +221,15 @@ msgctxt "field:party.contact_mechanism,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:party.extract.gpdr_data_view,data:"
+msgctxt "field:party.extract.gdpr_data_view,data:"
 msgid "Data"
 msgstr "Données"
 
-msgctxt "field:party.extract.gpdr_data_view,filename:"
+msgctxt "field:party.extract.gdpr_data_view,filename:"
 msgid "Filename"
 msgstr "Nom du Fichier"
 
-msgctxt "field:party.extract.gpdr_data_view,id:"
+msgctxt "field:party.extract.gdpr_data_view,id:"
 msgid "ID"
 msgstr "ID"
 
@@ -917,8 +917,8 @@ msgctxt "model:ir.action,name:act_person_form"
 msgid "Persons"
 msgstr "Personnes physiques"
 
-msgctxt "model:ir.action,name:start_extract_gpdr_data"
-msgid "Extract GPDR Data"
+msgctxt "model:ir.action,name:start_extract_gdpr_data"
+msgid "Extract GDPR Data"
 msgstr "Extraction des données RGPD"
 
 msgctxt "model:ir.action,name:start_synthesis_menu"
@@ -997,8 +997,8 @@ msgctxt "model:ir.ui.menu,name:menu_zipcode_form"
 msgid "Zip"
 msgstr "Code Postal"
 
-msgctxt "model:party.extract.gpdr_data_view,name:"
-msgid "Extract GPDR Data View"
+msgctxt "model:party.extract.gdpr_data_view,name:"
+msgid "Extract GDPR Data View"
 msgstr "Vue extraction des données RGPD"
 
 msgctxt "model:party.identifier,name:"
@@ -1170,7 +1170,7 @@ msgid "Contact"
 msgstr "Contact"
 
 msgctxt "view:party.party:"
-msgid "Extract GPDR Data"
+msgid "Extract GDPR Data"
 msgstr "Extraction des données RGPD"
 
 msgctxt "view:party.party:"
@@ -1197,7 +1197,7 @@ msgctxt "view:party.synthesis.menu:"
 msgid "Synthesis"
 msgstr "Synthèse"
 
-msgctxt "wizard_button:party.extract.gpdr_data,data_view,end:"
+msgctxt "wizard_button:party.extract.gdpr_data,data_view,end:"
 msgid "End"
 msgstr "Terminer"
 

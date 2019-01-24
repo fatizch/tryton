@@ -123,6 +123,17 @@ class Party(metaclass=PoolMeta):
             return self.full_name
         return super(Party, self).get_rec_name(name)
 
+    def get_gdpr_data(self):
+        res = super(Party, self).get_gdpr_data()
+        label_ = self.__class__._label_gdpr
+        value_ = coog_string.translate_value
+        if self.main_health_complement:
+            res.update({
+                    label_(self, 'bank_accounts'): [value_(account, 'number')
+                        for account in self.bank_accounts],
+                    })
+        return res
+
 
 class SynthesisMenuBankAccoount(model.CoogSQL):
     'Party Synthesis Menu Bank Account'

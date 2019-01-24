@@ -68,7 +68,6 @@ class BankDataSetWizard(Wizard):
             for row in reader:
                 yield row
 
-
     def address_compare(self, address, bank_row, country):
         return ((not address.street and not bank_row['address_street'] or
                 address.street == bank_row['address_street']) and

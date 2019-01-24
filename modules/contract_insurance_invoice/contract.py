@@ -1366,6 +1366,25 @@ class Contract(metaclass=PoolMeta):
         return utils.get_good_version_at_date(self, 'billing_informations',
             at_date=date, start_var_name='date')
 
+    def get_gdpr_data(self):
+        res = super(Contract, self).get_gdpr_data()
+        Party = Pool().get('party.party')
+        label_ = Party._label_gdpr
+        value_ = coog_string.translate_value
+        if self.billing_information:
+            res[label_(self.billing_information, 'billing_mode')] = value_(
+                self.billing_information.billing_mode, 'name')
+            if self.billing_information.direct_debit_account:
+                res.update({
+                        label_(self.billing_information, 'direct_debit_day'):
+                        value_(self.billing_information, 'direct_debit_day'),
+                        label_(self.billing_information,
+                            'direct_debit_account'):
+                        value_(self.billing_information.direct_debit_account,
+                            'number'),
+                        })
+        return res
+
     ###########################################################################
     # Cached invoices calculation to speed up future payments wizard,         #
     # report generation, & co                                                 #

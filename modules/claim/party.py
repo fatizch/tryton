@@ -41,6 +41,12 @@ class Party(metaclass=PoolMeta):
     def get_last_claim_id(self, name):
         return self.claims[-1].id if self.claims else None
 
+    def get_gdpr_data(self):
+        res = super(Party, self).get_gdpr_data()
+        res[coog_string.translate_label(self, 'claims')] = [
+            x.get_gdpr_data() for x in self.claims]
+        return res
+
 
 class Insurer(metaclass=PoolMeta):
     __name__ = 'insurer'

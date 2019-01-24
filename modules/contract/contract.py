@@ -1713,6 +1713,19 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                     })
         super(Contract, cls).delete(contracts)
 
+    def get_gdpr_data(self):
+        Party = Pool().get('party.party')
+        label_ = Party._label_gdpr
+        value_ = coog_string.translate_value
+        return {
+            label_(self, 'product'): value_(self.product, 'name'),
+            label_(self, 'initial_start_date'):
+                value_(self, 'initial_start_date'),
+            label_(self, 'end_date'): value_(self, 'end_date'),
+            label_(self, 'extra_data_values'):
+                value_(self, 'extra_data_values'),
+            }
+
 
 class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
             schema='coverage', field_name='current_extra_data',

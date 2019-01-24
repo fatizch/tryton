@@ -413,6 +413,14 @@ class Contract(Printable):
             return self.product.get_report_style_content(at_date, template,
                 self)
 
+    def get_gdpr_data(self):
+        res = super(Contract, self).get_gdpr_data()
+        Party = Pool().get('party.party')
+        res[Party._label_gdpr(self, 'covered_elements')] = [
+            coog_string.translate_value(covered.party, 'full_name')
+            for covered in self.covered_elements if covered.party]
+        return res
+
 
 class ContractOption(Printable):
     __name__ = 'contract.option'

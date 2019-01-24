@@ -104,6 +104,12 @@ class Party(metaclass=PoolMeta):
         contracts = Contract.get_covered_contracts_from_party(self, date)
         return [c.id for c in contracts]
 
+    def get_gdpr_data(self):
+        res = super(Party, self).get_gdpr_data()
+        res[coog_string.translate_label(self, 'contracts')] = [
+            x.get_gdpr_data() for x in self.contracts]
+        return res
+
 
 class SynthesisMenuContrat(model.CoogSQL):
     'Party Synthesis Menu Contract'

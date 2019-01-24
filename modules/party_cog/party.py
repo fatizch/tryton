@@ -43,8 +43,8 @@ __all__ = [
     'SynthesisMenuActionCloseSynthesis',
     'SynthesisMenuActionRefreshSynthesis',
     'SynthesisMenuRelationship',
-    'ExtractGPDRDataView',
-    'ExtractGPDRData',
+    'ExtractGDPRDataView',
+    'ExtractGDPRData',
     'PartyReplace',
     'PartyReplaceAsk',
     'PartyErase',
@@ -173,7 +173,7 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         cls.__rpc__.update({'anonymize': RPC(readonly=False)})
         cls._buttons.update({
                 'button_start_synthesis_menu': {'readonly': STATES_ACTIVE},
-                'button_extract_gpdr_data': {
+                'button_extract_gdpr_data': {
                     'readonly': ~Eval('is_anonymized')},
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
@@ -699,26 +699,27 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
         pass
 
     @classmethod
-    @model.CoogView.button_action('party_cog.start_extract_gpdr_data')
-    def button_extract_gpdr_data(cls, parties):
+    @model.CoogView.button_action('party_cog.start_extract_gdpr_data')
+    def button_extract_gdpr_data(cls, parties):
         pass
 
-    def _label_gpdr(self, instance, fname):
+    @classmethod
+    def _label_gdpr(cls, instance, fname):
         label_ = coog_string.translate_label
         return '[%s] - %s' % (fname, label_(instance, fname))
 
-    def get_gpdr_data(self):
-        label_ = self._label_gpdr
+    def get_gdpr_data(self):
+        label_ = self.__class__._label_gdpr
         value_ = coog_string.translate_value
         return {
-            self.__name__: {
                 label_(self, 'name'): value_(self, 'name'),
                 label_(self, 'first_name'): value_(self, 'first_name'),
                 label_(self, 'birth_date'): value_(self, 'birth_date'),
                 label_(self, 'addresses'): [value_(addr, 'rec_name')
                     for addr in self.all_addresses],
+                label_(self, 'relations'): [value_(relation, 'rec_name')
+                    for relation in self.relations]
                 }
-            }
 
     @classmethod
     def _import_json(cls, values, main_object=None):
@@ -1318,21 +1319,21 @@ class SynthesisMenuSet(Wizard):
         return 'reload menu'
 
 
-class ExtractGPDRDataView(model.CoogView):
-    'Extract GPDR Data View'
-    __name__ = 'party.extract.gpdr_data_view'
+class ExtractGDPRDataView(model.CoogView):
+    'Extract GDPR Data View'
+    __name__ = 'party.extract.gdpr_data_view'
 
     data = fields.Text('Data', readonly=True)
     filename = fields.Char('Filename', readonly=True)
 
 
-class ExtractGPDRData(Wizard):
-    'Extract GPDR Data'
-    __name__ = 'party.extract.gpdr_data'
+class ExtractGDPRData(Wizard):
+    'Extract GDPR Data'
+    __name__ = 'party.extract.gdpr_data'
 
     start = StateTransition()
-    data_view = StateView('party.extract.gpdr_data_view',
-        'party_cog.extract_gpdr_data_view_form', [
+    data_view = StateView('party.extract.gdpr_data_view',
+        'party_cog.extract_gdpr_data_view_form', [
             Button('End', 'end', 'tryton-cancel')],
         )
 
@@ -1342,7 +1343,7 @@ class ExtractGPDRData(Wizard):
         assert model == 'party.party'
         party_id = Transaction().context.get('active_id')
         party = Party(party_id)
-        self.data_view.data = json.dumps(party.get_gpdr_data(), indent=4,
+        self.data_view.data = json.dumps(party.get_gdpr_data(), indent=4,
             cls=JSONEncoder, ensure_ascii=False, separators=(',', ': ')
             ).encode('utf-8')
         self.data_view.filename = coog_string.slugify(
@@ -1351,7 +1352,7 @@ class ExtractGPDRData(Wizard):
 
     def default_data_view(self, name):
         return {
-            'data': self.data_view.data,
+            'data': self.data_view.data.decode('utf-8'),
             'filename': self.data_view.filename,
             }
 

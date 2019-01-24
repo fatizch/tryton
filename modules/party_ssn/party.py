@@ -157,3 +157,9 @@ class Party(metaclass=PoolMeta):
         if domain[0] == 'OR':
             domain.append([('ssn',) + tuple(clause[1:])])
         return domain
+
+    def get_gdpr_data(self):
+        res = super(Party, self).get_gdpr_data()
+        res[self._label_gdpr(self, 'ssn')] = coog_string.translate_value(
+            self, 'ssn')
+        return res
