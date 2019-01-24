@@ -153,7 +153,9 @@ class Contract(metaclass=PoolMeta):
         cls._error_messages.update({
                 'no_payer': 'A payer must be specified',
                 'missing_invoices': 'This contract can not be renewed because '
-                'there are missing invoices on the current term '
+                'there are missing invoices on the current term ',
+                'no_address': 'No address available for contract: %(contract)s '
+                'at period [%(start)s, %(end)s]'
                 })
 
     def get_color_from_balance_today(self):
@@ -966,16 +968,28 @@ class Contract(metaclass=PoolMeta):
             invoice = contract_invoice.invoice
             invoice.taxes = [x for x in list(invoice._compute_taxes().values())]
             if getattr(invoice, 'invoice_address', None) is None:
-                invoice.invoice_address = \
+                invoice_address = \
                     contract_invoice.contract.get_contract_address(
                         max(contract_invoice.start or datetime.date.min,
                             utils.today()))
-                if (invoice.invoice_address.party != invoice.party):
-                    invoice.invoice_address = \
+                if (not invoice_address or
+                        invoice_address.party != invoice.party):
+                    invoice_address = \
                         contract_invoice.contract.get_contract_address(
                             (contract_invoice.end + relativedelta(days=1)))
-                    if (invoice.invoice_address.party != invoice.party):
-                        invoice.invoice_address = invoice.party.main_address()
+                if (not invoice_address or
+                        invoice_address.party != invoice.party):
+                    invoice_address = invoice.party.main_address
+                if not invoice_address:
+                    cls.append_functional_error('no_address', {
+                            'contract':
+                            contract_invoice.contract.contract_number,
+                            'start': coog_string.translate_value(
+                                contract_invoice, 'start'),
+                            'end': coog_string.translate_value(
+                                contract_invoice, 'end')
+                            })
+                invoice.invoice_address = invoice_address
 
     @classmethod
     def prorate_premiums(cls):

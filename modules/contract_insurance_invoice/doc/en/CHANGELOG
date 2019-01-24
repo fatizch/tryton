@@ -1,3 +1,4 @@
+* BUG#9867 Add error message if no address is found when finalizing invoices
 * OTH#00000 Fix crash during previously posted invoices check
 * OTH#00000 Update intervaltree to version 3.0
 * BUG#10522 It was not possible to configure an event type action to re-generate non periodic invoices
