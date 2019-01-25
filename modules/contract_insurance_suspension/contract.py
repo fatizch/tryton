@@ -80,7 +80,8 @@ class Contract(metaclass=PoolMeta):
                 x.type_ == 'definitive']
             if temporary_suspensions:
                 last_paid_invoice = self.last_paid_invoice
-                last_payment_date = last_paid_invoice.reconciliation_date if \
+                last_payment_date = \
+                    last_paid_invoice.invoice.reconciliation_date if \
                     last_paid_invoice else datetime.date.max
                 to_date = min(last_payment_date, utils.today(), to_date)
                 to_write.extend([temporary_suspensions,
@@ -90,8 +91,8 @@ class Contract(metaclass=PoolMeta):
                 Event.notify_events(temporary_suspensions,
                     'contract_disable_temporary_right_suspension')
                 if due_invoices:
-                    suspension = self.get_suspension('temporary', to_date +
-                        relativedelta(days=1))
+                    suspension = self.get_suspension('temporary',
+                        to_date + relativedelta(days=1))
                     suspension.save()
                     Event.notify_events([suspension],
                         'contract_right_suspension_creation')

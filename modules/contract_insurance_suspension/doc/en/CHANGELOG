@@ -1,3 +1,4 @@
+* BUG#10857 Fix crash on suspension disabling
 * BUG#10046 Set end of temporary suspension to minimum between today and the calculated date
 
 Version 2.2 - 2018-10-12
