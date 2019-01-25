@@ -241,6 +241,12 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
         'get_finalizable', searcher='search_finalizable')
     requested_documents = fields.One2Many('document.request.line',
         'for_object', 'Requested Documents', delete_missing=True)
+    result_descriptions = fields.Function(
+        fields.Text('Decision Descriptions'),
+        'getter_result_descriptions')
+    document_request_descriptions = fields.Function(
+        fields.Text('Document Requests Descriptions'),
+        'getter_document_request_descriptions')
     type_code = fields.Function(
         fields.Char('Type Code'),
         'on_change_with_type_code')
@@ -256,7 +262,7 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
         'on_change_with_documents_received',
         searcher='search_documents_received')
     effective_date = fields.Function(
-        fields.Date('Effetive Date'),
+        fields.Date('Effective Date'),
         'getter_effective_date', searcher='search_effective_date')
     new_result = fields.Function(
         fields.Selection('select_possible_results', 'New result',
@@ -290,6 +296,8 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
                 'cannot_draft': 'Cannot draft completed underwritings',
                 'cannot_draft_result': 'Cannot draft completed results',
                 'non_completed_result': 'Results must be finalized first',
+                'document_received_string': 'Received',
+                'document_not_received_string': 'Not Received',
                 })
 
     @classmethod
@@ -389,6 +397,25 @@ class Underwriting(model.CoogSQL, model.CoogView, Printable):
 
     def getter_new_result(self, name):
         return ''
+
+    def getter_result_descriptions(self, name):
+        descs = []
+        for result in self.results:
+            desc = [result.provisional_decision.rec_name
+                if result.state != 'finalized'
+                else result.final_decision.rec_name,
+                coog_string.translate_value(result, 'effective_decision_date'),
+                coog_string.translate_value(result, 'effective_decision_end')]
+            desc = ' - '.join([x for x in desc if x])
+            descs.append(desc)
+        return '\n'.join(descs)
+
+    def getter_document_request_descriptions(self, name):
+        return '\n'.join(['%s (%s)' % (x.document_desc.name,
+                    self.raise_user_error('document_received_string'
+                        if x.received else 'document_not_received_string',
+                        raise_exception=False))
+                for x in self.requested_documents])
 
     @fields.depends('on_object', 'party', 'results')
     def select_possible_results(self):

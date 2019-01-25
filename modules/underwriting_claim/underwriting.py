@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, If, Bool, Len
 
-from trytond.modules.coog_core import fields, coog_string, utils
+from trytond.modules.coog_core import fields
 
 __all__ = [
     'UnderwritingDecisionType',
@@ -30,12 +30,6 @@ class Underwriting(metaclass=PoolMeta):
     insurers_names = fields.Function(
         fields.Char('Insurers'),
         'get_insurers_names')
-    result_descriptions = fields.Function(
-        fields.Text('Decision Descriptions'),
-        'get_result_descriptions')
-    document_request_descriptions = fields.Function(
-        fields.Text('Document Requests Descriptions'),
-        'get_document_request_descriptions')
 
     @classmethod
     def __setup__(cls):
@@ -57,24 +51,6 @@ class Underwriting(metaclass=PoolMeta):
 
     def get_insurers_names(self, name):
         return ', '.join(x.rec_name for x in self.insurers)
-
-    def get_result_descriptions(self, name):
-        descs = []
-        for result in self.results:
-            desc = [result.provisional_decision.rec_name
-                if result.state != 'finalized'
-                else result.final_decision.rec_name,
-                coog_string.translate_value(result, 'effective_decision_date'),
-                coog_string.translate_value(result, 'effective_decision_end')]
-            desc = ' - '.join([x for x in desc if x])
-            descs.append(desc)
-        return '\n'.join(descs)
-
-    def get_document_request_descriptions(self, name):
-        return '\n'.join(['%s (%s: %s)' % (x.document_desc.name,
-                    *coog_string.get_field_summary(x, 'received', True,
-                        lang=utils.get_user_language()))
-                for x in self.requested_documents])
 
     def add_document(self, document_code, data):
         line = super(Underwriting, self).add_document(document_code, data)

@@ -25,6 +25,14 @@ msgid "Cannot draft completed underwritings"
 msgstr "Impossible de passer des demandes terminées en brouillon"
 
 msgctxt "error:underwriting:"
+msgid "Received"
+msgstr "Reçu"
+
+msgctxt "error:underwriting:"
+msgid "Not Received"
+msgstr "Non reçu"
+
+msgctxt "error:underwriting:"
 msgid "Results must be finalized first"
 msgstr "Les résultats doivent d'abord être finalisés"
 
@@ -44,8 +52,12 @@ msgctxt "field:underwriting,documents_received:"
 msgid "Documents received"
 msgstr "Documents reçus"
 
+msgctxt "field:underwriting,document_request_descriptions:"
+msgid "Document Requests Descriptions"
+msgstr "Documents demandés"
+
 msgctxt "field:underwriting,effective_date:"
-msgid "Effetive Date"
+msgid "Effective Date"
 msgstr "Date effective"
 
 msgctxt "field:underwriting,finalizable:"
@@ -83,6 +95,10 @@ msgstr "Nom"
 msgctxt "field:underwriting,requested_documents:"
 msgid "Requested Documents"
 msgstr "Documents demandés"
+
+msgctxt "field:underwriting,result_descriptions:"
+msgid "Decision Descriptions"
+msgstr "Décisions"
 
 msgctxt "field:underwriting,results:"
 msgid "Results"
