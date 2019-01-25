@@ -1,3 +1,4 @@
+* FEA#10897 Check dates overlaps on level 0 covered elements to avoid duplicates
 * BUG#10618 Contract parties list must have unique parties
 * BUG#10418 The unicity constraint on the covered elements' party per contract blocks some business cases
 

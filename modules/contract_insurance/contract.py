@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
+from itertools import groupby
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 
@@ -16,7 +17,7 @@ from trytond.transaction import Transaction
 from trytond.model import ModelView
 
 from trytond.modules.coog_core import model, fields
-from trytond.modules.coog_core import utils
+from trytond.modules.coog_core import utils, coog_date
 from trytond.modules.coog_core import coog_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.contract import _CONTRACT_STATUS_STATES
@@ -959,7 +960,7 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             'parent']
         cls._error_messages.update({
                 'duplicate_covered': 'You are trying to create duplicate '
-                'covered elements on contracts:\n %s'})
+                'covered elements on contract: %s'})
 
     @classmethod
     def __register__(cls, module_name):
@@ -1067,10 +1068,39 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
                 group_by=[covered.contract, covered.party],
                 having=Count(covered.contract) > 1)
         cursor.execute(*query)
-        res = [x for (x,) in cursor.fetchall()]
+        res = [x for x, in cursor.fetchall()]
+
+        def _group_by_contract_party(c):
+            return (c.contract, c.party)
+
         if res:
-            cls.raise_user_error('duplicate_covered', '\n'.join([x.rec_name
-                    for x in Contract.browse(res)]))
+            with model.error_manager():
+                contracts = Contract.browse(res)
+                for contract in contracts:
+                    covereds = sorted(contract.covered_elements,
+                        key=_group_by_contract_party)
+                    for key, sub_covereds in groupby(covereds,
+                            key=_group_by_contract_party):
+                        cls._check_covereds_overlap(contract, list(
+                                sub_covereds))
+
+    @classmethod
+    def _check_covereds_overlap(cls, contract, sub_covereds):
+        n_covered = len(sub_covereds)
+        if n_covered > 1:
+            sub_covereds = sorted(
+                sub_covereds, key=lambda x: x.start_date)
+            for idx, covered in enumerate(sub_covereds):
+                next_covered = None
+                if idx < n_covered - 1:
+                    next_covered = sub_covereds[idx + 1]
+                if not next_covered:
+                    break
+                if coog_date.period_overlap(covered.start_date,
+                        covered.end_date, next_covered.start_date,
+                        next_covered.end_date):
+                    cls.append_functional_error('duplicate_covered',
+                        contract.rec_name)
 
     @classmethod
     def default_versions(cls):

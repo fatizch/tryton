@@ -4,10 +4,10 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.covered_element:"
 msgid ""
-"You are trying to create duplicate covered elements on contracts:\n"
+"You are trying to create duplicate covered elements on contract: "
 " %s"
 msgstr ""
-"Vous essayez de créer des éléments couverts en doublon sur les contrats:\n"
+"Vous essayez de créer des éléments couverts en doublon sur le contrat: "
 "%s"
 
 msgctxt "error:contract.manage_exclusion:"

@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 __all__ = [
     'HOURLY_DURATION',
     'DAILY_DURATION',
+    'period_overlap',
     'add_day',
     'add_month',
     'add_year',
@@ -52,6 +53,10 @@ FREQUENCY_CONVERSION_TABLE = {
     'quarterly': 3,
     'monthly': 1,
     }
+
+
+def period_overlap(p1_start, p1_end, p2_start, p2_end):
+    return (min(p1_end, p2_end) - max(p1_start, p2_start)).days + 1 > 0
 
 
 def calculate_periods_from_dates(dates, period_start_date, period_end_date):
