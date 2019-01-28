@@ -49,6 +49,9 @@ class CountryAddressLine(model.CoogDictSchema, model.CoogSQL, model.CoogView):
 
     country = fields.Many2One('country.country', 'Country', required=True,
         select=True, ondelete='CASCADE')
+    max_length = fields.Integer('Max Length',
+        help='When validating the address, the corresponding address line '
+        'length will be checked not to exceed this limit')
 
     @classmethod
     def __setup__(cls):

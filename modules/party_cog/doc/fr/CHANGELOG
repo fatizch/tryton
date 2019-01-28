@@ -1,3 +1,4 @@
+* FEA#10851 Ajout de paramétrage au niveau des lignes d'adresse des pays afin de limiter le nombre de caractères
 * OTH#0000: Ajout de donnée à l'export RGPD
 * BUG#10480 Erreur au re-démarrage d'un avenant de changement d'adresse
 

@@ -6,4 +6,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="string"/>
     <label name="name"/>
     <field name="name"/>
+    <label name="max_length"/>
+    <field name="max_length"/>
 </form>
