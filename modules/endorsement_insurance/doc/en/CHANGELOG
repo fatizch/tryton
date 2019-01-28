@@ -1,3 +1,5 @@
+* BUG#10693 Fix order of elements of the default insured management endorsement
+
 Version 2.2 - 2018-10-12
 * BUG#9919 Fix crash when updating empty endorsement (endorsement contract are removed)
 * BUG#9260 Fix a next / previous bug where options on a new covered element were duplicated

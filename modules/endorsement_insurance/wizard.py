@@ -516,7 +516,8 @@ class NewOptionOnCoveredElement(EndorsementWizardStepMixin):
                 if isinstance(new_value, Model):
                     new_value = new_value.id
                 option_endorsement.values[field.name] = new_value
-        EndorsementCoveredElementOption.delete(list(option_endorsements.values()))
+        EndorsementCoveredElementOption.delete(
+            list(option_endorsements.values()))
         good_endorsement.options = new_option_endorsements
 
         good_endorsement.save()
