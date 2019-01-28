@@ -3,7 +3,6 @@
 import unittest
 import doctest
 import datetime
-from decimal import Decimal
 import mock
 
 import trytond.tests.test_tryton
@@ -39,87 +38,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(self.Plan.get_commission_periods(plan, invoice_line),
             [(datetime.date(2000, 1, 1), datetime.date(2000, 1, 15)),
                 (datetime.date(2000, 1, 16), datetime.date(2000, 1, 31))])
-
-    def test0010_base_amount_computation(self):
-        plan = mock.Mock()
-        plan.get_commission_periods = mock.MagicMock(return_value=[
-                (datetime.date(2000, 1, 1), datetime.date(2000, 1, 15)),
-                (datetime.date(2000, 1, 16), datetime.date(2000, 1, 31))])
-        plan.commission_product = None
-        agent = self.Agent()
-        agent.currency = None
-
-        invoice = self.Invoice()
-        invoice.currency = None
-        invoice.currency_date = None
-        invoice.type = 'in'
-        invoice.contract = None
-
-        invoice_line = self.InvoiceLine()
-        invoice_line.invoice = invoice
-        invoice_line.amount = Decimal(310)
-        invoice_line.coverage_start = datetime.date(2000, 1, 1)
-        invoice_line.coverage_end = datetime.date(2000, 1, 31)
-        invoice_line.currency_digits = 2
-        detail = self.InvoiceLineDetail()
-        invoice_line.details = [detail]
-        detail.get_option = mock.MagicMock(return_value=None)
-
-        with mock.patch.object(self.Currency, 'compute',
-                return_value=Decimal(310)):
-            # Same rate => two lines
-            invoice_line._get_commission_amount = mock.Mock(
-                side_effect=[Decimal(15), Decimal(16)])
-            commissions = invoice_line.get_commissions_for_agent(agent, plan)
-            self.assertEqual([tuple(x) for x in
-                invoice_line._get_commission_amount.call_args_list], [
-                    ((150, plan), {
-                            'pattern': {
-                                'agent': agent,
-                                'date_start': datetime.date(2000, 1, 1),
-                                'date_end': datetime.date(2000, 1, 15)}}),
-                    ((160, plan), {
-                            'pattern': {
-                                'agent': agent,
-                                'date_start': datetime.date(2000, 1, 16),
-                                'date_end': datetime.date(2000, 1, 31)}}),
-                    ])
-            self.assertEqual(len(commissions), 2)
-            self.assertEqual(commissions[0].commission_rate, Decimal('.1'))
-            self.assertEqual(commissions[0].start, datetime.date(2000, 1, 1))
-            self.assertEqual(commissions[0].end, datetime.date(2000, 1, 15))
-            self.assertEqual(commissions[0].amount, Decimal('15'))
-            self.assertEqual(commissions[1].commission_rate, Decimal('.1'))
-            self.assertEqual(commissions[1].start, datetime.date(2000, 1, 16))
-            self.assertEqual(commissions[1].end, datetime.date(2000, 1, 31))
-            self.assertEqual(commissions[1].amount, Decimal('16'))
-
-            # Different rate => two lines
-            invoice_line._get_commission_amount = mock.Mock(
-                side_effect=[Decimal(75), Decimal(16)])
-            commissions = invoice_line.get_commissions_for_agent(agent, plan)
-            self.assertEqual(
-                invoice_line._get_commission_amount.call_args_list, [
-                    ((150, plan), {
-                            'pattern': {
-                                'agent': agent,
-                                'date_start': datetime.date(2000, 1, 1),
-                                'date_end': datetime.date(2000, 1, 15)}}),
-                    ((160, plan), {
-                            'pattern': {
-                                'agent': agent,
-                                'date_start': datetime.date(2000, 1, 16),
-                                'date_end': datetime.date(2000, 1, 31)}}),
-                    ])
-            self.assertEqual(len(commissions), 2)
-            self.assertEqual(commissions[0].commission_rate, Decimal('.5'))
-            self.assertEqual(commissions[0].start, datetime.date(2000, 1, 1))
-            self.assertEqual(commissions[0].end, datetime.date(2000, 1, 15))
-            self.assertEqual(commissions[0].amount, Decimal('75'))
-            self.assertEqual(commissions[1].commission_rate, Decimal('.1'))
-            self.assertEqual(commissions[1].start, datetime.date(2000, 1, 16))
-            self.assertEqual(commissions[1].end, datetime.date(2000, 1, 31))
-            self.assertEqual(commissions[1].amount, Decimal('16'))
 
     def test0020_date_calculations(self):
         invoice_line = mock.Mock()

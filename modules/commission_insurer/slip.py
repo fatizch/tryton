@@ -111,18 +111,36 @@ class InvoiceSlipConfiguration(metaclass=PoolMeta):
         return per_account
 
     @classmethod
+    def get_models_for_query(cls):
+        return ['commission', 'account.invoice.line', 'commission.agent',
+            'offered.option.description']
+
+    @classmethod
+    def get_tables(cls):
+        pool = Pool()
+        return {model_: pool.get(model_).__table__()
+            for model_ in cls.get_models_for_query()}
+
+    @classmethod
+    def _get_insurer_commission_where_clause(cls, tables, invoices_ids):
+        line = tables['account.invoice.line']
+        commission = tables['commission']
+        return ((line.invoice.in_(invoices_ids)) &
+            (commission.invoice_line == Null))
+
+    @classmethod
     def _get_insurer_commissions(cls, slip_parameters, invoices_ids):
         '''
             Returns all commissions associated to the invoices given as
             parameters, if they are meant for the insurers found in the slip
             parameters
         '''
-        pool = Pool()
-        commission = pool.get('commission').__table__()
+        tables = cls.get_tables()
         cursor = Transaction().connection.cursor()
-        line = pool.get('account.invoice.line').__table__()
-        agent = pool.get('commission.agent').__table__()
-        option = pool.get('offered.option.description').__table__()
+        commission = tables['commission']
+        line = tables['account.invoice.line']
+        agent = tables['commission.agent']
+        option = tables['offered.option.description']
 
         insurers = [_f for _f in
             [x.get('insurer', None) for x in slip_parameters] if _f]
@@ -141,8 +159,8 @@ class InvoiceSlipConfiguration(metaclass=PoolMeta):
             option.account_for_billing,
             group_by=[commission.id, option.insurer, line.invoice,
                 option.account_for_billing],
-            where=line.invoice.in_(invoices_ids) &
-            (commission.invoice_line == Null))
+            where=cls._get_insurer_commission_where_clause(
+                tables, invoices_ids))
         cursor.execute(*query)
         return cursor.fetchall()
 

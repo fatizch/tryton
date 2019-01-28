@@ -75,52 +75,30 @@ class InvoiceLine(metaclass=PoolMeta):
 
     def get_commissions_for_agent(self, agent, plan):
         pool = Pool()
-        Commission = pool.get('commission')
         Currency = pool.get('currency.currency')
-        Date = pool.get('ir.date')
-
-        today = Date.today()
         with Transaction().set_context(date=self.invoice.currency_date):
             base_amount = Currency.compute(self.invoice.currency,
                 self.amount, agent.currency, round=False)
         if self.invoice.type == 'out_credit_note':
             base_amount *= -1
-        commission_data = []
-        for start, end in plan.get_commission_periods(self):
-            amount = base_amount * (Decimal((end - start).days + 1) /
-                Decimal((self.coverage_end - self.coverage_start).days + 1))
-            commission_amount = self._get_commission_amount(amount, plan,
-                pattern={'agent': agent, 'date_start': start, 'date_end': end})
-            if not commission_amount:
-                continue
-            commission_rate = (commission_amount / amount).quantize(
-                Decimal(10) ** -COMMISSION_RATE_DIGITS)
-            commission_data.append([start, end, commission_amount,
-                commission_rate])
-
         commissions = []
-        for start, end, commission_amount, commission_rate in commission_data:
-            commission_amount = commission_amount.quantize(
-                Decimal(10) ** -COMMISSION_AMOUNT_DIGITS)
-            if not commission_amount:
+        for start, end in plan.get_commission_periods(self):
+            pattern = self._get_commission_pattern(plan, agent, start, end)
+            plan_line = plan.get_matching_line(pattern)
+            if not plan_line:
                 continue
-            commission = Commission()
-            commission.origin = self
-            if plan.commission_method == 'posting':
-                commission.date = today
-            commission.start = start
-            commission.end = end
-            commission.agent = agent
-            commission.product = plan.commission_product
-            commission.amount = commission_amount
-            commission.commission_rate = commission_rate
-            commission.commissioned_option = self.details[0].get_option()
-            commission.commissioned_contract = self.invoice.contract
-            commissions.append(commission)
+            commission = self.init_commission(
+                start, end, agent, plan_line, base_amount, pattern)
+            if self.commission_to_save(commission):
+                commissions.append(commission)
         return commissions
 
-    def _get_commission_amount(self, amount, plan, pattern=None):
+    def commission_to_save(self, commission):
+        return bool(commission.amount)
+
+    def _get_commission_pattern(self, plan, agent, start, end):
         product = self.product
+        pattern = {'agent': agent, 'date_start': start, 'date_end': end}
         if self.details:
             option = self.details[0].get_option()
             if option:
@@ -138,8 +116,57 @@ class InvoiceLine(metaclass=PoolMeta):
                         })
             elif self.details[0].fee and not product:
                 product = self.details[0].fee.product
-        commission_amount = plan.compute(amount, product, pattern)
-        return commission_amount
+        pattern.update({'product': product.id if product else None})
+        return pattern
+
+    def init_commission(self, start, end, agent, plan_line,
+            base_amount, pattern):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        today = Date.today()
+        Commission = pool.get('commission')
+
+        commission = Commission()
+        commission.origin = self
+        if plan_line.plan.commission_method == 'posting':
+            commission.date = today
+        commission.start = start
+        commission.end = end
+        commission.agent = agent
+        commission.product = plan_line.plan.commission_product
+        commission.commissioned_option = self.details[0].get_option()
+        commission.commissioned_contract = self.invoice.contract
+
+        context = self.get_commission_calculation_context(start, end, plan_line,
+            base_amount, pattern)
+        self.update_commission_from_plan_line(commission, plan_line, context)
+        return commission
+
+    def get_commission_calculation_context(self, start, end, plan_line,
+            base_amount, pattern):
+        amount = base_amount * (
+            Decimal((end - start).days + 1
+                ) / Decimal(
+                (self.coverage_end - self.coverage_start).days + 1))
+        context = plan_line.plan.get_context_formula(
+            amount, pattern['product'], pattern)
+        return context
+
+    def update_commission_from_plan_line(self, commission, plan_line,
+            context):
+        self.update_commission_amount_and_rate(commission, plan_line, context)
+
+    def update_commission_amount_and_rate(self, commission, plan_line, context):
+        commission_amount = self._get_commission_line_amount(plan_line, context)
+        commission_amount = commission_amount.quantize(
+            Decimal(10) ** -COMMISSION_AMOUNT_DIGITS)
+        commission_rate = (commission_amount / context['names']['amount']
+            ).quantize(Decimal(10) ** -COMMISSION_RATE_DIGITS)
+        commission.amount = commission_amount
+        commission.commission_rate = commission_rate
+
+    def _get_commission_line_amount(self, plan_line, context):
+        return plan_line.get_amount(**context)
 
     def get_move_lines(self):
         lines = super(InvoiceLine, self).get_move_lines()

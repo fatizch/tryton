@@ -633,15 +633,12 @@ class Plan(model.CoogSQL, model.CoogView, model.TaggedMixin):
             None)
         return context
 
-    def compute(self, amount, product, pattern=None):
-        'Compute commission amount for the amount'
+    def get_matching_line(self, pattern=None):
         if pattern is None:
             pattern = {}
-        pattern['product'] = product.id if product else None
-        context = self.get_context_formula(amount, product, pattern)
         for line in self.lines:
             if line.match(pattern):
-                return line.get_amount(**context)
+                return line
 
     @classmethod
     def is_master_object(cls):
@@ -1241,18 +1238,33 @@ class CreateInvoice(metaclass=PoolMeta):
         return action, {}
 
     @classmethod
+    def _get_models_for_query(cls):
+        return ['commission.agent', 'commission']
+
+    @classmethod
+    def _get_tables(cls):
+        pool = Pool()
+        return {model_: pool.get(model_).__table__()
+            for model_ in cls._get_models_for_query()}
+
+    @classmethod
+    def _get_commission_insurance_where_clause(cls, tables):
+        commission = tables['commission']
+        return ((commission.invoice_line == Null) & (
+                commission.date != Null))
+
+    @classmethod
     def fetch_commmissions_to_invoice(cls, from_=None, to=None, agent_type=None,
             agent_party_ids=None):
         pool = Pool()
-        agent = pool.get('commission.agent').__table__()
-        commission = pool.get('commission').__table__()
+        tables = cls._get_tables()
+        agent = tables['commission.agent']
+        commission = tables['commission']
 
         query_table = agent.join(commission, condition=(
                 commission.agent == agent.id))
 
-        where_clause = ((commission.invoice_line == Null) &
-            (commission.date != Null))
-
+        where_clause = cls._get_commission_insurance_where_clause(tables)
         if agent_type:
             where_clause &= (agent.type_ == agent_type)
         if from_:

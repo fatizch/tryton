@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="contract_rank_on_period">
+            <field name="translated_technical_name">rang_contrat</field>
+            <field name="description">Rang du contrat sur la période</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_contract_rank_on_period</field>
+            <field name="fct_args">debut_de_periode, fin_de_periode</field>
+            <field name="long_description"></field>
+            <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
+        </record>
+    </data>
+</tryton>

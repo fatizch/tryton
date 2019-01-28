@@ -27,12 +27,29 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
         return 'party.party'
 
     @classmethod
+    def get_models_for_query(cls):
+        return ['commission.agent', 'commission']
+
+    @classmethod
+    def get_tables(cls):
+        pool = Pool()
+        return {model_: pool.get(model_).__table__()
+            for model_ in cls.get_models_for_query()}
+
+    @classmethod
+    def get_where_clause(cls, tables, treatment_date, agent_type):
+        agent = tables['commission.agent']
+        commission = tables['commission']
+        return ((commission.invoice_line == Null) & (commission.date != Null) &
+            (commission.date <= treatment_date) & (agent.type_ == agent_type))
+
+    @classmethod
     def select_ids(cls, treatment_date, agent_type):
         cursor = Transaction().connection.cursor()
-        pool = Pool()
-
-        agent = pool.get('commission.agent').__table__()
-        commission = pool.get('commission').__table__()
+        tables = cls.get_tables()
+        agent = tables['commission.agent']
+        commission = tables['commission']
+        where_clause = cls.get_where_clause(tables, treatment_date, agent_type)
 
         if not agent_type:
             cls.logger.warning('No agent_type defined. '
@@ -43,9 +60,7 @@ class CreateCommissionInvoiceBatch(batch.BatchRoot):
                 commission.agent == agent.id))
 
         cursor.execute(*query_table.select(agent.party,
-                where=((commission.invoice_line == Null) &
-                    (commission.date <= treatment_date) &
-                    (agent.type_ == agent_type)),
+                where=where_clause,
                 group_by=[agent.party]))
 
         return cursor.fetchall()

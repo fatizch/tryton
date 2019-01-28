@@ -17,7 +17,8 @@ __all__ = [
     ]
 
 
-class Plan(with_extra_data_def('commission-plan-extra_data', 'plan', 'agent'), metaclass=PoolMeta):
+class Plan(with_extra_data_def('commission-plan-extra_data', 'plan', 'agent'),
+        metaclass=PoolMeta):
     __name__ = 'commission.plan'
 
     rule_engine_key = fields.Char('Rule Engine Key',
@@ -64,9 +65,7 @@ class PlanLines(
         else:
             return super(PlanLines, self).get_formula_description(name)
 
-    def get_amount(self, **context):
-        if not self.use_rule_engine:
-            return super(PlanLines, self).get_amount(**context)
+    def get_rule_engine_args_from_context(self, context):
         args = context['names']
         if 'option' in context['names']:
             context['names']['option'].init_dict_for_rule_engine(args)
@@ -77,6 +76,12 @@ class PlanLines(
                 args['date'] = context['names']['commission_start_date']
             else:
                 args['date'] = context['names']['invoice_line'].coverage_start
+        return args
+
+    def get_amount(self, **context):
+        if not self.use_rule_engine:
+            return super(PlanLines, self).get_amount(**context)
+        args = self.get_rule_engine_args_from_context(context)
         return Decimal(self.calculate_rule(args))
 
     def check_formula(self):
@@ -97,5 +102,6 @@ class Agent(with_extra_data(['agent'], schema='plan'), metaclass=PoolMeta):
 
     def get_hash(self):
         return super(Agent, self).get_hash() + (
-            ('extra_data', tuple([x for x in sorted(list(self.extra_data.items()),
+            ('extra_data', tuple([x for x in sorted(
+                            list(self.extra_data.items()),
                             key=lambda x: x[0])])),)

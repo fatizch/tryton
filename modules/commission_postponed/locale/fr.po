@@ -1,0 +1,35 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:commission,postponed:"
+msgid "Is Postponed"
+msgstr "Est reportée"
+
+msgctxt "field:commission.plan.line,postponement_rule:"
+msgid "Postponement Rule"
+msgstr "Règle de report"
+
+msgctxt "field:commission.plan.line,postponement_rule_extra_data:"
+msgid "Postponement Rule Extra Data"
+msgstr "Données complémentaires de règle de report"
+
+msgctxt "field:commission.postponed.calculate,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "help:commission,postponed:"
+msgid "The commission amount will be calculated by batch treatment"
+msgstr "Le montant de commission sera calculé lors du traitement par batch"
+
+msgctxt "help:commission.plan.line,postponement_rule:"
+msgid ""
+"This rule should return True or False to indicate if the commission amount "
+"calculation should be postponed."
+msgstr ""
+"Cette règle doit retouner True ou False pour indiquer si le calcul de "
+"montant de commission doit être reporté"
+
+msgctxt "model:commission.postponed.calculate,name:"
+msgid "Calculate posponed commission"
+msgstr "Calcul des commissions reportées"

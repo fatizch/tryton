@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+    	<record model="ir.ui.view" id="commission_view_form">
+        	<field name="model">commission</field>
+        	<field name="inherit" ref="commission.commission_view_form"/>
+        	<field name="name">commission_form</field>
+        </record>
+        <record model="ir.ui.view" id="commission_view_list">
+            <field name="model">commission</field>
+            <field name="inherit" ref="commission.commission_view_list"/>
+            <field name="name">commission_list</field>
+        </record>
+        <record model="ir.ui.view" id="plan_line_view_form">
+            <field name="model">commission.plan.line</field>
+            <field name="inherit" ref="commission.plan_line_view_form"/>
+            <field name="name">plan_line_form</field>
+        </record>
+    </data>
+</tryton>

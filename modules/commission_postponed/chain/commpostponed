@@ -1,0 +1,15 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=calculate_postponed_commissions
+
+CHAIN_PARAMETERS=('TREATMENT_DATE')
+CHAIN_REQUIRED=('TREATMENT_DATE')
+
+chain_params "$@"
+chain_begin
+
+chain_step commission.postponed.calculate ${GIVEN_PARAMETERS[@]}
+chain_wait commission.postponed.calculate || chain_end
+
+chain_end
