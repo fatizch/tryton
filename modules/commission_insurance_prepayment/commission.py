@@ -57,7 +57,7 @@ class Commission(WithExtraDetails):
 
     def _group_to_invoice_line_key(self):
         key = super(Commission, self)._group_to_invoice_line_key()
-        with_prepayment = self.redeemed_prepayment and not self.amount
+        with_prepayment = bool(self.redeemed_prepayment and not self.amount)
         return key + (('is_prepayment', self.is_prepayment),
             ('with_prepayment', with_prepayment))
 

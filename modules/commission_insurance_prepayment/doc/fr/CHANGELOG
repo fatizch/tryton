@@ -1,3 +1,4 @@
+* OTH#00000 Adapter la clé de tri des lignes de quittance à python 3
 * FEA#10905 Ajout de la chaine de synchronisation du précompte à la chaine de batch quotidienne
 
 Version 2.2 - 2018-10-12
