@@ -79,6 +79,13 @@ coog_daily_run() {
             || [ "$TOMORROW_DATE" == "01" ]; then
 
             (
+            _coog_daily_check_modules "commission_insurance_prepayment" || return 0 &&     \
+                coog_chain_main commission_insurance_prepayment synchronization \
+                    --treatment_date="$LAST_DAY_OF_THE_MONTH"
+            )
+            [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
+
+            (
             _coog_daily_check_modules "commission_insurance" || return 0 &&     \
                 coog_chain_main commission_insurance commission                 \
                     --treatment_date="$LAST_DAY_OF_THE_MONTH"                   \

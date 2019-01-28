@@ -1,0 +1,12 @@
+# vim: set ft=sh:
+
+CHAIN_NAME=synchronization
+
+CHAIN_PARAMETERS=('TREATMENT_DATE')
+CHAIN_REQUIRED=('TREATMENT_DATE')
+
+chain_step desynchronized.prepayment.report \
+    --treatment_date="$TREATMENT_DATE"
+chain_wait desynchronized.prepayment.report || chain_end
+
+chain_end

@@ -46,14 +46,14 @@ class CommissionBaseBatch(batch.BatchRoot):
         Model = Pool().get(cls.get_wizard_model())
         fields_ = cls._get_fields_name()
         fields_string = (getattr(Model, x).string for x in fields_)
-        with utils.safe_open(filename, 'ab') as fo_:
+        with utils.safe_open(filename, 'a') as fo_:
             fo_.write(';'.join([coog_string.translate(Model, f, fs, 'field'
-                            ).encode('utf-8')
+                            )
                         for f, fs in zip(fields_, fields_string)]) + '\n')
 
     @classmethod
     def flush(cls, lines, filename):
-        with utils.safe_open(filename, 'ab') as fo_:
+        with utils.safe_open(filename, 'a') as fo_:
             line_def = ';'.join(['{' + x + '}' for x in
                 cls._get_fields_name()])
             fo_.write('\n'.join([line_def.format(**line)
@@ -81,12 +81,11 @@ class DesynchronizedPrepaymentReport(CommissionBaseBatch):
 
     @classmethod
     def beautify(cls, obj):
-        obj['contract'] = obj['contract'].contract_number.encode('utf-8')
-        obj['party'] = obj['party'].rec_name.encode('utf-8')
-        obj['agent'] = obj['agent'].rec_name.encode('utf-8')
-        obj['description'] = obj['description'].encode('utf-8').replace(
-            '\n', ' ')
-        obj['codes'] = obj['codes'].encode('utf-8').replace('\n', ', ')
+        obj['contract'] = obj['contract'].contract_number
+        obj['party'] = obj['party'].rec_name
+        obj['agent'] = obj['agent'].rec_name
+        obj['description'] = obj['description'].replace('\n', ' ')
+        obj['codes'] = obj['codes'].replace('\n', ', ')
         obj['dates'] = ', '.join(obj['dates'])
 
     @classmethod
@@ -130,11 +129,10 @@ class DesynchronizedRedeemedReport(CommissionBaseBatch):
 
     @classmethod
     def beautify(cls, obj):
-        obj['contract'] = obj['contract'].contract_number.encode('utf-8')
-        obj['line'] = obj['line'].rec_name.encode('utf-8')
-        obj['agent'] = obj['agent'].rec_name.encode('utf-8')
-        obj['description'] = obj['description'].encode('utf-8').replace(
-            '\n', ' ')
+        obj['contract'] = obj['contract'].contract_number
+        obj['line'] = obj['line'].rec_name
+        obj['agent'] = obj['agent'].rec_name
+        obj['description'] = obj['description'].replace('\n', ' ')
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, filename, auto_adjust):

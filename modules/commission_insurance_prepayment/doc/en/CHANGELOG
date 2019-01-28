@@ -1,3 +1,5 @@
+* FEA#10905 Add prepayment synchronization chain to the daily chain
+
 Version 2.2 - 2018-10-12
 * BUG#10058 Add synchronize prepayment action to contract form view
 * BUG#10088 Consider unpaid periods to calculate the first year premium for the prepayment commission
