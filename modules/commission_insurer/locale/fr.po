@@ -113,7 +113,7 @@ msgctxt "selection:account.invoice,business_kind:"
 msgid "All Insurer Invoices"
 msgstr "Bordereau Assureur"
 
-msgctxt "selection:account.invoice.create.insurer_slip,notice_kind:"
+msgctxt "selection:account.invoice.create.insurer_slip.ask,notice_kind:"
 msgid "Options"
 msgstr "Primes"
 

@@ -97,7 +97,7 @@ class CreateInsurerSlip(Wizard):
     __name__ = 'account.invoice.create.insurer_slip'
 
     start_state = 'ask'
-    ask = StateView('account.invoice.create.insurer_slip',
+    ask = StateView('account.invoice.create.insurer_slip.ask',
         'account_invoice_slip.create_insurer_slip_parameters_view_form',
         [Button('Cancel', 'end', 'tryton-cancel'),
             Button('OK', 'create_', 'tryton-ok', default=True),
@@ -136,7 +136,7 @@ class CreateInsurerSlip(Wizard):
 class CreateInsurerSlipParameters(ModelView):
     'Create Insurer Slip Parameters'
 
-    __name__ = 'account.invoice.create.insurer_slip'
+    __name__ = 'account.invoice.create.insurer_slip.ask'
 
     company = fields.Many2One('company.company', 'Company', required=True)
     insurers = fields.Many2Many('party.party', None, None, 'Insurers',

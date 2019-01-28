@@ -257,7 +257,7 @@ class InvoiceSlipConfiguration(metaclass=PoolMeta):
 
 
 class CreateInsurerSlipParameters(metaclass=PoolMeta):
-    __name__ = 'account.invoice.create.insurer_slip'
+    __name__ = 'account.invoice.create.insurer_slip.ask'
 
     @classmethod
     def __setup__(cls):

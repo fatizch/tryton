@@ -26,7 +26,7 @@ msgctxt "selection:account.invoice,business_kind:"
 msgid "Claim Insurer Invoice"
 msgstr "Bordereau assureur prestation"
 
-msgctxt "selection:account.invoice.create.insurer_slip,notice_kind:"
+msgctxt "selection:account.invoice.create.insurer_slip.ask,notice_kind:"
 msgid "Benefit"
 msgstr "Prestation"
 

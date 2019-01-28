@@ -24,31 +24,31 @@ msgctxt "field:account.invoice,is_slip:"
 msgid "Is Slip"
 msgstr "Est un bordereau"
 
-msgctxt "field:account.invoice.create.insurer_slip,company:"
+msgctxt "field:account.invoice.create.insurer_slip.ask,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:account.invoice.create.insurer_slip,id:"
+msgctxt "field:account.invoice.create.insurer_slip.ask,id:"
 msgid "ID"
 msgstr "Identifiant"
 
-msgctxt "field:account.invoice.create.insurer_slip,insurers:"
+msgctxt "field:account.invoice.create.insurer_slip.ask,insurers:"
 msgid "Insurers"
 msgstr "Assureurs"
 
-msgctxt "field:account.invoice.create.insurer_slip,journal:"
+msgctxt "field:account.invoice.create.insurer_slip.ask,journal:"
 msgid "Journal"
 msgstr "Journal"
 
-msgctxt "field:account.invoice.create.insurer_slip,notice_kind:"
+msgctxt "field:account.invoice.create.insurer_slip.ask,notice_kind:"
 msgid "Notice Kind"
 msgstr "Type de bordereau"
 
-msgctxt "field:account.invoice.create.insurer_slip,post_invoices:"
+msgctxt "field:account.invoice.create.insurer_slip.ask,post_invoices:"
 msgid "Post Invoices"
 msgstr "Emettre les bordereaux"
 
-msgctxt "field:account.invoice.create.insurer_slip,until_date:"
+msgctxt "field:account.invoice.create.insurer_slip.ask,until_date:"
 msgid "Until Date"
 msgstr "Jusqu'au"
 
@@ -276,7 +276,7 @@ msgctxt "selection:account.invoice,business_kind:"
 msgid "Slip"
 msgstr "Bordereau"
 
-msgctxt "selection:account.invoice.create.insurer_slip,notice_kind:"
+msgctxt "selection:account.invoice.create.insurer_slip.ask,notice_kind:"
 msgid "All"
 msgstr "Tous"
 
