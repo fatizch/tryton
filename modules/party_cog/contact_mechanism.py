@@ -18,7 +18,7 @@ from trytond.modules.party.contact_mechanism import _TYPES, _PHONE_TYPES
 from trytond.modules.coog_core import model, utils, fields, export
 
 MEDIA = _TYPES + [
-    ('mail', 'Mail')
+    ('mail', 'Mail'),
     ]
 VALID_EMAIL_REGEX = r"[^@]+@[^@]+\.[^@]+"
 
@@ -39,32 +39,30 @@ class ContactMechanism(export.ExportImportMixin):
         # The most recent value should appear first
         cls._order.insert(1, ('id', 'DESC'))
 
-        # TODO : Make it cleaner
-        if ('skype', 'Skype') in cls.type.selection:
-            cls.type.selection.remove(('skype', 'Skype'))
-        if ('sip', 'SIP') in cls.type.selection:
-            cls.type.selection.remove(('sip', 'SIP'))
-        if ('irc', 'IRC') in cls.type.selection:
-            cls.type.selection.remove(('irc', 'IRC'))
-        if ('jabber', 'Jabber') in cls.type.selection:
-            cls.type.selection.remove(('jabber', 'Jabber'))
-        cls._constraints += [('check_email', 'invalid_email')]
+        forbidden_types = {'skype', 'sip', 'irc', 'jabber'}
+        cls.type.selection = [x for x in cls.type.selection
+            if x[0] not in forbidden_types]
         cls._error_messages.update({
                 'invalid_email': 'Invalid Email !'})
 
-    def check_email(self):
-        if not (hasattr(self, 'type') and self.type == 'email'):
-            return True
-        if hasattr(self, 'email') and self.email:
-            import re
-            if not re.match(VALID_EMAIL_REGEX, self.email):
-                return False
-        return True
+    @classmethod
+    def validate(cls, mechanisms):
+        with model.error_manager():
+            for mechanism in mechanisms:
+                mechanism.check_email()
 
     @fields.depends('email', 'type')
     def pre_validate(self):
-        if not self.check_email():
-            self.raise_user_error('invalid_email')
+        self.check_email()
+
+    def check_email(self):
+        if not (hasattr(self, 'type') and self.type == 'email'):
+            return
+        if hasattr(self, 'email') and self.email:
+            import re
+            if not re.match(VALID_EMAIL_REGEX, self.email):
+                self.append_functional_error('invalid_email')
+        return
 
     def get_icon(self):
         if self.type == 'phone' or self.type == 'mobile':

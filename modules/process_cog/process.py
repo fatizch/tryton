@@ -108,11 +108,6 @@ class ProcessTransition(model.CoogSQL):
                 'missing_choice': 'Both choices must be filled !',
                 })
 
-        cls._constraints += [
-            ('check_pyson', 'missing_pyson'),
-            ('check_choices', 'missing_choice'),
-            ]
-
     @classmethod
     def view_attributes(cls):
         return super(ProcessTransition, cls).view_attributes() + [
@@ -124,6 +119,13 @@ class ProcessTransition(model.CoogSQL):
     def _export_light(cls):
         return set(
             ['choice_if_true', 'choice_if_false', 'from_step', 'to_step'])
+
+    @classmethod
+    def validate(cls, transitions):
+        with model.error_manager():
+            for transition in transitions:
+                transition.check_pyson()
+                transition.check_choices()
 
     def get_func_key(self, name=None):
         return '|'.join((self.on_process.technical_name if
@@ -172,17 +174,15 @@ class ProcessTransition(model.CoogSQL):
 
     def check_pyson(self):
         if self.kind != 'choice':
-            return True
+            return
         if not self.pyson_choice or not self.pyson_description:
-            return False
-        return True
+            self.append_functional_error('missing_pyson')
 
     def check_choices(self):
         if self.kind != 'choice':
-            return True
+            return
         if not self.choice_if_true or not self.choice_if_false:
-            return False
-        return True
+            self.append_functional_error('missing_choice')
 
     def get_pyson_readonly(self):
         result = super(ProcessTransition, self).get_pyson_readonly()
