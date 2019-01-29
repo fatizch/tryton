@@ -1,3 +1,4 @@
+* BUG#10784 Autoriser l'utilisation de la relation "Affiliations" depuis une vue form d'affiliations
 * BUG#10189 Correction du transfert de risques entre contrats
 * FEA#10241 Ajout d'un tri par défaut sur la vue arborescente 
 
