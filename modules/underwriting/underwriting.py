@@ -206,7 +206,7 @@ class UnderwritingTypeDocumentRule(document.DocumentRuleMixin):
             ]
 
 
-class Underwriting(model.CoogSQL, model.CoogView, Printable):
+class Underwriting(Printable, model.CoogView):
     'Underwriting'
 
     __name__ = 'underwriting'

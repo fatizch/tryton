@@ -37,7 +37,7 @@ CLAIM_READONLY = Bool(Eval('claim_status')) & (
             Eval('claim_status') == 'closed')
 
 
-class Claim(model.CoogSQL, model.CoogView, Printable):
+class Claim(Printable, model.CoogView):
     'Claim'
 
     __name__ = 'claim'

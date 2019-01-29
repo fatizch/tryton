@@ -1,3 +1,4 @@
+* BUG#10581 Correction d'un cas où la suppression d'une quittance ne supprime pas les demandes d'impression associées
 * BUG#10789 Correctif de crashs d'encoding lors de la génération des modèles de courrier
 * FEA#10315 Ajout de la possibilité de trier l'ordre des paramètres de règle 
 * OTH#0000 Retour de l'erreur technique si problème non directement lié au template

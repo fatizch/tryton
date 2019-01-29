@@ -28,7 +28,7 @@ from dateutil.relativedelta import relativedelta
 from trytond import backend
 from trytond.pool import Pool, PoolMeta
 from trytond.config import config
-from trytond.model import Model, Unique
+from trytond.model import Unique, ModelSQL
 from trytond.wizard import StateAction, StateView, Button
 from trytond.wizard import StateTransition
 from trytond.report import Report
@@ -820,7 +820,7 @@ class ReportTemplateVersion(model.CoogSQL, model.CoogView):
         return utils.today()
 
 
-class Printable(Model):
+class Printable(ModelSQL):
     'Base class for printable objects'
 
     @classmethod

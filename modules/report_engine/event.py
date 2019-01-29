@@ -204,7 +204,7 @@ class ReportProductionRequest(model.CoogSQL, model.CoogView):
     report_template = fields.Many2One('report.template', 'Report Template',
         readonly=True, ondelete='RESTRICT')
     object_ = fields.Reference('Object To Report',
-        'get_all_printable_models', readonly=True, select=True)
+        'get_all_printable_models', readonly=True, select=True, required=True)
     treated = fields.Boolean('Treated', readonly=True, select=True)
     context_ = fields.Char('Reporting Context')
     _get_all_printable_models_cache = Cache('get_all_printable_models')
@@ -241,7 +241,7 @@ class ReportProductionRequest(model.CoogSQL, model.CoogView):
         return cls.create([{'report_template': report_template,
                     'object_': str(x),
                     'context_': json.dumps(context_, cls=JSONEncoder)}
-                for x in objects])
+                for x in objects if x])
 
     @classmethod
     def treat_requests(cls, report_production_requests):
