@@ -1,3 +1,4 @@
+* BUG#10749 Make default salary rules compatible with benefit having a revaluation on basic salary
 * FEA#10556 Add salaries relate on claim
 * FEA#10532 Add field on delivered service to override the salary mode per delivered service
 * BUG#10396 Regression of field net_salary_bonus

@@ -86,7 +86,7 @@ date_fin_periode = date_fin_periode_indemnisation()
 date_debut_prejudice = date_de_debut_du_prejudice()
 mode_revalo = param_1_reval_mode()
 salaire_journalier_base = salaire_journalier_de_base()
-description = description_du_calcul_du_salaire().decode('utf-8')
+description = description_du_calcul_du_salaire()
 
 # calcul de la date de premiere revalo
 if param_2_date_de_reference() == 'DAT' or not date_fin_franchise():
@@ -228,7 +228,7 @@ date_anniversaire_1er_revalo: A la date anniversaire de la 1ere revalo
         <record model="rule_engine" id="net_salary_calculation_a_payer">
             <field name="name">Calcul du salaire NET (A payer)</field>
             <field name="short_name">coog_net_salary_calculation_a_payer</field>
-            <field name="algorithm">tranches = tranche_salaire(['gross_salary', 'salary_bonus'])
+            <field name="algorithm">tranches = tranche_salaire(['gross_salary', 'salary_bonus'], with_revaluation=False)
 TRA = tranches['TA']
 TRB = tranches['TB']
 TRC = tranches['TC']
@@ -266,7 +266,7 @@ return arrondir(salaire_net, 0.01)</field>
         <record model="rule_engine" id="net_salary_calculation_imposable">
             <field name="name">Calcul du salaire NET (Imposable)</field>
             <field name="short_name">coog_net_salary_calculation_imposable</field>
-            <field name="algorithm">tranches = tranche_salaire(['gross_salary', 'salary_bonus'])
+            <field name="algorithm">tranches = tranche_salaire(['gross_salary', 'salary_bonus'], with_revaluation=False)
 TRA = tranches['TA']
 TRB = tranches['TB']
 TRC = tranches['TC']

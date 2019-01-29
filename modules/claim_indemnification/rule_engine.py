@@ -42,6 +42,14 @@ class RuleEngineRuntime(metaclass=PoolMeta):
     __name__ = 'rule_engine.runtime'
 
     @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._error_messages.update({
+                'wrong_parameters': 'Invalid configuration: the revaluation '
+                'rule is called with invalid parameters',
+                })
+
+    @classmethod
     def _re_indemnification_period_start_date(cls, args):
         if 'indemnification_detail_start_date' in args:
             return args['indemnification_detail_start_date']
@@ -196,6 +204,8 @@ class RuleEngineRuntime(metaclass=PoolMeta):
     @classmethod
     def _re_revaluation_sub_periods(cls, args, dates, period_start_date,
             period_end_date):
+        if period_start_date is None:
+            cls.append_functional_error('wrong_parameters')
         return coog_date.calculate_periods_from_dates(dates, period_start_date,
             period_end_date)
 
