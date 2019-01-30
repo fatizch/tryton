@@ -65,6 +65,8 @@ class Line(metaclass=PoolMeta):
 
     def get_move_line(self):
         result = super(Line, self).get_move_line()
+        if not result:
+            return
         contract = self.contract
         if not contract and self.invoice:
             contract = self.invoice.contract

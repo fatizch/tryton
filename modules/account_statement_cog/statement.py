@@ -88,6 +88,8 @@ class Line(metaclass=PoolMeta):
 
     def get_move_line(self):
         move_line = super(Line, self).get_move_line()
+        if not move_line:
+            return
         if not move_line.description and self.number:
             move_line.description = self.number
         return move_line
