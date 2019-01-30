@@ -36,6 +36,7 @@ else:
             <field name="name">claim_amount</field>
             <field name="type_">numeric</field>
             <field name="string">Claim Amount</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="simple_claim_rule"/>
         </record>
     </data>

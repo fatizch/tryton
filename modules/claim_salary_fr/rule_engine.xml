@@ -173,6 +173,7 @@ return res</field>
 ARRCO:Selon le point ARRCO</field>
             <field name="selection_sorted">True</field>
             <field name="string">Mode de revalorisation</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="regle_standard_de_calcul_de_la_revalorisation"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_date_de_reference_regle_standard_de_calcul_de_la_revalorisation">
@@ -182,6 +183,7 @@ ARRCO:Selon le point ARRCO</field>
 DEI: Date d'effet d'indemnisation</field>
             <field name="selection_sorted">True</field>
             <field name="string">Date de référence</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="regle_standard_de_calcul_de_la_revalorisation"/>
         </record>
         <record model="rule_engine.rule_parameter" id="3_1ere_revalorisation_regle_standard_de_calcul_de_la_revalorisation">
@@ -195,12 +197,14 @@ DEI: Date d'effet d'indemnisation</field>
 1er_janvier_suivant_date_ref: 1 janvier qui suit la date de référence</field>
             <field name="selection_sorted">True</field>
             <field name="string">1ère revalorisation (optionnel)</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="regle_standard_de_calcul_de_la_revalorisation"/>
         </record>
         <record model="rule_engine.rule_parameter" id="4_nombre_de_jours_regle_standard_de_calcul_de_la_revalorisation">
             <field name="name">4_nombre_de_jours</field>
             <field name="type_">integer</field>
             <field name="string">Nombre de jours</field>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="regle_standard_de_calcul_de_la_revalorisation"/>
         </record>
         <record model="rule_engine.rule_parameter" id="5_frequence_revalo_regle_standard_de_calcul_de_la_revalorisation">
@@ -212,6 +216,7 @@ date_anniversaire_1er_revalo: A la date anniversaire de la 1ere revalo
 01/07/YEARLY: Tous les 1er juillet</field>
             <field name="selection_sorted">True</field>
             <field name="string">Fréquence des revalorisations</field>
+            <field name="sequence_order" eval="5"/>
             <field name="parent_rule" ref="regle_standard_de_calcul_de_la_revalorisation"/>
         </record>
     </data>

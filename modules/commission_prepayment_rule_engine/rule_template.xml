@@ -19,6 +19,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type_">numeric</field>
             <field name="digits">2</field>
             <field name="string">Pourcentage du précompte</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="commission_precompte"/>
         </record>
     </data>

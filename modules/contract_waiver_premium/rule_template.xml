@@ -15,6 +15,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">nb_month</field>
             <field name="type_">integer</field>
             <field name="string">Number of month</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="waiver_of_premium_for_first_n_months_from_initial_start_date"/>
         </record>
     </data>

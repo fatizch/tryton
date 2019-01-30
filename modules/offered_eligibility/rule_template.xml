@@ -28,6 +28,7 @@ return param_max_age_for_option() > age</field>
             <field name="name">max_age_for_option</field>
             <field name="type_">integer</field>
             <field name="string">Maximum age for option (age included)</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="option_eligibility_on_age"/>
         </record>
         <record model="rule_engine.rule_parameter" id="option_age_kind">
@@ -37,6 +38,7 @@ return param_max_age_for_option() > age</field>
 at_given_day_of_year : At Given Day of Year
 at_end_of_month : At End of Month</field>
             <field name="string">Age kind for eligibility rule</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="option_eligibility_on_age"/>
         </record>
         <record model="rule_engine.rule_parameter" id="given_day">
@@ -75,6 +77,7 @@ at_end_of_month : At End of Month</field>
 31 : 31</field>
             <field name="selection_sorted">False</field>
             <field name="string">Given Day</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="option_eligibility_on_age"/>
         </record>
         <record model="rule_engine.rule_parameter" id="given_month">
@@ -94,6 +97,7 @@ at_end_of_month : At End of Month</field>
 12 : 12</field>
             <field name="selection_sorted">False</field>
             <field name="string">Given Month</field>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="option_eligibility_on_age"/>
         </record>
     </data>

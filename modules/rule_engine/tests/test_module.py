@@ -301,6 +301,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         kwarg_parameter.name = 'test_parameter'
         kwarg_parameter.string = 'Test Parameter'
         kwarg_parameter.type_ = 'boolean'
+        kwarg_parameter.sequence_order = 1
         kwarg_parameter.parent_rule = rule
         kwarg_parameter.save()
         full_tree_structure = rule.data_tree_structure()
@@ -384,6 +385,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         kwarg_parameter.name = 'test_parameter'
         kwarg_parameter.string = 'Test Parameter'
         kwarg_parameter.parent_rule = rule1
+        kwarg_parameter.sequence_order = 1
         kwarg_parameter.type_ = 'numeric'
         kwarg_parameter.save()
         rule1.algorithm = 'return param_test_parameter()'

@@ -15,6 +15,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">premium_amount</field>
             <field name="type_">numeric</field>
             <field name="string">Premium Amount</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="simple_premium_rule"/>
         </record>
     </data>

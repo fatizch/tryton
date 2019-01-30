@@ -49,18 +49,21 @@ return traitement_journalier, traitement_de_reference, trancheTA, trancheTB, tra
             <field name="name">pourcentage_ij_ta</field>
             <field name="type_">numeric</field>
             <field name="string">Pourcentage TA</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="calcul_du_traitement_de_base_journalier_en_fonction_des_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="pourcentage_ij_tb_calcul_du_traitement_de_base_journalier_en_fonction_des_tranches">
             <field name="name">pourcentage_ij_tb</field>
             <field name="type_">numeric</field>
             <field name="string">Pourcentage TB</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="calcul_du_traitement_de_base_journalier_en_fonction_des_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="_pourcentage_ij_tc_calcul_du_traitement_de_base_journalier_en_fonction_des_tranches">
             <field name="name">pourcentage_ij_tc</field>
             <field name="type_">numeric</field>
             <field name="string">Pourcentage TC</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="calcul_du_traitement_de_base_journalier_en_fonction_des_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="methode_de_traitement_de_reference_calcul_du_traitement_de_base_journalier_en_fonction_des_tranches">
@@ -71,6 +74,7 @@ salaire_net:Salaire Net
 salaire_brut_prime:Salaire Brut + Primes
 salaire_net_prime:Salaire Net + Primes</field>
             <field name="string">Méthode de traitement de référence</field>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="calcul_du_traitement_de_base_journalier_en_fonction_des_tranches"/>
         </record>
         <record model="rule_engine" id="traitement_journalier_par_tranche_de_salaire">
@@ -133,18 +137,21 @@ return rule_coog_calcul_des_periodes_d_indemnisation(
             <field name="name">1_pourcentage_ij_ta</field>
             <field name="type_">numeric</field>
             <field name="string">Pourcentage TA</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_pourcentage_ij_tb_salaire_brut_net_par_tranche_de_salaire">
             <field name="name">2_pourcentage_ij_tb</field>
             <field name="type_">numeric</field>
             <field name="string">Pourcentage TB</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine.rule_parameter" id="3_pourcentage_ij_tc_salaire_brut_net_par_tranche_de_salaire">
             <field name="name">3_pourcentage_ij_tc</field>
             <field name="type_">numeric</field>
             <field name="string">Pourcentage TC</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine.rule_parameter" id="4_traitement_de_reference_salaire_brut_net_par_tranche_de_salaire">
@@ -155,6 +162,7 @@ salaire_net:Salaire Net
 salaire_brut_prime:Salaire Brut + Primes
 salaire_net_prime:Salaire Net + Primes</field>
             <field name="string">Traitement de référence</field>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine.rule_parameter" id="5_inclusion_du_mi_temps_salaire_brut_net_par_tranche_de_salaire">
@@ -164,18 +172,21 @@ salaire_net_prime:Salaire Net + Primes</field>
 min_ijb_2_tdrj_mtt:Minimum de (Prestation base / 2) et (100% traitement de référence - IJSS - mi-temps) 
 tdrj_ijss_mtt: 100% Traitement de référénce - IJSS - mi-temps</field>
             <field name="string">Calcul du mi-temps thérapeutique</field>
+            <field name="sequence_order" eval="5"/>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine.rule_parameter" id="6_deduction_de_l_ijss_salaire_brut_net_par_tranche_de_salaire">
             <field name="name">6_sans_deduction_de_l_ijss</field>
             <field name="type_">boolean</field>
             <field name="string">Sans déduction de l'IJSS</field>
+            <field name="sequence_order" eval="6"/>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine.rule_parameter" id="7_limiter_au_net_salaire_brut_net_par_tranche_de_salaire">
             <field name="name">7_limiter_au_net</field>
             <field name="type_">boolean</field>
             <field name="string">Limiter au net</field>
+            <field name="sequence_order" eval="7"/>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
         </record>
         <record model="rule_engine-extra_data" id="rule_extra_data_ijss_traitement_journalier_par_tranche_de_salaire">
@@ -238,6 +249,7 @@ return traitement_journalier_base, montant_mi_temps, description</field>
             <field name="type_">numeric</field>
             <field name="string">Traitement de base journalier</field>
             <field name="digits">8</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="regle_de_calcul_des_deductions_des_montants_percus"/>
         </record>
         <record model="rule_engine.rule_parameter" id="ijss_regle_de_calcul_des_deductions_des_montants_percus">
@@ -245,6 +257,7 @@ return traitement_journalier_base, montant_mi_temps, description</field>
             <field name="type_">numeric</field>
             <field name="string">IJSS</field>
             <field name="digits">8</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="regle_de_calcul_des_deductions_des_montants_percus"/>
         </record>
         <record model="rule_engine.rule_parameter" id="inclusion_du_mi_temps_therapeutique_regle_de_calcul_des_deductions_des_montants_percus">
@@ -252,12 +265,14 @@ return traitement_journalier_base, montant_mi_temps, description</field>
             <field name="type_">selection</field>
             <field name="selection">jb_ijss_mtt:IJ de base - IJSS - mi-temps</field>
             <field name="string">Calcul du mi-temps thérapeutique</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="regle_de_calcul_des_deductions_des_montants_percus"/>
         </record>
         <record model="rule_engine.rule_parameter" id="deduction_de_l_ijss_regle_de_calcul_des_deductions_des_montants_percus">
             <field name="name">sans_deduction_de_l_ijss</field>
             <field name="type_">boolean</field>
             <field name="string">Sans déduction de l'IJSS</field>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="regle_de_calcul_des_deductions_des_montants_percus"/>
         </record>
         <record model="rule_engine.rule_parameter" id="traitement_de_reference_regle_de_calcul_des_deductions_des_montants_percus">
@@ -265,6 +280,7 @@ return traitement_journalier_base, montant_mi_temps, description</field>
             <field name="type_">numeric</field>
             <field name="string">Traitement de référence</field>
             <field name="digits">8</field>
+            <field name="sequence_order" eval="5"/>
             <field name="parent_rule" ref="regle_de_calcul_des_deductions_des_montants_percus"/>
         </record>
         <record model="rule_engine" id="calcul_des_limitations_du_traitement_journalier">
@@ -314,6 +330,7 @@ return traitement_journalier_base, description</field>
             <field name="type_">numeric</field>
             <field name="string">IJSS</field>
             <field name="digits">8</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="calcul_des_limitations_du_traitement_journalier"/>
         </record>
         <record model="rule_engine.rule_parameter" id="traitement_de_reference_calcul_des_limitations_du_traitement_journalier">
@@ -321,6 +338,7 @@ return traitement_journalier_base, description</field>
             <field name="type_">numeric</field>
             <field name="string">Traitement de référence</field>
             <field name="digits">8</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="calcul_des_limitations_du_traitement_journalier"/>
         </record>
         <record model="rule_engine.rule_parameter" id="inclusion_du_mi_temps_therapeutique_calcul_des_limitations_du_traitement_journalier">
@@ -330,18 +348,21 @@ return traitement_journalier_base, description</field>
 min_ijb_2_tdrj_mtt:Minimum de (Prestation de base / 2) et(100% traitement de référence - IJSS - mi-temps) 
 tdrj_ijss_mtt: 100% Traitement de référénce - IJSS - mi-temps</field>
             <field name="string">Calcul du mi-temps thérapeutique</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="calcul_des_limitations_du_traitement_journalier"/>
         </record>
         <record model="rule_engine.rule_parameter" id="deduction_de_l_ijss_calcul_des_limitations_du_traitement_journalier">
             <field name="name">sans_deduction_de_l_ijss</field>
             <field name="type_">boolean</field>
             <field name="string">Sans déduction de l'IJSS</field>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="calcul_des_limitations_du_traitement_journalier"/>
         </record>
         <record model="rule_engine.rule_parameter" id="limiter_au_net_calcul_des_limitations_du_traitement_journalier">
             <field name="name">limiter_au_net</field>
             <field name="type_">boolean</field>
             <field name="string">Limiter au net</field>
+            <field name="sequence_order" eval="5"/>
             <field name="parent_rule" ref="calcul_des_limitations_du_traitement_journalier"/>
         </record>
         <record model="rule_engine.rule_parameter" id="montant_du_mi_temps_therapeutique_calcul_des_limitations_du_traitement_journalier">
@@ -349,6 +370,7 @@ tdrj_ijss_mtt: 100% Traitement de référénce - IJSS - mi-temps</field>
             <field name="type_">numeric</field>
             <field name="string">Montant du mi-temps thérapeutique</field>
             <field name="digits">8</field>
+            <field name="sequence_order" eval="6"/>
             <field name="parent_rule" ref="calcul_des_limitations_du_traitement_journalier"/>
         </record>
         <record model="rule_engine.rule_parameter" id="traitement_journalier_de_base_calcul_des_limitations_du_traitement_journalier">
@@ -356,6 +378,7 @@ tdrj_ijss_mtt: 100% Traitement de référénce - IJSS - mi-temps</field>
             <field name="type_">numeric</field>
             <field name="string">Traitement journalier de base</field>
             <field name="digits">8</field>
+            <field name="sequence_order" eval="7"/>
             <field name="parent_rule" ref="calcul_des_limitations_du_traitement_journalier"/>
         </record>
         <record model="rule_engine" id="calcul_des_periodes_d_indemnisation">
@@ -392,6 +415,7 @@ return ([{
             <field name="type_">numeric</field>
             <field name="string">Traitement journalier de base</field>
             <field name="digits">8</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="calcul_des_periodes_d_indemnisation"/>
         </record>
         <record model="rule_engine.rule_parameter" id="description_calcul_des_periodes_d_indemnisation">
@@ -399,6 +423,7 @@ return ([{
             <field name="type_">char</field>
             <field name="string">Description</field>
             <field name="digits">8</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="calcul_des_periodes_d_indemnisation"/>
         </record>
         <record model="rule_engine.rule_parameter" id="tranche_ta_ijss_calcul_des_limitations_du_traitement_journalier">
@@ -406,6 +431,7 @@ return ([{
             <field name="type_">numeric</field>
             <field name="string">Tranche TA</field>
             <field name="digits">8</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="calcul_des_periodes_d_indemnisation"/>
         </record>
         <record model="rule_engine.rule_parameter" id="tranche_tb_calcul_des_periodes_d_indemnisation">
@@ -413,6 +439,7 @@ return ([{
             <field name="type_">numeric</field>
             <field name="string">Tranche TB</field>
             <field name="digits">8</field>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="calcul_des_periodes_d_indemnisation"/>
         </record>
         <record model="rule_engine.rule_parameter" id="tranche_tc_calcul_des_periodes_d_indemnisation">
@@ -420,6 +447,7 @@ return ([{
             <field name="type_">numeric</field>
             <field name="string">Tranche TC</field>
             <field name="digits">8</field>
+            <field name="sequence_order" eval="5"/>
             <field name="parent_rule" ref="calcul_des_periodes_d_indemnisation"/>
         </record>
         <record model="rule_engine.rule_parameter" id="ijss_calcul_des_periodes_d_indemnisation">
@@ -427,6 +455,7 @@ return ([{
             <field name="type_">numeric</field>
             <field name="string">IJSS</field>
             <field name="digits">8</field>
+            <field name="sequence_order" eval="6"/>
             <field name="parent_rule" ref="calcul_des_periodes_d_indemnisation"/>
         </record>
         <record model="rule_engine-rule_engine" id="rule_used_calcul_du_traitement_de_base_journalier_en_fonction_des_tranches_traitement_journalier_par_tranche_de_salaire">
@@ -488,18 +517,21 @@ cumulee_sur_365_jours:Cumulée sur les 365 jours précédant l'arrêt
 12_mois_glissants:Cumulée sur 12 mois glissants
 cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
             <field name="string">Type de franchise</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="franchise_base_sur_un_nombre_de_jour_defaut"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_nombre_de_jours_de_franchise_base_sur_un_nombre_de_jour_default">
             <field name="name">nombre_de_jours_de_franchise</field>
             <field name="type_">integer</field>
             <field name="string">Nombre de jours de franchise</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="franchise_base_sur_un_nombre_de_jour_defaut"/>
         </record>
         <record model="rule_engine.rule_parameter" id="3_date_de_prejudice_base_sur_un_nombre_de_jour_default">
             <field name="name">date_de_prejudice</field>
             <field name="type_">date</field>
             <field name="string">Date de prejudice</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="franchise_base_sur_un_nombre_de_jour_defaut"/>
         </record>
         <record model="rule_engine" id="franchise_toute_nature_arret_defaut">
@@ -530,12 +562,14 @@ cumulee_sur_365_jours:Cumulée sur les 365 jours précédant l'arrêt
 cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
             <field name="string">Type de franchise</field>
             <field name="selection_sorted">True</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="franchise_toute_nature_arret_defaut"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_nombre_de_jours_de_franchise_toute_nature_arret_default">
             <field name="name">nombre_de_jours_de_franchise</field>
             <field name="type_">integer</field>
             <field name="string">Nombre de jours de franchise</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="franchise_toute_nature_arret_defaut"/>
         </record>
         <record model="rule_engine-rule_engine" id="rule_used_toute_nature_arret_defaut_base_sur_un_nombre_de_jour_defaut">
@@ -580,12 +614,14 @@ cumulee_sur_365_jours:Cumulée sur les 365 jours précédant l'arrêt
 cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
             <field name="string">Type de franchise</field>
             <field name="selection_sorted">True</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_nombre_de_jours_de_franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut">
             <field name="name">nombre_de_jours_de_franchise</field>
             <field name="type_">integer</field>
             <field name="string">Nombre de jours de franchise</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut"/>
         </record>
         <record model="rule_engine-rule_engine" id="rule_used_toute_nature_arret_total_defaut_base_sur_un_nombre_de_jour_defaut">
@@ -625,6 +661,7 @@ return date_franchise</field>
             <field name="name">1_nombre_de_jours_de_franchise</field>
             <field name="type_">integer</field>
             <field name="string">Nombre de jours de franchise minimum (optionnel)</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="franchise_relais_conventation_defaut"/>
         </record>
         <record model="rule_engine-rule_engine" id="rule_used_franchise_relais_conventation_defaut_base_sur_un_nombre_de_jour_defaut">
@@ -670,36 +707,42 @@ cumulee_sur_365_jours:Cumulée sur les 365 jours précédant l'arrêt
 cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
             <field name="string">Type de franchise</field>
             <field name="selection_sorted">True</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_franchise_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi">
             <field name="name">2_franchise</field>
             <field name="type_">integer</field>
             <field name="string">Franchise (jours)</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
         </record>
         <record model="rule_engine.rule_parameter" id="3_franchise_en_cas_de_maladie_professionnelle_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi">
             <field name="name">3_franchise_en_cas_de_maladie_professionnelle</field>
             <field name="type_">integer</field>
             <field name="string">Franchise en cas de maladie professionnelle (jours)</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
         </record>
         <record model="rule_engine.rule_parameter" id="4_franchise_en_cas_d_accident_du_travail_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi">
             <field name="name">4_franchise_en_cas_d_accident_du_travail</field>
             <field name="type_">integer</field>
             <field name="string">Franchise en cas d'accident du travail (jours)</field>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
         </record>
         <record model="rule_engine.rule_parameter" id="5_franchise_en_cas_de_maternite_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi">
             <field name="name">5_franchise_en_cas_de_maternite</field>
             <field name="type_">integer</field>
             <field name="string">Franchise en cas de maternité (jours)</field>
+            <field name="sequence_order" eval="5"/>
             <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
         </record>
         <record model="rule_engine.rule_parameter" id="6_franchise_en_cas_d_hospitalisation_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi">
             <field name="name">6_franchise_en_cas_d_hospitalisation</field>
             <field name="type_">integer</field>
             <field name="string">Franchise en cas d'hospitalisation (jours)</field>
+            <field name="sequence_order" eval="6"/>
             <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
         </record>
         <record model="rule_engine-rule_engine" id="rule_used_franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi_franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut">
@@ -742,36 +785,42 @@ cumulee_sur_365_jours:Cumulée sur les 365 jours précédant l'arrêt
 cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
             <field name="string">Type de franchise</field>
             <field name="selection_sorted">True</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="franchise_fixe_en_arret_total_et_mi_temps_therapeutique"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_franchise_franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
             <field name="name">2_franchise</field>
             <field name="type_">integer</field>
             <field name="string">Franchise (jours)</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="franchise_fixe_en_arret_total_et_mi_temps_therapeutique"/>
         </record>
         <record model="rule_engine.rule_parameter" id="3_franchise_en_cas_de_maladie_professionnelle_franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
             <field name="name">3_franchise_en_cas_de_maladie_professionnelle</field>
             <field name="type_">integer</field>
             <field name="string">Franchise en cas de maladie professionnelle (jours)</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="franchise_fixe_en_arret_total_et_mi_temps_therapeutique"/>
         </record>
         <record model="rule_engine.rule_parameter" id="4_franchise_en_cas_d_accident_du_travail_franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
             <field name="name">4_franchise_en_cas_d_accident_du_travail</field>
             <field name="type_">integer</field>
             <field name="string">Franchise en cas d'accident du travail (jours)</field>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="franchise_fixe_en_arret_total_et_mi_temps_therapeutique"/>
         </record>
         <record model="rule_engine.rule_parameter" id="5_franchise_en_cas_de_maternite_franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
             <field name="name">5_franchise_en_cas_de_maternite</field>
             <field name="type_">integer</field>
             <field name="string">Franchise en cas de maternité (jours)</field>
+            <field name="sequence_order" eval="5"/>
             <field name="parent_rule" ref="franchise_fixe_en_arret_total_et_mi_temps_therapeutique"/>
         </record>
         <record model="rule_engine.rule_parameter" id="6_franchise_en_cas_d_hospitalisation_franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
             <field name="name">6_franchise_en_cas_d_hospitalisation</field>
             <field name="type_">integer</field>
             <field name="string">Franchise en cas d'hospitalisation (jours)</field>
+            <field name="sequence_order" eval="6"/>
             <field name="parent_rule" ref="franchise_fixe_en_arret_total_et_mi_temps_therapeutique"/>
         </record>
         <record model="rule_engine-rule_engine" id="rule_used_franchise_fixe_en_arret_total_et_mi_temps_therapeutique_coog_franchise_fixe_toute_nature_d_arret_confondue">
@@ -837,6 +886,7 @@ return [{'tauxTA': tauxTA,
             <field name="string">Catégorie</field>
             <field name="name">categorie</field>
             <field name="type_">char</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="calcul_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="1_pourcentage_ta_r1_calcul_taux">
@@ -844,6 +894,7 @@ return [{'tauxTA': tauxTA,
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TA R1</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="calcul_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="1_pourcentage_tb_r1_calcul_taux">
@@ -851,6 +902,7 @@ return [{'tauxTA': tauxTA,
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TB R1</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="calcul_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="1_pourcentage_tc_r1_calcul_taux">
@@ -858,6 +910,7 @@ return [{'tauxTA': tauxTA,
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TC R1</field>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="calcul_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_pourcentage_ta_r2_calcul_taux">
@@ -865,6 +918,7 @@ return [{'tauxTA': tauxTA,
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TA R2</field>
+            <field name="sequence_order" eval="5"/>
             <field name="parent_rule" ref="calcul_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_pourcentage_tb_r2_calcul_taux">
@@ -872,6 +926,7 @@ return [{'tauxTA': tauxTA,
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TB R2</field>
+            <field name="sequence_order" eval="6"/>
             <field name="parent_rule" ref="calcul_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_pourcentage_tc_r2_calcul_taux">
@@ -879,6 +934,7 @@ return [{'tauxTA': tauxTA,
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TC R2</field>
+            <field name="sequence_order" eval="7"/>
             <field name="parent_rule" ref="calcul_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="3_pourcentage_ta_r3_calcul_taux">
@@ -886,6 +942,7 @@ return [{'tauxTA': tauxTA,
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TA R3</field>
+            <field name="sequence_order" eval="8"/>
             <field name="parent_rule" ref="calcul_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="3_pourcentage_tb_r3_calcul_taux">
@@ -893,6 +950,7 @@ return [{'tauxTA': tauxTA,
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TB R3</field>
+            <field name="sequence_order" eval="9"/>
             <field name="parent_rule" ref="calcul_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="3_pourcentage_tc_r3_calcul_taux">
@@ -900,6 +958,7 @@ return [{'tauxTA': tauxTA,
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TC R3</field>
+            <field name="sequence_order" eval="10"/>
             <field name="parent_rule" ref="calcul_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="taux_incapacite_permanente_calcul_taux">
@@ -907,6 +966,7 @@ return [{'tauxTA': tauxTA,
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Taux incapacité permanente</field>
+            <field name="sequence_order" eval="11"/>
             <field name="parent_rule" ref="calcul_taux"/>
         </record>
         <!-- Default salary steps rule -->
@@ -964,6 +1024,7 @@ return [{
             <field name="string">Description</field>
             <field name="name">description</field>
             <field name="type_">char</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="calcul_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="calcul_tranches_TA">
@@ -971,6 +1032,7 @@ return [{
             <field name="name">ta</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="calcul_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="calcul_tranches_TB">
@@ -978,6 +1040,7 @@ return [{
             <field name="name">tb</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="calcul_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="calcul_tranches_TC">
@@ -985,6 +1048,7 @@ return [{
             <field name="name">tc</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="calcul_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="calcul_tranches_salaire_de_reference">
@@ -992,6 +1056,7 @@ return [{
             <field name="name">salaire_de_reference</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="5"/>
             <field name="parent_rule" ref="calcul_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="calcul_tranches_rente_SS">
@@ -999,6 +1064,7 @@ return [{
             <field name="name">rente_ss</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="6"/>
             <field name="parent_rule" ref="calcul_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="calcul_tranches_rente_de_base">
@@ -1006,6 +1072,7 @@ return [{
             <field name="name">rente_de_base</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="7"/>
             <field name="parent_rule" ref="calcul_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="calcul_tranches_taux_ta">
@@ -1013,6 +1080,7 @@ return [{
             <field name="name">tauxTA</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="8"/>
             <field name="parent_rule" ref="calcul_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="calcul_tranches_taux_tb">
@@ -1020,6 +1088,7 @@ return [{
             <field name="name">tauxTB</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="9"/>
             <field name="parent_rule" ref="calcul_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="calcul_tranches_taux_tc">
@@ -1027,6 +1096,7 @@ return [{
             <field name="name">tauxTC</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="10"/>
             <field name="parent_rule" ref="calcul_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="calcul_tranches_taux_incapacite_permanente">
@@ -1034,14 +1104,16 @@ return [{
             <field name="name">taux_incapacite_permanente</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="11"/>
             <field name="parent_rule" ref="calcul_tranches"/>
         </record>
         <record model="rule_engine.rule_parameter" id="calcul_tranches_categorie">
             <field name="string">Catégorie</field>
             <field name="name">categorie</field>
             <field name="type_">char</field>
+            <field name="sequence_order" eval="12"/>
             <field name="parent_rule" ref="calcul_tranches"/>
-        </record>        
+        </record>
         <!-- Default ltd annuity rule -->
         <record model="rule_engine" id="rente_invalidite_par_tranche_salaire_categorie_taux">
             <field name="name">Traitement rente invalidité par tranche de salaire (par catégorie et par taux)</field>
@@ -1171,6 +1243,7 @@ salaire_net:Salaire Net
 salaire_brut_prime:Salaire Brut + Primes
 salaire_net_prime:Salaire Net + Primes</field>
             <field name="string">Méthode de traitement de référence</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="1_pourcentage_ta_r1_rente_invalidite_par_tranche_salaire_categorie_taux">
@@ -1178,6 +1251,7 @@ salaire_net_prime:Salaire Net + Primes</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TA R1</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="2_pourcentage_tb_r1_rente_invalidite_par_tranche_salaire_categorie_taux">
@@ -1185,6 +1259,7 @@ salaire_net_prime:Salaire Net + Primes</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TB R1</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="3_pourcentage_tc_r1_rente_invalidite_par_tranche_salaire_categorie_taux">
@@ -1192,6 +1267,7 @@ salaire_net_prime:Salaire Net + Primes</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TC R1</field>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="4_pourcentage_ta_r2_rente_invalidite_par_tranche_salaire_categorie_taux">
@@ -1199,6 +1275,7 @@ salaire_net_prime:Salaire Net + Primes</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TA R2</field>
+            <field name="sequence_order" eval="5"/>
             <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="5_pourcentage_tb_r2_rente_invalidite_par_tranche_salaire_categorie_taux">
@@ -1206,6 +1283,7 @@ salaire_net_prime:Salaire Net + Primes</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TB R2</field>
+            <field name="sequence_order" eval="6"/>
             <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="6_pourcentage_tc_r2_rente_invalidite_par_tranche_salaire_categorie_taux">
@@ -1213,6 +1291,7 @@ salaire_net_prime:Salaire Net + Primes</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TC R2</field>
+            <field name="sequence_order" eval="7"/>
             <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="7_pourcentage_ta_r3_rente_invalidite_par_tranche_salaire_categorie_taux">
@@ -1220,6 +1299,7 @@ salaire_net_prime:Salaire Net + Primes</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TA R3</field>
+            <field name="sequence_order" eval="8"/>
             <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="8_pourcentage_tb_r3_rente_invalidite_par_tranche_salaire_categorie_taux">
@@ -1227,6 +1307,7 @@ salaire_net_prime:Salaire Net + Primes</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TB R3</field>
+            <field name="sequence_order" eval="9"/>
             <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
         </record>
         <record model="rule_engine.rule_parameter" id="9_pourcentage_tc_r3_rente_invalidite_par_tranche_salaire_categorie_taux">
@@ -1234,6 +1315,7 @@ salaire_net_prime:Salaire Net + Primes</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Pourcentage TC R3</field>
+            <field name="sequence_order" eval="10"/>
             <field name="parent_rule" ref="rente_invalidite_par_tranche_salaire_categorie_taux"/>
         </record>
         <!-- Default side benefits rule -->
@@ -1281,6 +1363,7 @@ return rente_de_base, description</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Rente de base</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="prestations_annexes_rente"/>
         </record>
         <record model="rule_engine.rule_parameter" id="rente_de_ss_prestations_annexes_rente">
@@ -1288,6 +1371,7 @@ return rente_de_base, description</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Rente SS</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="prestations_annexes_rente"/>
         </record>
         <record model="rule_engine.rule_parameter" id="salaire_de_reference_prestations_annexes_rente">
@@ -1295,18 +1379,21 @@ return rente_de_base, description</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
             <field name="string">Salaire de réference</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="prestations_annexes_rente"/>
         </record>
         <record model="rule_engine.rule_parameter" id="date_debut_periode_prestations_annexes_rente">
             <field name="name">date_debut_periode</field>
             <field name="type_">date</field>
             <field name="string">Date début période</field>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="prestations_annexes_rente"/>
         </record>
         <record model="rule_engine.rule_parameter" id="date_fin_periode_prestations_annexes_rente">
             <field name="name">date_fin_periode</field>
             <field name="type_">date</field>
             <field name="string">Date fin période</field>
+            <field name="sequence_order" eval="5"/>
             <field name="parent_rule" ref="prestations_annexes_rente"/>
         </record>
         <!-- Rule Rule Link -->

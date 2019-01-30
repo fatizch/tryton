@@ -1,3 +1,4 @@
+* BUG#10331 Make sequence order required on rule parameters
 * BUG#10786 Fix user warning mechanics in rules
 * BUG#10287 Update rule parameters only if they match the modified rule
 * BUG#10221 Fix formatting of errors

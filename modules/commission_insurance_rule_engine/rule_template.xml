@@ -25,6 +25,7 @@ else:
             <field name="type_">numeric</field>
             <field name="digits">2</field>
             <field name="string">Pourcentage 1ere année</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="commission_escompte"/>
         </record>
         <record model="rule_engine.rule_parameter" id="escompte_deuxieme_annee">
@@ -32,6 +33,7 @@ else:
             <field name="type_">numeric</field>
             <field name="digits">2</field>
             <field name="string">Pourcentage 2eme année</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="commission_escompte"/>
         </record>
         <record model="rule_engine.rule_parameter" id="escompte_annee_suivante">
@@ -39,6 +41,7 @@ else:
             <field name="type_">numeric</field>
             <field name="digits">2</field>
             <field name="string">Pourcentage années suivantes</field>
+            <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="commission_escompte"/>
         </record>
         <!-- ############################################################ -->
@@ -57,6 +60,7 @@ else:
             <field name="type_">numeric</field>
             <field name="digits">2</field>
             <field name="string">Pourcentage de commission</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="commission_lineaire"/>
         </record>
     </data>

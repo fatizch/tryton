@@ -74,6 +74,13 @@ return True</field>
             <field name="type_">benefit</field>
             <field name="context" ref="rule_engine.default_context"/>
         </record>
+        <record model="rule_engine.rule_parameter" id="rule_paramater_1_data_delai_de_declaration_quantite_eligibite_prestation">
+            <field name="name">1_delai_de_declaration_quantite</field>
+            <field name="type_">integer</field>
+            <field name="string">Délai de déclaration</field>
+            <field name="sequence_order" eval="1"/>
+            <field name="parent_rule" ref="eligibite_prestation"/>
+        </record>
         <record model="rule_engine.rule_parameter" id="rule_parameter_2_data_delai_de_declaration_definition_eligibite_prestation">
             <field name="name">2_delai_de_declaration_definition</field>
             <field name="type_">selection</field>
@@ -83,27 +90,24 @@ jour_apres_franchise:Nombre de jours après la franchise
 mois_apres_franchise:Nombre de mois après la franchise</field>
             <field name="string">Délai de déclaration - definition</field>
             <field name="selection_sorted">True</field>
-            <field name="parent_rule" ref="eligibite_prestation"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="rule_paramater_1_data_delai_de_declaration_quantite_eligibite_prestation">
-            <field name="name">1_delai_de_declaration_quantite</field>
-            <field name="type_">integer</field>
-            <field name="string">Délai de déclaration</field>
-            <field name="parent_rule" ref="eligibite_prestation"/>
-        </record>
-        <record model="rule_engine.rule_parameter" id="rule_parameter_4_periode_maximale_entre_un_precedent_arret_et_une_rechute_type_periodicite">
-            <field name="name">4_periode_maximale_entre_un_precedent_arret_et_une_rechute_type_periodicite</field>
-            <field name="type_">selection</field>
-            <field name="selection">jour:Jour
-            mois:Mois</field>
-            <field name="string">Période maximale entre un précédent arrêt et une rechute - periodicité</field>
-            <field name="selection_sorted">True</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="eligibite_prestation"/>
         </record>
         <record model="rule_engine.rule_parameter" id="rule_parameter_3_periode_maximale_entre_un_precedent_arret_et_une_rechute_quantite">
             <field name="name">3_periode_maximale_entre_un_precedent_arret_et_une_rechute_quantite</field>
             <field name="type_">integer</field>
             <field name="string">Période maximale entre un précédent arrêt et une rechute</field>
+            <field name="sequence_order" eval="3"/>
+            <field name="parent_rule" ref="eligibite_prestation"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="rule_parameter_4_periode_maximale_entre_un_precedent_arret_et_une_rechute_type_periodicite">
+            <field name="name">4_periode_maximale_entre_un_precedent_arret_et_une_rechute_type_periodicite</field>
+            <field name="type_">selection</field>
+            <field name="selection">jour:Jour
+mois:Mois</field>
+            <field name="string">Période maximale entre un précédent arrêt et une rechute - periodicité</field>
+            <field name="selection_sorted">True</field>
+            <field name="sequence_order" eval="4"/>
             <field name="parent_rule" ref="eligibite_prestation"/>
         </record>
     </data>

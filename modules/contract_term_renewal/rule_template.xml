@@ -68,6 +68,7 @@ else:
 31 : 31</field>
             <field name="selection_sorted">False</field>
             <field name="string">Given Day</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="product_term_renewal_sync_given_date"/>
         </record>
         <record model="rule_engine.rule_parameter" id="given_month">
@@ -87,6 +88,7 @@ else:
 12 : 12</field>
             <field name="selection_sorted">False</field>
             <field name="string">Given Month</field>
+            <field name="sequence_order" eval="2"/>
             <field name="parent_rule" ref="product_term_renewal_sync_given_date"/>
         </record>
     </data>

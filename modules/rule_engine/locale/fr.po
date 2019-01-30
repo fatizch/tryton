@@ -22,6 +22,10 @@ msgctxt "error:rule_engine.function:"
 msgid "Technical name must only use ascii"
 msgstr "Le nom technique doit utiliser seulement de l'ASCII"
 
+msgctxt "error:rule_engine.rule_parameter:"
+msgid "The parameter order must be unique accross a given rule"
+msgstr "L'ordre des paramètres doit être unique pour une règle donnée"
+
 msgctxt "error:rule_engine.runtime:"
 msgid "Field '%s' of model '%s' is not iterable"
 msgstr "Le champ '%s' du modele '%s' n'est pas une liste"

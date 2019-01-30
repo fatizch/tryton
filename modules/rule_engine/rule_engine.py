@@ -711,13 +711,19 @@ class RuleParameter(model.CoogDictSchema, model.CoogSQL, model.CoogView):
 
     parent_rule = fields.Many2One('rule_engine', 'Parent Rule', required=True,
         ondelete='CASCADE', select=True)
-    sequence_order = fields.Integer('Sequence Order')
+    sequence_order = fields.Integer('Sequence Order', required=True)
 
     @classmethod
     def __setup__(cls):
         super(RuleParameter, cls).__setup__()
         cls.name.string = 'Code'
         cls.string.string = 'Name'
+
+        t = cls.__table__()
+        cls._sql_constraints = [
+            ('order_unique', Unique(t, t.parent_rule, t.sequence_order),
+                'The parameter order must be unique accross a given rule'),
+            ]
 
     @classmethod
     def __register__(cls, module_name):
@@ -1009,6 +1015,21 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         if self.type_ == 'event_filter':
             return 'list'
         return ''
+
+    @fields.depends('parameters')
+    def on_change_parameters(self):
+        max_order = 0
+        to_order = []
+        for parameter in self.parameters:
+            if not parameter.sequence_order:
+                to_order.append(parameter)
+            else:
+                max_order = max(max_order, parameter.sequence_order)
+        if to_order:
+            for elem in to_order:
+                max_order += 1
+                elem.sequence_order = max_order
+            self.parameters = list(self.parameters)
 
     @classmethod
     def get_passing_test_cases(cls, instances, name):

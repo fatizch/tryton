@@ -15,6 +15,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">always_underwrite</field>
             <field name="type_">boolean</field>
             <field name="string">Always Underwrite</field>
+            <field name="sequence_order" eval="1"/>
             <field name="parent_rule" ref="underwriting_basic_rule"/>
         </record>
     </data>
