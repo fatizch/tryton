@@ -1,3 +1,5 @@
+* BUG#10920  Billing information changes should not be propagated to declined contracts
+
 Version 2.2 - 2018-10-12
 Version 2.0 - 2018-04-13
 * BUG#8500 Add warning when endorsement have posterior billing

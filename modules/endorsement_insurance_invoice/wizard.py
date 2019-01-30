@@ -165,7 +165,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
         for contract in Contract.search([
                     self.get_other_contracts_party_clause(),
                     ('id', '!=', self.contract.id),
-                    ('status', '!=', 'quote'),
+                    ('status', 'not in', ('quote', 'declined')),
                     ['OR', ('end_date', '=', None),
                         ('end_date', '>=', self.effective_date)],
                     ('billing_informations.direct_debit_account', '=',

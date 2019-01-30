@@ -1,3 +1,5 @@
+* BUG#10920 Les changements de quittancement ne doivent pas être propagés au contrats déclinés
+
 Version 2.2 - 2018-10-12
 Version 2.0 - 2018-04-13
 * BUG#8500 Ajout d'un message d'avertissement indiquant l'existance de futurs modes de quittancement

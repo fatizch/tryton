@@ -204,7 +204,7 @@ class EndorsementSet(Printable, model.CoogSQL, model.CoogView):
         return state.pop() if len(state) == 1 else ''
 
     def get_contracts_summary(self, name):
-        return '\n'.join([contract.contract_number + ' | ' +
+        return '\n'.join([contract.contract_number or '' + ' | ' +
                 contract.product.rec_name
                 for endorsement in self.endorsements
                 for contract in endorsement.contracts])
