@@ -1,3 +1,4 @@
+* BUG#10581 Correction du MRO pour les avenants
 * BUG#10809 Correction de l'affichage des sous éléments d'avenants
 
 Version 2.2 - 2018-10-12

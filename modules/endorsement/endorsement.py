@@ -1143,8 +1143,8 @@ class ContractContact(object, metaclass=PoolMeta):
     __name__ = 'contract.contact'
 
 
-class Endorsement(QueueMixin, Workflow, model.CoogSQL, model.CoogView,
-        Printable, metaclass=PoolMeta):
+class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
+        model.CoogView, metaclass=PoolMeta):
     'Endorsement'
     __name__ = 'endorsement'
     _func_key = 'number'

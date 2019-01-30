@@ -22,7 +22,7 @@ __all__ = [
     ]
 
 
-class UserConnection(model.CoogSQL, model.CoogView, Printable):
+class UserConnection(Printable, model.CoogSQL, model.CoogView):
     'User Connection'
     __name__ = 'res.user.connection'
 

@@ -84,7 +84,7 @@ class InvoiceLine(metaclass=PoolMeta):
         return self.invoice.business_kind
 
 
-class Invoice(model.CoogSQL, export.ExportImportMixin, Printable):
+class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
     __name__ = 'account.invoice'
     _func_key = 'number'
 

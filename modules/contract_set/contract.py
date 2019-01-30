@@ -85,7 +85,7 @@ class ConfigurationContractSetNumberSequence(model.CoogSQL, CompanyValueMixin):
             return sequences[0].id
 
 
-class ContractSet(model.CoogSQL, model.CoogView, Printable):
+class ContractSet(Printable, model.CoogSQL, model.CoogView):
     'Contract Set'
 
     __name__ = 'contract.set'

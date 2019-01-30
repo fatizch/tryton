@@ -62,7 +62,7 @@ class ConfigurationEndorsementSetSequence(model.CoogSQL, CompanyValueMixin):
             parent='configuration', fields=fields)
 
 
-class EndorsementSet(model.CoogSQL, model.CoogView, Printable):
+class EndorsementSet(Printable, model.CoogSQL, model.CoogView):
     'Endorsement Set'
 
     __name__ = 'endorsement.set'
