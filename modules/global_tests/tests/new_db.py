@@ -339,6 +339,7 @@ UnderwritingDecision = Model.get('underwriting.decision')
 UnderwritingRule = Model.get('underwriting.rule')
 DSNMessage = Model.get('dsn.message')
 User = Model.get('res.user')
+UserWarning = Model.get('res.user.warning')
 # }}}
 
 do_print('\nGet currency')  # {{{
@@ -5488,9 +5489,21 @@ if GENERATE_REPORTINGS:  # {{{
 
     slip, = Invoice.find([('business_kind', '=', 'pasrau')])
     assert_eq(slip.total_amount, Decimal('24.09'))
+
+    if not TESTING:
+        # Configuration may not be set, so we must handle the warning
+        warning = UserWarning()
+        warning.always = False
+        warning.user = User(1)
+        warning.name = 'undefined_dsn_section'
+        warning.save()
+
     slip.click('post')
-    messages = DSNMessage.find([])
-    assert_eq(len(messages), 1)
+
+    if TESTING:
+        # The message should have been generated
+        messages = DSNMessage.find([])
+        assert_eq(len(messages), 1)
     # }}}
 # }}}
 

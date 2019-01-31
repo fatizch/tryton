@@ -3,6 +3,12 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:dsn.message:"
+msgid "Dsn configuration is not done, message generation will be disabled"
+msgstr ""
+"La configuration dsn n'est pas faite, la génération automatique des messages "
+"est désactivée"
+
+msgctxt "error:dsn.message:"
 msgid "Message \"%s\" must be in draft before deletion."
 msgstr "Le message \"%s\" doit être à l'état brouillon pour être supprimé"
 

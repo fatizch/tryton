@@ -46,6 +46,8 @@ class DsnMessage(Workflow, model.CoogSQL, model.CoogView):
         cls._error_messages.update({
                 'delete_draft_msg': ('Message "%s" must be in draft before '
                     'deletion.'),
+                'undefined_dsn_section': ('Dsn configuration is not done, '
+                    'message generation will be disabled'),
                 })
         cls._transitions |= {
             ('draft', 'waiting'),
@@ -143,3 +145,12 @@ class DsnMessage(Workflow, model.CoogSQL, model.CoogView):
             if message.state != 'draft':
                 cls.raise_user_error('delete_draft_msg', (message.rec_name))
         super(DsnMessage, cls).delete(messages)
+
+    @classmethod
+    def check_configuration(cls):
+        sender_code = config.get('dsn', 'sender_code', default=-1)
+        if sender_code == -1:
+            cls.raise_user_warning('undefined_dsn_section',
+                'undefined_dsn_section')
+            return False
+        return True

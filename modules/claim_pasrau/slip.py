@@ -70,6 +70,8 @@ class Invoice(metaclass=PoolMeta):
     def generate_dsn_message(cls, slips):
         pool = Pool()
         DsnMessage = pool.get('dsn.message')
+        if not DsnMessage.check_configuration():
+            return
         dsn_messages = []
         for slip in slips:
             messages_not_done = slip._get_month_dsn_messages(
