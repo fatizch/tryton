@@ -2,7 +2,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import functools
-import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core import model, coog_string
@@ -254,13 +253,15 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         # another contract, and False if the coverage was never subscribed
         # or if this contract is the first one to subscribe it for the current
         # subscriber.
+        Option = Pool().get('contract.option')
         date = args.get('date', utils.today())
         contract = args['contract']
-        contracts = cls.get_all_contracts(contract.subscriber, date)
-        matches = [c.id for c in contracts for o in c.options
-            if (o.coverage == args['option'].coverage and
-                o.initial_start_date <= date and
-                (o.final_end_date or datetime.date.max) >= date)]
+        options = Option.get_covered_options_from_party(contract.subscriber,
+            date)
+        matches = []
+        for o in options:
+            if o.coverage == args['option'].coverage:
+                matches.append(o.parent_contract.id)
         matches.sort()
         return matches and (contract.id not in matches or
             matches.index(contract.id) != 0)
@@ -269,15 +270,3 @@ class RuleEngineRuntime(metaclass=PoolMeta):
     @check_args('option')
     def _re_option_has_extra_premiums(cls, args):
         return bool(args['option'].extra_premiums)
-
-    @classmethod
-    def get_all_contracts(cls, party, at_date=None):
-        Contract = Pool().get('contract')
-        at_date = at_date if at_date else utils.today()
-        return Contract.search([('activation_history.start_date', '<=',
-            at_date),
-                ('activation_history.end_date', '>=', at_date),
-                ('status', 'not in', ('void', 'declined')),
-                ['OR',
-                    ('subscriber', '=', party),
-                    ('covered_elements.party', '=', party)]])
