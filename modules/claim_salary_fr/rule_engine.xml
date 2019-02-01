@@ -86,7 +86,7 @@ date_fin_periode = date_fin_periode_indemnisation()
 date_debut_prejudice = date_de_debut_du_prejudice()
 mode_revalo = param_1_reval_mode()
 salaire_journalier_base = salaire_journalier_de_base()
-description = description_du_calcul_du_salaire()
+description = description_du_calcul_du_salaire().decode('utf-8')
 
 # calcul de la date de premiere revalo
 if param_2_date_de_reference() == 'DAT' or not date_fin_franchise():
