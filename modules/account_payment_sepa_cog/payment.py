@@ -36,6 +36,7 @@ __all__ = [
     'MergedPayments',
     'PaymentCreationStart',
     'PaymentCreation',
+    'JournalFailureAction',
     ]
 
 PARTY_PLACEHOLDER = re.compile(r'{party_(\w*)}')
@@ -602,6 +603,10 @@ class Payment(metaclass=PoolMeta):
         return code
 
     @classmethod
+    def fail_present_again_after(cls, *args):
+        pass
+
+    @classmethod
     @model.CoogView.button
     @Workflow.transition('succeeded')
     def succeed(cls, payments):
@@ -998,3 +1003,35 @@ class PaymentCreation(metaclass=PoolMeta):
         start = super(PaymentCreation, self).default_start(values)
         start.update({'payer': start.get('party', None)})
         return start
+
+
+class JournalFailureAction(metaclass=PoolMeta):
+    __name__ = 'account.payment.journal.failure_action'
+
+    number_of_day = fields.Integer('Number Of Day(s)', states={
+            'invisible': ~Eval('present_again_after'),
+            'required': Bool(Eval('present_again_after')),
+            }, depends=['present_again_after'])
+    present_again_after = fields.Function(
+        fields.Boolean('Present Again After Period'),
+        'on_change_with_present_again_after')
+
+    @classmethod
+    def __setup__(cls):
+        super(JournalFailureAction, cls).__setup__()
+        cls.action.selection += [
+            ('present_again_after', 'Present Again After Period'),
+            ]
+        insert_index = cls._fail_actions_order.index('retry') + 1
+        cls._fail_actions_order.insert(insert_index, 'present_again_after')
+
+    @fields.depends('action')
+    def on_change_with_present_again_after(self, name=None):
+        return self.action == 'present_again_after'
+
+    def get_actions_for_matching_reject_number(self, **kwargs):
+        actions = super(JournalFailureAction, self
+            ).get_actions_for_matching_reject_number(**kwargs)
+        if self.number_of_day:
+            actions[0] += (self.number_of_day,)
+        return actions

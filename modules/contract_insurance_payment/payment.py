@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.tools import grouped_slice
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields
 from trytond.modules.account_payment_cog.payment import MergedPaymentsMixin
@@ -183,6 +184,13 @@ class Payment(metaclass=PoolMeta):
 
         contract.billing_informations = list(contract.billing_informations)
         return contract, date, billing_change_date
+
+    @classmethod
+    def fail_present_again_after(cls, *args):
+        super(Payment, cls).fail_present_again_after(*args)
+        for payments, extra_arg in args:
+            with ServerContext().set_context(present_again_after=extra_arg):
+                cls.fail_retry(*([payments, extra_arg],))
 
     @classmethod
     def fail_retry(cls, *args):

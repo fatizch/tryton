@@ -33,6 +33,7 @@ def register():
         account.Configuration,
         payment.Message,
         payment.PaymentCreationStart,
+        payment.JournalFailureAction,
         move.MoveLine,
         payment.MergedPayments,
         batch.PaymentGroupCreationBatch,

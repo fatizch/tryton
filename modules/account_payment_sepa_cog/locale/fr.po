@@ -117,6 +117,18 @@ msgctxt "field:account.payment.journal,sepa_party:"
 msgid "Sepa Creditor / Debtor"
 msgstr "Créditeur / Débiteur Sepa"
 
+msgctxt "field:account.payment.journal.failure_action,number_of_day:"
+msgid "Number Of Day(s)"
+msgstr "Nombre de jour(s)"
+
+msgctxt "field:account.payment.journal.failure_action,present_again_after:"
+msgid "Present Again After"
+msgstr "Représenter à nouveau après"
+
+msgctxt "selection:account.payment.journal.failure_action,action:"
+msgid "Present Again After Period"
+msgstr "Représenter à nouveau après une période"
+
 msgctxt "field:account.payment.journal.update.sepa,id:"
 msgid "ID"
 msgstr "Identifiant"

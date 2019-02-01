@@ -15,6 +15,7 @@ from trytond.wizard import Wizard, StateView, Button
 from trytond.model import Workflow
 
 from trytond.modules.coog_core import utils, model, fields, coog_string
+from trytond.modules.coog_core import coog_date
 from trytond.modules.premium.offered import PREMIUM_FREQUENCY
 
 __all__ = [
@@ -314,7 +315,16 @@ class Invoice(metaclass=PoolMeta):
                 line.payment_date = \
                     self.contract.get_non_periodic_payment_date()
                 return
-        new_date = billing_information.get_direct_debit_planned_date(line)
+        payment_dates = []
+        present_again_after = ServerContext().get('present_again_after', None)
+        if hasattr(line, 'payments'):
+            payment_dates = filter(None, [x.date for x in line.payments])
+        if present_again_after and payment_dates:
+            max_payment_date_line = max(payment_dates)
+            new_date = coog_date.add_day(
+                max_payment_date_line, present_again_after)
+        else:
+            new_date = billing_information.get_direct_debit_planned_date(line)
         if new_date and (getattr(line, 'payment_date', None) or
                 datetime.date.min) < new_date:
             line.payment_date = new_date
