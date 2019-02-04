@@ -412,6 +412,14 @@ class ClaimService(metaclass=PoolMeta):
         fields.Boolean('Has Beneficiaries'),
         'get_manual_beneficiaries')
 
+    @classmethod
+    def __setup__(cls):
+        super(ClaimService, cls).__setup__()
+        cls._error_messages.update({
+                'multiple_covered_found': 'More than one covered element have '
+                'been found for the claim service %(id)s: %(rec_name)s.',
+                })
+
     def get_covered_person(self):
         return self.loss.get_covered_person()
 
@@ -436,6 +444,7 @@ class ClaimService(metaclass=PoolMeta):
 
     def get_theoretical_covered_element(self, name):
         CoveredElement = Pool().get('contract.covered_element')
+        loss_date = self.loss.get_date()
         if self.option and self.option.covered_element:
             person = self.get_covered_person()
             covered_element = self.option.covered_element
@@ -447,9 +456,18 @@ class ClaimService(metaclass=PoolMeta):
                         ('right', '<', covered_element.right),
                         ('contract', '=', covered_element.contract),
                         ('party', '=', person),
+                        ['OR',
+                            ('manual_start_date', '=', None),
+                            ('manual_start_date', '<=', loss_date)],
+                        ['OR',
+                            ('manual_end_date', '=', None),
+                            ('manual_end_date', '>=', loss_date)]
                         ])
                 if matches:
-                    return matches[0]
+                    if len(matches) == 1:
+                        return matches[0]
+                    else:
+                        self.raise_user_error('multiple_covered_found')
         return super(ClaimService, self).get_theoretical_covered_element(name)
 
     def init_from_option(self, option):
