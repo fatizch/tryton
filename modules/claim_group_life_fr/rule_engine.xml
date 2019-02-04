@@ -862,13 +862,13 @@ elif categorie == 'r3':
 
 elif categorie =='rat':
     if taux_incapacite_permanente >= 66:
-        tauxTA = pourcentage_tb_r2
-        tauxTB = pourcentage_tb_r2
-        tauxTC = pourcentage_tc_r2
+        tauxTA = pourcentage_ta_r3
+        tauxTB = pourcentage_tb_r3
+        tauxTC = pourcentage_tc_r3
     elif taux_incapacite_permanente >= 33 and taux_incapacite_permanente &lt;= 66:
-        tauxTA = pourcentage_tb_r2 
-        tauxTB = pourcentage_tb_r2
-        tauxTC = pourcentage_tc_r2
+        tauxTA = (Decimal('3') / Decimal('2')) * (taux_incapacite_permanente / 100) * pourcentage_ta_r2 
+        tauxTB = (Decimal('3') / Decimal('2')) * (taux_incapacite_permanente / 100) * pourcentage_tb_r2
+        tauxTC = (Decimal('3') / Decimal('2')) * (taux_incapacite_permanente / 100) * pourcentage_tc_r2
     elif taux_incapacite_permanente &lt; 33:
         tauxTA = 0
         tauxTB = 0
@@ -1174,10 +1174,6 @@ salaire_de_reference = salaires[0]['salaire_de_reference']
 rente_de_base = salaires[0]['rente_de_base']
 description = salaires[0]['description']
 
-if categorie =='rat':
-    rente_de_base = rente_de_base * taux_incapacite_permanente
-    description += u'Taux Incapacite : %s\n' %(taux_incapacite_permanente)
-
 periodes = periode_de_rente(date_debut_periode, date_fin_periode)
 annuites = calcul_annuites(periods=periodes, description=description, annuity_amount=rente_de_base, ss_annuity_amount=rente_SS, reference_salary=salaire_de_reference, trancheTA=trancheTA, trancheTB=trancheTB, trancheTC=trancheTC, annex_rule_code=annex_rule_code)
 return annuites</field>
@@ -1324,10 +1320,6 @@ salaire_net_prime:Salaire Net + Primes</field>
             <field name="short_name">coog_prestations_annexes_rente</field>
             <field name="algorithm">rente_de_base = param_rente_de_base()
 salaire_de_reference = param_salaire_de_reference()
-if limite_au_net():
-    libelle_salaire = u'Salaire de reference net'
-else:
-    libelle_salaire = u'Salaire de reference brut'
 
 date_debut_periode = param_date_debut_periode()
 date_fin_periode = param_date_fin_periode()
@@ -1351,8 +1343,11 @@ if montant_prestations_annexes:
         rente_de_base = min(rente_de_base, limite)
         description += u'Application de la limite : la nouvelle rente de base est %s\n' % rente_de_base
     else:
-        description += 'Limite non depassée: rente de base = %s\n' % rente_de_base
+        rente_de_base -= montant_prestations_annexes
+        rente_de_base = max(rente_de_base, Decimal('0'))
+        description += u'Limite non depassée: rente de base = %s\n' % rente_de_base
 
+rente_de_base = max(rente_de_base, Decimal('0'))
 return rente_de_base, description</field>
             <field name="status">validated</field>
             <field name="type_">tool</field>
