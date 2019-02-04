@@ -161,7 +161,8 @@ class RuleEngineRuntime(metaclass=PoolMeta):
                     'extra_details': {
                         'tranche_a': trancheTA,
                         'tranche_b': trancheTB,
-                        'tranche_c': trancheTC
+                        'tranche_c': trancheTC,
+                        'rente_ss': period_ss_annuity,
                         }
                     })
         return res
