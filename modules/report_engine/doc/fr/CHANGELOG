@@ -1,3 +1,4 @@
+* BUG#10951 Prise en compte des micro secondes dans le nom par défaut des rapports générés.
 * BUG#10581 Correction d'un cas où la suppression d'une quittance ne supprime pas les demandes d'impression associées
 * BUG#10789 Correctif de crashs d'encoding lors de la génération des modèles de courrier
 * FEA#10315 Ajout de la possibilité de trier l'ordre des paramètres de règle 

@@ -1099,7 +1099,7 @@ class ReportGenerate(CoogReport):
 
     @classmethod
     def get_time_suffix(cls):
-        return datetime.utcnow().strftime('%X')
+        return datetime.utcnow().strftime('%H:%M:%S.%f')
 
     @classmethod
     def get_filename(cls, template, object_, party):
