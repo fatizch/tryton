@@ -9,7 +9,7 @@
 * FEA#10383 Permettre de déroger au montant de l'indemnisation calculée par COOG
 * BUG#10477 La fonction de calcul des dates pivots pouvait échouer avec un jour de synchronisation au 30 du mois
 * BUG#10275 Empêcher le retro-calcul de taxes quand le montant de l'indemnisation est zéro
-* BUG#10270 Correctif sur le calcul de la revalorisation qui écrase les détails d'indémnisation
+* BUG#10270 Correctif sur le calcul de la revalorisation qui écrase les détails d'indemnisation
 * BUG#10087 Correction de la détection du caractère périodique d'une indemnisation
 
 Version 2.2 - 2018-10-12
@@ -28,7 +28,7 @@ Version 2.2 - 2018-10-12
 
 Version 2.0 - 2018-04-13
 * BUG#8685 Correction du type des régles de revalorisation
-* FEA#8537 Ajout d'un avertissement lors de l'ordonnancement des périodes d'indémnisation si il y a chevauchement avec d'autres périodes.
+* FEA#8537 Ajout d'un avertissement lors de l'ordonnancement des périodes d'indemnisation si il y a chevauchement avec d'autres périodes.
 * FEA#8269 Ajout de l'annulation d'une indemnisation avec avertissement.
 * BUG#8595 Toujours afficher la raison de régularisation à l'étape de régularisation dans le processus de création d'une indemnisation
 * BUG#8523 Correction d'un crash lorsque l'on exerce une garantie sur un événement avec une date de fin dans le cas ou la période est une franchise.

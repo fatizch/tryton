@@ -80,7 +80,7 @@ salaire_net_prime:Salaire Net + Primes</field>
         <record model="rule_engine" id="traitement_journalier_par_tranche_de_salaire">
             <field name="name">Traitement journalier par tranche de salaire</field>
             <field name="short_name">coog_traitement_journalier_par_tranche_de_salaire</field>
-            <field name="algorithm"># Pas d'indémnisation si IJSS nulle ou si + de 1095 jours
+            <field name="algorithm"># Pas d'indemnisation si IJSS nulle ou si + de 1095 jours
 IJSS = compl_ijss() or Decimal('0.00')
 date_debut_periode = date_debut_periode_indemnisation()
 date_fin_periode = date_fin_periode_indemnisation()
@@ -168,9 +168,9 @@ salaire_net_prime:Salaire Net + Primes</field>
         <record model="rule_engine.rule_parameter" id="5_inclusion_du_mi_temps_salaire_brut_net_par_tranche_de_salaire">
             <field name="name">5_inclusion_du_mi_temps_therapeutique</field>
             <field name="type_">selection</field>
-            <field name="selection">ijb_ijss_mtt:Prestation de base - IJSS - mi-temps
-min_ijb_2_tdrj_mtt:Minimum de (Prestation base / 2) et (100% traitement de référence - IJSS - mi-temps) 
-tdrj_ijss_mtt: 100% Traitement de référénce - IJSS - mi-temps</field>
+            <field name="selection">ijb_ijss_mtt: Prestation de base - IJSS - mi-temps
+min_ijb_2_tdrj_mtt: Minimum de (Prestation base / 2) et (100% traitement de référence - IJSS - mi-temps) 
+tdrj_ijss_mtt: 100% Traitement de référence - IJSS - mi-temps</field>
             <field name="string">Calcul du mi-temps thérapeutique</field>
             <field name="sequence_order" eval="5"/>
             <field name="parent_rule" ref="traitement_journalier_par_tranche_de_salaire"/>
@@ -346,7 +346,7 @@ return traitement_journalier_base, description</field>
             <field name="type_">selection</field>
             <field name="selection">ijb_ijss_mtt:Prestation de base - IJSS - mi-temps
 min_ijb_2_tdrj_mtt:Minimum de (Prestation de base / 2) et(100% traitement de référence - IJSS - mi-temps) 
-tdrj_ijss_mtt: 100% Traitement de référénce - IJSS - mi-temps</field>
+tdrj_ijss_mtt: 100% Traitement de référence - IJSS - mi-temps</field>
             <field name="string">Calcul du mi-temps thérapeutique</field>
             <field name="sequence_order" eval="3"/>
             <field name="parent_rule" ref="calcul_des_limitations_du_traitement_journalier"/>
