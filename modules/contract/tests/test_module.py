@@ -112,9 +112,14 @@ class ModuleTestCase(test_framework.CoogTestCase):
         )
     def test0011_testContractTermination(self):
         contract, = self.Contract.search([])
-        coverage, = self.Coverage.search([])
-        contract.options = [self.Option(status='active',
-                coverage=coverage) for _ in range(2)]
+        coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = self.Coverage.search([('code', '=', 'BET')])
+        contract.options = [
+            self.Option(status='active', coverage=coverage_a),
+            self.Option(status='active', coverage=coverage_a),
+            ]
+        self.assertRaises(UserError, contract.save)
+        contract.options[1].coverage = coverage_b
         contract.save()
 
         sub_status = self.SubStatus.search([('code', '=',
@@ -151,7 +156,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         )
     def test0020_testChangeStartDateWizard(self):
         contract, = self.Contract.search([])
-        coverage, = self.Coverage.search([])
+        coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = self.Coverage.search([('code', '=', 'BET')])
         start_date = contract.start_date
 
         def set_test_case(new_date, ant_date, post_date):
@@ -160,11 +166,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     self.Option.delete([option])
             option_ant = self.Option()
             option_ant.manual_start_date = ant_date
-            option_ant.coverage = coverage.id
+            option_ant.coverage = coverage_a.id
             option_ant.save()
             option_post = self.Option()
             option_post.manual_start_date = post_date
-            option_post.coverage = coverage.id
+            option_post.coverage = coverage_b.id
             option_post.save()
             contract.options = [option_ant.id, option_post.id]
             contract.save()
@@ -215,6 +221,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         early_date = start_date - datetime.timedelta(weeks=1)
         late_date = contract_end_date + datetime.timedelta(weeks=1)
 
+        coverage, = self.Coverage.search([('code', '=', 'ALP')])
+
         contract = self.Contract(
                     product=self.Contract.search([])[0].product,
                     company=self.Contract.search([])[0].company,
@@ -231,6 +239,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 automatic_end_date=automatic_end_date,
                 manual_end_date=manual_end_date,
                 contract=contract,
+                coverage=coverage,
                 )
             option.parent_contract = option.contract
             option.contract.end_date = contract_end_date
@@ -252,6 +261,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     option.contract.check_options_dates)
             else:
                 option.contract.check_options_dates()
+
+            self.Option.delete([option])
 
         # option with auto date
         test_option(automatic_end_date=auto_date, expected=auto_date,
@@ -280,13 +291,14 @@ class ModuleTestCase(test_framework.CoogTestCase):
     def test0040_maximum_end_date(self):
         contract, = self.Contract.search([])
         current_end = contract.end_date
-        coverage, = self.Coverage.search([])
+        coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = self.Coverage.search([('code', '=', 'BET')])
         end_option1 = current_end - datetime.timedelta(weeks=2)
         end_option2 = current_end - datetime.timedelta(weeks=4)
 
-        def get_options(option_end_dates):
+        def get_options(parameters):
             options = []
-            for end_date in option_end_dates:
+            for coverage, end_date in parameters:
                 option = self.Option(
                         start_date=contract.start_date,
                         automatic_end_date=end_date,
@@ -303,7 +315,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         # If the end dates of every options are below the contract
         # end date, the maximum end_date is the latest option end date.
-        contract.options = get_options([end_option1, end_option2])
+        contract.options = get_options(
+            [(coverage_a, end_option1), (coverage_b, end_option2)])
         self.Contract.calculate_activation_dates([contract])
         contract.save()
         self.assertEqual(contract.end_date, end_option1)
@@ -313,9 +326,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
         )
     def test0050_searcher_start_date(self):
         contract, = self.Contract.search([])
-        coverage, = self.Coverage.search([])
+        coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = self.Coverage.search([('code', '=', 'BET')])
+        coverage_c, = self.Coverage.search([('code', '=', 'GAM')])
 
-        def make_option(manual_offset=None):
+        def make_option(coverage, manual_offset=None):
             if manual_offset:
                 my_offset = relativedelta(weeks=manual_offset)
                 option = self.Option(
@@ -334,9 +349,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 option.save()
             return option
 
-        option_no_offset = make_option()
-        option_one_week = make_option(manual_offset=1)
-        option_three_weeks = make_option(manual_offset=3)
+        option_no_offset = make_option(coverage_a)
+        option_one_week = make_option(coverage_b, manual_offset=1)
+        option_three_weeks = make_option(coverage_c, manual_offset=3)
 
         res = self.Option.search([('start_date', '=', contract.start_date)])
         self.assertEqual(len(res), 1)
@@ -512,7 +527,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         )
     def test0070_void_option_dates(self):
         contract, = self.Contract.search([])
-        coverage, = self.Coverage.search([])
+        coverage, = self.Coverage.search([('code', '=', 'ALP')])
         sub_status, = self.SubStatus.search([('code', '=', 'error')])
         option = self.Option(status='void', contract=contract,
             manual_start_date=datetime.date(1999, 9, 1),

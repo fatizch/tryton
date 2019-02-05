@@ -55,6 +55,10 @@ msgstr ""
 "La garantie %(option)s a une date de fin antérieure à sa date de début, elle "
 "sera automatiquement déclinée"
 
+msgctxt "error:contract.option:"
+msgid "There are overlapping coverages for %(parent)s"
+msgstr "Des garanties de même nature se chevauchent pour %(parent)s"
+
 msgctxt "error:contract.reactivate:"
 msgid "No contract found"
 msgstr "Pas de contrat trouvé"

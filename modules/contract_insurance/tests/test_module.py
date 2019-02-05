@@ -123,7 +123,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         'contract_insurance.test0001_testPersonCreation',
         )
     def test0013_testChangeStartDateWizardOptions(self):
-        coverage = self.Coverage.search([])[0]
+        coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = self.Coverage.search([('code', '=', 'BET')])
         contract, = self.Contract.search([])
         start_date = contract.start_date
 
@@ -133,20 +134,20 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 for option in contract.covered_elements[0].options:
                     self.Option.delete([option])
             covered_element = self.CoveredElement()
-            covered_element.item_desc = coverage.item_desc
+            covered_element.item_desc = coverage_a.item_desc
             covered_element.contract = contract
             covered_element.product = covered_element.on_change_with_product()
             covered_element.party = party
             covered_element.save()
 
             option_cov_ant = self.Option()
-            option_cov_ant.coverage = coverage.id
+            option_cov_ant.coverage = coverage_a.id
             option_cov_ant.manual_start_date = ant_date
             option_cov_ant.covered_element = covered_element
             option_cov_ant.save()
 
             option_cov_post = self.Option()
-            option_cov_post.coverage = coverage.id
+            option_cov_post.coverage = coverage_b.id
             option_cov_post.manual_start_date = post_date
             option_cov_post.covered_element = covered_element
             option_cov_post.save()
@@ -424,6 +425,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     option.parent_contract.check_options_dates)
             else:
                 option.parent_contract.check_options_dates()
+            self.Option.delete([option])
 
         # option with auto end date
         test_option(automatic_end_date=date2, expected=date2,
@@ -463,7 +465,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             weeks=2)
         covered_element.save()
 
-        test_option(automatic_end_date=date2, expected=date2, to_set=date1,
+        self.assertRaises(UserError,
+            test_option, automatic_end_date=date2, expected=date2, to_set=date1,
             start_date=date4, should_raise=True)
 
     @test_framework.prepare_test(
@@ -474,20 +477,21 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # The ending date of a contract should be capped by
         # the max ending date of covered elements options
         contract, = self.Contract.search([])
-        coverage = self.Coverage.search([])[0]
+        coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = self.Coverage.search([('code', '=', 'BET')])
         current_end = contract.end_date
         end_option1 = current_end - datetime.timedelta(weeks=2)
         end_option2 = current_end - datetime.timedelta(weeks=4)
 
-        def add_covered_element_with_options(option_end_dates, party):
+        def add_covered_element_with_options(parameters, party):
             covered_element = self.CoveredElement()
-            covered_element.item_desc = coverage.item_desc
+            covered_element.item_desc = coverage_a.item_desc
             covered_element.contract = contract
             covered_element.product = covered_element.on_change_with_product()
             covered_element.party = party
             covered_element.save()
             options = []
-            for end_date in option_end_dates:
+            for coverage, end_date in parameters:
                 option = self.Option(
                         start_date=contract.start_date,
                         manual_end_date=end_date,
@@ -510,9 +514,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
             party1 = self.Party.search([('is_person', '=', True)])[1]
 
             contract.covered_elements = [add_covered_element_with_options(
-                    [end_date1, end_date2], party),
+                    [(coverage_a, end_date1), (coverage_b, end_date2)], party),
                 add_covered_element_with_options(
-                    [end_date2, end_date2], party1)]
+                    [(coverage_a, end_date1), (coverage_b, end_date2)], party1)
+                ]
 
         contract.options = []
         build_contract_covered_elements(end_option1, end_option2)
@@ -535,10 +540,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
     )
     def test_0030_search_start_date(self):
         contract, = self.Contract.search([])
-        coverage = self.Coverage.search([])[0]
+        coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = self.Coverage.search([('code', '=', 'BET')])
+        coverage_c, = self.Coverage.search([('code', '=', 'GAM')])
 
         covered_element = self.CoveredElement()
-        covered_element.item_desc = coverage.item_desc
+        covered_element.item_desc = coverage_a.item_desc
         covered_element.contract = contract
         covered_element.product = covered_element.on_change_with_product()
         party = self.Party.search([('is_person', '=', True)])[0]
@@ -547,7 +554,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         contract.covered_element = [covered_element]
         contract.save()
 
-        def make_option(manual_offset=None):
+        def make_option(coverage, manual_offset=None):
             if manual_offset:
                 my_offset = relativedelta(weeks=manual_offset)
                 option = self.Option(
@@ -566,9 +573,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 option.save()
             return option
 
-        option_no_offset = make_option()
-        option_one_week = make_option(manual_offset=1)
-        option_three_weeks = make_option(manual_offset=3)
+        option_no_offset = make_option(coverage_a)
+        option_one_week = make_option(coverage_b, manual_offset=1)
+        option_three_weeks = make_option(coverage_c, manual_offset=3)
 
         res = self.Option.search([('start_date', '=', contract.start_date)])
         self.assertEqual(len(res), 1)
@@ -601,20 +608,23 @@ class ModuleTestCase(test_framework.CoogTestCase):
         'contract_insurance.test0001_testPersonCreation',
         )
     def test0040_testContractTermination(self):
-        coverage = self.Coverage.search([])[0]
+        coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = self.Coverage.search([('code', '=', 'BET')])
         contract, = self.Contract.search([])
         sub_status = self.SubStatus.search([('code', '=',
                     'reached_end_date')])[0]
         covered_element = self.CoveredElement()
         covered_element.contract = contract
-        covered_element.item_desc = coverage.item_desc
+        covered_element.item_desc = coverage_a.item_desc
         covered_element.product = covered_element.on_change_with_product()
         party = self.Party.search([('is_person', '=', True)])[0]
         covered_element.party = party
         covered_element.save()
         contract.covered_elements = [covered_element.id]
-        contract.covered_elements[0].options = [self.Option(status='active',
-                coverage=coverage) for x in range(2)]
+        contract.covered_elements[0].options = [
+            self.Option(status='active', coverage=coverage_a),
+            self.Option(status='active', coverage=coverage_b),
+            ]
         contract.activation_history[0].termination_reason = sub_status
         contract.activation_history = list(contract.activation_history)
         contract.save()

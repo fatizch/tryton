@@ -499,6 +499,18 @@ class ContractOption(Printable):
                 '%(option)s in contract %(contract)s'
                 })
 
+    @classmethod
+    def validate(cls, options):
+        super(ContractOption, cls).validate(options)
+
+        covereds = Pool().get('contract.covered_element').browse(
+            list({x.covered_element.id for x in options if x.covered_element}))
+
+        with model.error_manager():
+            for covered in covereds:
+                cls.check_overlap(covered.options, covered.rec_name)
+                covered.check_options_dates()
+
     def get_full_name(self, name):
         return super(ContractOption, self).get_full_name(name)
 
@@ -960,7 +972,12 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             'parent']
         cls._error_messages.update({
                 'duplicate_covered': 'You are trying to create duplicate '
-                'covered elements on contract: %s'})
+                'covered elements on contract: %s',
+                'bad_option_start': 'Covered %(covered)s has an option that '
+                'starts before its start date',
+                'bad_option_end': 'Covered %(covered)s has an option that '
+                'ends after its end date',
+                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -1051,6 +1068,14 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
 
     @classmethod
     def validate(cls, covered_elements):
+        super(CoveredElement, cls).validate(covered_elements)
+        with model.error_manager():
+            cls.check_party_overlaps(covered_elements)
+            for covered_element in covered_elements:
+                covered_element.check_options_dates()
+
+    @classmethod
+    def check_party_overlaps(cls, covered_elements):
         Contract = Pool().get('contract')
         contracts = []
         for cov in covered_elements:
@@ -1074,15 +1099,28 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             return (c.contract, c.party)
 
         if res:
-            with model.error_manager():
-                contracts = Contract.browse(res)
-                for contract in contracts:
-                    covereds = sorted(contract.covered_elements,
-                        key=_group_by_contract_party)
-                    for key, sub_covereds in groupby(covereds,
-                            key=_group_by_contract_party):
-                        cls._check_covereds_overlap(contract, list(
-                                sub_covereds))
+            contracts = Contract.browse(res)
+            for contract in contracts:
+                covereds = sorted(contract.covered_elements,
+                    key=_group_by_contract_party)
+                for key, sub_covereds in groupby(covereds,
+                        key=_group_by_contract_party):
+                    cls._check_covereds_overlap(contract, list(
+                            sub_covereds))
+
+    def check_options_dates(self):
+        Option = Pool().get('contract.option')
+        Option.check_overlap(list(self.options), self.rec_name)
+        if self.manual_start_date and any(
+                x.manual_start_date < self.manual_start_date
+                for x in self.options if x.manual_start_date):
+            self.append_functional_error('bad_option_start',
+                {'covered': self.rec_name})
+        if self.manual_end_date and any(
+                x.manual_end_date > self.manual_end_date
+                for x in self.options if x.manual_end_date):
+            self.append_functional_error('bad_option_end',
+                {'covered': self.rec_name})
 
     @classmethod
     def _check_covereds_overlap(cls, contract, sub_covereds):

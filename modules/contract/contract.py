@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 import json
+from itertools import groupby
 from sql import Null, Window, Literal
 from sql.conditionals import NullIf, Coalesce
 from sql.aggregate import Max, Min
@@ -953,13 +954,15 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
     @classmethod
     def validate(cls, contracts):
         super(Contract, cls).validate(contracts)
-        for contract in contracts:
-            contract.check_activation_dates()
-            contract.check_options_dates()
+        with model.error_manager():
+            for contract in contracts:
+                contract.check_activation_dates()
+                contract.check_options_dates()
 
     def check_options_dates(self):
-        Pool().get('contract.option').check_dates([option
-                for option in self.options])
+        Option = Pool().get('contract.option')
+        Option.check_dates(list(self.options))
+        Option.check_overlap(list(self.options), self.rec_name)
 
     @fields.depends('status')
     def on_change_with_is_sub_status_required(self, name=None):
@@ -1837,6 +1840,8 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                 'bad_dates': 'The computed end date for option %(option)s is '
                 'less than its start date, it will be automatically '
                 'declined',
+                'coverage_overlap': 'There are overlapping coverages for '
+                '%(parent)s',
                 })
 
     @classmethod
@@ -1865,6 +1870,41 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
             for x in skips:
                 default.setdefault(x, None)
         return super(ContractOption, cls).copy(options, default=default)
+
+    @classmethod
+    def validate(cls, options):
+        super(ContractOption, cls).validate(options)
+
+        contracts = Pool().get('contract').browse(
+            list({x.contract.id for x in options if x.contract}))
+
+        with model.error_manager():
+            for contract in contracts:
+                cls.check_overlap(contract.options, contract.rec_name)
+
+    @classmethod
+    def check_overlap(cls, options, parent_string):
+        def order_by_coverage_and_date(option):
+            return (
+                option.coverage.id,
+                option.manual_start_date or datetime.date.min,
+                )
+
+        ordered_options = sorted(options, key=order_by_coverage_and_date)
+
+        for _, lines in groupby(ordered_options,
+                key=lambda x: x.coverage.id):
+            prev_end = None
+            for line in lines:
+                if prev_end is None:
+                    prev_end = line.manual_end_date or datetime.date.max
+                    continue
+                start = line.manual_start_date or datetime.date.min
+                if start <= prev_end:
+                    cls.append_functional_error('coverage_overlap',
+                        {'parent': parent_string})
+                    continue
+                prev_end = line.manual_end_date or datetime.date.max
 
     @classmethod
     def default_product(cls):

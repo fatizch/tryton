@@ -1,3 +1,4 @@
+* BUG#10956 Add overlap check on coverages
 * OTH#00000 Fix on_change_with_sub_status: must return id instead of object
 * BUG#10316 Block subscription of options with an end date smaller than its start date
 * BUG#10242 Reset terminated options manual end date when terminating contracts

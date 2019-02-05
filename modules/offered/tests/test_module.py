@@ -73,6 +73,24 @@ class ModuleTestCase(test_framework.CoogTestCase):
         coverage_a.start_date = datetime.date(2010, 1, 1)
         coverage_a.save()
 
+        coverage_b = self.OptionDescription()
+        coverage_b.code = 'BET'
+        coverage_b.name = 'Beta Coverage'
+        coverage_b.start_date = datetime.date.today()
+        coverage_b.company = company
+        coverage_b.currency = company.currency
+        coverage_b.start_date = datetime.date(2010, 1, 1)
+        coverage_b.save()
+
+        coverage_c = self.OptionDescription()
+        coverage_c.code = 'GAM'
+        coverage_c.name = 'Gamma Coverage'
+        coverage_c.start_date = datetime.date.today()
+        coverage_c.company = company
+        coverage_c.currency = company.currency
+        coverage_c.start_date = datetime.date(2010, 1, 1)
+        coverage_c.save()
+
         self.assertTrue(coverage_a.id)
 
     @test_framework.prepare_test(
@@ -86,7 +104,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
         coverage_a, = self.OptionDescription.search([
                 ('code', '=', 'ALP'),
                 ], limit=1)
-        product_a.coverages = [coverage_a]
+        coverage_b, = self.OptionDescription.search([
+                ('code', '=', 'BET'),
+                ], limit=1)
+        product_a.coverages = [coverage_a, coverage_b]
         product_a.save()
 
     def test0040_testExtraDataStructure(self):
