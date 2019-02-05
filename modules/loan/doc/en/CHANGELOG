@@ -1,3 +1,5 @@
+* BUG#10836 Fix get_share_per_loan method fail on loan order
+
 Version 2.2 - 2018-10-12
 * BUG#9718 Remove code hiding premiums display for loan contracts
 * FEA#9342 Add parameter which contains outstanding amount at the latest contract anniversary date to rule engine
