@@ -1,3 +1,4 @@
+* BUG#10808 Add loan end date in rule engine
 * BUG#10836 Fix get_share_per_loan method fail on loan order
 
 Version 2.2 - 2018-10-12

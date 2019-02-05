@@ -91,6 +91,11 @@ class RuleEngineRuntime(metaclass=PoolMeta):
 
     @classmethod
     @check_args('loan')
+    def _re_get_loan_end_date(cls, args):
+        return args['loan'].end_date
+
+    @classmethod
+    @check_args('loan')
     def _re_get_loan_payment_frequency(cls, args):
         return args['loan'].payment_frequency
 

@@ -26,6 +26,16 @@ this repository contains the full copyright notices and license terms. -->
             <field name="long_description">Retourne l'instance du prêt. Pour 
 utilisateurs avancés seulement.</field>
         </record>
+        <record model="rule_engine.function" id="fin_de_pret">
+            <field name="translated_technical_name">fin_du_pret</field>
+            <field name="description">Fin du Prêt</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_loan_end_date</field>
+            <field name="long_description">Retourne la date de fin du prêt</field>
+            <field name="parent" ref="pret"/>
+        </record>
         <record model="rule_engine.function" id="type_de_pret">
             <field name="translated_technical_name">type_de_pret</field>
             <field name="description">Type de Prêt</field>
