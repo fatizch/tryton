@@ -64,7 +64,7 @@ def main():
     # set broker (rq or celery) based on args
     async_broker.set_module(arguments.broker)
     fn = generate
-    if arguments.async is not None:
+    if getattr(arguments, 'async') is not None:
         fn = generate_async
     return fn(arguments.name, params)
 

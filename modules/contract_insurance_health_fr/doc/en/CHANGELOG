@@ -1,3 +1,5 @@
+* FEA#10793 Add batch to create annual report templates according to the Madelin law
+
 Version 2.2 - 2018-10-12
 * BUG#8993 Restoration to the call to 'super' on the 'write' of a party
 Version 2.0 - 2018-04-13

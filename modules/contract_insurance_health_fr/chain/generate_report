@@ -1,0 +1,15 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+CHAIN_NAME=generate_report
+
+CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'FROM_DATE' 'TO_DATE' 'TEMPLATE_CODE')
+CHAIN_REQUIRED=('TREATMENT_DATE', 'FROM_DATE' 'TO_DATE' 'TEMPLATE_CODE')
+
+chain_params "$@"
+chain_begin
+
+chain_step madelin.law.report ${GIVEN_PARAMETERS[@]}
+chain_wait madelin.law.report
+
+chain_end

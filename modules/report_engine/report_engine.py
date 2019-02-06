@@ -1,4 +1,3 @@
-# -*- coding:utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import io
@@ -1176,6 +1175,7 @@ class ReportGenerate(CoogReport):
                 yield key, list(values)
 
         report_context['groupby'] = copy_groupby
+        report_context['datetime'] = datetime
 
         report_context['Date'] = pool.get('ir.date').today()
         report_context['FDate'] = format_date

@@ -6,6 +6,9 @@ from . import health
 from . import party
 from . import contract
 from . import rule_engine
+from . import batch
+from . import invoice
+from . import offered
 from . import test_case
 
 
@@ -19,5 +22,13 @@ def register():
         contract.CoveredElement,
         contract.Contract,
         rule_engine.RuleEngineRuntime,
+        offered.Product,
         test_case.TestCaseModel,
         module='contract_insurance_health_fr', type_='model')
+
+    Pool.register(
+        batch.MadelinLawReport,
+        contract.ContractWithInvoice,
+        invoice.Invoice,
+        module='contract_insurance_health_fr', type_='model',
+        depends=['contract_insurance_invoice'])

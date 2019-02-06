@@ -33,6 +33,7 @@ def register():
         tools.SelectTemplatesForConversion,
         tools.MatchDisplayer,
         batch.ReportProductionRequestTreatmentBatch,
+        batch.GenerateReportPeriod,
         res.Group,
         party.Party,
         wizard.PrintUnboundReportStart,

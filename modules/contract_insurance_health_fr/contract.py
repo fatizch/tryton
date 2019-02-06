@@ -1,11 +1,17 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
+
 from trytond import backend
 from trytond.pool import PoolMeta
+
+from trytond.modules.coog_core import coog_date
+
 
 __all__ = [
     'CoveredElement',
     'Contract',
+    'ContractWithInvoice',
     ]
 
 
@@ -44,3 +50,37 @@ class Contract(metaclass=PoolMeta):
                 if (covered.party and covered.party.get_SSN_required(None)
                         and not covered.party.ssn):
                     cls.raise_user_error('ssn_required', covered.rec_name)
+
+
+class ContractWithInvoice(metaclass=PoolMeta):
+    __name__ = 'contract'
+
+    def _get_subscriber_rsi_periods(self, start_date, end_date):
+        all_periods = []
+        for idx, complement in enumerate(self.subscriber.health_complement):
+            if all_periods:
+                all_periods[idx - 1] += (
+                    coog_date.add_day(complement.date, -1),
+                    complement.hc_system)
+            all_periods.append((complement.date or datetime.date.min,))
+        if all_periods:
+            all_periods[-1] += (datetime.date.max, complement.hc_system)
+
+        rsi_periods = []
+        for period_start, period_end, hc_system in all_periods:
+            if period_end > start_date and period_start < end_date and \
+                    hc_system.code == '03':
+                rsi_periods.append((max(start_date, period_start),
+                        min(end_date, period_end)))
+        return rsi_periods
+
+    def _get_rsi_invoices(self, start_date, end_date, invoice_state=None):
+        rsi_periods = self._get_subscriber_rsi_periods(start_date, end_date)
+        invoices = []
+        for invoice in [x for x in self.invoices if (not invoice_state or
+                    x.invoice_state == invoice_state)]:
+            for period_start, period_end in rsi_periods:
+                if invoice._check_rsi_invoice_date(period_start, period_end):
+                    invoices.append(invoice)
+                    break
+        return invoices
