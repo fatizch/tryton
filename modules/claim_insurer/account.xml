@@ -10,7 +10,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="search_value"></field>
         </record>
         <menuitem parent="claim.menu_claim" action="act_invoice_claim_insurer_invoice_form" id="menu_invoice_claim_insurer_invoice" sequence="14"/>
-        </data>
         <record model="ir.ui.view" id="invoice_view_form">
             <field name="model">account.invoice</field>
             <field name="inherit" ref="account_invoice.invoice_view_form"/>
@@ -21,4 +20,5 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">invoice_line_claim_list</field>
         </record>
+    </data>
 </tryton>

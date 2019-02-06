@@ -64,6 +64,10 @@ class Insurer(metaclass=PoolMeta):
     def _get_domain_from_notice_kind(cls, notice_kind):
         return []
 
+    @classmethod
+    def get_journal_from_notice_kind(cls, notice_kind):
+        return None
+
     def _generate_slip_parameter(self, notice_kind):
         accounts = self._get_slip_accounts(notice_kind)
         return {
@@ -71,6 +75,7 @@ class Insurer(metaclass=PoolMeta):
             'party': self.party,
             'accounts': list(accounts),
             'slip_kind': self._get_slip_business_kind(notice_kind),
+            'journal': self.get_journal_from_notice_kind(notice_kind),
             }
 
     def _get_slip_accounts(self, notice_kind):

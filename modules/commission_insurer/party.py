@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond import backend
 
 
@@ -34,10 +34,25 @@ class Insurer(metaclass=PoolMeta):
     def _get_slip_business_kind(cls, notice_kind):
         if notice_kind == 'options':
             return 'insurer_invoice'
-        return super()._get_slip_business_kind(notice_kind)
+        return super(Insurer, cls)._get_slip_business_kind(notice_kind)
+
+    @classmethod
+    def get_journal_from_notice_kind(cls, notice_kind):
+        Journal = Pool().get('account.journal')
+        if notice_kind in ('all', 'options'):
+            journals = Journal.search([('type', '=', 'commission')])
+            assert len(journals) == 1, 'Multiple commission journals or no ' \
+                'commission journal defined'
+            return journals[0]
+        return super(Insurer, cls).get_journal_from_notice_kind(notice_kind)
 
     @classmethod
     def _get_domain_from_notice_kind(cls, notice_kind):
-        if notice_kind in ('options', 'all'):
-            return [('options.account_for_billing', '!=', None)]
-        return super()._get_domain_from_notice_kind(notice_kind)
+        base_domain = super(Insurer, cls)._get_domain_from_notice_kind(
+            notice_kind)
+        options_domain = [('options.account_for_billing', '!=', None)]
+        if notice_kind == 'options':
+            return options_domain
+        elif notice_kind == 'all':
+            return ['OR', options_domain, base_domain]
+        return base_domain

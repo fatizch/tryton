@@ -11,6 +11,7 @@ from trytond.pyson import Eval, In, Not, Or
 __all__ = [
     'Invoice',
     'InvoiceLine',
+    'Journal',
     ]
 
 
@@ -108,3 +109,13 @@ class InvoiceLine(metaclass=PoolMeta):
                     'claim_insurer_invoice'
                     }),
             ]
+
+
+class Journal(metaclass=PoolMeta):
+    __name__ = 'account.journal'
+
+    @classmethod
+    def __setup__(cls):
+        super(Journal, cls).__setup__()
+        cls.type.selection.append(
+            ('claim_insurer_slip', 'Claim Insurer Slip'))

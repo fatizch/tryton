@@ -15,5 +15,6 @@ def register():
         slip.CreateInsurerSlipParameters,
         account.Invoice,
         account.InvoiceLine,
+        account.Journal,
         report_engine.ReportTemplate,
         module='claim_insurer', type_='model')

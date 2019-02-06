@@ -22,7 +22,7 @@ class CreateEmptyInvoicePrincipalBatch(batch.BatchRootNoSelect):
 
     @classmethod
     def possible_notice_kinds(cls):
-        CreateNoticeAsk = Pool().get('account.invoice.create.insurer_slip')
+        CreateNoticeAsk = Pool().get('account.invoice.create.insurer_slip.ask')
         return [x[0] for x in CreateNoticeAsk.notice_kind.selection]
 
     @classmethod
@@ -36,13 +36,10 @@ class CreateEmptyInvoicePrincipalBatch(batch.BatchRootNoSelect):
     def get_slip_configurations(cls, treatment_date, notice_kind):
         pool = Pool()
         Insurer = pool.get('insurer')
-        Journal = pool.get('account.journal')
 
         parameters = Insurer.generate_slip_parameters(notice_kind)
-        journal, = Journal.search([('type', '=', 'commission')])
 
         for parameter in parameters:
-            parameter['journal'] = journal
             parameter['date'] = treatment_date
         return parameters
 
