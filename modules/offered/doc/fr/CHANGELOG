@@ -1,3 +1,4 @@
+* BUG#10475 Correction de l'initialization des données complémentaire de type booléan ayant une valeur par défaut à False
 * FEA#8322 Ajout d'un domaine sur les données complémentaires pour permettre un contrôle très fin des données saisies
 * BUG#10296 Ne pas initialiser les données complémentaires sans paramétrage dédié
 * BUG#9937 Ajout d'un filtre suplémentaire sur le type de données complémentaires

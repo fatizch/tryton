@@ -1,3 +1,4 @@
+* BUG#10475 Fix falsy boolean extra data initialization
 * FEA#8322 Add a domain on extra data to allow for fine-grained control of data entry
 * BUG#10296 Do not add default extra data if no configuration says to
 * BUG#9937 Add kind selector on extra_data cache

@@ -349,7 +349,7 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
             }
 
         if self.has_default_value:
-            res['default'] = self.default_value
+            res['default'] = self._default_value
 
         # Rely on tryton for translations, etc...
         for key in ('selection', 'sorted', 'digits'):
@@ -368,6 +368,14 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
                     sub_data.child._get_structure()))
 
         return res
+
+    @property
+    def _default_value(self):
+        if self.type_ == 'selection':
+            return self.default_value_selection
+        elif self.type_ == 'boolean':
+            return self.default_value_boolean
+        raise NotImplementedError
 
     @classmethod
     def _refresh_extra_data(cls, base_data, structure):
@@ -405,7 +413,7 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
 
     @classmethod
     def _sub_data_init(cls, data):
-        if not data.get('default', None):
+        if data.get('default', None) is None:
             return {data['code']: None}
         if data['technical_kind'] in ('char', 'selection'):
             return {data['code']: data['default']}
