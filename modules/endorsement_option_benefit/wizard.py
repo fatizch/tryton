@@ -262,7 +262,7 @@ class ManageOptionBenefitsDisplayer(model.CoogView):
 
     @classmethod
     def get_option_benefit_fields(cls):
-        return ('benefit', 'annuity_frequency',
+        return ('benefit', 'annuity_frequency', 'annuity_frequency_required',
             'deductible_rule', 'indemnification_rule', 'revaluation_rule',
             'indemnification_rule_extra_data',
             'deductible_rule_extra_data',

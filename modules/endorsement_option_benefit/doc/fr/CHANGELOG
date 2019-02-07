@@ -1,3 +1,4 @@
+* BUG#10965 Correction de l'affichage de la fréquence d'indemnisation lorsqu'elle n'est pas imposée
 * BUG#10171 Ajout du nom du parent dans la liste des garanties
 
 Version 2.2 - 2018-10-12
