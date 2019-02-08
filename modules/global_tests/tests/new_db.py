@@ -873,6 +873,15 @@ if LOAD_ACCOUNTING:  # {{{
     exceptional_journal.save()
     # }}}
 
+    benefit_journal = Journal()
+    benefit_journal.company = company
+    benefit_journal.name = 'Journal de prestation assureur'
+    benefit_journal.code = 'journal_presta_assureur'
+    benefit_journal.type = 'claim_insurer_slip'
+    benefit_journal.sequence, = Sequence.find(
+        [('code', '=', 'account.journal')])
+    benefit_journal.save()
+
     do_print('    Creating Payment method for cash')  # {{{
     payment_method = PaymentMethod()
     payment_method.name = 'Cash'
