@@ -271,25 +271,19 @@ class Agent(metaclass=PoolMeta):
         """
             Agents is a list of tuple (agent_id, option_id)
             Return a dictionnary with (agent_id, option_id) as key
-                and [outstanding amount, outstanding_base_amount] as value
+            and [outstanding amount, outstanding_base_amount, details] as value
         """
         result = cls.sum_of_prepayments(agents)
         redeemed_prepayments = cls.sum_of_redeemed_prepayment(agents)
-        # TODO: improve this condition
-        if not redeemed_prepayments:
-            for key, _ in result.items():
-                if key not in result:
-                    continue
-                result[key] += [{'sum_of_prepayments': result[key][0]}, ]
-        else:
-            for key, prepayment_amount_base in redeemed_prepayments.items():
-                if key not in result:
-                    continue
-                result[key] += [{'sum_of_redeemed_prepayments':
-                    prepayment_amount_base[0],
-                    'sum_of_prepayments': result[key][0]}, ]
-                result[key][0] -= prepayment_amount_base[0]
-                result[key][1] -= prepayment_amount_base[1]
+        for key in result:
+            result[key].append({'sum_of_prepayments': result[key][0]})
+        for key, prepayment_amount_base in redeemed_prepayments.items():
+            if key not in result:
+                continue
+            result[key][2]['sum_of_redeemed_prepayments'] = \
+                prepayment_amount_base[0]
+            result[key][0] -= prepayment_amount_base[0]
+            result[key][1] -= prepayment_amount_base[1]
         return result
 
 
