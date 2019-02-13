@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="sequence"/>
+    <field name="sequence"/>
+    <label name="identifier_type"/>
+    <field name="identifier_type"/>
+    <label name="code"/>
+    <field name="code"/>
+</form>

@@ -1,0 +1,1 @@
+- **Contract identifiers :** A contract can have several identifiers. Identifiers type can be customized.

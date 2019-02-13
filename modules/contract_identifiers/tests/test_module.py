@@ -11,7 +11,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     '''
     Test Coog module.
     '''
-    module = 'contract_external_number'
+    module = 'contract_identifiers'
 
 
 def suite():

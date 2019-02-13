@@ -6,5 +6,7 @@ from . import contract
 
 def register():
     Pool.register(
+        contract.ContractIdentifierType,
+        contract.ContractIdentifier,
         contract.Contract,
-        module='contract_external_number', type_='model')
+        module='contract_identifiers', type_='model')

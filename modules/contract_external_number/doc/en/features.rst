@@ -1,1 +1,0 @@
-- **External Number :** A contract has an unique external number set by an other system.

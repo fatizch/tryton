@@ -1,0 +1,139 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.identifier.type:"
+msgid "Identifier type is used. Deletion impossible"
+msgstr "Le type d'identifiant est utilisé. Impossible de le supprimer"
+
+msgctxt "error:contract.identifier.type:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
+msgctxt "error:contract.identifier:"
+msgid "External Number"
+msgstr "Numéro externe"
+
+msgctxt "field:contract,external_number:"
+msgid "External Number"
+msgstr "Numéro externe"
+
+msgctxt "field:contract,identifiers:"
+msgid "Identifiers"
+msgstr "Identifiants"
+
+msgctxt "field:contract,identifiers_as_string:"
+msgid "Identifiers"
+msgstr "Identifiants"
+
+msgctxt "field:contract.identifier,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:contract.identifier,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.identifier,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.identifier,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.identifier,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.identifier,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.identifier,identifier_type:"
+msgid "Type"
+msgstr "Type de demande de décisions"
+
+msgctxt "field:contract.identifier,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:contract.identifier,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:contract.identifier,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:contract.identifier,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.identifier,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.identifier.type,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:contract.identifier.type,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.identifier.type,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.identifier.type,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.identifier.type,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.identifier.type,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.identifier.type,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:contract.identifier.type,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:contract.identifier.type,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.identifier.type,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "help:contract,identifiers:"
+msgid "Add other identifiers of the contract."
+msgstr "Ajoute d'autres identifiants"
+
+msgctxt "help:contract.identifier,contract:"
+msgid "The contract identified by this record."
+msgstr "Contrat identifié"
+
+msgctxt "model:contract.identifier,name:"
+msgid "Contract Identifier"
+msgstr "Identifiant de contrat"
+
+msgctxt "model:contract.identifier.type,name:"
+msgid "Contract Identifier Type"
+msgstr "Type d'identifiant de contrat"
+
+msgctxt "model:ir.action,name:act_contract_identifier_type_form"
+msgid "Contract Identifier Type"
+msgstr "Type d'identifiant de contrat"
+
+msgctxt "model:ir.ui.menu,name:menu_contract_identifier_type_form"
+msgid "Contract Identifier Type"
+msgstr "Type d'identifiant de contrat"

@@ -1,5 +1,9 @@
+* FEA#10753: handle several identifiers, rename module from contract_external_number to contract_identifiers
+
 Version 2.2 - 2018-10-12
+
 Version 2.0 - 2018-04-13
+
 Version 1.14 - 2017-11-09
 * BUG#6654 Impossible to duplicate contract with external number
 

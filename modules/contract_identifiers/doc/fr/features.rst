@@ -1,0 +1,1 @@
+- **Numéro externe :** Un contrat peut avoir plusieurs identifiants externes.

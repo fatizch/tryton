@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="contract_view_form">
+            <field name="model">contract</field>
+            <field name="inherit" ref="contract.contract_view_form"/>
+            <field name="name">contract_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_view_list">
+            <field name="model">contract</field>
+            <field name="inherit" ref="contract.contract_view_tree"/>
+            <field name="name">contract_list</field>
+        </record>
+        <!-- ******************************************
+        ********** Contract Identifier Type ***********
+        ******************************************* -->
+        <record model="ir.ui.view" id="contract_identifier_type_view_form">
+            <field name="model">contract.identifier.type</field>
+            <field name="type">form</field>
+            <field name="name">contract_identifier_type_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_identifier_type_view_list">
+            <field name="model">contract.identifier.type</field>
+            <field name="type">tree</field>
+            <field name="name">contract_identifier_type_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_contract_identifier_type_form">
+            <field name="name">Contract Identifier Type</field>
+            <field name="res_model">contract.identifier.type</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_contract_identifier_type_form_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="contract_identifier_type_view_list"/>
+            <field name="act_window" ref="act_contract_identifier_type_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_contract_identifier_type_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="contract_identifier_type_view_form"/>
+            <field name="act_window" ref="act_contract_identifier_type_form"/>
+        </record>
+        <menuitem parent="offered.menu_product_configuration" id="menu_contract_identifier_type_form"
+            icon="tryton-list" action="act_contract_identifier_type_form"/>
+        <!-- *************************************
+        ********** Contract Identifier ***********
+        ************************************** -->
+        <record model="ir.ui.view" id="identifier_form">
+            <field name="model">contract.identifier</field>
+            <field name="type">form</field>
+            <field name="name">identifier_form</field>
+        </record>
+        <record model="ir.ui.view" id="identifier_list">
+            <field name="model">contract.identifier</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="10"/>
+            <field name="name">identifier_list</field>
+        </record>
+        <record model="ir.ui.view" id="identifier_list_sequence">
+            <field name="model">contract.identifier</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="20"/>
+            <field name="name">identifier_list_sequence</field>
+        </record>
+    </data>
+</tryton>

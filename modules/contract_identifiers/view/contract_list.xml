@@ -3,6 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/tree" position="inside">
-        <field name="external_number"/>
+        <field name="identifiers_as_string"/>
     </xpath>
 </data>
