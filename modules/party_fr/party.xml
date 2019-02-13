@@ -9,5 +9,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="party.party_view_form"/>
             <field name="name">party_form</field>
         </record>
+        <!-- Company tree view -->
+        <record model="ir.ui.view" id="company_view_tree">
+            <field name="model">party.party</field>
+            <field name="inherit" ref="party_cog.company_view_tree"/>
+            <field name="name">company_tree</field>
+        </record>
     </data>
 </tryton>

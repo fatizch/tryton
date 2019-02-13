@@ -18,3 +18,8 @@ class Party(metaclass=PoolMeta):
         super(Party, cls).__setup__()
         # Do not display SIREN for person
         cls.siren.states = {'invisible': Bool(Eval('is_person'))}
+
+    @classmethod
+    def get_key_for_search_rec_name_domain(cls):
+        return super(Party, cls).get_key_for_search_rec_name_domain() \
+            + ['siren']
