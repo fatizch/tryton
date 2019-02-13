@@ -991,8 +991,8 @@ class ClaimIjPeriod(model.CoogSQL, model.CoogView, ModelCurrency):
     @classmethod
     def __setup__(cls):
         super(ClaimIjPeriod, cls).__setup__()
-        cls._order = [('id', 'DESC'), ('start_date', 'DESC'),
-            ('sign', 'DESC')]
+        cls._order = [('accounting_date', 'ASC'), ('sign', 'ASC'),
+            ('start_date', 'ASC'), ('id', 'ASC')]
         cls._error_messages.update({
                 'no_subscription_found': ('No IJ subscription found for SIREN '
                     '%(siren)s and SSN %(ssn)s'),

@@ -1,3 +1,4 @@
+* FEA#10991 Reorder BPIJ view
 * BUG#10810 Ignore undeclared subscription when integrating a CR file
 * BUG#10723 Prest ij subscription object for company are created in double during person batch and inversely
 * BUG#10576 When in the same CR file there is cr for a SIREN and CR for insured affiliated to this SIREN, legal entity CR information will be propagated to all insured affiliated to this siren. Moreover CR integration for insured could be different from CR integration for insured period (that was not managed)
@@ -17,7 +18,7 @@ Version 2.2 - 2018-10-12
 * OTH#0000 Improve UI
 * BUG#9381 Remove unused code: ij_subscriptions on party
 * BUG#9381 Fix claim_ij_period order in wizard resulting in indemnification period initialization error
-* BUG#9409 Fix new indemnification period button 
+* BUG#9409 Fix new indemnification period button
 * BUG#9279 Fix coog build warnings
 * OTH#0000 Send BPIJ chain parameter to batch
 * OTH#0000 Change BPIJ order and fix crash in BPIJ treatement

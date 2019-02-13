@@ -1,3 +1,4 @@
+* FEA#10991 Réordonner le vue des BPIJ
 * BUG#10810 Ignorer les inscriptions non déclarés lors de l'intégration des CR
 * BUG#10723 Les objets de souscription prestij pour les sociétés sont créées en doublon dans le batch de création de ces objets pour les assurés (et inversement)
 * BUG#10576 Lorsque dans le même fichier CR, il y a un CR pour un siren et un CR pour un affilié à ce SIREN, l'information du CR de la société est propagée à l'ensemble des CR des affiliés. De plus, le CR d'intégration d'un assuré peut être différent du CR d'intégration d'une période (ce qui n'était pas géré)
