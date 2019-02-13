@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from collections import defaultdict
 from sql import Cast
 from sql.operators import Concat
 
@@ -17,6 +18,31 @@ __all__ = [
 
 class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
+
+    def get_slip_indemn_details_per_claim_and_service(self):
+        """
+        Mainly used for report generation
+        """
+        ind_details_claim = defaultdict(tuple)
+        Line = Pool().get('account.move.line')
+        related_lines = Line.search([('principal_invoice_line.invoice',
+                    '=', self.id)])
+        invoice_lines_info = set([
+                (line.origin.lines, line) if
+                line.origin.__name__ == 'account.invoice'
+                else (line.origin.origin.lines, line) for line in related_lines
+                ])
+        for claim_detail, move_line in [(detail, move_line)
+                for lines, move_line in invoice_lines_info
+                    for line in lines
+                        for detail in line.claim_details]:
+            ind_details_claim[
+                (claim_detail.claim,
+                    claim_detail.indemnification.details[0
+                        ].indemnification.service, move_line)] += \
+                    claim_detail.indemnification.details
+        return {(k[0], k[1], k[2], v[0].indemnification, v)
+            for k, v in list(ind_details_claim.items())}
 
     @classmethod
     def __setup__(cls):
