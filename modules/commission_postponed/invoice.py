@@ -46,8 +46,7 @@ class InvoiceLine(metaclass=PoolMeta):
             return
         args = plan_line.get_rule_engine_args_from_context(context)
         postpone = plan_line.calculate_postponement_rule(args)
-        if postpone:
-            commission.postponed = True
+        commission.postponed = bool(postpone)
 
     def update_commission_amount_and_rate(self, commission, plan_line, context):
         if not ServerContext().get('postponed_calculation') and \

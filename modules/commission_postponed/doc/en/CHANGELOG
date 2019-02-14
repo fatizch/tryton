@@ -1,1 +1,2 @@
+* BUG#11034 Fix error on creation of non null and non postponed commission
 * FEA#10781 Module Creation
