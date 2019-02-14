@@ -125,6 +125,7 @@ class ActivationHistory(model.CoogSQL, model.CoogView):
         return True
 
     def clean_before_reactivate(self):
+        # If for some reason we consider removing this, check #10975 first
         self.termination_reason = None
         if (self.contract.status != 'hold'):
             self.end_date = None
