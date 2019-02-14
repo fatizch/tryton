@@ -260,6 +260,8 @@ class ClaimLoss(metaclass=PoolMeta):
         for loss in losses:
             for service in loss.services:
                 service.init_salaries()
+            loss.services = list(loss.services)
+        cls.save(losses)
 
     def get_salary_reference_date(self):
         if self.loss_desc_kind == 'ltd':
@@ -386,7 +388,6 @@ class ClaimService(metaclass=PoolMeta):
                 salaries.append(Salary(from_date=from_date,
                         to_date=to_date))
         self.salary = salaries
-        self.save()
 
     def get_salary_mode(self, name=None):
         if self.benefit.is_group:
