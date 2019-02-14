@@ -1,3 +1,4 @@
+* OTH#00000 Correction d'un plantage dû à un mauvais appel de la fonction get_next_view_or_end
 * BUG#10792 Correction de la limite d'union d'avenant unitaire
 
 Version 2.2 - 2018-10-12

@@ -132,7 +132,7 @@ class StartEndorsement(metaclass=PoolMeta):
     def get_next_state(self, current_state):
         if not self.endorsement or not self.endorsement.current_state:
             return super(StartEndorsement, self).get_next_state(current_state)
-        return self.get_next_view_or_end(self, current_state)
+        return self.get_next_view_or_end(current_state)
 
     def get_next_view_or_end(self, current_state):
         found = False

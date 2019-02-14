@@ -1,3 +1,4 @@
+* OTH#00000 Fix crash due to erroneous call of get_next_view_or_end
 * BUG#10792 Fix endorsement part union limit
 
 Version 2.2 - 2018-10-12
