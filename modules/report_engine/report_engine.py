@@ -21,7 +21,7 @@ except ImportError:
 from itertools import groupby, chain
 from sql import Cast, Null, Literal
 from sql.functions import Substring, Position
-from datetime import datetime
+import datetime
 from dateutil.relativedelta import relativedelta
 
 from trytond import backend
@@ -485,7 +485,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             if not self.output_filename:
                 filename = coog_string.slugify(filename)
                 if add_time:
-                    filename += '_' + datetime.now().strftime("%H%M%S%f")
+                    filename += '_' + datetime.datetime.now().strftime(
+                        "%H%M%S%f")
             filename += ext
             out_path = os.path.join(export_dirname, filename)
             report['export_filename'] = out_path
@@ -944,7 +945,7 @@ class Printable(ModelSQL):
 
     def get_publishing_context(self, cur_context):
         return {
-            'Today': datetime.now().date(),
+            'Today': utils.today(),
             }
 
     def get_report_functional_date(self, event_code):
@@ -1098,7 +1099,7 @@ class ReportGenerate(CoogReport):
 
     @classmethod
     def get_time_suffix(cls):
-        return datetime.utcnow().strftime('%H:%M:%S.%f')
+        return datetime.datetime.utcnow().strftime('%H:%M:%S.%f')
 
     @classmethod
     def get_filename(cls, template, object_, party):
