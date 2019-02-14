@@ -5,6 +5,7 @@ Contract Payment SEPA Scenario
 Imports::
 
     >>> import datetime
+    >>> from decimal import Decimal
     >>> from dateutil.relativedelta import relativedelta
     >>> from proteus import Model, Wizard
     >>> from trytond.tests.tools import activate_modules
@@ -12,7 +13,7 @@ Imports::
     >>> from trytond.modules.company.tests.tools import get_company
     >>> from trytond.modules.company_cog.tests.tools import create_company
     >>> from trytond.modules.account.tests.tools import create_fiscalyear, \
-    ...     create_chart, get_accounts
+    ...     create_chart, get_accounts, create_tax
     >>> from trytond.modules.account_invoice.tests.tools import \
     ...     set_fiscalyear_invoice_sequences
     >>> from trytond.modules.contract_insurance_invoice.tests.tools import \
@@ -68,6 +69,8 @@ Create chart of accounts::
     >>> bank.party = party_bank
     >>> bank.bic = 'NSMBFRPPXXX'
     >>> bank.save()
+    >>> expense = accounts['expense']
+    >>> revenue = accounts['revenue']
     >>> Number = Model.get('bank.account.number')
     >>> banks = Bank.find([])
     >>> Account = Model.get('bank.account')
@@ -78,6 +81,45 @@ Create chart of accounts::
     >>> company_account.number = 'ES8200000000000000000000'
     >>> company_account.save()
 
+Create tax::
+
+    >>> tax = create_tax(Decimal('.10'))
+    >>> tax.save()
+
+Create Account Product::
+
+    >>> ProductUom = Model.get('product.uom')
+    >>> unit, = ProductUom.find([('name', '=', 'Unit')])
+    >>> ProductTemplate = Model.get('product.template')
+    >>> Product = Model.get('product.product')
+    >>> account_product = Product()
+    >>> ProductCategory = Model.get('product.category')
+    >>> account_category = ProductCategory(name="Account Category")
+    >>> account_category.accounting = True
+    >>> account_category.account_expense = expense
+    >>> account_category.account_revenue = revenue
+    >>> account_category.customer_taxes.append(tax)
+    >>> account_category.code = 'account_category'
+    >>> account_category.save()
+    >>> template = ProductTemplate()
+    >>> template.name = 'product'
+    >>> template.default_uom = unit
+    >>> template.type = 'service'
+    >>> template.list_price = Decimal('40')
+    >>> template.cost_price = Decimal('25')
+    >>> template.account_category = account_category
+    >>> template.products[0].code = 'product'
+    >>> template.save()
+    >>> account_product = template.products[0]
+    >>> Sequence = Model.get('ir.sequence')
+    >>> Journal = Model.get('account.journal')
+    >>> sequence_journal, = Sequence.find([('code', '=', 'account.journal')])
+    >>> reject_fee_journal = Journal(
+    ...     name='Write-Off',
+    ...     type='write-off',
+    ...     sequence=sequence_journal)
+    >>> reject_fee_journal.save()
+
 Create Product::
 
     >>> product = init_product()
@@ -86,6 +128,8 @@ Create Product::
     >>> product = add_invoice_configuration(product, accounts)
     >>> product = add_insurer_to_product(product)
     >>> product.save()
+    >>> Fee = Model.get('account.fee')
+    >>> Coverage = Model.get('offered.option.description')
 
 Create Payment Journal::
 
@@ -106,6 +150,7 @@ Create Payment Journal::
     >>> Configuration = Model.get('account.configuration')
     >>> configuration = Configuration(1)
     >>> configuration.direct_debit_journal = journal_SEPA
+    >>> configuration.reject_fee_journal = reject_fee_journal
     >>> configuration.save()
     >>> FailureAction = Model.get('account.payment.journal.failure_action')
     >>> RejectReason = Model.get('account.payment.journal.reject_reason')
@@ -129,6 +174,20 @@ Create Payment Journal::
     >>> invalid_adress_reject.action = 'manual'
     >>> invalid_adress_reject.journal = journal_SEPA
     >>> invalid_adress_reject.save()
+    >>> outdated = FailureAction()
+    >>> outdated.reject_reason, = RejectReason.find([
+    ...         ('code', '=', 'TM01')])
+    >>> outdated.action = 'present_again_after'
+    >>> outdated.journal = journal_SEPA
+    >>> outdated.present_again_day = '24'
+    >>> outdated.save()
+    >>> reject_fee = Fee(name='fee', code='fee', company=company,
+    ...     frequency='once_per_invoice', type='fixed', amount=Decimal('6.00'))
+    >>> reject_fee.coverages.append(Coverage(product.coverages[0].id))
+    >>> reject_fee.product = Product(account_product.id)
+    >>> reject_fee.save()
+    >>> outdated.rejected_payment_fee = reject_fee
+    >>> outdated.save()
 
 Create Subscriber::
 
@@ -332,4 +391,71 @@ Fail payments::
     True
     >>> contract.reload()
     >>> len(contract.invoices) == 3
+    True
+    >>> BillingInformation.delete([contract.billing_informations.pop()])
+    >>> contract.save()
+    >>> contract.reload()
+    >>> len(contract.billing_informations) == 1
+    True
+
+Create fourth invoice::
+
+    >>> if contract_start_date.month != (contract_start_date +
+    ...         relativedelta(days=1)).month:
+    ...     until_date = contract_start_date + relativedelta(days=1)
+    ...     until_date = until_date + relativedelta(months=3)
+    ...     until_date = until_date + relativedelta(days=-1)
+    ... else:
+    ...     until_date = contract_start_date + relativedelta(months=3)
+    >>> generate_invoice = Wizard('contract.do_invoice', models=[contract])
+    >>> generate_invoice.form.up_to_date = until_date
+    >>> generate_invoice.execute('invoice')
+    >>> contract.reload()
+    >>> len(contract.invoices)
+    4
+    >>> fourth_invoice = contract.invoices[0]
+    >>> fourth_invoice.invoice.click('post')
+
+Create payment for the fourth invoice::
+
+    >>> payment_fourth_invoice = Payment()
+    >>> payment_fourth_invoice.company = company
+    >>> payment_fourth_invoice.journal = journal_SEPA
+    >>> payment_fourth_invoice.kind = 'receivable'
+    >>> payment_fourth_invoice.amount = fourth_invoice.invoice.total_amount
+    >>> payment_fourth_invoice.party = subscriber
+    >>> payment_fourth_invoice.line, = MoveLine.find([('party', '=', subscriber.id),
+    ...         ('account.kind', '=', 'receivable'),
+    ...         ('origin', '=', 'account.invoice,%s' % fourth_invoice.invoice.id)])
+    >>> payment_fourth_invoice.date = payment_fourth_invoice.line.payment_date
+    >>> payment_fourth_invoice.save()
+    >>> payment_fourth_invoice.click('approve')
+    >>> payment_fourth_invoice.line.payment_date.day == 5
+    True
+    >>> payments = [payment_fourth_invoice]
+    >>> process_payment = Wizard('account.payment.process', payments)
+    >>> process_payment.execute('pre_process')
+    >>> initial_fourth_payment_date = payment_fourth_invoice.line.payment_date
+
+Fail payments::
+
+    >>> payment_fourth_invoice.sepa_return_reason_code = 'TM01'
+    >>> payment_fourth_invoice.merged_id = '123456'
+    >>> payment_fourth_invoice.save()
+    >>> config._context['client_defined_date'] = initial_payment_date + \
+    ...     relativedelta(days=10)
+    >>> Payment.fail([p.id for p in payments], config._context)
+    >>> payment_fourth_invoice.reload()
+    >>> payment_fourth_invoice.line.payment_date == datetime.date(day=24,
+    ...     month=initial_fourth_payment_date.month,
+    ...     year=initial_fourth_payment_date.year)
+    True
+    >>> contract.reload()
+    >>> len(contract.invoices)
+    5
+    >>> fee_invoice = contract.invoices[0]
+    >>> fee_invoice.invoice.total_amount == Decimal('6.00')
+    True
+    >>> fee_invoice.invoice.lines_to_pay[0].payment_date == \
+    ...     payment_fourth_invoice.line.payment_date
     True

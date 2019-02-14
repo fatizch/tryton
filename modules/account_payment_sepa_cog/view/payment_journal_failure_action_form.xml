@@ -3,8 +3,8 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='reject_number']" position="after">
-        <label name="number_of_day"/>
-        <field name="number_of_day"/>
+        <label name="present_again_day"/>
+        <field name="present_again_day"/>
         <field name="present_again_after" invisible="1"/>
         <newline/>
     </xpath>

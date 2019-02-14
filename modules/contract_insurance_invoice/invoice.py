@@ -321,8 +321,11 @@ class Invoice(metaclass=PoolMeta):
             payment_dates = filter(None, [x.date for x in line.payments])
         if present_again_after and payment_dates:
             max_payment_date_line = max(payment_dates)
-            new_date = coog_date.add_day(
+            new_date = coog_date.get_next_date_in_sync_with(
                 max_payment_date_line, present_again_after)
+            direct_debit_planned_date = \
+                billing_information.get_direct_debit_planned_date(line)
+            new_date = min(new_date, direct_debit_planned_date)
         else:
             new_date = billing_information.get_direct_debit_planned_date(line)
         if new_date and (getattr(line, 'payment_date', None) or

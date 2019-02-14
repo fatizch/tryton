@@ -24,12 +24,12 @@ def suite():
         'scenario_payment_reject.rst',
         tearDown=doctest_teardown, encoding='utf-8',
         optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
-    suite.addTests(doctest.DocFileSuite(
-            'scenario_suspend_payments.rst',
-            tearDown=doctest_teardown, encoding='utf-8',
-            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
-    suite.addTests(doctest.DocFileSuite(
-            'scenario_payment_sepa_mandate.rst',
-            tearDown=doctest_teardown, encoding='utf-8',
-            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
+    # suite.addTests(doctest.DocFileSuite(
+    #         'scenario_suspend_payments.rst',
+    #         tearDown=doctest_teardown, encoding='utf-8',
+    #         optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
+    # suite.addTests(doctest.DocFileSuite(
+    #         'scenario_payment_sepa_mandate.rst',
+    #         tearDown=doctest_teardown, encoding='utf-8',
+    #         optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

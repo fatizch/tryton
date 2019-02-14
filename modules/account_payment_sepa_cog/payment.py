@@ -1008,7 +1008,9 @@ class PaymentCreation(metaclass=PoolMeta):
 class JournalFailureAction(metaclass=PoolMeta):
     __name__ = 'account.payment.journal.failure_action'
 
-    number_of_day = fields.Integer('Number Of Day(s)', states={
+    present_again_day = fields.Selection([('', '')] + [('%s' % x, '%s' % x)
+                    for x in range(1, 28)],
+            'Present Again This Day', states={
             'invisible': ~Eval('present_again_after'),
             'required': Bool(Eval('present_again_after')),
             }, depends=['present_again_after'])
@@ -1020,7 +1022,7 @@ class JournalFailureAction(metaclass=PoolMeta):
     def __setup__(cls):
         super(JournalFailureAction, cls).__setup__()
         cls.action.selection += [
-            ('present_again_after', 'Present Again After Period'),
+            ('present_again_after', 'Present Again At Date'),
             ]
         insert_index = cls._fail_actions_order.index('retry') + 1
         cls._fail_actions_order.insert(insert_index, 'present_again_after')
@@ -1032,6 +1034,7 @@ class JournalFailureAction(metaclass=PoolMeta):
     def get_actions_for_matching_reject_number(self, **kwargs):
         actions = super(JournalFailureAction, self
             ).get_actions_for_matching_reject_number(**kwargs)
-        if self.number_of_day:
-            actions[0] += (self.number_of_day,)
+        for idx, action in enumerate(actions):
+            if action[0] == 'present_again_after':
+                actions[idx] += (self,)
         return actions

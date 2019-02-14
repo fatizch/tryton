@@ -189,7 +189,9 @@ class Payment(metaclass=PoolMeta):
     def fail_present_again_after(cls, *args):
         super(Payment, cls).fail_present_again_after(*args)
         for payments, extra_arg in args:
-            with ServerContext().set_context(present_again_after=extra_arg):
+            with ServerContext().set_context(
+                    present_again_after=int(extra_arg[0].present_again_day
+                        or '0')):
                 cls.fail_retry(*([payments, extra_arg],))
 
     @classmethod

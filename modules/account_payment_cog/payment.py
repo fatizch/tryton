@@ -720,7 +720,7 @@ class Payment(export.ExportImportMixin, Printable,
             for action in reject_actions:
                 actions['fail_%s' % action[0]].extend([
                         (payments_list,
-                            action[1] if len(action) > 1 else None)])
+                            action[1:] if len(action) > 1 else None)])
         for action in FailureAction._fail_actions_order:
             getattr(cls, 'fail_%s' % action)(*actions['fail_%s' % action])
 
@@ -749,6 +749,7 @@ class Payment(export.ExportImportMixin, Printable,
     @classmethod
     def fail_print(cls, *args):
         for payments, report in args:
+            report = report[0]
             to_print = cls.get_objects_for_fail_prints(report, payments)
             report.produce_reports(to_print)
 

@@ -78,7 +78,8 @@ class Payment(metaclass=PoolMeta):
         invoices_to_create = []
         contract_invoices_to_create = []
         payment_date_to_update = []
-        for payments, reject_fee in args:
+        for payments, other_args in args:
+            reject_fee, *others_args = other_args
             payments_keys = [(x._get_transaction_key(), x) for x in payments]
             payments_keys = sorted(payments_keys, key=lambda x: x[0])
             for key, payments_by_key in groupby(payments_keys,
@@ -98,6 +99,35 @@ class Payment(metaclass=PoolMeta):
                     payment_date = \
                         payment.journal.get_next_possible_payment_date(
                             payment.line, payment.date.day)
+
+                if 'present_again_after' in [action[0] for action in
+                        journal.get_fail_actions(payments_list)]:
+                    # If the action is to present again the payment after the
+                    # payment failure, we need to find out in args the journal
+                    # failure action to set the next payment day on the line's
+                    # payment date.
+                    present_again_day = None
+                    for other_arg in others_args:
+                        if getattr(other_arg, '__name__', None) == \
+                                'account.payment.journal.failure_action':
+                            present_again_day = int(
+                                other_arg.present_again_day or '0')
+                    sepa_mandate = payment.sepa_mandate
+                    initial_date = payment.line.payment_date or payment.date
+                    # Set the new payment_date day on the line
+                    if present_again_day and initial_date:
+                        new_date = journal.get_next_possible_payment_date(
+                            payment.line, present_again_day)
+                        new_payment_date = \
+                            payment.journal.get_next_possible_payment_date(
+                                payment.line, payment.date.day)
+                        new_date = min(new_date, new_payment_date)
+                        payment_date = new_date
+                    else:
+                        payment_date = \
+                            payment.journal.get_next_possible_payment_date(
+                                payment.line, payment.date.day)
+
                 journal = config.reject_fee_journal
                 account = reject_fee.product.template.account_revenue_used
                 name_for_billing = reject_fee.name
@@ -175,7 +205,8 @@ class JournalFailureAction(metaclass=PoolMeta):
         actions = super(JournalFailureAction,
             self).get_actions_for_matching_reject_number(**kwargs)
         if self.rejected_payment_fee:
-            actions.append(('create_reject_fee', self.rejected_payment_fee))
+            actions.append(('create_reject_fee', self.rejected_payment_fee,
+                    self))
         return actions
 
 
