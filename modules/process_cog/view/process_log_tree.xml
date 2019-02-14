@@ -3,6 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <tree>
     <field name="user"/>
+    <field name="process_start" widget="date"/>
     <field name="start_time" widget="date"/>
     <field name="start_time" widget="time"/>
     <field name="end_time" widget="date"/>

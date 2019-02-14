@@ -310,8 +310,8 @@ msgid "Latest"
 msgstr "Dernier"
 
 msgctxt "field:process.log,process_start:"
-msgid "Process Start"
-msgstr "Paramètres du Processus"
+msgid "Process Start Time"
+msgstr "Création"
 
 msgctxt "field:process.log,rec_name:"
 msgid "Record Name"

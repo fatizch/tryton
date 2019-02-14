@@ -4,6 +4,7 @@ this repository contains the full copyright notices and license terms. -->
 <tree keyword_open="1">
     <field name="user" tree_invisible="1"/>
     <field name="user_name"/>
+    <field name="process_start" widget="date"/>
     <field name="start_time" widget="date"/>
     <field name="start_time" widget="time" string=""/>
     <field name="from_state"/>

@@ -214,7 +214,7 @@ class ProcessLog(model.CoogSQL, model.CoogView):
     description = fields.Text('Description')
     task = fields.Reference(
         'Task', 'get_task_models', select=True, required=True)
-    process_start = fields.DateTime('Process Start', readonly=True,
+    process_start = fields.DateTime('Process Start Time', readonly=True,
         required=True)
     latest = fields.Function(
         fields.Boolean('Latest'),
