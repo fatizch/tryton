@@ -1,3 +1,4 @@
+* BUG#10981 Fix crash when erasing a party
 * BUG#10131 Allow SSN number that not start with 1 or 2
 
 Version 2.2 - 2018-10-12

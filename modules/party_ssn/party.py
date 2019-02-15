@@ -85,7 +85,9 @@ class Party(metaclass=PoolMeta):
 
     @classmethod
     def get_values_to_erase(cls):
-        return super(Party, cls).get_values_to_erase(cls).update({'ssn': None})
+        res = super(Party, cls).get_values_to_erase()
+        res.update({'ssn': None})
+        return res
 
     @staticmethod
     def calculate_ssn_key(ssn_no_key):
