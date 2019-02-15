@@ -125,6 +125,12 @@ installés.
     Cela permet d'éviter de surcharger la production en journée, et de
     regrouper les générations en fin de journée
 
+- *Utiliser la configuration d'agrégation d'événement* : Utilise la 
+  configuration globale d'agrégation des événements afin d'ignorer
+  les événements reçus pendant une période avant de lever un autre
+  événement une fois cette période consommée.
+
+
 Branchement des actions
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -137,3 +143,26 @@ d'alimenter la liste *Actions* sur le *Type d'événément*.
 
 Dans l'exemple ci-dessus, le déclenchement de l'événément *« Création d'un
 devis »* causera l'action *« Impression Devis »*.
+
+
+Configuration des agrégations d'événement
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+La *configuration d'agrégation d'événement* se trouve dans "Administration" =>
+"Evénement" => "configuration d'agrégation d'événement".
+
+.. image:: images/menu_event_aggregate_configuration.png
+    :align: center
+
+Cette configuration permet l'ajout de lignes décrivant des comportements
+d'agrégation sur une période ([Durée] [Unité]) pour un événement donné 
+(Type d'événement à agréger). Un fois la période consommée, un autre
+événement sera levé (Evénement à notifier).
+Exemple:
+
+.. image:: images/example_event_aggregate_configuration.png
+    :align: center
+
+Ici, nous ajoutons une ligne de paramétrage permettant de ne générer
+qu'un seul événement "Demande de création d'un document de signalement"
+par mois (glissant), quel que soit le nombre d'événement 
+"Reception d'un signalement" reçu.

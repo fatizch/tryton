@@ -44,10 +44,6 @@ msgstr ""
 "Si coché, le batch récuperera les contrats associés à chaque nouvelle "
 "année civile pour la génération des modèles Madelin"
 
-msgctxt "field:offered.product,print_madelin_reports:"
-msgid "Print Madelin Reports"
-msgstr "Imprimer les modèles Madelin"
-
 msgctxt "field:health.care_system,code:"
 msgid "Code"
 msgstr "Code"

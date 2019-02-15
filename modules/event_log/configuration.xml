@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<tryton>
+    <data depends="event_log">
+        <!-- ########################################### -->
+        <!-- ########### Configuration Lines ########### -->
+        <!-- ########################################### -->
+        <record model="ir.ui.view" id="configuration_event_description_form">
+            <field name="model">event.aggregate.description</field>
+            <field name="type">form</field>
+            <field name="name">event_aggregate_description_form</field>
+        </record>
+        <record model="ir.ui.view" id="configuration_event_description_list">
+            <field name="model">event.aggregate.description</field>
+            <field name="type">tree</field>
+            <field name="name">event_aggregate_description_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_configuration_event_description_form">
+            <field name="name">Event Aggregate Description</field>
+            <field name="res_model">event.aggregate.description</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_configuration_event_description_form_1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="configuration_event_description_list"/>
+            <field name="act_window" ref="act_configuration_event_description_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_configuration_event_description_form_2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="configuration_event_description_form"/>
+            <field name="act_window" ref="act_configuration_event_description_form"/>
+        </record>
+        <menuitem parent="coog_core.menu_event" sequence="30" id="menu_configuration_event_aggregate" action="act_configuration_event_description_form"/>
+    </data>
+</tryton>

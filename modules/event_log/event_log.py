@@ -1,16 +1,70 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
+from collections import defaultdict
 
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.coog_core import model, fields, utils
 
 __all__ = [
+    'EventTypeAction',
     'EventLog',
     'Trigger',
     'Event',
     ]
+
+
+class EventTypeAction(metaclass=PoolMeta):
+    __name__ = 'event.type.action'
+
+    @classmethod
+    def __setup__(cls):
+        super(EventTypeAction, cls).__setup__()
+        cls._error_messages.update({
+                'event_configuration_aggregate':
+                'Use Event Aggregate Configuration',
+                'log_aggregated': 'Event Log aggregated',
+                })
+
+    @classmethod
+    def get_action_types(cls):
+        return super(EventTypeAction, cls).get_action_types() + [
+            ('event_configuration_aggregate', cls.raise_user_error(
+                    'event_configuration_aggregate', raise_exception=False))]
+
+    def execute(self, objects, event_code, description=None, **kwargs):
+        pool = Pool()
+        if self.action != 'event_configuration_aggregate':
+            return super(EventTypeAction, self).execute(objects, event_code,
+                description, **kwargs)
+        Event = pool.get('event')
+        EventLog = pool.get('event.log')
+        Description = pool.get('event.aggregate.description')
+        to_notify = defaultdict(list)
+        to_ignore = []
+        for object_ in objects:
+            notify_list = Description.check_for_notification(
+                object_, utils.today(), event_code)
+            if not notify_list:
+                to_ignore.append(object_)
+                continue
+            for event_code in notify_list:
+                to_notify[event_code].append(object_)
+
+        if to_notify:
+            for event_code, grouped_objects in to_notify.items():
+                Event.notify_events(grouped_objects, event_code)
+        if to_ignore:
+            event_type_id = Event.get_event_type_data_from_code(
+                event_code)['id']
+            logs_to_modify = [x for x in kwargs.get('logs', [])
+                if x.object_ in to_ignore and x.event_type.id == event_type_id]
+            if logs_to_modify:
+                EventLog.write(logs_to_modify, {
+                    'description': self.raise_user_error('log_aggregated',
+                        raise_exception=False),
+                    })
 
 
 class EventLog(model.CoogSQL, model.CoogView):
@@ -121,15 +175,15 @@ class Event(metaclass=PoolMeta):
 
     @classmethod
     def notify_events(cls, objects, event_code, description=None, **kwargs):
-        super(Event, cls).notify_events(objects, event_code, description,
-            **kwargs)
         if not objects:
             return
         pool = Pool()
         EventLog = pool.get('event.log')
         event_type_id = cls.get_event_type_data_from_code(event_code)['id']
-        EventLog.create_event_logs(objects, event_type_id,
+        kwargs['logs'] = EventLog.create_event_logs(objects, event_type_id,
             description, **kwargs)
+        super(Event, cls).notify_events(objects, event_code, description,
+            **kwargs)
 
 
 class Trigger(metaclass=PoolMeta):

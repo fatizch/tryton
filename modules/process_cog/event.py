@@ -87,7 +87,8 @@ class EventTypeAction(metaclass=PoolMeta):
             return self._action_initiate_process(objects, event_code,
                 description, **kwargs)
         else:
-            return super(EventTypeAction, self).execute(objects, event_code)
+            return super(EventTypeAction, self).execute(objects, event_code,
+                description, **kwargs)
 
     def _action_clear_process(self, objects, event_code, description,
             **kwargs):

@@ -2,6 +2,98 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:event.type.action:"
+msgid "Event Log aggregated"
+msgstr "Log d'événement agrégé"
+
+msgctxt "error:event.type.action:"
+msgid "Use Event Aggregate Configuration"
+msgstr "Utiliser la configuration d'agrégation d'événement"
+
+msgctxt "field:event.aggregate.description,configuration:"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "field:event.aggregate.description,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:event.aggregate.description,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:event.aggregate.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:event.aggregate.description,duration:"
+msgid "Duration"
+msgstr "Durée"
+
+msgctxt "field:event.aggregate.description,event_type_aggregate:"
+msgid "Event Type To Aggregate"
+msgstr "Type d'événement à agréger"
+
+msgctxt "field:event.aggregate.description,event_type_notify:"
+msgid "Event Type To Notify"
+msgstr "Evénement à notifier"
+
+msgctxt "field:event.aggregate.description,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:event.aggregate.description,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:event.aggregate.description,unit:"
+msgid "Unit"
+msgstr "Unité"
+
+msgctxt "field:event.aggregate.description,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:event.aggregate.description,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:event.aggregate.description,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "help:event.aggregate.description,event_type_aggregate:"
+msgid "Event Type to aggregate for [duration] [unit]"
+msgstr "Type d'événement à agréger sur une période de [durée][unité]"
+
+msgctxt "model:event.aggregate.description,name:"
+msgid "Event Aggregate Description"
+msgstr "Description d'événement agrégé"
+
+msgctxt "model:event.type,name:event_aggregated_ignored"
+msgid "Event Aggregated (Ignored)"
+msgstr "Agrégation d'événement (Ingoré)"
+
+msgctxt "model:ir.action,name:act_configuration_event_aggregate_form"
+msgid "Event Aggregate Configuration"
+msgstr "Configuration d'agrégation d'événement"
+
+msgctxt "model:ir.action,name:act_configuration_event_description_form"
+msgid "Event Aggregate Description"
+msgstr "Description d'événement agrégé"
+
+msgctxt "model:ir.ui.menu,name:menu_configuration_event_aggregate"
+msgid "Event Aggregate Configuration"
+msgstr "Configuration d'agrégation d'événement"
+
+msgctxt "selection:event.aggregate.description,unit:"
+msgid "Day(s)"
+msgstr "Jour(s)"
+
+msgctxt "selection:event.aggregate.description,unit:"
+msgid "Month(s)"
+msgstr "Mois"
+
 msgctxt "field:event.log,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
