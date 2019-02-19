@@ -1,3 +1,4 @@
+* BUG#11054 Correctif du crash de la méthode de traduction des données
 * BUG#10581 Correction du MRO pour les avenants
 * BUG#10809 Correction de l'affichage des sous éléments d'avenants
 

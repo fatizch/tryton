@@ -2446,6 +2446,8 @@ class EndorsementExtraData(relation_mixin(
             elif extra_data.type_ == 'selection':
                 selection = dict(json.loads(extra_data.selection_json))
                 return selection[value]
+            elif isinstance(value, str):
+                return value
             return str(value)
 
         def _get_name(name):
