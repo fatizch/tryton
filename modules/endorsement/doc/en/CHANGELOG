@@ -1,3 +1,4 @@
+* FEA#11065 Add field to get endorsement target object at effective date
 * BUG#11054 Fix translate data method crash
 * BUG#10581 Fix MRO for endorsements
 * BUG#10809 Fix display of endorsement sub elements

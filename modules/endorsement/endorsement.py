@@ -1865,6 +1865,18 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 _datetime_exclude=True):
             return Pool().get('contract')(self.contract.id)
 
+    @property
+    def effective_date_instance(self):
+        if not self.contract:
+            return None
+        if not self.endorsement.effective_date:
+            return self.contract
+        with Transaction().set_context(
+                client_defined_date=self.endorsement.effective_date,
+                _datetime=self.endorsement.effective_date,
+                _datetime_exclude=False):
+            return Pool().get('contract')(self.contract.id)
+
     def get_definition(self, name):
         return self.endorsement.definition.id if self.endorsement else None
 
