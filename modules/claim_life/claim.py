@@ -417,7 +417,8 @@ class ClaimService(metaclass=PoolMeta):
         super(ClaimService, cls).__setup__()
         cls._error_messages.update({
                 'multiple_covered_found': 'More than one covered element have '
-                'been found for the claim service %(id)s: %(rec_name)s.',
+                'been found for the claim service at %(date)s for '
+                '%(rec_name)s.',
                 })
 
     def get_covered_person(self):
@@ -467,7 +468,8 @@ class ClaimService(metaclass=PoolMeta):
                     if len(matches) == 1:
                         return matches[0]
                     else:
-                        self.raise_user_error('multiple_covered_found')
+                        self.raise_user_error('multiple_covered_found', {
+                            'date': loss_date, 'rec_name': person.rec_name})
         return super(ClaimService, self).get_theoretical_covered_element(name)
 
     def init_from_option(self, option):

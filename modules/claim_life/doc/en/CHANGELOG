@@ -1,3 +1,4 @@
+* BUG#11021 Fix multiple covered found error message
 * BUG#10908 Check covered period dates in get_theoretical_covered_element
 * BUG#10739 Do not initialize a relapse with initial loss data if there is no such data
 * BUG#10353 Fix claim beneficiary documents reception date

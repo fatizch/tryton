@@ -1,3 +1,4 @@
+* BUG#11021 Correction du message d'erreur plus d'un élément couvert trouvés
 * BUG#10908 Vérification sur la période de l'élément couvert dans la méthode get_theoretical_covered_element
 * BUG#10739 Ne pas initialiser la rechute avec les données du préjudice initial si elles ne sont pas renseignées
 * BUG#10353 Correction du calcul de la date de réception des documents d'un bénéficiaire
