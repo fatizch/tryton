@@ -29,7 +29,7 @@ Imports::
 Install Modules::
 
     >>> config = activate_modules(['contract_insurance_invoice_dunning',
-    ...         'account_payment_sepa_contract'])
+    ...         'account_payment_sepa_contract', 'account_payment_clearing_contract'])
 
 Create country::
 
@@ -61,6 +61,9 @@ Create chart of accounts::
 
     >>> _ = create_chart(company)
     >>> accounts = get_accounts(company)
+    >>> expense = accounts['expense']
+    >>> revenue = accounts['revenue']
+    >>> BillingMode = Model.get('offered.billing_mode')
 
 Create Fee::
 
@@ -79,9 +82,18 @@ Create Fee::
     >>> dunning_fee_account.company = company
     >>> dunning_fee_account.save()
     >>> Product = Model.get('product.product')
+
+Create Account Product::
+
+    >>> ProductUom = Model.get('product.uom')
+    >>> unit, = ProductUom.find([('name', '=', 'Unit')])
+    >>> ProductTemplate = Model.get('product.template')
+    >>> Product = Model.get('product.product')
+    >>> account_product = Product()
     >>> ProductCategory = Model.get('product.category')
     >>> account_category = ProductCategory(name="Account Category")
     >>> account_category.accounting = True
+    >>> account_category.account_expense = expense
     >>> account_category.account_revenue = dunning_fee_account
     >>> account_category.code = 'account_category'
     >>> account_category.save()
@@ -148,6 +160,70 @@ Create Product::
 Create Subscriber::
 
     >>> subscriber = create_party_person()
+    >>> Bank = Model.get('bank')
+    >>> Party = Model.get('party.party')
+    >>> party_bank = Party()
+    >>> party_bank.name = 'Bank'
+    >>> party_bank.save()
+    >>> bank = Bank()
+    >>> bank.party = party_bank
+    >>> bank.bic = 'NSMBFRPPXXX'
+    >>> bank.save()
+    >>> Number = Model.get('bank.account.number')
+    >>> Account = Model.get('bank.account')
+    >>> subscriber_account = Account()
+    >>> subscriber_account.bank = bank
+    >>> subscriber_account.owners.append(subscriber)
+    >>> subscriber_account.currency = currency
+    >>> subscriber_account.number = 'BE82068896274468'
+    >>> subscriber_account.save()
+    >>> two_months_ago = today - relativedelta(months=2)
+    >>> Mandate = Model.get('account.payment.sepa.mandate')
+    >>> mandate = Mandate()
+    >>> mandate.company = company
+    >>> mandate.party = subscriber
+    >>> mandate.account_number = subscriber_account.numbers[0]
+    >>> mandate.identification = 'MANDATE'
+    >>> mandate.type = 'recurrent'
+    >>> mandate.signature_date = two_months_ago
+    >>> mandate.save()
+    >>> mandate.click('request')
+    >>> mandate.click('validate_mandate')
+
+Create Payment Journal::
+
+    >>> company_account = Account()
+    >>> company_account.bank = bank
+    >>> company_account.owners.append(Party(company.party.id))
+    >>> company_account.currency = currency
+    >>> company_account.number = 'ES8200000000000000000000'
+    >>> company_account.save()
+    >>> Account = Model.get('account.account')
+    >>> payable = accounts['payable']
+    >>> bank_clearing = Account(name='Bank Clearing', type=payable.type,
+    ...     reconcile=True, deferral=True, parent=payable.parent)
+    >>> bank_clearing.kind = 'other'  # Warning : on_change_parent !
+    >>> bank_clearing.save()
+    >>> Journal = Model.get('account.payment.journal')
+    >>> journal = Journal()
+    >>> journal.name = 'SEPA Journal'
+    >>> journal.company = company
+    >>> journal.currency = currency
+    >>> journal.process_method = 'sepa'
+    >>> journal.sepa_payable_flavor = 'pain.001.001.03'
+    >>> journal.sepa_receivable_flavor = 'pain.008.001.02'
+    >>> journal.sepa_charge_bearer = 'DEBT'
+    >>> journal.sepa_bank_account_number = company_account.numbers[0]
+    >>> journal.failure_billing_mode, = BillingMode.find([('code', '=',
+    ...     'monthly')])
+    >>> journal.always_create_clearing_move = True
+    >>> journal.clearing_journal = expense
+    >>> journal.clearing_account = bank_clearing
+    >>> journal.save()
+    >>> Configuration = Model.get('account.configuration')
+    >>> configuration = Configuration(1)
+    >>> configuration.direct_debit_journal = journal
+    >>> configuration.save()
 
 Create Contract::
 
@@ -231,6 +307,8 @@ Process dunnning::
     True
     >>> contract.status == 'hold'
     True
+    >>> contract.sub_status.code == 'unpaid_premium_hold'
+    True
     >>> fee_invoice, = ContractInvoice.find([('contract', '=', contract.id),
     ...         ('non_periodic', '=', True)])
     >>> fee_invoice.invoice.total_amount == Decimal('22')
@@ -252,6 +330,34 @@ Process dunnning::
     True
     >>> contract.end_date == first_invoice.end
     True
+    >>> due_invoice = contract.due_invoices[-1]
+
+Create payment for the first due contract invoice::
+
+    >>> Payment = Model.get('account.payment')
+    >>> MoveLine = Model.get('account.move.line')
+    >>> payment_invoice = Payment()
+    >>> payment_invoice.company = company
+    >>> payment_invoice.journal = journal
+    >>> payment_invoice.kind = 'receivable'
+    >>> payment_invoice.amount = due_invoice.invoice.total_amount
+    >>> payment_invoice.party = subscriber
+    >>> payment_invoice.line, = MoveLine.find([('party', '=', subscriber.id),
+    ...         ('account.kind', '=', 'receivable'),
+    ...         ('origin', '=', 'account.invoice,%s' % due_invoice.invoice.id)])
+    >>> payment_invoice.date = due_invoice.invoice.invoice_date
+    >>> payment_invoice.save()
+    >>> payment_invoice.click('approve')
+    >>> payments = [payment_invoice]
+    >>> process_payment = Wizard('account.payment.process', payments)
+    >>> process_payment.execute('pre_process')
+    >>> payment_invoice.click('succeed')
+    >>> due_invoice.reload()
+    >>> contract.reload()
+    >>> contract.status == 'active'
+    True
+    >>> journal.last_sepa_receivable_payment_creation_date = None
+    >>> journal.save()
     >>> procedure.from_payment_date = True
     >>> procedure.save()
     >>> PaymentTerm = Model.get('account.invoice.payment_term')
@@ -260,7 +366,6 @@ Process dunnning::
     >>> payment_term.name = 'rest_direct'
     >>> payment_term.lines.append(PaymentTermLine())
     >>> payment_term.save()
-    >>> BillingMode = Model.get('offered.billing_mode')
     >>> direct_monthly = BillingMode()
     >>> direct_monthly.name = 'direct monthly'
     >>> direct_monthly.code = 'direct_monthly'
@@ -272,61 +377,9 @@ Process dunnning::
     >>> direct_monthly.save()
     >>> product.billing_modes.append(direct_monthly)
     >>> product.save()
-    >>> Bank = Model.get('bank')
-    >>> Party = Model.get('party.party')
-    >>> party_bank = Party()
-    >>> party_bank.name = 'Bank'
-    >>> party_bank.save()
-    >>> bank = Bank()
-    >>> bank.party = party_bank
-    >>> bank.bic = 'NSMBFRPPXXX'
-    >>> bank.save()
     >>> Number = Model.get('bank.account.number')
     >>> Account = Model.get('bank.account')
     >>> two_months_ago = today - relativedelta(months=2)
-    >>> subscriber_account = Account()
-    >>> subscriber_account.bank = bank
-    >>> subscriber_account.owners.append(subscriber)
-    >>> subscriber_account.currency = currency
-    >>> subscriber_account.number = 'BE82068896274468'
-    >>> subscriber_account.save()
-    >>> Mandate = Model.get('account.payment.sepa.mandate')
-    >>> mandate = Mandate()
-    >>> mandate.company = company
-    >>> mandate.party = subscriber
-    >>> mandate.account_number = subscriber_account.numbers[0]
-    >>> mandate.identification = 'MANDATE'
-    >>> mandate.type = 'recurrent'
-    >>> mandate.signature_date = two_months_ago
-    >>> mandate.save()
-    >>> mandate.click('request')
-    >>> mandate.click('validate_mandate')
-
-Create Payment Journal::
-
-    >>> company_account = Account()
-    >>> company_account.bank = bank
-    >>> company_account.owners.append(Party(company.party.id))
-    >>> company_account.currency = currency
-    >>> company_account.number = 'ES8200000000000000000000'
-    >>> company_account.save()
-    >>> Journal = Model.get('account.payment.journal')
-    >>> journal = Journal()
-    >>> journal.name = 'SEPA Journal'
-    >>> journal.company = company
-    >>> journal.currency = currency
-    >>> journal.process_method = 'sepa'
-    >>> journal.sepa_payable_flavor = 'pain.001.001.03'
-    >>> journal.sepa_receivable_flavor = 'pain.008.001.02'
-    >>> journal.sepa_charge_bearer = 'DEBT'
-    >>> journal.sepa_bank_account_number = company_account.numbers[0]
-    >>> journal.failure_billing_mode, = BillingMode.find([('code', '=',
-    ...     'monthly')])
-    >>> journal.save()
-    >>> Configuration = Model.get('account.configuration')
-    >>> configuration = Configuration(1)
-    >>> configuration.direct_debit_journal = journal
-    >>> configuration.save()
     >>> Product = Model.get('offered.product')
     >>> contract_start_date = datetime.date(
     ...     two_months_ago.year, two_months_ago.month, 1)

@@ -1,3 +1,5 @@
+* FEA#11045 Dé-suspension automatique des contrats suspendus pour non-paiement de cotisation lors du paiement d'une quittance
+
 Version 2.2 - 2018-10-12
 * FEA#9859 Permettre de configurer des sous-statuts de contrats pour lesquels les mises en demeure seront ignorées
 * BUG#9271 Ne jamais passer un contrat avec une date de blocage de quittancement en sans-effet

@@ -1,3 +1,5 @@
+* FEA#11045 Automatically un-suspend held contracts (for unpaid premium motive) when paying an invoice
+
 Version 2.2 - 2018-10-12
 * FEA#9859 Allow to configure contract sub-statuses to ignore dunning
 * BUG#9271 Never void a contract with the block_invoicing_until field not null

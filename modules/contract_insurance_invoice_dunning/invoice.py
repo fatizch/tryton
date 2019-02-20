@@ -2,7 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
-from trytond.pool import PoolMeta
+from trytond.pool import Pool, PoolMeta
+from trytond.model import Workflow
 from trytond.server_context import ServerContext
 
 
@@ -13,6 +14,22 @@ __all__ = [
 
 class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
+
+    @classmethod
+    @Workflow.transition('paid')
+    def paid(cls, invoices):
+        super(Invoice, cls).paid(invoices)
+        contracts_to_reactivate = []
+        Contract = Pool().get('contract')
+        for invoice in invoices:
+            contract = invoice.contract
+            if contract and contract.status == 'hold' and \
+                    contract.sub_status and \
+                    contract.sub_status.code == 'unpaid_premium_hold':
+                contracts_to_reactivate.append(contract)
+        contracts_to_reactivate = list(set(contracts_to_reactivate))
+        if contracts_to_reactivate:
+            Contract.reactivate(contracts_to_reactivate)
 
     def get_dunning_procedure(self):
         if self.contract and self.contract.product.dunning_procedure:
