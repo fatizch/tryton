@@ -1258,7 +1258,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 [cls.raise_user_error('period_duplicate_data', {
                             'covered': x['covered'].rec_name,
                             'number': x['claim'].name,
-                            'ctr': x['claim'].main_contract.contract_number,
+                            'ctr': x['claim'].get_contract().contract_number
+                            if x['claim'].get_contract() else '',
                             'period': x['existing'].rec_name,
                             'overlap': x['overlap'],
                             }, raise_exception=False)
@@ -1270,7 +1271,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 [cls.raise_user_error('period_duplicate_data', {
                             'covered': x['covered'].rec_name,
                             'number': x['claim'].name,
-                            'ctr': x['claim'].main_contract.contract_number,
+                            'ctr': x['claim'].get_contract().contract_number
+                            if x['claim'].get_contract() else '',
                             'period': x['existing'].rec_name,
                             'overlap': x['overlap'],
                             }, raise_exception=False)

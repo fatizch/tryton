@@ -111,7 +111,8 @@ class Indemnification(metaclass=PoolMeta):
             return (x.contract, x.party)
 
         elements = sorted([x.service.theoretical_covered_element for x in
-                indemnifications], key=group_by_party_contract)
+                indemnifications if x.service.theoretical_covered_element],
+                key=group_by_party_contract)
         for key, sub_elements in groupby(elements, group_by_party_contract):
             covered_elements[key] = elements[0] if elements else None
         return covered_elements
