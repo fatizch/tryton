@@ -1,3 +1,4 @@
+* BUG#10972 Fix coherence of Pasrau declaration due to rounding of lines sum versus sum of rounded lines
 * BUG#10919 Raise a warning rather than an error when trying to post a dsn invoice without the dsn configuration done
 * OTH#00000 Fix super call following #10638
 * BUG#10694 CRM file can contain duplicate blocks

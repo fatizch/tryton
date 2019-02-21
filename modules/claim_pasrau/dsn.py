@@ -358,7 +358,21 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         if (isinstance(line, ZeroLine) or
                 (line.credit - line.debit) < Decimal('0.0')):
             return Decimal('0.0')
-        return self.get_pasrau_tax_line(line).base
+        rate = self.custom_pasrau_rate(line)
+        amount = self.custom_pasrau_debit_amount(line)
+        coog_base = self.get_pasrau_tax_line(line).base
+        amount_check = (coog_base * rate / Decimal('100.0')
+            ).quantize(Decimal('.01'))
+        if amount_check == amount:
+            return coog_base
+        # The base that is on the tax line could be inexact
+        # Because it is the sum of the base for each invoice lines.
+        # But the tax was calculated and rounded invoice line
+        # per invoice line.
+        # In this case, we send a base that is recalculated
+        # And matches the rate and amount.
+        base = (amount / (rate * Decimal('.01'))).quantize(Decimal('.01'))
+        return base
 
     def custom_pasrau_debit_amount(self, line):
         # We declare a zero block and a regularization for negative lines

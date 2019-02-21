@@ -1,6 +1,7 @@
 # encoding: utf8
 import unittest
 import datetime
+import mock
 
 from decimal import Decimal
 
@@ -182,6 +183,35 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(DefaultRate.get_region('95001'), 'metropolitan')
         self.assertEqual(DefaultRate.get_region('97120'), 'grm')
         self.assertEqual(DefaultRate.get_region('97300'), 'gm')
+
+    def test_pasrau_base_amount(self):
+        D = pasrau_dsn.NEORAUTemplate(None, void=True, replace=True)
+        line = mock.Mock()
+        line.credit = Decimal('100.0')
+        line.debit = Decimal('0.0')
+        tax_line = mock.Mock()
+
+        def test_base(amount, rate, coog_base, replace=False):
+            with mock.patch.object(D, 'custom_pasrau_rate') as patched_rate, \
+                    mock.patch.object(D, 'custom_pasrau_debit_amount') as \
+                    patched_amount, \
+                    mock.patch.object(D, 'get_pasrau_tax_line') as \
+                    patched_tax_line:
+                tax_line.base = coog_base
+                patched_tax_line.return_value = tax_line
+                patched_rate.return_value = rate
+                patched_amount.return_value = amount
+                base = D.custom_pasrau_base(line)
+                self.assertEqual(base == coog_base, not replace)
+                debit_check = (base * rate / Decimal('100.0')
+                    ).quantize(Decimal('.01'))
+                self.assertEqual(debit_check, amount)
+
+        test_base(Decimal('49.94'), Decimal('6.30'), Decimal('792.83'),
+            replace=True)
+        test_base(Decimal('18.39'), Decimal('14.40'), Decimal('127.68'))
+        test_base(Decimal('18.39'), Decimal('14.40'), Decimal('127.67'),
+            replace=True)
 
 
 def suite():
