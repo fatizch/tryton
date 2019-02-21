@@ -1,3 +1,4 @@
+* BUG#11068 Ne forcer le statut d'un paiement Sepa sans mandat à brouillon que lorsqu'il est à recevoir
 * BUG#10116 Set state of new payment to draft if no mandate was found
 
 Version 2.2 - 2018-10-12
