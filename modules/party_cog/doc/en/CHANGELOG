@@ -1,3 +1,4 @@
+* FEA#8622 anonymize party automatically by batch
 * FEA#10851 Add configuration at the country address lines level to limit the number of caracters
 * OTH#0000: Add data to GDPR extract
 * BUG#10480 Error when restarting an address change endorsement

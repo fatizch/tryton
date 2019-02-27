@@ -18,7 +18,7 @@ from . import relationship
 from . import res
 from . import attachment
 from . import configuration
-
+from . import batch
 
 from trytond.modules.coog_core import expand_tree
 
@@ -57,6 +57,7 @@ def register():
         PartyMenuTreeExpansion,
         party.PartyReplaceAsk,
         configuration.Configuration,
+        batch.PartyAnonymizeBatch,
         module='party_cog', type_='model')
     Pool.register(
         party.SynthesisMenuSet,

@@ -167,7 +167,7 @@ class PartyInteraction(model.CoogSQL, model.CoogView):
         states={'readonly': True})
 
     @classmethod
-    def get_models(self):
+    def get_models(cls):
         return utils.models_get() + [('', '')]
 
     @staticmethod

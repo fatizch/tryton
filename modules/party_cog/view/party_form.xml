@@ -84,4 +84,13 @@ this repository contains the full copyright notices and license terms. -->
             <button name="button_start_synthesis_menu" string="Synthesis"/>
         </group>
     </xpath>
+    <xpath expr="/form/notebook" position="inside">
+        <page string="GDPR" id="gdpr">
+            <group id="role_group" colspan="4">
+                <label name="planned_anonymization_date"/>
+                <field name="planned_anonymization_date"/>
+            </group>
+            <notebook/>
+        </page>
+    </xpath>
 </data>

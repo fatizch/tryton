@@ -137,6 +137,10 @@ class Party(export.ExportImportMixin, summary.SummaryMixin):
     has_role = fields.Function(
         fields.Boolean('has_role'),
         'getter_has_role', searcher='searcher_has_role')
+    planned_anonymization_date = fields.Date('Planned Anonymization Date',
+        states={
+            'invisible': Eval('is_anonymized', True),
+            }, depends=['is_anonymized'])
 
     @classmethod
     def __register__(cls, module_name):
