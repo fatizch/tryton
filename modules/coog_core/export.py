@@ -288,7 +288,7 @@ class ExportImportMixin(Historizable):
 
         pool = Pool()
         was_list = True
-        if isinstance(values, str):
+        if isinstance(values, str) or isinstance(values, bytes):
             values = json.loads(values, object_hook=JSONDecoder())
         if isinstance(values, dict):
             was_list = False

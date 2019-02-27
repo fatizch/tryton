@@ -17,6 +17,7 @@ class EventAggregateDescription(model.CoogSQL, model.CoogView):
 
     __name__ = 'event.aggregate.description'
 
+    _func_key = 'func_key'
     duration = fields.Integer('Duration', required=True)
     unit = fields.Selection([('day', 'Day(s)'), ('month', 'Month(s)')],
         'Unit', required=True)
@@ -28,6 +29,8 @@ class EventAggregateDescription(model.CoogSQL, model.CoogView):
         help='Event Type to notify when not aggregating')
     _get_description_event_code = Cache('get_description_event_code')
     _get_existing_event = Cache('get_existing_event')
+    func_key = fields.Function(fields.Char('Functionnal Key'),
+        'getter_func_key', searcher='searcher_func_key')
 
     @classmethod
     def delete(cls, tables):
@@ -106,3 +109,22 @@ class EventAggregateDescription(model.CoogSQL, model.CoogView):
         eligible_codes = cls.get_eligible_codes(obj, date, event_code)
         existing_logs = cls.get_existing_logs(obj, date, event_code)
         return [x for x in eligible_codes if x not in existing_logs]
+
+    def getter_func_key(self, name):
+        return '|'.join([str(self.duration), self.unit,
+            self.event_type_aggregate.code, self.event_type_notify.code])
+
+    @classmethod
+    def searcher_func_key(cls, name, clause):
+        operands = clause[2].split('|')
+        assert clause[1] == '='
+        if len(operands) == 4:
+            duration, unit, event_type_agg, event_type_notif = operands
+            return [
+                ('duration', '=', int(duration)),
+                ('unit', '=', unit),
+                ('event_type_aggregate.code', '=', event_type_agg),
+                ('event_type_notify.code', '=', event_type_notif),
+                ]
+        else:
+            return [('id', '=', None)]

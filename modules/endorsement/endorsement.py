@@ -1872,9 +1872,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         if not self.endorsement.effective_date:
             return self.contract
         with Transaction().set_context(
-                client_defined_date=self.endorsement.effective_date,
-                _datetime=self.endorsement.effective_date,
-                _datetime_exclude=False):
+                client_defined_date=self.endorsement.effective_date):
             return Pool().get('contract')(self.contract.id)
 
     def get_definition(self, name):
