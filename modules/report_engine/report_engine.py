@@ -1168,6 +1168,9 @@ class ReportGenerate(CoogReport):
         report_context['setVar'] = setVar
         report_context['getVar'] = getVar
 
+        report_context['TodayTime'] = datetime.datetime.combine(utils.today(),
+            datetime.datetime.now().time())
+
         report_context.update({k: v for k, v in data.items() if k not in
                 ['party', 'address', 'sender', 'sender_address']})
 

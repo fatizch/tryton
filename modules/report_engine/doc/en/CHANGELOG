@@ -1,3 +1,4 @@
+* BUG#11090 Add TodayTime to the context report generation and genshi
 * OTH#00000 Properly use datetime in report engine
 * BUG#10951 Take micro seconds into account in default time extension for reports name
 * BUG#10581 Fix a case where invoice deletion does not delete associated report production requests

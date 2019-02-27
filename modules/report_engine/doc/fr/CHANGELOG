@@ -1,3 +1,4 @@
+* BUG#11090 Ajout de TodayTime dans le contexte de génération des rapports et de genshi
 * OTH#00000 Corriger l'utilisation de datetime pour la génération de rapports
 * BUG#10951 Prise en compte des micro secondes dans le nom par défaut des rapports générés.
 * BUG#10581 Correction d'un cas où la suppression d'une quittance ne supprime pas les demandes d'impression associées
