@@ -24,4 +24,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="cancelled" colspan="4"/>
     <field name="payback_required"/>
     <field name="payment_term_required"/>
+    <field name="forced_base_amount" invisible="1"/>    
+    <field name="forced_base_amount_display_access" invisible="1"/>
 </form>

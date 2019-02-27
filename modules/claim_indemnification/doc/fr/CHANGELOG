@@ -1,3 +1,4 @@
+* BUG#10785 Correctif d'un crash lors de la regularisation de période d'indemnisation
 * BUG#11044 Correctif d'un crash lorsque l'on essaie de récupérer la valeur du champ "contrat principal" sur un sinistre au niveau de la méthode qui vérifie l'existence de périodes à indemniser en doublon
 * FEA#10812 Afficher l'assistant de validation/controle des indemnisations dans un onglet dédié. Ajout d'un lien vers le sinistre à partir d'une indemnisation
 * BUG#10791 Correction d'un crash lorsque l'on essaie de récupérer la liste des prestations à délivrer alors que toutes les indemnisations sont annulées
