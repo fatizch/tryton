@@ -21,3 +21,12 @@ class MoveLine(metaclass=PoolMeta):
     def __setup__(cls):
         super(MoveLine, cls).__setup__()
         cls.dunnings.states['invisible'] = ~Eval('dunnings')
+
+    @classmethod
+    def copy(cls, lines, default=None):
+        if default is None:
+            default = {}
+        else:
+            default = default.copy()
+        default.setdefault('inactive_dunnings', None)
+        return super(MoveLine, cls).copy(lines, default=default)

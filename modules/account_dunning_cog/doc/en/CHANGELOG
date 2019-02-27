@@ -1,3 +1,5 @@
+* BUG#11093 inactive_dunning are copied with moved lines
+
 Version 2.2 - 2018-10-12
 Version 2.0 - 2018-04-13
 * BUG#7674 Do not treat an already treated dunning

@@ -1,3 +1,5 @@
+* BUG#11093 les relances inactives sont copiées avec les mouvements comptables
+
 Version 2.2 - 2018-10-12
 Version 2.0 - 2018-04-13
 * BUG#7674 Ne pas traiter une relance déjà traitée
