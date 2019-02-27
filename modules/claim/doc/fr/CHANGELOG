@@ -1,3 +1,4 @@
+* BUG#11037 Modification de la valeur du type des données complémentaires qui sont attachées au service délivré afin qu'ils soient cnconcordnace avec le type définit sur la donnée complémantaire
 * FEA#10840 Extraction des données liées aux sinistres pour la RGPD
 * BUG#10811 Permettre au profil de droit gestion sinistre de supprimer les données complémentaires sur un sinistre
 * BUG#10748 Amélioration des performances du getter de service->claim

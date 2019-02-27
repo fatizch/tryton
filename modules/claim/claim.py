@@ -848,7 +848,7 @@ class Loss(model.CoogSQL, model.CoogView,
 
 
 class ClaimService(model.CoogSQL, model.CoogView,
-        with_extra_data(['service'], schema='benefit',
+        with_extra_data(['benefit'], schema='benefit',
             field_name='current_extra_data',
             getter_name='getter_current_extra_data',
             setter_name='setter_void'),
@@ -1164,7 +1164,7 @@ class ClaimSubStatus(model.CoogSQL, model.CoogView):
 
 
 class ClaimServiceExtraDataRevision(model.CoogSQL, model.CoogView,
-        with_extra_data(['service'], schema='benefit',
+        with_extra_data(['benefit'], schema='benefit',
             field_name='extra_data_values',
             create_string='extra_data_values_translated',
             create_summary='extra_data_summary'),

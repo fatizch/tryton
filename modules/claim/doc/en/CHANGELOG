@@ -1,3 +1,4 @@
+* BUG#11037 Modification of the value of the kind of the used extra data in order to be the same kind of the one that has been parameterized
 * FEA#10840 Extract claim related informations in GDPR extract
 * BUG#10811 Allow claim manage right profile to delete claim extra data
 * BUG#10748 Improve performances of service->claim getter
