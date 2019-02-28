@@ -16,7 +16,8 @@ from trytond.modules.coog_core import fields, utils
 
 from trytond.modules.commission_insurance.commission import \
     COMMISSION_AMOUNT_DIGITS
-from trytond.modules.coog_core.extra_details import WithExtraDetails
+from trytond.modules.commission_insurance.contract import \
+    ANNUAL_CONVERSION_TABLE
 
 __all__ = [
     'PlanLines',
@@ -26,10 +27,11 @@ __all__ = [
     'FilterCommissions',
     'FilterAggregatedCommissions',
     'AggregatedCommission',
+    'CommissionDescriptionConfiguration',
     ]
 
 
-class Commission(WithExtraDetails):
+class Commission(metaclass=PoolMeta):
     __name__ = 'commission'
 
     is_prepayment = fields.Boolean('Is Prepayment', readonly=True)
@@ -47,8 +49,9 @@ class Commission(WithExtraDetails):
         cls._error_messages.update({
                 'prepayment_amortization': 'Prepayment Amortization',
                 'prepayment': 'Prepayment',
+                'redeemed_prepayment': 'Redeemed prepayment: '
+                '%(redeemed_amount)s\n',
                 })
-        cls.extra_details.readonly = True
 
     @classmethod
     def _get_origin(cls):
@@ -92,6 +95,54 @@ class Commission(WithExtraDetails):
         super(Commission, self).update_cancel_copy()
         if self.redeemed_prepayment:
             self.redeemed_prepayment *= -1
+
+    def getter_calculation_description(self, name):
+        if self.amount == 0 and self.redeemed_prepayment:
+            return ''
+        description = super().getter_calculation_description(name)
+        details = self.extra_details or {}
+        if self.is_prepayment and details:
+            commission_title = ''
+            desc_configuration = Pool().get(
+                'commission.description.configuration').get_singleton()
+            if details.get('is_adjustment', False):
+                if (desc_configuration and desc_configuration.
+                        prepayment_adjustment_commission_title):
+                    commission_title = desc_configuration. \
+                        prepayment_adjustment_commission_title
+                description += commission_title
+                description += '\n%s = %s * %s' % (
+                    str(self.amount) if self.amount is not None else '',
+                    str(details.get('prepayment_amount', Decimal(0))),
+                    str(details.get('duration_factor', Decimal(1))))
+            else:
+                if (desc_configuration
+                        and desc_configuration.prepayment_commission_title):
+                    commission_title = desc_configuration. \
+                        prepayment_commission_title
+                nb_units = Decimal(12)
+                if (self.commissioned_option.coverage.premium_rules[0].
+                        frequency in ANNUAL_CONVERSION_TABLE):
+                    nb_units = ANNUAL_CONVERSION_TABLE[
+                        self.commissioned_option.coverage.premium_rules[0].
+                        frequency]
+                description += commission_title
+                description += '\n%s = %s * %s * %s * %s' % (
+                    str(self.amount) if self.amount is not None else '',
+                    str(details.get('monthly_premium_excl_tax', Decimal(0))),
+                    str(details.get('rate', Decimal(1))),
+                    str(details.get('percentage', Decimal(1))),
+                    str(nb_units))
+        elif details.get('type', '') == 'linear':
+            redeemed_amount = self.redeemed_prepayment or Decimal('0.0')
+            if redeemed_amount <= Decimal('0.001'):
+                redeemed_amount = Decimal('0.0')
+            if redeemed_amount != 0:
+                description = self.raise_user_error('redeemed_prepayment', {
+                        'redeemed_amount': redeemed_amount
+                        }, raise_exception=False) + description
+                description += ' - %s' % redeemed_amount
+        return description
 
 
 class PlanLines(metaclass=PoolMeta):
@@ -163,7 +214,7 @@ class Plan(metaclass=PoolMeta):
         ''' Return a list of tuple with date and percentage'''
         today = utils.today()
         payment_date = option.parent_contract.signature_date or today
-        return [(max(payment_date, today), 1)]
+        return [(max(payment_date, today), Decimal(1))]
 
     def getter_is_prepayment(self, name):
         # TODO: Merge module with commission_insurance_prepayment_rule_engine
@@ -338,3 +389,17 @@ class AggregatedCommission(metaclass=PoolMeta):
             Case((commission.is_prepayment == Literal(False), Null),
                 else_=commission.date), commission.is_prepayment
             ]
+
+
+class CommissionDescriptionConfiguration(metaclass=PoolMeta):
+
+    __name__ = 'commission.description.configuration'
+
+    prepayment_commission_title = fields.Char(
+        'Prepayment Commission Title', help='Contains the string which '
+        'will  be used to introduce prepayment commissions calculation details',
+        required=True, translate=True)
+    prepayment_adjustment_commission_title = fields.Char(
+        'Prepayment Adjustment Commission Title', help='Contains the '
+        'string which will be used to introduce prepayment adjustment'
+        'commissions calculation details', required=True, translate=True)

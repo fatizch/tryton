@@ -161,6 +161,21 @@ Create recovery rule::
     >>> recovery.rule = recovery_rule
     >>> recovery.save()
 
+Create commission description configuration::
+
+    >>> CommissionDescriptionConfiguration = Model.get(
+    ...     'commission.description.configuration')
+    >>> descriptionConfiguration = CommissionDescriptionConfiguration()
+    >>> descriptionConfiguration.linear_commission_title = \
+    ...     'Linear commission calculation details'
+    >>> descriptionConfiguration.recovery_commission_title = \
+    ...     'Recovery commission calculation details'
+    >>> descriptionConfiguration.prepayment_commission_title = \
+    ...     'Prepayment commission calculation details'
+    >>> descriptionConfiguration.prepayment_adjustment_commission_title = \
+    ...     'Prepayment adjustment calculation details'
+    >>> descriptionConfiguration.save()
+
 Create broker commission plan::
 
     >>> Plan = Model.get('commission.plan')
@@ -285,7 +300,12 @@ Check commissions (example: broker: 10% x 100 x 5 months / 2 )::
     >>> recovery_commissions = Commission.find([('is_recovery', '=', True)])
     >>> len(recovery_commissions)
     2
-    >>> [(c.amount, c.agent.id) for c in recovery_commissions] == [(-25, 1), (-150, 2)]
+    >>> [(c.amount, c.agent.id, c.calculation_description)
+    ...     for c in recovery_commissions] == [
+    ...     (-25, 1, 'Recovery commission calculation details\n'
+    ...         '-25.0000000 = 0 - 25.0000000'),
+    ...     (-150, 2, 'Recovery commission calculation details\n'
+    ...         '-150.0000000 = 0 - 150.0000000')]
     True
 
 Reactivate Contract::

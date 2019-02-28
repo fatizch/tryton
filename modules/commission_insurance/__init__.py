@@ -52,6 +52,7 @@ def register():
         wizard.SimulateCommissionsLine,
         test_case.TestCaseModel,
         res.User,
+        commission.CommissionDescriptionConfiguration,
         module='commission_insurance', type_='model')
     Pool.register(
         wizard.SimulateCommissionsParametersTermRenewal,

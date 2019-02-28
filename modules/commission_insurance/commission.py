@@ -11,7 +11,7 @@ from sql.functions import ToChar
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
-from trytond.model import Unique
+from trytond.model import Unique, ModelSingleton
 from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.wizard import StateAction
@@ -24,6 +24,8 @@ from trytond.modules.coog_core import (fields, model, export, coog_string,
     coog_date, utils, coog_sql)
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.product import price_digits
+
+from trytond.modules.coog_core.extra_details import WithExtraDetails
 
 __all__ = [
     'PlanLines',
@@ -48,13 +50,14 @@ __all__ = [
     'OpenCommissionsSynthesisShow',
     'OpenCommissionSynthesisYearLine',
     'FilterAggregatedCommissions',
+    'CommissionDescriptionConfiguration',
     ]
 
 COMMISSION_AMOUNT_DIGITS = 8
 COMMISSION_RATE_DIGITS = 4
 
 
-class Commission(metaclass=PoolMeta):
+class Commission(WithExtraDetails, metaclass=PoolMeta):
     __name__ = 'commission'
 
     commissioned_contract = fields.Many2One('contract',
@@ -111,6 +114,11 @@ class Commission(metaclass=PoolMeta):
         # No rounding here, it would break the sums
         fields.Numeric('Commissioned amount (with taxes)'),
         'getter_base_full_amount')
+    calculation_description = fields.Function(
+        fields.Char('Calculation Description', help='This field contains a '
+            'short functional description on how the commission has been '
+            'calculated.'),
+        'getter_calculation_description')
 
     @classmethod
     def __setup__(cls):
@@ -124,6 +132,7 @@ class Commission(metaclass=PoolMeta):
         cls.agent.readonly = True
         cls.product.readonly = True
         cls.amount.readonly = True
+        cls.extra_details.readonly = True
         cls._error_messages.update({
                 'no_delete_invoiced_commission': 'Cannot delete an already '
                 'invoiced commission',
@@ -377,6 +386,23 @@ class Commission(metaclass=PoolMeta):
                 line.agent = new_agent
                 to_save.append(line)
             cls.save(to_save)
+
+    def getter_calculation_description(self, name):
+        description = ''
+        details = self.extra_details or {}
+        if details.get('type', '') == 'linear':
+            commission_title = ''
+            desc_configuration = Pool().get(
+                'commission.description.configuration').get_singleton()
+            if (desc_configuration
+                    and desc_configuration.linear_commission_title):
+                commission_title = desc_configuration.linear_commission_title
+            description += '%s\n%s = %s * %s' % (
+                commission_title,
+                str(self.amount) if self.amount is not None else '',
+                str(details.get('monthly_premium_excl_tax', 0)),
+                str(details.get('rate', 0)))
+        return description
 
 
 class AggregatedCommission(model.CoogSQL, model.CoogView):
@@ -1769,3 +1795,15 @@ class AggregatedCommissionByAgent(model.CoogSQL, model.CoogView):
         return query_table.select(*klass.get_fields_to_select(tables),
             where=klass.get_where_clause(tables),
             group_by=klass.get_group_by(tables))
+
+
+class CommissionDescriptionConfiguration(ModelSingleton, model.CoogSQL,
+        model.CoogView, export.ExportImportMixin):
+    'Commission Description Configuration'
+
+    __name__ = 'commission.description.configuration'
+
+    linear_commission_title = fields.Char(
+        'Linear Commission Title', help='Contains the string which will '
+        'be used to introduce linear commissions calculation details',
+        required=True, translate=True)

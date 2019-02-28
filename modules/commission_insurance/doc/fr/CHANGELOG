@@ -1,3 +1,4 @@
+* FEA#11058 Ajout d'un champ description du calcul sur les commissions. Ce champ contient une description courte sur la manière avec laquelle la commission a été calculée.
 * BUG#10540 Ajout de la méthode de commissionnement "Au paiement et comptabilisé" pour permettre au bordereau courtier de se comporter comme le bordereau assureur
 * OTH#0000 Ajout de champs (pour le reporting) permettant d'afficher les montants de taxe / montants totaux proratés sur la période de la commission
 

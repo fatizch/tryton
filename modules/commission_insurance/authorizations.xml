@@ -296,7 +296,22 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="access_commission_description_configuration_commission_manage_group">
+            <field name="model" search="[('model', '=', 'commission.description.configuration')]"/>
+            <field name="group" ref="group_commission_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <!-- Default Commission Insurance Access Rights -->
+        <record model="ir.model.access" id="access_commission_description_configuration">
+            <field name="model" search="[('model', '=', 'commission.description.configuration')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <record model="ir.model.access" id="access_distribution_network">
             <field name="model" search="[('model', '=', 'distribution.network')]"/>
             <field name="perm_read" eval="True"/>

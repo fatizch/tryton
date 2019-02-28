@@ -16,4 +16,5 @@ def register():
         rule_engine.RuleEngineRuntime,
         contract.Contract,
         contract.ContractOption,
+        commission.CommissionDescriptionConfiguration,
         module='commission_insurance_recovery', type_='model')

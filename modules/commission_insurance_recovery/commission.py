@@ -15,6 +15,7 @@ __all__ = [
     'CommissionRecoveryRule',
     'Commission',
     'Agent',
+    'CommissionDescriptionConfiguration',
     ]
 
 
@@ -62,7 +63,7 @@ class CommissionRecoveryRule(
         # initial_start_date used if contract is never in force
         args['date'] = option.end_date or option.initial_start_date
         args['agent'] = agent
-        return self.calculate_rule(args)
+        return self.calculate_rule(args, return_full=True)
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
@@ -99,6 +100,34 @@ class Commission(metaclass=PoolMeta):
             invoice_line.description = cls.raise_user_error(
                     'recovery_commission', raise_exception=False)
         return invoice_line
+
+    def get_recovery_details(self, recovery_info, recovery_amount,
+            existing_recovery_amount):
+        if self.is_recovery:
+            recovery_details = {
+                'recovery_amount': recovery_amount,
+                'existing_recovery_amount': existing_recovery_amount,
+                }
+            if recovery_info and len(recovery_info) == 1:
+                recovery_details.update(recovery_info[0])
+            return recovery_details
+
+    def getter_calculation_description(self, name):
+        description = super().getter_calculation_description(name)
+        details = self.extra_details
+        if self.is_recovery and details:
+            commission_title = ''
+            desc_configuration = Pool().get(
+                'commission.description.configuration').get_singleton()
+            if (desc_configuration
+                    and desc_configuration.recovery_commission_title):
+                commission_title = desc_configuration.recovery_commission_title
+            description += '%s\n%s = %s - %s' % (
+                commission_title,
+                str(self.amount) if self.amount is not None else '',
+                str(details.get('existing_recovery_amount', 0)),
+                str(details.get('recovery_amount', 0)))
+        return description
 
 
 class Agent(metaclass=PoolMeta):
@@ -174,3 +203,13 @@ class Agent(metaclass=PoolMeta):
         for agent, option, com_amount in cursor.fetchall():
             result[(agent, option)] = com_amount
         return result
+
+
+class CommissionDescriptionConfiguration(metaclass=PoolMeta):
+
+    __name__ = 'commission.description.configuration'
+
+    recovery_commission_title = fields.Char(
+        'Recovery Commission Title', help='Contains the string which will'
+        ' be used to introduce recovery commissions calculation details',
+        required=True, translate=True)

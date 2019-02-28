@@ -107,20 +107,29 @@ class ContractOption(metaclass=PoolMeta):
             for agent, plan in option.recovery_agent_plans_used():
                 existing_recovery_amount = recoveries.get((agent.id,
                     option.id), 0)
-                recovery_amount = plan.compute_recovery(option, agent)
-                if (recovery_amount and
-                        existing_recovery_amount != recovery_amount):
-                    commission = Commission()
-                    commission.date = today
-                    commission.origin = option
-                    commission.agent = agent
-                    commission.is_recovery = True
-                    commission.product = plan.commission_product
-                    commission.commissioned_option = option
-                    commission.commissioned_contract = option.parent_contract
-                    commission.amount = -recovery_amount + \
-                        existing_recovery_amount
-                    commissions.append(commission)
+                recovery_rule_output = plan.compute_recovery(option, agent)
+                if recovery_rule_output:
+                    recovery_amount = recovery_rule_output.result
+                    recovery_computation_info = recovery_rule_output.info
+                    if (recovery_amount and
+                            existing_recovery_amount != recovery_amount):
+                        commission = Commission()
+                        commission.date = today
+                        commission.origin = option
+                        commission.agent = agent
+                        commission.is_recovery = True
+                        commission.product = plan.commission_product
+                        commission.commissioned_option = option
+                        commission.commissioned_contract = \
+                            option.parent_contract
+                        commission.amount = -recovery_amount + \
+                            existing_recovery_amount
+                        commission.extra_details = {}
+                        commission.extra_details.update(
+                            commission.get_recovery_details(
+                                recovery_computation_info, recovery_amount,
+                                existing_recovery_amount))
+                        commissions.append(commission)
         Commission.save(commissions)
 
         if not active_options:

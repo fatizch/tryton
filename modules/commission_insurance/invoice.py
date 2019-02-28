@@ -127,6 +127,7 @@ class InvoiceLine(metaclass=PoolMeta):
         Commission = pool.get('commission')
 
         commission = Commission()
+        commission.extra_details = {}
         commission.origin = self
         if plan_line.plan.commission_method == 'posting':
             commission.date = today
@@ -164,6 +165,12 @@ class InvoiceLine(metaclass=PoolMeta):
             ).quantize(Decimal(10) ** -COMMISSION_RATE_DIGITS)
         commission.amount = commission_amount
         commission.commission_rate = commission_rate
+        if commission.amount != 0:
+            commission.extra_details.update({
+                    'monthly_premium_excl_tax': context['names']['amount'],
+                    'rate': commission_rate,
+                    'type': 'linear'
+                    })
 
     def _get_commission_line_amount(self, plan_line, context):
         return plan_line.get_amount(**context)

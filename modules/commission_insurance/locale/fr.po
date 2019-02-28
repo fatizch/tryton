@@ -79,20 +79,24 @@ msgid "Broker Fee Invoice Line"
 msgstr "Lignes de frais d'apporteur"
 
 msgctxt "field:commission,base_amount:"
-msgid "Commissioned amount tax"
-msgstr "Taxes sur l'assiette"
+msgid "Base Amount"
+msgstr "Assiette"
 
 msgctxt "field:commission,base_full_amount:"
 msgid "Commissioned amount (with taxes)"
 msgstr "Assiette (avec taxes)"
 
-msgctxt "field:commission,base_amount:"
-msgid "Base Amount"
-msgstr "Assiette"
+msgctxt "field:commission,base_tax_amount:"
+msgid "Commissioned amount tax"
+msgstr "Taxes sur l'assiette"
 
 msgctxt "field:commission,broker:"
 msgid "Broker"
 msgstr "Courtier"
+
+msgctxt "field:commission,calculation_description:"
+msgid "Calculation Description"
+msgstr "Description du calcul"
 
 msgctxt "field:commission,commission_rate:"
 msgid "Commission Rate"
@@ -398,6 +402,42 @@ msgctxt "field:commission.create_invoice.ask,post_invoices:"
 msgid "Post Invoices"
 msgstr "Emettre les bordereaux"
 
+msgctxt "field:commission.description.configuration,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.description.configuration,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.description.configuration,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.description.configuration,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:commission.description.configuration,linear_commission_title:"
+msgid "Linear Commission Title"
+msgstr "Titre des commissions linéaires"
+
+msgctxt "field:commission.description.configuration,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:commission.description.configuration,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:commission.description.configuration,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:commission.description.configuration,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
 msgctxt "field:commission.invoice.create,id:"
 msgid "ID"
 msgstr "ID"
@@ -413,6 +453,10 @@ msgstr "Actif"
 msgctxt "field:commission.plan,code:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:commission.plan,commission_description_configuration:"
+msgid "Commission Description Configuration"
+msgstr "Configuration de la description de commissions"
 
 msgctxt "field:commission.plan,commissioned_products:"
 msgid "Commissioned Products"
@@ -898,6 +942,12 @@ msgctxt "field:res.user,broker_party:"
 msgid "Broker Party"
 msgstr "Tiers courtier"
 
+msgctxt "help:commission,calculation_description:"
+msgid ""
+"This field contains a short functional description on how the commission has"
+" been calculated."
+msgstr "Contient un résumé court du détail de calcul de la commission."
+
 msgctxt "help:commission.agent,agent_payment_term:"
 msgid ""
 "If defined, this payment term has priority over the party's one and the "
@@ -905,6 +955,12 @@ msgid ""
 msgstr ""
 "Si défini, cette condition de paiement sera prioritaire face à celle sur le "
 "tiers ainsi que sur la configuration globale"
+
+msgctxt "help:commission.description.configuration,linear_commission_title:"
+msgid ""
+"Contains the string which will be used to introduce linear commissions "
+"calculation details"
+msgstr "Contient l'introduction au détail des commissions linéaires"
 
 msgctxt "help:commission.plan.date,first_match_only:"
 msgid "If True, only the first matching date will be considered."
@@ -929,6 +985,10 @@ msgstr "Créer les protocoles de commissionnement"
 msgctxt "model:commission.create_agents.parties,name:"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
+
+msgctxt "model:commission.description.configuration,name:"
+msgid "Commission Description Configuration"
+msgstr "Configuration de la description de commissions"
 
 msgctxt "model:commission.invoice.create,name:"
 msgid "Commission Invoice Creation Batch"
@@ -978,6 +1038,28 @@ msgctxt "model:event.type,name:event_invoice_commission_generated"
 msgid "Commission Invoice Generated"
 msgstr "Bordereau de commission généré"
 
+msgctxt "model:extra_details.configuration.line,selection:commission_type"
+msgid "linear:Linear"
+msgstr "linear:Linéaire"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:commission_monthly_premium_excl_tax"
+msgid "Monthly premium excluding tax"
+msgstr "Prime mensuelle HT"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:commission_monthly_premium_incl_tax"
+msgid "Monthly premium including tax"
+msgstr "Prime mensuelle TTC"
+
+msgctxt "model:extra_details.configuration.line,string:commission_rate"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "model:extra_details.configuration.line,string:commission_type"
+msgid "Type"
+msgstr "Type"
+
 msgctxt "model:ir.action,name:"
 msgid "Aggregated commissions"
 msgstr "Commissions agrégées"
@@ -1018,6 +1100,10 @@ msgstr "Commissions"
 msgctxt "model:ir.action,name:act_commission_create_agents"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
+
+msgctxt "model:ir.action,name:act_commission_description_configuration_form"
+msgid "Commission Description Configuration"
+msgstr "Configuration de la description de commissions"
 
 msgctxt "model:ir.action,name:act_commission_invoice_form"
 msgid "Commission Invoices"
@@ -1112,6 +1198,10 @@ msgstr "Bordereaux courtiers"
 msgctxt "model:ir.ui.menu,name:menu_invoice_insurer_invoice"
 msgid "Insurer Invoices"
 msgstr "Bordereaux assureurs"
+
+msgctxt "model:ir.ui.menu,name:menu_item_commission_description_configuration"
+msgid "Commission Description Configuration"
+msgstr "Configuration de la description de commissions"
 
 msgctxt "model:res.group,name:group_commission_manage"
 msgid "Coog Commission management"
@@ -1604,20 +1694,20 @@ msgid "Product Template - Commission Agent"
 msgstr "Modèle produit - Protocole de commissionnement"
 
 msgctxt "selection:commission.agent,type_:commission."
-msgid "Agent Of"
-msgstr "Est commissionné par"
-
-msgctxt "selection:commission.agent,type_:commission."
 msgid "Principal Of"
 msgstr "Commissionne"
 
-msgctxt "view:commission.agent:commission."
-msgid "Agents"
-msgstr "Protocoles de commissionnement"
+msgctxt "selection:commission.agent,type_:commission."
+msgid "Agent Of"
+msgstr "Est commissionné par"
 
 msgctxt "view:commission.agent:commission."
 msgid "Agent"
 msgstr "Protocole de commissionnement"
+
+msgctxt "view:commission.agent:commission."
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "view:commission.create_invoice.ask:commission."
 msgid "Create Commission Invoice"

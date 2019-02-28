@@ -14,6 +14,11 @@ msgctxt "field:commission,is_recovery:"
 msgid "Is Recovery Commission"
 msgstr "Est une commission de reprise"
 
+msgctxt ""
+"field:commission.description.configuration,recovery_commission_title:"
+msgid "Recovery Commission Title"
+msgstr "Titre des commissions de reprise"
+
 msgctxt "field:commission.plan,commission_recovery:"
 msgid "Recovery Rule"
 msgstr "Règle de reprise de commissions"
@@ -66,9 +71,26 @@ msgctxt "field:commission.plan.recovery_rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:commission.description.configuration,recovery_commission_title:"
+msgid ""
+"Contains the string which will be used to introduce recovery commissions "
+"calculation details"
+msgstr ""
+"Contient l'introduction au détail du calcul des commissions de reprise"
+
 msgctxt "model:commission.plan.recovery_rule,name:"
 msgid "Commission Recovery Rule"
 msgstr "Règle de reprise de commissions"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:commission_existing_recovery_amount"
+msgid "Existing Recovery Amount"
+msgstr "Montant de reprise existant"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:commission_recovery_amount"
+msgid "Recovery Amount"
+msgstr "Montant de la reprise"
 
 msgctxt "model:ir.action,name:act_recovery_rule_form"
 msgid "Recovery Rules"

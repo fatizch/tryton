@@ -193,5 +193,60 @@ this repository contains the full copyright notices and license terms. -->
             <field name="action" ref="act_filter_commission"/>
         </record>
         <menuitem parent="commission.menu_commission_form" action="act_commission_aggregated_form_relate" id="menu_commission_aggregated_commissions" sequence="10"/>
+        <!-- ############################################################ -->
+        <!-- ########### Extra Details Configuration ########### -->
+        <!-- ############################################################ -->
+        <record model="extra_details.configuration" id="commission_extra_details_configuration">
+            <field name="model_name">commission</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Commission Detail ########### -->
+        <!-- ############################################################ -->
+        <record model="extra_details.configuration.line" id="commission_monthly_premium_incl_tax">
+            <field name="configuration" ref="commission_extra_details_configuration"/>
+            <field name="string">Monthly premium including tax</field>
+            <field name="name">monthly_premium_incl_tax</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+        </record>
+        <record model="extra_details.configuration.line" id="commission_monthly_premium_excl_tax">
+            <field name="configuration" ref="commission_extra_details_configuration"/>
+            <field name="string">Monthly premium excluding tax</field>
+            <field name="name">monthly_premium_excl_tax</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+        </record>
+        <record model="extra_details.configuration.line" id="commission_rate">
+            <field name="configuration" ref="commission_extra_details_configuration"/>
+            <field name="string">Rate</field>
+            <field name="name">rate</field>
+            <field name="type_">numeric</field>
+            <field name="digits">4</field>
+        </record>
+        <record model="extra_details.configuration.line" id="commission_type">
+            <field name="configuration" ref="commission_extra_details_configuration"/>
+            <field name="string">Type</field>
+            <field name="name">type</field>
+            <field name="type_">selection</field>
+            <field name="selection">linear:Linear</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Commission Description Configuration ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="commission_description_view_form">
+            <field name="model">commission.description.configuration</field>
+            <field name="type">form</field>
+            <field name="name">commission_description_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_commission_description_configuration_form">
+            <field name="name">Commission Description Configuration</field>
+            <field name="res_model">commission.description.configuration</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_commission_description_form_view">
+            <field name="sequence" eval="2"/>
+            <field name="view" ref="commission_description_view_form"/>
+            <field name="act_window" ref="act_commission_description_configuration_form"/>
+        </record>
+        <menuitem id="menu_item_commission_description_configuration" name="Commission Description Configuration" parent="commission.menu_configuration" sequence="200" action="act_commission_description_configuration_form"/>
     </data>
 </tryton>

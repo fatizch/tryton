@@ -172,6 +172,14 @@ templateComission.products[0].code = 'commission_product'
 templateComission.save()
 commission_product = templateComission.products[0]
 
+# #Comment# #Create commission description configuration
+CommissionDescriptionConfiguration = Model.get(
+    'commission.description.configuration')
+descriptionConfiguration = CommissionDescriptionConfiguration()
+descriptionConfiguration.linear_commission_title = \
+    'Linear commission calculation details'
+descriptionConfiguration.save()
+
 # #Comment# #Create broker commission plan
 Plan = Model.get('commission.plan')
 Coverage = Model.get('offered.option.description')
@@ -271,10 +279,16 @@ first_invoice.invoice.click('post')
 line = first_invoice.invoice.lines[1]
 len(line.commissions)
 # #Res# #2
-set([(x.amount, x.commission_rate, x.agent.party.name, x.line_amount)
+
+set([(x.amount, x.commission_rate, x.agent.party.name, x.line_amount,
+            x.calculation_description)
     for x in line.commissions]) == set([
-            (Decimal('10'), Decimal('.1'), 'Broker', Decimal('100')),
-            (Decimal('60'), Decimal('.6'), 'Insurer', Decimal('100'))])
+            (Decimal('10'), Decimal('.1'), 'Broker', Decimal('100'),
+                'Linear commission calculation details\n'
+                '10.00000000 = 100.00 * 0.1000'),
+            (Decimal('60'), Decimal('.6'), 'Insurer', Decimal('100'),
+                'Linear commission calculation details\n'
+                '60.00000000 = 100.00 * 0.6000')])
 # #Res# #True
 
 # #Comment# #Pay invoice

@@ -33,6 +33,7 @@ def register():
         wizard.SimulateCommissionsLine,
         batch.DesynchronizedPrepaymentReport,
         batch.DesynchronizedRedeemedReport,
+        commission.CommissionDescriptionConfiguration,
         module='commission_insurance_prepayment', type_='model')
     Pool.register(
         commission.FilterCommissions,

@@ -67,5 +67,30 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <!-- ############################################################ -->
+        <!-- ########### Commission Description Configuration ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="commission_description_configuration_view_form">
+            <field name="model">commission.description.configuration</field>
+            <field name="inherit" ref="commission_insurance.commission_description_view_form"/>
+            <field name="name">commission_description_form</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Commission Detail ########### -->
+        <!-- ############################################################ -->
+        <record model="extra_details.configuration.line" id="commission_existing_recovery_amount">
+            <field name="configuration" ref="commission_insurance.commission_extra_details_configuration"/>
+            <field name="string">Existing Recovery Amount</field>
+            <field name="name">existing_recovery_amount</field>
+            <field name="type_">numeric</field>
+            <field name="digits">8</field>
+        </record>
+        <record model="extra_details.configuration.line" id="commission_recovery_amount">
+            <field name="configuration" ref="commission_insurance.commission_extra_details_configuration"/>
+            <field name="string">Recovery Amount</field>
+            <field name="name">recovery_amount</field>
+            <field name="type_">numeric</field>
+            <field name="digits">8</field>
+        </record>
     </data>
 </tryton>

@@ -109,6 +109,9 @@ class Contract(metaclass=PoolMeta):
             else:
                 commission.amount += commission.redeemed_prepayment
                 commission.redeemed_prepayment = None
+                commission.extra_details.update({
+                        'rate': commission.commission_rate,
+                        })
                 to_save.append(commission)
         Commission.delete(to_delete)
         Commission.save(to_save)
@@ -667,7 +670,8 @@ class ContractOption(metaclass=PoolMeta):
         return amount, rate
 
     def compute_commission_with_prepayment_schedule(self, agent, plan, rate,
-            amount, start_date, end_date, details):
+            amount, start_date, end_date, details, duration_factor=None):
+        duration_factor = duration_factor or Decimal(1)
         pool = Pool()
         Commission = pool.get('commission')
         commissions = []
@@ -686,6 +690,8 @@ class ContractOption(metaclass=PoolMeta):
             commission.product = plan.commission_product
             commission.commission_rate = (rate * percentage).quantize(
                 Decimal(10) ** -COMMISSION_RATE_DIGITS)
+            initial_amount = amount
+            amount *= duration_factor
             commission.amount = (percentage * amount).quantize(
                 Decimal(10) ** -COMMISSION_AMOUNT_DIGITS)
             commission.commissioned_option = self
@@ -696,7 +702,18 @@ class ContractOption(metaclass=PoolMeta):
                 'is_adjustment': is_adjustment,
                 'monthly_premium_incl_tax': self.monthly_premium_incl_tax,
                 'monthly_premium_excl_tax': self.monthly_premium_excl_tax,
+                'percentage': Decimal(percentage).quantize(
+                    Decimal(10) ** -COMMISSION_RATE_DIGITS),
+                'rate': rate.quantize(
+                    Decimal(10) ** -COMMISSION_RATE_DIGITS),
                 })
+            if is_adjustment:
+                commission.extra_details.update({
+                        'duration_factor': duration_factor.quantize(
+                            Decimal(10) ** -COMMISSION_RATE_DIGITS),
+                        'prepayment_amount': initial_amount.quantize(
+                            Decimal(10) ** -COMMISSION_AMOUNT_DIGITS)
+                        })
             commissions.append(commission)
 
         if commissions and \
