@@ -1,8 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import datetime
+
 from operator import itemgetter
 from collections import defaultdict
-import datetime
+from itertools import groupby
 
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, Button
@@ -52,7 +54,8 @@ class PreviewContractPremiums(EndorsementWizardPreviewMixin,
         premiums = []
         for premium in Premium.search([('main_contract', '=', instance.id),
                 ['OR', [('start', '>=', instance.start_date),
-                        ('start', '<=', instance.end_date or
+                        ('start', '<=', instance.final_end_date or
+                            instance.end_date or
                             datetime.date.max)],
                     [('start', '<', instance.start_date),
                         ('end', '>=', endorsement.effective_date or
@@ -73,7 +76,11 @@ class PreviewContractPremiums(EndorsementWizardPreviewMixin,
             }
 
     @classmethod
-    def init_from_preview_values(cls, preview_values):
+    def init_from_preview_values(cls, preview_values, endorsement=None):
+        preview_values = cls.filter_preview_new_premiums(preview_values,
+            endorsement)
+        preview_values = cls.filter_preview_old_premiums(preview_values,
+            endorsement)
         contracts = defaultdict(lambda: {
                 'contract': None,
                 'currency_digits': 2,
@@ -97,6 +104,53 @@ class PreviewContractPremiums(EndorsementWizardPreviewMixin,
                     contract_preview['%s_contract_premiums' % kind].append(
                         elem)
         return {'contract_previews': list(contracts.values())}
+
+    @classmethod
+    def filter_preview_new_premiums(cls, preview_values, endorsement):
+        if endorsement is None:
+            return preview_values
+
+        def keyfunc(premium):
+            return (premium.get('contract', -1),
+                premium.get('frequency', ''),
+                premium.get('name', ''))
+
+        new_preview_values = {}
+
+        for key, preview in preview_values['new'].items():
+            new_preview_values = preview.get('premiums', [])
+            filtered_new_preview_values = []
+            new_preview_values.sort(key=keyfunc)
+            for _, premiums in groupby(new_preview_values, key=keyfunc):
+                premiums_cpy = list(premiums)
+                if len(premiums_cpy) == 1:
+                    if (premiums_cpy[0].get('end', datetime.date.max) >
+                            endorsement.effective_date):
+                        filtered_new_preview_values.extend(premiums_cpy)
+                    continue
+                filtered_new_preview_values.extend([
+                        p for p in premiums_cpy
+                        if p.get('end', datetime.date.max) >
+                        (endorsement.effective_date
+                            or datetime.date.min)])
+                preview_values['new'][key]['premiums'] = \
+                    filtered_new_preview_values
+        return preview_values
+
+    @classmethod
+    def filter_preview_old_premiums(cls, preview_values, endorsement):
+        if endorsement is None:
+            return preview_values
+        old_preview_values = {}
+
+        for key, preview in preview_values['old'].items():
+            old_preview_values = preview.get('premiums', [])
+            filtered_old_preview_values = [p for p in old_preview_values
+                if p.get('start', datetime.date.min) <=
+                    (endorsement.effective_date or datetime.date.max)]
+            preview_values['old'][key]['premiums'] = \
+                filtered_old_preview_values
+        return preview_values
 
 
 class ContractPreview(model.CoogView):
@@ -151,4 +205,5 @@ class StartEndorsement(metaclass=PoolMeta):
         preview_values = self.endorsement.extract_preview_values(
             ContractPremiumsPreview.extract_endorsement_preview,
             endorsement=self.endorsement)
-        return ContractPremiumsPreview.init_from_preview_values(preview_values)
+        return ContractPremiumsPreview.init_from_preview_values(preview_values,
+            endorsement=self.endorsement)
