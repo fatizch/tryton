@@ -51,7 +51,8 @@ def new_populate(menu, model, record, title='', field=None, context=None):
             return
         dev_edit_item = gtk.MenuItem('Dev Edit...')
         dev_edit_item.connect('activate', dev_edit)
-        menu.insert(dev_edit_item, notes + 1)
+        if notes is not None:
+            menu.insert(dev_edit_item, notes + 1)
 
     set_menu(menu)
 
