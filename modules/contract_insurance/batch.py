@@ -3,11 +3,14 @@
 import datetime
 import logging
 
+from trytond.pool import Pool, PoolMeta
+
 from trytond.modules.report_engine import batch as report_batch
 
 
 __all__ = [
     'ContractDocumentRequestCreation',
+    'PartyAnonymizeIdentificationBatch',
     ]
 
 
@@ -61,3 +64,21 @@ class ContractDocumentRequestCreation(report_batch.ReportRequestCreationBatch):
             products=None, contract_ids=None, **template_args):
         return super(ContractDocumentRequestCreation, cls).execute(
             objects, ids, template, **template_args)
+
+
+class PartyAnonymizeIdentificationBatch(metaclass=PoolMeta):
+    __name__ = 'party.anonymize.identify'
+
+    @classmethod
+    def get_tables(cls):
+        pool = Pool()
+        covered_element = pool.get('contract.covered_element').__table__()
+        prev_tables = super(PartyAnonymizeIdentificationBatch, cls).get_tables()
+        prev_tables['covered_element'] = {
+            'table': covered_element,
+            'condition': (prev_tables['contract']['table'].id ==
+                covered_element.contract)}
+        prev_tables['party']['condition'] = (prev_tables['party']['condition'] |
+             (covered_element.party == prev_tables['party']['table'].id))
+        prev_tables.move_to_end('party')
+        return prev_tables

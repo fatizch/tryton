@@ -41,6 +41,7 @@ def register():
         contract.ContractOption,
         contract.ContractOptionVersion,
         batch.ContractEndDateTerminationBatch,
+        batch.PartyAnonymizeIdentificationBatch,
         contract.ContractExtraDataRevision,
         contract.ContractSelectStartDate,
         service.ContractService,

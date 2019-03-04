@@ -1,3 +1,4 @@
+* FEA#8622 identify parties to anonymize after contract termination
 * BUG#10975 Remove termination reason when reactivating a hold contract
 * BUG#10956 Add overlap check on coverages
 * OTH#00000 Fix on_change_with_sub_status: must return id instead of object

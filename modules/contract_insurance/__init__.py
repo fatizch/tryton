@@ -41,6 +41,7 @@ def register():
         wizard.ExclusionDisplay,
         rule_engine.RuleEngineRuntime,
         batch.ContractDocumentRequestCreation,
+        batch.PartyAnonymizeIdentificationBatch,
         module='contract_insurance', type_='model')
 
     Pool.register(

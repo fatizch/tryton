@@ -1,3 +1,4 @@
+* FEA#8622 Identifier les tiers à anonymiser après terminaison de leur contrat
 * BUG#10975 Retirer le motif de résiliation lors de la réactivation d'un contrat suspendu
 * BUG#10956 Ajout d'un contrôle de chevauchement sur les garanties
 * OTH#00000 Correction de la méthode on_change_with_sub_status: elle doit retrouner l'id au lieu de l'instance
