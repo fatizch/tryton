@@ -55,8 +55,8 @@ class CreateIndemnification(metaclass=PoolMeta):
                     new_deduction = Deduction()
                     elem.update_deduction(new_deduction)
                     new_deductions.append(new_deduction)
-            loss.deduction_periods = tuple(list(updated_deduction_periods.values()) +
-                new_deductions)
+            loss.deduction_periods = \
+                tuple(list(updated_deduction_periods.values()) + new_deductions)
             loss.save()
         return super(CreateIndemnification, self).transition_calculate()
 
