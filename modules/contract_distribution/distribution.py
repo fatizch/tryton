@@ -52,10 +52,9 @@ class DistributionNetwork(metaclass=PoolMeta):
 
     def get_parent_com_products_id(self, name):
         ComProduct = Pool().get('distribution.commercial_product')
-        return [x.id for x in ComProduct.search([
-                    ('dist_networks.left', '<', self.left),
-                    ('dist_networks.right', '>', self.right),
-                    ])]
+        return [x.id for x in ComProduct.search([('dist_networks', 'where',
+                            [('left', '<', self.left),
+                                ('right', '>', self.right), ]), ])]
 
     def get_all_commercial_products_id(self, name):
         return [x.id for x in set(
