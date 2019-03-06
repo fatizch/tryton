@@ -25,8 +25,7 @@ coog_test_dropdb() { # drop test db from postgresql server
 coog_test_manual() { # interactively launch tests - [module *]
     if [ "$1" = bin ]
     then
-        cd "$COOG_BIN/.."
-        python -m pytest -v --ignore=lib/tryton_test.py
+        python -m pytest -v --ignore="$COOG_COOG/bin/lib/tryton_test.py"
         return
     fi
     unset TRYTOND_CONFIG
@@ -39,7 +38,9 @@ coog_test_manual() { # interactively launch tests - [module *]
     coog_server_clearcache
     run-tests.py -c "$COOG_CONF_TEST" -vv -m "$@"
 
-    [ -z "$forced" ] && rm -rf "$DB_CACHE"
+    if [[ -z "$forced" ]]; then
+        rm -rf "$DB_CACHE"
+    fi
 }
 
 _coog_test_modules() { # list all linked modules
