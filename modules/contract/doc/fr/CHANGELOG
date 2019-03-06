@@ -1,3 +1,4 @@
+* BUG#11154 Corriger la montée en version de la property de séquence des numéros de devis
 * FEA#8622 Identifier les tiers à anonymiser après terminaison de leur contrat
 * BUG#10975 Retirer le motif de résiliation lors de la réactivation d'un contrat suspendu
 * BUG#10956 Ajout d'un contrôle de chevauchement sur les garanties

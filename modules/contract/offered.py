@@ -1,7 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pyson import Eval, Bool
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 from trytond import backend
 from trytond.tools.multivalue import migrate_property
 from trytond.modules.company.model import (CompanyMultiValueMixin,
@@ -27,8 +28,8 @@ class Product(CompanyMultiValueMixin, metaclass=PoolMeta):
     quote_number_sequence = fields.MultiValue(fields.Many2One('ir.sequence',
             'Quote number sequence', domain=[
                 ('code', '=', 'quote'),
-                ('company', '=', Eval('context', {}).get('company', -1)),
-                ],
+                ('company', '=', [Eval('context', {}).get('company', -1), None]
+                    ), ],
             states={
                 'required': Bool(Eval('context', {}).get('company')),
                 'invisible': ~Eval('context', {}).get('company'),
@@ -36,6 +37,27 @@ class Product(CompanyMultiValueMixin, metaclass=PoolMeta):
     contract_data_rule = fields.One2Many(
         'contract.data.rule', 'product',
         'Contract Data Rule', delete_missing=True, size=1)
+
+    @classmethod
+    def __register__(cls, module_name):
+        pool = Pool()
+        QuoteNumberSequence = pool.get('offered.product.quote_number_sequence')
+        TableHandler = backend.get('TableHandler')
+        sql_table = cls.__table__()
+        quote_sequence = QuoteNumberSequence.__table__()
+
+        super(Product, cls).__register__(module_name)
+
+        cursor = Transaction().connection.cursor()
+        table = TableHandler(cls, module_name)
+
+        # Migration from 1.14 sequence Many2One change into MultiValue
+        if table.column_exist('quote_number_sequence'):
+            query = quote_sequence.insert(
+                [quote_sequence.product, quote_sequence.quote_number_sequence],
+                sql_table.select(sql_table.id, sql_table.quote_number_sequence))
+            cursor.execute(*query)
+            table.drop_column('quote_number_sequence', exception=True)
 
     @classmethod
     def __setup__(cls):
@@ -51,8 +73,7 @@ class Product(CompanyMultiValueMixin, metaclass=PoolMeta):
         return (super(Product, cls)._export_light() |
             set(['quote_number_sequence']))
 
-    def update_contract_from_rule(self, contract, no_rule_errors,
-            **kwargs):
+    def update_contract_from_rule(self, contract, no_rule_errors, **kwargs):
         rule = self.contract_data_rule[0]
         exec_context = {}
         try:
@@ -86,7 +107,7 @@ class ProductQuoteNumberSequence(model.CoogSQL, CompanyValueMixin):
         select=True)
     quote_number_sequence = fields.Many2One('ir.sequence',
         'Quote Number Sequence', domain=[('code', '=', 'quote'),
-            ('company', '=', Eval('company', -1))], ondelete='RESTRICT',
+            ('company', '=', [Eval('company', -1), None])], ondelete='RESTRICT',
         depends=['company'])
 
     @classmethod
