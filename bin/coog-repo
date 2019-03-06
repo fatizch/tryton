@@ -92,11 +92,14 @@ _coog_repo_link_api() {
 }
 
 coog_repo_link_api() { # link repos modules - <repos> - default: all
-    ([ -d "$COOG_API" ] \
-        && mkdir -p "$COOG_API/api/custom" \
-        && cd "$COOG_API/api/custom" \
-        && _coog_repo_rm \
-        && _coog_repo_link_api "$@")
+    if [[ -d "$COOG_API" ]]; then \
+        mkdir -p "$COOG_API/api/custom" \
+            && cd "$COOG_API/api/custom" \
+            && _coog_repo_rm \
+            && _coog_repo_link_api "$@"
+    else
+        return 0
+    fi
 }
 
 coog_repo_unlink_api() { # unlink all repos modules
@@ -120,11 +123,14 @@ _coog_repo_link_app() {
 }
 
 coog_repo_link_app() { # link repos modules - <repos> - default: all
-    ([ -d "$COOG_APP" ] \
-        && mkdir -p "$COOG_APP/src/custom" \
-        && cd "$COOG_APP/src/custom" \
-        && _coog_repo_rm \
-        && _coog_repo_link_app "$@")
+    if [[ -d "$COOG_APP" ]]; then \
+        mkdir -p "$COOG_APP/src/custom" \
+            && cd "$COOG_APP/src/custom" \
+            && _coog_repo_rm \
+            && _coog_repo_link_app "$@"
+    else
+        return 0
+    fi
 }
 
 coog_repo_unlink_app() { # unlink all repos modules
