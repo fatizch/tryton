@@ -68,8 +68,14 @@ coog_code_status() { # status of all repos
 }
 
 coog_code_foreach() { # exec command on each repo <command>
-    local verbose; verbose=0
+    local global_result;
+    local local_result;
+    local verbose;
+    global_result=0
+    local_result=0
+    verbose=0
     [ ! -z "$1" ] && [ "$1" = v ] && shift && verbose=1
+
     for folder in $COOG_ROOT/*
     do
         if [ ! -d "$folder" ] || [ ! -d "$folder/.git" ] || [ -e "$folder/.not-coog" ]
@@ -78,8 +84,14 @@ coog_code_foreach() { # exec command on each repo <command>
         fi
         [ $verbose = 1 ] && echo "### $(basename "$folder")"
         (cd "$folder" && "$@")
+        local_result=$?
+        if [[ "$global_result" = 0 ]] && [[ "$local_result" != 0 ]]; then
+            global_result=$local_result
+        fi
         [ $verbose = 1 ] && echo "###"
     done
+    return "$global_result"  # Mandatory so that the result value is that of
+                             # the commands that were ran
 }
 
 coog_code_fetch() { # fetch all repos
