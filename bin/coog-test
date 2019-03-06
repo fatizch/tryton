@@ -33,14 +33,15 @@ coog_test_manual() { # interactively launch tests - [module *]
     unset TRYTOND_CACHE_CLASS
 
     local forced
+    local result
     forced=$DB_CACHE
     [ -z "$DB_CACHE" ] && DB_CACHE="$COOG_TMP/coog-test-manual-db-cache"
     coog_server_clearcache
     run-tests.py -c "$COOG_CONF_TEST" -vv -m "$@"
+    result=$?
 
-    if [[ -z "$forced" ]]; then
-        rm -rf "$DB_CACHE"
-    fi
+    [ -z "$forced" ] && rm -rf "$DB_CACHE"
+    return $result
 }
 
 _coog_test_modules() { # list all linked modules
