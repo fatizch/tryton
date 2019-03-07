@@ -606,6 +606,9 @@ def with_extra_data(kinds, schema=None, field_name='extra_data',
             if getattr(self, schema, None) is None:
                 setattr(self, field_name, {})
                 return
+            # See #11161, we may have to rewrite this in order to filter on the
+            # business kind if the rule becomes "one extra_data_def == multiple
+            # kinds"
             setattr(self, field_name, getattr(self, schema).refresh_extra_data(
                     (getattr(self, field_name) or {}).copy()))
 
@@ -624,5 +627,23 @@ def with_extra_data(kinds, schema=None, field_name='extra_data',
             getattr(self, 'on_change_%s' % field_name)()
 
         setattr(WithExtraDataMixin, 'on_change_%s' % schema, on_change_schema)
+
+    @classmethod
+    def validate_extra_data(cls, records):
+        super(WithExtraDataMixin, cls).validate(records)
+        # Domains on dict fields are not properly validated for now, so we have
+        # to do it here. Could probably be optimized with a query, but not
+        # necessary for now
+        ExtraData = Pool().get('extra_data')
+        structs = {}
+        for record in records:
+            for key in getattr(record, field_name, {}):
+                if key not in structs:
+                    structs[key] = ExtraData._extra_data_struct(key)
+                assert structs[key]['kind'] in kinds, 'Unexpected extra ' \
+                    'data kind "%s" for field "%s" of "%s"' % (
+                    structs[key]['kind'], field_name, cls.__name__)
+
+    setattr(WithExtraDataMixin, 'validate', validate_extra_data)
 
     return WithExtraDataMixin

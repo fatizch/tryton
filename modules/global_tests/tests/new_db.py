@@ -2371,6 +2371,20 @@ if CREATE_PRODUCTS:  # {{{
     reduction_libre.save()
     # }}}
 
+    do_print('    Contract Underwriting')  # {{{
+    analyse_forcee = ExtraData()
+    analyse_forcee.type_ = 'selection'
+    analyse_forcee.kind = 'contract_underwriting'
+    analyse_forcee.string = 'Analyse forcée'
+    analyse_forcee.name = 'analyse_forcee'
+    analyse_forcee.selection = '''oui: Oui
+non: None
+'''
+    analyse_forcee.has_default_value = True
+    analyse_forcee.default_value = 'non'
+    analyse_forcee.save()
+    # }}}
+
     do_print('    Item Desc')  # {{{
     objet_du_pret = ExtraData()
     objet_du_pret.type_ = 'selection'
@@ -3533,6 +3547,7 @@ else:
     contract_accepted.level = 'contract'
     contract_accepted.status = 'accepted'
     contract_accepted.decline_option = False
+    contract_accepted.with_extra_data = True
     contract_accepted.save()
 
     contract_accepted_conditions = UnderwritingDecision()
@@ -4258,6 +4273,7 @@ else:
     life_product.document_rules[0].documents.new()
     life_product.document_rules[0].documents[0].document = subscription_request
     life_product.document_rules[0].documents[0].blocking = True
+    life_product.extra_data_def.append(ExtraData(analyse_forcee.id))
     life_product.save()
 
     life_process.for_products.append(life_product)
@@ -4727,6 +4743,7 @@ if CREATE_CONTRACTS:  # {{{
         [('code', '=', 'yearly_manual')])[0]
     process_next(life_contract)
     process_next(life_contract)
+    assert_eq(life_contract.extra_data_values, {})
     # }}}
 
     do_print('    Creating a loan contract')  # {{{

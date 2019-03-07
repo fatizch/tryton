@@ -14,6 +14,7 @@ def register():
         offered.UnderwritingDecision,
         offered.UnderwritingDecisionUnderwritingDecision,
         contract.Contract,
+        contract.ContractOption,
         contract.ContractUnderwriting,
         contract.ContractUnderwritingOption,
         offered.Product,

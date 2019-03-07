@@ -14,6 +14,7 @@ __all__ = [
     'ContractUnderwriting',
     'ContractUnderwritingOption',
     'Contract',
+    'ContractOption',
     ]
 
 
@@ -412,3 +413,32 @@ class Contract(metaclass=PoolMeta):
             covered_element.options = covered_element.options
         self.covered_elements = covered_elements
         self.save()
+
+    def init_extra_data(self):
+        super().init_extra_data()
+
+        if not self.extra_datas:
+            return
+
+        # Filter out contract_underwriting extra data since they are not
+        # supposed to be here
+        ExtraData = Pool().get('extra_data')
+        self.extra_data_values = {k: v
+            for k, v in self.extra_data_values.items()
+            if ExtraData._extra_data_struct(k)['kind']
+            != 'contract_underwriting'}
+        self.extra_datas[-1].extra_data_values = self.extra_data_values
+
+
+class ContractOption(metaclass=PoolMeta):
+    __name__ = 'contract.option'
+
+    def recalculate_extra_data(self, extra_data):
+        values = super().recalculate_extra_data(extra_data)
+
+        # Filter out option_underwriting extra data since they are not
+        # supposed to be here
+        ExtraData = Pool().get('extra_data')
+        return {k: v for k, v in values.items()
+            if ExtraData._extra_data_struct(k)['kind']
+            != 'option_underwriting'}
