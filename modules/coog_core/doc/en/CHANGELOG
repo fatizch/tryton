@@ -1,3 +1,4 @@
+* OTH#00000 Add possibility to override the batch configuration using env variables
 * OTH#00000 Fix on export import JSON (Python 3)
 * OTH#00000 Transform _constraints into validate
 * BUG#10577 Fix on "User" model to make it JSON exportable

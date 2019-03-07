@@ -70,6 +70,31 @@ def analyze(meth):
     return wrap
 
 
+def update_environ(config):
+    """
+    Batch environ syntax: [PREFIX]_[BATCH_NAME]__[VARIABLE]_[VALUE]
+    - Prefix is "TRYTOND_BATCH"
+    - BATCH_NAME is the batch __name__ with "_" instead of "."
+
+    Exemple: TRYTOND_BATCH_ACCOUNT_INVOICE_GENERATE__JOB_SIZE=0
+    In configuration file should be:
+    [account.invoice.generate]
+    job_size=0
+    """
+    for key, value in os.environ.items():
+        if not key.startswith('TRYTOND_BATCH_'):
+            continue
+        try:
+            section, option = key[len('TRYTOND_BATCH_'):].lower().split(
+                '__', 1)
+        except ValueError:
+            continue
+        section = '.'.join(section.split('_'))
+        if not config.has_section(section):
+            config.add_section(section)
+        config.set(section, option, value)
+
+
 def load_batch_config():
     config = configparser.RawConfigParser()
     config_file = os.environ.get('TRYTOND_BATCH_CONFIG')
@@ -79,6 +104,7 @@ def load_batch_config():
                 config.read_file(fconf)
         except IOError:
             pass
+    update_environ(config)
     return config
 
 

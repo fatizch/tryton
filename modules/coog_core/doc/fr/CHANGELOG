@@ -1,3 +1,4 @@
+* OTH#00000 Ajout de la possibilité de surcharger la configuration des batchs avec des variables d'environnement
 * OTH#00000 Correctifs sur l'import export JSON (Python 3)
 * OTH#00000 Conversion des _constraints en validate
 * BUG#10577 Correctif sur le modèle "Utilisateur" afin de le rendre exportable en JSON 
