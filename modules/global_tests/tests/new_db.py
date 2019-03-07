@@ -1084,15 +1084,6 @@ if LOAD_ACCOUNTING:  # {{{
     account_configuration.broker_analytic_account_to_use = analytic_child
     account_configuration.save()
     # }}}
-
-cash_method, = PaymentMethod.find([('name', '=', 'Cash')])
-payment_sepa, = PaymentJournal.find([('name', '=', 'Sepa')])
-default_payment_term, = PaymentTerm.find([('name', '=', 'Par défaut')])
-claim_product, = AccountProduct.find([('code', '=', 'reglement_sinistres')])
-claim_product_taxed, = AccountProduct.find(
-    [('code', '=', 'reglement_sinistres_taxes')])
-claim_product_reduced_taxed, = AccountProduct.find(
-    [('code', '=', 'reglement_sinistres_taxes_reduites')])
 # }}}
 
 if CREATE_PROCESSES:  # {{{
@@ -2089,17 +2080,6 @@ if not champs_technique('loss.covered_person.id'):
         # }}}
     claim_work_interruption_process.save()
     # }}}
-
-generic_process, = Process.find(
-    [('technical_name', '=', 'souscription_generique')])
-life_process, = Process.find(
-    [('technical_name', '=', 'souscription_prevoyance')])
-loan_process, = Process.find(
-    [('technical_name', '=', 'souscription_emprunteur')])
-death_claim_process, = Process.find(
-    [('technical_name', '=', 'claim_death_process')])
-work_interruption_claim_process, = Process.find(
-    [('technical_name', '=', 'claim_work_interruption_process')])
 # }}}
 
 if CREATE_ACTORS:  # {{{
@@ -2162,13 +2142,30 @@ if CREATE_ACTORS:  # {{{
     french_state.name = 'État français'
     french_state.save()
     # }}}
-
-insurer, = Insurer.find([])
-broker, = Party.find([('name', '=', _broker_name)])
-lender, = Party.find([('name', '=', _lender_name)])
 # }}}
 
 if CREATE_PRODUCTS:  # {{{
+    do_print('\nLoading required configuration')  # {{{
+    insurer, = Insurer.find([])
+    generic_process, = Process.find(
+        [('technical_name', '=', 'souscription_generique')])
+    life_process, = Process.find(
+        [('technical_name', '=', 'souscription_prevoyance')])
+    loan_process, = Process.find(
+        [('technical_name', '=', 'souscription_emprunteur')])
+    death_claim_process, = Process.find(
+        [('technical_name', '=', 'claim_death_process')])
+    work_interruption_claim_process, = Process.find(
+        [('technical_name', '=', 'claim_work_interruption_process')])
+    claim_product, = AccountProduct.find([('code', '=', 'reglement_sinistres')])
+    claim_product_taxed, = AccountProduct.find(
+        [('code', '=', 'reglement_sinistres_taxes')])
+    claim_product_taxed, = AccountProduct.find(
+        [('code', '=', 'reglement_sinistres_taxes')])
+    claim_product_reduced_taxed, = AccountProduct.find(
+        [('code', '=', 'reglement_sinistres_taxes_reduites')])
+    # }}}
+
     do_print('\nCreating claim sub status')  # {{{
     non_eligible = ClaimSubStatus()
     non_eligible.code = 'non_eligible'
@@ -3608,10 +3605,12 @@ else:
     product_config.loan_number_sequence = loan_sequence
     product_config.save()
     claim_config = ClaimConfiguration(1)
-    claim_config.payment_journal = payment_sepa
+    claim_config.payment_journal, = PaymentJournal.find(
+        [('name', '=', 'Sepa')])
     claim_config.prest_ij_sequence = prest_ij_sequence
     claim_config.prest_ij_period_sequence = prest_ij_period_sequence
-    claim_config.claim_default_payment_term = default_payment_term
+    claim_config.claim_default_payment_term, = PaymentTerm.find(
+        [('name', '=', 'Par défaut')])
     claim_config.save()
     # }}}
 
@@ -4366,38 +4365,15 @@ else:
         'stop_indemnifications'
     group_life_product.save()
     # }}}
-
-employee_category, = ItemDesc.find([('code', '=', 'category_item_desc')])
-
-house_product, = Product.find([('code', '=', 'house_product')])
-life_product, = Product.find([('code', '=', 'life_product')])
-loan_product, = Product.find([('code', '=', 'loan_product')])
-funeral_product, = Product.find([('code', '=', 'funeral_product')])
-group_life_product, = Product.find([('code', '=', 'group_life_product')])
-
-responsability_coverage, = Coverage.find(
-    [('code', '=', 'responsability_coverage')])
-fire_coverage, = Coverage.find([('code', '=', 'fire_coverage')])
-death_coverage, = Coverage.find([('code', '=', 'death_coverage')])
-unemployment_coverage, = Coverage.find(
-    [('code', '=', 'unemployment_coverage')])
-disability_coverage, = Coverage.find([('code', '=', 'disability_coverage')])
-funeral_coverage, = Coverage.find([('code', '=', 'funeral_coverage')])
-group_incapacity_coverage, = Coverage.find(
-    [('code', '=', 'group_incapacity_coverage')])
-
-standard_beneficiary_clause, = Clause.find(
-    [('code', '=', 'clause_beneficiaire_standard')])
-custom_beneficiary_clause, = Clause.find(
-    [('code', '=', 'clause_beneficiaire_personnalisee')])
-loan_beneficiary_clause, = Clause.find(
-    [('code', '=', 'clause_beneficiaire_emprunteur')])
-funeral_beneficiary_clause, = Clause.find(
-    [('code', '=', 'clause_beneficiaire_obseques')])
 # }}}
 
 if CREATE_COMMISSION_CONFIG:  # {{{
     do_print('\nCreating commission configuration')
+
+    do_print('    Loading configuration')  # {{{
+    broker, = Party.find([('name', '=', _broker_name)])
+    # }}}
+
     do_print('    Creating commission plans extra data')  # {{{
     vip_agent = ExtraData()
     vip_agent.type_ = 'boolean'
@@ -4541,23 +4517,58 @@ return 1.0 if compl_vip_agent() else 0.75
         [('code', '=', 'C1010102')])
     broker_user.save()
     # }}}
-
-insurer_plan, = CommissionPlan.find(
-    [('code', '=', 'commissionnement_assureur')])
-broker_plan, = CommissionPlan.find(
-    [('code', '=', 'commissionnement_courtier')])
-broker_plan_flat, = CommissionPlan.find(
-    [('code', '=', 'commissionnement_courtier_constant')])
-insurer_agent, = CommissionAgent.find(
-    [('plan', '=', insurer_plan.id), ('party', '=', insurer.party.id)])
-broker_agent, = CommissionAgent.find(
-    [('plan', '=', broker_plan.id), ('party', '=', broker.id)])
-broker_agent_flat, = CommissionAgent.find(
-    [('plan', '=', broker_plan_flat.id), ('party', '=', broker.id)])
 # }}}
 
 if CREATE_CONTRACTS:  # {{{
     do_print('\nCreating contracts')
+
+    do_print('    Loading configuration')  # {{{
+    broker, = Party.find([('name', '=', _broker_name)])
+    lender, = Party.find([('name', '=', _lender_name)])
+    insurer, = Insurer.find([])
+
+    insurer_plan, = CommissionPlan.find(
+        [('code', '=', 'commissionnement_assureur')])
+    broker_plan, = CommissionPlan.find(
+        [('code', '=', 'commissionnement_courtier')])
+    broker_plan_flat, = CommissionPlan.find(
+        [('code', '=', 'commissionnement_courtier_constant')])
+    insurer_agent, = CommissionAgent.find(
+        [('plan', '=', insurer_plan.id), ('party', '=', insurer.party.id)])
+    broker_agent, = CommissionAgent.find(
+        [('plan', '=', broker_plan.id), ('party', '=', broker.id)])
+    broker_agent_flat, = CommissionAgent.find(
+        [('plan', '=', broker_plan_flat.id), ('party', '=', broker.id)])
+
+    employee_category, = ItemDesc.find([('code', '=', 'category_item_desc')])
+
+    house_product, = Product.find([('code', '=', 'house_product')])
+    life_product, = Product.find([('code', '=', 'life_product')])
+    loan_product, = Product.find([('code', '=', 'loan_product')])
+    funeral_product, = Product.find([('code', '=', 'funeral_product')])
+    group_life_product, = Product.find([('code', '=', 'group_life_product')])
+
+    responsability_coverage, = Coverage.find(
+        [('code', '=', 'responsability_coverage')])
+    fire_coverage, = Coverage.find([('code', '=', 'fire_coverage')])
+    death_coverage, = Coverage.find([('code', '=', 'death_coverage')])
+    unemployment_coverage, = Coverage.find(
+        [('code', '=', 'unemployment_coverage')])
+    disability_coverage, = Coverage.find([('code', '=', 'disability_coverage')])
+    funeral_coverage, = Coverage.find([('code', '=', 'funeral_coverage')])
+    group_incapacity_coverage, = Coverage.find(
+        [('code', '=', 'group_incapacity_coverage')])
+
+    standard_beneficiary_clause, = Clause.find(
+        [('code', '=', 'clause_beneficiaire_standard')])
+    custom_beneficiary_clause, = Clause.find(
+        [('code', '=', 'clause_beneficiaire_personnalisee')])
+    loan_beneficiary_clause, = Clause.find(
+        [('code', '=', 'clause_beneficiaire_emprunteur')])
+    funeral_beneficiary_clause, = Clause.find(
+        [('code', '=', 'clause_beneficiaire_obseques')])
+    # }}}
+
     do_print('    Creating a house contract')  # {{{
     house_subscriber = Party()
     house_subscriber.name = 'DOE'
@@ -5102,6 +5113,16 @@ if BILL_CONTRACTS:  # {{{
 
 if CREATE_CLAIMS:  # {{{
     do_print('\nCreating claims')
+    do_print('    Loading required configuration')  # {{{
+
+    work_interruption_claim_process, = Process.find(
+        [('technical_name', '=', 'claim_work_interruption_process')])
+    death_claim_process, = Process.find(
+        [('technical_name', '=', 'claim_death_process')])
+
+    claim_product_reduced_taxed, = AccountProduct.find(
+        [('code', '=', 'reglement_sinistres_taxes_reduites')])
+    # }}}
     do_print('    Creating a work interruption claim')  # {{{
 
     # Initialize claim {{{
@@ -5428,7 +5449,8 @@ if GENERATE_REPORTINGS:  # {{{
         relativedelta(days=-1)
     for invoice in Invoice.find([('state', '=', 'posted')]):
         PayInvoice = Wizard('account.invoice.pay', [invoice])
-        PayInvoice.form.payment_method = cash_method
+        PayInvoice.form.payment_method, = PaymentMethod.find(
+            [('name', '=', 'Cash')])
         PayInvoice.form.date = _contract_rebill_post_date + relativedelta(
             days=-1)
         PayInvoice.execute('choice')
