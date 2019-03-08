@@ -1,3 +1,5 @@
+* BUG#11146 The reduction date should be an invoice period end rather than start
+
 Version 2.2 - 2018-10-12
 * BUG#9977 The reduction of a renewable contract should remove its end date and prevent further renewal
 * BUG#9272 Set contract status to 'active' when reducing a hold contract

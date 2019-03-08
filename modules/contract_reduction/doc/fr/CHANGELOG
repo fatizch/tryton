@@ -1,3 +1,5 @@
+* BUG#11146 La date de réduction doit être une date de fin de période de quittancement plutôt que de début
+
 Version 2.2 - 2018-10-12
 * BUG#9977 La réduction d'un contrat renouvelable doit supprimer sa date de fin et empécher tout nouveau renouvellement
 * BUG#9272 Passage du statut du contrat à actif lors de la mise en réduction d'un contrat suspendu

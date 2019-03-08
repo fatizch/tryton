@@ -122,16 +122,10 @@ class Contract(metaclass=PoolMeta):
 
     def apply_reduction(self, reduction_date):
         SubStatus = Pool().get('contract.sub_status')
-        self.reduction_date = reduction_date
-        for option in self.options:
-            option.reduce(reduction_date)
-        self.options = list(self.options)
-        for covered_element in self.covered_elements:
-            for option in covered_element.options:
-                option.reduce(reduction_date)
-            covered_element.options = list(covered_element.options)
-        self.covered_elements = list(self.covered_elements)
         reduced_active = SubStatus.get_sub_status('contract_active_reduced')
+
+        self.reduction_date = reduction_date
+        self._apply_options_reduction(reduction_date)
         self.sub_status = reduced_active
 
         # When automatically terminating a suspended contract, we want to set
@@ -160,15 +154,18 @@ class Contract(metaclass=PoolMeta):
             until = min([self.reduction_date, invoice_rrule[1]])
         else:
             until = self.reduction_date
+        # The rrule will return the starts of billing periods, so we must add
+        # one day to the reduction date so that the last period ends with it
         invoice_rrule[0].rrule([datetime.datetime.combine(
-                    self.reduction_date, datetime.time())])
+                    coog_date.add_day(self.reduction_date, 1),
+                    datetime.time())])
         return (invoice_rrule[0], until) + tuple(invoice_rrule[2:])
 
     def get_invoice_periods(self, up_to_date, from_date=None,
             ignore_invoices=False):
         if self.reduction_date:
             up_to_date = min(up_to_date or datetime.date.max,
-                coog_date.add_day(self.reduction_date, -1))
+                self.reduction_date)
         return super(Contract, self).get_invoice_periods(up_to_date, from_date,
             ignore_invoices)
 
@@ -219,7 +216,7 @@ class Contract(metaclass=PoolMeta):
                     contract.sub_status = None
                 cls.save([contract])
                 if utils.is_module_installed('contract_insurance_invoice'):
-                    contract.rebill(coog_date.add_day(reduction_date, -1))
+                    contract.rebill(reduction_date)
                     contract.reconcile()
             Event.notify_events(contracts, 'contract_reduction_cancelling')
 
@@ -227,8 +224,24 @@ class Contract(metaclass=PoolMeta):
         self.reduction_date = None
 
     def _cancel_options_reduction(self):
-        for option in self._get_calculate_targets('options'):
+        for option in self.options:
             option.cancel_reduction()
+        self.options = list(self.options)
+        for covered_element in self.covered_elements:
+            for option in covered_element.options:
+                option.cancel_reduction()
+            covered_element.options = list(covered_element.options)
+        self.covered_elements = list(self.covered_elements)
+
+    def _apply_options_reduction(self, reduction_date):
+        for option in self.options:
+            option.reduce(reduction_date)
+        self.options = list(self.options)
+        for covered_element in self.covered_elements:
+            for option in covered_element.options:
+                option.reduce(reduction_date)
+            covered_element.options = list(covered_element.options)
+        self.covered_elements = list(self.covered_elements)
 
 
 class Option(metaclass=PoolMeta):
