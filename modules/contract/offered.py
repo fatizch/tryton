@@ -28,12 +28,15 @@ class Product(CompanyMultiValueMixin, metaclass=PoolMeta):
     quote_number_sequence = fields.MultiValue(fields.Many2One('ir.sequence',
             'Quote number sequence', domain=[
                 ('code', '=', 'quote'),
-                ('company', '=', [Eval('context', {}).get('company', -1), None]
+                ('company', 'in', [Eval('context', {}).get('company', -1), None]
                     ), ],
             states={
                 'required': Bool(Eval('context', {}).get('company')),
                 'invisible': ~Eval('context', {}).get('company'),
                 }))
+    quote_number_sequences = fields.One2Many(
+            'offered.product.quote_number_sequence', 'product', 'Sequences',
+            delete_missing=True)
     contract_data_rule = fields.One2Many(
         'contract.data.rule', 'product',
         'Contract Data Rule', delete_missing=True, size=1)
@@ -104,10 +107,11 @@ class ProductQuoteNumberSequence(model.CoogSQL, CompanyValueMixin):
     __name__ = 'offered.product.quote_number_sequence'
 
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
-        select=True)
+        select=True, required=True)
     quote_number_sequence = fields.Many2One('ir.sequence',
         'Quote Number Sequence', domain=[('code', '=', 'quote'),
-            ('company', '=', [Eval('company', -1), None])], ondelete='RESTRICT',
+            ('company', 'in',
+                [Eval('company', -1), None])], ondelete='RESTRICT',
         depends=['company'])
 
     @classmethod
