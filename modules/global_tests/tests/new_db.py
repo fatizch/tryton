@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 
 from proteus import config, Model, Wizard
-from trytond.exceptions import UserError
+from trytond.exceptions import UserError, UserWarning
 
 
 def parse_environ(name, default):
@@ -83,15 +83,25 @@ def assert_eq(x, y):
     assert x == y, 'Assertion error, got %s, expected %s' % (str(x), str(y))
 
 
+def test_error(error_class, func, *func_args, **func_kwargs):
+    try:
+        func(*func_args, **func_kwargs)
+        raise Exception('Expected error was not raised')
+    except error_class:
+        pass
+
+
 do_print('\nDefining constants')  # {{{
 _base_date = datetime.date(2000, 1, 1)
 _base_contract_date = datetime.date(2018, 1, 1)
 _contract_rebill_date = datetime.date(2018, 7, 1)
 _contract_rebill_post_date = datetime.date(2018, 6, 1)
+_contract_payment_date = datetime.date(2018, 5, 1)
 _death_claim_date = datetime.date(2018, 7, 12)
 _illness_claim_date = datetime.date(2018, 5, 12)
 _illness_claim_end_date_1 = datetime.date(2018, 7, 12)
 _illness_claim_end_date_2 = datetime.date(2018, 7, 26)
+_commission_invoice_date = datetime.date(2018, 7, 31)
 _slip_generation_date = datetime.date(2018, 9, 1)
 _account_chart_code = 'PCS'
 _default_receivable_code = '4117'
@@ -306,11 +316,14 @@ Journal = Model.get('account.journal')
 Lang = Model.get('ir.lang')
 Loan = Model.get('loan')
 LossDesc = Model.get('benefit.loss.description')
+MoveLine = Model.get('account.move.line')
 MoveLinePasrauRate = Model.get('account.move.line.pasrau.rate')
 NetCalculationRule = Model.get('claim.net_calculation_rule')
 Party = Model.get('party.party')
 PartyConfiguration = Model.get('party.configuration')
 PartyPasrauRate = Model.get('party.pasrau.rate')
+Payment = Model.get('account.payment')
+PaymentGroup = Model.get('account.payment.group')
 PaymentJournal = Model.get('account.payment.journal')
 PaymentJournalFailureAction = Model.get(
     'account.payment.journal.failure_action')
@@ -339,7 +352,7 @@ UnderwritingDecision = Model.get('underwriting.decision')
 UnderwritingRule = Model.get('underwriting.rule')
 DSNMessage = Model.get('dsn.message')
 User = Model.get('res.user')
-UserWarning = Model.get('res.user.warning')
+Warning = Model.get('res.user.warning')
 # }}}
 
 do_print('\nGet currency')  # {{{
@@ -498,6 +511,7 @@ if LOAD_BANKS:  # {{{
     company_bank_account = BankAccount()
     company_bank_account.currency = currency
     company_bank_account.number = _company_bank_account
+    company_bank_account.start_date = None
     company_bank_account.bank = Bank.find([('bic', '=', _company_bank_bic)])[0]
     company_bank_account.owners.append(Party(company_party.id))
     company_bank_account.save()
@@ -1028,8 +1042,6 @@ if LOAD_ACCOUNTING:  # {{{
     freq_yearly_sepa.code = 'yearly_sepa'
     freq_yearly_sepa.frequency = 'yearly'
     freq_yearly_sepa.direct_debit = True
-    freq_yearly_sepa.sync_day = '1'
-    freq_yearly_sepa.sync_month = '1'
     freq_yearly_sepa.allowed_payment_terms.append(
         PaymentTerm(payment_term.id))
     freq_yearly_sepa.save()
@@ -4260,6 +4272,8 @@ else:
             [('code', '=', 'half_yearly_manual')])[0])
     life_product.billing_modes.append(BillingMode.find(
             [('code', '=', 'yearly_manual')])[0])
+    life_product.billing_modes.append(BillingMode.find(
+            [('code', '=', 'yearly_sepa')])[0])
     life_product.term_renewal_rule.new()
     life_product.term_renewal_rule[0].rule = product_term_renewal_rule
     life_product.term_renewal_rule[0].allow_renewal = True
@@ -4300,6 +4314,8 @@ else:
             [('code', '=', 'half_yearly_manual')])[0])
     loan_product.billing_modes.append(BillingMode.find(
             [('code', '=', 'yearly_manual')])[0])
+    loan_product.billing_modes.append(BillingMode.find(
+            [('code', '=', 'yearly_sepa')])[0])
     loan_product.average_loan_premium_rule = loan_premium_rule
     loan_product.com_products.new()
     loan_product.com_products[0].name = 'Emprunteur +'
@@ -4340,6 +4356,8 @@ else:
             [('code', '=', 'half_yearly_manual')])[0])
     funeral_product.billing_modes.append(BillingMode.find(
             [('code', '=', 'yearly_manual')])[0])
+    funeral_product.billing_modes.append(BillingMode.find(
+            [('code', '=', 'yearly_sepa')])[0])
     funeral_product.com_products.new()
     funeral_product.com_products[0].name = 'Obsèques +'
     funeral_product.com_products[0].code = 'obseques_plus'
@@ -4599,6 +4617,15 @@ if CREATE_CONTRACTS:  # {{{
     house_subscriber.all_addresses[0].country = country
     house_subscriber.save()
 
+    house_subscriber_account = BankAccount()
+    house_subscriber_account.owners.append(Party(house_subscriber.id))
+    house_subscriber_account.start_date = None
+    house_subscriber_account.currency = currency
+    house_subscriber_account.number = get_iban()
+    house_subscriber_account.bank, = Bank.find(
+        [('bic', '=', _company_bank_bic)])
+    house_subscriber_account.save()
+
     SubscribeContract = Wizard('contract.subscribe')
     SubscribeContract.form.signature_date = _base_contract_date
     SubscribeContract.form.distributor = DistributionNetwork.find(
@@ -4608,12 +4635,12 @@ if CREATE_CONTRACTS:  # {{{
 
     house_contract = Contract.find([('product.code', '=', 'house_product')])[0]
     house_contract.subscriber = house_subscriber
-    assert house_contract.agent == broker_agent
+    assert_eq(house_contract.agent, broker_agent)
     process_next(house_contract)
     covered = house_contract.covered_elements[0]
     covered.name = 'Résidence principale'
-    assert set(covered.current_extra_data.keys()) == {
-        'house_type', 'house_size', 'house_rooms', 'house_construction_date'}
+    assert_eq(set(covered.current_extra_data.keys()),
+        {'house_type', 'house_size', 'house_rooms', 'house_construction_date'})
     covered.current_extra_data = {
         'house_type': 'appartement',
         }
@@ -4636,7 +4663,10 @@ if CREATE_CONTRACTS:  # {{{
     house_contract.document_request_lines[0].save()
     process_next(house_contract)
     house_contract.billing_informations[0].billing_mode = BillingMode.find(
-        [('code', '=', 'yearly_manual')])[0]
+        [('code', '=', 'yearly_sepa')])[0]
+    house_contract.billing_informations[0].direct_debit_account = \
+        house_subscriber_account
+    house_contract.billing_informations[0].direct_debit_day = 1
     process_next(house_contract)
     process_next(house_contract)
     # }}}
@@ -4657,6 +4687,7 @@ if CREATE_CONTRACTS:  # {{{
 
     life_subscriber_account = BankAccount()
     life_subscriber_account.owners.append(Party(life_subscriber.id))
+    life_subscriber_account.start_date = None
     life_subscriber_account.currency = currency
     life_subscriber_account.number = get_iban()
     life_subscriber_account.bank, = Bank.find(
@@ -4738,9 +4769,11 @@ if CREATE_CONTRACTS:  # {{{
     process_next(life_contract)
     # Now it should
     process_next(life_contract)
-
-    life_contract.billing_informations[0].billing_mode = BillingMode.find(
-        [('code', '=', 'yearly_manual')])[0]
+    life_contract.billing_informations[0].billing_mode, = BillingMode.find(
+        [('code', '=', 'yearly_sepa')])
+    life_contract.billing_informations[0].direct_debit_account = \
+        life_subscriber_account
+    life_contract.billing_informations[0].direct_debit_day = 1
     process_next(life_contract)
     process_next(life_contract)
     assert_eq(life_contract.extra_data_values, {})
@@ -4759,6 +4792,15 @@ if CREATE_CONTRACTS:  # {{{
     loan_subscriber.all_addresses[0].city = 'PARIS'
     loan_subscriber.all_addresses[0].country = country
     loan_subscriber.save()
+
+    loan_subscriber_account = BankAccount()
+    loan_subscriber_account.owners.append(Party(loan_subscriber.id))
+    loan_subscriber_account.start_date = None
+    loan_subscriber_account.currency = currency
+    loan_subscriber_account.number = get_iban()
+    loan_subscriber_account.bank, = Bank.find(
+        [('bic', '=', _company_bank_bic)])
+    loan_subscriber_account.save()
 
     loan_1 = Loan()
     loan_1.lender_address = lender.addresses[0]
@@ -4832,8 +4874,11 @@ if CREATE_CONTRACTS:  # {{{
     loan_contract.document_request_lines[1].received = True
     loan_contract.save()
     process_next(loan_contract)
-    loan_contract.billing_informations[0].billing_mode = BillingMode.find(
-        [('code', '=', 'yearly_manual')])[0]
+    loan_contract.billing_informations[0].billing_mode, = BillingMode.find(
+        [('code', '=', 'yearly_sepa')])
+    loan_contract.billing_informations[0].direct_debit_account = \
+        loan_subscriber_account
+    loan_contract.billing_informations[0].direct_debit_day = 1
     process_next(loan_contract)
     process_next(loan_contract)
     # }}}
@@ -4854,6 +4899,7 @@ if CREATE_CONTRACTS:  # {{{
 
     funeral_subscriber_account = BankAccount()
     funeral_subscriber_account.owners.append(Party(funeral_subscriber.id))
+    funeral_subscriber_account.start_date = None
     funeral_subscriber_account.currency = currency
     funeral_subscriber_account.number = get_iban()
     funeral_subscriber_account.bank, = Bank.find(
@@ -4887,6 +4933,9 @@ if CREATE_CONTRACTS:  # {{{
     funeral_contract.document_request_lines[0].received = True
     funeral_contract.save()
     process_next(funeral_contract)
+    process_next(funeral_contract)
+    funeral_contract.billing_informations[0].billing_mode, = BillingMode.find(
+        [('code', '=', 'yearly_sepa')])
     funeral_contract.billing_informations[0].direct_debit_account = \
         funeral_subscriber_account
     funeral_contract.billing_informations[0].direct_debit_day = 1
@@ -4989,7 +5038,7 @@ if CREATE_CONTRACTS:  # {{{
         'employee_type': 'cadre'}
     covered.options[-1].current_extra_data = {
         'relapse_threshold': '90'}
-    assert len(covered.options[-1].versions[-1].benefits) == 1
+    assert_eq(len(covered.options[-1].versions[-1].benefits), 1)
     benefit_data = covered.options[-1].versions[-1].benefits[-1]
     benefit_data.salary_mode = 'last_12_months'
     benefit_data.net_salary_mode = True
@@ -4998,12 +5047,13 @@ if CREATE_CONTRACTS:  # {{{
     assert benefit_data.deductible_rule is None
     benefit_data.deductible_rule = get_rule(
         'coog_franchise_relais_conventation')
-    assert list(benefit_data.deductible_rule_extra_data.keys()) == \
-        ['1_nombre_de_jours_de_franchise']
+    assert_eq(list(benefit_data.deductible_rule_extra_data.keys()),
+        ['1_nombre_de_jours_de_franchise'])
 
-    assert benefit_data.indemnification_rule.short_name == \
-        'coog_traitement_journalier_par_tranche_de_salaire'
-    assert set(benefit_data.indemnification_rule_extra_data) == {
+    assert_eq(benefit_data.indemnification_rule.short_name,
+        'coog_traitement_journalier_par_tranche_de_salaire')
+    assert_eq(set(benefit_data.indemnification_rule_extra_data),
+        {
         '1_pourcentage_ij_ta',
         '2_pourcentage_ij_tb',
         '3_pourcentage_ij_tc',
@@ -5011,7 +5061,7 @@ if CREATE_CONTRACTS:  # {{{
         '5_inclusion_du_mi_temps_therapeutique',
         '6_sans_deduction_de_l_ijss',
         '7_limiter_au_net',
-        }
+        })
     benefit_data.indemnification_rule_extra_data = {
         '1_pourcentage_ij_ta': 20,
         '2_pourcentage_ij_tb': 15,
@@ -5021,15 +5071,16 @@ if CREATE_CONTRACTS:  # {{{
         '6_sans_deduction_de_l_ijss': False,
         '7_limiter_au_net': True,
         }
-    assert benefit_data.revaluation_rule.short_name == \
-        'coog_regle_standard_de_calcul_de_la_revalorisation'
-    assert set(benefit_data.revaluation_rule_extra_data) == {
+    assert_eq(benefit_data.revaluation_rule.short_name,
+        'coog_regle_standard_de_calcul_de_la_revalorisation')
+    assert_eq(set(benefit_data.revaluation_rule_extra_data),
+        {
         '1_reval_mode',
         '2_date_de_reference',
         '3_1ere_revalorisation',
         '4_nombre_de_jours',
         '5_frequence_revalo',
-        }
+        })
     benefit_data.revaluation_rule_extra_data = {
         '1_reval_mode': 'AGIRC',
         '2_date_de_reference': 'DAT',
@@ -5080,7 +5131,7 @@ if CREATE_CONTRACTS:  # {{{
         subsidiary_covered.parent = group_life_contract.covered_elements[
             idx % 2]
         subsidiary_covered.party = subsidiary
-        assert subsidiary_covered.item_desc.kind == 'subsidiary'
+        assert_eq(subsidiary_covered.item_desc.kind, 'subsidiary')
         subsidiary_covered.manual_start_date = _base_contract_date
         if idx == 3:
             subsidiary_covered.manual_end_date = _contract_rebill_date
@@ -5093,9 +5144,9 @@ if CREATE_CONTRACTS:  # {{{
                         ('is_person', '=', True)])):
             employee_covered = CoveredElement()
             employee_covered.parent = subsidiary_covered
-            assert employee_covered.item_desc.kind == 'person'
-            assert set(employee_covered.current_extra_data.keys()) == {
-                'job_start', 'job_end'}
+            assert_eq(employee_covered.item_desc.kind, 'person')
+            assert_eq(set(employee_covered.current_extra_data.keys()),
+                {'job_start', 'job_end'})
             employee_covered.current_extra_data = {
                 'job_start': _base_contract_date + relativedelta(days=-30),
                 'job_end': None,
@@ -5119,7 +5170,7 @@ if BILL_CONTRACTS:  # {{{
     do_print('\nBilling contracts')
     do_print('    Rebilling all contracts')  # {{{
     config._context['client_defined_date'] = _contract_rebill_post_date + \
-        relativedelta(days=-1)
+        relativedelta(days=-1, months=-1)
     Contract.rebill_contracts([x.id for x in Contract.find(
                 [('status', '!=', 'quote')])],
         _contract_rebill_date, _contract_rebill_date,
@@ -5155,7 +5206,7 @@ if CREATE_CLAIMS:  # {{{
     config._context['client_defined_date'] = _illness_claim_end_date_2
     claim, = Claim.find([])
     claim.declaration_date = _illness_claim_date
-    assert claim.losses[0].loss_desc.code == 'temporary_work_interruption'
+    assert_eq(claim.losses[0].loss_desc.code, 'temporary_work_interruption')
     claim.losses[0].event_desc, = EventDesc.find([('code', '=', 'illness')])
     claim.losses[0].start_date = _illness_claim_date
     claim.losses[0].save()
@@ -5170,64 +5221,64 @@ if CREATE_CLAIMS:  # {{{
         if idx == 6:
             period.salary_bonus = Decimal('3124.11')
     SalaryWizard.execute('process')
-    assert SalaryWizard.form.rates[0].extra_data.name == \
-        '1_coog_urssaf_1'
+    assert_eq(SalaryWizard.form.rates[0].extra_data.name,
+        '1_coog_urssaf_1')
     SalaryWizard.form.rates[0].ta = Decimal('0.75')
     SalaryWizard.form.rates[0].tb = Decimal('0.23')
-    assert SalaryWizard.form.rates[1].extra_data.name == \
-        '1_coog_urssaf_2'
+    assert_eq(SalaryWizard.form.rates[1].extra_data.name,
+        '1_coog_urssaf_2')
     SalaryWizard.form.rates[1].ta = Decimal('1.5')
     SalaryWizard.form.rates[1].tb = Decimal('1.6')
-    assert SalaryWizard.form.rates[2].extra_data.name == \
-        '1_coog_urssaf_3'
+    assert_eq(SalaryWizard.form.rates[2].extra_data.name,
+        '1_coog_urssaf_3')
     SalaryWizard.form.rates[2].ta = Decimal('6.9')
     SalaryWizard.form.rates[2].ta = Decimal('7.43')
-    assert SalaryWizard.form.rates[3].extra_data.name == \
-        '1_coog_urssaf_4'
+    assert_eq(SalaryWizard.form.rates[3].extra_data.name,
+        '1_coog_urssaf_4')
     SalaryWizard.form.rates[3].ta = Decimal('0.35')
     SalaryWizard.form.rates[3].ta = Decimal('0.67')
-    assert SalaryWizard.form.rates[4].extra_data.name == \
-        '2_coog_retraite_1'
+    assert_eq(SalaryWizard.form.rates[4].extra_data.name,
+        '2_coog_retraite_1')
     SalaryWizard.form.rates[4].ta = Decimal('0.8')
     SalaryWizard.form.rates[4].ta = Decimal('1.52')
-    assert SalaryWizard.form.rates[5].extra_data.name == \
-        '2_coog_retraite_2'
+    assert_eq(SalaryWizard.form.rates[5].extra_data.name,
+        '2_coog_retraite_2')
     SalaryWizard.form.rates[5].ta = Decimal('3.1')
     SalaryWizard.form.rates[5].ta = Decimal('3.21')
-    assert SalaryWizard.form.rates[6].extra_data.name == \
-        '3_coog_prevoyance_1'
+    assert_eq(SalaryWizard.form.rates[6].extra_data.name,
+        '3_coog_prevoyance_1')
     SalaryWizard.form.rates[6].ta = Decimal(0)
     SalaryWizard.form.rates[6].tb = Decimal('1.1')
-    assert SalaryWizard.form.rates[7].extra_data.name == \
-        '3_coog_prevoyance_2'
+    assert_eq(SalaryWizard.form.rates[7].extra_data.name,
+        '3_coog_prevoyance_2')
     SalaryWizard.form.rates[7].ta = Decimal(0)
     SalaryWizard.form.rates[7].tb = Decimal('2.1')
-    assert SalaryWizard.form.rates[8].extra_data.name == \
-        '4_coog_chomage_1'
+    assert_eq(SalaryWizard.form.rates[8].extra_data.name,
+        '4_coog_chomage_1')
     SalaryWizard.form.rates[8].ta = Decimal('2.4')
     SalaryWizard.form.rates[8].tb = Decimal('3.1')
-    assert SalaryWizard.form.rates[9].extra_data.name == \
-        '4_coog_chomage_2'
+    assert_eq(SalaryWizard.form.rates[9].extra_data.name,
+        '4_coog_chomage_2')
     SalaryWizard.form.rates[9].ta = Decimal(0)
     SalaryWizard.form.rates[9].tb = Decimal(0)
-    assert SalaryWizard.form.rates[10].extra_data.name == \
-        '5_coog_charges_patronales_prevoyance'
+    assert_eq(SalaryWizard.form.rates[10].extra_data.name,
+        '5_coog_charges_patronales_prevoyance')
     SalaryWizard.form.rates[10].ta = Decimal('1.428')
     SalaryWizard.form.rates[10].tb = Decimal('1.72')
-    assert SalaryWizard.form.rates[11].extra_data.name == \
-        '6_coog_charges_patronales_sante_taux'
+    assert_eq(SalaryWizard.form.rates[11].extra_data.name,
+        '6_coog_charges_patronales_sante_taux')
     SalaryWizard.form.rates[11].ta = Decimal(0)
     SalaryWizard.form.rates[11].tb = Decimal(0)
-    assert SalaryWizard.form.rates[12].extra_data.name == \
-        '6_coog_charges_salariales_sante_taux'
+    assert_eq(SalaryWizard.form.rates[12].extra_data.name,
+        '6_coog_charges_salariales_sante_taux')
     SalaryWizard.form.rates[12].ta = Decimal(0)
     SalaryWizard.form.rates[12].tb = Decimal(0)
 
-    assert SalaryWizard.form.fixed_amounts[0].extra_data.name == \
-        '1_coog_charges_salariales_mutuelle'
+    assert_eq(SalaryWizard.form.fixed_amounts[0].extra_data.name,
+        '1_coog_charges_salariales_mutuelle')
     SalaryWizard.form.fixed_amounts[0].fixed_amount = Decimal('46.34')
-    assert SalaryWizard.form.fixed_amounts[1].extra_data.name == \
-        '2_coog_charges_patronales_sante_montant'
+    assert_eq(SalaryWizard.form.fixed_amounts[1].extra_data.name,
+        '2_coog_charges_patronales_sante_montant')
     SalaryWizard.form.fixed_amounts[1].fixed_amount = Decimal('46.34')
     SalaryWizard.execute('compute')
     claim.reload()
@@ -5236,7 +5287,7 @@ if CREATE_CLAIMS:  # {{{
                 Decimal('1579.38'), Decimal('1590.02'), Decimal('1600.66'),
                 Decimal('4134.53'), Decimal('1621.93'), Decimal('1632.57'),
                 Decimal('1643.21'), Decimal('1653.85'), Decimal('1664.48')]):
-        assert salary.net_salary == net
+        assert_eq(salary.net_salary, net)
     process_next(claim)
     # }}}
 
@@ -5398,12 +5449,13 @@ if CREATE_CLAIMS:  # {{{
     # }}}
 
     account_move_line_pasrau_rate, = MoveLinePasrauRate.find([])
-    assert account_move_line_pasrau_rate.move_line.amount == Decimal(
-        '-18.39')
-    assert account_move_line_pasrau_rate.pasrau_rate == Decimal('0.144')
-    assert account_move_line_pasrau_rate.pasrau_rate_kind == 'manual'
-    assert account_move_line_pasrau_rate.pasrau_rate_business_id == \
-        'Some Business Id'
+    assert_eq(account_move_line_pasrau_rate.move_line.amount,
+        Decimal('-18.39'))
+    assert_eq(account_move_line_pasrau_rate.pasrau_rate,
+        Decimal('0.144'))
+    assert_eq(account_move_line_pasrau_rate.pasrau_rate_kind, 'manual')
+    assert_eq(account_move_line_pasrau_rate.pasrau_rate_business_id,
+        'Some Business Id')
 
     do_print('    Creating a death claim')  # {{{
     config._context['client_defined_date'] = _death_claim_date
@@ -5461,24 +5513,118 @@ if CREATE_CLAIMS:  # {{{
 
 if GENERATE_REPORTINGS:  # {{{
     do_print('\nGenerating reportings')
-    do_print('    Paying invoices')  # {{{
-    config._context['client_defined_date'] = _contract_rebill_post_date + \
-        relativedelta(days=-1)
-    for invoice in Invoice.find([('state', '=', 'posted')]):
-        PayInvoice = Wizard('account.invoice.pay', [invoice])
-        PayInvoice.form.payment_method, = PaymentMethod.find(
-            [('name', '=', 'Cash')])
-        PayInvoice.form.date = _contract_rebill_post_date + relativedelta(
-            days=-1)
-        PayInvoice.execute('choice')
+    do_print('    Paying contract invoices')  # {{{
+    config._context['client_defined_date'] = _contract_payment_date
+
+    # Ideally we would use the payment wizard on invoices, but we cannot force
+    # the date in the past because it compares to Date()
+    lines = MoveLine.find([('account.kind', 'in', ['receivable', 'payable']),
+            ('party', '!=', None), ('reconciliation', '=', None),
+            ('payment_amount', '!=', 0), ('move_state', '=', 'posted'),
+            ['OR', ('debit', '>', 0), ('credit', '<', 0)]])
+
+    PayLines = Wizard('account.payment.creation', lines)
+    assert_eq(PayLines.form.total_amount, Decimal('2321.88'))
+    assert_eq(PayLines.form.payment_date, _contract_payment_date)
+    PayLines.form.journal, = PaymentJournal.find([
+            ('name', '=', 'Sepa')])
+    PayLines.execute('create_payments')
+
+    payments = Payment.find([('kind', '=', 'receivable')])
+    assert_eq(len(payments), 4)
+    assert_eq({x.state for x in payments}, {'approved'})
+    assert_eq({x.date for x in payments}, {_contract_payment_date})
+    assert_eq(sum(x.amount for x in payments), Decimal('2321.88'))
+
+    ProcessPayments = Wizard('account.payment.process', payments)
+    ProcessPayments.execute('pre_process')
+
+    group, = PaymentGroup.find([('kind', '=', 'receivable')])
+    assert_eq(group.state, 'processing')
+    assert_eq(group.amount, Decimal('2321.88'))
+    assert_eq(group.payment_date_min, _contract_payment_date)
+
+    group.click('acknowledge')
+
+    payments = Payment.find([('kind', '=', 'receivable')])
+    assert_eq({x.state for x in payments}, {'succeeded'})
+    assert_eq(all(x.line.reconciliation for x in payments), True)
+    assert_eq({x.clearing_move.date for x in payments},
+        {_contract_payment_date})
+    assert_eq({x.clearing_move.state for x in payments}, {'posted'})
+
+    invoices = Invoice.find([('state', '!=', 'cancel'), ('start', '!=', None),
+            ('business_kind', '=', 'contract_invoice')])
+    assert_eq(len(invoices), 4)
+    assert_eq({x.state for x in invoices}, {'paid'})
+
+    config._context.pop('client_defined_date')
+    # }}}
+
+    do_print('    Paying claim invoices')  # {{{
+    config._context['client_defined_date'] = _illness_claim_end_date_2
+
+    # Ideally we would use the payment wizard on invoices, but we cannot force
+    # the date in the past because it compares to Date()
+    lines = MoveLine.find([('account.kind', 'in', ['receivable', 'payable']),
+            ('party', '!=', None), ('reconciliation', '=', None),
+            ('payment_amount', '!=', 0), ('move_state', '=', 'posted'),
+            ['OR', ('debit', '<', 0), ('credit', '>', 0)]])
+
+    PayLines = Wizard('account.payment.creation', lines)
+    assert_eq(PayLines.form.total_amount, Decimal('20411.99'))
+    assert_eq(PayLines.form.payment_date, _illness_claim_end_date_2)
+    PayLines.form.journal, = PaymentJournal.find([
+            ('name', '=', 'Sepa')])
+
+    # Warning because all lines are not on the same date
+    test_error(UserWarning, PayLines.execute, 'create_payments')
+
+    line_to_update_date, = MoveLine.find([('credit', '=', Decimal(20000))])
+    warning = Warning()
+    warning.always = False
+    warning.user = User(config.user)
+    warning.name = 'updating_payment_date_account.move.line,%s' % str(
+        line_to_update_date.id)
+    warning.save()
+
+    PayLines.execute('create_payments')
+
+    payments = Payment.find([('kind', '=', 'payable')])
+    assert_eq(len(payments), 3)
+    assert_eq({x.state for x in payments}, {'approved'})
+    assert_eq({x.date for x in payments}, {_illness_claim_end_date_2})
+    assert_eq(sum(x.amount for x in payments), Decimal('20411.99'))
+
+    ProcessPayments = Wizard('account.payment.process', payments)
+    ProcessPayments.execute('pre_process')
+
+    group, = PaymentGroup.find([('kind', '=', 'payable')])
+    assert_eq(group.state, 'processing')
+    assert_eq(group.amount, Decimal('20411.99'))
+    assert_eq(group.payment_date_min, _illness_claim_end_date_2)
+
+    group.click('acknowledge')
+
+    payments = Payment.find([('kind', '=', 'payable')])
+    assert_eq({x.state for x in payments}, {'succeeded'})
+    assert_eq(all(x.line.reconciliation for x in payments), True)
+    assert_eq({x.clearing_move.date for x in payments},
+        {_illness_claim_end_date_2})
+    assert_eq({x.clearing_move.state for x in payments}, {'posted'})
+
+    invoices = Invoice.find([('state', '!=', 'cancel'),
+            ('business_kind', '=', 'claim_invoice')])
+    assert_eq(len(invoices), 3)
+    assert_eq({x.state for x in invoices}, {'paid'})
+
     config._context.pop('client_defined_date')
     # }}}
 
     do_print('    Generating commission invoices')  # {{{
     CommissionCreate = Wizard('commission.create_invoice')
     CommissionCreate.form.from_ = _base_contract_date
-    CommissionCreate.form.to = _contract_rebill_post_date + relativedelta(
-        days=-1)
+    CommissionCreate.form.to = _commission_invoice_date
     CommissionCreate.execute('create_')
 
     for invoice in Invoice.find(
@@ -5489,20 +5635,20 @@ if GENERATE_REPORTINGS:  # {{{
 
     do_print('    Generating insurer invoices')  # {{{
     InsurerInvoiceCreate = Wizard('account.invoice.create.insurer_slip')
-    InsurerInvoiceCreate.form.until_date = _illness_claim_end_date_2
+    InsurerInvoiceCreate.form.until_date = _commission_invoice_date
     InsurerInvoiceCreate.form.insurers.append(Party(insurer.party.id))
     InsurerInvoiceCreate.form.notice_kind = 'options'
     InsurerInvoiceCreate.execute('create_')
 
     insurer_invoice, = Invoice.find(
         [('business_kind', '=', 'insurer_invoice')])
-    assert_eq(insurer_invoice.total_amount, Decimal('1440.17'))
+    assert_eq(insurer_invoice.total_amount, Decimal('1857.5'))
     ReportCreation = Wizard('report.create', [insurer_invoice])
     ReportCreation.execute('generate')
     Invoice.delete([insurer_invoice])
 
     InsurerInvoiceCreate = Wizard('account.invoice.create.insurer_slip')
-    InsurerInvoiceCreate.form.until_date = _illness_claim_end_date_2
+    InsurerInvoiceCreate.form.until_date = _commission_invoice_date
     InsurerInvoiceCreate.form.insurers.append(Party(insurer.party.id))
     InsurerInvoiceCreate.form.notice_kind = 'benefits'
     InsurerInvoiceCreate.execute('create_')
@@ -5515,14 +5661,14 @@ if GENERATE_REPORTINGS:  # {{{
     insurer.group_insurer_invoices = True
     insurer.save()
     InsurerInvoiceCreate = Wizard('account.invoice.create.insurer_slip')
-    InsurerInvoiceCreate.form.until_date = _illness_claim_end_date_2
+    InsurerInvoiceCreate.form.until_date = _commission_invoice_date
     InsurerInvoiceCreate.form.insurers.append(Party(insurer.party.id))
     InsurerInvoiceCreate.form.notice_kind = 'all'
     InsurerInvoiceCreate.execute('create_')
 
     insurer_invoice, = Invoice.find(
         [('business_kind', '=', 'all_insurer_invoices')])
-    assert_eq(insurer_invoice.total_amount, Decimal('-18995.91'))
+    assert_eq(insurer_invoice.total_amount, Decimal('-18578.58'))
     # }}}
 
     do_print('    Generating slip')  # {{{
@@ -5540,7 +5686,7 @@ if GENERATE_REPORTINGS:  # {{{
 
     if not TESTING:
         # Configuration may not be set, so we must handle the warning
-        warning = UserWarning()
+        warning = Warning()
         warning.always = False
         warning.user = User(1)
         warning.name = 'undefined_dsn_section'
