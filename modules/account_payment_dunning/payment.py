@@ -72,6 +72,7 @@ class Payment(metaclass=PoolMeta):
         Dunning = pool.get('account.dunning')
         dunnings = []
         for payments, level in args:
+            level = level[0]
             for payment in payments:
                 dunning = payment._set_dunning(level)
                 if dunning:
