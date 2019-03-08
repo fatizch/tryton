@@ -279,6 +279,7 @@ class RuleEngineResult(object):
         self.debug = []
         self.low_level_debug = []
         self.result = result
+        self.result_details = {}
         self.result_set = False
         self.calls = []
 
@@ -288,6 +289,8 @@ class RuleEngineResult(object):
 
     def __str__(self):
         result = '[' + self.print_result()
+        if self.result_details:
+            result += ', ' + self.print_details()
         result += ', [' + ', '.join(self.print_errors()) + ']'
         result += ', [' + ', '.join(self.print_warnings()) + ']'
         result += ', [' + ', '.join(self.print_info()) + ']'
@@ -312,6 +315,9 @@ class RuleEngineResult(object):
     def print_debug(self):
         return list(map(self._format_for_print, self.debug))
 
+    def print_details(self):
+        return pprint.pformat(self.result_details)
+
     def print_result(self):
         return self._format_for_print(self.result)
 
@@ -333,6 +339,7 @@ class RuleExecutionLog(ModelSQL, ModelView):
     debug = fields.Text('Debug', states={'readonly': True})
     low_level_debug = fields.Text('Execution Trace', states={'readonly': True})
     result = fields.Char('Result', states={'readonly': True})
+    result_details = fields.Text('Result Details', states={'readonly': True})
     calls = fields.Text('Calls', states={'readonly': True})
     calculation_date = fields.Date('Calculation Date', readonly=True)
     context = fields.Text('Context', readonly=True)
@@ -360,6 +367,7 @@ class RuleExecutionLog(ModelSQL, ModelView):
             self.low_level_debug = '\n'.join([
                     x.decode('utf-8') for x in result.low_level_debug])
         self.result = result.print_result()
+        self.result_details = result.print_details()
         self.calls = '\n'.join(['|&|'.join(x) for x in result.calls])
         self.context = result.context
 
@@ -625,6 +633,13 @@ class RuleTools(ModelView):
             col_number)
         return [val[0] for val in dimension_values if val[0] >= start_date
                 and (val[1] or datetime.date.min) <= end_date]
+
+    @classmethod
+    def _re_add_result_detail(cls, args, key, value):
+        # We could actually check that the key is an actual detail, but that
+        # could remove some flexibility that might be needed. The dev will have
+        # to make the checks himself before storing them
+        cls.get_result(args).result_details[key] = value
 
 
 class FunctionFinder(ast.NodeVisitor):
@@ -1881,6 +1896,7 @@ class TestCase(ModelView, ModelSQL):
         'Values', depends=['rule'], delete_missing=True,
         context={'rule_id': Eval('rule')})
     result_value = fields.Char('Result Value')
+    result_details = fields.Text('Result Details')
     result_warnings = fields.Text('Result Warnings')
     result_errors = fields.Text('Result Errors')
     result_info = fields.Text('Result Info')
@@ -1937,12 +1953,14 @@ class TestCase(ModelView, ModelSQL):
         except Exception as exc:
             self.result_value = 'ERROR: {}'.format(exc)
             self.result_info = self.result_warnings = self.result_errors = ''
+            self.result_details = ''
             self.debug = self.low_debug = ''
             self.expected_result = self.result_value
             return
         if test_result == {}:
             return
         self.result_value = test_result.print_result()
+        self.result_details = test_result.print_details()
         self.result_info = '\n'.join(test_result.print_info())
         self.result_warning = '\n'.join(test_result.print_warnings())
         self.result_errors = '\n'.join(test_result.print_errors())
@@ -2149,7 +2167,7 @@ class InitTestCaseFromExecutionLog(Wizard):
         elif method_name.startswith('rule_'):
             return False
         elif method_name in ('add_info', 'add_error', 'add_warning',
-                'add_debug'):
+                'add_debug', 'add_result_detail'):
             return False
         return True
 
@@ -2173,8 +2191,11 @@ class InitTestCaseFromExecutionLog(Wizard):
         description = ', '.join(['result: %s' % log.result] + ['%s: %s' % (
                     x['name'], x['value'])
                 for x in test_values if x['override_value']])
-        testcase.expected_result = '[%s, [%s], [%s], [%s]]' % (
-            log.result, log.errors, log.warnings, log.info)
+        testcase.expected_result = '[%s, ' % log.result
+        if log.result_details:
+            testcase.expected_result += '%s, ' % log.result_details
+        testcase.expected_result += '[%s], [%s], [%s]]' % (
+            log.errors, log.warnings, log.info)
         testcase.result_value = log.result
         testcase.result_warnings = log.warnings
         testcase.result_errors = log.errors

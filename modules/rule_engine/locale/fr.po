@@ -591,6 +591,10 @@ msgctxt "field:rule_engine.log,result:"
 msgid "Result"
 msgstr "Résultat"
 
+msgctxt "field:rule_engine.log,result_details:"
+msgid "Result Details"
+msgstr "Détails du résultat"
+
 msgctxt "field:rule_engine.log,rule:"
 msgid "Rule"
 msgstr "Règle"
@@ -738,6 +742,10 @@ msgstr "Niveau bas de debug"
 msgctxt "field:rule_engine.test_case,rec_name:"
 msgid "Record Name"
 msgstr "Nom"
+
+msgctxt "field:rule_engine.test_case,result_details:"
+msgid "Result Details"
+msgstr "Détails du résultat"
 
 msgctxt "field:rule_engine.test_case,result_errors:"
 msgid "Result Errors"

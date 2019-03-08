@@ -101,7 +101,7 @@ class Benefit(metaclass=PoolMeta):
     def calculate_deductible(self, args):
         if not self.benefit_rules:
             return
-        return self.benefit_rules[0].do_calculate_deductible_rule(args)
+        return self.benefit_rules[0].do_calculate_deductible_rule(args).result
 
     def getter_waiting_account(self, name):
         accounts = self.get_benefit_accounts()
@@ -183,6 +183,8 @@ class BenefitRule(
                 'amount per day is %(annual_forced_amount)s / %(ratio)s = '
                 '%(amount_per_unit)s \nThe annuity amount is '
                 '%(amount_per_unit)s * %(prorata)s = %(annuity_amount)s \n',
+                'invalid_detail_deductible_rule': 'Detail %(detail_key) does '
+                'not exist in configuration for deductible rules',
                 })
         cls.indemnification_rule.domain = [('type_', '=', 'benefit')]
         cls.deductible_rule.domain = [('type_', '=', 'benefit_deductible')]
@@ -268,23 +270,44 @@ class BenefitRule(
         loss = args['loss']
         indemnification = args['indemnification']
         delivered = args['service']
-        deductible_end_date = self.do_calculate_deductible_rule(args)
+        deductible_result = self.do_calculate_deductible_rule(args)
+        deductible_end_date = (deductible_result.result
+            if deductible_result else None)
+        deductible_infos = (deductible_result.result_details
+            if deductible_result else {})
         previous_date = None
         args['limit_date'] = None
         if deductible_end_date:
             # create deductible if deductible rule is defined
             if args['start_date'] <= deductible_end_date:
                 end_period = min(args['end_date'], deductible_end_date)
+                description = deductible_infos.pop('description', '')
+                details = {}
+                if deductible_infos:
+                    DetailsConfiguration = Pool().get(
+                        'extra_details.configuration')
+                    keys = DetailsConfiguration.get_extra_details_fields(
+                        'claim.indemnification.detail')
+                    for key, value in deductible_infos.items():
+                        if key not in keys:
+                            self.raise_user_error(
+                                'invalid_detail_deductible_rule', {
+                                    'detail_key': key,
+                                    })
+                        details[key] = value
                 res.append({
-                    'kind': 'deductible',
-                    'start_date': args['start_date'],
-                    'end_date': end_period,
-                    'nb_of_unit': (end_period - args['start_date']).days + 1,
-                    'unit': 'day',
-                    'amount': 0,
-                    'base_amount': 0,
-                    'amount_per_unit': 0
-                    })
+                        'kind': 'deductible',
+                        'start_date': args['start_date'],
+                        'end_date': end_period,
+                        'nb_of_unit':
+                        (end_period - args['start_date']).days + 1,
+                        'unit': 'day',
+                        'amount': 0,
+                        'base_amount': 0,
+                        'amount_per_unit': 0,
+                        'description': description,
+                        'extra_details': details,
+                        })
                 if args['end_date'] <= deductible_end_date:
                     return res
                 else:
@@ -493,7 +516,7 @@ class BenefitRule(
         return res
 
     def do_calculate_deductible_rule(self, args):
-        return self.calculate_deductible_rule(args)
+        return self.calculate_deductible_rule(args, return_full=True)
 
     def do_calculate_revaluation_rule(self, args):
         return self.calculate_revaluation_rule(args)

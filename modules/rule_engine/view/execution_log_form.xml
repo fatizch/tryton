@@ -15,6 +15,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="debug"/>
             <separator name="info"/>
             <field name="info"/>
+            <separator name="result_details"/>
+            <field name="result_details"/>
             <separator name="warnings"/>
             <field name="warnings"/>
             <separator name="errors"/>

@@ -83,6 +83,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'rule_engine.runtime', 'Add Error')
         create_tree_elem('function', '_re_add_warning', 'add_warning',
             'rule_engine.runtime', 'Add Warning')
+        create_tree_elem('function', '_re_add_result_detail',
+            'add_result_detail', 'rule_engine.runtime', 'Add Result Detail')
         create_tree_elem('function', '_re_add_info', 'add_info',
             'rule_engine.runtime', 'Add Info')
         create_tree_elem('function', '_re_add_error_code',
@@ -99,11 +101,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
         ct = self.Context()
         ct.name = 'test_context'
         allowed_elements = []
-        for elem in self.RuleFunction.search([
-                    ('language.code', '=', 'en')]):
+        for elem in self.RuleFunction.search([('language.code', '=', 'en')]):
             allowed_elements.append(elem)
         ct.allowed_elements = allowed_elements
-        self.assertEqual(len(ct.allowed_elements), 7)
+        self.assertEqual(len(ct.allowed_elements), 8)
         ct.save()
         return ct
 
@@ -156,6 +157,15 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 'type': "function",
                 'children': [],
                 'name': "_re_add_info",
+                },
+            {
+                'description': "Add Result Detail",
+                'fct_args': "",
+                'long_description': "",
+                'translated': "add_result_detail",
+                'type': "function",
+                'children': [],
+                'name': "_re_add_result_detail",
                 },
             {
                 'description': "Add Warning",
@@ -242,8 +252,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         self.assertEqual(set(rule.allowed_functions()), {
                 'add_debug', 'add_error', 'add_error_code', 'add_info',
-                'add_warning', 'calculation_date', 'today',
-                'datetime', 'Decimal', 'relativedelta'})
+                'add_result_detail', 'add_warning', 'calculation_date',
+                'today', 'datetime', 'Decimal', 'relativedelta'})
         # Check execution_code, code template and decistmt behaviour
         func_code = rule.execution_code.split('\n')
         func_id = ('%s' % hash(rule.name)).replace('-', '_')
@@ -411,6 +421,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 "add_error('test error')",
                 "add_warning('test warning')",
                 "add_info('test info')",
+                "add_result_detail('test_key', 'test_value')",
                 "if table_test_code('foo', 1) == 'ham':",
                 "   return rule_test_rule(test_parameter=20)",
                 ])
@@ -422,6 +433,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
         result = rule.execute({})
         self.assertEqual(result.result, 20)
+        self.assertEqual(result.result_details, {'test_key': 'test_value'})
         self.assertEqual(result.errors, ['test error'])
         self.assertEqual(result.warnings, ['test warning'])
         self.assertEqual(result.info, ['test info'])
@@ -441,6 +453,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     {'override_value': True, 'name': 'add_warning',
                         'value': ''},
                     {'override_value': True, 'name': 'add_info',
+                        'value': ''},
+                    {'override_value': True, 'name': 'add_result_detail',
                         'value': ''},
                     {'override_value': False, 'name':
                         'table_test_code', 'value': ''},
@@ -475,6 +489,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 "Entering add_info\n\t"
                 "args : ('test info',)\n\t"
                 "result = None\n"
+                "Entering add_result_detail\n\t"
+                "args : ('test_key', 'test_value')\n\t"
+                "result = None\n"
                 "Entering table_test_code\n\t"
                 "args : ('foo', 1)\n\t"
                 "result = ham\n"
@@ -484,10 +501,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
             self.assertEqual(tc.debug, '')
             self.assertEqual(tc.result_errors, 'test error')
             self.assertEqual(tc.expected_result,
-                '[20, [test error], [test warning], [test info]]')
+                "[20, {'test_key': 'test_value'}, [test error], "
+                "[test warning], [test info]]")
             self.assertEqual(tc.result_info, 'test info')
             self.assertEqual(tc.result_value, '20')
             self.assertEqual(tc.result_warning, 'test warning')
+            self.assertEqual(tc.result_details, "{'test_key': 'test_value'}")
             tc.test_values = [tcv1]
             tc.run_test()
             self.assertEqual(tc.low_debug,
@@ -497,15 +516,17 @@ class ModuleTestCase(test_framework.CoogTestCase):
             self.assertEqual(tc.result_value, '10')
             self.assertEqual(tc.debug, '')
             self.assertEqual(tc.result_errors, '')
+            self.assertEqual(tc.result_details, '{}')
             self.assertEqual(tc.expected_result, '[10, [], [], []]')
             self.assertEqual(tc.result_info, '')
             tc.save()
 
             # Check override of function elements
             tcv1 = create_test_case_value('add_error', "'nothing'")
+            tcv2 = create_test_case_value('add_result_detail', "'nothing'")
             tc = self.TestCase()
-            tc.description = 'Remove Errors'
-            tc.test_values = [tcv1]
+            tc.description = 'Remove Errors and Details'
+            tc.test_values = [tcv1, tcv2]
             tc.expected_result = '[20, [], [test warning], [test info]]'
             tc.rule = rule
             tc.save()
@@ -516,7 +537,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
             tc.description = 'Override rule'
             tc.test_values = [tcv1]
             tc.expected_result = \
-                '[50, [test error], [test warning], [test info]]'
+                "[50, {'test_key': 'test_value'}, [test error], " \
+                "[test warning], [test info]]"
             tc.rule = rule
             tc.save()
 
@@ -527,7 +549,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             res = wizard.default_report(None)
             self.assertEqual(res, {'report':
                     'Fail Value ... SUCCESS\n\n'
-                    'Remove Errors ... SUCCESS\n'
+                    'Remove Errors and Details ... SUCCESS\n'
                     '\nOverride rule ... SUCCESS'})
 
     @test_framework.prepare_test('rule_engine.test0030_TestCaseCreation')
@@ -535,10 +557,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
         rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
         output = []
         rule.export_json(output=output)
-        output[1]['short_name'] = 'test_rule_advanced'
+        output[1]['short_name'] = 'test_rule_copy'
         rule.import_json(output)
         rule_1, = self.RuleEngine.search([
-                ('short_name', '=', 'test_rule_advanced')])
+                ('short_name', '=', 'test_rule_copy')])
 
         with Transaction().set_context({'active_id': rule_1.id}):
             wizard_id, _, _ = self.RunTests.create()
@@ -547,7 +569,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             res = wizard.default_report(None)
             self.assertEqual(res, {'report':
                     'Fail Value ... SUCCESS\n\n'
-                    'Remove Errors ... SUCCESS\n\n'
+                    'Remove Errors and Details ... SUCCESS\n\n'
                     'Override rule ... SUCCESS'})
 
     @test_framework.prepare_test('rule_engine.test0030_TestCaseCreation')
@@ -767,7 +789,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertRaises(UserError, rule.execute, {})
 
     def test0061_testTestCaseCreationFromLog(self):
-        rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
+        rule, = self.RuleEngine.search(
+            [('short_name', '=', 'test_rule_advanced')])
         rule.debug_mode = True
         rule.algorithm = '\n'.join([
                 "if table_test_code('test', 30):",
@@ -775,6 +798,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 "add_error('test error')",
                 "add_warning('test warning')",
                 "add_info('test info')",
+                "add_result_detail('test_key', 'test_value')",
                 "if table_test_code('foo', 1) == 'ham':",
                 "   return rule_test_rule(test_parameter=20)",
                 ])
@@ -796,8 +820,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             wizard = self.RunTests(wizard_id)
             wizard._execute('report')
             res = wizard.default_report(None)
-            self.assertEqual(res, {'report':
-                    'result: 20 ... SUCCESS'})
+            self.assertEqual(res, {'report': 'result: 20 ... SUCCESS'})
 
 
 def suite():

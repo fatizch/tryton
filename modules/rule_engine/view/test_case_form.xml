@@ -17,6 +17,8 @@ this repository contains the full copyright notices and license terms. -->
                 <field name="result_value"/>
                 <separator name="result_info" colspan="2"/>
                 <field name="result_info" colspan="2"/>
+                <separator name="result_details" colspan="2"/>
+                <field name="result_details" colspan="2"/>
                 <separator name="result_warnings" colspan="2"/>
                 <field name="result_warnings" colspan="2"/>
                 <separator name="result_errors" colspan="2"/>

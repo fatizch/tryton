@@ -35,6 +35,13 @@ msgstr "Montant force de capital %(forced_amount)s\n"
 
 msgctxt "error:benefit.rule:"
 msgid ""
+"Detail %(detail_key) does not exist in configuration for deductible rules"
+msgstr ""
+"Le détail %(detail_key) n'existe pas dans la configuration pour les règles "
+"de franchise"
+
+msgctxt "error:benefit.rule:"
+msgid ""
 "Indemnification computed with forced base amount %(forced_amount)s\n"
 "Indemnification amount is %(forced_amount)s * %(nb_of_unit)s = %(amount)s\n"
 msgstr ""

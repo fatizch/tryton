@@ -222,6 +222,17 @@ this repository contains the full copyright notices and license terms. -->
             <field name="long_description">Ajouter un message informatif</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
+        <record model="rule_engine.function" id="ajouter_detail">
+            <field name="translated_technical_name">ajouter_detail</field>
+            <field name="description">Ajouter Détail</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_add_result_detail</field>
+            <field name="fct_args">cle, valeur</field>
+            <field name="long_description">Ajoute la valeur à la clé correspondante dans les détails du résultat</field>
+            <field name="parent" ref="dossier_outils"/>
+        </record>
         <record model="rule_engine.function" id="generer_slug">
             <field name="translated_technical_name">generer_slug</field>
             <field name="description">Générer slug</field>

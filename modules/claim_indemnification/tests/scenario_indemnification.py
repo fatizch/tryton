@@ -121,6 +121,15 @@ event_desc.name = 'Accident'
 event_desc.loss_descs.append(LossDesc(loss_desc.id))
 event_desc.save()
 
+ExtraDetail = Model.get('extra_details.configuration')
+indemnification_detail_configuration, = ExtraDetail.find(
+    [('model_name', '=', 'claim.indemnification.detail')])
+line = indemnification_detail_configuration.lines.new()
+line.string = 'Deductible Duration'
+line.name = 'deductible_duration'
+line.type_ = 'integer'
+indemnification_detail_configuration.save()
+
 Rule = Model.get('rule_engine')
 BenefitRule = Model.get('benefit.rule')
 benefit_rule = BenefitRule()
@@ -129,6 +138,28 @@ benefit_rule.indemnification_rule, = Rule.find([
         ('short_name', '=', 'simple_claim_rule')])
 benefit_rule.indemnification_rule_extra_data = {'claim_amount': Decimal('42')}
 benefit_rule.offered = product
+
+benefit_deductible_rule = Rule()
+benefit_deductible_rule.context = benefit_rule.indemnification_rule.context
+benefit_deductible_rule.name = 'Franchise en nombre de jours'
+benefit_deductible_rule.short_name = 'benefit_deductible'
+benefit_deductible_rule.status = 'validated'
+benefit_deductible_rule.type_ = 'benefit_deductible'
+parameter = benefit_deductible_rule.parameters.new()
+parameter.string = 'Nombre de jours'
+parameter.name = 'number_of_days'
+parameter.type_ = 'integer'
+algorithm = 'date_prejudice = date_de_debut_du_prejudice()'
+algorithm += "\najouter_detail('description', 'Some deductible')"
+algorithm += "\najouter_detail('deductible_duration', 3)"
+algorithm += "\nreturn ajouter_jours(date_prejudice, param_number_of_days())"
+benefit_deductible_rule.algorithm = algorithm
+benefit_deductible_rule.save()
+
+benefit_rule.deductible_rule = benefit_deductible_rule
+benefit_rule.deductible_rule_extra_data = {
+    'number_of_days': 2,
+    }
 
 RuleContext = Model.get('rule_engine.context')
 ControlRule = Model.get('claim.indemnification.control.rule')
@@ -294,12 +325,33 @@ indemnifications = service.indemnifications
 len(indemnifications) == 1
 # #Res# #True
 
-indemnifications[0].amount == 8988
+indemnifications[0].amount == 8862
 # #Res# #True
-
 
 indemnifications[0].journal == journal
 # #Res# #True
+
+deductible = indemnifications[0].details[0]
+assert deductible.kind == 'deductible'
+assert deductible.start_date == datetime.date(2016, 1, 1)
+assert deductible.end_date == datetime.date(2016, 1, 3)
+assert deductible.nb_of_unit == Decimal(3)
+assert deductible.unit == 'day'
+assert deductible.amount == Decimal(0)
+assert deductible.base_amount == Decimal(0)
+assert deductible.description == 'Some deductible'
+assert deductible.extra_details == {'deductible_duration': 3}
+
+detail = indemnifications[0].details[1]
+assert detail.kind == 'benefit'
+assert detail.start_date == datetime.date(2016, 1, 4)
+assert detail.end_date == datetime.date(2016, 8, 1)
+assert detail.nb_of_unit == Decimal(211)
+assert detail.unit == 'day'
+assert detail.amount == Decimal('8862')
+assert detail.base_amount is None
+assert detail.description is None
+assert detail.extra_details == {'deductible_duration': None}
 
 indemnifications[0].click('schedule')
 indemnifications[0].status == 'scheduled'
