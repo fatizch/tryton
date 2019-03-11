@@ -101,7 +101,8 @@ class Benefit(metaclass=PoolMeta):
     def calculate_deductible(self, args):
         if not self.benefit_rules:
             return
-        return self.benefit_rules[0].do_calculate_deductible_rule(args).result
+        rule_result = self.benefit_rules[0].do_calculate_deductible_rule(args)
+        return rule_result.result if rule_result else None
 
     def getter_waiting_account(self, name):
         accounts = self.get_benefit_accounts()
