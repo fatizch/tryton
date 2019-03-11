@@ -422,6 +422,19 @@ class Contract(Printable):
             for covered in self.covered_elements if covered.party]
         return res
 
+    @classmethod
+    def void(cls, contracts, void_reason):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        options = []
+        for contract in contracts:
+            for covered_element in contract.covered_elements:
+                for option in covered_element.options:
+                    options.append(option)
+
+        Option.write(options, {'status': 'void'})
+        super().void(contracts, void_reason)
+
 
 class ContractOption(Printable):
     __name__ = 'contract.option'
@@ -1684,7 +1697,7 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         if self.parent:
             date = max(date or datetime.date.min, self.parent.start_date)
         return max(
-            self.contract.start_date if self.contract and \
+            self.contract.start_date if self.contract and
             self.contract.start_date else datetime.date.min,
             date or datetime.date.min)
 

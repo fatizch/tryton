@@ -1,3 +1,4 @@
+* BUG#11091 Add consistency check between a voided contract status and the status of its options
 * BUG#11154 Fix Quote Number Sequence property migration
 * FEA#8622 identify parties to anonymize after contract termination
 * BUG#10975 Remove termination reason when reactivating a hold contract

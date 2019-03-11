@@ -1,3 +1,4 @@
+* BUG#11091 Ajout d'un contrôle de cohérence entre le statut d'un contrat mis en effet et les statuts de ses options
 * BUG#11154 Corriger la montée en version de la property de séquence des numéros de devis
 * FEA#8622 Identifier les tiers à anonymiser après terminaison de leur contrat
 * BUG#10975 Retirer le motif de résiliation lors de la réactivation d'un contrat suspendu

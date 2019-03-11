@@ -1409,6 +1409,11 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         pool = Pool()
         Event = pool.get('event')
         History = pool.get('contract.activation_history')
+        Option = pool.get('contract.option')
+        options = [option for contract in contracts
+            for option in contract.options]
+        if options:
+            Option.write(options, {'status': 'void'})
         cls.write(contracts, {
                 'status': 'void',
                 'sub_status': void_reason,

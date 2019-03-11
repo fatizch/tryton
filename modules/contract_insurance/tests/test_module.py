@@ -635,6 +635,54 @@ class ModuleTestCase(test_framework.CoogTestCase):
             self.assertEqual(option.status, 'terminated')
             self.assertEqual(option.sub_status, sub_status)
 
+    @test_framework.prepare_test(
+        'contract_insurance.test0012_testContractCreation'
+        )
+    def test0050_void_contract_options(self):
+        """
+        Tests coherence between contract status and its options status
+        when voiding a contract
+        """
+        coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
+        coverage_b, = self.Coverage.search([('code', '=', 'BET')])
+        contract, = self.Contract.search([])
+        covered_element = self.CoveredElement()
+        covered_element.contract = contract
+        covered_element.item_desc = coverage_a.item_desc
+        party = self.Party.search([('is_person', '=', True)])[0]
+        covered_element.party = party
+        covered_element.save()
+        first_option = self.Option(
+            manual_start_date=contract.start_date,
+            covered_element=covered_element,
+            parent_contract=contract,
+            coverage=coverage_a,
+            )
+        first_option.save()
+        second_option = self.Option(
+            manual_start_date=contract.start_date,
+            covered_element=covered_element,
+            parent_contract=contract,
+            coverage=coverage_b,
+            )
+        second_option.save()
+        # before void
+        options_status = [option.status
+            for covered_element in contract.covered_elements
+            for option in covered_element.options
+            ]
+        self.assertEqual(options_status, ['active', 'active'])
+        self.assertEqual(contract.status, 'active')
+        void_reason, = self.SubStatus.search([('code', '=', 'error')])
+        self.Contract.void([contract], void_reason)
+        # after void
+        options_status = [option.status
+            for covered_element in contract.covered_elements
+            for option in covered_element.options
+            ]
+        self.assertEqual(options_status, ['void', 'void'])
+        self.assertEqual(contract.status, 'void')
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()

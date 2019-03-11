@@ -537,6 +537,30 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(option.end_date, None)
         self.assertEqual(option.start_date, None)
 
+    @test_framework.prepare_test(
+        'contract.test0010_testContractCreation'
+        )
+    def test0080_void_contract_options(self):
+        """
+            Tests coherence between contract status and its options status
+             when voiding a contract
+        """
+        contract, = self.Contract.search([])
+        coverage, = self.Coverage.search([('code', '=', 'ALP')])
+        option = self.Option(
+            manual_start_date=contract.start_date,
+            contract=contract,
+            parent_contract=contract,
+            coverage=coverage,
+            status='quote',
+            )
+        option.save()
+        self.assertEqual(option.status, 'quote')
+        contracts = [contract]
+        void_reason, = self.SubStatus.search([('code', '=', 'error')])
+        self.Contract.void(contracts, void_reason)
+        self.assertEqual(option.status, 'void')
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
