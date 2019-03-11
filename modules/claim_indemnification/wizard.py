@@ -828,6 +828,16 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
     def get_cancelled_indemnification(self, service):
         return [i for i in service.indemnifications if i.status == 'cancelled']
 
+    def _get_definition_start_date(self, service, non_cancelled):
+        if non_cancelled and non_cancelled[-1].end_date:
+            start_date = non_cancelled[-1].end_date + \
+                relativedelta(days=1)
+        else:
+            start_date = service.loss.start_date
+        if service.benefit.indemnification_kind == 'capital':
+            start_date = utils.today()
+        return start_date
+
     def default_definition(self, name):
         result = getattr(self, 'result', None)
         pool = Pool()
@@ -854,16 +864,14 @@ class CreateIndemnification(wizard_context.PersistentContextWizard):
                 if 'cancel' not in indemnification.status:
                     non_cancelled.append(indemnification)
             if non_cancelled and non_cancelled[-1].end_date:
-                start_date = non_cancelled[-1].end_date + \
-                    relativedelta(days=1)
                 beneficiary = non_cancelled[-1].beneficiary
                 product_id = non_cancelled[-1].product.id
             else:
-                start_date = service.loss.start_date
                 beneficiary = None
+            start_date = self._get_definition_start_date(
+                service, non_cancelled)
             end_date = self.get_end_date(start_date, service)
             if service.benefit.indemnification_kind == 'capital':
-                start_date = utils.today()
                 end_date = None
         extra_data = utils.get_value_at_date(service.extra_datas,
             start_date).extra_data_values

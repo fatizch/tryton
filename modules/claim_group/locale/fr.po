@@ -74,7 +74,7 @@ msgstr " "
 
 msgctxt "selection:contract,post_termination_claim_behaviour:"
 msgid "Lock Indemnifications"
-msgstr "Bloquer les prestations au niveau atteint"
+msgstr "Figer les montants des prestations au niveau atteint"
 
 msgctxt "selection:contract,post_termination_claim_behaviour:"
 msgid "Normal Indemnifications"
@@ -90,7 +90,7 @@ msgstr "Reprise complète de la gestion"
 
 msgctxt "selection:contract.option,previous_claims_management_rule:"
 msgid "In Complement of Previous Insurer"
-msgstr "Reprise au niveau atteint"
+msgstr "En complément du précédent assureur"
 
 msgctxt "selection:contract.option,previous_claims_management_rule:"
 msgid "No management"
@@ -104,7 +104,7 @@ msgstr " "
 msgctxt ""
 "selection:endorsement.contract.terminate,post_termination_claim_behaviour:"
 msgid "Lock Indemnifications"
-msgstr "Bloquer les prestations au niveau atteint"
+msgstr "Figer les montants des prestations au niveau atteint"
 
 msgctxt ""
 "selection:endorsement.contract.terminate,post_termination_claim_behaviour:"
@@ -122,7 +122,7 @@ msgstr " "
 
 msgctxt "selection:offered.product,default_termination_claim_behaviour:"
 msgid "Lock Indemnifications"
-msgstr "Bloquer les prestations au niveau atteint"
+msgstr "Figer les montants des prestations au niveau atteint"
 
 msgctxt "selection:offered.product,default_termination_claim_behaviour:"
 msgid "Normal Indemnifications"

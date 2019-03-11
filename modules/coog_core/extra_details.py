@@ -121,7 +121,7 @@ class ExtraDetailsConfiguration(model.CoogSQL, model.CoogView):
         else:
             value = {}
         cls._per_model_lines_cache.set(model_name, value)
-        return value
+        return dict(value)
 
     def generate_summary(self, instances, lang=None):
         '''

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form/field[@name='claim_status']" position="after">
+        <label name="previous_insurer_base_amount"/>
+        <field name="previous_insurer_base_amount"/>
+        <label name="previous_insurer_revaluation"/>
+        <field name="previous_insurer_revaluation"/>
+        <field name="currency_digits" invisible="1"/>
+        <field name="previous_insurer_amount_invisible" invisible="1"/>
+    </xpath>
+</data>

@@ -12,6 +12,7 @@ Fonctionnalités générales
    regularisation_tuto
    mise_a_jour_parametrage_donnee_complementaire
    eligibilite_prestation
+   transfert_contrat_assureur
 
 
 Fonctionnalités prévoyance collective

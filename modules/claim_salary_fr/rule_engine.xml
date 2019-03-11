@@ -28,11 +28,11 @@ base (par défaut cette donnée est à vrai)</field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_range_by_name</field>
             <field name="fct_args">nom_de_tranche, contribution_fixe, listes_des_code_des_contributions</field>
-            <field name="long_description">Retourne la somme des taux des 
-contributions pour le calcul du salaire net. Cette donnée prend en paramètre 
-le nom de la tranche de salaire ('A', 'B', 'C'), un boolean pour indiquer si 
-il s'agit de taux en pourcentage ou une somme de montant (par défaut à faux), 
-une liste des codes des contributions à additionner (par défaut à vide: 
+            <field name="long_description">Retourne la somme des taux des
+contributions pour le calcul du salaire net. Cette donnée prend en paramètre
+le nom de la tranche de salaire ('A', 'B', 'C'), un boolean pour indiquer si
+il s'agit de taux en pourcentage ou une somme de montant (par défaut à faux),
+une liste des codes des contributions à additionner (par défaut à vide:
 dans ce cas l'ensemble des contributions est sommée)</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
@@ -63,7 +63,7 @@ dans ce cas l'ensemble des contributions est sommée)</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_is_net_limite</field>
-            <field name="long_description">Retourne vrai si la garantie 
+            <field name="long_description">Retourne vrai si la garantie
 prévoit une limitation au salaire net</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
@@ -87,6 +87,7 @@ date_debut_prejudice = date_de_debut_du_prejudice()
 mode_revalo = param_1_reval_mode()
 salaire_journalier_base = salaire_journalier_de_base()
 description = description_du_calcul_du_salaire().decode('utf-8')
+date_maximum_revalo = date_revalorisation_maximum()
 
 # calcul de la date de premiere revalo
 if param_2_date_de_reference() == 'DAT' or not date_fin_franchise():
@@ -118,7 +119,7 @@ frequence_revalo = param_5_frequence_revalo()
 if frequence_revalo == 'changement_taux':
     dates.extend(dates_changement_table(mode_revalo, 1, date_debut_periode, date_fin_periode))
 elif frequence_revalo == 'date_anniversaire_1er_revalo':
-    dates.extend(dates_pivot(date_debut_periode, date_fin_periode, 'YEARLY', premiere_revalo.month, premiere_revalo.day))
+    dates.extend(dates_pivot(date_debut_periode, min(date_fin_periode, date_maximum_revalo), 'YEARLY', premiere_revalo.month, premiere_revalo.day))
 elif frequence_revalo in ('01/01/YEARLY', '01/07/YEARLY'):
     frequence_revalo = '01/01/YEARLY'
     jour_synchro, mois_synchro, frequence = frequence_revalo.split('/')
@@ -137,9 +138,9 @@ for period in periodes:
         taux_revalo = 1
     else:
         if mode_revalo == 'AGIRC':
-            taux_revalo = table_COOG_AGIRC(period[0]) / table_COOG_AGIRC(date_debut_prejudice)
+            taux_revalo = table_COOG_AGIRC(min(period[0], date_maximum_revalo)) / table_COOG_AGIRC(date_debut_prejudice)
         elif mode_revalo == 'ARRCO':
-            taux_revalo = table_COOG_ARRCO(period[0]) / table_COOG_ARRCO(date_debut_prejudice)
+            taux_revalo = table_COOG_ARRCO(min(period[0], date_maximum_revalo)) / table_COOG_ARRCO(date_debut_prejudice)
 
     salaire_journalier_revalorise = arrondir(salaire_journalier_base * taux_revalo, 0.01)
     if (salaire_journalier_revalorise - salaire_journalier_base) != 0.0:
@@ -159,7 +160,7 @@ for period in periodes:
             'date_limite': None,
             'extra_details': {
                 'montant_revalorisation': salaire_journalier_revalorise - salaire_journalier_base,
-                } 
+                }
             })
 return res</field>
             <field name="status">validated</field>

@@ -514,7 +514,8 @@ class ClaimService(metaclass=PoolMeta):
         cur_args = args.copy()
         cur_args['base_amount'] = salary
         cur_args['description'] = ''
-        res = self.benefit.benefit_rules[0].calculate_revaluation_rule(cur_args)
+        res = self.benefit.benefit_rules[0].calculate_revaluation_rule(
+            cur_args)
         return res[0]['amount_per_unit']
 
     @classmethod

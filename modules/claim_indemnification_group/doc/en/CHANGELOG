@@ -1,3 +1,4 @@
+* FEA#10498 Add only revaluation computation for the in complement contracts
 * BUG#10733 Fix automatically selected benefit "Subsidiaries then covered" which is inverted
 * BUG#10634 Fix readonly states of contract benefit options
 * BUG#10629 Fix on readonly states of contract benefit options fields

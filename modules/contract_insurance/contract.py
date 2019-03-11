@@ -1684,7 +1684,8 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         if self.parent:
             date = max(date or datetime.date.min, self.parent.start_date)
         return max(
-            self.contract.start_date if self.contract else datetime.date.min,
+            self.contract.start_date if self.contract and \
+            self.contract.start_date else datetime.date.min,
             date or datetime.date.min)
 
     def get_covered_parties(self, at_date):

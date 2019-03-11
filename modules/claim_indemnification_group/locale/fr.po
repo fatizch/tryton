@@ -3,6 +3,10 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:benefit.rule:"
+msgid "Amount is replaced by revaluation amount."
+msgstr "Le montant est remplacé par le montant de revalorisation"
+
+msgctxt "error:benefit.rule:"
 msgid "Multiple indemnification rules allowed"
 msgstr "Plusieurs règles d'indemnisation autorisées"
 
@@ -13,6 +17,10 @@ msgstr "Filiales puis élément couvert"
 msgctxt "error:benefit:"
 msgid "Subsidiaries, Covered and Subscriber"
 msgstr "Filiales, assuré et souscripteur"
+
+msgctxt "error:benefit.rule:"
+msgid "Computed amount transfered by the previous insurer: %(computation)s"
+msgstr "Montant calculé reversé par le précédent assureur: %(computation)s"
 
 msgctxt "error:claim.create_indemnification:"
 msgid ""
@@ -266,9 +274,42 @@ msgctxt "field:benefit_rule-revaluation_rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt ""
+"field:claim.indemnification_definition,previous_insurer_amount_invisible:"
+msgid "Previous Insurer Amount Invisible"
+msgstr "Montant de base du précédent assureur invisible"
+
+msgctxt "field:claim.indemnification_definition,previous_insurer_base_amount:"
+msgid "Previous Insurer Base Amount"
+msgstr "Montant de base du précédent assureur"
+
+msgctxt "field:claim.indemnification_definition,previous_insurer_revaluation:"
+msgid "Previous Insurer Revaluation Amount"
+msgstr "Montant de la revalorisation du précédent assureur"
+
+msgctxt "field:claim.service.extra_data,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision de la devise"
+
+msgctxt "field:claim.service.extra_data,previous_insurer_amount_invisible:"
+msgid "Previous Insurer Amount Invisible"
+msgstr "Montant de base du précédent assureur invisible"
+
+msgctxt "field:claim.service.extra_data,previous_insurer_base_amount:"
+msgid "Previous Insurer Base Amount"
+msgstr "Montant de base du précédent assureur"
+
+msgctxt "field:claim.service.extra_data,previous_insurer_revaluation:"
+msgid "Previous Insurer Revaluation Amount"
+msgstr "Montant de la revalorisation du précédent assureur"
+
 msgctxt "field:claim.transfer_services.benefit_line,id:"
 msgid "ID"
 msgstr "Identifiant"
+
+msgctxt "field:claim.transfer_services.benefit_line,insurance_kind:"
+msgid "Insurance Kind"
+msgstr "Type d'assurance"
 
 msgctxt "field:claim.transfer_services.benefit_line,number:"
 msgid "Number"
@@ -369,6 +410,10 @@ msgstr "règles de revalorisation disponibles"
 msgctxt "field:contract.option.benefit,benefit:"
 msgid "Benefit"
 msgstr "Prestation"
+
+msgctxt "field:contract.option.benefit,contract_status:"
+msgid "Contract Status"
+msgstr "Statut du contrat"
 
 msgctxt "field:contract.option.benefit,create_date:"
 msgid "Create Date"
@@ -508,7 +553,7 @@ msgstr "Mensuelle"
 
 msgctxt "selection:contract.option.benefit,annuity_frequency:"
 msgid "Quarterly"
-msgstr "Trimestrielle"
+msgstr "Montant de base du précédent assureur invisible"
 
 msgctxt "selection:contract.option.benefit,annuity_frequency:"
 msgid "Yearly"

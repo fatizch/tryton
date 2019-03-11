@@ -23,6 +23,7 @@ def register():
         rule_engine.RuleEngineRuntime,
         claim.ClaimService,
         claim.Indemnification,
+        claim.ClaimServiceExtraDataRevision,
         wizard.IndemnificationDefinition,
         wizard.TransferServicesContracts,
         wizard.TransferServicesBenefits,

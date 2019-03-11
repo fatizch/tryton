@@ -1133,6 +1133,20 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         return indemnifications[-1]
 
     @classmethod
+    def _get_delta_indemnifications(cls, indemnification,
+            previous_indemnification):
+        delta = 0
+        if (not previous_indemnification and
+                indemnification.service.loss.has_end_date):
+            delta = (indemnification.start_date -
+                indemnification.service.loss.start_date).days + 1
+        if (previous_indemnification and
+                previous_indemnification.service.loss.has_end_date):
+            delta = (indemnification.start_date -
+                previous_indemnification.end_date).days
+        return delta
+
+    @classmethod
     def check_schedulability(cls, indemnifications):
         cancel_indemnifications = cls.search([
                 ('service', 'in', [i.service.id for i in indemnifications]),
@@ -1166,15 +1180,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 previous_indemnification = \
                     indemnification.previous_indemnification(['calculated',
                             'scheduled', 'controlled', 'validated', 'paid'])
-                delta = 0
-                if (not previous_indemnification and
-                        indemnification.service.loss.has_end_date):
-                    delta = (indemnification.start_date -
-                        indemnification.service.loss.start_date).days + 1
-                if (previous_indemnification and
-                        previous_indemnification.service.loss.has_end_date):
-                    delta = (indemnification.start_date -
-                        previous_indemnification.end_date).days
+                delta = cls._get_delta_indemnifications(
+                    indemnification, previous_indemnification)
                 if delta > 1 or (previous_indemnification
                         and previous_indemnification.status == 'calculated'
                         and previous_indemnification not in to_schedule):

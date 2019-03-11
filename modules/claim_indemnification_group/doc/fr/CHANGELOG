@@ -1,3 +1,4 @@
+* FEA#10498 Ajout du calcul d'uniquement la révalorisation pour les contrats "En complément du précédent assureur"
 * BUG#10733 Correctif sur l'inversion du bénéficiaire automatiquement selectionné "Filiale puis assuré"
 * BUG#10634 Correction des états de lecture seule des prestations
 * BUG#10629 Correctif sur les états en lecture seule des champs des options de prestation

@@ -447,6 +447,22 @@ class ClaimService(metaclass=PoolMeta):
                     values[key] = value
         self.extra_datas[-1].extra_data_values = values
 
+    @classmethod
+    def _filter_theoretical_covered(cls, covered, loss_date, option):
+        start_date_check = covered.manual_start_date
+        if option.full_management_start_date:
+            start_date_check = (option.full_mangement_start_date
+                if not start_date_check
+                else min(start_date_check, option.full_mangement_start_date))
+        if option.previous_claims_management_rule == 'in_complement':
+            return True
+        if not start_date_check or (start_date_check <= loss_date):
+            return True
+        if not covered.manuel_end_date or (
+                covered.manuel_end_date >= loss_date):
+            return True
+        return False
+
     def get_theoretical_covered_element(self, name):
         CoveredElement = Pool().get('contract.covered_element')
         loss_date = self.loss.get_date()
@@ -461,13 +477,10 @@ class ClaimService(metaclass=PoolMeta):
                         ('right', '<', covered_element.right),
                         ('contract', '=', covered_element.contract),
                         ('party', '=', person),
-                        ['OR',
-                            ('manual_start_date', '=', None),
-                            ('manual_start_date', '<=', loss_date)],
-                        ['OR',
-                            ('manual_end_date', '=', None),
-                            ('manual_end_date', '>=', loss_date)]
                         ])
+                matches = [x for x in matches if
+                    self._filter_theoretical_covered(x, loss_date, self.option)
+                    ]
                 if matches:
                     if len(matches) == 1:
                         return matches[0]

@@ -5,6 +5,7 @@ import datetime
 from trytond.pool import PoolMeta
 
 from trytond.modules.rule_engine import check_args
+from trytond.modules.coog_core import utils
 
 
 __all__ = [
@@ -22,5 +23,22 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         if (contract and
                 contract.post_termination_claim_behaviour ==
                 'lock_indemnifications'):
-            return contract.end_date
+            return contract.final_end_date
         return datetime.date.max
+
+    @classmethod
+    @check_args('contract', 'option')
+    def _re_revaluation_min_revaluation_date(cls, args):
+        contract = args['contract']
+        option = args['option']
+        if (contract and option and
+                option.previous_claims_management_rule == 'in_complement'):
+            return contract.initial_start_date
+        return datetime.date.min
+
+    @classmethod
+    @check_args('service')
+    def _re_get_previous_insurer_base_amount(cls, args):
+        service = args['service']
+        return utils.get_value_at_date(service.extra_datas,
+            service.loss.start_date).previous_insurer_base_amount

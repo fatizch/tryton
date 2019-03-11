@@ -1,15 +1,17 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
+from decimal import Decimal
 
 from trytond.pool import PoolMeta
 from trytond.pyson import And, Eval, Or, Bool
 from trytond.server_context import ServerContext
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, utils, coog_string
 from trytond.modules.claim_indemnification \
     import BenefitRule as OriginalBenefitRule
+
 
 __all__ = [
     'Benefit',
@@ -123,6 +125,10 @@ class BenefitRule(metaclass=PoolMeta):
         cls._error_messages.update({
                 'multiple_indemnification_rules': 'Multiple indemnification '
                 'rules allowed',
+                'amount_revaluation': 'Amount is replaced by revaluation '
+                'amount.',
+                'previous_insurer_desc': 'Computed amount transfered by the '
+                'previous insurer: %(computation)s',
                 })
         cls.indemnification_rule.states['invisible'] = And(
             cls.indemnification_rule.states.get('invisible', True),
@@ -247,6 +253,75 @@ class BenefitRule(metaclass=PoolMeta):
         if self.force_indemnification_rule:
             return super(BenefitRule, self).must_revaluate()
         return bool(self.revaluation_rules)
+
+    def _get_previous_insurer_amount_benefits(self, service, start_date,
+            end_date, previous_insurer_amount, indemnification):
+        description = ''
+
+        if self.benefit.indemnification_kind == 'period':
+            nb_of_unit = (end_date - start_date).days + 1
+            str_nb_of_unit = coog_string.format_number('%.2f', nb_of_unit)
+            amount = previous_insurer_amount * nb_of_unit
+            str_amount = coog_string.format_number('%.2f', amount)
+            previous_insurer_desc = '%s = %s * %s\n' % (str_amount,
+                previous_insurer_amount, str_nb_of_unit)
+            description += self.raise_user_error('previous_insurer_desc', {
+                    'computation': previous_insurer_desc,
+                    }, raise_exception=False)
+            return [{
+                    'start_date': start_date,
+                    'end_date': end_date,
+                    'nb_of_unit': nb_of_unit,
+                    'unit': 'day',
+                    'amount': amount,
+                    'base_amount': previous_insurer_amount,
+                    'amount_per_unit': previous_insurer_amount,
+                    'description': description,
+                    'limit_date': None,
+                    'extra_details': {},
+                    }]
+        elif self.benefit.indemnification_kind == 'annuity':
+            frequency = indemnification.service.annuity_frequency
+            annual_previous_insurer_amount = previous_insurer_amount
+            periods = indemnification.service.calculate_annuity_periods(
+                start_date, end_date)
+            rounding_factor = (
+                Decimal(1) / 10 ** indemnification.currency_digits)
+            return self.get_ltd_periods(periods,
+                annual_previous_insurer_amount, frequency, description,
+                rounding_factor, None)
+        return []
+
+    def do_calculate_indemnification_rule(self, args):
+        delivered = args['service']
+        start_date = args['indemnification_detail_start_date']
+        end_date = args['indemnification_detail_end_date']
+        extra_data = utils.get_value_at_date(delivered.extra_datas, start_date)
+        if not extra_data.previous_insurer_base_amount:
+            return super(BenefitRule, self).do_calculate_indemnification_rule(
+                args)
+        return self._get_previous_insurer_amount_benefits(delivered,
+            start_date, end_date, extra_data.previous_insurer_base_amount,
+            args['indemnification'])
+
+    def do_calculate_revaluation_rule(self, args):
+        delivered = args['service']
+        start_date = args['indemnification_detail_start_date']
+        extra_data = utils.get_value_at_date(delivered.extra_datas, start_date)
+        res = super(BenefitRule, self).do_calculate_revaluation_rule(args)
+        if not extra_data.previous_insurer_base_amount:
+            return res
+
+        for benefit in res:
+            benefit['amount_per_unit'] -= (
+                extra_data.previous_insurer_base_amount +
+                extra_data.previous_insurer_revaluation)
+            benefit['base_amount'] = Decimal('0')
+            benefit['amount'] = benefit['amount_per_unit'] * \
+                benefit['nb_of_unit']
+            benefit['extra_details']['montant_revalorisation'] = \
+                benefit['amount_per_unit']
+        return res
 
 
 class BenefitRuleIndemnification(model.CoogSQL):

@@ -1,16 +1,17 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from collections import defaultdict
+from dateutil.relativedelta import relativedelta
 
 from sql import Null
 from sql.aggregate import Count
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If
+from trytond.pyson import Eval, If, Bool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, utils
 
 
 __all__ = [
@@ -26,9 +27,34 @@ __all__ = [
 class IndemnificationDefinition(metaclass=PoolMeta):
     __name__ = 'claim.indemnification_definition'
 
+    previous_insurer_base_amount = fields.Numeric(
+        'Previous Insurer Base Amount',
+        digits=(16, Eval('currency_digits', 2)),
+        states={'invisible': Bool(Eval('previous_insurer_amount_invisible'))},
+        depends=['currency_digits', 'previous_insurer_amount_invisible'])
+    previous_insurer_revaluation = fields.Numeric(
+        'Previous Insurer Revaluation Amount',
+        digits=(16, Eval('currency_digits', 2)),
+        states={'invisible': Bool(Eval('previous_insurer_amount_invisible'))},
+        depends=['currency_digits', 'previous_insurer_amount_invisible'])
+    previous_insurer_amount_invisible = fields.Boolean(
+            'Previous Insurer Amount Invisible', readonly=True)
+    currency_digits = fields.Function(fields.Integer('Currency Digits'),
+        'getter_currency_digits')
+
+    def getter_currency_digits(self, name):
+        if not self.service:
+            return None
+        return self.service.currency_digits
+
     @fields.depends('beneficiary')
     def on_change_service(self):
         super(IndemnificationDefinition, self).on_change_service()
+        self.previous_insurer_amount_invisible = True
+        if self.service and \
+                self.service.option.previous_claims_management_rule == \
+                'in_complement':
+            self.previous_insurer_amount_invisible = False
 
     @fields.depends('beneficiary', 'possible_products', 'product', 'service')
     def on_change_beneficiary(self):
@@ -37,8 +63,8 @@ class IndemnificationDefinition(metaclass=PoolMeta):
 
     def get_possible_products(self):
         if not self.beneficiary or self.beneficiary.is_person:
-            return super(IndemnificationDefinition, self).get_possible_products(
-                )
+            return super(IndemnificationDefinition, self
+                ).get_possible_products()
         return self.service.benefit.company_products if self.service else []
 
 
@@ -60,6 +86,13 @@ class CreateIndemnification(metaclass=PoolMeta):
                 'after this date',
                 })
 
+    def _get_definition_start_date(self, service, non_cancelled):
+        start_date = super(CreateIndemnification, self
+            )._get_definition_start_date(service, non_cancelled)
+        if service.option.previous_claims_management_rule == 'in_complement':
+            return max(start_date, service.option.start_date)
+        return start_date
+
     def default_definition(self, name):
         defaults = super(CreateIndemnification, self).default_definition(name)
         if not defaults.get('service', None) or not defaults.get('start_date',
@@ -74,6 +107,24 @@ class CreateIndemnification(metaclass=PoolMeta):
                     self.raise_user_error('bad_start_date', {
                             'indemn_start': defaults['start_date'],
                             'contract_end': contract_end})
+        non_cancelled = []
+        for indemnification in service.indemnifications:
+            if 'cancel' not in indemnification.status:
+                non_cancelled.append(indemnification)
+        if non_cancelled and non_cancelled[-1].end_date:
+            start_date = non_cancelled[-1].end_date + \
+                relativedelta(days=1)
+        else:
+            start_date = service.loss.start_date
+        if service.benefit.indemnification_kind == 'capital':
+            start_date = utils.today()
+        extra_data = utils.get_value_at_date(service.extra_datas,
+            start_date)
+        defaults['previous_insurer_base_amount'] = \
+            extra_data.previous_insurer_base_amount
+        defaults['previous_insurer_revaluation'] = \
+            extra_data.previous_insurer_revaluation
+
         return defaults
 
     def check_input(self):
@@ -105,6 +156,33 @@ class CreateIndemnification(metaclass=PoolMeta):
                             'indemn_end': input_end_date,
                             'contract_end': contract_end})
         return res
+
+    def update_service_extra_data(self, values):
+        super(CreateIndemnification, self).update_service_extra_data(values)
+        service = self.definition.service
+        if self.definition.is_period:
+            at_date = self.definition.start_date
+        else:
+            at_date = self.definition.indemnification_date
+        at_date = at_date or service.loss.start_date
+        extra_data = utils.get_value_at_date(service.extra_datas, at_date)
+        if (self.definition.previous_insurer_base_amount !=
+                extra_data.previous_insurer_base_amount or
+                self.definition.previous_insurer_revaluation !=
+                extra_data.previous_insurer_revaluation):
+            if (at_date == extra_data.date):
+                extra_data.previous_insurer_base_amount = \
+                    self.definition.previous_insurer_base_amount
+                extra_data.previous_insurer_revaluation = \
+                    self.definition.previous_insurer_revaluation
+            else:
+                extra_data, = extra_data.copy([extra_data])
+                extra_data.date = at_date
+                extra_data.previous_insurer_base_amount = \
+                    self.definition.previous_insurer_base_amount
+                extra_data.previous_insurer_revaluation = \
+                    self.definition.previous_insurer_revaluation
+            extra_data.save()
 
 
 class TransferServices(Wizard):

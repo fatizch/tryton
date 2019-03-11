@@ -5,12 +5,15 @@ import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
+from trytond.model import ModelView
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.coog_core import fields
 
 __all__ = [
     'ClaimService',
     'Indemnification',
+    'ClaimServiceExtraDataRevision',
     ]
 
 
@@ -118,6 +121,38 @@ class Indemnification(metaclass=PoolMeta):
         return covered_elements
 
     @classmethod
+    def _get_delta_indemnifications(cls, indemnification,
+            previous_indemnification):
+        delta = super(Indemnification, cls)._get_delta_indemnifications(
+            indemnification, previous_indemnification)
+        option = indemnification.service.option
+        if not option.previous_claims_management_rule == 'in_complement':
+            return delta
+        delta = 0
+        if (not previous_indemnification and
+                indemnification.service.loss.has_end_date):
+            delta = (indemnification.start_date -
+                max(indemnification.service.loss.start_date,
+                    option.start_date)).days + 1
+        if (previous_indemnification and
+                previous_indemnification.service.loss.has_end_date):
+            delta = (indemnification.start_date -
+                max(previous_indemnification.end_date, option.start_date)
+                ).days
+        return delta
+
+    @classmethod
+    def check_schedulability(cls, indemnifications):
+        super(Indemnification, cls).check_schedulability(indemnifications)
+        for indemn in indemnifications:
+            option = indemn.service.option
+            if option.previous_claims_management_rule == 'in_complement':
+                if indemn.start_date < option.start_date:
+                    cls.raise_user_error('before_option_start_date', {
+                            'indemnification': indemn.rec_name,
+                            })
+
+    @classmethod
     def check_calculable(cls, indemnifications):
         super(Indemnification, cls).check_calculable(indemnifications)
         covered_elements = cls.covered_elements_per_party_contract(
@@ -168,3 +203,46 @@ class Indemnification(metaclass=PoolMeta):
                             'indemn_end': indemnification.end_date,
                             'management_start': management_start,
                             'management_end': management_end})
+
+    @classmethod
+    @ModelView.button
+    def validate_indemnification(cls, indemnifications):
+        for indemn in indemnifications:
+            option = indemn.service.option
+            if option.previous_claims_management_rule == \
+                    'in_complement' and indemn.start_date < option.start_date:
+                cls.raise_user_error('before_option_start_date', {
+                        'indemnification': indemn.rec_name,
+                        })
+        super(Indemnification, cls).validate_indemnification(indemnifications)
+
+
+class ClaimServiceExtraDataRevision(metaclass=PoolMeta):
+    __name__ = 'claim.service.extra_data'
+
+    previous_insurer_base_amount = fields.Numeric(
+        'Previous Insurer Base Amount',
+        digits=(16, Eval('currency_digits', 2)),
+        states={'invisible': Bool(Eval('previous_insurer_amount_invisible'))},
+        depends=['currency_digits', 'previous_insurer_amount_invisible'])
+    previous_insurer_revaluation = fields.Numeric(
+        'Previous Insurer Revaluation Amount',
+        digits=(16, Eval('currency_digits', 2)),
+        states={'invisible': Bool(Eval('previous_insurer_amount_invisible'))},
+        depends=['currency_digits', 'previous_insurer_amount_invisible'])
+    previous_insurer_amount_invisible = fields.Function(fields.Boolean(
+            'Previous Insurer Amount Invisible'),
+        'getter_previous_amount_invisible')
+    currency_digits = fields.Function(fields.Integer('Currency Digits',
+            readonly=True), 'getter_currency_digits')
+
+    def getter_currency_digits(self, name):
+        return self.claim_service.currency_digits
+
+    def getter_previous_amount_invisible(self, name):
+        if not self.claim_service:
+            return True
+        if self.claim_service.option.previous_claims_management_rule == \
+                'in_complement':
+            return False
+        return True

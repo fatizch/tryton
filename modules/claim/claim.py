@@ -82,7 +82,7 @@ class Claim(Printable, model.CoogView):
         depends=['possible_contracts', 'company'])
     possible_contracts = fields.Function(
         fields.Many2Many('contract', None, None, 'Contracts'),
-        'getter_possible_contracts')
+        'on_change_with_possible_contracts')
     _claim_number_generator_cache = Cache('claim_number_generator')
     losses_description = fields.Function(
         fields.Char('Losses Description'), 'get_losses_description')
@@ -342,8 +342,11 @@ class Claim(Printable, model.CoogView):
         return Contract.get_covered_contracts_from_party(self.claimant,
             at_date)
 
-    def getter_possible_contracts(self, name=None):
-        return [x.id for x in self.get_possible_contracts()]
+    @fields.depends('claimant', 'declaration_date', 'losses')
+    def on_change_with_possible_contracts(self, name=None):
+        if self.claimant:
+            return [x.id for x in self.get_possible_contracts()]
+        return []
 
     def get_contracts(self):
         res = []
@@ -830,6 +833,13 @@ class Loss(model.CoogSQL, model.CoogView,
                         key=_group_by_sub_status):
                     Claim.hold_contracts([x[0] for x in payers], sub_status)
             pool.get('event').notify_events(to_write, 'activate_loss')
+
+    @fields.depends('start_date', 'claim', 'claimant', 'declaration_date',
+        'losses')
+    def on_change_start_date(self):
+        if self.claim:
+            self.claim.possible_contracts = \
+                self.claim.on_change_with_possible_contracts()
 
     def get_gdpr_data(self):
         Party = Pool().get('party.party')

@@ -1,5 +1,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
 
@@ -72,18 +75,46 @@ class CoveredElement(metaclass=PoolMeta):
         return list(set(res +
                 self.fill_list_with_previous_covered_options(at_date)))
 
-    def fill_list_with_previous_covered_options(self, at_date):
+    def fill_list_with_previous_covered_options(self, at_date, complements=True
+            ):
+        if complements:
+            options = self._future_complement_option(self,
+                at_date)
+        else:
+            options = []
         if self.manual_start_date and self.manual_start_date > at_date:
-            return []
+            return options
         if self.manual_end_date and self.manual_end_date < at_date:
-            return []
-        options = [option for option in self.options
+            return options
+        options += [option for option in self.options
             if (option.previous_claims_management_rule == 'full_management' and
                 option.full_management_start_date <= at_date)]
         if not self.parent:
             return options
         return options + self.parent.fill_list_with_previous_covered_options(
-            at_date)
+            at_date, complements=False)
+
+    def _future_complement_option(self, covered, at_date, coverage=None):
+        options = []
+        for option in [x for x in covered.options if (not coverage or
+                        x.coverage == coverage)]:
+            if (option.start_date or datetime.date.min) > at_date and \
+                    option.previous_claims_management_rule == 'in_complement':
+                options.append(option)
+        if not covered.parent:
+            return options
+        return options + self._future_complement_option(
+            covered.parent, at_date, coverage)
+
+    def is_valid_at_date(self, at_date):
+        return super(CoveredElement, self).is_valid_at_date(at_date) or \
+            self._future_complement_option(self, at_date)
+
+    def is_covered_at_date(self, at_date, coverage=None):
+
+        return super(CoveredElement, self).is_covered_at_date(at_date,
+                coverage) or self._future_complement_option(self, at_date,
+                coverage)
 
 
 class TerminateContract(metaclass=PoolMeta):
