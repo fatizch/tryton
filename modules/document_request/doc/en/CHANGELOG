@@ -1,3 +1,5 @@
+* BUG#11130 Fix document request processing batch
+
 Version 2.2 - 2018-10-12
 * BUG#8961 Set reception date to null when attachment is removed from a document request
 

@@ -376,7 +376,7 @@ class ReportCreate(metaclass=PoolMeta):
         context = super(ReportCreate, self).create_report_context(instances)
         context['recipient_email'] =  \
             self.select_template.recipient_email.value \
-            if self.select_template.recipient_email else ''
+            if getattr(self.select_template, 'recipient_email', None) else ''
         return context
 
     def finalize_report(self, report, instances):

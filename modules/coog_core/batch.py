@@ -219,7 +219,7 @@ class BatchRoot(ModelView):
             timestamp = datetime.now().strftime(date_format)
             filepath_template = filepath_template.replace('%{TIMESTAMP}',
                 timestamp)
-        filepath = os.path.join(cls.kwargs('root_dir'),
+        filepath = os.path.join(kwargs['root_dir'],
             filepath_template)
         dirpath = os.path.dirname(filepath)
         if makedirs and not os.path.exists(dirpath):
@@ -262,7 +262,7 @@ class BatchRoot(ModelView):
     @classmethod
     def write_batch_output(cls, _buffer, filename, **kwargs):
         batch_outpath = cls.generate_filepath(filename, **kwargs)
-        with open(batch_outpath, 'w') as f:
+        with open(batch_outpath, 'wb') as f:
             f.write(_buffer)
 
     @classmethod

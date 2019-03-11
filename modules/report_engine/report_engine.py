@@ -1648,13 +1648,13 @@ class ReportCreate(wizard_context.PersistentContextWizard):
 
     def transition_post_generation(self):
         self.wizard_context['attachments'] = []
+        instances = self.get_instances()
+        for instance in instances:
+            instance.post_generation()
         if not self.select_template.template.format_for_internal_edm:
             return 'end'
         pool = Pool()
         ContactHistory = pool.get('party.interaction')
-        instances = self.get_instances()
-        for instance in instances:
-            instance.post_generation()
         reports = {cur_id: report_list
             for ids, report_list in self.wizard_context['reports']
             for cur_id in ids}
@@ -1682,7 +1682,8 @@ class ReportCreate(wizard_context.PersistentContextWizard):
             recipient = instance.get_recipients()[0]
         contact.party = recipient
         contact.media = 'mail'
-        contact.address = self.select_template.recipient_address
+        contact.address = getattr(self.select_template, 'recipient_address',
+            None)
         contact.title = self.select_template.template.name
         contact.for_object_ref = instance.get_object_for_contact()
         return contact

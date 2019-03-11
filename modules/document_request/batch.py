@@ -60,17 +60,17 @@ class DocumentRequestBatch(batch.BatchRoot):
             'report.create', type='wizard')
         for cur_object in objects:
             with Transaction().set_context(
-                    active_model=cur_object.__name__, active_id=cur_object.id):
+                    active_model=cur_object.__name__, active_id=cur_object.id,
+                    active_ids=[cur_object.id]):
                 wizard_id, _, _ = ReportCreate.create()
                 wizard = ReportCreate(wizard_id)
-                data = wizard.execute(wizard_id, {}, 'select_model')
+                data = wizard.execute(wizard_id, {}, 'init_templates')
                 data = wizard.execute(wizard_id, {
-                    'select_model': data['view']['defaults']}, 'generate')
+                    'select_template': data['view']['defaults']}, 'generate')
                 report_def, data = data['actions'][0]
                 Report = Pool().get(report_def['report_name'], type='report')
-                ext, _buffer, _, name = Report.execute([data['id']], data)
-                cls.write_batch_output(_buffer, '%s.%s' % (name, ext),
-                    **kwargs)
+                ext, _buffer, _, name = Report.execute([cur_object.id], data)
+                cls.write_batch_output(_buffer, '%s.%s' % (name, ext), **kwargs)
                 wizard.execute(wizard_id, {}, 'post_generation')
                 cls.logger.info('Processed report request for %s' %
                     cur_object.get_rec_name(None))

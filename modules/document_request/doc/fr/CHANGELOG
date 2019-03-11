@@ -1,3 +1,5 @@
+* BUG#11130 Correction du batch de traitement des demandes de documents
+
 Version 2.2 - 2018-10-12
 * BUG#8961 Réinitialiser la date de réception à nul lorsque la pièce jointe associée à une demande de document est supprimée
 
