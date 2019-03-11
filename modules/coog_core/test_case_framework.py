@@ -255,7 +255,7 @@ class TestCaseModel(ModelSingleton, model.CoogSQL, model.CoogView):
         return cls._loaded_resources[module_name]['translations'][msg_id]
 
     @classmethod
-    def load_resources(cls, modules_to_load=None):
+    def load_resources(cls, modules_to_load=None, force_language=None):
         if not hasattr(cls, '_loaded_resources'):
             cls._loaded_resources = {}
         if isinstance(modules_to_load, str):
@@ -267,7 +267,8 @@ class TestCaseModel(ModelSingleton, model.CoogSQL, model.CoogView):
         # trytond/trytond/modules path
         top_path = os.path.abspath(os.path.join(os.path.normpath(__file__),
                 '..', '..'))
-        language_path = cls.get_language().code
+        language_path = cls.get_language().code \
+            if not force_language else force_language
         for module_name in modules_to_load:
             if module_name in cls._loaded_resources:
                 continue

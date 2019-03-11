@@ -1,3 +1,5 @@
+* BUG#10989 Le jeux d'essai de création des agences bancaires est non fonctionnel
+
 Version 2.2 - 2018-10-12
 * FEA#8748 Export de la méthode de vérification d'IBAN pour être exploitée dans API
 

@@ -45,6 +45,6 @@ class TestCaseModel(metaclass=PoolMeta):
     @classmethod
     def agencies_test_case(cls):
         logger = cls.get_logger()
-        cls.load_resources('bank_fr')
+        cls.load_resources('bank_fr', force_language='fr')
         file_path = cls._loaded_resources['bank_fr']['files']['agencies.csv']
         AgenciesLoader.execute(file_path, logger)

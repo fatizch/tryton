@@ -1,3 +1,5 @@
+* BUG#10989 Test case for bank_fr agencies is non functional
+
 Version 2.2 - 2018-10-12
 * FEA#8748 Export method to check IBAN
 

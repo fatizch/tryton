@@ -50,7 +50,7 @@ class AgenciesLoader:
                     return False
             return True
 
-        with open(agencies_file_path, 'rb') as f:
+        with open(agencies_file_path, 'r') as f:
             reader = csv.reader(f, delimiter=';')
             missing_bics = defaultdict(int)
             for row in reader:
