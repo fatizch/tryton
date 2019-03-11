@@ -124,6 +124,16 @@ class Payment(metaclass=PoolMeta):
                     if (invoice.invoice_state == 'posted' and invoice.start
                             and invoice.start >= next_invoice_date):
                         lines_to_update += invoice.invoice.lines_to_pay
+                    # Check if that it's an fee invoce and that it is posted
+                    # if we are in this case, we check that it's have
+                    # no payment in progress. If one is in this case, we reset
+                    # the payment date
+                    elif (invoice.invoice_state == 'posted'
+                                and not invoice.start and not invoice.end):
+                            payments = invoice.invoice.payments
+                            if not any([x.state == 'processing'
+                                        for x in payments]):
+                                lines_to_update += invoice.invoice.lines_to_pay
 
         if lines_to_update:
             MoveLine.write(lines_to_update, {'payment_date': None})

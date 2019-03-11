@@ -1,3 +1,4 @@
+* BUG#10962 Réinitialiser la valeur de la date de paiement sur les quittances de frais émis lorsqu'on passe à un paiement manuel sur contrat suite à un rejet
 * BUG#10526 Réinitialisation du jour de prélèvement lorsqu'on passe à un paiement manuel sur contrat en raison d'un échec
 * BUG#10379 Prendre la date d'effet du contrat comme étant la date d'effet du nouvau quittancement lorsqu'on il y a un rejet de paiement et basculement en mode de paiement par chéque
 * BUG#10390 La date du passage en paiement manuel est mal positionnée pour les contrats faisant partie d'un ensemble de contrat (module contract_set), et dont les paiements sont rejetés en même temps.
