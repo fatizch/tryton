@@ -420,7 +420,7 @@ class ChangePartyName(EndorsementWizardStepMixin):
         displayers = []
         defaults = super(ChangePartyName, self).step_default()
         for party, party_endorsement in zip(Party.browse(
-                    list(self._get_parties().keys())), list(self._get_parties().values())):
+                    self._get_parties().keys()), self._get_parties().values()):
             displayer = {'party_rec_name': party.rec_name}
             values = party_endorsement.values
             for fname in self._party_fields_to_extract():

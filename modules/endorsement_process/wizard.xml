@@ -12,5 +12,20 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Preview Changes</field>
             <field name="wiz_name">endorsement.preview_changes</field>
         </record>
+        <!-- ######################### -->
+        <!-- # Ask Next Endorsements # -->
+        <!-- ######################### -->
+        <record model="ir.action.wizard" id="act_ask_next_endorsement">
+            <field name="name">Ask For Next Endorsement</field>
+            <field name="wiz_name">endorsement.ask_next_endorsement</field>
+        </record>
+        <!-- ############################### -->
+        <!-- # Ask Next Endorsement Choice # -->
+        <!-- ############################### -->
+        <record model="ir.ui.view" id="endorsement_ask_next_endorsement_choice_view_form">
+            <field name="model">endorsement.ask_next_endorsement.choice</field>
+            <field name="type">form</field>
+            <field name="name">ask_next_endorsement_choice_form</field>
+        </record>
     </data>
 </tryton>

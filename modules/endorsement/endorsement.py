@@ -1569,8 +1569,8 @@ class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
         cls.write(endorsements, {'state': 'applied'})
 
         cls.run_methods(endorsements, 'apply')
-
-        cls.generate_next_endorsements(endorsements)
+        if cls.should_generate_next_endorsement():
+            cls.generate_next_endorsements(endorsements)
         if not Transaction().context.get('will_be_rollbacked', False):
             Event.notify_events(endorsements, 'apply_endorsement')
 
@@ -1595,12 +1595,15 @@ class Endorsement(QueueMixin, Workflow, Printable, model.CoogSQL,
             endorsement.save()
 
     @classmethod
+    def should_generate_next_endorsement(cls):
+        return True
+
+    @classmethod
     def generate_next_endorsements(cls, endorsements):
         for endorsement in endorsements:
             if not endorsement.definition.next_endorsement:
                 continue
-            to_endorse = endorsement.get_next_endorsement_contracts()
-            cls.endorse_contracts(to_endorse,
+            cls.endorse_contracts(endorsement.get_next_endorsement_contracts(),
                 endorsement.definition.next_endorsement, origin=endorsement)
 
     def get_next_endorsement_contracts(self):

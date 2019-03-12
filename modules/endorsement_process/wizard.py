@@ -3,7 +3,9 @@
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Bool, Eval
-from trytond.wizard import Wizard, StateAction, StateView, Button
+from trytond.wizard import Wizard, StateAction, StateView, Button, \
+        StateTransition
+from trytond.server_context import ServerContext
 
 from trytond.modules.process_cog.process import ProcessFinder, ProcessStart
 from trytond.modules.coog_core import fields, model
@@ -15,6 +17,8 @@ __all__ = [
     'EndorsementFindProcess',
     'EndorsementStartProcess',
     'PreviewChangesWizard',
+    'AskNextEndorsementChoice',
+    'AskNextEndorsement',
     ]
 
 
@@ -190,3 +194,76 @@ class StartEndorsement(metaclass=PoolMeta):
         # endorsement.part.union model in endorsement_process/endorsement.py
         return EndorsementPart(Transaction().context.get(
                 'active_id') % 100).view
+
+
+class AskNextEndorsementChoice(model.CoogView):
+    'Ask Next Endorsement Choice'
+
+    __name__ = 'endorsement.ask_next_endorsement.choice'
+
+    question = fields.Text('Question', readonly=True)
+
+
+class AskNextEndorsement(model.CoogWizard):
+    'Ask For Next Endorsement Wizard'
+
+    __name__ = 'endorsement.ask_next_endorsement'
+
+    start_state = 'detect'
+    detect = StateTransition()
+    choice = StateView('endorsement.ask_next_endorsement.choice',
+        'endorsement_process.endorsement_ask_next_endorsement_choice_view_form',
+            [Button('No', 'apply_without_generate', 'tryton-cancel'),
+                Button('Generate', 'apply_with_generate', 'tryton-go-next',
+                    default=True)])
+    apply_without_generate = StateTransition()
+    apply_with_generate = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._error_messages.update({
+                'ask_next_endorsement': 'Do you want to execute the endorsement'
+                ' \"%(next_endorsement)s\" too?',
+                })
+
+    def get_endorsement(self):
+        active_model = Transaction().context.get('active_model', None)
+        if active_model != 'endorsement':
+            return
+        active_id = Transaction().context.get('active_id')
+        if not active_id:
+            return
+        Endorsement = Pool().get('endorsement')
+        return Endorsement(active_id)
+
+    def transition_detect(self):
+        endorsement = self.get_endorsement()
+        if (endorsement is None
+                or endorsement.definition.next_endorsement is None):
+            return 'end'
+        return 'choice'
+
+    def default_choice(self, name):
+        endorsement = self.get_endorsement()
+        question = self.raise_user_error('ask_next_endorsement', {
+                'next_endorsement':
+                endorsement.definition.next_endorsement.rec_name
+                }, raise_exception=False)
+        return {
+            'question': question,
+            }
+
+    def transition_apply_without_generate(self):
+        Endorsement = Pool().get('endorsement')
+        endorsement = self.get_endorsement()
+        with ServerContext().set_context(force_contracts_to_endorse=False):
+            with Transaction().set_context(force_synchronous=True):
+                Endorsement.apply([endorsement])
+                return 'end'
+
+    def transition_apply_with_generate(self):
+        with ServerContext().set_context(force_contracts_to_endorse=True):
+            with Transaction().set_context(force_synchronous=True):
+                Pool().get('endorsement').apply([self.get_endorsement()])
+                return 'end'

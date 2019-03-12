@@ -331,9 +331,8 @@ class Endorsement(metaclass=PoolMeta):
             if contract.contract_set:
                 all_contracts.extend(contract.contract_set.contracts)
         all_contracts = list(set(all_contracts))
-        endorsements = super(Endorsement, cls).endorse_contracts(
-            all_contracts, endorsement_definition, origin)
-
+        endorsements = super().endorse_contracts(cls.get_contracts_to_endorse(
+                all_contracts), endorsement_definition, origin)
         for endorsement in endorsements:
             contract_set = \
                 endorsement.contract_endorsements[0].contract.contract_set
@@ -347,6 +346,10 @@ class Endorsement(metaclass=PoolMeta):
 
         cls.save(endorsements)
         return endorsements
+
+    @classmethod
+    def get_contracts_to_endorse(cls, all_contracts):
+        return all_contracts
 
     def get_contact(self):
         contact = super(Endorsement, self).get_contact()

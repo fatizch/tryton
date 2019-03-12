@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:endorsement.ask_next_endorsement:"
+msgid "Do you want to execute the endorsement \"%(next_endorsement)s\" too?"
+msgstr "Souhaitez-vous exécuter l'avenant \"%(next_endorsement)s\" également?"
+
 msgctxt "error:endorsement.start_process:"
 msgid ""
 "The chosen endorsement definition cannot be applied on several contracts."
@@ -54,6 +58,14 @@ msgstr "Nom de la tâche"
 msgctxt "field:endorsement,task_status:"
 msgid "Task Status"
 msgstr "Statut du processus"
+
+msgctxt "field:endorsement.ask_next_endorsement.choice,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:endorsement.ask_next_endorsement.choice,question:"
+msgid "Question"
+msgstr "Question"
 
 msgctxt "field:endorsement.part.union,code:"
 msgid "Code"
@@ -131,6 +143,10 @@ msgctxt "field:endorsement.start.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
 
+msgctxt "model:endorsement.ask_next_endorsement.choice,name:"
+msgid "Ask Next Endorsement Choice"
+msgstr "Souhaitez-vous exécuter l'avenant suivant?"
+
 msgctxt "model:endorsement.part.union,name:"
 msgid "Endorsement Part Display"
 msgstr "Avenant unitaire"
@@ -138,6 +154,10 @@ msgstr "Avenant unitaire"
 msgctxt "model:endorsement.start.find_process,name:"
 msgid "Endorsement Process Finder"
 msgstr "Choix du processus d'avenant"
+
+msgctxt "model:ir.action,name:act_ask_next_endorsement"
+msgid "Ask For Next Endorsement"
+msgstr "Souhaitez-vous exécuter l'avenant suivant?"
 
 msgctxt "model:ir.action,name:act_preview_changes"
 msgid "Preview Changes"
@@ -170,6 +190,16 @@ msgstr "Modifier"
 msgctxt "view:endorsement.part.union:"
 msgid "Modify"
 msgstr "Modifier"
+
+msgctxt ""
+"wizard_button:endorsement.ask_next_endorsement,choice,apply_with_generate:"
+msgid "Generate"
+msgstr "Générer"
+
+msgctxt ""
+"wizard_button:endorsement.ask_next_endorsement,choice,apply_without_generate:"
+msgid "No"
+msgstr "Non"
 
 msgctxt "wizard_button:endorsement.start,basic_preview,end:"
 msgid "Ok"

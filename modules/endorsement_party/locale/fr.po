@@ -55,6 +55,14 @@ msgctxt "field:endorsement,party_endorsements:"
 msgid "Party Endorsements"
 msgstr "Avenants sur tiers"
 
+msgctxt "field:endorsement.ask_next_endorsement.choice,contracts:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "field:endorsement.ask_next_endorsement.choice,possible_contracts:"
+msgid "Possible Contracts"
+msgstr "Contrats disponibles"
+
 msgctxt "field:endorsement.definition,is_party:"
 msgid "Is Party"
 msgstr "Est un avenant de type tiers"

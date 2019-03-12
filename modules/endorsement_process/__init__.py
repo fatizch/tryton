@@ -15,12 +15,14 @@ def register():
         wizard.EndorsementFindProcess,
         endorsement.EndorsementPartUnion,
         process.Contract,
+        wizard.AskNextEndorsementChoice,
         module='endorsement_process', type_='model')
     Pool.register(
         wizard.StartEndorsement,
         wizard.EndorsementStartProcess,
         wizard.PreviewChangesWizard,
         document.ReceiveDocument,
+        wizard.AskNextEndorsement,
         module='endorsement_process', type_='wizard')
     Pool.register(
         document.DocumentDescription,

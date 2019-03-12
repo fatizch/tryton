@@ -10,6 +10,7 @@ from trytond.modules.coog_core import model, fields
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool
+from trytond.server_context import ServerContext
 
 __all__ = [
     'Endorsement',
@@ -70,6 +71,18 @@ class Endorsement(CoogProcessFramework, metaclass=ClassAttr):
         'endorsement_process.act_preview_changes')
     def button_preview_changes(cls, endorsements):
         pass
+
+    @classmethod
+    def should_generate_next_endorsement(cls):
+        # force_contracts_to_endorse will only be in server context if we use
+        # Ask Nex Endorsement Wizard. If it's not the case, we want to apply
+        # next endorsements to keep the original behavior intact
+        return ServerContext().get('force_contracts_to_endorse',
+            super().should_generate_next_endorsement())
+
+    def get_next_endorsement_contracts(self):
+        return ServerContext().get('contracts_to_endorse',
+            super().get_next_endorsement_contracts())
 
 
 class EndorsementPartUnion(model.CoogSQL, model.CoogView):

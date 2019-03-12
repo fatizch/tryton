@@ -6,6 +6,7 @@ from trytond.modules.process import ClassAttr
 from trytond.modules.coog_core import fields, model
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
 
 __all__ = [
     'Endorsement',
@@ -46,6 +47,13 @@ class Endorsement(metaclass=PoolMeta):
     def get_generated_sets_processes_over(self, name):
         return all([not x.current_state for x in
                 self.generated_endorsement_sets])
+
+    @classmethod
+    def get_contracts_to_endorse(cls, all_contracts):
+        ctx_contracts = ServerContext().get('contracts_to_endorse', None)
+        if ctx_contracts is None:
+            return super().get_contracts_to_endorse(all_contracts)
+        return ctx_contracts
 
 
 class EndorsementSet(CoogProcessFramework, metaclass=ClassAttr):

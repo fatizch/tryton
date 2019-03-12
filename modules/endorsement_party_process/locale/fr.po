@@ -8,6 +8,14 @@ msgid ""
 msgstr ""
 "La définition d'avenant choisie ne peut pas s'appliquer sur plusieurs tiers."
 
+msgctxt "field:endorsement.ask_next_endorsement.choice,contracts:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "field:endorsement.ask_next_endorsement.choice,possible_contracts:"
+msgid "Possible Contracts"
+msgstr "Contrats disponibles"
+
 msgctxt "field:endorsement_party.start.find_process,definition:"
 msgid "Endorsement Definition"
 msgstr "Définition d'avenant"
