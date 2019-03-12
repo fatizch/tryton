@@ -1,3 +1,4 @@
+* BUG#11171 Avoid leap year problem on prepayment calcul
 * BUG#10923 Modify the method that returns the outstanding prepayment informations by adding sum of prepayment and sum of redeemed
 * OTH#00000 Adapt invoice lines sorting key to python 3
 * FEA#10905 Add prepayment synchronization chain to the daily chain

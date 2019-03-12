@@ -147,8 +147,8 @@ Create broker agent::
     >>> broker_party.supplier_payment_term, = PaymentTerm.find([])
     >>> broker_party.save()
     >>> DistributionNetwork = Model.get('distribution.network')
-    >>> broker = DistributionNetwork(name='Broker', code='broker', party=broker_party,
-    ...     is_broker=True)
+    >>> broker = DistributionNetwork(name='Broker', code='broker', party=broker_party)
+    >>> broker.is_broker=True
     >>> broker.save()
     >>> agent_broker = Agent(party=broker_party)
     >>> agent_broker.type_ = 'agent'
@@ -468,4 +468,40 @@ Check commission once terminated::
     ...     (Decimal('720.00000000'), Decimal('1200.0000'), 'Broker',
     ...         'Prepayment calculation details\n'
     ...         '720.00000000 = 100.00 * 0.6000 * 1.0000 * 12')]
+    True
+    >>> contract_start_date = datetime.date(2019, 2, 28)
+    >>> config._context['client_defined_date'] = contract_start_date
+    >>> Contract = Model.get('contract')
+    >>> ContractPremium = Model.get('contract.premium')
+    >>> BillingInformation = Model.get('contract.billing_information')
+    >>> contract = Contract()
+    >>> contract.company = company
+    >>> contract.subscriber = subscriber
+    >>> contract.start_date = contract_start_date
+    >>> contract.product = product
+    >>> contract.options[0].premiums.append(ContractPremium(start=contract_start_date,
+    ...         amount=Decimal('110'), frequency='monthly',
+    ...         account=accounts['revenue'], rated_entity=Coverage(coverage)))
+    >>> contract.billing_informations.append(BillingInformation(date=None,
+    ...         billing_mode=product.billing_modes[0],
+    ...         payment_term=product.billing_modes[0].allowed_payment_terms[0]))
+    >>> contract.contract_number = '1234567890'
+    >>> DistributionNetwork = Model.get('distribution.network')
+    >>> contract.dist_network = DistributionNetwork(broker.id)
+    >>> contract.agent = agent_broker
+    >>> contract.save()
+    >>> Wizard('contract.activate', models=[contract]).execute('apply')
+
+Check prepayment commission creation::
+
+    >>> commissions = Commission.find([('commissioned_contract', '=', contract.id)])
+    >>> [(x.amount, x.commission_rate, x.is_prepayment, x.redeemed_prepayment,
+    ...         x.base_amount, x.agent.party.name, x.calculation_description)
+    ...     for x in commissions] == [
+    ...     (Decimal('792.0000'), Decimal('.6'), True, None, Decimal('1320.0000'),
+    ...         'Broker', 'Prepayment calculation details'
+    ...             '\n792.00000000 = 110.00 * 0.6000 * 1.0000 * 12'),
+    ...     (Decimal('396.0000'), Decimal('.3'), True, None, Decimal('1320.0000'),
+    ...         'Insurer', 'Prepayment calculation details'
+    ...             '\n396.00000000 = 110.00 * 0.3000 * 1.0000 * 12')]
     True

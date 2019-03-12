@@ -129,12 +129,13 @@ def get_last_day_of_last_month(date):
     return add_day(get_begin_of_month(date), -1)
 
 
-def get_end_of_period(date, duration_unit, duration=1):
+def get_end_of_period(date, duration_unit, duration=1,
+        stick_to_end_of_month=False):
     '''
     Returns the last day of period
     for example : 01/01/Y + 1 year = 31/12/Y
     '''
-    res = add_duration(date, duration_unit, duration)
+    res = add_duration(date, duration_unit, duration, stick_to_end_of_month)
     return add_day(res, -1)
 
 

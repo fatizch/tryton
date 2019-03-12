@@ -6,7 +6,6 @@ from collections import defaultdict
 
 from decimal import Decimal
 from decimal import ROUND_UP
-from dateutil.relativedelta import relativedelta
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
@@ -14,6 +13,7 @@ from trytond.model import dualmethod
 from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields, coog_string, model
+from trytond.modules.coog_core.coog_date import get_end_of_period
 from trytond.modules.commission_insurance.commission import \
     COMMISSION_AMOUNT_DIGITS, COMMISSION_RATE_DIGITS
 
@@ -55,7 +55,7 @@ class Contract(metaclass=PoolMeta):
                 # This is the case of first year prepayment when there is no
                 # adjustment to make
                 start_date = contract.initial_start_date
-                end_date = start_date + relativedelta(years=1, days=-1)
+                end_date = get_end_of_period(start_date, 'year', 1, True)
             options = list(contract.covered_element_options + contract.options)
             for option in options:
                 commissions.extend(option.compute_prepayment(adjustement,
@@ -126,7 +126,7 @@ class Contract(metaclass=PoolMeta):
             self.initial_start_date
         end_date = end or min(
             (self.final_end_date or self.end_date or datetime.date.max),
-            (self.initial_start_date + relativedelta(years=1, days=-1) if
+            (get_end_of_period(self.initial_start_date, 'year', 1, True) if
                 self.initial_start_date else datetime.date.max))
         end_date = end_date if end_date != datetime.date.max else None
         super(Contract, self).rebill(start, end, post_end)
@@ -622,7 +622,7 @@ class ContractOption(metaclass=PoolMeta):
             # when a contract is void for example
             return 0
         contract_start_date = self.parent_contract.initial_start_date
-        end_first_year = contract_start_date + relativedelta(years=1, days=-1)
+        end_first_year = get_end_of_period(contract_start_date, 'year', 1, True)
         if ((limit_to_paid_invoice and
                    self.parent_contract.status == 'terminated') or
                 (limit_to_paid_invoice and not limit_for_terminated)):
