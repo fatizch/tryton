@@ -9,6 +9,7 @@ from trytond.server_context import ServerContext
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import fields, model, utils, coog_string
+from trytond.modules.rule_engine.rule_engine import RuleEngineResult
 from trytond.modules.claim_indemnification \
     import BenefitRule as OriginalBenefitRule
 
@@ -238,8 +239,8 @@ class BenefitRule(metaclass=PoolMeta):
             **kwargs)
 
     def calculate_deductible_rule(self, args, **kwargs):
-        return self._calculate_rule('deductible_rule', args, datetime.date.min,
-            **kwargs)
+        return self._calculate_rule('deductible_rule', args,
+            RuleEngineResult(datetime.date.min), **kwargs)
 
     def calculate_indemnification_rule(self, args, **kwargs):
         return self._calculate_rule('indemnification_rule', args, [], **kwargs)
