@@ -146,6 +146,8 @@ class MigratorContractGroup(BaseMigratorContractGroup):
     def init_cache(cls, rows, **kwargs):
         super(MigratorContractGroup, cls).init_cache(rows, **kwargs)
         cls.cache_obj['process_step'] = cls.get_process_step()
+        cls.cache_obj['contract_end_reason'] = tools.cache_from_search(
+            'contract.sub_status', 'code')
 
     @classmethod
     def create_activation_history(cls, contract_lines):
@@ -288,6 +290,9 @@ class MigratorContractGroup(BaseMigratorContractGroup):
         else:
             # only set status when not updating
             contract['status'] = contract_lines[0]['status']
+            if contract['status'] == 'terminated':
+                contract['sub_status'] = cls.cache_obj['contract_end_reason'][
+                    contract_lines[0]['end_reason']].id
             options = cls.init_options_from_row(
                 [line for line in contract_lines if line['coverage']])
             contract['covered_elements'] = [('create', options)]
