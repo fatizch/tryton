@@ -1,0 +1,11 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:event.log,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "model:ir.action,name:act_event_log_relate_form"
+msgid "Event Logs"
+msgstr "Logs d'événements"
