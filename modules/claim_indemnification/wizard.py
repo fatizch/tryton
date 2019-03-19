@@ -152,7 +152,7 @@ class IndemnificationAssistantView(model.CoogView):
     def get_field_names(cls):
         return [
             ('', ''),
-            ('total_amount', 'Montant'),
+            ('amount', 'Montant'),
             ('start_date', 'Date de début'),
             ('end_date', 'Date de fin')]
 
@@ -254,12 +254,12 @@ class IndemnificationAssistant(Wizard, model.FunctionalErrorMixIn):
     def default_validate_view_state(self, fields):
         return {
             'validate': [], 'mode': 'validate',
-            'global_setter': 'nothing', 'field_sort': 'total_amount',
+            'global_setter': 'nothing', 'field_sort': 'amount',
             'order_sort': 'DESC'}
 
     def default_control_view_state(self, fields):
         return {'control': [], 'mode': 'control',
-            'global_setter': 'nothing', 'field_sort': 'total_amount',
+            'global_setter': 'nothing', 'field_sort': 'amount',
             'order_sort': 'DESC'}
 
     def check_validation_state(self):

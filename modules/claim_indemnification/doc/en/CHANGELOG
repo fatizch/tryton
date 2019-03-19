@@ -1,3 +1,4 @@
+* BUG#10992 Fix amounts inconsistencies on indemnification by going full Function fields
 * BUG#10785 Fix crash when doing indemnification period regularisation
 * BUG#11044 Fix a crash when trying to retrieve the value of the "main contract" on a claim when checking the existence of duplicate indemnification periods
 * FEA#10812 Display indemnification validation/control wizard in dedicated tab. Add relate to claim

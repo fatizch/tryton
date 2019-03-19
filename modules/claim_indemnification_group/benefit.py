@@ -28,8 +28,9 @@ class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     company_products = fields.Many2Many('benefit-company_product', 'benefit',
-        'product', 'Company Products', help='Products available when '
-        'paying a company')
+        'product', 'Company Products',
+        domain=[('template.taxes_included', '!=', True)],
+        help='Products available when paying a company')
 
     @classmethod
     def __setup__(cls):

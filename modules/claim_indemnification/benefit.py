@@ -56,7 +56,7 @@ class Benefit(metaclass=PoolMeta):
         states={'invisible': Eval('indemnification_kind') != 'period'},
         depends=['indemnification_kind'])
     products = fields.Many2Many('benefit-product', 'benefit', 'product',
-        'Products')
+        'Products', domain=[('template.taxes_included', '!=', True)])
     waiting_account = fields.Function(fields.Many2One(
             'account.account', 'Waiting Account'),
         'getter_waiting_account')

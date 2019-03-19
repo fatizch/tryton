@@ -4,7 +4,7 @@
 import datetime
 
 from decimal import Decimal
-from sql.aggregate import Max
+from sql.aggregate import Max, Sum
 from dateutil.relativedelta import relativedelta
 from itertools import groupby
 from collections import defaultdict
@@ -650,24 +650,18 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     amount = fields.Function(
         fields.Numeric('Amount',
             digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
-            states={
-                'readonly': ~Eval('manual') | (Eval('status') != 'calculated')
-                | Eval('taxes_included')
-                },
-            depends=['currency_digits', 'status', 'manual', 'taxes_included']),
-        'get_amount', 'setter_void')
-    total_amount = fields.Numeric('Total Amount',
+            depends=['currency_digits']),
+        'getter_amount', searcher='search_amount')
+    total_amount = fields.Function(
+        fields.Numeric('Total Amount',
             digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
-            states={
-                'readonly': ~Eval('manual') | (Eval('status') != 'calculated')
-                | ~Eval('taxes_included')
-                },
-            depends=['currency_digits', 'status', 'manual', 'taxes_included'])
+            depends=['currency_digits']),
+        'getter_total_amount')
     tax_amount = fields.Function(
         fields.Numeric('Tax Amount',
             digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
             depends=['currency_digits']),
-        'on_change_with_tax_amount')
+        'getter_tax_amount')
     local_currency_amount = fields.Numeric('Local Currency Amount',
         digits=(16, Eval('local_currency_digits', DEF_CUR_DIG)),
         states={
@@ -688,7 +682,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             'readonly': Or(~Eval('manual'), Eval('status') != 'calculated')
             },
         depends=['status', 'manual'], delete_missing=True)
-    manual = fields.Boolean('Manual Calculation')
+    manual = fields.Boolean('Manual Calculation',
+        states={'readonly': Eval('manual', True)})
     benefit_description = fields.Function(
         fields.Char('Benefit Description'),
         'get_benefit_description')
@@ -819,22 +814,30 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         TableHandler = backend.get('TableHandler')
         handler = TableHandler(cls, module)
 
-        # Migrate from 1.12: add payback_reason field and set it to 'migration'
         cursor = Transaction().connection.cursor()
-        do_migrate = not handler.column_exist('payback_reason')
+
+        # Migrate from 1.12: add payback_reason field and set it to 'migration'
+        add_payback_reason = not handler.column_exist('payback_reason')
+
+        # Migrate from 1.12: Transform total_amount to a Function field
+        remove_total_amount = handler.column_exist('total_amount')
+
         super(Indemnification, cls).__register__(module)
-        if not do_migrate:
-            return
-        table = cls.__table__()
-        payback_reason_table = Pool().get(
-            'claim.indemnification.payback_reason').__table__()
-        query = table.update(columns=[table.payback_reason],
-            values=payback_reason_table.select(payback_reason_table.id,
-                where=(payback_reason_table.code == 'migration')
-                & (table.status.in_(
-                        ['cancelled', 'cancel_paid', 'cancel_scheduled',
-                            'cancel_validated', 'cancel_controlled']))))
-        cursor.execute(*query)
+
+        if add_payback_reason:
+            table = cls.__table__()
+            payback_reason_table = Pool().get(
+                'claim.indemnification.payback_reason').__table__()
+            query = table.update(columns=[table.payback_reason],
+                values=payback_reason_table.select(payback_reason_table.id,
+                    where=(payback_reason_table.code == 'migration')
+                    & (table.status.in_(
+                            ['cancelled', 'cancel_paid', 'cancel_scheduled',
+                                'cancel_validated', 'cancel_controlled']))))
+            cursor.execute(*query)
+
+        if remove_total_amount:
+            handler.drop_column('total_amount')
 
     def getter_has_end_date(self, name):
         return self.kind != 'capital'
@@ -1053,47 +1056,96 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             detail.is_manual_indemnification = self.manual
         self.details = list(self.details)
 
-    def get_amount(self, name):
-        if not self.product.supplier_taxes_used:
-            return self.total_amount
+    @classmethod
+    def getter_amount(cls, indemnifications, name):
         pool = Pool()
-        Tax = pool.get('account.tax')
-        if self.total_amount:
-            amount = Tax.reverse_compute(self.total_amount,
-                self.product.account_category.supplier_taxes, self.start_date)
-            amount = amount.quantize(Decimal(1) / 10 ** self.currency_digits)
-        else:
-            amount = Decimal('0.0')
-        return amount
+        IndemnificationDetail = pool.get('claim.indemnification.detail')
+        detail = IndemnificationDetail.__table__()
 
-    @fields.depends('amount', 'total_amount')
-    def on_change_with_tax_amount(self, name=None):
+        result = {x.id: Decimal(0) for x in indemnifications}
+        cursor = Transaction().connection.cursor()
+
+        for slice in grouped_slice(indemnifications):
+            cursor.execute(*detail.select(detail.indemnification,
+                    Sum(detail.amount),
+                    where=detail.indemnification.in_([x.id for x in slice]),
+                    group_by=[detail.indemnification]
+                    ))
+
+            for indemnification, value in cursor.fetchall():
+                result[indemnification] = value
+
+        return result
+
+    @classmethod
+    def getter_total_amount(cls, indemnifications, name):
+        result = {}
+        for indemnification in indemnifications:
+            if not indemnification.product.supplier_taxes_used:
+                result[indemnification.id] = indemnification.amount
+            else:
+                result[indemnification.id] = indemnification.amount + sum(
+                    x['amount']
+                    for x in indemnification._get_taxes().values())
+        return result
+
+    def getter_tax_amount(self, name):
         return (self.total_amount or 0) - (self.amount or 0)
 
-    @fields.depends('amount', 'currency_digits', 'product', 'start_date',
-        'total_amount')
-    def on_change_amount(self):
-        self.update_amounts()
+    @classmethod
+    def search_amount(cls, name, clause):
+        pool = Pool()
+        IndemnificationDetail = pool.get('claim.indemnification.detail')
+        detail = IndemnificationDetail.__table__()
+        indemnification = cls.__table__()
 
-    @fields.depends('amount', 'currency_digits', 'product', 'start_date',
-        'total_amount')
-    def on_change_total_amount(self):
+        _, operator, value = clause
+        Operator = fields.SQL_OPERATORS[operator]
+
+        query = indemnification.join(detail, 'LEFT OUTER',
+            condition=detail.indemnification == indemnification.id
+            ).select(indemnification.id,
+            group_by=indemnification.id,
+            having=Operator(Sum(detail.amount), value))
+        return [('id', 'in', query)]
+
+    @classmethod
+    def order_amount(cls, tables):
+        table, _ = tables[None]
+        if 'details' not in tables:
+            IndemnificationDetail = Pool().get('claim.indemnification.detail')
+            detail = IndemnificationDetail.__table__()
+            indemnification = cls.__table__()
+
+            order_table = indemnification.join(detail, 'LEFT OUTER',
+                condition=detail.indemnification == indemnification.id
+                ).select(indemnification.id, Sum(detail.amount).as_('amount'),
+                group_by=indemnification.id)
+
+            tables['amount_table'] = {
+                None: (order_table, order_table.id == table.id),
+                }
+        else:
+            order_table, = tables['details'][None]
+        return [order_table.amount]
+
+    @fields.depends('details', 'currency_digits', 'product', 'start_date',
+        'manual')
+    def on_change_details(self):
+        if not self.manual:
+            return
+        self.amount = sum([x.amount for x in self.details], Decimal(0))
         self.update_amounts()
 
     def update_amounts(self):
         if not self.product:
             return
         if not self.product.supplier_taxes_used:
-            if self.product.taxes_included:
-                self.amount = self.total_amount
-            else:
-                self.total_amount = self.amount
-            return
-        if self.product.taxes_included:
-            self.amount = self.get_amount(None)
+            self.total_amount = self.amount
         else:
             self.total_amount = self.amount + sum(x['amount']
                 for x in list(self._get_taxes().values()))
+        self.tax_amount = self.total_amount - self.amount
 
     def get_rec_name(self, name):
         payment_line = None
@@ -1366,11 +1418,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 details.append(IndemnificationDetail(**detail))
             indemnification.details = details
             amount = sum([getattr(d, 'amount', 0) for d in details])
-            if indemnification.product.taxes_included:
-                indemnification.total_amount = amount
-            else:
-                indemnification.amount = amount
-                indemnification.update_amounts()
+            indemnification.amount = amount
+            indemnification.update_amounts()
             to_save.append(indemnification)
         return to_save
 
@@ -1492,7 +1541,6 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     def _get_invoice_line(cls, key, invoice, indemnification):
         pool = Pool()
         InvoiceLine = pool.get('account.invoice.line')
-        Tax = pool.get('account.tax')
         LineDetail = pool.get('account.invoice.line.claim_detail')
         invoice_line = InvoiceLine()
         invoice_line.invoice = invoice
@@ -1502,15 +1550,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         invoice_line.description = indemnification.invoice_line_description()
         invoice_line.party = invoice.party
         invoice_line.on_change_product()
-        if invoice_line.product.taxes_included:
-            invoice_line.unit_price = Tax.reverse_compute(
-                indemnification.total_amount,
-                invoice_line.product.supplier_taxes_used,
-                indemnification.start_date)
-            invoice_line.unit_price = invoice_line.unit_price.quantize(
-                Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1])
-        else:
-            invoice_line.unit_price = indemnification.amount
+        invoice_line.unit_price = indemnification.amount
         if indemnification.status == 'cancel_validated':
             invoice_line.unit_price = -invoice_line.unit_price
         detail = LineDetail()
@@ -1743,6 +1783,23 @@ class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,
     def get_indemnification_status(self, name):
         if self.indemnification:
             return self.indemnification.status
+
+    @fields.depends('is_manual_indemnification', 'nb_of_unit', 'amount',
+        'amount_per_unit')
+    def on_change_amount_per_unit(self):
+        self._update_amount()
+
+    @fields.depends('is_manual_indemnification', 'nb_of_unit', 'amount',
+        'amount_per_unit')
+    def on_change_nb_of_unit(self):
+        self._update_amount()
+
+    def _update_amount(self):
+        if not self.is_manual_indemnification:
+            return
+        if not self.amount_per_unit or not self.nb_of_unit:
+            self.amount = None
+        self.amount = self.amount_per_unit * self.nb_of_unit
 
     @classmethod
     def remove_indemnifications(cls, details):

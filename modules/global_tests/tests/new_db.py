@@ -5338,6 +5338,8 @@ if CREATE_CLAIMS:  # {{{
     default_pasrau.rate = Decimal('0.07')
     default_pasrau.save()
 
+    # First test. This case makes sure the indemnification amount and the
+    # details amount are consistent (avoid regression after #10992)
     CreateIndemnification = Wizard('claim.create_indemnification', [claim])
     assert_eq(CreateIndemnification.form.beneficiary, claim.claimant)
     assert_eq(CreateIndemnification.form.extra_data, {
@@ -5347,6 +5349,49 @@ if CREATE_CLAIMS:  # {{{
         })
     assert_eq(CreateIndemnification.form.start_date,
         _illness_claim_end_date_1 + relativedelta(days=1))
+    CreateIndemnification.form.extra_data = {
+        'date_d_effet_d_indemnisation': _illness_claim_date
+        + relativedelta(days=30),
+        'ijss': Decimal('12.50'),
+        }
+    CreateIndemnification.form.end_date = _illness_claim_end_date_2
+    CreateIndemnification.form.product = claim_product_reduced_taxed
+    CreateIndemnification.execute('calculate')
+    CreateIndemnification.execute('regularisation')
+    CreateIndemnification.execute('end')
+    claim.reload()
+
+    benefit_line = claim.losses[0].services[0].indemnifications[1].details[0]
+    assert_eq(benefit_line.kind, 'benefit')
+    assert_eq(benefit_line.nb_of_unit, 14)
+    assert_eq(benefit_line.unit, 'day')
+    assert_eq(benefit_line.base_amount, Decimal('11.98'))
+    assert_eq(benefit_line.amount_per_unit, Decimal('11.98'))
+    assert_eq(benefit_line.amount, Decimal('167.72'))
+    assert_eq(claim.losses[0].services[0].indemnifications[1].amount,
+        Decimal('167.72'))
+    assert_eq(claim.losses[0].services[0].indemnifications[1].total_amount,
+        Decimal('149.22'))
+    assert_eq(claim.losses[0].services[0].indemnifications[1].tax_amount,
+        Decimal('-18.50'))
+
+    # Recompute with another configuration
+    Indemnification.delete([claim.losses[0].services[0].indemnifications[1]])
+
+    CreateIndemnification = Wizard('claim.create_indemnification', [claim])
+    assert_eq(CreateIndemnification.form.beneficiary, claim.claimant)
+    assert_eq(CreateIndemnification.form.extra_data, {
+        'date_d_effet_d_indemnisation': _illness_claim_date
+        + relativedelta(days=30),
+        'ijss': Decimal('12.50'),
+        })
+    assert_eq(CreateIndemnification.form.start_date,
+        _illness_claim_end_date_1 + relativedelta(days=1))
+    CreateIndemnification.form.extra_data = {
+        'date_d_effet_d_indemnisation': _illness_claim_date
+        + relativedelta(days=30),
+        'ijss': Decimal('15.00'),
+        }
     CreateIndemnification.form.end_date = _illness_claim_end_date_2
     CreateIndemnification.form.product = claim_product_reduced_taxed
     CreateIndemnification.execute('calculate')
