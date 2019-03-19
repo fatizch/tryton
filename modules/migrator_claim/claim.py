@@ -308,7 +308,8 @@ class MigratorClaim(Migrator):
             deductible_days)
         indemn['total_amount'] = Decimal('0')
         indemn['status'] = 'paid'
-        indemn['beneficiary'] = cls.cache_obj['party'][indemn_row['party']]
+        indemn['beneficiary'] = cls.cache_obj['covered_person'][
+            indemn_row['covered_person']]
         indemn['details'] = [('create', [cls._create_deductible_details(
                         indemn_row, indemn, deductible_days)])]
         indemn['possible_products'] = indemn['service'
