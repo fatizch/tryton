@@ -112,7 +112,7 @@ class ChangeBillingInformation(metaclass=PoolMeta):
                     ('state', '=', 'validated'),
                     ('party', '=', new_info.payer.id),
                     ('OR', ('start_date', '=', None),
-                        ('start_date', '<', self.effective_date)),
+                        ('start_date', '<=', self.effective_date)),
                     ('account_number.account', '=', new_account)])
         if possible_mandates:
             self.mandate_needed = False

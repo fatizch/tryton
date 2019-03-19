@@ -1,3 +1,5 @@
+* BUG#11182 La sélection des mandats possibles doit inclure les mandats qui commencent à la date d'effet de l'avenant
+
 Version 2.2 - 2018-10-12
 * BUG#10044 Ne pas mettre à jour le mandat SEPA lorsqu'on amende le précedent mandat
 * BUG#9734 La vérification des mandats Sepa bloque la réactivation des contrats même si le mode de quittancement bloquant est périmé.

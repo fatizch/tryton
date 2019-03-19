@@ -1,3 +1,5 @@
+* BUG#11182 Existing mandates selection should include mandates starting at endorsement effective date
+
 Version 2.2 - 2018-10-12
 * BUG#10044 Do not update the SEPA mandate when amend the previous mandate
 * BUG#9734 Mandate checking blocks contract reactivation even if the blocking billing information is outdated
