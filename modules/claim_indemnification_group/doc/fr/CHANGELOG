@@ -1,3 +1,4 @@
+* BUG#11215 Correction de la traduction de la fréquence d'indemnisation
 * OTH#00000 Correction de la valeur par défaut des règles de franchise
 * FEA#10498 Ajout du calcul d'uniquement la révalorisation pour les contrats "En complément du précédent assureur"
 * BUG#10733 Correctif sur l'inversion du bénéficiaire automatiquement selectionné "Filiale puis assuré"

@@ -553,7 +553,7 @@ msgstr "Mensuelle"
 
 msgctxt "selection:contract.option.benefit,annuity_frequency:"
 msgid "Quarterly"
-msgstr "Montant de base du précédent assureur invisible"
+msgstr "Trimestrielle"
 
 msgctxt "selection:contract.option.benefit,annuity_frequency:"
 msgid "Yearly"
