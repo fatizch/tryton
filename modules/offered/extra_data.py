@@ -466,6 +466,29 @@ class ExtraDataSubExtraDataRelation(model.CoogSQL, model.CoogView):
         Pool().get('extra_data')._extra_data_structure_cache.clear()
 
 
+class ExtraDataDefTable(model.CoogSQL):
+    '''
+        This should be used when creating a M2M intermediate table in order to
+        make sure the cache is properly cleaned up when adding / removing
+        elements in the list
+    '''
+    @classmethod
+    def create(cls, vlist):
+        created = super(ExtraDataDefTable, cls).create(vlist)
+        Pool().get('extra_data')._extra_data_structure_cache.clear()
+        return created
+
+    @classmethod
+    def delete(cls, ids):
+        super(ExtraDataDefTable, cls).delete(ids)
+        Pool().get('extra_data')._extra_data_structure_cache.clear()
+
+    @classmethod
+    def write(cls, *args):
+        super(ExtraDataDefTable, cls).write(*args)
+        Pool().get('extra_data')._extra_data_structure_cache.clear()
+
+
 def with_extra_data_def(reverse_model_name, reverse_field_name, kind,
         getter=None):
     class WithExtraDataDefMixin(Model):

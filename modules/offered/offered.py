@@ -16,6 +16,7 @@ from trytond.modules.coog_core import coog_string
 from trytond.modules.currency_cog import ModelCurrency
 
 from .extra_data import with_extra_data_def, with_extra_data
+from .extra_data import ExtraDataDefTable
 
 __all__ = [
     'Product',
@@ -427,7 +428,7 @@ class OptionDescription(model.CoogSQL, model.CoogView,
             return self.ending_rule[0].calculate_rule(exec_context)
 
 
-class OptionDescriptionExtraDataRelation(model.CoogSQL):
+class OptionDescriptionExtraDataRelation(ExtraDataDefTable):
     'Relation between OptionDescription and Extra Data'
 
     __name__ = 'offered.option.description-extra_data'
@@ -462,7 +463,7 @@ class ProductOptionDescriptionRelation(model.CoogSQL, model.CoogView):
             handler.drop_column('order')
 
 
-class ProductExtraDataRelation(model.CoogSQL):
+class ProductExtraDataRelation(ExtraDataDefTable):
     'Relation between Product and Extra Data'
 
     __name__ = 'offered.product-extra_data'

@@ -1,3 +1,4 @@
+* BUG#11192 Mise à jour du cache lors de l'ajout / suppression de données complémentaires sur les éléments de paramétrage
 * BUG#10475 Correction de l'initialization des données complémentaire de type booléan ayant une valeur par défaut à False
 * FEA#8322 Ajout d'un domaine sur les données complémentaires pour permettre un contrôle très fin des données saisies
 * BUG#10296 Ne pas initialiser les données complémentaires sans paramétrage dédié

@@ -2,7 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.coog_core import model, fields
+from trytond.modules.coog_core import fields
+from trytond.modules.offered.extra_data import ExtraDataDefTable
 
 
 __all__ = [
@@ -20,7 +21,7 @@ class ExtraData(metaclass=PoolMeta):
         cls.kind.selection.append(('agent', 'Agent'))
 
 
-class CommissionPlanExtraDataRelation(model.CoogSQL):
+class CommissionPlanExtraDataRelation(ExtraDataDefTable):
     'Relation between Commission Plan and Extra Data'
 
     __name__ = 'commission-plan-extra_data'

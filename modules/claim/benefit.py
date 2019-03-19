@@ -12,6 +12,8 @@ from trytond.cache import Cache
 from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.offered.extra_data import with_extra_data
 from trytond.modules.offered.extra_data import with_extra_data_def
+from trytond.modules.offered.extra_data import ExtraDataDefTable
+
 
 __all__ = [
     'ClosingReason',
@@ -202,7 +204,7 @@ class LossDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
         return instance
 
 
-class LossDescriptionExtraDataRelation(model.CoogSQL):
+class LossDescriptionExtraDataRelation(ExtraDataDefTable):
     'Relation between Loss Description and Extra Data'
 
     __name__ = 'benefit.loss.description-extra_data'
@@ -370,7 +372,7 @@ class OptionDescriptionBenefitRelation(model.CoogSQL):
     benefit = fields.Many2One('benefit', 'Benefit', ondelete='RESTRICT')
 
 
-class BenefitExtraDataRelation(model.CoogSQL):
+class BenefitExtraDataRelation(ExtraDataDefTable):
     'Benefit to Extra Data Relation'
 
     __name__ = 'benefit-extra_data'

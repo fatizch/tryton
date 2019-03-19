@@ -13,6 +13,7 @@ from trytond.cache import Cache
 from trytond.modules.coog_core import model, fields
 from trytond.modules.coog_core import coog_string
 from trytond.modules.offered.extra_data import with_extra_data_def
+from trytond.modules.offered.extra_data import ExtraDataDefTable
 
 
 __all__ = [
@@ -186,7 +187,7 @@ class ItemDescSubItemDescRelation(model.CoogSQL):
         'Sub Item Desc', ondelete='RESTRICT')
 
 
-class ItemDescriptionExtraDataRelation(model.CoogSQL):
+class ItemDescriptionExtraDataRelation(ExtraDataDefTable):
     'Item Description to Extra Data Relation'
 
     __name__ = 'offered.item.description-extra_data'
