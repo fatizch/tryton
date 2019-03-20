@@ -1,3 +1,4 @@
+* OTH#00000 Hotfix: Fix roundings in default std/ltd rules
 * BUG#00000 Add rente_ss to default extra details
 * BUG#10783 The default ltd rule now takes the SS amount for the period instead of annual amount
 * BUG#10631 Fix computation of annuities periods amounts

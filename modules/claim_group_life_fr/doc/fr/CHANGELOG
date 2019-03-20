@@ -1,3 +1,4 @@
+* OTH#00000 Hotfix: arrondis dans les règles livrées par défaut
 * BUG#00000 Ajout de la rente SS dans les détails complémentaires
 * BUG#10783 Le règle d'invalidité par défaut prend désormais un montant de rente SS sur la période et non l'année 
 * BUG#10631 Correctif sur le calcul du montant des périodes d'annuité

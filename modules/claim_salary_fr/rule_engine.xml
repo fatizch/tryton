@@ -153,9 +153,9 @@ for period in periodes:
             'end_date': period[1],
             'nb_of_unit': (period[1] - period[0]).days + 1,
             'unit': 'day',
-            'amount': ((period[1] - period[0]).days + 1) * salaire_journalier_revalorise,
-            'amount_per_unit': salaire_journalier_revalorise,
-            'base_amount': salaire_journalier_base,
+            'amount': arrondir(((period[1] - period[0]).days + 1) * salaire_journalier_revalorise, 0.01),
+            'amount_per_unit': arrondir(salaire_journalier_revalorise, 0.01),
+            'base_amount': arrondir(salaire_journalier_base, 0.01),
             'description': description.encode('utf-8'),
             'date_limite': None,
             'extra_details': {
