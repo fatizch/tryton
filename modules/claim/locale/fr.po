@@ -1432,6 +1432,10 @@ msgctxt "model:ir.action.act_window.domain,name:act_claim_domain_open"
 msgid "Open"
 msgstr "Ouvert"
 
+msgctxt "model:ir.action.act_window.domain,name:act_claim_domain_recent"
+msgid "Recent"
+msgstr "Mon historique"
+
 msgctxt "model:ir.sequence,name:claim_sequence"
 msgid "Claim Sequence"
 msgstr "Sequence des numéros de sinistres"

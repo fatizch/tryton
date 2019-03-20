@@ -85,6 +85,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="domain" eval="[]" pyson="1"/>
             <field name="act_window" ref="act_claim_form"/>
         </record>
+        <record model="ir.action.act_window.domain" id="act_claim_domain_recent">
+            <field name="name">Recent</field>
+            <field name="sequence" eval="50"/>
+            <field name="domain" eval="['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]" pyson="1"/>
+            <field name="act_window" ref="act_claim_form"/>
+        </record>
         <record model="ir.action.act_window.view" id="act_claim_view_form">
             <field name="sequence" eval="20"/>
             <field name="view" ref="claim_view_form"/>
