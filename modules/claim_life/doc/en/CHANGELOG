@@ -1,3 +1,4 @@
+* BUG#11245 Fix typos on manual_end_date and full_management_start_date
 * BUG#11107 Fix the initial loss date used in case of relapse or long term disability
 * BUG#11021 Fix multiple covered found error message
 * BUG#10908 Check covered period dates in get_theoretical_covered_element
