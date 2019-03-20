@@ -1528,6 +1528,11 @@ class Contract(metaclass=PoolMeta):
     # End calculation cache                                                   #
     ###########################################################################
 
+    def before_activate(self):
+        super(Contract, self).before_activate()
+        limit_date = self.initial_start_date - datetime.timedelta(days=1)
+        self.clean_up_contract_invoices(contracts=[self], to_date=limit_date)
+
 
 class ContractFee(metaclass=PoolMeta):
     __name__ = 'contract.fee'

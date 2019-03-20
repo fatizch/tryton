@@ -1,3 +1,4 @@
+* BUG#10985 Correction de l'inconsistance entre la date effective d'un contrat actif et la date effective de ses quittances
 * BUG#9867 Ajout d'un message d'erreur si aucune adresse n'est trouvée lors de la finalisation de quittances
 * OTH#00000 Correction d'un plantage lors de la vérification des quittances précédemment postées
 * OTH#00000 Mise à jour de intervaltree en version 3.0
