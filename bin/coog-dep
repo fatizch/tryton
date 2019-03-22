@@ -27,7 +27,7 @@ coog_dep_main() { # install base deps
                 "filelock" \
                 "wrapt" \
                 "ipaddress" \
-                "werkzeug" \
+                "werkzeug<0.15" \
                 "Mock" \
                 "simpleeval" \
                 "ldap3" \
