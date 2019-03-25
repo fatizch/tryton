@@ -1,3 +1,4 @@
+* FEA#11263 Ajout d'un lien entre une prestation et celle l'ayant précédée
 * FEA#11113 Saisie du compte bancaire pour les sinistres sur le contrat quand nécessaire
 * FEA#11188 Ajout de mon historique au menu sinistres
 * BUG#11037 Modification de la valeur du type des données complémentaires qui sont attachées au service délivré afin qu'ils soient cnconcordnace avec le type définit sur la donnée complémantaire

@@ -88,6 +88,15 @@ msgstr ""
 "Il n'y à pas de description d'événement pour le descripteur de préjudice "
 "\"%loss_desc)s\" dans la configuration"
 
+msgctxt "error:claim.service.set_origin:"
+msgid "The \"origin\" field is required to proceed"
+msgstr "Le champ \"Prestation d'origine\" doit être renseigné pour continuer"
+
+msgctxt "error:claim.service.set_origin:"
+msgid "This action must be run service by service"
+msgstr ""
+"Cette opération ne peut être exécutée que sur une prestation à la fois"
+
 msgctxt "error:claim.sub_status:"
 msgid "No sub status has been found with the code %s."
 msgstr "Il n'y a aucun sous statut avec le code %s."
@@ -202,6 +211,10 @@ msgstr "Assureur"
 msgctxt "field:benefit,loss_descs:"
 msgid "Loss Descriptions"
 msgstr "Descripteurs de préjudice"
+
+msgctxt "field:benefit,may_have_origin:"
+msgid "May Have an Origin"
+msgstr "Peut avoir une origine"
 
 msgctxt "field:benefit,name:"
 msgid "Name"
@@ -947,9 +960,17 @@ msgctxt "field:claim.service,loss_summary:"
 msgid "Loss Summary"
 msgstr "Résumé des préjudices"
 
+msgctxt "field:claim.service,may_have_origin:"
+msgid "May Have Origin"
+msgstr "Peut avoir une origine"
+
 msgctxt "field:claim.service,option:"
 msgid "Coverage"
 msgstr "Garantie"
+
+msgctxt "field:claim.service,origin_service:"
+msgid "Origin Service"
+msgstr "Prestation d'origine"
 
 msgctxt "field:claim.service,rec_name:"
 msgid "Record Name"
@@ -1030,6 +1051,22 @@ msgstr "Mis à jour par"
 msgctxt "field:claim.service.extra_data,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:claim.service.set_origin.select,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:claim.service.set_origin.select,origin:"
+msgid "Origin"
+msgstr "Origine"
+
+msgctxt "field:claim.service.set_origin.select,possible_origins:"
+msgid "Possible origins"
+msgstr "Origines possibles"
+
+msgctxt "field:claim.service.set_origin.select,service:"
+msgid "Service"
+msgstr "Prestation"
 
 msgctxt "field:claim.sub_status,active:"
 msgid "Active"
@@ -1321,6 +1358,14 @@ msgstr ""
 "Si cochée, la prestation sera exercée automatiquement une fois le préjudice "
 "déclaré"
 
+msgctxt "help:benefit,may_have_origin:"
+msgid ""
+"If True, services based on this benefit will have the possibility to select "
+"an \"origin service\", which represents the service that preceded it"
+msgstr ""
+"Si cochée, les prestations exercées pourront être rattaché à une "
+"\"prestation d'origine\", qui représente la prestation les précédent"
+
 msgctxt "help:benefit,several_delivered:"
 msgid "If true, it will be possible to deliver the same benefit several times"
 msgstr "Si cochée, la prestation peut être délivrée plusieurs fois "
@@ -1337,6 +1382,18 @@ msgctxt "help:claim.loss,start_date:"
 msgid "Date of the event, or start date of a period"
 msgstr "Date de l'évènement, ou date de début de période"
 
+<<<<<<< HEAD
+msgctxt "help:claim.service,origin_service:"
+msgid ""
+"This can be used to know if this service is some sort of follow-up of the "
+"parent. For instance if the contract from which the origin service was "
+"terminated and replaced with another which created this service"
+msgstr ""
+"Ce champ permet de savoir si la prestation est en quelque sorte une suite ou"
+" un complément d'une prestation existante. Par exemple si le contrat "
+"rattaché à la prestation d'origine était résilié et remplacé par un autre "
+"ayant donné lieu à cette prestation."
+=======
 msgctxt "help:contract,claim_bank_account:"
 msgid ""
 "The default bank account that will be used to pay claims related to this "
@@ -1352,6 +1409,7 @@ msgid ""
 msgstr ""
 "Vrai si au moins une des prestations du produit doit être payée au "
 "souscripteur"
+>>>>>>> origin/master
 
 msgctxt "model:account.journal,name:"
 msgid "Claim"
@@ -1424,6 +1482,10 @@ msgstr "Prestation fournie"
 msgctxt "model:claim.service.extra_data,name:"
 msgid "Claim Service Extra Data"
 msgstr "Données complémentaires"
+
+msgctxt "model:claim.service.set_origin.select,name:"
+msgid "Select Origin Service"
+msgstr "Sélection de l'origine"
 
 msgctxt "model:claim.sub_status,name:"
 msgid "Claim Close Reason"
@@ -1506,6 +1568,10 @@ msgstr "Propager les données complémentaires sur l'ensemble des préjudices"
 msgctxt "model:ir.action,name:act_service_propagate_extra_data_wizard"
 msgid "Propagate Extra Data On Claim Services"
 msgstr "Propager les données complémentaires sur l'ensemble des services"
+
+msgctxt "model:ir.action,name:act_set_origin_service"
+msgid "Set Origin Service"
+msgstr "Définir l'origine"
 
 msgctxt "model:ir.action,name:act_sub_status_form"
 msgid "Sub-status"
@@ -1764,8 +1830,12 @@ msgid "Extra Datas"
 msgstr "Données complémentaires"
 
 msgctxt "view:claim.service:"
-msgid "Claim Service"
-msgstr "Prestation fournie"
+msgid "Clear Origin"
+msgstr "Supprimer l'origine"
+
+msgctxt "view:claim.service:"
+msgid "Set Origin"
+msgstr "Définir l'origine"
 
 msgctxt "view:claim.sub_status:"
 msgid "Substatus"
@@ -1824,6 +1894,16 @@ msgctxt "wizard_button:claim.deliver_benefits,benefits,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
+<<<<<<< HEAD
+msgctxt "wizard_button:claim.service.set_origin,select_origin,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:claim.service.set_origin,select_origin,select:"
+msgid "Select"
+msgstr "Selectionner"
+
+=======
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_claim_account,change_contract_claim_account_next:"
 msgid "Next"
@@ -1843,6 +1923,7 @@ msgctxt "wizard_button:endorsement.start,change_contract_claim_account,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
+>>>>>>> origin/master
 msgctxt "wizard_button:loss.propagate_extra_data,select_extra_data,end:"
 msgid "Cancel"
 msgstr "Annuler"

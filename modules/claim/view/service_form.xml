@@ -11,6 +11,13 @@ this repository contains the full copyright notices and license terms. -->
     <label name="insurer_delegations"/>
     <field name="insurer_delegations"/>
     <newline/>
+    <label name="origin_service"/>
+    <group name="origin_service" string="" colspan="3">
+        <field name="origin_service" xexpand="1"/>
+        <button string="Set Origin" name="button_set_origin_service"/>
+        <button string="Clear Origin" name="clear_origin_service"/>
+    </group>
+    <newline/>
     <label name="benefit"/>
     <field name="benefit" widget="selection"/>
     <field name="extra_datas" colspan="4"/>

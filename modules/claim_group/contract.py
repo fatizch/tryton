@@ -47,7 +47,10 @@ class Option(metaclass=PoolMeta):
     previous_claims_management_rule = fields.Selection([
             ('no_management', 'No management'),
             ('full_management', 'Full management'),
-            ('in_complement', 'In Complement of Previous Insurer')],
+            ('in_complement', 'In Complement of Previous Insurer'),
+            ('in_complement_previous_rule',
+                'In Complement of Previous Insurer (use previous rule)'),
+            ],
         'Previous Claims Management Rule',
         states={'invisible': ~Eval('is_group'),
             'readonly': Bool(Eval('contract_status')) &
@@ -99,7 +102,8 @@ class CoveredElement(metaclass=PoolMeta):
         for option in [x for x in covered.options if (not coverage or
                         x.coverage == coverage)]:
             if (option.start_date or datetime.date.min) > at_date and \
-                    option.previous_claims_management_rule == 'in_complement':
+                    option.previous_claims_management_rule in (
+                        'in_complement', 'in_complement_previous_rule'):
                 options.append(option)
         if not covered.parent:
             return options

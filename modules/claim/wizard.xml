@@ -68,5 +68,20 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">benefit.loss.description,-1</field>
             <field name="action" ref="act_loss_propagate_extra_data_wizard"/>
         </record>
+        <!-- ###################### -->
+        <!-- # Set Origin Service # -->
+        <!-- ###################### -->
+        <record model="ir.action.wizard" id="act_set_origin_service">
+            <field name="name">Set Origin Service</field>
+            <field name="wiz_name">claim.service.set_origin</field>
+        </record>
+        <!-- ############################# -->
+        <!-- # Set Origin Service Select # -->
+        <!-- ############################# -->
+        <record model="ir.ui.view" id="select_origin_service_view_form">
+            <field name="model">claim.service.set_origin.select</field>
+            <field name="type">form</field>
+            <field name="name">select_origin_service_form</field>
+        </record>
     </data>
 </tryton>

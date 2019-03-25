@@ -834,6 +834,15 @@ def check_button_access(model_name, button_name):
     return True
 
 
+def extract_context():
+    context = Transaction().context
+    return (
+        context.get('active_model', None),
+        context.get('active_id', None),
+        context.get('active_ids', []),
+        )
+
+
 class DataExporter(object):
 
     def format_amount(self, data):

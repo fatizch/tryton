@@ -32,7 +32,8 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         contract = args['contract']
         option = args['option']
         if (contract and option and
-                option.previous_claims_management_rule == 'in_complement'):
+                option.previous_claims_management_rule in (
+                    'in_complement', 'in_complement_previous_rule')):
             return contract.initial_start_date
         return datetime.date.min
 

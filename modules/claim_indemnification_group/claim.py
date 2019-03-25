@@ -74,6 +74,16 @@ class ClaimService(metaclass=PoolMeta):
                 + [(covered.party, 1)]
         return super(ClaimService, self).get_beneficiaries_data(at_date)
 
+    def getter_may_have_origin(self, name):
+        result = super().getter_may_have_origin(name)
+        if not result or not self.benefit.is_group:
+            return result
+        # Check whether the option requires this behavior
+        if not self.option:
+            return False
+        return (self.option.previous_claims_management_rule ==
+            'in_complement_previous_rule')
+
 
 class Indemnification(metaclass=PoolMeta):
     __name__ = 'claim.indemnification'
@@ -93,6 +103,8 @@ class Indemnification(metaclass=PoolMeta):
                 '(%(indemn_start)s - %(indemn_end)s) is not compatible with '
                 'the claim\'s management period (%(management_start)s - '
                 '%(management_end)s).',
+                'missing_origin_service': 'The origin service must be set '
+                'prior to calculation for %(service)s',
                 })
 
     def get_possible_products(self):
@@ -138,7 +150,8 @@ class Indemnification(metaclass=PoolMeta):
         delta = super(Indemnification, cls)._get_delta_indemnifications(
             indemnification, previous_indemnification)
         option = indemnification.service.option
-        if not option.previous_claims_management_rule == 'in_complement':
+        if option.previous_claims_management_rule not in ('in_complement',
+                'in_complement_previous_rule'):
             return delta
         delta = 0
         if (not previous_indemnification and
@@ -158,7 +171,8 @@ class Indemnification(metaclass=PoolMeta):
         super(Indemnification, cls).check_schedulability(indemnifications)
         for indemn in indemnifications:
             option = indemn.service.option
-            if option.previous_claims_management_rule == 'in_complement':
+            if option.previous_claims_management_rule in (
+                    'in_complement', 'in_complement_previous_rule'):
                 if indemn.start_date < option.start_date:
                     cls.raise_user_error('before_option_start_date', {
                             'indemnification': indemn.rec_name,
@@ -215,14 +229,27 @@ class Indemnification(metaclass=PoolMeta):
                             'indemn_end': indemnification.end_date,
                             'management_start': management_start,
                             'management_end': management_end})
+        cls._check_origin_service(indemnifications)
+
+    @classmethod
+    def _check_origin_service(cls, indemnifications):
+        for indemnification in indemnifications:
+            service = indemnification.service
+            if (service.option.previous_claims_management_rule !=
+                    'in_complement_previous_rule'):
+                continue
+            if not service.origin_service:
+                cls.raise_user_error('missing_origin_service',
+                    {'service': service.rec_name})
 
     @classmethod
     @ModelView.button
     def validate_indemnification(cls, indemnifications):
         for indemn in indemnifications:
             option = indemn.service.option
-            if option.previous_claims_management_rule == \
-                    'in_complement' and indemn.start_date < option.start_date:
+            if (option.previous_claims_management_rule in (
+                        'in_complement', 'in_complement_previous_rule')
+                    and indemn.start_date < option.start_date):
                 cls.raise_user_error('before_option_start_date', {
                         'indemnification': indemn.rec_name,
                         })
@@ -254,7 +281,7 @@ class ClaimServiceExtraDataRevision(metaclass=PoolMeta):
     def getter_previous_amount_invisible(self, name):
         if not self.claim_service:
             return True
-        if self.claim_service.option.previous_claims_management_rule == \
-                'in_complement':
+        if self.claim_service.option.previous_claims_management_rule in (
+                'in_complement', 'in_complement_previous_rule'):
             return False
         return True

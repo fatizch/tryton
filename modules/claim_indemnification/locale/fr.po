@@ -279,6 +279,10 @@ msgstr ""
 "d'effectuer le calcul, même si vous annulez le processus"
 
 msgctxt "error:claim.service:"
+msgid "The service %(service)s has non-cancelled indemnifications"
+msgstr "La prestation %(service)s a des indemnisations non annulées"
+
+msgctxt "error:claim.service:"
 msgid ""
 "There may not be multiple capital indemnifications for a given beneficiary, "
 "the current one will be cancelled"

@@ -25,9 +25,10 @@ class RuleEngineRuntime(metaclass=PoolMeta):
                 for x in args['loss'].hospitalisation_periods])
 
     @classmethod
-    @check_args('indemnification', 'indemnification_detail_start_date')
+    @check_args('indemnification', 'indemnification_detail_start_date',
+        'service')
     def _re_ijss_before_part_time(cls, args):
-        delivered = args['indemnification'].service
+        delivered = args['service']
         at_date = args['indemnification_detail_start_date']
         ijss = {e.date or delivered.loss.start_date:
             e.extra_data_values['ijss']

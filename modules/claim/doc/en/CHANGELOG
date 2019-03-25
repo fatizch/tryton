@@ -1,3 +1,4 @@
+* FEA#11263 Add a link between a service and the service that was its origin
 * FEA#11113 Store the claim bank account on contracts when appropriate
 * FEA#11188 Add my history to claim entry point
 * BUG#11037 Modification of the value of the kind of the used extra data in order to be the same kind of the one that has been parameterized

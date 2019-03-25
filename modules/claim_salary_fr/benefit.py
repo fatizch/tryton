@@ -51,9 +51,8 @@ class BenefitRule(metaclass=PoolMeta):
             return option.revaluation_on_basic_salary
 
     def do_calculate_revaluation_rule(self, args):
-        if ('indemnification' in args and
-                self.process_revaluation_on_basic_salary(
-                    args['indemnification'].service)):
+        if ('service' in args and
+                self.process_revaluation_on_basic_salary(args['service'])):
             # do not calculate revaluation after indemnification calculation
             # if revaluation on basic salary
             return [args]

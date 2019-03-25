@@ -52,6 +52,7 @@ def register():
         wizard.ClaimCloseReasonView,
         wizard.BenefitSelectExtraDataView,
         wizard.LossSelectExtraDataView,
+        wizard.SetOriginServiceSelect,
         global_search.GlobalSearchSet,
         module='claim', type_='model')
     Pool.register(
@@ -60,6 +61,7 @@ def register():
         wizard.PropagateBenefitExtraData,
         wizard.PropagateLossExtraData,
         wizard.PartyErase,
+        wizard.SetOriginService,
         party.SynthesisMenuOpen,
         party.PartyReplace,
         module='claim', type_='wizard')

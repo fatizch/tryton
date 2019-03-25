@@ -135,11 +135,11 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         return res
 
     @classmethod
-    @check_args('indemnification')
+    @check_args('service')
     def _re_sum_of_unit_amount(cls, args, date):
         res = 0
-        for service in args['indemnification'].service.loss.services:
-            if service == args['indemnification'].service:
+        for service in args['service'].loss.services:
+            if service == args['service']:
                 continue
             for indemn in service.indemnifications:
                 for detail in indemn.details:

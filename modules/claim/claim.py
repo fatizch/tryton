@@ -5,7 +5,7 @@ from itertools import groupby
 from sql.conditionals import Coalesce
 
 from trytond.rpc import RPC
-from trytond.pyson import Eval, Bool, Or
+from trytond.pyson import Eval, Bool, Or, If
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.model import Unique
@@ -883,6 +883,16 @@ class ClaimService(model.CoogSQL, model.CoogView,
         states={
             'invisible': ~Eval('extra_datas'),
             }, depends=['extra_datas'])
+    origin_service = fields.Many2One('claim.service', 'Origin Service',
+        ondelete='RESTRICT', readonly=True, states={
+            'invisible': ~Eval('may_have_origin'),
+            },
+        domain=[If(~Eval('may_have_origin'), [('id', '=', None)], [])],
+        depends=['may_have_origin'],
+        help='This can be used to know if this service is some sort of '
+        'follow-up of the parent. For instance if the contract from which the '
+        'origin service was terminated and replaced with another which '
+        'created this service')
     claim = fields.Function(
         fields.Many2One('claim', 'Claim'),
         'getter_claim', searcher='search_claim')
@@ -905,6 +915,27 @@ class ClaimService(model.CoogSQL, model.CoogView,
         'get_icon')
     claim_status = fields.Function(fields.Char('Claim Status'),
         'get_claim_status')
+    may_have_origin = fields.Function(
+        fields.Boolean('May Have Origin'),
+        'getter_may_have_origin')
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._buttons.update({
+                'button_set_origin_service': {
+                    'invisible': ~~Eval('origin_service') | (
+                        Eval('claim_status', 'closed') == 'closed'),
+                    'readonly': ~~Eval('origin_service') | (
+                        Eval('claim_status', 'closed') == 'closed'),
+                    },
+                'clear_origin_service': {
+                    'invisible': ~Eval('origin_service') | (
+                        Eval('claim_status', 'closed') == 'closed'),
+                    'readonly': ~Eval('origin_service') | (
+                        Eval('claim_status', 'closed') == 'closed'),
+                    },
+                })
 
     @classmethod
     def __post_setup__(cls):
@@ -953,6 +984,9 @@ class ClaimService(model.CoogSQL, model.CoogView,
                 result[table_id] = value
 
         return result
+
+    def getter_may_have_origin(self, name):
+        return self.benefit.may_have_origin
 
     def get_icon(self, name):
         if self.insurer_delegations:
@@ -1107,6 +1141,36 @@ class ClaimService(model.CoogSQL, model.CoogView,
         extra_data = utils.get_value_at_date(self.extra_datas, kwargs.get(
                 'date', utils.today()))
         return extra_data.find_extra_data_values_value(name, **kwargs)
+
+    @classmethod
+    @model.CoogView.button_action('claim.act_set_origin_service')
+    def button_set_origin_service(cls, services):
+        pass
+
+    def set_origin_service(self, origin):
+        assert origin
+        assert self.loss.claim.status != 'closed'
+        self.origin_service = origin
+        self.save()
+
+    @classmethod
+    @model.CoogView.button
+    def clear_origin_service(cls, services):
+        with model.error_manager():
+            for service in services:
+                if not service.origin_service:
+                    cls.append_functional_error('clearing_empty_origin',
+                        {'service': service.rec_name})
+        cls.raise_user_warning('clearing_origin_%s' % ','.join(
+                str(x.id) for x in services[:10]),
+            'clearing_origin')
+        for service in services:
+            assert service.loss.claim.status != 'closed'
+            service._clear_origin_service()
+        cls.save(services)
+
+    def _clear_origin_service(self):
+        self.origin_service = None
 
 
 class ClaimSubStatus(model.CoogSQL, model.CoogView):

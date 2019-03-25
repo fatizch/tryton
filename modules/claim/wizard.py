@@ -4,7 +4,7 @@ from trytond.pool import Pool, PoolMeta
 
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
-from trytond.modules.coog_core import model, fields
+from trytond.modules.coog_core import model, fields, utils
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 
 
@@ -19,6 +19,8 @@ __all__ = [
     'LossSelectExtraDataView',
     'PropagateLossExtraData',
     'PartyErase',
+    'SetOriginService',
+    'SetOriginServiceSelect',
     ]
 
 
@@ -309,3 +311,73 @@ class PartyErase(metaclass=PoolMeta):
                     [],
                     [])])
         return to_erase
+
+
+class SetOriginService(Wizard):
+    'Set Origin Service'
+
+    __name__ = 'claim.service.set_origin'
+
+    start_state = 'select_origin'
+    select_origin = StateView('claim.service.set_origin.select',
+        'claim.select_origin_service_view_form', [
+            Button('Cancel', 'end', 'tryton-exit'),
+            Button('Select', 'select', 'tryton-next', default=True),
+            ])
+    select = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._error_messages.update({
+                'only_one_service':
+                'This action must be run service by service',
+                'origin_required': 'The "origin" field is required to proceed',
+                })
+
+    def default_select_origin(self, name):
+        active_model, active_id, active_ids = utils.extract_context()
+        assert active_model == 'claim.service'
+        if len(active_ids) > 1:
+            self.raise_user_error('only_one_service')
+
+        Service = Pool().get('claim.service')
+        active = Service(active_id)
+
+        possible_origins = Service.search(
+            self._possible_origins_domain(active))
+        if len(possible_origins) == 0:
+            self.raise_user_error('no_possible_origins')
+        return {
+            'service': active_id,
+            'possible_origins': [x.id for x in possible_origins],
+            'origin':
+            possible_origins[0].id if len(possible_origins) == 1 else None,
+            }
+
+    def _possible_origins_domain(self, service):
+        return [
+            ('loss.claim.claimant', '=', service.loss.claim.claimant),
+            ('loss.start_date', '<=', service.loss.start_date),
+            ('loss.loss_desc.loss_kind', '=', service.loss.loss_desc.loss_kind),
+            ]
+
+    def transition_select(self):
+        if not self.select_origin.origin:
+            self.raise_user_error('origin_required')
+        self.select_origin.service.set_origin_service(
+            self.select_origin.origin)
+        return 'end'
+
+
+class SetOriginServiceSelect(model.CoogView):
+    'Select Origin Service'
+
+    __name__ = 'claim.service.set_origin.select'
+
+    service = fields.Many2One('claim.service', 'Service', readonly=True)
+    origin = fields.Many2One('claim.service', 'Origin',
+        domain=[('id', 'in', Eval('possible_origins'))],
+        depends=['possible_origins'])
+    possible_origins = fields.Many2Many('claim.service', None, None,
+        'Possible origins', readonly=True)

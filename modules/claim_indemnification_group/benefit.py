@@ -308,6 +308,21 @@ class BenefitRule(metaclass=PoolMeta):
 
     def do_calculate_revaluation_rule(self, args):
         delivered = args['service']
+
+        if (delivered.option.previous_claims_management_rule ==
+                'in_complement_previous_rule'):
+            # The rule that should be used to compute the revaluation must be
+            # that of the previous service
+            assert delivered.origin_service
+            origin = delivered.origin_service
+
+            rule = origin.benefit.benefit_rules
+            if not rule:
+                return
+
+            origin.init_dict_for_rule_engine(args)
+            return rule[0].do_calculate_revaluation_rule(args)
+
         start_date = args['indemnification_detail_start_date']
         extra_data = utils.get_value_at_date(delivered.extra_datas, start_date)
         res = super(BenefitRule, self).do_calculate_revaluation_rule(args)

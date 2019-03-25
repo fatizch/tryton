@@ -7,6 +7,10 @@ msgid "Amount is replaced by revaluation amount."
 msgstr "Le montant est remplacé par le montant de revalorisation"
 
 msgctxt "error:benefit.rule:"
+msgid "Computed amount transfered by the previous insurer: %(computation)s"
+msgstr "Montant calculé reversé par le précédent assureur: %(computation)s"
+
+msgctxt "error:benefit.rule:"
 msgid "Multiple indemnification rules allowed"
 msgstr "Plusieurs règles d'indemnisation autorisées"
 
@@ -17,10 +21,6 @@ msgstr "Filiales puis élément couvert"
 msgctxt "error:benefit:"
 msgid "Subsidiaries, Covered and Subscriber"
 msgstr "Filiales, assuré et souscripteur"
-
-msgctxt "error:benefit.rule:"
-msgid "Computed amount transfered by the previous insurer: %(computation)s"
-msgstr "Montant calculé reversé par le précédent assureur: %(computation)s"
 
 msgctxt "error:claim.create_indemnification:"
 msgid ""
@@ -73,6 +73,12 @@ msgid ""
 msgstr ""
 "La période d'indemnisation (%(indemn_start)s - %(indemn_end)s) n'est pas "
 "compatible avec la date de fin du contrat (%(contract_end)s)."
+
+msgctxt "error:claim.indemnification:"
+msgid "The origin service must be set prior to calculation for %(service)s"
+msgstr ""
+"La prestation d'origine doit être renseignée sur %(service)s avant de "
+"pouvoir effectuer les calculs"
 
 msgctxt "error:claim.transfer_services.contracts:"
 msgid "%s (%i claims)"

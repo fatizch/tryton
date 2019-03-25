@@ -309,7 +309,9 @@ class ClaimService(metaclass=PoolMeta):
                 'the current one will be cancelled',
                 'period_will_be_deleted': 'The period "%(description)s" will '
                 'be definitely deleted for the calculation, event if you '
-                'cancel the process'
+                'cancel the process',
+                'indemnification_paid': 'The service %(service)s has non-'
+                'cancelled indemnifications',
                 })
 
     @classmethod
@@ -595,6 +597,17 @@ class ClaimService(metaclass=PoolMeta):
     @classmethod
     def searcher_can_be_indemnified(cls, name, clause):
         return []
+
+    @classmethod
+    @model.CoogView.button
+    def clear_origin_service(cls, services):
+        for service in services:
+            if any(x.status in ('calculated', 'scheduled', 'controlled',
+                        'validated', 'paid')
+                    for x in service.indemnifications):
+                cls.raise_user_error('indemnification_paid', {
+                        'service': service.rec_name})
+        super().clear_origin_service(services)
 
 
 class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,

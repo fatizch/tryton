@@ -261,6 +261,10 @@ class Benefit(model.CoogSQL, model.CoogView,
     several_delivered = fields.Boolean('Several delivered',
         help='If true, it will be possible to deliver the same benefit '
         'several times')
+    may_have_origin = fields.Boolean('May Have an Origin',
+        help='If True, services based on this benefit will have the '
+        'possibility to select an "origin service", which represents the '
+        'service that preceded it')
 
     @classmethod
     def __setup__(cls):

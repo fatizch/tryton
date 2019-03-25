@@ -6,11 +6,6 @@ msgctxt "error:benefit:"
 msgid "Subscriber then Covered"
 msgstr "Le souscripteur puis l'assuré"
 
-msgctxt "error:claim:"
-msgid "Declaration date cannot be posterior to today's date"
-msgstr ""
-"La date de déclaration ne peut être postérieure à la date d'aujourd'hui"
-
 msgctxt "field:benefit,is_group:"
 msgid "Group Benefit"
 msgstr "Prestation collective"
@@ -91,6 +86,11 @@ msgstr "Reprise complète de la gestion"
 msgctxt "selection:contract.option,previous_claims_management_rule:"
 msgid "In Complement of Previous Insurer"
 msgstr "En complément du précédent assureur"
+
+msgctxt "selection:contract.option,previous_claims_management_rule:"
+msgid "In Complement of Previous Insurer (use previous rule)"
+msgstr ""
+"En complément de l'assureur précédent (selon l'ancienne règle de calcul)"
 
 msgctxt "selection:contract.option,previous_claims_management_rule:"
 msgid "No management"

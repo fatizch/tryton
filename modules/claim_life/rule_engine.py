@@ -18,9 +18,9 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         return args['loss'].is_a_relapse
 
     @classmethod
-    @check_args('indemnification')
+    @check_args('service', 'indemnification')
     def _re_is_covered_element_beneficiary(cls, args):
-        return (args['indemnification'].service.loss.covered_person
+        return (args['service'].loss.covered_person
                 == args['indemnification'].beneficiary)
 
     @classmethod

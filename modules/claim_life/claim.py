@@ -454,7 +454,8 @@ class ClaimService(metaclass=PoolMeta):
             start_date_check = (option.full_management_start_date
                 if not start_date_check
                 else min(start_date_check, option.full_management_start_date))
-        if option.previous_claims_management_rule == 'in_complement':
+        if option.previous_claims_management_rule in ('in_complement',
+                'in_complement_previous_rule'):
             return True
         if not start_date_check or (start_date_check <= loss_date):
             return True
