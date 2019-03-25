@@ -1,3 +1,5 @@
+* BUG#8306 Remove final renewal flag when activating a contract
+
 Version 2.2 - 2018-10-12
 * FEA#8878 Add configuration to allow contracts deferments, even if contracts has already been renewed
 * BUG#8924 Fix the batch query to avoid multiple renewals

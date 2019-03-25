@@ -142,6 +142,13 @@ class Contract(metaclass=PoolMeta):
             res = False
         return res
 
+    def before_activate(self):
+        # We do this before super because end_date is cleared
+        self.activation_history[-1].clean_before_reactivate()
+        self.activation_history = list(self.activation_history)
+        self.save()
+        super().before_activate()
+
     @classmethod
     def terminate(cls, contracts, at_date, termination_reason):
         pool = Pool()
