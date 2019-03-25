@@ -45,6 +45,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="menu" ref="contract_group.menu_group_contract_transfer_enrollment"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
+        <record model="ir.model.button-res.group" id="cancel_enrollment_contract_manage">
+            <field name="button" ref="cancel_enrollment"/>
+            <field name="group" ref="contract.group_contract_manage"/>
+        </record>
         <!-- Product Management Group  -->
         <!-- Laboratory -->
         <record model="ir.ui.menu-res.group" id="menu_product_form_product_manage">

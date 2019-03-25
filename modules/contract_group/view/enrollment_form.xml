@@ -32,5 +32,6 @@ this repository contains the full copyright notices and license terms. -->
         <button name="button_open_sub_elements" string="Sub Elements" keyword="relate"/>
         <field name="has_sub_covered_elements" invisible="1"/>
         <field name="show_name" invisible="1"/>
+        <button string="Cancel Enrollment" icon="tryton-cancel" name="cancel_enrollment"/>
     </group>
 </form>

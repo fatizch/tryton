@@ -1,3 +1,4 @@
+* FEA#11077 Allow to cancel an enrollment
 * BUG#10784 Allow to use sub covered elements relate from enrollment's view form
 * BUG#10189 Fix covered element transfer across contracts
 * FEA#10241 Add default order on hierarchy

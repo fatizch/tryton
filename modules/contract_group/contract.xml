@@ -74,8 +74,12 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">enrollment_form</field>
         </record>
-        <!-- The following view is quite the same as the one above : 
-             the 'selection' widget on the 'parent' field has been removed 
+        <record model="ir.model.button" id="cancel_enrollment">
+            <field name="name">cancel_enrollment</field>
+            <field name="model" search="[('model', '=', 'contract.covered_element')]"/>
+        </record>
+        <!-- The following view is quite the same as the one above :
+             the 'selection' widget on the 'parent' field has been removed
              due to load of all the 'covered_element' that causes a slowdown -->
         <record model="ir.ui.view" id="party_enrollment_view_form">
             <field name="model">contract.covered_element</field>

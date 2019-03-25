@@ -1,9 +1,8 @@
 # -*- coding:utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import If, Bool
+from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.coog_core import fields, coog_date, model
 
@@ -64,6 +63,7 @@ class CoveredElement(metaclass=PoolMeta):
     subscriber = fields.Function(
         fields.Many2One('party.party', 'Subscriber'),
         'getter_subscriber')
+    active = fields.Boolean('Active', readonly=True)
 
     @classmethod
     def __setup__(cls):
@@ -82,6 +82,10 @@ class CoveredElement(metaclass=PoolMeta):
         cls._buttons.update({
                 'button_open_sub_elements': {
                     'readonly': ~Eval('has_sub_covered_elements'),
+                    },
+                'cancel_enrollment': {
+                    'readonly': ~Eval('active'),
+                    'invisible': ~Eval('parent'),
                     },
                 })
 
@@ -112,6 +116,10 @@ class CoveredElement(metaclass=PoolMeta):
             Event.notify_events(terminated, 'terminated_enrollment')
         if modified:
             Event.notify_events(modified, 'changed_enrollment')
+
+    @classmethod
+    def default_active(cls):
+        return True
 
     @classmethod
     def view_attributes(cls):
@@ -194,3 +202,10 @@ class CoveredElement(metaclass=PoolMeta):
     @model.CoogView.button_action('contract_group.act_open_sub_elements')
     def button_open_sub_elements(cls, instances):
         pass
+
+    @classmethod
+    @model.CoogView.button
+    def cancel_enrollment(cls, enrollments):
+        to_deactivate = [x for x in enrollments if x.active]
+        if to_deactivate:
+            cls.write(to_deactivate, {'active': False})
