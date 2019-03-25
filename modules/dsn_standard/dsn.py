@@ -45,7 +45,7 @@ class NEODeSTemplate(utils.DataExporter):
         'S10.G00.01.001': 'siren',
         'S10.G00.01.002': 'conf_sender_nic',
         'S10.G00.01.003': 'name',
-        'S10.G00.01.004': 'main_address.one_line_street',
+        'S10.G00.01.004': 'main_address_street',
         'S10.G00.01.005': 'main_address.zip',
         'S10.G00.01.006': 'main_address.city',
         'S10.G00.01.007': 'main_address_country_code',
@@ -304,6 +304,12 @@ class NEODeSTemplate(utils.DataExporter):
     @property
     def declaration_number(self):
         return '1'
+
+    def custom_main_address_street(self, party):
+        if not party.main_address:
+            return u''
+        else:
+            return party.main_address.street.splitlines()[-1][:50]
 
     def custom_main_address_country_code(self, party):
         # if S10.G00.01.005 defined country must be empty

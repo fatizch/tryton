@@ -31,7 +31,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         'S21.G00.06.001': 'siren',
         # 'S21.G00.06.002': '',  # NIC du siège
         'S21.G00.06.003': 'conf_code_apen',
-        'S21.G00.06.004': 'main_address.one_line_street',
+        'S21.G00.06.004': 'main_address_street',
         'S21.G00.06.005': 'main_address.zip',
         'S21.G00.06.006': 'main_address.city',
         # 'S21.G00.06.007': '',  # Complément de la localisation de la constr.
@@ -43,7 +43,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
 
         'S21.G00.11.001': 'conf_nic_etablissement',
         'S21.G00.11.002': 'conf_apet_etablissement',
-        'S21.G00.11.003': 'main_address.one_line_street',
+        'S21.G00.11.003': 'main_address_street',
         'S21.G00.11.004': 'main_address.zip',
         'S21.G00.11.005': 'main_address.city',
         # 'S21.G00.11.006': '',  # Complément de la localisation de la constr.
@@ -71,7 +71,7 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
         'S21.G00.30.005': 'gender',
         'S21.G00.30.006': 'birth_date',
         'S21.G00.30.007': 'birth_place',
-        'S21.G00.30.008': 'main_address.one_line_street',
+        'S21.G00.30.008': 'main_address_street',
         'S21.G00.30.009': 'main_address.zip',
         'S21.G00.30.010': 'main_address.city',
         'S21.G00.30.011': 'main_address_country_code',

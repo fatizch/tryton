@@ -1,3 +1,4 @@
+* BUG#11270 Limit the length of the street field
 * BUG#10714 Locality field must be normalized to ascii alphanumeric only
-* OTH#0000 Fix dsn standard following test on NetEntreprise portal 
+* OTH#0000 Fix dsn standard following test on NetEntreprise portal
 * Module creation
