@@ -4,6 +4,7 @@ from trytond.pool import Pool
 from . import claim
 from . import offered
 from . import contract
+from . import endorsement
 from . import rule_engine
 from . import party
 from . import test_case
@@ -33,10 +34,12 @@ def register():
         claim.ClaimService,
         claim.ClaimServiceExtraDataRevision,
         contract.Contract,
+        contract.ContractVersion,
         contract.Option,
         rule_engine.RuleEngineRuntime,
         party.Party,
         party.Insurer,
+        offered.Product,
         offered.OptionDescription,
         test_case.TestCaseModel,
         wizard.BenefitToDeliver,
@@ -64,3 +67,12 @@ def register():
         event.EventLog,
         module='claim', type_='model',
         depends=['event_log'])
+    Pool.register(
+        endorsement.ContractEndorsement,
+        endorsement.ChangeContractClaimAccount,
+        module='claim', type_='model',
+        depends=['endorsement'])
+    Pool.register(
+        endorsement.StartEndorsement,
+        module='claim', type_='wizard',
+        depends=['endorsement'])

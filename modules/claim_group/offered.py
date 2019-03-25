@@ -24,6 +24,11 @@ class Product(metaclass=PoolMeta):
             'required': Bool(Eval('is_group'))},
         depends=['is_group'])
 
+    @classmethod
+    def _get_subscriber_benefit_kinds(cls):
+        return super()._get_subscriber_benefit_kinds() | {
+            'subscriber_then_covered'}
+
 
 class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'

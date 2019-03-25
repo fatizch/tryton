@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="subscriber"/>
+    <field name="subscriber"/>
+    <label name="contract"/>
+    <field name="contract"/>
+    <newline/>
+    <label name="current_claim_account"/>
+    <field name="current_claim_account"/>
+    <label name="new_claim_account"/>
+    <group id="new_claim_account" string="">
+        <field name="new_claim_account"/>
+        <button string="Refresh" name="reset_new_claim_account"/>
+    </group>
+    <field name="other_contracts" colspan="4"/>
+    <button string="Add All Contracts" name="add_all_contracts" colspan="2"/>
+    <button string="Remove All Contracts" name="remove_all_contracts" colspan="2"/>
+    <newline/>
+    <field name="effective_date" invisible="1"/>
+    <field name="endorsement_part" invisible="1"/>
+    <field name="endorsement_definition" invisible="1"/>
+    <field name="contract" invisible="1"/>
+    <field name="calculated_bank_account" invisible="1"/>
+    <field name="possible_contracts" invisible="1"/>
+</form>

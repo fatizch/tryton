@@ -61,3 +61,20 @@ class MoveLine(metaclass=PoolMeta):
             return journals
         return super(MoveLine, cls).get_configuration_journals_from_lines(
             lines)
+
+    def _indemnification(self):
+        if not self._line_from_claim_invoices():
+            return None
+        invoice = self.move.invoice
+        if not invoice.lines or not invoice.lines[0].claim_details:
+            return None
+        return invoice.lines[0].claim_details[0].indemnification
+
+    def init_payment_information(self, journal, kind, amount, payment):
+        super().init_payment_information(journal, kind, amount, payment)
+        if kind != 'payable' or not journal.needs_bank_account():
+            return payment
+        indemnification = self._indemnification()
+        if indemnification:
+            payment['bank_account'] = indemnification.bank_account
+        return payment

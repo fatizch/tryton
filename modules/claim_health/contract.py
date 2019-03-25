@@ -34,26 +34,27 @@ class CoveredElement(metaclass=PoolMeta):
             states={'invisible': True}),
         'get_has_health_related_option')
 
-    def get_claim_bank_account(self, name=None):
+    def get_claim_bank_account(self, name):
         if self.claim_specific_bank_account:
             return self.claim_specific_bank_account.id
         if self.claim_default_bank_account:
             return self.claim_default_bank_account.id
 
-    def get_possible_claim_bank_accounts(self, name=None):
+    def get_possible_claim_bank_accounts(self, name):
         res = []
         for party in self.contract.parties:
             res.extend([account.id for account in party.bank_accounts])
         return res
 
-    def get_claim_default_bank_account(self, name=None):
+    def get_claim_default_bank_account(self, name):
         if utils.is_module_installed('contract_insurance_invoice'):
             billing_info = self.contract.billing_information
             if billing_info and billing_info.direct_debit_account:
                 return billing_info.direct_debit_account
-        account = self.contract.subscriber.get_bank_account(utils.today())
-        if account:
-            return account.id
+        if self.contract.subscriber:
+            account = self.contract.subscriber.get_bank_account(utils.today())
+            if account:
+                return account.id
 
     def get_has_health_related_option(self, name=None):
         for option in self.options:

@@ -733,6 +733,10 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             [('forced_base_amount', '>=', 0)]],
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
         depends=['currency_digits'], readonly=True)
+    bank_account = fields.Function(
+        fields.Many2One('bank.account', 'Bank Account',
+            help='The bank account that will be used in case of a transfer'),
+        'getter_bank_account')
 
     @classmethod
     def __setup__(cls):
@@ -1137,6 +1141,17 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         self.amount = sum([x.amount for x in self.details], Decimal(0))
         self.update_amounts()
 
+    def getter_bank_account(self, name):
+        if not self.journal or not self.journal.needs_bank_account():
+            return
+        invoice = self._invoice()
+        date = invoice.invoice_date if invoice else utils.today()
+        if self.service.benefit.beneficiary_kind == 'subscriber':
+            account = self.service.contract.get_claim_bank_account_at_date(
+                at_date=date)
+            return account.id if account else None
+        return self.beneficiary.get_bank_account(at_date=date)
+
     def update_amounts(self):
         if not self.product:
             return
@@ -1244,8 +1259,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                             })
             journal = indemnification.journal
             if (journal and journal.needs_bank_account() and
-                    not indemnification.beneficiary.get_bank_account(
-                        utils.today())):
+                    not indemnification.bank_account):
                 cls.append_functional_error('no_bank_account', (
                         indemnification.beneficiary.rec_name,
                         indemnification.service.claim.name))
@@ -1568,6 +1582,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             'currency': self.currency,
             'journal': self.journal,
             'applied_taxes': [],
+            'bank_account': self.bank_account
+            if self.journal.needs_bank_account() else None,
             }
         if self.service.benefit.tax_date_is_indemnification_date():
             key['applied_taxes'] = sorted([x.id for x in
@@ -1649,6 +1665,11 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         return [i for s in services for i in s.indemnifications
             if 'cancel' not in i.status and 'rejected' not in i.status
             and i.kind in kinds]
+
+    def _invoice(self):
+        if not self.invoice_line_details:
+            return None
+        return self.invoice_line_details[0].invoice_line.invoice
 
 
 class IndemnificationDetail(model.CoogSQL, model.CoogView, ModelCurrency,

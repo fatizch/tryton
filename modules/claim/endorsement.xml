@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="endorsement">
+        <!-- ############################# -->
+        <!-- # Change Claim Bank Account # -->
+        <!-- ############################# -->
+        <record model="ir.ui.view" id="change_contract_claim_account_view_form">
+            <field name="model">endorsement.contract.change_claim_account</field>
+            <field name="type">form</field>
+            <field name="name">change_contract_claim_account_form</field>
+        </record>
+        <!-- ################################## -->
+        <!-- # Change Claim Bank Account Part # -->
+        <!-- ################################## -->
+        <record model="endorsement.part" id="change_claim_bank_accounts_endorsement_part">
+            <field name="code">change_claim_bank_accounts</field>
+            <field name="name">Change Claim Bank Account</field>
+            <field name="kind">contract</field>
+            <field name="view">change_contract_claim_account</field>
+        </record>
+        <record model="endorsement.definition" id="definition_change_claim_bank_account">
+            <field name="code">change_claim_bank_account</field>
+            <field name="name">Change Claim Bank Account</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="change_claim_bank_account_relation">
+            <field name="definition" ref="definition_change_claim_bank_account"/>
+            <field name="endorsement_part" ref="change_claim_bank_accounts_endorsement_part"/>
+            <field name="order">1</field>
+        </record>
+    </data>
+</tryton>

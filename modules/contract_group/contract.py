@@ -141,7 +141,7 @@ class CoveredElement(metaclass=PoolMeta):
         return super(CoveredElement, self).on_change_with_icon(name)
 
     def getter_subscriber(self, name):
-        return self.contract.subscriber.id
+        return self.contract.subscriber.id if self.contract.subscriber else None
 
     @fields.depends('contract')
     def on_change_contract(self):

@@ -131,6 +131,10 @@ msgstr ""
 "Vous ne pouvez pas fermer plusieurs dossiers avec différentes descriptions "
 "de sinistre en même temps"
 
+msgctxt "error:endorsement.contract.change_claim_account:"
+msgid "Please enter the new bank account to use"
+msgstr "Merci de saisir le nouveau compte à utiliser"
+
 msgctxt "error:party.erase:"
 msgid ""
 "The party %(party)s can not be erased because it is a claimant on the following claims: \n"
@@ -142,10 +146,6 @@ msgstr ""
 msgctxt "field:benefit,automatically_deliver:"
 msgid "Automatically Deliver"
 msgstr "Exercer la prestation automatiquement"
-
-msgctxt "field:benefit,several_delivered:"
-msgid "Several delivered"
-msgstr "Délivrer la prestation plusieurs fois"
 
 msgctxt "field:benefit,beneficiary_kind:"
 msgid "Beneficiary Kind"
@@ -214,6 +214,10 @@ msgstr "Options"
 msgctxt "field:benefit,rec_name:"
 msgid "Record Name"
 msgstr "Nom de l'enregistrement"
+
+msgctxt "field:benefit,several_delivered:"
+msgid "Several delivered"
+msgstr "Délivrer la prestation plusieurs fois"
 
 msgctxt "field:benefit,start_date:"
 msgid "Start Date"
@@ -451,6 +455,10 @@ msgctxt "field:benefit.loss.description,extra_data_def:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
+msgctxt "field:benefit.loss.description,has_end_date:"
+msgid "With End Date"
+msgstr "Avec Date de Fin"
+
 msgctxt "field:benefit.loss.description,id:"
 msgid "ID"
 msgstr "ID"
@@ -470,10 +478,6 @@ msgstr "Nom"
 msgctxt "field:benefit.loss.description,rec_name:"
 msgid "Record Name"
 msgstr "Nom de l'enregistrement"
-
-msgctxt "field:benefit.loss.description,has_end_date:"
-msgid "With End Date"
-msgstr "Avec Date de Fin"
 
 msgctxt "field:benefit.loss.description,write_date:"
 msgid "Write Date"
@@ -799,6 +803,10 @@ msgctxt "field:claim.loss,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
 
+msgctxt "field:claim.loss,has_end_date:"
+msgid "With End Date"
+msgstr "Avec Date de Fin"
+
 msgctxt "field:claim.loss,id:"
 msgid "ID"
 msgstr "ID"
@@ -838,10 +846,6 @@ msgstr "Date"
 msgctxt "field:claim.loss,state:"
 msgid "State"
 msgstr "Etat"
-
-msgctxt "field:claim.loss,has_end_date:"
-msgid "With End Date"
-msgstr "Avec Date de Fin"
 
 msgctxt "field:claim.loss,write_date:"
 msgid "Write Date"
@@ -1075,13 +1079,76 @@ msgctxt "field:claim.sub_status,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract,claim_bank_account:"
+msgid "Claim Bank Account"
+msgstr "Compte pour les prestations"
+
 msgctxt "field:contract,claims:"
 msgid "Claims"
 msgstr "Sinistres"
 
+msgctxt "field:contract,claims_paid_to_subscriber:"
+msgid "Claims paid to subscriber"
+msgstr "Prestations payées au souscripteur"
+
+msgctxt "field:contract.extra_data,claim_bank_account:"
+msgid "Claim Bank Account"
+msgstr "Compte pour les prestations"
+
 msgctxt "field:contract.option,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
+
+msgctxt ""
+"field:endorsement.contract.change_claim_account,calculated_bank_account:"
+msgid "Calculated Bank Account"
+msgstr "Compte calculé"
+
+msgctxt "field:endorsement.contract.change_claim_account,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt ""
+"field:endorsement.contract.change_claim_account,current_claim_account:"
+msgid "Current Claim Account"
+msgstr "Compte pour les prestations"
+
+msgctxt "field:endorsement.contract.change_claim_account,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt ""
+"field:endorsement.contract.change_claim_account,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.contract.change_claim_account,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.change_claim_account,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:endorsement.contract.change_claim_account,new_claim_account:"
+msgid "New Bank Account"
+msgstr "Nouveau compte bancaire"
+
+msgctxt "field:endorsement.contract.change_claim_account,other_contracts:"
+msgid "Other Contracts"
+msgstr "Autres contrats"
+
+msgctxt "field:endorsement.contract.change_claim_account,possible_contracts:"
+msgid "Possible Contracts"
+msgstr "Contrats disponibles"
+
+msgctxt "field:endorsement.contract.change_claim_account,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
+msgctxt "field:endorsement.contract.change_claim_account,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
 
 msgctxt "field:event.log,claim:"
 msgid "Claim"
@@ -1255,10 +1322,8 @@ msgstr ""
 "déclaré"
 
 msgctxt "help:benefit,several_delivered:"
-msgid ""
-"If true, it will be possible to deliver the same benefit several times'"
-msgstr ""
-"Si cochée, la prestation peut être délivrée plusieurs fois "
+msgid "If true, it will be possible to deliver the same benefit several times"
+msgstr "Si cochée, la prestation peut être délivrée plusieurs fois "
 
 msgctxt "help:benefit.loss.description,contract_hold_sub_status:"
 msgid ""
@@ -1272,11 +1337,23 @@ msgctxt "help:claim.loss,start_date:"
 msgid "Date of the event, or start date of a period"
 msgstr "Date de l'évènement, ou date de début de période"
 
-msgctxt "model:account.journal,name:"
-msgid "Claim"
-msgstr "Sinistre"
+msgctxt "help:contract,claim_bank_account:"
+msgid ""
+"The default bank account that will be used to pay claims related to this "
+"contract"
+msgstr ""
+"Le compte bancaire qui sera utilisé pour le paiment des prestations "
+"rattachées à ce contrat"
 
-msgctxt "model:account.journal.type,name:"
+msgctxt "help:contract,claims_paid_to_subscriber:"
+msgid ""
+"Returns True if at least one benefit on the product will be paid to the "
+"subscriber"
+msgstr ""
+"Vrai si au moins une des prestations du produit doit être payée au "
+"souscripteur"
+
+msgctxt "model:account.journal,name:"
 msgid "Claim"
 msgstr "Sinistre"
 
@@ -1351,6 +1428,20 @@ msgstr "Données complémentaires"
 msgctxt "model:claim.sub_status,name:"
 msgid "Claim Close Reason"
 msgstr "Raison de clôture"
+
+msgctxt "model:endorsement.contract.change_claim_account,name:"
+msgid "Change contract claim account"
+msgstr "Modification du compte de prestation"
+
+msgctxt ""
+"model:endorsement.definition,name:definition_change_claim_bank_account"
+msgid "Change Claim Bank Account"
+msgstr "Modifier le compte de prestation"
+
+msgctxt ""
+"model:endorsement.part,name:change_claim_bank_accounts_endorsement_part"
+msgid "Change Claim Bank Account"
+msgstr "Modification du compte de prestation"
 
 msgctxt "model:event.type,name:event_activate_loss"
 msgid "Activate Loss"
@@ -1688,6 +1779,18 @@ msgctxt "view:claim:"
 msgid "Losses"
 msgstr "Préjudices"
 
+msgctxt "view:endorsement.contract.change_claim_account:"
+msgid "Add All Contracts"
+msgstr "Ajouter tous les contrats"
+
+msgctxt "view:endorsement.contract.change_claim_account:"
+msgid "Refresh"
+msgstr "Rafraîchir"
+
+msgctxt "view:endorsement.contract.change_claim_account:"
+msgid "Remove All Contracts"
+msgstr "Retirer tous les contrats"
+
 msgctxt "view:offered.option.description:"
 msgid "Benefits"
 msgstr "Prestations"
@@ -1718,6 +1821,25 @@ msgid "Deliver"
 msgstr "Délivrer"
 
 msgctxt "wizard_button:claim.deliver_benefits,benefits,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_contract_claim_account,change_contract_claim_account_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_contract_claim_account,change_contract_claim_account_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_contract_claim_account,change_contract_claim_account_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,change_contract_claim_account,end:"
 msgid "Cancel"
 msgstr "Annuler"
 

@@ -705,6 +705,10 @@ msgctxt "field:claim.indemnification,amount:"
 msgid "Amount"
 msgstr "Montant"
 
+msgctxt "field:claim.indemnification,bank_account:"
+msgid "Bank Account"
+msgstr "Compte Bancaire"
+
 msgctxt "field:claim.indemnification,beneficiary:"
 msgid "Beneficiary"
 msgstr "Destinataire du paiement"
@@ -1557,6 +1561,10 @@ msgid ""
 msgstr ""
 "Si coché, la date de taxe pour les quittances sera la date de "
 "l'indemnisation. Sinon, la date de taxe sera la date de la quittance"
+
+msgctxt "help:claim.indemnification,bank_account:"
+msgid "The bank account that will be used in case of a transfer"
+msgstr "Le compte bancaire qui sera utilisé en cas de transfert"
 
 msgctxt "help:claim.indemnification,forced_base_amount:"
 msgid ""

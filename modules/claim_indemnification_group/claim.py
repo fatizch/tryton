@@ -8,7 +8,7 @@ from trytond.transaction import Transaction
 from trytond.model import ModelView
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, utils
 
 __all__ = [
     'ClaimService',
@@ -105,6 +105,18 @@ class Indemnification(metaclass=PoolMeta):
         if not self.service and not self.beneficiary:
             return
         self.__class__.update_product(self)
+
+    def getter_bank_account(self, name):
+        if (self.journal and self.journal.needs_bank_account()
+                and self.service.benefit.beneficiary_kind ==
+                'subscriber_then_covered'
+                and self.beneficiary == self.service.contract.subscriber):
+            invoice = self._invoice()
+            date = invoice.invoice_date if invoice else utils.today()
+            account = self.service.contract.get_claim_bank_account_at_date(
+                at_date=date)
+            return account.id if account else None
+        return super().getter_bank_account(name)
 
     @classmethod
     def covered_elements_per_party_contract(cls, indemnifications):

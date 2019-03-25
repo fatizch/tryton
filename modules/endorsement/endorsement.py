@@ -2178,6 +2178,26 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             instance = self.contract
         return super(EndorsementContract, self).clean_up(instance)
 
+    def version_for_modification(self, at_date):
+        Version = Pool().get('contract.extra_data')
+        contract = self.contract
+
+        version = utils.get_value_at_date(contract.extra_datas, at_date)
+        if version.date == at_date:
+            contract.extra_datas = list(contract.extra_datas)
+            return version
+        else:
+            fields = self._new_version_fields()
+            new_version = Version(**model.dictionarize(version, fields))
+            new_version.date = at_date
+            contract.extra_datas = list(contract.extra_datas) + [new_version]
+            return new_version
+
+    def _new_version_fields(self):
+        return {
+            'contract.extra_data': ['extra_data_values'],
+            }
+
 
 class EndorsementOption(relation_mixin(
             'endorsement.contract.option.field', 'option', 'contract.option',
@@ -2396,6 +2416,10 @@ class EndorsementExtraData(relation_mixin(
             extra_data_id = extra_data.id
             cls._extra_data_def_cache.set(name, extra_data_id)
         return ExtraData(extra_data_id)
+
+    @classmethod
+    def _ignore_fields_for_matching(cls):
+        return {'contract'}
 
     @classmethod
     def default_definition(cls):

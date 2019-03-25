@@ -829,6 +829,10 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             self.product_subscriber_kind = 'all'
         self.extra_data_values = self.extra_data_values
 
+    def on_change_subscriber(self):
+        # So that overrides can properly call super
+        pass
+
     @fields.depends('subscriber')
     def on_change_with_current_policy_owner(self, name=None):
         policy_owner = self.get_policy_owner(utils.today())

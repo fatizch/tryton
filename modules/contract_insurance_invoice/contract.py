@@ -178,6 +178,7 @@ class Contract(metaclass=PoolMeta):
 
     @fields.depends('subscriber', 'billing_informations')
     def on_change_subscriber(self):
+        super().on_change_subscriber()
         if not self.subscriber or not self.billing_informations:
             return
         new_billing_information = self.billing_informations[-1]

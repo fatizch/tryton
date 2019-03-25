@@ -193,7 +193,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">tree</field>
             <field name="name">claim_service_extra_data_list</field>
         </record>
-        <record model="ir.ui.view" id="contract_extra_data_view_form">
+        <record model="ir.ui.view" id="claim_service_extra_data_view_form">
             <field name="model">claim.service.extra_data</field>
             <field name="type">form</field>
             <field name="name">claim_service_extra_data_form</field>
