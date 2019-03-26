@@ -1382,7 +1382,6 @@ msgctxt "help:claim.loss,start_date:"
 msgid "Date of the event, or start date of a period"
 msgstr "Date de l'évènement, ou date de début de période"
 
-<<<<<<< HEAD
 msgctxt "help:claim.service,origin_service:"
 msgid ""
 "This can be used to know if this service is some sort of follow-up of the "
@@ -1393,7 +1392,7 @@ msgstr ""
 " un complément d'une prestation existante. Par exemple si le contrat "
 "rattaché à la prestation d'origine était résilié et remplacé par un autre "
 "ayant donné lieu à cette prestation."
-=======
+
 msgctxt "help:contract,claim_bank_account:"
 msgid ""
 "The default bank account that will be used to pay claims related to this "
@@ -1409,7 +1408,6 @@ msgid ""
 msgstr ""
 "Vrai si au moins une des prestations du produit doit être payée au "
 "souscripteur"
->>>>>>> origin/master
 
 msgctxt "model:account.journal,name:"
 msgid "Claim"
@@ -1894,7 +1892,6 @@ msgctxt "wizard_button:claim.deliver_benefits,benefits,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-<<<<<<< HEAD
 msgctxt "wizard_button:claim.service.set_origin,select_origin,end:"
 msgid "Cancel"
 msgstr "Annuler"
@@ -1903,7 +1900,6 @@ msgctxt "wizard_button:claim.service.set_origin,select_origin,select:"
 msgid "Select"
 msgstr "Selectionner"
 
-=======
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_claim_account,change_contract_claim_account_next:"
 msgid "Next"
@@ -1923,7 +1919,6 @@ msgctxt "wizard_button:endorsement.start,change_contract_claim_account,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
->>>>>>> origin/master
 msgctxt "wizard_button:loss.propagate_extra_data,select_extra_data,end:"
 msgid "Cancel"
 msgstr "Annuler"
