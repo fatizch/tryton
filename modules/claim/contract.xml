@@ -14,7 +14,7 @@ this repository contains the full copyright notices and license terms. -->
         <!-- #################### -->
         <!-- # Contract Version # -->
         <!-- #################### -->
-        <record model="ir.ui.view" id="contract_extra_data_view_form">
+        <record model="ir.ui.view" id="contract_version_view_form">
             <field name="model">contract.extra_data</field>
             <field name="inherit" ref="contract.contract_extra_data_view_form"/>
             <field name="name">contract_extra_data_form</field>
