@@ -1,3 +1,4 @@
+* BUG#11285 Correction du filtre sur les périodes de couverture théorique
 * BUG#11245 Correction de typos sur manual_end_date et full_management_start_date
 * BUG#11107 Correction de la date de préjudice initial utilisée en cas de rechute ou d'invalidité
 * BUG#11021 Correction du message d'erreur plus d'un élément couvert trouvés

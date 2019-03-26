@@ -450,6 +450,7 @@ class ClaimService(metaclass=PoolMeta):
     @classmethod
     def _filter_theoretical_covered(cls, covered, loss_date, option):
         start_date_check = covered.manual_start_date
+        end_date_check = covered.manual_end_date
         if option.full_management_start_date:
             start_date_check = (option.full_management_start_date
                 if not start_date_check
@@ -457,10 +458,8 @@ class ClaimService(metaclass=PoolMeta):
         if option.previous_claims_management_rule in ('in_complement',
                 'in_complement_previous_rule'):
             return True
-        if not start_date_check or (start_date_check <= loss_date):
-            return True
-        if not covered.manual_end_date or (
-                covered.manual_end_date >= loss_date):
+        if (not start_date_check or (start_date_check <= loss_date)) and \
+                (not end_date_check or (end_date_check >= loss_date)):
             return True
         return False
 
