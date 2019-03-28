@@ -1,3 +1,4 @@
+* BUG#11274 Correct concurrent access due to not refreshing the process when executing next endorsement
 * FEA#11057 Add wizard to exploit in configuration to ask if we should or not apply next endorsement
 * OTH#00000 Fix crash due to erroneous call of get_next_view_or_end
 * BUG#10792 Fix endorsement part union limit
