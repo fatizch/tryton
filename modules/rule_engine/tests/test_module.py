@@ -822,6 +822,42 @@ class ModuleTestCase(test_framework.CoogTestCase):
             res = wizard.default_report(None)
             self.assertEqual(res, {'report': 'result: 20 ... SUCCESS'})
 
+    def test0070_testUnicodeHandling(self):
+        # Configuration already exists because previous test was commited
+        ct = self.Context.search([('name', '=', 'test_context')])[0]
+
+        # Here we want to check that debugging tools properly handle unicode
+        # data
+        rule = self.RuleEngine()
+        rule.name = 'Test Unicode Rule'
+        rule.short_name = 'test_unicode_rule'
+        rule.context = ct
+        rule.parameters = [self.RuleParameter(
+                name='test_parameter', string='Test Parameter (ééé)',
+                type_='boolean', sequence_order=0)]
+        rule.rules_used = []
+        rule.tables_used = []
+        rule.algorithm = '''
+add_debug({'é'})
+param_test_parameter()
+return {'é'}
+'''
+        rule.debug_mode = True
+        rule.save()
+
+        Transaction().commit()
+        rule.execute({}, parameters={'test_parameter': 'é'})
+
+        self.assertRaises(UserError, rule.execute, {})
+
+        rule.algorithm = '''
+add_debug('é', test='éé')
+param_test_parameter()
+return 'é'
+'''
+        rule.save()
+        self.assertRaises(TypeError, rule.execute, {})
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
