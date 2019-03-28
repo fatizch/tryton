@@ -294,14 +294,20 @@ class BenefitRule(metaclass=PoolMeta):
                 rounding_factor, None)
         return []
 
+    @classmethod
+    def revaluation_service_only(cls, args):
+        extra_data = utils.get_value_at_date(args['service'].extra_datas,
+            args['indemnification_detail_start_date'])
+        return True if extra_data.previous_insurer_base_amount else False
+
     def do_calculate_indemnification_rule(self, args):
+        if not self.__class__.revaluation_service_only(args):
+            return super(BenefitRule, self).do_calculate_indemnification_rule(
+                args)
         delivered = args['service']
         start_date = args['indemnification_detail_start_date']
         end_date = args['indemnification_detail_end_date']
         extra_data = utils.get_value_at_date(delivered.extra_datas, start_date)
-        if not extra_data.previous_insurer_base_amount:
-            return super(BenefitRule, self).do_calculate_indemnification_rule(
-                args)
         return self._get_previous_insurer_amount_benefits(delivered,
             start_date, end_date, extra_data.previous_insurer_base_amount,
             args['indemnification'])

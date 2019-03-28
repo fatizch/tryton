@@ -1,3 +1,4 @@
+* FEA#00000 Ajout d'un hook pour permettre la surcharge du calcul de la règle d'indemnisation pour la prestation
 * BUG#11215 Correction de la traduction de la fréquence d'indemnisation
 * OTH#00000 Correction de la valeur par défaut des règles de franchise
 * FEA#10498 Ajout du calcul d'uniquement la révalorisation pour les contrats "En complément du précédent assureur"
