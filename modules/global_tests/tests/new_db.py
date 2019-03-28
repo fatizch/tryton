@@ -1991,7 +1991,7 @@ if not champs_technique('loss.covered_person.id'):
         "Déclaration d'arrêt de travail"
     claim_work_interruption_process.on_model, = \
         IrModel.find([('model', '=', 'claim')])
-    claim_work_interruption_process.kind = 'claim_declaration'
+    claim_work_interruption_process.kind = 'claim_declaration_and_reopening'
     claim_work_interruption_process.all_steps.new()
     claim_work_interruption_process.all_steps[-1].step = step_claim_info
     claim_work_interruption_process.all_steps[-1].order = 1
@@ -2037,7 +2037,7 @@ if not champs_technique('loss.covered_person.id'):
 '''
     transitions = [  # {{{
         ('start', None, step_claim_info,
-            [('add_new_loss', "'temporary_work_interruption'")], ''),
+            [('add_new_loss', "'temporary_work_interruption', True")], ''),
         ('standard', step_claim_info, step_benefit_check,
             [('activate_underwritings_if_needed', '')], ''),
         ('standard', step_benefit_check, step_claim_info, [], ''),
