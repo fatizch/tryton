@@ -304,7 +304,9 @@ class Invoice(metaclass=PoolMeta):
 
     def update_move_line_from_billing_information(self, line,
             billing_information):
-        if self.contract and self.fees and billing_information.direct_debit:
+        term_change = ServerContext().context.get('_payment_term_change', False)
+        if not term_change and self.contract and self.fees and \
+                billing_information.direct_debit:
             all_fee_in_product = True
             for cur_line in self.lines:
                 if (not cur_line.detail or not cur_line.detail.fee or
