@@ -173,7 +173,7 @@ class InvoiceLine(metaclass=PoolMeta):
                     })
 
     def _get_commission_line_amount(self, plan_line, context):
-        return plan_line.get_amount(**context)
+        return Decimal(plan_line.get_amount(**context))
 
     def get_move_lines(self):
         lines = super(InvoiceLine, self).get_move_lines()
