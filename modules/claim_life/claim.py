@@ -243,7 +243,7 @@ class Loss(metaclass=PoolMeta):
         key += name[:-7]
         return self.raise_user_error(key, raise_exception=False)
 
-    @fields.depends('loss_kind')
+    @fields.depends('loss_kind', 'is_a_relapse')
     def on_change_with_possible_loss_descs(self, name=None):
         return super(Loss, self).on_change_with_possible_loss_descs(name)
 
