@@ -1368,7 +1368,13 @@ class ManageOptions(metaclass=PoolMeta):
     def get_parent_name(self, parent):
         if isinstance(parent, Pool().get(
                     'endorsement.contract.covered_element')):
-            return parent.party.rec_name if parent.party else parent.name
+            if parent.party:
+                return parent.party.rec_name
+            if parent.name:
+                return parent.name
+            if parent.covered_element:
+                return parent.covered_element.rec_name
+            return ''
         return super(ManageOptions, self).get_parent_name(parent)
 
     @classmethod

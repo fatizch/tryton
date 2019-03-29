@@ -139,14 +139,14 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
                 ],
             'contract.option.benefit': Displayer.get_option_benefit_fields() +
             ('available_deductible_rules', 'available_indemnification_rules',
-                'available_revaluation_rules')}
+                'available_revaluation_rules', 'contract_status')}
 
     @classmethod
     def get_version_fields(cls):
         Displayer = Pool().get('contract.manage_option_benefits.option')
         return {
             'contract.option.version': [
-                'benefits', 'option', 'start', 'start_date', 'rec_name',
+                'benefits', 'option', 'start', 'rec_name',
                 'extra_data', 'extra_data_as_string',
                 ],
             'contract.option.benefit': Displayer.get_option_benefit_fields() +
@@ -160,7 +160,8 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
 
     def get_contract_options(self, contract):
         return [x for covered in contract.covered_elements
-            for x in covered.options]
+            for x in covered.options
+            if not x.id or x.is_active_at_date(self.effective_date)]
 
     def generate_displayers(self, contract_endorsement, options):
         pool = Pool()
@@ -175,36 +176,55 @@ class ManageOptionBenefits(EndorsementWizardStepMixin):
     def update_endorsed_options(self, contract_endorsement, options):
         pool = Pool()
         Displayer = pool.get('contract.manage_option_benefits.option')
-        Version = pool.get('contract.option.version')
-        per_key = {Displayer.get_parent_key(x): x
+        options_per_key = {Displayer.get_parent_key(x): x
             for covered in contract_endorsement.contract.covered_elements
             for x in covered.options}
         for displayer in options:
-            patched_option = per_key[displayer.parent]
-            version = patched_option.get_version_at_date(self.effective_date)
-            if (version.start == self.effective_date) or (
-                    version.start is None and self.effective_date ==
-                    contract_endorsement.contract.start_date):
-                if getattr(version, 'benefits', None) is None:
-                    version.init_from_coverage(patched_option.coverage)
-                patched_benefits = {x.benefit.id: x for x in version.benefits}
-                for benefit in displayer.option_benefits:
-                    patched_benefit = patched_benefits[benefit.benefit.id]
-                    for fname in Displayer.get_option_benefit_fields():
-                        new_value = getattr(benefit, fname, None)
-                        old_value = getattr(patched_benefit, fname, None)
-                        if new_value != old_value:
-                            version.benefits = displayer.option_benefits
-                            patched_option.versions = list(
-                                patched_option.versions)
-                            break
+            patched_option = options_per_key[displayer.parent]
+            if patched_option.id and patched_option.id > 0:
+                self._update_existing_option(patched_option, displayer)
             else:
-                fields = self.get_version_fields()
-                version = Version(**model.dictionarize(version, fields))
-                version.start = self.effective_date
-                version.benefits = displayer.option_benefits
-                patched_option.versions = [v for v in patched_option.versions
-                    if not v.start or v.start < self.effective_date] + [version]
+                self._update_new_option(patched_option, displayer)
+
+    def _update_existing_option(self, option, displayer):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        Version = pool.get('contract.option.version')
+
+        fields = self.get_version_fields()
+        fields['contract.option.version'].remove('start')
+        fields['contract.option.version'].remove('rec_name')
+        fields['contract.option.version'].remove('extra_data_as_string')
+        contract = option.parent_contract
+        original_version = Option(option.id).get_version_at_date(
+            self.effective_date)
+        original_values = model.dictionarize(original_version, fields)
+
+        new_version = option.get_version_at_date(self.effective_date)
+        if ((new_version.start or contract.initial_start_date) !=
+                self.effective_date):
+            new_version = Version(**original_values)
+
+        new_version.benefits = displayer.option_benefits
+        new_values = model.dictionarize(new_version, fields)
+
+        if new_values != original_values:
+            # Real modification, we update the option
+            new_version.start = self.effective_date
+            option.versions = [v for v in option.versions
+                if not v.start or v.start < self.effective_date] + [
+                new_version]
+        else:
+            # Clean up time. The 'apply_dict' from earlier could have left some
+            # traces on versions
+            if 'versions' in (option._values or {}):
+                del option._values['versions']
+
+    def _update_new_option(self, option, displayer):
+        version = option.get_version_at_date(self.effective_date)
+        assert version.start is None or version.start == self.effective_date
+        version.benefits = displayer.option_benefits
+        option.versions = [version]
 
 
 class ManageOptionBenefitsDisplayer(model.CoogView):
@@ -237,7 +257,7 @@ class ManageOptionBenefitsDisplayer(model.CoogView):
         displayer.display_name = option.get_rec_name(None)
         displayer.option_id = getattr(option, 'id', None)
         version = option.get_version_at_date(effective_date)
-        if getattr(version, 'benefits', None) is None:
+        if not getattr(version, 'benefits', None):
             version.init_from_coverage(option.coverage)
 
         option_benefits = []
@@ -255,6 +275,7 @@ class ManageOptionBenefitsDisplayer(model.CoogView):
         if option.id:
             return str(option)
         if option.covered_element:
+            # This may cause some problems down the line :'(
             return str(option.covered_element.party)
         if option.contract:
             return str(option.contract)
@@ -264,9 +285,8 @@ class ManageOptionBenefitsDisplayer(model.CoogView):
     def get_option_benefit_fields(cls):
         return ('benefit', 'annuity_frequency', 'annuity_frequency_required',
             'deductible_rule', 'indemnification_rule', 'revaluation_rule',
-            'indemnification_rule_extra_data',
-            'deductible_rule_extra_data',
-            'revaluation_rule_extra_data', 'contract_status')
+            'indemnification_rule_extra_data', 'deductible_rule_extra_data',
+            'revaluation_rule_extra_data')
 
 
 class StartEndorsement(metaclass=PoolMeta):

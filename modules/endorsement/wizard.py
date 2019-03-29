@@ -999,7 +999,8 @@ class ManageOptions(EndorsementWizardStepMixin):
         all_options = []
         for options in per_coverage.values():
             for idx, option in enumerate(sorted(options,
-                        key=lambda x: x.manual_start_date or x.start_date)):
+                        key=lambda x: x.manual_start_date or x.start_date
+                        or datetime.date.min)):
                 save_values = option._values
                 if not save_values and (self.effective_date > (
                             getattr(option, 'manual_end_date',

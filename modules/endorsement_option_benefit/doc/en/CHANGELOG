@@ -1,3 +1,4 @@
+* BUG#11042 Only create new option versions on modified options
 * BUG#10965 Fix annuity frequency display when it is not forced
 * BUG#10171 Add parent name in option list
 

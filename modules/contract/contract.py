@@ -1906,6 +1906,8 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                 key=lambda x: x.coverage.id):
             prev_end = None
             for line in lines:
+                if line.status in ('declined', 'void'):
+                    continue
                 if prev_end is None:
                     prev_end = line.manual_end_date or datetime.date.max
                     continue

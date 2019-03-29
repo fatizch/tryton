@@ -1,3 +1,4 @@
+* BUG#11042 Création des versions de garanties uniquement en cas de modification
 * BUG#10965 Correction de l'affichage de la fréquence d'indemnisation lorsqu'elle n'est pas imposée
 * BUG#10171 Ajout du nom du parent dans la liste des garanties
 
