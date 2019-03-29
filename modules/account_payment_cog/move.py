@@ -98,11 +98,11 @@ class Move(metaclass=PoolMeta):
             should be merged together when cancelled.
         '''
         if not move.origin:
-            return None
+            return ''
         if move.origin.__name__ != 'account.move':
-            return None
+            return ''
         if getattr(move.origin.origin, '__name__', '') != 'account.payment':
-            return None
+            return ''
         return move.origin.origin.merged_id
 
 
