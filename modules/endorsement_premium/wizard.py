@@ -79,8 +79,6 @@ class PreviewContractPremiums(EndorsementWizardPreviewMixin,
     def init_from_preview_values(cls, preview_values, endorsement=None):
         preview_values = cls.filter_preview_new_premiums(preview_values,
             endorsement)
-        preview_values = cls.filter_preview_old_premiums(preview_values,
-            endorsement)
         contracts = defaultdict(lambda: {
                 'contract': None,
                 'currency_digits': 2,
@@ -135,21 +133,6 @@ class PreviewContractPremiums(EndorsementWizardPreviewMixin,
                             or datetime.date.min)])
                 preview_values['new'][key]['premiums'] = \
                     filtered_new_preview_values
-        return preview_values
-
-    @classmethod
-    def filter_preview_old_premiums(cls, preview_values, endorsement):
-        if endorsement is None:
-            return preview_values
-        old_preview_values = {}
-
-        for key, preview in preview_values['old'].items():
-            old_preview_values = preview.get('premiums', [])
-            filtered_old_preview_values = [p for p in old_preview_values
-                if p.get('start', datetime.date.min) <=
-                    (endorsement.effective_date or datetime.date.max)]
-            preview_values['old'][key]['premiums'] = \
-                filtered_old_preview_values
         return preview_values
 
 

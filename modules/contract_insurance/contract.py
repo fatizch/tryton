@@ -1149,7 +1149,7 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
                     break
                 if coog_date.period_overlap(covered.start_date,
                         covered.end_date, next_covered.start_date,
-                        next_covered.end_date):
+                        next_covered.end_date or datetime.date.min):
                     cls.append_functional_error('duplicate_covered',
                         contract.rec_name)
 
