@@ -1,3 +1,4 @@
+* BUG#11310 Retrait de la contrainte sur les dates du compte bancaire de prestation
 * FEA#11263 Ajout d'un lien entre une prestation et celle l'ayant précédée
 * FEA#11113 Saisie du compte bancaire pour les sinistres sur le contrat quand nécessaire
 * FEA#11188 Ajout de mon historique au menu sinistres

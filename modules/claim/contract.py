@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool, If
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.coog_core import utils, fields
 
@@ -22,21 +22,8 @@ class Contract(metaclass=PoolMeta):
                     Eval('status') != 'quote') | ~Eval('subscriber'),
                 'invisible': ~Eval('claims_paid_to_subscriber'),
                 },
-            domain=[('owners', '=', Eval('subscriber')),
-                If(Eval('status') == 'quote',
-                    [
-                        ['OR',
-                            ('start_date', '=', None),
-                            ('start_date', '<=', Eval('initial_start_date')),
-                            ],
-                        ['OR',
-                            ('end_date', '=', None),
-                            ('end_date', '>=', Eval('initial_start_date')),
-                            ],
-                        ],
-                    []),
-                ], depends=['subscriber', 'initial_start_date', 'status',
-                'claims_paid_to_subscriber'],
+            domain=[('owners', '=', Eval('subscriber'))],
+            depends=['subscriber', 'claims_paid_to_subscriber', 'status'],
             help='The default bank account that will be used to pay claims '
             'related to this contract'),
         'get_extra_data', setter='setter_void')
