@@ -282,6 +282,14 @@ class ContractUnderwritingOption(model.CoogSQL, model.CoogView,
             fields.Many2One('contract.covered_element', 'Covered Element',
                 readonly=True, states={'invisible': ~Eval('covered')}),
             'get_covered')
+    extra_premiums = fields.Function(
+        fields.Char('Extra Premiums',
+            states={'invisible': ~Eval('extra_premiums')}),
+        'on_change_with_extra_premiums')
+    exclusions = fields.Function(
+        fields.Char('Exclusions',
+            states={'invisible': ~Eval('exclusions')}),
+        'on_change_with_exclusions')
 
     @classmethod
     def __post_setup__(cls):
@@ -346,6 +354,18 @@ class ContractUnderwritingOption(model.CoogSQL, model.CoogView,
     def check_decision_required(self):
         return (self.decision is not None
             or not self.option.coverage.get_underwriting_rule().decisions)
+
+    @fields.depends('option')
+    def on_change_with_extra_premiums(self, name=None):
+        if not self.option:
+            return ''
+        return ', '.join(x.rec_name for x in self.option.extra_premiums)
+
+    @fields.depends('option')
+    def on_change_with_exclusions(self, name=None):
+        if not self.option:
+            return ''
+        return ', '.join(x.rec_name for x in self.option.exclusions)
 
 
 class Contract(metaclass=PoolMeta):

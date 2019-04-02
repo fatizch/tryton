@@ -13,4 +13,9 @@ this repository contains the full copyright notices and license terms. -->
     <field name="extra_data" colspan="2" no_command="1"/>
     <field name="contract"/>
     <field name="automatic_decision" invisible="1"/>
+    <newline/>
+    <label name="extra_premiums"/>
+    <field name="extra_premiums"/>
+    <label name="exclusions"/>
+    <field name="exclusions"/>
 </form>

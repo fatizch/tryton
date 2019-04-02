@@ -7,4 +7,6 @@ this repository contains the full copyright notices and license terms. -->
     <field name="decision" widget="selection"/>
     <field name="extra_data_summary"/>
     <field name="automatic_decision" tree_invisible="1"/>
+    <field name="extra_premiums"/>
+    <field name="exclusions"/>
 </tree>

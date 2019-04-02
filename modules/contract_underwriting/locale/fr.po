@@ -150,6 +150,14 @@ msgctxt "field:contract.underwriting.option,extra_data_summary:"
 msgid "Extra Data Summary"
 msgstr "Résumé des données complémentaires"
 
+msgctxt "field:contract.underwriting.option,extra_premiums:"
+msgid "Extra Premiums"
+msgstr "Surprimes"
+
+msgctxt "field:contract.underwriting.option,exclusions:"
+msgid "Exclusions"
+msgstr "Exclusions"
+
 msgctxt "field:contract.underwriting.option,id:"
 msgid "ID"
 msgstr "ID"
