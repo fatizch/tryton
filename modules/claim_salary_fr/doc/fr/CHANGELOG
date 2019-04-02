@@ -1,3 +1,4 @@
+* BUG#11327 Correction d'une erreur lorsque l'on calcule le mode de salaire sur un service sans prestation trouvée
 * BUG#11007 Ne pas forcer la sauvegarde des services délivrées lors de l'initialisation des salaires
 * BUG#10749 Rendre les règles de calcul de salaire par défaut compatibles avec le fait que la prestation liée ait une revalorisation basée sur le traitement de base
 * FEA#10556 Ajout d'un menu dans enregistrements liés afin de visualiser les salaires sur un sinistre

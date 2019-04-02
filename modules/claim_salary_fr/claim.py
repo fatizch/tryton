@@ -393,8 +393,13 @@ class ClaimService(metaclass=PoolMeta):
         if self.benefit.is_group:
             if self.specific_salary_mode:
                 return self.specific_salary_mode
-            return self.benefit.benefit_rules[0].option_benefit_at_date(
-                self.option, self.loss.start_date).salary_mode
+            if not self.benefit.benefit_rules:
+                return ''
+            option_benefit = self.benefit.benefit_rules[0]. \
+                option_benefit_at_date(self.option, self.loss.start_date)
+            if not option_benefit:
+                return ''
+            return option_benefit.salary_mode
         return ''
 
     def init_from_loss(self, loss, benefit):
