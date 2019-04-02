@@ -51,9 +51,7 @@ class IndemnificationDefinition(metaclass=PoolMeta):
     def on_change_service(self):
         super(IndemnificationDefinition, self).on_change_service()
         self.previous_insurer_amount_invisible = True
-        if self.service and \
-                self.service.option.previous_claims_management_rule in (
-                    'in_complement', 'in_complement_previous_rule'):
+        if self.service and self.service.is_a_complement:
             self.previous_insurer_amount_invisible = False
 
     @fields.depends('beneficiary', 'possible_products', 'product', 'service')
@@ -91,7 +89,7 @@ class CreateIndemnification(metaclass=PoolMeta):
             )._get_definition_start_date(service, non_cancelled)
         if service.option.previous_claims_management_rule in (
                 'in_complement', 'in_complement_previous_rule'):
-            return max(start_date, service.option.start_date)
+            return max(start_date, service.option.initial_start_date)
         return start_date
 
     def default_definition(self, name):

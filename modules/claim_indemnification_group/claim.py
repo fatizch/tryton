@@ -20,6 +20,12 @@ __all__ = [
 class ClaimService(metaclass=PoolMeta):
     __name__ = 'claim.service'
 
+    def getter_is_a_complement(self, name):
+        if self.option.previous_claims_management_rule not in (
+                'in_complement', 'in_complement_previous_rule'):
+            return super().getter_is_a_complement(name)
+        return self.loss.get_date() < self.option.initial_start_date
+
     def init_from_loss(self, loss, benefit):
         super(ClaimService, self).init_from_loss(loss, benefit)
         if (not self.benefit.is_group or
@@ -235,8 +241,7 @@ class Indemnification(metaclass=PoolMeta):
     def _check_origin_service(cls, indemnifications):
         for indemnification in indemnifications:
             service = indemnification.service
-            if (service.option.previous_claims_management_rule !=
-                    'in_complement_previous_rule'):
+            if not service.is_a_complement:
                 continue
             if not service.origin_service:
                 cls.raise_user_error('missing_origin_service',

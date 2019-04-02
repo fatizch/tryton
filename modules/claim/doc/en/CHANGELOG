@@ -1,3 +1,4 @@
+* OTH#00000 Improve controls when using service origins
 * BUG#11310 Remove constraint on dates of contract's claim bank account
 * FEA#11263 Add a link between a service and the service that was its origin
 * FEA#11113 Store the claim bank account on contracts when appropriate

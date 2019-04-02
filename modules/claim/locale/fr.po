@@ -948,6 +948,10 @@ msgctxt "field:claim.service,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:claim.service,is_a_complement:"
+msgid "Is a Complement"
+msgstr "Est un complément"
+
 msgctxt "field:claim.service,insurer_delegations:"
 msgid "Insurer Delefations"
 msgstr "Délégations accordées"

@@ -294,28 +294,23 @@ class BenefitRule(metaclass=PoolMeta):
                 rounding_factor, None)
         return []
 
-    @classmethod
-    def revaluation_service_only(cls, args):
-        extra_data = utils.get_value_at_date(args['service'].extra_datas,
-            args['indemnification_detail_start_date'])
-        return True if extra_data.previous_insurer_base_amount else False
-
     def do_calculate_indemnification_rule(self, args):
-        if not self.__class__.revaluation_service_only(args):
-            return super(BenefitRule, self).do_calculate_indemnification_rule(
-                args)
         delivered = args['service']
         start_date = args['indemnification_detail_start_date']
         end_date = args['indemnification_detail_end_date']
-        extra_data = utils.get_value_at_date(delivered.extra_datas, start_date)
+        version = utils.get_value_at_date(delivered.extra_datas, start_date)
+        if not version.previous_insurer_base_amount:
+            return super(BenefitRule, self).do_calculate_indemnification_rule(
+                args)
         return self._get_previous_insurer_amount_benefits(delivered,
-            start_date, end_date, extra_data.previous_insurer_base_amount,
+            start_date, end_date, version.previous_insurer_base_amount,
             args['indemnification'])
 
     def do_calculate_revaluation_rule(self, args):
         delivered = args['service']
 
-        if (delivered.option.previous_claims_management_rule ==
+        if (delivered.is_a_complement and
+                delivered.option.previous_claims_management_rule ==
                 'in_complement_previous_rule'):
             # The rule that should be used to compute the revaluation must be
             # that of the previous service
@@ -326,6 +321,7 @@ class BenefitRule(metaclass=PoolMeta):
             if not rule:
                 return
 
+            args = args.copy()
             origin.init_dict_for_rule_engine(args)
             return rule[0].do_calculate_revaluation_rule(args)
 

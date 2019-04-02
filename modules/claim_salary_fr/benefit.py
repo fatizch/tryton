@@ -46,9 +46,9 @@ class BenefitRule(metaclass=PoolMeta):
         if not self.is_group or self.force_revaluation_on_basic_salary:
             return self.revaluation_on_basic_salary
         else:
-            option = self.option_benefit_at_date(service.option,
-                service.loss.start_date)
-            return option.revaluation_on_basic_salary
+            option_benefit = self.option_benefit_at_date(service.option,
+                service.loss.get_date())
+            return option_benefit.revaluation_on_basic_salary
 
     def do_calculate_revaluation_rule(self, args):
         if ('service' in args and

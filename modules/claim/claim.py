@@ -918,6 +918,10 @@ class ClaimService(model.CoogSQL, model.CoogView,
     may_have_origin = fields.Function(
         fields.Boolean('May Have Origin'),
         'getter_may_have_origin')
+    is_a_complement = fields.Function(
+        fields.Boolean('Is a Complement', help='True if the service is a '
+            'complement to another service that was previously delivered'),
+        'getter_is_a_complement')
 
     @classmethod
     def __setup__(cls):
@@ -987,6 +991,9 @@ class ClaimService(model.CoogSQL, model.CoogView,
 
     def getter_may_have_origin(self, name):
         return self.benefit.may_have_origin
+
+    def getter_is_a_complement(self, name):
+        return bool(self.origin_service)
 
     def get_icon(self, name):
         if self.insurer_delegations:
