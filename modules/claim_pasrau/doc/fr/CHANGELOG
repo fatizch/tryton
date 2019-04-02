@@ -1,3 +1,4 @@
+* BUG#11321 Prise en compte du cas des factures ayant plusieurs lignes de taxe pasrau
 * BUG#10972 Correction d'incohérence de la déclaration Pasrau dûes aux écarts entre arrondi des sommes et somme d'arrondis
 * BUG#10919 Utiliser un message non bloquant plutôt que bloquant lors de l'émission d'une quittance pasrau sans la configuration DSN
 * OTH#00000 Correction d'un call à super suite à #10638

@@ -3,6 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 import datetime
 
+from collections import defaultdict
 from itertools import groupby
 from decimal import Decimal
 from sql import Null, Literal
@@ -154,33 +155,39 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
 
         data = {'individuals': {}}
         for party, grouped_lines in groupby(sorted_lines, key=keyfunc):
-            def key(x):
-                return self.get_invoice_from_move_line(x)
+            # Group lines per amounts
+            per_amount = defaultdict(list)
+            for line in grouped_lines:
+                per_amount[abs(line.credit - line.debit)].append(line)
 
-            lines = sorted(list(grouped_lines), key=key)
-            add_to_zero_individual = True
-
+            # Try to remove lines with the same amounts and opposing signs
             to_output = []
-            for invoice, invoice_group_lines in groupby(lines, key=key):
-                invoice_group_lines = list(invoice_group_lines)
+            for lines in per_amount.values():
+                positives, negatives = [], []
+                for line in lines:
+                    if line.credit == line.debit == 0:
+                        continue
+                    elif line.credit - line.debit > 0:
+                        positives.append(line)
+                    else:
+                        negatives.append(line)
 
-                sum_ = sum([line.credit - line.debit for line in
-                        invoice_group_lines])
-                by_date = sorted(invoice_group_lines,
-                    key=lambda x: x.create_date)
+                positives.sort(key=lambda x: x.id)
+                negatives.sort(key=lambda x: x.id)
 
-                last = by_date.pop()
-                if sum_ != Decimal('0.0'):
-                    if len(by_date) >= 1:
-                        # Check that the sum of the outstanding line are zero
-                        # Normally these lines cancel each other
-                        rest_sum = sum([line.credit - line.debit
-                                for line in by_date])
-                        assert rest_sum in (0, Decimal(0.0)), rest_sum
-                    add_to_zero_individual = False
-                    to_output.append(last)
+                while positives and negatives:
+                    positives.pop(0)
+                    negatives.pop(0)
 
-            if add_to_zero_individual:
+                if positives or negatives:
+                    to_output += positives
+                    to_output += negatives
+
+            if sum(x.credit - x.debit for x in positives + negatives) == 0:
+                positives, negatives = [], []
+            if positives or negatives:
+                to_output += positives + negatives
+            else:
                 to_output.append(ZeroLine(party))
 
             data['individuals'][party] = {'lines': to_output}
