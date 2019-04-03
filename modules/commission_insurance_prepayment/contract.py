@@ -737,6 +737,13 @@ class ContractOption(metaclass=PoolMeta):
 
         return commissions
 
+    def should_compute_prepayment(self, agent, plan, all_prepayments,
+            adjustment):
+        return not ((agent.id, self.id) in all_prepayments
+            and not plan.adjust_prepayment
+            and adjustment
+            and not ServerContext().get('reactivate', False))
+
     def compute_prepayment(self, adjustment, start_date, end_date):
         pool = Pool()
         Agent = pool.get('commission.agent')
@@ -749,9 +756,8 @@ class ContractOption(metaclass=PoolMeta):
             all_prepayments = Agent.sum_of_prepayments([(x[0].id, self.id)
                     for x in agents_plans_to_compute])
             for agent, plan in agents_plans_to_compute:
-                if ((agent.id, self.id) in all_prepayments and
-                        not plan.adjust_prepayment and adjustment
-                        and not ServerContext().get('reactivate', False)):
+                if not self.should_compute_prepayment(agent, plan,
+                        all_prepayments, adjustment):
                     continue
                 amount, rate = self._get_prepayment_amount_and_rate(agent, plan)
                 if amount is None:

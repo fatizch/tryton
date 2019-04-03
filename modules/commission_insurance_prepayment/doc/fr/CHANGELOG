@@ -1,3 +1,4 @@
+* OTH#00000 Ajout d'un hook pour la condition de non calcul de précompte
 * BUG#11171 Eviter le problème des années bisextiles lors des calculs de précomptes
 * BUG#10923 Modifier la méthode qui retourne les informations des précomptes impayés pour ajouter la somme des précomptes et des amortissements
 * OTH#00000 Adapter la clé de tri des lignes de quittance à python 3
