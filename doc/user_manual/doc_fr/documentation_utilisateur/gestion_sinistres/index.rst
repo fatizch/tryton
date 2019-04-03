@@ -15,6 +15,15 @@ Fonctionnalités générales
    transfert_contrat_assureur
 
 
+Fonctionnalités prévoyance
+--------------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   processus_traitement_deces_eckert
+
+
 Fonctionnalités prévoyance collective
 -------------------------------------
 
