@@ -148,7 +148,7 @@ Create broker agent::
     >>> broker_party.save()
     >>> DistributionNetwork = Model.get('distribution.network')
     >>> broker = DistributionNetwork(name='Broker', code='broker', party=broker_party)
-    >>> broker.is_broker=True
+    >>> broker.is_broker = True
     >>> broker.save()
     >>> agent_broker = Agent(party=broker_party)
     >>> agent_broker.type_ = 'agent'

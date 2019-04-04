@@ -124,6 +124,9 @@ def register():
             models_for_tests.TestLoaderUpdater,
             models_for_tests.TestLocalMpttMaster,
             models_for_tests.TestLocalMptt,
+            models_for_tests.TestRevisionModel,
+            models_for_tests.TestModelWithReverseField,
+            models_for_tests.TestSubTransactionModel,
             module='coog_core', type_='model')
 
     Pool.register(

@@ -11,7 +11,6 @@ from sql import Column
 
 from trytond import backend
 import trytond.tests.test_tryton
-from trytond.model import ModelSQL, fields
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 
@@ -48,6 +47,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'TestLocalMpttMaster': 'coog_core.test_local_mptt_master',
             'TestLocalMptt': 'coog_core.test_local_mptt',
             'TestDictSchema': 'coog_core.test.dict.schema',
+            'TestRevisionModel': 'coog_core.test_model_revision_mixin',
+            'TestModelWithReverseField':
+            'coog_core.test_model_revision_mixin_2',
+            'TestSubTransactionModel': 'coog_core.test_model_sub_transaction',
             }
 
     def test0010class_injection(self):
@@ -302,43 +305,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
     def test0040revision_mixin(self):
         'Test RevisionMixin'
 
-        class TestModel(ModelSQL, model._RevisionMixin):
-            'Test RevisionMixin Model'
-            __name__ = 'coog_core.test_model_revision_mixin'
-            _parent_name = 'parent'
-            parent = fields.Integer('Parent', required=True)
-            value = fields.Integer('Value')
-
-            @staticmethod
-            def revision_columns():
-                return ['value']
-
-        class TestModelWithReverseField(ModelSQL, model._RevisionMixin):
-            'Test RevisionMixin Model'
-            __name__ = 'coog_core.test_model_revision_mixin'
-            _parent_name = 'parent'
-            parent = fields.Integer('Parent', required=True)
-            value = fields.Integer('Value')
-
-            @staticmethod
-            def revision_columns():
-                return ['value']
-
-            @classmethod
-            def get_reverse_field_name(cls):
-                return 'revisions'
-
-        TestModel.__setup__()
-        TestModel.__post_setup__()
-        TestModel.__register__('coog_core')
-
-        TestModelWithReverseField.__setup__()
-        TestModelWithReverseField.__post_setup__()
-        TestModelWithReverseField.__register__('coog_core')
+        TestRevisionModel = self.TestRevisionModel
+        TestModelWithReverseField = self.TestModelWithReverseField
 
         parent_id = 1
 
-        records = TestModel.create([{
+        records = TestRevisionModel.create([{
                     'parent': parent_id,
                     'date': None,
                     'value': 1,
@@ -359,29 +331,29 @@ class ModuleTestCase(test_framework.CoogTestCase):
         parent = mock.Mock()
         parent.id = parent_id
 
-        self.assertEqual(TestModel.get_values([parent], ['value']),
+        self.assertEqual(TestRevisionModel.get_values([parent], ['value']),
             {'value': {parent_id: 1}, 'id': {parent_id: records[0].id}})
 
-        self.assertEqual(TestModel.get_values([parent], ['value'],
+        self.assertEqual(TestRevisionModel.get_values([parent], ['value'],
                 datetime.date(2014, 2, 1)),
             {'value': {parent_id: 2}, 'id': {parent_id: records[1].id}})
 
-        self.assertEqual(TestModel.get_values([parent], ['value'],
+        self.assertEqual(TestRevisionModel.get_values([parent], ['value'],
                 datetime.date(2014, 6, 1)),
             {'value': {parent_id: 3}, 'id': {parent_id: records[2].id}})
 
-        self.assertEqual(TestModel.get_values([parent], ['value'],
+        self.assertEqual(TestRevisionModel.get_values([parent], ['value'],
                 datetime.date(2015, 1, 1)),
             {'value': {parent_id: 4}, 'id': {parent_id: records[3].id}})
 
-        TestModel.delete([records[0]])
-        self.assertEqual(TestModel.get_values([parent], ['value']),
+        TestRevisionModel.delete([records[0]])
+        self.assertEqual(TestRevisionModel.get_values([parent], ['value']),
             {'value': {parent_id: None}, 'id': {parent_id: None}})
 
         parent_id = 2
         parent.id = parent_id
 
-        records_reverse_field = TestModel.create([{
+        records_reverse_field = TestModelWithReverseField.create([{
                     'parent': parent_id,
                     'date': None,
                     'value': 1,
@@ -931,20 +903,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     def test_0120_pre_commit_sub_transaction_behavior(self):
         from trytond.modules.coog_core import model
+        TestSubTransactionModel = self.TestSubTransactionModel
 
         inc = mock.Mock()
-
-        class TestModel(ModelSQL, model._RevisionMixin):
-            'Test Sub Transaction Model'
-            __name__ = 'coog_core.test_model_sub_transaction'
-            value = fields.Integer('Value')
-
-        TestModel.__setup__()
-        TestModel.__post_setup__()
-        TestModel.__register__('coog_core')
         inc.increment = 0
-        real_main_transaction = Transaction()
 
+        real_main_transaction = Transaction()
         real_main_transaction.commit()
 
         def some_substitute(*args):
@@ -971,13 +935,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 increment.increment += 1
             if increment.increment == crash_at:
                 raise exception_class('Error')
-            TestModel.create([{
+            TestSubTransactionModel.create([{
                     'value': increment.increment
                     }])
             if not inc_first:
                 increment.increment += 1
 
-        self.assertEqual(len(TestModel.search([])), 0)
+        self.assertEqual(len(TestSubTransactionModel.search([])), 0)
 
         with Transaction().new_transaction():
             ret = pre_commit_function(inc,
@@ -985,13 +949,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
             self.assertEqual(ret, 42)
 
         with Transaction().new_transaction():
-            self.assertEqual(len(TestModel.search([])), 1)
+            self.assertEqual(len(TestSubTransactionModel.search([])), 1)
 
         def commit_should_fail():
             with Transaction().new_transaction():
-                self.assertEqual(len(TestModel.search([])), 1)
+                self.assertEqual(len(TestSubTransactionModel.search([])), 1)
                 # Create object and save it into the fake_main_transaction
-                TestModel.create([{
+                TestSubTransactionModel.create([{
                         'value': -99,
                         }])
                 res = pre_commit_function(inc, crash_at=inc.increment)
@@ -1007,15 +971,15 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # 2. The objected created into the sub transaction of the delayed
         # method
         with Transaction().new_transaction():
-            self.assertEqual(len(TestModel.search([])), 1)
+            self.assertEqual(len(TestSubTransactionModel.search([])), 1)
 
         def commit_should_succeed_with_retry():
             # Here we check if the sub transaction retry
             # succeed after a failure
             with Transaction().new_transaction():
-                self.assertEqual(len(TestModel.search([])), 1)
+                self.assertEqual(len(TestSubTransactionModel.search([])), 1)
                 # Create object and save it into the fake_main_transaction
-                TestModel.create([{
+                TestSubTransactionModel.create([{
                         'value': -99,
                         }])
                 pre_commit_function(inc, crash_at=inc.increment + 1,
@@ -1029,7 +993,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # 2. The objected created into the sub transaction of the delayed
         # method
         with Transaction().new_transaction():
-            self.assertEqual(len(TestModel.search([])), 3)
+            self.assertEqual(len(TestSubTransactionModel.search([])), 3)
 
         with Transaction().new_transaction():
             # check whether multiple call is working
@@ -1044,7 +1008,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             # when an exception different from DatabaseOperationalError
             # is raised
             with Transaction().new_transaction():
-                TestModel.create([{
+                TestSubTransactionModel.create([{
                         'value': -99,
                         }])
                 pre_commit_function(inc, crash_at=inc.increment + 1,

@@ -287,3 +287,37 @@ class TestLocalMptt(model.with_local_mptt('master')):
 
     parent = fields.Many2One('coog_core.test_local_mptt', 'Parent')
     master = fields.Many2One('coog_core.test_local_mptt_master', 'Master')
+
+
+class TestRevisionModel(model.CoogSQL, model._RevisionMixin):
+    'Test RevisionMixin Model'
+    __name__ = 'coog_core.test_model_revision_mixin'
+    _parent_name = 'parent'
+    parent = fields.Integer('Parent', required=True)
+    value = fields.Integer('Value')
+
+    @staticmethod
+    def revision_columns():
+        return ['value']
+
+
+class TestModelWithReverseField(model.CoogSQL, model._RevisionMixin):
+    'Test RevisionMixin Model'
+    __name__ = 'coog_core.test_model_revision_mixin_2'
+    _parent_name = 'parent'
+    parent = fields.Integer('Parent', required=True)
+    value = fields.Integer('Value')
+
+    @staticmethod
+    def revision_columns():
+        return ['value']
+
+    @classmethod
+    def get_reverse_field_name(cls):
+        return 'revisions'
+
+
+class TestSubTransactionModel(model.CoogSQL, model._RevisionMixin):
+    'Test Sub Transaction Model'
+    __name__ = 'coog_core.test_model_sub_transaction'
+    value = fields.Integer('Value')
