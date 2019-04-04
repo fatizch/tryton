@@ -309,7 +309,7 @@ class NEODeSTemplate(utils.DataExporter):
         if not party.main_address:
             return u''
         else:
-            return party.main_address.street.splitlines()[-1][:50]
+            return party.main_address.street.strip().splitlines()[-1][:50]
 
     def custom_main_address_country_code(self, party):
         # if S10.G00.01.005 defined country must be empty
