@@ -2329,8 +2329,12 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                 # If the module is installed, the "before_activate" method will
                 # call check_eligibility on options, which will already raise
                 # the warning
-                self.raise_user_warning('bad_dates_%i' % self.id, 'bad_dates',
-                    {'option': self.rec_name})
+                Date = Pool().get('ir.date')
+                self.raise_user_warning('bad_dates_%s' %
+                    ' - '.join([
+                            self.rec_name,
+                            Date.date_as_string(self.initial_start_date)]),
+                    'bad_dates', {'option': self.rec_name})
             self.status = 'declined'
 
     @classmethod

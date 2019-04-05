@@ -1,6 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 __all__ = [
     'Contract',
@@ -52,6 +52,10 @@ class ContractOption(metaclass=PoolMeta):
             return False
         if (self.final_end_date and self.initial_start_date
                 and self.initial_start_date > self.final_end_date):
-            self.raise_user_warning('bad_dates_%i' % self.id, 'bad_dates', {
-                    'option': self.rec_name})
+            Date = Pool().get('ir.date')
+            self.raise_user_warning('bad_dates_%s' %
+                ' - '.join([
+                        self.rec_name,
+                        Date.date_as_string(self.initial_start_date)]),
+                'bad_dates', {'option': self.rec_name})
         return True

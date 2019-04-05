@@ -1,3 +1,5 @@
+* BUG#11271 Index bad dates warning message on option creation with more meaningful data as id can create a loop in some cases
+
 Version 2.2 - 2018-10-12
 * BUG#2197 Check eligibility before anything else in calculate
 

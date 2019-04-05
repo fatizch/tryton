@@ -1,3 +1,5 @@
+* BUG#11271 Indexer le message d'avertissement sur les dates lors de la création d'une option avec des informations plus stables que l'identifiant qui peut entraîner une boucle dans certains cas
+
 Version 2.2 - 2018-10-12
 * BUG#2197 Vérifier l'égibilité avant toute chose dans le calcul
 
