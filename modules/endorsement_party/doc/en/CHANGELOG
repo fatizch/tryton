@@ -1,3 +1,5 @@
+* FEA#8610 Add check in party address endorsement according to the country configuration
+
 Version 2.2 - 2018-10-12
 * BUG#9612 Fix crash on endorsement party change relation ship by checking the existence of 'previous_relation'
 

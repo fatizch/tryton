@@ -210,9 +210,12 @@ class ChangePartyAddress(EndorsementWizardStepMixin):
                         x.action == 'add']
             for displayer in self.displayers:
                 address = displayer.new_address[0]
-                prev_address = displayer.previous_address[0] if\
+                prev_address = displayer.previous_address[0] if \
                     displayer.previous_address else None
                 new_values = get_save_values(address, prev_address)
+                if new_values and 'address_lines' in new_values:
+                    utils.apply_dict(prev_address, new_values)
+                    prev_address.check_country_values()
                 if not new_values:
                     continue
                 elif not displayer.address_endorsement:

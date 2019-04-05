@@ -71,9 +71,9 @@ class Address(model.FunctionalErrorMixIn, export.ExportImportMixin,
                 '(%(max)s) for the country "%(country)s"',
                 })
 
-    @classmethod
-    def validate(cls, addresses):
-        super(Address, cls).validate(addresses)
+    def check_country_values(self):
+        if not self.country:
+            return
 
         def _get_line_config(country, code):
             for config_line in country.address_lines:
@@ -82,22 +82,24 @@ class Address(model.FunctionalErrorMixIn, export.ExportImportMixin,
             return None
 
         with model.error_manager():
-            for address in addresses:
-                country = address.country
-                if not country:
+            for line_name, value in self.address_lines.items():
+                line_config = _get_line_config(self.country, line_name)
+                if line_config.max_length is None:
                     continue
-                for line_name, value in address.address_lines.items():
-                    line_config = _get_line_config(country, line_name)
-                    if line_config.max_length is None:
-                        continue
-                    elif len(value) > line_config.max_length:
-                        cls.append_functional_error('line_exceeds_max_length',
-                            {
-                                'line': line_name,
-                                'value': value,
-                                'max': line_config.max_length,
-                                'country': country.name,
-                                })
+                elif len(value) > line_config.max_length:
+                    self.append_functional_error(
+                        'line_exceeds_max_length', {
+                            'line': line_name,
+                            'value': value,
+                            'max': line_config.max_length,
+                            'country': self.country.name,
+                            })
+
+    @classmethod
+    def validate(cls, addresses):
+        super(Address, cls).validate(addresses)
+        for address in addresses:
+            address.check_country_values()
 
     @classmethod
     def view_attributes(cls):
