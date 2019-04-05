@@ -1,3 +1,4 @@
+* BUG#11299 Hot fix: allow to change ssn on social security dependent parties
 * FEA#10793 Add batch to create annual report templates according to the Madelin law
 
 Version 2.2 - 2018-10-12

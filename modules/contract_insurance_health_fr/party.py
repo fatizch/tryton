@@ -60,7 +60,7 @@ class Party(metaclass=PoolMeta):
             for parties, values in zip(params, params):
                 ss_dependent_parties = [p for p in parties
                     if p.social_security_dependent]
-                if ss_dependent_parties:
+                if ss_dependent_parties and not cls.ssn_only(values):
                     cls.append_functional_error(
                         'social_security_dependent_party',
                         {
@@ -68,6 +68,10 @@ class Party(metaclass=PoolMeta):
                                 for p in ss_dependent_parties]
                         })
         super(Party, cls).write(*args)
+
+    @classmethod
+    def ssn_only(cls, values):
+        return list(values) == ['ssn']
 
     def get_main_health_complement(self, name):
         complement = self.get_health_complement_at_date()

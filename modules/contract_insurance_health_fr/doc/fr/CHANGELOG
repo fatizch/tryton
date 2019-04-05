@@ -1,3 +1,4 @@
+* BUG#11299 Hot fix: autoriser la modification de ssn sur les tiers ayant droit
 * FEA#10793 Ajout d'un batch de création de modèles de courriers annuels pour la loi Madelin
 
 Version 2.2 - 2018-10-12
