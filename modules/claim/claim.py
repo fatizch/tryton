@@ -595,11 +595,13 @@ class Loss(model.CoogSQL, model.CoogView,
     def search_loss_desc_kind(cls, name, clause):
         return [('loss_desc.kind',) + tuple(clause[1:])]
 
-    @fields.depends('event_desc', 'loss_desc', 'has_end_date', 'end_date')
+    @fields.depends('event_desc', 'loss_desc', 'has_end_date', 'end_date',
+        'loss_desc_kind')
     def on_change_loss_desc(self):
         super(Loss, self).on_change_loss_desc()
         self.has_end_date = self.getter_has_end_date('')
         self.loss_desc_code = self.loss_desc.code if self.loss_desc else ''
+        self.loss_desc_kind = self.loss_desc.loss_kind if self.loss_desc else ''
         if (self.loss_desc and self.event_desc
                 and self.event_desc not in self.loss_desc.event_descs):
             self.event_desc = None

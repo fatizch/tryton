@@ -16,6 +16,7 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="initial_std_start_date"/>
         <field name="initial_std_start_date"/>
+        <field name="loss_desc_kind" invisible="1"/>
         <newline/>
         <label name="closing_reason" colspan="1"/>
         <field name="closing_reason" widget="selection"/>

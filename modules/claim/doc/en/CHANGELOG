@@ -1,3 +1,4 @@
+* BUG#11095 Add the field loss desc kind on the on_change_loss_desc in order to manage his value and its display as needed
 * OTH#00000 Improve controls when using service origins
 * BUG#11310 Remove constraint on dates of contract's claim bank account
 * FEA#11263 Add a link between a service and the service that was its origin

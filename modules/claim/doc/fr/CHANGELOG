@@ -1,3 +1,4 @@
+* BUG#11095 Ajout du champ type de préjudice au niveau du on_change_loss_desc afin de gérer correctement sa mise à jour et pouvoir l'afficher au besoin
 * OTH#00000 Amélioration des contrôles à l'utilisation des prestations d'origine
 * BUG#11310 Retrait de la contrainte sur les dates du compte bancaire de prestation
 * FEA#11263 Ajout d'un lien entre une prestation et celle l'ayant précédée
