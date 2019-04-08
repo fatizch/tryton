@@ -390,12 +390,13 @@ class ReportCreate(metaclass=PoolMeta):
                 not self.select_template.template.allow_manual_sending):
             self.select_template.template.raise_user_error('manual_send')
         ReportGenerate = Pool().get('report.generate', type='report')
-        report_context = self.create_report_context()
+        instances = self.get_instances()
+        report_context = self.create_report_context(instances)
         with ServerContext().set_context(auto_send=False):
             types, attachments, _, filenames = ReportGenerate.execute(
                 report_context['ids'], report_context)
         action['email_print'] = True
-        report_context = self.create_report_context()
+        report_context = self.create_report_context(instances)
         records = ReportGenerate._get_records(report_context['ids'],
             report_context['model'], report_context)
         report_context = ReportGenerate.get_context(records, report_context)

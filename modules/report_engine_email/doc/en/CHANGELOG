@@ -1,3 +1,4 @@
+* BUG#11087 Fix crash when printing a mail with manual editing
 * BUG#10112 Add recipient email to printing context
 
 Version 2.2 - 2018-10-12
