@@ -120,5 +120,42 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="account.reconcile_lines_writeoff_view_form"/>
             <field name="name">reconcile_lines_writeoff_form</field>
         </record>
+        <!-- ################################# -->
+        <!-- # Manual Reconcile postponement # -->
+        <!-- ################################# -->
+        <record model="ir.ui.view" id="manual_reconcile_postponement_form">
+            <field name="model">manual.reconciliation.postponement</field>
+            <field name="type">form</field>
+            <field name="name">manual_reconciliation_postponement_form</field>
+        </record>
+        <record model="ir.ui.view" id="manual_reconcile_postponement_list">
+            <field name="model">manual.reconciliation.postponement</field>
+            <field name="type">tree</field>
+            <field name="name">manual_reconciliation_postponement_list</field>
+        </record>
+        <record model="ir.ui.view" id="manual_postponement_motive_form">
+            <field name="model">manual.postponement.reconciliation.motive</field>
+            <field name="type">form</field>
+            <field name="name">manual_postponement_motive_form</field>
+        </record>
+        <record model="ir.ui.view" id="manual_postponement_motive_list">
+            <field name="model">manual.postponement.reconciliation.motive</field>
+            <field name="type">tree</field>
+            <field name="name">manual_postponement_motive_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_manual_postponement_motive_form">
+            <field name="name">Manual Reconciliation Postponement Motives</field>
+            <field name="res_model">manual.postponement.reconciliation.motive</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_manual_postponement_motive_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="account_cog.manual_postponement_motive_form"/>
+            <field name="act_window" ref="account_cog.act_manual_postponement_motive_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_manual_postponement_motive_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="account_cog.manual_postponement_motive_list"/>
+            <field name="act_window" ref="account_cog.act_manual_postponement_motive_form"/>
+        </record>
     </data>
 </tryton>

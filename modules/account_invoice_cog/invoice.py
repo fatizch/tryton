@@ -1,5 +1,6 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from itertools import groupby
 from decimal import Decimal
 from collections import defaultdict
 
@@ -421,6 +422,23 @@ class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
         Event.notify_events(invoices, 'change_payment_term')
 
     @classmethod
+    def _update_postponements(cls, invoices):
+        Postponement = Pool().get('manual.reconciliation.postponement')
+        postponements = []
+
+        def group_by_party(invoice):
+            return invoice.party
+
+        invoices = sorted(invoices, key=group_by_party)
+        for party, _ in groupby(invoices, key=group_by_party):
+            for postponement in party.reconciliation_postponements:
+                postponement.force_inactive = True
+                postponements.append(postponement)
+        if postponements:
+            Postponement.save(postponements)
+        return postponements
+
+    @classmethod
     @model.CoogView.button
     @Workflow.transition('posted')
     def post(cls, invoices):
@@ -428,6 +446,7 @@ class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
         Event = pool.get('event')
         super(Invoice, cls).post(invoices)
         Event.notify_events(invoices, 'post_invoice')
+        cls._update_postponements(invoices)
 
     @classmethod
     @model.CoogView.button
@@ -438,6 +457,7 @@ class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
         super(Invoice, cls).cancel(invoices)
         if not Transaction().context.get('deleting_invoice', None):
             Event.notify_events(invoices, 'cancel_invoice')
+        cls._update_postponements(invoices)
 
     @classmethod
     @Workflow.transition('paid')
@@ -446,6 +466,7 @@ class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
         Event = pool.get('event')
         super(Invoice, cls).paid(invoices)
         Event.notify_events(invoices, 'pay_invoice')
+        cls._update_postponements(invoices)
 
     @classmethod
     def delete(cls, invoices):

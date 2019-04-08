@@ -216,6 +216,21 @@ class Statement(export.ExportImportMixin):
             cls.raise_user_error('empty_lines', ', '.join(errors))
         super(Statement, cls).validate_statement(statements)
 
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('posted')
+    def post(cls, statements):
+        Postponement = Pool().get('manual.reconciliation.postponement')
+        super(Statement, cls).post(statements)
+        parties = [l.party for l in sum([x.lines for x in statements], [])]
+        postponements = []
+        for party in parties:
+            if party.reconciliation_postponements:
+                party.reconciliation_postponements[0].force_inactive = True
+                postponements.append(party.reconciliation_postponements[0])
+        if postponements:
+            Postponement.save(postponements)
+
 
 class LineGroup(metaclass=PoolMeta):
     __name__ = 'account.statement.line.group'

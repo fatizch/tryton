@@ -15,6 +15,8 @@ from . import load_data
 def register():
     Pool.register(
         batch.GenerateAgedBalance,
+        move.ManualReconciliationPostponementMotive,
+        move.ManualReconciliationPostponement,
         move.MoveTemplate,
         move.Move,
         move.Line,
@@ -49,8 +51,8 @@ def register():
     Pool.register(
         move.Reconcile,
         move.ReconcileLines,
-        party.SynthesisMenuOpen,
         move.CreateMove,
+        party.SynthesisMenuOpen,
         load_data.FiscalYearSetWizard,
         module='account_cog', type_='wizard')
     Pool.register(

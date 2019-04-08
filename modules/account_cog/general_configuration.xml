@@ -10,5 +10,6 @@ this repository contains the full copyright notices and license terms. -->
         <menuitem name="Fiscal Periods" parent="coog_core.general_configuration_menu" action="account.act_period_form" id="menu_period_general_configuration" sequence="80"/>
         <menuitem name="Taxes" parent="coog_core.general_configuration_menu" action="account.act_tax_list" id="menu_tax_general_configuration" sequence="85"/>
         <menuitem name="Account Configuration" parent="coog_core.general_configuration_menu" action="account.act_configuration_form" id="menu_account_configuration_general_configuration" sequence="120" icon="tryton-settings"/>
+        <menuitem name="Reconciliation Postponement Motives" parent="account.menu_account_configuration" action="account_cog.act_manual_postponement_motive_form" id="menu_account_configuration_manual_postponement_motive" sequence="130" icon="tryton-list"/>
     </data>
 </tryton>

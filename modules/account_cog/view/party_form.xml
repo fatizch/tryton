@@ -2,6 +2,17 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
+    <xpath expr="//label[@name='payable']" position="after">
+        <newline/>
+        <notebook>
+            <page id="active_postpononements" string="Active Postponements">
+                <field name="reconciliation_postponements" colspan="4" view_ids="account_cog.manual_reconcile_postponement_form"/>
+            </page>
+            <page id="inactive_postpononements" string="Inactive Postponements">
+                <field name="inactive_reconciliation_postponements" colspan="4"/>
+            </page>
+        </notebook>
+    </xpath>
     <xpath expr="//separator[@id='taxes']" position="replace"/>
     <xpath expr="//label[@name='customer_tax_rule']" position="replace"/>
     <xpath expr="//field[@name='customer_tax_rule']" position="replace"/>

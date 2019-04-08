@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tree>
+    <field name="code"/>
+    <field name="full_name"/>
+    <field name="receivable_today"/>
+    <field name="payable_today"/>
+    <field name="reconciliation_name"/>
+    <field name="reconciliation_date"/>
+    <field name="reconciliation_comment"/>
+    <field name="reconciliation_color" tree_invisible="1"/>
+    <field name="reconciliation_postponements" tree_invisible="1"/>
+</tree>

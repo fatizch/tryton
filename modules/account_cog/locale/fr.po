@@ -14,6 +14,10 @@ msgctxt "error:account.move:"
 msgid "You cannot cancel the move %(move)s more than once"
 msgstr "Vous ne pouvez pas annuler le mouvement %(move)s plusieurs fois"
 
+msgctxt "error:account.reconcile:"
+msgid "Date and motive are required to continue"
+msgstr "La date et le motif sont requis pour continuer"
+
 msgctxt "error:fiscal_year.set.wizard:"
 msgid "Fiscal Year"
 msgstr "Année fiscale"
@@ -21,6 +25,10 @@ msgstr "Année fiscale"
 msgctxt "error:fiscal_year.set.wizard:"
 msgid "Post Move Sequence"
 msgstr "Séquence d'émission de mouvement"
+
+msgctxt "error:party.party:"
+msgid "There is already a reconciliation postponement on the party %(party)s"
+msgstr "Il y a déja un report de lettrage sur le tiers %(party)s"
 
 msgctxt "field:account.account,tags:"
 msgid "Tags"
@@ -174,6 +182,22 @@ msgctxt "field:account.reconcile.show,post_leftovers:"
 msgid "Post Left Over Moves"
 msgstr "Émettre les mouvements d'ajustement"
 
+msgctxt "field:account.reconcile.show,postpone_comment:"
+msgid "Postpone Comment"
+msgstr "Commentaire du report"
+
+msgctxt "field:account.reconcile.show,postpone_date:"
+msgid "Postpone Date"
+msgstr "Date de report"
+
+msgctxt "field:account.reconcile.show,postpone_motive:"
+msgid "Postpone Motive"
+msgstr "Motif de report"
+
+msgctxt "field:account.reconcile.show,to_postpone:"
+msgid "To Postpone"
+msgstr "Reporter le lettrage"
+
 msgctxt "field:account.tax,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -222,6 +246,110 @@ msgctxt "field:ir.test_case,account_template:"
 msgid "Account Template"
 msgstr "Modèle de compte"
 
+msgctxt "field:manual.postponement.reconciliation.motive,account_movement_deactivation:"
+msgid "Account Movement Deactivation"
+msgstr "Désactivation par mouvement comptable"
+
+msgctxt "field:manual.postponement.reconciliation.motive,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:manual.postponement.reconciliation.motive,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:manual.postponement.reconciliation.motive,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:manual.postponement.reconciliation.motive,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:manual.postponement.reconciliation.motive,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:manual.postponement.reconciliation.motive,name:"
+msgid "Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:manual.postponement.reconciliation.motive,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l' enregistrement"
+
+msgctxt "field:manual.postponement.reconciliation.motive,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:manual.postponement.reconciliation.motive,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:manual.postponement.reconciliation.motive,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:manual.reconciliation.postponement,active:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "field:manual.reconciliation.postponement,comment:"
+msgid "Comment"
+msgstr "Commentaire"
+
+msgctxt "field:manual.reconciliation.postponement,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:manual.reconciliation.postponement,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:manual.reconciliation.postponement,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:manual.reconciliation.postponement,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:manual.reconciliation.postponement,force_inactive:"
+msgid "Force inactive"
+msgstr "Forcer inactif"
+
+msgctxt "field:manual.reconciliation.postponement,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:manual.reconciliation.postponement,motive:"
+msgid "Motive"
+msgstr "Motif"
+
+msgctxt "field:manual.reconciliation.postponement,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:manual.reconciliation.postponement,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l' enregistrement"
+
+msgctxt "field:manual.reconciliation.postponement,write_date:"
+msgid "Write Date"
+msgstr "Modifié le"
+
+msgctxt "field:manual.reconciliation.postponement,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:manual.reconciliation.postponement,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.party,reconciliation_color:"
+msgid "Reconciliation Color"
+msgstr "Couleur de lettrage"
+
 msgctxt "field:party.party,currency:"
 msgid "Currency"
 msgstr "Devises"
@@ -233,6 +361,10 @@ msgstr "Précision"
 msgctxt "field:party.party,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
+
+msgctxt "field:party.party,inactive_reconciliation_postponements:"
+msgid "Inactive Reconciliation Postponements"
+msgstr "Reports de lettrage inactifs"
 
 msgctxt "field:party.party,negative_payable:"
 msgid "Payable"
@@ -257,6 +389,22 @@ msgstr "Icône de à recevoir"
 msgctxt "field:party.party,receivable_today_icon:"
 msgid "Receivable Today Icon"
 msgstr "Icône de à recevoir aujourd'hui"
+
+msgctxt "field:party.party,reconciliation_comment:"
+msgid "Active Reconciliation Postponement Comment"
+msgstr "Commentaire du report de lettrage actif"
+
+msgctxt "field:party.party,reconciliation_date:"
+msgid "Active Reconciliation Postponement Date"
+msgstr "Date du report de lettrage actif"
+
+msgctxt "field:party.party,reconciliation_name:"
+msgid "Active Reconciliation Postponement Name"
+msgstr "Motif du report de lettrage actif"
+
+msgctxt "field:party.party,reconciliation_postponements:"
+msgid "Active Reconciliation Postponements"
+msgstr "Reports de lettrage actifs"
 
 msgctxt "field:party.party.account,xml_id:"
 msgid "XML Id"
@@ -302,6 +450,18 @@ msgctxt "field:party.synthesis.menu.move.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:manual.postponement.reconciliation.motive,account_movement_deactivation:"
+msgid ""
+"If set: automatically deactivate reconciliation postponement when triggering"
+" a movement for the related party"
+msgstr ""
+"Si coché: Désactivation automatique des reports de lettrage lors de la "
+"détection d'un mouvement comptable sur le tiers associé "
+
+msgctxt "help:manual.reconciliation.postponement,date:"
+msgid "Maximum date to postpone manual reconciliation until presenting again."
+msgstr "Date maximale de report avant re-présentation dans l'assistant."
+
 msgctxt "model:account.aged_balance.generate,name:"
 msgid "Generate Aged Balace"
 msgstr "Génération de balance agée"
@@ -310,13 +470,13 @@ msgctxt "model:account.journal,name:journal_split"
 msgid "Move Line Reconciliation Split Journal"
 msgstr "Journal de mouvements de découpage"
 
-msgctxt "model:account.journal.type,name:journal_type_split"
-msgid "Split"
-msgstr "Découpage"
-
 msgctxt "model:fiscal_year.set,name:"
 msgid "Fiscal Year Set"
 msgstr "Création des années fiscales"
+
+msgctxt "model:ir.action,name:act_manual_postponement_motive_form"
+msgid "Manual Reconciliation Postponement Motives"
+msgstr "Motifs de report de lettrage manuel"
 
 msgctxt "model:ir.action,name:act_move_line_party_balance"
 msgid "Party Balance"
@@ -363,6 +523,11 @@ msgctxt ""
 msgid "Account Configuration"
 msgstr "Configuration comptable"
 
+msgctxt ""
+"model:ir.ui.menu,name:menu_account_configuration_manual_postponement_motive"
+msgid "Reconciliation Postponement Motives"
+msgstr "Motifs de report de lettrage"
+
 msgctxt "model:ir.ui.menu,name:menu_account_journal_general_configuration"
 msgid "Account Journals"
 msgstr "Journaux comptable"
@@ -390,6 +555,14 @@ msgstr "Créer un plan comptable depuis un modèle"
 msgctxt "model:ir.ui.menu,name:menu_wizard_update_chart_general_configuration"
 msgid "Update Chart Of Accounts From Template"
 msgstr "Mise à jour d'un plan comptable depuis un modèle"
+
+msgctxt "model:manual.postponement.reconciliation.motive,name:"
+msgid "Manual Postponement Motive"
+msgstr "Motif de report de lettrage manuel"
+
+msgctxt "model:manual.reconciliation.postponement,name:"
+msgid "Manual Reconciliation Postponement"
+msgstr "Report de lettrage manuel"
 
 msgctxt "model:party.synthesis.menu.move.line,name:"
 msgid "Party Synthesis Menu Move line"
@@ -575,6 +748,10 @@ msgctxt "report:account.aged_balance:"
 msgid "unit"
 msgstr ""
 
+msgctxt "selection:account.journal,type:"
+msgid "Split"
+msgstr "Découpage"
+
 msgctxt "selection:account.move,kind:"
 msgid ""
 msgstr " "
@@ -638,6 +815,18 @@ msgstr "Candidats"
 msgctxt "view:party.party:"
 msgid "Account"
 msgstr "Compte"
+
+msgctxt "view:party.party:"
+msgid "Active Postponements"
+msgstr "Reports actifs"
+
+msgctxt "view:party.party:"
+msgid "Inactive Postponements"
+msgstr "Reports de lettrage inactifs"
+
+msgctxt "wizard_button:account.reconcile,show,postpone:"
+msgid "Postpone Reconciliation"
+msgstr "Report de lettrage"
 
 msgctxt "wizard_button:fiscal_year.set.wizard,start,end:"
 msgid "Cancel"
@@ -717,8 +906,8 @@ msgid ""
 "You can not create a reconciliation where debit \"%(debit)s\" and credit "
 "\"%(credit)s\" differ."
 msgstr ""
-"Vous ne pouvez créer un lettrage où le débit « %(debit)s » et le crédit « "
-"%(credit)s » diffèrent."
+"Vous ne pouvez créer un lettrage où le débit « %(debit)s » et le crédit "
+"« %(credit)s » diffèrent."
 
 msgctxt "error:account.move.reconciliation:account."
 msgid "You can not reconcile line \"%s\" because it is not in valid state."
@@ -806,12 +995,3 @@ msgstr "Emis"
 msgctxt "view:account.move:account."
 msgid "Post"
 msgstr "Emettre"
-
-
-msgctxt "view:account.tax:account."
-msgid "Invoice"
-msgstr "Quittance"
-
-msgctxt "view:account.tax.template:account."
-msgid "Invoice"
-msgstr "Quittance"

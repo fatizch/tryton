@@ -8,14 +8,17 @@ from sql import Null
 from sql.aggregate import Sum, Max
 from sql.conditionals import Case
 
+from trytond.wizard import Button, StateTransition
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
-from trytond.modules.coog_core import export, fields, utils, coog_string
+from trytond.pyson import Eval, Bool
+from trytond.modules.coog_core import export, fields, utils, coog_string, model
 
 
 __all__ = [
+    'ManualReconciliationPostponementMotive',
+    'ManualReconciliationPostponement',
     'MoveTemplate',
     'Move',
     'Line',
@@ -26,6 +29,89 @@ __all__ = [
     'ReconcileLines',
     'ReconcileLinesWriteOff',
     ]
+
+
+class ManualReconciliationPostponementMotive(model.CoogSQL, model.CoogView):
+    'Manual Postponement Motive'
+    __name__ = 'manual.postponement.reconciliation.motive'
+    _func_key = 'code'
+
+    name = fields.Char('Name', required=True)
+    code = fields.Char('Code', required=True)
+    account_movement_deactivation = fields.Boolean(
+        'Account Movement Deactivation',
+        help='If set: automatically deactivate reconciliation postponement '
+        'when triggering a movement for the related party')
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coog_string.slugify(self.name)
+
+
+class ManualReconciliationPostponement(model.CoogSQL, model.CoogView):
+    'Manual Reconciliation Postponement'
+    __name__ = 'manual.reconciliation.postponement'
+
+    party = fields.Many2One('party.party', 'Party', required=True,
+        readonly=True, select=True, ondelete='CASCADE')
+    motive = fields.Many2One('manual.postponement.reconciliation.motive',
+        'Motive', required=True, ondelete='RESTRICT')
+    date = fields.Date('Date', required=True, select=True,
+        help='Maximum date to postpone manual reconciliation until '
+        'presenting again.')
+    comment = fields.Text('Comment')
+    active = fields.Function(fields.Boolean('Active', states={
+            'invisible': True}), 'getter_active', searcher='searcher_active',
+        loader='getter_active')
+    force_inactive = fields.Boolean('Force inactive')
+
+    @classmethod
+    @model.CoogView.button_action('account_cog.act_create_postponement')
+    def create_postponement(cls):
+        pass
+
+    def getter_active(self, name):
+        if self.force_inactive:
+            return False
+        return self.date < utils.today()
+
+    @classmethod
+    def searcher_active(cls, name, clause):
+        # For this searcher, we alway consider the clause[2] value as it
+        # is False. So possible clause are [(..., '=', False)] or
+        #  [(..., '!=', False)]
+        # Following mappings are made this way.
+
+        reverse = {
+            '=': '!=',
+            '!=': '=',
+            }
+        cond_date_mapping = {
+            '=': '>=',
+            '!=': '<',
+            }
+        logical_operator_mapping = {
+            '!=': 'OR',
+            '=': 'AND',
+            }
+
+        today = utils.today()
+        if clause[1] in reverse:
+            # clause is True
+            if clause[2]:
+                return [logical_operator_mapping[clause[1]],
+                    [('force_inactive', clause[1], False)],
+                    [('date', cond_date_mapping[clause[1]], today)]]
+            # clause[2] is False
+            else:
+                return [logical_operator_mapping[reverse[clause[1]]],
+                    [('force_inactive', reverse[clause[1]], False)],
+                    [('date', cond_date_mapping[reverse[clause[1]]], today)]]
+        else:
+            # Returns nothing
+            return [('id', '=', None)]
 
 
 class MoveTemplate(export.ExportImportMixin):
@@ -229,6 +315,31 @@ class Line(export.ExportImportMixin):
             obj.create_date)
 
     @classmethod
+    def _update_postponements(cls, reconciliations):
+        Postponement = Pool().get('manual.reconciliation.postponement')
+        postponements = []
+        lines = sum([list(x.lines) for x in reconciliations], [])
+        parties = {x.party for x in lines if x}
+        for party in parties:
+            for postponement in party.reconciliation_postponements:
+                if not postponement\
+                        .motive.account_movement_deactivation:
+                    continue
+                postponement.force_inactive = True
+                postponements.append(postponement)
+        if postponements:
+            Postponement.save(postponements)
+        return postponements
+
+    @classmethod
+    def reconcile(cls, *lines_list, date=None, writeoff=None,
+            description=None):
+        reconciliations = super(Line, cls).reconcile(
+            *lines_list, date=date, writeoff=writeoff, description=description)
+        cls._update_postponements(reconciliations)
+        return reconciliations
+
+    @classmethod
     def get_reconciliation_lines(cls, lines_per_object):
         """
         Returns a list of reconciliation lines packet.
@@ -251,7 +362,8 @@ class Line(export.ExportImportMixin):
 
         # Split lines if necessary
         splits = cls.split_lines([(lines[-1], split_amount)
-                for (lines, split_amount) in sum(list(reconciliations.values()), [])
+                for (lines, split_amount) in sum(
+                    list(reconciliations.values()), [])
                 if split_amount != 0])
 
         reconciliation_lines = []
@@ -534,7 +646,8 @@ class Reconciliation(metaclass=PoolMeta):
 
     @classmethod
     def create_reconciliations_from_lines(cls, packet_lines):
-        Reconciliation = Pool().get('account.move.reconciliation')
+        pool = Pool()
+        Reconciliation = pool.get('account.move.reconciliation')
         reconciliations = []
         for reconciliation_lines in packet_lines:
             if not reconciliation_lines:
@@ -543,6 +656,8 @@ class Reconciliation(metaclass=PoolMeta):
                 date=max(x.date for x in reconciliation_lines)))
         if reconciliations:
             cls.save(reconciliations)
+            pool.get('account.move.line')._update_postponements(
+                reconciliations)
         return reconciliations
 
     @classmethod
@@ -583,6 +698,23 @@ class Reconciliation(metaclass=PoolMeta):
 
 class Reconcile(metaclass=PoolMeta):
     __name__ = 'account.reconcile'
+
+    postpone = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(Reconcile, cls).__setup__()
+        idx = 0
+        for idx, button in enumerate(list(cls.show.buttons)):
+            if button.state == 'next_':
+                break
+        cls.show.buttons.insert(idx,
+            Button('Postpone Reconciliation', 'postpone', 'tryton-history',
+                states={'invisible': ~Eval('to_postpone')}))
+        cls._error_messages.update({
+                'postpone_date_or_motive': 'Date and motive are required to '
+                'continue',
+                })
 
     def get_accounts(self):
         # Fully override method to filter out draft move lines
@@ -652,6 +784,9 @@ class Reconcile(metaclass=PoolMeta):
     def default_show(self, fields):
         defaults = super(Reconcile, self).default_show(fields)
         defaults['post_leftovers'] = True
+        defaults['to_postpone'] = False
+        defaults['postpone_motive'] = None
+        defaults['postpone_date'] = None
         return defaults
 
     def transition_reconcile(self):
@@ -672,17 +807,55 @@ class Reconcile(metaclass=PoolMeta):
             Pool().get('account.move').post(new_moves)
         return next_state
 
+    def _next_party(self):
+        parties = list(self.show.parties)
+        if not parties:
+            return
+        party = parties.pop()
+        while parties and party.reconciliation_postponements:
+            party = parties.pop()
+        self.show.party = party
+        self.show.parties = parties
+        return party
+
+    def transition_postpone(self):
+        if not self.show.postpone_date or not self.show.postpone_motive:
+            self.raise_user_error('postpone_date_or_motive')
+        postponement = Pool().get('manual.reconciliation.postponement')()
+        postponement.motive = self.show.postpone_motive
+        postponement.date = self.show.postpone_date
+        postponement.party = self.show.party
+        postponement.comment = self.show.postpone_comment
+        postponement.save()
+        return self.transition_next_()
+
 
 class ReconcileShow(metaclass=PoolMeta):
     __name__ = 'account.reconcile.show'
 
     post_leftovers = fields.Boolean('Post Left Over Moves')
+    to_postpone = fields.Boolean('To Postpone')
+    postpone_date = fields.Date('Postpone Date', states={
+            'invisible': ~Eval('to_postpone'),
+            'required': Bool(Eval('to_postpone')),
+            })
+    postpone_motive = fields.Many2One(
+        'manual.postponement.reconciliation.motive',
+        'Postpone Motive', states={
+            'invisible': ~Eval('to_postpone'),
+            'required': Bool(Eval('to_postpone')),
+            })
+    postpone_comment = fields.Text(
+        'Postpone Comment', states={
+            'invisible': ~Eval('to_postpone'),
+            })
 
     @classmethod
     def __setup__(cls):
         super(ReconcileShow, cls).__setup__()
         cls.lines.domain = ['AND', cls.lines.domain,
             [('move_state', '!=', 'draft')]]
+        cls.parties.readonly = False
 
 
 class ReconcileLines(metaclass=PoolMeta):

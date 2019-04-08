@@ -703,6 +703,7 @@ class Payment(export.ExportImportMixin, Printable,
 
         super(Payment, cls).fail(payments)
         Event.notify_events(payments, 'fail_payment')
+        cls._update_postponements(payments)
 
         # Remove payment_date on payment line
         for payment in payments:
@@ -844,6 +845,23 @@ class Payment(export.ExportImportMixin, Printable,
         return True, dates
 
     @classmethod
+    def _update_postponements(cls, payments):
+        Postponement = Pool().get('manual.reconciliation.postponement')
+        postponements = []
+
+        def group_by_party(payment):
+            return payment.party
+
+        payments = sorted(payments, key=group_by_party)
+        for party, _ in groupby(payments, key=group_by_party):
+            for postponement in party.reconciliation_postponements:
+                postponement.force_inactive = True
+                postponements.append(postponement)
+        if postponements:
+            Postponement.save(postponements)
+        return postponements
+
+    @classmethod
     @model.CoogView.button
     @Workflow.transition('succeeded')
     def succeed(cls, payments):
@@ -854,6 +872,7 @@ class Payment(export.ExportImportMixin, Printable,
             'manual_reject_code': None,
             'manual_fail_status': ''})
         Event.notify_events(payments, 'succeed_payment')
+        cls._update_postponements(payments)
 
     def get_doc_template_kind(self):
         res = super(Payment, self).get_doc_template_kind()

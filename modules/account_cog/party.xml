@@ -18,5 +18,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="party.party_view_tree"/>
             <field name="name">party_list</field>
         </record>
+        <record model="ir.ui.view" id="party_view_reconciliation_list">
+            <field name="model">party.party</field>
+            <field name="type">tree</field> 
+            <field name="name">party_view_reconciliation_list</field>
+        </record>
     </data>
 </tryton>

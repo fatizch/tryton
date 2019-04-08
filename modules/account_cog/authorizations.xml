@@ -991,5 +991,72 @@ this repository contains the full copyright notices and license terms. -->
             <field name="sequence_type" ref="account.sequence_type_account_journal"/>
             <field name="group" ref="group_financial_manage"/>
         </record>
+        <record model="ir.model.field.access"
+            id="access_party_reconciliation_postponements_group_financial_read">
+            <field name="field" search="[('model.model', '=', 'party.party'), ('name', '=', 'reconciliation_postponements')]"/>
+            <field name="group" ref="group_financial_read"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.field.access"
+            id="access_party_inactive_reconciliation_postponements">
+            <field name="field" search="[('model.model', '=', 'party.party'), ('name', '=', 'inactive_reconciliation_postponements')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.field.access"
+            id="access_party_reconciliation_postponements_group_financial_management">
+            <field name="field" search="[('model.model', '=', 'party.party'), ('name', '=', 'reconciliation_postponements')]"/>
+            <field name="group" ref="group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.field.access"
+            id="access_party_inactive_reconciliation_postponements_group_financial_read">
+            <field name="field" search="[('model.model', '=', 'party.party'), ('name', '=', 'inactive_reconciliation_postponements')]"/>
+            <field name="group" ref="group_financial_read"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.field.access"
+            id="access_party_inactive_reconciliation_postponements_group_financial_management">
+            <field name="field" search="[('model.model', '=', 'party.party'), ('name', '=', 'inactive_reconciliation_postponements')]"/>
+            <field name="group" ref="group_financial_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_reconciliation_postponements">
+            <field name="model" search="[('model', '=', 'manual.reconciliation.postponement')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_read_reconciliation_postponements">
+            <field name="group" ref="group_financial_read"/>
+            <field name="model" search="[('model', '=', 'manual.reconciliation.postponement')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_manage_reconciliation_postponements">
+            <field name="group" ref="group_financial_manage"/>
+            <field name="model" search="[('model', '=', 'manual.reconciliation.postponement')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
     </data>
 </tryton>

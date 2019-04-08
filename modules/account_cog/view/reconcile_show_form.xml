@@ -2,15 +2,26 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/field[@name='lines']" position="after">
-        <label name="post_leftovers"/>
-        <field name="post_leftovers"/>
+    <xpath expr="/form/field[@name='lines']" position="replace">
+        <field name="lines" expand_toolbar="0"/>
+        <group col="8" colspan="8" id="head_fields">
+            <label name="post_leftovers"/>
+            <field name="post_leftovers"/>
+            <label name="to_postpone"/>
+            <field name="to_postpone"/>
+            <label name="postpone_date"/>
+            <field name="postpone_date"/>
+            <label name="postpone_motive"/>
+            <field name="postpone_motive"/>
+            <label name="postpone_comment"/>
+            <field name="postpone_comment" colspan="7"/>
+        </group>
         <notebook>
             <page name="lines">
                 <field name="lines"/>
             </page>
             <page string="Candidates" id="candidates">
-                <field name="parties"/>
+                <field name="parties" view_ids="account_cog.party_view_reconciliation_list" expand_toolbar="0"/>
             </page>
         </notebook>
     </xpath>
