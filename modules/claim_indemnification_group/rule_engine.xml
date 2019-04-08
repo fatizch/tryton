@@ -10,8 +10,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_revaluation_max_revaluation_date</field>
-            <field name="long_description">Retourne la date maximale de 
-revalorisation. Cette donnée est basée sur la date de résiliation du contrat 
+            <field name="long_description">Retourne la date maximale de
+revalorisation. Cette donnée est basée sur la date de résiliation du contrat
 lorsque celui ci est résilié avec blocage des prestations au niveau atteint</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
@@ -22,8 +22,8 @@ lorsque celui ci est résilié avec blocage des prestations au niveau atteint</f
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_revaluation_min_revaluation_date</field>
-            <field name="long_description">Retourne la date minimale de 
-revalorisation. Cette donnée est basée sur la date de début du contrat 
+            <field name="long_description">Retourne la date minimale de
+revalorisation. Cette donnée est basée sur la date de début du contrat
 lorsque celui ci est souscrit avec l'option "en complément du précédent assureur"</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
@@ -34,7 +34,17 @@ lorsque celui ci est souscrit avec l'option "en complément du précédent assur
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_previous_insurer_base_amount</field>
-            <field name="long_description">Retourne le montant versé par le précédent assureur</field>
+            <field name="long_description">Retourne le montant de base versé par le précédent assureur</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="get_previous_insurer_revaluation">
+            <field name="translated_technical_name">revalorisation_ancien_assureur</field>
+            <field name="description">Montant de revalorisation du précédent assureur</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_previous_insurer_revaluation</field>
+            <field name="long_description">Retourne le montant de revalorisation versé par le précédent assureur</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
     </data>

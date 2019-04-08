@@ -43,3 +43,10 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         service = args['service']
         return utils.get_value_at_date(service.extra_datas,
             service.loss.start_date).previous_insurer_base_amount
+
+    @classmethod
+    @check_args('service')
+    def _re_get_previous_insurer_revaluation(cls, args):
+        service = args['service']
+        return utils.get_value_at_date(service.extra_datas,
+            service.loss.start_date).previous_insurer_revaluation

@@ -1,4 +1,4 @@
-* FEA#00000 Add hook to allow the override of the indemnification rule calculation for the benefit
+* FEA#11366 Add previous insurer revaluation in rule engine
 * BUG#11215 Fix translation for quarterly annuity frequency
 * OTH#00000 Fix default value for deductible rules
 * FEA#10498 Add only revaluation computation for the in complement contracts
