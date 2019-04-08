@@ -36,3 +36,10 @@ class RuleEngineRuntime(metaclass=PoolMeta):
             for loss in args['claim'].losses:
                 if loss.loss_desc_kind == 'std':
                     return loss.start_date
+
+    @classmethod
+    @check_args('claim')
+    def _re_first_ltd_start_date(cls, args):
+        for loss in args['claim'].losses:
+            if loss.loss_desc_kind == 'ltd':
+                return loss.start_date

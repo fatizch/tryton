@@ -10,7 +10,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_is_a_relapse</field>
-            <field name="long_description">Retourne un boolean vrai si 
+            <field name="long_description">Retourne un boolean vrai si
 l'événement est une rechute</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
@@ -21,7 +21,7 @@ l'événement est une rechute</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_is_covered_element_beneficiary</field>
-            <field name="long_description">Renvoie vrai si l'élément couvert 
+            <field name="long_description">Renvoie vrai si l'élément couvert
 est le bénéficiaire</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
@@ -43,6 +43,16 @@ est le bénéficiaire</field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_initial_std_start_date</field>
             <field name="long_description">Retourne la date de début de l'arrêt de travail</field>
+            <field name="parent" ref="claim.dossier_sinistre"/>
+        </record>
+        <record model="rule_engine.function" id="date_premiere_invalidite">
+            <field name="translated_technical_name">date_premiere_invalidite</field>
+            <field name="description">Date de la première invalidité</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_first_ltd_start_date</field>
+            <field name="long_description">Retourne la date de début du premier évènement d'invalidité du sinistre</field>
             <field name="parent" ref="claim.dossier_sinistre"/>
         </record>
     </data>
