@@ -1332,7 +1332,7 @@ montant_prestations_annexes = montant_de_deduction(None, date_debut_periode, dat
 if montant_prestations_annexes:
     montant_prestations_annexes = arrondir(montant_prestations_annexes * jours_entre(date_debut_periode,
         date_fin_periode), 0.01)
-    limite = salaire_de_reference - montant_prestations_annexes
+    limite = salaire_de_reference - montant_prestations_annexes - rente_ss
     description += u'Calcul de la limite en cas de prestations annexes (%s)\n' % montant_prestations_annexes 
     description += 'Limite = %s\n' % limite
     if rente_de_base > limite:
@@ -1342,8 +1342,6 @@ if montant_prestations_annexes:
         rente_de_base = min(rente_de_base, limite)
         description += u'Application de la limite : la nouvelle rente de base est %s\n' % rente_de_base
     else:
-        rente_de_base -= montant_prestations_annexes
-        rente_de_base = max(rente_de_base, Decimal('0'))
         description += u'Limite non depassée: rente de base = %s\n' % rente_de_base
 
 rente_de_base = max(rente_de_base, Decimal('0'))
