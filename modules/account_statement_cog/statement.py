@@ -222,7 +222,8 @@ class Statement(export.ExportImportMixin):
     def post(cls, statements):
         Postponement = Pool().get('manual.reconciliation.postponement')
         super(Statement, cls).post(statements)
-        parties = [l.party for l in sum([x.lines for x in statements], [])]
+        parties = [l.party for l in sum([list(x.lines) for x in statements],
+                [])]
         postponements = []
         for party in parties:
             if party.reconciliation_postponements:

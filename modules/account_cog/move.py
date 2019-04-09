@@ -319,7 +319,7 @@ class Line(export.ExportImportMixin):
         Postponement = Pool().get('manual.reconciliation.postponement')
         postponements = []
         lines = sum([list(x.lines) for x in reconciliations], [])
-        parties = {x.party for x in lines if x}
+        parties = {x.party for x in lines if x and x.party}
         for party in parties:
             for postponement in party.reconciliation_postponements:
                 if not postponement\
