@@ -12,8 +12,7 @@ msgstr "Le risque %(covered)s a une garantie commençant après sa date de débu
 
 msgctxt "error:contract.covered_element:"
 msgid ""
-"You are trying to create duplicate covered elements on contract: "
-" %s"
+"You are trying to create duplicate covered elements on contract: %s"
 msgstr ""
 "Vous essayez de créer des éléments couverts en doublon sur le contrat: "
 "%s"
