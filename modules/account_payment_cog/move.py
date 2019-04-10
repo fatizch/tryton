@@ -337,7 +337,8 @@ class MoveLine(metaclass=PoolMeta):
 
     @classmethod
     def _process_payment_key(cls, line):
-        return (line.party, line.get_payment_journal(), line.account.kind)
+        return (line.party or -1, line.get_payment_journal() or -1,
+            line.account.kind or '')
 
     @classmethod
     def create_payments(cls, lines):

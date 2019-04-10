@@ -22,7 +22,7 @@ class MoveLine(metaclass=PoolMeta):
     @classmethod
     def _process_payment_key(cls, line):
         return super(MoveLine, cls)._process_payment_key(line) + \
-            (line.contract, )
+            (line.contract or -1, )
 
     @classmethod
     def get_configuration_journals_from_lines(cls, lines):

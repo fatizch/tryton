@@ -1,3 +1,4 @@
+* BUG#11403 Fix crash on sorting function _process_payment_key due to None type comparison on python 3
 * BUG#11307 Fix crash on sorting function group_for_payment_cancellation due to None type comparison on python 3
 * BUG#10725 Check default party accounts when trying to reconcile
 * BUG#10537 Concurrent update errors could happen for the succeed payment batch if the job size was low
