@@ -173,6 +173,7 @@ def batch_exec(name, ids, params, **kwargs):
                 Cache.clean(database)
                 try:
                     with ServerContext().set_context(from_batch=True,
+                            user_to_notify=kwargs.get('user'),
                             job_size=job_size,
                             transaction_size=transaction_size,
                             auto_accept_warnings=True):

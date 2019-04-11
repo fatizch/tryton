@@ -38,6 +38,7 @@ from trytond.server_context import ServerContext
 from trytond.filestore import filestore
 from trytond.tools import file_open
 from trytond.rpc import RPC
+from trytond.bus import notify
 
 from trytond.modules.coog_core import fields, model, utils, coog_string
 from trytond.modules.coog_core import wizard_context, coog_date
@@ -201,6 +202,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 'format_original': 'Original',
                 'format_pdf': 'Pdf',
                 'microsoft_office': 'Microsoft Office',
+                'reports_produced': ('Your reports have been produced:'
+                    '\n%(reports)s'),
                 })
 
     @classmethod
@@ -606,6 +609,12 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         attachments = []
         if self.format_for_internal_edm:
             attachments = self.save_reports_in_edm(reports)
+        to_notify = ServerContext().get('user_to_notify')
+        if to_notify:
+            message = self.raise_user_error('reports_produced',
+                {'reports': '\n'.join([x['report_name'] for x in reports])},
+                raise_exception=False),
+            notify("Coog", message, user=to_notify)
         return reports, attachments
 
     @classmethod
