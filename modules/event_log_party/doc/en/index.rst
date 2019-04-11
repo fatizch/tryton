@@ -1,4 +1,4 @@
-.. Transversal
+.. transversal
 
 Transversal - Event log for party
 =================================

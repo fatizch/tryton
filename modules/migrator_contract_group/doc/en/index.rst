@@ -13,8 +13,3 @@ Features
 --------
 
 .. include:: features.rst
-
-User guide
-----------
-
-.. include:: batch.rst

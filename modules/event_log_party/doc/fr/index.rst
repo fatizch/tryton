@@ -1,4 +1,4 @@
-.. Transverse
+.. transversal
 
 Transverse - Log d'évènement pour tiers
 =======================================
