@@ -1,3 +1,35 @@
 #
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:migrator.affiliated,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.contract.group,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.contract.group.configuration,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.contract.subsidiary,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "model:migrator.affiliated,name:"
+msgid "Migrate Adhesions With Subsidiaries"
+msgstr "Migrer les adhésions avec filiales"
+
+msgctxt "model:migrator.contract.group,name:"
+msgid "Migrate Contracts Groups"
+msgstr "Migrer les contrats collectifs"
+
+msgctxt "model:migrator.contract.group.configuration,name:"
+msgid "Migrate Contracts Groups Configuration"
+msgstr "Configuration de migration des contrats groupes"
+
+msgctxt "model:migrator.contract.subsidiary,name:"
+msgid "Migrate Contracts Subsidiaries"
+msgstr "Migrer les filiales de contrats"

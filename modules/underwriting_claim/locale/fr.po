@@ -12,6 +12,11 @@ msgstr ""
 "\n"
 "%(claims)s"
 
+msgctxt "error:underwriting.start:"
+msgid "Cannot start a new underwriting process on a closed claim"
+msgstr "Impossible de commencer un nouveau processus d'analyse médicale sur "
+"un sinistre clos"
+
 msgctxt "field:benefit,underwriting_rule:"
 msgid "Underwriting Rule"
 msgstr "Règle de demande de décisions"

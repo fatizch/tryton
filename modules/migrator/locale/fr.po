@@ -1,0 +1,11 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:staging.create,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "model:staging.create,name:"
+msgid "Create Staging Files"
+msgstr "Fichiers de création de staging"

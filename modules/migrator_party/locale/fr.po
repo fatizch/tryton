@@ -6,11 +6,19 @@ msgctxt "field:migrator.address,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt "field:migrator.company,id:"
+msgid "ID"
+msgstr "Identifiant"
+
 msgctxt "field:migrator.contact,id:"
 msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:migrator.country,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.interlocutor,id:"
 msgid "ID"
 msgstr "Identifiant"
 
@@ -30,13 +38,21 @@ msgctxt "model:migrator.address,name:"
 msgid "Migrator address"
 msgstr "Migration des adresses"
 
+msgctxt "model:migrator.company,name:"
+msgid "Migrate Company"
+msgstr "Migrer les sociétés"
+
 msgctxt "model:migrator.contact,name:"
-msgid "Migrator contact"
-msgstr "Migration des contrats"
+msgid "Migrate Contact Mechanism"
+msgstr "Migrer les contacts"
 
 msgctxt "model:migrator.country,name:"
 msgid "Migrator country"
 msgstr "Migration des pays"
+
+msgctxt "model:migrator.interlocutor,name:"
+msgid "Migrate Interlocutors"
+msgstr "Migrer les interlocuteurs"
 
 msgctxt "model:migrator.party,name:"
 msgid "Migrator Party."

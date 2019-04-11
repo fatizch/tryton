@@ -23,6 +23,26 @@ msgid "Technical name must only use ascii"
 msgstr "Le nom technique doit utiliser seulement de l'ASCII"
 
 msgctxt "error:rule_engine.rule_parameter:"
+msgid "Invalid domain in schema \"%(schema)s\"."
+msgstr "Domaine non valide dans le schéma « %(schema)s »."
+
+msgctxt "error:rule_engine.rule_parameter:"
+msgid ""
+"The following keys will be removed from all existing data in the database, this may take some time:\n"
+"%(codes)s"
+msgstr ""
+"Toutes les occurences des clefs suivantes seront retirées de la base de "
+"données, cela peut prendre du temps:\n%(codes)s"
+
+msgctxt "error:rule_engine.rule_parameter:"
+msgid ""
+"The following keys will be renamed in all existing data in the database, this may take some time:\n"
+"%(codes)s"
+msgstr ""
+"Toutes les occurences des clefs suivantes seront renommées en base de "
+"données, cela peut prendre du temps:\n%(codes)s"
+
+msgctxt "error:rule_engine.rule_parameter:"
 msgid "The parameter order must be unique accross a given rule"
 msgstr "L'ordre des paramètres doit être unique pour une règle donnée"
 
@@ -639,6 +659,10 @@ msgctxt "field:rule_engine.rule_parameter,digits:"
 msgid "Digits"
 msgstr "Précision"
 
+msgctxt "field:rule_engine.rule_parameter,domain:"
+msgid "Domain"
+msgstr "Domaine"
+
 msgctxt "field:rule_engine.rule_parameter,id:"
 msgid "ID"
 msgstr "ID"
@@ -666,6 +690,10 @@ msgstr "Sélection JSON"
 msgctxt "field:rule_engine.rule_parameter,selection_sorted:"
 msgid "Selection Sorted"
 msgstr "Sélection Triée"
+
+msgctxt "field:rule_engine.rule_parameter,sequence_order:"
+msgid "Sequence Order"
+msgstr "Ordre de séquence"
 
 msgctxt "field:rule_engine.rule_parameter,string:"
 msgid "Name"

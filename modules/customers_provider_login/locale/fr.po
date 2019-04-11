@@ -2,6 +2,18 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:party.party:"
+msgid "App url not configurated"
+msgstr "L'URL de l'app n'est pas configuré"
+
+msgctxt "error:party.party:"
+msgid "No request hash or expired hash for this token: %s"
+msgstr "Pas de hash de requête ou hash expiré pour ce token: %s"
+
+msgctxt "error:party.party:"
+msgid "No token for this party: %s"
+msgstr "Pas de token pour ce tiers: %s"
+
 msgctxt "field:api.provider,active:"
 msgid "active"
 msgstr "Actif"
@@ -53,6 +65,10 @@ msgstr "Identifiant XML"
 msgctxt "field:api.token,request_hash:"
 msgid "Request Hash"
 msgstr "Bon pour jeton"
+
+msgctxt "field:party.party,connection_url:"
+msgid "Connection Url"
+msgstr "Url de connexion"
 
 msgctxt "help:api.token,request_hash:"
 msgid "Allow user to create Token via Api"

@@ -621,6 +621,10 @@ msgctxt "field:claim.ij.subscription,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
+msgctxt "field:claim.ij.subscription,synthesis_rec_name:"
+msgid "Information"
+msgstr "Information"
+
 msgctxt "field:claim.ij.subscription,task_name:"
 msgid "Task Name"
 msgstr "Nom de la tâche"
@@ -1834,10 +1838,6 @@ msgstr "Création manuelle d'une souscription Prest IJ"
 msgctxt "wizard_button:claim.ij.period.treat,to_treat,automatic:"
 msgid "Treat"
 msgstr "Traiter"
-
-msgctxt "wizard_button:claim.ij.period.treat,to_treat,cancel:"
-msgid "Cancel"
-msgstr "Annuler"
 
 msgctxt "wizard_button:claim.ij.period.treat,to_treat,cancel:"
 msgid "Cancel Indemnifications"

@@ -61,7 +61,7 @@ if __name__ == '__main__':
             if not os.path.exists(po_dir):
                 os.mkdir(po_dir)
             po_path = os.path.join(po_dir, '%s.po' % lang.code)
-            with open(po_path, 'w') as po_file:
+            with open(po_path, 'wb') as po_file:
                 po_file.write(res)
             print('### generation done, saved to %s ###' % po_path)
         else:

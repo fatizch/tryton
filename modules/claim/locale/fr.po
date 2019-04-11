@@ -948,13 +948,13 @@ msgctxt "field:claim.service,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:claim.service,is_a_complement:"
-msgid "Is a Complement"
-msgstr "Est un complément"
-
 msgctxt "field:claim.service,insurer_delegations:"
 msgid "Insurer Delefations"
 msgstr "Délégations accordées"
+
+msgctxt "field:claim.service,is_a_complement:"
+msgid "Is a Complement"
+msgstr "Est un complément"
 
 msgctxt "field:claim.service,loss:"
 msgid "Loss"
@@ -1385,6 +1385,13 @@ msgstr ""
 msgctxt "help:claim.loss,start_date:"
 msgid "Date of the event, or start date of a period"
 msgstr "Date de l'évènement, ou date de début de période"
+
+msgctxt "help:claim.service,is_a_complement:"
+msgid ""
+"True if the service is a complement to another service that was previously "
+"delivered"
+msgstr ""
+"Vrai si le service est un complément d'un autre service précédemment délivré"
 
 msgctxt "help:claim.service,origin_service:"
 msgid ""

@@ -1,3 +1,19 @@
 #
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:migrator.claim,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:migrator.claim.indemnification,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "model:migrator.claim,name:"
+msgid "Migrator Claim"
+msgstr "Migration des sinistres"
+
+msgctxt "model:migrator.claim.indemnification,name:"
+msgid "Migrator Claim Indemnification"
+msgstr "Migration des indemnisations"

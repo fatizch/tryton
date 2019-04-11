@@ -4,18 +4,19 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.covered_element:"
 msgid "Covered %(covered)s has an option that ends after its end date"
-msgstr "Le risque %(covered)s a une garantie se terminant après sa date de fin"
+msgstr ""
+"Le risque %(covered)s a une garantie se terminant après sa date de fin"
 
 msgctxt "error:contract.covered_element:"
 msgid "Covered %(covered)s has an option that starts before its start date"
-msgstr "Le risque %(covered)s a une garantie commençant après sa date de début"
+msgstr ""
+"Le risque %(covered)s a une garantie commençant après sa date de début"
 
 msgctxt "error:contract.covered_element:"
 msgid ""
 "You are trying to create duplicate covered elements on contract: %s"
 msgstr ""
-"Vous essayez de créer des éléments couverts en doublon sur le contrat: "
-"%s"
+"Vous essayez de créer un doublon d'éléments couverts sur le contrat: %s"
 
 msgctxt "error:contract.manage_exclusion:"
 msgid "At least one exclusion must be selected"

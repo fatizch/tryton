@@ -21,7 +21,7 @@ msgstr ""
 
 msgctxt "error:received_premiums:"
 msgid "Received Premium"
-msgstr ""
+msgstr "Primes Reçues"
 
 msgctxt "error:report.template:"
 msgid "All Insurer Invoice"
