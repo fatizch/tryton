@@ -1,7 +1,7 @@
 # encoding: utf-8
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from sql import Column
+from sql import Column, Null
 from sql.conditionals import Coalesce
 from sql.aggregate import Max
 
@@ -62,6 +62,22 @@ class ContractOptionVersion(object, metaclass=PoolMeta):
 class CoveredElement(object, metaclass=PoolMeta):
     _history = True
     __name__ = 'contract.covered_element'
+
+    @classmethod
+    def __register__(cls, module):
+        super(CoveredElement, cls).__register__(module)
+        handler = backend.get('TableHandler')(cls, module)
+
+        migrate = handler.column_exist('active')
+        # Migration necessary because of bug
+        # https://support.coopengo.com/issues/11400
+        if migrate:
+            cursor = Transaction().connection.cursor()
+            covered_element_history = cls.__table_history__()
+            cursor.execute(*covered_element_history.update(
+                    columns=[covered_element_history.active],
+                    values=[True],
+                    where=(covered_element_history.active == Null)))
 
 
 class CoveredElementVersion(object, metaclass=PoolMeta):

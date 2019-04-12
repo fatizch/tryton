@@ -1,3 +1,4 @@
+* BUG#11400 Add missing migration for history table of covered elements
 * BUG#10693 Fix order of elements of the default insured management endorsement
 
 Version 2.2 - 2018-10-12
