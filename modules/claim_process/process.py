@@ -78,6 +78,7 @@ class ClaimDeclarationElement(model.CoogView):
             'status': claim.status_string,
             'sub_status': claim.sub_status.id if claim.sub_status else None,
             'losses_summary': '\n'.join([l.rec_name for l in claim.losses]),
+            'loss': claim.losses[-1] if claim.losses else None,
             }
 
 
@@ -170,6 +171,8 @@ class ClaimDeclareFindProcess(ProcessStart):
                         'reopened'))
                     or (force_claim and claim.id == force_claim)):
                 selected = True
+                self.loss_desc = element['loss'].loss_desc \
+                    if element['loss'] else None
                 element['select'] = True
             elements.append(element)
         self.claims = elements

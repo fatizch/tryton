@@ -1,3 +1,4 @@
+* BUG#11416 Fix proposed processes when selecting a claim into the process launcher assistant
 * BUG#10646 Fix document request on losses crash when there are no documents to initialize
 
 Version 2.2 - 2018-10-12
