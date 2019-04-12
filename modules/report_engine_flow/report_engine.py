@@ -212,7 +212,7 @@ class FlowVariable(model.CoogSQL, model.CoogView):
 
     @classmethod
     def get_separator(cls, node, leaf, last):
-        return str(node.separator).decode('string_escape')
+        return bytes(node.separator, 'utf-8').decode('unicode_escape')
 
     def get_else_generated_code(self, node):
         output = ''
