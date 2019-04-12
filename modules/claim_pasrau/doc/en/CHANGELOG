@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#11321 Somehow manage invoices with even number of pasrau lines
 * BUG#10972 Fix coherence of Pasrau declaration due to rounding of lines sum versus sum of rounded lines
 * BUG#10919 Raise a warning rather than an error when trying to post a dsn invoice without the dsn configuration done

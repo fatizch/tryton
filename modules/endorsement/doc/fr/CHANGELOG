@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * FEA#11065 Ajout d'un champ pour obtenir l'objet visé par l'avenant en date d'effet
 * BUG#11054 Correctif du crash de la méthode de traduction des données
 * BUG#10581 Correction du MRO pour les avenants

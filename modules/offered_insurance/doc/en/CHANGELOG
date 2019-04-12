@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#10695 Check if an option was already subscribed by the subscriber of the contract
 * BUG#10779 Fix domain on extra data definitions
 * OTH#0000 Replace some "technical_field" rule engine functions by real business entries

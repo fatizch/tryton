@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * FEA#11004 Ajout de la date de début du processus à la vue liste de tâches
 * BUG#10594 Gestion du cas où aucune trace du processus n'existe lorsqu'on relance un processus
 

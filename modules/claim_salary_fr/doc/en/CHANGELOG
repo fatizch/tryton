@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#11327 Fix crash when calculating salary mode if no benefit found on service
 * BUG#11007 Do not automatically save services when calling init_salaries
 * BUG#10749 Make default salary rules compatible with benefit having a revaluation on basic salary

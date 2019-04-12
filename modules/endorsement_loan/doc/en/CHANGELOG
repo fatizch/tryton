@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * BUG#8404 Block the possibility to add new lines in the loan share endorsement
 * BUG#9168 Fix crash when changing the contract start date in the past

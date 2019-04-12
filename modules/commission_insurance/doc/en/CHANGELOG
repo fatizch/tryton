@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * OTH#0000 Handle case rule returns zero as an int
 * FEA#11058 Add calculation description field on commissions. This field contains a short description on how the commission has been calculated.
 * BUG#10540 Add "On payment and accounted" commission method to allow broker invoice to behave as insurer invoice

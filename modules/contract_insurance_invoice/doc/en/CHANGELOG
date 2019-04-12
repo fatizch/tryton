@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#11238 Fix installment of fee invoices
 * BUG#10985 Fix incoherence between the start date of activated contract and the start date of its invoices
 * BUG#9867 Add error message if no address is found when finalizing invoices

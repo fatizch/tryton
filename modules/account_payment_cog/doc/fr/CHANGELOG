@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#11403 Correction d'un plantage dans la fonction de tri _process_payment_key dû à la comparaison de types None en python 3
 * BUG#11307 Correction d'un plantage dû à la comparaison de types None en python 3
 * BUG#10725 Prise en compte des valeurs par défaut des comptes comptables des tiers lors des tentatives de réconciliation

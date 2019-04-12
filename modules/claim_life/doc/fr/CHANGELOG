@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * FEA#11365 Ajout de la donnée date de début du premier évènement d'invalidité du sinistre dans le moteur de règle
 * BUG#11169 Correction des depends sur claim.loss.get_date
 * BUG#11285 Correction du filtre sur les périodes de couverture théorique

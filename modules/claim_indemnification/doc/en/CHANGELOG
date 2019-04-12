@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#10992 Fix amounts inconsistencies on indemnification by going full Function fields
 * BUG#10785 Fix crash when doing indemnification period regularisation
 * BUG#11044 Fix a crash when trying to retrieve the value of the "main contract" on a claim when checking the existence of duplicate indemnification periods

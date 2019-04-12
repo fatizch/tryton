@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#10356 Le contact sur un avenant doit être celui du contrat principal s'il existe, autrement c'est celui de l'ensemble de contrats
 
 Version 2.2 - 2018-10-12

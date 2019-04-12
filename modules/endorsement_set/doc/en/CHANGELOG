@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#10356 An endorsement contact should always be the main contract contact if it exists, otherwise it is the contract set contact
 
 Version 2.2 - 2018-10-12

@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#10446 Fix crash when generating renewal document on a contract set with at least a contract void 
 
 Version 2.2 - 2018-10-12

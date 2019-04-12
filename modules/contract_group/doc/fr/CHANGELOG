@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * FEA#11077 Permettre d'annuler une affiliation
 * BUG#10784 Autoriser l'utilisation de la relation "Affiliations" depuis une vue form d'affiliations
 * BUG#10189 Correction du transfert de risques entre contrats

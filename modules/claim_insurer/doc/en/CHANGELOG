@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * FEA#10435 add method for reporting on claim slip
 * BUG#10966 Fix claim insurer invoice slip generation chain
 

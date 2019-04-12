@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * FEA#11065 Add field to get endorsement target object at effective date
 * BUG#11054 Fix translate data method crash
 * BUG#10581 Fix MRO for endorsements

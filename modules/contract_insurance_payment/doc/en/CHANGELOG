@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#10962 Reset the value of the payment date on posted fee invoices when fail payment and move contract to manual payment
 * BUG#10526 Reset direct debit day when fail moving a contract to manual payment
 * BUG#10379 Manage the value of the contract billing information effective date after a payment fail and moving on manual mode

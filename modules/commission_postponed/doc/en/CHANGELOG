@@ -1,2 +1,3 @@
+Version 2.4 - 2019-04-12
 * BUG#11034 Fix error on creation of non null and non postponed commission
 * FEA#10781 Module Creation

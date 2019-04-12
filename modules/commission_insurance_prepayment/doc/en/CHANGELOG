@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * OTH#00000 Add hook for not computing prepayment condition
 * BUG#11171 Avoid leap year problem on prepayment calcul
 * BUG#10923 Modify the method that returns the outstanding prepayment informations by adding sum of prepayment and sum of redeemed

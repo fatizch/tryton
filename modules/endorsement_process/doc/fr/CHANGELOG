@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#11274 Correction de l'accès concurrent dû au non rafrachissement du processus lorsqu'on exécute l'avenant suivant
 * FEA#11057 Ajout d'un assistant à exploiter dans le paramétrage permettant de choisir si l'on souhaite ou pas exécuter l'avenant suivant
 * OTH#00000 Correction d'un plantage dû à un mauvais appel de la fonction get_next_view_or_end

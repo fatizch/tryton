@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#11353 Correction de l'affichage des adresses
 * FEA#8622 anonymisation des tiers par batch
 * FEA#10851 Ajout de paramétrage au niveau des lignes d'adresse des pays afin de limiter le nombre de caractères

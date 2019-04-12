@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * FEA#10991 Reorder BPIJ view
 * BUG#10810 Ignore undeclared subscription when integrating a CR file
 * BUG#10723 Prest ij subscription object for company are created in double during person batch and inversely

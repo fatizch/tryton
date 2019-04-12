@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * FEA#10899 Add new action on payment rejects: Present again after period
 * BUG#10186 Fix the state of the field sepa bank reject date in order to make it visible
 

@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#10790 Fix compatibility with account_per_product module
 * FEA#10638 Break claim_insurer / commission_insurer dependency
 * BUG#10337 Fix crash when launching slip generation without slip configuration from the application

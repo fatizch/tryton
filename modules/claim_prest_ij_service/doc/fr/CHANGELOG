@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * FEA#10991 Réordonner le vue des BPIJ
 * BUG#10810 Ignorer les inscriptions non déclarés lors de l'intégration des CR
 * BUG#10723 Les objets de souscription prestij pour les sociétés sont créées en doublon dans le batch de création de ces objets pour les assurés (et inversement)

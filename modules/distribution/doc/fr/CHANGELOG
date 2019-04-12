@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * BUG#10010 Mettre à vide l'adresse d'un réseau de distribution lorsqu'on supprime le lien vers le tiers
 * BUG#9000 Ajout d'un paramétrage par défaut des habilitations

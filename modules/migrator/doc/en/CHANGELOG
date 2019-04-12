@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#10381 Correct batch param initialization
 * FEA#10153 Adding of the delimiter option in the configuration and setting the semicolon as the default value for it
 * BUG#10107 Split option must be set to True and default job_size to 1000 for migrator batch

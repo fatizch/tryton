@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#10808 Ajout de la date de fin de prêt dans le moteur de règles
 * BUG#10836 Correction de la méthode get_share_per_loan sur l'ordre des prêts
 

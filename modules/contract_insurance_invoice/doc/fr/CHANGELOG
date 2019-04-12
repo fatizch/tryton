@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#11238 Correction de l'échelonnement des quittances de frais
 * BUG#10985 Correction de l'inconsistance entre la date effective d'un contrat actif et la date effective de ses quittances
 * BUG#9867 Ajout d'un message d'erreur si aucune adresse n'est trouvée lors de la finalisation de quittances

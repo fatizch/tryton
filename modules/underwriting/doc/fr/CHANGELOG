@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * FEA#10506 Mise à jour des traductions sur certaines vues
 * FEA#10506 Modification de l'affichage des listes d'analyses de risques: ajout d'un onglet pour les analyses en brouillons.
 * FEA#10506 Ajout d'un assistant qui propose à l'utilisateur de consulter immédiatement une analyse de risque générée automatiquement.

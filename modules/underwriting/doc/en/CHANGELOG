@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * FEA#10506 Iteration over translations
 * FEA#10506 Change the display of underwriting lists: add a new tab for draft underwritings
 * FEA#10506 Add a wizard that allows the user to immediatly see an underwriting that was automatically generated

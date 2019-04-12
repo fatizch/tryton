@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#11402 Optimization of the production request treatment batch's selection
 * FEA#11414 Notify the user when an asynchronous printing job is done
 * BUG#11090 Add TodayTime to the context report generation and genshi

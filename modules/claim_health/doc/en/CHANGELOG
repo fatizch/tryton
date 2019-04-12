@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#10683 Default claim bank account is the contract's billing information direct debit account if it exists, otherwise it is one of the subscriber's active account, contrary to before where it was the opposite.
 
 Version 2.2 - 2018-10-12

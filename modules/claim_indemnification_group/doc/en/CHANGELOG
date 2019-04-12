@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * FEA#11366 Add previous insurer revaluation in rule engine
 * BUG#11215 Fix translation for quarterly annuity frequency
 * OTH#00000 Fix default value for deductible rules

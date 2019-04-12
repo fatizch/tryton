@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#10992 Correction des incohérences des montants d'indemnisation en recalculant tout à la volée
 * BUG#10785 Correctif d'un crash lors de la regularisation de période d'indemnisation
 * BUG#11044 Correctif d'un crash lorsque l'on essaie de récupérer la valeur du champ "contrat principal" sur un sinistre au niveau de la méthode qui vérifie l'existence de périodes à indemniser en doublon

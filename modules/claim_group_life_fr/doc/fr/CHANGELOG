@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#11383 Correctif du calcul du montant d'une période dans la règle par défaut de limitation des prestations annexes
 * OTH#00000 Hotfix: arrondis dans les règles livrées par défaut
 * BUG#00000 Ajout de la rente SS dans les détails complémentaires

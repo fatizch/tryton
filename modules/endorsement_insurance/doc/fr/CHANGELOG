@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#11400 Ajout d'une migration manquante de la table d'historique des éléments couverts
 * BUG#10693 Correction de l'ordre des éléments de l'avenant de gestion des assurés par défaut
 

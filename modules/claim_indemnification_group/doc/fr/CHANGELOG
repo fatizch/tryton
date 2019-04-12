@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * FEA#11366 Ajout de la donnée montant de revalorisation du précédent assureur dans le moteur de règle
 * BUG#11215 Correction de la traduction de la fréquence d'indemnisation
 * OTH#00000 Correction de la valeur par défaut des règles de franchise

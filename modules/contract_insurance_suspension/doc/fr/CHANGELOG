@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#10857 Correction d'un crash lors de la désactivation d'une suspension
 * BUG#10046 Au moment de la désactivation d'une suspension, définir la fin d'une suspension temporaire comme le minimum entre aujourd'hui et la date calculée
 

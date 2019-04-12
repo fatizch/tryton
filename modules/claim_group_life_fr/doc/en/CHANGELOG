@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 * BUG#11383 Fix amount computation in default french annexes periods limitation
 * OTH#00000 Hotfix: Fix roundings in default std/ltd rules
 * BUG#00000 Add rente_ss to default extra details

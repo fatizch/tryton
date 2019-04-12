@@ -1,3 +1,4 @@
+Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 Version 2.0 - 2018-04-13
 * BUG#8514 Ne pas générer de relance si il en existe déjà une inactive (qui pourrait être réactivée)
