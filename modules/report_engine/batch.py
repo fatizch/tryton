@@ -39,8 +39,10 @@ class ReportProductionRequestTreatmentBatch(batch.BatchRoot):
 
     @classmethod
     def select_ids(cls):
+        pool = Pool()
         cursor = Transaction().connection.cursor()
-        ProductionRequest = Pool().get('report_production.request')
+        ProductionRequest = pool.get('report_production.request')
+        Template = pool.get('report.template')
         main_table = ProductionRequest.__table__()
         query = main_table.select(main_table.report_template, main_table.id,
             where=(main_table.treated == Literal(False) &
@@ -49,9 +51,13 @@ class ReportProductionRequestTreatmentBatch(batch.BatchRoot):
         cursor.execute(*query)
         records = [(tmpl, req) for tmpl, req in cursor.fetchall()]
         selected = []
-        for template, requests in groupby(records, lambda x:
+        for template_id, requests in groupby(records, lambda x:
                 x[0]):
-            selected.append([(x[1],) for x in requests])
+            requests = list(requests)
+            if not Template(template_id).split_reports:
+                selected.append([(x[1],) for x in requests])
+            else:
+                selected += [(x[1],) for x in requests]
         return selected
 
     @classmethod

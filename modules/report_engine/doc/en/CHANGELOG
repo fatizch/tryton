@@ -1,3 +1,4 @@
+* BUG#11402 Optimization of the production request treatment batch's selection
 * FEA#11414 Notify the user when an asynchronous printing job is done
 * BUG#11090 Add TodayTime to the context report generation and genshi
 * OTH#00000 Properly use datetime in report engine
