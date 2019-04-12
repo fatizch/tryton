@@ -3,6 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form//label[@name='sequence']" position="replace"/>
+    <xpath expr="/form//field[@name='sequence']" position="replace"/>
     <xpath expr="/form/field[@name='name']" position="replace_attributes">
         <field name="name" invisible="1"/>
     </xpath>
@@ -11,6 +12,8 @@ this repository contains the full copyright notices and license terms. -->
     </xpath>
     <xpath expr="/form/label[@name='name']" position="replace"/>
     <xpath expr="/form/field[@name='name']" position="replace"/>
+    <xpath expr="/form/label[@name='party_name']" position="replace"/>
+    <xpath expr="/form/field[@name='party_name']" position="replace"/>
     <xpath expr="/form/label[@name='country']" position="replace"/>
     <xpath expr="/form/field[@name='country']" position="replace"/>
     <xpath expr="/form/label[@name='street']" position="replace"/>
@@ -23,8 +26,10 @@ this repository contains the full copyright notices and license terms. -->
         <group colspan="2" col="4" id="checkboxes" yfill="1" yexpand="1"/>
     </xpath>
    <xpath expr="/form/group[@id='checkboxes']" position="before">
-        <group id="left" colspan="2" col="1" yfill="1" yexpand="1">
-            <field name="address_lines" no_command="1" no_label="1" xfill="1" xexpand="1"/>
+        <group id="left" colspan="2" col="2" yfill="1" yexpand="1">
+            <label name="party_name"/>
+            <field name="party_name"/>
+            <field name="address_lines" colspan="2" no_command="1" no_label="1" xfill="1" xexpand="1"/>
             <group id="street" col="1" xfill="1" xexpand="1" yfill="1" yexpand="1">
                 <separator name="street" xfill="1" xexpand="1"/>
                 <field name="street" xfill="1" xexpand="1"/>
