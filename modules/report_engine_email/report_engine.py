@@ -109,8 +109,7 @@ class ReportGenerate(metaclass=PoolMeta):
                 for i, attachment in enumerate(attachments):
                     part = MIMEApplication(attachment['data'])
                     part.add_header('Content-Disposition', 'attachment',
-                        filename=('%s_%s' % (i, attachment['report_name'])
-                            ).encode('utf-8'))
+                        filename=('%s_%s' % (i, attachment['report_name'])))
                     msg.attach(part)
                 for image in selected_letter.images:
                     img = MIMEImage(image.image)

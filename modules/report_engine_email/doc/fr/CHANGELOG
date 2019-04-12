@@ -1,3 +1,4 @@
+* BUG#11224 Correction d'un plantage lors de l'envoi d'un mail avec pièce jointe en raison d'un mauvais encodage en python 3
 * BUG#11087 Correctif de l'impression de courrier avec édition manuelle active
 * BUG#10112 Ajout de l'email sélectionné dans le contexte d'impression
 

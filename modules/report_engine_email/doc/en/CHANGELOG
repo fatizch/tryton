@@ -1,3 +1,4 @@
+* BUG#11224 Fix crash when printing a mail with attachment due to erroneous encoding since python 3
 * BUG#11087 Fix crash when printing a mail with manual editing
 * BUG#10112 Add recipient email to printing context
 
