@@ -1,3 +1,4 @@
+* BUG#11354 Correction d'un crash lors de la création d'une affiliation
 * BUG#11091 Ajout d'un check de cohérence entre le statut d'un contrat mis en effet et les statuts des options de ses élements couverts
 * FEA#10897 Vérification des chevauchements sur les dates des éléments couverts ne niveau 0 pour empêcher les doublons
 * BUG#10618 La liste des tiers d'un contract ne doit contenir qu'une seule fois un même tiers.

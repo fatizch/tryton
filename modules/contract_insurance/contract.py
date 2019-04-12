@@ -1562,7 +1562,7 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             return
         available_coverages = self.get_coverages(self.product, self.item_desc)
         new_options = list(getattr(self, 'options', ()))
-        for elem in new_options:
+        for elem in list(getattr(self, 'options', ())):
             if elem.coverage not in available_coverages:
                 new_options.remove(elem)
             else:

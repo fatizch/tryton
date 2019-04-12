@@ -1,3 +1,4 @@
+* BUG#11354 Fix crash when creating enrollment
 * BUG#11091 Add coherence check between a voided contract status and the status of its covered elements's options
 * FEA#10897 Check dates overlaps on level 0 covered elements to avoid duplicates
 * BUG#10618 Contract parties list must have unique parties
