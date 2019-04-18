@@ -1383,7 +1383,7 @@ def with_local_mptt(master_field, parent_field='parent'):
         master field, without having to rebuild the whole database when
         inserting new records.
     '''
-    class LocalMptt(ModelSQL):
+    class LocalMptt(CoogSQL):
         left = fields.Integer('Left', select=True, required=True)
         right = fields.Integer('Right', select=True, required=True)
 

@@ -1,3 +1,5 @@
+* BUG#11454 Inheritance on CoogSQL instead of ModelSQL for the class "LocalMptt"
+
 Version 2.4 - 2019-04-12
 * OTH#00000 Add possibility to override the batch configuration using env variables
 * OTH#00000 Fix on export import JSON (Python 3)

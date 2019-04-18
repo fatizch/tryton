@@ -285,8 +285,10 @@ class TestLocalMptt(model.with_local_mptt('master')):
 
     __name__ = 'coog_core.test_local_mptt'
 
-    parent = fields.Many2One('coog_core.test_local_mptt', 'Parent')
-    master = fields.Many2One('coog_core.test_local_mptt_master', 'Master')
+    parent = fields.Many2One('coog_core.test_local_mptt', 'Parent',
+        ondelete='SET NULL')
+    master = fields.Many2One('coog_core.test_local_mptt_master', 'Master',
+        ondelete='SET NULL')
 
 
 class TestRevisionModel(model.CoogSQL, model._RevisionMixin):
