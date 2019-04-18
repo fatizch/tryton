@@ -89,7 +89,7 @@ class Address(model.FunctionalErrorMixIn, export.ExportImportMixin,
                 elif len(value) > line_config.max_length:
                     self.append_functional_error(
                         'line_exceeds_max_length', {
-                            'line': line_name,
+                            'line': line_config.string,
                             'value': value,
                             'max': line_config.max_length,
                             'country': self.country.name,

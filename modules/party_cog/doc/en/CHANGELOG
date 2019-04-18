@@ -1,3 +1,5 @@
+* OTH#00000 Fix address line error message when checking address line maximum length
+
 Version 2.4 - 2019-04-12
 * BUG#11353 Fix Address display
 * FEA#8622 anonymize party automatically by batch
