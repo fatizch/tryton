@@ -871,7 +871,7 @@ if LOAD_ACCOUNTING:  # {{{
     bank_journal.debit_account = bank_account
     bank_journal.credit_account = bank_account
     bank_journal.aggregate = True
-    bank_journal.aggregate_posting = True
+    bank_journal.aggregate_posting_behavior = 'except_payment_cancel'
     bank_journal.sequence, = Sequence.find([('code', '=', 'account.journal')])
     bank_journal.save()
 

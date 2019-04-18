@@ -74,7 +74,8 @@ class AnalyticLineAggregated(LineAggregated):
             Literal(0).as_('create_date'),
             Literal(0).as_('write_uid'),
             Literal(0).as_('write_date'),
-            Case((journal.aggregate and not journal.aggregate_posting,
+            Case((journal.aggregate &
+                (journal.aggregate_posting_behavior == 'never'),
                 Literal('')),
                 else_=Coalesce(Max(line.description),
                     Max(move.description))).as_('description'),

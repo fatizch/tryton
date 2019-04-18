@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.journal:"
+msgid "Always"
+msgstr "Toujours"
+
+msgctxt "error:account.journal:"
+msgid "Never"
+msgstr "Jamais"
+
 msgctxt "error:account.move.snapshot:"
 msgid "No fiscal year defined with the Export Moves option"
 msgstr "Pas d'année fiscale avec l'option Exporter les mouvements comptables"
@@ -70,9 +78,9 @@ msgctxt "field:account.journal,aggregate:"
 msgid "Aggregate"
 msgstr "Agrégat"
 
-msgctxt "field:account.journal,aggregate_posting:"
-msgid "Aggregate Posting"
-msgstr "Agréger à l'émission"
+msgctxt "field:account.journal,aggregate_posting_behavior:"
+msgid "Aggregate Posting Behavior"
+msgstr "Comportement d'aggrégation à l'émission"
 
 msgctxt "field:account.move,snapshot:"
 msgid "Snapshot"

@@ -1,3 +1,5 @@
+* FEA#11094 Permettre d'avoir un seul agrégat comptable pour les mouvements d'annulation de tous les paiements échoués par le même fichier CAMT054
+
 Version 2.4 - 2019-04-12
 * FEA#10899 Ajout d'une nouvelle action sur les rejets de paiement: Représenter à nouveau après une période
 * BUG#10186 Correction du state du champ date du rejet bancaire afin de le rendre visible

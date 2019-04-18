@@ -112,3 +112,14 @@ class Payment(metaclass=PoolMeta):
     def get_move_reject_description(cls, move_description):
         return cls.raise_user_error('reject_of', (move_description,),
             raise_exception=False)
+
+    @classmethod
+    def get_payment_moves(cls, payments):
+        pool = Pool()
+        Move = pool.get('account.move')
+        clearing_moves = Move.search([
+            ('origin', 'in', [str(x) for x in payments])])
+        # Linked moves could be cancel moves or clearing waiting moves
+        linked_moves = Move.search([
+            ('origin', 'in', [str(x) for x in clearing_moves])])
+        return clearing_moves + linked_moves

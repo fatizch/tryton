@@ -12,6 +12,7 @@ from trytond.pool import Pool
 from trytond.tools import grouped_slice
 from trytond.transaction import Transaction
 from trytond.config import config
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import batch, coog_string
 
@@ -550,7 +551,7 @@ class PaymentSucceedBatch(PaymentValidationBatchBase):
             payment_kind=None, journal_methods=None, auto_acknowledge=None):
         pool = Pool()
         Payment = pool.get('account.payment')
-        with Transaction().set_context(disable_auto_aggregate=True,
+        with ServerContext().set_context(disable_auto_aggregate=True,
                 reconcile_to_date=treatment_date):
             Payment.succeed(objects)
         cls.logger.info('%s succeed' %

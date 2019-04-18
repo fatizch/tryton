@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 from . import payment
 from . import move
+from . import account
 
 
 def register():
@@ -12,3 +13,8 @@ def register():
         payment.Journal,
         move.MoveLine,
         module='account_payment_clearing_cog', type_='model')
+    Pool.register(
+        account.Journal,
+        move.Move,
+        module='account_payment_clearing_cog', type_='model',
+        depends=['account_aggregate'])

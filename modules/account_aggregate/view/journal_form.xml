@@ -6,7 +6,7 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="aggregate"/>
         <field name="aggregate"/>
-        <label name="aggregate_posting"/>
-        <field name="aggregate_posting"/>
+        <label name="aggregate_posting_behavior"/>
+        <field name="aggregate_posting_behavior"/>
     </xpath>
 </data>

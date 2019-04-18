@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.journal:"
+msgid "Except Payment Cancel"
+msgstr "Sauf annulation de paiement"
+
 msgctxt "error:account.payment:"
 msgid "Reject of %s"
 msgstr "Rejet du %s"

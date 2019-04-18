@@ -76,35 +76,6 @@ class Move(metaclass=PoolMeta):
         else:
             return name
 
-    @classmethod
-    def group_moves_for_snapshots(cls, moves):
-        if Transaction().context.get('disable_auto_aggregate', False):
-            return []
-        move_groups = []
-        for move_group in super(Move, cls).group_moves_for_snapshots(moves):
-            if len(move_group) == 1:
-                move_groups.append(move_group)
-                continue
-            move_group.sort(key=cls.group_for_payment_cancellation)
-            for _, group in groupby(move_group,
-                    cls.group_for_payment_cancellation):
-                move_groups.append(list(group))
-        return move_groups
-
-    @classmethod
-    def group_for_payment_cancellation(cls, move):
-        '''
-            Used to find moves which are payment cancellations, since they
-            should be merged together when cancelled.
-        '''
-        if not move.origin:
-            return ''
-        if move.origin.__name__ != 'account.move':
-            return ''
-        if getattr(move.origin.origin, '__name__', '') != 'account.payment':
-            return ''
-        return move.origin.origin.merged_id
-
 
 class MoveLine(metaclass=PoolMeta):
     __name__ = 'account.move.line'

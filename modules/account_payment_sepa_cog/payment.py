@@ -718,6 +718,20 @@ class Payment(metaclass=PoolMeta):
     def get_journal_method_to_reset_date(cls):
         return super(Payment, cls).get_journal_method_to_reset_date() + ['sepa']
 
+    @classmethod
+    def finalize_fail_batch(cls, payments):
+        if utils.is_module_installed('account_aggregate') and \
+                utils.is_module_installed('account_payment_clearing_cog'):
+            cls.snapshot_payment_moves(payments)
+
+    @classmethod
+    def snapshot_payment_moves(cls, payments):
+        # should only be called if both account_aggregate
+        # and account_payment_clearing_cog are installed
+        pool = Pool()
+        Move = pool.get('account.move')
+        Move.create_snapshots(cls.get_payment_moves(payments))
+
 
 class InvoiceLine(metaclass=PoolMeta):
     __name__ = 'account.invoice.line'

@@ -72,15 +72,38 @@ class FiscalYear(metaclass=PoolMeta):
 class Journal(metaclass=PoolMeta):
     __name__ = 'account.journal'
     aggregate = fields.Boolean('Aggregate')
-    aggregate_posting = fields.Boolean('Aggregate Posting',
+    aggregate_posting_behavior = fields.Selection(
+        'get_aggregate_posting_options',
+        'Aggregate Posting Behavior',
         states={
             'invisible': ~Eval('aggregate'),
             },
         depends=['aggregate'])
 
+    @classmethod
+    def __setup__(cls):
+        super(Journal, cls).__setup__()
+        cls._error_messages.update({
+                'never': 'Never',
+                'always': 'Always',
+                })
+
     @staticmethod
     def default_aggregate():
         return True
+
+    @staticmethod
+    def default_aggregate_posting_behavior():
+        return 'never'
+
+    @classmethod
+    def get_aggregate_posting_options(cls):
+        return [
+            ('never', cls.raise_user_error('never',
+                    raise_exception=False)),
+            ('always', cls.raise_user_error('always',
+                        raise_exception=False)),
+            ]
 
 
 class Move(metaclass=PoolMeta):
@@ -102,13 +125,16 @@ class Move(metaclass=PoolMeta):
     @classmethod
     @model.CoogView.button
     def post(cls, moves):
+        super(Move, cls).post(moves)
+        cls.create_snapshots(moves)
+
+    @classmethod
+    def create_snapshots(cls, moves):
         pool = Pool()
         Snapshot = pool.get('account.move.snapshot')
-
-        super(Move, cls).post(moves)
         # Do not take snapshots for moves not in an exportable fiscal year
         moves_to_snapshot = [m for m in moves
-            if m.period.fiscalyear.export_moves]
+            if m.period.fiscalyear.export_moves and not m.snapshot]
         move_groups = cls.group_moves_for_snapshots(moves_to_snapshot)
         if not move_groups:
             return
@@ -128,7 +154,8 @@ class Move(metaclass=PoolMeta):
 
         groups = []
         for journal, moves in groupby(moves, keyfunc):
-            if journal.aggregate and journal.aggregate_posting:
+            if journal.aggregate and \
+                    journal.aggregate_posting_behavior != 'never':
                 moves = list(moves)
                 groups.append(moves)
         return groups
@@ -390,7 +417,8 @@ class LineAggregated(model.CoogSQL, model.CoogView):
             Literal(0).as_('create_date'),
             Literal(0).as_('write_uid'),
             Literal(0).as_('write_date'),
-            Case((journal.aggregate and not journal.aggregate_posting,
+            Case((journal.aggregate &
+                (journal.aggregate_posting_behavior == 'never'),
                 Literal('')),
                 else_=Coalesce(Max(line.description),
                     Max(move.description))).as_('description'),
@@ -421,6 +449,7 @@ class LineAggregated(model.CoogSQL, model.CoogView):
         group_by = [line.account,
             Case((journal.aggregate, move.journal), else_=line.id),
             journal.aggregate,
+            journal.aggregate_posting_behavior,
             move.journal,
             move.date,
             move.post_date,

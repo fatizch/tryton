@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from lxml import etree
 from dateutil.parser import parse
+from io import BytesIO
 
 from trytond.modules.account_payment_sepa.payment import CAMT054
 from trytond.pool import Pool
@@ -37,3 +38,15 @@ class CAMT054Coog(CAMT054):
 class CAMT054CoogPassive(CAMT054Coog):
     def __init__(self):
         self.Payment = Pool().get('account.payment')
+
+    def extract_elements(self, source, to_string=False):
+        f = BytesIO(source)
+        elements = []
+        for event, element in etree.iterparse(f):
+            tag = etree.QName(element)
+            if tag.localname == 'Ntry':
+                if to_string:
+                    elements.append(etree.tostring(element, encoding=str))
+                else:
+                    elements.append(element)
+        return elements

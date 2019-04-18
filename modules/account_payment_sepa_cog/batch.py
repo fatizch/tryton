@@ -3,7 +3,7 @@
 import codecs
 import os
 from lxml import etree
-from io import BytesIO
+from trytond.server_context import ServerContext
 
 from sql import Null
 
@@ -84,6 +84,7 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
             cls.get_batch_configuration().get('in_directory', None)
         if not in_directory:
             raise Exception("'in_directory' is required")
+        handler = CAMT054CoogPassive()
         files = cls.get_file_names_and_paths(in_directory)
         if os.path.isfile(in_directory):
             files = [(os.path.basename(in_directory), in_directory)]
@@ -94,12 +95,10 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
         all_elements = []
         for file_name, file_path in files:
             with codecs.open(file_path, 'r') as _file:
-                source = _file.read()
-                f = BytesIO(source)
-                for event, element in etree.iterparse(f):
-                    tag = etree.QName(element)
-                    if tag.localname == 'Ntry':
-                        all_elements.append((etree.tostring(element),))
+                source = _file.read().encode('utf8')
+                all_elements.extend(
+                    [(x,) for x in handler.extract_elements(source,
+                            to_string=True)])
         return all_elements
 
     @classmethod
@@ -107,9 +106,10 @@ class PaymentFailBatch(batch.BatchRootNoSelect):
         if not ids:
             return
         handler = CAMT054CoogPassive()
-        for text_element in ids:
-            element = etree.fromstring(text_element)
-            handler.handle_entry(element)
+        with ServerContext().set_context(disable_auto_aggregate=True):
+            for text_element in ids:
+                element = etree.fromstring(text_element)
+                handler.handle_entry(element)
         return ids
 
 
@@ -134,7 +134,9 @@ class PaymentFailMessageCreationBatch(batch.BatchRootNoSelect):
 
     @classmethod
     def execute(cls, objects, ids, in_directory=None, archive=None):
-        Message = Pool().get('account.payment.sepa.message')
+        pool = Pool()
+        Message = pool.get('account.payment.sepa.message')
+        Payment = pool.get('account.payment')
         if not in_directory or not archive:
             raise Exception("'in_directory' and 'archive' are required")
         files = cls.get_file_names_and_paths(in_directory)
@@ -144,19 +146,28 @@ class PaymentFailMessageCreationBatch(batch.BatchRootNoSelect):
             files = [(f, os.path.join(in_directory, f)) for f in os.listdir(
                     in_directory) if os.path.isfile(os.path.join(
                                 in_directory, f))]
+        handler = CAMT054CoogPassive()
         messages = []
+        all_failed = []
         for file_name, file_path in files:
             with codecs.open(file_path, 'r') as _file:
                 source = _file.read()
+                source_bytes = source.encode('utf8')
                 message = Message()
                 message.company = Transaction().context.get('company')
                 message.type = 'in'
                 message.message = source
                 message.state = 'done'
                 messages.append(message)
+                failed_payments = sum((handler.get_payments(element)
+                    for element in handler.extract_elements(
+                            source_bytes)), [])
+                all_failed.extend(failed_payments)
+                Payment.finalize_fail_batch(failed_payments)
         if messages:
             Message.save(messages)
         cls.archive_treated_files(files, archive, utils.today())
+        return [x.id for x in all_failed]
 
 
 class PaymentGroupCreationBatch(metaclass=PoolMeta):
