@@ -1137,6 +1137,9 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
 
     @classmethod
     def _check_covereds_overlap(cls, contract, sub_covereds):
+        sub_covereds = [
+            x for x in sub_covereds
+            if any(o.status != 'void' for o in x.options)]
         n_covered = len(sub_covereds)
         if n_covered > 1:
             sub_covereds = sorted(
@@ -1147,9 +1150,9 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
                     next_covered = sub_covereds[idx + 1]
                 if not next_covered:
                     break
-                if coog_date.period_overlap(covered.start_date,
-                        covered.end_date, next_covered.start_date,
-                        next_covered.end_date or datetime.date.min):
+                if coog_date.period_overlap(covered.initial_start_date,
+                        covered.end_date, next_covered.initial_start_date,
+                        next_covered.end_date or datetime.date.max):
                     cls.append_functional_error('duplicate_covered',
                         contract.rec_name)
 

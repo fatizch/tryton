@@ -1,3 +1,5 @@
+* OTH#9323 Correctif: utilisation de inital_start_date sur covered_element pour la vérification des périodes de chevauchement
+
 Version 2.4 - 2019-04-12
 * BUG#11354 Correction d'un crash lors de la création d'une affiliation
 * BUG#11091 Ajout d'un check de cohérence entre le statut d'un contrat mis en effet et les statuts des options de ses élements couverts
