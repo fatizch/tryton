@@ -1,3 +1,5 @@
+* BUG#11471 Fix Method Resolution Order of the object Claim
+
 Version 2.4 - 2019-04-12
 * BUG#11095 Add the field loss desc kind on the on_change_loss_desc in order to manage his value and its display as needed
 * OTH#00000 Improve controls when using service origins

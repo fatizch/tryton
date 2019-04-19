@@ -1,3 +1,5 @@
+* BUG#11471 Correction du Method Resolution Order de l'objet claim
+
 Version 2.4 - 2019-04-12
 * BUG#11095 Ajout du champ type de préjudice au niveau du on_change_loss_desc afin de gérer correctement sa mise à jour et pouvoir l'afficher au besoin
 * OTH#00000 Amélioration des contrôles à l'utilisation des prestations d'origine

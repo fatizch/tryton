@@ -13,7 +13,8 @@ from trytond.cache import Cache
 from trytond.server_context import ServerContext
 from trytond.tools import grouped_slice
 
-from trytond.modules.coog_core import model, utils, fields, export, coog_string
+from trytond.modules.coog_core import model, utils, fields, export
+from trytond.modules.coog_core import coog_string
 from trytond.modules.report_engine import Printable
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.offered.extra_data import with_extra_data
@@ -37,7 +38,7 @@ CLAIM_READONLY = Bool(Eval('claim_status')) & (
             Eval('claim_status') == 'closed')
 
 
-class Claim(Printable, model.CoogView):
+class Claim(export.ExportImportMixin, Printable, model.CoogView):
     'Claim'
 
     __name__ = 'claim'
