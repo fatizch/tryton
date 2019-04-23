@@ -1,3 +1,5 @@
+* BUG#11423 Fix "original" method storing into the internal EDM for generated reports
+
 Version 2.4 - 2019-04-12
 * BUG#11402 Optimization of the production request treatment batch's selection
 * FEA#11414 Notify the user when an asynchronous printing job is done

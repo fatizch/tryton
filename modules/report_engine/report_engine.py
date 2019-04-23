@@ -352,6 +352,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
 
     def get_extension(self, var_name='output_format'):
         format_ = getattr(self, var_name)
+        if self.input_kind == 'flat_document':
+            return os.path.splitext(self.versions[0].name)[1][1:]
         if not format_:
             return None
         if (format_ == 'microsoft_office'
@@ -359,11 +361,11 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             return {'odt': 'docx', 'ods': 'xlsx'}[self.input_kind[-3:]]
         elif format_ == 'pdf':
             return 'pdf'
-        elif self.input_kind.startswith('libre_office') and (
-                format_.startswith('libre_office') or format_ == 'original'):
+        elif self.input_kind.startswith('libre_office') and \
+                format_.startswith('libre_office'):
             return self.input_kind[-3:]
-        elif self.input_kind == 'flat_document':
-            return os.path.splitext(self.versions[0].name)[1][1:]
+        elif format_ == 'original':
+            return self.get_extension()
 
     @classmethod
     def search(cls, domain, *args, **kwargs):

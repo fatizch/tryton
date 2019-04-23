@@ -1,3 +1,5 @@
+* BUG#11423 Correctif sur la méthode de stockage "originel" en GED interne des documents générés
+
 Version 2.4 - 2019-04-12
 * BUG#11402 Optimisation de la selection du batch de traitement des demandes de production de document
 * FEA#11413 Notifier l'utilisateur quand une impression en asynchrone est terminée
