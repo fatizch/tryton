@@ -1,4 +1,5 @@
-OTH#00000 Correctif sur la ligne d'adresse à afficher dans le message d'erreur lors de la validation des longueurs de ligne d'adresse
+* BUG#11437 Correction d'erreur lors l'entrée d'une addresse email erronée
+* OTH#00000 Correctif sur la ligne d'adresse à afficher dans le message d'erreur lors de la validation des longueurs de ligne d'adresse
 
 Version 2.4 - 2019-04-12
 * BUG#11353 Correction de l'affichage des adresses

@@ -28,7 +28,7 @@ __all__ = [
     ]
 
 
-class ContactMechanism(export.ExportImportMixin):
+class ContactMechanism(export.ExportImportMixin, model.FunctionalErrorMixIn):
     __name__ = 'party.contact_mechanism'
     _rec_name = 'value'
 
