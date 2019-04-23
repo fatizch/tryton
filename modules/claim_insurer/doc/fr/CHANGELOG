@@ -1,3 +1,5 @@
+* BUG#11487 Correctif sur la méthode récupération des détails d'indemnisations pour les bordereaux assureur de prestation
+
 Version 2.4 - 2019-04-12
 * FEA#10435 ajout d'une méthode pour le reporting sur les bordereaux de prestations
 * BUG#10966 Correctif de la chaine de génération des bordereaux de prestation assureur

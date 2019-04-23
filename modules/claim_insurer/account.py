@@ -28,20 +28,22 @@ class Invoice(metaclass=PoolMeta):
         related_lines = Line.search([('principal_invoice_line.invoice',
                     '=', self.id)])
         invoice_lines_info = set([
-                (line.origin.lines, line) if
+                (line.origin.lines, line.move) if
                 line.origin.__name__ == 'account.invoice'
-                else (line.origin.origin.lines, line) for line in related_lines
-                ])
-        for claim_detail, move_line in [(detail, move_line)
-                for lines, move_line in invoice_lines_info
-                    for line in lines
-                        for detail in line.claim_details]:
+                else (line.origin.origin.lines, line.move)
+                for line in related_lines])
+        for claim_detail, move, invoice_line in [(detail, move, invoice_line)
+                for lines, move in invoice_lines_info
+                    for invoice_line in lines
+                        for detail in invoice_line.claim_details]:
+            sign = 1 if (invoice_line.unit_price *
+                claim_detail.indemnification.amount) > 0 else -1
             ind_details_claim[
                 (claim_detail.claim,
                     claim_detail.indemnification.details[0
-                        ].indemnification.service, move_line)] += \
-                    claim_detail.indemnification.details
-        return {(k[0], k[1], k[2], v[0].indemnification, v)
+                        ].indemnification.service, move, invoice_line, sign)
+                ] += claim_detail.indemnification.details
+        return {(k[0], k[1], k[2], k[3], k[4], v[0].indemnification, v)
             for k, v in list(ind_details_claim.items())}
 
     @classmethod
