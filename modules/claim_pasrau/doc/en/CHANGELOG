@@ -1,3 +1,5 @@
+* BUG#11421 Update the default pasrau rates in xml
+
 Version 2.4 - 2019-04-12
 * BUG#11321 Somehow manage invoices with even number of pasrau lines
 * BUG#10972 Fix coherence of Pasrau declaration due to rounding of lines sum versus sum of rounded lines

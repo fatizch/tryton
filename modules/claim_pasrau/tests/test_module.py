@@ -139,30 +139,30 @@ class ModuleTestCase(test_framework.CoogTestCase):
             ),
             (
                 # full month, this is in reference dodcument
-                ('75001', Decimal('1420'), d(2019, 1, 1), d(2019, 1, 31),
+                ('75001', Decimal('1457'), d(2019, 1, 1), d(2019, 1, 31),
                     d(2019, 1, 1)),
                 Decimal('0.015')
             ),
             (
                 # full month, this is in reference dodcument
-                ('75001', Decimal('46502'), d(2019, 1, 1), d(2019, 1, 31),
+                ('75001', Decimal('47718'), d(2019, 1, 1), d(2019, 1, 31),
                     d(2019, 1, 1)),
                 Decimal('0.43')
             ),
             (   # full trimester, also in reference document
-                ('75001', Decimal('4104'), d(2019, 1, 1), d(2019, 3, 31),
+                ('75001', Decimal('4212'), d(2019, 1, 1), d(2019, 3, 31),
                     d(2019, 1, 1)),
                 Decimal('0.005')
             ),
             (   # one day, also in reference document
                 ('75001', Decimal('55'), d(2019, 1, 1), d(2019, 1, 1),
                     d(2019, 1, 1)),
-                Decimal('0.015')
+                Decimal('0.005')
             ),
             (   # three days, also in reference document
                 ('75001', Decimal('53.14') * 3, d(2019, 1, 1),
                     d(2019, 1, 3), d(2019, 1, 1)),
-                Decimal('0.005')
+                Decimal('0')
             ),
             (
                 # 113 days
