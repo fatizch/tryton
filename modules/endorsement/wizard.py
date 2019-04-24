@@ -1630,6 +1630,10 @@ class ManageContacts(EndorsementWizardStepMixin, model.CoogView):
                 {'invisible': True})]
 
     @classmethod
+    def get_methods_for_model(cls, model_name):
+        return set()
+
+    @classmethod
     def state_view_name(cls):
         return 'endorsement.manage_contacts_view_form'
 

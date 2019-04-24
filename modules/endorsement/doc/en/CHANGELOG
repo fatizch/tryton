@@ -1,3 +1,5 @@
+* BUG#11345 Deactivate contract recalculation for manage contacts endorsement
+
 Version 2.4 - 2019-04-12
 * FEA#11065 Add field to get endorsement target object at effective date
 * BUG#11054 Fix translate data method crash
