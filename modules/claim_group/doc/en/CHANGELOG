@@ -1,3 +1,5 @@
+* BUG#11509 Fix on terminated contract group reactivation
+
 Version 2.4 - 2019-04-12
 * BUG#10053 Pay services to the company on the last day of work
 

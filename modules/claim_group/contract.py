@@ -37,7 +37,8 @@ class Contract(metaclass=PoolMeta):
 
     @classmethod
     def clean_before_reactivate(cls, contracts):
-        cls.write(contracts, {'post_termination_claim_behaviour': ''})
+        for contract in contracts:
+            contract.post_termination_claim_behaviour = ''
         super(Contract, cls).clean_before_reactivate(contracts)
 
 
