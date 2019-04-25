@@ -767,7 +767,14 @@ class Reconcile(metaclass=PoolMeta):
                     Sum(Case((balance > 0, 1), else_=0)) > 0)
                 & (Sum(Case((balance < 0, 1), else_=0)) > 0)
                 ))
-        return [p for p, in cursor.fetchall()]
+        parties = [p for p, in cursor.fetchall()]
+        if parties:
+            parties = Pool().get('party.party').browse(parties)
+            parties = sorted(parties,
+                key=lambda x: bool(x.reconciliation_postponements),
+                reverse=True)
+            parties = [x.id for x in parties]
+        return parties
 
     def _all_lines(self):
         # Override to filter draft lines
@@ -812,6 +819,14 @@ class Reconcile(metaclass=PoolMeta):
         if not parties:
             return
         party = parties.pop()
+
+        # if all parties are postponned, do not pop all parties and show
+        # the first one.
+        if all([x.reconciliation_postponements for x in parties]):
+            self.show.party = party
+            self.show.parties = parties
+            return party
+
         while parties and party.reconciliation_postponements:
             party = parties.pop()
         self.show.party = party
