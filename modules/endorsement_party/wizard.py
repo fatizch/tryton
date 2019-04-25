@@ -185,6 +185,7 @@ class ChangePartyAddress(EndorsementWizardStepMixin):
         pool = Pool()
         EndorsementAddress = pool.get('endorsement.party.address')
         Party = pool.get('party.party')
+        Address = pool.get('party.address')
         parties = self._get_parties()
 
         def get_save_values(address, prev_address):
@@ -214,8 +215,13 @@ class ChangePartyAddress(EndorsementWizardStepMixin):
                     displayer.previous_address else None
                 new_values = get_save_values(address, prev_address)
                 if new_values and 'address_lines' in new_values:
-                    utils.apply_dict(prev_address, new_values)
-                    prev_address.check_country_values()
+                    if prev_address:
+                        utils.apply_dict(prev_address, new_values)
+                        prev_address.check_country_values()
+                    else:
+                        fake_address = Address()
+                        utils.apply_dict(fake_address, new_values)
+                        fake_address.check_country_values()
                 if not new_values:
                     continue
                 elif not displayer.address_endorsement:

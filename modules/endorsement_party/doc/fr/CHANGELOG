@@ -1,3 +1,5 @@
+* OTH#10851 Iteration sur la vérification des adresses en fonction de la configuration du pays
+
 Version 2.4 - 2019-04-12
 * FEA#8610 Ajout de vérifications sur les avenants d'adresses de tiers en fonction de la configuration du pays
 

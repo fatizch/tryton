@@ -1,3 +1,5 @@
+* OTH#10851 Iteration on address checks according to the country configuration
+
 Version 2.4 - 2019-04-12
 * FEA#8610 Add check in party address endorsement according to the country configuration
 
