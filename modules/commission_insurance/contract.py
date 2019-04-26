@@ -282,10 +282,10 @@ class ContractOption(metaclass=PoolMeta):
 
     def get_void_premium(self, date):
         res = {
-            'annual_void_premium_incl_tax': 0,
-            'annual_void_premium_excl_tax': 0,
-            'monthly_void_premium_incl_tax': 0,
-            'monthly_void_premium_excl_tax': 0,
+            'annual_void_premium_incl_tax': Decimal('0.0'),
+            'annual_void_premium_excl_tax': Decimal('0.0'),
+            'monthly_void_premium_incl_tax': Decimal('0.0'),
+            'monthly_void_premium_excl_tax': Decimal('0.0'),
             }
         rule_dict_template = self.coverage.premium_rules[
             0].get_base_premium_dict(self)
@@ -340,7 +340,7 @@ class ContractOption(metaclass=PoolMeta):
                 void_premiums = option.get_void_premium(
                     option.initial_start_date)
                 annual_premium_incl_tax = void_premiums.get(
-                    'annual_void_premium_incl_tax', 0)
+                    'annual_void_premium_incl_tax')
                 monthly_premium_incl_tax = void_premiums.get(
                     'monthly_void_premium_incl_tax')
                 annual_premium_excl_tax = void_premiums.get(

@@ -1,3 +1,5 @@
+* BUG#11276 get_void_premium: Initialiser les valeurs avec Decimal
+
 Version 2.4 - 2019-04-12
 * OTH#0000 Gérer le cas où la règle retourne 0 comme entier
 * FEA#11058 Ajout d'un champ description du calcul sur les commissions. Ce champ contient une description courte sur la manière avec laquelle la commission a été calculée.
