@@ -1,3 +1,5 @@
+* BUG#11465 Claim beneficiary extra data are not initialized when creating a beneficiary
+
 Version 2.4 - 2019-04-12
 * FEA#11365 Add first ltd start date in rule engine
 * BUG#11169 Fix depends on claim.loss.get_date

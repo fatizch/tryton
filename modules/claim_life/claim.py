@@ -594,6 +594,17 @@ class ClaimBeneficiary(model.CoogSQL, model.CoogView,
             if len(possible_services) == 1:
                 return possible_services[0].id
 
+    @fields.depends('service', 'extra_data_values')
+    def on_change_service(self):
+        if not self.service:
+            self.extra_data_values = {}
+            return
+        ExtraData = Pool().get('extra_data')
+        self.extra_data_values = {}
+        self.extra_data_values.update(ExtraData._refresh_extra_data({},
+                {x.name: x._get_structure()
+                    for x in self.service.benefit.beneficiary_extra_data_def}))
+
     @classmethod
     def delete(cls, beneficiaries):
         if beneficiaries:
