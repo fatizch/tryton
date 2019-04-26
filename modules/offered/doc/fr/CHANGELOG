@@ -1,3 +1,5 @@
+* OTH#00000 Ajout d'un message si la donnée complémentaire n'est pas trouvée
+
 Version 2.4 - 2019-04-12
 * BUG#11192 Mise à jour du cache lors de l'ajout / suppression de données complémentaires sur les éléments de paramétrage
 * BUG#10475 Correction de l'initialization des données complémentaire de type booléan ayant une valeur par défaut à False

@@ -1,3 +1,5 @@
+* OTH#00000 Add message if extra data not found
+
 Version 2.4 - 2019-04-12
 * BUG#11192 Fix cache invalidation following adding / removing extra data in configuration
 * BUG#10475 Fix falsy boolean extra data initialization

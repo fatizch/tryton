@@ -426,8 +426,9 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
         value = cls._extra_data_cache.get(name, -1)
         if value != -1:
             return value
-        instance = cls.search([('name', '=', name)])[0]
-        instance_data = instance._extra_data_struct_extract()
+        instances = cls.search([('name', '=', name)])
+        assert len(instances) == 1, 'Cannot find extra data named %s' % name
+        instance_data = instances[0]._extra_data_struct_extract()
         cls._extra_data_cache.set(name, instance_data)
         return instance_data.copy()
 
