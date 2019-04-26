@@ -1,3 +1,5 @@
+* OTH#00000 Fix crash when trying to validate an indemnification
+
 Version 2.4 - 2019-04-12
 * BUG#10992 Fix amounts inconsistencies on indemnification by going full Function fields
 * BUG#10785 Fix crash when doing indemnification period regularisation

@@ -1596,7 +1596,7 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             'journal': self.journal,
             'applied_taxes': [],
             'bank_account': self.bank_account
-            if self.journal.needs_bank_account() else None,
+            if self.journal and self.journal.needs_bank_account() else None,
             }
         if self.service.benefit.tax_date_is_indemnification_date():
             key['applied_taxes'] = sorted([x.id for x in
