@@ -1,3 +1,5 @@
+* OTH#00000 Ouverture de l'assistant de transfert en tant que nouvel onglet au lieu d'une fenêtre modale
+
 Version 2.4 - 2019-04-12
 * FEA#11366 Ajout de la donnée montant de revalorisation du précédent assureur dans le moteur de règle
 * BUG#11215 Correction de la traduction de la fréquence d'indemnisation

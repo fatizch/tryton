@@ -9,6 +9,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.wizard" id="act_transfer_covered_elements">
             <field name="name">Transfer Covered Elements</field>
             <field name="wiz_name">contract.transfer_covered_elements</field>
+            <field name="window" eval="True"/>
         </record>
         <menuitem parent="contract_group.menu_group_contract" sequence="30" id="menu_group_contract_transfer_enrollment" action="act_transfer_covered_elements"/>
         <!-- ####################################### -->

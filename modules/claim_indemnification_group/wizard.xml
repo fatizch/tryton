@@ -9,6 +9,7 @@ this repository contains the full copyright notices and license terms. -->
         <record model="ir.action.wizard" id="act_claim_transfer_services">
             <field name="name">Transfer Services</field>
             <field name="wiz_name">claim.transfer_services</field>
+            <field name="window" eval="True"/>
         </record>
         <menuitem parent="claim.menu_claim" sequence="50" action="act_claim_transfer_services" id="menu_transfer_services"/>
         <!-- ############################### -->
