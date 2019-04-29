@@ -852,10 +852,12 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         child_1 = self.TestHistoryChildTable(bar='1', parent=master)
         child_1.save()
+        child_2 = self.TestHistoryChildTable(bar='2', parent=master)
+        child_2.save()
         Transaction().commit()
-        child_date = child_1.create_date
+        child_date = child_2.create_date
 
-        master.childs = []
+        master.childs = [child_1]
         master.save()
         Transaction().commit()
 
@@ -874,8 +876,25 @@ class ModuleTestCase(test_framework.CoogTestCase):
             cursor.execute(*test_table.join(child_table, type_='LEFT OUTER',
                     condition=(child_table.parent == test_table.id)
                 ).select(test_table.id, test_table.foo, child_table.bar,
+                    where=test_table.id == master.id,
+                    order_by=child_table.bar))
+            self.assertEqual(cursor.fetchall(), [
+                (master.id, u'2', u'1'),
+                (master.id, u'2', u'2'),
+                ])
+
+        with Transaction().set_context(_datetime=master.write_date):
+            test_table = self.TestHistoryTable._get_history_table()
+            child_table = self.TestHistoryChildTable._get_history_table()
+            cursor.execute(*test_table.join(child_table, type_='LEFT OUTER',
+                    condition=(child_table.parent == test_table.id)
+                ).select(test_table.id, test_table.foo, child_table.bar,
                     where=test_table.id == master.id))
             self.assertEqual(cursor.fetchall(), [(master.id, '2', '1')])
+
+        master.childs = []
+        master.save()
+        Transaction().commit()
 
         with Transaction().set_context(_datetime=master.write_date):
             test_table = self.TestHistoryTable._get_history_table()

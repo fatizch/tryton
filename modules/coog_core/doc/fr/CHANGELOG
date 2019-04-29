@@ -1,3 +1,4 @@
+* BUG#11515 Correction de la méthode _get_history_table
 * BUG#11454 Héritage sur CoogSQL au lieu de ModelSQL sur la classe LocalMptt
 
 Version 2.4 - 2019-04-12

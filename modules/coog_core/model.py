@@ -568,24 +568,29 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
         _datetime = Transaction().context.get('_datetime')
         assert _datetime
 
-        columns = []
-        for field_name in list(cls._fields.keys()):
+        base_names = []
+        for field_name in cls._fields.keys():
             field = cls._fields.get(field_name)
             if not field or hasattr(field, 'get'):
                 continue
             if ModelAccess.check_relation(cls.__name__, field_name,
                     mode='read'):
-                columns.append(field.sql_column(history_table).as_(field_name))
+                base_names.append((field, field_name))
+
+        columns = [x.sql_column(history_table).as_(field_name)
+            for x, field_name in base_names]
 
         window_id = Window([Column(history_table, 'id')])
-        window_date = Window([Coalesce(history_table.write_date,
-                    history_table.create_date)])
+        window_date = Window([
+            Column(history_table, 'id'),
+            Coalesce(history_table.write_date, history_table.create_date)])
+
         columns.append(Column(history_table, '__id').as_('__id'))
         columns.append(Max(Coalesce(history_table.write_date,
                     history_table.create_date), window=window_id
                 ).as_('__max_start'))
-        columns.append(Max(Column(history_table, '__id'), window=window_date
-                ).as_('__max__id'))
+        columns.append(Max(Column(history_table, '__id'),
+            window=window_date).as_('__max__id'))
 
         if Transaction().context.get('_datetime_exclude', False):
             where = Coalesce(history_table.write_date,
@@ -595,7 +600,9 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
                 history_table.create_date) <= _datetime
 
         tmp_table = history_table.select(*columns, where=where)
-        return tmp_table.select(where=(
+        base_columns = [x.sql_column(tmp_table).as_(field_name)
+            for x, field_name in base_names]
+        return tmp_table.select(*base_columns, where=(
                 (Column(tmp_table, '__max_start') == Coalesce(
                         tmp_table.write_date, tmp_table.create_date))
                 & (Column(tmp_table, '__id') == Column(tmp_table, '__max__id'))

@@ -1,3 +1,4 @@
+* BUG#11515 Fix _get_history_table
 * BUG#11454 Inheritance on CoogSQL instead of ModelSQL for the class "LocalMptt"
 
 Version 2.4 - 2019-04-12
