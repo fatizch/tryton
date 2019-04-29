@@ -1,3 +1,4 @@
+* BUG#11470 Add CoogSQL inheritance to party.relation model in order to be able to use _get_history_table to manage party relation history
 * BUG#11437 Fix error when wrong email is submitted
 * OTH#00000 Fix address line error message when checking address line maximum length
 

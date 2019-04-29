@@ -2,8 +2,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
+from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields, coog_string, export
+from trytond.modules.coog_core import fields, coog_string, export, model
 
 __all__ = [
     'RelationType',
@@ -29,7 +30,7 @@ class RelationType(export.ExportImportMixin):
         return super(RelationType, cls)._export_skips() | {'reverse'}
 
 
-class PartyRelation(export.ExportImportMixin):
+class PartyRelation(model.CoogSQL):
     __name__ = 'party.relation'
     _func_key = 'func_key'
 
@@ -78,6 +79,14 @@ class PartyRelation(export.ExportImportMixin):
 
 class PartyRelationAll(PartyRelation):
     __name__ = 'party.relation.all'
+
+    @classmethod
+    def get_table_for_table_query(cls):
+        Relation = Pool().get('party.relation')
+        if (Relation._history and Transaction().context.get('_datetime')):
+            return Relation._get_history_table()
+        else:
+            return Relation.__table__()
 
     def get_synthesis_rec_name(self, name):
         return '%s: %s' % (self.type.rec_name, self.to.rec_name)
