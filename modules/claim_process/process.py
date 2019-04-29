@@ -66,6 +66,7 @@ class ClaimDeclarationElement(model.CoogView):
     sub_status = fields.Many2One(
         'claim.sub_status', 'Status details', readonly=True)
     losses_summary = fields.Text('Losses Summary', readonly=True)
+    loss = fields.Many2One('claim.loss', 'Loss', readonly=True)
 
     @classmethod
     def from_claim(cls, claim):
@@ -112,6 +113,13 @@ class ClaimDeclareFindProcess(ProcessStart):
                     [('kind', '=', Eval('claim_process_type'))],
                 ])]
         return res
+
+    @fields.depends('party', 'claims')
+    def on_change_with_loss_desc(self, name=None):
+        for claim in self.claims:
+            if claim.select:
+                return claim.loss.loss_desc.id
+        return
 
     @fields.depends('party', 'claims')
     def on_change_with_claim_process_type(self, name=None):

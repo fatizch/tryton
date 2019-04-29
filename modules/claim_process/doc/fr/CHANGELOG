@@ -1,3 +1,5 @@
+BUG#11416 Iteration sur le correctif incomplet
+
 Version 2.4 - 2019-04-12
 * BUG#11416 Correctif sur les processus proposés lorsqu'un sinistre est selectionné dans l'assistant de lancement de processus
 * BUG#10646 Correction d'un crash sur les demandes de documents liées à des préjudices lorsqu'il n'y a pas de documents à initialiser
