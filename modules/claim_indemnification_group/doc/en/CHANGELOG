@@ -1,3 +1,4 @@
+* BUG#11529 Only require origin service when necessary
 * OTH#00000 Open tranfer wizard as new tab instead of modal window
 
 Version 2.4 - 2019-04-12

@@ -1,3 +1,4 @@
+* BUG#11529 Ne pas rendre obligatoire la prestation d'origine sauf si nécessaire
 * OTH#00000 Ouverture de l'assistant de transfert en tant que nouvel onglet au lieu d'une fenêtre modale
 
 Version 2.4 - 2019-04-12

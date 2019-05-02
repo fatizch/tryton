@@ -243,6 +243,10 @@ class Indemnification(metaclass=PoolMeta):
             service = indemnification.service
             if not service.is_a_complement:
                 continue
+            if not service.may_have_origin:
+                continue
+            # If a service is a complement, and if it can have an origin, it
+            # should have one in order to be properly calculated
             if not service.origin_service:
                 cls.raise_user_error('missing_origin_service',
                     {'service': service.rec_name})
