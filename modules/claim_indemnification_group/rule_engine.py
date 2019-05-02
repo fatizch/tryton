@@ -38,15 +38,15 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         return datetime.date.min
 
     @classmethod
-    @check_args('service')
+    @check_args('service', 'indemnification')
     def _re_get_previous_insurer_base_amount(cls, args):
         service = args['service']
         return utils.get_value_at_date(service.extra_datas,
-            service.loss.start_date).previous_insurer_base_amount
+            args['indemnification'].start_date).previous_insurer_base_amount
 
     @classmethod
-    @check_args('service')
+    @check_args('service', 'indemnification')
     def _re_get_previous_insurer_revaluation(cls, args):
         service = args['service']
         return utils.get_value_at_date(service.extra_datas,
-            service.loss.start_date).previous_insurer_revaluation
+            args['indemnification'].start_date).previous_insurer_revaluation
