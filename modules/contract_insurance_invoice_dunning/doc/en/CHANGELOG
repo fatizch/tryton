@@ -1,3 +1,5 @@
+* BUG#11507 Change the invoice address in order to be the same of the contract subscriber
+
 Version 2.4 - 2019-04-12
 * FEA#11045 Automatically un-suspend held contracts (for unpaid premium motive) when paying an invoice
 

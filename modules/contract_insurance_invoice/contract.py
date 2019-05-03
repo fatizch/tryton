@@ -977,7 +977,8 @@ class Contract(metaclass=PoolMeta):
                         invoice_address.party != invoice.party):
                     invoice_address = \
                         contract_invoice.contract.get_contract_address(
-                            (contract_invoice.end + relativedelta(days=1)))
+                            contract_invoice.end + relativedelta(days=1)
+                            if contract_invoice.end else utils.today())
                 if (not invoice_address or
                         invoice_address.party != invoice.party):
                     invoice_address = invoice.party.main_address

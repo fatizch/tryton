@@ -333,12 +333,9 @@ class Level(metaclass=PoolMeta):
             invoice = contract.get_invoice(None, None, billing_info)
             invoice.journal = journal
             invoice.invoice_date = utils.today()
-            if invoice.invoice_address is None:
-                invoice.invoice_address = contract.get_contract_address(
-                    invoice.invoice_date)
             invoice.lines = self.get_fee_invoice_lines(fee, contract)
             contract_invoice = ContractInvoice(contract=contract,
-                invoice=invoice, non_periodic=True)
+                invoice=invoice, non_periodic=True, start=None, end=None)
             invoices_to_create.append(invoice)
             contract_invoices_to_create.append(contract_invoice)
             # Make sure the payment_date will be cleared if the contract is not

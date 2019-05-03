@@ -1,3 +1,5 @@
+* BUG#11507 Modification de l'adresse de facturation sur les quittances de frais afin qu'elle soit égale à celle du souscripteur de contrat
+
 Version 2.4 - 2019-04-12
 * FEA#11045 Dé-suspension automatique des contrats suspendus pour non-paiement de cotisation lors du paiement d'une quittance
 
