@@ -1,3 +1,5 @@
+* BUG#11528 Correctif sur les montants d'éxonérations de prime et prise en compte des taxes avec rétro-calcul
+
 Version 2.4 - 2019-04-12
 * BUG#10612 Ajout d'une vérification lorsque des exonérations se chevauchent sur une même option
 

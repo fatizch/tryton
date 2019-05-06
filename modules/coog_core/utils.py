@@ -549,9 +549,11 @@ class CustomRrule(object):
     '''
     def __init__(self, start, interval, end=None, base_date=None,
             follow_end_of_month=True):
-        assert start
+        assert start and isinstance(start, datetime.date)
         assert interval
-        assert base_date is None or base_date <= start
+        assert base_date is None or (isinstance(base_date, datetime.date)
+            and base_date <= start)
+        assert end is None or isinstance(end, datetime.date)
         self._base_date = base_date or start
         self._interval = interval
         self._start = start
@@ -799,11 +801,13 @@ def get_prorated_amount_on_period(start, end, frequency, value, sync_date,
                     }
                 key_list = list(interval.keys())
                 lower_frequency_idx = key_list[key_list.index(frequency) - 1]
-                return_value += get_prorated_amount_on_period(start, end,
+                return_value += get_prorated_amount_on_period(
+                    last_date.date(), end.date(),
                     lower_frequency_idx, value /
                     Decimal(
                         (interval[frequency] / interval[lower_frequency_idx])),
-                    sync_date, interval_start, proportion, recursion=True)
+                    sync_date=start.date(), interval_start=interval_start,
+                    proportion=True, recursion=True)
             else:
                 # Do not add parenthesis anywhere here. We want to first
                 # multiply the value with the number of days, and divide

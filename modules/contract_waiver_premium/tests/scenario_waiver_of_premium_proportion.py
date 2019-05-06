@@ -3,6 +3,7 @@
 # #Comment# #Imports
 import datetime
 from decimal import Decimal
+from dateutil.relativedelta import relativedelta
 from proteus import Model, Wizard
 from trytond.tests.tools import activate_modules
 
@@ -185,6 +186,20 @@ freq_quarterly.frequency = 'quarterly'
 freq_quarterly.allowed_payment_terms.append(payment_term)
 freq_quarterly.save()
 
+# #Comment# #Create billing modes
+payment_term_y = PaymentTerm()
+payment_term_y.name = 'direct'
+payment_term_y.lines.append(PaymentTermLine())
+payment_term_y.save()
+freq_yearly = BillingMode()
+freq_yearly.name = 'Yearly'
+freq_yearly.code = 'yearly'
+freq_yearly.frequency = 'yearly'
+freq_yearly.allowed_payment_terms.append(payment_term_y)
+freq_yearly.sync_month = '1'
+freq_yearly.sync_day = '1'
+freq_yearly.save()
+
 # #Comment# #Define tax configuration per line
 configuration, = Configuration.find([])
 configuration.tax_rounding = 'line'
@@ -273,6 +288,7 @@ product.contract_generator = contract_sequence
 product.quote_number_sequence = quote_sequence
 product.start_date = product_start_date
 product.billing_modes.append(freq_quarterly)
+product.billing_modes.append(freq_yearly)
 product.coverages.append(coverage)
 product.save()
 
@@ -379,6 +395,86 @@ all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
             ('invoice.state', 'in', ['posted', 'validated', 'paid'])]),
     key=lambda x: x.invoice.start)
 all([(x.invoice.total_amount, x.invoice.state) == (110, 'posted')
+        for x in all_invoices[:1]])
+# #Res# #True
+all([(x.invoice.total_amount, x.invoice.state) == (0, 'paid')
+        for x in all_invoices[1:]])
+# #Res# #True
+
+# #Comment# #Create Test Contract II: Yearly contract with prorated waiver
+contract = Contract()
+contract.company = company
+contract.subscriber = subscriber
+contract.start_date = contract_start_date
+contract.product = product
+contract.status = 'quote'
+contract.billing_informations.append(BillingInformation(date=None,
+        billing_mode=freq_yearly, payment_term=payment_term_y))
+covered_element = contract.covered_elements.new()
+covered_element.party = subscriber
+option = covered_element.options[0]
+option.coverage = coverage
+contract.save()
+Wizard('contract.activate', models=[contract]).execute('apply')
+contract.covered_elements[0].options[0].premiums.append(ContractPremium(
+        start=contract_start_date,
+        amount=Decimal('398.18'), frequency='yearly',
+        account=product_account, rated_entity=coverage))
+contract.save()
+
+Contract.first_invoice([contract.id], config.context)
+first_invoice = sorted(ContractInvoice.find([('contract', '=', contract.id),
+            ('invoice.state', '=', 'validated')]), key=lambda x: x.start)[0]
+len(first_invoice.invoice.taxes) == 1
+# #Res# #True
+all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
+            ('invoice.state', '=', 'validated')]),
+    key=lambda x: x.invoice.start)
+AccountInvoice.post([all_invoices[0].invoice.id], config.context)
+
+# #Comment# #Test Waiver Creation Wizard
+create_wizard = Wizard('contract.waiver_premium.create', [contract])
+len(create_wizard.form.options) == 1
+# #Res# #True
+create_wizard.form.options[0].coverage.code == 'test_coverage'
+# #Res# #True
+create_wizard.form.start_date = contract_start_date + relativedelta(days=24)
+create_wizard.execute('reinvoice')
+all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
+            ('invoice.state', 'in', ['posted', 'validated', 'paid'])]),
+    key=lambda x: x.invoice.start)
+all_invoices[0].invoice.total_amount == 29.75
+# #Res# #True
+all_invoices[0].invoice.state
+# #Res# #'posted'
+all([(x.invoice.total_amount, x.invoice.state) == (0, 'paid')
+        for x in all_invoices[1:]])
+# #Res# #True
+
+# #Comment# #Test Set Waiver End Date Wizard
+waiver = Waiver.find([])[0]
+end_date_wizard = Wizard('contract.waiver_premium.set_end_date', [waiver])
+end_date_wizard.form.new_end_date = datetime.date(2014, 12, 31)
+end_date_wizard.execute('reinvoice')
+all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
+            ('invoice.state', 'in', ['posted', 'validated'])]),
+    key=lambda x: x.invoice.start)
+all_invoices[0].invoice.total_amount == 29.75
+# #Res# #True
+all_invoices[0].invoice.state
+# #Res# #'posted'
+all([(x.invoice.total_amount, x.invoice.state) == (330, 'posted')
+        for x in all_invoices[1:]])
+# #Res# #True
+
+waiver = Waiver.find([])[0]
+end_date_wizard = Wizard('contract.waiver_premium.set_end_date', [waiver])
+end_date_wizard.form.new_end_date = None
+end_date_wizard.execute('reinvoice')
+all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id),
+            ('invoice.state', 'in', ['posted', 'validated', 'paid'])]),
+    key=lambda x: x.invoice.start)
+all([(x.invoice.total_amount, x.invoice.state) == (29.75, 'posted')
         for x in all_invoices[:1]])
 # #Res# #True
 all([(x.invoice.total_amount, x.invoice.state) == (0, 'paid')

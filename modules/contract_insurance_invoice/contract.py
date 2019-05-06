@@ -2025,11 +2025,25 @@ class Premium(metaclass=PoolMeta):
         return utils.get_prorated_amount_on_period(start, end, frequency,
             amount, sync_date, interval_start, proportion, recursion)
 
+    def compute_amount_with_taxes(self, line_amount, start):
+        pool = Pool()
+        Tax = pool.get('account.tax')
+        InvoiceLine = pool.get('account.invoice.line')
+        if self.main_contract.product.taxes_included_in_premium:
+            line_amount = Tax.reverse_compute(line_amount, self.taxes, start)
+        if self._round_unit_price_to_currency():
+            line_amount = self.main_contract.company.currency.round(
+                line_amount)
+        else:
+            # Round to maximum allowed precision
+            line_amount = line_amount.quantize(
+                Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1])
+        return line_amount
+
     def get_invoice_lines(self, start, end):
         pool = Pool()
         InvoiceLine = pool.get('account.invoice.line')
         InvoiceLineDetail = pool.get('account.invoice.line.detail')
-        Tax = pool.get('account.tax')
         invoice_end = end
         if start is not None and end is not None:
             if ((self.start or datetime.date.min) > end
@@ -2041,15 +2055,7 @@ class Premium(metaclass=PoolMeta):
         line_amount = self.get_amount(start, end)
         if not line_amount:
             return []
-        if self.main_contract.product.taxes_included_in_premium:
-            line_amount = Tax.reverse_compute(line_amount, self.taxes, start)
-        if self._round_unit_price_to_currency():
-            line_amount = self.main_contract.company.currency.round(
-                line_amount)
-        else:
-            # Round to maximum allowed precision
-            line_amount = line_amount.quantize(
-                Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1])
+        line_amount = self.compute_amount_with_taxes(line_amount, start)
         return [InvoiceLine(
                 type='line',
                 description=self.get_description(),

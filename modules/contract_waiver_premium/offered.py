@@ -216,10 +216,10 @@ class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
         waiver_end = waiver_option.end_date or datetime.date.max
         fully_exonerated = (waiver_start <= line.coverage_start
             and waiver_end >= line.coverage_end)
+        premium = getattr(line.details[0], 'premium', None)
         if self.invoice_line_period_behaviour == 'proportion' \
                 and not fully_exonerated:
             assert line.details
-            premium = getattr(line.details[0], 'premium', None)
             if not premium:
                 return line
             line.unit_price = -1 * utils.get_prorated_amount_on_period(
@@ -236,6 +236,8 @@ class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
             line.unit_price *= -1 * self.rate
         line.description += ' - ' + self.raise_user_error(
             'waiver_line', raise_exception=False)
+        line.unit_price = premium.compute_amount_with_taxes(line.unit_price,
+            waiver_start)
         return line
 
 
