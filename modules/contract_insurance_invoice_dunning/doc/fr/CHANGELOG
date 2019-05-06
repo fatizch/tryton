@@ -1,3 +1,4 @@
+* FEA#8010 Ajout d'un lien vers les relances depuis un contrat
 * BUG#11507 Modification de l'adresse de facturation sur les quittances de frais afin qu'elle soit égale à celle du souscripteur de contrat
 
 Version 2.4 - 2019-04-12

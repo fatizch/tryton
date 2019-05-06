@@ -63,5 +63,19 @@ this repository contains the full copyright notices and license terms. -->
             <field name="domain" eval="[('dunning_status', '!=', '')]" pyson="1"/>
             <field name="act_window" ref="contract.act_contract_form"/>
         </record>
+
+        <!-- ############################# -->
+        <!-- ###### Contract Relates ####-->
+        <!-- ############################# -->
+        <record model="ir.action.act_window" id="act_contract_dunning_relation">
+            <field name="name">Dunnings</field>
+            <field name="res_model">account.dunning</field>
+            <field name="domain" eval="[('contract', '=', Eval('active_id'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_open_contract_dunnings_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_contract_dunning_relation"/>
+        </record>
     </data>
 </tryton>

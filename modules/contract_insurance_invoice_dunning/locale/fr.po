@@ -135,6 +135,11 @@ msgid "Contracts"
 msgstr "Contrats"
 
 msgctxt ""
+"model:ir.action.act_window,name:act_contract_dunning_relation"
+msgid "Dunnings"
+msgstr "Relances"
+
+msgctxt ""
 "model:ir.action.act_window.domain,name:act_contract_domain_terminated"
 msgid "Dunning"
 msgstr "Relance"
