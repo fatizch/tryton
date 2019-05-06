@@ -1,3 +1,5 @@
+* OTH#0000 Correction d'un crash du à l'encodage en raison du passage en python 3
+
 Version 2.4 - 2019-04-12
 * OTH#0000 Correction d'un crash lors du décodage du séparateur en raison du passage en python 3
 

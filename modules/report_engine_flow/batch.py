@@ -75,7 +75,7 @@ class BaseMassFlowBatch(batch.MemorySavingBatch):
         """
         Return the separator to use between each line
         """
-        return '\n'
+        return b'\n'
 
     @classmethod
     def line_writer(cls, filename, lines, *args, **kwargs):
@@ -89,7 +89,8 @@ class BaseMassFlowBatch(batch.MemorySavingBatch):
         if flush_size != 0:
             for lines in utils.iterator_slice(lines, flush_size):
                 with utils.safe_open(filename, 'ab') as fo_:
-                    fo_.write(separator.join(lines) + separator)
+                    blines = [bytes(l, 'utf-8') for l in lines]
+                    fo_.write(separator.join(blines) + separator)
         else:
             with utils.safe_open(filename, 'ab') as fo_:
                 fo_.write(separator.join(lines) + separator)
