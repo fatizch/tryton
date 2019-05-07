@@ -94,6 +94,14 @@ class Line(metaclass=PoolMeta):
             move_line.description = self.number
         return move_line
 
+    @fields.depends('amount', 'party', 'account', 'invoice', 'statement',
+        'date', '_parent_statement.journal')
+    def on_change_amount(self):
+        old_invoice = self.invoice
+        super(Line, self).on_change_amount()
+        self.invoice = old_invoice if self.amount and old_invoice \
+            and self.account == old_invoice.account else None
+
 
 class Statement(export.ExportImportMixin):
     __name__ = 'account.statement'

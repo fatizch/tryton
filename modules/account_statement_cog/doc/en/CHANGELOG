@@ -1,3 +1,5 @@
+* BUG#11316 Fix the disappearance of the invoice on the bank deposit slip if we enter the invoice and then the amount.
+
 Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * BUG#9561 Add missing access rights on new 4.8 models
