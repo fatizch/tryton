@@ -49,9 +49,16 @@ def batch_generate(name, params):
 
         # Batch params computation
         batch_params = BatchModel._default_config_items.copy()
-        batch_params.update(BatchModel.get_batch_configuration())
-        batch_params.update(params)
 
+        conf = BatchModel.get_batch_configuration()
+        to_disable = conf.get('disable')
+        if to_disable:
+            logger.info('This batch %s has been disabled' % name)
+            return []
+
+        conf.pop('disable', None)
+        batch_params.update(conf)
+        batch_params.update(params)
         batch_params = BatchModel.parse_params(batch_params)
 
         # Remove non business params (batch_params to be passed to select_ids)
@@ -90,6 +97,7 @@ def batch_generate(name, params):
                         from_batch=True,
                         job_size=job_size,
                         transaction_size=transaction_size):
+
                     for l in split_batch(BatchModel.select_ids(**batch_params),
                             job_size):
                         broker.enqueue(name, 'batch_exec',
@@ -122,6 +130,7 @@ def split_job(l, n):
 
 
 def batch_exec(name, ids, params, **kwargs):
+
     assert name, 'Batch name is required'
     assert type(ids) is list, 'Ids list is required'
     assert type(params) is dict, 'Params dict is required'

@@ -1,3 +1,4 @@
+* FEA#11352 Ajout de la possibilité de désactiver les batchs par configuration
 * BUG#11515 Correction de la méthode _get_history_table
 * BUG#11454 Héritage sur CoogSQL au lieu de ModelSQL sur la classe LocalMptt
 
