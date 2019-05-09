@@ -14,4 +14,5 @@ Documentation utilisateurs
     processus/index
     moteur_de_regles/index
     editique/index
+    tutorials/index
     administration/index
