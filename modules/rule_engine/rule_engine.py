@@ -27,6 +27,7 @@ from sql.functions import RowNumber
 from trytond import backend
 from trytond.rpc import RPC
 from trytond.cache import Cache
+from trytond.model.modelstorage import without_check_access
 from trytond.model import ModelView as TrytonModelView, Unique
 from trytond.model import fields as tryton_fields, Model
 from trytond.wizard import Wizard, StateView, Button, StateTransition
@@ -1518,6 +1519,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def default_algorithm(cls):
         return 'return'
 
+    @without_check_access
     def add_debug_log(self, result, date, context, exc=None):
         if not self.id or not getattr(self, 'debug_mode', None):
             return result

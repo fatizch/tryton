@@ -1,3 +1,5 @@
+* BUG#11550 Levée de la vérification des droits lors de la création des logs d'exécution du moteur de règle
+
 Version 2.4 - 2019-04-12
 * FEA#11073 Ajout de la possibilité d'ajouter des détails aux résultats des règles
 * BUG#10331 Obligation de renseigner l'ordre des paramètres de règles

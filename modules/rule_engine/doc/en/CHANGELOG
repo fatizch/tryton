@@ -1,3 +1,5 @@
+* BUG#11550 Remove access right checks when creating rule engine execution logs
+
 Version 2.4 - 2019-04-12
 * FEA#11073 Add result detail capabilities
 * BUG#10331 Make sequence order required on rule parameters
