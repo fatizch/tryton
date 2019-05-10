@@ -1182,7 +1182,7 @@ return annuites</field>
         </record>
         <record model="extra_data" id="rente_securite_sociale_annuelle_extra_data">
             <field name="has_default_value" eval="False"/>
-            <field name="string">Rente de la sécurité sociale pour la période</field>
+            <field name="string">Pension de la sécurité sociale pour la période</field>
             <field name="name">rente_securite_sociale_periode</field>
             <field name="kind">benefit</field>
             <field name="type_">numeric</field>
