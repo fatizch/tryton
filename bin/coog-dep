@@ -9,45 +9,46 @@ _coog_dep_proxy() {
 
 coog_dep_main() { # install base deps
         pip install --upgrade $(_coog_dep_proxy) "$@" \
-                "pyflakes" \
-                "dateutils" \
-                "lxml" \
-                "python-sql" \
-                "psycopg2-binary" \
-                "polib" \
                 "Genshi" \
-                "relatorio" \
-                "pydot" \
-                "pyparsing" \
-                "python-stdnum" \
-                "unidecode" \
-                "argcomplete" \
-                "num2words" \
-                "intervaltree" \
-                "filelock" \
-                "wrapt" \
-                "ipaddress" \
-                "werkzeug<0.15" \
                 "Mock" \
-                "simpleeval" \
-                "ldap3" \
-                "requests" \
-                "chardet" \
-                "vobject" \
-                "raven" \
-                "redis" \
-                "hiredis" \
-                "msgpack-python" \
-                "uwsgi" \
-                "rq" \
+                "argcomplete" \
                 "celery" \
-                "sphinx" \
-                "sphinxcontrib-inheritance" \
-                "sphinxprettysearchresults" \
-                "sphinx-rtd-theme" \
+                "chardet" \
+                "dateutils" \
+                "fastjsonschema" \
+                "filelock" \
+                "hiredis" \
+                "intervaltree" \
+                "ipaddress" \
+                "ldap3" \
+                "lxml" \
+                "msgpack-python" \
+                "num2words" \
+                "passlib" \
+                "phonenumbers" \
+                "polib" \
+                "psycopg2-binary" \
+                "pydot" \
+                "pyflakes" \
+                "pygobject" \
+                "pyparsing" \
                 "pytest"\
                 "python-magic" \
-                "phonenumbers" \
-                "passlib" \
-                "pygobject"
+                "python-sql" \
+                "python-stdnum" \
+                "raven" \
+                "redis" \
+                "relatorio" \
+                "requests" \
+                "rq" \
+                "simpleeval" \
+                "sphinx" \
+                "sphinx-rtd-theme" \
+                "sphinxcontrib-inheritance" \
+                "sphinxprettysearchresults" \
+                "unidecode" \
+                "uwsgi" \
+                "vobject" \
+                "werkzeug<0.15" \
+                "wrapt"
 }

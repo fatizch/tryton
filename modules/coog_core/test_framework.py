@@ -83,9 +83,16 @@ class CoogTestCase(ModuleTestCase):
     'Coog Test Case'
 
     @classmethod
+    def setUpClass(cls):
+        import trytond.tests.test_tryton
+        trytond.tests.test_tryton.drop_db()
+        cls.activate_module()
+        super(ModuleTestCase, cls).setUpClass()
+
+    @classmethod
     def activate_module(cls):
         import trytond.tests.test_tryton
-        trytond.tests.test_tryton.activate_module(cls.module)
+        trytond.tests.test_tryton.activate_module(['api', cls.module])
 
     def run(self, result=None):
         test_function = getattr(self, self._testMethodName)
@@ -167,6 +174,14 @@ class CoogTestCase(ModuleTestCase):
                     'Missing %s %s.rst doc file' % (lang, filename))
                 self.assertNotEqual(os.stat(filepath).st_size, 0,
                     'File %s.rst for %s doc looks empty' % (filename, lang))
+
+    def test9990_check_apis(self):
+        from trytond.modules.api import APIMixin
+        from trytond.modules.api.tests.test_module import test_apis
+        for _, klass in Pool().iterobject():
+            if not issubclass(klass, APIMixin):
+                continue
+            test_apis(klass)
 
     def test9999_launch_test_cases(self):
         if not os.environ.get('DO_TEST_CASES'):

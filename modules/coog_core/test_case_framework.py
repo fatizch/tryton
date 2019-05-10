@@ -610,8 +610,8 @@ class TestCaseWizard(model.CoogWizard):
                                 export.ExportImportMixin.import_json(
                                     the_file.read())
                         else:
-                                export.ExportImportMixin.import_json(
-                                    the_file.read())
+                            export.ExportImportMixin.import_json(
+                                the_file.read())
                         try:
                             transaction.commit()
                         except DatabaseOperationalError:

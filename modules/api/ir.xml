@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ####################### -->
+        <!-- # Business API Access # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="api_access_view_list">
+            <field name="model">ir.api.access</field>
+            <field name="type">tree</field>
+            <field name="name">api_access_list</field>
+        </record>
+        <record model="ir.ui.view" id="api_access_view_form">
+            <field name="model">ir.api.access</field>
+            <field name="type">form</field>
+            <field name="name">api_access_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_open_ir_api_access">
+            <field name="name">APIs</field>
+            <field name="res_model">ir.api.access</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_open_ir_api_access_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="api_access_view_list"/>
+            <field name="act_window" ref="act_open_ir_api_access"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_open_ir_api_access_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="api_access_view_form"/>
+            <field name="act_window" ref="act_open_ir_api_access"/>
+        </record>
+        <menuitem parent="ir.menu_models" sequence="100" action="act_open_ir_api_access" id="menu_open_ir_api_access"/>
+    </data>
+</tryton>
