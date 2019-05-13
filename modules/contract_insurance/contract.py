@@ -1106,7 +1106,7 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
                 group_by=[covered.contract, covered.party],
                 having=Count(covered.contract) > 1)
         cursor.execute(*query)
-        res = [x for x, in cursor.fetchall()]
+        res = {x for x, in cursor.fetchall()}
 
         def _group_by_contract_party(c):
             return (c.contract, c.party)

@@ -1,3 +1,4 @@
+* OTH#0000 Fix overlap message error appearing as many times as there are covered elements independently of if they are all overlapping
 * OTH#9323 Hotfix: Use initial_start_date of covered element to check overlaps
 
 Version 2.4 - 2019-04-12
