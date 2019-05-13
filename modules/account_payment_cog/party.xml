@@ -18,5 +18,23 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">party.party,-1</field>
             <field name="action" ref="act_payment_relate_form"/>
         </record>
+
+          <!--
+        ****************************************************
+        ****** Payer Subsidized By relationship  ***********
+        ****************************************************
+        -->
+         <record model="party.relation.type" id="payer_relation_type">
+            <field name="code">payer</field>
+            <field name="name">Payer</field>
+         </record>
+        <record model="party.relation.type" id="subsidized_relation_type">
+            <field name="code">subsidized</field>
+            <field name="name">Subsidized By</field>
+            <field name="reverse" ref="payer_relation_type"/>
+        </record>
+        <record model="party.relation.type" id="payer_relation_type" update="1">
+            <field name="reverse" ref="subsidized_relation_type"/>
+        </record>
     </data>
 </tryton>

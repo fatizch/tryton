@@ -947,8 +947,8 @@ class PaymentInvoice(metaclass=PoolMeta):
             return self.line.move.invoice.id
 
     def get_related_invoice_business_kind(self, name=None):
-            return (self.related_invoice.business_kind if
-                self.related_invoice else None)
+        return (self.related_invoice.business_kind if
+            self.related_invoice else None)
 
 
 class Configuration(CompanyMultiValueMixin, metaclass=PoolMeta):

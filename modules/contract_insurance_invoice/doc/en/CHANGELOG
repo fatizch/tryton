@@ -1,3 +1,5 @@
+* FEA#11297 Make only related people with whom a subscriber have payer relation as possible contract payer
+
 Version 2.4 - 2019-04-12
 * BUG#11238 Fix installment of fee invoices
 * BUG#10985 Fix incoherence between the start date of activated contract and the start date of its invoices

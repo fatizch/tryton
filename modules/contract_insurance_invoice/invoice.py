@@ -123,10 +123,10 @@ class Invoice(metaclass=PoolMeta):
             cls.raise_user_error('no_copy_periodic_invoices')
         copies = super(Invoice, cls).copy(invoices, default=default)
         for new_invoice, old_invoice in zip(copies, invoices):
-                if not old_invoice.contract:
-                    continue
-                ContractInvoice.copy([old_invoice.contract_invoice],
-                    default={'invoice': new_invoice.id})
+            if not old_invoice.contract:
+                continue
+            ContractInvoice.copy([old_invoice.contract_invoice],
+                default={'invoice': new_invoice.id})
         return copies
 
     @classmethod

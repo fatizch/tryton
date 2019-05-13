@@ -1,3 +1,5 @@
+* FEA#11297 Le payeur d'un contrat ne peut être que le souscripteur ou un autre tiers ayant une relation "payeur" avec le souscripteur
+
 Version 2.4 - 2019-04-12
 * BUG#11238 Correction de l'échelonnement des quittances de frais
 * BUG#10985 Correction de l'inconsistance entre la date effective d'un contrat actif et la date effective de ses quittances

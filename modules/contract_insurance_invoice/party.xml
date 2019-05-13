@@ -23,5 +23,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="invoice_view_form"/>
             <field name="act_window" ref="act_contract_invoice_form"/>
         </record>
+
     </data>
 </tryton>

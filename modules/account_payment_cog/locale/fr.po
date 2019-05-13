@@ -1021,6 +1021,14 @@ msgctxt "model:ir.ui.menu,name:menu_reject_reason_form"
 msgid "Reject reasons"
 msgstr "Motifs de rejet"
 
+msgctxt "model:party.relation.type,name:payer_relation_type"
+msgid "Payer"
+msgstr "Payeur"
+
+msgctxt "model:party.relation.type,name:subsidized_relation_type"
+msgid "Subsidized By"
+msgstr "Financé par"
+
 msgctxt "model:party.synthesis.menu.payment,name:"
 msgid "Party Synthesis Menu payment"
 msgstr "Synthèse acteur - Paiement"

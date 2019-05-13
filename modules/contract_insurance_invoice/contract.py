@@ -17,7 +17,6 @@ from trytond.pool import Pool, PoolMeta
 from trytond.model import dualmethod
 from trytond.pyson import Eval, And, Len, If, Bool, Or, PYSONEncoder
 from trytond.error import UserError
-from trytond import backend
 from trytond.transaction import Transaction
 from trytond.tools import reduce_ids, grouped_slice
 from trytond.wizard import Wizard, StateView, Button, StateAction
@@ -182,8 +181,11 @@ class Contract(metaclass=PoolMeta):
         if not self.subscriber or not self.billing_informations:
             return
         new_billing_information = self.billing_informations[-1]
+        new_billing_information.contract = self
         new_billing_information.date = None
         new_billing_information.payer = self.subscriber
+        new_billing_information.possible_payers = new_billing_information.\
+            get_possible_payers()
         if new_billing_information.direct_debit_account:
             if (new_billing_information.payer not in
                     new_billing_information.direct_debit_account.owners):
@@ -1701,15 +1703,20 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
                     'active')),
             'readonly': Bool(Eval('contract_status')) & (
                     Eval('contract_status') != 'quote'),
-
-            }, depends=['direct_debit', 'contract_status'],
-            ondelete='RESTRICT')
+            }, domain=[('id', 'in', Eval('possible_payers'))],
+            depends=['direct_debit', 'contract_status', 'possible_payers'],
+            ondelete='RESTRICT',
+            help='You may set another payer if there is a payer'
+                 'relation between other party and the subscriber')
     suspended = fields.Function(fields.Boolean('Suspended'),
         'get_suspended')
     icon = fields.Function(fields.Char('Icon'),
         'get_icon')
     suspensions = fields.One2Many('contract.payment_suspension',
         'billing_info', 'Suspensions', delete_missing=True)
+    possible_payers = fields.Function(
+        fields.Many2Many('party.party', None, None, 'Possible Payers',
+            states={'invisible': True}), 'getter_possible_payers')
 
     @classmethod
     def _export_light(cls):
@@ -1814,40 +1821,54 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
 
     @classmethod
     def __register__(cls, module_name):
-        # Migration from 1.1: Billing change
-        migrate = False
-        TableHandler = backend.get('TableHandler')
-        cursor = Transaction().connection.cursor()
-        if (not TableHandler.table_exist(
-                    'contract_billing_information')
-                and TableHandler.table_exist('contract_invoice_frequency')):
-            migrate = True
-        # Migration from 1.8: Add payer on billing information
-        add_payer = False
-        contract_billing_h = TableHandler(cls, module_name)
-        if not contract_billing_h.column_exist('payer'):
-            add_payer = True
 
         super(ContractBillingInformation, cls).__register__(module_name)
+        # Migration from 2.2
+        cursor = Transaction().connection.cursor()
+        party_relation_type = Pool().get('party.relation.type').__table__()
+        cursor.execute(*party_relation_type.select(party_relation_type.id,
+                where=(party_relation_type.code == 'payer')))
+        id_of_payer_type, = [x for x in cursor.fetchall()][0]
 
-        # Migration from 1.1: Billing change
-        if migrate:
-            cursor.execute('insert into '
-                '"contract_billing_information" '
-                '(id, create_uid, create_date, write_uid, write_date,'
-                'billing_mode, contract, date, direct_debit_day, '
-                'direct_debit_account) '
-                'select f.id, f.create_uid, f.create_date, f.write_uid, '
-                'f.write_date, f.value, f.contract, f.date, '
-                'cast(c.direct_debit_day as integer), '
-                'c.direct_debit_account from '
-                'contract_invoice_frequency as f, '
-                'contract as c where f.contract = c.id')
+        cursor.execute(*party_relation_type.select(party_relation_type.id,
+                where=(party_relation_type.code == 'subsidized')))
+        id_of_subsidized_type, = [x for x in cursor.fetchall()][0]
 
-        # Migration from 1.8: Add payer on billing information
-        # The default payer is the mandate's party
-        if add_payer:
-            cls._migrate_payer()
+        party_relation = Pool().get('party.relation').__table__()
+        contract = Pool().get('contract').__table__()
+        billing_information = Pool().get('contract.billing_information').\
+            __table__()
+        join_condition = ((billing_information.contract == contract.id)
+            & (billing_information.payer != contract.subscriber))
+        second_join_condition = ((
+                (party_relation.from_ == billing_information.payer) &
+                (party_relation.to == contract.subscriber) &
+                (party_relation.type == id_of_payer_type)) |
+                ((party_relation.type == id_of_subsidized_type) &
+                (party_relation.from_ == contract.subscriber) &
+                (party_relation.to == billing_information.payer)
+                ))
+        query = contract.join(billing_information, condition=join_condition).\
+            join(party_relation, 'LEFT OUTER', condition=second_join_condition)
+
+        cursor.execute(*query.select(contract.subscriber,
+                billing_information.payer,
+                group_by=[contract.subscriber, billing_information.payer],
+                where=(party_relation.type == Null)))
+        for slice in grouped_slice(cursor.fetchall()):
+            to_insert = []
+            for to, from_ in slice:
+                current_moment = datetime.datetime.now()
+                to_insert.append([current_moment, 1,
+                        from_, to, id_of_payer_type])
+
+            cursor.execute(*party_relation.insert(
+                columns=[party_relation.create_date,
+                         party_relation.create_uid,
+                         party_relation.from_,
+                         party_relation.to,
+                         party_relation.type],
+                values=to_insert))
 
     @classmethod
     def _migrate_payer(cls):
@@ -1976,6 +1997,20 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
     @classmethod
     def search_direct_debit(cls, name, domain):
         return [('billing_mode.direct_debit',) + tuple(domain[1:])]
+
+    def getter_possible_payers(self, name):
+        if self.contract.subscriber:
+            return [x.id
+                    for x in self.get_possible_payers()]
+        return []
+
+    def get_possible_payers(self):
+        suggested_payers = []
+        suggested_payers.append(self.contract.subscriber)
+        for x in self.contract.subscriber.relations:
+            if x.type.code == 'subsidized':
+                suggested_payers.append(x.to)
+        return suggested_payers
 
 
 class Premium(metaclass=PoolMeta):
