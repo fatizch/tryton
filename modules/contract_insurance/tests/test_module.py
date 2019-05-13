@@ -5,7 +5,6 @@ from dateutil.relativedelta import relativedelta
 import datetime
 import unittest
 from decimal import Decimal
-
 import trytond.tests.test_tryton
 
 from trytond.modules.coog_core import test_framework
@@ -35,6 +34,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'CoveredElement': 'contract.covered_element',
             'RuleEngineRuntime': 'rule_engine.runtime',
             'SubStatus': 'contract.sub_status',
+            'EndReason': 'covered_element.end_reason',
+            'EndReasonItemDescription':
+            'offered.item.description-covered_element.end_reason',
             }
 
     def test0001_testPersonCreation(self):
@@ -638,7 +640,172 @@ class ModuleTestCase(test_framework.CoogTestCase):
     @test_framework.prepare_test(
         'contract_insurance.test0012_testContractCreation'
         )
-    def test0050_void_contract_options(self):
+    def test0050_testOveralppingCoveredElements(self):
+
+        def _test_prepare_data():
+            """
+                Factory method to prepare required data and
+                 its dependencies for this test
+
+            """
+            party = self.Party(
+                is_person=True,
+                name='Von Neumann',
+                first_name='John',
+                birth_date=datetime.date(1980, 5, 30),
+                gender='male'
+                )
+            party.save()
+
+            party1 = self.Party(
+                is_person=True,
+                name='Alain',
+                first_name='Turing',
+                birth_date=datetime.date(1920, 5, 30),
+                gender='male'
+                )
+            party1.save()
+
+            party2 = self.Party(
+                is_person=True,
+                name='Leslie',
+                first_name='Lamport',
+                birth_date=datetime.date(1945, 5, 30),
+                gender='male'
+                )
+            party2.save()
+
+            party3 = self.Party(
+                is_person=True,
+                name='Edsger',
+                first_name='Dijkstra',
+                birth_date=datetime.date(1945, 5, 30),
+                gender='male'
+                )
+            party3.save()
+
+            contract, = self.Contract.search([])
+
+            coverage_a, = self.Coverage.search([('code', '=', 'ALP')])
+            item_desc = coverage_a.item_desc
+
+            end_reason = self.EndReason(code='contract_transfer',
+                                        name='Contract Transfer')
+            end_reason.item_descs = [item_desc]
+            end_reason.save()
+
+            return party, party1, party2, party3,\
+                   contract, coverage_a, end_reason
+
+        party, party1, party2, party3,\
+             contract, coverage_a, end_reason = _test_prepare_data()
+
+        def test_method_raises_an_error(func):
+            """
+                When we create a covered element
+                this decorator will verify that if a User Error raises
+                its message will be the message below
+            """
+            MSG = "You are trying to create a covered element " \
+                  "that overlaps with an old covered element"
+
+            def wrapper(*args, **kwargs):
+                try:
+                    value = func(*args, **kwargs)
+                    return value
+                except UserError as e:
+                    self.assertEqual(e.message, MSG)
+            return wrapper
+
+        @test_method_raises_an_error
+        def _make_covered_element(party, contract, coverage_a,
+             has_parent=False, ended=False, **kwargs):
+
+            """
+                Create a covered element with a parent or without parent
+            :param party:
+            :param contract:
+            :param coverage_a:
+            :param has_parent: True if it has parent
+            :param kwargs: the different attributes
+            :return: covered element
+            """
+
+            covered_element = self.CoveredElement()
+            covered_element.contract = contract
+            covered_element.item_desc = coverage_a.item_desc
+            covered_element.product = covered_element.on_change_with_product()
+            if ended:
+                covered_element.end_reason = kwargs["end_reason"]
+                covered_element.manual_end_date = kwargs["manual_end_date"]
+            if has_parent:
+                covered_element.parent = kwargs["parent"]
+                covered_element.manual_start_date = kwargs["manual_start_date"]
+            covered_element.party = party
+            covered_element.save()
+            if has_parent is False:
+                contract.covered_elements = [covered_element.id]
+            contract.save()
+            return covered_element
+
+        covered_element = _make_covered_element(party, contract, coverage_a)
+        sub_covered_1 = _make_covered_element(party1, contract, coverage_a,
+                         has_parent=True,
+                         parent=covered_element,
+                         manual_start_date=datetime.date(2018, 5, 5),
+                         manual_end_date=datetime.date(2018, 6, 6),
+                         ended=True,
+                         end_reason=end_reason)
+        sub_covered_2 = _make_covered_element(party2, contract,
+                         coverage_a, has_parent=True,
+                         parent=covered_element,
+                         manual_start_date=datetime.date(2018, 1, 1),
+                         manual_end_date=datetime.date(2018, 2, 2),
+                         end_reason=end_reason, ended=True)
+
+        sub_covered_3 = _make_covered_element(party3, contract, coverage_a,
+                        has_parent=True,
+                        parent=covered_element,
+                        manual_start_date=datetime.date(2016, 5, 5),
+                        manual_end_date=None, ended=False)
+
+        # """
+        #     Tree Structure Professor and his students
+        #     [+] Professor Von Neumann
+        #         [-] Student 1 : Turing
+        #         [-] Student 2 : Lamport
+        #         [-] Student 3 : Dijkstra
+        #
+        # """
+
+        result = [cov.party.first_name
+                  for cov in covered_element.sub_covered_elements]
+        expected_result = [sub_covered_1.party.first_name,
+                           sub_covered_2.party.first_name,
+                           sub_covered_3.party.first_name]
+        self.assertEqual(result, expected_result)
+
+        # Sub_covered_4 has party1 as party and it overlapps with sub_covered_1
+        sub_covered_4 = _make_covered_element(party1, contract, coverage_a,
+                        has_parent=True,
+                        parent=covered_element,
+                        manual_start_date=datetime.date(2018, 5, 15),
+                        manual_end_date=None, end_reason=end_reason)
+
+        self.assertEqual(sub_covered_4, None)
+
+        # Sub_covered_5 does not overlap sub_covered_2
+        sub_covered_12 = _make_covered_element(party2, contract, coverage_a,
+                        has_parent=True, parent=covered_element,
+                        manual_start_date=datetime.date(2018, 2, 3),
+                        ended=True, manual_end_date=datetime.date(2018, 6, 18),
+                        end_reason=end_reason)
+        self.assertNotEqual(sub_covered_12, None)
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0012_testContractCreation'
+        )
+    def test0051_void_contract_options(self):
         """
         Tests coherence between contract status and its options status
         when voiding a contract
@@ -686,6 +853,5 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        ModuleTestCase))
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(ModuleTestCase))
     return suite

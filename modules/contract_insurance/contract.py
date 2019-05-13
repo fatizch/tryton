@@ -990,7 +990,9 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
                 'starts before its start date',
                 'bad_option_end': 'Covered %(covered)s has an option that '
                 'ends after its end date',
-                })
+                'overlapped_elements': 'You are trying to create a covered '
+                'element that overlaps with an old covered element',
+                    })
 
     @classmethod
     def __register__(cls, module_name):
@@ -1086,6 +1088,42 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             cls.check_party_overlaps(covered_elements)
             for covered_element in covered_elements:
                 covered_element.check_options_dates()
+                covered_element.check_overlapping()
+
+    def check_overlapping(self):
+        """
+        Check overlapping between covered elements with
+        the same parent and same party
+        """
+        parent = self.parent
+        party = self.party
+
+        if not parent or not party:
+            return
+        cursor = Transaction().connection.cursor()
+        Covered = Pool().get('contract.covered_element')
+        covered_1 = Covered.__table__()
+        covered_2 = Covered.__table__()
+
+        join_condition = ((covered_1.party == covered_2.party) &
+            (covered_1.parent == covered_2.parent) &
+            (covered_1.parent == parent.id) &
+            (covered_1.party == party.id))
+        query = covered_1.join(covered_2, condition=join_condition)
+        cov_1_start = Coalesce(covered_1.manual_start_date, datetime.date.min)
+        cov_1_end = Coalesce(covered_1.manual_end_date, datetime.date.max)
+        cov_2_start = Coalesce(covered_2.manual_start_date, datetime.date.min)
+
+        where_clause = ((covered_2.id != covered_1.id) &
+            (cov_2_start >= cov_1_start) &
+            (cov_2_start <= cov_1_end))
+        cursor.execute(*query.select(covered_1.id,
+                where=where_clause)
+            )
+
+        res = [x for x in cursor.fetchall()]
+        if res:
+            self.append_functional_error('overlapped_elements',)
 
     @classmethod
     def check_party_overlaps(cls, covered_elements):
