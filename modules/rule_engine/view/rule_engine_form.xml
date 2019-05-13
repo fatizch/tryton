@@ -33,6 +33,9 @@ this repository contains the full copyright notices and license terms. -->
                 </notebook>
             </group>
         </page>
+        <page name="description">
+            <field name="description" colspan="4"/>
+        </page>
         <page name="tags">
             <field name="tags" colspan="4"/>
         </page>

@@ -245,7 +245,7 @@ def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
     @fields.depends(field_name, extra_name)
     def on_change_with_rule_extra_data(self):
         if not getattr(self, field_name):
-                return {}
+            return {}
         if getattr(self, extra_name) is None:
             setattr(self, extra_name, {})
         return getattr(self, field_name).get_extra_data_for_on_change(
@@ -826,6 +826,8 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     short_name = fields.Char('Code', required=True)
     # TODO : rename as code (before code was the name for algorithm)
     algorithm = fields.Text('Algorithm')
+    description = fields.Text('Rule Description',
+        help='Functional description of the rule')
     data_tree = fields.Function(fields.Text('Data Tree'),
         'on_change_with_data_tree')
     test_cases = fields.One2Many('rule_engine.test_case', 'rule', 'Test Cases',
