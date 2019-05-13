@@ -109,7 +109,10 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
         if document_descs:
             domain = ['AND', domain,
                 ['OR', ('document_desc', '=', None),
-                    ('document_desc', 'in', [x.id for x in document_descs])]]
+                    ('document_desc', 'in', [x.id for x in document_descs])],
+                [('attachment.document_desc', 'in', [
+                    x.id for x in document_descs] + [None, ])],
+                ]
         else:
             domain = ['AND', domain, [('document_desc', '=', None)]]
         return super(DocumentRequestLine, cls).search(domain, *args, **kwargs)

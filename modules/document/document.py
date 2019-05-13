@@ -71,7 +71,9 @@ class DocumentDescription(model.CoogSQL, model.CoogView):
         # The 'remove_document_desc_filter' is used in document desc act window
         # and in report engine act window (report engine module) to allow
         # configuration by non-authorized members.
-        if not Transaction().context.get('remove_document_desc_filter', False):
+        if Transaction().context.get('_check_access', False) and \
+                not Transaction().context.get('remove_document_desc_filter',
+                    False):
             user = Pool().get('res.user')(Transaction().user)
             domain = ['AND', domain,
                 ['OR', ('groups', '=', None),
