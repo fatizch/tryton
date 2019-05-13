@@ -96,6 +96,18 @@ class ReportGenerate(metaclass=PoolMeta):
                 if tmpl.format_for_internal_edm:
                     tmpl.save_reports_in_edm(generated_reports)
                 attachments += generated_reports
+            if not attachments:
+                selected_letter.raise_user_warning('configuration_mismatch_%s' %
+                    ','.join([str(x.id) for x in selected_letter.attachments]),
+                    'configuration_mismatch')
+                if selected_letter.html_body:
+                    msg = MIMEMultipart('mixed')
+                    msg.attach(MIMEText(
+                            selected_letter.genshi_evaluated_email_body,
+                            'html', 'UTF-8'))
+                else:
+                    msg = MIMEText(
+                        selected_letter.genshi_evaluated_email_body)
             if attachments or selected_letter.images:
                 if selected_letter.html_body:
                     msg = MIMEMultipart('mixed')
@@ -104,8 +116,7 @@ class ReportGenerate(metaclass=PoolMeta):
                             'html', 'UTF-8'))
                 else:
                     msg = MIMEMultipart(
-                        selected_letter.genshi_evaluated_email_body.encode(
-                            'utf-8'))
+                        selected_letter.genshi_evaluated_email_body)
                 for i, attachment in enumerate(attachments):
                     part = MIMEApplication(attachment['data'])
                     part.add_header('Content-Disposition', 'attachment',
@@ -123,8 +134,7 @@ class ReportGenerate(metaclass=PoolMeta):
                         'html', 'UTF-8'))
             else:
                 msg = MIMEText(
-                    selected_letter.genshi_evaluated_email_body.encode(
-                        'utf-8'))
+                    selected_letter.genshi_evaluated_email_body)
         msg['From'] = selected_letter.genshi_evaluated_email_sender
         msg['To'] = selected_letter.genshi_evaluated_email_dest
         msg['Cc'] = selected_letter.genshi_evaluated_email_cc
@@ -243,6 +253,10 @@ class ReportTemplate(metaclass=PoolMeta):
                 'input_email': 'Email',
                 'split_email': 'Split reports on email templates is'
                 ' recommended, you must be sure of your genshi fields',
+                'configuration_mismatch': 'It seems that there is a '
+                'configuration mismatch regarding attachments. Therefore, '
+                'the email will be sent without attachments. Do you want to '
+                'continue?'
                 })
 
     @classmethod
