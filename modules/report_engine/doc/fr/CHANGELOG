@@ -1,3 +1,4 @@
+* OTH#0000 En raison de régressions lors de la génération automatique de rapports, revert du commit d15fb01cf1
 * BUG#11423 Correctif sur la méthode de stockage "originel" en GED interne des documents générés
 
 Version 2.4 - 2019-04-12

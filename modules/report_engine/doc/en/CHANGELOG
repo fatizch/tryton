@@ -1,3 +1,4 @@
+* OTH#0000 Due to regressions on reports automatic generation, revert commit d15fb01cf1
 * BUG#11423 Fix "original" method storing into the internal EDM for generated reports
 
 Version 2.4 - 2019-04-12
