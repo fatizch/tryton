@@ -17,7 +17,7 @@ class OptionDescription(metaclass=PoolMeta):
     beneficiaries_clauses = fields.Many2Many(
         'offered.option.description-beneficiary_clause', 'coverage', 'clause',
         'Beneficiaries Clauses', domain=[('kind', '=', 'beneficiary')])
-    default_beneficiary_clause = fields.Many2One('clause', 'Clause',
+    default_beneficiary_clause = fields.Many2One('clause', 'Default Clause',
         domain=[('id', 'in', Eval('beneficiaries_clauses'))],
         depends=['beneficiaries_clauses'], ondelete='RESTRICT')
 

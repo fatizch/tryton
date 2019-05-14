@@ -11,8 +11,8 @@ msgid "Beneficiaries Clauses"
 msgstr "Clauses bénéficiaires"
 
 msgctxt "field:offered.option.description,default_beneficiary_clause:"
-msgid "Clause"
-msgstr "Clause"
+msgid "Default Clause"
+msgstr "Clause par défaut"
 
 msgctxt "field:offered.option.description-beneficiary_clause,clause:"
 msgid "Clause"
