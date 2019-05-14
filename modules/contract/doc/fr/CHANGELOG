@@ -1,3 +1,5 @@
+* BUG#11523 Modification de la gestion des garanties qui sont aux status "sans effet" lors de la réactivation d'un contrat
+
 Version 2.4 - 2019-04-12
 * BUG#11091 Ajout d'un contrôle de cohérence entre le statut d'un contrat mis en effet et les statuts de ses options
 * BUG#11154 Corriger la montée en version de la property de séquence des numéros de devis

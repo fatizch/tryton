@@ -2315,9 +2315,9 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                 at_date <= (self.final_end_date or datetime.date.max))
 
     def activate(self):
-        if self.status in ('declined', 'void'):
+        if self.status == 'declined':
             return
-        if not self.final_end_date:
+        if self.status == 'void' or not self.final_end_date:
             self.status = 'active'
             self.sub_status = None
         elif self.initial_start_date < self.final_end_date < utils.today():
