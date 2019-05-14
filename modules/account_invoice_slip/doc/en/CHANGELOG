@@ -1,3 +1,5 @@
+* BUG#11338 Restore attribute principal_lines on invoice slip lines
+
 Version 2.4 - 2019-04-12
 * BUG#10790 Fix compatibility with account_per_product module
 * FEA#10638 Break claim_insurer / commission_insurer dependency

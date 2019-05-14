@@ -1,3 +1,5 @@
+* BUG#11338 Restauration de l'attribut principal_lines sur les lignes de bordereaux
+
 Version 2.4 - 2019-04-12
 * BUG#10790 Correction de la compatibilité avec le module account_per_product
 * FEA#10638 Suppression de la dépendance entre claim_insurer et commission_insurer

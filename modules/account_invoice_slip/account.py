@@ -8,11 +8,12 @@ from trytond.model import ModelView, Workflow
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
 
-from trytond.modules.coog_core import fields, utils
+from trytond.modules.coog_core import fields, utils, model
 
 __all__ = [
     'MoveLine',
     'Invoice',
+    'InvoiceLine',
     'Journal',
     ]
 
@@ -162,6 +163,18 @@ class Invoice(metaclass=PoolMeta):
             move.lines = lines
             moves.append(move)
         return moves
+
+
+class InvoiceLine(metaclass=PoolMeta):
+    __name__ = 'account.invoice.line'
+
+    @property
+    def principal_lines(self):
+        domain = [
+            ('principal_invoice_line', '=', self.id),
+            ]
+        return model.search_and_stream(Pool().get('account.move.line'),
+            domain)
 
 
 class Journal(metaclass=PoolMeta):
