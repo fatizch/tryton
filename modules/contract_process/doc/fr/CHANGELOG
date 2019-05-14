@@ -1,3 +1,5 @@
+* BUG#11628 Le champ payeur n'est pas affiché à l'étape Paiement du processus par défaut de souscription prévoyance
+
 Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * BUG#8725 Simplifier la gestion des depends dans l'assistant de souscription

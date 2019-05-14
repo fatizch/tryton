@@ -16,7 +16,7 @@
         },
         "pyson": "",
         "static_view": null,
-        "step_xml": "<button name=\"button_change_start_date\" string=\"Change start date\"/>\r\n<field name=\"subscriber_desc\" widget=\"richtext\" colspan=\"4\"/>\r\n\r\n\r\n",
+        "step_xml": "<button name=\"button_change_start_date\" string=\"Change start date\"/>\r\n<field name=\"subscriber_desc\" widget=\"richtext\" colspan=\"4\"/>\r\n<field name=\"billing_informations\" invisible=\"1\" colspan=\"4\"/>\r\n\r\n\r\n",
         "tags": [],
         "technical_name": "adherent"
     },
@@ -153,7 +153,7 @@
                 "header_line": "col=\"4\" ",
                 "input_mode": "expert",
                 "nb_col": 4,
-                "view_content": "    <label name=\"billing_mode\"/>\r\n    <field name=\"billing_mode\" widget=\"selection\" xexpand=\"0\"/>\r\n    <newline/>\r\n    <label name=\"direct_debit_day_selector\"/>\r\n    <field name=\"direct_debit_day_selector\"/>\r\n    <label name=\"direct_debit_account\"/>\r\n    <field name=\"direct_debit_account\"/>",
+                "view_content": "    <label name=\"billing_mode\"/>\r\n    <field name=\"billing_mode\" widget=\"selection\" xexpand=\"0\"/>\r\n    <newline/>\r\n    <label name=\"direct_debit_day_selector\"/>\r\n    <field name=\"direct_debit_day_selector\"/>\r\n    <newline/>\r\n    <label name=\"payer\"/>\r\n    <field name=\"payer\"/>\r\n    <label name=\"direct_debit_account\"/>\r\n    <field name=\"direct_debit_account\"/>",
                 "view_kind": "form",
                 "view_model": {
                     "_func_key": "contract.billing_information"

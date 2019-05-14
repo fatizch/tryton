@@ -27,7 +27,7 @@
         },
         "pyson": "",
         "static_view": null,
-        "step_xml": "<button name=\"button_change_start_date\" string=\"Change start date\" colspan=\"2\"/>\n<newline/>\n<label name=\"signature_date\"/>\n<field name=\"signature_date\"/>\n<field name=\"subscriber_desc\" widget=\"richtext\" colspan=\"4\"/>\n\n\n",
+        "step_xml": "<button name=\"button_change_start_date\" string=\"Change start date\" colspan=\"2\"/>\n<newline/>\n<label name=\"signature_date\"/>\n<field name=\"signature_date\"/>\n<field name=\"subscriber_desc\" widget=\"richtext\" colspan=\"4\"/>\r\n<field name=\"billing_informations\" invisible=\"1\" colspan=\"4\"/>\n\n\n",
         "tags": [],
         "technical_name": "subscriber_selection"
     },
