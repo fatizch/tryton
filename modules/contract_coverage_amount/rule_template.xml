@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="rule_engine" id="coverage_amount_per_range">
+            <field name="name">Coverage Amount Per Range Rule</field>
+            <field name="short_name">coverage_amount_per_range</field>
+            <field name="algorithm">range_amount = param_coverage_amount_range()
+return list(range(param_min_amount(), param_max_amount() + range_amount, range_amount))</field>
+            <field name="status">validated</field>
+            <field name="type_">coverage_amount_selection</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="minimum_coverage_amount">
+            <field name="name">min_amount</field>
+            <field name="type_">integer</field>
+            <field name="string">Minimum Coverage Amount</field>
+            <field name="sequence_order" eval="1"/>
+            <field name="parent_rule" ref="coverage_amount_per_range"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="maximum_coverage_amount">
+            <field name="name">max_amount</field>
+            <field name="type_">integer</field>
+            <field name="string">Maximum Coverage Amount</field>
+            <field name="sequence_order" eval="2"/>
+            <field name="parent_rule" ref="coverage_amount_per_range"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="coverage_amount_range">
+            <field name="name">coverage_amount_range</field>
+            <field name="type_">integer</field>
+            <field name="string">Coverage Amount Range</field>
+            <field name="sequence_order" eval="3"/>
+            <field name="parent_rule" ref="coverage_amount_per_range"/>
+        </record>
+    </data>
+</tryton>

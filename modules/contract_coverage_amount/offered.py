@@ -48,6 +48,8 @@ class CoverageAmountRule(
                 [('type_', '=', 'coverage_amount_selection')],
                 ))
         cls.rule.depends.append('free_input')
+        cls.rule.help = 'The rule must return the list of possible coverage '\
+            'amounts'
 
     @classmethod
     def __register__(cls, module_name):

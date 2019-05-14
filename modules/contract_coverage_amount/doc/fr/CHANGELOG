@@ -1,3 +1,5 @@
+* FEA#11626 Ajout d'une règle par défaut de montant de couverture basé sur des tranches
+
 Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * BUG#9259 Gestion de la création de nouvelles garanties avec montant de couverture par avenants

@@ -69,7 +69,8 @@ class OptionDisplayer(metaclass=PoolMeta):
                 values = option.get_coverage_amount_rule_result(
                     self.effective_date)
             if values:
-                selection += [(str(x), option.currency.amount_as_string(x)) for x in values]
+                selection += [(str(x), option.currency.amount_as_string(x))
+                    for x in values]
         if self.coverage_amount and self.coverage_amount not in values:
             selection.append((str(self.coverage_amount),
                     option.currency.amount_as_string(self.coverage_amount)))

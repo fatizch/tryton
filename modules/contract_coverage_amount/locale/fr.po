@@ -119,9 +119,32 @@ msgstr ""
 "Si Vrai, la règle doit retourner un booléen pour valider la saisie, "
 "autrement la règle doit retourner une liste de valeurs possibles"
 
+msgctxt "help:offered.coverage_amount.rule,rule:"
+msgid "The rule must return the list of possible coverage amount"
+msgstr ""
+"La règle doit retourner une liste des montants de couverture disponible"
+
 msgctxt "model:offered.coverage_amount.rule,name:"
 msgid "Coverage Amount Rule"
 msgstr "Règle de montant de couverture"
+
+msgctxt "model:rule_engine,name:coverage_amount_per_range"
+msgid "Coverage Amount Per Range Rule"
+msgstr "Règle de montant de couverture par tranches"
+
+msgctxt ""
+"model:rule_engine.rule_parameter,string:maximum_coverage_amount"
+msgid "Maximum Coverage Amount"
+msgstr "Montant de couverture maximal"
+
+msgctxt ""
+"model:rule_engine.rule_parameter,string:minimum_coverage_amount"
+msgid "Minimum Coverage Amount"
+msgstr "Montant de couverture minimum"
+
+msgctxt "model:rule_engine.rule_parameter,string:coverage_amount_range"
+msgid "Coverage Amount Range"
+msgstr "Tranche du montant de couverture"
 
 msgctxt "selection:rule_engine,type_:"
 msgid "Coverage Amount Selection"

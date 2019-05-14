@@ -93,7 +93,8 @@ class ContractOption(metaclass=PoolMeta):
         if self.has_coverage_amount and not self.free_coverage_amount:
             values = self.get_coverage_amount_rule_result(utils.today())
             if values:
-                selection += [(str(x), self.currency.amount_as_string(x)) for x in values]
+                selection += [(str(x), self.currency.amount_as_string(x))
+                    for x in values]
         if (self.current_coverage_amount and
                 self.current_coverage_amount not in values):
             selection.append((str(self.current_coverage_amount),

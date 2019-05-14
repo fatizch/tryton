@@ -1,3 +1,5 @@
+* FEA#11626 Add default coverage amount rule based on amount range 
+
 Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * BUG#9259 Allow to create new options with coverage amount through endorsements
