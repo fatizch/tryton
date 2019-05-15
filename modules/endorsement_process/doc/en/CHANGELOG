@@ -1,3 +1,5 @@
+* OTH#0000 Hotfix on client crash due to domain
+
 Version 2.4 - 2019-04-12
 * BUG#11274 Correct concurrent access due to not refreshing the process when executing next endorsement
 * FEA#11057 Add wizard to exploit in configuration to ask if we should or not apply next endorsement
