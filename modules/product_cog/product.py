@@ -227,6 +227,12 @@ class Category(export.ExportImportMixin):
             'product_supplier_taxes_rel')
         # End of Migration from 4.8
 
+    @classmethod
+    def _export_light(cls):
+        return super(Category, cls)._export_light() | {
+            'company', 'parent', 'accounts', 'customer_taxes', 'childs'
+            }
+
 
 class ProductCostPrice(export.ExportImportMixin):
     __name__ = 'product.cost_price'
@@ -291,8 +297,12 @@ class ProductCostPriceMethod(export.ExportImportMixin):
             ('cost_price_method', '=', cost_price_method)]
 
 
-class CategoryAccount(metaclass=PoolMeta):
+class CategoryAccount(export.ExportImportMixin, metaclass=PoolMeta):
     __name__ = 'product.category.account'
+    _func_key = 'func_key'
+
+    func_key = fields.Function(fields.Char('Func Key'),
+        'getter_func_key', searcher='searcher_func_key')
 
     @classmethod
     def __setup__(cls):
@@ -313,3 +323,23 @@ class CategoryAccount(metaclass=PoolMeta):
         cls.account_expense.domain = [['OR', ('kind', '=', 'other'),
             account_expense_original_domain[0]],
             account_expense_original_domain[1]]
+
+    def getter_func_key(self, name):
+        expense_code = self.account_expense.code if self.account_expense \
+            else ''
+        revenue_code = self.account_revenue.code if self.account_revenue \
+            else ''
+        return '%s|%s' % (expense_code, revenue_code)
+
+    @classmethod
+    def searcher_func_key(cls, name, clause):
+        assert clause[1] == '='
+        expense_code, revenue_code = clause[2].split('|')
+        return [('account_expense.code', '=', expense_code),
+            ('account_revenue.code', '=', revenue_code)]
+
+    @classmethod
+    def _export_light(cls):
+        return (super(CategoryAccount, cls)._export_light() |
+            set(['account_expense', 'account_revenue', 'category', 'company']
+                ))
