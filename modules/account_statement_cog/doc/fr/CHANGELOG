@@ -1,3 +1,4 @@
+* BUG#11627 Correction de la disparition de la valeur du champ quittance sur une ligne relevé en entrant le montant à cause du changement du compte
 * BUG#11316 Correction de la disparition de la valeur du champ quittance sur une ligne de relevé si on entre la quittance puis le montant
 
 Version 2.4 - 2019-04-12

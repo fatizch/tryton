@@ -1,3 +1,4 @@
+* BUG#11627 Fix the disappearance of the invoice on the bank deposit when entering the amount because that account on the statement line is changed
 * BUG#11316 Fix the disappearance of the invoice on the bank deposit slip if we enter the invoice and then the amount.
 
 Version 2.4 - 2019-04-12

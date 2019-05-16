@@ -99,8 +99,9 @@ class Line(metaclass=PoolMeta):
     def on_change_amount(self):
         old_invoice = self.invoice
         super(Line, self).on_change_amount()
-        self.invoice = old_invoice if self.amount and old_invoice \
-            and self.account == old_invoice.account else None
+        if old_invoice:
+            self.account = old_invoice.account
+            self.invoice = old_invoice
 
 
 class Statement(export.ExportImportMixin):
