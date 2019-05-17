@@ -1251,6 +1251,11 @@ msgctxt "model:contract.rebill.batch,name:"
 msgid "Rebill Contracts"
 msgstr "Requittancer les contrats"
 
+msgctxt "model:event.type,name:event_first_invoice_payment"
+msgid "First Invoice Payment"
+msgstr "Paiement de la première quittance"
+
+
 msgctxt "model:ir.action,name:"
 msgid "Invoice Frequencies"
 msgstr "Fréquences de quittancement"

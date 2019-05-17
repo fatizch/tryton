@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="event.type" id="event_first_invoice_payment">
+            <field name="name">First Invoice Payment</field>
+            <field name="code">first_invoice_payment</field>
+            <field name="icon" ref="account_cog.cash-in_icon"/>
+        </record>
+    </data>
+</tryton>

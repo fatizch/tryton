@@ -4,7 +4,7 @@ from collections import defaultdict
 import datetime
 
 from sql import Null, Literal, Query
-from sql.aggregate import Sum
+from sql.aggregate import Sum, Min
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 from trytond.tools import grouped_slice
@@ -458,6 +458,43 @@ class Invoice(metaclass=PoolMeta):
         if updated_invoices:
             cls.write(*updated_invoices)
         super(Invoice, cls).post(invoices)
+
+    @classmethod
+    @model.CoogView.button
+    @Workflow.transition('paid')
+    def paid(cls, invoices):
+        super().paid(invoices)
+        Event = Pool().get('event')
+        contracts = cls._first_paid_contracts(invoices)
+        if contracts:
+            Event.notify_events(contracts, 'first_invoice_payment')
+
+    @classmethod
+    def _first_paid_contracts(cls, invoices):
+        '''
+            Returns the list of contracts for which this invoice is the first
+            paid one
+        '''
+        contract_list = [x.contract.id for x in invoices if x.contract]
+        if not contract_list:
+            return []
+        invoice = cls.__table__()
+        contract_invoice = Pool().get('contract.invoice').__table__()
+
+        cursor = Transaction().connection.cursor()
+        cursor.execute(*contract_invoice.join(invoice,
+                condition=invoice.id == contract_invoice.id
+                ).select(
+                contract_invoice.contract,
+                Min(contract_invoice.start).as_('min_start'),
+                where=(invoice.state == 'paid')
+                & (contract_invoice.start != Null)
+                & contract_invoice.contract.in_(contract_list),
+                group_by=contract_invoice.contract))
+        per_contract = dict(cursor.fetchall())
+        return [x.contract for x in invoices
+            if x.contract.id in per_contract
+            and per_contract[x.contract.id] == x.start]
 
     @classmethod
     def _can_post_invoice(cls, invoice):
