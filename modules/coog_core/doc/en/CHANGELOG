@@ -1,3 +1,4 @@
+* BUG#11657 Remove 'api' from test database names since it is automatically injected and break cache alignment with scenarios
 * FEA#11352 Allow to disable batch by configuration
 * BUG#11515 Fix _get_history_table
 * BUG#11454 Inheritance on CoogSQL instead of ModelSQL for the class "LocalMptt"
