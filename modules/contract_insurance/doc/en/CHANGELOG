@@ -1,3 +1,4 @@
+* BUG#11141 Make the selection of optional coverage at contract level in manage options wizard possible
 * BUG#11036 Forbid covered elements with same party and the same parent to overlap
 * OTH#0000 Fix overlap message error appearing as many times as there are covered elements independently of if they are all overlapping
 * OTH#9323 Hotfix: Use initial_start_date of covered element to check overlaps

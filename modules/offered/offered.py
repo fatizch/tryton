@@ -427,6 +427,9 @@ class OptionDescription(model.CoogSQL, model.CoogView,
         if self.ending_rule:
             return self.ending_rule[0].calculate_rule(exec_context)
 
+    def is_contract_option(self):
+        return True
+
 
 class OptionDescriptionExtraDataRelation(ExtraDataDefTable):
     'Relation between OptionDescription and Extra Data'

@@ -37,28 +37,28 @@ class OptionSubscription(metaclass=PoolMeta):
         res = super(OptionSubscription, self).default_options_displayer(values)
         pool = Pool()
         covered_element = None
-        if Transaction().context.get('active_model') == 'contract':
-            Contract = pool.get('contract')
-            contract = Contract(Transaction().context.get('active_id'))
-            if len(contract.covered_elements) == 1:
-                covered_element = contract.covered_elements[0]
-        elif (Transaction().context.get('active_model') ==
+        if (Transaction().context.get('active_model') ==
                 'contract.covered_element'):
             CoveredElement = pool.get('contract.covered_element')
             covered_element = CoveredElement(Transaction().context.get(
                     'active_id'))
             contract = covered_element.contract
+        else:
+            contract = self.get_contract()
+            if contract.covered_elements:
+                covered_element = contract.covered_elements[0]
         if covered_element:
             res['covered_element'] = covered_element.id
             res['party'] = (covered_element.party.id
                 if covered_element.party else None)
-            res['hide_covered_element'] = True
         res['possible_covered_elements'] = [
             x.id for x in contract.covered_elements]
         return res
 
     def transition_update_options(self):
         cov_element = self.options_displayer.covered_element
+        if not cov_element:
+            return super(OptionSubscription, self).transition_update_options()
         cov_element.options = self.add_remove_options(
             list(getattr(cov_element, 'options', [])),
             self.options_displayer.options)
@@ -73,11 +73,8 @@ class OptionsDisplayer(metaclass=PoolMeta):
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element',
         domain=[('id', 'in', Eval('possible_covered_elements'))],
-        states={'invisible': Bool(Eval('hide_covered_element'))},
-        depends=['possible_covered_elements', 'hide_covered_element'],
-        required=True)
-    hide_covered_element = fields.Boolean('Hide Covered Element',
-        states={'invisible': True})
+        states={'invisible': ~Bool(Eval('possible_covered_elements'))},
+        depends=['possible_covered_elements'])
     possible_covered_elements = fields.Many2Many(
         'contract.covered_element', None, None, 'Covered Elements',
         states={'invisible': True})
@@ -96,18 +93,16 @@ class OptionsDisplayer(metaclass=PoolMeta):
         if self.covered_element:
             self.update_options(self.covered_element.options,
                 [x for x in self.contract.product.coverages
-                    if x.item_desc is not None])
+                    if not x.is_contract_option()])
+        elif self.contract:
+            self.update_options(self.contract.options,
+                [x for x in self.contract.product.coverages
+                    if x.is_contract_option()])
 
     @fields.depends('covered_element')
     def on_change_with_party(self):
         return (self.covered_element.party.id
             if self.covered_element and self.covered_element.party else None)
-
-    def update_options(self, initial_options, coverages):
-        if not self.covered_element and self.contract:
-            coverages = [x for x in coverages if x.item_desc is None]
-        return super(OptionsDisplayer, self).update_options(initial_options,
-            coverages)
 
 
 class WizardOption(metaclass=PoolMeta):

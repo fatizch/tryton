@@ -135,3 +135,8 @@ class OptionDescription(metaclass=PoolMeta):
 
     def get_insurer(self, at_date=None):
         return self.insurer
+
+    def is_contract_option(self):
+        if self.item_desc:
+            return False
+        return super().is_contract_option()
