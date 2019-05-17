@@ -1,3 +1,5 @@
+* BUG#11602 Permettre la création de demandes de documents depuis une vue liste
+
 Version 2.4 - 2019-04-12
 * BUG#11130 Correction du batch de traitement des demandes de documents
 

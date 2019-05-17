@@ -1,3 +1,5 @@
+* BUG#11602 Enable document request creation from list view
+
 Version 2.4 - 2019-04-12
 * BUG#11130 Fix document request processing batch
 

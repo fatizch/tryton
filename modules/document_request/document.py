@@ -264,8 +264,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
 
         needed_by = Transaction().context.get('request_owner')
         the_model, the_id = needed_by.split(',')
-        if the_model not in [
-                k for k, v in cls._fields['for_object'].selection]:
+        if the_model not in [x[0] for x in cls.models_get()]:
             return ''
         return needed_by
 
@@ -407,7 +406,8 @@ class DocumentRequest(Printable, model.CoogSQL, model.CoogView):
 
     @fields.depends('documents')
     def on_change_with_documents_str(self, name=None):
-        return ', '.join([d.document_desc.name for d in self.documents])
+        return ', '.join([d.document_desc.name for d in self.documents
+                if d.document_desc])
 
     @fields.depends('needed_by')
     def on_change_with_needed_by_str(self, name=None):
