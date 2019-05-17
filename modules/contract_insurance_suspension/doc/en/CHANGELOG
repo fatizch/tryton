@@ -1,3 +1,5 @@
+* BUG#11586 Reactivating a contract with temporary and definitive suspensions should only terminate the definitive suspension
+
 Version 2.4 - 2019-04-12
 * BUG#10857 Fix crash on suspension disabling
 * BUG#10046 Set end of temporary suspension to minimum between today and the calculated date

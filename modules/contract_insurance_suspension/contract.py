@@ -108,7 +108,7 @@ class Contract(metaclass=PoolMeta):
         for contract in contracts:
             if (contract.status == 'hold'
                     and contract.right_suspension_allowed()):
-                contract.disable_right_suspensions()
+                contract.disable_right_suspensions(type_='definitive')
         super(Contract, cls).reactivate(contracts)
 
     def reactivate_through_endorsement(self, caller=None):
