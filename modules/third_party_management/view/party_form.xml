@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='role']/group[@id='role_group']" position="inside">
+        <label name="is_third_party_manager"/>
+        <field name="is_third_party_manager" xexpand="0" width="25"/>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='role']/notebook" position="inside">
+        <page id="third_party_manager" string="Third Party Manager">
+            <field name="third_party_manager_role" mode="form,tree"/>
+        </page>
+    </xpath>
+</data>

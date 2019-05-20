@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <menuitem id="menu_third_party_management" name="Third Party Management"/>
+        <!-- ######### -->
+        <!-- # Party # -->
+        <!-- ######### -->
+        <record model="ir.ui.view" id="party_view_form">
+            <field name="model">party.party</field>
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="name">party_form</field>
+        </record>
+        <!-- ####################### -->
+        <!-- # Third Party Manager # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="third_party_manager_view_list">
+            <field name="model">third_party_manager</field>
+            <field name="type">tree</field>
+            <field name="name">third_party_manager_list</field>
+        </record>
+        <record model="ir.ui.view" id="third_party_manager_view_form">
+            <field name="model">third_party_manager</field>
+            <field name="type">form</field>
+            <field name="name">third_party_manager_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_third_party_manager">
+            <field name="name">Third Party Managers</field>
+            <field name="res_model">third_party_manager</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_third_party_manager_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="third_party_manager_view_list"/>
+            <field name="act_window" ref="act_third_party_manager"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_third_party_manager_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="third_party_manager_view_form"/>
+            <field name="act_window" ref="act_third_party_manager"/>
+        </record>
+        <menuitem parent="menu_third_party_management" action="act_third_party_manager" id="menu_third_party_manager_form"/>
+    </data>
+</tryton>
