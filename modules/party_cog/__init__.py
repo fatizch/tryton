@@ -19,6 +19,7 @@ from . import res
 from . import attachment
 from . import configuration
 from . import batch
+from . import api
 
 from trytond.modules.coog_core import expand_tree
 
@@ -66,6 +67,12 @@ def register():
         party.PartyReplace,
         party.PartyErase,
         module='party_cog', type_='wizard')
+
+    Pool.register(
+        api.APIIdentity,
+        api.Party,
+        api.APICore,
+        module='party_cog', type_='model', depends=['api'])
 
     Pool.register_post_init_hooks(migrate_1_10_include_name_in_street,
         module='party')

@@ -39,9 +39,33 @@ msgstr ""
 "Import impossible: les objets suivants:\\n%s\\n partagent la même clé "
 "fonctionnelle:\\n\"%s\"."
 
+msgctxt "error:extra_details.configuration.line:"
+msgid "Invalid domain in schema \"%(schema)s\"."
+msgstr "Domaine non valide dans le schéma « %(schema)s »."
+
+msgctxt "error:extra_details.configuration.line:"
+msgid ""
+"The following keys will be removed from all existing data in the database, this may take some time:\n"
+"%(codes)s"
+msgstr ""
+"Toutes les occurences des clefs suivantes seront retirées de la base de données, cela peut prendre du temps:\n"
+"%(codes)s"
+
+msgctxt "error:extra_details.configuration.line:"
+msgid ""
+"The following keys will be renamed in all existing data in the database, this may take some time:\n"
+"%(codes)s"
+msgstr ""
+"Toutes les occurences des clefs suivantes seront renommées en base de données, cela peut prendre du temps:\n"
+"%(codes)s"
+
 msgctxt "error:extra_details.configuration:"
 msgid "The model must be unique!"
 msgstr "Le modèle doit être unique !"
+
+msgctxt "error:ir.api.identity:"
+msgid "The identifier must be unique per kind"
+msgstr "L'identifiant doit être unique pour un type donné"
 
 msgctxt "error:ir.export.configuration.field:"
 msgid "Field %s is not defined in model %s"
@@ -513,6 +537,10 @@ msgctxt "field:extra_details.configuration.line,digits:"
 msgid "Digits"
 msgstr "Précision"
 
+msgctxt "field:extra_details.configuration.line,domain:"
+msgid "Domain"
+msgstr "Domaine"
+
 msgctxt "field:extra_details.configuration.line,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -568,6 +596,50 @@ msgstr "Identifiant XML"
 msgctxt "field:ir.action.keyword,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:ir.api.identity,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.api.identity,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.api.identity,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ir.api.identity,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:ir.api.identity,identifier:"
+msgid "Identifier"
+msgstr "Identifiant"
+
+msgctxt "field:ir.api.identity,kind:"
+msgid "Kind"
+msgstr "Type métier"
+
+msgctxt "field:ir.api.identity,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:ir.api.identity,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:ir.api.identity,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:ir.api.identity,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:ir.api.identity,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
 
 msgctxt "field:ir.attachment,func_key:"
 msgid "Functional Key"
@@ -1429,6 +1501,20 @@ msgctxt "help:extra_details.configuration.line,selection_sorted:"
 msgid "If the selection must be sorted on label"
 msgstr "Si la sélection doit être triée par le libéllé"
 
+msgctxt "help:ir.api.identity,identifier:"
+msgid "The identifier to match against"
+msgstr "L'identifiant externe à utiliser"
+
+msgctxt "help:ir.api.identity,kind:"
+msgid "The type of identifier. Identifiers must be unique across a given type"
+msgstr ""
+"Le type de l'identifiant. Les identifiants doivent être unique pour un type "
+"donné"
+
+msgctxt "help:ir.api.identity,user:"
+msgid "If set, this identity will be bound to this user"
+msgstr "Si renseigné, l'identité sera liée à cet utilisateur"
+
 msgctxt "help:ir.test_case.instance,test_method_name:"
 msgid ""
 "The name of the method that will be used to decide whether the Test Case "
@@ -1560,6 +1646,14 @@ msgctxt "model:ir.action,name:act_extra_details_configuration"
 msgid "Extra Details Configuration"
 msgstr "Configuration des détails"
 
+msgctxt "model:ir.action,name:act_open_api_identity"
+msgid "API Identity"
+msgstr "Identités API"
+
+msgctxt "model:ir.action,name:act_open_user_api_identity"
+msgid "API Identity"
+msgstr "Identité API"
+
 msgctxt "model:ir.action,name:act_override_translation_form"
 msgid "Override Translations"
 msgstr "Surcharger les traductions"
@@ -1617,6 +1711,10 @@ msgctxt ""
 "model:ir.action.act_window.domain,name:act_event_type_action_domain_inactive"
 msgid "Disabled"
 msgstr "Inactif"
+
+msgctxt "model:ir.api.identity,name:"
+msgid "API Identity"
+msgstr "Identité API"
 
 msgctxt "model:ir.export.configuration,name:"
 msgid "Export Configuration"
@@ -1758,6 +1856,10 @@ msgctxt "model:ir.ui.menu,name:menu_import_wizard"
 msgid "Import Wizard"
 msgstr "Importer un fichier"
 
+msgctxt "model:ir.ui.menu,name:menu_open_api_identity"
+msgid "API Identity"
+msgstr "Identités API"
+
 msgctxt "model:ir.ui.menu,name:menu_tag_form"
 msgid "Tags"
 msgstr "Labels"
@@ -1853,6 +1955,22 @@ msgstr "Numérique"
 msgctxt "selection:extra_details.configuration.line,type_:"
 msgid "Selection"
 msgstr "Sélection"
+
+msgctxt "selection:ir.api.identity,kind:"
+msgid "Facebook"
+msgstr "Facebook"
+
+msgctxt "selection:ir.api.identity,kind:"
+msgid "Generic"
+msgstr "Générique"
+
+msgctxt "selection:ir.api.identity,kind:"
+msgid "Google"
+msgstr "Google"
+
+msgctxt "selection:ir.api.identity,kind:"
+msgid "SalesForce"
+msgstr "SalesForce"
 
 msgctxt "selection:ir.model,history_status:"
 msgid ""

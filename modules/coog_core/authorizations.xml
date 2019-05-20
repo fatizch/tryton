@@ -288,5 +288,27 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_delete" eval="True"/>
         </record>
     </data>
+    <data depends="api">
+        <!-- #################### -->
+        <!-- # Default API User # -->
+        <!-- #################### -->
+        <record model="res.user" id="coog_user_api">
+            <field name="login">coog_api_user</field>
+            <field name="name">Coog API User</field>
+            <field name="signature">Coog API User</field>
+            <field name="menu" ref="ir.act_menu_tree"/>
+        </record>
+        <record model="res.user-res.group" id="user_api_group_api">
+            <field name="user" ref="coog_user_api"/>
+            <field name="group" ref="api.group_default_api"/>
+        </record>
+        <!-- ############## -->
+        <!-- # API Access # -->
+        <!-- ############## -->
+        <record model="ir.api.access" id="identity_context_default_access">
+            <field name="api">api.core.identity_context</field>
+            <field name="group" ref="api.group_default_api"/>
+        </record>
+    </data>
 </tryton>
 

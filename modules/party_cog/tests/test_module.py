@@ -24,6 +24,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'Address': 'party.address',
             'Country': 'country.country',
             'ZipCode': 'country.zip',
+            'User': 'res.user',
+            'APICore': 'api.core',
+            'APIIdentity': 'ir.api.identity',
         }
 
     def test0001_createParties(self):
@@ -201,6 +204,30 @@ class ModuleTestCase(test_framework.CoogTestCase):
         marty.set_contact([marty], 'phone', '0164091187')
         test_value_length_and_type(['+33 6 57 51 18 79', '+33 1 64 09 11 87'], [
                 'mobile', 'phone'], 2, marty)
+
+    @test_framework.prepare_test('party_cog.test0001_createParties')
+    def test9001_identity_context_api(self):
+        admin = self.User(1)
+        parent, = self.Party.search([('name', '=', 'Parent')])
+
+        identity = self.APIIdentity()
+        identity.identifier = '12345'
+        identity.user = admin
+        identity.save()
+
+        party_identity = self.APIIdentity()
+        party_identity.identifier = '09876'
+        party_identity.party = parent
+        party_identity.save()
+
+        with Transaction().set_user(self.User.search(
+                    [('login', '=', 'coog_api_user')])[0].id):
+            no_party = self.APICore.identity_context(
+                {'kind': 'generic', 'identifier': '12345'}, {})
+            self.assertEqual(no_party, {'user': 1, 'party': None})
+            with_party = self.APICore.identity_context(
+                {'kind': 'generic', 'identifier': '09876'}, {})
+            self.assertEqual(with_party, {'user': None, 'party': parent.id})
 
 
 def suite():

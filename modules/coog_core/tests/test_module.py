@@ -14,6 +14,7 @@ import trytond.tests.test_tryton
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 
+from trytond.modules.api import APIAuthorizationError, APIInputError
 from trytond.modules.coog_core import test_framework, history_tools
 from trytond.modules.coog_core import utils, coog_string, coog_date, model
 
@@ -51,6 +52,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'TestModelWithReverseField':
             'coog_core.test_model_revision_mixin_2',
             'TestSubTransactionModel': 'coog_core.test_model_sub_transaction',
+            'User': 'res.user',
+            'APICore': 'api.core',
+            'APIIdentity': 'ir.api.identity',
             }
 
     def test0010class_injection(self):
@@ -1559,6 +1563,50 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.assertEqual(target_2.some_dict, {})
         self.assertEqual(target_3.some_dict, {})
         self.assertEqual(target_4.some_dict, {'test_2_renamed': True})
+
+    def test_9001_identity_api(self):
+        user = self.User(1)
+        simple_identity = self.APIIdentity()
+        simple_identity.identifier = 'hello_world'
+        simple_identity.save()
+        self.assertEqual(simple_identity.kind, 'generic')
+        user_identity = self.APIIdentity()
+        user_identity.identifier = 'hello_world_1'
+        user_identity.user = user
+        user_identity.save()
+
+        bad_user_call = self.APICore.identity_context({}, {})
+        self.assertEqual(bad_user_call, APIAuthorizationError(
+                'api.core.identity_context'))
+
+        with Transaction().set_user(self.User.search(
+                    [('login', '=', 'coog_api_user')])[0].id):
+            # Missing required parameters
+            bad_input_call = self.APICore.identity_context({}, {})
+            self.assertIsInstance(bad_input_call, APIInputError)
+
+            # Debug Mode
+            self.assertRaises(Exception, self.APICore.identity_context,
+                {}, {'_debug_server': True})
+
+            # Additional properties
+            also_bad_input_call = self.APICore.identity_context(
+                {'kind': 'generic', 'identifier': 'hello_world', 'other': 10},
+                {})
+            self.assertIsInstance(also_bad_input_call, APIInputError)
+
+            good_call = self.APICore.identity_context(
+                {'kind': 'generic', 'identifier': 'hello_world'}, {})
+            self.assertEqual(good_call, {'user': None})
+
+            good_call = self.APICore.identity_context(
+                {'kind': 'generic', 'identifier': 'hello_world_1'}, {})
+            self.assertEqual(good_call, {'user': 1})
+
+            inexisting_id = self.APICore.identity_context(
+                {'kind': 'generic', 'identifier': 'hello_world_2'}, {})
+            self.assertEqual(inexisting_id, APIInputError(
+                    {'type': 'unknown_identifier'}))
 
 
 def suite():

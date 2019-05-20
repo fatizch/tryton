@@ -6,6 +6,7 @@ from . import company
 from . import res
 from . import ir
 from . import test_case
+from . import api
 
 
 def register():
@@ -18,3 +19,7 @@ def register():
         ir.Date,
         test_case.TestCaseModel,
         module='company_cog', type_='model')
+
+    Pool.register(
+        api.APIModel,
+        module='company_cog', type_='model', depends=['api'])

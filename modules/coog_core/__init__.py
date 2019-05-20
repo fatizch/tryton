@@ -24,6 +24,7 @@ from . import wizard_context
 from . import test_case
 from . import load_data
 from . import queue
+from . import api
 
 from .model import UnionMixin, expand_tree
 
@@ -141,6 +142,11 @@ def register():
         load_data.GlobalSearchSetWizard,
         load_data.LanguageTranslatableWizard,
         module='coog_core', type_='wizard')
+
+    Pool.register(
+        api.APIIdentity,
+        api.APICore,
+        module='coog_core', type_='model', depends=['api'])
 
     Pool.register_post_init_hooks(cache_fields_get, module='ir')
     Pool.register_post_init_hooks(event_process_buttons, module='process')

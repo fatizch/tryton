@@ -1,3 +1,4 @@
+* FEA#11623 Ajout de la gestion d'identités pour les API
 * BUG#11657 Retrait de 'api' dans le nom des dumps de base de test afin de qu'elles puissent être réutilisées par les scenarios
 * FEA#11352 Ajout de la possibilité de désactiver les batchs par configuration
 * BUG#11515 Correction de la méthode _get_history_table

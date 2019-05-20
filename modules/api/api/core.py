@@ -78,6 +78,8 @@ def apify(klass, api_name):
         - handling of errors
     '''
     function = getattr(klass, api_name)
+    # re-decorate everytime if needed
+    function = getattr(function, '__api_function', function)
 
     def decorated(parameters, context):
         Api = Pool().get('api')
@@ -91,7 +93,13 @@ def apify(klass, api_name):
                     return Api.handle_result(
                         klass, api_name, parameters, result)
                 except Exception as e:
+                    if (api_logger.isEnabledFor(logging.DEBUG)
+                             or config.getboolean('env', 'testing') is True):
+                        if context.get('_debug_server', False):
+                            raise
                     return Api.handle_error(e)
+
+    decorated.__api_function = function
     return decorated
 
 
@@ -494,6 +502,37 @@ class APIMixin(Model):
                         'output': 4,
                         },
                     ]
+
+        When calling an API via JSON-RPC, one should pass the following
+        parameters:
+
+            my_api(parameters, api_context, tryton_context)
+
+        - <parameters> are the actual parameters of the API. They must match
+          the input json schema that was provided earlier
+
+        - <api_context> is a dictionnary that can be used to provide some
+          generic context for APIs. The whole context will be available anytime
+          in API-related code by using the ServerContext "api_context" key.
+          There are some special keys that will temporarily override the tryton
+          context:
+
+            - 'language': Overrides the language for the transaction
+            - 'language_direction': Indicates the expected language direction
+            - '_debug_server': If True, exceptions during handling of APIs
+              will not be wrapped in API dedicated exceptions. This can greatly
+              help when debugging 500s
+
+          The api::update_transaction_context method can be overriden in
+          modules which want to transfer other api_context values to the tryton
+          context
+
+        - <tryton_context>: The "standard" context for all JSON-RPC calls with
+          Tryton. Usually irrelevant except in specific cases, since
+          informations critical to the API's behaviour should be set in either
+          the parameters or the api_context
+
+
     '''  # NOQA
     @classmethod
     def __setup__(cls):
