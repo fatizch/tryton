@@ -16,7 +16,7 @@ class ReportTemplate(metaclass=PoolMeta):
         if attachment.document_desc and \
                 attachment.document_desc.digital_signature_required:
             signer = report.get('party') or (report.get('origin') or
-                    report.get('resource')).get_contact()
+                    report.get('resource')or attachment.resource).get_contact()
             attachment.update_electronic_signer(signer)
         return attachment
 
