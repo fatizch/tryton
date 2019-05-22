@@ -70,12 +70,12 @@ class TestCaseModel(metaclass=PoolMeta):
         first_line = True
         funds = []
         with open(cls._loaded_resources[MODULE_NAME]['files']['orgdest.csv'],
-                'r') as f:
+                'r', encoding="latin-1") as f:
             for line in f:
                 if first_line:
                     first_line = False
                     continue
-                decode_line = line.decode('latin-1')
+                decode_line = line
                 decode_line = decode_line.replace('"', '')
                 fund_data = decode_line.split(';')
                 funds.append(Fund(

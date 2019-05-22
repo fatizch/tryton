@@ -1,3 +1,5 @@
+* BUG#11674 Formater les informations lu depuis le fichier pour pouvoir les gerer avec type unicode
+
 Version 2.4 - 2019-04-12
 * BUG#11299 Hot fix: autoriser la modification de ssn sur les tiers ayant droit
 * FEA#10793 Ajout d'un batch de création de modèles de courriers annuels pour la loi Madelin

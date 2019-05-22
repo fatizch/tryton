@@ -1,3 +1,5 @@
+* BUG#11674 Format the information read from the file in order to manage them like unicode
+
 Version 2.4 - 2019-04-12
 * BUG#11299 Hot fix: allow to change ssn on social security dependent parties
 * FEA#10793 Add batch to create annual report templates according to the Madelin law
