@@ -206,7 +206,7 @@ msgstr "Questionnaires"
 
 msgctxt "model:ir.ui.menu,name:menu_questionnaire"
 msgid "Questionnaires"
-msgstr "Paramètres de la règle"
+msgstr "Questionnaires"
 
 msgctxt "model:questionnaire,name:"
 msgid "Questionnaire"

@@ -1,3 +1,5 @@
+* BUG#11551 Renommer le point d'entrée questionnaire
+
 Version 2.4 - 2019-04-12
 * BUG#11410 Correction de la documentation
 * FEA#9826 Création du module
