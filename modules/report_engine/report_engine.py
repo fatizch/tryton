@@ -871,7 +871,10 @@ class Printable(ModelSQL):
         raise NotImplementedError
 
     def get_recipients(self):
-        return [self.get_contact()]
+        contact = self.get_contact()
+        if contact:
+            return [contact]
+        return []
 
     def get_lang(self):
         try:
@@ -1690,7 +1693,10 @@ class ReportCreate(wizard_context.PersistentContextWizard):
         contact = ContactHistory()
         recipient = self.select_template.recipient
         if recipient is None:
-            recipient = instance.get_recipients()[0]
+            recipients = instance.get_recipients()
+            recipient = recipients[0] if recipients else None
+        if recipient is None:
+            return
         contact.party = recipient
         contact.media = 'mail'
         contact.address = getattr(self.select_template, 'recipient_address',

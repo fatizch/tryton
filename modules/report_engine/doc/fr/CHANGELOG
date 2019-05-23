@@ -1,3 +1,4 @@
+* OTH#0000 Correction d'anomalie lors de la génération d'un courrier dans le cas où aucun contact ou destinataire n'est disponible
 * OTH#0000 En raison de régressions lors de la génération automatique de rapports, revert du commit d15fb01cf1
 * BUG#11423 Correctif sur la méthode de stockage "originel" en GED interne des documents générés
 
