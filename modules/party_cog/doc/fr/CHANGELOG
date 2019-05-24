@@ -1,3 +1,4 @@
+* BUG#11676 La hauteur du champ adresse devient fixe sur la vue formulaire d'un tiers
 * BUG#11470 Ajout de l'héritage CoogSQL sur le modèle party.relation dans le but d'utiliser _get_history_table pour gérer l'historique des versions.
 * BUG#11437 Correction d'erreur lors l'entrée d'une addresse email erronée
 * OTH#00000 Correctif sur la ligne d'adresse à afficher dans le message d'erreur lors de la validation des longueurs de ligne d'adresse

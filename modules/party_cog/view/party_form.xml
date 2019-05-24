@@ -62,10 +62,10 @@ this repository contains the full copyright notices and license terms. -->
     </xpath>
     <xpath expr="/form/notebook/page/field[@name='addresses']" position="replace">
         <group id="one_address" col="4" colspan="4" yexpand="1" yfill="1">
-            <field name="all_addresses" mode="form,tree" colspan="4" yexpand="1" yfill="1" view_ids="party.address_view_form,party.address_view_tree_sequence"/>
+            <field name="all_addresses" mode="form,tree" height="200" colspan="4" yexpand="1" yfill="1" view_ids="party.address_view_form,party.address_view_tree_sequence"/>
         </group>
         <group id="several_addresses" col="4" colspan="4" yexpand="1" yfill="1">
-            <field name="all_addresses" mode="tree,from" colspan="4" yexpand="1" yfill="1" view_ids="party.address_view_tree_sequence,party.address_view_form"/>
+            <field name="all_addresses" mode="tree,from" height="200" colspan="4" yexpand="1" yfill="1" view_ids="party.address_view_tree_sequence,party.address_view_form"/>
         </group>
         <field name="has_multiple_addresses" invisible="1"/>
         <field name="is_anonymized" invisible="1"/>
