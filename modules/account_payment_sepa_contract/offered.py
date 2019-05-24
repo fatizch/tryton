@@ -14,4 +14,5 @@ class Product(metaclass=PoolMeta):
     sepa_mandate_sequence = fields.Many2One('ir.sequence',
         "SEPA Mandate Sequence", domain=[
             ('code', '=', 'account.payment.sepa.mandate')],
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', help='Sequence used to generate the sepa '
+        'mandate identification number')

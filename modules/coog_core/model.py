@@ -1040,7 +1040,8 @@ class _RevisionMixin(object):
 class TaggedMixin(object):
     'Define a model with tags'
 
-    tags = fields.Many2Many('tag-object', 'object_', 'tag', 'Tags')
+    tags = fields.Many2Many('tag-object', 'object_', 'tag', 'Tags',
+        help='Add and search all related configuration objects based on a tag')
     tags_name = fields.Function(
         fields.Char('Tags'),
         'on_change_with_tags_name', searcher='search_tags')

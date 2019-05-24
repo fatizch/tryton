@@ -12,7 +12,8 @@ __all__ = [
 class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
-    is_group = fields.Boolean('Group Benefit')
+    is_group = fields.Boolean('Group Benefit',
+        help='Define if the benefit is available only for a group coverage')
 
     @classmethod
     def __setup__(cls):

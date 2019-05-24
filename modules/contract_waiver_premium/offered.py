@@ -92,7 +92,9 @@ class OptionDescription(metaclass=PoolMeta):
         'get_with_waiver_of_premium')
     waiver_premium_rule = fields.One2Many(
         'waiver_premium.rule', 'coverage',
-        'Waiver Of Premium Rule', delete_missing=True, size=1)
+        'Waiver Of Premium Rule', help='Define how waiver of premium can be '
+        'processed on this option',
+        delete_missing=True, size=1)
 
     def get_with_waiver_of_premium(self, name):
         return bool(self.waiver_premium_rule)

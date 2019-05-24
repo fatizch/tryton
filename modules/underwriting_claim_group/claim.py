@@ -15,7 +15,10 @@ class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     underwriting_rules = fields.Many2Many('benefit-underwriting_rule',
-        'benefit', 'rule', 'Underwriting Rules', states={
+        'benefit', 'rule', 'Underwriting Rules',
+        help='Define how underwriting will be processed during claim '
+        'declaration and treatment',
+        states={
             'invisible': Eval('force_underwriting_rule', False)},
         depends=['force_underwriting_rule'])
     force_underwriting_rule = fields.Function(

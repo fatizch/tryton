@@ -158,7 +158,7 @@ class ManualRejectionEligibility(Wizard):
 
     def transition_check_selection(self):
         if not self.select_reason.eligibility_decision:
-                self.raise_user_error('rejection_needs_decision')
+            self.raise_user_error('rejection_needs_decision')
         return 'register_reason'
 
     def transition_register_reason(self):

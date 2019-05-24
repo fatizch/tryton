@@ -17,7 +17,8 @@ class OptionDescription(metaclass=PoolMeta):
 
     surrender_rules = fields.One2Many(
         'offered.option.description.surrender_rule', 'coverage',
-        'Surrender Rules', delete_missing=True, size=1)
+        'Surrender Rules', help='Rule that defines the contract surrender '
+        'behavior', delete_missing=True, size=1)
 
 
 class OptionDescriptionSurrenderRule(model.CoogSQL, model.CoogView,

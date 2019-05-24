@@ -20,6 +20,8 @@ class Product(metaclass=PoolMeta):
             ('lock_indemnifications', 'Lock Indemnifications'),
             ('normal_indemnifications', 'Normal Indemnifications')],
         'Default Post Termination Claim Behaviour',
+        help=' Define how claim indemnification will be computed once this '
+        'option is terminated',
         states={'invisible': ~Eval('is_group'),
             'required': Bool(Eval('is_group'))},
         depends=['is_group'])

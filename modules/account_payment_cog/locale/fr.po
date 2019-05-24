@@ -811,6 +811,12 @@ msgctxt "field:report.template,export_dir:"
 msgid "Export Directory"
 msgstr "Répertoire d'export"
 
+msgctxt "help:account.payment.journal,tags:"
+msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgstr ""
+"Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
+"l'ensemble des objets de configuration liés à un même label."
+
 msgctxt "help:account.payment.journal.failure_action,reject_number:"
 msgid ""
 "Filter the action according to the number of rejects for a given payment. If"
@@ -1288,12 +1294,12 @@ msgid "Receivable"
 msgstr "À recevoir"
 
 msgctxt "selection:account.payment,kind:account_payment."
-msgid "Payable"
-msgstr "À payer"
-
-msgctxt "selection:account.payment,kind:account_payment."
 msgid "Receivable"
 msgstr "À recevoir"
+
+msgctxt "selection:account.payment,kind:account_payment."
+msgid "Payable"
+msgstr "À payer"
 
 msgctxt "selection:account.payment,state:account_payment."
 msgid "Failed"

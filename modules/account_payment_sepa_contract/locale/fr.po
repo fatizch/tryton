@@ -51,6 +51,10 @@ msgctxt "field:offered.product,sepa_mandate_sequence:"
 msgid "SEPA Mandate Sequence"
 msgstr "Séquence de mandat SEPA"
 
+msgctxt "help:offered.product,sepa_mandate_sequence:"
+msgid "Sequence used to generate the sepa mandate identification number"
+msgstr "Générateur de référence unique de mandat (RUM)"
+
 msgctxt "model:report.template,name:default_mandat_sepa_template"
 msgid "Letter of sepa mandat"
 msgstr "Courrier mandat SEPA par défaut"

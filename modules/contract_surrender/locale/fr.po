@@ -235,6 +235,10 @@ msgctxt "help:contract.validate.surrender.preview,surrender_value:"
 msgid "The amount that will be surrendered"
 msgstr "La valeur de rachat qui sera reversée"
 
+msgctxt "help:offered.option.description,surrender_rules:"
+msgid "Rule that defines the contract surrender behavior"
+msgstr "Règle de gestion du rachat d'un contrat"
+
 msgctxt "help:offered.option.description.surrender_rule,eligibility_rule:"
 msgid ""
 "If set, the rule result must be True to allow surrendering of the contract"

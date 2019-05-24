@@ -16,7 +16,8 @@ __all__ = [
 class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
-    is_group = fields.Boolean('Group Product')
+    is_group = fields.Boolean('Group Product', help='Define if the product is '
+        'a group product')
 
     @classmethod
     def __setup__(cls):
@@ -30,7 +31,8 @@ class Product(metaclass=PoolMeta):
 class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
-    is_group = fields.Boolean('Group Coverage')
+    is_group = fields.Boolean('Group Coverage', help='Define if the coverage '
+        'is available only for a group product')
 
 
 class ItemDesc(metaclass=PoolMeta):

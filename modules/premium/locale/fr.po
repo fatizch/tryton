@@ -558,6 +558,30 @@ msgctxt "help:account.fee,amount:"
 msgid "In company's currency"
 msgstr "Dans la devise de la société"
 
+msgctxt "help:offered.option.description,fees:"
+msgid "Fees that applies if this option is subscribed"
+msgstr "Frais qui s'applique si l'option est souscrite"
+
+msgctxt "help:offered.option.description,premium_rules:"
+msgid "Rules that return the premium amount for the option"
+msgstr "Règles de calcul du tarif de l'option"
+
+msgctxt "help:offered.option.description,taxes:"
+msgid "Taxes that apply to the coverage"
+msgstr "Taxes qui s'appliquent à la garantie"
+
+msgctxt "help:offered.product,fees:"
+msgid "Define which fee applies for this product"
+msgstr "Liste des frais qui s'appliquent au contrat"
+
+msgctxt "help:offered.product,premium_dates:"
+msgid ""
+"Rules that define dates when contract must be recalculed when a change "
+"occurs"
+msgstr ""
+"Règles qui définissent les dates de recalcul du contrat lorsque celui est "
+"modifié."
+
 msgctxt "model:account.fee,name:"
 msgid "Fee"
 msgstr "Frais"

@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.covered_element:"
+msgid ""
+"You are trying to create a covered element that overlaps an old covered"
+" element"
+msgstr ""
+"Vous essayez de créer un élément couvert pour un tiers dont les dates de "
+"début et de fin chevauchent un autre élément couvert pour le même tiers"
+
 msgctxt "error:contract.option:"
 msgid ""
 "Coverage amount \"%(coverage_amount)s\" is invalid for coverage "
@@ -120,9 +128,19 @@ msgstr ""
 "autrement la règle doit retourner une liste de valeurs possibles"
 
 msgctxt "help:offered.coverage_amount.rule,rule:"
-msgid "The rule must return the list of possible coverage amount"
+msgid "The rule must return the list of possible coverage amounts"
 msgstr ""
 "La règle doit retourner une liste des montants de couverture disponible"
+
+msgctxt "help:offered.option.description,coverage_amount_rules:"
+msgid "Define how a coverage amount will be required and filled for the option"
+msgstr ""
+"Définit si un montant de couverture est requis pour cette garantie "
+"et les montants disponibles"
+
+msgctxt "help:rule_engine,description:"
+msgid "Functional description of the rule"
+msgstr "Description fonctionnelle de la règle"
 
 msgctxt "model:offered.coverage_amount.rule,name:"
 msgid "Coverage Amount Rule"
@@ -132,19 +150,17 @@ msgctxt "model:rule_engine,name:coverage_amount_per_range"
 msgid "Coverage Amount Per Range Rule"
 msgstr "Règle de montant de couverture par tranches"
 
-msgctxt ""
-"model:rule_engine.rule_parameter,string:maximum_coverage_amount"
-msgid "Maximum Coverage Amount"
-msgstr "Montant de couverture maximal"
-
-msgctxt ""
-"model:rule_engine.rule_parameter,string:minimum_coverage_amount"
-msgid "Minimum Coverage Amount"
-msgstr "Montant de couverture minimum"
-
 msgctxt "model:rule_engine.rule_parameter,string:coverage_amount_range"
 msgid "Coverage Amount Range"
 msgstr "Tranche du montant de couverture"
+
+msgctxt "model:rule_engine.rule_parameter,string:maximum_coverage_amount"
+msgid "Maximum Coverage Amount"
+msgstr "Montant de couverture maximal"
+
+msgctxt "model:rule_engine.rule_parameter,string:minimum_coverage_amount"
+msgid "Minimum Coverage Amount"
+msgstr "Montant de couverture minimum"
 
 msgctxt "selection:rule_engine,type_:"
 msgid "Coverage Amount Selection"

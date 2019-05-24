@@ -21,12 +21,15 @@ class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     insurance_kind = fields.Selection([('', '')], 'Insurance Kind',
-        sort=False)
+        sort=False, help='Categorized coverage (used in insurer delegation '
+        'configuration)')
     insurance_kind_string = insurance_kind.translated('insurance_kind')
     insurer = fields.Many2One('insurer', 'Insurer',
         states={'required': ~Eval('is_service')}, ondelete='RESTRICT',
         depends=['is_service'], select=True)
-    family = fields.Selection([('generic', 'Generic')], 'Family')
+    family = fields.Selection([('generic', 'Generic')], 'Family',
+        help='Define the main insurance family. According to the family '
+        'selected some behavior are different')
     with_extra_premiums = fields.Boolean('Extra Premium Management',
         help='If True, it is be possible to add extra premiums to subscribed'
         ' options')
@@ -36,7 +39,8 @@ class OptionDescription(metaclass=PoolMeta):
     family_string = family.translated('family')
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         ondelete='RESTRICT', states={'required': ~Eval('is_service')},
-        depends=['is_service'], select=True)
+        depends=['is_service'], select=True,
+        help='Define the risk covered by the coverage')
 
     _insurer_flags_cache = Cache('get_insurer_flag')
 

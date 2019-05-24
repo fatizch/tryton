@@ -54,6 +54,15 @@ msgctxt "field:offered.option.description-beneficiary_clause,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:offered.option.description,beneficiaries_clauses:"
+msgid "Beneficiaries clauses available when subscribing this option"
+msgstr "Clauses bénéficiaires disponibles à la souscription de la garantie"
+
+msgctxt "help:offered.option.description,default_beneficiary_clause:"
+msgid "Beneficiaries default clause used when initializing the subscription"
+msgstr ""
+"Clause bénéficaire par défaut utilisée à l'initialisation du contrat"
+
 msgctxt ""
 "model:ir.action.act_window.domain,name:act_model_clause_domain_beneficiary"
 msgid "Beneficiary Clauses"

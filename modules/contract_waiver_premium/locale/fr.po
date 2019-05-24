@@ -315,6 +315,11 @@ msgctxt "field:waiver_premium.rule-account.tax,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:offered.option.description,waiver_premium_rule:"
+msgid "Define how waiver of premium can be processed on this option"
+msgstr ""
+"Définit comment les exonérations de primes vont s'appliquer sur la garantie"
+
 msgctxt "help:waiver_premium.rule,duration_rule:"
 msgid "Returns a list containing the start and the end date"
 msgstr ""

@@ -15,7 +15,8 @@ class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     processes = fields.Many2Many('process-offered.product',
-        'product', 'process', 'Processes')
+        'product', 'process', 'Processes',
+        help='Processes available for this product')
 
     @classmethod
     def _export_light(cls):

@@ -16,7 +16,9 @@ class OptionDescription(metaclass=PoolMeta):
 
     eligibility_rules = fields.One2Many(
         'offered.option.description.eligibility_rule', 'coverage',
-        'Eligibility Rules', delete_missing=True)
+        'Eligibility Rules', help='If the rule result is True, the option can '
+        'be activated else it must be declined or removed',
+        delete_missing=True)
 
     def check_eligibility(self, exec_context):
         if not self.eligibility_rules:

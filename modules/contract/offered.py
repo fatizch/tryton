@@ -26,7 +26,9 @@ class Product(CompanyMultiValueMixin, metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     quote_number_sequence = fields.MultiValue(fields.Many2One('ir.sequence',
-            'Quote number sequence', domain=[
+            'Quote number sequence',
+            help='Sequence used to compute the quote number on the contract',
+            domain=[
                 ('code', '=', 'quote'),
                 ('company', 'in', [Eval('context', {}).get('company', -1), None]
                     ), ],
@@ -39,7 +41,9 @@ class Product(CompanyMultiValueMixin, metaclass=PoolMeta):
             delete_missing=True)
     contract_data_rule = fields.One2Many(
         'contract.data.rule', 'product',
-        'Contract Data Rule', delete_missing=True, size=1)
+        'Contract Data Rule', help='Rule called at contract creation in order '
+        'to initialize any contract field',
+        delete_missing=True, size=1)
 
     @classmethod
     def __register__(cls, module_name):
@@ -112,7 +116,8 @@ class ProductQuoteNumberSequence(model.CoogSQL, CompanyValueMixin):
         'Quote Number Sequence', domain=[('code', '=', 'quote'),
             ('company', 'in',
                 [Eval('company', -1), None])], ondelete='RESTRICT',
-        depends=['company'])
+        depends=['company'], help='Sequence used to initalize the quote '
+        'number')
 
     @classmethod
     def __register__(cls, module_name):

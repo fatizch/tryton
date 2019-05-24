@@ -15,8 +15,9 @@ class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     term_renewal_rule = fields.One2Many(
-        'offered.product.term_renewal_rule', 'product',
-        'Term Renewal Rule', delete_missing=True, size=1)
+        'offered.product.term_renewal_rule', 'product', 'Term Renewal Rule',
+        help='Rule to define contract renewal and term behavior',
+        delete_missing=True, size=1)
 
     def get_contract_end_date(self, exec_context):
         if self.term_renewal_rule and not \
@@ -39,13 +40,15 @@ class ProductTermRenewalRule(
         'get_func_key', searcher='search_func_key')
     product = fields.Many2One('offered.product', 'Product', required=True,
         ondelete='CASCADE', select=True)
-    allow_renewal = fields.Boolean('Allow Renewal')
+    allow_renewal = fields.Boolean('Allow Renewal', help='If True, the '
+        'product will be renewed based on the renewal rule')
 
     @classmethod
     def __setup__(cls):
         super(ProductTermRenewalRule, cls).__setup__()
         cls.rule.required = True
         cls.rule.domain = [('type_', '=', 'renewal')]
+        cls.rule.help = 'Rule that returns the next term date'
 
     @classmethod
     def _export_light(cls):

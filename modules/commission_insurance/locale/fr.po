@@ -126,6 +126,14 @@ msgctxt "field:commission,end:"
 msgid "End"
 msgstr "Date de fin"
 
+msgctxt "field:commission,extra_details:"
+msgid "Extra Details"
+msgstr "Détails complémentaires"
+
+msgctxt "field:commission,extra_summary:"
+msgid "Extra Summary"
+msgstr "Résumé complémentaire"
+
 msgctxt "field:commission,line_amount:"
 msgid "Line Amount"
 msgstr "Montant de la ligne"
@@ -453,10 +461,6 @@ msgstr "Actif"
 msgctxt "field:commission.plan,code:"
 msgid "Code"
 msgstr "Code"
-
-msgctxt "field:commission.plan,commission_description_configuration:"
-msgid "Commission Description Configuration"
-msgstr "Configuration de la description de commissions"
 
 msgctxt "field:commission.plan,commissioned_products:"
 msgid "Commissioned Products"
@@ -961,6 +965,12 @@ msgid ""
 "Contains the string which will be used to introduce linear commissions "
 "calculation details"
 msgstr "Contient l'introduction au détail des commissions linéaires"
+
+msgctxt "help:commission.plan,tags:"
+msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgstr ""
+"Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
+"l'ensemble des objets de configuration liés à un même label."
 
 msgctxt "help:commission.plan.date,first_match_only:"
 msgid "If True, only the first matching date will be considered."

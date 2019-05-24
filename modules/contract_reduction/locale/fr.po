@@ -196,6 +196,10 @@ msgctxt "help:contract.reduce.preview,reduction_value:"
 msgid "The contract value after reduction"
 msgstr "La valeur du contrat après mise en réduction"
 
+msgctxt "help:offered.option.description,reduction_rules:"
+msgid "Rule that defines the contract reduction behavior"
+msgstr "Règle de gestion de la mise en réduction d'un contrat"
+
 msgctxt "help:offered.option.description.reduction_rule,eligibility_rule:"
 msgid ""
 "If set, the rule result must be True to allow reduction of the contract"

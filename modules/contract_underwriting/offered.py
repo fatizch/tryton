@@ -127,8 +127,9 @@ class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     underwriting_rules = fields.One2Many(
-        'underwriting.rule', 'coverage',
-        'Underwriting Rules', delete_missing=True)
+        'underwriting.rule', 'coverage', 'Underwriting Rules',
+        help='Rule that defines underwriting behavior during option '
+        'subscription', delete_missing=True)
 
     @classmethod
     def __register__(cls, module_name):
@@ -181,7 +182,9 @@ class UnderwritingRule(
     coverage = fields.Many2One('offered.option.description', 'Coverage',
         required=True, ondelete='CASCADE', select=True)
     decisions = fields.Many2Many('underwriting.rule-underwriting.decision',
-        'rule', 'decision', 'Decisions', domain=[('level', '=', 'coverage')])
+        'rule', 'decision', 'Decisions',
+        help='Decisions available for underwriting',
+        domain=[('level', '=', 'coverage')])
     accepted_decision = fields.Many2One('underwriting.decision',
         'Default Accepted Decision', help='If set and the rule returns true, '
         'this would be the accepted decision for the coverage',

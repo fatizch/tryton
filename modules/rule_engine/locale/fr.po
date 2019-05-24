@@ -927,6 +927,18 @@ msgctxt "help:rule_engine,description:"
 msgid "Functional description of the rule"
 msgstr "Description fonctionnelle de la règle"
 
+msgctxt "help:rule_engine,tags:"
+msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgstr ""
+"Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
+"l'ensemble des objets de configuration liés à un même label."
+
+msgctxt "help:rule_engine.context,tags:"
+msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgstr ""
+"Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
+"l'ensemble des objets de configuration liés à un même label."
+
 msgctxt "help:rule_engine.rule_parameter,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"

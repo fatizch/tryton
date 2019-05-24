@@ -401,7 +401,8 @@ class Product(metaclass=PoolMeta):
 
     endorsement_definitions = fields.Many2Many(
         'endorsement.definition-product', 'product', 'endorsement_definition',
-        'Endorsement Definitions')
+        'Endorsement Definitions', help='Endorsements available on a contract '
+        'linked to this product')
 
     @classmethod
     def _export_light(cls):

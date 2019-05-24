@@ -17,7 +17,8 @@ class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     documents_rules = fields.One2Many('document.rule', 'benefit',
-        'Document Rules', delete_missing=True, size=1,
+        'Document Rules', help='Define which documents are requested and '
+        'required during claim declaration', delete_missing=True, size=1,
         target_not_required=True)
 
     def calculate_required_documents(self, args):

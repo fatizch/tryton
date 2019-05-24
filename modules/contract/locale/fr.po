@@ -1408,6 +1408,21 @@ msgstr ""
 "conditions d'une souscription de contrat. Sinon, la date de conditions sera "
 "la date d'effet."
 
+msgctxt "help:offered.product,contract_data_rule:"
+msgid ""
+"Rule called at contract creation in order to initialize any contract field"
+msgstr ""
+"Règle appelée à la création du contrat permettant d'initialiser des "
+"données du contrat"
+
+msgctxt "help:offered.product,quote_number_sequence:"
+msgid "Sequence used to compute the quote number on the contract"
+msgstr "Générateur de numéro de devis pour un contrat"
+
+msgctxt "help:offered.product.quote_number_sequence,quote_number_sequence:"
+msgid "Sequence used to initalize the quote number"
+msgstr "Générateur de numéro utilisé pour le numéro de devis"
+
 msgctxt "model:contract,name:"
 msgid "Contract"
 msgstr "Contrat"

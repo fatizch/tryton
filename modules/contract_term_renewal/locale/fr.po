@@ -116,6 +116,19 @@ msgctxt "field:offered.product.term_renewal_rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:offered.product,term_renewal_rule:"
+msgid "Rule to define contract renewal and term behavior"
+msgstr "Règle régissant le renouvellement d'un contrat et son terme"
+
+msgctxt "help:offered.product.term_renewal_rule,allow_renewal:"
+msgid "If True, the product will be renewed based on the renewal rule"
+msgstr ""
+"Si vrai, le produit sera renouvelé selon la règle de renouvellement définie"
+
+msgctxt "help:offered.product.term_renewal_rule,rule:"
+msgid "Rule that returns the next term date"
+msgstr "Règle qui retourne la date du prochain terme"
+
 msgctxt "model:contract.renew,name:"
 msgid "Contracts Renewal Batch"
 msgstr "Batch de renouvellement de contrats"

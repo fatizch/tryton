@@ -17,7 +17,9 @@ class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     coverage_amount_rules = fields.One2Many('offered.coverage_amount.rule',
-        'coverage', 'Coverage Amount Rules', delete_missing=True)
+        'coverage', 'Coverage Amount Rules',
+        help='Define how a coverage amount will be required and filled for the'
+        ' option', delete_missing=True)
 
     def get_coverage_amount_rule_result(self, args):
         if not self.coverage_amount_rules:

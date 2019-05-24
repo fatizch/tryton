@@ -991,7 +991,7 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
                 'bad_option_end': 'Covered %(covered)s has an option that '
                 'ends after its end date',
                 'overlapped_elements': 'You are trying to create a covered '
-                'element that overlaps with an old covered element',
+                'element that overlaps an old covered element',
                     })
 
     @classmethod

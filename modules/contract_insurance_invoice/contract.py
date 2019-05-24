@@ -1706,7 +1706,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
             }, domain=[('id', 'in', Eval('possible_payers'))],
             depends=['direct_debit', 'contract_status', 'possible_payers'],
             ondelete='RESTRICT',
-            help='You may set another payer if there is a payer'
+            help='You may set another payer if there is a payer '
                  'relation between other party and the subscriber')
     suspended = fields.Function(fields.Boolean('Suspended'),
         'get_suspended')

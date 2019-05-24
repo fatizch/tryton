@@ -528,9 +528,21 @@ msgctxt "field:process.transition-group,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "help:process,tags:"
+msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgstr ""
+"Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
+"l'ensemble des objets de configuration liés à un même label."
+
 msgctxt "help:process.action,parameters:"
 msgid "Write parameters separated by \",\""
 msgstr "Ecrire les paramètres séparés par des \",\""
+
+msgctxt "help:process.step,tags:"
+msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgstr ""
+"Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
+"l'ensemble des objets de configuration liés à un même label."
 
 msgctxt "model:ir.action,name:act_configuration"
 msgid "Configuration"

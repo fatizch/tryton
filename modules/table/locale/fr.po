@@ -534,6 +534,12 @@ msgctxt "field:table.dimension.value.open.ask_type,type:"
 msgid "Type"
 msgstr "Type"
 
+msgctxt "help:table,tags:"
+msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgstr ""
+"Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
+"l'ensemble des objets de configuration liés à un même label."
+
 msgctxt "help:table.dimension.value,end:"
 msgid "Value Excluded"
 msgstr "Valeur exclue"

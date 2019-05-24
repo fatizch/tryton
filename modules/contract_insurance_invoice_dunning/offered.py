@@ -13,7 +13,8 @@ class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     dunning_procedure = fields.Many2One('account.dunning.procedure',
-        'Dunning Procedure', ondelete='RESTRICT')
+        'Dunning Procedure', ondelete='RESTRICT', help='Dunning procedure '
+        'used for contract pre-litigation')
 
     @classmethod
     def _export_light(cls):

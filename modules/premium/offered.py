@@ -111,9 +111,10 @@ class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     fees = fields.Many2Many('offered.product-account.fee', 'product', 'fee',
-        'Fees')
+        'Fees', help='Define which fee applies for this product')
     premium_dates = fields.One2Many('offered.product.premium_date', 'product',
-        'Premium Dates', delete_missing=True)
+        'Premium Dates', help='Rules that define dates when contract must be '
+        'recalculed when a change occurs', delete_missing=True)
 
     def calculate_premiums(self, contract, dates):
         lines = {date: [] for date in dates}
@@ -285,11 +286,13 @@ class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     fees = fields.Many2Many('offered.option.description-account.fee',
-        'coverage', 'fee', 'Fees')
+        'coverage', 'fee', 'Fees', help='Fees that applies if this option is '
+        'subscribed')
     premium_rules = fields.One2Many('offered.option.description.premium_rule',
-        'coverage', 'Premium Rules', delete_missing=True)
+        'coverage', 'Premium Rules', help='Rules that return the premium '
+        'amount for the option', delete_missing=True)
     taxes = fields.Many2Many('offered.option.description-account.tax',
-        'coverage', 'tax', 'Taxes')
+        'coverage', 'tax', 'Taxes', help='Taxes that apply to the coverage')
 
     _taxes_per_coverage_cache = Cache('taxes_per_coverage')
 

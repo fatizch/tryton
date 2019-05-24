@@ -16,7 +16,9 @@ class Coverage(metaclass=PoolMeta):
 
     extra_details_rule = fields.One2Many(
         'offered.option.description.extra_detail_rule', 'coverage',
-        'Extra Details Rule', size=1, delete_missing=True)
+        'Extra Details Rule', help='Rule used to update extra details (called '
+        'anytime there is a contract change)',
+        size=1, delete_missing=True)
 
     def calculate_extra_details(self, data):
         if not self.extra_details_rule:

@@ -124,7 +124,9 @@ class Product(metaclass=PoolMeta):
 
     document_rules = fields.One2Many('document.rule', 'product',
         'Document Rules', delete_missing=True, size=1,
-        target_not_required=True)
+        target_not_required=True,
+        help='Define which documents are requested and required during '
+        'contract subscription')
 
     @classmethod
     def __register__(cls, module_name):
@@ -151,7 +153,9 @@ class OptionDescription(metaclass=PoolMeta):
 
     document_rules = fields.One2Many('document.rule', 'option',
         'Document Rules', delete_missing=True, size=1,
-        target_not_required=True)
+        target_not_required=True,
+        help='Define which documents are requested and required during option '
+        'subscription')
 
     @classmethod
     def __register__(cls, module_name):

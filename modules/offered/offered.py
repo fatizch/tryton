@@ -79,9 +79,12 @@ class Product(model.CoogSQL, model.CoogView,
         'Contract Number Generator', context={'code': 'offered.product'},
         help='If empty, contract numbers will have to be manually set',
         ondelete='RESTRICT', domain=[('code', '=', 'contract')])
-    subscriber_kind = fields.Selection(SUBSCRIBER_KIND, 'Subscriber Kind')
+    subscriber_kind = fields.Selection(SUBSCRIBER_KIND, 'Subscriber Kind',
+        help='Define who can subscribe to the product (person, legal entity, '
+        'both)')
     report_templates = fields.Many2Many('report.template-offered.product',
-        'product', 'report_template', 'Report Templates')
+        'product', 'report_template', 'Report Templates',
+        help='Report templates available for this product')
     report_style_template = fields.Binary('Report Style')
     data_shelf_life = fields.Integer('Data Shelf Life',
         domain=['OR',
@@ -107,6 +110,11 @@ class Product(model.CoogSQL, model.CoogView,
                 'missing_contract_extra_data': 'The following contract extra'
                 'data should be set on the product: %s',
                 })
+        cls.extra_data.help = 'Extra data to characterize product. These '\
+            'extra data are available in rule engine'
+        cls.extra_data_def.help = 'List of extra data that will be requested '\
+            'to subscribe a contract. These data can be used in rule engine '\
+            'and will be versioned and stored on the contract'
 
     @classmethod
     def __register__(cls, module_name):
@@ -253,17 +261,22 @@ class OptionDescription(model.CoogSQL, model.CoogView,
         fields.Char('Currency Symbol'),
         'on_change_with_currency_symbol')
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
-        'Subscription Behaviour', sort=False)
+        'Subscription Behaviour', sort=False,
+        help='Define how the option is initialized and required at '
+        'subscription')
     options_required = fields.Many2Many('offered.option.description.required',
         'from_option_desc', 'to_option_desc', 'Options Required', domain=[
             ('id', '!=', Eval('id')),
             ('id', 'not in', Eval('options_excluded')),
-            ], depends=['id', 'options_excluded'])
+            ], depends=['id', 'options_excluded'], help='Options required in '
+            'order to subscribe this option')
     options_excluded = fields.Many2Many('offered.option.description.excluded',
         'from_option_desc', 'to_option_desc', 'Options Excluded', domain=[
             ('id', '!=', Eval('id')),
             ('id', 'not in', Eval('options_required')),
-            ], depends=['id', 'options_required'])
+            ], depends=['id', 'options_required'], help='If one of these '
+            'options is already subscribed, it will not be possible to '
+            'subscribe this option')
     products = fields.Many2Many('offered.product-option.description',
         'coverage', 'product', 'Products', domain=[
             ('currency', '=', Eval('currency')),
@@ -278,7 +291,8 @@ class OptionDescription(model.CoogSQL, model.CoogView,
         fields.Boolean('Is a Service'),
         'on_change_with_is_service')
     ending_rule = fields.One2Many('offered.option.description.ending_rule',
-        'coverage', 'Ending Rule', size=1, delete_missing=True)
+        'coverage', 'Ending Rule', help='Rule that returns a date which '
+        'defines when the contract will end', size=1, delete_missing=True)
 
     @classmethod
     def __setup__(cls):
@@ -288,6 +302,11 @@ class OptionDescription(model.CoogSQL, model.CoogView,
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
+        cls.extra_data.help = 'Extra data to characterize the option. These '\
+            'extra data are available in rule engine.'
+        cls.extra_data_def.help = 'List of extra data that will be requested '\
+            'for subscribing this option. These data can be used in rule '\
+            'engine and will be versioned and stored on the subscribed option.'
 
     @classmethod
     def __register__(cls, module_name):

@@ -292,8 +292,8 @@ class Invoice(metaclass=PoolMeta):
         if (getattr(self, 'business_kind', None) == 'broker_invoice' and
                 self.type == 'in' and self.total_amount > 0):
             if ((self.business_kind == 'broker_invoice') and
-            (broker_journal is not None)):
-                    line.payment_date = line.maturity_date or utils.today()
+                    (broker_journal is not None)):
+                line.payment_date = line.maturity_date or utils.today()
         return line
 
     def get_synthesis_rec_name(self, name):

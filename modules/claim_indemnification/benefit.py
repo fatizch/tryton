@@ -44,7 +44,9 @@ class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     indemnification_kind = fields.Selection(INDEMNIFICATION_KIND,
-        'Indemnification Kind', sort=False, required=True)
+        'Indemnification Kind', help='Define how the indemnification dates '
+        'will be initialized (period or capital)',
+        sort=False, required=True)
     indemnification_kind_string = indemnification_kind.translated(
         'indemnification_kind')
     benefit_rules = fields.One2Many('benefit.rule', 'benefit', 'Benefit Rules',
@@ -56,7 +58,10 @@ class Benefit(metaclass=PoolMeta):
         states={'invisible': Eval('indemnification_kind') != 'period'},
         depends=['indemnification_kind'])
     products = fields.Many2Many('benefit-product', 'benefit', 'product',
-        'Products', domain=[('template.taxes_included', '!=', True)])
+        'Products', help='Accounting products available when creating a new '
+        'indemnification. Account and taxes that apply to the benefit are '
+        'defined in an accounting product',
+        domain=[('template.taxes_included', '!=', True)])
     waiting_account = fields.Function(fields.Many2One(
             'account.account', 'Waiting Account'),
         'getter_waiting_account')

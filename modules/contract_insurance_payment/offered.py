@@ -17,7 +17,8 @@ class Product(metaclass=PoolMeta):
     payment_journal = fields.Many2One('account.payment.journal',
         'Payment Journal', domain=[('process_method', '!=', 'manual')],
         ondelete='RESTRICT',
-        help='If no journal defined the global configuration will be used')
+        help='Payment journal used when billing mode is set to direct debit.'
+        'If no journal defined the global configuration will be used')
 
     @classmethod
     def _export_light(cls):

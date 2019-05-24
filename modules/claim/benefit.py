@@ -246,10 +246,12 @@ class Benefit(model.CoogSQL, model.CoogView,
     description = fields.Text('Description', translate=True)
     loss_descs = fields.Many2Many('benefit-loss.description', 'benefit',
         'loss_desc', 'Loss Descriptions',
+        help='Loss description list when the benefit can be delivered',
         domain=[('company', '=', Eval('company'))], depends=['company'],
         required=True)
     beneficiary_kind = fields.Selection('get_beneficiary_kind',
-        'Beneficiary Kind', required=True, sort=False)
+        'Beneficiary Kind', help='Define who will benefit of the benefit',
+        required=True, sort=False)
     beneficiary_kind_string = beneficiary_kind.translated('beneficiary_kind')
     automatically_deliver = fields.Boolean('Automatically Deliver',
         help='If True the benefit will automatically be delivered after loss '
@@ -280,6 +282,12 @@ class Benefit(model.CoogSQL, model.CoogView,
                 'accounts on products of the benefit %(benefit)s, ensure all '
                 'the products have the same account before saving',
                 })
+        cls.extra_data.help = 'Extra data to characterize the benefit. These '\
+            'extra data are available in rule engine.'
+        cls.extra_data_def.help = 'List of extra data that will be requested '\
+            'for delivering this benefit in a claim. These data can be used '\
+            'in rule engine and will be versioned and store on the delivered '\
+            'service'
 
     @classmethod
     def __register__(cls, module_name):

@@ -13,7 +13,8 @@ class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     clauses = fields.Many2Many('offered.product-clause', 'product', 'clause',
-        'Clauses', domain=[('kind', '=', 'specific')])
+        'Clauses', help='Clauses defined for this product',
+        domain=[('kind', '=', 'specific')])
 
 
 class ProductClauseRelation(model.CoogSQL):

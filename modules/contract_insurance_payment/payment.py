@@ -129,11 +129,11 @@ class Payment(metaclass=PoolMeta):
                     # no payment in progress. If one is in this case, we reset
                     # the payment date
                     elif (invoice.invoice_state == 'posted'
-                                and not invoice.start and not invoice.end):
-                            payments = invoice.invoice.payments
-                            if not any([x.state == 'processing'
-                                        for x in payments]):
-                                lines_to_update += invoice.invoice.lines_to_pay
+                            and not invoice.start and not invoice.end):
+                        payments = invoice.invoice.payments
+                        if not any([x.state == 'processing'
+                                    for x in payments]):
+                            lines_to_update += invoice.invoice.lines_to_pay
 
         if lines_to_update:
             MoveLine.write(lines_to_update, {'payment_date': None})

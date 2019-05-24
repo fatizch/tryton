@@ -293,7 +293,9 @@ class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
     billing_modes = fields.Many2Many('offered.product-offered.billing_mode',
-        'product', 'billing_mode', 'Billing Modes', order=[('order', 'ASC')],
+        'product', 'billing_mode', 'Billing Modes',
+        help='Billing mode available to invoice the contract',
+        order=[('order', 'ASC')],
         states={'invisible': Bool(Eval('change_billing_modes_order'))})
     change_billing_modes_order = fields.Function(
         fields.Boolean('Change Order'),
@@ -434,10 +436,10 @@ class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     account_for_billing = fields.Many2One('account.account',
-        'Account for billing', depends=['company'],
+        'Account for billing', help='Account used to credit premium amount',
+        depends=['company'], states={'required': True},
         domain=[['OR', [('kind', '=', 'revenue')], [('kind', '=', 'other')]],
             ('company', '=', Eval('company'))],
-        states={'required': True},
         ondelete='RESTRICT')
     taxes_included_in_premium = fields.Boolean('Taxes Included',
         help='Taxes Included In Premium',

@@ -23,13 +23,16 @@ class Benefit(metaclass=PoolMeta):
     __name__ = 'benefit'
 
     eligibility_rules = fields.One2Many('benefit.eligibility.rule', 'benefit',
-        'Benefit Eligibility Rules', delete_missing=True, size=1)
+        'Benefit Eligibility Rules', help='Rule to define if a benefit can be '
+        'delivered', delete_missing=True, size=1)
     refuse_from_rules = fields.Boolean('Refuse From Eligibility Rules',
         help='If True, a non-eligible service will be refused. Else it will '
         'still require a manual analysis')
     eligibility_decisions = fields.Many2Many(
         'benefit-benefit.eligibility_decision',
-        'benefit', 'benefit_eligibility', 'Eligibility Decisions')
+        'benefit', 'benefit_eligibility', 'Eligibility Decisions',
+        help='Decisions that can be used when accepting or refusing the '
+        'eligibility')
     decision_default = fields.Many2One('benefit.eligibility.decision',
         'Default Decision', ondelete='SET NULL', domain=[
             ('id', 'in', Eval('eligibility_decisions'))],

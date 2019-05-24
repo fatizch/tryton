@@ -1171,6 +1171,15 @@ msgid ""
 msgstr ""
 "L'élément couvert du contrat cible vers lequel transférer les sous éléments"
 
+msgctxt "help:offered.option.description,is_group:"
+msgid "Define if the coverage is available only for a group product"
+msgstr ""
+"Définit si la garantie est accessible selon depuis un contrat collectif"
+
+msgctxt "help:offered.product,is_group:"
+msgid "Define if the product is a group product"
+msgstr "Définit si le produit est un produit collectif"
+
 msgctxt "model:contract.transfer_covered_elements.contracts,name:"
 msgid "Transfer Covered Elements Contracts"
 msgstr "Contrats du transfert"
@@ -1183,7 +1192,8 @@ msgctxt "model:contract.transfer_covered_elements.item_descs,name:"
 msgid "Transfer Covered Elements Item Descs"
 msgstr "Risques du transfert"
 
-msgctxt "model:covered_element.end_reason,name:default_end_reason_for_transfers"
+msgctxt ""
+"model:covered_element.end_reason,name:default_end_reason_for_transfers"
 msgid "Contract Transfer"
 msgstr "Transfert de contrat"
 
@@ -1397,6 +1407,10 @@ msgid "Subsidiary"
 msgstr "Filiale"
 
 msgctxt "view:contract.covered_element:"
+msgid "Cancel Enrollment"
+msgstr "Annuler l'affiliation"
+
+msgctxt "view:contract.covered_element:"
 msgid "Sub Elements"
 msgstr "Affiliations"
 
@@ -1438,7 +1452,3 @@ msgctxt ""
 "wizard_button:contract.transfer_covered_elements,select_contracts,item_descs:"
 msgid "Check Item Descs"
 msgstr "Vérifier les risques"
-
-msgctxt "view:contract.covered_element:"
-msgid "Cancel Enrollment"
-msgstr "Annuler l'affiliation"

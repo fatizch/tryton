@@ -102,6 +102,12 @@ msgctxt "field:document.rule,benefit:"
 msgid "Benefit"
 msgstr "Prestation"
 
+msgctxt "help:benefit,documents_rules:"
+msgid "Define which documents are requested and required during claim declaration"
+msgstr ""
+"Définit quels documents seront demandés et requis lors de la déclaration "
+"d'un sinistre"
+
 msgctxt "model:benefit.loss.description-document.description,name:"
 msgid "Loss Description to Document Description Relation"
 msgstr "Relation Fait générateur - Type de document"

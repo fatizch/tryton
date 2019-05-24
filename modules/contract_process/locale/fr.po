@@ -238,6 +238,10 @@ msgctxt "field:process-offered.product,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:offered.product,processes:"
+msgid "Processes available for this product"
+msgstr "Processus disponibles pour ce produit"
+
 msgctxt "model:contract.subscribe.find_process,name:"
 msgid "ContractSubscribe Find Process"
 msgstr "Paramètres du Processus de Souscription"

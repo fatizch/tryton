@@ -1501,6 +1501,18 @@ msgctxt "help:extra_details.configuration.line,selection_sorted:"
 msgid "If the selection must be sorted on label"
 msgstr "Si la sélection doit être triée par le libéllé"
 
+msgctxt "help:ir.sequence,tags:"
+msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgstr ""
+"Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
+"l'ensemble des objets de configuration liés à un même label."
+
+msgctxt "help:ir.sequence.strict,tags:"
+msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgstr ""
+"Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
+"l'ensemble des objets de configuration liés à un même label."
+
 msgctxt "help:ir.api.identity,identifier:"
 msgid "The identifier to match against"
 msgstr "L'identifiant externe à utiliser"

@@ -50,6 +50,10 @@ msgctxt "field:offered.product-clause,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:offered.product,clauses:"
+msgid "Clauses defined for this product"
+msgstr "Clauses de ce produit"
+
 msgctxt "model:offered.product-clause,name:"
 msgid "Product Clause Relation"
 msgstr "Relation produit - clause"

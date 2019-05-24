@@ -17,7 +17,8 @@ class OptionDescription(metaclass=PoolMeta):
 
     reduction_rules = fields.One2Many(
         'offered.option.description.reduction_rule', 'coverage',
-        'Reduction Rules', delete_missing=True, size=1)
+        'Reduction Rules', help='Rule that defines the contract reduction '
+        'behavior', delete_missing=True, size=1)
 
 
 class OptionDescriptionReductionRule(model.CoogSQL, model.CoogView,

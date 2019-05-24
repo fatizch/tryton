@@ -62,6 +62,13 @@ msgctxt "field:offered.option.description.extra_detail_rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:offered.option.description,extra_details_rule:"
+msgid ""
+"Rule used to update extra details (called anytime there is a contract change)"
+msgstr ""
+"Règle de mise à jour des données de détails (exécutée à chaque mise à jour "
+"du contrat)"
+
 msgctxt "help:offered.option.description.extra_detail_rule,rule:"
 msgid ""
 "When contract recalculation is triggered, this rule will be called, and its "

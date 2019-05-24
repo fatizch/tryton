@@ -89,6 +89,10 @@ msgstr ""
 "Si Vrai, les contrats avec ce sous-statuts seront ignorés lors des mises en "
 "demeure"
 
+msgctxt "help:offered.product,dunning_procedure:"
+msgid "Dunning procedure used for contract pre-litigation"
+msgstr "Procédure de pré-contentieux utilisée"
+
 msgctxt "model:account.dunning.create,name:"
 msgid "Dunning Creation Batch"
 msgstr "Batch de création des relances "
@@ -134,8 +138,11 @@ msgctxt "model:ir.action,name:act_contract_dunning_form"
 msgid "Contracts"
 msgstr "Contrats"
 
-msgctxt ""
-"model:ir.action.act_window,name:act_contract_dunning_relation"
+msgctxt "model:ir.action,name:act_contract_dunning_relation"
+msgid "Dunnings"
+msgstr "Relances"
+
+msgctxt "model:ir.action.act_window,name:act_contract_dunning_relation"
 msgid "Dunnings"
 msgstr "Relances"
 
