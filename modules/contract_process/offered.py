@@ -3,7 +3,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, coog_string
 
 
 __all__ = [
@@ -21,3 +21,9 @@ class Product(metaclass=PoolMeta):
     @classmethod
     def _export_light(cls):
         return super(Product, cls)._export_light() | {'processes'}
+
+    def get_documentation_structure(self):
+        doc = super(Product, self).get_documentation_structure()
+        doc['parameters'].append(
+            coog_string.doc_for_field(self, 'processes'))
+        return doc

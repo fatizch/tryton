@@ -11,7 +11,7 @@ from trytond.pyson import Bool, Eval
 from trytond.transaction import Transaction
 from trytond.cache import Cache
 
-from trytond.modules.coog_core import fields, model, utils
+from trytond.modules.coog_core import fields, model, utils, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 
@@ -101,6 +101,12 @@ class OptionDescription(metaclass=PoolMeta):
 
     def init_waiver_line(self, line, waiver_option):
         return self.waiver_premium_rule[0].init_waiver_line(line, waiver_option)
+
+    def get_documentation_structure(self):
+        structure = super(OptionDescription, self).get_documentation_structure()
+        structure['rules'].append(
+            coog_string.doc_for_rules(self, 'waiver_premium_rule'))
+        return structure
 
 
 class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
@@ -241,6 +247,19 @@ class WaiverPremiumRule(get_rule_mixin('duration_rule', 'Duration Rule',
         line.unit_price = premium.compute_amount_with_taxes(line.unit_price,
             waiver_start)
         return line
+
+    def get_rule_documentation_structure(self):
+        doc = [
+            coog_string.doc_for_field(self, 'rate'),
+            coog_string.doc_for_field(self, 'automatic'),
+            coog_string.doc_for_field(self, 'invoice_line_period_behaviour'),
+            coog_string.doc_for_field(self, 'taxes'),
+            coog_string.doc_for_field(self, 'account_for_waiver'),
+            ]
+        if self.duration_rule:
+            doc.append(
+                self.get_duration_rule_rule_engine_documentation_structure())
+        return doc
 
 
 class WaiverPremiumRuleTaxRelation(model.CoogSQL):

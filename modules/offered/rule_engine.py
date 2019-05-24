@@ -118,3 +118,6 @@ class OptionDescriptionEndingRule(
     @classmethod
     def search_func_key(cls, name, clause):
         return [('coverage.code',) + tuple(clause[1:])]
+
+    def get_rule_documentation_structure(self):
+        return [self.get_rule_rule_engine_documentation_structure()]

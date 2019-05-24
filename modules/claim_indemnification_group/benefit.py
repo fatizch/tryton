@@ -69,6 +69,13 @@ class Benefit(metaclass=PoolMeta):
             x.account_expense_used for x in self.company_products
             if x.account_expense_used]
 
+    def get_documentation_structure(self):
+        doc = super(Benefit, self).get_documentation_structure()
+        if self.is_group:
+            doc['parameters'].append(
+                coog_string.doc_for_field(self, 'company_products'))
+        return doc
+
 
 class BenefitCompanyProduct(model.CoogSQL):
     'Benefit Company Product relation'

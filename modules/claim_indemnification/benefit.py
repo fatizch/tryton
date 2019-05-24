@@ -122,6 +122,17 @@ class Benefit(metaclass=PoolMeta):
     def default_indemnification_kind():
         return 'capital'
 
+    def get_documentation_structure(self):
+        doc = super(Benefit, self).get_documentation_structure()
+        doc['parameters'].extend([
+                coog_string.doc_for_field(self, 'indemnification_kind'),
+                coog_string.doc_for_field(self, 'automatic_period_calculation'),
+                coog_string.doc_for_field(self, 'products'),
+                coog_string.doc_for_field(self, 'payment_journals'),
+                ])
+        doc['rules'].append(coog_string.doc_for_rules(self, 'benefit_rules'))
+        return doc
+
 
 class BenefitProduct(model.CoogSQL):
     'Benefit Product relation'
@@ -531,3 +542,16 @@ class BenefitRule(
         if Transaction().context.get('force_no_revaluation', False):
             return False
         return self.revaluation_rule is not None
+
+    def get_rule_documentation_structure(self):
+        res = []
+        if self.indemnification_rule:
+            res.append(self.
+                get_indemnification_rule_rule_engine_documentation_structure())
+        if self.deductible_rule:
+            res.append(
+                self.get_deductible_rule_rule_engine_documentation_structure())
+        if self.revaluation_rule:
+            res.append(
+                self.get_revaluation_rule_rule_engine_documentation_structure())
+        return res

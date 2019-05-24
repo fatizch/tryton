@@ -15,6 +15,10 @@ Nous nous concentrerons dans cette partie sur les aspects propres au produit,
 les éléments issus du paramétrage des garanties étant abordé dans la partie
 *Garantie* de la formation.
 
+Un fichier pdf synthétisant l'ensemble du paramétrage d'un produit peut être
+généré depuis Coog (cf le tutoriel dans le menu
+documentation utilisateur/paramétrage).
+
 Présentation générale
 ---------------------
 

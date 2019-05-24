@@ -92,6 +92,16 @@ def translate_label(instance, var_name, lang=None):
     return translate_field(instance, var_name, string, lang=lang)
 
 
+def translate_help(instance, var_name, lang=None):
+    field = instance._fields[var_name]
+    # function field
+    if not hasattr(field, 'help') and hasattr(field, 'field'):
+        _help = field.field.help
+    else:
+        _help = field.help
+    return translate_field(instance, var_name, _help, 'help', lang=lang)
+
+
 def translate_value(instance, var_name, lang=None):
     field = getattr(instance.__class__, var_name)
     if hasattr(field, '_field'):
@@ -191,3 +201,36 @@ def get_print_infos(lst, obj_name=None):
         min_max = ''
     return '%d %s%s%s' % (length, obj_name or 'obj',
         's' if length > 1 else '', min_max)
+
+
+def doc_for_field(instance, var_name, explanation=None):
+    attributes = []
+    if explanation is None:
+        field = getattr(instance.__class__, var_name)
+        if hasattr(field, '_field'):
+            _type = field._field.__class__._type
+        else:
+            _type = field.__class__._type
+        if _type in ('many2many', 'one2many'):
+            attributes = [x.rec_name for x in getattr(instance, var_name)]
+        elif _type == 'many2one':
+            if getattr(instance, var_name):
+                attributes = [getattr(instance, var_name).rec_name]
+        else:
+            attributes = [translate_value(instance, var_name)]
+    elif explanation:
+        attributes = [explanation]
+    return {
+        'label': translate_label(instance, var_name),
+        'help': translate_help(instance, var_name),
+        'attributes': attributes,
+        }
+
+
+def doc_for_rules(instance, rule_name):
+    rule_doc = doc_for_field(instance, rule_name, '')
+    rule_doc['attributes'] = []
+    for rule in getattr(instance, rule_name):
+        rule_doc['attributes'].extend(
+            rule.get_rule_documentation_structure())
+    return rule_doc

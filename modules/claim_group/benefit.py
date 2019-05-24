@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, coog_string
 
 __all__ = [
     'Benefit',
@@ -28,3 +28,9 @@ class Benefit(metaclass=PoolMeta):
             ('subscriber_then_covered', cls.raise_user_error(
                     'subscriber_then_covered_enum', raise_exception=False)),
             ]
+
+    def get_documentation_structure(self):
+        doc = super(Benefit, self).get_documentation_structure()
+        doc['parameters'].append(
+            coog_string.doc_for_field(self, 'is_group'))
+        return doc

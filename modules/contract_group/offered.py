@@ -4,7 +4,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, coog_string
 
 __all__ = [
     'Product',
@@ -27,12 +27,24 @@ class Product(metaclass=PoolMeta):
             ]
         cls.coverages.depends.append('is_group')
 
+    def get_documentation_structure(self):
+        doc = super(Product, self).get_documentation_structure()
+        doc['parameters'].append(
+            coog_string.doc_for_field(self, 'is_group'))
+        return doc
+
 
 class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
 
     is_group = fields.Boolean('Group Coverage', help='Define if the coverage '
         'is available only for a group product')
+
+    def get_documentation_structure(self):
+        doc = super(OptionDescription, self).get_documentation_structure()
+        doc['parameters'].append(
+            coog_string.doc_for_field(self, 'is_group'))
+        return doc
 
 
 class ItemDesc(metaclass=PoolMeta):

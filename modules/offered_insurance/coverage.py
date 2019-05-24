@@ -9,7 +9,7 @@ from trytond.transaction import Transaction
 from trytond.cache import Cache
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, coog_string
 
 
 __all__ = [
@@ -144,3 +144,17 @@ class OptionDescription(metaclass=PoolMeta):
         if self.item_desc:
             return False
         return super().is_contract_option()
+
+    def get_documentation_structure(self):
+        structure = super(OptionDescription, self).get_documentation_structure()
+        structure['parameters'].extend([
+            coog_string.doc_for_field(self, 'insurance_kind'),
+            coog_string.doc_for_field(self, 'insurer',
+                self.insurer.rec_name if self.insurer else ''),
+            coog_string.doc_for_field(self, 'family'),
+            coog_string.doc_for_field(self, 'with_extra_premiums'),
+            coog_string.doc_for_field(self, 'with_exclusions'),
+            coog_string.doc_for_field(self, 'item_desc',
+                self.item_desc.rec_name if self.item_desc else ''),
+            ])
+        return structure

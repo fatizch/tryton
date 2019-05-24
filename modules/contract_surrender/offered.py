@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 __all__ = [
@@ -19,6 +19,12 @@ class OptionDescription(metaclass=PoolMeta):
         'offered.option.description.surrender_rule', 'coverage',
         'Surrender Rules', help='Rule that defines the contract surrender '
         'behavior', delete_missing=True, size=1)
+
+    def get_documentation_structure(self):
+        structure = super(OptionDescription, self).get_documentation_structure()
+        structure['rules'].append(
+            coog_string.doc_for_rules(self, 'surrender_rules'))
+        return structure
 
 
 class OptionDescriptionSurrenderRule(model.CoogSQL, model.CoogView,
@@ -63,3 +69,13 @@ class OptionDescriptionSurrenderRule(model.CoogSQL, model.CoogView,
         if self.rule is None:
             self.surrender_account = None
             self.eligibility_rule = None
+
+    def get_rule_documentation_structure(self):
+        doc = []
+        if self.rule:
+            doc.append(self.get_rule_rule_engine_documentation_structure())
+        if self.eligibility_rule:
+            doc.append(self.
+                get_eligibility_rule_rule_engine_documentation_structure())
+        doc.append(coog_string.doc_for_field(self, 'surrender_account'))
+        return doc

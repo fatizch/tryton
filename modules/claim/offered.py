@@ -50,3 +50,9 @@ class OptionDescription(metaclass=PoolMeta):
     @classmethod
     def _export_light(cls):
         return super(OptionDescription, cls)._export_light() | {'benefits'}
+
+    def get_documentation_structure(self):
+        structure = super(OptionDescription, self).get_documentation_structure()
+        structure['benefits'] = [b.get_documentation_structure()
+            for b in self.benefits]
+        return structure

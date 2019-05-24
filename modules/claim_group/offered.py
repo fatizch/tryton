@@ -31,6 +31,14 @@ class Product(metaclass=PoolMeta):
         return super()._get_subscriber_benefit_kinds() | {
             'subscriber_then_covered'}
 
+    def get_documentation_structure(self):
+        doc = super(Product, self).get_documentation_structure()
+        if self.is_group:
+            doc['parameters'].append(
+                coog_string.doc_for_field(self,
+                    'default_termination_claim_behaviour'))
+        return doc
+
 
 class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data noupdate="1">
+        <record model="report.template" id="functional_product_documentation_template">
+            <field name="name">Functional Product Documentation</field>
+            <field name="code">functional_product_documentation</field>
+            <field name="on_model" search="[('model', '=', 'offered.product')]"/>
+            <field name="kind">documentation</field>
+            <field name="input_kind">libre_office_odt</field>
+            <field name="process_method">libre_office</field>
+            <field name="format_for_internal_edm">pdf</field>
+            <field name="output_format">pdf</field>
+            <field name="modifiable_before_printing">false</field>
+            <field name="split_reports">True</field>
+            <field name="recipient_needed">False</field>
+        </record>
+        <record model="report.template.version" id="product_documentation_fr_version">
+            <field name="template" ref="offered.functional_product_documentation_template"/>
+            <field name="name">Functional FR Product Documentation</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="path">offered/reports/functional_product_documentation.fodt</field>
+        </record>
+    </data>
+</tryton>

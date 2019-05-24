@@ -26,6 +26,19 @@ class Product(metaclass=PoolMeta):
             'required': Bool(Eval('is_loan', False))},
         depends=['is_loan'], ondelete='RESTRICT')
 
+    def get_documentation_structure(self):
+        doc = super(Product, self).get_documentation_structure()
+        if self.is_loan:
+            loan_average_doc = coog_string.doc_for_field(self,
+                'average_loan_premium_rule', '')
+            loan_average_doc['attributes'] = []
+            if self.average_loan_premium_rule:
+                loan_average_doc['attributes'].extend(
+                    self.average_loan_premium_rule.
+                    get_rule_documentation_structure())
+            doc['rules'].append(loan_average_doc)
+        return doc
+
 
 class LoanAveragePremiumRule(model.CoogSQL, model.CoogView):
     'Loan Average Premium Rule'
@@ -198,6 +211,24 @@ class LoanAveragePremiumRule(model.CoogSQL, model.CoogView):
         if den:
             return share_amount, share_amount * 100 / den
         return share_amount, None
+
+    def get_rule_documentation_structure(self):
+        doc = [
+            coog_string.doc_for_field(self, 'code'),
+            coog_string.doc_for_field(self, 'name'),
+            coog_string.doc_for_field(self, 'use_default_rule'),
+            coog_string.doc_for_field(self, 'default_fee_action'),
+            ]
+        if self.contract_rule:
+            doc.append(self.contract_rule.get_documentation())
+        if self.option_rule:
+            doc.append(self.option_rule.get_documentation())
+        for rule in self.fee_rules:
+            doc.append(
+                coog_string.doc_for_field(self, 'fee_rules',
+                    '%s:%s' % (fee.rec_name,
+                        coog_string.translate_value(fee, 'action'))))
+        return doc
 
 
 class FeeRule(model.CoogSQL, model.CoogView):

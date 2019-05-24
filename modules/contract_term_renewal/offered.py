@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 __all__ = [
@@ -26,6 +26,12 @@ class Product(metaclass=PoolMeta):
             return self.term_renewal_rule[0].calculate_rule(exec_context)
         elif self.term_renewal_rule:
             return exec_context['contract'].final_end_date
+
+    def get_documentation_structure(self):
+        doc = super(Product, self).get_documentation_structure()
+        doc['rules'].append(
+            coog_string.doc_for_rules(self, 'term_renewal_rule'))
+        return doc
 
 
 class ProductTermRenewalRule(
@@ -61,3 +67,9 @@ class ProductTermRenewalRule(
     @classmethod
     def search_func_key(cls, name, clause):
         return [('product.code',) + tuple(clause[1:])]
+
+    def get_rule_documentation_structure(self):
+        return [
+            coog_string.doc_for_field(self, 'allow_renewal'),
+            self.get_rule_rule_engine_documentation_structure(),
+            ]

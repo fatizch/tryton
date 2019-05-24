@@ -168,6 +168,12 @@ class OptionDescription(metaclass=PoolMeta):
         # TODO deal with multiple underwriting rules?
         return self.underwriting_rules[-1] if self.underwriting_rules else None
 
+    def get_documentation_structure(self):
+        structure = super(OptionDescription, self).get_documentation_structure()
+        structure['rules'].append(
+            coog_string.doc_for_rules(self, 'underwriting_rules'))
+        return structure
+
 
 class UnderwritingRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
@@ -228,6 +234,13 @@ class UnderwritingRule(
     def calculate(self, args):
         rule_result = self.rule.execute(args, self.rule_extra_data)
         return rule_result.result
+
+    def get_rule_documentation_structure(self):
+        return [
+            self.get_rule_rule_engine_documentation_structure(),
+            coog_string.doc_for_field(self, 'decisions'),
+            coog_string.doc_for_field(self, 'accepted_decision')
+            ]
 
 
 class UnderwritingRuleUnderwritingDecision(model.CoogSQL):

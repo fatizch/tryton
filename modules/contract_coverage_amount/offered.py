@@ -4,7 +4,7 @@ from trytond import backend
 from trytond.pool import PoolMeta
 from trytond.pyson import If, Bool, Eval
 
-from trytond.modules.coog_core import model, fields
+from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 __all__ = [
@@ -25,6 +25,12 @@ class OptionDescription(metaclass=PoolMeta):
         if not self.coverage_amount_rules:
             return
         return self.coverage_amount_rules[0].calculate_rule(args)
+
+    def get_documentation_structure(self):
+        structure = super(OptionDescription, self).get_documentation_structure()
+        structure['rules'].append(
+            coog_string.doc_for_rules(self, 'coverage_amount_rules'))
+        return structure
 
 
 class CoverageAmountRule(
@@ -65,3 +71,9 @@ class CoverageAmountRule(
                 'config_kind']:
             if rule.column_exist(var_name):
                 rule.drop_column(var_name)
+
+    def get_rule_documentation_structure(self):
+        return [
+            coog_string.doc_for_field(self, 'free_input'),
+            self.get_rule_rule_engine_documentation_structure()
+            ]

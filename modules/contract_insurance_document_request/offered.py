@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 from trytond.pyson import Bool, Eval
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 
@@ -99,6 +99,18 @@ class DocumentRule(
         elif self.option:
             return getattr(self.option, self.option._func_key)
 
+    def get_rule_documentation_structure(self):
+        res = [
+            coog_string.doc_for_field(self, 'documents',
+                ' - '.join([d.rec_name for d in self.documents])),
+            coog_string.doc_for_field(self, 'reminder_delay'),
+            coog_string.doc_for_field(self, 'reminder_unit')
+            ]
+        if self.rule:
+            res.append(
+                self.get_rule_rule_engine_documentation_structure())
+        return res
+
 
 class RuleDocumentDescriptionRelation(model.CoogSQL, model.CoogView):
     'Rule to Document Description Relation'
@@ -147,6 +159,11 @@ class Product(metaclass=PoolMeta):
         if self.document_rules:
             return self.document_rules[0].reception_requires_attachment
 
+    def get_documentation_structure(self):
+        doc = super(Product, self).get_documentation_structure()
+        doc['rules'].append(coog_string.doc_for_rules(self, 'document_rules'))
+        return doc
+
 
 class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
@@ -170,3 +187,9 @@ class OptionDescription(metaclass=PoolMeta):
         if not self.document_rules:
             return []
         return self.document_rules[0].calculate_required_documents(args)
+
+    def get_documentation_structure(self):
+        structure = super(OptionDescription, self).get_documentation_structure()
+        structure['rules'].append(
+            coog_string.doc_for_rules(self, 'document_rules'))
+        return structure

@@ -6,7 +6,7 @@ from trytond import backend
 from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, coog_string
 
 
 __all__ = [
@@ -106,3 +106,10 @@ class OptionDescription(metaclass=PoolMeta):
 
     def get_is_loan_coverage(self, name):
         return self.family == 'loan'
+
+    def get_documentation_structure(self):
+        structure = super(OptionDescription, self).get_documentation_structure()
+        if self.is_loan:
+            structure['parameters'].append(
+                coog_string.doc_for_field(self, 'insured_outstanding_balance'))
+        return structure

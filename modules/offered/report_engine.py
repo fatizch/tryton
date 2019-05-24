@@ -29,6 +29,14 @@ class ReportTemplate(metaclass=PoolMeta):
         default.setdefault('products', None)
         return super(ReportTemplate, cls).copy(reports, default=default)
 
+    def get_possible_kinds(self):
+        result = super(ReportTemplate, self).get_possible_kinds()
+        if not self.on_model:
+            return result
+        if self.on_model.model == 'offered.product':
+            result.append(('documentation', 'Documentation'))
+        return result
+
 
 class ReportProductRelation(model.CoogSQL):
     'Report template to Product relation'

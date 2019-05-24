@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool, Or, In, If
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, coog_string
 
 __all__ = [
     'Benefit',
@@ -61,6 +61,16 @@ class Benefit(metaclass=PoolMeta):
         if self.beneficiary_kind == 'manual_list':
             self.beneficiary_documents = []
             self.beneficiary_extra_data_def = []
+
+    def get_documentation_structure(self):
+        doc = super(Benefit, self).get_documentation_structure()
+        doc['parameters'].extend([
+                coog_string.doc_for_field(self, 'beneficiary_documents'),
+                coog_string.doc_for_field(self, 'beneficiary_extra_data_def'),
+                coog_string.doc_for_field(self, 'manual_share_management'),
+                coog_string.doc_for_field(self, 'ignore_shares'),
+                ])
+        return doc
 
 
 class BenefitBeneficiaryDocument(model.CoogSQL):

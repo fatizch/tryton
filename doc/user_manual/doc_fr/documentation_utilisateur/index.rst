@@ -12,6 +12,7 @@ Documentation utilisateurs
     comptabilite/index
     commissionnement/index
     processus/index
+    parametrage/index
     moteur_de_regles/index
     editique/index
     tutorials/index

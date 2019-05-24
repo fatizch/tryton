@@ -266,6 +266,17 @@ def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
 
     setattr(BaseRuleMixin, 'get_' + field_name + '_extract', get_extract)
 
+    def get_documentation_structure(self):
+        rule = getattr(self, field_name, None)
+        if not rule:
+            return
+        doc = rule.get_documentation(extra_name)
+        doc['help'] = coog_string.translate_help(self, field_name)
+        return doc
+
+    setattr(BaseRuleMixin, 'get_' + field_name +
+        '_rule_engine_documentation_structure', get_documentation_structure)
+
     return BaseRuleMixin
 
 
@@ -1587,6 +1598,15 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             return {k: getattr(result, k, None) for k in fields}
 
         return [execute_case(case) for case in cases]
+
+    def get_documentation(self, parameters_value={}):
+        return {
+            'label': self.name,
+            'help': '',
+            'rule_description': self.description,
+            'rule_algorithm': self.algorithm,
+            'attributes': [],
+            }
 
 
 class Context(ModelView, ModelSQL, model.TaggedMixin):

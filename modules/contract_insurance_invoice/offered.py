@@ -12,7 +12,7 @@ from trytond.pyson import Eval, Bool, If
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 
-from trytond.modules.coog_core import fields, model, export, utils
+from trytond.modules.coog_core import fields, model, export, utils, coog_string
 
 from .contract import FREQUENCIES
 
@@ -353,6 +353,16 @@ class Product(metaclass=PoolMeta):
         offset = self.days_offset_for_subscription_payments
         return utils.today() + relativedelta(days=offset or 0)
 
+    def get_documentation_structure(self):
+        doc = super(Product, self).get_documentation_structure()
+        doc['parameters'].extend([
+                coog_string.doc_for_field(self,
+                    'days_offset_for_subscription_payments'),
+                coog_string.doc_for_field(self, 'taxes_included_in_premium'),
+                coog_string.doc_for_field(self, 'billing_modes')
+                ])
+        return doc
+
 
 class ProductBillingModeRelation(model.CoogSQL, model.CoogView):
     'Product Billing Mode Relation'
@@ -463,6 +473,15 @@ class OptionDescription(metaclass=PoolMeta):
 
     def get_account_for_billing(self, line):
         return self.account_for_billing
+
+    def get_documentation_structure_for_premium_rule(self):
+        doc = super(OptionDescription, self).\
+            get_documentation_structure_for_premium_rule()
+        doc['attributes'].extend([
+            coog_string.doc_for_field(self, 'account_for_billing'),
+            coog_string.doc_for_field(self, 'taxes_included_in_premium')
+            ])
+        return doc
 
 
 class OptionDescriptionPremiumRule(metaclass=PoolMeta):

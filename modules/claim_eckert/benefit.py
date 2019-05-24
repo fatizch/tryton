@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, If
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, coog_string
 
 __all__ = [
     'Benefit',
@@ -32,3 +32,9 @@ class Benefit(metaclass=PoolMeta):
         if self.indemnification_kind != 'capital':
             return False
         return self.is_eckert
+
+    def get_documentation_structure(self):
+        doc = super(Benefit, self).get_documentation_structure()
+        doc['parameters'].append(
+            coog_string.doc_for_field(self, 'is_eckert'))
+        return doc

@@ -90,6 +90,23 @@ class Benefit(metaclass=PoolMeta):
     def default_refuse_from_rules(cls):
         return True
 
+    def get_documentation_structure(self):
+        doc = super(Benefit, self).get_documentation_structure()
+        eligibility_doc = coog_string.doc_for_field(self, 'eligibility_rules',
+            '')
+        eligibility_doc['attributes'] = []
+        for rule in self.eligibility_rules:
+            eligibility_doc['attributes'].extend(
+                rule.get_rule_documentation_structure())
+        eligibility_doc['attributes'].extend([
+            coog_string.doc_for_field(self, 'refuse_from_rules'),
+            coog_string.doc_for_field(self, 'decision_default'),
+            coog_string.doc_for_field(self, 'accept_decision_default'),
+            coog_string.doc_for_field(self, 'refuse_decision_default'),
+            ])
+        doc['rules'].append(eligibility_doc)
+        return doc
+
 
 class BenefitEligibilityRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
@@ -110,6 +127,9 @@ class BenefitEligibilityRule(
     def check_eligibility(self, exec_context):
         res = self.calculate_rule(exec_context, return_full=True)
         return res.result, '\n'.join(res.print_info())
+
+    def get_rule_documentation_structure(self):
+        return [self.get_rule_rule_engine_documentation_structure()]
 
 
 class BenefitEligibilityDecision(model.CoogSQL, model.CoogView):

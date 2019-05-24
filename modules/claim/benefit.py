@@ -363,6 +363,29 @@ class Benefit(model.CoogSQL, model.CoogView,
     def on_change_with_code(self):
         return self.code if self.code else coog_string.slugify(self.name)
 
+    def get_documentation_structure(self):
+        structure = {
+            'name': self.name,
+            'code': self.code,
+            'description': self.description,
+            'parameters': [
+                coog_string.doc_for_field(self, 'company'),
+                coog_string.doc_for_field(self, 'start_date'),
+                coog_string.doc_for_field(self, 'end_date'),
+                coog_string.doc_for_field(self, 'insurer'),
+                coog_string.doc_for_field(self, 'beneficiary_kind'),
+                coog_string.doc_for_field(self, 'extra_data'),
+                coog_string.doc_for_field(self, 'extra_data_def'),
+                coog_string.doc_for_field(self, 'tags'),
+                coog_string.doc_for_field(self, 'automatically_deliver'),
+                coog_string.doc_for_field(self, 'several_delivered'),
+                coog_string.doc_for_field(self, 'may_have_origin'),
+                ],
+            'rules': [
+                ],
+            }
+        return structure
+
 
 class BenefitLossDescriptionRelation(model.CoogSQL):
     'Benefit Loss Description Relation'

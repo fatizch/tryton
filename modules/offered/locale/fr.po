@@ -1166,6 +1166,10 @@ msgctxt "model:offered.product-package,name:"
 msgid "Product - Package Relation"
 msgstr "Relation Produit - Formule"
 
+msgctxt "model:report.template,name:functional_product_documentation_template"
+msgid "Functional Product Documentation"
+msgstr "Documentation fonctionnelle du produit"
+
 msgctxt "model:report.template-offered.product,name:"
 msgid "Report template to Product relation"
 msgstr "Relation Modèle - Produit"

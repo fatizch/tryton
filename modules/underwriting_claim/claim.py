@@ -5,7 +5,7 @@ from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import fields, utils
+from trytond.modules.coog_core import fields, utils, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 __all__ = [
@@ -34,6 +34,17 @@ class Benefit(get_rule_mixin('underwriting_rule', 'Underwriting Rule'),
         else:
             type_ = None
         return type_, date
+
+    def get_documentation_structure(self):
+        doc = super(Benefit, self).get_documentation_structure()
+        underwriting_rule_doc = coog_string.doc_for_field(self,
+            'underwriting_rule', '')
+        if self.underwriting_rule:
+            underwriting_rule_doc['attributes'] = [
+                self.get_underwriting_rule_rule_engine_documentation_structure()
+                ]
+        doc['rules'].append(underwriting_rule_doc)
+        return doc
 
 
 class Claim(metaclass=PoolMeta):

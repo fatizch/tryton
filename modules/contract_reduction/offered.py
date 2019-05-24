@@ -3,7 +3,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 __all__ = [
@@ -19,6 +19,12 @@ class OptionDescription(metaclass=PoolMeta):
         'offered.option.description.reduction_rule', 'coverage',
         'Reduction Rules', help='Rule that defines the contract reduction '
         'behavior', delete_missing=True, size=1)
+
+    def get_documentation_structure(self):
+        structure = super(OptionDescription, self).get_documentation_structure()
+        structure['rules'].append(
+            coog_string.doc_for_rules(self, 'reduction_rules'))
+        return structure
 
 
 class OptionDescriptionReductionRule(model.CoogSQL, model.CoogView,
@@ -50,3 +56,12 @@ class OptionDescriptionReductionRule(model.CoogSQL, model.CoogView,
     def _export_light(cls):
         return super(OptionDescriptionReductionRule, cls)._export_light() | {
             'eligibility_rule', 'rule'}
+
+    def get_rule_documentation_structure(self):
+        doc = []
+        if self.rule:
+            doc.append(self.get_rule_rule_engine_documentation_structure())
+        if self.eligibility_rule:
+            doc.append(self.
+                get_eligibility_rule_rule_engine_documentation_structure())
+        return doc

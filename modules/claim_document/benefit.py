@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, coog_string
 
 
 __all__ = [
@@ -25,6 +25,11 @@ class Benefit(metaclass=PoolMeta):
         if not self.documents_rules:
             return []
         return self.documents_rules[0].calculate_required_documents(args)
+
+    def get_documentation_structure(self):
+        doc = super(Benefit, self).get_documentation_structure()
+        doc['rules'].append(coog_string.doc_for_rules(self, 'documents_rules'))
+        return doc
 
 
 class DocumentRule(metaclass=PoolMeta):

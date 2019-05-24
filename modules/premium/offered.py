@@ -8,7 +8,7 @@ from trytond.pyson import Eval, Bool, In
 from trytond.cache import Cache
 from trytond.model import MatchMixin
 
-from trytond.modules.coog_core import fields, model, coog_date
+from trytond.modules.coog_core import fields, model, coog_date, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 
@@ -106,6 +106,14 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
             return rrule.rrule(rrule.YEARLY,
                 dtstart=contract.initial_start_date, until=max_date)
 
+    def get_rule_documentation_structure(self):
+        return [
+            coog_string.doc_for_field(self, 'type_'),
+            coog_string.doc_for_field(self, 'custom_date'),
+            coog_string.doc_for_field(self, 'duration'),
+            coog_string.doc_for_field(self, 'duration_unit'),
+            ]
+
 
 class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
@@ -154,6 +162,13 @@ class Product(metaclass=PoolMeta):
             rule_set.rrule(premium_date_rule)
         dates.update([x.date() for x in rule_set])
         return dates
+
+    def get_documentation_structure(self):
+        doc = super(Product, self).get_documentation_structure()
+        doc['rules'].append(
+            coog_string.doc_for_field(self, 'fees'))
+        doc['rules'].append(coog_string.doc_for_rules(self, 'premium_dates'))
+        return doc
 
 
 class ProductFeeRelation(model.CoogSQL):
@@ -281,6 +296,9 @@ class OptionDescriptionPremiumRule(
             return []
         return [cls._premium_result_class(0, rule_dict)]
 
+    def get_rule_documentation_structure(self):
+        return [self.get_rule_rule_engine_documentation_structure()]
+
 
 class OptionDescription(metaclass=PoolMeta):
     __name__ = 'offered.option.description'
@@ -334,6 +352,20 @@ class OptionDescription(metaclass=PoolMeta):
             for premium_rule in self.premium_rules:
                 if premium_rule.match(match_rule):
                     premium_rule.calculate(rated_instance, lines)
+
+    def get_documentation_structure_for_premium_rule(self):
+        premium_rule_desc = coog_string.doc_for_rules(self, 'premium_rules')
+        premium_rule_desc['attributes'].extend([
+                coog_string.doc_for_field(self, 'taxes'),
+                coog_string.doc_for_field(self, 'fees'),
+                ])
+        return premium_rule_desc
+
+    def get_documentation_structure(self):
+        structure = super(OptionDescription, self).get_documentation_structure()
+        structure['rules'].append(
+            self.get_documentation_structure_for_premium_rule())
+        return structure
 
 
 class OptionDescriptionFeeRelation(model.CoogSQL):

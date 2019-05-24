@@ -11,7 +11,7 @@ def register():
     Pool.register(
         rule_engine.RuleEngine,
         rule_engine.Runtime,
-        offered.Coverage,
+        offered.OptionDescription,
         offered.CoverageExtraDetails,
         contract.Contract,
         contract.ContractOption,

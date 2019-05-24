@@ -11,8 +11,8 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond import backend
 
-from trytond.modules.coog_core import model, utils, fields
-from trytond.modules.coog_core import coog_string
+from trytond.modules.report_engine import Printable
+from trytond.modules.coog_core import model, utils, fields, coog_string
 from trytond.modules.currency_cog import ModelCurrency
 
 from .extra_data import with_extra_data_def, with_extra_data
@@ -41,7 +41,7 @@ SUBSCRIPTION_BEHAVIOUR = [
     ]
 
 
-class Product(model.CoogSQL, model.CoogView,
+class Product(model.CoogSQL, model.CoogView, Printable,
         with_extra_data_def('offered.product-extra_data', 'product',
             'contract'),
         with_extra_data(['product'], field_string='Offered Kind'),
@@ -233,6 +233,70 @@ class Product(model.CoogSQL, model.CoogView,
     @fields.depends('currency')
     def on_change_with_currency_symbol(self, name=None):
         return self.currency.symbol if self.currency else ''
+
+    def get_doc_template_kind(self):
+        res = super(Product, self).get_doc_template_kind()
+        res.append('documentation')
+        return res
+
+    def get_contact(self):
+        return None
+
+    def get_product(self):
+        return self
+
+    def get_object_for_contact(self):
+        return self.company.party
+
+    def get_documentation_structure(self):
+        '''
+        This method is used in report templates to generate functional
+        documentation of a product
+        The structure of the documentation is based on 3 main level :
+        product/coverage/benefit/. Each level has the following information:
+            - name,
+            - code,
+            - description
+            - parameters keys: list of
+                label,
+                help,
+                list of attributes (list of string)
+            - rules keys: list of
+                label,
+                help,
+                list of attributes :
+                    - label
+                    - help
+                    - rule_description
+                    - rule_algorithm
+                    - attributes (list of string)
+        '''
+        structure = {
+            'name': self.name,
+            'code': self.code,
+            'description': self.description,
+            'parameters': [
+                coog_string.doc_for_field(self, 'company'),
+                coog_string.doc_for_field(self, 'start_date'),
+                coog_string.doc_for_field(self, 'end_date'),
+                coog_string.doc_for_field(self, 'subscriber_kind'),
+                coog_string.doc_for_field(self, 'currency'),
+                coog_string.doc_for_field(self, 'contract_generator'),
+                coog_string.doc_for_field(self, 'data_shelf_life'),
+                coog_string.doc_for_field(self, 'extra_data'),
+                coog_string.doc_for_field(self, 'extra_data_def'),
+                coog_string.doc_for_field(self, 'tags'),
+                coog_string.doc_for_field(self, 'report_templates'),
+                coog_string.doc_for_field(self, 'packages'),
+                ],
+            'rules': [
+                ],
+            }
+
+        structure['coverages'] = [c.get_documentation_structure()
+            for c in self.coverages]
+
+        return structure
 
 
 class OptionDescription(model.CoogSQL, model.CoogView,
@@ -448,6 +512,38 @@ class OptionDescription(model.CoogSQL, model.CoogView,
 
     def is_contract_option(self):
         return True
+
+    def get_documentation_structure(self):
+        structure = {
+            'name': self.name,
+            'code': self.code,
+            'description': self.description,
+            'parameters': [
+                coog_string.doc_for_field(self, 'company',
+                    self.company.rec_name if self.company else ''),
+                coog_string.doc_for_field(self, 'start_date'),
+                coog_string.doc_for_field(self, 'end_date'),
+                coog_string.doc_for_field(self, 'extra_data'),
+                coog_string.doc_for_field(self, 'sequence'),
+                coog_string.doc_for_field(self, 'extra_data_def'),
+                coog_string.doc_for_field(self, 'tags'),
+                ],
+            'rules': []
+            }
+
+        subscription_behaviour_rule = coog_string.doc_for_field(self,
+            'subscription_behaviour', '')
+        subscription_behaviour_rule['attributes'] = [
+            coog_string.doc_for_field(self, 'subscription_behaviour'),
+            coog_string.doc_for_field(self, 'options_required'),
+            coog_string.doc_for_field(self, 'options_excluded'),
+            ]
+        structure['rules'].append(subscription_behaviour_rule)
+
+        structure['rules'].append(
+            coog_string.doc_for_rules(self, 'ending_rule'))
+
+        return structure
 
 
 class OptionDescriptionExtraDataRelation(ExtraDataDefTable):

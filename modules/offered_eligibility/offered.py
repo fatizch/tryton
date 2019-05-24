@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 __all__ = [
@@ -24,6 +24,12 @@ class OptionDescription(metaclass=PoolMeta):
         if not self.eligibility_rules:
             return True
         return all([x.calculate(exec_context) for x in self.eligibility_rules])
+
+    def get_documentation_structure(self):
+        structure = super(OptionDescription, self).get_documentation_structure()
+        structure['rules'].append(
+            coog_string.doc_for_rules(self, 'eligibility_rules'))
+        return structure
 
 
 class OptionDescriptionEligibilityRule(
@@ -80,3 +86,8 @@ class OptionDescriptionEligibilityRule(
             self.raise_user_warning(str((self.id, args['option'])),
                 '\r\r'.join(rule_result.print_warnings()))
         return result
+
+    def get_rule_documentation_structure(self):
+        return [
+            self.get_rule_rule_engine_documentation_structure(),
+            ]

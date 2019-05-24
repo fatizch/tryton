@@ -6,8 +6,7 @@ from trytond.pool import PoolMeta
 from trytond.cache import Cache
 from trytond.pyson import Eval
 
-from trytond.modules.coog_core import fields
-
+from trytond.modules.coog_core import fields, coog_string
 EVENT_DESCS = [
     ('AS', 'Illness'),
     ('AT', 'Work Accident'),
@@ -54,6 +53,12 @@ class Benefit(metaclass=PoolMeta):
         benefits = cls.search([('prest_ij', '=', True)])
         cls._prest_ij_benefits_cache.set(None, [x.id for x in benefits])
         return benefits
+
+    def get_documentation_structure(self):
+        doc = super(Benefit, self).get_documentation_structure()
+        doc['parameters'].append(
+            coog_string.doc_for_field(self, 'prest_ij'))
+        return doc
 
 
 class EventDesc(metaclass=PoolMeta):

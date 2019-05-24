@@ -409,6 +409,12 @@ class Product(metaclass=PoolMeta):
         return super(Product, cls)._export_light() | {
             'endorsement_definitions'}
 
+    def get_documentation_structure(self):
+        doc = super(Product, self).get_documentation_structure()
+        doc['rules'].append(
+            coog_string.doc_for_field(self, 'endorsement_definitions'))
+        return doc
+
 
 class EndorsementDefinitionProductRelation(model.CoogSQL):
     'Endorsement Definition to Product Relation'

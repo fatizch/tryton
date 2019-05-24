@@ -25,3 +25,11 @@ class DocumentRule(
             'Rule Engine for indemnifications',
             extra_string='Rule Extra Data'), metaclass=PoolMeta):
     __name__ = 'document.rule'
+
+    def get_rule_documentation_structure(self):
+        doc = super(DocumentRule, self).get_rule_documentation_structure()
+        if not self.indemnification_doc_rule:
+            return doc
+        doc.append(self.
+            get_indemnification_doc_rule_rule_engine_documentation_structure())
+        return doc

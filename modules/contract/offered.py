@@ -8,7 +8,7 @@ from trytond.tools.multivalue import migrate_property
 from trytond.modules.company.model import (CompanyMultiValueMixin,
     CompanyValueMixin)
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.rule_engine.rule_engine import RuleEngineResult
 
@@ -105,6 +105,14 @@ class Product(CompanyMultiValueMixin, metaclass=PoolMeta):
             setattr(contract, k, v)
         return res
 
+    def get_documentation_structure(self):
+        doc = super(Product, self).get_documentation_structure()
+        doc['parameters'].append(
+            coog_string.doc_for_field(self, 'quote_number_sequence'))
+        doc['rules'].append(
+            coog_string.doc_for_rules(self, 'contract_data_rule'))
+        return doc
+
 
 class ProductQuoteNumberSequence(model.CoogSQL, CompanyValueMixin):
     'Product Quote Number Sequence'
@@ -159,3 +167,6 @@ class ContractDataRule(
 
     def _get_authorized_fields(self):
         return ['start_date']
+
+    def get_rule_documentation_structure(self):
+        return [self.get_rule_rule_engine_documentation_structure()]
