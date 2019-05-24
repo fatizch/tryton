@@ -32,6 +32,11 @@ de :
   existe bien sur le contrat (par exemple) avant de poursuivre la souscription.
   Cette option doit être laissée non-cochée dans le cas où la *GED* interne de
   **Coog** n'est pas utilisée
+* *Signature électronique requise* : Visible uniquement si *La réception
+  requiert la pièce jointe* et si le module de gestion de la signature
+  électronique (« Cryptolog ») est installé, permet d'indiquer que les demandes
+  de documents rattachés à ce type doivent être signées électroniquement pour
+  que le document soit considéré comme reçu
 * *Action quand reçu* : Pour le cas où la saisie des documents dans
   l'application est traité par une équipe dédiée, cet élément de configuration
   permet de décrire quelle action doit être déclenchée lors du traitement de la
