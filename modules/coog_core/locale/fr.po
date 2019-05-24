@@ -1647,7 +1647,7 @@ msgid "Extra Details Configuration"
 msgstr "Configuration des détails"
 
 msgctxt "model:ir.action,name:act_open_api_identity"
-msgid "API Identity"
+msgid "API Identities"
 msgstr "Identités API"
 
 msgctxt "model:ir.action,name:act_open_user_api_identity"

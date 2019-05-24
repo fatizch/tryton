@@ -18,7 +18,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <!-- Menu -->
         <record model="ir.action.act_window" id="act_open_api_identity">
-            <field name="name">API Identity</field>
+            <field name="name">API Identities</field>
             <field name="res_model">ir.api.identity</field>
         </record>
         <record model="ir.action.act_window.view" id="act_open_api_identity_view_list">
