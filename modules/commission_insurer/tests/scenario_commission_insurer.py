@@ -261,7 +261,7 @@ create_invoice.form.insurers.append(agent.party)
 create_invoice.form.until_date = None
 create_invoice.form.notice_kind = 'options'
 create_invoice.execute('create_')
-invoice = Invoice.find([('type', '=', 'in'),
-        ('state', '!=', 'cancel')])[0]
+invoice = Invoice.find([('type', '=', 'in'), ('state', '!=', 'cancel')],
+        order=[('create_date', 'DESC')])[0]
 assert invoice.total_amount == Decimal('-40'), 'Expected cancelled invoice ' \
     'amount to be -40.0, got %.2f' % invoice.total_amount

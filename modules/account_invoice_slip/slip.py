@@ -5,7 +5,7 @@ from collections import defaultdict
 from sql import Null, Cast
 from sql.conditionals import Coalesce
 from sql.aggregate import Sum
-from sql.operators import Not
+from sql.operators import Not, Concat
 
 from trytond import backend
 from trytond.pool import Pool
@@ -283,6 +283,7 @@ class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView,
         cursor = Transaction().connection.cursor()
 
         cls.check_parameters(slip_parameters)
+        Cat = coog_sql.TextCat if backend.name() != 'sqlite' else Concat
 
         accounts = set(sum([x['accounts'] for x in slip_parameters], []))
         date = slip_parameters[0]['date']
@@ -299,7 +300,7 @@ class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView,
 
         if reset_journals:
             invoice_condition |= ((
-                    move.origin == coog_sql.TextCat('account.invoice,',
+                    move.origin == Cat('account.invoice,',
                     Cast(invoice.id, 'VARCHAR')))
                 & move.journal.in_([x.id for x in reset_journals]))
 

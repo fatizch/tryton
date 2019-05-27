@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import copy
+import datetime
 
 from itertools import chain
 
@@ -200,6 +201,18 @@ class Function(tryton_fields.Function):
         return Function(copy.deepcopy(self._field, memo), self.getter,
             setter=self.setter, searcher=self.searcher, loading=self.loading,
             loader=self.loader, updater=self.updater)
+
+    def get(self, ids, Model, name, values=None):
+        result = super().get(ids, Model, name, values)
+        if isinstance(self._field, tryton_fields.Date) \
+                and backend.name() == 'sqlite':
+            for fname, vals in result.items():
+                for id_, val in vals.items():
+                    if isinstance(val, str):
+                        vals[id_] = datetime.datetime.strptime(val,
+                            '%Y-%m-%d').date()
+            result[fname] = vals
+        return result
 
 
 class MultiValue(tryton_fields.MultiValue):

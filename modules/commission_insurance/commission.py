@@ -10,6 +10,7 @@ from sql.aggregate import Sum, Max, Min
 from sql.functions import ToChar
 
 from trytond import backend
+from trytond.config import config
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique, ModelSingleton
 from trytond.pyson import Eval, Bool, PYSONEncoder
@@ -149,7 +150,8 @@ class Commission(WithExtraDetails, metaclass=PoolMeta):
 
         super(Commission, cls).__register__(module_name)
 
-        if not has_contract_column:
+        if not has_contract_column and config.getboolean('env',
+                'testing') is not True:
             pool = Pool()
 
             # Find contract from contract options
@@ -502,12 +504,13 @@ class AggregatedCommission(model.CoogSQL, model.CoogView):
         commission = tables['commission']
         agent = tables['commission.agent']
         invoice_line = tables['account.invoice.line']
+        Cat = coog_sql.TextCat if backend.name() != 'sqlite' else Concat
 
         commission_agent = commission.join(agent,
             condition=commission.agent == agent.id)
 
         return commission_agent.join(invoice_line, type_='LEFT OUTER',
-                condition=(commission.origin == coog_sql.TextCat(
+                condition=(commission.origin == Cat(
                     'account.invoice.line,', Cast(invoice_line.id, 'VARCHAR')))
                 )
 

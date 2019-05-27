@@ -4,9 +4,11 @@ from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 from sql import Cast, Null, Literal
 from sql.conditionals import Case
+from sql.operators import Concat
 from itertools import groupby
 
 from trytond.pool import PoolMeta, Pool
+from trytond import backend
 from trytond.pyson import Eval, Or, In, Not
 from trytond.transaction import Transaction
 from trytond.model import ModelView, Workflow
@@ -323,9 +325,10 @@ class Invoice(metaclass=PoolMeta):
         commission = Commission.__table__()
         invoice_line = InvoiceLine.__table__()
         cursor = Transaction().connection.cursor()
+        Cat = coog_sql.TextCat if backend.name() != 'sqlite' else Concat
 
         sub_query = invoice_line.select(
-            coog_sql.TextCat('account.invoice.line,',
+            Cat('account.invoice.line,',
                 Cast(invoice_line.id, 'VARCHAR')),
             where=invoice_line.invoice.in_(ids))
 
@@ -360,12 +363,13 @@ class Invoice(metaclass=PoolMeta):
         invoice_line = InvoiceLine.__table__()
         cursor = Transaction().connection.cursor()
         method_agents = cls._get_agents_for_method('payment_and_accounted')
+        Cat = coog_sql.TextCat if backend.name() != 'sqlite' else Concat
         if not method_agents:
             return super(Invoice, cls)._set_paid_commissions_dates(invoices)
 
         query_table = commission.join(invoice_line,
                 condition=(
-                    (commission.origin == coog_sql.TextCat(
+                    (commission.origin == Cat(
                         'account.invoice.line,',
                         Cast(invoice_line.id, 'VARCHAR'))
                     ) & commission.agent.in_(method_agents))

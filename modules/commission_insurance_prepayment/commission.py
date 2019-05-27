@@ -276,6 +276,11 @@ class Agent(metaclass=PoolMeta):
                 where=where_clause,
                 group_by=[commission.agent, commission.origin]))
         for agent, option, amount, base_amount in cursor.fetchall():
+            # SQLite uses float for SUM
+            if not isinstance(amount, Decimal):
+                amount = Decimal(str(amount))
+            if not isinstance(base_amount, Decimal):
+                base_amount = Decimal(str(base_amount))
             result[(agent, int(option.split(',')[1]))] = [amount, base_amount]
         return result
 
@@ -314,6 +319,11 @@ class Agent(metaclass=PoolMeta):
                 where=where_redeemed,
                 group_by=[commission.agent, commission.commissioned_option]))
         for agent, option, amount, base_amount in cursor.fetchall():
+            # SQLite uses float for SUM
+            if not isinstance(amount, Decimal):
+                amount = Decimal(str(amount))
+            if not isinstance(base_amount, Decimal):
+                base_amount = Decimal(str(base_amount))
             result[(agent, option)] = [amount, base_amount]
         return result
 

@@ -93,8 +93,8 @@ payment.reload()
 payment.state
 # #Res# #'processing'
 line.reload()
-line.payment_amount
-# #Res# #Decimal('20.00')
+line.payment_amount == Decimal('20.00')
+# #Res# #True
 
 # #Comment# #Succeed payment
 succeed = Wizard('account.payment.succeed', [payment])
@@ -147,5 +147,5 @@ assert line_from_clearing in reconciliation.lines
 # #Comment# #Check Payment Amount
 move.reload()
 line_from_move, = [l for l in move.lines if l.account == payable]
-line_from_move.payment_amount
-# #Res# #Decimal('50.00')
+line_from_move.payment_amount == Decimal('50.00')
+# #Res# #True

@@ -101,8 +101,8 @@ Partially pay the line::
     >>> payment.state
     'processing'
     >>> line.reload()
-    >>> line.payment_amount
-    Decimal('20.00')
+    >>> line.payment_amount == Decimal('20.00')
+    True
 
 Succeed payment::
 
@@ -157,5 +157,5 @@ Check Payment Amount::
 
     >>> move.reload()
     >>> line_from_move, = [l for l in move.lines if l.account == payable]
-    >>> line_from_move.payment_amount
-    Decimal('50.00')
+    >>> line_from_move.payment_amount == Decimal('50.00')
+    True

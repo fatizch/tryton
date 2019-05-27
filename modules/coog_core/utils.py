@@ -86,7 +86,7 @@ def add_reference_index(klass, module_name):
 
     # Manually add index for references match
     ref_index = table.table_name + '_reference_index'
-    if ref_index in table._indexes:
+    if ref_index in table._indexes or backend.name() == 'sqlite':
         return
     with Transaction().connection.cursor() as cursor:
         cursor.execute('CREATE INDEX "' + ref_index + '" ON "' +

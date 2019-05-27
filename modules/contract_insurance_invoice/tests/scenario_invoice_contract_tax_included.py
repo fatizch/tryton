@@ -355,6 +355,8 @@ contract_invoice.invoice.total_amount == Decimal('6')
 
 premium = contract.options[0].premiums[0]
 res = []
+# #Comment# #The test below is extremely long (several minutes)
+# #Comment# even with sqlite backend
 for premium_amount in range(100, 300):
     premium.amount = Decimal(premium_amount / 100.00).quantize(
         Decimal(1) / 100)

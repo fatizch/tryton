@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond import backend
+from trytond.config import config
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
@@ -37,7 +38,8 @@ class Invoice(metaclass=PoolMeta):
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().connection.cursor()
         handler = TableHandler(cls, module_name)
-        to_migrate = not handler.column_exist('insurer_role')
+        to_migrate = not handler.column_exist('insurer_role') and \
+            config.getboolean('env', 'testing') is not True
 
         super(Invoice, cls).__register__(module_name)
 

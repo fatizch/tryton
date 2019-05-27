@@ -6,7 +6,9 @@ from collections import defaultdict
 from sql import Null, Cast
 from sql.aggregate import Sum
 from sql.conditionals import Coalesce
+from sql.operators import Concat
 
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
@@ -141,17 +143,20 @@ class InvoiceSlipConfiguration(metaclass=PoolMeta):
         line = tables['account.invoice.line']
         agent = tables['commission.agent']
         option = tables['offered.option.description']
+        Cat = coog_sql.TextCat if backend.name() != 'sqlite' else Concat
 
         insurers = [_f for _f in
             [x.get('insurer', None) for x in slip_parameters] if _f]
         if not insurers or not invoices_ids:
             return []
 
-        query_table = line.join(option
-            .join(agent, condition=(option.insurer == agent.insurer) &
-                option.insurer.in_([x.id for x in insurers]))
-            .join(commission, condition=(agent.id == commission.agent)),
-            condition=(commission.origin == coog_sql.TextCat(
+        query_table = option.join(
+            agent, condition=(option.insurer == agent.insurer
+                ) & option.insurer.in_([x.id for x in insurers])
+            ).join(
+                commission, condition=(agent.id == commission.agent)
+            ).join(line,
+            condition=(commission.origin == Cat(
                     'account.invoice.line,', Cast(line.id, 'VARCHAR'))))
 
         query = query_table.select(

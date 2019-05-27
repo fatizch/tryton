@@ -452,7 +452,7 @@ contract.reload()
 len(contract.invoices)
 # #Res# #5
 
-fee_invoice = contract.invoices[0]
+fee_invoice, = [x for x in contract.invoices if not x.start]
 fee_invoice.invoice.total_amount == Decimal('6.00')
 # #Res# #True
 

@@ -764,7 +764,7 @@ class RuleParameter(model.CoogDictSchema, model.CoogSQL, model.CoogView):
 
         # Migration from 2.2: Add sequence order field
         parameter_definition = cls.__table__()
-        if not sequence_order_exists:
+        if not sequence_order_exists and backend.name() != 'sqlite':
             sequence_col = RowNumber(window=Window([
                         parameter_definition.parent_rule],
                     order_by=[parameter_definition.name]))

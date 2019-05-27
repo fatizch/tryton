@@ -157,7 +157,16 @@ class Contract(Printable):
 
     @classmethod
     def get_initial_number_of_sub_covered_elements(cls, contracts, name):
+        if backend.name() == 'sqlite':
+            result = {x.id: 0 for x in contracts}
+            for contract in contracts:
+                subs = [x for x in contract.covered_elements if x.parent
+                    and (x.manual_start_date or datetime.date.min) <
+                    contract.initial_start_date]
+                result[contract.id] = len(subs)
+            return result
         pool = Pool()
+
         activation_history = pool.get('contract.activation_history').__table__()
         CoveredElement = pool.get('contract.covered_element')
         covered_element = CoveredElement.__table__()

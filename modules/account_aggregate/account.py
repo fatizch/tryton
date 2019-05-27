@@ -9,6 +9,7 @@ from sql.functions import ToChar, CurrentTimestamp
 from sql.operators import Concat
 
 from trytond import backend
+from trytond.config import config
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
 from trytond.pyson import Eval, PYSONEncoder
@@ -196,6 +197,8 @@ class ConfigurationSnapshotSequence(model.CoogSQL, CompanyValueMixin):
         TableHandler = backend.get('TableHandler')
         exist = TableHandler.table_exist(cls._table)
         super(ConfigurationSnapshotSequence, cls).__register__(module_name)
+        if config.getboolean('env', 'testing') is True:
+            return
         if not exist:
             cls._migrate_property([], [], [])
         cls.update_snapshot_sequence_type()

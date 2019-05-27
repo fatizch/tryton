@@ -5,6 +5,7 @@ from sql import Cast, Null
 from sql.operators import Concat
 
 from trytond import backend
+from trytond.config import config
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -44,7 +45,8 @@ class EventLog(metaclass=PoolMeta):
     def __register__(cls, module_name):
         TableHandler = backend.get('TableHandler')
         event_h = TableHandler(cls, module_name)
-        if not event_h.column_exist('party'):
+        if not event_h.column_exist('party') and \
+                config.getboolean('env', 'testing') is not True:
             # Please check comment above for more info on the use of this
             # variable
             global _MIGRATE_PARTY

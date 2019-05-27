@@ -355,6 +355,9 @@ Create Test Contract::
     True
     >>> premium = contract.options[0].premiums[0]
     >>> res = []
+
+The test below is extremely long (several minutes)::
+
     >>> for premium_amount in range(100, 300):
     ...     premium.amount = Decimal(premium_amount / 100.00).quantize(
     ...         Decimal(1) / 100)

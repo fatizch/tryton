@@ -309,6 +309,9 @@ class Group(metaclass=PoolMeta):
         for last_date, journal_id in res:
             if not last_date:
                 continue
+            if backend.name() == 'sqlite':
+                last_date = datetime.datetime.strptime(last_date,
+                    '%Y-%m-%d').date()
             journal = Journal(journal_id)
             if (not journal.last_sepa_receivable_payment_creation_date or
                     overwrite or

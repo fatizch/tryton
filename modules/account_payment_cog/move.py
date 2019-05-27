@@ -114,6 +114,9 @@ class MoveLine(metaclass=PoolMeta):
                 group_by=group_expr))
 
         for line, amount in cursor.fetchall():
+            # SQLite uses float for SUM
+            if not isinstance(amount, Decimal):
+                amount = Decimal(str(amount))
             result[line] = amount
         return result
 

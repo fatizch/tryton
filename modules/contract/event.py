@@ -6,6 +6,7 @@ from sql import Cast, Literal
 from sql.functions import Substring, Position
 
 from trytond import backend
+from trytond.config import config
 from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -126,7 +127,8 @@ class EventLog(metaclass=PoolMeta):
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().connection.cursor()
         event_h = TableHandler(cls, module_name)
-        to_migrate = not event_h.column_exist('contract')
+        to_migrate = not event_h.column_exist('contract') and \
+            config.getboolean('env', 'testing') is not True
 
         super(EventLog, cls).__register__(module_name)
 

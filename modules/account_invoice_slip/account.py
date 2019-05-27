@@ -3,6 +3,7 @@
 from collections import defaultdict
 from sql import Null
 
+from trytond import backend
 from trytond.pool import Pool, PoolMeta
 from trytond.model import ModelView, Workflow
 from trytond.transaction import Transaction
@@ -76,6 +77,14 @@ class Invoice(metaclass=PoolMeta):
 
         # Clear the principal line field of move lines linked to the lines of
         # the cancelled invoices
+        if backend.name() == 'sqlite':
+            for sub_invoices in grouped_slice(invoices):
+                invoice_line_ids = [l.id for i in sub_invoices for l in i.lines]
+                move_lines = MoveLine.search([('principal_invoice_line', 'in',
+                            invoice_line_ids)])
+                MoveLine.write(move_lines, {'principal_invoice_line': None})
+            return
+
         cursor = Transaction().connection.cursor()
         for sub_invoices in grouped_slice(invoices):
             invoices_ids = [i.id for i in sub_invoices]

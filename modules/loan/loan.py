@@ -8,6 +8,7 @@ from sql.aggregate import Min, Max
 from dateutil.relativedelta import relativedelta
 
 from trytond import backend
+from trytond.config import config
 from trytond.rpc import RPC
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -1045,6 +1046,8 @@ class LoanIncrement(model.CoogSQL, model.CoogView, ModelCurrency):
             increment_history_h.column_rename('deferal', 'deferral')
 
         super(LoanIncrement, cls).__register__(module_name)
+        if config.getboolean('env', 'testing') is True:
+            return
 
         loan_h = TableHandler(Loan, module_name)
         if loan_h.column_exist('payment_frequency'):

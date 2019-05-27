@@ -6,6 +6,7 @@ from collections import defaultdict
 
 from sql import Cast
 from sql.aggregate import Max
+from sql.operators import Concat
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If
@@ -276,6 +277,7 @@ class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
         line = pool.get('account.move.line').__table__()
         move = pool.get('account.move').__table__()
         invoice_table = cls.__table__()
+        Cat = coog_sql.TextCat if backend.name() != 'sqlite' else Concat
 
         result = {x.id: None for x in invoices}
 
@@ -285,7 +287,7 @@ class Invoice(Printable, model.CoogSQL, export.ExportImportMixin):
                 ).join(move, condition=(
                     line.move == move.id)
                 ).join(invoice_table, condition=(
-                    move.origin == coog_sql.TextCat(cls.__name__ + ',',
+                    move.origin == Cat(cls.__name__ + ',',
                         Cast(invoice_table.id, 'VARCHAR'))))
 
             cursor.execute(*query_table.select(invoice_table.id,

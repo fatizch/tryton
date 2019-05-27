@@ -265,8 +265,9 @@ invoice, = Invoice.find([('type', '=', 'in')])
 first_invoice.click('cancel')
 last_invoice.click('cancel')
 line, = last_invoice.invoice.lines
-[(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
-    x.agent.party.name) for x in line.commissions] == [
+sorted([(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
+        x.agent.party.name) for x in line.commissions],
+    key=lambda x: x[2], reverse=True) == [
     (Decimal('0.0000'), False, Decimal('60.0000'), Decimal('100.0000'),
         'Broker'),
     (Decimal('0.0000'), False, Decimal('30.0000'), Decimal('100.0000'),
@@ -302,20 +303,21 @@ commissions = Commission.find([('is_prepayment', '=', True)],
 # 360 : 12months * 30
 # 720 : 12months * 60
 # base amount: -500: (12 - 7) * 100
-[(x.amount, x.base_amount, x.agent.party.name, x.calculation_description)
-    for x in commissions] == [
-    (Decimal('360.00000000'), Decimal('1200.0000'), 'Insurer',
-        'Prepayment calculation details\n'
-        '360.00000000 = 100.00 * 0.3000 * 1.0000 * 12'),
+sorted([(x.amount, x.base_amount, x.agent.party.name,
+        x.calculation_description)
+        for x in commissions], key=lambda x: x[0], reverse=True) == [
     (Decimal('720.00000000'), Decimal('1200.0000'), 'Broker',
         'Prepayment calculation details\n'
         '720.00000000 = 100.00 * 0.6000 * 1.0000 * 12'),
-    (Decimal('-300.00000000'), Decimal('-500.0000'), 'Broker',
-        'Prepayment adjustment calculation details\n'
-        '-300.00000000 = -300.00000000 * 1.0000'),
+    (Decimal('360.00000000'), Decimal('1200.0000'), 'Insurer',
+        'Prepayment calculation details\n'
+        '360.00000000 = 100.00 * 0.3000 * 1.0000 * 12'),
     (Decimal('-150.00000000'), Decimal('-500.0000'), 'Insurer',
         'Prepayment adjustment calculation details\n'
-        '-150.00000000 = -150.00000000 * 1.0000')]
+        '-150.00000000 = -150.00000000 * 1.0000'),
+    (Decimal('-300.00000000'), Decimal('-500.0000'), 'Broker',
+        'Prepayment adjustment calculation details\n'
+        '-300.00000000 = -300.00000000 * 1.0000')]
 # #Res# #True
 
 # #Comment# #Reactivate Contract
@@ -323,26 +325,27 @@ Wizard('contract.reactivate', models=[contract]).execute('reactivate')
 commissions = Commission.find([('is_prepayment', '=', True)],
     order=[('create_date', 'ASC')])
 
-[(x.amount, x.base_amount, x.agent.party.name, x.calculation_description)
-    for x in commissions] == [
-    (Decimal('360.00000000'), Decimal('1200.0000'), 'Insurer',
-        'Prepayment calculation details\n'
-        '360.00000000 = 100.00 * 0.3000 * 1.0000 * 12'),
+sorted([(x.amount, x.base_amount, x.agent.party.name,
+        x.calculation_description)
+        for x in commissions], key=lambda x: x[0], reverse=True) == [
     (Decimal('720.00000000'), Decimal('1200.0000'), 'Broker',
         'Prepayment calculation details\n'
         '720.00000000 = 100.00 * 0.6000 * 1.0000 * 12'),
-    (Decimal('-300.00000000'), Decimal('-500.0000'), 'Broker',
-        'Prepayment adjustment calculation details\n'
-        '-300.00000000 = -300.00000000 * 1.0000'),
-    (Decimal('-150.00000000'), Decimal('-500.0000'), 'Insurer',
-        'Prepayment adjustment calculation details\n'
-        '-150.00000000 = -150.00000000 * 1.0000'),
+    (Decimal('360.00000000'), Decimal('1200.0000'), 'Insurer',
+        'Prepayment calculation details\n'
+        '360.00000000 = 100.00 * 0.3000 * 1.0000 * 12'),
     (Decimal('300.00000000'), Decimal('500.0000'), 'Broker',
         'Prepayment adjustment calculation details\n'
         '300.00000000 = 300.00000000 * 1.0000'),
     (Decimal('150.00000000'), Decimal('500.0000'), 'Insurer',
         'Prepayment adjustment calculation details\n'
-        '150.00000000 = 150.00000000 * 1.0000')]
+        '150.00000000 = 150.00000000 * 1.0000'),
+    (Decimal('-150.00000000'), Decimal('-500.0000'), 'Insurer',
+        'Prepayment adjustment calculation details\n'
+        '-150.00000000 = -150.00000000 * 1.0000'),
+    (Decimal('-300.00000000'), Decimal('-500.0000'), 'Broker',
+        'Prepayment adjustment calculation details\n'
+        '-300.00000000 = -300.00000000 * 1.0000')]
 # #Res# #True
 
 # #Comment# #Add new premium version
