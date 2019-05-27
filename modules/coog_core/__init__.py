@@ -154,6 +154,7 @@ def register():
     Pool.register_post_init_hooks(add_readonly_transaction_model,
         module='coog_core')
     Pool.register_post_init_hooks(queue.async_methods_hook, module='coog_core')
+    Pool.register_post_init_hooks(add_model_int_comparison, module='coog_core')
 
 
 def cache_fields_get(pool, update):
@@ -256,6 +257,16 @@ def inject_class(pool, kind, source, target, model_list=None):
         for model in list(pool._pool[pool.database_name].get(
                 kind, {}).values()):
             patch_model(model)
+
+
+def add_model_int_comparison(pool, update):
+    if update:
+        return
+    from trytond.model import ModelStorage
+    from trytond.modules.coog_core.model import ModelIntegerComparisonMixin
+
+    logging.getLogger('modules').info('Add model comparison to integers')
+    inject_class(pool, 'model', ModelStorage, ModelIntegerComparisonMixin)
 
 
 def add_global_search_limit(pool, update):

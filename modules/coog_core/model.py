@@ -66,6 +66,36 @@ __all__ = [
     ]
 
 
+class ModelIntegerComparisonMixin(ModelStorage):
+    """
+    To be able to sort trytond objects with default integers (-1) if
+    value is None (Python 3 does not allow comparing with None object)
+    we need to override comparison operators (It will crash otherwise).
+    Behavior is as following: integers will be compared with the id
+    of the tryton object.
+    """
+
+    def __lt__(self, other):
+        if isinstance(other, int):
+            return self.id < other
+        return super(ModelIntegerComparisonMixin, self).__lt__(other)
+
+    def __gt__(self, other):
+        if isinstance(other, int):
+            return self.id > other
+        return super(ModelIntegerComparisonMixin, self).__gt__(other)
+
+    def __le__(self, other):
+        if isinstance(other, int):
+            return self.id <= other
+        return super(ModelIntegerComparisonMixin, self).__le__(other)
+
+    def __ge__(self, other):
+        if isinstance(other, int):
+            return self.id >= other
+        return super(ModelIntegerComparisonMixin, self).__ge__(other)
+
+
 class PostExecutionDataManager(object):
 
     def __new__(cls):

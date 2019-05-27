@@ -1,3 +1,4 @@
+* BUG#11722 Implémentation d'une Mixin pour supported la comparaison d'objets tryton avec des entiers
 * FEA#11623 Ajout de la gestion d'identités pour les API
 * BUG#11657 Retrait de 'api' dans le nom des dumps de base de test afin de qu'elles puissent être réutilisées par les scenarios
 * FEA#11352 Ajout de la possibilité de désactiver les batchs par configuration
@@ -8,7 +9,7 @@ Version 2.4 - 2019-04-12
 * OTH#00000 Ajout de la possibilité de surcharger la configuration des batchs avec des variables d'environnement
 * OTH#00000 Correctifs sur l'import export JSON (Python 3)
 * OTH#00000 Conversion des _constraints en validate
-* BUG#10577 Correctif sur le modèle "Utilisateur" afin de le rendre exportable en JSON 
+* BUG#10577 Correctif sur le modèle "Utilisateur" afin de le rendre exportable en JSON
 * OTH#0000 Optimisation de l'utilisation mémoire des méthodes "stream"
 * BUG#10249 Utiliser la chaîne fast_invoice dans la chaîne de batch journalière par défaut
 * BUG#10179 Propagation du renommage et de la suppression des clés de champs dictionnaire
