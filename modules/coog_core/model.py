@@ -274,6 +274,27 @@ def post_transaction(DataManager=PostExecutionDataManager):
     return wrapper
 
 
+def with_pre_commit_keyword_argument():
+    # Black magic function
+    # This allow any decorated function to take 'at_commit' extra kwargs
+    # and execute it just before the main transaction commit
+
+    def wrapper(func):
+
+        @pre_commit_transaction()
+        def pre_commit_func(*args, **kwargs):
+
+            return func(*args, **kwargs), None
+
+        def decorate(*args, **kwargs):
+            to_postpone = kwargs.pop('at_commit', False)
+            if to_postpone:
+                return pre_commit_func(*args, **kwargs)
+            return func(*args, **kwargs)
+        return decorate
+    return wrapper
+
+
 def genshi_evaluated_fields(*fields_):
     # Do the magic
 

@@ -13,6 +13,8 @@ this repository contains the full copyright notices and license terms. -->
     <newline/>
     <label name="priority"/>
     <field name="priority"/>
+    <label name="at_commit"/>
+    <field name="at_commit"/>
     <newline/>
     <label name="active"/>
     <field name="active"/>

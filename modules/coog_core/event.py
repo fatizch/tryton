@@ -37,6 +37,14 @@ class Event(Model):
                 ' with following information %s'})
 
     @classmethod
+    @model.with_pre_commit_keyword_argument()
+    def __execute_action(cls, action, filtered, event_code, description,
+            **kwargs):
+        # This method should never not be overriden.
+        action.execute(filtered, event_code, description,
+            **kwargs)
+
+    @classmethod
     def notify_events(cls, objects, event_code, description=None, **kwargs):
         'This method can be called each time an event happens'
         pool = Pool()
@@ -47,8 +55,8 @@ class Event(Model):
             for action in actions:
                 filtered = action.filter_objects(objects)
                 if filtered:
-                    action.execute(filtered, event_code, description,
-                        **kwargs)
+                    cls.__execute_action(action, filtered, event_code,
+                        description, at_commit=action.at_commit, **kwargs)
 
     @classmethod
     def get_event_type_data_from_code(cls, event_code):
@@ -223,6 +231,12 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
             states={'invisible': ~Eval('show_descriptor')},
             depends=['show_descriptor']), 'on_change_with_descriptor')
     active = fields.Boolean('Active')
+    at_commit = fields.Boolean('At The Last Moment',
+        help='If set, this ensure the action will be executed at the last '
+        'moment and that everything has been executed correctly before '
+        'processing this action. '
+        'This could be usefull for report generation and avoid documents to '
+        'be sent whereas something went wrong during processing.')
 
     @classmethod
     def __setup__(cls):
@@ -260,6 +274,10 @@ class EventTypeAction(model.CoogSQL, model.CoogView):
     @classmethod
     def default_active(cls):
         return True
+
+    @classmethod
+    def default_at_commit(cls):
+        return False
 
     @fields.depends('action', 'treatment_kind', 'show_descriptor')
     def on_change_action(self):

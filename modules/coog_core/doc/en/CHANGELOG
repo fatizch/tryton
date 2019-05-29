@@ -1,3 +1,4 @@
+* BUG#11664 Add configuration on event type action to execute it just before the main transaction commit
 * BUG#11722 Implementation of a Mixin to support tryton objects and integers comparison
 * FEA#11623 Add identity management APIs
 * BUG#11657 Remove 'api' from test database names since it is automatically injected and break cache alignment with scenarios
