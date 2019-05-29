@@ -2,14 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.covered_element:"
-msgid ""
-"You are trying to create a covered element that overlaps an old covered"
-" element"
-msgstr ""
-"Vous essayez de créer un élément couvert pour un tiers dont les dates de "
-"début et de fin chevauchent un autre élément couvert pour le même tiers"
-
 msgctxt "error:contract.option:"
 msgid ""
 "Coverage amount \"%(coverage_amount)s\" is invalid for coverage "
