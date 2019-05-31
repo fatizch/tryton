@@ -176,11 +176,11 @@ msgstr "Si coché, les mandats SEPA pourront être amendés plutôt que recréé
 
 msgctxt "help:account.payment.journal,force_smnda:"
 msgid ""
-"If True, the OrgnlDbtrAcct tag will always use SMNDA even when the previous "
-"IBAN is known"
+"If True, the OrgnlDbtrAcct tag will always use SMNDA even when the BIC dit "
+"not change"
 msgstr ""
-"Si coché, la balise OrgnlDbtrAcct sera toujours à \"SMNDA\" même si l'IBAN "
-"précédent est connu"
+"Si coché, la balise OrgnlDbtrAcct sera toujours à \"SMNDA\" même si le BIC "
+"n'a pas été modifié"
 
 msgctxt "help:account.payment.journal,sepa_party:"
 msgid ""
