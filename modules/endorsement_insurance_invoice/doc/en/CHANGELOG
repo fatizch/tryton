@@ -1,3 +1,5 @@
+* BUG#11726 Set possible payers when creating billing endorsements
+
 Version 2.4 - 2019-04-12
 * BUG#10920  Billing information changes should not be propagated to declined contracts
 
