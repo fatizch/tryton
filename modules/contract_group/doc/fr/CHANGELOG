@@ -1,8 +1,10 @@
+* BUG#11766 Utilisation du champ contrat sur les éléments couverts dans l'arborescence pour déterminer son état (résilié ou non)
+
 Version 2.4 - 2019-04-12
 * FEA#11077 Permettre d'annuler une affiliation
 * BUG#10784 Autoriser l'utilisation de la relation "Affiliations" depuis une vue form d'affiliations
 * BUG#10189 Correction du transfert de risques entre contrats
-* FEA#10241 Ajout d'un tri par défaut sur la vue arborescente 
+* FEA#10241 Ajout d'un tri par défaut sur la vue arborescente
 
 Version 2.2 - 2018-10-12
 * FEA#9315 Iteration sur l'affichage des libellés dans la hierarchie

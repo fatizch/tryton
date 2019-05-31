@@ -1,3 +1,5 @@
+* BUG#11766 Use contract field of organization's covered elements to determine whether it is terminated or not
+
 Version 2.4 - 2019-04-12
 * FEA#11077 Allow to cancel an enrollment
 * BUG#10784 Allow to use sub covered elements relate from enrollment's view form

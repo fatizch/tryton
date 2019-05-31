@@ -38,10 +38,10 @@ def get_organization_hierarchy():
                 [D] party.hierarchy.subsidiaries
                     [D] party.hierarchy.subsidiary.contracts
                     [D] party.hierarchy.subsidiary.covereds
-                    [N] party.hierarchy.subsidiary.terminated
-                        [D] party.hierarchy.subsidiary.terminated.contracts
-                        [D] party.hierarchy.subsidiary.terminated.covereds
-    '''
+                [N] party.hierarchy.subsidiary.terminated
+                    [D] party.hierarchy.subsidiary.terminated.contracts
+                    [D] party.hierarchy.subsidiary.terminated.covereds
+'''
     subsidiary_terminated_contracts = {
         'node_name': 'party.hierarchy.subsidiary.terminated.contracts',
         'model': 'contract',
@@ -55,7 +55,10 @@ def get_organization_hierarchy():
         'model': 'contract.covered_element',
         'main_field': 'party',
         'type': 'data',
-        'domain': [('manual_end_date', '<', CurrentDate)],
+        'domain': ['OR',
+            ('manual_end_date', '<', CurrentDate),
+            ('contract.status', 'in', ('void', 'terminated')),
+            ],
         'name_func': lambda x: ' - '.join([_f for _f in [
                     x.name,
                     x.contract.get_synthesis_rec_name(None),
@@ -69,9 +72,12 @@ def get_organization_hierarchy():
         'type': 'node',
         'icon': 'contract_red',
         'name': 'Terminated',
-        'domain': ['OR', ('contracts.status', 'in', ('void', 'terminated')),
-            ('covered_elements', 'where',
-                ('manual_end_date', '<', CurrentDate)),
+        'domain': ['OR', [('contracts.status', 'in', ('void', 'terminated'))],
+            [('covered_elements', 'where',
+                ['OR',
+                    ('manual_end_date', '<', CurrentDate),
+                    ('contract.status', 'in', ('void', 'terminated')),
+                    ])],
             ],
         'childs': [subsidiary_terminated_contracts,
             subsidiary_terminated_covereds],
@@ -81,8 +87,15 @@ def get_organization_hierarchy():
         'model': 'contract.covered_element',
         'main_field': 'party',
         'type': 'data',
-        'domain': ['OR', ('manual_end_date', '=', None),
-            ('manual_end_date', '>=', CurrentDate)],
+        'domain': ['AND',
+            ['OR',
+                ('manual_end_date', '=', None),
+                ('manual_end_date', '>=', CurrentDate),
+                ],
+            [
+                ('contract.status', 'not in', ('void', 'terminated')),
+                ],
+            ],
         'name_func': lambda x: ' - '.join([_f for _f in [
                     x.name,
                     x.contract.get_synthesis_rec_name(None),
