@@ -11,5 +11,8 @@ this repository contains the full copyright notices and license terms. -->
         <newline/>
         <label name="last_sepa_receivable_payment_creation_date"/>
         <field name="last_sepa_receivable_payment_creation_date"/>
+        <newline/>
+        <label name="force_smnda"/>
+        <field name="force_smnda"/>
     </xpath>
 </data>

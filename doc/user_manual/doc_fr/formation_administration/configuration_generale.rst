@@ -616,6 +616,8 @@ différents fichiers de prélèvement / virement. On y retrouve :
 * *Date de la deernière génération des prélèvements SEPA* : Mise à jour
   automatiquement, permet de contrôler la date à laquelle auront lieu les
   prochains prélèvements automatiques
+* *Forcer le SMNDA* : Force l'utilisation de la balise SMNDA pour l'élément
+  *OrgnlDbtrAcct* pour les amendements de mandat SEPA
 
 Le bloc *Compensation* permet de contrôler les opérations comptables qui
 seront générées lors de la validation ou du rejet des paiements rattachés à

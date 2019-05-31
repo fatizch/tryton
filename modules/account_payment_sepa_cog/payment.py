@@ -756,6 +756,11 @@ class Journal(metaclass=PoolMeta):
         states={'invisible': Eval('process_method') != 'sepa'},
         depends=['process_method'], help='If set, will be used in place of '
         'the company for the Creditor / Debtor section of SEPA messages')
+    force_smnda = fields.Boolean('Force SMNDA',
+        states={'invisible': Eval('process_method') != 'sepa'},
+        depends=['process_method'],
+        help='If True, the OrgnlDbtrAcct tag will always use SMNDA even when '
+        'the BIC did not change')
 
     @classmethod
     def __register__(cls, module):
@@ -765,6 +770,10 @@ class Journal(metaclass=PoolMeta):
         if handler.column_exist('sepa_creditor'):
             handler.column_rename('sepa_creditor', 'sepa_party')
         super(Journal, cls).__register__(module)
+
+    @classmethod
+    def default_force_smnda(cls):
+        return False
 
     def get_next_possible_payment_date(self, line, day):
         if self.process_method != 'sepa':

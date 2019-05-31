@@ -1,3 +1,4 @@
+* FEA#11160 Allow to force the use of the SMNDA flag for sepa messages through configuration
 * FEA#11094 Allow to have a single snapshot for the cancel moves of all payments failed by the same CAMT054 file
 
 Version 2.4 - 2019-04-12

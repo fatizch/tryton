@@ -1,3 +1,4 @@
+* FEA#11160 Permettre de forcer l'usage de la balise SMNDA pour les messages SEPA via la configuration du journal de paiement
 * FEA#11094 Permettre d'avoir un seul agrégat comptable pour les mouvements d'annulation de tous les paiements échoués par le même fichier CAMT054
 
 Version 2.4 - 2019-04-12

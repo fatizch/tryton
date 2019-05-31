@@ -108,6 +108,10 @@ msgctxt "field:account.payment.group,payment_dates:"
 msgid "Payment Dates"
 msgstr "Dates de paiement"
 
+msgctxt "field:account.payment.journal,force_smnda:"
+msgid "Force SMNDA"
+msgstr "Forcer le SMNDA"
+
 msgctxt ""
 "field:account.payment.journal,last_sepa_receivable_payment_creation_date:"
 msgid "Last Receivable Payment SEPA Creation"
@@ -117,17 +121,13 @@ msgctxt "field:account.payment.journal,sepa_party:"
 msgid "Sepa Creditor / Debtor"
 msgstr "Créditeur / Débiteur Sepa"
 
+msgctxt "field:account.payment.journal.failure_action,present_again_after:"
+msgid "Present Again After Period"
+msgstr "Représenter à nouveau à une date"
+
 msgctxt "field:account.payment.journal.failure_action,present_again_day:"
 msgid "Present Again This Day"
 msgstr "Représenter ce jour"
-
-msgctxt "field:account.payment.journal.failure_action,present_again_after:"
-msgid "Present Again At"
-msgstr "Représenter à nouveau à une date"
-
-msgctxt "selection:account.payment.journal.failure_action,action:"
-msgid "Present Again At Date"
-msgstr "Représenter à nouveau à une date"
 
 msgctxt "field:account.payment.journal.update.sepa,id:"
 msgid "ID"
@@ -173,6 +173,14 @@ msgstr "Mandats SEPA"
 msgctxt "help:account.configuration,enable_amendment:"
 msgid "If checked, the sepa mandates may be amended rather than recreated"
 msgstr "Si coché, les mandats SEPA pourront être amendés plutôt que recréés"
+
+msgctxt "help:account.payment.journal,force_smnda:"
+msgid ""
+"If True, the OrgnlDbtrAcct tag will always use SMNDA even when the previous "
+"IBAN is known"
+msgstr ""
+"Si coché, la balise OrgnlDbtrAcct sera toujours à \"SMNDA\" même si l'IBAN "
+"précédent est connu"
 
 msgctxt "help:account.payment.journal,sepa_party:"
 msgid ""
@@ -390,3 +398,119 @@ msgstr "Brouillon"
 msgctxt "selection:account.payment.group,state:"
 msgid "Waiting"
 msgstr "En attente"
+
+msgctxt "selection:account.payment.journal.failure_action,action:"
+msgid "Present Again At Date"
+msgstr "Représenter à nouveau à une date"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "1"
+msgstr "1"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "10"
+msgstr "10"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "11"
+msgstr "11"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "12"
+msgstr "12"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "13"
+msgstr "13"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "14"
+msgstr "14"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "15"
+msgstr "15"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "16"
+msgstr "16"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "17"
+msgstr "17"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "18"
+msgstr "18"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "19"
+msgstr "19"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "2"
+msgstr "2"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "20"
+msgstr "20"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "21"
+msgstr "21"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "22"
+msgstr "22"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "23"
+msgstr "23"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "24"
+msgstr "24"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "25"
+msgstr "25"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "26"
+msgstr "26"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "27"
+msgstr "27"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "3"
+msgstr "3"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "4"
+msgstr "4"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "5"
+msgstr "5"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "6"
+msgstr "6"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "7"
+msgstr "7"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "8"
+msgstr "8"
+
+msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
+msgid "9"
+msgstr "9"
