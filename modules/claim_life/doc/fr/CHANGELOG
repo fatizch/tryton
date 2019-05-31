@@ -1,3 +1,4 @@
+* FEA#11723 Ajout du nom du sinistre dans le message d'erreur apparaissant en cas de doublon d'élément couvert
 * BUG#11465 Les données complémentaires sur un bénéficiaire au niveau d'un sinistre ne sont pas initialisées depuis la configuration d'une prestation.
 
 Version 2.4 - 2019-04-12

@@ -1,3 +1,4 @@
+* FEA#11723 Include claim rec_name in theoretical covered element error message
 * BUG#11465 Claim beneficiary extra data are not initialized when creating a beneficiary
 
 Version 2.4 - 2019-04-12
