@@ -204,6 +204,8 @@ class Function(tryton_fields.Function):
 
     def get(self, ids, Model, name, values=None):
         result = super().get(ids, Model, name, values)
+        # Necessary for sqlite because a select
+        # from a date column returns a string
         if isinstance(self._field, tryton_fields.Date) \
                 and backend.name() == 'sqlite':
             for fname, vals in result.items():
