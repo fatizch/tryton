@@ -1,3 +1,4 @@
+* BUG#10090 Allow to search endorsement by contracts/subscribers
 * BUG#11345 Deactivate contract recalculation for manage contacts endorsement
 
 Version 2.4 - 2019-04-12

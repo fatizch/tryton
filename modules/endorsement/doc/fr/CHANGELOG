@@ -1,3 +1,4 @@
+* BUG#10090 Permettre le recherche des avenants par contrats ou souscripteurs
 * BUG#11345 Désactivation du recalcul du contrat si on applique un avenant de type gérer les contacts
 
 Version 2.4 - 2019-04-12
