@@ -1,3 +1,4 @@
+* OTH#00000 Allow party extra data CRUD operations when the party is social security dependent
 * BUG#11674 Format the information read from the file in order to manage them like unicode
 
 Version 2.4 - 2019-04-12
