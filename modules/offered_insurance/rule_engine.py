@@ -9,6 +9,7 @@ from trytond.modules.coog_core import fields
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.tools import cursor_dict
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import utils
 from trytond.modules.rule_engine import check_args, RuleTools
@@ -205,6 +206,17 @@ class RuleEngineRuntime(metaclass=PoolMeta):
             args,
             birthdate,
             RuleTools.today(args)) >= limit_age
+
+    @classmethod
+    @check_args('option')
+    def _re_coverage_end_date(cls, args):
+        return args['option'].end_date
+
+    @classmethod
+    @check_args('option')
+    def _re_non_automatic_end_coverage(cls, args):
+        with ServerContext().set_context(ignore_automatic_end_date=True):
+            return args['option'].end_date
 
     @classmethod
     @check_args('contract')

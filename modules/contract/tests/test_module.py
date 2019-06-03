@@ -243,7 +243,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 )
             option.parent_contract = option.contract
             option.contract.end_date = contract_end_date
-            self.assertEqual(option.get_end_date('end_date'), expected)
+            self.assertEqual(option.loader_end_date('end_date'), expected)
             option.contract.options = [option]
             option.manual_end_date = to_set
             option.sub_status = \

@@ -14,9 +14,11 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.modules.coog_core import batch
 
+
 __all__ = [
     'ContractEndDateTerminationBatch',
     'PartyAnonymizeIdentificationBatch',
+    'TerminateContractOption',
     ]
 
 
@@ -164,3 +166,50 @@ class PartyAnonymizeIdentificationBatch(batch.BatchRoot):
                 values=[treatment_date],
                 where=party.id.in_(ids)))
         cls.logger.info('%d parties identified to be anonymized' % len(objects))
+
+
+class TerminateContractOption(batch.BatchRoot):
+    "Terminate Contract Option"
+
+    __name__ = 'contract.option.terminate'
+    logger = logging.getLogger(__name__)
+
+    @classmethod
+    def __setup__(cls):
+        super(TerminateContractOption, cls).__setup__()
+        cls._default_config_items.update({
+                'job_size': 50,
+                })
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'contract.option'
+
+    @classmethod
+    def get_batch_search_model(cls):
+        return 'contract.option'
+
+    @classmethod
+    def get_batch_domain(cls, treatment_date):
+        # First OR clause is for contract options whose automatic end date
+        # is exceeded. Theses options are active, a manual end date defined and
+        # a coverage with an ending rule.
+        # The second OR clause is for contract options whose manual end '
+        # date is exceeded and already have a termination sub status.
+        return ['OR',
+            [
+                ('coverage.ending_rule', '!=', None),
+                ('automatic_end_date', '!=', None),
+                ('automatic_end_date', '<', treatment_date),
+                ('status', '=', 'active'),
+                ],
+            [
+                ('manual_end_date', '<', treatment_date),
+                ('status', '=', 'active'),
+                ],
+            ]
+
+    @classmethod
+    def execute(cls, objects, ids, treatment_date):
+        Pool().get('contract.option').automatic_terminate(objects)
+        return ids

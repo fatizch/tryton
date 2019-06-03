@@ -1,3 +1,4 @@
+* FEA#11698 Ajout d'un batch et de configuration sur les paramétrages de garantie afin d'automatiquement résilier les garanties dont la date automatique de fin est dépassée
 * BUG#11523 Modification de la gestion des garanties qui sont aux status "sans effet" lors de la réactivation d'un contrat
 
 Version 2.4 - 2019-04-12

@@ -1,3 +1,4 @@
+* FEA#11698 Add coverage configuration and batch to automatically terminate contract options which the automatic end date is exceeded
 * BUG#11523 Manage void options in order to reactivate correctly void contrat
 
 Version 2.4 - 2019-04-12

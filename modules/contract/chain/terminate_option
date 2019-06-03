@@ -1,7 +1,7 @@
 #!/bin/bash
 # vim: set ft=sh:
 
-CHAIN_NAME=terminate_contract
+CHAIN_NAME=terminate_option
 
 CHAIN_PARAMETERS=('TREATMENT_DATE' 'CONNECTION_DATE' 'WORKING_DAYS' 'CONF_CODE')
 CHAIN_REQUIRED=('TREATMENT_DATE')
@@ -9,7 +9,7 @@ CHAIN_REQUIRED=('TREATMENT_DATE')
 chain_params "$@"
 chain_begin
 
-chain_step contract.termination.process ${GIVEN_PARAMETERS[@]}
-chain_wait contract.termination.process || chain_end
+chain_step contract.option.terminate ${GIVEN_PARAMETERS[@]}
+chain_wait contract.oprion.terminate || chain_end
 
 chain_end

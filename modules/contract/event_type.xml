@@ -48,6 +48,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="code">unhold_contract</field>
             <field name="icon" ref="contract.contract_icon"/>
         </record>
+        <record model="event.type" id="automatic_terminate_option">
+            <field name="name">Option Terminate Automatically</field>
+            <field name="code">automatic_terminate_option</field>
+        </record>
     </data>
     <data depends="event_log">
         <record model="ir.action.act_window" id="act_event_log_relate_form">

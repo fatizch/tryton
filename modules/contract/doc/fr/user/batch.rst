@@ -1,3 +1,18 @@
+Batch de résiliation automatique des garanties [``contract.option.terminate``]
+==============================================================================
+
+Ce batch résilie les garanties dont la date de fin automatique est dépassée et
+dont le paramétrage sur la garantie définit le comportement de résiliation
+automatique ainsi que le sous-statut approprié.
+- date de fin automatique de la garantie doit être postérieure ou égale à la
+  date de traitement du batch.
+
+En conséquence, le statut de ces garanties passera à "résilié" et le
+sous-statut défini sur le paramétrage de cette dernière lui sera
+appliqué.
+
+*Fréquence suggérée: quotidienne*
+
 Batch de résiliation pour fin de contrat [``contract.termination.process``]
 ===========================================================================
 

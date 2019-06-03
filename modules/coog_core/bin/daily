@@ -53,6 +53,13 @@ coog_daily_run() {
         [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
 
         (
+        _coog_daily_check_modules "contract" || return 0 &&                     \
+            coog_chain_main contract terminate_option                           \
+                --treatment_date="$TODAY_DATE"
+        )
+        [ "$?" -ne 0 ] && GLOBAL_SUCCESS=1
+
+        (
         _coog_daily_check_modules "contract_term_renewal" || return 0 &&        \
             coog_chain_main contract_term_renewal renew                         \
                 --working_days="$WORKING_DAYS"                                  \

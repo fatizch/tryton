@@ -38,6 +38,26 @@ this repository contains the full copyright notices and license terms. -->
             <field name="long_description">Renvoie True si la personne est majeure</field>
             <field name="parent" ref="dossier_personne_couverte"/>
         </record>
+        <record model="rule_engine.function" id="date_fin_couverture">
+            <field name="translated_technical_name">date_fin_couverture_garantie_contrat</field>
+            <field name="description">Date de fin de couverture garantie</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_coverage_end_date</field>
+            <field name="long_description">Retourne la date de fin de couverture de la garantie du contrat</field>
+            <field name="parent" ref="dossier_personne_couverte"/>
+        </record>
+        <record model="rule_engine.function" id="date_fin_couverture_sans_automatique">
+            <field name="translated_technical_name">date_fin_couverture_assure_sans_automatique</field>
+            <field name="description">Date de fin de couverture sans prise en compte de la fin automatique</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_non_automatic_end_coverage</field>
+            <field name="long_description">Retourne la date de fin de couverture de l'assuré sans prise en compte de la date de fin automatique</field>
+            <field name="parent" ref="dossier_personne_couverte"/>
+        </record>
         <record model="rule_engine.function" id="date_de_naissance">
             <field name="translated_technical_name">date_de_naissance</field>
             <field name="description">Date de naissance</field>

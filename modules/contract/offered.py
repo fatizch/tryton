@@ -18,7 +18,8 @@ DatabaseOperationalError = backend.get('DatabaseOperationalError')
 __all__ = [
     'Product',
     'ProductQuoteNumberSequence',
-    'ContractDataRule'
+    'ContractDataRule',
+    'OptionDescriptionEndingRule',
     ]
 
 
@@ -170,3 +171,13 @@ class ContractDataRule(
 
     def get_rule_documentation_structure(self):
         return [self.get_rule_rule_engine_documentation_structure()]
+
+
+class OptionDescriptionEndingRule(metaclass=PoolMeta):
+    __name__ = 'offered.option.description.ending_rule'
+
+    automatic_sub_status = fields.Many2One('contract.sub_status',
+    'Automatic Sub Status', domain=[('status', '=', 'terminated')],
+        required=True, ondelete='RESTRICT',
+        help='Automatic sub status which will be applied on automatilcally '
+        'terminated options')

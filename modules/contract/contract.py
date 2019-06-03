@@ -1777,7 +1777,7 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                     Eval('contract_status') != 'quote'),
                 'invisible': ~Eval('end_date')},
             depends=_CONTRACT_STATUS_DEPENDS),
-        'get_end_date', setter='set_end_date')
+        loader='loader_end_date', setter='set_end_date',)
     automatic_end_date = fields.Date('Automatic End Date', readonly=True)
     manual_end_date = fields.Date('Manual End Date', readonly=True)
     start_date = fields.Function(
@@ -2035,7 +2035,7 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                     values['start_date'][option.id] = None
         return values
 
-    def get_end_date(self, name):
+    def loader_end_date(self, name):
         if self.status in ['void', 'declined']:
             return None
         dates = [x for x in self.get_possible_end_date().values()]
@@ -2248,10 +2248,13 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
         dates = {}
         if self.manual_end_date:
             dates['manual_date'] = self.manual_end_date
-        if self.automatic_end_date:
-            # If automatic end date is prior start date, we will have a date
-            # before the start date, whisch is strange but not wrong
-            dates['automatic_end_date'] = self.automatic_end_date
+        if not ServerContext().get('ignore_automatic_end_date', False):
+            # Flag set when wee need to get the end_date without taking notice
+            # of the automatic_end_date.
+            if self.automatic_end_date:
+                # If automatic end date is prior start date, we will have a
+                # date before the start date, which is strange but not wrong
+                dates['automatic_end_date'] = self.automatic_end_date
         return dates
 
     def set_automatic_end_date(self):
@@ -2363,6 +2366,41 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                 None))
         options = cls.browse([x['id'] for x in cursor_dict(cursor)])
         return [o for o in options if o.is_active_at_date(at_date)]
+
+    @classmethod
+    def automatic_terminate(cls, options):
+        pool = Pool()
+        Event = pool.get('event')
+
+        def _group_coverage(x):
+            return (x.coverage, x.sub_status or -1)
+
+        options = sorted(options, key=_group_coverage)
+        for key, sub_options in groupby(options, key=_group_coverage):
+            coverage, sub_status = key
+            sub_status = coverage.ending_rule[0].automatic_sub_status if \
+                sub_status == -1 else sub_status
+            # Fallback (Default sub status = reached_end_date) if terminating
+            # contract option without automatic configuration and no sub_status
+            # defined on the terminated contract option
+            if not sub_status or sub_status == -1:
+                sub_status = pool.get('contract.sub_status').get_sub_status(
+                    'reached_end_date')
+            cls.terminate_options(list(sub_options), sub_status)
+        Event.notify_events(options, 'automatic_terminate_option')
+
+    @classmethod
+    def terminate_options(cls, options, sub_status):
+        options = sorted(options, key=lambda x: (
+            x.end_date, x.sub_status or -1))
+        for key, sub_options in groupby(
+                options, key=lambda x: (x.end_date, x.sub_status or -1)):
+            _, existing_status = key
+            cls.write(list(sub_options), {
+                    'status': 'terminated',
+                    'sub_status': sub_status if existing_status == -1 else
+                    existing_status,
+                    })
 
 
 class ContractOptionVersion(model.CoogSQL, model.CoogView,
