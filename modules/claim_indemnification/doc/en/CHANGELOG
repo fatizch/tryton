@@ -1,3 +1,4 @@
+* BUG#11266 Separate initial deductible creation from service initialization
 * OTH#00000 Fix crash when trying to validate an indemnification
 
 Version 2.4 - 2019-04-12

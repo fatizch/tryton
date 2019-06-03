@@ -140,6 +140,14 @@ class Claim(metaclass=PoolMeta):
         Indemnification = Pool().get('claim.indemnification')
         Indemnification.schedule(claims[0].indemnifications_to_schedule)
 
+    @classmethod
+    def deliver_automatic_benefit(cls, claims):
+        super(Claim, cls).deliver_automatic_benefit(claims)
+        for claim in claims:
+            for loss in claim.losses:
+                for service in loss.services:
+                    service.create_deductible_period_if_needed()
+
 
 class Loss(metaclass=PoolMeta):
     __name__ = 'claim.loss'
@@ -405,12 +413,14 @@ class ClaimService(metaclass=PoolMeta):
         return all([x.kind == 'deductible' for x in details])
 
     def init_from_loss(self, loss, benefit):
-        pool = Pool()
-        Indemnification = pool.get('claim.indemnification')
         super(ClaimService, self).init_from_loss(loss, benefit)
         if benefit.benefit_rules:
             self.annuity_frequency = benefit.benefit_rules[0].annuity_frequency
         self.indemnifications = []
+
+    def create_deductible_period_if_needed(self):
+        pool = Pool()
+        Indemnification = pool.get('claim.indemnification')
         if self.loss.start_date and self.loss.end_date:
             deductible_end_date = self.get_deductible_end_date() or \
                 coog_date.add_day(self.loss.start_date, -1)
@@ -426,7 +436,6 @@ class ClaimService(metaclass=PoolMeta):
                     indemnification.init_from_service(self)
                     indemnification.save()
                     Indemnification.calculate([indemnification])
-                    self.indemnifications = [indemnification]
 
     def regularize_indemnification(self, indemnification, details_dict,
             currency):

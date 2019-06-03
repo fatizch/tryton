@@ -1,3 +1,4 @@
+* BUG#11266 Séparation de la création de la première période de franchise de l'initialisation de la prestation
 * OTH#00000 Correction d'un crash lorsqu'on essaie de valider une indemnisation
 
 Version 2.4 - 2019-04-12
