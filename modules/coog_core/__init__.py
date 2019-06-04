@@ -145,6 +145,7 @@ def register():
 
     Pool.register(
         api.APIIdentity,
+        api.APIResource,
         api.APICore,
         module='coog_core', type_='model', depends=['api'])
 

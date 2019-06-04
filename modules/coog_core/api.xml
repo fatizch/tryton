@@ -32,6 +32,34 @@ this repository contains the full copyright notices and license terms. -->
             <field name="act_window" ref="act_open_api_identity"/>
         </record>
         <menuitem parent="res.menu_res" sequence="200" action="act_open_api_identity" id="menu_open_api_identity"/>
+        <!-- ################ -->
+        <!-- # API Resource # -->
+        <!-- ################ -->
+        <record model="ir.ui.view" id="api_resource_view_form">
+            <field name="model">api.resource</field>
+            <field name="type">form</field>
+            <field name="name">api_resource_form</field>
+        </record>
+        <record model="ir.ui.view" id="api_resource_view_list">
+            <field name="model">api.resource</field>
+            <field name="type">tree</field>
+            <field name="name">api_resource_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_open_api_resources">
+            <field name="name">API Resources</field>
+            <field name="domain" eval="[('origin', '=', (Eval('active_model'),Eval('active_id')))]" pyson="1"/>
+            <field name="res_model">api.resource</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_open_api_resource_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="api_resource_view_list"/>
+            <field name="act_window" ref="act_open_api_resources"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_open_api_resource_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="api_resource_view_form"/>
+            <field name="act_window" ref="act_open_api_resources"/>
+        </record>
         <!-- ############### -->
         <!-- # User Relate # -->
         <!-- ############### -->

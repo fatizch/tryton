@@ -1,3 +1,4 @@
+* FEA#11661 Add dedicated resources for APIs
 * BUG#11664 Add configuration on event type action to execute it just before the main transaction commit
 * BUG#11722 Implementation of a Mixin to support tryton objects and integers comparison
 * FEA#11623 Add identity management APIs

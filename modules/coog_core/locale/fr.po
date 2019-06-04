@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:api.resource:"
+msgid "The origin / key pair must be unique"
+msgstr "Le couple origine / clé doit être unique"
+
 msgctxt "error:diff_blame.revision_blame_wizard:"
 msgid "The model %s has no revisions."
 msgstr "L'historique n'est pas disponible"
@@ -28,16 +32,12 @@ msgstr ""
 msgctxt "error:export_not_found:"
 msgid "Cannot import : no object %s with functionnal key : \"%s\" were found."
 msgstr ""
-"Import impossible: aucun object %s n'a été trouvé pour la clé fonctionnelle:"
-" \"%s\" "
 
 msgctxt "error:export_not_unique:"
 msgid ""
 "Cannot import : the following objects:\\n%s\\n share the same functional "
 "key:\\n\"%s\"."
 msgstr ""
-"Import impossible: les objets suivants:\\n%s\\n partagent la même clé "
-"fonctionnelle:\\n\"%s\"."
 
 msgctxt "error:extra_details.configuration.line:"
 msgid "Invalid domain in schema \"%(schema)s\"."
@@ -115,7 +115,51 @@ msgstr ""
 
 msgctxt "error:missing_export_configuration:"
 msgid "Can't find configuration for code %s."
-msgstr "Aucune configuration trouvée pour le code %s."
+msgstr ""
+
+msgctxt "field:api.resource,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:api.resource,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:api.resource,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:api.resource,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:api.resource,key:"
+msgid "Key"
+msgstr "Clé"
+
+msgctxt "field:api.resource,origin:"
+msgid "Origin"
+msgstr "Origine"
+
+msgctxt "field:api.resource,rec_name:"
+msgid "Record Name"
+msgstr "Nom"
+
+msgctxt "field:api.resource,value:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:api.resource,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:api.resource,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:api.resource,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
 
 msgctxt "field:async.task,create_date:"
 msgid "Create Date"
@@ -1481,6 +1525,18 @@ msgctxt "field:wizard.persistent_data.view,json_context:"
 msgid "JSON Context"
 msgstr "Contexte JSON"
 
+msgctxt "help:api.resource,key:"
+msgid "The identifier for this particular resource for this origin"
+msgstr "L'identifiant de cette resource pour cette origine"
+
+msgctxt "help:api.resource,origin:"
+msgid "The record to which this resource will be linked"
+msgstr "L'objet auquel la resource sera lié"
+
+msgctxt "help:api.resource,value:"
+msgid "The value for this origin / key pair"
+msgstr "La valeur correspondant à ce couple origine / clé"
+
 msgctxt "help:event.type,groups:"
 msgid ""
 "If the user belongs to one of the groups linked to the event type, he can "
@@ -1550,6 +1606,10 @@ msgid ""
 "should be run or not"
 msgstr ""
 "Le nom de la méthode utilisé pour décider si le jeux d'essai doit être lancé"
+
+msgctxt "model:api.resource,name:"
+msgid "API Resource"
+msgstr "Resource API"
 
 msgctxt "model:async.task,name:"
 msgid "Coog Async Task"
@@ -1678,6 +1738,10 @@ msgstr "Configuration des détails"
 msgctxt "model:ir.action,name:act_open_api_identity"
 msgid "API Identities"
 msgstr "Identités API"
+
+msgctxt "model:ir.action,name:act_open_api_resources"
+msgid "API Resources"
+msgstr "Resources API"
 
 msgctxt "model:ir.action,name:act_open_user_api_identity"
 msgid "API Identity"

@@ -10,6 +10,7 @@ from . import report_engine
 from . import rule_engine
 from . import global_search
 from . import test_case
+from . import api
 
 
 def register():
@@ -34,3 +35,7 @@ def register():
         global_search.GlobalSearchSet,
         test_case.TestCaseModel,
         module='offered', type_='model')
+
+    Pool.register(
+        api.ExtraData,
+        module='offered', type_='model', depends=['api'])
