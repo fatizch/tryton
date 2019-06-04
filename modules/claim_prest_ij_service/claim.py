@@ -290,8 +290,8 @@ class ClaimIjSubscriptionRequestGroup(Workflow, model.CoogSQL, model.CoogView):
         archive_name = os.path.join(os.path.abspath(output_dir),
             self._identification + '.zip')
         with ZipFile(archive_name, 'w') as archive:
-                archive.writestr(header_filename, header_data)
-                archive.writestr(gesti_document_filename, doc_data)
+            archive.writestr(header_filename, header_data)
+            archive.writestr(gesti_document_filename, doc_data)
 
     @dualmethod
     def process(cls, groups, output_dir):

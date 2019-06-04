@@ -169,7 +169,8 @@ class CreateCoveredPersonIjSubscription(Wizard):
                 'OR', [
                     [('end_date', '<=', date)],
                     [('end_date', '=', None)]],
-                ('subscriber', 'in', [x.parties[0].id for x in company_subs])])
+                ('subscriber', 'in', [party.id for sub in company_subs
+                        for party in sub.parties])])
         parent_covereds = CoveredElement.search(
             [('contract', 'in', [x.id for x in siren_contracts])])
         person_covered = CoveredElement.search(

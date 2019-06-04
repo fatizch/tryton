@@ -1,3 +1,5 @@
+* BUG#11675 Autoriser l'inscription manuelle pour les individus affiliés via une filiale
+
 Version 2.4 - 2019-04-12
 * FEA#10991 Réordonner le vue des BPIJ
 * BUG#10810 Ignorer les inscriptions non déclarés lors de l'intégration des CR
