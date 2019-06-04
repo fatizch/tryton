@@ -31,7 +31,7 @@ le cas d'une régularisation négative:
 
 - Par compensation: l'argent dû par le bénéficiaire sera déduit du prochain versement.
 - Par planification: un échéancier peut être sélectionné afin de planifier le remboursement par le bénéficiaire.
-- Par réclamation de l'indu à effet immédiat: le montant de la régularisation négative est demandé au bénéficaire.
+- Par réclamation de l'indu à effet immédiat: l'ensemble des lignes à payer liées aux indemnisations du sinistre sur la même quittance ont un paiement bloqué. Cela inclut la régularisation négative. Cela bloque la compensation automatique sur les versements futurs.
 
 .. image:: images/regularisation.png
 

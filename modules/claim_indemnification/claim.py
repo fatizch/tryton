@@ -31,6 +31,8 @@ from trytond.modules.coog_core.extra_details import WithExtraDetails
 
 from .benefit import ANNUITY_FREQUENCIES
 
+DEFAULT_SORT_GROUP_ID = -1
+
 __all__ = [
     'Claim',
     'Loss',
@@ -56,6 +58,10 @@ class Claim(metaclass=PoolMeta):
     is_services_deductible = fields.Function(fields.Boolean(
             'Is Services Deductible'),
         'get_is_services_deductible')
+    immediate_payback = fields.Function(fields.Boolean(
+            'Immediate Payback', help='Set to true if at least one '
+            'indemnification is has an immediate payback method'),
+        'getter_immediate_payback')
 
     @classmethod
     def __setup__(cls):
@@ -139,6 +145,31 @@ class Claim(metaclass=PoolMeta):
             return
         Indemnification = Pool().get('claim.indemnification')
         Indemnification.schedule(claims[0].indemnifications_to_schedule)
+
+    @classmethod
+    def getter_immediate_payback(cls, claims, name):
+        pool = Pool()
+        cursor = Transaction().connection.cursor()
+        res = {c.id: False for c in claims}
+        claim = cls.__table__()
+        indemnification = pool.get('claim.indemnification').__table__()
+        service = pool.get('claim.service').__table__()
+        loss = pool.get('claim.loss').__table__()
+
+        query = indemnification.join(service, condition=(
+                indemnification.service == service.id)
+            ).join(loss, condition=(
+                service.loss == loss.id)
+            ).join(claim, condition=(loss.claim == claim.id)
+            ).select(claim.id,
+            where=((indemnification.status.in_(['cancelled, cancel_scheduled',
+                            'cancel_validated', 'cancel_controlled']))
+                    & (indemnification.payback_method == 'immediate')))
+
+        cursor.execute(*query)
+        for claim, in cursor.fetchall():
+            res[claim] = True
+        return res
 
     @classmethod
     def deliver_automatic_benefit(cls, claims):
@@ -1605,7 +1636,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             'journal': self.journal,
             'applied_taxes': [],
             'bank_account': self.bank_account
-            if self.journal and self.journal.needs_bank_account() else None,
+            if self.journal.needs_bank_account() else DEFAULT_SORT_GROUP_ID,
+            'claim': (self.service.claim if self.service.claim.immediate_payback
+                else DEFAULT_SORT_GROUP_ID),
             }
         if self.service.benefit.tax_date_is_indemnification_date():
             key['applied_taxes'] = sorted([x.id for x in
@@ -1616,9 +1649,11 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     def invoice(cls, indemnifications):
         pool = Pool()
         Invoice = pool.get('account.invoice')
+        MoveLine = pool.get('account.move.line')
         invoices = []
         paid = []
         cancelled = []
+        invoices_to_block = []
 
         with model.error_manager():
             cls.check_invoicable(indemnifications)
@@ -1646,10 +1681,14 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 lines.extend([cls._get_invoice_line(key, invoice,
                         indemnification)])
             invoice.lines = lines
+            if key.get('claim', DEFAULT_SORT_GROUP_ID) != DEFAULT_SORT_GROUP_ID:
+                invoices_to_block.append(invoice)
             invoices.append(invoice)
 
         Invoice.save(invoices)
         Invoice.post(invoices)
+        MoveLine.payment_block([line for inv in invoices_to_block
+                for line in inv.lines_to_pay])
         cls.write(paid, {'status': 'paid'},
             cancelled, {'status': 'cancel_paid'})
 

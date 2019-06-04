@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from itertools import groupby
-from sql import Null
+from sql import Null, Literal
 from sql.aggregate import Sum
 from sql.conditionals import Coalesce, Case
 from sql.operators import Not
@@ -219,6 +219,7 @@ class MoveLine(metaclass=PoolMeta):
                 where=(account.company == company_id)
                 & cls.payment_outstanding_group_clause(lines, line)
                 & (account.id == account_id)
+                & (line.payment_blocked == Literal(False))
                 & where_clause))
         ids = [x[0] for x in cursor.fetchall()]
         if ids:
