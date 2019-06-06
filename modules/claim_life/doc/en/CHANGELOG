@@ -1,3 +1,4 @@
+* BUG#11692 Only considerer covered elements that existed at the beginning of the contract for in_complement options claims
 * FEA#11723 Include claim rec_name in theoretical covered element error message
 * BUG#11465 Claim beneficiary extra data are not initialized when creating a beneficiary
 
