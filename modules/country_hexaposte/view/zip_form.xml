@@ -5,5 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="/form/field[@name='city']" position="after">
         <label name="hexa_post_id"/>
         <field name="hexa_post_id"/>
+        <label name="insee_code"/>
+        <field name="insee_code"/>
     </xpath>
 </data>

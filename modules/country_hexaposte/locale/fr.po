@@ -18,6 +18,10 @@ msgctxt "field:country.hexapost.set,use_default:"
 msgid "Use default file"
 msgstr "Utiliser le fichier par défaut"
 
+msgctxt "field:country.zip,insee_code:"
+msgid "Insee Code"
+msgstr "Code Insee"
+
 msgctxt "field:country.zip,hexa_post_id:"
 msgid "Hexa Post Id"
 msgstr "Identifiant hexaposte"
@@ -25,6 +29,10 @@ msgstr "Identifiant hexaposte"
 msgctxt "field:country.zipcode.update_from_hexapost,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "help:country.zip,insee_code:"
+msgid "Insee Code"
+msgstr "Code Insee"
 
 msgctxt "model:country.hexapost.set,name:"
 msgid "HexaPost Loader"
@@ -53,3 +61,4 @@ msgstr "Annuler"
 msgctxt "wizard_button:country.hexapost.set.wizard,configuration,set_:"
 msgid "Set"
 msgstr "Mise à jour"
+
