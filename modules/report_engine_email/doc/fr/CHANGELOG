@@ -1,3 +1,4 @@
+* BUG#11811 Correction de la traduction en doublon de generated_code
 * BUG#11420 Correction du plantage de la génération d'emails lorsque le modèle définissant la pièce jointe n'est pas défini sur le produit
 * BUG#11224 Correction d'un plantage lors de l'envoi d'un mail avec pièce jointe en raison d'un mauvais encodage en python 3
 * BUG#11087 Correctif de l'impression de courrier avec édition manuelle active

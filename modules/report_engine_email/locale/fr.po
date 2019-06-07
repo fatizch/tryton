@@ -81,10 +81,6 @@ msgctxt "field:report.template,email_subject:"
 msgid "eMail Subject"
 msgstr "Sujet de l'eMail"
 
-msgctxt "field:report.template,generated_code:"
-msgid "Generated code"
-msgstr "Code généré"
-
 msgctxt "field:report.template,genshi_evaluated_email_bcc:"
 msgid "Email BCC Genshi Evaluated"
 msgstr "Copie caché d'email (dynamique)"
