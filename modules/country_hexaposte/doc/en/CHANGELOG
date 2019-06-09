@@ -1,3 +1,4 @@
+* OTH#00000 Fix zip uniqueness and zip update via wizard
 * FEA#11654 Save insee code in zip code when integrating hexapost format
 
 Version 2.4 - 2019-04-12

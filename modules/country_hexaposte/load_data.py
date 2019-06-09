@@ -5,6 +5,8 @@ from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 from trytond.wizard import Wizard, StateTransition, StateView, Button
 from trytond.transaction import Transaction
+from trytond.server_context import ServerContext
+
 from trytond.modules.coog_core import model, fields
 
 
@@ -65,7 +67,8 @@ class HexaPostSetWizard(Wizard):
         if to_create:
             Zip.create(to_create)
         if to_write:
-            Zip.write(*to_write)
+            with ServerContext().set_context(from_batch=True):
+                Zip.write(*to_write)
         return 'end'
 
 
@@ -83,8 +86,8 @@ class HexaPostLoader(object):
         existing_zips = Zip.search([('country', '=', france.id)])
         zip_dict_hexa_id = {x.hexa_post_id: x for x in existing_zips}
         zip_dict_hexa_id_keys = set(zip_dict_hexa_id.keys())
-        zip_dict_name = {'%s_%s_%s_%s' % (x.zip, x.city,
-                x.line5 or '', x.insee_code or ''): x for x in existing_zips}
+        zip_dict_name = {'%s_%s_%s' % (x.zip, x.city,
+                x.line5 or ''): x for x in existing_zips}
         zip_dict_name_keys = set(zip_dict_name.keys())
 
         hexa_data_coog = cls.convert_hexa_data_to_coog_data(hexa_data)
@@ -97,8 +100,7 @@ class HexaPostLoader(object):
             city = line['city']
             hexa_id = line['hexa_post_id']
             line5 = line['line5']
-            insee_code = line['insee_code']
-            name_key = '%s_%s_%s_%s' % (zip, city, line5, insee_code)
+            name_key = '%s_%s_%s' % (zip, city, line5)
 
             if hexa_id in zip_dict_hexa_id_keys:
                 to_write.extend(([zip_dict_hexa_id[hexa_id]], line))
