@@ -26,6 +26,9 @@ elif param_age_kind() == 'at_given_day_of_year':
     else:
         return given_date_in_birth_year + relativedelta(
             years=param_max_age_for_option(), days=-1)</field>
+            <field name="description">The end rule is based on the insured age.
+The coverage will terminated at age of ${max_age_for_option} (included).
+${"The age used is the age at subscription" if age_kind =="real" else ("The age is synchonized with the %s day of the %s month" % (given_day, given_month) if age_kind == "at_given_day_of_year" else "The age used is based on the first day of the month following the birth")}.</field>
             <field name="status">validated</field>
             <field name="context" ref="rule_engine.default_context"/>
             <field name="type_">ending</field>

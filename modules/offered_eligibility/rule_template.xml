@@ -20,6 +20,10 @@ elif param_age_kind() == 'at_given_day_of_year':
         int(param_given_month()), int(param_given_day()))
     age = relativedelta(date_effet_initiale_option(), given_date_in_birth_year).years
 return param_max_age_for_option() > age</field>
+            <field name="description">The eligibility rule is based on the insured birth date.
+The maximum age is ${max_age_for_option} (included).
+${"The age used is the age at subscription" if age_kind =="real" else ("The age is synchonized with the %s day of the %s month" % (given_day, given_month) if age_kind == "at_given_day_of_year" else "The age used is based on the first day of the month following the birth")}.
+</field>
             <field name="status">validated</field>
             <field name="type_">eligibility</field>
             <field name="context" ref="rule_engine.default_context"/>

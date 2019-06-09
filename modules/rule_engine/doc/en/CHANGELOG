@@ -1,3 +1,4 @@
+* FEA#11782 Allow to use genshi expression in rule engine in order to use the parameters
 * FEA#11543 Add description field on rule engine in order to fill a functionnal description of the algorithm
 * BUG#11550 Remove access right checks when creating rule engine execution logs
 

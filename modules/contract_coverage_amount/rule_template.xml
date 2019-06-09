@@ -8,6 +8,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="short_name">coverage_amount_per_range</field>
             <field name="algorithm">range_amount = param_coverage_amount_range()
 return list(range(param_min_amount(), param_max_amount() + range_amount, range_amount))</field>
+            <field name="description">Possible coverage amount are computed per ${coverage_amount_range} range with a ${min_amount} minimum amount and ${max_amount} maximum amount.</field>
             <field name="status">validated</field>
             <field name="type_">coverage_amount_selection</field>
             <field name="context" ref="rule_engine.default_context"/>

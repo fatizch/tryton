@@ -11,6 +11,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="short_name">product_term_renewal_sync_sub_date</field>
             <field name="algorithm">start_date = date_de_calcul()
 return start_date + relativedelta(years=1, days=-1)</field>
+            <field name="description">Contracts will be renewed each year at the contract anniversary date.</field>
             <field name="status">validated</field>
             <field name="type_">renewal</field>
             <field name="context" ref="rule_engine.default_context"/>
@@ -28,6 +29,7 @@ if given_day_in_current_year > start_date:
     return given_day_in_current_year + relativedelta(days=-1)
 else:
     return given_day_in_current_year + relativedelta(years=1, days=-1)</field>
+            <field name="description">Contracts will be renewed each year the ${given_day} day of the ${given_month} month.</field>
             <field name="status">validated</field>
             <field name="type_">renewal</field>
             <field name="context" ref="rule_engine.default_context"/>

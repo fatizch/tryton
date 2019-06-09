@@ -270,7 +270,7 @@ def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
         rule = getattr(self, field_name, None)
         if not rule:
             return
-        doc = rule.get_documentation(extra_name)
+        doc = rule.get_documentation(getattr(self, extra_name, {}))
         doc['help'] = coog_string.translate_help(self, field_name)
         return doc
 
@@ -825,6 +825,7 @@ class RuleParameter(model.CoogDictSchema, model.CoogSQL, model.CoogView):
         return coog_string.slugify(self.string)
 
 
+@model.genshi_evaluated_fields('description')
 class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     "Rule"
     _history = True
@@ -837,8 +838,9 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     short_name = fields.Char('Code', required=True)
     # TODO : rename as code (before code was the name for algorithm)
     algorithm = fields.Text('Algorithm')
-    description = fields.Text('Rule Description',
-        help='Functional description of the rule')
+    description = fields.Text('Rule Description', translate=True,
+        help='Functional description of the rule. The description can used the '
+        'rule parameter entered with the following synthax ${parameters_code}')
     data_tree = fields.Function(fields.Text('Data Tree'),
         'on_change_with_data_tree')
     test_cases = fields.One2Many('rule_engine.test_case', 'rule', 'Test Cases',
@@ -1600,13 +1602,14 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         return [execute_case(case) for case in cases]
 
     def get_documentation(self, parameters_value={}):
-        return {
-            'label': self.name,
-            'help': '',
-            'rule_description': self.description,
-            'rule_algorithm': self.algorithm,
-            'attributes': [],
-            }
+        with ServerContext().set_context(genshi_context=parameters_value):
+            return {
+                'label': self.name,
+                'help': '',
+                'rule_description': self.genshi_evaluated_description,
+                'rule_algorithm': self.algorithm,
+                'attributes': [],
+                }
 
 
 class Context(ModelView, ModelSQL, model.TaggedMixin):

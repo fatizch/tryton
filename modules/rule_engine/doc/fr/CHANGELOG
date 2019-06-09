@@ -1,3 +1,4 @@
+* FEA#11782 Permettre d'utiliser des expressions genshi dans la description fonctionnelle de la règle dans le but d'utiliser les paramètres de la règle dans le paramétrage.
 * FEA#11543 Ajout d'un champ description sur une règle afin de renseigner une description fonctionnelle de l'algorithme.
 * BUG#11550 Levée de la vérification des droits lors de la création des logs d'exécution du moteur de règle
 
