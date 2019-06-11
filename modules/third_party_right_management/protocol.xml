@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ############ -->
+        <!-- # Protocol # -->
+        <!-- ############ -->
+        <record model="ir.ui.view" id="third_party_manager_protocol_view_list">
+            <field name="model">third_party_manager.protocol</field>
+            <field name="type">tree</field>
+            <field name="name">third_party_manager_protocol_list</field>
+        </record>
+        <record model="ir.ui.view" id="third_party_manager_protocol_view_form">
+            <field name="model">third_party_manager.protocol</field>
+            <field name="type">form</field>
+            <field name="name">third_party_manager_protocol_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_third_party_manager_protocol">
+            <field name="name">Protocols</field>
+            <field name="res_model">third_party_manager.protocol</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_third_party_manager_protocol_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="third_party_manager_protocol_view_list"/>
+            <field name="act_window" ref="act_third_party_manager_protocol"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_third_party_manager_protocol_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="third_party_manager_protocol_view_form"/>
+            <field name="act_window" ref="act_third_party_manager_protocol"/>
+        </record>
+        <menuitem parent="third_party_management.menu_third_party_management" action="act_third_party_manager_protocol" id="menu_third_party_manager_protocol_form"/>
+        <!-- #################### -->
+        <!-- # Recompute Wizard # -->
+        <!-- #################### -->
+        <record model="ir.action.wizard" id="wizard_recompute_period">
+            <field name="name">Recompute Period</field>
+            <field name="wiz_name">third_party_manager.recompute_period</field>
+        </record>
+        <record model="ir.action.keyword" id="act_wizard_recompute_period_keyword">
+            <field name="action" ref="wizard_recompute_period"/>
+            <field name="keyword">form_action</field>
+            <field name="model">contract,-1</field>
+        </record>
+        <record model="ir.ui.view" id="recompute_period_ask_date_view_form">
+            <field name="model">third_party_manager.recompute_period.ask_date</field>
+            <field name="type">form</field>
+            <field name="name">recompute_period_ask_date_form</field>
+        </record>
+    </data>
+</tryton>

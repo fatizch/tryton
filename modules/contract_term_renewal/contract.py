@@ -166,6 +166,7 @@ class Contract(metaclass=PoolMeta):
 
         contracts = sorted(contracts, key=keyfunc)
         for end_date, contracts in groupby(contracts, key=keyfunc):
+            contracts = list(contracts)
             to_renew = [x for x in contracts if x.is_renewable]
             if to_renew:
                 res[end_date + relativedelta(days=1)] = to_renew

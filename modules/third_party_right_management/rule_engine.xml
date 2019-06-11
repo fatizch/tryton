@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="dossier_tpp">
+            <field name="translated_technical_name">dossier_tpp</field>
+            <field name="description">Gestion des droits délégués</field>
+            <field name="type">folder</field>
+            <field name="language" ref="ir.lang_fr"/>
+        </record>
+        <record model="rule_engine.context-function" id="cte_default_dossier_tpp">
+            <field name="context" ref="rule_engine.default_context"/>
+            <field name="tree_element" ref="dossier_tpp"/>
+        </record>
+        <record model="rule_engine.function" id="event_code_function">
+            <field name="translated_technical_name">code_evenement</field>
+            <field name="description">Code de l'événement</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_event_code</field>
+            <field name="long_description">Retourne le code de l'événement</field>
+            <field name="parent" ref="dossier_tpp"/>
+        </record>
+    </data>
+</tryton>

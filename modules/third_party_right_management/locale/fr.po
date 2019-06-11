@@ -1,0 +1,362 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.option.third_party_period:"
+msgid "Third Party Period overlaps"
+msgstr "Les Périodes de Délégation se chevauchent"
+
+msgctxt "error:third_party_manager.protocol:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
+msgctxt "field:contract.option,third_party_periods:"
+msgid "Third Party Periods"
+msgstr "Périodes de Délégation"
+
+msgctxt "field:contract.option.third_party_period,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.option.third_party_period,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.option.third_party_period,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.option.third_party_period,end_date:"
+msgid "End Date"
+msgstr "Date de fin de couverture"
+
+msgctxt "field:contract.option.third_party_period,extra_details:"
+msgid "Extra Details"
+msgstr "Détails complémentaires"
+
+msgctxt "field:contract.option.third_party_period,extra_summary:"
+msgid "Extra Summary"
+msgstr "Résumé complémentaire"
+
+msgctxt "field:contract.option.third_party_period,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.option.third_party_period,option:"
+msgid "Contract Option"
+msgstr "Garantie"
+
+msgctxt "field:contract.option.third_party_period,protocol:"
+msgid "Protocol"
+msgstr "Protocole"
+
+msgctxt "field:contract.option.third_party_period,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:contract.option.third_party_period,send_after:"
+msgid "Send After"
+msgstr "Date d'envoi"
+
+msgctxt "field:contract.option.third_party_period,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:contract.option.third_party_period,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:contract.option.third_party_period,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:contract.option.third_party_period,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.option.third_party_period,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:endorsement.part,third_party_protocols:"
+msgid "Third Party Protocols"
+msgstr "Protocoles des Délégataires"
+
+msgctxt "field:offered.option.description,third_party_protocols:"
+msgid "Third Party Protocols"
+msgstr "Protocoles des Délégataires"
+
+msgctxt "field:third_party_manager.protocol,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:third_party_manager.protocol,coverages:"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "field:third_party_manager.protocol,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:third_party_manager.protocol,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:third_party_manager.protocol,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:third_party_manager.protocol,endorsement_parts:"
+msgid "Endorsement Parts"
+msgstr "Avenants unitaires"
+
+msgctxt "field:third_party_manager.protocol,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:third_party_manager.protocol,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:third_party_manager.protocol,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:third_party_manager.protocol,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:third_party_manager.protocol,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Règle Données complémentaires"
+
+msgctxt "field:third_party_manager.protocol,technical_protocol:"
+msgid "Technical Protocol"
+msgstr "Protocole Technique"
+
+msgctxt "field:third_party_manager.protocol,third_party_manager:"
+msgid "Third Party Manager"
+msgstr "Délégataire"
+
+msgctxt "field:third_party_manager.protocol,watched_events:"
+msgid "Watched Events"
+msgstr "Événements Surveillés"
+
+msgctxt "field:third_party_manager.protocol,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:third_party_manager.protocol,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:third_party_manager.protocol,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:third_party_manager.protocol-event.type,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:third_party_manager.protocol-event.type,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:third_party_manager.protocol-event.type,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:third_party_manager.protocol-event.type,event_type:"
+msgid "Event Type"
+msgstr "Type d'événement"
+
+msgctxt "field:third_party_manager.protocol-event.type,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:third_party_manager.protocol-event.type,protocol:"
+msgid "Protocol"
+msgstr "Protocole"
+
+msgctxt "field:third_party_manager.protocol-event.type,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:third_party_manager.protocol-event.type,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:third_party_manager.protocol-event.type,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:third_party_manager.protocol-event.type,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt ""
+"field:third_party_manager.protocol-offered.option.description,coverage:"
+msgid "Coverage"
+msgstr "Offre"
+
+msgctxt ""
+"field:third_party_manager.protocol-offered.option.description,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:third_party_manager.protocol-offered.option.description,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:third_party_manager.protocol-offered.option.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:third_party_manager.protocol-offered.option.description,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt ""
+"field:third_party_manager.protocol-offered.option.description,protocol:"
+msgid "Protocol"
+msgstr "Protocole"
+
+msgctxt ""
+"field:third_party_manager.protocol-offered.option.description,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt ""
+"field:third_party_manager.protocol-offered.option.description,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:third_party_manager.protocol-offered.option.description,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:third_party_manager.protocol-offered.option.description,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:third_party_manager.recompute_period.ask_date,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:third_party_manager.recompute_period.ask_date,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:third_party_manager.recompute_period.ask_date,periods:"
+msgid "Last Periods"
+msgstr "Dernières Périodes"
+
+msgctxt "field:third_party_manager_protocol-endorsement_part,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:third_party_manager_protocol-endorsement_part,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:third_party_manager_protocol-endorsement_part,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:third_party_manager_protocol-endorsement_part,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:third_party_manager_protocol-endorsement_part,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:third_party_manager_protocol-endorsement_part,protocol:"
+msgid "Protocol"
+msgstr "Protocole"
+
+msgctxt "field:third_party_manager_protocol-endorsement_part,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:third_party_manager_protocol-endorsement_part,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:third_party_manager_protocol-endorsement_part,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:third_party_manager_protocol-endorsement_part,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "model:contract.option.third_party_period,name:"
+msgid "Third Party Period"
+msgstr "Période de Délégation"
+
+msgctxt "model:ir.action,name:act_third_party_manager_protocol"
+msgid "Protocols"
+msgstr "Protocoles"
+
+msgctxt "model:ir.action,name:act_third_party_period_relate"
+msgid "Third Party Periods"
+msgstr "Périodes de Délégation"
+
+msgctxt "model:ir.action,name:wizard_recompute_period"
+msgid "Recompute Period"
+msgstr "Re-calcul des Périodes"
+
+msgctxt "model:ir.ui.menu,name:menu_third_party_manager_protocol_form"
+msgid "Protocols"
+msgstr "Protocoles"
+
+msgctxt "model:third_party_manager.protocol,name:"
+msgid "Third Party Management Protocol"
+msgstr "Protocole des Délégataires"
+
+msgctxt "model:third_party_manager.protocol-event.type,name:"
+msgid "Third Party Management Protocol - Event Type"
+msgstr "Protocole des Délégataires - Type d'Événement"
+
+msgctxt "model:third_party_manager.protocol-offered.option.description,name:"
+msgid "Third Party Protocol - Coverage"
+msgstr "Protocole des Délégataires - Couverture"
+
+msgctxt "model:third_party_manager.recompute_period.ask_date,name:"
+msgid "Recompute the periods - Ask Date"
+msgstr "Re-calcul des Périodes - Date"
+
+msgctxt "model:third_party_manager_protocol-endorsement_part,name:"
+msgid "Third Party Protocol - Endorsement Part"
+msgstr "Protocole des Délégataires - Avenants"
+
+msgctxt "selection:contract.option.third_party_period,status:"
+msgid "Rejected"
+msgstr "Rejeté"
+
+msgctxt "selection:contract.option.third_party_period,status:"
+msgid "Sent"
+msgstr "Envoyé"
+
+msgctxt "selection:contract.option.third_party_period,status:"
+msgid "Validated"
+msgstr "Validé"
+
+msgctxt "selection:contract.option.third_party_period,status:"
+msgid "Waiting"
+msgstr "En attente"
+
+msgctxt "wizard_button:third_party_manager.recompute_period,ask_date,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:third_party_manager.recompute_period,ask_date,recompute:"
+msgid "Recompute"
+msgstr "Re-calculer"

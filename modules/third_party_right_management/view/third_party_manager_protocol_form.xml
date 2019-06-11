@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<form>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="third_party_manager"/>
+    <field name="third_party_manager"/>
+    <label name="technical_protocol"/>
+    <field name="technical_protocol"/>
+    <notebook>
+        <page name="watched_events">
+            <field name="watched_events" colspan="4"/>
+        </page>
+        <page name="coverages">
+            <field name="coverages" colspan="4"/>
+        </page>
+        <page name="rule">
+            <label name="rule"/>
+            <field name="rule"/>
+        </page>
+    </notebook>
+</form>

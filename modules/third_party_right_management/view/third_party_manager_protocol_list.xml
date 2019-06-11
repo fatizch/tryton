@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree>
+    <field name="name"/>
+    <field name="code"/>
+    <field name="third_party_manager"/>
+    <field name="technical_protocol"/>
+</tree>

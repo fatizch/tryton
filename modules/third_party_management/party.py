@@ -50,7 +50,18 @@ class ThirdPartyManager(model.CoogView, model.CoogSQL):
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
     party = fields.Many2One('party.party', "Third Party Manager",
+        domain=[
+            ('is_third_party_manager', '=', True),
+            ],
         ondelete='RESTRICT', required=True)
+
+    def get_rec_name(self, name):
+        if self.party:
+            return self.party.rec_name
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return [('party.rec_name',) + tuple(clause[1:])]
 
     def get_func_key(self, name):
         return self.party.code

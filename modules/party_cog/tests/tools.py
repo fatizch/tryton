@@ -72,3 +72,14 @@ def create_party_person(name=None, first_name=None, birth_date=None,
         add_accounts(person, company)
     person.save()
     return person
+
+
+def create_party_company(name=None):
+    Party = Model.get('party.party')
+
+    if not name:
+        name = 'Acme Inc.'
+
+    company = Party(name=name, is_person=False)
+    company.save()
+    return company

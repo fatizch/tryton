@@ -1,0 +1,71 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:party.party,is_third_party_manager:"
+msgid "Is Third-Party Manager"
+msgstr "Est un Délégataire"
+
+msgctxt "field:party.party,third_party_manager_role:"
+msgid "Third Party Role"
+msgstr "Role de Délégataire"
+
+msgctxt "field:third_party_manager,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:third_party_manager,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:third_party_manager,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:third_party_manager,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:third_party_manager,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:third_party_manager,party:"
+msgid "Third Party Manager"
+msgstr "Délégataire"
+
+msgctxt "field:third_party_manager,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:third_party_manager,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:third_party_manager,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:third_party_manager,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "model:ir.action,name:act_third_party_manager"
+msgid "Third Party Managers"
+msgstr "Délégataires"
+
+msgctxt "model:ir.ui.menu,name:menu_third_party_management"
+msgid "Third Party Management"
+msgstr "Gestion des Délégataires"
+
+msgctxt "model:ir.ui.menu,name:menu_third_party_manager_form"
+msgid "Third Party Managers"
+msgstr "Délégataires"
+
+msgctxt "model:third_party_manager,name:"
+msgid "Third Party Manager"
+msgstr "Délégataire"
+
+msgctxt "view:party.party:"
+msgid "Third Party Manager"
+msgstr "Délégataire"

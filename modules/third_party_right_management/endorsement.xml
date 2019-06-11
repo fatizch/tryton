@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<tryton>
+    <data depends="endorsement">
+        <!-- ############### -->
+        <!-- # Endorsement # -->
+        <!-- ############### -->
+        <record model="ir.ui.view" id="endorsement_part_view_form">
+            <field name="model">endorsement.part</field>
+            <field name="inherit" ref="endorsement.endorsement_part_view_form"/>
+            <field name="name">endorsement_part_form</field>
+        </record>
+        <!-- ############ -->
+        <!-- # Protocol # -->
+        <!-- ############ -->
+        <record model="ir.ui.view" id="third_party_protocol_endorsement_view_form">
+            <field name="model">third_party_manager.protocol</field>
+            <field name="inherit" ref="third_party_manager_protocol_view_form"/>
+            <field name="name">third_party_protocol_endorsement_form</field>
+        </record>
+    </data>
+</tryton>
