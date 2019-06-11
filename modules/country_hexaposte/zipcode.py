@@ -19,7 +19,7 @@ class Zip(metaclass=PoolMeta):
         if Transaction().context.get('search_with_insee_code', False):
             return '%s %s' % (self.insee_code, self.city)
         else:
-            super(Zip, self).get_rec_name(name)
+            return super(Zip, self).get_rec_name(name)
 
     @classmethod
     def search_rec_name(cls, name, clause):
