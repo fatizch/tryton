@@ -226,8 +226,8 @@ class LoanAveragePremiumRule(model.CoogSQL, model.CoogView):
         for rule in self.fee_rules:
             doc.append(
                 coog_string.doc_for_field(self, 'fee_rules',
-                    '%s:%s' % (fee.rec_name,
-                        coog_string.translate_value(fee, 'action'))))
+                    '%s:%s' % (rule.fee.rec_name,
+                        coog_string.translate_value(rule.fee, 'action'))))
         return doc
 
 

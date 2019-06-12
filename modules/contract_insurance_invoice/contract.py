@@ -86,14 +86,12 @@ class Contract(metaclass=PoolMeta):
         'get_billing_information')
     billing_informations = fields.One2Many('contract.billing_information',
         'contract', 'Billing Information',
-        domain=[
-            ('billing_mode.products', '=', Eval('product')),
-            If(Bool(Eval('status') == 'active'),
+        domain=[If(Bool(Eval('status') == 'active'),
                 ['OR',
                     ('direct_debit', '=', False),
                     ('direct_debit_account', '!=', None)],
                 [])
-        ], delete_missing=True,
+            ], delete_missing=True,
         states=_STATES, depends=['product', 'status', 'id'])
     last_invoice_start = fields.Function(
         fields.Date('Last Invoice Start Date'), 'get_last_invoice',
@@ -1244,7 +1242,7 @@ class Contract(metaclass=PoolMeta):
 
     def init_from_product(self, product):
         super(Contract, self).init_from_product(product)
-        if not self.product or not self.product.billing_modes:
+        if not self.product or not self.product.billing_rules[0].billing_modes:
             return
         self.init_billing_information()
 
@@ -1252,7 +1250,7 @@ class Contract(metaclass=PoolMeta):
         if getattr(self, 'billing_informations', None):
             return
         BillingInformation = Pool().get('contract.billing_information')
-        default_billing_mode = self.product.billing_modes[0]
+        default_billing_mode = self.product.billing_rules[0].billing_modes[0]
         if default_billing_mode.direct_debit:
             days = default_billing_mode.get_allowed_direct_debit_days()
             direct_debit_day = days[0][0]
@@ -1402,6 +1400,19 @@ class Contract(metaclass=PoolMeta):
                             'number'),
                         })
         return res
+
+    @classmethod
+    def _calculate_methods(cls, product):
+        return super()._calculate_methods(product) + [
+            ('contract', 'update_default_billing_information'),
+            ]
+
+    def update_default_billing_information(self):
+        # Set default billing informations according to possible billing modes
+        possible_values = self.billing_informations[0].possible_billing_modes
+        if self.billing_informations[0].billing_mode not in possible_values:
+            self.billing_informations[0].billing_mode = possible_values[0]
+            self.billing_informations = list(self.billing_informations)
 
     ###########################################################################
     # Cached invoices calculation to speed up future payments wizard,         #
@@ -1654,8 +1665,13 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
         fields.Char('Contract Status'),
         'on_change_with_contract_status')
     billing_mode = fields.Many2One('offered.billing_mode', 'Billing Mode',
-        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS,
-        required=True, ondelete='RESTRICT')
+        states=_CONTRACT_STATUS_STATES,
+        required=True, ondelete='RESTRICT',
+        domain=[('id', 'in', Eval('possible_billing_modes'))],
+        depends=_CONTRACT_STATUS_DEPENDS + ['possible_billing_modes'])
+    possible_billing_modes = fields.Function(
+        fields.One2Many('offered.billing_mode', None, 'Possible Billing Modes'),
+        'getter_possible_billing_modes')
     payment_term = fields.Many2One('account.invoice.payment_term',
         'Payment Term', ondelete='RESTRICT', states={
             'required': And(Eval('direct_debit', False),
@@ -1806,6 +1822,21 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
             to_save.extend(to_update)
         if to_save:
             MoveLine.save(to_save)
+
+    def init_dict_for_rule_engine(self, args):
+        args['context'] = self
+        self.contract.init_dict_for_rule_engine(args)
+
+    def getter_possible_billing_modes(self, name):
+        billing_rule = self.contract.product.billing_rules[0]
+        if not billing_rule or self.contract.status != 'quote':
+            return [x.id for x in billing_rule.billing_modes]
+
+        args = {}
+        self.init_dict_for_rule_engine(args)
+        args['date'] = utils.today()
+        billing_modes = billing_rule.calculate_available_billing_modes(args)
+        return [x.id for x in billing_modes]
 
     @classmethod
     def get_suspended(cls, billings, name):

@@ -15,6 +15,18 @@ this repository contains the full copyright notices and license terms. -->
         </record>
     </data>
     <data>
+        <record model="rule_engine.function" id="missing_arguments">
+            <field name="translated_technical_name">parametres_manquants</field>
+            <field name="description">Arrête l'exécution de la règle</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_incomplete_inputs</field>
+            <field name="fct_args"/>
+            <field name="long_description">Arrête l'exécution de la règle en raison d'informations
+insuffisantes pour son exécution</field>
+            <field name="parent" ref="dossier_outils"/>
+        </record>
         <record model="rule_engine.function" id="event_objects">
             <field name="translated_technical_name">objets_evenement</field>
             <field name="description">Objets de l'événement</field>
@@ -22,7 +34,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_event_objects</field>
-            <field name="fct_args"></field>
+            <field name="fct_args"/>
             <field name="long_description">Retourne les objets d'un événement</field>
             <field name="parent" ref="dossier_outils"/>
         </record>
@@ -261,9 +273,9 @@ forme "contract.options.status".
 
 Pour les champs One2Many ou Many2Many, on peut
 utiliser la notation suivante :
-  - contract.options => Toute la liste
-  - contract.options[0] => Le premier élément
-  - contract.options[-1] => Le dernier élément
+  - contract.options =&gt; Toute la liste
+  - contract.options[0] =&gt; Le premier élément
+  - contract.options[-1] =&gt; Le dernier élément
 
 Le premier noeud de la liste (ex: 'contract') doit
 etre disponible dans le contexte d'exécution</field>

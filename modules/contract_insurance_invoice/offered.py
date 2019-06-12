@@ -13,6 +13,7 @@ from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import fields, model, export, utils, coog_string
+from trytond.modules.rule_engine import get_rule_mixin
 
 from .contract import FREQUENCIES
 
@@ -21,6 +22,8 @@ __all__ = [
     'BillingMode',
     'BillingModeFeeRelation',
     'Product',
+    'RuleEngine',
+    'ProductBillingRule',
     'ProductBillingModeRelation',
     'BillingModePaymentTermRelation',
     'OptionDescription',
@@ -92,9 +95,9 @@ class BillingMode(model.CoogSQL, model.CoogView):
             'invisible': Eval('frequency') == 'monthly'},
             depends=['frequency'])
     sync_month_string = sync_month.translated('sync_month')
-    products = fields.Many2Many(
-        'offered.product-offered.billing_mode',
-        'billing_mode', 'product', 'Products', readonly=True)
+    products = fields.Function(
+        fields.Many2Many('offered.product', None, None, 'Products'),
+        'getter_products')
     fees = fields.Many2Many('offered.billing_mode-account.fee', 'billing_mode',
         'fee', 'Fees')
 
@@ -220,6 +223,11 @@ class BillingMode(model.CoogSQL, model.CoogView):
     def get_change_payment_term_order(self, name):
         return False
 
+    def getter_products(self):
+        Relation = Pool().get('offered.product-offered.billing_mode')
+        rules = Relation.search([('billing_mode', '=', self.id)])
+        return [rule.product.id for rule in rules]
+
 
 class BillingModeFeeRelation(model.CoogSQL):
     'Billing Mode Fee Relation'
@@ -289,22 +297,22 @@ class PaymentTermLineRelativeDelta(export.ExportImportMixin):
             return [('id', '=', None)]
 
 
+class RuleEngine(metaclass=PoolMeta):
+    __name__ = 'rule_engine'
+
+    @classmethod
+    def __setup__(cls):
+        super(RuleEngine, cls).__setup__()
+        cls.type_.selection.extend([('billing_mode', 'Billing Mode'), ])
+
+
 class Product(metaclass=PoolMeta):
     __name__ = 'offered.product'
 
-    billing_modes = fields.Many2Many('offered.product-offered.billing_mode',
-        'product', 'billing_mode', 'Billing Modes',
-        help='Billing mode available to invoice the contract',
-        order=[('order', 'ASC')],
-        states={'invisible': Bool(Eval('change_billing_modes_order'))})
-    change_billing_modes_order = fields.Function(
-        fields.Boolean('Change Order'),
-        'get_change_billing_modes_order', 'setter_void')
-    ordered_billing_modes = fields.One2Many(
-        'offered.product-offered.billing_mode', 'product',
-        'Ordered Billing Mode', order=[('order', 'ASC')],
-        states={'invisible': ~Eval('change_billing_modes_order')},
-        delete_missing=True)
+    billing_rules = fields.One2Many('offered.product.billing_rule', 'product',
+        'Billing Rules', delete_missing=True, size=1,
+        help='Define which billing mode are available'
+        ' during contract subscription')
     days_offset_for_subscription_payments = fields.Integer(
         'Days Offset For Subscription Payments')
     taxes_included_in_premium = fields.Boolean('Taxes Included',
@@ -334,6 +342,10 @@ class Product(metaclass=PoolMeta):
         cls.coverages.depends.extend(['taxes_included_in_premium'])
 
     @classmethod
+    def default_billing_rules(cls):
+        return [{}]
+
+    @classmethod
     def default_tax_rounding(cls):
         return Pool().get('account.configuration')(1).tax_rounding
 
@@ -345,9 +357,6 @@ class Product(metaclass=PoolMeta):
     def get_tax_rounding(cls, products, name):
         method = cls.default_tax_rounding()
         return {x.id: method for x in products}
-
-    def get_change_billing_modes_order(self, name):
-        return False
 
     def get_non_periodic_payment_date(self, contract):
         offset = self.days_offset_for_subscription_payments
@@ -364,41 +373,102 @@ class Product(metaclass=PoolMeta):
         return doc
 
 
+class ProductBillingRule(
+        get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoogSQL, model.CoogView):
+    'ProductBilling Rule'
+
+    __name__ = 'offered.product.billing_rule'
+
+    product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
+        required=True, select=True)
+    billing_modes = fields.Many2Many('offered.product-offered.billing_mode',
+        'billing_rule', 'billing_mode', 'Billing Modes',
+        states={'invisible': Bool(Eval('change_billing_modes_order'))},
+        help="Billing mode available to invoice the contract")
+    change_billing_modes_order = fields.Function(
+        fields.Boolean('Change Order'),
+        'get_change_billing_modes_order', 'setter_void')
+    ordered_billing_modes = fields.One2Many(
+        'offered.product-offered.billing_mode', 'billing_rule',
+        'Ordered Billing Mode', order=[('order', 'ASC')],
+        states={'invisible': ~Eval('change_billing_modes_order')},
+        delete_missing=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(ProductBillingRule, cls).__setup__()
+        cls._error_messages.update({
+            'wrong_rule_format':
+                'The return value of the rule must be a dictionnary.',
+        })
+        cls.rule.domain = [('type_', '=', 'billing_mode')]
+        cls.rule.help = ('The rule must return a list with billing mode codes.')
+        cls.rule.string = 'Billing Rule'
+
+    @classmethod
+    def __register__(cls, module):
+        cursor = Transaction().connection.cursor()
+        TableHandler = backend.get('TableHandler')
+        Product = Pool().get('offered.product')
+        BillingRule_table = cls.__table__()
+        Product_table = Product.__table__()
+        to_migrate = not TableHandler.table_exist(cls._table)
+        super(ProductBillingRule, cls).__register__(module)
+
+        if to_migrate:
+            cursor.execute(*BillingRule_table.insert(
+                columns=[BillingRule_table.product],
+                values=Product_table.select(Product_table.id)
+            ))
+
+    def format_as_rule_result(self):
+        return [x for x in self.billing_modes]
+
+    def calculate_available_billing_modes(self, args):
+        if not self.rule:
+            return self.format_as_rule_result()
+        result = self.calculate_rule(args, crash_on_missing_arguments=False)
+        if type(result) not in (list, type(None)):
+            self.raise_user_error('wrong_rule_format')
+        if result:
+            return [x for x in self.billing_modes if x.code in result]
+        else:
+            return self.billing_modes
+
+    def get_change_billing_modes_order(self, name):
+        return False
+
+
 class ProductBillingModeRelation(model.CoogSQL, model.CoogView):
     'Product Billing Mode Relation'
 
     __name__ = 'offered.product-offered.billing_mode'
 
+    billing_rule = fields.Many2One('offered.product.billing_rule', 'Rule',
+        ondelete='CASCADE', required=True, select=True)
     billing_mode = fields.Many2One('offered.billing_mode',
         'Billing Mode', ondelete='RESTRICT', required=True, select=True)
-    product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
-        required=True, select=True)
     order = fields.Integer('Order')
 
     @classmethod
     def __register__(cls, module_name):
-        # Migration from 1.1: Billing change
-        migrate = False
         TableHandler = backend.get('TableHandler')
+        BillingRule = Pool().get('offered.product.billing_rule')
+        Relation_table = cls.__table__()
+        BillingRule_table = BillingRule.__table__()
+        product_billing = TableHandler(cls, module_name)
         cursor = Transaction().connection.cursor()
-        if (not TableHandler.table_exist(
-                'offered_product-offered_billing_mode') and
-                TableHandler.table_exist(
-                    'offered_product-offered_invoice_frequency')):
-            migrate = True
-
         super(ProductBillingModeRelation, cls).__register__(
             module_name)
-
-        # Migration from 1.1: Billing change
-        if migrate:
-            cursor.execute('insert into '
-                '"offered_product-offered_billing_mode" '
-                '(id, create_uid, create_date, write_uid, write_date,'
-                'product, billing_mode) '
-                'select id, create_uid, create_date, write_uid, write_date,'
-                'product, invoice_frequency from '
-                '"offered_product-offered_invoice_frequency"')
+        if product_billing.column_exist('product'):
+            cursor.execute(*Relation_table.update(
+                columns=[Relation_table.billing_rule],
+                values=[BillingRule_table.id],
+                from_=[BillingRule_table],
+                where=Relation_table.product == BillingRule_table.product
+            ))
+            product_billing.drop_column('product')
 
 
 class BillingModePaymentTermRelation(model.CoogSQL, model.CoogView):

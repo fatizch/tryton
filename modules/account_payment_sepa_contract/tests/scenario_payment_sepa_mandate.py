@@ -254,7 +254,7 @@ delta = line.relativedeltas.new(days=15)
 payment_term_percent.save()
 monthly_percent = create_billing_mode('monthly',
     payment_term_percent.id, direct_debit=True, code='monthly_percent')
-product.billing_modes.append(monthly_percent)
+product.billing_rules[-1].billing_modes.append(monthly_percent)
 product.save()
 
 Contract = Model.get('contract')

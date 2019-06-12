@@ -1,3 +1,4 @@
+* FEA#11728 Billing modes dynamic management in subscription
 * FEA#11656 Add a dedicated event for the payment of the first invoice of a contract
 * FEA#11297 Make only related people with whom a subscriber have payer relation as possible contract payer
 

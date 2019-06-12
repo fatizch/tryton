@@ -187,6 +187,14 @@ def noargs_func(name, values):
     return newfunc
 
 
+class MissingRuleArguments(Exception):
+    '''
+        Can be used to identify the fact that a rule was called when some
+        required information was not yet set
+    '''
+    pass
+
+
 class InternalRuleEngineError(Exception):
     pass
 
@@ -230,10 +238,28 @@ def get_rule_mixin(field_name, field_string, extra_name='', extra_string=''):
     setattr(BaseRuleMixin, extra_name + '_string',
         rule_extra_data.translated(extra_name))
 
-    def calculate(self, args, return_full=False, raise_errors=False):
+    def calculate(self, args, return_full=False, raise_errors=False,
+            crash_on_missing_arguments=True):
+        '''
+            Executes the rule then returns the resuls
+
+                - If return_full is set, the return value will be the Result
+                  object, rather than the sole result.
+                - If raise_errors is set, functional errors that were added in
+                  the rule will automatically be raised
+                - If crash_on_missing_arguments is set, the
+                  MissingRuleArguments will be raised if it occurs. If it is
+                  False, the error will be handled, and the rule will return
+                  None
+        '''
         rule = getattr(self, field_name, None)
         if rule:
-            res = rule.execute(args, getattr(self, extra_name))
+            try:
+                res = rule.execute(args, getattr(self, extra_name))
+            except MissingRuleArguments:
+                if crash_on_missing_arguments:
+                    raise
+                return None
             if raise_errors:
                 self.raise_result_errors(res)
             if return_full:
@@ -420,6 +446,14 @@ class RuleTools(ModelView):
     @classmethod
     def debug(cls, args, debug):
         args['__result__'].debug.append(debug)
+
+    @classmethod
+    def _re_incomplete_inputs(cls, args):
+        '''
+            Raises a special exception that can be used to identify that the
+            rule needed some informations for execution that were not provided
+        '''
+        raise MissingRuleArguments
 
     @classmethod
     @check_args('event_objects')
@@ -1422,7 +1456,6 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 if self.debug_mode:
                     raise
             except CatchedRuleEngineError:
-                pass
                 the_result.result = None
             except ReadOnlyException as exc:
                 err_msg = self.raise_user_error('readonly_rule',

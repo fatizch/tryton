@@ -12,11 +12,7 @@ this repository contains the full copyright notices and license terms. -->
             <label name="days_offset_for_subscription_payments"/>
             <field name="days_offset_for_subscription_payments"/>
             <newline/>
-            <label name="change_billing_modes_order"/>
-            <field name="change_billing_modes_order"/>
-            <newline/>
-            <field name="billing_modes" colspan="4"/>
-            <field name="ordered_billing_modes" colspan="4" mode="tree"/>
+            <field name="billing_rules" colspan="4" mode="form"/>
         </page>
     </xpath>
 </data>

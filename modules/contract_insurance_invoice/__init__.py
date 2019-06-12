@@ -31,6 +31,8 @@ def register():
         batch.BulkSetNumberInvoiceContractBatch,
         batch.RebillBatch,
         configuration.OfferedConfiguration,
+        offered.ProductBillingRule,
+        offered.RuleEngine,
         offered.BillingMode,
         offered.BillingModeFeeRelation,
         offered.BillingModePaymentTermRelation,

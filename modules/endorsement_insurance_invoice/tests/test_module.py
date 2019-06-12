@@ -32,11 +32,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'Account': 'account.account',
             'AccountKind': 'account.account.type',
             'Tax': 'account.tax',
+            'BillingMode': 'offered.billing_mode',
             'Product': 'offered.product',
             'Coverage': 'offered.option.description',
             'PaymentTerm': 'account.invoice.payment_term',
             'BillingInformation': 'contract.billing_information',
-            'BillingMode': 'offered.billing_mode',
             'Company': 'company.company',
             'MoveLine': 'account.move.line',
             'User': 'res.user',
@@ -121,13 +121,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         'name': 'Test Product',
                         'code': 'test_product',
                         'start_date': datetime.date(2014, 1, 1),
-                        'billing_modes': [
-                            ('add', [freq_year.id, freq_quart.id,
-                                    freq_once.id])],
                         'contract_generator': sequence.id,
                         'quote_number_sequence': quote_sequence.id,
                         'currency': currency.id,
+                        'billing_rules': [
+                            ('create', [{
+                                        'billing_modes': [
+                                            ('add', [freq_year.id,
+                                                    freq_quart.id,
+                                                    freq_once.id])],
+                                        }])],
                         }])
+
         config = self.OfferedConfiguration(1)
         config.split_invoices_on_endorsement_dates = True
         config.save()

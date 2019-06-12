@@ -51,12 +51,10 @@ def add_invoice_configuration(product, accounts, user_context=False):
         direct_debit=True, user_context=user_context)
     freq_yearly = create_billing_mode('yearly', payment_term.id,
         user_context=user_context)
-
-    product.billing_modes.append(freq_monthly)
-    product.billing_modes.append(freq_yearly)
-    product.billing_modes.append(freq_quarterly)
-    product.billing_modes.append(freq_monthly_direct_debit)
-
+    product.billing_rules[-1].billing_modes.append(freq_monthly)
+    product.billing_rules[-1].billing_modes.append(freq_yearly)
+    product.billing_rules[-1].billing_modes.append(freq_quarterly)
+    product.billing_rules[-1].billing_modes.append(freq_monthly_direct_debit)
     for coverage in product.coverages:
         coverage.account_for_billing = Model.get('account.account')(
             accounts['revenue'].id)

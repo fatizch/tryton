@@ -71,5 +71,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="premium.option_description_premium_rule_view_form"/>
             <field name="name">option_description_premium_rule_form</field>
         </record>
+        <!-- ######################## -->
+        <!-- # Product Billing Rule # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="product_billing_rule_view_form">
+            <field name="model">offered.product.billing_rule</field>
+            <field name="type">form</field>
+            <field name="name">product_billing_rule_form</field>
+        </record>
     </data>
 </tryton>

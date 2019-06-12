@@ -278,13 +278,13 @@ Create Product::
     >>> product.contract_generator = contract_sequence
     >>> product.quote_number_sequence = quote_sequence
     >>> product.start_date = product_start_date
-    >>> product.billing_modes.append(freq_monthly)
-    >>> product.billing_modes.append(freq_yearly)
     >>> product.taxes_included_in_premium = True
     >>> product.coverages.append(coverage)
     >>> product.coverages.append(coverage_1)
     >>> product.coverages.append(coverage_2)
     >>> product.taxes_included_in_premium = True
+    >>> product.billing_rules[-1].billing_modes.append(freq_monthly)
+    >>> product.billing_rules[-1].billing_modes.append(freq_yearly)
     >>> product.save()
     >>> config = switch_user('contract_user')
     >>> Account = Model.get('account.account')

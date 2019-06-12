@@ -399,7 +399,8 @@ class AddRemoveLoan(EndorsementWizardStepMixin, model.CoogView):
                 endorsements[contract_id] = new_endorsement
             self._update_endorsement(endorsements[contract_id],
                 contract._save_values)
-        endorsement.contract_endorsements = [x for x in list(endorsements.values())
+        endorsement.contract_endorsements = [
+            x for x in list(endorsements.values())
             if not x.is_null()]
         endorsement.save()
 

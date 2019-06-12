@@ -282,10 +282,10 @@ product.code = 'test_product'
 product.contract_generator = contract_sequence
 product.quote_number_sequence = quote_sequence
 product.start_date = product_start_date
-product.billing_modes.append(freq_monthly)
-product.billing_modes.append(freq_yearly)
 product.average_loan_premium_rule = loan_average_rule
 product.coverages.append(coverage)
+product.billing_rules[-1].billing_modes.append(freq_monthly)
+product.billing_rules[-1].billing_modes.append(freq_yearly)
 product.save()
 
 # #Comment# #Create Subscriber

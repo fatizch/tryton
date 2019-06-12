@@ -84,6 +84,10 @@ msgctxt "error:offered.billing_mode:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
 
+msgctxt "error:offered.product.billing_rule:"
+msgid "The return value of the rule must be a dictionnary."
+msgstr "La valeur retournée doit être un dictionnaire"
+
 msgctxt "field:account.fee,coverages:"
 msgid "Coverages"
 msgstr "Garanties"
@@ -475,6 +479,10 @@ msgstr "Payeur"
 msgctxt "field:contract.billing_information,payment_term:"
 msgid "Payment Term"
 msgstr "Condition de paiement"
+
+msgctxt "field:contract.billing_information,possible_billing_modes:"
+msgid "Possible Billing Modes"
+msgstr "Modes de quittancement possibles"
 
 msgctxt "field:contract.billing_information,possible_payers:"
 msgid "Possible Payers"
@@ -1004,21 +1012,13 @@ msgctxt ""
 msgid "Match Contract Frequency"
 msgstr "Synchroniser avec la fréquence du contrat"
 
-msgctxt "field:offered.product,billing_modes:"
-msgid "Billing Modes"
-msgstr "Modes de quittancement"
-
-msgctxt "field:offered.product,change_billing_modes_order:"
-msgid "Change Order"
-msgstr "Modifier l'Ordre"
+msgctxt "field:offered.product,billing_rules:"
+msgid "Billing Rules"
+msgstr "Règle de Modes de quittancement"
 
 msgctxt "field:offered.product,days_offset_for_subscription_payments:"
 msgid "Days Offset For Subscription Payments"
 msgstr "Délai en jours pour le paiement des frais à la signature"
-
-msgctxt "field:offered.product,ordered_billing_modes:"
-msgid "Ordered Billing Mode"
-msgstr "Modifier l'ordre des modes de quittancement"
 
 msgctxt "field:offered.product,tax_rounding:"
 msgid "Tax_Rounding"
@@ -1031,6 +1031,10 @@ msgstr "Taxes incluses"
 msgctxt "field:offered.product-offered.billing_mode,billing_mode:"
 msgid "Billing Mode"
 msgstr "Mode de quittancement"
+
+msgctxt "field:offered.product-offered.billing_mode,billing_rule:"
+msgid "Rule"
+msgstr "Règle"
 
 msgctxt "field:offered.product-offered.billing_mode,create_date:"
 msgid "Create Date"
@@ -1052,10 +1056,6 @@ msgctxt "field:offered.product-offered.billing_mode,order:"
 msgid "Order"
 msgstr "Ordre"
 
-msgctxt "field:offered.product-offered.billing_mode,product:"
-msgid "Product"
-msgstr "Produit"
-
 msgctxt "field:offered.product-offered.billing_mode,rec_name:"
 msgid "Record Name"
 msgstr "Nom"
@@ -1071,6 +1071,62 @@ msgstr "Mis à jour par"
 msgctxt "field:offered.product-offered.billing_mode,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:offered.product.billing_rule,billing_modes:"
+msgid "Billing Modes"
+msgstr "Modes de quittancement"
+
+msgctxt "field:offered.product.billing_rule,change_billing_modes_order:"
+msgid "Change Order"
+msgstr "Modifier l'Ordre"
+
+msgctxt "field:offered.product.billing_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.product.billing_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.product.billing_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.product.billing_rule,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:offered.product.billing_rule,ordered_billing_modes:"
+msgid "Ordered Billing Mode"
+msgstr "Modifier l'ordre des modes de quittancement"
+
+msgctxt "field:offered.product.billing_rule,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:offered.product.billing_rule,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:offered.product.billing_rule,rule:"
+msgid "Billing Rule"
+msgstr "Règle de quittancement"
+
+msgctxt "field:offered.product.billing_rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Règle Données complémentaires"
+
+msgctxt "field:offered.product.billing_rule,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:offered.product.billing_rule,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:offered.product.billing_rule,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
 
 msgctxt "field:party.synthesis.menu.invoice,create_date:"
 msgid "Create Date"
@@ -1181,15 +1237,25 @@ msgctxt ""
 msgid "Should the premium be stored at the contract's frequency ?"
 msgstr "La prime doit-elle être stockée à la fréquence du contrat?"
 
-msgctxt "help:offered.product,billing_modes:"
-msgid "Billing mode available to invoice the contract"
-msgstr "Mode de quittancement disponible pour quittancer le contrat"
+msgctxt "help:offered.product,billing_rules:"
+msgid "Define which billing mode are available during contract subscription"
+msgstr ""
+"Définir le mode de quittancement disponible lors de la souscription d'un "
+"contrat"
 
 msgctxt "help:offered.product,taxes_included_in_premium:"
 msgid "Taxes Included In Premium. Requires tax rounding to be set to\"line\""
 msgstr ""
 "Taxes incluses dans le tarif. L'arrondi des taxes doit être configuré par "
 "ligne"
+
+msgctxt "help:offered.product.billing_rule,billing_modes:"
+msgid "Billing mode available to invoice the contract"
+msgstr "Mode de quittancement disponible pour quittancer le contrat"
+
+msgctxt "help:offered.product.billing_rule,rule:"
+msgid "The rule must return a list with billing mode codes."
+msgstr "La règle doit retournée une liste des codes de mode de quittancement"
 
 msgctxt "model:account.invoice.aggregate_lines.display,name:"
 msgid "Display Invoice Line Aggregates"
@@ -1266,7 +1332,6 @@ msgstr "Requittancer les contrats"
 msgctxt "model:event.type,name:event_first_invoice_payment"
 msgid "First Invoice Payment"
 msgstr "Paiement de la première quittance"
-
 
 msgctxt "model:ir.action,name:"
 msgid "Invoice Frequencies"
@@ -1348,6 +1413,10 @@ msgstr "Relation paramètres de quittancement - frais"
 msgctxt "model:offered.product-offered.billing_mode,name:"
 msgid "Product Billing Mode Relation"
 msgstr "Produit et mode de quittancement"
+
+msgctxt "model:offered.product.billing_rule,name:"
+msgid "ProductBilling Rule"
+msgstr "Règle de quittancement de produit"
 
 msgctxt "model:party.synthesis.menu.invoice,name:"
 msgid "Party Synthesis Menu Invoice"
@@ -1520,6 +1589,10 @@ msgstr "Octobre"
 msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "September"
 msgstr "Septembre"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Billing Mode"
+msgstr "Mode de quittancement"
 
 msgctxt "view:account.invoice.aggregate_lines.display.line:"
 msgid "Base"

@@ -123,13 +123,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         'name': 'Test Product',
                         'code': 'test_product',
                         'start_date': date(2014, 1, 1),
-                        'billing_modes': [
-                            ('add', [freq_month.id, freq_quart.id,
-                                    freq_once.id])],
                         'contract_generator': sequence.id,
                         'quote_number_sequence': quote_sequence.id,
                         'currency': currency.id,
+                        'billing_rules': [
+                            ('create', [{
+                                        'billing_modes': [
+                                            ('add', [freq_month.id,
+                                                    freq_quart.id,
+                                                    freq_once.id])],
+                                        }])],
                         }])
+
         contract = self.Contract(company=company,
             start_date=date(2014, 4, 15),
             product=product,
