@@ -1,3 +1,4 @@
+* BUG#11845 Ajout de la base de donnée de la transaction dans la génération de taches asynchrones
 * FEA#11661 Ajout de resources dédiées aux APIs
 * BUG#11664 Ajout de configuration sur les actions par type d'événement afin d'exécuter l'action avant le commit de la transaction
 * BUG#11722 Implémentation d'une Mixin pour supported la comparaison d'objets tryton avec des entiers

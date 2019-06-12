@@ -1,3 +1,4 @@
+* BUG#11845 Add transaction's database when generating the async tasks
 * FEA#11661 Add dedicated resources for APIs
 * BUG#11664 Add configuration on event type action to execute it just before the main transaction commit
 * BUG#11722 Implementation of a Mixin to support tryton objects and integers comparison

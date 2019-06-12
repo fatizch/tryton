@@ -307,6 +307,7 @@ class BatchRoot(ModelView):
         batch_params = cls._default_config_items
         batch_params.update(cls.get_batch_configuration())
         batch_params.update(params)
+        kwargs['database'] = Transaction().database.name
         cls._enqueue(records, batch_params, **kwargs)
 
 
