@@ -9,6 +9,7 @@ import datetime
 from sql import Literal, Null
 from sql.aggregate import Sum, Max
 from sql.conditionals import Case, Coalesce
+from sql.operators import In, NotIn
 from itertools import groupby
 
 from trytond.pool import Pool
@@ -124,16 +125,13 @@ class BaseSelectPrestIj(batch.BatchRoot):
                     (subscription.ssn == Null))).select(party.id,
                 where=Operator(subscription.id, Null) &
                 (party.is_person == Literal(False)))
+            return party.id.in_(sub_query)
         else:
-            sub_query = subscription.join(party, 'RIGHT OUTER', condition=(
-                    subscription.ssn == party.ssn)
-                ).join(company, 'LEFT OUTER', condition=(
-                    subscription.siren == company.siren)
-                ).select(party.id,
-                where=Operator(subscription.id, Null) &
-                (party.is_person == Literal(True))
-                )
-        return party.id.in_(sub_query)
+            sub_query = subscription.select(subscription.ssn,
+                subscription.siren, where=subscription.ssn != Null)
+            if operation == 'cre':
+                return NotIn((party.ssn, company.siren), sub_query)
+            return In((party.ssn, company.siren), sub_query)
 
     @classmethod
     def select_ids(cls, **kwargs):

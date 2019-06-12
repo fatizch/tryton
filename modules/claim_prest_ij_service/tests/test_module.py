@@ -5,8 +5,9 @@ import unittest
 from lxml.etree import XMLSyntaxError
 
 import trytond.tests.test_tryton
-from trytond.modules.coog_core import test_framework
+from trytond.modules.coog_core import test_framework, coog_date
 from trytond.modules.claim_prest_ij_service import gesti_templates
+import datetime
 
 
 class ModuleTestCase(test_framework.CoogTestCase):
@@ -15,14 +16,30 @@ class ModuleTestCase(test_framework.CoogTestCase):
     module = 'claim_prest_ij_service'
 
     @classmethod
+    def fetch_models_for(cls):
+        return ['offered_insurance', 'contract']
+
+    @classmethod
     def get_models(cls):
         return {
             'Party': 'party.party',
             'Subscription': 'claim.ij.subscription',
+            'ItemDesc': 'offered.item.description',
+            'CoveredElement': 'contract.covered_element',
+            'Claim': 'claim',
+            'ClaimClosingReason': 'claim.closing_reason',
+            'Service': 'claim.service',
+            'Benefit': 'benefit',
+            'Loss': 'claim.loss',
+            'LossDesc': 'benefit.loss.description',
+            'Insurer': 'insurer',
+            'Request': 'claim.ij.subscription_request',
+            'SubscriptionBatch': 'prest_ij.subscription.create',
+            'SubmitPersonPrestIjSubscription':
+            'prest_ij.subscription.submit_person',
             }
 
     def test0001_test_gesti_templates(self):
-        import datetime
         n = datetime.datetime.utcnow()
         n = n.strftime('%Y-%m-%dT%H:%M:%SZ')
 
@@ -80,6 +97,193 @@ class ModuleTestCase(test_framework.CoogTestCase):
             gesti_templates.GestipHeader, data)
         self.assertRaises(XMLSyntaxError,
             gesti_templates.GestipDocument, data)
+
+    @test_framework.prepare_test(
+        'offered_insurance.test0010Coverage_creation',
+        )
+    def test0001_test_create_ij_subscription_batch(self):
+        birth_date = datetime.date(1980, 1, 1)
+        person_a = self.Party(name='person_a', first_name='a',
+            is_person=True, birth_date=birth_date, gender='male',
+            ssn='180107710378929')
+        person_a.save()
+        person_b = self.Party(name='person_b', first_name='b',
+            is_person=True, birth_date=birth_date, gender='male',
+            ssn='180105059921334')
+        person_b.save()
+        siren_a = '552100554'
+        big_company_a = self.Party(name='Big A', siren=siren_a)
+        big_company_a.save()
+
+        siren_b = '800403222'
+        big_company_b = self.Party(name='Big B', siren=siren_b)
+        big_company_b.save()
+
+        product, = self.Product.search([
+                ('code', '=', 'AAA'),
+                ])
+        product.start_date = datetime.date(2001, 1, 1)
+        product.save()
+        start_date = product.start_date + datetime.timedelta(weeks=4)
+
+        def create_contract(subscriber, person):
+            contract = self.Contract(
+                product=product.id,
+                company=product.company.id,
+                start_date=start_date,
+                appliable_conditions_date=start_date,
+                subscriber=subscriber,
+                )
+            contract.save()
+
+            category_item_desc = self.ItemDesc()
+            category_item_desc.name = 'population'
+            category_item_desc.code = 'category_item_desc'
+            category_item_desc.kind = None
+            category_item_desc.save()
+
+            person_item_desc = self.ItemDesc()
+            person_item_desc.name = 'Person'
+            person_item_desc.code = 'person'
+            person_item_desc.kind = None
+            person_item_desc.save()
+
+            population = self.CoveredElement()
+            population.contract = contract
+            population.name = 'population lambda'
+            population.item_desc = category_item_desc
+            population.save()
+
+            person_cov = self.CoveredElement()
+            person_cov.party = person
+            person_cov.contract = contract
+            person_cov.parent = population
+            person_cov.item_desc = person_item_desc
+            person_cov.manual_start_date = start_date
+            person_cov.save()
+
+            return contract
+
+        first_contract = create_contract(big_company_a, person_a)
+
+        subscription_big_a = self.Subscription(siren=siren_a,
+            state='declaration_confirmed', activated=True,
+            ij_activation=True)
+        subscription_big_a.save()
+        assert bool(subscription_big_a.activated) is True
+
+        def run_subscription_batch():
+            SubscriptionBatch = self.SubscriptionBatch
+            treatment_date = datetime.date.today()
+            ids = SubscriptionBatch.select_ids(
+                treatment_date=treatment_date,
+                kind='person')
+            SubscriptionBatch.execute(ids, ids, treatment_date,
+                kind='person')
+            return ids
+
+        run_subscription_batch()
+
+        person_a_sub, = self.Subscription.search([
+            ('ssn', '=', person_a.ssn),
+            ('siren', '=', siren_a)])
+
+        run_subscription_batch()
+        person_a_sub, = self.Subscription.search([
+            ('ssn', '=', person_a.ssn),
+            ('siren', '=', siren_a)])
+        all_ = self.Subscription.search([])
+        assert len(all_) == 2
+
+        create_contract(big_company_b, person_a)
+        subscription_big_b = self.Subscription(siren=siren_b,
+            state='declaration_confirmed', activated=True,
+            ij_activation=True)
+        subscription_big_b.save()
+        all_ = self.Subscription.search([])
+        assert len(all_) == 3
+        assert bool(subscription_big_b.activated) is True
+        run_subscription_batch()
+        person_a_sub_big_b, = self.Subscription.search([
+            ('ssn', '=', person_a.ssn),
+            ('siren', '=', siren_b)])
+
+        all_ = self.Subscription.search([])
+        assert len(all_) == 4
+        run_subscription_batch()
+        all_ = self.Subscription.search([])
+        assert len(all_) == 4
+
+        def run_submit_person_batch(operation='cre'):
+            SubmitPerson = \
+                self.SubmitPersonPrestIjSubscription
+            treatment_date = datetime.date.today()
+            ids = SubmitPerson.select_ids(
+                treatment_date=treatment_date, operation=operation)
+            objects = \
+                list(SubmitPerson.convert_to_instances(ids))
+            SubmitPerson.execute(objects,
+                ids, treatment_date, operation=operation)
+            return ids
+
+        person_a_sub.state = 'declaration_confirmed'
+        person_a_sub.save()
+
+        Request = self.Request
+        run_submit_person_batch(operation='sup')
+        requests = Request.search([])
+        assert len(requests) == 0
+
+        invalidity_reason = self.ClaimClosingReason()
+        invalidity_reason.code = 'invalidity'
+        invalidity_reason.name = 'Passage en invalidité'
+        invalidity_reason.save()
+
+        std = self.LossDesc()
+        std.code = 'std'
+        std.name = 'std'
+        std.has_end_date = True
+        std.kind = 'person'
+        std.loss_kind = 'std'
+        std.company = product.company
+        std.closing_reasons = [invalidity_reason]
+        std.save()
+
+        insurer = self.Insurer.search([])[0]
+        benefit = self.Benefit()
+        benefit.code = 'std'
+        benefit.name = 'Capital Décès'
+        benefit.start_date = product.start_date
+        benefit.insurer = insurer
+        benefit.company = product.company
+        benefit.indemnification_kind = 'capital'
+        benefit.loss_descs = [std]
+        benefit.prest_ij = True
+        benefit.save()
+
+        claim = self.Claim()
+        claim.claimant = person_a
+        claim.save()
+        loss = self.Loss()
+        loss.loss_desc = std
+        loss.claim = claim
+        loss.end_date = coog_date.add_month(
+            datetime.date.today(), -3)
+        loss.closing_reason = invalidity_reason
+        loss.covered_person = person_a
+        loss.save()
+        service = self.Service()
+        service.loss = loss
+        service.contract = first_contract
+        service.benefit = benefit
+        service.save()
+
+        run_submit_person_batch(operation='sup')
+        request, = Request.search([])
+        assert request.operation == 'sup'
+
+        run_submit_person_batch(operation='sup')
+        request, = Request.search([])
 
 
 def suite():

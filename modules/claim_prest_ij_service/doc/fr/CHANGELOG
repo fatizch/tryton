@@ -1,3 +1,4 @@
+* BUG#11799 Correction du batch de création des inscriptions pour les personnes déjà inscrites sous un autre siren
 * BUG#11675 Autoriser l'inscription manuelle pour les individus affiliés via une filiale
 
 Version 2.4 - 2019-04-12
