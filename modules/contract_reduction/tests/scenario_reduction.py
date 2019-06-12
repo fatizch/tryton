@@ -267,8 +267,8 @@ product.code = 'test_product'
 product.contract_generator = contract_sequence
 product.quote_number_sequence = quote_sequence
 product.start_date = product_start_date
-product.billing_modes.append(freq_monthly)
-product.billing_modes.append(freq_yearly)
+product.billing_rules[-1].billing_modes.append(freq_monthly)
+product.billing_rules[-1].billing_modes.append(freq_yearly)
 product.coverages.append(coverage)
 product.fees.append(contract_fee)
 product.save()

@@ -183,13 +183,13 @@ Create a second Product::
     >>> offered_product2 = add_quote_number_generator(offered_product2)
     >>> offered_product2 = add_premium_rules(offered_product2)
     >>> BillingMode = Model.get('offered.billing_mode')
-    >>> offered_product2.billing_modes.append(BillingMode.find(
+    >>> offered_product2.billing_rules[-1].billing_modes.append(BillingMode.find(
     ...         [('code', '=', 'monthly')])[0])
-    >>> offered_product2.billing_modes.append(BillingMode.find(
+    >>> offered_product2.billing_rules[-1].billing_modes.append(BillingMode.find(
     ...         [('code', '=', 'monthly_direct_debit')])[0])
-    >>> offered_product2.billing_modes.append(BillingMode.find(
+    >>> offered_product2.billing_rules[-1].billing_modes.append(BillingMode.find(
     ...         [('code', '=', 'quarterly')])[0])
-    >>> offered_product2.billing_modes.append(BillingMode.find(
+    >>> offered_product2.billing_rules[-1].billing_modes.append(BillingMode.find(
     ...         [('code', '=', 'yearly')])[0])
     >>> for coverage in offered_product2.coverages:
     ...     coverage.account_for_billing = Model.get('account.account')(
@@ -432,8 +432,9 @@ Create Test Contract::
     >>> contract.signature_date = contract_start_date
     >>> contract.product = offered_product
     >>> contract.billing_informations.append(BillingInformation(date=None,
-    ...         billing_mode=offered_product.billing_modes[0],
-    ...         payment_term=offered_product.billing_modes[0].allowed_payment_terms[0]))
+    ...         billing_mode=offered_product.billing_rules[-1].billing_modes[0],
+    ...         payment_term=offered_product.billing_rules[-1].billing_modes[0
+    ...             ].allowed_payment_terms[0]))
     >>> contract.contract_number = '123456789'
     >>> DistributionNetwork = Model.get('distribution.network')
     >>> contract.dist_network = DistributionNetwork(broker.id)
@@ -454,8 +455,9 @@ Create a second contract with same product but different month/year::
     >>> contract2.signature_date = contract2_start_date
     >>> contract2.product = offered_product
     >>> contract2.billing_informations.append(BillingInformation(date=None,
-    ...         billing_mode=offered_product.billing_modes[0],
-    ...         payment_term=offered_product.billing_modes[0].allowed_payment_terms[0]))
+    ...         billing_mode=offered_product.billing_rules[-1].billing_modes[0],
+    ...         payment_term=offered_product.billing_rules[-1].billing_modes[0
+    ...             ].allowed_payment_terms[0]))
     >>> contract2.contract_number = '223456789'
     >>> contract2.dist_network = DistributionNetwork(broker.id)
     >>> contract2.agent = Agent(agent_broker.id)
@@ -472,9 +474,9 @@ Create a third contract with different product::
     >>> contract3.signature_date = contract_start_date
     >>> contract3.product = offered_product2
     >>> contract3.billing_informations.append(BillingInformation(date=None,
-    ...         billing_mode=offered_product2.billing_modes[0],
-    ...         payment_term=offered_product2.billing_modes[0].allowed_payment_terms[0])
-    ...         )
+    ...         billing_mode=offered_product2.billing_rules[-1].billing_modes[0],
+    ...         payment_term=offered_product2.billing_rules[-1].billing_modes[0
+    ...             ].allowed_payment_terms[0]))
     >>> contract3.contract_number = '323456789'
     >>> contract3.dist_network = DistributionNetwork(broker2.id)
     >>> contract3.agent = Agent(agent_broker2.id)
@@ -490,8 +492,9 @@ Create a fourth contract with different broker::
     >>> contract4.signature_date = contract_start_date
     >>> contract4.product = offered_product2
     >>> contract4.billing_informations.append(BillingInformation(date=None,
-    ...         billing_mode=offered_product2.billing_modes[0],
-    ...         payment_term=offered_product2.billing_modes[0].allowed_payment_terms[0])
+    ...         billing_mode=offered_product2.billing_rules[-1].billing_modes[0],
+    ...         payment_term=offered_product2.billing_rules[-1].billing_modes[0
+    ...             ].allowed_payment_terms[0])
     ...         )
     >>> contract4.contract_number = '423456789'
     >>> contract4.dist_network = DistributionNetwork(broker3.id)

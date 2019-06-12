@@ -141,8 +141,9 @@ contract.start_date = contract_start_date
 product = Model.get('offered.product')(product.id)
 contract.product = product
 contract.billing_informations.append(BillingInformation(date=None,
-        billing_mode=product.billing_modes[0],
-        payment_term=product.billing_modes[0].allowed_payment_terms[0]))
+        billing_mode=product.billing_rules[-1].billing_modes[0],
+        payment_term=product.billing_rules[-1].billing_modes[0
+            ].allowed_payment_terms[0]))
 contract.contract_number = '123456789'
 contract.save()
 Wizard('contract.activate', models=[contract]).execute('apply')

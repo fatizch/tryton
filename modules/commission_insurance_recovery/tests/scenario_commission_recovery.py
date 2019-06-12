@@ -232,8 +232,9 @@ contract.subscriber = subscriber
 contract.start_date = contract_start_date
 contract.product = product
 contract.billing_informations.append(BillingInformation(date=None,
-        billing_mode=product.billing_modes[0],
-        payment_term=product.billing_modes[0].allowed_payment_terms[0]))
+        billing_mode=product.billing_rules[-1].billing_modes[0],
+        payment_term=product.billing_rules[-1].billing_modes[0
+            ].allowed_payment_terms[0]))
 contract.contract_number = '123456789'
 contract.dist_network = DistributionNetwork(broker.id)
 contract.agent = agent_broker

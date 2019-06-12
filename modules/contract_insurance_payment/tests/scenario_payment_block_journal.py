@@ -174,10 +174,10 @@ subscriber_account.save()
 
 # #Comment# #Create Contract
 monthly = BillingMode(monthly.id)
-product.billing_modes.append(monthly)
+product.billing_rules[-1].billing_modes.append(monthly)
 product.save()
 monthly = BillingMode(monthly.id)
-product2.billing_modes.append(monthly)
+product2.billing_rules[-1].billing_modes.append(monthly)
 product2.save()
 
 Contract = Model.get('contract')

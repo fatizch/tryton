@@ -185,8 +185,8 @@ Create Test Contract::
     ...         amount=Decimal('100'), frequency='monthly',
     ...         account=accounts['revenue'], rated_entity=Coverage(coverage)))
     >>> contract.billing_informations.append(BillingInformation(date=None,
-    ...         billing_mode=product.billing_modes[0],
-    ...         payment_term=product.billing_modes[0].allowed_payment_terms[0]))
+    ...         billing_mode=product.billing_rules[-1].billing_modes[0],
+    ...         payment_term=product.billing_rules[-1].billing_modes[0].allowed_payment_terms[0]))
     >>> contract.contract_number = '123456789'
     >>> DistributionNetwork = Model.get('distribution.network')
     >>> contract.dist_network = DistributionNetwork(broker.id)
@@ -486,8 +486,9 @@ Check commission once terminated::
     ...         amount=Decimal('110'), frequency='monthly',
     ...         account=accounts['revenue'], rated_entity=Coverage(coverage)))
     >>> contract.billing_informations.append(BillingInformation(date=None,
-    ...         billing_mode=product.billing_modes[0],
-    ...         payment_term=product.billing_modes[0].allowed_payment_terms[0]))
+    ...         billing_mode=product.billing_rules[-1].billing_modes[0],
+    ...         payment_term=product.billing_rules[-1
+    ...             ].billing_modes[0].allowed_payment_terms[0]))
     >>> contract.contract_number = '1234567890'
     >>> DistributionNetwork = Model.get('distribution.network')
     >>> contract.dist_network = DistributionNetwork(broker.id)

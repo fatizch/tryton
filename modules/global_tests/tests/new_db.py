@@ -4223,15 +4223,15 @@ else:
     house_product.contract_generator = contract_sequence
     house_product.coverages.append(responsability_coverage)
     house_product.coverages.append(fire_coverage)
-    house_product.billing_modes.append(BillingMode.find(
+    house_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'monthly_sepa')])[0])
-    house_product.billing_modes.append(BillingMode.find(
+    house_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'quarterly_sepa')])[0])
-    house_product.billing_modes.append(BillingMode.find(
+    house_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'half_yearly_sepa')])[0])
-    house_product.billing_modes.append(BillingMode.find(
+    house_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'yearly_sepa')])[0])
-    house_product.billing_modes.append(BillingMode.find(
+    house_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'yearly_manual')])[0])
     house_product.term_renewal_rule.new()
     house_product.term_renewal_rule[0].rule = product_term_renewal_rule
@@ -4264,15 +4264,15 @@ else:
     life_product.coverages.append(Coverage(death_coverage.id))
     life_product.coverages.append(Coverage(unemployment_coverage.id))
     life_product.coverages.append(Coverage(disability_coverage.id))
-    life_product.billing_modes.append(BillingMode.find(
+    life_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'monthly_sepa')])[0])
-    life_product.billing_modes.append(BillingMode.find(
+    life_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'quarterly_sepa')])[0])
-    life_product.billing_modes.append(BillingMode.find(
+    life_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'half_yearly_manual')])[0])
-    life_product.billing_modes.append(BillingMode.find(
+    life_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'yearly_manual')])[0])
-    life_product.billing_modes.append(BillingMode.find(
+    life_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'yearly_sepa')])[0])
     life_product.term_renewal_rule.new()
     life_product.term_renewal_rule[0].rule = product_term_renewal_rule
@@ -4306,15 +4306,15 @@ else:
     loan_product.coverages.append(Coverage(loan_death_coverage.id))
     loan_product.coverages.append(Coverage(loan_unemployment_coverage.id))
     loan_product.coverages.append(Coverage(loan_disability_coverage.id))
-    loan_product.billing_modes.append(BillingMode.find(
+    loan_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'monthly_sepa')])[0])
-    loan_product.billing_modes.append(BillingMode.find(
+    loan_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'quarterly_sepa')])[0])
-    loan_product.billing_modes.append(BillingMode.find(
+    loan_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'half_yearly_manual')])[0])
-    loan_product.billing_modes.append(BillingMode.find(
+    loan_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'yearly_manual')])[0])
-    loan_product.billing_modes.append(BillingMode.find(
+    loan_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'yearly_sepa')])[0])
     loan_product.average_loan_premium_rule = loan_premium_rule
     loan_product.com_products.new()
@@ -4348,15 +4348,15 @@ else:
     funeral_product.quote_number_sequence = quote_sequence
     funeral_product.contract_generator = contract_sequence
     funeral_product.coverages.append(Coverage(funeral_coverage.id))
-    funeral_product.billing_modes.append(BillingMode.find(
+    funeral_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'monthly_sepa')])[0])
-    funeral_product.billing_modes.append(BillingMode.find(
+    funeral_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'quarterly_sepa')])[0])
-    funeral_product.billing_modes.append(BillingMode.find(
+    funeral_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'half_yearly_manual')])[0])
-    funeral_product.billing_modes.append(BillingMode.find(
+    funeral_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'yearly_manual')])[0])
-    funeral_product.billing_modes.append(BillingMode.find(
+    funeral_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'yearly_sepa')])[0])
     funeral_product.com_products.new()
     funeral_product.com_products[0].name = 'Obsèques +'
@@ -4387,7 +4387,7 @@ else:
     group_life_product.contract_generator = contract_sequence
     group_life_product.coverages.append(
         Coverage(group_incapacity_coverage.id))
-    group_life_product.billing_modes.append(BillingMode.find(
+    group_life_product.billing_rules[-1].billing_modes.append(BillingMode.find(
             [('code', '=', 'yearly_manual')])[0])
     group_life_product.com_products.new()
     group_life_product.com_products[0].name = 'Prevoyance Co +'
