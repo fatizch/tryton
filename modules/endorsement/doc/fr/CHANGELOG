@@ -1,3 +1,4 @@
+* BUG#11803 Ignorer les garanties commençant après la date d'effet dans l'avenant de gestion des options
 * BUG#10090 Permettre le recherche des avenants par contrats ou souscripteurs
 * BUG#11345 Désactivation du recalcul du contrat si on applique un avenant de type gérer les contacts
 

@@ -1006,7 +1006,9 @@ class ManageOptions(EndorsementWizardStepMixin):
                             getattr(option, 'manual_end_date',
                                 getattr(option, 'end_date', None))
                             or datetime.date.max)
-                        or getattr(option, 'status', '') == 'void'):
+                        or getattr(option, 'status', '') == 'void'
+                        or getattr(option, 'start_date',
+                            datetime.date.min) > self.effective_date):
                     continue
                 displayer = Displayer.new_displayer(option,
                     self.effective_date)

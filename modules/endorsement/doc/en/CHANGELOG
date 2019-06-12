@@ -1,3 +1,4 @@
+* BUG#11803 Ignore options starting after effective date when doing manage options endorsement
 * BUG#10090 Allow to search endorsement by contracts/subscribers
 * BUG#11345 Deactivate contract recalculation for manage contacts endorsement
 
