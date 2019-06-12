@@ -1409,6 +1409,8 @@ class Contract(metaclass=PoolMeta):
 
     def update_default_billing_information(self):
         # Set default billing informations according to possible billing modes
+        if not self.billing_informations:
+            return
         possible_values = self.billing_informations[0].possible_billing_modes
         if self.billing_informations[0].billing_mode not in possible_values:
             self.billing_informations[0].billing_mode = possible_values[0]

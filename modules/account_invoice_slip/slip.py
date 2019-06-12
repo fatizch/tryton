@@ -460,6 +460,7 @@ class InvoiceSlipConfiguration(model.CoogSQL, model.CoogView,
         for account, account_data in slips_data.items():
             cls._finalize_invoice_lines(slip_parameters, account_data)
             slips.add(account_data['invoice'])
+        slips = list(slips)
         Invoice.update_taxes(slips)
 
         Event.notify_events(slips,
