@@ -1,0 +1,19 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:party.party,birth_city:"
+msgid "Birth City"
+msgstr "Ville de naissance"
+
+msgctxt "field:party.party,birth_country:"
+msgid "Birth Country"
+msgstr "Pays de naissance"
+
+msgctxt "field:party.party,birth_zip:"
+msgid "Birth Zip"
+msgstr "Code postal de naissance"
+
+msgctxt "field:party.party,birth_zip_and_city:"
+msgid "Birth Zip and Birth City"
+msgstr "Commune de naissance"
