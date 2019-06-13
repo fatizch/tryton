@@ -402,7 +402,7 @@ class Commission(WithExtraDetails, metaclass=PoolMeta):
             description += '%s\n%s = %s * %s' % (
                 commission_title,
                 str(self.amount) if self.amount is not None else '',
-                str(details.get('monthly_premium_excl_tax', 0)),
+                str(self.base_amount),
                 str(details.get('rate', 0)))
         return description
 

@@ -284,12 +284,12 @@ len(line.commissions)
 set([(x.amount, x.commission_rate, x.agent.party.name, x.line_amount,
             x.calculation_description)
     for x in line.commissions]) == set([
-            (Decimal('10'), Decimal('.1'), 'Broker', Decimal('100'),
+            (Decimal('10'), Decimal('0.1'), 'Broker', Decimal('100'),
                 'Linear commission calculation details\n'
-                '10.00000000 = 100.00 * 0.1000'),
+                '10.00000000 = 100.0000 * 0.1000'),
             (Decimal('60'), Decimal('.6'), 'Insurer', Decimal('100'),
                 'Linear commission calculation details\n'
-                '60.00000000 = 100.00 * 0.6000')])
+                '60.00000000 = 100.0000 * 0.6000')])
 # #Res# #True
 
 # #Comment# #Pay invoice

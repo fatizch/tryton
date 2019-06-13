@@ -265,10 +265,10 @@ Validate first invoice of next year commissions::
     ...     x.agent.party.name, x.calculation_description) for x in line.commissions] \
     ...     == [(Decimal('60.0000'), False, Decimal('0.0000'), Decimal('100.0000'),
     ...         'Broker', 'Linear commission calculation details\n'
-    ...         '60.00000000 = 100.00 * 0.6000'),
+    ...         '60.00000000 = 100.00000000 * 0.6000'),
     ...     (Decimal('30.0000'), False, Decimal('0.0000'), Decimal('100.0000'),
     ...         'Insurer', 'Linear commission calculation details\n'
-    ...         '30.00000000 = 100.00 * 0.3000')]
+    ...         '30.00000000 = 100.00000000 * 0.3000')]
     True
 
 Generate insurer and broker invoice::
@@ -407,14 +407,14 @@ Check invoice amount and commission::
     >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     ...     x.agent.party.name, x.calculation_description)
     ...     for x in last_year_invoice.lines[0].commissions] == [
-    ...         (Decimal('18.0000'), False, Decimal('48.0000'), Decimal('110.0000'),
-    ...             'Broker', 'Redeemed prepayment: 48.00000000\n'
-    ...             'Linear commission calculation details\n'
-    ...             '18.00000000 = 110.00 * 0.6000 - 48.00000000'),
-    ...         (Decimal('9.0000'), False, Decimal('24.0000'), Decimal('110.0000'),
-    ...             'Insurer', 'Redeemed prepayment: 24.00000000\n'
-    ...             'Linear commission calculation details\n'
-    ...             '9.00000000 = 110.00 * 0.3000 - 24.00000000')]
+    ...     (Decimal('18.0000'), False, Decimal('48.0000'), Decimal('110.0000'),
+    ...         'Broker', 'Redeemed prepayment: 48.00000000\n'
+    ...         'Linear commission calculation details\n'
+    ...         '18.00000000 = 110.00000000 * 0.6000 - 48.00000000'),
+    ...     (Decimal('9.0000'), False, Decimal('24.0000'), Decimal('110.0000'),
+    ...         'Insurer', 'Redeemed prepayment: 24.00000000\n'
+    ...         'Linear commission calculation details\n'
+    ...         '9.00000000 = 110.00000000 * 0.3000 - 24.00000000')]
     True
     >>> last_invoice, = Invoice.find([
     ...         ('start', '=', datetime.date(2016, 1, 1)),
@@ -423,14 +423,14 @@ Check invoice amount and commission::
     >>> [(x.amount, x.is_prepayment, x.redeemed_prepayment, x.base_amount,
     ...     x.agent.party.name, x.calculation_description)
     ...     for x in last_invoice.lines[0].commissions] == [
-    ...         (Decimal('66.0000'), False, Decimal('0.0000'), Decimal('110.0000'),
-    ...             'Broker',
-    ...             'Linear commission calculation details\n'
-    ...             '66.00000000 = 110.00 * 0.6000'),
-    ...         (Decimal('33.0000'), False, Decimal('0.0000'), Decimal('110.0000'),
-    ...             'Insurer',
-    ...             'Linear commission calculation details\n'
-    ...             '33.00000000 = 110.00 * 0.3000')]
+    ...     (Decimal('66.0000'), False, Decimal('0.0000'), Decimal('110.0000'),
+    ...         'Broker',
+    ...         'Linear commission calculation details\n'
+    ...         '66.00000000 = 110.00000000 * 0.6000'),
+    ...     (Decimal('33.0000'), False, Decimal('0.0000'), Decimal('110.0000'),
+    ...         'Insurer',
+    ...         'Linear commission calculation details\n'
+    ...         '33.00000000 = 110.00000000 * 0.3000')]
     True
 
 Terminate Contract::
