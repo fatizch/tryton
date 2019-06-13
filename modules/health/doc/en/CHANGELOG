@@ -1,3 +1,5 @@
+* OTH#0000 Display birth order after ssn instead after birth name
+
 Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * BUG#9882 Use the field 'date' of heath party complement in order to get the right version of this object
