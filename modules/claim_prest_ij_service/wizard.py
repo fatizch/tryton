@@ -5,7 +5,7 @@ import datetime
 from collections import defaultdict
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.server_context import ServerContext
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateTransition, StateView, \
@@ -85,11 +85,11 @@ class FindPartySubscription(Wizard):
             'ir.action.act_window', [good_action.id])
         good_values[0]['views'] = [
             view for view in good_values[0]['views'] if view[1] in
-            (['form'] if len(subscriptions) == 1 else ['tree'])]
-        return good_values[0], {
-            'res_id': subscriptions[0].id,
-            'res_ids': [x.id for x in subscriptions],
-            }
+            (['form'] if len(subscriptions) == 1 else ['tree', 'form'])]
+        encoder = PYSONEncoder()
+        good_values[0]['pyson_domain'] = encoder.encode([
+                ('id', 'in', [x.id for x in subscriptions])])
+        return good_values[0], {}
 
 
 class CoveredPersonIjSubscriptionSelectDate(model.CoogView):

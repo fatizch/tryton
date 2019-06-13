@@ -1,3 +1,4 @@
+* BUG#11724 Correction de l'affichage des inscriptions dans le cas où il y en a plusieurs
 * BUG#11799 Correction du batch de création des inscriptions pour les personnes déjà inscrites sous un autre siren
 * BUG#11675 Autoriser l'inscription manuelle pour les individus affiliés via une filiale
 
