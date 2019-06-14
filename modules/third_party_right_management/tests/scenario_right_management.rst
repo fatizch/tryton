@@ -23,7 +23,8 @@ Imports::
 Install Modules::
 
     >>> config = activate_modules([
-    ...      'third_party_right_management', 'contract_insurance_suspension'])
+    ...      'third_party_right_management', 'contract_insurance_suspension'],
+    ...     cache_file_name='third_party_right_management_scen_3')
 
 Create country::
 

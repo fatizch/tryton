@@ -24,7 +24,8 @@ from trytond.modules.coog_core.test_framework import execute_test_case, \
 
 config = activate_modules([
      'third_party_right_management', 'contract_insurance_suspension',
-     'contract_term_renewal'])
+     'contract_term_renewal'],
+    cache_file_name='third_party_right_management_scen_2')
 
 # #Comment# #Create country
 

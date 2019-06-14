@@ -28,9 +28,9 @@ new_contract_start_date = dt.date(2014, 10, 21)
 
 # #Comment# #Install Modules
 
-config = activate_modules([
-        'third_party_right_management', 'contract_insurance_suspension',
-        'endorsement'])
+config = activate_modules(['third_party_right_management',
+        'contract_insurance_suspension', 'endorsement'],
+    cache_file_name='third_party_right_management_scen_1')
 
 # #Comment# #Create country
 
