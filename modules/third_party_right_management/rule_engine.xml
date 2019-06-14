@@ -21,5 +21,11 @@
             <field name="long_description">Retourne le code de l'événement</field>
             <field name="parent" ref="dossier_tpp"/>
         </record>
+        <!-- ############################### -->
+        <!-- # Extra Details Configuration # -->
+        <!-- ############################### -->
+        <record model="extra_details.configuration" id="third_party_procotol_extra_details_configuration">
+            <field name="model_name">contract.option.third_party_period</field>
+        </record>
     </data>
 </tryton>

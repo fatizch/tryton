@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form col="2">
+    <label name="customer_number"/>
+    <field name="customer_number"/>
+    <label name="customer_label"/>
+    <field name="customer_label"/>
+    <label name="number_sequence_v3"/>
+    <field name="number_sequence_v3"/>
+    <label name="protocol_version"/>
+    <field name="protocol_version"/>
+</form>

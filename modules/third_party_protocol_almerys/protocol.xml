@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############ -->
+        <!-- # Protocol # -->
+        <!-- ############ -->
+        <record model="ir.ui.view" id="third_party_manager_protocol_view_form">
+            <field name="model">third_party_manager.protocol</field>
+            <field name="inherit" ref="third_party_right_management.third_party_manager_protocol_view_form"/>
+            <field name="name">third_party_manager_protocol_form</field>
+        </record>
+
+        <!-- #################### -->
+        <!-- # Almerys Sequence # -->
+        <!-- #################### -->
+        <record model="ir.sequence.type" id="sequence_type_almerys_v3">
+            <field name="name">Almerys v3</field>
+            <field name="code">third_party_protocol.almerys.v3</field>
+        </record>
+
+        <!-- ############################### -->
+        <!-- # Extra Details Configuration # -->
+        <!-- ############################### -->
+        <record model="extra_details.configuration.line" id="third_party_protocol_almerys_reference_produit">
+            <field name="configuration" ref="third_party_right_management.third_party_procotol_extra_details_configuration"/>
+            <field name="string">Référence Produit</field>
+            <field name="name">third_party_protocol_almerys_reference_produit"</field>
+            <field name="type_">char</field>
+        </record>
+        <record model="extra_details.configuration.line" id="third_party_protocol_almerys_code_mouvement_carte">
+            <field name="configuration" ref="third_party_right_management.third_party_procotol_extra_details_configuration"/>
+            <field name="string">Code Mouvement Carte</field>
+            <field name="name">third_party_protocol_almerys_code_mouvement_carte"</field>
+            <field name="type_">selection</field>
+            <field name="selection">CA:CA
+CC:CC
+CS:CS
+            </field>
+        </record>
+        <record model="extra_details.configuration.line" id="third_party_protocol_almerys_fond_carte">
+            <field name="configuration" ref="third_party_right_management.third_party_procotol_extra_details_configuration"/>
+            <field name="string">Fond Carte</field>
+            <field name="name">third_party_protocol_almerys_fond_carte</field>
+            <field name="type_">char</field>
+        </record>
+        <record model="extra_details.configuration.line" id="third_party_protocol_almerys_envoi">
+            <field name="configuration" ref="third_party_right_management.third_party_procotol_extra_details_configuration"/>
+            <field name="string">Envoi</field>
+            <field name="name">third_party_protocol_almerys_envoi</field>
+            <field name="type_">char</field>
+        </record>
+        <record model="extra_details.configuration.line" id="third_party_protocol_almerys_ref_interne">
+            <field name="configuration" ref="third_party_right_management.third_party_procotol_extra_details_configuration"/>
+            <field name="string">Référence Interne</field>
+            <field name="name">third_party_protocol_almerys_ref_interne</field>
+            <field name="type_">char</field>
+        </record>
+        <record model="extra_details.configuration.line" id="third_party_protocol_almerys_ref_courtier">
+            <field name="configuration" ref="third_party_right_management.third_party_procotol_extra_details_configuration"/>
+            <field name="string">Référence Courtier</field>
+            <field name="name">third_party_protocol_almerys_ref_courtier</field>
+            <field name="type_">char</field>
+        </record>
+        <record model="extra_details.configuration.line" id="third_party_protocol_almerys_ref_entreprise">
+            <field name="configuration" ref="third_party_right_management.third_party_procotol_extra_details_configuration"/>
+            <field name="string">Référence Entreprise</field>
+            <field name="name">third_party_protocol_almerys_ref_entreprise</field>
+            <field name="type_">char</field>
+        </record>
+        <record model="extra_details.configuration.line" id="third_party_protocol_almerys_num_contrat_collectif">
+            <field name="configuration" ref="third_party_right_management.third_party_procotol_extra_details_configuration"/>
+            <field name="string">Numéro de Contrat Collectif</field>
+            <field name="name">third_party_protocol_almerys_num_contrat_collectif</field>
+            <field name="type_">char</field>
+        </record>
+        <record model="extra_details.configuration.line" id="third_party_protocol_almerys_ref_site">
+            <field name="configuration" ref="third_party_right_management.third_party_procotol_extra_details_configuration"/>
+            <field name="string">Référence Site</field>
+            <field name="name">third_party_protocol_almerys_ref_site</field>
+            <field name="type_">char</field>
+        </record>
+        <record model="extra_details.configuration.line" id="third_party_protocol_almerys_ref_gestionnaire">
+            <field name="configuration" ref="third_party_right_management.third_party_procotol_extra_details_configuration"/>
+            <field name="string">Référence Gestionnaire</field>
+            <field name="name">third_party_protocol_almerys_ref_gestionnaire</field>
+            <field name="type_">char</field>
+        </record>
+    </data>
+</tryton>

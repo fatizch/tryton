@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="third_party_protocol_almerys_configuration_view_form">
+            <field name="model">third_party_protocol.almerys.configuration</field>
+            <field name="type">form</field>
+            <field name="name">third_party_protocol_almerys_configuration_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_third_party_protocol_almerys_configuration">
+            <field name="name">Almerys Configuration</field>
+            <field name="res_model">third_party_protocol.almerys.configuration</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_third_party_protocol_almerys_configuration_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="third_party_protocol_almerys_configuration_view_form"/>
+            <field name="act_window" ref="act_third_party_protocol_almerys_configuration"/>
+        </record>
+        <menuitem parent="third_party_right_management.menu_configuration"
+            action="act_third_party_protocol_almerys_configuration"
+            id="menu_third_party_protocol_almerys_form"/>
+    </data>
+</tryton>

@@ -1,6 +1,16 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
+        <!-- ###################### -->
+        <!-- # Configuration Menu # -->
+        <!-- ###################### -->
+        <menuitem id="menu_configuration" name="Configuration"
+            parent="third_party_management.menu_third_party_management" />
+        <record model="ir.ui.menu-res.group" id="menu_configuration_group_admin">
+            <field name="menu" ref="menu_configuration"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+
         <!-- ############ -->
         <!-- # Protocol # -->
         <!-- ############ -->
