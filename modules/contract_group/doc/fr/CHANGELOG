@@ -1,3 +1,4 @@
+* BUG#11862 Amélioration de libellé des filiales dans la vue arborescente des organisations
 * BUG#11766 Utilisation du champ contrat sur les éléments couverts dans l'arborescence pour déterminer son état (résilié ou non)
 
 Version 2.4 - 2019-04-12

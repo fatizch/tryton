@@ -61,7 +61,7 @@ def get_organization_hierarchy():
             ],
         'name_func': lambda x: ' - '.join([_f for _f in [
                     x.name,
-                    x.contract.get_synthesis_rec_name(None),
+                    x.get_synthesis_rec_name(),
                     ] if _f]),
         'order_fields': [('name', 'ASC')],
         }
@@ -98,7 +98,7 @@ def get_organization_hierarchy():
             ],
         'name_func': lambda x: ' - '.join([_f for _f in [
                     x.name,
-                    x.contract.get_synthesis_rec_name(None),
+                    x.get_synthesis_rec_name(),
                     ] if _f]),
 
         'order_fields': [('name', 'ASC')],

@@ -1081,6 +1081,22 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         else:
             cls.raise_user_error('too_many_party')
 
+    def get_synthesis_status(self):
+        return '[%s]' % coog_string.translate_value(
+            self.contract, 'status') if self.contract else ''
+
+    def get_synthesis_rec_name(self):
+        dates = self.get_synthesis_dates()
+        status = self.get_synthesis_status()
+        product = '[%s]' % self.contract.product.rec_name if self.contract \
+            else ''
+        number = (self.contract.contract_number or self.contract.quote_number
+            if self.contract else '')
+        if self.contract_status in ['void', 'declined']:
+            return '%s %s %s' % (number, product, status)
+        else:
+            return '%s %s %s %s' % (number, product, status, dates)
+
     @classmethod
     def copy(cls, instances, default=None):
         default = {} if default is None else default.copy()
