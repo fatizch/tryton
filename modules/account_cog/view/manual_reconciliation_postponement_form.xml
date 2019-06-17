@@ -1,14 +1,18 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form col="6">
-    <label name="motive"/> 
+<form col="10">
+    <label name="motive"/>
     <field name="motive"/>
     <label name="date"/>
     <field name="date"/>
     <label name="force_inactive"/>
     <field name="force_inactive"/>
-    <field name="comment" colspan="6"/>
+    <label name="create_uid"/>
+    <field name="create_uid"/>
+    <label name="create_date"/>
+    <field name="create_date"/>
+    <field name="comment" colspan="10"/>
     <group id="invisible">
         <field name="party" invisible="1"/>
         <field name="active" invisible="1"/>

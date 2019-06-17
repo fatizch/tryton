@@ -5,4 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <field name="motive"/>
     <field name="date"/>
     <field name="force_inactive"/>
+    <field name="create_uid"/>
+    <field name="create_date" widget="date"/>
+    <field name="write_date" widget="date"/>
 </tree>
