@@ -204,10 +204,10 @@ Check prepayment commission creation::
     ...     for x in commissions] == [
     ...         (Decimal('720.0000'), Decimal('.6'), True, None, Decimal('1200.0000'),
     ...             'Broker', 'Prepayment calculation details'
-    ...             '\n720.00000000 = 100.00 * 0.6000 * 1.0000 * 12'),
+    ...             '\n720.00000000 = 100.00000000 * 0.6000 * 1.0000 * 12'),
     ...         (Decimal('360.0000'), Decimal('.3'), True, None, Decimal('1200.0000'),
     ...             'Insurer', 'Prepayment calculation details'
-    ...             '\n360.00000000 = 100.00 * 0.3000 * 1.0000 * 12')]
+    ...             '\n360.00000000 = 100.00000000 * 0.3000 * 1.0000 * 12')]
     True
 
 Create invoices::
@@ -323,10 +323,10 @@ Check commission once terminated::
     ...         for x in commissions], key=lambda x: x[0], reverse=True) == [
     ...     (Decimal('720.00000000'), Decimal('1200.0000'), 'Broker',
     ...         'Prepayment calculation details\n'
-    ...         '720.00000000 = 100.00 * 0.6000 * 1.0000 * 12'),
+    ...         '720.00000000 = 100.00000000 * 0.6000 * 1.0000 * 12'),
     ...     (Decimal('360.00000000'), Decimal('1200.0000'), 'Insurer',
     ...         'Prepayment calculation details\n'
-    ...         '360.00000000 = 100.00 * 0.3000 * 1.0000 * 12'),
+    ...         '360.00000000 = 100.00000000 * 0.3000 * 1.0000 * 12'),
     ...     (Decimal('-150.00000000'), Decimal('-500.0000'), 'Insurer',
     ...         'Prepayment adjustment calculation details\n'
     ...         '-150.00000000 = -150.00000000 * 1.0000'),
@@ -345,10 +345,10 @@ Reactivate Contract::
     ...         for x in commissions], key=lambda x: x[0], reverse=True) == [
     ...     (Decimal('720.00000000'), Decimal('1200.0000'), 'Broker',
     ...         'Prepayment calculation details\n'
-    ...         '720.00000000 = 100.00 * 0.6000 * 1.0000 * 12'),
+    ...         '720.00000000 = 100.00000000 * 0.6000 * 1.0000 * 12'),
     ...     (Decimal('360.00000000'), Decimal('1200.0000'), 'Insurer',
     ...         'Prepayment calculation details\n'
-    ...         '360.00000000 = 100.00 * 0.3000 * 1.0000 * 12'),
+    ...         '360.00000000 = 100.00000000 * 0.3000 * 1.0000 * 12'),
     ...     (Decimal('300.00000000'), Decimal('500.0000'), 'Broker',
     ...         'Prepayment adjustment calculation details\n'
     ...         '300.00000000 = 300.00000000 * 1.0000'),
@@ -468,10 +468,10 @@ Check commission once terminated::
     ...         '300.00000000 = 300.00000000 * 1.0000'),
     ...     (Decimal('360.00000000'), Decimal('1200.0000'), 'Insurer',
     ...         'Prepayment calculation details\n'
-    ...         '360.00000000 = 100.00 * 0.3000 * 1.0000 * 12'),
+    ...         '360.00000000 = 100.00000000 * 0.3000 * 1.0000 * 12'),
     ...     (Decimal('720.00000000'), Decimal('1200.0000'), 'Broker',
     ...         'Prepayment calculation details\n'
-    ...         '720.00000000 = 100.00 * 0.6000 * 1.0000 * 12')]
+    ...         '720.00000000 = 100.00000000 * 0.6000 * 1.0000 * 12')]
     True
     >>> contract_start_date = datetime.date(2019, 2, 28)
     >>> config._context['client_defined_date'] = contract_start_date
@@ -505,8 +505,8 @@ Check prepayment commission creation::
     ...     for x in commissions] == [
     ...     (Decimal('792.0000'), Decimal('.6'), True, None, Decimal('1320.0000'),
     ...         'Broker', 'Prepayment calculation details'
-    ...         '\n792.00000000 = 110.00 * 0.6000 * 1.0000 * 12'),
+    ...         '\n792.00000000 = 110.00000000 * 0.6000 * 1.0000 * 12'),
     ...     (Decimal('396.0000'), Decimal('.3'), True, None, Decimal('1320.0000'),
     ...         'Insurer', 'Prepayment calculation details'
-    ...         '\n396.00000000 = 110.00 * 0.3000 * 1.0000 * 12')]
+    ...         '\n396.00000000 = 110.00000000 * 0.3000 * 1.0000 * 12')]
     True

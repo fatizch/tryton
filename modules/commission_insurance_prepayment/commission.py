@@ -127,12 +127,15 @@ class Commission(metaclass=PoolMeta):
                         self.commissioned_option.coverage.premium_rules[0].
                         frequency]
                 description += commission_title
-                description += '\n%s = %s * %s * %s * %s' % (
-                    str(self.amount) if self.amount is not None else '',
-                    str(details.get('monthly_premium_excl_tax', Decimal(0))),
-                    str(details.get('rate', Decimal(1))),
-                    str(details.get('percentage', Decimal(1))),
-                    str(nb_units))
+                description += '\n%s = %s' % (str(self.amount)
+                    if self.amount is not None else '',
+                    str((self.base_amount or Decimal(0)) / nb_units))
+                if details.get('rate', self.commission_rate):
+                    description += ' * %s' % str(details.get('rate',
+                            self.commission_rate))
+                if details.get('percentage'):
+                    description += ' * %s' % str(details.get('percentage'))
+                description += ' * %s' % str(nb_units)
         elif details.get('type', '') == 'linear':
             redeemed_amount = self.redeemed_prepayment or Decimal('0.0')
             if redeemed_amount <= Decimal('0.001'):

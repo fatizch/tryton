@@ -1,3 +1,5 @@
+* OTH#00000 Itération sur la description de calcul des commissions
+
 Version 2.4 - 2019-04-12
 * OTH#00000 Ajout d'un hook pour la condition de non calcul de précompte
 * BUG#11171 Eviter le problème des années bisextiles lors des calculs de précomptes
