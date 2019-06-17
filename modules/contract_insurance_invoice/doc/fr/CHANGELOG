@@ -1,3 +1,4 @@
+* OTH#00000 Itération pour permettre la surcharge du calcul de repositionnement de date de paiement en cas d'échec
 * FEA#11728 Gestion des modes de quittancement dynamiques en souscription
 * FEA#11656 Ajout d'un événement déclenché au paiement de la première quittance d'un contrat
 * FEA#11297 Le payeur d'un contrat ne peut être que le souscripteur ou un autre tiers ayant une relation "payeur" avec le souscripteur

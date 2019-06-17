@@ -302,6 +302,16 @@ class Invoice(metaclass=PoolMeta):
         if self.reconciled:
             return 'coopengo-reconciliation'
 
+    def _present_again_after_next_date(self, line, billing_information,
+            payment_dates, present_again_after):
+        max_payment_date_line = max(payment_dates)
+        new_date = coog_date.get_next_date_in_sync_with(
+            max_payment_date_line, present_again_after)
+        direct_debit_planned_date = \
+            billing_information.get_direct_debit_planned_date(line)
+        new_date = min(new_date, direct_debit_planned_date)
+        return new_date
+
     def update_move_line_from_billing_information(self, line,
             billing_information):
         term_change = ServerContext().context.get('_payment_term_change', False)
@@ -322,12 +332,8 @@ class Invoice(metaclass=PoolMeta):
         if hasattr(line, 'payments'):
             payment_dates = filter(None, [x.date for x in line.payments])
         if present_again_after and payment_dates:
-            max_payment_date_line = max(payment_dates)
-            new_date = coog_date.get_next_date_in_sync_with(
-                max_payment_date_line, present_again_after)
-            direct_debit_planned_date = \
-                billing_information.get_direct_debit_planned_date(line)
-            new_date = min(new_date, direct_debit_planned_date)
+            new_date = self._present_again_after_next_date(line,
+                billing_information, payment_dates, present_again_after)
         else:
             new_date = billing_information.get_direct_debit_planned_date(line)
         if new_date and (getattr(line, 'payment_date', None) or
