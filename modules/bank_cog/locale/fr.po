@@ -78,6 +78,10 @@ msgctxt "field:bank_cog.data.set,data_file:"
 msgid "Default Data file"
 msgstr "Fichier de données par défaut"
 
+msgctxt "field:bank_cog.data.set,file_format:"
+msgid "File Format"
+msgstr "Format du fichier"
+
 msgctxt "field:bank_cog.data.set,id:"
 msgid "ID"
 msgstr "Identifiant"
@@ -173,6 +177,10 @@ msgstr "Mise à jour des banques"
 msgctxt "model:party.synthesis.menu.bank_account,name:"
 msgid "Party Synthesis Menu Bank Account"
 msgstr "Menu Compte Bancaire Synthèse Tiers "
+
+msgctxt "selection:bank_cog.data.set,file_format:"
+msgid "Coog File"
+msgstr "Fichier Coog"
 
 msgctxt "view:party.party:"
 msgid "Bank"

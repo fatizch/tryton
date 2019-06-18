@@ -1,3 +1,5 @@
+* FEA#11795 Load banks and agencies from Banque de France files
+
 Version 2.4 - 2019-04-12
 * BUG#10989 Test case for bank_fr agencies is non functional
 

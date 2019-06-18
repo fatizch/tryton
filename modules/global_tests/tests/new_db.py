@@ -506,6 +506,7 @@ if LOAD_ZIP_CODES:  # {{{
 if LOAD_BANKS:  # {{{
     do_print('\nLoading banks')  # {{{
     BankLoader = Wizard('bank_cog.data.set.wizard')
+    BankLoader.form.file_format = 'coog_file'
     BankLoader.form.use_default = True
     BankLoader.execute('set_')
     company_bank_account = BankAccount()

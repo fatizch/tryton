@@ -86,6 +86,10 @@ msgctxt "model:ir.test_case.instance,name:agencies_test_case"
 msgid "Agencies Test Case"
 msgstr "Jeu d'essai d'agences bancaires"
 
+msgctxt "selection:bank_cog.data.set,file_format:"
+msgid "Banque De France"
+msgstr "Banque de France"
+
 msgctxt "view:bank.agency:"
 msgid "Agencies"
 msgstr "Agences"

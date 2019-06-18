@@ -2,6 +2,9 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <form>
+    <label name="file_format"/>
+    <field name="file_format"/>
+    <newline/>
     <label name="use_default"/>
     <field name="use_default"/>
     <newline/>

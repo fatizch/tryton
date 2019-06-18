@@ -20,6 +20,8 @@ class BankDataSet(model.CoogView):
 
     __name__ = 'bank_cog.data.set'
 
+    file_format = fields.Selection([
+            ('coog_file', 'Coog File')], 'File Format')
     use_default = fields.Boolean('Use default file')
     resource = fields.Binary('Resource', states={
             'invisible': Bool(Eval('use_default'))
@@ -30,17 +32,19 @@ class BankDataSet(model.CoogView):
             })
 
     @staticmethod
-    def default_data_file():
-        filename = 'bank.csv'
-        top_path = os.path.abspath(os.path.dirname(__file__))
-        data_path = os.path.join(
-            top_path, 'test_case_data',
-            Transaction().language, filename)
-        return data_path
-
-    @staticmethod
     def default_use_default():
         return True
+
+    @fields.depends('use_default', 'file_format')
+    def on_change_use_default(self):
+        if self.use_default and self.file_format == 'coog_file':
+            filename = 'bank.csv'
+            top_path = os.path.abspath(os.path.dirname(__file__))
+            self.data_file = os.path.join(
+                top_path, 'test_case_data',
+                Transaction().language, filename)
+        else:
+            self.data_file = ''
 
 
 class BankDataSetWizard(Wizard):
@@ -57,7 +61,7 @@ class BankDataSetWizard(Wizard):
     set_ = StateTransition()
 
     def read_resource_file(self):
-        if self.configuration.use_default is True:
+        if self.configuration.file_format == 'coog_file':
             with open(self.configuration.data_file, 'r') as _file:
                 reader = csv.DictReader(_file, delimiter=';')
                 for row in reader:

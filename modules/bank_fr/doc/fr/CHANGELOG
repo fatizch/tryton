@@ -1,3 +1,5 @@
+* FEA#11795 Chargement des banques et des agences des fichiers Banque de France
+
 Version 2.4 - 2019-04-12
 * BUG#10989 Le jeux d'essai de création des agences bancaires est non fonctionnel
 

@@ -157,4 +157,4 @@ class AgenciesLoader:
                 logger.info('%s bics missing, %s agencies not created' %
                     (len(missing_bics), sum(missing_bics.values())))
             if row_errors:
-                    logger.info('Missing data on %s rows', row_errors)
+                logger.info('Missing data on %s rows', row_errors)

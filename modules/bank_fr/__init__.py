@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 from . import bank
 from . import test_case
+from . import load_data
 
 
 def register():
@@ -12,4 +13,8 @@ def register():
         bank.Agency,
         bank.BankAccount,
         test_case.TestCaseModel,
+        load_data.BankDataSet,
         module='bank_fr', type_='model')
+    Pool.register(
+        load_data.BankDataSetWizard,
+        module='bank_fr', type_='wizard')
