@@ -20,6 +20,7 @@ def register():
         event.Event,
         protocol.Protocol,
         protocol.ProtocolEventType,
+        rule_engine.RuleEngine,
         rule_engine.RuleTools,
         module='third_party_right_management', type_='model')
     Pool.register(

@@ -41,6 +41,10 @@ class Party(metaclass=PoolMeta):
                 ('is_third_party_manager', reverse[clause[1]], False)]
         return additional_clause + domain
 
+    @fields.depends('is_third_party_manager')
+    def on_change_is_third_party_manager(self):
+        self._on_change_is_actor('is_third_party_manager')
+
 
 class ThirdPartyManager(model.CoogView, model.CoogSQL):
     'Third Party Manager'
