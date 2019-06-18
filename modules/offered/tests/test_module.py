@@ -120,13 +120,16 @@ class ModuleTestCase(test_framework.CoogTestCase):
         test_selection.selection = '1:1\n2:2\n3:3'
         test_selection.has_default_value = True
         test_selection.default_value = '2'
+        test_selection.sequence_order = 1
         test_selection.save()
 
         self.assertEqual(test_selection._get_structure(),
             {'code': 'test_selection', 'name': 'Test Selection',
                 'technical_kind': 'selection',
                 'business_kind': 'contract',
-                'sorted': True, 'default': '2',
+                'sequence': 1,
+                'sorted': True,
+                'default': '2',
                 'selection': [('1', '1'), ('2', '2'), ('3', '3')],
                 })
 
@@ -136,12 +139,14 @@ class ModuleTestCase(test_framework.CoogTestCase):
         test_numeric.string = 'Test Numeric'
         test_numeric.kind = 'contract'
         test_numeric.digits = 4
+        test_numeric.sequence_order = 2
         test_numeric.save()
 
         self.assertEqual(test_numeric._get_structure(),
             {'code': 'test_numeric', 'name': 'Test Numeric',
                 'technical_kind': 'numeric',
                 'business_kind': 'contract',
+                'sequence': 2,
                 'digits': (16, 4)})
 
         # Sub data
@@ -153,7 +158,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             {'code': 'test_selection', 'name': 'Test Selection',
                 'technical_kind': 'selection',
                 'business_kind': 'contract',
-                'sorted': True, 'default': '2',
+                'sorted': True,
+                'sequence': 1,
+                'default': '2',
                 'selection': [('1', '1'), ('2', '2'), ('3', '3')],
                 'sub_data': [
                     ('=', '2', test_numeric._get_structure())],
@@ -167,6 +174,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         test_selection_2.kind = 'contract'
         test_selection_2.selection = '1:1\n2:2\n3:3'
         test_selection_2.has_default_value = False
+        test_selection_2.sequence_order = 4
         test_selection_2.save()
 
         test_numeric_2 = self.ExtraData()
@@ -175,6 +183,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         test_numeric_2.string = 'Test Numeric 2'
         test_numeric_2.kind = 'contract'
         test_numeric_2.digits = 4
+        test_numeric_2.sequence_order = 5
         test_numeric_2.save()
 
         test_selection_2.sub_datas = [self.SubData(
@@ -189,7 +198,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             {'code': 'test_selection', 'name': 'Test Selection',
                 'technical_kind': 'selection',
                 'business_kind': 'contract',
-                'sorted': True, 'default': '2',
+                'sorted': True,
+                'default': '2',
+                'sequence': 1,
                 'selection': [('1', '1'), ('2', '2'), ('3', '3')],
                 'sub_data': [
                     ('=', '2', test_numeric._get_structure()),

@@ -28,6 +28,7 @@ class ClaimService(metaclass=PoolMeta):
 
     def init_from_loss(self, loss, benefit):
         super(ClaimService, self).init_from_loss(loss, benefit)
+
         if (not self.benefit.is_group or
                 self.benefit.benefit_rules[0].force_annuity_frequency):
             return

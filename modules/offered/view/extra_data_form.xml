@@ -40,4 +40,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="tags" colspan="4"/>
         </page>
     </notebook>
+    <label name="sequence_order"/>
+    <field name="sequence_order"/>
 </form>

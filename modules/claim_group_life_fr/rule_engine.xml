@@ -224,7 +224,7 @@ if montant_mi_temps:
         ijb_ijss_mtt = traitement_journalier_base_originel - IJSS - montant_mi_temps
         tdrj_divise_par_deux =  arrondir(traitement_reference_journalier / 2, 0.01)
         traitement_journalier_base = min(ijb_ijss_mtt, tdrj_divise_par_deux)
-        if tdrj_divise_par_deux > ijb_ijss_mtt:
+        if tdrj_divise_par_deux &gt; ijb_ijss_mtt:
             description += 'Limitation du mi-temps thérapeutique (Ij de base - IJSS - montant percu en mi-temps): %s€ - %s€ - %s€ = %s€\n' % (
                 traitement_journalier_base_originel, IJSS, montant_mi_temps, traitement_journalier_base)
         else:
@@ -627,12 +627,12 @@ cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
             <field name="parent_rule" ref="franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut"/>
             <field name="rule" ref="franchise_base_sur_un_nombre_de_jour_defaut"/>
         </record>
-
         <record model="extra_data" id="date_d_effet_d_indemnisation_franchise_relais_conventation_defaut">
             <field name="name">date_d_effet_d_indemnisation</field>
             <field name="type_">date</field>
             <field name="string">Date d'effet d'indemnisation</field>
             <field name="kind">benefit</field>
+            <field name="sequence_order" eval="0"/>
         </record>
         <record model="rule_engine" id="franchise_relais_conventation_defaut">
             <field name="name">Franchise relais convention</field>
@@ -649,7 +649,7 @@ if franchise_min:
     date_franchise_min = rule_coog_franchise_base_sur_un_nombre_de_jour_defaut(
         nombre_de_jours_de_franchise=franchise_min, type_de_franchise='continue', date_de_prejudice=None)
     # Utilisation de la plus grande franchise
-    if date_franchise_min > date_franchise:
+    if date_franchise_min &gt; date_franchise:
         date_franchise = date_franchise_min
 return date_franchise</field>
             <field name="status">validated</field>
@@ -682,7 +682,7 @@ franchise_mp = param_3_franchise_en_cas_de_maladie_professionnelle()
 franchise_at = param_4_franchise_en_cas_d_accident_du_travail()
 franchise_mater = param_5_franchise_en_cas_de_maternite()
 
-if nombre_jours_hospitalisation_prejudice() > 0:
+if nombre_jours_hospitalisation_prejudice() &gt; 0:
     nb_jour = franchise_hospi if franchise_hospi is not None else nb_jour
 elif evenement == 'maladie_professionnelle':
     nb_jour = franchise_mp if franchise_mp is not None else nb_jour
@@ -748,7 +748,6 @@ cumulee_sur_annee_civile:Cumulée sur l'année civile</field>
             <field name="parent_rule" ref="franchise_fixe_en_arret_total_maladie_at_mp_maternite_hospi"/>
             <field name="rule" ref="franchise_fixe_toute_nature_d_arret_confondue_pour_un_arret_total_defaut"/>
         </record>
-
         <record model="rule_engine" id="franchise_fixe_en_arret_total_et_mi_temps_therapeutique">
             <field name="name">Franchise fixe arrêt total et temps partiel thérapeutique</field>
             <field name="short_name">coog_franchise_fixe_en_arret_total_et_mi_temps_therapeutique</field>
@@ -760,7 +759,7 @@ franchise_mp = param_3_franchise_en_cas_de_maladie_professionnelle()
 franchise_at = param_4_franchise_en_cas_d_accident_du_travail()
 franchise_mater = param_5_franchise_en_cas_de_maternite()
 
-if nombre_jours_hospitalisation_prejudice() > 0:
+if nombre_jours_hospitalisation_prejudice() &gt; 0:
     nb_jour = franchise_hospi if franchise_hospi is not None else nb_jour
 elif evenement == 'maladie_professionnelle':
     nb_jour = franchise_mp if franchise_mp is not None else nb_jour
@@ -860,11 +859,11 @@ elif categorie == 'r3':
     tauxTC = pourcentage_tc_r3
 
 elif categorie =='rat':
-    if taux_incapacite_permanente >= 66:
+    if taux_incapacite_permanente &gt;= 66:
         tauxTA = pourcentage_ta_r3
         tauxTB = pourcentage_tb_r3
         tauxTC = pourcentage_tc_r3
-    elif taux_incapacite_permanente >= 33 and taux_incapacite_permanente &lt;= 66:
+    elif taux_incapacite_permanente &gt;= 33 and taux_incapacite_permanente &lt;= 66:
         tauxTA = (Decimal('3') / Decimal('2')) * (taux_incapacite_permanente / 100) * pourcentage_ta_r2 
         tauxTB = (Decimal('3') / Decimal('2')) * (taux_incapacite_permanente / 100) * pourcentage_tb_r2
         tauxTC = (Decimal('3') / Decimal('2')) * (taux_incapacite_permanente / 100) * pourcentage_tc_r2
@@ -1187,6 +1186,7 @@ return annuites</field>
             <field name="kind">benefit</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="1"/>
         </record>
         <record model="extra_data" id="categorie_de_rente_d_invalidite_extra_data">
             <field name="has_default_value" eval="False"/>
@@ -1199,6 +1199,7 @@ r2:Catégorie 2
 r3:Catégorie 3
 rat: Rente Accident Travail</field>
             <field name="selection_sorted">True</field>
+            <field name="sequence_order" eval="2"/>
         </record>
         <record model="extra_data" id="taux_incapacite_extra_data">
             <field name="has_default_value" eval="False"/>
@@ -1207,6 +1208,7 @@ rat: Rente Accident Travail</field>
             <field name="kind">benefit</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="3"/>
         </record>
         <record model="extra_data" id="salaire_journalier_mi_temps_therapeutique_extra_data">
             <field name="has_default_value" eval="False"/>
@@ -1215,6 +1217,7 @@ rat: Rente Accident Travail</field>
             <field name="kind">benefit</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="4"/>
         </record>
         <!-- Link Extra Data to rule -->
         <record model="rule_engine-extra_data" id="rule_extra_data_rente_securite_sociale_annuelle">
@@ -1335,7 +1338,7 @@ if montant_prestations_annexes:
     limite = salaire_de_reference - montant_prestations_annexes - rente_ss
     description += u'Calcul de la limite en cas de prestations annexes (%s)\n' % montant_prestations_annexes 
     description += 'Limite = %s\n' % limite
-    if rente_de_base > limite:
+    if rente_de_base &gt; limite:
         # On verifie que la limite est positive sinon elle est egale a 0, donc elle ne peux pas etre strictement negative.
         limite = max(limite, Decimal(0))
         # On limite rente_de_base a la la valeur de la limite.
@@ -1349,7 +1352,7 @@ return rente_de_base, description</field>
             <field name="status">validated</field>
             <field name="type_">tool</field>
             <field name="context" ref="rule_engine.default_context"/>
-        </record>        
+        </record>
         <record model="rule_engine.rule_parameter" id="rente_de_base_prestations_annexes_rente">
             <field name="name">rente_de_base</field>
             <field name="type_">numeric</field>

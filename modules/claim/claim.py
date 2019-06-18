@@ -1021,10 +1021,8 @@ class ClaimService(model.CoogSQL, model.CoogView,
         else:
             self.extra_datas = self.extra_datas
 
-        data_values = self.benefit.refresh_extra_data(
+        self.update_extra_data(self.extra_datas[-1].date,
             self.extra_datas[-1].extra_data_values)
-
-        self.extra_datas[-1].extra_data_values = data_values
 
     def get_insurer(self):
         date = self.loss.get_date() if self.loss else None
@@ -1128,7 +1126,10 @@ class ClaimService(model.CoogSQL, model.CoogView,
 
     def update_extra_data(self, at_date, base_values):
         ExtraData = Pool().get('claim.service.extra_data')
-        extra_data = utils.get_value_at_date(self.extra_datas, at_date)
+        if at_date:
+            extra_data = utils.get_value_at_date(self.extra_datas, at_date)
+        else:
+            extra_data = self.extra_datas[0]
         with ServerContext().set_context(service=self):
             new_data = self.benefit.refresh_extra_data(
                 extra_data.extra_data_values)
@@ -1305,3 +1306,21 @@ class ClaimServiceExtraDataRevision(model.CoogSQL, model.CoogView,
     def get_claim_status(self, name):
         if self.claim_service and self.claim_service.claim:
             return self.claim_service.claim.status
+
+    @fields.depends('claim_service')
+    def on_change_benefit(self):
+        super().on_change_benefit()
+
+    @fields.depends('claim_service')
+    def on_change_extra_data_values(self):
+        super().on_change_extra_data_values()
+
+    def _refresh_extra_data_values(self):
+        # Required so that override is properly done
+        if self.claim_service:
+            with ServerContext().set_context(service=self.claim_service):
+                self.extra_data_values = \
+                    self.claim_service.benefit.refresh_extra_data(
+                        self.extra_data_values)
+        else:
+            super()._refresh_extra_data_values()

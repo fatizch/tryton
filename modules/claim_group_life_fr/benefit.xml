@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tryton>
@@ -19,6 +19,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="kind">benefit</field>
             <field name="type_">numeric</field>
             <field name="digits" eval="2"/>
+            <field name="sequence_order" eval="0"/>
         </record>
     </data>
     <data depends="claim_eligibility">

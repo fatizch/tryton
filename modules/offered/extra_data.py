@@ -1,6 +1,10 @@
 # -*- coding:utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from sql import Window
+from sql.aggregate import Max
+from sql.functions import RowNumber
+
 from trytond import backend
 from trytond.pool import Pool
 from trytond.cache import Cache
@@ -64,6 +68,9 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
     parents = fields.Many2Many('extra_data-sub_extra_data', 'child', 'master',
         'Parents', states={'readonly': True})
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT')
+    sequence_order = fields.Integer('Sequence Order', required=True,
+        help='The value that will be used to define the order in which the '
+        'fields will be displayed client side')
 
     _translation_cache = Cache('_get_extra_data_summary_cache')
     _extra_data_cache = Cache('extra_data_cache', context=False)
@@ -93,7 +100,7 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
                 'multiple_parents_matches': 'Data %(data)s has multiple '
                 'parents with the current configuration',
                 })
-        cls._order = [('kind', 'ASC'), ('string', 'ASC')]
+        cls._order = [('kind', 'ASC'), ('sequence_order', 'ASC')]
         cls._extra_data_providers = getattr(cls, '_extra_data_providers', {})
 
     @classmethod
@@ -105,6 +112,10 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
             extra_data.column_rename('with_default_value',
             'has_default_value')
 
+        # Migration from 2.4: Add sequence_order
+        create_order = (extra_data.table_exist('table_name')
+            and not extra_data.column_exist('sequence_order'))
+
         super(ExtraData, cls).__register__(module_name)
 
         # migration from a fix in 2.0 due to missing reset of default_value
@@ -112,6 +123,26 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
         cursor.execute("update extra_data "
             "set default_value = Null, selection = Null "
             "where type_ not in ('boolean', 'selection')")
+
+        if create_order:
+            extra_data = cls.__table__()
+            sequence_col = RowNumber(window=Window([
+                        extra_data.kind],
+                    order_by=[extra_data.name]))
+            sub_query = extra_data.select(extra_data.name,
+                sequence_col.as_('sequence_order'),
+                extra_data.kind,
+                )
+            values = sub_query.select(sub_query.name, sub_query.sequence_order,
+                sub_query.kind)
+            query = extra_data.update(
+                columns=[extra_data.sequence_order],
+                # * 10 to have some space for insertions
+                values=[values.sequence_order * 10],
+                from_=[values],
+                where=(values.name == extra_data.name)
+                & (values.kind == extra_data.kind))
+            cursor.execute(*query)
 
     @classmethod
     def _export_skips(cls):
@@ -149,6 +180,16 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
     @staticmethod
     def default_type_():
         return ''
+
+    @classmethod
+    def default_sequence_order(cls):
+        '''
+            Adds one to the latest value
+        '''
+        cursor = Transaction().connection.cursor()
+        table = cls.__table__()
+        cursor.execute(*table.select(Max(table.sequence_order)))
+        return (cursor.fetchone()[0] or 0) + 1
 
     @fields.depends('default_value_selection', 'type_', 'selection',
         'has_default_value')
@@ -346,6 +387,7 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
             'name': self.string,
             'technical_kind': self.type_,
             'business_kind': self.kind,
+            'sequence': self.sequence_order,
             }
 
         if self.has_default_value:
@@ -655,19 +697,30 @@ def with_extra_data(kinds, schema=None, field_name='extra_data',
     @classmethod
     def validate_extra_data(cls, records):
         super(WithExtraDataMixin, cls).validate(records)
+        for record in records:
+            getattr(record, '_validate_%s' % field_name)()
+
+    def _validate_extra_data(self):
         # Domains on dict fields are not properly validated for now, so we have
         # to do it here. Could probably be optimized with a query, but not
         # necessary for now
         ExtraData = Pool().get('extra_data')
         structs = {}
-        for record in records:
-            for key in getattr(record, field_name, {}):
-                if key not in structs:
-                    structs[key] = ExtraData._extra_data_struct(key)
-                assert structs[key]['kind'] in kinds, 'Unexpected extra ' \
-                    'data kind "%s" for field "%s" of "%s"' % (
-                    structs[key]['kind'], field_name, cls.__name__)
+        value = getattr(self, field_name, {})
+        for key in value:
+            if key not in structs:
+                structs[key] = ExtraData._extra_data_struct(key)
+            assert structs[key]['kind'] in kinds, 'Unexpected extra ' \
+                'data kind "%s" for field "%s" of "%s"' % (
+                structs[key]['kind'], field_name, self.__name__)
+        if schema:
+            # Make sure the extra data are consistent
+            value = value.copy()
+            getattr(self, '_refresh_%s' % field_name)()
+            assert value == getattr(self, field_name, {})
 
     setattr(WithExtraDataMixin, 'validate', validate_extra_data)
+    setattr(WithExtraDataMixin, '_validate_%s' % field_name,
+        _validate_extra_data)
 
     return WithExtraDataMixin
