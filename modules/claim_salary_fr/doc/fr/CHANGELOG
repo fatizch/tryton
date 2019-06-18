@@ -1,3 +1,5 @@
+* BUG#11767 Mise à jour et contrôle des contenus des tables créées par défaut
+
 Version 2.4 - 2019-04-12
 * BUG#11327 Correction d'une erreur lorsque l'on calcule le mode de salaire sur un service sans prestation trouvée
 * BUG#11007 Ne pas forcer la sauvegarde des services délivrées lors de l'initialisation des salaires

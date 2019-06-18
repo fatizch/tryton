@@ -50,6 +50,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="end_date">2019-01-01</field>
             <field name="name">[01/01/2018 - 01/01/2019[</field>
         </record>
+        <record model="table.dimension.value" id="agirc_dimension_value_2019">
+            <field name="definition" ref="claim_salary_fr.table_agirc"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2020-01-01</field>
+            <field name="name">[01/01/2019 - 01/01/2020[</field>
+        </record>
         <record model="table.dimension.value" id="arrco_dimension_value_2016">
             <field name="definition" ref="claim_salary_fr.table_arrco"/>
             <field name="type">dimension1</field>
@@ -70,6 +77,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="start_date">2018-01-01</field>
             <field name="end_date">2019-01-01</field>
             <field name="name">[01/01/2018 - 01/01/2019[</field>
+        </record>
+        <record model="table.dimension.value" id="arrco_dimension_value_2019">
+            <field name="definition" ref="claim_salary_fr.table_arrco"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2020-01-01</field>
+            <field name="name">[01/01/2019 - 01/01/2020[</field>
         </record>
         <record model="table.dimension.value" id="pmss_dimension_value_2000">
             <field name="definition" ref="claim_salary_fr.table_pmss"/>
@@ -204,6 +218,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="end_date">2019-01-01</field>
             <field name="name">[01/01/2018 - 01/01/2019[</field>
         </record>
+        <record model="table.dimension.value" id="pmss_dimension_value_2019">
+            <field name="definition" ref="table_pmss"/>
+            <field name="type">dimension1</field>
+            <field name="start_date">2019-01-01</field>
+            <field name="end_date">2020-01-01</field>
+            <field name="name">[01/01/2019 - 01/01/2020[</field>
+        </record>
         <!-- CELLS -->
         <record model="table.cell" id="agirc_cell_2016">
             <field name="definition" ref="claim_salary_fr.table_agirc"/>
@@ -220,6 +241,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="dimension1" ref="claim_salary_fr.agirc_dimension_value_2018"/>
             <field name="value">0.4352</field>
         </record>
+        <record model="table.cell" id="agirc_cell_2019">
+            <field name="definition" ref="claim_salary_fr.table_agirc"/>
+            <field name="dimension1" ref="claim_salary_fr.agirc_dimension_value_2019"/>
+            <field name="value">0.4378</field>
+        </record>
         <record model="table.cell" id="arrco_cell_2016">
             <field name="definition" ref="claim_salary_fr.table_arrco"/>
             <field name="dimension1" ref="claim_salary_fr.arrco_dimension_value_2016"/>
@@ -234,6 +260,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="definition" ref="claim_salary_fr.table_arrco"/>
             <field name="dimension1" ref="claim_salary_fr.arrco_dimension_value_2018"/>
             <field name="value">1.2513</field>
+        </record>
+        <record model="table.cell" id="arrco_cell_2019">
+            <field name="definition" ref="claim_salary_fr.table_arrco"/>
+            <field name="dimension1" ref="claim_salary_fr.arrco_dimension_value_2019"/>
+            <field name="value">1.2588</field>
         </record>
         <record model="table.cell" id="pmss_cell_2000">
             <field name="definition" ref="claim_salary_fr.table_pmss"/>
@@ -329,6 +360,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="definition" ref="claim_salary_fr.table_pmss"/>
             <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2018"/>
             <field name="value">3311</field>
+        </record>
+        <record model="table.cell" id="pmss_cell_2019">
+            <field name="definition" ref="claim_salary_fr.table_pmss"/>
+            <field name="dimension1" ref="claim_salary_fr.pmss_dimension_value_2019"/>
+            <field name="value">3377</field>
         </record>
     </data>
 </tryton>

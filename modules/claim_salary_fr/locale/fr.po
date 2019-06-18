@@ -34,6 +34,10 @@ msgstr ""
 "Ce sinistre a des périodes d'indemnisation, il faudra peut être les annuler "
 "ou les recalculer si les salaires sont modifiés"
 
+msgctxt "error:table:"
+msgid "You cannnot modify the content of tables from the configuration"
+msgstr "Vous ne pouvez pas modifier le contenu des tables fournies par défaut"
+
 msgctxt "field:benefit.rule,force_revaluation_on_basic_salary:"
 msgid "Force revaluation on basic salary"
 msgstr "Forcer le paramétrage de la revalorisation sur le traitement de base"
