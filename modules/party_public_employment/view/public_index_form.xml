@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form>
+    <label name="effective_date"/>
+    <field name="effective_date"/>
+    <newline/>
+    <label name="increased_index"/>
+    <field name="increased_index"/>
+    <label name="gross_index"/>
+    <field name="gross_index"/>
+</form>
+

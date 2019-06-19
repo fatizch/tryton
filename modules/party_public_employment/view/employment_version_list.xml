@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/tree/field[@name='work_time_type']" position="after">
+        <field name="administrative_situation"/>
+        <field name="administrative_situation_sub_status"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='gross_salary']" position="after">
+        <field name="increased_index"/>
+        <field name="gross_index"/>
+    </xpath>
+</data>
+

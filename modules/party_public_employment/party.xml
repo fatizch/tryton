@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Model party employment version-->
+        <record model="ir.ui.view" id="employment_version_view_form">
+            <field name="model">party.employment.version</field>
+            <field name="inherit" ref="party_employment.employment_version_view_form"/>
+            <field name="name">employment_version_form</field>
+        </record>
+        <record model="ir.ui.view" id="employment_version_view_list">
+            <field name="model">party.employment.version</field>
+            <field name="inherit" ref="party_employment.employment_version_view_list"/>
+            <field name="name">employment_version_list</field>
+        </record>
+        <!-- Model party public employment index-->
+        <record model="ir.ui.view" id="public_index_view_form">
+            <field name="model">party.public_employment_index</field>
+            <field name="type">form</field>
+            <field name="name">public_index_form</field>
+        </record>
+        <record model="ir.ui.view" id="public_index_view_list">
+            <field name="model">party.public_employment_index</field>
+            <field name="type">tree</field>
+            <field name="name">public_index_list</field>
+        </record>
+        <!-- Model party administrative sub_status-->
+        <record model="ir.ui.view" id="administrative_situation_sub_status_view_form">
+            <field name="model">party.administrative_situation_sub_status</field>
+             <field name="type">form</field>
+            <field name="name">administrative_situation_sub_status_form</field>
+        </record>
+         <record model="ir.ui.view" id="administrative_situation_sub_status_view_list">
+            <field name="model">party.administrative_situation_sub_status</field>
+             <field name="type">tree</field>
+            <field name="name">administrative_situation_sub_status_list</field>
+        </record>
+        <!-- Menu for administrative_situation_sub_status-->
+        <record model="ir.action.act_window" id="act_administrative_situation_sub_status">
+            <field name="name">Admin Situation Sub Status</field>
+            <field name="res_model">party.administrative_situation_sub_status</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_administrative_situation_sub_status_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="administrative_situation_sub_status_view_form"/>
+            <field name="act_window" ref="act_administrative_situation_sub_status"/>
+        </record>
+         <record model="ir.action.act_window.view" id="act_administrative_situation_sub_status_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="administrative_situation_sub_status_view_list"/>
+            <field name="act_window" ref="act_administrative_situation_sub_status"/>
+        </record>
+        <menuitem parent="party_employment.menu_employment_configuration" action="act_administrative_situation_sub_status" id="menu_configuration_admin_situation_sub_status" sequence="5" icon="tryton-list"/>
+        <!-- Menu for public index-->
+        <record model="ir.action.act_window" id="act_public_index">
+            <field name="name">Public Employment Index</field>
+            <field name="res_model">party.public_employment_index</field>
+        </record>
+         <record model="ir.action.act_window.view" id="act_public_index_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="public_index_view_list"/>
+            <field name="act_window" ref="act_public_index"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_public_index_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="public_index_view_form"/>
+            <field name="act_window" ref="act_public_index"/>
+        </record>
+        <menuitem parent="party_employment.menu_employment_configuration" action="act_public_index" id="menu_configuration_public_index" sequence="5" icon="tryton-list"/>
+    </data>
+</tryton>

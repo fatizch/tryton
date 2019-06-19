@@ -1,0 +1,181 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:party.administrative_situation_sub_status:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
+msgctxt "error:party.public_employment_index:"
+msgid "The combination date, gross_index must be unique!"
+msgstr "La combinaison date, indice brut doit être unique"
+
+msgctxt "field:party.administrative_situation_sub_status,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:party.administrative_situation_sub_status,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.administrative_situation_sub_status,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:party.administrative_situation_sub_status,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.administrative_situation_sub_status,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.administrative_situation_sub_status,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.administrative_situation_sub_status,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:party.administrative_situation_sub_status,situation:"
+msgid "Administrative Situation"
+msgstr "Situation administrative"
+
+msgctxt "field:party.administrative_situation_sub_status,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.administrative_situation_sub_status,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.administrative_situation_sub_status,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:party.employment.version,administrative_situation:"
+msgid "Administrative Situtation"
+msgstr "Situation Administrative"
+
+msgctxt "field:party.employment.version,administrative_situation_sub_status:"
+msgid "Administrative Situation Details"
+msgstr "Détail de la situation administrative"
+
+msgctxt "field:party.employment.version,gross_index:"
+msgid "Gross Index"
+msgstr "Indice Brut"
+
+msgctxt "field:party.employment.version,increased_index:"
+msgid "Increased Index"
+msgstr "Indice Majoré"
+
+msgctxt "field:party.public_employment_index,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.public_employment_index,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.public_employment_index,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.public_employment_index,effective_date:"
+msgid "Effective Date"
+msgstr "Date d'effet"
+
+msgctxt "field:party.public_employment_index,gross_index:"
+msgid "Gross Index"
+msgstr "Indice Brut"
+
+msgctxt "field:party.public_employment_index,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.public_employment_index,increased_index:"
+msgid "Increased Index"
+msgstr "Indice Majoré"
+
+msgctxt "field:party.public_employment_index,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:party.public_employment_index,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.public_employment_index,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.public_employment_index,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "help:party.administrative_situation_sub_status,name:"
+msgid "Name of Administrative Situation Sub Status"
+msgstr "Nom du sous statut de la situation administrative "
+
+msgctxt "help:party.administrative_situation_sub_status,situation:"
+msgid ""
+"Define the administration situation (used to filter sub status according the"
+" administrative situation)"
+msgstr ""
+"Défini la situation administrative de ce statut (utilisé pour filtrer les "
+"statuts en fonction de la situation administrative)"
+
+msgctxt "help:party.employment.version,gross_index:"
+msgid "Gross public service index used to defined salary"
+msgstr ""
+"Indice brut de la fonction publique servant de base au calcul du salaire"
+
+msgctxt "help:party.employment.version,increased_index:"
+msgid "Increased public service index used to defined salary"
+msgstr ""
+"Indice majoré de la fonction publique servant de base au calcul du salaire"
+
+msgctxt "help:party.public_employment_index,effective_date:"
+msgid "Date used to versionned the index"
+msgstr "Date utilisée pour versionner les correspondances d'indices"
+
+msgctxt "model:ir.action,name:act_administrative_situation_sub_status"
+msgid "Sous statut de la situation administrative"
+msgstr "Sous statut de la situation administrative"
+
+msgctxt "model:ir.action,name:act_public_index"
+msgid "Public Employment Index"
+msgstr "Indice de la fonction publique"
+
+msgctxt "model:ir.ui.menu,name:menu_configuration_admin_situation_sub_status"
+msgid "Admin Situation sub_status"
+msgstr "Sous statut de la situation administrative"
+
+msgctxt "model:ir.ui.menu,name:menu_configuration_public_index"
+msgid "Public Employment Index"
+msgstr "Indice de la fonction publique"
+
+msgctxt "model:party.administrative_situation_sub_status,name:"
+msgid "Administrative Situation Sub Status"
+msgstr "Sous statut de la situation administrative"
+
+msgctxt "model:party.public_employment_index,name:"
+msgid "Public Employment Index Table"
+msgstr "Table des indices de la fonction publique"
+
+msgctxt "selection:party.administrative_situation_sub_status,situation:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:party.administrative_situation_sub_status,situation:"
+msgid "Retired"
+msgstr "Retraité"
+
+msgctxt "selection:party.employment.version,administrative_situation:"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "selection:party.employment.version,administrative_situation:"
+msgid "Retired"
+msgstr "Retraité"
