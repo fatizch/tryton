@@ -36,15 +36,14 @@ class BankDataSet(model.CoogView):
         return True
 
     @fields.depends('use_default', 'file_format')
-    def on_change_use_default(self):
+    def on_change_with_data_file(self):
         if self.use_default and self.file_format == 'coog_file':
             filename = 'bank.csv'
             top_path = os.path.abspath(os.path.dirname(__file__))
-            self.data_file = os.path.join(
+            return os.path.join(
                 top_path, 'test_case_data',
                 Transaction().language, filename)
-        else:
-            self.data_file = ''
+        return ''
 
 
 class BankDataSetWizard(Wizard):

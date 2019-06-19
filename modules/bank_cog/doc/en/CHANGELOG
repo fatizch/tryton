@@ -1,3 +1,5 @@
+* OTH#0000 Fix bank data generation using default coog file
+
 Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * BUG#9441 Bank should not be a person
