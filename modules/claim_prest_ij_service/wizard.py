@@ -86,10 +86,17 @@ class FindPartySubscription(Wizard):
         good_values[0]['views'] = [
             view for view in good_values[0]['views'] if view[1] in
             (['form'] if len(subscriptions) == 1 else ['tree', 'form'])]
-        encoder = PYSONEncoder()
-        good_values[0]['pyson_domain'] = encoder.encode([
-                ('id', 'in', [x.id for x in subscriptions])])
-        return good_values[0], {}
+        if len(subscriptions) == 1:
+            data = {
+                'res_id': subscriptions[0].id,
+                'res_ids': [subscriptions[0].id],
+            }
+        else:
+            encoder = PYSONEncoder()
+            good_values[0]['pyson_domain'] = encoder.encode([
+                    ('id', 'in', [x.id for x in subscriptions])])
+            data = {}
+        return good_values[0], data
 
 
 class CoveredPersonIjSubscriptionSelectDate(model.CoogView):
