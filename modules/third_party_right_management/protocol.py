@@ -280,7 +280,7 @@ class RecomputePeriod(model.CoogWizard):
         ThirdPartyPeriod = pool.get('contract.option.third_party_period')
 
         contract = Contract(Transaction().context['active_id'])
-        to_remove, modified_periods = Protocol.add_period(
+        to_remove, modified_periods = Protocol.edit_periods(
             contract, self.ask_date.date, 'apply_endorsement')
 
         if to_remove or modified_periods:
