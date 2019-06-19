@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- Group Global Config -->
+        <record model="ir.ui.menu-res.group" id="menu_employment_configuration_global_config">
+            <field name="menu" ref="menu_employment_configuration"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_configuration_profession_global_config">
+            <field name="menu" ref="menu_configuration_profession"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="menu_configuration_work_time_global_config">
+            <field name="menu" ref="menu_configuration_work_time"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
+        <record model="ir.model.access" id="access_party_employment_kind_global_config">
+            <field name="model" search="[('model', '=', 'party.employment_kind')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_party_employment_work_time_type_global_config">
+            <field name="model" search="[('model', '=', 'party.employment_work_time_type')]"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- Default Access -->
+        <record model="ir.model.access" id="access_party_employment">
+            <field name="model" search="[('model', '=', 'party.employment')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_employment_kind">
+            <field name="model" search="[('model', '=', 'party.employment_kind')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_employment_work_time_type">
+            <field name="model" search="[('model', '=', 'party.employment_work_time_type')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_party_employment_version">
+            <field name="model" search="[('model', '=', 'party.employment.version')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <!-- Coog Management Party -->
+        <record model="ir.model.access" id="access_party_employment_config_group_party_manage">
+            <field name="model" search="[('model', '=', 'party.employment')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+         <record model="ir.model.access" id="access_party_employment_version_config_global_config_group_party_manage">
+            <field name="model" search="[('model', '=', 'party.employment.version')]"/>
+            <field name="group" ref="party_cog.group_party_manage"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>
+

@@ -1,0 +1,275 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:party.employment_kind:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
+msgctxt "error:party.employment_work_time_type:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
+msgctxt "field:party.employment,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.employment,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:party.employment,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.employment,employee:"
+msgid "Employee"
+msgstr "Employé"
+
+msgctxt "field:party.employment,employer:"
+msgid "Employer"
+msgstr "Employeur"
+
+msgctxt "field:party.employment,employment_kind:"
+msgid "Employment Kind"
+msgstr "Type d'emploi"
+
+msgctxt "field:party.employment,end_date:"
+msgid "End Date"
+msgstr "Date de fin"
+
+msgctxt "field:party.employment,entry_date:"
+msgid "Entry Date"
+msgstr "Date d'entrée"
+
+msgctxt "field:party.employment,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.employment,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:party.employment,start_date:"
+msgid "Start Date"
+msgstr "Date de début"
+
+msgctxt "field:party.employment,versions:"
+msgid "Versions"
+msgstr "Versions"
+
+msgctxt "field:party.employment,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.employment,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.employment,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:party.employment.version,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.employment.version,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:party.employment.version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.employment.version,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:party.employment.version,employment:"
+msgid "Employment"
+msgstr "Situation professionnelle"
+
+msgctxt "field:party.employment.version,gross_salary:"
+msgid "Gross Salary"
+msgstr "Salaire brut"
+
+msgctxt "field:party.employment.version,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.employment.version,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:party.employment.version,work_time_type:"
+msgid "Work Time Type"
+msgstr "Durée de travail"
+
+msgctxt "field:party.employment.version,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.employment.version,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.employment.version,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:party.employment_kind,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:party.employment_kind,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.employment_kind,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:party.employment_kind,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.employment_kind,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.employment_kind,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.employment_kind,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:party.employment_kind,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.employment_kind,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.employment_kind,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:party.employment_work_time_type,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:party.employment_work_time_type,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.employment_work_time_type,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:party.employment_work_time_type,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.employment_work_time_type,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.employment_work_time_type,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.employment_work_time_type,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:party.employment_work_time_type,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.employment_work_time_type,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.employment_work_time_type,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:party.party,employments:"
+msgid "Employments"
+msgstr "Situation professionnelle"
+
+msgctxt "help:party.employment,end_date:"
+msgid "End date of the employment contract"
+msgstr "Date de fin du contrat de travail"
+
+msgctxt "help:party.employment,entry_date:"
+msgid "Date of entry in the legal entity"
+msgstr "Date d'entrée ou de recrutement"
+
+msgctxt "help:party.employment,start_date:"
+msgid "Begin date of the employment contract"
+msgstr "Date de début du contrat de travail"
+
+msgctxt "help:party.employment_kind,name:"
+msgid "Employment kind name"
+msgstr "Nom du type de contrat de travail"
+
+msgctxt "help:party.employment_work_time_type,name:"
+msgid "Employment work time type name"
+msgstr "Nom du type de durée de travail"
+
+msgctxt "model:ir.action,name:"
+msgid "Profession"
+msgstr "Profession"
+
+msgctxt "model:ir.action,name:act_employer_employees_relation"
+msgid "Employees"
+msgstr "Employés"
+
+msgctxt "model:ir.action,name:act_employment_kind"
+msgid "Employment Kind"
+msgstr "Type de contrat de travail"
+
+msgctxt "model:ir.action,name:act_work_time_type"
+msgid "Work Time Type"
+msgstr "Type de durée de travail"
+
+msgctxt "model:ir.ui.menu,name:menu_configuration_profession"
+msgid "Employment Kind"
+msgstr "Profession"
+
+msgctxt "model:ir.ui.menu,name:menu_configuration_work_time"
+msgid "Work Time Type"
+msgstr "Type de durée de travail"
+
+msgctxt "model:ir.ui.menu,name:menu_employment_configuration"
+msgid "Employment Configuration"
+msgstr "Configuration des données professionnelles"
+
+msgctxt "model:party.employment,name:"
+msgid "Employment"
+msgstr "Emploi"
+
+msgctxt "model:party.employment.version,name:"
+msgid "Employment Version"
+msgstr "Version du contrat de travail"
+
+msgctxt "model:party.employment_kind,name:"
+msgid "Employment Kind"
+msgstr "Type de contrat de travail"
+
+msgctxt "model:party.employment_work_time_type,name:"
+msgid "Employment Work Time Type"
+msgstr "Type de la durée du travail"
+
+msgctxt "view:party.employment.version:"
+msgid "Salary Information"
+msgstr "Données liées à la rémunération"
+
+msgctxt "view:party.party:"
+msgid "Employment"
+msgstr "Données professionnelles"

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="work_time_type_view_form">
+            <field name="model">party.employment_work_time_type</field>
+            <field name="type">form</field>
+            <field name="name">work_time_type_form</field>
+        </record>
+        <record model="ir.ui.view" id="work_time_type_view_list">
+            <field name="model">party.employment_work_time_type</field>
+            <field name="type">tree</field>
+            <field name="name">work_time_type_list</field>
+        </record>
+         <record model="ir.ui.view" id="party_view_form">
+            <field name="model">party.party</field>
+            <field name="inherit" ref="party.party_view_form"/>
+            <field name="name">party_form</field>
+        </record>
+        <record model="ir.ui.view" id="party_view_tree">
+            <field name="model">party.party</field>
+            <field name="inherit" ref="party.party_view_tree"/>
+        </record>
+         <record model="ir.ui.view" id="employment_view_form">
+            <field name="model">party.employment</field>
+             <field name="type">form</field>
+            <field name="name">employment_form</field>
+        </record>
+         <record model="ir.ui.view" id="employment_view_list">
+            <field name="model">party.employment</field>
+             <field name="type">tree</field>
+            <field name="name">employment_list</field>
+        </record>
+        <record model="ir.ui.view" id="employment_kind_view_form">
+            <field name="model">party.employment_kind</field>
+             <field name="type">form</field>
+            <field name="name">employment_kind_form</field>
+        </record>
+         <record model="ir.ui.view" id="employment_kind_view_list">
+            <field name="model">party.employment_kind</field>
+             <field name="type">tree</field>
+            <field name="name">employment_kind_list</field>
+        </record>
+        <record model="ir.ui.view" id="employment_version_view_form">
+            <field name="model">party.employment.version</field>
+             <field name="type">form</field>
+            <field name="name">employment_version_form</field>
+        </record>
+         <record model="ir.ui.view" id="employment_version_view_list">
+            <field name="model">party.employment.version</field>
+             <field name="type">tree</field>
+            <field name="name">employment_version_list</field>
+        </record>
+        <!--Menu for party.employment_kind -->
+        <record model="ir.action.act_window" id="act_employment_kind">
+            <field name="name">Employment Kind</field>
+            <field name="res_model">party.employment_kind</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_employment_kind_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="employment_kind_view_list"/>
+            <field name="act_window" ref="act_employment_kind"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_employment_kind_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="employment_kind_view_form"/>
+            <field name="act_window" ref="act_employment_kind"/>
+        </record>
+        <menuitem parent="party.menu_configuration" id="menu_employment_configuration" sequence="100" icon="tryton-list" name="Employment Configuration"/>
+        <menuitem parent="menu_employment_configuration" action="act_employment_kind" id="menu_configuration_profession" sequence="5" icon="tryton-list"/>
+        <!-- Menu for party.employment_work_time_type -->
+         <record model="ir.action.act_window" id="act_work_time_type">
+            <field name="name">Work Time Type</field>
+            <field name="res_model">party.employment_work_time_type</field>
+        </record>
+         <record model="ir.action.act_window.view" id="act_work_time_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="work_time_type_view_list"/>
+            <field name="act_window" ref="act_work_time_type"/>
+        </record>
+         <record model="ir.action.act_window.view" id="act_work_time_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="work_time_type_view_form"/>
+            <field name="act_window" ref="act_work_time_type"/>
+        </record>
+        <menuitem parent="menu_employment_configuration" action="act_work_time_type" id="menu_configuration_work_time" sequence="4" icon="tryton-list"/>
+
+        <!-- ########### -->
+        <!-- # Relates # -->
+        <!-- ########### -->
+        <record model="ir.action.act_window" id="act_employer_employees_relation">
+            <field name="name">Employees</field>
+            <field name="res_model">party.employment</field>
+            <field name="domain" eval="[('employer', '=', Eval('active_id'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_employer_employees_relation_view_form">
+            <field name="sequence" eval="1"/>
+            <field name="view" ref="employment_view_list"/>
+           <field name="act_window" ref="act_employer_employees_relation"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_employer_employees_relation_view_list">
+            <field name="sequence" eval="1"/>
+            <field name="view" ref="employment_view_form"/>
+            <field name="act_window" ref="act_employer_employees_relation"/>
+        </record>
+        <record model="ir.action.keyword" id="act_employer_employees_relation_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="act_employer_employees_relation"/>
+        </record>
+    </data>
+</tryton>
