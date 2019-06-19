@@ -92,7 +92,7 @@ class OptionsDisplayer(metaclass=PoolMeta):
         self.options = []
         if self.covered_element:
             self.update_options(self.covered_element.options,
-                [x for x in self.contract.product.coverages
+                [x for x in self.covered_element.contract.product.coverages
                     if not x.is_contract_option()])
         elif self.contract:
             self.update_options(self.contract.options,

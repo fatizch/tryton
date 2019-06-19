@@ -1,3 +1,4 @@
+* BUG#11891 Fix crash when launching 'manage option' from a covered element
 * BUG#11141 Make the selection of optional coverage at contract level in manage options wizard possible
 * BUG#11036 Forbid covered elements with same party and the same parent to overlap
 * OTH#0000 Fix overlap message error appearing as many times as there are covered elements independently of if they are all overlapping
