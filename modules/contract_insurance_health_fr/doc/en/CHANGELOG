@@ -1,3 +1,4 @@
+* BUG#11918 Allow party edition when the party is social security dependant
 * OTH#00000 Allow party extra data CRUD operations when the party is social security dependent
 * BUG#11674 Format the information read from the file in order to manage them like unicode
 

@@ -1,3 +1,4 @@
+* BUG#11918 Autoriser l'édition des tiers même s'il est ayant droit
 * OTH#00000 Autorisation de l'ajout de données complémentaires sur les tiers est ayant droit
 * BUG#11674 Formater les informations lu depuis le fichier pour pouvoir les gerer avec type unicode
 

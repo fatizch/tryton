@@ -8,7 +8,7 @@ from trytond import backend
 from trytond.pyson import Eval, Bool, Or
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coog_core import fields, model, coog_string
+from trytond.modules.coog_core import fields, coog_string
 
 __all__ = [
     'Party',
@@ -52,26 +52,6 @@ class Party(metaclass=PoolMeta):
                 'its health complement, change social security insured\'s main '
                 'health complement'
                 })
-
-    @classmethod
-    def write(cls, *args):
-        with model.error_manager():
-            params = iter(args)
-            for parties, values in zip(params, params):
-                ss_dependent_parties = [p for p in parties
-                    if p.social_security_dependent]
-                if ss_dependent_parties and not cls._allowed_values(values):
-                    cls.append_functional_error(
-                        'social_security_dependent_party',
-                        {
-                            'dependent_party': [p.name
-                                for p in ss_dependent_parties]
-                        })
-        super(Party, cls).write(*args)
-
-    @classmethod
-    def _allowed_values(cls, values):
-        return all(x in ['ssn', 'extra_data'] for x in list(values))
 
     def get_main_health_complement(self, name):
         complement = self.get_health_complement_at_date()
