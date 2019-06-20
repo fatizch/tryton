@@ -8,6 +8,7 @@ from decimal import Decimal
 import trytond.tests.test_tryton
 
 from trytond.modules.coog_core import test_framework
+from trytond.modules.api import APIInputError
 
 
 class ModuleTestCase(test_framework.CoogTestCase):
@@ -28,6 +29,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'OptionDescription': 'offered.option.description',
             'ExtraData': 'extra_data',
             'SubData': 'extra_data-sub_extra_data',
+            'APIModel': 'api',
+            'APICore': 'api.core',
+            'APIProduct': 'api.product',
              }
 
     def test0001_testNumberGeneratorCreation(self):
@@ -309,6 +313,161 @@ class ModuleTestCase(test_framework.CoogTestCase):
             {'test_alpha': 'test',
                 'test_selection': '2',
                 'test_numeric': None})
+
+    @test_framework.prepare_test(
+        'offered.test0040_testExtraDataStructure',
+        )
+    def test0060_extraDataApiStructure(self):
+        test_selection, = self.ExtraData.search(
+            [('name', '=', 'test_selection')])
+
+        self.maxDiff = None
+        self.assertEqual(
+            self.APICore._extra_data_structure([test_selection]),
+            [
+                {
+                    'code': 'test_selection',
+                    'name': 'Test Selection',
+                    'type': 'selection',
+                    'default': '2',
+                    'sequence': 1,
+                    'selection': [
+                        {'value': '1', 'name': '1', 'sequence': 0},
+                        {'value': '2', 'name': '2', 'sequence': 1},
+                        {'value': '3', 'name': '3', 'sequence': 2},
+                        ],
+                    },
+                {
+                    'code': 'test_numeric',
+                    'conditions': [
+                        {'code': 'test_selection', 'operator': '=',
+                            'value': '2'}],
+                    'digits': (16, 4),
+                    'name': 'Test Numeric',
+                    'sequence': 2,
+                    'type': 'numeric'},
+                {'code': 'test_selection_2',
+                    'conditions': [{'code': 'test_selection', 'operator': '=',
+                            'value': '1'}],
+                    'name': 'Test Selection 2',
+                    'selection': [
+                        {'name': '1', 'sequence': 0, 'value': '1'},
+                        {'name': '2', 'sequence': 1, 'value': '2'},
+                        {'name': '3', 'sequence': 2, 'value': '3'}],
+                    'sequence': 4,
+                    'type': 'selection'},
+                {'code': 'test_numeric_2',
+                    'conditions': [{'code': 'test_selection_2',
+                            'operator': '=', 'value': '3'}],
+                    'digits': (16, 4),
+                    'name': 'Test Numeric 2',
+                    'sequence': 5,
+                    'type': 'numeric'},
+                ],
+            )
+
+    @test_framework.prepare_test(
+        'offered.test0030_testProductCoverageRelation',
+        )
+    def test0065_instantiateCodeObject(self):
+        product_a, = self.Product.search([
+                ('code', '=', 'AAA'),
+                ], limit=1)
+        self.assertEqual(
+            self.APIModel.instantiate_code_object('offered.product',
+                {'code': 'AAA'}).id,
+            product_a.id)
+        self.assertEqual(
+            self.APIModel.instantiate_code_object('offered.product',
+                {'id': product_a.id}).id,
+            product_a.id)
+        try:
+            self.APIModel.instantiate_code_object('offered.product',
+                {'code': 'does not exists'})
+        except APIInputError as e:
+            self.assertEqual(e, APIInputError([{
+                    'type': 'invalid_code',
+                    'data': {
+                        'model': 'offered.product',
+                        'key': {'code': 'does not exists'},
+                        },
+                    }]),
+                )
+
+    @test_framework.prepare_test(
+        'offered.test0030_testProductCoverageRelation',
+        )
+    def test0070_productDescription(self):
+        product_a, = self.Product.search([
+                ('code', '=', 'AAA'),
+                ], limit=1)
+        self.maxDiff = None
+        self.assertEqual(
+            self.APIProduct.describe_products({}, {}),
+            [
+                {
+                    'id': product_a.id,
+                    'code': 'AAA',
+                    'name': 'Awesome Alternative Allowance',
+                    'description': '',
+                    'coverages': [{
+                            'code': 'ALP',
+                            'description': '',
+                            'extra_data': [],
+                            'id': product_a.coverages[0].id,
+                            'name': 'Alpha Coverage',
+                            },
+                        {
+                            'code': 'BET',
+                            'description': '',
+                            'extra_data': [],
+                            'id': product_a.coverages[1].id,
+                            'name': 'Beta Coverage'},
+                        ],
+                    'extra_data': [],
+                    'packages': [],
+                    'subscriber': [
+                        {
+                            'help': 'The main identifier of the party.',
+                            'label': 'Name',
+                            'name': 'name',
+                            'required': True,
+                            'sequence': 0,
+                            'type': 'string',
+                            },
+                        {
+                            'conditions': [
+                                {'name': 'is_person', 'operator': '=',
+                                    'value': True}],
+                            'help': '',
+                            'label': 'First Name',
+                            'name': 'first_name',
+                            'required': True,
+                            'sequence': 10,
+                            'type': 'string',
+                            },
+                        {
+                            'conditions': [
+                                {'name': 'is_person', 'operator': '=',
+                                    'value': True}],
+                            'help': '',
+                            'label': 'Birth Date',
+                            'name': 'birth_date',
+                            'required': True,
+                            'sequence': 20,
+                            'type': 'date',
+                            },
+                        {
+                            'help': '',
+                            'label': 'Person',
+                            'name': 'is_person',
+                            'required': True,
+                            'sequence': -10,
+                            'type': 'boolean',
+                            },
+                        ],
+                    },
+                ])
 
 
 def suite():

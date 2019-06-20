@@ -38,6 +38,7 @@ from . import summary
 from . import exception
 from . import coog_sql
 from . import utils
+from . import coog_string
 
 try:
     import coog_async.broker as async_broker
@@ -1598,3 +1599,101 @@ def history_versions(instance, start, end):
         with Transaction().set_context(_datetime=history_datetime):
             result[history_datetime] = instance.__class__(instance.id)
     return result
+
+
+class CodedMixin(CoogSQL):
+    '''
+        Mixin class to provide properly defined name / code fields
+    '''
+    _func_key = 'code'
+
+    name = fields.Char('Name', required=True, translate=True,
+        help='The name that will be displayed to the end user')
+    code = fields.Char('Code', required=True,
+        help='The string that will be used to identify this record across the '
+        'configuration. It should not be modified without checking first if '
+        'it is used somewhere')
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
+            ]
+        if not hasattr(cls, '_instance_from_code_cache'):
+            cls._instance_from_code_cache = Cache(
+                'instance_from_code_%s' % cls.__name__)
+
+    @classmethod
+    def create(cls, vlist):
+        res = super().create(vlist)
+        cls._instance_from_code_cache.clear()
+        return res
+
+    @classmethod
+    def write(cls, *args):
+        super().write(*args)
+        cls._instance_from_code_cache.clear()
+
+    @classmethod
+    def delete(cls, instances):
+        super().delete(instances)
+        cls._instance_from_code_cache.clear()
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        return self.code if self.code else coog_string.slugify(self.name)
+
+    @classmethod
+    def get_instance_from_code(cls, code):
+        cached = cls._instance_from_code_cache.get(None, -1)
+        if cached != -1:
+            return cls(cached[code])
+        cache = {x.code: x.id for x in cls.search([])}
+        cls._instance_from_code_cache.set(None, cache)
+        return cls(cache[code])
+
+
+class IconMixin(Model):
+    '''
+        Mixin class to add an icon (and the associated function field) on a
+        model
+    '''
+    icon = fields.Many2One('ir.ui.icon', 'Icon', ondelete='RESTRICT',
+        help='This icon will be used to quickly identify the questionnaire')
+    icon_name = fields.Function(
+        fields.Char('Icon Name', help="Shortcut to the icon's name"),
+        'getter_icon_name')
+
+    @fields.depends('icon')
+    def on_change_with_icon_name(self):
+        return self.icon.name if self.icon else ''
+
+    def getter_icon_name(self, name):
+        if self.icon:
+            return self.icon.name
+        return ''
+
+
+class SequenceMixin(Model):
+    '''
+        Mixin that adds a sequence for ordering
+    '''
+    sequence = fields.Integer('Sequence', required=True,
+        help='Will be used to order the records')
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._order = [('sequence', 'ASC')]
+
+    @classmethod
+    def default_sequence(cls):
+        '''
+            Adds one to the latest created sequence
+        '''
+        cursor = Transaction().connection.cursor()
+        table = cls.__table__()
+        cursor.execute(*table.select(Max(table.sequence)))
+        return (cursor.fetchone()[0] or 0) + 1

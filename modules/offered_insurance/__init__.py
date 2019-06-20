@@ -9,6 +9,7 @@ from . import batch
 from . import exclusion
 from . import extra_premium
 from . import party
+from . import api
 
 
 def register():
@@ -35,3 +36,7 @@ def register():
     Pool.register(
         party.PartyReplace,
         module='offered_insurance', type_='wizard')
+
+    Pool.register(
+        api.APIProduct,
+        module='offered_insurance', type_='model', depends=['api'])

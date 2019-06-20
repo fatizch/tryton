@@ -10,6 +10,7 @@ from . import batch
 from . import invoice
 from . import offered
 from . import test_case
+from . import api
 
 
 def register():
@@ -32,3 +33,8 @@ def register():
         invoice.Invoice,
         module='contract_insurance_health_fr', type_='model',
         depends=['contract_insurance_invoice'])
+
+    Pool.register(
+        api.APIProduct,
+        module='contract_insurance_health_fr', type_='model',
+        depends=['api'])

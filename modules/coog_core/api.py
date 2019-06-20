@@ -1,11 +1,66 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
-from trytond.model import Unique
+from trytond.model import Unique, fields as tryton_fields
 
 from trytond.modules.api import APIInputError
-from trytond.modules.coog_core import model, fields
+from trytond.modules.coog_core import model, fields, coog_string
 
+OBJECT_ID_SCHEMA = {
+    'type': 'integer',
+    'minimum': 1,
+    }
+
+OBJECT_ID_NULL_SCHEMA = {
+    'oneOf': [
+        OBJECT_ID_SCHEMA,
+        {'type': 'null'},
+        ],
+    }
+
+CODE_SCHEMA = {'type': 'string', 'minLength': 1}
+
+CODED_OBJECT_SCHEMA = {
+    'anyOf': [
+        {
+            'type': 'object',
+            'properties': {'id': OBJECT_ID_SCHEMA},
+            'additionalProperties': False,
+            },
+        {
+            'type': 'object',
+            'properties': {
+                'code': CODE_SCHEMA,
+                },
+            'additionalProperties': False,
+            },
+        ],
+    }
+
+CODED_OBJECT_ARRAY_SCHEMA = {
+    'type': 'array',
+    'items': CODED_OBJECT_SCHEMA,
+    'minItems': 1,
+    'additionalItems': False,
+    }
+
+FIELD_SCHEMA = {
+    'type': 'object',
+    'additionalProperties': False,
+    'properties': {
+        'type': {
+            'type': 'string',
+            'enum': ['string', 'date', 'email', 'phone_number', 'percentage',
+                'amount'],
+            },
+        'required': {'type': 'boolean'},
+        'label': {'type': 'string'},
+        'help': {'type': 'string'},
+        'sequence': {'type': 'integer'},
+        'name': {'type': 'string'},
+        },
+    'required': ['name', 'label', 'required', 'type'],
+    }
 
 IDENTIFIER_KINDS = [
     ('generic', 'Generic'),
@@ -13,7 +68,6 @@ IDENTIFIER_KINDS = [
     ('facebook', 'Facebook'),
     ('salesforce', 'SalesForce'),
     ]
-
 
 __all__ = [
     'APIIdentity',
@@ -167,3 +221,33 @@ class APICore(metaclass=PoolMeta):
                 'output': {'user': 2},
                 },
             ]
+
+    @classmethod
+    def _field_description(cls, model, field_name, required=False, sequence=0):
+        result = {
+            'name': field_name,
+            'required': required,
+            'sequence': sequence,
+            }
+        # Required for translations
+        Model = Pool().get(model)
+        instance = Model()
+        result['label'] = coog_string.translate_label(instance, field_name)
+        result['help'] = coog_string.translate_help(instance, field_name)
+
+        field = getattr(Model, field_name)
+        if hasattr(field, '_field'):
+            field = field._field
+        if isinstance(field, tryton_fields.Char):
+            result['type'] = 'string'
+        elif isinstance(field, tryton_fields.Integer):
+            result['type'] = 'integer'
+        elif isinstance(field, tryton_fields.Numeric):
+            result['type'] = 'numeric'
+        elif isinstance(field, tryton_fields.Boolean):
+            result['type'] = 'boolean'
+        elif isinstance(field, tryton_fields.Selection):
+            result['type'] = 'string'
+        elif isinstance(field, tryton_fields.Date):
+            result['type'] = 'date'
+        return result

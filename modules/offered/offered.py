@@ -6,7 +6,6 @@ from sql.conditionals import Coalesce
 from sql.functions import RowNumber
 
 from trytond.pool import Pool
-from trytond.model import Unique
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond import backend
@@ -41,7 +40,7 @@ SUBSCRIPTION_BEHAVIOUR = [
     ]
 
 
-class Product(model.CoogSQL, model.CoogView, Printable,
+class Product(model.CodedMixin, model.CoogView, Printable,
         with_extra_data_def('offered.product-extra_data', 'product',
             'contract'),
         with_extra_data(['product'], field_string='Offered Kind'),
@@ -51,8 +50,6 @@ class Product(model.CoogSQL, model.CoogView, Printable,
     __name__ = 'offered.product'
     _func_key = 'code'
 
-    code = fields.Char('Code', required=True)
-    name = fields.Char('Name', required=True, translate=True)
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
     start_date = fields.Date('Start Date', required=True)
@@ -102,10 +99,6 @@ class Product(model.CoogSQL, model.CoogView, Printable,
     def __setup__(cls):
         super(Product, cls).__setup__()
         cls._export_binary_fields.add('report_style_template')
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
-            ]
         cls._error_messages.update({
                 'missing_contract_extra_data': 'The following contract extra'
                 'data should be set on the product: %s',
@@ -299,7 +292,7 @@ class Product(model.CoogSQL, model.CoogView, Printable,
         return structure
 
 
-class OptionDescription(model.CoogSQL, model.CoogView,
+class OptionDescription(model.CodedMixin, model.CoogView,
         with_extra_data_def('offered.option.description-extra_data',
             'coverage', 'option'),
         with_extra_data(['product'], field_string='Offered Kind'),
@@ -309,8 +302,6 @@ class OptionDescription(model.CoogSQL, model.CoogView,
     __name__ = 'offered.option.description'
     _func_key = 'code'
 
-    code = fields.Char('Code', required=True)
-    name = fields.Char('Name', required=True, translate=True)
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
     start_date = fields.Date('Start Date', required=True)
@@ -361,11 +352,7 @@ class OptionDescription(model.CoogSQL, model.CoogView,
     @classmethod
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
-        t = cls.__table__()
         cls._order = [('sequence', 'ASC NULLS LAST')]
-        cls._sql_constraints += [
-            ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
-            ]
         cls.extra_data.help = 'Extra data to characterize the option. These '\
             'extra data are available in rule engine.'
         cls.extra_data_def.help = 'List of extra data that will be requested '\
@@ -498,10 +485,6 @@ class OptionDescription(model.CoogSQL, model.CoogView,
     @fields.depends('currency')
     def on_change_with_currency_symbol(self, name=None):
         return self.currency.symbol if self.currency else ''
-
-    @fields.depends('code', 'name')
-    def on_change_with_code(self):
-        return self.code if self.code else coog_string.slugify(self.name)
 
     def init_dict_for_rule_engine(self, args):
         args['coverage'] = self

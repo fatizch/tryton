@@ -6,6 +6,7 @@ from . import offered
 from . import contract
 from . import rule_engine
 from . import party
+from . import api
 
 
 def register():
@@ -22,3 +23,7 @@ def register():
     Pool.register(
         party.PartyReplace,
         module='health', type_='wizard')
+
+    Pool.register(
+        api.APIProduct,
+        module='health', type_='model', depends=['api'])

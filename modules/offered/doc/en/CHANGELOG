@@ -1,3 +1,4 @@
+* FEA#11812 Describe product API
 * FEA#11837 Add a sequence_order field on extra_data to manage their order
 * OTH#00000 Add message if extra data not found
 

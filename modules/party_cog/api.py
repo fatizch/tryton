@@ -53,3 +53,80 @@ class APICore(metaclass=PoolMeta):
                 'output': {'user': 3, 'party': 20},
                 })
         return examples
+
+    @classmethod
+    def _person_description(cls, **kwargs):
+        result = [
+            cls._field_description('party.party', 'name',
+                required=True, sequence=0),
+            cls._field_description('party.party', 'first_name',
+                required=True, sequence=10),
+            ]
+        if kwargs.get('with_birth_date', False):
+            result.append(cls._field_description(
+                    'party.party', 'birth_date',
+                    required=kwargs.get('with_birth_date_required', False),
+                    sequence=20))
+        if kwargs.get('with_email', False):
+            result.append(cls._field_description(
+                    'party.party', 'email',
+                    required=kwargs.get('with_email_required', False),
+                    sequence=30))
+            result[-1]['type'] = 'email'
+        if kwargs.get('with_phone', False):
+            result.append(cls._field_description(
+                    'party.party', 'phone_number',
+                    required=kwargs.get('with_phone_required', False),
+                    sequence=40))
+            result[-1]['type'] = 'phone'
+        return result
+
+    @classmethod
+    def _company_description(cls, **kwargs):
+        result = [
+            cls._field_description('party.party', 'name',
+                required=True, sequence=0),
+            ]
+        if kwargs.get('with_email', False):
+            result.append(cls._field_description(
+                    'party.party', 'birth_date',
+                    required=kwargs.get('with_email_required', False),
+                    sequence=30))
+            result[-1]['type'] = 'email'
+        if kwargs.get('with_phone', False):
+            result.append(cls._field_description(
+                    'party.party', 'birth_date',
+                    required=kwargs.get('with_phone_required', False),
+                    sequence=40))
+            result[-1]['type'] = 'phone'
+        return result
+
+    @classmethod
+    def _party_description(cls, **kwargs):
+        result = cls._person_description(**kwargs)
+        result.append(cls._field_description('party.party',
+                'is_person', required=True, sequence=-10))
+        for elem in result:
+            if elem['name'] in cls._person_only_fields():
+                elem['conditions'] = [
+                    {'name': 'is_person', 'operator': '=', 'value': True}]
+            if elem['name'] in cls._company_only_fields():
+                elem['conditions'] = [
+                    {'name': 'is_person', 'operator': '=', 'value': False}]
+        return result
+
+    @classmethod
+    def _person_only_fields(cls):
+        '''
+            The list of fields that will only be displayed if the party is a
+            person
+        '''
+        return ['birth_date', 'first_name']
+
+    @classmethod
+    def _company_only_fields(cls):
+        '''
+            The list of fields that will only be displayed if the party is not
+            a person
+        '''
+        return []

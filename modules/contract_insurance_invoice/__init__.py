@@ -15,6 +15,7 @@ from . import bank
 from . import configuration
 from . import payment
 from . import wizard
+from . import api
 
 
 def register():
@@ -91,3 +92,8 @@ def register():
         batch.RenewContracts,
         module='contract_insurance_invoice', type_='model',
         depends=['contract_term_renewal'])
+
+    Pool.register(
+        api.APIProduct,
+        module='contract_insurance_invoice', type_='model',
+        depends=['api'])

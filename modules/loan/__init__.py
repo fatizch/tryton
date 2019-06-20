@@ -9,6 +9,7 @@ from . import party
 from . import wizard
 from . import extra_data
 from . import commission
+from . import api
 
 from trytond.modules.coog_core import model
 LoanShareTreeExpansion = model.expand_tree('loan.share')
@@ -55,3 +56,7 @@ def register():
         contract.DisplayContractPremium,
         module='loan', type_='wizard',
         depends=['premium'])
+
+    Pool.register(
+        api.APIProduct,
+        module='loan', type_='model', depends=['api'])

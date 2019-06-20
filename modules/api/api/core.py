@@ -88,7 +88,7 @@ def apify(klass, api_name):
             with ServerContext().set_context(_api_context=context):
                 try:
                     klass._check_access(api_name, parameters)
-                    klass._check_input(api_name, parameters)
+                    parameters = klass._check_input(api_name, parameters)
                     result = function(parameters)
                     return Api.handle_result(
                         klass, api_name, parameters, result)
@@ -375,7 +375,7 @@ class APIModel(Model):
             try:
                 klass._apis[api_name]['compiled_output_schema'](result)
             except fastjsonschema.exceptions.JsonSchemaException as e:
-                api_logger.warning('%s.%s:Invalid output:%s' %
+                api_logger.error('%s.%s:Invalid output:%s' %
                     (klass.__name__, api_name, e.message))
         return result
 
@@ -486,6 +486,7 @@ class APIMixin(Model):
                                 'description': 'Count should be positive',
                                 },
                             }]
+
         - _my_api_examples: Returns a list of examples that will be provided in
           the api description, and tested against the input / output schemas.
           If None is provided, it is assumed the API takes no parameters (an
@@ -556,7 +557,7 @@ class APIMixin(Model):
 
     @classmethod
     def _check_input(cls, api_name, parameters):
-        Pool().get('api').check_input(cls, api_name, parameters)
+        return Pool().get('api').check_input(cls, api_name, parameters)
 
 
 class APICore(APIMixin):

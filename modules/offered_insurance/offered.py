@@ -75,7 +75,8 @@ class Product(metaclass=PoolMeta):
         return list(res)
 
 
-class ItemDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
+class ItemDescription(model.CodedMixin, model.CoogView,
+        with_extra_data_def(
             'offered.item.description-extra_data', 'item_desc',
             'covered_element'), model.TaggedMixin):
     'Item Description'
@@ -83,8 +84,6 @@ class ItemDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
     __name__ = 'offered.item.description'
     _func_key = 'code'
 
-    code = fields.Char('Code', required=True)
-    name = fields.Char('Name', translate=True)
     kind = fields.Selection([
             ('', ''),
             ('party', 'Party'),
@@ -141,13 +140,6 @@ class ItemDescription(model.CoogSQL, model.CoogView, with_extra_data_def(
         default = {} if default is None else default.copy()
         default.setdefault('coverages', None)
         return super(ItemDescription, cls).copy(items, default=default)
-
-    @fields.depends('name', 'code')
-    def on_change_with_code(self):
-        if self.code:
-            return self.code
-        elif self.name:
-            return coog_string.slugify(self.name)
 
     @classmethod
     def _export_skips(cls):
