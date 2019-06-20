@@ -346,7 +346,7 @@ class SubmitPersonPrestIjSubscription(BaseSelectPrestIj):
                 if (end_deductible and
                         treatment_date > end_deductible and
                         (not service.loss.end_date or
-                            service.loss.end_date > treatment_date)):
+                            service.loss.end_date > end_deductible)):
                     yield (object_id, )
             else:
                 yield (object_id, )

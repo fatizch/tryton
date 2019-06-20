@@ -1,3 +1,4 @@
+* BUG#11890 Fix conditions of automatic subscription when there is deductible period
 * BUG#11917 Fix display of subscriptions where there is only one (regression from 11724 )
 * BUG#11724 Fix display of person subscriptions when there are serveral subscriptions
 * BUG#11799 Fix subscription creation batch for person who already has a subscription for an other siren 

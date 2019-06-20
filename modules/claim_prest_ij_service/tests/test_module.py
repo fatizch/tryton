@@ -2,6 +2,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import unittest
+import mock
 from lxml.etree import XMLSyntaxError
 
 import trytond.tests.test_tryton
@@ -37,7 +38,30 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'SubscriptionBatch': 'prest_ij.subscription.create',
             'SubmitPersonPrestIjSubscription':
             'prest_ij.subscription.submit_person',
+            'RequestGroup': 'claim.ij.subscription_request.group',
             }
+
+    def run_subscription_batch(self):
+        SubscriptionBatch = self.SubscriptionBatch
+        treatment_date = datetime.date.today()
+        ids = SubscriptionBatch.select_ids(
+            treatment_date=treatment_date,
+            kind='person')
+        SubscriptionBatch.execute(ids, ids, treatment_date,
+            kind='person')
+        return ids
+
+    def run_submit_person_batch(self, operation='cre'):
+        SubmitPerson = \
+            self.SubmitPersonPrestIjSubscription
+        treatment_date = datetime.date.today()
+        ids = SubmitPerson.select_ids(
+            treatment_date=treatment_date, operation=operation)
+        objects = \
+            list(SubmitPerson.convert_to_instances(ids))
+        SubmitPerson.execute(objects,
+            ids, treatment_date, operation=operation)
+        return ids
 
     def test0001_test_gesti_templates(self):
         n = datetime.datetime.utcnow()
@@ -101,7 +125,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     @test_framework.prepare_test(
         'offered_insurance.test0010Coverage_creation',
         )
-    def test0001_test_create_ij_subscription_batch(self):
+    def test0002_test_create_ij_subscription_batch(self):
         birth_date = datetime.date(1980, 1, 1)
         person_a = self.Party(name='person_a', first_name='a',
             is_person=True, birth_date=birth_date, gender='male',
@@ -164,7 +188,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
             return contract
 
-        first_contract = create_contract(big_company_a, person_a)
+        create_contract(big_company_a, person_a)
 
         subscription_big_a = self.Subscription(siren=siren_a,
             state='declaration_confirmed', activated=True,
@@ -172,23 +196,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
         subscription_big_a.save()
         assert bool(subscription_big_a.activated) is True
 
-        def run_subscription_batch():
-            SubscriptionBatch = self.SubscriptionBatch
-            treatment_date = datetime.date.today()
-            ids = SubscriptionBatch.select_ids(
-                treatment_date=treatment_date,
-                kind='person')
-            SubscriptionBatch.execute(ids, ids, treatment_date,
-                kind='person')
-            return ids
-
-        run_subscription_batch()
+        self.run_subscription_batch()
 
         person_a_sub, = self.Subscription.search([
             ('ssn', '=', person_a.ssn),
             ('siren', '=', siren_a)])
 
-        run_subscription_batch()
+        self.run_subscription_batch()
         person_a_sub, = self.Subscription.search([
             ('ssn', '=', person_a.ssn),
             ('siren', '=', siren_a)])
@@ -203,36 +217,29 @@ class ModuleTestCase(test_framework.CoogTestCase):
         all_ = self.Subscription.search([])
         assert len(all_) == 3
         assert bool(subscription_big_b.activated) is True
-        run_subscription_batch()
+        self.run_subscription_batch()
         person_a_sub_big_b, = self.Subscription.search([
             ('ssn', '=', person_a.ssn),
             ('siren', '=', siren_b)])
 
         all_ = self.Subscription.search([])
         assert len(all_) == 4
-        run_subscription_batch()
+        self.run_subscription_batch()
         all_ = self.Subscription.search([])
         assert len(all_) == 4
-
-        def run_submit_person_batch(operation='cre'):
-            SubmitPerson = \
-                self.SubmitPersonPrestIjSubscription
-            treatment_date = datetime.date.today()
-            ids = SubmitPerson.select_ids(
-                treatment_date=treatment_date, operation=operation)
-            objects = \
-                list(SubmitPerson.convert_to_instances(ids))
-            SubmitPerson.execute(objects,
-                ids, treatment_date, operation=operation)
-            return ids
 
         person_a_sub.state = 'declaration_confirmed'
         person_a_sub.save()
 
-        Request = self.Request
-        run_submit_person_batch(operation='sup')
-        requests = Request.search([])
-        assert len(requests) == 0
+    @test_framework.prepare_test(
+        'claim_prest_ij_service.test0002_test_create_ij_subscription_batch',
+        )
+    def test0003_test_create_benefit(self):
+        product, = self.Product.search([
+                ('code', '=', 'AAA'),
+                ])
+        contract_big_a, = self.Contract.search([
+                ('subscriber.name', '=', 'Big A')])
 
         invalidity_reason = self.ClaimClosingReason()
         invalidity_reason.code = 'invalidity'
@@ -252,7 +259,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         insurer = self.Insurer.search([])[0]
         benefit = self.Benefit()
         benefit.code = 'std'
-        benefit.name = 'Capital Décès'
+        benefit.name = 'std'
         benefit.start_date = product.start_date
         benefit.insurer = insurer
         benefit.company = product.company
@@ -261,29 +268,142 @@ class ModuleTestCase(test_framework.CoogTestCase):
         benefit.prest_ij = True
         benefit.save()
 
+    @test_framework.prepare_test(
+        'claim_prest_ij_service.test0003_test_create_benefit',
+        )
+    def test0004_test_submit_person(self):
+        person_a, = self.Party.search([('first_name', '=', 'a')])
+        benefit, = self.Benefit.search([])
+        std, = self.LossDesc.search([])
+        invalidity_reason, = self.ClaimClosingReason.search([])
+        contract_big_a, = self.Contract.search([
+                ('subscriber.name', '=', 'Big A')])
+        Request = self.Request
+
         claim = self.Claim()
         claim.claimant = person_a
         claim.save()
-        loss = self.Loss()
-        loss.loss_desc = std
-        loss.claim = claim
-        loss.end_date = coog_date.add_month(
-            datetime.date.today(), -3)
-        loss.closing_reason = invalidity_reason
-        loss.covered_person = person_a
-        loss.save()
-        service = self.Service()
-        service.loss = loss
-        service.contract = first_contract
-        service.benefit = benefit
-        service.save()
 
-        run_submit_person_batch(operation='sup')
-        request, = Request.search([])
-        assert request.operation == 'sup'
+        def patch(f):
+            def decorated(**kwargs):
+                RequestGroup = self.RequestGroup
+                Service = self.Service
+                with mock.patch.object(RequestGroup, 'generate_identification'
+                        ) as gen_id_patched, \
+                        mock.patch.object(Service, 'deductible_end_date',
+                            new_callable=mock.PropertyMock
+                            ) as deduc_end_patched:
+                    gen_id_patched.return_value = '123'
+                    deduc_end_patched.return_value = kwargs.get(
+                        'deductible_end_date', None)
+                    return f(**kwargs)
+            return decorated
 
-        run_submit_person_batch(operation='sup')
-        request, = Request.search([])
+        @patch
+        def test_loss_case(
+                start_date,
+                end_date,
+                deductible_end_date,
+                operation,
+                should_create):
+            self.run_submit_person_batch(operation='sup')
+            requests = Request.search([])
+            assert len(requests) == 0
+            self.run_submit_person_batch(operation='cre')
+            requests = Request.search([])
+            assert len(requests) == 0
+            loss = self.Loss()
+            loss.loss_desc = std
+            loss.covered_person = person_a
+            loss.claim = claim
+
+            loss.start_date = start_date
+            loss.end_date = end_date
+            if end_date:
+                loss.closing_reason = invalidity_reason
+            loss.save()
+
+            service = self.Service()
+            service.loss = loss
+            service.contract = contract_big_a
+            service.benefit = benefit
+            service.save()
+
+            def validate():
+                requests = Request.search([])
+                if should_create:
+                    request, = requests
+                    assert request.operation == operation
+                else:
+                    assert len(requests) == 0
+
+            self.run_submit_person_batch(operation=operation)
+            validate()
+            self.run_submit_person_batch(operation=operation)
+            validate()
+
+            self.Loss.delete([loss])
+            self.Service.delete([service])
+            Request.delete(Request.search([]))
+
+        three_months_ago = coog_date.add_month(datetime.date.today(), -3)
+        test_loss_case(
+            start_date=None,
+            end_date=three_months_ago,
+            deductible_end_date=None,
+            operation='sup',
+            should_create=True)
+
+        person_a_sub, = self.Subscription.search([
+            ('ssn', '=', person_a.ssn),
+            ('siren', '=', contract_big_a.subscriber.siren)])
+        person_a_sub.state = 'undeclared'
+        person_a_sub.save()
+
+        yesterday = coog_date.add_day(datetime.date.today(), -1)
+        test_loss_case(
+            start_date=yesterday,
+            end_date=datetime.date.today(),
+            deductible_end_date=None,
+            operation='cre',
+            should_create=True)
+
+        two_days_ago = coog_date.add_day(datetime.date.today(), -2)
+        test_loss_case(
+            start_date=two_days_ago,
+            end_date=yesterday,
+            deductible_end_date=None,
+            operation='cre',
+            should_create=True)
+
+        test_loss_case(
+            start_date=yesterday,
+            end_date=None,
+            deductible_end_date=yesterday,
+            operation='cre',
+            should_create=True)
+
+        tomorrow = coog_date.add_day(datetime.date.today(), 1)
+        test_loss_case(
+            start_date=yesterday,
+            end_date=None,
+            deductible_end_date=tomorrow,
+            operation='cre',
+            should_create=False)
+
+        test_loss_case(
+            start_date=yesterday,
+            end_date=tomorrow,
+            deductible_end_date=tomorrow,
+            operation='cre',
+            should_create=False)
+
+        test_loss_case(
+            start_date=yesterday,
+            end_date=tomorrow,
+            deductible_end_date=yesterday,
+            operation='cre',
+            should_create=True)
 
 
 def suite():
