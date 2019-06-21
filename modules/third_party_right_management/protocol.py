@@ -12,7 +12,7 @@ from trytond.server_context import ServerContext
 from trytond.transaction import Transaction
 from trytond.wizard import Button, StateView, StateTransition
 
-from trytond.modules.coog_core import model, fields
+from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 
@@ -50,6 +50,12 @@ class Protocol(model.CoogView, model.CoogSQL, get_rule_mixin('rule', "Rule")):
             ('code_unique', Unique(table, table.code),
                 "The code must be unique"),
             ]
+
+    @fields.depends('name', 'code')
+    def on_change_with_code(self):
+        if not self.code:
+            return coog_string.slugify(self.name)
+        return self.code
 
     @property
     def watched_codes(self):

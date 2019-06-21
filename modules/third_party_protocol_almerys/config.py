@@ -21,6 +21,7 @@ class AlmerysConfig(
         ModelSingleton, model.CoogSQL, model.CoogView, CompanyMultiValueMixin):
     "Almerys Configuration"
     __name__ = 'third_party_protocol.almerys.configuration'
+    _table = 'tpp_almerys_configuration'
 
     customer_number = fields.MultiValue(customer_number)
     customer_label = fields.MultiValue(customer_label)
@@ -31,6 +32,7 @@ class AlmerysConfig(
 class ConfigurationNumberSequenceV3(model.CoogSQL, CompanyValueMixin):
     "Almerys Configuration - Number Sequence V3"
     __name__ = 'third_party_protocol.almerys.configuration.number_sequence_v3'
+    _table = 'tpp_almerys_configuration_number_sequence_v3'
 
     number_sequence_v3 = number_sequence_v3
 
@@ -38,6 +40,7 @@ class ConfigurationNumberSequenceV3(model.CoogSQL, CompanyValueMixin):
 class ConfigurationProtocolVersion(model.CoogSQL, CompanyValueMixin):
     "Almerys Configuration - Protocol Version"
     __name__ = 'third_party_protocol.almerys.configuration.protocol_version'
+    _table = 'tpp_almerys_configuration_protocol_version'
 
     protocol_version = protocol_version
 
@@ -45,6 +48,7 @@ class ConfigurationProtocolVersion(model.CoogSQL, CompanyValueMixin):
 class ConfigurationCustomerNumber(model.CoogSQL, CompanyValueMixin):
     "Almerys Configuration - Customer Number"
     __name__ = 'third_party_protocol.almerys.configuration.customer_number'
+    _table = 'tpp_almerys_configuration_customer_number'
 
     customer_number = customer_number
 
@@ -52,5 +56,6 @@ class ConfigurationCustomerNumber(model.CoogSQL, CompanyValueMixin):
 class ConfigurationCustomerLabel(model.CoogSQL, CompanyValueMixin):
     "Almerys Configuration - Customer Label"
     __name__ = 'third_party_protocol.almerys.configuration.customer_label'
+    _table = 'tpp_almerys_configuration_customer_label'
 
     customer_label = customer_label

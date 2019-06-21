@@ -26,13 +26,13 @@ this repository contains the full copyright notices and license terms. -->
         <record model="extra_details.configuration.line" id="third_party_protocol_almerys_reference_produit">
             <field name="configuration" ref="third_party_right_management.third_party_procotol_extra_details_configuration"/>
             <field name="string">Référence Produit</field>
-            <field name="name">third_party_protocol_almerys_reference_produit"</field>
+            <field name="name">third_party_protocol_almerys_reference_produit</field>
             <field name="type_">char</field>
         </record>
         <record model="extra_details.configuration.line" id="third_party_protocol_almerys_code_mouvement_carte">
             <field name="configuration" ref="third_party_right_management.third_party_procotol_extra_details_configuration"/>
             <field name="string">Code Mouvement Carte</field>
-            <field name="name">third_party_protocol_almerys_code_mouvement_carte"</field>
+            <field name="name">third_party_protocol_almerys_code_mouvement_carte</field>
             <field name="type_">selection</field>
             <field name="selection">CA:CA
 CC:CC
