@@ -1,3 +1,4 @@
+* FEA#11832 Identifier au niveau du tiers le compte bancaire à utiliser pour les remboursements de prestations
 * BUG#11471 Correction du Method Resolution Order de l'objet claim
 
 Version 2.4 - 2019-04-12

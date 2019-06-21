@@ -786,8 +786,13 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             [('forced_base_amount', '>=', 0)]],
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
         depends=['currency_digits'], readonly=True)
+    journal_process_method = fields.Function(
+        fields.Char('Journal Process Method'),
+        'getter_journal_process_method')
     bank_account = fields.Function(
         fields.Many2One('bank.account', 'Bank Account',
+            states={'invisible': Eval('journal_process_method') != 'sepa'},
+            depends=['journal_process_method'],
             help='The bank account that will be used in case of a transfer'),
         'getter_bank_account')
 
@@ -898,6 +903,9 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
 
     def getter_has_end_date(self, name):
         return self.kind != 'capital'
+
+    def getter_journal_process_method(self, name):
+        return self.journal.process_method
 
     @classmethod
     def _get_skip_set_readonly_fields(cls):
@@ -1203,7 +1211,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
             account = self.service.contract.get_claim_bank_account_at_date(
                 at_date=date)
             return account.id if account else None
-        return self.beneficiary.get_bank_account(at_date=date)
+        return self.beneficiary.claim_bank_account.id if self.beneficiary \
+            and self.beneficiary.claim_bank_account else None
 
     def update_amounts(self):
         if not self.product:

@@ -58,11 +58,16 @@ class Contract(metaclass=PoolMeta):
                 values['claim_bank_account'][contract.id] = bank_account.id
         return values
 
+    def get_claim_bank_account(self, at_date=None):
+        if self.subscriber.forced_claim_bank_account:
+            return self.subscriber.forced_claim_bank_account
+        return self.subscriber.get_bank_account(at_date=at_date)
+
     def _get_default_claim_bank_account(self, at_date=None):
         if not self.subscriber:
             return None
         at_date = at_date or utils.today()
-        return self.subscriber.get_bank_account(at_date=at_date)
+        return self.get_claim_bank_account(at_date=at_date)
 
     def getter_claims_paid_to_subscriber(self, name):
         return self.product.indemnifications_paid_to_subscriber()

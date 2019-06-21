@@ -1,3 +1,4 @@
+* FEA#11832 Use an identifier at the bank account for refund of benefits
 * BUG#11471 Fix Method Resolution Order of the object Claim
 
 Version 2.4 - 2019-04-12

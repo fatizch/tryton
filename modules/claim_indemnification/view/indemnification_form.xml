@@ -10,6 +10,8 @@ this repository contains the full copyright notices and license terms. -->
     <field name="beneficiary"/>
     <label name="journal"/>
     <field name="journal"/>
+    <label name="bank_account"/>
+    <field name="bank_account"/>
     <group id="left" colspan="2" col="2">
         <field name="note" colspan="2"/>
         <label name="start_date"/>

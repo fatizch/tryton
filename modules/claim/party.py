@@ -1,10 +1,11 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import copy
+import datetime
 from sql.aggregate import Max
 from sql import Literal
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import PYSONEncoder
+from trytond.pyson import PYSONEncoder, Eval
 from trytond.wizard import Wizard
 
 from trytond.modules.coog_core import model, fields, coog_string
@@ -28,6 +29,15 @@ class Party(metaclass=PoolMeta):
     last_claim = fields.Function(
         fields.Many2One('claim', 'Last Claim'),
         'get_last_claim_id')
+    forced_claim_bank_account = fields.Many2One('bank.account',
+        'Forced Claim Bank Account', ondelete='SET NULL')
+    claim_bank_account = fields.Function(
+        fields.Many2One('bank.account', 'Claim Bank account',
+            domain=[('owners', '=', Eval('id'))],
+            depends=['id'], help="By default, the first valid account on"
+            " the contract. Can be forced manually. If nothing selected "
+            "it will take the default one"),
+        'getter_claim_bank_account', setter='setter_void')
 
     @classmethod
     def _export_light(cls):
@@ -46,6 +56,17 @@ class Party(metaclass=PoolMeta):
         res[coog_string.translate_label(self, 'claims')] = [
             x.get_gdpr_data() for x in self.claims]
         return res
+
+    def getter_claim_bank_account(self, name):
+        if self.forced_claim_bank_account:
+            return self.forced_claim_bank_account.id
+        bank_account = self.get_bank_account(datetime.date.today())
+        return bank_account.id if bank_account else None
+
+    @fields.depends('claim_bank_account')
+    def on_change_with_forced_claim_bank_account(self):
+        if self.claim_bank_account:
+            return self.claim_bank_account.id
 
 
 class Insurer(metaclass=PoolMeta):
