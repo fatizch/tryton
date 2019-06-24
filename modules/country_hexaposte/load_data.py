@@ -16,6 +16,21 @@ __all__ = [
     'HexaPostSetWizard',
     ]
 
+mapping_fr_subdivision = {
+    'GP': ['970', '971'],  # Guadeloupe
+    'MQ': ['972'],  # Martinique
+    'GF': ['973'],  # Guyanne
+    'RE': ['974', '977', '978', ],  # Réunion
+    'PM': ['975'],  # St Pierre et Miquelon
+    'YT': ['976'],  # Mayotte
+    'TF': ['984'],  # Terres australes française
+    'WF': ['986'],  # Wallis et Futuna
+    'PF': ['987'],  # Polynésie Française
+    'NC': ['988'],  # Nouvelle calédonie
+    '2A': ['201', '200', '203', '205', '207', '209'],  # Corse du sud
+    '2B': ['202', '206', '204'],  # Haute corse
+    }
+
 
 class HexaPostSet(model.CoogView):
     'HexaPost Loader '
@@ -30,6 +45,13 @@ class HexaPostSet(model.CoogView):
             'readonly': True,
             'invisible': True,
             })
+
+    @classmethod
+    def __setup__(cls):
+        super(HexaPostSet, cls).__setup__()
+        cls._error_messages.update({
+                'cant_find_subdivision': "Can't find subdivision for %s"
+                })
 
     @staticmethod
     def default_data_file():
@@ -78,8 +100,9 @@ class HexaPostLoader(object):
 
     @classmethod
     def get_hexa_post_updates(cls, hexa_data):
-        Country = Pool().get('country.country')
-        Zip = Pool().get('country.zip')
+        pool = Pool()
+        Country = pool.get('country.country')
+        Zip = pool.get('country.zip')
 
         france = Country.search([('code', '=', 'FR')])[0]
 
@@ -117,6 +140,23 @@ class HexaPostLoader(object):
 
     @classmethod
     def convert_hexa_data_to_coog_data(cls, data):
+        pool = Pool()
+        SubDivision = pool.get('country.subdivision')
+        Country = pool.get('country.country')
+        UpdateCreationView = pool.get('country.hexapost.set')
+
+        france = Country.search([('code', '=', 'FR')])[0]
+
+        subdivisions = SubDivision.search([('country', '=', france.id)])
+        subdivisions_cache = {}
+        for division in subdivisions:
+            # First 3 characters are FR_
+            if division.code[3:] in mapping_fr_subdivision:
+                for code in mapping_fr_subdivision[division.code[3:]]:
+                    subdivisions_cache[code] = division
+            else:
+                subdivisions_cache[division.code[3:]] = division
+
         translation = {
             'delivery_wording': 'city',
             'post_code': 'zip',
@@ -131,6 +171,16 @@ class HexaPostLoader(object):
             new_line = {}
             for k, v in translation.items():
                 new_line[v] = line[k]
+            if line['post_code'][:2] in subdivisions_cache:
+                new_line['subdivision'] = subdivisions_cache[
+                    line['post_code'][:2]]
+            elif line['post_code'][:3] in subdivisions_cache:
+                new_line['subdivision'] = subdivisions_cache[
+                    line['post_code'][:3]]
+            elif line['post_code'][:2] not in ('00', '98'):
+                UpdateCreationView.raise_user_error('cant_find_subdivision',
+                    line['post_code'])
+
             res.append(new_line)
         return res
 

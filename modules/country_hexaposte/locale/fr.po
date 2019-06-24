@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:country.hexapost.set:"
+msgid "Can't find subdivision for %s"
+msgstr "Impossible de trouver le département pour %s"
+
 msgctxt "field:country.hexapost.set,data_file:"
 msgid "Default data file"
 msgstr "Fichier de données par défaut"
@@ -18,13 +22,13 @@ msgctxt "field:country.hexapost.set,use_default:"
 msgid "Use default file"
 msgstr "Utiliser le fichier par défaut"
 
-msgctxt "field:country.zip,insee_code:"
-msgid "Insee Code"
-msgstr "Code Insee"
-
 msgctxt "field:country.zip,hexa_post_id:"
 msgid "Hexa Post Id"
 msgstr "Identifiant hexaposte"
+
+msgctxt "field:country.zip,insee_code:"
+msgid "Insee Code"
+msgstr "Code Insee"
 
 msgctxt "field:country.zipcode.update_from_hexapost,id:"
 msgid "ID"
@@ -61,4 +65,3 @@ msgstr "Annuler"
 msgctxt "wizard_button:country.hexapost.set.wizard,configuration,set_:"
 msgid "Set"
 msgstr "Mise à jour"
-

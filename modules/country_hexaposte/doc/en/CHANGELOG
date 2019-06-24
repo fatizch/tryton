@@ -1,3 +1,4 @@
+* FEA#11926 Initialize zipcode subdivision when integrating hexapost zipcode
 * OTH#00000 Fix missing return in zip code get_rec_name
 * OTH#00000 Fix zip uniqueness and zip update via wizard
 * FEA#11654 Save insee code in zip code when integrating hexapost format
