@@ -8,23 +8,11 @@ _coog_server_file() {
 coog_server_clearcache() { # clear redis cache
         coog_redis_exec cache flushdb &> /dev/null
         [ $? -eq 0 ] && echo redis cache cleared
-        find "$COOG_ROOT" -name "*.pyc" -delete 2> /dev/null
-        [ $? -eq 0 ] && echo pyc files cleared
         for repo in $(coog_repo_main)
         do
             [ -d "COOG_ROOT/$repo/modules" ] \
                 && find "$COOG_ROOT/$repo/modules" -type d -empty -delete
         done
-}
-
-coog_server_launch() { # launch - [trytond args]
-        local args
-        [ ! -z "$DB_NAME" ] && args="$args -d $DB_NAME"
-        [ ! -z "$COOG_CONF_LOG" ] && args="$args --logconf $COOG_CONF_LOG"
-        args="$args $*"
-        coog_server_clearcache
-        trytond -c "$COOG_CONF_SRV" $args &
-        echo "$!" > "$COOG_TMP/$COOG_FILE_WATCH"
 }
 
 coog_server_debug() { # launch in pdb - [trytond args]
@@ -41,7 +29,12 @@ coog_server_start() { # start - [trytond args]
         local pid; pid=$(coog_env_pid "$pid_file" 2> /dev/null) &&
                 >&2 echo "already running" && return 1
         coog_env_bak "$out_file" "$pid" || return $?
-        "$COOG_BIN/watch" "$COOG_TRYTOND" coog server launch &> "$out_file" &
+        local args
+        [ ! -z "$DB_NAME" ] && args="$args -d $DB_NAME"
+        [ ! -z "$COOG_CONF_LOG" ] && args="$args --logconf $COOG_CONF_LOG"
+        args="$args $*"
+        coog_server_clearcache
+        trytond -c "$COOG_CONF_SRV" $args --dev &> "$out_file" &
         echo "$!" > "$pid_file"
         echo server started
 }
@@ -66,9 +59,8 @@ coog_server_restart() { # kill + start - [trytond args]
 
 coog_server_pid() { # get pid
         local pid_file; pid_file=$(_coog_server_file pid)
-        local pid1; pid1=$(coog_env_pid "$pid_file") || return $?
-        local pid2; pid2=$(cat "$COOG_TMP/$COOG_FILE_WATCH")
-        echo "$pid1" "$pid2"
+        local pid; pid=$(coog_env_pid "$pid_file") || return $?
+        echo "$pid"
 }
 
 coog_server_log() { # less logs - [less args]

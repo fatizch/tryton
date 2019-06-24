@@ -16,7 +16,6 @@ _coog_env_files() { # set file names
     COOG_FILE_CEL="coog-cel-$USER"
     COOG_FILE_BAT="coog-bat-$USER"
     COOG_FILE_TEST="coog-test-$USER"
-    COOG_FILE_WATCH="coog-watch-$USER"
     if [ ! -z "$VIRTUAL_ENV" ]
     then
         local venv
@@ -30,7 +29,6 @@ _coog_env_files() { # set file names
         COOG_FILE_CEL=$COOG_FILE_CEL-$venv
         COOG_FILE_BAT=$COOG_FILE_BAT-$venv
         COOG_FILE_TEST=$COOG_FILE_TEST-$venv
-        COOG_FILE_WATCH=$COOG_FILE_WATCH-$venv
     else
         echo warn: running outside a virtual env
     fi
@@ -143,7 +141,6 @@ _coog_env_server() { # set server vars
     TRYTOND_SERVER_PORT=$(python "$COOG_BIN/parse-config.py" web listen < "$COOG_CONF_SRV" | sed -e "s/.*://" 2> /dev/null)
     [ ! -z "$TRYTOND_SERVER_NAME" ] && export TRYTOND_SERVER_NAME
     [ ! -z "$TRYTOND_SERVER_PORT" ] && export TRYTOND_SERVER_PORT
-    export COOG_FILE_WATCH
     export COOG_TMP
     return 0
 }
@@ -232,7 +229,6 @@ coog_env_main() { # print meaningful vars for coog execution
     echo "    TRYTOND_BATCH_CONFIG   $TRYTOND_BATCH_CONFIG"
     echo "    TRYTOND_SERVER_NAME    $TRYTOND_SERVER_NAME"
     echo "    TRYTOND_SERVER_PORT    $TRYTOND_SERVER_PORT"
-    echo "    COOG_FILE_WATCH        $COOG_FILE_WATCH"
     echo "    COOG_TMP               $COOG_TMP"
 }
 
