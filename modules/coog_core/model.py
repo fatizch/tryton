@@ -1088,6 +1088,17 @@ class _RevisionMixin(object):
                     values[field_name][elem[cls._parent_name]] = value
         return values
 
+    @classmethod
+    def version_at_date(cls, instance, at_date):
+        'Return the effective version at_date.'
+        'Only usable for ModelSQL instance'
+        values = cls.get_values([instance], date=at_date)
+        target_field = cls.get_reverse_field_name() or 'id'
+        if (target_field not in values or
+                instance.id not in values[target_field]):
+            return None
+        return cls(values[target_field][instance.id])
+
 
 class TaggedMixin(object):
     'Define a model with tags'

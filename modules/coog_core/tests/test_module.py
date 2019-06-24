@@ -350,6 +350,11 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 datetime.date(2015, 1, 1)),
             {'value': {parent_id: 4}, 'id': {parent_id: records[3].id}})
 
+        self.assertEqual(TestRevisionModel.version_at_date(parent,
+            datetime.date(2014, 12, 1)), records[3])
+        self.assertEqual(TestRevisionModel.version_at_date(parent,
+            datetime.date(2000, 12, 1)), records[0])
+
         TestRevisionModel.delete([records[0]])
         self.assertEqual(TestRevisionModel.get_values([parent], ['value']),
             {'value': {parent_id: None}, 'id': {parent_id: None}})

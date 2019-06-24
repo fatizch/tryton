@@ -1,3 +1,4 @@
+* OTH#00000 Ajout de la méthode get_good_version_at_date sur revisionmixin
 * BUG#11845 Ajout de la base de donnée de la transaction dans la génération de taches asynchrones
 * FEA#11661 Ajout de resources dédiées aux APIs
 * BUG#11664 Ajout de configuration sur les actions par type d'événement afin d'exécuter l'action avant le commit de la transaction
