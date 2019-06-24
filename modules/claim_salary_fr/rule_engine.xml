@@ -144,9 +144,9 @@ for period in periodes:
 
     salaire_journalier_revalorise = arrondir(salaire_journalier_base * taux_revalo, 0.01)
     if (salaire_journalier_revalorise - salaire_journalier_base) != 0.0:
-        description += u'Montant de la revalorisation: %s€\n' % (salaire_journalier_revalorise - salaire_journalier_base)
+        description += 'Montant de la revalorisation: %s€\n' % (salaire_journalier_revalorise - salaire_journalier_base)
     nb_jour = (period[1] - period[0]).days + 1
-    description += u'Montant total: %s€ * %s = %s€' % (salaire_journalier_revalorise, nb_jour,
+    description += 'Montant total: %s€ * %s = %s€' % (salaire_journalier_revalorise, nb_jour,
         nb_jour * salaire_journalier_revalorise)
     res.append({
             'start_date': period[0],
@@ -156,7 +156,7 @@ for period in periodes:
             'amount': arrondir(((period[1] - period[0]).days + 1) * salaire_journalier_revalorise, 0.01),
             'amount_per_unit': arrondir(salaire_journalier_revalorise, 0.01),
             'base_amount': arrondir(salaire_journalier_base, 0.01),
-            'description': description.encode('utf-8'),
+            'description': description,
             'date_limite': None,
             'extra_details': {
                 'montant_revalorisation': salaire_journalier_revalorise - salaire_journalier_base,

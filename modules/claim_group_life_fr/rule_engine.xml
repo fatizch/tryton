@@ -396,7 +396,7 @@ return ([{
             'amount': traitement_journalier_base * ((date_fin_periode - date_debut_periode).days + 1),
             'base_amount': traitement_journalier_base,
             'amount_per_unit': traitement_journalier_base,
-            'description': description.encode('utf-8'),
+            'description': description,
             'limit_date': None,
             'extra_details': {
                 'tranche_a': param_tranche_ta(),
@@ -988,23 +988,23 @@ if tauxTA:
     trancheTA = arrondir(tauxTA * ta / 100.0, 0.01)
     salaire_de_reference += ta
     rente_de_base += trancheTA
-    description += u'Salaire de base (TA): %s * %s = %s\n' % (tauxTA, ta, trancheTA)
+    description += 'Salaire de base (TA): %s * %s = %s\n' % (tauxTA, ta, trancheTA)
 if tauxTB:
     trancheTB = arrondir(tauxTB * tb / 100.0, 0.01)
     salaire_de_reference += tb
     rente_de_base += trancheTB
-    description += u'Salaire de base (TB): %s * %s = %s\n' % (tauxTB, tb, trancheTB)
+    description += 'Salaire de base (TB): %s * %s = %s\n' % (tauxTB, tb, trancheTB)
 if tauxTC:
     trancheTC = arrondir(tauxTC * tc / 100.0, 0.01)
     salaire_de_reference += tc
     rente_de_base += trancheTC
-    description += u'Salaire de base (TC): %s * %s = %s\n' % (tauxTC, tc, trancheTC)
+    description += 'Salaire de base (TC): %s * %s = %s\n' % (tauxTC, tc, trancheTC)
 
 salaire_de_reference = arrondir(salaire_de_reference, 0.01)
 rente_de_base = arrondir(rente_de_base, 0.01)
 
 
-description += u'Rente Securite Sociale pour la période: %s\n' % rente_SS
+description += 'Rente Securite Sociale pour la période: %s\n' % rente_SS
 
 return [{
     'trancheTA': trancheTA,
@@ -1132,7 +1132,7 @@ elif traitement_de_reference == 'salaire_net_prime':
 
 salaire_de_reference = 0 
 rente_de_base = 0
-description = u''
+description = ''
 annex_rule_code = 'coog_prestations_annexes_rente'
 trancheTA, trancheTB, trancheTC = 0, 0, 0
 date_debut_periode = date_debut_periode_indemnisation()
@@ -1140,7 +1140,7 @@ date_fin_periode = date_fin_periode_indemnisation()
 
 if not rente_SS:
     rente_de_base = 0
-    description = u'Aucune prestation a verser car la rente de la securite sociale est nulle\n'
+    description = 'Aucune prestation a verser car la rente de la securite sociale est nulle\n'
 
 pourcentage_ta_r1 = param_1_pourcentage_ta_r1()
 pourcentage_tb_r1 = param_2_pourcentage_tb_r1()
@@ -1325,7 +1325,7 @@ salaire_de_reference = param_salaire_de_reference()
 
 date_debut_periode = param_date_debut_periode()
 date_fin_periode = param_date_fin_periode()
-description = u''
+description = ''
 rente_ss = param_rente_ss()
 rente_de_base = param_rente_de_base() - rente_ss 
 description += 'Déduction de la rente SS: %s - %s = %s\n' % (param_rente_de_base(), rente_ss, rente_de_base)
@@ -1336,16 +1336,16 @@ if montant_prestations_annexes:
     montant_prestations_annexes = arrondir(montant_prestations_annexes * jours_entre(date_debut_periode,
         date_fin_periode), 0.01)
     limite = salaire_de_reference - montant_prestations_annexes - rente_ss
-    description += u'Calcul de la limite en cas de prestations annexes (%s)\n' % montant_prestations_annexes 
+    description += 'Calcul de la limite en cas de prestations annexes (%s)\n' % montant_prestations_annexes 
     description += 'Limite = %s\n' % limite
     if rente_de_base &gt; limite:
         # On verifie que la limite est positive sinon elle est egale a 0, donc elle ne peux pas etre strictement negative.
         limite = max(limite, Decimal(0))
         # On limite rente_de_base a la la valeur de la limite.
         rente_de_base = min(rente_de_base, limite)
-        description += u'Application de la limite : la nouvelle rente de base est %s\n' % rente_de_base
+        description += 'Application de la limite : la nouvelle rente de base est %s\n' % rente_de_base
     else:
-        description += u'Limite non depassée: rente de base = %s\n' % rente_de_base
+        description += 'Limite non depassée: rente de base = %s\n' % rente_de_base
 
 rente_de_base = max(rente_de_base, Decimal('0'))
 return rente_de_base, description</field>

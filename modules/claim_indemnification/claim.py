@@ -1487,10 +1487,6 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
                 cur_dict)
             details = []
             for detail in details_data:
-                if 'description' in detail and isinstance(
-                        detail['description'], bytes):
-                    detail['description'] = detail['description'].decode(
-                        'utf-8')
                 details.append(IndemnificationDetail(**detail))
             indemnification.details = details
             amount = sum([getattr(d, 'amount', 0) for d in details])
