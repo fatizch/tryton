@@ -27,3 +27,7 @@ class CountrySubdivision(export.ExportImportMixin):
     'Country Subdivision'
 
     __name__ = 'country.subdivision'
+
+    def get_rec_name(self, name):
+        res = super(CountrySubdivision, self).get_rec_name(name)
+        return res + '(%s)' % self.code
