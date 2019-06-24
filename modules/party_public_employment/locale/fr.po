@@ -70,6 +70,10 @@ msgctxt "field:party.employment.version,increased_index:"
 msgid "Increased Index"
 msgstr "Indice Majoré"
 
+msgctxt "field:party.employment.version,work_subdivision:"
+msgid "Subdivision Work Place"
+msgstr "Département de rattachement"
+
 msgctxt "field:party.public_employment_index,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -136,12 +140,16 @@ msgid "Increased public service index used to defined salary"
 msgstr ""
 "Indice majoré de la fonction publique servant de base au calcul du salaire"
 
+msgctxt "help:party.employment.version,work_subdivision:"
+msgid "Subdivision where the employee works"
+msgstr "Département du lieu de travail de l'employé"
+
 msgctxt "help:party.public_employment_index,effective_date:"
 msgid "Date used to versionned the index"
 msgstr "Date utilisée pour versionner les correspondances d'indices"
 
 msgctxt "model:ir.action,name:act_administrative_situation_sub_status"
-msgid "Sous statut de la situation administrative"
+msgid "Admin Situation Sub Status"
 msgstr "Sous statut de la situation administrative"
 
 msgctxt "model:ir.action,name:act_public_index"
@@ -149,7 +157,7 @@ msgid "Public Employment Index"
 msgstr "Indice de la fonction publique"
 
 msgctxt "model:ir.ui.menu,name:menu_configuration_admin_situation_sub_status"
-msgid "Admin Situation sub_status"
+msgid "Admin Situation Sub Status"
 msgstr "Sous statut de la situation administrative"
 
 msgctxt "model:ir.ui.menu,name:menu_configuration_public_index"

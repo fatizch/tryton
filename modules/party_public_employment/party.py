@@ -3,6 +3,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
 from trytond.pyson import Eval
+from trytond.config import config
 
 from trytond.modules.coog_core import fields, model, coog_string
 
@@ -41,6 +42,21 @@ class EmploymentVersion(metaclass=PoolMeta):
             help='Gross public service index used to defined salary',
             domain=['OR', ('gross_index', '=', None), ('gross_index', '>', 0)]),
         'on_change_with_gross_index', setter='setter_void')
+    work_country = fields.Many2One('country.country',
+        'Work Country', help='Country where the employee works',
+        ondelete='RESTRICT')
+    work_subdivision = fields.Many2One('country.subdivision',
+        'Subdivision Work Place', help='Subdivision where the employee works',
+        domain=[('country', '=', Eval('work_country'))],
+        depends=['work_country'], ondelete='RESTRICT')
+
+    @classmethod
+    def default_work_country(cls):
+        code = config.get('options', 'default_country', default='FR')
+        Country = Pool().get('country.country')
+        country = Country.search([('code', '=', code)])
+        if country:
+            return country[0].id
 
     @fields.depends('increased_index', 'date')
     def on_change_with_gross_index(self, name=None):
