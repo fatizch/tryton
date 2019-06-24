@@ -1625,6 +1625,8 @@ class CodedMixin(CoogSQL):
         'configuration. It should not be modified without checking first if '
         'it is used somewhere')
 
+    _instance_from_code_cache = {}
+
     @classmethod
     def __setup__(cls):
         super().__setup__()
@@ -1632,25 +1634,29 @@ class CodedMixin(CoogSQL):
         cls._sql_constraints += [
             ('code_uniq', Unique(t, t.code), 'The code must be unique!'),
             ]
-        if not hasattr(cls, '_instance_from_code_cache'):
-            cls._instance_from_code_cache = Cache(
+
+    @classmethod
+    def __post_setup__(cls):
+        super().__post_setup__()
+        if cls.__name__ not in cls._instance_from_code_cache:
+            cls._instance_from_code_cache[cls.__name__] = Cache(
                 'instance_from_code_%s' % cls.__name__)
 
     @classmethod
     def create(cls, vlist):
         res = super().create(vlist)
-        cls._instance_from_code_cache.clear()
+        cls._instance_from_code_cache[cls.__name__].clear()
         return res
 
     @classmethod
     def write(cls, *args):
         super().write(*args)
-        cls._instance_from_code_cache.clear()
+        cls._instance_from_code_cache[cls.__name__].clear()
 
     @classmethod
     def delete(cls, instances):
         super().delete(instances)
-        cls._instance_from_code_cache.clear()
+        cls._instance_from_code_cache[cls.__name__].clear()
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
@@ -1658,11 +1664,12 @@ class CodedMixin(CoogSQL):
 
     @classmethod
     def get_instance_from_code(cls, code):
-        cached = cls._instance_from_code_cache.get(None, -1)
+        cached = cls._instance_from_code_cache[cls.__name__].get(
+            None, -1)
         if cached != -1:
             return cls(cached[code])
         cache = {x.code: x.id for x in cls.search([])}
-        cls._instance_from_code_cache.set(None, cache)
+        cls._instance_from_code_cache[cls.__name__].set(None, cache)
         return cls(cache[code])
 
 

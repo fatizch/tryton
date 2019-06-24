@@ -458,7 +458,8 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
         Payment = Pool().get('loan.payment')
         payments = [Payment(
                 kind='releasing_funds',
-                number=0,
+                number=Decimal(0), amount=Decimal(0), begin_balance=Decimal(0),
+                principal=Decimal(0), interest=Decimal(0),
                 start_date=self.funds_release_date,
                 outstanding_balance=self.amount,
                 )]

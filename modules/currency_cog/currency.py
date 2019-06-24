@@ -4,7 +4,7 @@ from decimal import ROUND_HALF_UP
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import export, utils
+from trytond.modules.coog_core import model, export, utils
 
 from . import string_utils
 
@@ -17,9 +17,8 @@ __all__ = [
 DEF_CUR_DIG = 2
 
 
-class Currency(export.ExportImportMixin):
+class Currency(model.CodedMixin):
     __name__ = 'currency.currency'
-    _func_key = 'code'
 
     @classmethod
     def __setup__(cls):

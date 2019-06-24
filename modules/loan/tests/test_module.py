@@ -30,6 +30,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'AccountKind': 'account.account.type',
             'Address': 'party.address',
             'Contract': 'contract',
+            'ContractAPI': 'api.contract',
             'Country': 'country.country',
             'Coverage': 'offered.option.description',
             'CoveredElement': 'contract.covered_element',
@@ -897,6 +898,15 @@ class ModuleTestCase(test_framework.CoogTestCase):
         self.Lender.delete(bank.lender_role)
         bank.save()
         self.assertEqual(bank.is_lender, False)
+
+    @test_framework.prepare_test(
+        'company_cog.test0001_testCompanyCreation')
+    def test0090_compute_loan_api(self):
+        for example in self.ContractAPI._compute_loan_examples():
+            self.assertEqual(
+                self.ContractAPI.compute_loan(example['input'],
+                    {'_debug_server': True}),
+                example['output'])
 
 
 def suite():

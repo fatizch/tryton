@@ -15,6 +15,7 @@ from . import batch
 from . import event
 from . import notification
 from . import test_case
+from . import api
 
 from .contract import _STATES, _DEPENDS
 from .contract import _CONTRACT_STATUS_STATES, _CONTRACT_STATUS_DEPENDS
@@ -86,3 +87,7 @@ def register():
         party.PartyReplace,
         wizard.PartyErase,
         module='contract', type_='wizard')
+
+    Pool.register(
+        api.APIContract,
+        module='contract', type_='model', depends=['api'])

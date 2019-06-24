@@ -40,6 +40,8 @@
 # https://www.peterbe.com/plog/jsonschema-validate-10x-faster-in-python
 import logging
 import fastjsonschema
+import datetime
+from decimal import Decimal, InvalidOperation
 
 from trytond.pool import Pool
 from trytond.model import Model
@@ -52,10 +54,21 @@ from trytond.server_context import ServerContext
 
 DEFAULT_INPUT_SCHEMA = {
     'type': 'object',
-    'additional_properties': False,
+    'additionalProperties': False,
     }
+
 DEFAULT_OUTPUT_SCHEMA = {
     'type': 'null',
+    }
+
+DATE_SCHEMA = {'type': 'string', 'pattern': r'^[0-9]{4}-[0-9]{2}-[0-9]{2}$'}
+
+AMOUNT_SCHEMA = {'type': 'string', 'pattern': r'^([0-9]{1,}\.)?[0-9]{1,}$'}
+
+RATE_SCHEMA = {'oneOf': [
+        {'type': 'string', 'enum': ['1', '1.0', '1.00', '1.000', '1.0000']},
+        {'type': 'string', 'pattern': r'^0\.[0-9]{1,4}$'},
+        ],
     }
 
 
@@ -101,6 +114,42 @@ def apify(klass, api_name):
 
     decorated.__api_function = function
     return decorated
+
+
+def amount_for_api(amount):
+    assert isinstance(amount, Decimal)
+    return str(amount)
+
+
+def amount_from_api(amount):
+    try:
+        return Decimal(amount)
+    except InvalidOperation:
+        raise APIInputError([{
+                'type': 'conversion',
+                'data': {
+                    'input': amount,
+                    'target_type': 'Decimal',
+                    },
+                }])
+
+
+def date_for_api(date):
+    assert isinstance(date, datetime.date)
+    return date.strftime('%Y-%m-%d')
+
+
+def date_from_api(date):
+    try:
+        return datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    except ValueError:
+        raise APIInputError([{
+                'type': 'conversion',
+                'data': {
+                    'input': date,
+                    'target_type': 'date',
+                    },
+                }])
 
 
 class APIError(Exception):
@@ -449,7 +498,7 @@ class APIMixin(Model):
                         'count': {'type': 'integer', 'default': 0},
                         },
                     'required': ['price', 'name'],
-                    'additional_properties': False,
+                    'additionalProperties': False,
                     }
 
         - _my_api_output_schema: returns a jsonschema that can be used to
@@ -634,7 +683,7 @@ class APICore(APIMixin):
                         # This could go out of hand fast...
                         'examples': [{'input': {}, 'output': {}}],
                         'input_schema': {
-                            'additional_properties': False,
+                            'additionalProperties': False,
                             'type': 'object'},
                         'model': 'api.core',
                         'name': 'list_apis',
