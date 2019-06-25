@@ -150,6 +150,14 @@ class ModuleTestCase(test_framework.CoogTestCase):
         product.save()
         start_date = product.start_date + datetime.timedelta(weeks=4)
 
+        category_item_desc = self.ItemDesc()
+        category_item_desc.name = 'population'
+        category_item_desc.code = 'category_item_desc'
+        category_item_desc.kind = None
+        category_item_desc.save()
+
+        person_item_desc, = self.ItemDesc.search([('code', '=', 'person')])
+
         def create_contract(subscriber, person):
             contract = self.Contract(
                 product=product.id,
@@ -159,18 +167,6 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 subscriber=subscriber,
                 )
             contract.save()
-
-            category_item_desc = self.ItemDesc()
-            category_item_desc.name = 'population'
-            category_item_desc.code = 'category_item_desc'
-            category_item_desc.kind = None
-            category_item_desc.save()
-
-            person_item_desc = self.ItemDesc()
-            person_item_desc.name = 'Person'
-            person_item_desc.code = 'person'
-            person_item_desc.kind = None
-            person_item_desc.save()
 
             population = self.CoveredElement()
             population.contract = contract

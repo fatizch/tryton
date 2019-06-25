@@ -44,11 +44,15 @@ class ModuleTestCase(test_framework.CoogTestCase):
         party1, = self.Party.search([], limit=1)
         bank1, = self.Bank.search([], limit=1)
 
-        currency, = self.Currency.create([{
-                'name': 'Euro',
-                'code': 'EUR',
-                'symbol': '€',
-        }])
+        currency = self.Currency.search([('code', '=', 'EUR')])
+        if currency:
+            currency, = currency
+        else:
+            currency, = self.Currency.create([{
+                    'name': 'Euro',
+                    'code': 'EUR',
+                    'symbol': '€',
+            }])
 
         bank_account = self.BankAccount()
         bank_account.bank = bank1
