@@ -1,3 +1,5 @@
+* BUG#11964 Correction d'une erreur dans l'affichage de certains avenants de changements de prestations
+
 Version 2.4 - 2019-04-12
 * BUG#11042 Création des versions de garanties uniquement en cas de modification
 * BUG#10965 Correction de l'affichage de la fréquence d'indemnisation lorsqu'elle n'est pas imposée

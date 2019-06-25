@@ -56,7 +56,8 @@ class EndorsementOptionVersion(metaclass=PoolMeta):
         if self.action == 'remove':
             return result
         option_benefit_summary = [
-            x.get_diff('contract.option.benefit', x.benefit)
+            x.get_diff('contract.option.benefit',
+                x.benefit if x.action == 'update' else None)
             for x in self.benefits]
 
         if option_benefit_summary:
