@@ -6,6 +6,7 @@ from trytond.pyson import Eval, Bool
 from trytond.wizard import Wizard, StateTransition, StateView, Button
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
+from trytond.config import config
 
 from trytond.modules.coog_core import model, fields
 
@@ -156,7 +157,6 @@ class HexaPostLoader(object):
                     subdivisions_cache[code] = division
             else:
                 subdivisions_cache[division.code[3:]] = division
-
         translation = {
             'delivery_wording': 'city',
             'post_code': 'zip',
@@ -165,6 +165,7 @@ class HexaPostLoader(object):
             'insee_code': 'insee_code',
             }
         res = []
+        is_testing = config.getboolean('env', 'testing')
         for line in data:
             if not line['post_code'] or not line['delivery_wording']:
                 continue
@@ -178,9 +179,9 @@ class HexaPostLoader(object):
                 new_line['subdivision'] = subdivisions_cache[
                     line['post_code'][:3]]
             elif line['post_code'][:2] not in ('00', '98'):
-                UpdateCreationView.raise_user_error('cant_find_subdivision',
-                    line['post_code'])
-
+                if not is_testing:
+                    UpdateCreationView.raise_user_error('cant_find_subdivision',
+                        line['post_code'])
             res.append(new_line)
         return res
 

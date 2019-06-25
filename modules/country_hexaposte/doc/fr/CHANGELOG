@@ -1,3 +1,4 @@
+* OTH#00000 Ne pas afficher d'erreur en mode test lors de la mise à jour/creation des codes postaux si il n'y a pas de département.
 * FEA#11926 Initialisation des départements dans les codes postaux à l'intégration du fichier hexapost
 * OTH#00000 Manque un return dans le get_rec_name du zip code
 * OTH#00000 Correction de l'unicité du zip code et de sa mise à jour via l'assistant
