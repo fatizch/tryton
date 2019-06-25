@@ -4,6 +4,7 @@ from trytond.tools import grouped_slice
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
+from trytond.model import ModelView, Workflow
 
 from trytond.modules.coog_core import fields, model
 __all__ = [
@@ -81,4 +82,18 @@ class Invoice(metaclass=PoolMeta):
     @classmethod
     @model.CoogView.button_action('account_payment_cog.create_payments_wizard')
     def create_payments(cls, invoices):
+        pass
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('posted')
+    def post(cls, invoices):
+        # The invoices that are paid before calling super
+        # are going to transition to the post status, hence, unpaid
+        unpaid_invoices = [x for x in invoices if x.state == 'paid']
+        super(Invoice, cls).post(invoices)
+        cls.update_payment_dates(unpaid_invoices)
+
+    @classmethod
+    def update_payment_dates(cls, invoices):
         pass

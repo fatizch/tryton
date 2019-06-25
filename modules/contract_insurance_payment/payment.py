@@ -10,7 +10,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
 
-from trytond.modules.coog_core import fields
+from trytond.modules.coog_core import fields, utils
 from trytond.modules.account_payment_cog.payment import MergedPaymentsMixin
 
 
@@ -96,10 +96,8 @@ class Payment(metaclass=PoolMeta):
         pool = Pool()
         Contract = pool.get('contract')
         Invoice = pool.get('account.invoice')
-        MoveLine = pool.get('account.move.line')
         contracts_to_save = []
         invoices = []
-        lines_to_update = []
         for payments, _ in args:
             payments = sorted(payments, key=cls._group_per_contract_key)
             for contracts, _grouped_payments in groupby(payments,
@@ -114,39 +112,42 @@ class Payment(metaclass=PoolMeta):
                         contracts_to_save.append(to_save)
 
             if contracts_to_save:
-                Contract.save([x[0] for x in contracts_to_save])
-            for contract, billing_info_date, next_invoice_date \
-                    in contracts_to_save:
-                Contract.calculate_prices([contract], start=billing_info_date)
+                Contract.save(contracts_to_save)
+            for contract in contracts_to_save:
+                recalculate_prices_dates = max(contract.initial_start_date,
+                    utils.today())
+                Contract.calculate_prices([contract], recalculate_prices_dates)
+                last_paid_plus_one = contract.last_paid_invoice_end + \
+                    relativedelta(days=1) if contract.last_paid_invoice_end \
+                    else datetime.date.min
+                rebill_date = max(last_paid_plus_one,
+                    contract.initial_start_date)
                 invoices.extend(Contract.invoice([contract],
-                    up_to_date=next_invoice_date))
-                for invoice in contract.invoices:
-                    if (invoice.invoice_state == 'posted' and invoice.start
-                            and invoice.start >= next_invoice_date):
-                        lines_to_update += invoice.invoice.lines_to_pay
-                    # Check if that it's an fee invoce and that it is posted
-                    # if we are in this case, we check that it's have
-                    # no payment in progress. If one is in this case, we reset
-                    # the payment date
-                    elif (invoice.invoice_state == 'posted'
-                            and not invoice.start and not invoice.end):
-                        payments = invoice.invoice.payments
-                        if not any([x.state == 'processing'
-                                    for x in payments]):
-                            lines_to_update += invoice.invoice.lines_to_pay
-
-        if lines_to_update:
-            MoveLine.write(lines_to_update, {'payment_date': None})
-
+                    up_to_date=rebill_date))
         Invoice.post([contract_invoice.invoice
                 for contract_invoice in invoices])
+        # JMO: we are forced to do this because if we had old paid invoices,
+        # that were unpaid by the failure,
+        # Their payment date were recalculated during the transition from
+        # paid to post (after reconciliation.delete)
+        # While the manual billing info was not created yet
+        posted_invoices = Invoice.search([
+                ('contract', 'in', [x.id
+                    for x in contracts_to_save]),
+                ('state', '=', 'posted')
+                ])
+        to_clear = [
+            x for x in posted_invoices if not any(
+                p.state == 'processing' for p in x.payments
+            ) and all(
+                [p.needs_to_clear_payment_date_after_failure()
+                    for p in x.payments])]
+        Invoice.clear_payment_dates(to_clear)
 
     @classmethod
     def move_contract_to_manual_payment(cls, contract, grouped_payments):
         pool = Pool()
         ContractBillingInformation = pool.get('contract.billing_information')
-        Date = pool.get('ir.date')
-        today = Date.today()
         if contract is None or contract.status not in ('active', 'terminated',
                 'hold'):
             return
@@ -160,40 +161,36 @@ class Payment(metaclass=PoolMeta):
             raise Exception('no failure_billing_mode on journal %s'
                 % (grouped_payments[0].journal.rec_name))
 
-        start_dates = [payment.line.move.origin.start
-            for payment in grouped_payments
-            if getattr(payment.line.move.origin, 'start', None)]
-        if start_dates:
-            billing_change_date = min(start_dates)
-        else:
-            # case when only non periodic invoice payment is failed
-            billing_change_date = max(contract.initial_start_date,
-                contract.last_paid_invoice_end + relativedelta(days=1)
-                if contract.last_paid_invoice_end else datetime.date.min)
+        today = utils.today()
+        existing_to_update = None
+        billing_change_date = max(today, contract.initial_start_date)
 
         for billing_info in contract.billing_informations:
-            if billing_info.date == billing_change_date or (
-                        not billing_info.date
-                        and today < contract.initial_start_date):
-                billing_info.billing_mode = failure_billing_mode
-                billing_info.payment_term = \
-                    failure_billing_mode.allowed_payment_terms[0]
-                direct_debit_day = int(failure_billing_mode.sync_day) if \
-                    failure_billing_mode.sync_day else None
-                billing_info.direct_debit_day = direct_debit_day
-                date = billing_info.date
+            today_before_first = not billing_info.date and \
+                today <= (contract.initial_start_date or datetime.date.min)
+            if today_before_first or (billing_info.date == billing_change_date):
+                existing_to_update = billing_info
                 break
-        else:
-            new_billing_information = ContractBillingInformation(
-                date=billing_change_date,
-                billing_mode=failure_billing_mode,
-                payment_term=failure_billing_mode.allowed_payment_terms[0])
-            contract.billing_informations = contract.billing_informations + \
-                (new_billing_information,)
-            date = new_billing_information.date
 
-        contract.billing_informations = list(contract.billing_informations)
-        return contract, date, billing_change_date
+        manual_billing = existing_to_update if existing_to_update else \
+            ContractBillingInformation()
+        if not existing_to_update:
+            manual_billing.date = billing_change_date
+        manual_billing.billing_mode = failure_billing_mode
+        manual_billing.payment_term = \
+            failure_billing_mode.allowed_payment_terms[0]
+        manual_billing.direct_debit_day = int(failure_billing_mode.sync_day
+            ) if failure_billing_mode.sync_day else None
+        direct_debit_day = int(failure_billing_mode.sync_day) if \
+            failure_billing_mode.sync_day else None
+        manual_billing.direct_debit_day = direct_debit_day
+
+        if existing_to_update:
+            contract.billing_informations = list(contract.billing_informations)
+        else:
+            contract.billing_informations = contract.billing_informations + \
+                (manual_billing,)
+        return contract
 
     @classmethod
     def fail_present_again_after(cls, *args):
@@ -221,12 +218,9 @@ class Payment(metaclass=PoolMeta):
 
                 if not contract_invoice:
                     continue
-                with Transaction().set_context(
-                        contract_revision_date=contract_invoice.start):
-                    invoice.update_move_line_from_billing_information(
-                        payment.line,
-                        contract_invoice.contract.billing_information)
-                    to_save.append(payment.line)
+                invoice.update_move_line_from_billing_information(
+                    payment.line)
+                to_save.append(payment.line)
 
         if to_save:
             MoveLine.save(to_save)

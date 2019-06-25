@@ -1806,24 +1806,11 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
     def update_after_unsuspend(cls, billings):
         pool = Pool()
         Invoice = pool.get('account.invoice')
-        MoveLine = Pool().get('account.move.line')
         posted_invoices = Invoice.search([
                 ('contract', 'in', [x.contract.id for x in billings]),
                 ('state', '=', 'posted')
                 ])
-        to_save = []
-        for invoice in posted_invoices:
-            to_update = [x for x in invoice.lines_to_pay
-                if x.payment_date and not x.reconciliation]
-            current_bill_info = invoice.contract.billing_information
-            if current_bill_info.suspended:
-                continue
-            for line in to_update:
-                invoice.update_move_line_from_billing_information(line,
-                    current_bill_info)
-            to_save.extend(to_update)
-        if to_save:
-            MoveLine.save(to_save)
+        Invoice.update_payment_dates(posted_invoices)
 
     def init_dict_for_rule_engine(self, args):
         args['context'] = self

@@ -1,3 +1,5 @@
+* BUG#11103 La date de paiement n'était pas supprimée lors du rejet si le paiement était utilisé pour payer une ligne différente de la ligne originale
+
 Version 2.4 - 2019-04-12
 * BUG#11403 Correction d'un plantage dans la fonction de tri _process_payment_key dû à la comparaison de types None en python 3
 * BUG#11307 Correction d'un plantage dû à la comparaison de types None en python 3

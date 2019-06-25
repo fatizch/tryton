@@ -25,6 +25,10 @@ def suite():
         tearDown=doctest_teardown, encoding='utf-8',
         optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     suite.addTests(doctest.DocFileSuite(
+        'scenario_payment_reject_before_start_date.rst',
+        tearDown=doctest_teardown, encoding='utf-8',
+        optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
+    suite.addTests(doctest.DocFileSuite(
             'scenario_suspend_payments.rst',
             tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))

@@ -291,15 +291,16 @@ Add billing information with monthly billing monde and mandate2::
  as sepa mandate::
 
     >>> monthly_percent = BillingMode(monthly_percent.id)
-    >>> contract2.billing_informations.append(BillingInformation(date=None,
-    ...         billing_mode=monthly_percent,
-    ...         payment_term=monthly_percent.allowed_payment_terms[0],
-    ...         payer=subscriber2,
-    ...         direct_debit_day=5,
-    ...         sepa_mandate=mandate2))
-    >>> contract2.contract_number = '123456780'
+    >>> contract2.billing_informations.append(BillingInformation(date=None))
+    >>> contract2.billing_informations[0].billing_mode = monthly_percent
+    >>> contract2.billing_informations[0].payment_term = \
+    ...     monthly_percent.allowed_payment_terms[0]
+    >>> contract2.billing_informations[0].payer = subscriber2
+    >>> contract2.billing_informations[0].direct_debit_day = 5
+    >>> contract2.billing_informations[0].sepa_mandate = mandate2
     >>> contract2.billing_informations[0].direct_debit_account = \
     ...     mandate2.account_number.account
+    >>> contract2.contract_number = '123456780'
     >>> contract2.save()
     >>> Wizard('contract.activate', models=[contract2]).execute('apply')
 
@@ -525,16 +526,17 @@ So the sepa_mandate for lines_to_pay[0] must still be None and::
 the lines_to_pay[1]::
 
     >>> billing_information_no_sepa_2 = BillingInformation(
-    ...         date=contract_2_invoice_2.invoice.lines_to_pay[1].payment_date,
-    ...         billing_mode=monthly_percent,
-    ...         payment_term=monthly_percent.allowed_payment_terms[0],
-    ...         direct_debit_day=5,
-    ...         payer=subscriber2,
-    ...         contract=contract2,
-    ...         direct_debit=True,
-    ...         sepa_mandate=mandate3)
+    ...         date=contract_2_invoice_2.invoice.lines_to_pay[1].payment_date)
+    >>> billing_information_no_sepa_2.billing_mode = monthly_percent
+    >>> billing_information_no_sepa_2.payment_term = \
+    ...     monthly_percent.allowed_payment_terms[0]
+    >>> billing_information_no_sepa_2.direct_debit_day = 5
+    >>> billing_information_no_sepa_2.payer = subscriber2
+    >>> billing_information_no_sepa_2.contract = contract2
+    >>> billing_information_no_sepa_2.direct_debit = True
     >>> billing_information_no_sepa_2.direct_debit_account = \
     ...     mandate3.account_number.account
+    >>> billing_information_no_sepa_2.sepa_mandate = mandate3
     >>> billing_information_no_sepa_2.save()
     >>> contract2.reload()
     >>> contract_2_invoice_2.reload()
@@ -561,12 +563,13 @@ with no sepa mandate::
     >>> mandate4 = Mandate(mandate4.id)
     >>> future_billing_information = BillingInformation(
     ...     date=contract_2_invoice_2.invoice.lines_to_pay[1].payment_date +
-    ...     relativedelta(months=3),
-    ...     billing_mode=monthly_percent,
-    ...     payment_term=monthly_percent.allowed_payment_terms[0],
-    ...     payer=Party(subscriber2.id),
-    ...     direct_debit_day=5,
-    ...     sepa_mandate=mandate4)
+    ...     relativedelta(months=3))
+    >>> future_billing_information.billing_mode = monthly_percent
+    >>> future_billing_information.payment_term = \
+    ...     monthly_percent.allowed_payment_terms[0]
+    >>> future_billing_information.payer = Party(subscriber2.id)
+    >>> future_billing_information.direct_debit_day = 5
+    >>> future_billing_information.sepa_mandate = mandate4
     >>> contract2.billing_informations.append(future_billing_information)
     >>> future_billing_information.direct_debit_account = \
     ...     mandate4.account_number.account

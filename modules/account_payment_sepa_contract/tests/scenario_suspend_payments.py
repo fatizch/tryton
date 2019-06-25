@@ -35,7 +35,8 @@ from trytond.modules.premium.tests.tools import add_premium_rules
 
 # #Comment# #Install Modules
 config = activate_modules(['account_payment_sepa_contract',
-        'account_payment_clearing_cog'])
+        'account_payment_clearing_cog'],
+    cache_file_name='scenario_payment_with_clearing')
 
 # #Comment# #Create country
 _ = create_country()

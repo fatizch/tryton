@@ -24,6 +24,7 @@ __all__ = [
     'PaymentInformationModification',
     'PaymentCreation',
     'PaymentCreationStart',
+    'Reconciliation',
     ]
 
 
@@ -688,3 +689,20 @@ class PaymentCreation(model.CoogWizard):
         action['pyson_domain'] = encoder.encode([('id', 'in', payment_ids)])
         action['pyson_search_value'] = encoder.encode([])
         return action, {'extra_context': {'created_payments': payment_ids}}
+
+
+class Reconciliation(metaclass=PoolMeta):
+    __name__ = 'account.move.reconciliation'
+
+    @classmethod
+    def delete(cls, reconciliations):
+        MoveLine = Pool().get('account.move.line')
+        lines_to_clear = []
+        for reconciliation in reconciliations:
+            for line in reconciliation.lines:
+                if line.payment_date and all(
+                        [x.needs_to_clear_payment_date_after_failure()
+                            for x in line.payments]):
+                    lines_to_clear.append(line)
+        super(Reconciliation, cls).delete(reconciliations)
+        MoveLine.write(lines_to_clear, {'payment_date': None})

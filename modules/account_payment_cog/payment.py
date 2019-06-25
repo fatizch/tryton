@@ -705,10 +705,15 @@ class Payment(export.ExportImportMixin, Printable,
         Event.notify_events(payments, 'fail_payment')
         cls._update_postponements(payments)
 
-        # Remove payment_date on payment line
+        # The clearing of the payment_date is handled
+        # during the deletion of the reconciliation
+        # But a payment can also be failed before it is succeeded.
+        # We still want to remove the payment_date
+
         for payment in payments:
             if payment.needs_to_clear_payment_date_after_failure():
-                lines.append(payment.line)
+                if payment.line.payment_date:
+                    lines.append(payment.line)
         if lines:
             Line.write(lines, {'payment_date': None})
 

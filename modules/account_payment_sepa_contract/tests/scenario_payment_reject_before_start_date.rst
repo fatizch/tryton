@@ -1,6 +1,6 @@
-===============================
-Contract Payment SEPA Scenario
-===============================
+===================================================
+Contract Payment Reject Before Contract Start Date
+===================================================
 
 Imports::
 
@@ -376,6 +376,10 @@ Create payment for second and third invoice::
     >>> payments = [payment_second_invoice, payment_third_invoice]
     >>> process_payment = Wizard('account.payment.process', payments)
     >>> process_payment.execute('pre_process')
+    >>> len(contract.billing_informations) == 1
+    True
+    >>> contract.billing_informations[0].date is None
+    True
 
 Fail payments::
 
@@ -385,143 +389,18 @@ Fail payments::
     >>> payment_third_invoice.sepa_return_reason_code = 'AM04'
     >>> payment_third_invoice.merged_id = '123456'
     >>> payment_third_invoice.save()
-    >>> config._context['client_defined_date'] = cur_payment_date + \
+    >>> config._context['client_defined_date'] = contract.initial_start_date - \
     ...     relativedelta(days=10)
     >>> Payment.fail([p.id for p in payments], config._context)
     >>> payment_second_invoice.line.payment_date
     >>> payment_third_invoice.line.payment_date
     >>> payment_second_invoice.manual_fail_status
     >>> payment_third_invoice.manual_fail_status
+    >>> contract.reload()
     >>> len(contract.billing_informations)
-    2
-    >>> contract.billing_informations[-1].date == config._context['client_defined_date']
+    1
+    >>> contract.billing_informations[0].date is None
     True
     >>> contract.billing_informations[-1].billing_mode == \
     ...     journal_SEPA.failure_billing_mode
     True
-    >>> contract.reload()
-    >>> len(contract.invoices) == 3
-    True
-    >>> BillingInformation.delete([contract.billing_informations.pop()])
-    >>> contract.save()
-    >>> contract.reload()
-    >>> len(contract.billing_informations) == 1
-    True
-
-Create fourth invoice::
-
-    >>> if contract_start_date.month != (contract_start_date +
-    ...         relativedelta(days=1)).month:
-    ...     until_date = contract_start_date + relativedelta(days=1)
-    ...     until_date = until_date + relativedelta(months=3)
-    ...     until_date = until_date + relativedelta(days=-1)
-    ... else:
-    ...     until_date = contract_start_date + relativedelta(months=3)
-    >>> generate_invoice = Wizard('contract.do_invoice', models=[contract])
-    >>> generate_invoice.form.up_to_date = until_date
-    >>> generate_invoice.execute('invoice')
-    >>> contract.reload()
-    >>> len(contract.invoices)
-    4
-    >>> fourth_invoice = contract.invoices[0]
-    >>> fourth_invoice.invoice.click('post')
-
-Create payment for the fourth invoice::
-
-    >>> payment_fourth_invoice = Payment()
-    >>> payment_fourth_invoice.company = company
-    >>> payment_fourth_invoice.journal = journal_SEPA
-    >>> payment_fourth_invoice.kind = 'receivable'
-    >>> payment_fourth_invoice.amount = fourth_invoice.invoice.total_amount
-    >>> payment_fourth_invoice.party = subscriber
-    >>> payment_fourth_invoice.line, = MoveLine.find([('party', '=', subscriber.id),
-    ...         ('account.kind', '=', 'receivable'),
-    ...         ('origin', '=', 'account.invoice,%s' % fourth_invoice.invoice.id)])
-    >>> payment_fourth_invoice.date = payment_fourth_invoice.line.payment_date
-    >>> payment_fourth_invoice.save()
-    >>> payment_fourth_invoice.click('approve')
-    >>> payment_fourth_invoice.line.payment_date.day == 5
-    True
-    >>> payments = [payment_fourth_invoice]
-    >>> process_payment = Wizard('account.payment.process', payments)
-    >>> process_payment.execute('pre_process')
-    >>> initial_fourth_payment_date = payment_fourth_invoice.line.payment_date
-
-Fail payments::
-
-    >>> payment_fourth_invoice.sepa_return_reason_code = 'TM01'
-    >>> payment_fourth_invoice.merged_id = '123456'
-    >>> payment_fourth_invoice.save()
-    >>> config._context['client_defined_date'] = cur_payment_date + \
-    ...     relativedelta(days=10)
-    >>> Payment.fail([p.id for p in payments], config._context)
-    >>> payment_fourth_invoice.reload()
-    >>> payment_fourth_invoice.line.payment_date == datetime.date(day=24,
-    ...     month=initial_fourth_payment_date.month,
-    ...     year=initial_fourth_payment_date.year)
-    True
-    >>> contract.reload()
-    >>> len(contract.invoices)
-    5
-    >>> fee_invoice, = [x for x in contract.invoices if not x.start]
-    >>> fee_invoice.invoice.total_amount == Decimal('6.00')
-    True
-    >>> fee_invoice.invoice.lines_to_pay[0].payment_date == \
-    ...     payment_fourth_invoice.line.payment_date
-    True
-
-Clean all dates::
-
-    >>> config._context['client_defined_date'] = first_payment_date
-    >>> MoveLine = Model.get('account.move.line')
-    >>> journal_SEPA.last_sepa_receivable_payment_creation_date = first_payment_date \
-    ...     + relativedelta(days=-1)
-    >>> journal_SEPA.save()
-    >>> invoices = [x.invoice for x in ContractInvoice.find(
-    ...         [], order=[('start', 'ASC NULLS LAST')])]
-    >>> MoveLine.write(sum([x.lines_to_pay for x in invoices], []),
-    ...     {'payment_date': None}, config._context)
-    >>> Payment.write(Payment.find([]), {'date': first_payment_date + relativedelta(
-    ...             days=-1)}, config._context)
-    >>> MoveLine.write(invoices[0].lines_to_pay,
-    ...     {'payment_date': first_payment_date}, config._context)
-    >>> payment = Payment()
-    >>> payment.company = company
-    >>> payment.journal = journal_SEPA
-    >>> payment.kind = 'receivable'
-    >>> payment.amount = invoices[0].total_amount
-    >>> payment.party = subscriber
-    >>> payment.line = MoveLine(invoices[0].lines_to_pay[0].id)
-    >>> payment.date = payment.line.payment_date
-    >>> payment.save()
-    >>> payment.click('approve')
-    >>> process_payment = Wizard('account.payment.process', [payment])
-    >>> process_payment.execute('pre_process')
-    >>> Contract.rebill_contracts([contract], contract.initial_start_date,
-    ...     config._context)
-    >>> cancelled, new = [x.invoice for x in ContractInvoice.find(
-    ...         [('start', '=', contract.initial_start_date)],
-    ...         order=[('invoice.state', 'ASC')])]
-    >>> cancelled.state == 'cancel'
-    True
-    >>> new.state == 'posted'
-    True
-    >>> payment.group.click('acknowledge')
-    >>> payment.reload()
-    >>> clearing_move = payment.clearing_move
-    >>> clearing_line, = [x for x in clearing_move.lines if x.reconciliation]
-    >>> other_line, = [x for x in clearing_line.reconciliation.lines
-    ...     if x.id != clearing_line.id]
-    >>> new.reload()
-    >>> new.state == 'paid'
-    True
-    >>> other_line.id == new.lines_to_pay[0].id
-    True
-    >>> payment.reload()
-    >>> payment.sepa_return_reason_code = 'BE04'
-    >>> payment.save()
-    >>> config._context['client_defined_date'] = first_payment_date + \
-    ...     relativedelta(days=10)
-    >>> payment.click('fail')
-    >>> new.reload()
-    >>> assert new.lines_to_pay[0].payment_date is None

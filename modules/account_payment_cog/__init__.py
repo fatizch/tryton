@@ -26,6 +26,7 @@ def register():
         move.Move,
         move.MoveLine,
         move.PaymentInformationSelection,
+        move.Reconciliation,
         payment.PaymentFailInformation,
         batch.PaymentTreatmentBatch,
         batch.PaymentCreationBatch,

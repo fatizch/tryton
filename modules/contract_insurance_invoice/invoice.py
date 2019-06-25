@@ -312,8 +312,14 @@ class Invoice(metaclass=PoolMeta):
         new_date = min(new_date, direct_debit_planned_date)
         return new_date
 
-    def update_move_line_from_billing_information(self, line,
-            billing_information):
+    def update_move_line_from_billing_information(self, line):
+        contract_revision_date = max(line.maturity_date,
+            utils.today(), self.contract.initial_start_date or utils.today())
+        with Transaction().set_context(
+                contract_revision_date=contract_revision_date):
+            billing_information = self.contract.billing_information
+        if billing_information.suspended:
+            return
         term_change = ServerContext().context.get('_payment_term_change', False)
         if not term_change and self.contract and self.fees and \
                 billing_information.direct_debit:
@@ -330,7 +336,7 @@ class Invoice(metaclass=PoolMeta):
         payment_dates = []
         present_again_after = ServerContext().get('present_again_after', None)
         if hasattr(line, 'payments'):
-            payment_dates = filter(None, [x.date for x in line.payments])
+            payment_dates = list(filter(None, [x.date for x in line.payments]))
         if present_again_after and payment_dates:
             new_date = self._present_again_after_next_date(line,
                 billing_information, payment_dates, present_again_after)
@@ -347,13 +353,35 @@ class Invoice(metaclass=PoolMeta):
                 or self.business_kind != 'contract_invoice'):
             return line
         line.contract = self.contract.id
-        contract_revision_date = max(line.maturity_date,
-            utils.today(), self.contract.initial_start_date or utils.today())
-        with Transaction().set_context(
-                contract_revision_date=contract_revision_date):
-            self.update_move_line_from_billing_information(line,
-                self.contract.billing_information)
-            return line
+        self.update_move_line_from_billing_information(line)
+        return line
+
+    @classmethod
+    def update_payment_dates(cls, invoices):
+        MoveLine = Pool().get('account.move.line')
+        to_save = []
+        for invoice in invoices:
+            to_update = [x for x in invoice.lines_to_pay
+                if not x.reconciliation]
+            for line in to_update:
+                invoice.update_move_line_from_billing_information(line)
+            to_save.extend(to_update)
+        if to_save:
+            MoveLine.save(to_save)
+
+    @classmethod
+    def clear_payment_dates(cls, invoices):
+        MoveLine = Pool().get('account.move.line')
+        lines_to_clear = cls.get_payment_lines_to_clear(invoices)
+        MoveLine.write(lines_to_clear, {'payment_date': None})
+
+    @classmethod
+    def get_payment_lines_to_clear(cls, invoices):
+        to_clear = []
+        for invoice in invoices:
+            to_clear.extend([x for x in invoice.lines_to_pay if x.payment_date
+                and not x.reconciliation])
+        return to_clear
 
     def update_invoice_before_post(self):
         if not self.invoice_date:
