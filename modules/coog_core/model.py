@@ -56,6 +56,7 @@ _dictionarize_fields_cache = Cache('dictionarize_fields', context=False)
 
 __all__ = [
     'error_manager',
+    'pre_commit_transaction',
     'FunctionalErrorMixIn',
     'CoogSQL',
     'CoogView',

@@ -11,6 +11,7 @@ from decimal import Decimal
 
 from dateutil.rrule import rrule, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
+from functools import reduce
 
 from sql import Column, Window, Null
 from sql.conditionals import Coalesce
@@ -31,10 +32,9 @@ from trytond.config import config
 from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT
 from trytond.model.modelstorage import EvalEnvironment
 from trytond.modules.coog_core import coog_date
-from . import coog_string
 
-from .model import fields
-from functools import reduce
+from . import coog_string
+from . import model
 
 __all__ = []
 
@@ -72,6 +72,105 @@ class FileLocker:
 
     def close(self):
         return self.file_obj.close()
+
+
+def write_file(filepath, data, binary=True, append=False, safe_open_data=None):
+    '''
+        Write <data> to <filepath> when the transaction is committed.
+
+        <data> will still be accessible using "read_file"
+
+        Options :
+
+            - <binary>: If True, the file will be written with the 'b' flag
+            - <append>: If True, the file will be written with the 'a' flag
+            - <safe_open_data>: If set, the file will be opened using the
+              'safe_open' method, using this configuration
+    '''
+    writer = _file_writer()
+
+    # There can be multiple operations on a given filepath, which we must store
+    # in order to be able to "replay" them at commit time
+    operations = writer.setdefault(filepath, [])
+    operations.append((binary, append, safe_open_data, data))
+
+
+def _file_writer():
+    '''
+        Technical method that handles the list of files to write, and plugs the
+        write at the end of the transaction
+    '''
+    if not hasattr(Transaction(), '__file_writer'):
+
+        @model.pre_commit_transaction()
+        def write(sub_transactions=None):
+            to_clean_up = []
+            for filepath, operations in Transaction().__file_writer.items():
+                if not os.path.exists(filepath):
+                    # Go the safe way for now, meaning we only delete files
+                    # that were created right now in case of error.
+                    # Doing this properly would require to backup the previous
+                    # files, but this could get ugly in terms of IO (especially
+                    # for the 'append' case on large files), and is not
+                    # necessary for now
+                    to_clean_up.append(filepath)
+                try:
+                    for binary, append, safe_open_data, data in operations:
+                        # No need to handle more modes for now
+                        mode = 'a' if append else 'w'
+                        mode += 'b' if binary else ''
+
+                        if safe_open_data:
+                            with safe_open(filepath, mode,
+                                    **safe_open_data) as f:
+                                f.write(data)
+                        else:
+                            with open(filepath, mode) as f:
+                                f.write(data)
+                except Exception:
+                    # Make sure we clean up as best as we can
+                    for path in to_clean_up:
+                        try:
+                            os.remove(path)
+                        except Exception:
+                            pass
+                    raise
+
+            # This is required to avoid having multiple commits in the same
+            # transaction write multiple times
+            del Transaction().__file_writer
+
+        Transaction().__file_writer = {}
+
+        # This is only done to actually trigger the call when the transaction
+        # is committed
+        write()
+
+    return Transaction().__file_writer
+
+
+def read_file(filepath, binary=True):
+    '''
+        This method allows to seemlessly read the contents of a file, whether
+        it already exists, or is planned to be created at the end of the
+        transaction
+
+        The <binary> flag is used to decide whether the file should be opened
+        with the 'b' flag or not
+    '''
+    writer = _file_writer()
+    if filepath in writer:
+        write_binary, append, _, data = writer[filepath][-1]
+        if not append:
+            # Full write
+            assert write_binary == binary
+            return data
+        else:
+            # Could be done by replaying all operations in memory, but tricky
+            # and not necessary for now
+            raise NotImplementedError
+    with open(filepath, 'rb' if binary else 'r') as f:
+        return f.read()
 
 
 def multi_column_required(table, column_names):
@@ -316,9 +415,9 @@ def get_json_from_pyson(pyson):
 
 def get_domain_instances(record, field_name):
     field = record._fields[field_name]
-    if isinstance(field, fields.Function):
+    if isinstance(field, model.fields.Function):
         field = field._field
-    if not isinstance(field, (fields.Many2One, fields.One2Many)):
+    if not isinstance(field, (model.fields.Many2One, model.fields.One2Many)):
         return []
     pyson_domain = PYSONEncoder().encode(field.domain)
     env = EvalEnvironment(record, record.__class__)
@@ -880,7 +979,7 @@ class DataExporter(object):
                 return self.format_amount(data)
             elif issubclass(data.__class__, datetime.date):
                 return self.format_date(data)
-            elif (issubclass(data.__class__, fields.Boolean or
+            elif (issubclass(data.__class__, model.fields.Boolean or
                     data) or type(data) is bool):
                 return self.format_boolean(data)
             assert isinstance(data, (type(''), type(None))), (
@@ -908,8 +1007,8 @@ class DataExporter(object):
 
 def clear_transaction_cache_for(models):
     for cache in list(Transaction().cache.values()):
-        for model in [models] if isinstance(models, str) else models:
-            cache.pop(model, None)
+        for cur_model in [models] if isinstance(models, str) else models:
+            cache.pop(cur_model, None)
 
 
 class DictAsObject(object):

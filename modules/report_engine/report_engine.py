@@ -495,8 +495,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             filename += ext
             out_path = os.path.join(export_dirname, filename)
             report['export_filename'] = out_path
-            with open(out_path, 'ab') as out:
-                out.write(report['data'])
+            utils.write_file(out_path, report['data'], append=True)
 
     def convert(self, data, to_ext, from_ext=None):
         pool = Pool()
@@ -1288,9 +1287,8 @@ class ReportGenerate(CoogReport):
         client_filepath, server_filepath = cls.create_shared_tmp_dir()
         client_filepath = os.path.join(client_filepath, filename)
         server_filepath = os.path.join(server_filepath, filename)
-        with open(server_filepath, 'wb') as f:
-            f.write(report_data)
-            return(client_filepath, server_filepath)
+        utils.write_file(server_filepath, report_data)
+        return(client_filepath, server_filepath)
 
     @classmethod
     def _prepare_template_file(cls, report):
@@ -1384,8 +1382,7 @@ class ReportGenerateFromFile(CoogReport):
 
     @classmethod
     def execute(cls, ids, data):
-        with open(data['output_report_filepath'], 'rb') as f:
-            value = bytearray(f.read())
+        value = bytearray(utils.read_file(data['output_report_filepath']))
         return (data['output_report_filepath'].split('.')[-1], value, False,
             os.path.splitext(
                 os.path.basename(data['output_report_filepath']))[0])
@@ -1397,12 +1394,10 @@ class ReportGenerateFromFile(CoogReport):
         report = Pool().get('ir.action.report')(
             template_extension=input_format, extension=output_format)
         for input_path in input_paths:
-            with open(input_path, 'rb') as f:
-                data = f.read()
+            data = utils.read_file(input_path)
             oext, conv_data = cls.convert(report, data)
             output_path = os.path.splitext(input_path)[0] + '.' + oext
-            with open(output_path, 'wb') as f:
-                f.write(conv_data)
+            utils.write_file(output_path, conv_data)
             conv_paths.append(output_path)
         if len(conv_paths) > 1:
             if os.path.splitext(output_report_filepath)[1] == '.pdf':
@@ -1711,8 +1706,7 @@ class ReportCreate(wizard_context.PersistentContextWizard):
 
     def complete_report(self, instance, report):
         report_name_wo_ext, ext = report['file_basename'], report['extension']
-        with open(report['server_filepath'], 'rb') as f:
-            original_data = bytearray(f.read())
+        original_data = bytearray(utils.read_file(report['server_filepath']))
         report.update({
                 'original_ext': ext.split(os.extsep)[-1],
                 'report_type': ext.split(os.extsep)[-1],

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import os
 import unittest
 import datetime
 import mock
@@ -786,6 +787,63 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         parent = self.ExportTest(parent.id)
         self.assertEqual(len(parent.one2many), 2)
+
+    def test0090_save_writes(self):
+        existing = '/tmp/existing'
+        new = '/tmp/new'
+
+        other = '/tmp/hello'
+        fail = '/tmpx/other'
+
+        try:
+            with open(existing, 'wb') as f:
+                f.write(b'test')
+
+            # Write a file at the end of the transaction
+            utils.write_file(new, b'hello')
+            # It does not exist yet
+            self.assertRaises(IOError, open, new, 'r')
+            # But we can get its data
+            self.assertEqual(utils.read_file(new), b'hello')
+
+            Transaction().commit()
+            # Now we can read it
+            with open(new, 'rb') as f:
+                self.assertEqual(f.read(), b'hello')
+
+            # Append to an existing file
+            utils.write_file(existing, b'test1', append=True)
+            # No modifications are done
+            with open(existing, 'rb') as f:
+                self.assertEqual(f.read(), b'test')
+
+            Transaction().commit()
+            # Now they are
+            with open(existing, 'rb') as f:
+                self.assertEqual(f.read(), b'testtest1')
+
+            os.remove(new)
+            # Write and append can be mixed, order is preserved
+            utils.write_file(new, 'hello', binary=False)
+            utils.write_file(new, 'world', binary=False, append=True)
+            Transaction().commit()
+            with open(new, 'r') as f:
+                self.assertEqual(f.read(), 'helloworld')
+
+            # Second file will fail, there is a typo in its name
+            utils.write_file(other, b'hello')
+            utils.write_file(fail, b'hello')
+            # We obviously cannot commit
+            self.assertRaises(IOError, Transaction().commit)
+            # And the "ok" file was deleted
+            self.assertRaises(IOError, open, other, 'r')
+        finally:
+            # Make sure we can restart tests :)
+            for path in (existing, new, other, fail):
+                try:
+                    os.remove(path)
+                except IOError:
+                    pass
 
     def test0100_loader_updater(self):
         test_instance = self.TestLoaderUpdater(real_field='foo')

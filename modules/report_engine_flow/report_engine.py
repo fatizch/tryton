@@ -450,9 +450,9 @@ class ReportCreate(metaclass=PoolMeta):
     @classmethod
     def create_flow_file(cls, filepath, content):
         temporary_folder = config.get('TMP', 'folder') or '/tmp/'
-        with utils.safe_open(filepath, 'ab',
-                lock_directory=temporary_folder) as _file:
-            _file.write(content)
+
+        utils.write_file(filepath, content, append=True,
+            safe_open_data={'lock_directory': temporary_folder})
         return filepath
 
     def transition_generate(self):

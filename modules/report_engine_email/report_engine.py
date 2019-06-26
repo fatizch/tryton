@@ -17,7 +17,7 @@ from trytond.pyson import Eval, Or
 from trytond.sendmail import sendmail, sendmail_transactional
 from trytond.wizard import Button, StateAction
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, utils
 
 
 __all__ = [
@@ -328,8 +328,8 @@ class ReportGenerateEmail(Report):
         base_path = data['path']
         contents = []
         for fname in filenames:
-            with open(os.path.join(base_path, fname), 'rb') as _f:
-                contents.append(bytearray(_f.read()))
+            contents.append(bytearray(
+                    utils.read_file(os.path.join(base_path, fname))))
         return types, contents, False, [os.path.splitext(x)[0] for x in
             filenames]
 
@@ -434,8 +434,7 @@ class ReportCreate(metaclass=PoolMeta):
 
         _, base_path = ReportGenerate.create_shared_tmp_dir()
         for content, filename in zip(attachments, filenames):
-            with open(os.path.join(base_path, filename), 'wb') as _f:
-                _f.write(content)
+            utils.write_file(os.path.join(base_path, filename), content)
         return action, {
             'attachments': filenames,
             'types': types,
