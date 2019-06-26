@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="event.type" id="event_noemie_reject">
+            <field name="name">Noemie Rejets</field>
+            <field name="code">noemie_rejet</field>
+        </record>
+        <record model="event.type" id="event_noemie_report">
+            <field name="name">Noemie Signalements</field>
+            <field name="code">noemie_signalements</field>
+        </record>
+        <record model="event.type" id="event_noemie_acquittement">
+            <field name="name">Noemie Acquitements</field>
+            <field name="code">noemie_acquitements</field>
+        </record>
+    </data>
+</tryton>

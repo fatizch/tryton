@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="//field[@name='party']" position="after">
+        <group id="noemie_management" colspan="2" col="2" string="Noemie management">
+            <label name="noemie_status"/>
+            <field name="noemie_status"/>
+            <label name="noemie_update_date"/>
+            <field name="noemie_update_date"/>
+            <label name="noemie_return_code"/>
+            <field name="noemie_return_code"/>
+        </group>
+    </xpath>
+</data>

@@ -1,0 +1,239 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:contract.covered_element,is_noemie:"
+msgid "Is Noemie"
+msgstr "Personne noémisable"
+
+msgctxt "field:contract.covered_element,noemie_return_code:"
+msgid "Noemie Return Code"
+msgstr "Code retour"
+
+msgctxt "field:contract.covered_element,noemie_status:"
+msgid "Noemie Status"
+msgstr "Statut"
+
+msgctxt "field:contract.covered_element,noemie_update_date:"
+msgid "Noemie Update Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.noemie.flow.batch,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:offered.item.description,is_noemie:"
+msgid "Is Noemie Person"
+msgstr "Gestion de la noémisation"
+
+msgctxt "help:offered.item.description,is_noemie:"
+msgid ""
+"If True, covered elements using this item descriptor will have noemie "
+"related informations"
+msgstr ""
+"Si vrai, les risques couverts utilisant ce descripteur auront des "
+"informations noémie liées  "
+
+msgctxt "model:contract.noemie.flow.batch,name:"
+msgid "Contract Noemie Flow Batch"
+msgstr "Contract Noémie Flow Batch"
+
+msgctxt "model:event.type,name:event_noemie_acquittement"
+msgid "Noemie Acquitements"
+msgstr "Acquittement Noémie"
+
+msgctxt "model:event.type,name:event_noemie_reject"
+msgid "Noemie Rejets"
+msgstr "Rejet Noémie"
+
+msgctxt "model:event.type,name:event_noemie_report"
+msgid "Noemie Signalements"
+msgstr "Signalement Noémie"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[01] Birth date absent onMvt. of member"
+msgstr "[01] Date naissance absente surMvt. Adhérent"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[02] Wrong registration number"
+msgstr "[02] Numéro de matricule erroné"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[03] Wrong movement code"
+msgstr "[03] Code  Mouvement erroné"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[04] C.O Wrong number"
+msgstr "[04] Numéro d'O.C. erroné"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[05] Wrong type of contract"
+msgstr "[05] Type de contrat erroné"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[06] Invalid start date of contract"
+msgstr "[06] Date de début de contrat erronée"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[07] Invalid end date of contract"
+msgstr "[07] Date de fin de contrat erronée"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[08] Incomp. start date end date of contract"
+msgstr "[08] Incomp. Date Début Date Fin de contrat"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[09] Wrong beneficiary birth date"
+msgstr "[09] Date de naissancebénéficiaire erronée"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[10] Bad beneficiary rank"
+msgstr "[10] Rang de bénéficiaire erroné"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[11] Reserved to CPAM"
+msgstr "[11] RESERVE A LA CPAM"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[13] Reserved to CPAM"
+msgstr "[13] RESERVE A LA CPAM"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[14] Unknown Annul imposs Rub O.C./CT"
+msgstr "[14] Annul imposs Rub O.C./CTinconnue"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[15] Beneficiary creation impossible> 19"
+msgstr "[15] Création bénéficiaireimpossible > 19"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[16] O.C creation impossible> 3"
+msgstr "[16] Création O.C. impossible > 3"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[17] O.C unknown to the file"
+msgstr "[17] O.C. inconnu au fichier"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[18] Insured unknown to the file"
+msgstr "[18] Assuré inconnu au fichier"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[19] Reserved to CPAM"
+msgstr "[19] RESERVE A LA CPAM"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[20] Beneficiary unknown to the file"
+msgstr "[20] Bénéficiaire inconnu au fichier"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[21] Insured managed by another Caisse"
+msgstr "[21] Assuré géré par une autre Caisse"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[22] Validity period O.C. not outstanding"
+msgstr "[22] Période validité O.C. non encours"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[23] Not mutualist insured"
+msgstr "[23] Assuré non mutualiste"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[24] Not mutualist beneficiary"
+msgstr "[24] Bénéficiaire non mutualiste"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[25] Modif. imposs. Rub. O.C./CT not found"
+msgstr "[25] Modif. imposs. Rub. O.C./CTnon trouvée"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[26] Reserved to CPAM"
+msgstr "[26] RESERVE A LA CPAM"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[27] Divergence on Civil Status"
+msgstr "[27] Divergence sur Etat Civil"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[28] Rub. Benef. only allowed for VITALE"
+msgstr "[28] Rub. Bénéf. seule autorisée pour VITALE"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[29] Origin different flow of the option"
+msgstr "[29] Origine flux différente del'option"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[30] Matricular key absent or erroneous"
+msgstr "[30] Clé Matriculaire absente ou erronée"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[31] Birthday benef. diverge"
+msgstr "[31] Jour de naissanceBénéf. divergent"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[32] Modification info C.O. acquitted"
+msgstr "[32] Modification info O.C.acquittée"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[33] Creation info C.O. acquitted"
+msgstr "[33] Création info O.C. acquittée"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[34] Cancellation info C.O. acquitted"
+msgstr "[34] Annulation info O.C. acquittée"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[35] Refusal of the Member trades"
+msgstr "[35] Refus de l'Adhérent auxéchanges"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[36] Member mutual status"
+msgstr "[36] Situation mutualiste Adhérent"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[37] C.O. not founded"
+msgstr "[37] O.C. non trouvé"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[38] Cash change XXX to XXX - with convention"
+msgstr "[38] Changement de CaisseXXX vers XXX - avecconvention"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[40] Matrix Id Change: XXXXX XX XXX XXX"
+msgstr "[40] Changement Idt Matriculaire :XXXXX XX XXX XXX"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[41] Change Birth Date. Benefit: XX/XX/XX"
+msgstr "[41] Changement Date naissanceBénéf.:  XX/XX/XX"
+
+msgctxt "selection:contract.covered_element,noemie_return_code:"
+msgid "[43] Mutual Beneficiary Cancellation"
+msgstr "[43] Annulation Bénéficiaire Mutualiste"
+
+msgctxt "selection:contract.covered_element,noemie_status:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:contract.covered_element,noemie_status:"
+msgid "Acquitted"
+msgstr "Acquitté"
+
+msgctxt "selection:contract.covered_element,noemie_status:"
+msgid "Rejected"
+msgstr "Rejeté"
+
+msgctxt "selection:contract.covered_element,noemie_status:"
+msgid "Reported"
+msgstr "Signalé"
+
+msgctxt "selection:contract.covered_element,noemie_status:"
+msgid "Waiting"
+msgstr "En attente"
+
+msgctxt "view:contract.covered_element:"
+msgid "Noemie management"
+msgstr "Gestion Noémie"
