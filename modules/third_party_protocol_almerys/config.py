@@ -15,6 +15,7 @@ number_sequence_v3 = fields.Many2One('ir.sequence', "Number Sequence V3",
         ('code', '=', 'third_party_protocol.almerys.v3'),
         ])
 protocol_version = fields.Char("Protocol Version", required=True)
+autonomous = fields.Boolean("Autonomous")
 
 
 class AlmerysConfig(
@@ -27,6 +28,7 @@ class AlmerysConfig(
     customer_label = fields.MultiValue(customer_label)
     number_sequence_v3 = fields.MultiValue(number_sequence_v3)
     protocol_version = fields.MultiValue(protocol_version)
+    autonomous = fields.MultiValue(autonomous)
 
 
 class ConfigurationNumberSequenceV3(model.CoogSQL, CompanyValueMixin):
@@ -59,3 +61,11 @@ class ConfigurationCustomerLabel(model.CoogSQL, CompanyValueMixin):
     _table = 'tpp_almerys_configuration_customer_label'
 
     customer_label = customer_label
+
+
+class ConfigurationAutonomous(model.CoogSQL, CompanyValueMixin):
+    "Almerys Configuration - Autonomous"
+    __name__ = 'third_party_protocol.almerys.configuration.autonomous'
+    _table = 'tpp_almerys_configuration_autonomous'
+
+    autonomous = autonomous

@@ -87,5 +87,11 @@ CS:CS
             <field name="name">third_party_protocol_almerys_ref_gestionnaire</field>
             <field name="type_">char</field>
         </record>
+        <record model="extra_details.configuration.line" id="third_party_procotol_almerys_service_tp_envoi">
+            <field name="configuration" ref="third_party_right_management.third_party_procotol_extra_details_configuration"/>
+            <field name="string">Tiers-Payant Envoi</field>
+            <field name="name">third_party_procotol_almerys_service_tp_envoi</field>
+            <field name="type_">boolean</field>
+        </record>
     </data>
 </tryton>

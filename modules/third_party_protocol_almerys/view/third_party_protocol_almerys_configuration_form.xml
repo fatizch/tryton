@@ -8,4 +8,6 @@
     <field name="number_sequence_v3"/>
     <label name="protocol_version"/>
     <field name="protocol_version"/>
+    <label name="autonomous"/>
+    <field name="autonomous"/>
 </form>

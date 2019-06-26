@@ -19,6 +19,11 @@ class Protocol(metaclass=PoolMeta):
         states=ALMERYS_STATES, depends=ALMERYS_DEPENDS)
     almerys_libelle_ss_groupe = fields.Char("Libellé Numéro Sous-Groupe",
         states=ALMERYS_STATES, depends=ALMERYS_DEPENDS)
+    almerys_support_tp = fields.Boolean("Support Tiers-Payant",
+        states={
+            'invisible': Eval('technical_protocol') != 'almerys',
+            },
+        depends=ALMERYS_DEPENDS)
 
     del ALMERYS_STATES, ALMERYS_DEPENDS
 

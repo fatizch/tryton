@@ -6,6 +6,8 @@
             <field name="almerys_ss_groupe"/>
             <label name="almerys_libelle_ss_groupe"/>
             <field name="almerys_libelle_ss_groupe"/>
+            <label name="almerys_support_tp"/>
+            <field name="almerys_support_tp"/>
         </page>
     </xpath>
 </data>
