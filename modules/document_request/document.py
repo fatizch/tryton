@@ -78,7 +78,8 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     last_reminder_date = fields.Date('Last Reminder Date',
         states={'invisible': True})
     reminders_sent = fields.Integer('Reminders Sent')
-    details = fields.Text('Details')
+    details = fields.Text('Comment',
+        help="Add details about the received document")
     allow_force_receive = fields.Function(fields.Boolean('Force Receive'),
         'get_allow_force_receive')
 
