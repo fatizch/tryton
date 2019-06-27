@@ -1,3 +1,4 @@
+* BUG#11975 Prise en compte de la date de fin calculée sur l'élément couvert dans la méthode de filtre de l'élément couvert théorique du service délivré
 * BUG#11692 Filtrer les risques commençant après la date d'effet du contrat pour les sinistres calculés "en complément"
 * FEA#11723 Ajout du nom du sinistre dans le message d'erreur apparaissant en cas de doublon d'élément couvert
 * BUG#11465 Les données complémentaires sur un bénéficiaire au niveau d'un sinistre ne sont pas initialisées depuis la configuration d'une prestation.
