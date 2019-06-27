@@ -51,6 +51,13 @@ class EmploymentVersion(metaclass=PoolMeta):
         depends=['work_country'], ondelete='RESTRICT')
 
     @classmethod
+    def __setup__(cls):
+        super(EmploymentVersion, cls).__setup__()
+        cls.work_time_type.states['invisible'] = (
+            Eval('administrative_situation', '') == 'retired')
+        cls.work_time_type.depends.append('administrative_situation')
+
+    @classmethod
     def default_work_country(cls):
         code = config.get('options', 'default_country', default='FR')
         Country = Pool().get('country.country')
