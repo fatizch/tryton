@@ -22,7 +22,7 @@ class Country(metaclass=PoolMeta):
         'Address Lines', states={
             'invisible': ~Eval('address_line_configuration'),
             'required': Bool(Eval('address_line_configuration', False))},
-        depends=['address_line_configuration'])
+        depends=['address_line_configuration'], delete_missing=True)
 
     _address_line_cache = Cache('get_country_address_lines_cache')
 

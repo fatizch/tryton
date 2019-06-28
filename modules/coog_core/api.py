@@ -44,22 +44,81 @@ CODED_OBJECT_ARRAY_SCHEMA = {
     'additionalItems': False,
     }
 
-FIELD_SCHEMA = {
+FIELD_CONDITIONS = {
+    'type': 'array',
+    'additionalItems': False,
+    'items': {
+        'type': 'object',
+        'additionalProperties': False,
+        'properties': {
+            'name': {'type': 'string'},
+            'operator': {'type': 'string', 'enum': ['=']},
+            'value': {
+                'type': ['string', 'integer', 'boolean'],
+                },
+            },
+        'required': ['name', 'operator', 'value'],
+        },
+    }
+
+MODEL_REFERENCE = {
     'type': 'object',
     'additionalProperties': False,
     'properties': {
-        'type': {
-            'type': 'string',
-            'enum': ['string', 'date', 'email', 'phone_number', 'percentage',
-                'amount'],
+        'model': {'type': 'string'},
+        'required': {
+            'type': 'array',
+            'additionalItems': False,
+            'items': {'type': 'string'},
             },
-        'required': {'type': 'boolean'},
-        'label': {'type': 'string'},
-        'help': {'type': 'string'},
-        'sequence': {'type': 'integer'},
-        'name': {'type': 'string'},
+        'fields': {
+            'type': 'array',
+            'additionalItems': False,
+            'items': {'type': 'string'},
+            },
+        'conditions': FIELD_CONDITIONS,
         },
-    'required': ['name', 'label', 'required', 'type'],
+    'required': ['model'],
+    }
+
+FIELD_SCHEMA = {
+    'oneOf': [
+        {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'type': {
+                    'type': 'string',
+                    'enum': ['string', 'date', 'email', 'phone_number',
+                        'percentage', 'amount', 'boolean'],
+                    },
+                'required': {'type': 'boolean'},
+                'label': {'type': 'string'},
+                'help': {'type': 'string'},
+                'sequence': {'type': 'integer'},
+                'name': {'type': 'string'},
+                'conditions': FIELD_CONDITIONS,
+                },
+            'required': ['name', 'label', 'required', 'type', 'sequence'],
+            },
+        {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'type': {'type': 'string', 'enum': ['ref', 'array']},
+                'required': {'type': 'boolean'},
+                'label': {'type': 'string'},
+                'help': {'type': 'string'},
+                'sequence': {'type': 'integer'},
+                'name': {'type': 'string'},
+                'conditions': FIELD_CONDITIONS,
+                'model_conditions': FIELD_CONDITIONS,
+                'model': {'type': 'string'},
+                },
+            'required': ['name', 'label', 'required', 'type', 'sequence',
+                'model'],
+            },
+        ],
     }
 
 IDENTIFIER_KINDS = [
@@ -156,6 +215,12 @@ class APICore(metaclass=PoolMeta):
     def __setup__(cls):
         super().__setup__()
         cls._apis.update({
+                'model_definitions': {
+                    'public': True,
+                    'readonly': True,
+                    'description': 'Technical descriptions for the models '
+                    'that will be used in the APIs',
+                    },
                 'identity_context': {
                     'public': False,
                     'readonly': True,
@@ -223,17 +288,115 @@ class APICore(metaclass=PoolMeta):
             ]
 
     @classmethod
-    def _field_description(cls, model, field_name, required=False, sequence=0):
+    def model_definitions(cls, parameters):
+        # Will be overriden to add business models
+        return []
+
+    @classmethod
+    def _model_definitions_output_schema(cls):
+        return {
+            'type': 'array',
+            'additionalItems': False,
+            'items': {
+                'type': 'object',
+                'additionalProperties': False,
+                'properties': {
+                    'model': {'type': 'string'},
+                    'fields': {
+                        'type': 'array',
+                        'additionalItems': False,
+                        'items': FIELD_SCHEMA,
+                        },
+                    },
+                'required': ['model', 'fields'],
+                },
+            }
+
+    @classmethod
+    def _model_definitions_examples(cls):
+        return [
+            {
+                'input': {},
+                'output': [
+                    {
+                        'model': 'party',
+                        'fields': [
+                            {
+                                'name': 'is_person',
+                                'required': True,
+                                'label': 'Is Person',
+                                'type': 'boolean',
+                                'sequence': -10,
+                                },
+                            {
+                                'name': 'name',
+                                'required': True,
+                                'label': 'Name',
+                                'type': 'string',
+                                'sequence': 0,
+                                },
+                            {
+                                'name': 'first_name',
+                                'required': True,
+                                'label': 'First Name',
+                                'type': 'string',
+                                'sequence': 10,
+                                'conditions': [
+                                    {'name': 'is_person', 'operator': '=',
+                                        'value': True},
+                                    ],
+                                },
+                            {
+                                'name': 'birth_date',
+                                'required': True,
+                                'label': 'Birth Date',
+                                'type': 'string',
+                                'sequence': 20,
+                                'conditions': [
+                                    {'name': 'is_person', 'operator': '=',
+                                        'value': True},
+                                    ],
+                                },
+                            {
+                                'name': 'father',
+                                'required': False,
+                                'label': 'Father',
+                                'type': 'ref',
+                                'model': 'party',
+                                'sequence': 30,
+                                'conditions': [
+                                    {'name': 'is_person', 'operator': '=',
+                                        'value': True},
+                                    ],
+                                'model_conditions': [
+                                    {'name': 'is_person', 'operator': '=',
+                                        'value': True},
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ]
+
+    @classmethod
+    def _field_description(cls, model, field_name, required=False, sequence=0,
+            conditions=None, force_type=None):
         result = {
             'name': field_name,
             'required': required,
             'sequence': sequence,
             }
+
         # Required for translations
         Model = Pool().get(model)
         instance = Model()
         result['label'] = coog_string.translate_label(instance, field_name)
         result['help'] = coog_string.translate_help(instance, field_name)
+
+        if force_type is not None:
+            result['type'] = force_type
+            return result
 
         field = getattr(Model, field_name)
         if hasattr(field, '_field'):

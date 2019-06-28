@@ -94,11 +94,18 @@ def apify(klass, api_name):
     # re-decorate everytime if needed
     function = getattr(function, '__api_function', function)
 
-    def decorated(parameters, context):
+    def decorated(parameters, context=None):
         Api = Pool().get('api')
-        with Transaction().set_context(
-                **Api.update_transaction_context(context)):
-            with ServerContext().set_context(_api_context=context):
+
+        # Required for super calls to decorated functions
+        transaction_context, server_context = {}, {}
+        if context is None:
+            assert ServerContext().get('_api_context')
+        else:
+            transaction_context = Api.update_transaction_context(context)
+            server_context = context
+        with Transaction().set_context(**transaction_context):
+            with ServerContext().set_context(_api_context=server_context):
                 try:
                     klass._check_access(api_name, parameters)
                     parameters = klass._check_input(api_name, parameters)
@@ -297,8 +304,20 @@ class APIModel(Model):
         data['examples'] = []
         for example in getattr(Model, '_%s_examples' % name, DEFAULT_EXAMPLE)():
 
-            data['compiled_input_schema'](example['input'])
-            data['compiled_output_schema'](example['output'])
+            try:
+                data['compiled_input_schema'](example['input'])
+            except fastjsonschema.exceptions.JsonSchemaException:
+                logging.getLogger('api').error(
+                    'Invalid input example for api %s.%s' %
+                    (cls.__name__, name))
+                raise
+            try:
+                data['compiled_output_schema'](example['output'])
+            except fastjsonschema.exceptions.JsonSchemaException:
+                logging.getLogger('api').error(
+                    'Invalid output example for api %s.%s' %
+                    (cls.__name__, name))
+                raise
             data['examples'].append(example)
 
         # Pre-compute the description (so that retrieving it does not require
@@ -426,6 +445,8 @@ class APIModel(Model):
             except fastjsonschema.exceptions.JsonSchemaException as e:
                 api_logger.error('%s.%s:Invalid output:%s' %
                     (klass.__name__, api_name, e.message))
+                if config.getboolean('env', 'testing') is True:
+                    raise
         return result
 
     @classmethod

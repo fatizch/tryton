@@ -37,10 +37,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'name': 'Children',
                     'addresses': [],
                 }])
-        relation_parent, = self.RelationType.create([{
-                    'code': 'parent',
-                    'name': 'Parent',
-                    }])
+        relation_parent, = self.RelationType.search([('code', '=', 'parent')])
         relation_children, = self.RelationType.create([{
                     'code': 'children',
                     'name': 'Children',
@@ -204,6 +201,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         marty.set_contact([marty], 'phone', '0164091187')
         test_value_length_and_type(['+33 6 57 51 18 79', '+33 1 64 09 11 87'], [
                 'mobile', 'phone'], 2, marty)
+
+    def test0050_party_api_models(self):
+        self.APICore.model_definitions({}, {'_debug_server': True})
 
     @test_framework.prepare_test('party_cog.test0001_createParties')
     def test9001_identity_context_api(self):

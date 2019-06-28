@@ -4,7 +4,7 @@
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields, coog_string, export, model
+from trytond.modules.coog_core import fields, export, model
 
 __all__ = [
     'RelationType',
@@ -13,17 +13,9 @@ __all__ = [
     ]
 
 
-class RelationType(export.ExportImportMixin):
+class RelationType(model.CodedMixin, export.ExportImportMixin):
     __name__ = 'party.relation.type'
     _func_key = 'code'
-
-    code = fields.Char('Code', required=True)
-
-    @fields.depends('code', 'name')
-    def on_change_with_code(self):
-        if self.code:
-            return self.code
-        return coog_string.slugify(self.name)
 
     @classmethod
     def _export_skips(cls):

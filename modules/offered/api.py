@@ -8,7 +8,7 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core.api import APIResourceMixin, OBJECT_ID_SCHEMA
 from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA, CODE_SCHEMA
-from trytond.modules.coog_core.api import FIELD_SCHEMA
+from trytond.modules.coog_core.api import MODEL_REFERENCE
 from trytond.modules.api import APIMixin, DEFAULT_INPUT_SCHEMA, APIInputError
 
 
@@ -422,19 +422,34 @@ class APIProduct(APIMixin):
 
     @classmethod
     def _describe_subscriber(cls, product):
-        Core = Pool().get('api.core')
         if product.subscriber_kind == 'person':
-            return Core._person_description(
-                with_birth_date=True,
-                with_birth_date_required=True,
-                )
-        if product.subscriber_kind == 'company':
-            return Core._company_description()
+            return {
+                'model': 'party',
+                'conditions': [
+                    {'name': 'is_person', 'operator': '=', 'value': True},
+                    ],
+                'required': ['name', 'first_name', 'birth_date', 'email',
+                    'address'],
+                'fields': ['name', 'first_name', 'birth_date', 'email',
+                    'phone_number', 'address'],
+                }
+        elif product.subscriber_kind == 'company':
+            return {
+                'model': 'party',
+                'conditions': [
+                    {'name': 'is_person', 'operator': '=', 'value': False},
+                    ],
+                'required': ['name', 'email', 'address'],
+                'fields': ['name', 'email', 'phone_number', 'address'],
+                }
         if product.subscriber_kind == 'all':
-            return Core._party_description(
-                with_birth_date=True,
-                with_birth_date_required=True,
-                )
+            return {
+                'model': 'party',
+                'required': ['name', 'first_name', 'birth_date', 'email',
+                    'address'],
+                'fields': ['name', 'first_name', 'birth_date', 'email',
+                    'phone_number', 'is_person', 'address'],
+                }
 
     @classmethod
     def _describe_products_convert_input(cls, parameters):
@@ -504,15 +519,13 @@ class APIProduct(APIMixin):
                                     ]
                                 }
                             ],
-                        'subscriber': [
-                            {
-                                'name': 'name',
-                                'required': True,
-                                'label': 'Name',
-                                'type': 'string',
-                                'sequence': 0,
-                                },
-                            ],
+                        'subscriber': {
+                            'model': 'party',
+                            'required': ['name', 'first_name', 'birth_date',
+                                'email'], 'fields': ['name', 'first_name',
+                                'birth_date', 'email', 'phone_number',
+                                'is_person'],
+                            },
                         'packages': [],
                         },
                     ],
@@ -575,15 +588,13 @@ class APIProduct(APIMixin):
                                     ],
                                 }
                             ],
-                        'subscriber': [
-                            {
-                                'name': 'name',
-                                'required': True,
-                                'label': 'Name',
-                                'type': 'string',
-                                'sequence': 0,
-                                },
-                            ],
+                        'subscriber': {
+                            'model': 'party',
+                            'required': ['name', 'first_name', 'birth_date',
+                                'email'], 'fields': ['name', 'first_name',
+                                'birth_date', 'email', 'phone_number',
+                                'is_person'],
+                            },
                         'packages': [],
                         },
                     {
@@ -601,29 +612,17 @@ class APIProduct(APIMixin):
                                 'extra_data': [],
                                 }
                             ],
-                        'subscriber': [
-                            {
-                                'name': 'name',
-                                'required': True,
-                                'label': 'Name',
-                                'type': 'string',
-                                'sequence': 0,
-                                },
-                            {
-                                'name': 'first_name',
-                                'required': True,
-                                'label': 'First Name',
-                                'type': 'string',
-                                'sequence': 10,
-                                },
-                            {
-                                'name': 'birth_date',
-                                'required': True,
-                                'label': 'Birth Date',
-                                'type': 'string',
-                                'sequence': 20,
-                                },
-                            ],
+                        'subscriber': {
+                            'model': 'party',
+                            'conditions': [
+                                {'name': 'is_person', 'operator': '=', 'value':
+                                    True},
+                                ],
+                            'required': ['name', 'first_name', 'birth_date',
+                                'email'],
+                            'fields': ['name', 'first_name', 'birth_date',
+                                'email', 'phone_number'],
+                            },
                         'packages': [
                             {
                                 'id': 1,
@@ -682,11 +681,7 @@ class APIProduct(APIMixin):
                     'items': cls._describe_coverage_schema(),
                     },
                 'extra_data': Pool().get('api.core')._extra_data_schema(),
-                'subscriber': {
-                    'type': 'array',
-                    'additionalItems': False,
-                    'items': FIELD_SCHEMA,
-                    },
+                'subscriber': MODEL_REFERENCE,
                 'packages': {
                     'type': 'array',
                     'additionalItems': False,

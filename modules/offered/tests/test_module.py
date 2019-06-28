@@ -426,46 +426,13 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         ],
                     'extra_data': [],
                     'packages': [],
-                    'subscriber': [
-                        {
-                            'help': 'The main identifier of the party.',
-                            'label': 'Name',
-                            'name': 'name',
-                            'required': True,
-                            'sequence': 0,
-                            'type': 'string',
-                            },
-                        {
-                            'conditions': [
-                                {'name': 'is_person', 'operator': '=',
-                                    'value': True}],
-                            'help': '',
-                            'label': 'First Name',
-                            'name': 'first_name',
-                            'required': True,
-                            'sequence': 10,
-                            'type': 'string',
-                            },
-                        {
-                            'conditions': [
-                                {'name': 'is_person', 'operator': '=',
-                                    'value': True}],
-                            'help': '',
-                            'label': 'Birth Date',
-                            'name': 'birth_date',
-                            'required': True,
-                            'sequence': 20,
-                            'type': 'date',
-                            },
-                        {
-                            'help': '',
-                            'label': 'Person',
-                            'name': 'is_person',
-                            'required': True,
-                            'sequence': -10,
-                            'type': 'boolean',
-                            },
-                        ],
+                    'subscriber': {
+                        'model': 'party',
+                        'required': ['name', 'first_name', 'birth_date',
+                            'email', 'address'],
+                        'fields': ['name', 'first_name', 'birth_date',
+                            'email', 'phone_number', 'is_person', 'address'],
+                        },
                     },
                 ])
 
