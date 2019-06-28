@@ -275,7 +275,7 @@ class SetNumberInvoiceAgainstBalanceBatch(batch.BatchRoot):
         groups = cursor.fetchall()
         res = []
         for key, group in groupby(groups, key=lambda x: x[1]):
-            res.append([x[0] for x in group])
+            res.append([(x[0],) for x in group])
         return res
 
     @classmethod
@@ -327,7 +327,7 @@ class PostInvoiceAgainstBalanceBatch(batch.BatchRoot):
 
         res = []
         for key, group in groupby(groups, key=lambda x: x[1]):
-            res.append([x[0] for x in group])
+            res.append([(x[0],) for x in group])
         return res
 
     @classmethod

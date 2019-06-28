@@ -1,3 +1,4 @@
+* BUG#11869 Select id should return a tuple to be compliant
 * OTH#00000 Iteration to allow override of the repositioning payment date computation when failing payment
 * FEA#11728 Billing modes dynamic management in subscription
 * FEA#11656 Add a dedicated event for the payment of the first invoice of a contract
