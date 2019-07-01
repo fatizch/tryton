@@ -48,7 +48,7 @@ coog_server_stop() { # stop
 }
 
 coog_server_kill() { # kill
-        coog_server_pid | xargs kill -9 &> /dev/null
+        coog_server_pid | xargs kill &> /dev/null
         echo server killed
 }
 
