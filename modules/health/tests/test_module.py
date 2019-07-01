@@ -30,11 +30,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         relation_spouse.save()
         relation_spouse.reverse = relation_spouse
         relation_spouse.reverse.save()
-        relation_child = self.PartyRelationType(name='Child', code='child')
-        relation_child.save()
-        relation_parent = self.PartyRelationType(name='Parent', code='parent')
-        relation_parent.reverse = relation_child
-        relation_parent.save()
+        relation_child, = self.PartyRelationType.search(
+            [('code', '=', 'child')])
         party_father = self.Party(name='Father', first_name='F', gender='male',
             is_person=True, birth_date=datetime.date(1978, 2, 15))
         party_father.save()
