@@ -3,7 +3,6 @@
 import logging
 import codecs
 
-from io import BytesIO
 from datetime import datetime, date
 from collections import defaultdict
 
@@ -79,15 +78,15 @@ class BankMobilityBatch(batch.BatchRootNoSelect):
             return
         for x in ids:
             cls.treat_mobility_modification(
-                x['message_id'],
-                x['modification_id'],
-                datetime.strptime(x['date_of_signature'],
+                x[0]['message_id'],
+                x[0]['modification_id'],
+                datetime.strptime(x[0]['date_of_signature'],
                     '%Y-%m-%d').date(),
-                x['original_iban'],
-                x['original_bic'],
-                x['updated_iban'],
-                x['updated_bic'],
-                x['mandate_identification'])
+                x[0]['original_iban'],
+                x[0]['original_bic'],
+                x[0]['updated_iban'],
+                x[0]['updated_bic'],
+                x[0]['mandate_identification'])
         return ids
 
     @classmethod

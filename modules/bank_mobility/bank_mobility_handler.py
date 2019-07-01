@@ -41,5 +41,5 @@ class FLOW5(BankMobilityHandler):
                 d['mandate_identification'] = [x.text for x in
                         element.findall('{*}TxRprt/{*}TxDtls/{*}Refs/{*}MndtId')
                         ]
-                result.append([d])
+                result.append([(d,)])
         return result
