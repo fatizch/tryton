@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- Index data at computation date-->
+        <!-- ############################################################ -->
+        <record model="rule_engine.function" id="indice_majore">
+            <field name="translated_technical_name">indice_majore</field>
+            <field name="description">Indice majoré (FP)</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_employment_increased_index</field>
+            <field name="long_description">Indice majoré de la fonction publique défini dans les données professionnelles en date de calcul</field>
+            <field name="parent" ref="offered_insurance.dossier_personne_couverte"/>
+        </record>
+        <record model="rule_engine.function" id="indice_brut">
+            <field name="translated_technical_name">indice_brut</field>
+            <field name="description">Indice brut (FP)</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_employment_gross_index</field>
+            <field name="long_description">Indice brut de la fonction publique défini dans les données professionnelles en date du calcul</field>
+            <field name="parent" ref="offered_insurance.dossier_personne_couverte"/>
+        </record>
+        <record model="rule_engine.function" id="indice_majore_souscripteur">
+            <field name="translated_technical_name">indice_majore_souscripteur</field>
+            <field name="description">Indice majoré du souscripteur (FP)</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_subscriber_employment_increased_index</field>
+            <field name="long_description">Indice majoré de la fonction publique défini dans les données professionnelles du souscripteur du contrat en date du calcul</field>
+            <field name="parent" ref="offered_insurance.dossier_souscripteur"/>
+        </record>
+        <record model="rule_engine.function" id="indice_brut_souscripteur">
+            <field name="translated_technical_name">indice_brut_souscripteur</field>
+            <field name="description">Indice brut du souscripteur (FP)</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_subscriber_employment_gross_index</field>
+            <field name="long_description">Indice brut de la fonction publique défini dans les données professionnelles du souscripteur du contrat en date du calcul</field>
+            <field name="parent" ref="offered_insurance.dossier_souscripteur"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- Rule Engine 1st january -->
+        <!-- ############################################################ -->
+        <record model="rule_engine.function" id="indice_majore_1_er_janvier">
+            <field name="translated_technical_name">indice_majore_1_er_janvier</field>
+            <field name="description">Indice majoré au 1er janvier(FP)</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_employment_increased_index_1st_january</field>
+            <field name="long_description">Indice majoré de la fonction publique défini dans les données professionnelles en date de 1er janvier de l'année de la date de calcul</field>
+            <field name="parent" ref="offered_insurance.dossier_personne_couverte"/>
+        </record>
+        <record model="rule_engine.function" id="indice_brut_1_er_janvier">
+            <field name="translated_technical_name">indice_brut_1_er_janvier</field>
+            <field name="description">Indice brut au 1er janvier(FP)</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_employment_gross_index_1st_january</field>
+            <field name="long_description">Indice brut de la fonction publique défini dans les données professionnelles en date du 1er janvier de l'année de la date de calcul</field>
+            <field name="parent" ref="offered_insurance.dossier_personne_couverte"/>
+        </record>
+        <record model="rule_engine.function" id="indice_majore_souscripteur_1_er_janvier">
+            <field name="translated_technical_name">indice_majore_souscripteur_1_er_janvier</field>
+            <field name="description">Indice majoré du souscripteur au 1er janvier(FP)</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_subscriber_employment_increased_index_1st_january</field>
+            <field name="long_description">Indice majoré de la fonction publique défini dans les données professionnelles du souscripteur du contrat en date du 1er janvier de l'année de la date de calcul</field>
+            <field name="parent" ref="offered_insurance.dossier_souscripteur"/>
+        </record>
+        <record model="rule_engine.function" id="indice_brut_souscripteur_1_er_janvier">
+            <field name="translated_technical_name">indice_brut_souscripteur_1_er_janvier</field>
+            <field name="description">Indice brut du souscripteur au 1er janvier(FP)</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_subscriber_employment_gross_index_1st_january</field>
+            <field name="long_description">Indice brut de la fonction publique défini dans les données professionnelles du souscripteur du contrat en date du 1er janvier de l'année de la date de calcul</field>
+            <field name="parent" ref="offered_insurance.dossier_souscripteur"/>
+        </record>
+    </data>
+</tryton>

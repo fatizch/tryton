@@ -1,9 +1,12 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
-from trytond.pool import PoolMeta
-from trytond.modules.coog_core import fields, model, coog_string
+import datetime
+
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
 from trytond.model import Unique
+
+from trytond.modules.coog_core import fields, model, coog_string
 
 __all__ = [
     'Employment',
@@ -51,16 +54,32 @@ class Party(metaclass=PoolMeta):
                  {'invisible': ~Eval('is_person')}),
             ]
 
+    def get_employments(self, at_date):
+        return [e for e in self.employments
+            if e.start_date <= at_date and
+            (e.end_date or datetime.date.max) >= at_date]
+
+    def get_employment_version_data(self, name, at_date):
+        if not self.is_person:
+            return
+        Version = Pool().get('party.employment.version')
+        employments = self.get_employments(at_date)
+        for e in employments:
+            version = Version.version_at_date(e, at_date)
+            if getattr(version, name, None):
+                return getattr(version, name)
+
 
 class EmploymentVersion(model._RevisionMixin, model.CoogView, model.CoogSQL):
     'Employment Version'
     __name__ = 'party.employment.version'
+    _parent_name = 'employment'
 
     employment = fields.Many2One('party.employment', 'Employment',
         select=True, required=True, ondelete='RESTRICT')
     work_time_type = fields.Many2One('party.employment_work_time_type',
         'Work Time Type', ondelete='RESTRICT')
-    gross_salary = fields.Numeric('Gross Salary')
+    gross_salary = fields.Numeric('Annual Gross Salary')
 
     @classmethod
     def __setup__(cls):
