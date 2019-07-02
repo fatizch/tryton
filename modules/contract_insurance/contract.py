@@ -1129,19 +1129,17 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         Covered = Pool().get('contract.covered_element')
         covered_1 = Covered.__table__()
         covered_2 = Covered.__table__()
+        tables = {}
+        tables['covered_1'] = covered_1
+        tables['covered_2'] = covered_2
 
         join_condition = ((covered_1.party == covered_2.party) &
             (covered_1.parent == covered_2.parent) &
             (covered_1.parent == parent.id) &
             (covered_1.party == party.id))
         query = covered_1.join(covered_2, condition=join_condition)
-        cov_1_start = Coalesce(covered_1.manual_start_date, datetime.date.min)
-        cov_1_end = Coalesce(covered_1.manual_end_date, datetime.date.max)
-        cov_2_start = Coalesce(covered_2.manual_start_date, datetime.date.min)
 
-        where_clause = ((covered_2.id != covered_1.id) &
-            (cov_2_start >= cov_1_start) &
-            (cov_2_start <= cov_1_end))
+        where_clause = self.check_overlapping_where_clause(tables)
         cursor.execute(*query.select(covered_1.id,
                 where=where_clause)
             )
@@ -1149,6 +1147,17 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         res = [x for x in cursor.fetchall()]
         if res:
             self.append_functional_error('overlapped_elements',)
+
+    def check_overlapping_where_clause(self, tables):
+        covered_1 = tables['covered_1']
+        covered_2 = tables['covered_2']
+        cov_1_start = Coalesce(covered_1.manual_start_date, datetime.date.min)
+        cov_1_end = Coalesce(covered_1.manual_end_date, datetime.date.max)
+        cov_2_start = Coalesce(covered_2.manual_start_date, datetime.date.min)
+        where_clause = ((covered_2.id != covered_1.id) &
+            (cov_2_start >= cov_1_start) &
+            (cov_2_start <= cov_1_end))
+        return where_clause
 
     @classmethod
     def check_party_overlaps(cls, covered_elements):

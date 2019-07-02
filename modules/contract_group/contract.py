@@ -1,6 +1,8 @@
 # -*- coding:utf-8 -*-
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from sql import Literal
+
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
 
@@ -209,3 +211,11 @@ class CoveredElement(metaclass=PoolMeta):
         to_deactivate = [x for x in enrollments if x.active]
         if to_deactivate:
             cls.write(to_deactivate, {'active': False})
+
+    def check_overlapping_where_clause(self, tables):
+        covered_1 = tables['covered_1']
+        covered_2 = tables['covered_2']
+        where_clause = super(CoveredElement, self
+            ).check_overlapping_where_clause(tables)
+        return where_clause & (covered_1.active == Literal(True)) & (
+            covered_2.active == Literal(True))

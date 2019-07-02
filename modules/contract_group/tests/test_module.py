@@ -13,6 +13,16 @@ class ModuleTestCase(test_framework.CoogTestCase):
     '''
     module = 'contract_group'
 
+    @classmethod
+    def fetch_models_for(cls):
+        return ['contract_insurance']
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0050_testOveralppingCoveredElements'
+        )
+    def test0050_testOveralppingCoveredElements_group(self):
+        pass
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
