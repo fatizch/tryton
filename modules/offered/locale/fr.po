@@ -925,8 +925,8 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "help:extra_data,domain:"
-msgid "Example: [['my_code', '>=', 5], ['my_code', '<', 12]]"
-msgstr "Exemple: [['mon_code', '>=', 5], ['mon_code', '<', 12]]"
+msgid "Example: [[\"my_code\", \">=\", 5], [\"my_code\", \"<\", 12]]"
+msgstr "Exemple: [[\"mon_code\", \">=\", 5], [\"mon_code\", \"<\", 12]]"
 
 msgctxt "help:extra_data,selection:"
 msgid "A couple of key and label separated by \":\" per line"
