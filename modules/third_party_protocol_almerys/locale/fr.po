@@ -1,3 +1,135 @@
 #
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:party.party,almerys_courrier_gestion:"
+msgid "Almerys COURRIER_GESTION"
+msgstr "Almerys COURRIER_GESTION"
+
+msgctxt "field:party.party,almerys_joignabilite_adresse_media:"
+msgid "Almerys JOIGNABILITE > ADRESSE_MEDIA"
+msgstr "Almerys JOIGNABILITE > ADRESSE_MEDIA"
+
+msgctxt "field:party.party,almerys_joignabilite_media:"
+msgid "Almerys JOIGNABILITE > MEDIA"
+msgstr "Almerys JOIGNABILITE > MEDIA"
+
+msgctxt "field:party.party,almerys_releve_presta:"
+msgid "Almerys RELEVE_PRESTA"
+msgstr "Almerys RELEVE_PRESTA"
+
+msgctxt "field:third_party_manager.protocol,almerys_libelle_ss_groupe:"
+msgid "Sous-Groupe Number Label"
+msgstr "Libellé numéro sous-groupe"
+
+msgctxt "field:third_party_manager.protocol,almerys_ss_groupe:"
+msgid "Sous-Groupe Number"
+msgstr "Numéro sous-groupe"
+
+msgctxt "field:third_party_manager.protocol,almerys_support_tp:"
+msgid "Third-Party Payment Support"
+msgstr "Support tiers-payant"
+
+msgctxt "field:third_party_protocol.almerys.configuration,autonomous:"
+msgid "Autonomous"
+msgstr "Autonome"
+
+msgctxt "field:third_party_protocol.almerys.configuration,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:third_party_protocol.almerys.configuration,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:third_party_protocol.almerys.configuration,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:third_party_protocol.almerys.configuration,customer_label:"
+msgid "Customer Label"
+msgstr "Libellé client"
+
+msgctxt "field:third_party_protocol.almerys.configuration,customer_number:"
+msgid "Customer Number"
+msgstr "Numéro client"
+
+msgctxt "field:third_party_protocol.almerys.configuration,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:third_party_protocol.almerys.configuration,number_sequence_v3:"
+msgid "Number Sequence V3"
+msgstr "Séquence de numérotation v3"
+
+msgctxt "field:third_party_protocol.almerys.configuration,protocol_version:"
+msgid "Protocol Version"
+msgstr "Version du protocole"
+
+msgctxt "field:third_party_protocol.almerys.configuration,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:third_party_protocol.almerys.configuration,write_date:"
+msgid "Write Date"
+msgstr "Date de modification"
+
+msgctxt "field:third_party_protocol.almerys.configuration,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:third_party_protocol.almerys.configuration,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:third_party_protocol.almerys.configuration.autonomous,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:third_party_protocol.almerys.configuration.customer_label,customer_label:"
+msgid "Customer Label"
+msgstr "Libellé client"
+
+msgctxt "field:third_party_protocol.almerys.configuration.customer_label,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:third_party_protocol.almerys.configuration.customer_number,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:third_party_protocol.batch.almerys,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "model:ir.action,name:act_third_party_protocol_almerys_configuration"
+msgid "Almerys Configuration"
+msgstr "Configuration Almerys"
+
+msgctxt "model:ir.sequence.type,name:sequence_type_almerys_v3"
+msgid "Almerys v3"
+msgstr "Almerys v3"
+
+msgctxt "model:ir.ui.menu,name:menu_third_party_protocol_almerys_form"
+msgid "Almerys Configuration"
+msgstr "Configuration Almerys"
+
+msgctxt "model:third_party_protocol.almerys.configuration,name:"
+msgid "Almerys Configuration"
+msgstr "Configuration Almerys"
+
+msgctxt "model:third_party_protocol.almerys.configuration.autonomous,name:"
+msgid "Almerys Configuration - Autonomous"
+msgstr "Configuration Almerys - Autonome"
+
+msgctxt "model:third_party_protocol.batch.almerys,name:"
+msgid "Almerys Batch Job"
+msgstr "Batch Almerys"
+
+msgctxt "selection:third_party_manager.protocol,technical_protocol:"
+msgid "Almerys"
+msgstr "Almerys"
+
+msgctxt "view:third_party_manager.protocol:"
+msgid "Almerys"
+msgstr "Almerys"

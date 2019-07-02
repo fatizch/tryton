@@ -5,6 +5,7 @@ from lxml import etree
 from lxml.builder import ElementMaker
 from itertools import groupby
 from operator import attrgetter
+from stdnum import iban
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -12,12 +13,16 @@ from trytond.transaction import Transaction
 from trytond.modules.coog_core import batch
 
 
+def empty_element(e):
+    return e is None or (isinstance(e, str) and e.strip() == '')
+
+
 # This class allows to simplify instantion of elements by skipping those that
 # are empty
 class AlmerysElementMaker(ElementMaker):
 
     def __call__(self, tag, *children, **attributes):
-        if children and all(c is None or c == '' for c in children):
+        if children and all(empty_element(c) for c in children):
             return None
         sub_elements = []
         for child in children:
@@ -135,7 +140,7 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                 periods = list(periods)
                 contract_e = E.CONTRAT(
                     E.NUM_CONTRAT(contract.contract_number),
-                    E.ETAT_CONTRAT('NA'),
+                    E.ETAT_CONTRAT('OU'),
                     E.DATE_SOUSCRIPTION(
                         contract.initial_start_date.isoformat()),
                     E.DATE_IMMAT(contract.initial_start_date.isoformat()),
@@ -300,6 +305,7 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                             liens.get(relation.type.code, 'AA')
                             if relation else 'AA'),
                         )
+                    health_complement = None
                     if covered.party.main_health_complement:
                         health_complement = covered.party.main_health_complement
                         ro = E.RO()
@@ -307,11 +313,12 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                             ro.append(E.CODE_GRAND_REGIME(
                                     health_complement.hc_system.code
                                     ))
-                        ro.extend(filter(None, [
-                                    E.CODE_CAISSE_RO(health_complement
-                                        .insurance_fund_number[2:5]),
-                                    E.CENTRE_SS(health_complement
-                                        .insurance_fund_number[5:9]),
+                        fund_number = (health_complement.insurance_fund_number
+                            if health_complement.insurance_fund_number
+                            else '000000000')
+                        ro.extend(filter(lambda e: not empty_element(e), [
+                                    E.CODE_CAISSE_RO(fund_number[2:5]),
+                                    E.CENTRE_SS(fund_number[5:9]),
                                     ]))
                         beneficiaire.append(ro)
 
@@ -332,14 +339,13 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                                         tp_period.end_date.isoformat()))
                             beneficiaire.append(produit)
 
-                    if (getattr(covered.item_desc, 'is_noemie', False)
-                            and covered.party.main_health_complement
-                            and covered.party.ssn):
-                        beneficiaire.append(E.STATUT_NOEMISATION(
-                                E.NOEMISE('true'),
-                                # DATE_DEBUT_NOEMISATION
-                                # DATE_FIN_NOEMISATION
-                                ))
+                    noemise = (covered.item_desc.is_noemie
+                            and health_complement
+                            and health_complement.hc_system
+                            and health_complement.insurance_fund_number)
+                    beneficiaire.append(E.STATUT_NOEMISATION(
+                            E.NOEMISE('true' if noemise else 'false'),
+                            ))
 
                     if any(tpp.protocol.almerys_support_tp
                             for tpp in all_periods):
@@ -347,7 +353,9 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                             for tpp in all_periods
                             if tpp.protocol.almerys_support_tp)
                         bank_account = covered.party.claim_bank_account
-                        bank_number = bank_account.number.replace(' ', '')
+                        bank_number = iban.compact(bank_account.number)
+                        bank_code, bank_agency = bank_account.\
+                            get_bank_identifiers_fr(bank_number)
                         bank = bank_account.bank
                         if bank:
                             service_tp = E.SERVICE_TP(
@@ -364,8 +372,8 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                                         E.BIC_EMPLACEMENT(bank.bic[6:8]),
                                         E.BIC_BRANCHE(bank.bic[8:11]),
                                         E.NOM_BANQUE(bank.party.name[:100]),
-                                        E.CODE_BANQUE(bank_number[4:9]),
-                                        E.AGENCE_BANQUE(bank_number[9:14]),
+                                        E.CODE_BANQUE(bank_code),
+                                        E.AGENCE_BANQUE(bank_agency),
                                         E.NUM_COMPTE(bank_number[14:-2]),
                                         E.CLE_RIB(bank_number[-2:]),
                                         # DATE_EFFET
@@ -411,7 +419,7 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                         selected_period = period
 
                 extra_details = selected_period.extra_details
-                contract_e.extend(filter(None, [
+                contract_e.extend(filter(lambda e: not empty_element(e), [
                             E.REF_INTERNE_CG(
                                 extra_details.get(
                                     tp_prefix + 'ref_interne', '')[:15]),
@@ -435,10 +443,11 @@ class AlmerysProtocolBatch(batch.BatchRoot):
 
                 perimetre_service.append(contract_e)
 
-        filename = 'Almerys-{}.xml'.format(sequence)
+        filename = '{}.xml'.format(sequence)
         cls.write_batch_output(
             etree.tostring(
-                document, pretty_print=True, xml_declaration=True),
+                document, encoding='UTF-8', pretty_print=True,
+                xml_declaration=True),
             filename, root_dir=directory, **kwargs)
 
         TPPeriod.write(objects, {'status': 'sent'})

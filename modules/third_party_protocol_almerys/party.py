@@ -24,7 +24,7 @@ class Party(metaclass=PoolMeta):
         fields.Char("Almerys JOIGNABILITE > MEDIA"),
         'on_change_with_almerys_joignabilite_media')
     almerys_joignabilite_adresse_media = fields.Function(
-        fields.Char("Akmerys JOIGNABILITE > ADRESSE_MEDIA"),
+        fields.Char("Almerys JOIGNABILITE > ADRESSE_MEDIA"),
         'on_change_with_almerys_joignabilite_adresse_media')
 
     def on_change_with_almerys_releve_presta(self, name=None):
