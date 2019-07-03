@@ -19,6 +19,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">Almerys v3</field>
             <field name="code">third_party_protocol.almerys.v3</field>
         </record>
+        <record model="ir.sequence.type-res.group" id="sequence_type_almerys_group_admin">
+            <field name="sequence_type" ref="sequence_type_almerys_v3"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+        <record model="ir.sequence.type-res.group" id="sequence_type_almerys_group_global_config">
+            <field name="sequence_type" ref="sequence_type_almerys_v3"/>
+            <field name="group" ref="coog_core.group_global_config"/>
+        </record>
 
         <!-- ############################### -->
         <!-- # Extra Details Configuration # -->

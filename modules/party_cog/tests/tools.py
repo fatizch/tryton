@@ -55,6 +55,7 @@ def create_party_person(name=None, first_name=None, birth_date=None,
         company=None):
     "Create default party person"
     Party = Model.get('party.party')
+    Country = Model.get('country.country')
 
     if not name:
         name = 'Doe'
@@ -68,6 +69,13 @@ def create_party_person(name=None, first_name=None, birth_date=None,
         is_person=True,
         gender='male',
         birth_date=birth_date)
+
+    a = person.all_addresses[0]
+    a.street = 'Adresse Inconnue'
+    a.zip = '99999'
+    a.city = 'Bioul'
+    a.country, = Country.find([('code', '=', 'FR')])
+
     if hasattr(person, 'account_payable') and company:
         add_accounts(person, company)
     person.save()
@@ -76,10 +84,18 @@ def create_party_person(name=None, first_name=None, birth_date=None,
 
 def create_party_company(name=None):
     Party = Model.get('party.party')
+    Country = Model.get('country.country')
 
     if not name:
         name = 'Acme Inc.'
 
     company = Party(name=name, is_person=False)
+
+    a = company.all_addresses[0]
+    a.street = 'Adresse Inconnue'
+    a.zip = '99999'
+    a.city = 'Bioul'
+    a.country, = Country.find([('code', '=', 'FR')])
+
     company.save()
     return company

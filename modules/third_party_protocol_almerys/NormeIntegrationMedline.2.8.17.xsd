@@ -1,0 +1,2594 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.3 U (http://www.xmlspy.com) by Bertrand (private) -->
+<xs:schema targetNamespace="http://www.almerys.com/NormeV3" xmlns="http://www.almerys.com/NormeV3" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>non</xs:documentation>
+	</xs:annotation>
+	<xs:element name="FICHIER">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ENTETE" type="infoEntete"/>
+				<xs:element name="OFFREUR_SERVICE" type="infoOS"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="infoEntete">
+		<xs:sequence>
+			<xs:element name="NUM_FICHIER" type="positiveInteger-6"/>
+			<xs:element name="DATE_CREATION" type="xs:dateTime"/>
+			<xs:element name="VERSION_NORME" type="string-1-10"/>
+			<xs:element name="NUM_OS_EMETTEUR" type="positiveInteger-14"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoOS">
+		<xs:sequence>
+			<xs:element name="LIBELLE_OS" type="string-1-30">
+				<xs:annotation>
+					<xs:documentation>Libelle de l'OS</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NUM_OS" type="string-1-16"/>
+			<xs:element name="PERIMETRE_SERVICE" type="infoPerimetre" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Perimetre de service de l'OS</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoCentreGestion">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_CG" type="string-1-15">
+				<xs:annotation>
+					<xs:documentation>Référence  du centre de gestion de l'OS</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ADRESSE_CG" type="infoAdresse"/>
+			<xs:element name="INFO_CARTE" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="LIGNE1" type="string-1-50" minOccurs="0"/>
+						<xs:element name="LIGNE2" type="string-1-50" minOccurs="0"/>
+						<xs:element name="LIGNE3" type="string-1-50" minOccurs="0"/>
+						<xs:element name="LIGNE4" type="string-1-50" minOccurs="0"/>
+						<xs:element name="LIGNE5" type="string-1-50" minOccurs="0"/>
+						<xs:element name="LIGNE6" type="string-1-50" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="TYPE_GESTIONNAIRE" type="string-1-50" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Front office ou Back office</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="GESTIONNAIRE_CONTRAT" type="string-1-30" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Libelle du gestionnaire</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="HORAIRE" type="string-1-80" minOccurs="0"/>
+			<xs:element name="TARIF" type="string-1-80" minOccurs="0"/>
+			<xs:element name="OUVERTURE" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="OUV1" type="string-1-80" minOccurs="0"/>
+						<xs:element name="OUV2" type="string-1-80" minOccurs="0"/>
+						<xs:element name="OUV3" type="string-1-80" minOccurs="0"/>
+						<xs:element name="OUV4" type="string-1-80" minOccurs="0"/>
+						<xs:element name="OUV5" type="string-1-80" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoSite">
+		<xs:sequence>
+			<xs:element name="REF_SITE" type="string-1-15"/>
+			<xs:element name="ADRESSE_SITE" type="infoAdresse"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoContrat">
+		<xs:sequence>
+			<xs:element name="NUM_CONTRAT" type="string-1-30"/>
+			<xs:element name="REF_NUM_CONTRAT" type="string-1-30" minOccurs="0" maxOccurs="2">
+				<xs:annotation>
+					<xs:documentation>Référence au N° de contrat de l'ouvrant-droit</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="REF_ADH_CONTRAT" type="string-1-20" minOccurs="0" maxOccurs="2"/>
+			<xs:element name="ETAT_CONTRAT" type="codeContrat">
+				<xs:annotation>
+					<xs:documentation>OU: Ouvert
+FE : Fermé volontairement
+FR : Fermé pour 	autre raison
+RO : Rouvert
+NA : Non applicable</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_SOUSCRIPTION" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Date souscription du contrat</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_IMMAT" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Date d'immatricilation dans la contrat</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_RENOUVELLEMENT" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Date de renouvellement du contrat</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_RESILIATION" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Date de résiliation du contrat</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MOTIF_RESILIATION" type="xs:string" minOccurs="0"/>
+			<xs:element name="GRP_ASSURE" type="xs:string" minOccurs="0"/>
+			<xs:element name="DATE_GRP_ASSURE" type="xs:date" minOccurs="0"/>
+			<xs:element name="ADRESSE_CONTRAT" type="infoAdresseParticulier" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Adresse de référence du contrat du contractant. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MEMBRE_CONTRAT" type="infoMembreContrat" maxOccurs="unbounded"/>
+			<xs:element name="RATTACHEMENT" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="REF_OS_RATTACHANT" type="string-1-30"/>
+						<xs:element name="REF_OS_RATTACHE" type="string-1-30"/>
+						<xs:element name="LIEN_JURIDIQUE" type="codeJuridique">
+							<xs:annotation>
+								<xs:documentation>AU : autorité parentale,
+EN : enfant,
+CJ : conjoint,
+CO : concubin,
+PA : partenaire lié par PACS,
+TU : tuteur,
+CU : curateur,
+AE : Ascendant,
+AA : Autre,
+PC : Personne à charge</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SERVICE" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SERVICE_CV" type="infoServiceCV" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="SERVICE_CD" type="infoServiceCD" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="SERVICE_CR" type="infoServiceCR" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="SERVICE_PREVOYANCE" type="infoServicePrev" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="SERVICE_TP_PEC" type="infoTP_PEC" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="SERVICE_DECOMPTE" type="InfoDecompte" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="CARTE_A_PUCE" type="InfoCartePuce" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="CARTE_VITALE" type="infoServiceCarteVitale" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="SERVICE_RMS" type="infoServiceRMS" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="SERVICE_COFFRE" type="infoServiceCoffre" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="SERVICE_NOMADE" type="infoServiceNMD" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="SERVICE_TEAMLIVE" type="infoTeamLive" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="CARTE_RMS" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="CARTE_INDIVIDUELLE"/>
+									<xs:element name="CARTE_COLLECTIVE"/>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="REF_INTERNE_CG" type="string-1-15" minOccurs="0"/>
+			<xs:element name="REF_COURTIER" type="string-1-15" minOccurs="0"/>
+			<xs:element name="REF_ENTREPRISE" type="string-1-15" minOccurs="0"/>
+			<xs:element name="NUM_CONTRAT_COLLECTIF" type="string-1-30" minOccurs="0"/>
+			<xs:element name="REF_SITE" type="string-1-15" minOccurs="0"/>
+			<xs:element name="REF_GESTIONNAIRE" type="string-1-15" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoContratEntreprise">
+		<xs:sequence>
+			<xs:element name="TYPE_DESTINATAIRE" type="codeDestinataire">
+				<xs:annotation>
+					<xs:documentation>EN : adresse de l'entreprise qui doit etre utilisée,
+AD : 'adresse du MembreContrat qui doit etre utilisée</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NUM_AVENANT" type="string-1-30">
+				<xs:annotation>
+					<xs:documentation>Numero d'avenant</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoServiceRMS">
+		<xs:sequence>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:string"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:string" minOccurs="0"/>
+			<xs:element name="DATE_DEBUT_SUSPENSION" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" minOccurs="0"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service,
+DE: désactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN = Envoi à l'entrepise,
+AD = envoi à L'adhérent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoServiceCV">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS" type="string-1-30"/>
+			<xs:element name="LISTE_DROIT_ACCES" type="infoDroitAcces" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service,
+DE : désactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_RESILIATION" type="xs:string" minOccurs="0"/>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise,
+AD : envoi à l'adhérent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoServiceCD">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS" type="string-1-30"/>
+			<xs:element name="LISTE_DROIT_ACCES" type="infoDroitAcces" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service,
+DE : désactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_RESILIATION" type="xs:string" minOccurs="0"/>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise,
+AD : envoi à l'adhérent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoServiceCR">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS" type="string-1-30"/>
+			<xs:element name="LISTE_DROIT_ACCES" type="infoDroitAcces" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service,
+DE : désactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_RESILIATION" type="xs:string" minOccurs="0"/>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise,
+AD : envoi à l'adhérent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoServicePrev">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS" type="string-1-30"/>
+			<xs:element name="MNT_GARANTI" type="positiveInteger-14" minOccurs="0"/>
+			<xs:element name="MNT_COTISATION" type="positiveInteger-14" minOccurs="0"/>
+			<xs:element name="REDUCTION" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="LISTE_DROIT_ACCES" type="infoDroitAcces" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service,
+DE : désactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_RESILIATION" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoServiceNMD">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS" type="string-1-30"/>
+			<xs:element name="LISTE_DROIT_ACCES" type="infoDroitAcces" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service,
+DE : désactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_RESILIATION" type="xs:string" minOccurs="0"/>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise,
+AD : envoi à l'adhérent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoServiceTLPRO">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS" type="string-1-30"/>
+			<xs:element name="LISTE_DROIT_ACCES" type="infoDroitAcces" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service,
+DE : désactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_RESILIATION" type="xs:string" minOccurs="0"/>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise,
+AD : envoi à l'adhérent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoServiceTLMED">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS" type="string-1-30"/>
+			<xs:element name="LISTE_DROIT_ACCES" type="infoDroitAcces" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service,
+DE : désactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_RESILIATION" type="xs:string" minOccurs="0"/>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise,
+AD : envoi à l'adhérent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoServiceTLCLUB">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS" type="string-1-30"/>
+			<xs:element name="LISTE_DROIT_ACCES" type="infoDroitAcces" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service,
+DE : désactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_RESILIATION" type="xs:string" minOccurs="0"/>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise,
+AD : envoi à l'adhérent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoServiceCoffre">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS" type="string-1-30"/>
+			<xs:element name="LISTE_DROIT_ACCES" type="infoDroitAcces" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service,
+DE : désactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_RESILIATION" type="xs:string" minOccurs="0"/>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise, AD : envoi à l'adhérent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoServiceCarteVitale">
+		<xs:sequence>
+			<xs:element name="NATURE_DEMANDE" type="codeDemande">
+				<xs:annotation>
+					<xs:documentation>PN: Personnalisation Normale,
+PU : Personnalisation Urgente,
+TJ : Télé mise à jour,
+ME : Mutation Entrante,
+MR : Mutation entrante avec remplacement, 
+MS : Mutation Sortante,
+IN : Invalidation,
+BL : Blocage,
+DE : Destruction par avis GTC,
+GE : Mutation entrante par avis GTC,
+GS : Mutation Sortante par avis GTC,
+RM : Renouvellement de Masse,
+AN: Annulation PN,PU ou ME,
+RC : Regime Complementaire, contrats AMC,
+TC : Télé mise à jour de contrat AMC,
+IT : Invalidation de contrat AMC,
+ED : Destruction de contrat AMC</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CODE_EVENEMENT_CARTE" type="string-2" minOccurs="0"/>
+			<xs:element name="CODE_SERVICE" type="positiveInteger-2" minOccurs="0"/>
+			<xs:element name="RO_FAMILLE" type="infoRO_FAMILLE" minOccurs="0"/>
+			<xs:element name="BENEF_RC" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="BENEFICIAIRE" type="infoBenefVtl"/>
+						<xs:element name="RC" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="TEXTE_MUTUELLE" type="infoTexteMutuelle" minOccurs="0"/>
+									<xs:element name="NATURE_RC">
+										<xs:complexType>
+											<xs:complexContent>
+												<xs:extension base="infoRC"/>
+											</xs:complexContent>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="HABILITATION" type="xs:integer" minOccurs="0"/>
+									<xs:element name="INDICATEUR_TRAITEMENT" type="string-2" minOccurs="0"/>
+									<xs:element name="LIBL_DIALOGUE" type="string-1-16"/>
+									<xs:element name="LIBL_DIALOGUE_LONG" type="string-1-32" minOccurs="0"/>
+									<xs:element name="SERVICE_ASSOCIE" type="string-1-17" minOccurs="0"/>
+									<xs:element name="TYPE_SERVICE" type="string-1" minOccurs="0"/>
+									<xs:element name="ZONE_COMMUNE" type="string-1-115" minOccurs="0"/>
+									<xs:element name="DATE_INSCRIPTION_CARTE" type="xs:date" minOccurs="0"/>
+									<xs:element name="CODE_AIGUILLAGE_STS" type="string-1" minOccurs="0"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CARTE" type="infoCarteVitale"/>
+			<xs:element name="CARTE_A_REMPLACER" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="NUM_SERIE" type="string-1-16"/>
+						<xs:element name="DERNIERE_OPERATION" type="xs:dateTime" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="MUTATION" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CODE_GRAND_REGIME" type="string-1-6">
+							<xs:annotation>
+								<xs:documentation>Régime général ou
+Régimes spéciaux : CRPCEN, SNCF</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CODE_CAISSE_RO" type="string-1-3">
+							<xs:annotation>
+								<xs:documentation>CPAM</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CENTRE_SS" type="string-1-4">
+							<xs:annotation>
+								<xs:documentation>Centre de gestion</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="DATE_PERSONNALISATION" type="xs:date"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoTP_PEC">
+		<xs:sequence>
+			<xs:element name="BENEFICIAIRE" type="infoBenef"/>
+			<xs:element name="SERVICE_TP" type="infoServiceTP" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoTeamLive">
+		<xs:sequence>
+			<xs:element name="SERVICE_TLPRO" type="infoServiceTLPRO" minOccurs="0"/>
+			<xs:element name="SERVICE_TLMED" type="infoServiceTLMED" minOccurs="0"/>
+			<xs:element name="SERVICE_TLCLUB" type="infoServiceTLCLUB" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoBenef">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS" type="string-1-30"/>
+			<xs:element name="TYPE_BENEF" type="codeBenef">
+				<xs:annotation>
+					<xs:documentation>AS : assuré,
+CJ : conjoint, 
+CD : Conjoint Divorcé, 
+CS : Conjoint Séparé, 
+CV : Conjoint Veuf,
+CO : Concubin, 
+EN : Enfant, 
+PC : Personne à charge, 
+RA : Rattaché, 
+BH : Benef hors art 133, 
+UT : étudiant, 
+AA : Autre Assuré, 
+AE : Ascendant</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RO" type="infoRO" minOccurs="0" maxOccurs="3"/>
+			<xs:element name="CONTRAT_RESPONSABLE" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="PRODUIT" type="infoProduit" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="STATUT_NOEMISATION" type="infoNoemisation" minOccurs="0"/>
+			<xs:element name="CODE_MOUVEMENT_CARTE" type="codeCarte" minOccurs="0"/>
+			<xs:element name="NUMERO_CARTE" type="string-1-14" minOccurs="0"/>
+			<xs:element name="DETAIL_CARTE" type="infoDetailCarte" minOccurs="0"/>
+			<xs:element name="RESEAU" type="infoReseau" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoBenefVtl">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS" type="string-1-30"/>
+			<xs:element name="TYPE_BENEF" type="codeBenef">
+				<xs:annotation>
+					<xs:documentation>AS : assuré,
+CJ : conjoint, 
+CD : Conjoint Divorcé, 
+CS : Conjoint Séparé, 
+CV : Conjoint Veuf,
+CO : Concubin, 
+EN : Enfant, 
+PC : Personne à charge, 
+RA : Rattaché, 
+BH : Benef hors art 133, 
+UT : étudiant, 
+AA : Autre Assuré, 
+AE : Ascendant</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RO" type="infoROVtl" minOccurs="0"/>
+			<xs:element name="CONTRAT_RESPONSABLE" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="PRODUIT" type="infoProduit" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="STATUT_NOEMISATION" type="infoNoemisation" minOccurs="0"/>
+			<xs:element name="CODE_MOUVEMENT_CARTE" type="codeCarte" minOccurs="0"/>
+			<xs:element name="NUMERO_CARTE" type="string-1-14" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoServiceTP">
+		<xs:sequence>
+			<xs:element name="LISTE_DROIT_ACCES" type="infoDroitAcces" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="RIB" minOccurs="0">
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="PRESTATION" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="TITULAIRE" type="string-1-80" minOccurs="0"/>
+									<xs:element name="IBAN_PAYS" type="string-1-2" minOccurs="0"/>
+									<xs:element name="IBAN_CONTROLE" type="string-1-2" minOccurs="0"/>
+									<xs:element name="IBAN_BBAN" type="string-1-30" minOccurs="0"/>
+									<xs:element name="BIC_BANQUE" type="string-1-4" minOccurs="0"/>
+									<xs:element name="BIC_PAYS" type="string-1-2" minOccurs="0"/>
+									<xs:element name="BIC_EMPLACEMENT" type="string-1-2" minOccurs="0"/>
+									<xs:element name="BIC_BRANCHE" type="string-1-3" minOccurs="0"/>
+									<xs:element name="NOM_BANQUE" type="string-1-100" minOccurs="0"/>
+									<xs:element name="CODE_BANQUE" type="string-1-5" minOccurs="0"/>
+									<xs:element name="AGENCE_BANQUE" type="string-1-5" minOccurs="0"/>
+									<xs:element name="NUM_COMPTE" type="string-1-11" minOccurs="0"/>
+									<xs:element name="CLE_RIB" type="string-2" minOccurs="0"/>
+									<xs:element name="DATE_EFFET" type="xs:dateTime" minOccurs="0"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="COTISATION" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="TITULAIRE" type="string-1-80" minOccurs="0"/>
+									<xs:element name="IBAN_PAYS" type="string-1-2" minOccurs="0"/>
+									<xs:element name="IBAN_CONTROLE" type="string-1-2" minOccurs="0"/>
+									<xs:element name="IBAN_BBAN" type="string-1-30" minOccurs="0"/>
+									<xs:element name="BIC_BANQUE" type="string-1-4" minOccurs="0"/>
+									<xs:element name="BIC_PAYS" type="string-1-2" minOccurs="0"/>
+									<xs:element name="BIC_EMPLACEMENT" type="string-1-2" minOccurs="0"/>
+									<xs:element name="BIC_BRANCHE" type="string-1-3" minOccurs="0"/>
+									<xs:element name="NOM_BANQUE" type="string-1-100" minOccurs="0"/>
+									<xs:element name="CODE_BANQUE" type="string-1-6" minOccurs="0"/>
+									<xs:element name="AGENCE_BANQUE" type="string-1-30" minOccurs="0"/>
+									<xs:element name="NUM_COMPTE" type="string-1-16" minOccurs="0"/>
+									<xs:element name="CLE_RIB" type="string-2" minOccurs="0"/>
+									<xs:element name="DATE_EFFET" type="xs:dateTime" minOccurs="0"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_SUSPENSION" type="codeMotifSuspension" minOccurs="0"/>
+			<xs:element name="MOTIF_RESILIATION" type="string-1-30" minOccurs="0"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service,
+DE : désactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise, AD : envoi à l'adhérent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FRAUDE" type="infoFraude" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoBenefRMS">
+		<xs:sequence>
+			<xs:element name="POSITION" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>Position du memvre dans  le contrat
+01 : indique que le membre doit etre considéré comme tete du contrat,
+02 : indique qu'il s'agit d'un membre subordonné
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SOUSCRIPTEUR" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>indique si le Membre est le souscripteur du contrat.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="INDIVIDU_OS" type="infoIndividuOsRMS"/>
+			<xs:element name="ADRESSE_BENEF" type="infoAdresseParticulier"/>
+			<xs:element name="CODE_MOUVEMENT" type="codeMVT">
+				<xs:annotation>
+					<xs:documentation>C : création,
+M : modification,
+R : résiliation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoMembreContrat">
+		<xs:sequence>
+			<xs:element name="SOUSCRIPTEUR" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>indique si le Membre est le souscripteur du contrat.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="POSITION" type="string-2">
+				<xs:annotation>
+					<xs:documentation>01: tete du contrat
+02: ayant droit subordonné
+03: ayant droit subordonné, rattachant alternatif
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TYPE_REGIME" type="codeRegime">
+				<xs:annotation>
+					<xs:documentation> RO
+ RC
+ R+
+ NA : Non applicable</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_ENTREE" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Date d'entrée dans la contrat</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_INSCRIPTION" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Date première inscription à l'organisme assureur</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="INDIVIDU" type="infoIndividuOs"/>
+			<xs:element name="ADRESSE_MEMBRE" type="infoAdresseParticulier" minOccurs="0"/>
+			<xs:element name="MEDIA_ENVOI" type="infoMediaEnvoi" minOccurs="0"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="NUM_ADHESION" type="string-1-20" minOccurs="0" maxOccurs="2"/>
+			<xs:element name="AUTONOME" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Indique si le membre du contrat est autonome ou non</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MODE_PAIEMENT" type="codeModePaiement" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>CH: Chèque
+VR : Virement
+NM : Numéraire
+AU : Autre</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NNI" type="string-1-13" minOccurs="0"/>
+			<xs:element name="NNI_RATT" type="string-1-13" minOccurs="0" maxOccurs="2">
+				<xs:annotation>
+					<xs:documentation>2eme NNI de rattachement</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="REGIME_SPECIAL" type="codeRegimeSpecial" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>AM: regime Alsace Moselle
+MO: regime Monaco
+AU : autre
+UN : Unesco</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="VIP" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="DATE_CERTIFICATION_NNI" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_CERTIFICATION_NNI_RATT" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_RADIATION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_RADIATION" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoMembreContratTP">
+		<xs:sequence>
+			<xs:element name="POSITION" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>Position du memvre dans  le contrat
+01: indique que le membre doit etre considéré comme tete du contrat
+02: indique qu'il s'agit d'un membre subordonné
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SOUSCRIPTEUR" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>indique si le Membre est le souscripteur du contrat.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" maxOccurs="unbounded"/>
+			<xs:element name="CODE_MOUVEMENT" type="codeMVT"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoJoignabilite">
+		<xs:sequence>
+			<xs:element name="MEDIA" type="codeMedia">
+				<xs:annotation>
+					<xs:documentation>SM : SMS
+VB : MESSAGE VOCAL MOBILE
+VF :  MESSAGE VOCAL FIXE
+FA :TELECOPIE
+ME : EMAIL
+CO : COURRIER
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ADRESSE_MEDIA" type="xs:string"/>
+			<xs:element name="ACTIF" type="xs:boolean"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoIndividuOsRMS">
+		<xs:sequence>
+			<xs:element name="REF_ADHERENT_OS" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>Référence manipulée par l'OS pour identifier un individu dans son SI. (indépendant de la notion de contrat ou service)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NIS" type="xs:string"/>
+			<xs:element name="DATE_NAISSANCE" type="xs:string"/>
+			<xs:element name="RANG_NAISSANCE" type="xs:int"/>
+			<xs:element name="COMMUNE_NAISSANCE" type="xs:string"/>
+			<xs:element name="NOM_PATRONIMIQUE" type="xs:string"/>
+			<xs:element name="PRENOM" type="xs:string"/>
+			<xs:element name="CODE_SEXE" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>0 : Inconnu,
+1 : Masculin,
+2 : Féminin</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NOM_USAGE" type="xs:string" minOccurs="0"/>
+			<xs:element name="AUTRE" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="TYPE" type="xs:int">
+							<xs:annotation>
+								<xs:documentation>0 : entier,
+1 : nombre décimal, séparateur ',',
+2 : data au format 'DDMMAAAA',
+3 : chaîne de caracteres</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="VALEUR" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>valeur de la donnée</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoIndividuOs">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS" type="string-1-30">
+				<xs:annotation>
+					<xs:documentation>Référence manipulée par l'OS pour identifier un individu dans son SI. (indépendant de la notion de contrat ou service)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NIS" type="string-16" minOccurs="0"/>
+			<xs:element name="DATE_CERTIFICATION_NIS" type="string-10" minOccurs="0"/>
+			<xs:element name="DATE_NAISSANCE" type="string-10"/>
+			<xs:element name="RANG_NAISSANCE" type="xs:positiveInteger" minOccurs="0"/>
+			<xs:element name="COMMUNE_NAISSANCE" type="string-1-50" minOccurs="0"/>
+			<xs:element name="NOM_PATRONIMIQUE" type="string-1-80"/>
+			<xs:element name="NOM_USAGE" type="string-1-80" minOccurs="0"/>
+			<xs:element name="PRENOM" type="string-1-40"/>
+			<xs:element name="CODE_SEXE" type="codeSexe" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>MA : Masculin,
+FE : Féminin</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PROFESSION" type="infoProfession" minOccurs="0"/>
+			<xs:element name="MEDECIN_TRAITANT" type="nonNegativeInteger-1" minOccurs="0"/>
+			<xs:element name="IDENTITE_WEB" type="infoWeb" minOccurs="0"/>
+			<xs:element name="AUTRE" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="TYPE" type="positiveInteger-1">
+							<xs:annotation>
+								<xs:documentation>0 : entier, 
+1 : nombre décimal, séparateur ',',
+2 : data au format 'DDMMAAAA',
+3 : chaîne de caracteres</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="VALEUR" type="string-1-50">
+							<xs:annotation>
+								<xs:documentation>valeur de la donnée</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PORTEUR_RISQUE" type="string-1-50" minOccurs="0"/>
+			<xs:element name="REF_INTERNE_ALMERYS" type="string-1-50" minOccurs="0"/>
+			<xs:element name="DATE_CAL" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Date de naissance calculee</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TYPE_CAL" type="string-2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Type de calendrier utilise</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoIndividuOsTP">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS" type="string-1-30">
+				<xs:annotation>
+					<xs:documentation>Référence manipulée par l'OS pour identifier un individu dans son SI. (indépendant de la notion de contrat ou service)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NIS" type="xs:string"/>
+			<xs:element name="DATE_NAISSANCE" type="xs:string"/>
+			<xs:element name="RANG_NAISSANCE" type="xs:int"/>
+			<xs:element name="COMMUNE_NAISSANCE" type="xs:string"/>
+			<xs:element name="NOM_PATRONIMIQUE" type="xs:string"/>
+			<xs:element name="PRENOM" type="xs:string"/>
+			<xs:element name="NOM_USAGE" type="xs:int" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoIndividu"/>
+	<xs:complexType name="infoDonneesTP">
+		<xs:sequence/>
+	</xs:complexType>
+	<xs:complexType name="infoProfession">
+		<xs:sequence>
+			<xs:element name="EXERCICE_PROFESSIONEL" type="string-1-50" minOccurs="0"/>
+			<xs:element name="STATUT" type="codeStatut">
+				<xs:annotation>
+					<xs:documentation>EA : En activite,
+IA : Sans activite,
+RE : Retraite,
+IN : Indéterminé, 
+DC : Decede,
+EU : Etudiant,
+SB : Substituant</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoDonneesRMS">
+		<xs:sequence/>
+	</xs:complexType>
+	<xs:complexType name="infoDonneesCV"/>
+	<xs:complexType name="infoWeb">
+		<xs:sequence>
+			<xs:element name="LOGIN" type="string-1-30"/>
+			<xs:element name="PASSWORD" type="string-1-40" minOccurs="0"/>
+			<xs:element name="QUESTION_SECRETE" type="string-1-100" minOccurs="0"/>
+			<xs:element name="REPONSE_SECRETE" type="string-1-50" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoCourtier">
+		<xs:sequence>
+			<xs:element name="REF_COURTIER" type="string-1-15"/>
+			<xs:element name="NOM_COURTIER" type="string-1-80"/>
+			<xs:element name="PRENOM_COURTIER" type="string-1-40" minOccurs="0"/>
+			<xs:element name="ADRESSE_COURTIER" type="infoAdresse"/>
+			<xs:element name="IDENTITE_WEB" type="infoWeb" minOccurs="0"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoGestionnaire">
+		<xs:sequence>
+			<xs:element name="REF_GEST" type="string-1-15"/>
+			<xs:element name="NOM_GEST" type="string-1-80" minOccurs="0"/>
+			<xs:element name="PRENOM_GEST" type="string-1-40" minOccurs="0"/>
+			<xs:element name="ADRESSE_GEST" type="infoAdresse"/>
+			<xs:element name="IDENTITE_WEB" type="infoWeb" minOccurs="0"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoDroitAcces">
+		<xs:sequence>
+			<xs:element name="REF_OS_ACCEDANT" type="string-1-30"/>
+			<xs:element name="REF_OS_ACCEDE" type="string-1-30"/>
+			<xs:element name="MOTIF" type="string-1-30" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoAdresse">
+		<xs:choice>
+			<xs:element name="ADRESSE_AGREGEE" type="infoAdresseAgregeeEntreprise" maxOccurs="unbounded"/>
+			<xs:element name="ADRESSE_DECOMPOSEE" type="infoAdresseDecomposeeEntreprise" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="infoAdresseParticulier">
+		<xs:choice>
+			<xs:element name="ADRESSE_AGREGEE" type="infoAdresseAgregeeParticulier" maxOccurs="unbounded"/>
+			<xs:element name="ADRESSE_DECOMPOSEE" type="infoAdresseDecomposeeParticulier" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="infoAdresseAgregeeParticulier">
+		<xs:sequence>
+			<xs:element name="LIGNE1" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>IDENTITÉ DU DESTINATAIRE :
+Civilite-Titre- Prenom- Nom</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE2" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>IDENTIFICATION DU POINT DE REMISE
+N° apt ou boite aux lettres - etage-couloir-esclier</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE3" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>COMPLÉMENT DE LOCALISATION DE LA CONSTRUCTION
+entree-bât-immeuble-residence</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE4" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>N° et LIBELLÉ DE LA VOIE
+rue-avenue-hameau</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE5" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>SERVICE DE DISTRIBUTION - COMPLÉMENT LOCALISATION VOIE
+poste restante-BP-lieu dit</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE6" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>CODE POSTAL et LOCALITÉ
+ou
+CODE CEDEX et LIBELLÉ CEDEX</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE7" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Pays</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_EFFET" type="xs:dateTime" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoAdresseAgregeeEntreprise">
+		<xs:sequence>
+			<xs:element name="LIGNE1" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>RAISON SOCIALE ? DENOMINATION COMMERCIALE</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE2" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>IDENTITÉ DU DESTINATAIRE -SERVICE</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE3" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>COMPLÉMENT DE LOCALISATION DE LA CONSTRUCTION
+entree-bât-immeuble-residence</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE4" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>N° et LIBELLÉ DE LA VOIE
+rue-avenue-hameau</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE5" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>SERVICE DE DISTRIBUTION - COMPLÉMENT LOCALISATION VOIE
+poste restante-BP-lieu dit</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE6" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>CODE POSTAL et LOCALITÉ
+ou
+CODE CEDEX et LIBELLÉ CEDEX</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE7" type="string-1-100" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Pays</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_EFFET" type="xs:dateTime" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoAdresseDecomposeeEntreprise">
+		<xs:sequence>
+			<xs:element name="RAISON_SOCIALE" type="string-1-50"/>
+			<xs:element name="DENOMINATION_COMMERCIALE" type="string-1-50" minOccurs="0"/>
+			<xs:element name="DESTINATAIRE" type="string-1-50" minOccurs="0"/>
+			<xs:element name="SERVICE_ENTREPRISE" type="string-1-50" minOccurs="0"/>
+			<xs:element name="COMPLEMENT_CONSTRUCTION" type="string-1-50" minOccurs="0"/>
+			<xs:element name="NUM_VOIE" type="integer-5" minOccurs="0"/>
+			<xs:element name="CODE_BIS" type="string-1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>B : Bis,
+T : Ter,
+Q : Quater 
+ou encore A, B, C, D...</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TYPE_VOIE" type="string-1-4" minOccurs="0"/>
+			<xs:element name="NOM_VOIE" type="xs:string"/>
+			<xs:element name="SERVICE_DISTRIBUTION" type="string-1-38" minOccurs="0"/>
+			<xs:element name="COMPLEMENT_VOIE" type="string-1-38" minOccurs="0"/>
+			<xs:element name="CODE_POSTAL" type="string-1-5"/>
+			<xs:element name="COMMUNE" type="string-1-38" minOccurs="0"/>
+			<xs:element name="PAYS" type="string-1-38" minOccurs="0"/>
+			<xs:element name="CODE_CEDEX" type="string-1-5" minOccurs="0"/>
+			<xs:element name="LIBELLE_CEDEX" type="string-1-50" minOccurs="0"/>
+			<xs:element name="DATE_EFFET" type="xs:dateTime" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoAdresseDecomposeeParticulier">
+		<xs:sequence>
+			<xs:element name="CIVILITE" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>MME  : Madame
+MLLE : Mademoiselle
+M    : Monsieur</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="codeCivilite"/>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="TITRE" type="codeTitre" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>DR   : Docteur
+ME   : Maître
+MGR  : Monseigneur
+LT   : Lieutenant
+LTDV : Lieutenant de vaisseau
+MAL  : Marechal
+PR   : Professeur
+ADJ  : Adjudant
+CNL  : Colonel
+GAL  : General</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PRENOM_ADR" type="string-1-40"/>
+			<xs:element name="NOM_ADR" type="string-1-80"/>
+			<xs:element name="POINT_REMISE" type="string-1-50" minOccurs="0"/>
+			<xs:element name="COMPLEMENT_CONSTRUCTION" type="string-1-50" minOccurs="0"/>
+			<xs:element name="NUM_VOIE" type="integer-5" minOccurs="0"/>
+			<xs:element name="CODE_BIS" type="string-1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>B : Bis,
+T : Ter,
+Q : Quater 
+ou encore A, B, C, D...</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TYPE_VOIE" type="string-1-4" minOccurs="0"/>
+			<xs:element name="NOM_VOIE" type="string-1-30" minOccurs="0"/>
+			<xs:element name="SERVICE_DISTRIBUTION" type="string-1-38" minOccurs="0"/>
+			<xs:element name="COMPLEMENT_VOIE" type="string-1-38" minOccurs="0"/>
+			<xs:element name="CODE_POSTAL" type="string-1-5"/>
+			<xs:element name="COMMUNE" type="string-1-38" minOccurs="0"/>
+			<xs:element name="PAYS" type="string-1-38" minOccurs="0"/>
+			<xs:element name="CODE_CEDEX" type="string-1-5" minOccurs="0"/>
+			<xs:element name="LIBELLE_CEDEX" type="string-1-50" minOccurs="0"/>
+			<xs:element name="DATE_EFFET" type="xs:dateTime" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoPerimetre">
+		<xs:sequence>
+			<xs:element name="CODE_PERIMETRE" type="string-1-10">
+				<xs:annotation>
+					<xs:documentation>Code du perimetre de service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIBELLE_PERIMETRE" type="string-1-30">
+				<xs:annotation>
+					<xs:documentation>Libelle du perimetre de service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRITERE_REGROUPEMENT" type="infoCritere" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Critere de regroupement des contrats</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CONTRAT" type="infoContrat" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoEntreprise">
+		<xs:sequence>
+			<xs:element name="REF_ENTREPRISE" type="string-1-15"/>
+			<xs:element name="NOM_ENTREPRISE" type="string-1-80" minOccurs="0"/>
+			<xs:element name="NUM_CONTRAT_COLLECTIF" type="string-1-30" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="SITE" type="infoSite" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoCritere">
+		<xs:sequence>
+			<xs:element name="CENTRE_GESTION" type="infoCentreGestion" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="REPRESENTANT_COMMERCIAL" type="infoCourtier" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ENTREPRISE" type="infoEntreprise" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="GESTIONNAIRE" type="infoGestionnaire" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InfoCartePapier">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS_PORTEUR" type="string-1-30">
+				<xs:annotation>
+					<xs:documentation>Reference interne OS du porteur de la carte </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="REF_INTERNE_OS_PORTE" type="string-1-30" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>liste des references internes OS des personnes portees sur la carte </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NNI_PORTEUR" type="string-1-13"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service
+DE: desactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_RESTITUTION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_RESTITUTION" type="string-1-30" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Carte perdue, volee, retournee par l'adherent,...</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise,
+AD : envoi à l'adherent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoNoemisation">
+		<xs:choice>
+			<xs:element name="DMD_NOEMISATION">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="DATE_DEBUT" type="xs:date"/>
+						<xs:element name="DATE_FIN" type="xs:date" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="REFUS_NOEMISATION" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>OUI / NON</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:sequence>
+				<xs:element name="TYPE_CONTRAT" type="typeContrat" minOccurs="0"/>
+				<xs:element name="A_NOEMISER" type="xs:boolean" minOccurs="0"/>
+				<xs:element name="NOEMISE" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>OUI / NON</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DATE_DEBUT_NOEMISATION" type="xs:date" minOccurs="0"/>
+				<xs:element name="DATE_FIN_NOEMISATION" type="xs:date" minOccurs="0"/>
+			</xs:sequence>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="infoRO_FAMILLE">
+		<xs:sequence>
+			<xs:element name="NIR_OD" type="string-1-13" minOccurs="0"/>
+			<xs:element name="DATE_CERTIFICATION_NIR_OD" type="xs:date" minOccurs="0"/>
+			<xs:element name="DROITS_FAMILLE" type="infoDroitFamille" maxOccurs="3"/>
+			<xs:element name="SERVICE_AMO_FAMILLE" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CODE_SERVICE_AMO" type="string-2"/>
+						<xs:element name="DATE_DEBUT_AMO" type="xs:date" minOccurs="0"/>
+						<xs:element name="DATE_FIN_AMO" type="xs:date" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CODE_GRAND_REGIME" type="string-2">
+				<xs:annotation>
+					<xs:documentation>Régime général ou 
+Régimes spéciaux : CRPCEN, SNCF</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CODE_GESTION" type="string-2">
+				<xs:annotation>
+					<xs:documentation>les 2 premiers chiffres du régime </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TYPE_REGIME" type="string-2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>accident de régime</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CODE_CAISSE_RO" type="string-1-3">
+				<xs:annotation>
+					<xs:documentation>CPAM</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CODE_GUICHET" type="string-1-4" minOccurs="0"/>
+			<xs:element name="CODE_ORGANISME" type="string-1-4" minOccurs="0"/>
+			<xs:element name="CENTRE_SS" type="string-1-4">
+				<xs:annotation>
+					<xs:documentation>Centre de gestion</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ETM_FAMILLE" type="infoETMFamille" minOccurs="0"/>
+			<xs:element name="E112_FAMILLE" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="TYPE_EXPERIMENTATION" type="positiveInteger-1"/>
+						<xs:element name="ACTIVITE" type="string-1"/>
+						<xs:element name="ARTICLE_REGLEMENT" type="string-3"/>
+						<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+						<xs:element name="DATE_FIN_VALIDITE" type="xs:date"/>
+						<xs:element name="DATE_ETABLISSEMENT" type="xs:date"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ENCART_FAMILLE" type="infoAttestation" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoRO">
+		<xs:sequence>
+			<xs:element name="CODE_GRAND_REGIME" type="string-2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Régime général ou 
+Régimes spéciaux : CRPCEN, SNCF</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CODE_GESTION" type="string-2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>les 2 premiers chiffres du régime </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TYPE_REGIME" type="string-2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>accident de régime</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NNI" type="string-1-13" minOccurs="0"/>
+			<xs:element name="CODE_CAISSE_RO" type="string-1-3" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>CPAM</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CODE_GUICHET" type="string-1-4" minOccurs="0"/>
+			<xs:element name="CODE_ORGANISME" type="string-1-4" minOccurs="0"/>
+			<xs:element name="CENTRE_SS" type="string-1-4" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Centre de gestion</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CODE_SERVICE_AMO" type="positiveInteger-2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>code service AMO</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SPECIFIQUE_SNCF_CAMAC" type="string-2" minOccurs="0"/>
+			<xs:element name="PERMANENT" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="DATE_FOMULAIRE_E112" type="xs:date" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoROVtl">
+		<xs:sequence>
+			<xs:element name="TEXTE_AMO" type="infoTexteAMO" minOccurs="0"/>
+			<xs:element name="SERVICE_AMO" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CODE_SERVICE_AMO" type="string-2"/>
+						<xs:element name="DATE_DEBUT_AMO" type="xs:date" minOccurs="0"/>
+						<xs:element name="DATE_FIN_AMO" type="xs:date" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SPECIFIQUE_SNCF_CAMAC" type="string-2" minOccurs="0"/>
+			<xs:element name="PERMANENT" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="DROITS" type="infoDroitBenef" minOccurs="0"/>
+			<xs:element name="ETM" minOccurs="0" maxOccurs="3">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CODE_ETM" type="codeEtm"/>
+						<xs:element name="DATE_DEBUT_ETM" type="xs:date" minOccurs="0"/>
+						<xs:element name="DATE_FIN_ETM" type="xs:date" minOccurs="0"/>
+						<xs:element name="DATE_PROLONGATION" type="xs:date" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="E112" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="TYPE_EXPERIMENTATION" type="positiveInteger-1"/>
+						<xs:element name="ACTIVITE" type="string-1"/>
+						<xs:element name="ARTICLE_REGLEMENT" type="string-3"/>
+						<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+						<xs:element name="DATE_FIN_VALIDITE" type="xs:date"/>
+						<xs:element name="DATE_ETABLISSEMENT" type="xs:date"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ACCIDENT_DU_TRAVAIL" minOccurs="0" maxOccurs="3">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="IDENTIFIANT_AT" type="string-9"/>
+						<xs:element name="DROIT_SPECIFIQUE" type="string-2" minOccurs="0"/>
+						<xs:element name="CODE_GR" type="string-2"/>
+						<xs:element name="CODE_CAISSE" type="string-3"/>
+						<xs:element name="CODE_CENTRE" type="string-4"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoDroitFamille">
+		<xs:sequence>
+			<xs:element name="DATE_DEBUT" type="xs:date"/>
+			<xs:element name="DATE_FIN" type="xs:date"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoDroitBenef">
+		<xs:sequence>
+			<xs:element name="DATE_DEBUT" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="CHAINE_FIN_JUSTIFICATIF" type="string-1-4" minOccurs="0"/>
+			<xs:element name="DUREE_PROLONGATION" type="string-1-60" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Durée sur 60 mois ajustable séparément</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoDetailCarte">
+		<xs:sequence>
+			<xs:element name="FOND_CARTE" type="string-1-10" minOccurs="0"/>
+			<xs:element name="CODE_ANNEXE" type="string-1-10" minOccurs="0" maxOccurs="2"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoRC">
+		<xs:choice>
+			<xs:element name="AMC" type="infoAMC" minOccurs="0"/>
+			<xs:element name="MUTUELLE" type="infoMutuelle" minOccurs="0"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="infoMutuelle">
+		<xs:sequence>
+			<xs:element name="NUM_MUTUELLE" type="positiveInteger-8"/>
+			<xs:element name="CODE_GARANTIE" type="string-2">
+				<xs:annotation>
+					<xs:documentation>code héxadécimal sur 2 caractères
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEB_DROITS_MUT" type="xs:date"/>
+			<xs:element name="DATE_FIN_DROITS_MUT" type="xs:date" minOccurs="0"/>
+			<xs:element name="DUREE_PROLONGATION_MUT" type="string-1-50" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Durée eur 50 mois</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoAMC">
+		<xs:sequence>
+			<xs:element name="NUMERO_B2" type="string-10"/>
+			<xs:element name="NUMERO_EDI" type="string-19" minOccurs="0"/>
+			<xs:element name="NUM_ADHERENT" type="string-8" minOccurs="0"/>
+			<xs:element name="NUM_CONTRAT_OS" type="string-1-50" minOccurs="0"/>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="CODE_ROUTAGE" type="string-2"/>
+			<xs:element name="IDENT_HOTE" type="string-3"/>
+			<xs:element name="NOM_DOMAINE" type="string-1-20" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoETMFamille">
+		<xs:sequence>
+			<xs:element name="CODE_ETM" type="codeEtm"/>
+			<xs:element name="DATE_DEBUT_ETM" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_ETM" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_PROLONGATION" type="xs:date" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoCarteVitale">
+		<xs:sequence>
+			<xs:element name="PROFIL_PRODUCTION" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="TYPE_CARTE" type="codeCarteVitale">
+							<xs:annotation>
+								<xs:documentation>V1 : Vitale V1
+1B : Vitale 1 Bis
+1T : Vitale 1 Ter
+V2 : Vitale V2
+2A : Vital 2A
+2B : Vital 2B
+2C : Vital 2C
+2D : Vital 2D
+2E : Vital 2E</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="TYPE_CARTE_A_PRODUIRE" type="CodeProduction">
+							<xs:annotation>
+								<xs:documentation>Valeur de DE-00010 du TM9+</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="NATURE" type="CodeNature">
+							<xs:annotation>
+								<xs:documentation>R,S ou T</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CODE_PROFIL" type="string-9"/>
+						<xs:element name="LOCALISATION_POSTALE" type="nonNegativeInteger-1">
+							<xs:annotation>
+								<xs:documentation>0 : Métropole, 1 : DOM, 2 : TOM, 3 : Etranger</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ORIGINE" type="positiveInteger-1"/>
+						<xs:element name="CARTE_ACTIVE" type="xs:boolean"/>
+						<xs:element name="INDICATEUR_ENCART" type="positiveInteger-1" minOccurs="0"/>
+						<xs:element name="PHOTO" type="string-30"/>
+						<xs:element name="SERIGRAPHIE">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="NOM_PORTEUR" type="string-1-80"/>
+									<xs:element name="PRENOM_PORTEUR" type="string-1-40"/>
+									<xs:element name="NNI_PORTEUR" type="string-1-13"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="NUM_LOT_OS" type="string-1-16" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Numero de lot fourni par l'OS pour le suivi des cartes</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="NUM_SERIE" type="string-1-16" minOccurs="0"/>
+			<xs:element name="REF_INTERNE_OS_PORTEUR" type="string-1-30" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>reference interne OS du porteur de la carte </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="REF_INTERNE_OS_PORTE" type="string-1-30" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>liste des references internes OS des personnes portees sur la carte </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service
+DE: desactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise,
+AD : envoi à l'adherent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoTexteAMO">
+		<xs:sequence>
+			<xs:element name="NUM_TEXT" type="infoNumText" maxOccurs="6"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoTexteMutuelle">
+		<xs:sequence>
+			<xs:element name="NUM_TEXT" type="infoNumText" minOccurs="0" maxOccurs="3"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoAttestation">
+		<xs:sequence>
+			<xs:element name="NUM_TEXT" type="infoNumText" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoNumText">
+		<xs:sequence>
+			<xs:element name="NUM_LIGNE" type="positiveInteger-2"/>
+			<xs:element name="LIBELLE" type="string-1-96"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InfoDecompte">
+		<xs:sequence>
+			<xs:element name="REF_INTERNE_OS_PRINCIPAL" type="string-1-30">
+				<xs:annotation>
+					<xs:documentation>reference interne OS de l'adherent principal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="REF_INTERNE_OS_AYANT_DROIT" type="string-1-30" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>liste des refeences internes OS des ayants droits</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_RESILIATION" type="string-1-30" minOccurs="0"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service
+DE: desactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise,
+AD : envoi à l'adherent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InfoCartePuce">
+		<xs:sequence>
+			<xs:element name="CARTE" type="CartePuce" minOccurs="0"/>
+			<xs:element name="LECTEUR" type="Lecteur" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CartePuce">
+		<xs:sequence>
+			<xs:element name="NUM_LOT_OS" type="string-1-16" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Numero de lot fourni par l'OS pour le suivi des cartes</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ENCART" type="infoEncart" minOccurs="0"/>
+			<xs:element name="ENCART_CHIFFRE" type="infoAdresseAgregeeParticulierChiffree" minOccurs="0"/>
+			<xs:element name="ADRESSE_GROUPEE" type="infoAdresseAgregeeEntreprise" minOccurs="0"/>
+			<xs:element name="REF_INTERNE_OS_PORTEUR" type="string-1-30">
+				<xs:annotation>
+					<xs:documentation>Reference interne OS du porteur de carte (personne de + de 16 ans)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="REF_INTERNE_OS_PORTE" type="string-1-30" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>liste des references internes OS des personnes portees sur la carte (enfant de - de 16 ans) </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service
+DE: desactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_REVOCATION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_REVOCATION" type="string-1-30" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Carte perdue, volee, retournee par l'adherent,...</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise,
+AD : envoi à l'adherent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TYPE_CARTE" type="string-2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>CC : Carte Cleyris
+CR : Carte Ceyris RMS
+RM : Carte RMS </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DROITS_AMC" type="xs:boolean" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Lecteur">
+		<xs:sequence>
+			<xs:element name="MOTIF" type="string-1-30">
+				<xs:annotation>
+					<xs:documentation>Motif de la demande de lecteur</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DMD" type="xs:date"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoEncart">
+		<xs:sequence>
+			<xs:element name="CODE_ENCART" type="string-1-10" minOccurs="0"/>
+			<xs:element name="CODE_MAILER" type="string-1-10" minOccurs="0"/>
+			<xs:element name="CODE_ANNEXE" type="string-1-10" minOccurs="0"/>
+			<xs:element name="CODE_ENVOI" type="string-1-8" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoAdresseAgregeeParticulierChiffree">
+		<xs:sequence>
+			<xs:element name="LIGNE1" type="xs:hexBinary">
+				<xs:annotation>
+					<xs:documentation>IDENTITÉ DU DESTINATAIRE :
+Civilite-Titre- Prenom- Nom</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE2" type="xs:hexBinary">
+				<xs:annotation>
+					<xs:documentation>IDENTIFICATION DU POINT DE REMISE
+N° apt ou boite aux lettres - etage-couloir-esclier</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE3" type="xs:hexBinary">
+				<xs:annotation>
+					<xs:documentation>COMPLÉMENT DE LOCALISATION DE LA CONSTRUCTION
+entree-bât-immeuble-residence</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE4" type="xs:hexBinary">
+				<xs:annotation>
+					<xs:documentation>N° et LIBELLÉ DE LA VOIE
+rue-avenue-hameau</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE5" type="xs:hexBinary">
+				<xs:annotation>
+					<xs:documentation>SERVICE DE DISTRIBUTION - COMPLÉMENT LOCALISATION VOIE
+poste restante-BP-lieu dit</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE6" type="xs:hexBinary">
+				<xs:annotation>
+					<xs:documentation>CODE POSTAL et LOCALITÉ
+ou
+CODE CEDEX et LIBELLÉ CEDEX</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIGNE7" type="xs:hexBinary">
+				<xs:annotation>
+					<xs:documentation>Pays</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoServicePEC">
+		<xs:sequence>
+			<xs:element name="PEC_HOSPIT" type="infoPEC" minOccurs="0"/>
+			<xs:element name="PEC_DENTAIRE" type="infoPEC" minOccurs="0"/>
+			<xs:element name="PEC_OPTIQUE" type="infoPEC" minOccurs="0"/>
+			<xs:element name="PEC_AUDIOPROTHESE" type="infoPEC" minOccurs="0"/>
+			<xs:element name="COTATION" type="infoPEC" minOccurs="0"/>
+			<xs:element name="LISTE_DROIT_ACCES" type="infoDroitAcces" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="JOIGNABILITE" type="infoJoignabilite" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ACTIVATION_DESACTIVATION" type="codeActivation">
+				<xs:annotation>
+					<xs:documentation>AC : activation du service
+DE: desactivation du service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_VALIDITE" type="xs:date"/>
+			<xs:element name="DATE_FIN_VALIDITE" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_DEBUT_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_FIN_SUSPENSION" type="xs:date" minOccurs="0"/>
+			<xs:element name="MOTIF_RESILIATION" type="xs:string" minOccurs="0"/>
+			<xs:element name="ENVOI" type="codeEnvoi">
+				<xs:annotation>
+					<xs:documentation>EN : envoi à l'entreprise,
+AD : envoi à l'adhérent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoProduit">
+		<xs:sequence>
+			<xs:element name="ORDRE" type="positiveInteger-2" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>1 à N</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="REFERENCE_PRODUIT" type="string-1-80"/>
+			<xs:element name="DATE_SOUSCRIPTION" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_ENTREE_PRODUIT" type="xs:date" minOccurs="0"/>
+			<xs:element name="DATE_SORTIE_PRODUIT" type="xs:date" minOccurs="0"/>
+			<xs:element name="CARENCE" type="infoCadreExercice" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoCadreExercice">
+		<xs:sequence>
+			<xs:element name="REFERENCE_PRODUIT" type="string-1-80" minOccurs="0"/>
+			<xs:element name="IDENT_COLONNE" type="codeProduit" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>AUX: Auxiliairas medicaux
+BIO : Biologie
+HOSP : Hospitalisation
+MK : Masseur Kinesitherapeute
+MS : Medecin Specialiste hors CR
+MS* : Medecin Specialiste hors hors CR
+OPT : Optique
+PHAR : Pharmacie
+PH2 : Pharmacie vignette orange
+PH4 : Vignette bleue
+PH7 : Vignette blanche
+PH7/L : Vignette blanche + LPPR
+PROD : prothese dentaire
+RAD : Radiologie hors CR
+RAD* : Radiologie CR
+SDENT : Soins externes hors CR
+SE : Soins externes hors CR
+SE* : Soins externes CR
+TRA : Transport</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT_EFFET" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>date début carence</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_FIN_EFFET" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>date fin de carence</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InfoErreur">
+		<xs:sequence>
+			<xs:element name="CODE_ERREUR" type="string-2"/>
+			<xs:element name="LIBELLE_ERREUR" type="string-1-10"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoMediaEnvoi">
+		<xs:sequence>
+			<xs:element name="RELEVE_PRESTA" type="codeRelevePresta" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>PAPIER : envoi postal,
+EMAIL : messagerie électronique,
+AUCUN : pas d'envoi</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="COURRIER_GESTION" type="codeCourrierGestion" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>PAPIER : envoi postal,
+EMAIL : messagerie électronique</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoFraude">
+		<xs:sequence>
+			<xs:element name="ACTION_TPS" type="infoAction" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Action tiers payant simple</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ACTION_TPC" type="infoAction" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Action tiers payant complexe</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ACTION_HTP" type="infoAction" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Action hors tiers payant</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoAction">
+		<xs:sequence>
+			<xs:element name="NIVEAU" type="codeNiveau">
+				<xs:annotation>
+					<xs:documentation>SUSPICION : Suspicion de fraude,
+AVEREE : Fraude avérée</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DATE_DEBUT" type="xs:date"/>
+			<xs:element name="DATE_FIN" type="xs:date" minOccurs="0"/>
+			<xs:element name="ACTION" type="codeAction">
+				<xs:annotation>
+					<xs:documentation>PAYER : Payer,
+CONTROLER : Contrôler,
+REJETER : Rejeter</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="infoReseau">
+		<xs:sequence>
+			<xs:element name="NOM_RESEAU" type="string-1-10"/>
+			<xs:element name="DATE_DEBUT" type="xs:date"/>
+			<xs:element name="DATE_FIN" type="xs:date" minOccurs="0"/>
+			<xs:element name="CODE_PACK" type="string-1-10" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="codeMVT">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="C"/>
+			<xs:enumeration value="M"/>
+			<xs:enumeration value="R"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeTitre">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DR"/>
+			<xs:enumeration value="ME"/>
+			<xs:enumeration value="LT"/>
+			<xs:enumeration value="LTDV"/>
+			<xs:enumeration value="MAL"/>
+			<xs:enumeration value="PR"/>
+			<xs:enumeration value="ADJ"/>
+			<xs:enumeration value="CNL"/>
+			<xs:enumeration value="GAL"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeProduit">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AUD"/>
+			<xs:enumeration value="AUX"/>
+			<xs:enumeration value="BIO"/>
+			<xs:enumeration value="HOSP"/>
+			<xs:enumeration value="L/P"/>
+			<xs:enumeration value="LPP"/>
+			<xs:enumeration value="MG"/>
+			<xs:enumeration value="MS"/>
+			<xs:enumeration value="MS*"/>
+			<xs:enumeration value="MGS"/>
+			<xs:enumeration value="MSG"/>
+			<xs:enumeration value="MK"/>
+			<xs:enumeration value="OPT"/>
+			<xs:enumeration value="PHAR"/>
+			<xs:enumeration value="PH2"/>
+			<xs:enumeration value="PH4"/>
+			<xs:enumeration value="PH7"/>
+			<xs:enumeration value="PH7/L"/>
+			<xs:enumeration value="PROD"/>
+			<xs:enumeration value="RAD"/>
+			<xs:enumeration value="RAD*"/>
+			<xs:enumeration value="RADIO"/>
+			<xs:enumeration value="SDENT"/>
+			<xs:enumeration value="SE"/>
+			<xs:enumeration value="S.E."/>
+			<xs:enumeration value="S.E"/>
+			<xs:enumeration value="TRA"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeRegime">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="RO"/>
+			<xs:enumeration value="RC"/>
+			<xs:enumeration value="R+"/>
+			<xs:enumeration value="CU"/>
+			<xs:enumeration value="NA"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeRegimeSpecial">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="MO"/>
+			<xs:enumeration value="AM"/>
+			<xs:enumeration value="AU"/>
+			<xs:enumeration value="UN"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeModePaiement">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CH"/>
+			<xs:enumeration value="VR"/>
+			<xs:enumeration value="NM"/>
+			<xs:enumeration value="AU"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeCivilite">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="MME"/>
+			<xs:enumeration value="MLLE"/>
+			<xs:enumeration value="M"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeSexe">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="FE"/>
+			<xs:enumeration value="MA"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeJuridique">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AU"/>
+			<xs:enumeration value="EN"/>
+			<xs:enumeration value="CJ"/>
+			<xs:enumeration value="CO"/>
+			<xs:enumeration value="PA"/>
+			<xs:enumeration value="TU"/>
+			<xs:enumeration value="CU"/>
+			<xs:enumeration value="AE"/>
+			<xs:enumeration value="AA"/>
+			<xs:enumeration value="PC"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeDestinataire">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="EN"/>
+			<xs:enumeration value="AD"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeEnvoi">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="EN"/>
+			<xs:enumeration value="AD"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeContrat">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="OU"/>
+			<xs:enumeration value="FE"/>
+			<xs:enumeration value="FR"/>
+			<xs:enumeration value="RO"/>
+			<xs:enumeration value="NA"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="typeContrat">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="89"/>	<!-- Bénéficiaire CMU-C -->
+			<xs:enumeration value="91"/>	<!-- Bénéficiaire ACS - Contrat A -->
+			<xs:enumeration value="92"/>	<!-- Bénéficiaire ACS - Contrat B -->
+			<xs:enumeration value="93"/>	<!-- Bénéficiaire ACS - Contrat C -->
+			<xs:enumeration value="00"/>	<!-- Contrats classiques (non CMU-C et ACS) -->
+			<xs:enumeration value="01"/>	<!-- Contrats classiques (non CMU-C et ACS) -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeActivation">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AC"/>
+			<xs:enumeration value="DE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeCarte">
+		<xs:annotation>
+			<xs:documentation>
+				CA: Attestation provisoire (Carte en Attente)
+				CC: Création avec carte
+				CS: Création sans carte
+				MC: Modification avec carte
+				EE: eCarte Exclusivement
+				MS: Modification sans carte
+				RC: Radiation avec carte
+				RS: Radiation sans carte
+				NP: Renouvellement
+				QD: Quotidien Dématérialisé
+				QP: Quotidien Papier
+				QT: Quotidien Tout (Papier et Dématérialisé)
+				RD: Renouvellement Dématérialisé
+				RP: Renouvellement Papier
+				RT: Renouvellement Tout (Papier et Dématérialisé)
+				EP: eCarte et papier (idem CC)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CA"/>
+			<xs:enumeration value="CC"/>
+			<xs:enumeration value="CS"/>
+			<xs:enumeration value="MC"/>
+			<xs:enumeration value="EE"/>
+			<xs:enumeration value="MS"/>
+			<xs:enumeration value="RC"/>
+			<xs:enumeration value="RS"/>
+			<xs:enumeration value="NP"/>
+			<xs:enumeration value="QD"/>
+			<xs:enumeration value="QP"/>
+			<xs:enumeration value="QT"/>
+			<xs:enumeration value="RD"/>
+			<xs:enumeration value="RP"/>
+			<xs:enumeration value="RT"/>
+			<xs:enumeration value="EP"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeMedia">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SM"/>
+			<xs:enumeration value="VB"/>
+			<xs:enumeration value="VF"/>
+			<xs:enumeration value="FA"/>
+			<xs:enumeration value="ME"/>
+			<xs:enumeration value="CO"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeBenef">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AS"/>
+			<xs:enumeration value="CJ"/>
+			<xs:enumeration value="CD"/>
+			<xs:enumeration value="CS"/>
+			<xs:enumeration value="CV"/>
+			<xs:enumeration value="CO"/>
+			<xs:enumeration value="EN"/>
+			<xs:enumeration value="PC"/>
+			<xs:enumeration value="RA"/>
+			<xs:enumeration value="BH"/>
+			<xs:enumeration value="UT"/>
+			<xs:enumeration value="AA"/>
+			<xs:enumeration value="AE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeStatut">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="EA"/>
+			<xs:enumeration value="IA"/>
+			<xs:enumeration value="RE"/>
+			<xs:enumeration value="IN"/>
+			<xs:enumeration value="DC"/>
+			<xs:enumeration value="EU"/>
+			<xs:enumeration value="SB"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeQualif">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="C"/>
+			<xs:enumeration value="O"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeOperateur">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0"/>
+			<xs:enumeration value="+"/>
+			<xs:enumeration value="Max"/>
+			<xs:enumeration value="Min"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeGarantie">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SE"/>
+			<xs:enumeration value="FE"/>
+			<xs:enumeration value="SC"/>
+			<xs:enumeration value="FC"/>
+			<xs:enumeration value="SI"/>
+			<xs:enumeration value="FI"/>
+			<xs:enumeration value="ST"/>
+			<xs:enumeration value="FT"/>
+			<xs:enumeration value="UA"/>
+			<xs:enumeration value="M1"/>
+			<xs:enumeration value="M2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeDemande">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="PN"/>
+			<xs:enumeration value="PU"/>
+			<xs:enumeration value="TJ"/>
+			<xs:enumeration value="ME"/>
+			<xs:enumeration value="MR"/>
+			<xs:enumeration value="MS"/>
+			<xs:enumeration value="IN"/>
+			<xs:enumeration value="BL"/>
+			<xs:enumeration value="DE"/>
+			<xs:enumeration value="GE"/>
+			<xs:enumeration value="GS"/>
+			<xs:enumeration value="RM"/>
+			<xs:enumeration value="AN"/>
+			<xs:enumeration value="RC"/>
+			<xs:enumeration value="TC"/>
+			<xs:enumeration value="IT"/>
+			<xs:enumeration value="ED"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeCarteVitale">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="V1"/>
+			<xs:enumeration value="1B"/>
+			<xs:enumeration value="1T"/>
+			<xs:enumeration value="V2"/>
+			<xs:enumeration value="2A"/>
+			<xs:enumeration value="2B"/>
+			<xs:enumeration value="2C"/>
+			<xs:enumeration value="2D"/>
+			<xs:enumeration value="2E"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CodeProduction">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="00"/>
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="02"/>
+			<xs:enumeration value="03"/>
+			<xs:enumeration value="04"/>
+			<xs:enumeration value="05"/>
+			<xs:enumeration value="06"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CodeNature">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="R"/>
+			<xs:enumeration value="S"/>
+			<xs:enumeration value="T"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeEtm">
+		<xs:annotation>
+			<xs:documentation>
+				00 Family ETM Rente Accident du Travail
+				01 Family ETM Regime local pour les Migrants
+				02 Beneficiary ETM LIS ET MAT
+				03 Beneficiary ETM R.EXO ET EXP
+				04 Beneficiary ETM EXC ET MAT
+				05 Beneficiary ETM R.EXO ET LIS
+				06 Beneficiary ETM MAT
+				07 Beneficiary ETM R.EXO ET EXC
+				08 Beneficiary ETM LIS
+				09 Beneficiary ETM EXC
+				10 Beneficiary ETM EXP ET MAT
+				11 Family ETM FNS(FSV)
+				12 Family ETM Regime local Alsace-Moselle
+				13 Beneficiary ETM EXP
+				14 Beneficiary ETM R.EXO
+				15 Without ETM
+				16 PENS MILIT (A115 OU REG 130)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="00"/>
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="02"/>
+			<xs:enumeration value="03"/>
+			<xs:enumeration value="04"/>
+			<xs:enumeration value="05"/>
+			<xs:enumeration value="06"/>
+			<xs:enumeration value="07"/>
+			<xs:enumeration value="08"/>
+			<xs:enumeration value="09"/>
+			<xs:enumeration value="10"/>
+			<xs:enumeration value="11"/>
+			<xs:enumeration value="12"/>
+			<xs:enumeration value="13"/>
+			<xs:enumeration value="14"/>
+			<xs:enumeration value="15"/>
+			<xs:enumeration value="16"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeSpe">
+		<xs:annotation>
+			<xs:documentation>
+				00 SNCF - National Railways Company.
+				01 RATP
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="00"/>
+			<xs:enumeration value="01"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="infoPEC">
+		<xs:sequence>
+			<xs:element name="DATE_DEBUT_EFFET" type="xs:date"/>
+			<xs:element name="DATE_FIN_EFFET" type="xs:date"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="codeUnite">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="EU"/>
+			<xs:enumeration value="JR"/>
+			<xs:enumeration value="NA"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeMotifSuspension">
+		<xs:annotation>
+			<xs:documentation>
+				CSS congé sans solde
+				CPA congé parental
+				CSA congé sabbatique
+				NPC non paiement de cotisation
+				FRA fraude
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CSS"/>
+			<xs:enumeration value="CPA"/>
+			<xs:enumeration value="CSA"/>
+			<xs:enumeration value="NPC"/>
+			<xs:enumeration value="FRA"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeRelevePresta">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="PAPIER">
+				<xs:annotation>
+					<xs:documentation>PAPIER : envoi postal</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="EMAIL">
+				<xs:annotation>
+					<xs:documentation>EMAIL : messagerie électronique</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AUCUN">
+				<xs:annotation>
+					<xs:documentation>AUCUN : pas d'envoi</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeCourrierGestion">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="PAPIER">
+				<xs:annotation>
+					<xs:documentation>PAPIER : envoi posta</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="EMAIL">
+				<xs:annotation>
+					<xs:documentation>EMAIL : messagerie électronique</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeNiveau">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SUSPICION">
+				<xs:annotation>
+					<xs:documentation>Suspicion de fraude</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AVEREE">
+				<xs:annotation>
+					<xs:documentation>Fraude avérée</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeAction">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="PAYER">
+				<xs:annotation>
+					<xs:documentation>Payer</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CONTROLER">
+				<xs:annotation>
+					<xs:documentation>Contrôler</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="REJETER">
+				<xs:annotation>
+					<xs:documentation>Rejeter</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1">
+		<xs:restriction base="xs:string">
+			<xs:length value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-2">
+		<xs:restriction base="xs:string">
+			<xs:length value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-3">
+		<xs:restriction base="xs:string">
+			<xs:length value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-4">
+		<xs:restriction base="xs:string">
+			<xs:length value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-8">
+		<xs:restriction base="xs:string">
+			<xs:length value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-9">
+		<xs:restriction base="xs:string">
+			<xs:length value="9"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-10">
+		<xs:restriction base="xs:string">
+			<xs:length value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-13">
+		<xs:restriction base="xs:string">
+			<xs:length value="13"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-16">
+		<xs:restriction base="xs:string">
+			<xs:length value="16"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-17">
+		<xs:restriction base="xs:string">
+			<xs:length value="17"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-19">
+		<xs:restriction base="xs:string">
+			<xs:length value="19"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-30">
+		<xs:restriction base="xs:string">
+			<xs:length value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-2">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-3">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-4">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-5">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="5"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-6">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="6"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-10">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="10"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-8">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-11">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="11"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-12">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="12"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-13">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="13"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-14">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="14"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-15">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="15"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-16">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="16"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-17">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="17"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-20">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="20"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-30">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="30"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-32">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="32"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-0-38">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="38"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-38">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="38"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-40">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="40"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-50">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-60">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="60"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-80">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="80"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-96">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="96"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-100">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="100"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string-1-115">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="115"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="positiveInteger-1">
+		<xs:restriction base="xs:positiveInteger">
+			<xs:totalDigits value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="positiveInteger-2">
+		<xs:restriction base="xs:positiveInteger">
+			<xs:totalDigits value="2"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="integer-5">
+		<xs:restriction base="xs:integer">
+			<xs:totalDigits value="5"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="positiveInteger-6">
+		<xs:restriction base="xs:positiveInteger">
+			<xs:totalDigits value="6"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="positiveInteger-8">
+		<xs:restriction base="xs:positiveInteger">
+			<xs:totalDigits value="8"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="positiveInteger-13">
+		<xs:restriction base="xs:positiveInteger">
+			<xs:totalDigits value="13"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="positiveInteger-14">
+		<xs:restriction base="xs:positiveInteger">
+			<xs:totalDigits value="14"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="nonNegativeInteger-1">
+		<xs:restriction base="xs:nonNegativeInteger">
+			<xs:totalDigits value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
