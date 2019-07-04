@@ -1,3 +1,4 @@
+* BUG#12042 Correction de la génération du message pasrau pour empêcher les doublons de lignes
 * BUG#11421 Mise à jour de la grille des pasraus
 
 Version 2.4 - 2019-04-12

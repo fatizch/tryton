@@ -183,11 +183,9 @@ class NEORAUTemplate(dsn.NEODeSTemplate):
                     to_output += positives
                     to_output += negatives
 
-            if sum(x.credit - x.debit for x in positives + negatives) == 0:
-                positives, negatives = [], []
-            if positives or negatives:
-                to_output += positives + negatives
-            else:
+            if sum(x.credit - x.debit for x in to_output) == 0:
+                to_output = []
+            if not to_output:
                 to_output.append(ZeroLine(party))
 
             data['individuals'][party] = {'lines': to_output}

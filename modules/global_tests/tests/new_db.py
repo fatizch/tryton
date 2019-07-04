@@ -5019,11 +5019,11 @@ if CREATE_CONTRACTS:  # {{{
     group_life_subscriber_account.save()
 
     group_life_contract = Contract()
-    group_life_contract.product = group_life_product
     group_life_contract.dist_network, = DistributionNetwork.find(
         [('code', '=', 'C1010101')])
     group_life_contract.subscriber = group_life_subscriber
     group_life_contract.start_date = _base_contract_date
+    group_life_contract.product = group_life_product
     group_life_contract.signature_date = _base_contract_date
     group_life_contract.conditions_date = _base_contract_date
     group_life_contract.end_date = None
@@ -5745,6 +5745,20 @@ if GENERATE_REPORTINGS:  # {{{
         # The message should have been generated
         messages = DSNMessage.find([])
         assert_eq(len(messages), 1)
+        generated_pasrau_message = messages[0].text_message.split('\n')
+        path = os.path.join(os.path.dirname(__file__), 'test_data',
+            'pasrau_dsn.txt')
+        with open(path, 'rb') as f:
+            test_pasrau_message = f.read().decode('latin1').split('\n')
+
+        assert_eq(len(generated_pasrau_message), len(test_pasrau_message))
+        assert_eq(len(generated_pasrau_message), 58)
+        # there is a carriage return at the end of the file
+        # so we have an emply line at the of the list
+        for message_line, test_line in zip(generated_pasrau_message,
+                test_pasrau_message):
+            assert_eq(message_line.strip(), test_line.strip())
+
     # }}}
 # }}}
 
