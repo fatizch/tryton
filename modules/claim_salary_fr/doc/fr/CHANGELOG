@@ -1,3 +1,4 @@
+* BUG#12038 Correction du comportement des avenants pour le champ "Revalorisation sur le traitement de base"
 * BUG#11767 Mise à jour et contrôle des contenus des tables créées par défaut
 
 Version 2.4 - 2019-04-12

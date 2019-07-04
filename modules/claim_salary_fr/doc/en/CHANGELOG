@@ -1,3 +1,4 @@
+* BUG#12038 Fix endorsement behavior for the "Revaluation on basic salary" field
 * BUG#11767 Make sure default tables are up to date
 
 Version 2.4 - 2019-04-12

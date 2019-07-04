@@ -92,4 +92,5 @@ class ManageOptionBenefitsDisplayer(metaclass=PoolMeta):
     def get_option_benefit_fields(cls):
         return super(
             ManageOptionBenefitsDisplayer, cls).get_option_benefit_fields() + (
-                'salary_mode', 'net_salary_mode', 'net_calculation_rule')
+                'salary_mode', 'net_salary_mode', 'net_calculation_rule',
+                'revaluation_on_basic_salary')
