@@ -1,0 +1,8 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:party.employment:"
+msgid ""
+"Employment Identifier must have 15 digits if the employment is is civil"
+msgstr "Le numéro de liaison administratif doit avoir 15 chiffres"

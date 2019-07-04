@@ -1,0 +1,1 @@
+- **Données de la fonction publique**: Ce module permet de gérer les spécificités de la fonction publique en France

@@ -54,6 +54,14 @@ msgctxt "field:party.administrative_situation_sub_status,xml_id:"
 msgid "XML Id"
 msgstr "XML Id"
 
+msgctxt "field:party.employment,is_civil_service_employment:"
+msgid "Civil Service Employment"
+msgstr "Emploi dans la Fonction Publique"
+
+msgctxt "field:party.employment,retirement_pension_identifier:"
+msgid "Retirement Pension Identifier"
+msgstr "N° de brevet"
+
 msgctxt "field:party.employment.version,administrative_situation:"
 msgid "Administrative Situtation"
 msgstr "Situation Administrative"
@@ -70,9 +78,17 @@ msgctxt "field:party.employment.version,increased_index:"
 msgid "Increased Index"
 msgstr "Indice Majoré"
 
+msgctxt "field:party.employment.version,work_country:"
+msgid "Work Country"
+msgstr "Pays d'emploi"
+
 msgctxt "field:party.employment.version,work_subdivision:"
 msgid "Subdivision Work Place"
 msgstr "Département de rattachement"
+
+msgctxt "field:party.employment_kind,is_civil_service_employment:"
+msgid "Civil Service Employment"
+msgstr "Emploi de la Service Publique"
 
 msgctxt "field:party.public_employment_index,create_date:"
 msgid "Create Date"
@@ -139,6 +155,10 @@ msgctxt "help:party.employment.version,increased_index:"
 msgid "Increased public service index used to defined salary"
 msgstr ""
 "Indice majoré de la fonction publique servant de base au calcul du salaire"
+
+msgctxt "help:party.employment.version,work_country:"
+msgid "Country where the employee works"
+msgstr "Le pays où l'employé travaille"
 
 msgctxt "help:party.employment.version,work_subdivision:"
 msgid "Subdivision where the employee works"

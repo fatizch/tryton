@@ -2,7 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 from trytond.config import config
 
 from trytond.modules.coog_core import fields, model, coog_string
@@ -13,11 +13,12 @@ ADMINISTRATIVE_SITUATION = [
     ('retired', 'Retired'),
     ]
 
-
 __all__ = [
     'AdminSituationSubStatus',
     'EmploymentVersion',
     'PublicEmploymentIndex',
+    'EmploymentKind',
+    'Employment',
     ]
 
 
@@ -159,3 +160,42 @@ class PublicEmploymentIndex(model.CoogView, model.CoogSQL):
                 ], order=[('effective_date', 'DESC')])
         if indexes:
             return indexes[0].increased_index
+
+
+class EmploymentKind(metaclass=PoolMeta):
+    __name__ = 'party.employment_kind'
+
+    is_civil_service_employment = fields.Boolean('Civil Service Employment',
+        help='Is Civil Service Employment')
+
+
+class Employment(metaclass=PoolMeta):
+    __name__ = 'party.employment'
+
+    is_civil_service_employment = fields.Function(
+        fields.Boolean('Civil Service Employment', depends=['employment_kind']),
+        'getter_is_civil_service_employment')
+    retirement_pension_identifier = fields.Char('Retirement Pension Identifier',
+        states={'invisible': ~(Bool(Eval('is_retired'))
+                & Bool(Eval('is_civil_service_employment')))},
+        depends=['is_retired', 'is_civil_service_employment'])
+    is_retired = fields.Function(
+        fields.Boolean('Is retired'),
+        'on_change_with_is_retired')
+
+    @fields.depends('versions')
+    def on_change_with_is_retired(self, name=None):
+        return any([v.administrative_situation ==
+                'retired' for v in self.versions])
+
+    def getter_is_civil_service_employment(self, name):
+        return self.employment_kind.is_civil_service_employment \
+            if self.employment_kind else None
+
+    @fields.depends('employment_kind', 'is_civil_service_employment')
+    def on_change_employment_kind(self):
+        if self.employment_kind:
+            self.is_civil_service_employment = self.employment_kind. \
+                is_civil_service_employment
+        else:
+            self.is_civil_service_employment = None

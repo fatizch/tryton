@@ -11,4 +11,6 @@ def register():
         party.AdminSituationSubStatus,
         party.PublicEmploymentIndex,
         rule_engine.RuleEngineRuntime,
+        party.EmploymentKind,
+        party.Employment,
         module='party_public_employment', type_='model')

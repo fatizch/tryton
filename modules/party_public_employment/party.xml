@@ -3,6 +3,21 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <record model="ir.ui.view" id="employment_view_form">
+            <field name="model">party.employment</field>
+            <field name="inherit" ref="party_employment.employment_view_form"/>
+            <field name="name">employment_form</field>
+        </record>
+        <record model="ir.ui.view" id="employment_kind_view_form">
+            <field name="model">party.employment_kind</field>
+            <field name="inherit" ref="party_employment.employment_kind_view_form"/>
+            <field name="name">employment_kind_form</field>
+        </record>
+        <record model="ir.ui.view" id="employment_kind_view_list">
+            <field name="model">party.employment_kind</field>
+            <field name="inherit" ref="party_employment.employment_kind_view_list"/>
+            <field name="name">employment_kind_list</field>
+        </record>
         <!-- Model party employment version-->
         <record model="ir.ui.view" id="employment_version_view_form">
             <field name="model">party.employment.version</field>

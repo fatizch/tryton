@@ -1,0 +1,1 @@
+- **Public employment data**: This module handle french public employment specificity

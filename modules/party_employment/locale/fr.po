@@ -10,6 +10,10 @@ msgctxt "error:party.employment_work_time_type:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
 
+msgctxt "error:party.work_section:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
 msgctxt "field:party.employment,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -29,6 +33,10 @@ msgstr "Employé"
 msgctxt "field:party.employment,employer:"
 msgid "Employer"
 msgstr "Employeur"
+
+msgctxt "field:party.employment,employment_identifier:"
+msgid "Employment Identifier"
+msgstr "Matricule de l'employé (n° liaison administratif) "
 
 msgctxt "field:party.employment,employment_kind:"
 msgid "Employment Kind"
@@ -57,6 +65,10 @@ msgstr "Date de début"
 msgctxt "field:party.employment,versions:"
 msgid "Versions"
 msgstr "Versions"
+
+msgctxt "field:party.employment,work_section:"
+msgid "Work Section"
+msgstr "Service gestionnaire"
 
 msgctxt "field:party.employment,write_date:"
 msgid "Write Date"
@@ -202,6 +214,54 @@ msgctxt "field:party.party,employments:"
 msgid "Employments"
 msgstr "Situation professionnelle"
 
+msgctxt "field:party.work_section,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:party.work_section,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:party.work_section,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:party.work_section,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.work_section,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:party.work_section,name:"
+msgid "Name"
+msgstr "Nom de l'enregistremnt"
+
+msgctxt "field:party.work_section,party:"
+msgid "Party"
+msgstr "Société"
+
+msgctxt "field:party.work_section,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:party.work_section,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:party.work_section,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:party.work_section,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "help:party.employment,employment_identifier:"
+msgid "The identifier of the employee in his company"
+msgstr "Matricule Employé (n° liaison administratif)"
+
 msgctxt "help:party.employment,end_date:"
 msgid "End date of the employment contract"
 msgstr "Date de fin du contrat de travail"
@@ -222,6 +282,10 @@ msgctxt "help:party.employment_work_time_type,name:"
 msgid "Employment work time type name"
 msgstr "Nom du type de durée de travail"
 
+msgctxt "help:party.work_section,name:"
+msgid "Work Section Name"
+msgstr "Nom du service gestionnaire"
+
 msgctxt "model:ir.action,name:"
 msgid "Profession"
 msgstr "Profession"
@@ -233,6 +297,10 @@ msgstr "Employés"
 msgctxt "model:ir.action,name:act_employment_kind"
 msgid "Employment Kind"
 msgstr "Type de contrat de travail"
+
+msgctxt "model:ir.action,name:act_work_section_relation"
+msgid "Work Sections"
+msgstr "Service gestionnaire"
 
 msgctxt "model:ir.action,name:act_work_time_type"
 msgid "Work Time Type"
@@ -265,6 +333,10 @@ msgstr "Type de contrat de travail"
 msgctxt "model:party.employment_work_time_type,name:"
 msgid "Employment Work Time Type"
 msgstr "Type de la durée du travail"
+
+msgctxt "model:party.work_section,name:"
+msgid "Party Work Section "
+msgstr "Section gestionnaire"
 
 msgctxt "view:party.employment.version:"
 msgid "Salary Information"

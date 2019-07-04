@@ -14,6 +14,7 @@ __all__ = [
     'EmploymentVersion',
     'EmploymentKind',
     'EmploymentWorkTimeType',
+    'PartyWorkSection',
     ]
 
 
@@ -39,6 +40,25 @@ class Employment(model.CoogSQL, model.CoogView):
         'Employment Kind', ondelete='RESTRICT', required=True)
     versions = fields.One2Many('party.employment.version',
         'employment', 'Versions', delete_missing=True)
+    employment_identifier = fields.Char('Employment Identifier',
+        help='The identifier of the employee in his company')
+    work_section = fields.Many2One(
+        'party.work_section', 'Work Section', ondelete='RESTRICT',
+        domain=[('party', '=', Eval('employer'))],
+        depends=['employer'])
+
+    @classmethod
+    def validate(cls, employments):
+        super(Employment, cls).validate(employments)
+        for employment in employments:
+            employment.check_employment_identifier()
+
+    def check_employment_identifier(self):
+        pass
+
+    @fields.depends('employer', 'work_section')
+    def on_change_employer(self):
+        self.work_section = None
 
 
 class Party(metaclass=PoolMeta):
@@ -142,3 +162,21 @@ class EmploymentWorkTimeType(model.CoogView, model.CoogSQL):
         if not self.code:
             return coog_string.slugify(self.name)
         return self.code
+
+
+class PartyWorkSection(model.CoogView, model.CoogSQL):
+    'Party Work Section'
+    __name__ = 'party.work_section'
+
+    party = fields.Many2One('party.party', 'Party',
+        ondelete='RESTRICT', required=True, domain=[('is_person', '=', False)])
+    name = fields.Char('Name', required=True, help='Work Section Name')
+    code = fields.Char('Code', required=True)
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        t = cls.__table__()
+        cls._sql_constraints += [
+            ('identifier_uniq', Unique(t, t.code, t.party),
+             'The code and the party must be unique!')]

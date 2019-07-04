@@ -13,4 +13,5 @@ def register():
         party.EmploymentVersion,
         party.EmploymentWorkTimeType,
         rule_engine.RuleEngineRuntime,
+        party.PartyWorkSection,
         module='party_employment', type_='model')

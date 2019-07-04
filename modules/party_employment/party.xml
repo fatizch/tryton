@@ -3,6 +3,16 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <record model="ir.ui.view" id="work_section_view_form">
+            <field name="model">party.work_section</field>
+            <field name="type">form</field>
+            <field name="name">work_section_form</field>
+        </record>
+        <record model="ir.ui.view" id="work_section_view_list">
+            <field name="model">party.work_section</field>
+            <field name="type">tree</field>
+            <field name="name">work_section_list</field>
+        </record>
         <record model="ir.ui.view" id="work_time_type_view_form">
             <field name="model">party.employment_work_time_type</field>
             <field name="type">form</field>
@@ -108,6 +118,26 @@ this repository contains the full copyright notices and license terms. -->
             <field name="keyword">form_relate</field>
             <field name="model">party.party,-1</field>
             <field name="action" ref="act_employer_employees_relation"/>
+        </record>
+        <record model="ir.action.act_window" id="act_work_section_relation">
+            <field name="name">Work Sections</field>
+            <field name="res_model">party.work_section</field>
+            <field name="domain" eval="[('party', '=', Eval('active_id'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_work_section_relation_view_1">
+            <field name="sequence" eval="1"/>
+            <field name="view" ref="work_section_view_list"/>
+            <field name="act_window" ref="act_work_section_relation"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_work_section_relation_view_2">
+            <field name="sequence" eval="1"/>
+            <field name="view" ref="work_section_view_form"/>
+            <field name="act_window" ref="act_work_section_relation"/>
+        </record>
+        <record model="ir.action.keyword" id="act_open_party_work_sections_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="act_work_section_relation"/>
         </record>
     </data>
 </tryton>
