@@ -280,6 +280,7 @@ class SetNumberInvoiceAgainstBalanceBatch(batch.BatchRoot):
 
     @classmethod
     def execute(cls, objects, ids, ids_list=None):
+        Invoice = Pool().get('account.invoice')
         for contract, invoices in groupby(objects, key=lambda x: x.contract):
             invoices = iter(sorted(invoices, key=lambda x: x.start))
             balance = contract.balance
@@ -287,7 +288,7 @@ class SetNumberInvoiceAgainstBalanceBatch(batch.BatchRoot):
                 invoice = next(invoices, None)
                 if not invoice:
                     break
-                invoice.set_number()
+                Invoice.set_number([invoice])
                 balance += invoice.total_amount
         return ids
 

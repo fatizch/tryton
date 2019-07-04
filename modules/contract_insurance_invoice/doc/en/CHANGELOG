@@ -1,3 +1,4 @@
+* BUG#12041 Fix the numbering of the invoice against balance batch
 * BUG#11869 Select id should return a tuple to be compliant
 * OTH#00000 Iteration to allow override of the repositioning payment date computation when failing payment
 * FEA#11728 Billing modes dynamic management in subscription

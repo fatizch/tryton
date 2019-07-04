@@ -1,3 +1,4 @@
+* BUG#12041 Correction du batch de numérotation pour le quittancement pour épuisement trop perçu
 * BUG#11869 Le select id doit retourner un tuple to be conforme
 * OTH#00000 Itération pour permettre la surcharge du calcul de repositionnement de date de paiement en cas d'échec
 * FEA#11728 Gestion des modes de quittancement dynamiques en souscription
