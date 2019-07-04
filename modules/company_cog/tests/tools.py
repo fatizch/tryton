@@ -14,7 +14,7 @@ def create_company(*args, **kwargs):
         a.street = 'Adresse Inconnue'
         a.zip = '99999'
         a.city = 'Bioul'
-        a.country, = Country.find([('code', '=', 'FR')])
+        a.country, = Country.find([('code', '=', 'FR')]) or [None]
         p.save()
 
     res_conf = tools.create_company(*args, **kwargs)
