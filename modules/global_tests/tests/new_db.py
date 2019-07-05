@@ -5755,9 +5755,18 @@ if GENERATE_REPORTINGS:  # {{{
         assert_eq(len(generated_pasrau_message), 58)
         # there is a carriage return at the end of the file
         # so we have an emply line at the of the list
-        for message_line, test_line in zip(generated_pasrau_message,
+        for message_line, control_line in zip(generated_pasrau_message,
                 test_pasrau_message):
-            assert_eq(message_line.strip(), test_line.strip())
+            if not message_line and not control_line:
+                continue
+            section, content = message_line.split(',')
+            if section in ("S20.G00.05.007", "S21.G00.50.001"):
+                # file date and reconciliation date
+                today_str = datetime.date.today().strftime('%d%m%Y')
+                assert message_line.split(',')[-1] == \
+                    '\'' + today_str + '\''
+            else:
+                assert_eq(message_line.strip(), control_line.strip())
 
     # }}}
 # }}}
