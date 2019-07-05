@@ -7,4 +7,5 @@ this repository contains the full copyright notices and license terms. -->
     <label name="code"/>
     <field name="code"/>
     <field name="text" colspan="4"/>
+    <field name="groups" colspan="4"/>
 </form>

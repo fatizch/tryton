@@ -2318,3 +2318,12 @@ class OptionExclusionKindRelation(model.CoogSQL):
         required=True, select=True)
     exclusion = fields.Many2One('offered.exclusion', 'Exclusion',
         ondelete='RESTRICT', required=True, select=True)
+
+    @classmethod
+    def search(cls, domain, *args, **kwargs):
+        exclusions = Pool().get('offered.exclusion').search([])
+
+        domain = ['AND', domain, ['OR', ('exclusion', '=', None),
+            ('exclusion', 'in', [x.id for x in exclusions])]]
+        return super(OptionExclusionKindRelation, cls).search(
+            domain, *args, **kwargs)

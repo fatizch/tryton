@@ -1,3 +1,5 @@
+* FEA#11912 Gérer des droits d'accès sur les exclusions
+
 Version 2.4 - 2019-04-12
 * BUG#10695 Vérifier si une garantie est déja souscrite par le souscripteur du contrat
 * BUG#10779 Correction du domaine sur les données complémentaires

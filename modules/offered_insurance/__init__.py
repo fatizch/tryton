@@ -29,6 +29,7 @@ def register():
         rule_engine.RuleEngineExtraData,
         rule_engine.RuleEngine,
         exclusion.ExclusionKind,
+        exclusion.ExclusionKindGroup,
         extra_premium.ExtraPremiumKind,
         rule_engine.RuleEngineRuntime,
         test_case.TestCaseModel,
