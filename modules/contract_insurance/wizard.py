@@ -12,6 +12,8 @@ from trytond.transaction import Transaction
 from trytond.modules.coog_core import fields, model, utils
 
 __all__ = [
+    'PackageSelection',
+    'PackageSelectionPerCovered',
     'OptionSubscription',
     'OptionsDisplayer',
     'ExtraPremiumSelector',
@@ -29,9 +31,78 @@ __all__ = [
     ]
 
 
+class PackageSelectionPerCovered(model.CoogView):
+    'Select Package Per Covered'
+    __name__ = 'contract.wizard.option_subscription.select_package_per_covered'
+
+    covered = fields.Many2One('contract.covered_element', 'Covered Element',
+        readonly=True)
+    package = fields.Many2One('offered.package', 'Package',
+        domain=[('id', 'in', Eval('possible_packages'))],
+        depends=['possible_packages'])
+    possible_packages = fields.Many2Many('offered.package', None, None,
+        'Possible Packages')
+    main_selection_screen = fields.Many2One(
+        'contract.wizard.option_subscription.select_package',
+        'Main Selection Screen')
+
+
+class PackageSelection(metaclass=PoolMeta):
+    __name__ = 'contract.wizard.option_subscription.select_package'
+
+    select_package_per_covered = fields.Boolean('Select Package Per Covered')
+    covereds_package = fields.One2Many(
+        'contract.wizard.option_subscription.select_package_per_covered',
+        'main_selection_screen', 'Package per Covered',
+        states={'invisible': ~Eval('select_package_per_covered')},
+        depends=['select_package_per_covered'])
+
+    @classmethod
+    def __setup__(cls):
+        super(PackageSelection, cls).__setup__()
+        cls.package.states['invisible'] = Eval('select_package_per_covered')
+        cls.package.depends.append('select_package_per_covered')
+
+
 class OptionSubscription(metaclass=PoolMeta):
     'Option Subscription'
     __name__ = 'contract.wizard.option_subscription'
+
+    def default_select_package(self, values):
+        contract = self.get_contract()
+        if not contract:
+            return {}
+        if not contract.product.packages_defined_per_covered:
+            res = super(OptionSubscription, self).default_select_package(values)
+            res['select_package_per_covered'] = False
+            return res
+        covereds_package = []
+        for covered in contract.covered_elements:
+            covereds_package.append({
+                    'covered': covered.id,
+                    'possible_packages': [x.id for x in
+                        contract.product.packages]
+                    })
+        return {
+            'select_package_per_covered': True,
+            'covereds_package': covereds_package,
+            }
+
+    def apply_package(self):
+        contract = self.get_contract()
+        if not contract.product.packages_defined_per_covered:
+            super(OptionSubscription, self).apply_package()
+        else:
+            new_covereds = []
+            for covered_displayer in self.select_package.covereds_package:
+                if covered_displayer.package:
+                    new_covereds.append(
+                        covered_displayer.package.apply_package_on_covered(
+                            covered_displayer.covered))
+                else:
+                    new_covereds.append(covered_displayer.covered)
+            contract.covered_elements = new_covereds
+            contract.save()
 
     def default_options_displayer(self, values):
         res = super(OptionSubscription, self).default_options_displayer(values)

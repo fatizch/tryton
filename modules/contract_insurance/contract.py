@@ -362,6 +362,12 @@ class Contract(Printable):
         else:
             return None
 
+    def set_extra_data_value(self, key, value):
+        super(Contract, self).set_extra_data_value(key, value)
+        for covered in self.covered_elements:
+            covered.set_extra_data_value(key, value)
+        self.covered_elements = self.covered_elements
+
     def get_parties(self, name):
         parties = super(Contract, self).get_parties(name)
         parties += [x.party.id for x in self.covered_elements if x.party]
@@ -1361,6 +1367,15 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         res.update(self.get_version_at_date(utils.today()).extra_data)
         return res
 
+    def set_extra_data_value(self, key, value):
+        for version in self.versions:
+            if key in version.extra_data:
+                version.extra_data[key] = value
+        self.versions = self.versions
+        for option in self.options:
+            option.set_extra_data_value(key, value)
+        self.options = self.options
+
     def get_rec_name(self, name):
         res = ''
         if self.party:
@@ -1711,7 +1726,8 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
         if not at_date:
             at_date = utils.today()
         for package in self.contract.product.packages:
-            coverages = [c for c in package.options if not c.is_service]
+            coverages = [c.option for c in package.option_relations
+                if not c.option.is_service]
             if not coverages or not all([self.is_covered_at_date(at_date, c)
                     for c in coverages]):
                 continue

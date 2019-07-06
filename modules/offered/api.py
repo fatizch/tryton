@@ -417,7 +417,8 @@ class APIProduct(APIMixin):
             'id': package.id,
             'code': package.code,
             'name': package.name,
-            'options': [{'id': x.id, 'code': x.code} for x in package.options],
+            'options': [{'id': x.option.id, 'code': x.option.code}
+                for x in package.option_relations],
             }
 
     @classmethod

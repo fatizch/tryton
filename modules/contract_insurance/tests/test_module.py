@@ -30,13 +30,18 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'Contract': 'contract',
             'Option': 'contract.option',
             'ContractChangeStartDate': 'contract.change_start_date',
+            'OptionSubscription': 'contract.wizard.option_subscription',
             'Coverage': 'offered.option.description',
             'CoveredElement': 'contract.covered_element',
+            'CoveredElementVersion': 'contract.covered_element.version',
             'RuleEngineRuntime': 'rule_engine.runtime',
             'SubStatus': 'contract.sub_status',
             'EndReason': 'covered_element.end_reason',
             'EndReasonItemDescription':
             'offered.item.description-covered_element.end_reason',
+            'SelectCoveredPackageView':
+            'contract.wizard.option_subscription.select_package_per_covered',
+            'Package': 'offered.package',
             }
 
     def test0001_testPersonCreation(self):
@@ -849,6 +854,132 @@ class ModuleTestCase(test_framework.CoogTestCase):
             ]
         self.assertEqual(options_status, ['void', 'void'])
         self.assertEqual(contract.status, 'void')
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0001_testPersonCreation',
+        'offered_insurance.test0010Package_creation'
+        )
+    def test0060_subscription_by_package(self):
+        product, = self.Product.search([
+                ('code', '=', 'AAA'),
+                ], limit=1)
+        # create contract
+        start_date = product.start_date + datetime.timedelta(weeks=4)
+        contract = self.Contract(
+            start_date=start_date,
+            product=product.id,
+            company=product.company.id,
+            appliable_conditions_date=start_date,
+            )
+        contract.init_extra_data()
+        contract.save()
+        # create covered element
+        party1, party2 = self.Party.search([('is_person', '=', True)])
+        covered_element1 = self.CoveredElement()
+        covered_element1.contract = contract
+        covered_element1.item_desc = product.coverages[0].item_desc
+        covered_element1.product = covered_element1.on_change_with_product()
+        covered_element1.party = party1
+        covered_element1_version = self.CoveredElementVersion()
+        covered_element1_version.extra_data = {'extra_data_covered': None}
+        covered_element1.versions = [covered_element1_version]
+        covered_element1.save()
+        covered_element2 = self.CoveredElement()
+        covered_element2.contract = contract
+        covered_element2.item_desc = product.coverages[0].item_desc
+        covered_element2.product = covered_element2.on_change_with_product()
+        covered_element2.party = party2
+        covered_element2_version = self.CoveredElementVersion()
+        covered_element2_version.extra_data = {'extra_data_covered': None}
+        covered_element2.versions = [covered_element2_version]
+        covered_element2.save()
+        contract.covered_elements = [covered_element1, covered_element2]
+        contract.save()
+        self.assertTrue(len(contract.covered_elements) == 2)
+
+        def apply_package(packages, contract):
+            # packages could be a list in case of package per covered
+            with Transaction().set_context(active_id=contract.id,
+                    active_model='contract'):
+                wizard_id, _, _ = self.OptionSubscription.create()
+                wizard = self.OptionSubscription(wizard_id)
+                wizard._execute('select_package')
+                if len(packages) > 1:
+                    views = []
+                    wizard.select_package.covereds_package = []
+                    for rank, selected in enumerate(packages):
+                        view = self.SelectCoveredPackageView()
+                        view.covered = contract.covered_elements[rank]
+                        view.package = selected
+                        views.append(view)
+                    wizard.select_package.covereds_package = views
+                else:
+                    wizard.select_package.package = packages[0]
+                wizard._execute('set_package')
+        # apply package 1
+        apply_package([product.packages[0]], contract)
+        self.assertTrue(
+            [a.coverage.code for c in contract.covered_elements
+                for a in c.options] == ['ALP', 'BET', 'ALP', 'BET'])
+        self.assertTrue([c.options[0].current_version.extra_data
+                for c in contract.covered_elements] == [
+                {'extra_data_coverage_alpha': 'option2'},
+                {'extra_data_coverage_alpha': 'option2'}])
+        # apply package 2
+        apply_package([product.packages[1]], contract)
+        self.assertTrue([a.coverage.code for a in contract.options] == ['CONT'])
+        self.assertTrue([a.current_version.extra_data
+                for a in contract.options] == [{}])
+        self.assertTrue(
+            [a.coverage.code for c in contract.covered_elements
+                for a in c.options] == ['ALP', 'GAM', 'DEL',
+                    'ALP', 'GAM', 'DEL'])
+        self.assertTrue([c.options[0].current_version.extra_data
+                for c in contract.covered_elements] == [
+                {'extra_data_coverage_alpha': 'option3'},
+                {'extra_data_coverage_alpha': 'option3'}])
+        self.assertTrue(contract.extra_datas[0].extra_data_values == {
+                'extra_data_contract': 'formula2'})
+        # apply package 3
+        apply_package([product.packages[2]], contract)
+        self.assertTrue(contract.extra_datas[0].extra_data_values == {
+                'extra_data_contract': 'formula3'})
+        self.assertTrue(len(contract.options) == 0)
+        self.assertTrue(
+            [a.coverage.code for c in contract.covered_elements
+                for a in c.options] == ['GAM', 'DEL', 'GAM', 'DEL'])
+        self.assertTrue([c.options[0].current_version.extra_data
+                for c in contract.covered_elements] == [{}, {}])
+
+        # test package per covered
+        packages = self.Package.search([('code', 'in', ('P1', 'P4'))])
+        product.packages_defined_per_covered = True
+        product.packages = packages
+        product.save()
+
+        # apply package 1 to covered1 and package 2 to covered2
+        apply_package([product.packages[0], product.packages[1]], contract)
+        self.assertTrue(len(contract.options) == 0)
+        self.assertTrue(
+            [a.coverage.code for c in contract.covered_elements
+                for a in c.options] == ['ALP', 'BET', 'ALP', 'GAM', 'DEL'])
+        self.assertTrue([c.options[0].current_version.extra_data
+                for c in contract.covered_elements] == [
+                {'extra_data_coverage_alpha': 'option2'},
+                {'extra_data_coverage_alpha': 'option1'}])
+        self.assertTrue([c.versions[0].extra_data
+                for c in contract.covered_elements] == [
+                {'extra_data_covered': None},
+                {'extra_data_covered': 'covered3'}])
+        # apply package 1 to covered1 and package 2 to covered2
+        apply_package([product.packages[1], product.packages[0]], contract)
+        self.assertTrue(
+            [a.coverage.code for c in contract.covered_elements
+                for a in c.options] == ['ALP', 'GAM', 'DEL', 'ALP', 'BET'])
+        self.assertTrue([c.versions[0].extra_data
+                for c in contract.covered_elements] == [
+                {'extra_data_covered': 'covered3'},
+                {'extra_data_covered': 'covered3'}])
 
 
 def suite():

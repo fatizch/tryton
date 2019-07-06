@@ -30,6 +30,8 @@ def register():
         contract.OptionExclusionKindRelation,
         OptionTreeExpansion,
         report_engine.ReportTemplate,
+        wizard.PackageSelectionPerCovered,
+        wizard.PackageSelection,
         wizard.OptionsDisplayer,
         wizard.WizardOption,
         wizard.ExtraPremiumSelector,

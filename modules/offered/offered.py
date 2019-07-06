@@ -133,6 +133,11 @@ class Product(model.CodedMixin, model.CoogView, Printable,
     def validate(cls, instances):
         super(Product, cls).validate(instances)
         cls.validate_contract_extra_data(instances)
+        cls.validate_packages(instances)
+
+    @classmethod
+    def validate_packages(cls, instances):
+        pass
 
     @classmethod
     def validate_contract_extra_data(cls, instances):

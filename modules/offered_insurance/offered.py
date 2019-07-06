@@ -34,6 +34,10 @@ class Product(metaclass=PoolMeta):
         fields.Many2Many('offered.item.description', None, None,
             'Item Descriptions'),
         'on_change_with_item_descriptors')
+    packages_defined_per_covered = fields.Boolean(
+        'Package defined per covered', help='If set, each covered will have '
+        'to select a package. Else the selection will be unique for all '
+        'covered')
 
     @classmethod
     def kind_list_for_extra_data_domain(cls):
@@ -47,12 +51,33 @@ class Product(metaclass=PoolMeta):
         cls._error_messages.update({
                 'missing_covered_element_extra_data': 'The following covered '
                 'element extra data should be set on the product: %s',
+                'wrong_extra_data_type': 'Extra data "%(extra_data)s" set on '
+                'package "%(package)s" is not compatible with package defined '
+                'per covered option'
                 })
 
     @classmethod
     def validate(cls, instances):
         super(Product, cls).validate(instances)
         cls.validate_covered_element_extra_data(instances)
+
+    @classmethod
+    def validate_packages(cls, instances):
+        ExtraData = Pool().get('extra_data')
+        for product in instances:
+            for package in product.packages:
+                for key, value in package.extra_data.items():
+                    extra_data_struct = ExtraData._extra_data_struct(key)
+                    if (extra_data_struct['kind'] == 'contract' and
+                            product.packages_defined_per_covered or
+                            extra_data_struct['kind'] == 'covered_element' and
+                            not product.packages_defined_per_covered):
+                        cls.raise_user_error('wrong_extra_data_type',
+                            {'package': package.name, 'extra_data': key})
+
+    @staticmethod
+    def default_packages_defined_per_covered():
+        return True
 
     @classmethod
     def validate_covered_element_extra_data(cls, instances):

@@ -2,6 +2,11 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
+    <xpath expr="/form/notebook/page[@id='option']/field[@name='packages']" position="before">
+        <label name="packages_defined_per_covered"/>
+        <field name="packages_defined_per_covered"/>
+        <newline/>
+    </xpath>
     <xpath expr="/form/notebook/page[@id='option']/field[@name='packages']" position="after">
         <field name="item_descriptors" colspan="2"/>
     </xpath>

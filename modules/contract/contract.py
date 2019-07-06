@@ -379,7 +379,6 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                 'contracts %(contracts)s are not quote or declined.',
                 'no_dist_network': 'Contract %(contracts)s must have a '
                 'distributor, please enter it',
-
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
         # if issue with following code, apply SQL script from Github PR #815
@@ -860,6 +859,20 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             current_version = self.extra_datas[-1]
         self.extra_datas = list(self.extra_datas)
         current_version.extra_data_values = self.extra_data_values
+
+    def set_extra_data_value(self, key, value):
+        # This method set extra data value if the
+        # extra data already exist on the object. This method sets all
+        # extra_data versions. Mainly used during subscription
+        for extra_data_version in self.extra_datas:
+            if key in extra_data_version.extra_data_values:
+                extra_data_version.extra_data_values[key] = value
+                extra_data_version.extra_data_values = \
+                    extra_data_version.extra_data_values
+        self.extra_datas = self.extra_datas
+        for option in self.options:
+            option.set_extra_data_value(key, value)
+        self.options = self.options
 
     def can_change_start_date(self):
         if self.activation_history and \
@@ -1466,7 +1479,8 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         if not subscribed:
             return None
         for package in self.product.packages:
-            coverages = set([c.id for c in package.options if c.is_service])
+            coverages = set([c.option.id for c in package.option_relations
+                    if c.option.is_service])
             if coverages != subscribed:
                 continue
             return package
@@ -2306,6 +2320,13 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
         current_version = self.get_version_at_date(kwargs.get('date',
                 utils.today()))
         return current_version.find_extra_data_value(name, **kwargs)
+
+    def set_extra_data_value(self, key, value):
+        for version in self.versions:
+            if key in version.extra_data:
+                version.extra_data[key] = value
+            version.extra_data = version.extra_data
+        self.versions = self.versions
 
     def decline_option(self, reason):
         self.status = 'declined'

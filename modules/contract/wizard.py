@@ -41,9 +41,14 @@ class OptionSubscription(model.CoogWizard):
         'contract.wizard.option_subscription.select_package',
         'contract.select_package_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Next', 'options_displayer', 'tryton-go-next',
+            Button('Apply Package', 'set_package', 'tryton-go-next',
                 default=True),
+            Button('Apply Package and Customize Options',
+                'set_package_and_customize_option',
+                'tryton-go-next'),
             ])
+    set_package = StateTransition()
+    set_package_and_customize_option = StateTransition()
     options_displayer = StateView(
         'contract.wizard.option_subscription.options_displayer',
         'contract.options_displayer_view_form', [
@@ -69,6 +74,21 @@ class OptionSubscription(model.CoogWizard):
         return {
             'possible_packages': [x.id for x in contract.product.packages],
             }
+
+    def apply_package(self):
+        contract = self.get_contract()
+        if self.select_package and self.select_package.package:
+            contract = self.select_package.package.apply_package_on_contract(
+                contract)
+            contract.save()
+
+    def transition_set_package(self):
+        self.apply_package()
+        return 'end'
+
+    def transition_set_package_and_customize_option(self):
+        self.apply_package()
+        return 'options_displayer'
 
     def default_options_displayer(self, values):
         contract = self.get_contract()
@@ -204,7 +224,8 @@ class OptionsDisplayer(model.CoogView):
                         'subscription_behaviour')),
                 is_selected=((not self.package and (bool(existing_option) or
                             coverage.subscription_behaviour != 'optional'))
-                    or (self.package and coverage in self.package.options)),
+                    or (self.package and coverage in
+                        [o.option for o in self.package.option_relations])),
                 coverage_behaviour=coverage.subscription_behaviour,
                 coverage=coverage, selection=selection, option=existing_option,
                 )

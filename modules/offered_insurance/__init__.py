@@ -3,6 +3,7 @@
 from trytond.pool import Pool
 from . import rule_engine
 from . import offered
+from . import package
 from . import coverage
 from . import test_case
 from . import batch
@@ -25,6 +26,7 @@ def register():
         offered.CoveredElementEndReason,
         offered.ItemDescriptionEndReasonRelation,
         offered.ExtraData,
+        package.Package,
         batch.ProductValidationBatch,
         rule_engine.RuleEngineExtraData,
         rule_engine.RuleEngine,

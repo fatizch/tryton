@@ -29,6 +29,19 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="contract.options_displayer_view_form"/>
             <field name="name">options_displayer_form</field>
         </record>
+        <!-- ############################ -->
+        <!-- # Select Package displayer # -->
+        <!-- ############################ -->
+        <record model="ir.ui.view" id="select_package_view_form">
+            <field name="model">contract.wizard.option_subscription.select_package</field>
+            <field name="inherit" ref="contract.select_package_view_form"/>
+            <field name="name">select_package_form</field>
+        </record>
+        <record model="ir.ui.view" id="select_package_per_covered_view_list">
+            <field name="model">contract.wizard.option_subscription.select_package_per_covered</field>
+            <field name="type">tree</field>
+            <field name="name">select_package_per_covered_list</field>
+        </record>
         <!-- ########################## -->
         <!-- # Extra Premium Selector # -->
         <!-- ########################## -->

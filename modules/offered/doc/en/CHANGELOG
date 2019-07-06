@@ -1,3 +1,4 @@
+* FEA#11920 Improve package functionnality. Packages can be defined to be selected at contract level or covered element level. Contract/covered/option extra data can be pre-defined in package
 * BUG#12020 Fix helper on the field domain of the extra data definition
 * FEA#11812 Describe product API
 * FEA#11837 Add a sequence_order field on extra_data to manage their order

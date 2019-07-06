@@ -26,12 +26,15 @@ class ModuleTestCase(test_framework.CoogTestCase):
         return {
             'Product': 'offered.product',
             'OptionDescription': 'offered.option.description',
+            'Package': 'offered.package',
             'Sequence': 'ir.sequence',
             'Lang': 'ir.lang',
             'ItemDesc': 'offered.item.description',
             'ExtraPremiumKind': 'extra_premium.kind',
             'Insurer': 'insurer',
             'Party': 'party.party',
+            'PackageOptionRelation': 'offered.package-option.description',
+            'ExtraData': 'extra_data',
             }
 
     def test0001_testFunctionalRuleCreation(self):
@@ -186,6 +189,7 @@ return True'''
         coverage_a.code = 'ALP'
         coverage_a.name = 'Alpha Coverage'
         coverage_a.start_date = datetime.date.today()
+        coverage_a.sequence = 1
 
         coverage_a.item_desc = item_desc
         coverage_a.insurer = insurer
@@ -202,6 +206,7 @@ return True'''
         coverage_b.family = coverage_a._fields['family'].selection[0][0]
         coverage_b.start_date = datetime.date.today() + \
             datetime.timedelta(days=5)
+        coverage_b.sequence = 2
 
         coverage_b.item_desc = item_desc
         coverage_b.insurer = insurer
@@ -216,6 +221,7 @@ return True'''
         coverage_c.name = 'GammaCoverage'
         coverage_c.family = coverage_a._fields['family'].selection[0][0]
         coverage_c.start_date = datetime.date.today()
+        coverage_c.sequence = 3
 
         coverage_c.item_desc = item_desc
         coverage_c.insurer = insurer
@@ -231,6 +237,7 @@ return True'''
         coverage_d.name = 'Delta Coverage'
         coverage_d.family = coverage_a._fields['family'].selection[0][0]
         coverage_d.start_date = datetime.date.today()
+        coverage_d.sequence = 4
 
         coverage_d.item_desc = item_desc
         coverage_d.insurer = insurer
@@ -254,6 +261,99 @@ return True'''
         product_a.save()
 
         self.assertTrue(product_a.id)
+
+    @test_framework.prepare_test(
+        'offered_insurance.test0010Coverage_creation',
+        )
+    def test0010Package_creation(self):
+        product, = self.Product.search([
+                ('code', '=', 'AAA'),
+                ], limit=1)
+        item_desc = self.ItemDesc.search([('code', '=', 'person')])[0]
+        # add coverage at contract level
+        coverage = self.OptionDescription()
+        coverage.family = coverage._fields['family'].selection[0][0]
+        coverage.code = 'CONT'
+        coverage.name = 'Contract Coverage'
+        coverage.start_date = datetime.date.today()
+        coverage.insurer = product.coverages[0].insurer
+        coverage.company = product.company
+        coverage.currency = product.company.currency
+        coverage.save()
+        product.coverages = product.coverages + (coverage,)
+        product.save()
+        self.assertTrue(len(product.coverages) == 5)
+
+        c1, c2, c3, c4, c5 = product.coverages
+        # create packages
+
+        def create_package(name, code, options, contract_extra_data):
+            # options is a tuple with option and extra_ data
+            package = self.Package()
+            package.name = name
+            package.code = code
+            package.extra_data = contract_extra_data
+            relations = []
+            for option in options:
+                relation = self.PackageOptionRelation()
+                relation.option = option[0]
+                relation.extra_data = option[1]
+                relations.append(relation)
+            package.option_relations = relations
+            package.save()
+            return package
+
+        # Add extra_data on contract
+        contract_extra_data = self.ExtraData()
+        contract_extra_data.name = 'extra_data_contract'
+        contract_extra_data.string = 'Extra Data Contract'
+        contract_extra_data.type_ = 'selection'
+        contract_extra_data.selection = 'formula1: Formula 1\n'\
+            'formula2: Formula 2,formula3: Formula 3'
+        contract_extra_data.kind = 'contract'
+        contract_extra_data.save()
+        product.extra_data_def = [contract_extra_data]
+
+        # Add extra_data on coverage 1
+        option_extra_data = self.ExtraData()
+        option_extra_data.name = 'extra_data_coverage_alpha'
+        option_extra_data.string = 'Extra Data Coverage Alpha'
+        option_extra_data.type_ = 'selection'
+        option_extra_data.selection = 'option1: Option 1\n'\
+            'option2: Option 2,option3: Option 3'
+        option_extra_data.kind = 'option'
+        option_extra_data.save()
+        option_alpha = product.coverages[0]
+        option_alpha.extra_data_def = [option_extra_data]
+        option_alpha.save()
+
+        # Add covered extra data on item desc
+        covered_extra_data = self.ExtraData()
+        covered_extra_data.name = 'extra_data_covered'
+        covered_extra_data.string = 'Extra Data Covered'
+        covered_extra_data.type_ = 'selection'
+        covered_extra_data.selection = 'covered1: Covered 1\n'\
+            'covered2: Covered 2,covered3: Covered 3'
+        covered_extra_data.kind = 'covered_element'
+        covered_extra_data.save()
+        item_desc.extra_data_def = [covered_extra_data]
+        item_desc.save()
+
+        product.packages_defined_per_covered = False
+        package1 = create_package('Package 1', 'P1',
+            [(c1, {'extra_data_coverage_alpha': 'option2'}), (c2, {})], {})
+        package2 = create_package('Package 2', 'P2',
+            [(c1, {'extra_data_coverage_alpha': 'option3'}), (c3, {}),
+                (c4, {}), (c5, {})],
+            {'extra_data_contract': 'formula2'})
+        package3 = create_package('Package 3', 'P3',
+            [(c3, {}), (c4, {})], {'extra_data_contract': 'formula3'})
+        create_package('Package 4', 'P4',
+            [(c1, {'extra_data_coverage_alpha': 'option1'}), (c3, {}),
+                (c4, {})], {'extra_data_covered': 'covered3'})
+        product.packages = [package1, package2, package3]
+        product.save()
+        self.assertTrue(len(product.packages) == 3)
 
     def test0100_testExtraPremiumKindCreation(self):
         def createExtraPremiumKind(code, is_discount=False, max_rate=None,

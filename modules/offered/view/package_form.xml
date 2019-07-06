@@ -7,5 +7,5 @@ this repository contains the full copyright notices and license terms. -->
     <label name="code"/>
     <field name="code"/>
     <field name="extra_data" colspan="2"/>
-    <field name="options" colspan="4"/>
+    <field name="option_relations" colspan="4"/>
 </form>
