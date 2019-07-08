@@ -1,7 +1,7 @@
-.. MAIN_TOPIC
+.. contract
 
-MAIN TOPIC - Module Topic
-=========================
+Third Party Manager: Almerys flux V3 flow
+=========================================
 
 Summary
 -------

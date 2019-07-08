@@ -1,5 +1,7 @@
-Tryton Coog - Third Party Right Management
-==========================================
+.. contract
+
+Third Party Right Management
+============================
 
 Summary
 -------

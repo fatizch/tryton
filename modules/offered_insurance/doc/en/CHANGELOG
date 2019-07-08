@@ -1,3 +1,4 @@
+* BUG#12088 Impossible to use rules base on subscriber country code when using quotation.calculate APIs
 * FEA#11912 Manage exclusions right access
 
 Version 2.4 - 2019-04-12

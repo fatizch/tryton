@@ -291,8 +291,10 @@ class AlmerysProtocolBatch(batch.BatchRoot):
 
                         if not souscripteur:
                             rattachements.append(E.RATTACHEMENT(
-                                    E.REF_OS_RATTACHANT(relation.to.code),
-                                    E.REF_OS_RATTACHE(relation.from_.code),
+                                    E.REF_OS_RATTACHANT(relation.to.code if
+                                        relation else ''),
+                                    E.REF_OS_RATTACHE(relation.from_.code if
+                                        relation else ''),
                                     E.LIEN_JURIDIQUE(
                                         liens.get(relation.type.code, 'AA')
                                         if relation else 'AA')
@@ -353,10 +355,12 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                             for tpp in all_periods
                             if tpp.protocol.almerys_support_tp)
                         bank_account = covered.party.claim_bank_account
-                        bank_number = iban.compact(bank_account.number)
-                        bank_code, bank_agency = bank_account.\
-                            get_bank_identifiers_fr(bank_number)
-                        bank = bank_account.bank
+                        bank = None
+                        if bank_account:
+                            bank_number = iban.compact(bank_account.number)
+                            bank_code, bank_agency = bank_account.\
+                                get_bank_identifiers_fr(bank_number)
+                            bank = bank_account.bank
                         if bank:
                             service_tp = E.SERVICE_TP(
                                 E.RIB(
@@ -365,8 +369,8 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                                                 covered.party.first_name,
                                                 covered.party.name)[:80]),
                                         E.IBAN_PAYS(bank_number[:2]),
-                                        E.IBAN_CONTROLE(bank_number[2:4]),
-                                        E.IBAN_BBAN(bank_number[4:]),
+                                        E.IBAN_CONTROLE(bank_number[-2:]),
+                                        E.IBAN_BBAN(bank_number[2:-2]),
                                         E.BIC_BANQUE(bank.bic[:4]),
                                         E.BIC_PAYS(bank.bic[4:6]),
                                         E.BIC_EMPLACEMENT(bank.bic[6:8]),

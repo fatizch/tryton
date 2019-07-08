@@ -160,6 +160,12 @@ class RuleEngineRuntime(metaclass=PoolMeta):
 
     @classmethod
     @check_args('contract')
+    def _re_get_subscriber_living_country_code(cls, args):
+        address = args['contract'].subscriber.address_get()
+        return address.country.code if address.country else ''
+
+    @classmethod
+    @check_args('contract')
     def _re_subscriber_subscribed(cls, args, product_name):
         contracts = args['contract'].subscriber.get_subscribed_contracts()
         matches = [

@@ -118,7 +118,18 @@ souscripteur du contrat</field>
 souscripteur du contrat défini sur l'adresse du souscripteur</field>
             <field name="parent" ref="dossier_souscripteur"/>
         </record>
-        <record model="rule_engine.function" id="souscripteur_a_souscrit_produit">
+         <record model="rule_engine.function" id="code_pays_de_residence_souscripteur">
+            <field name="translated_technical_name">code_pays_de_residence_souscripteur</field>
+            <field name="description">Code du pays de résidence</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_subscriber_living_country_code</field>
+            <field name="long_description">Retourne le code du pays de résidence du 
+souscripteur du contrat défini sur l'adresse du souscripteur</field>
+            <field name="parent" ref="dossier_souscripteur"/>
+        </record>
+       <record model="rule_engine.function" id="souscripteur_a_souscrit_produit">
             <field name="translated_technical_name">souscripteur_a_souscrit_produit</field>
             <field name="description">A souscrit le produit</field>
             <field name="type">function</field>

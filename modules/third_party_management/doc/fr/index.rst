@@ -1,7 +1,7 @@
-.. custom_tryton_coog
+.. contract
 
-Tryton Coog - Délégataires
-==========================
+Délégataires
+============
 
 Résumé
 ------

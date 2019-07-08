@@ -328,6 +328,6 @@ Create Contract::
     >>> len(document.xpath('//almerys:SERVICE_TP', namespaces=ns))
     1
     >>> document.xpath('//almerys:IBAN_BBAN', namespaces=ns)[0].text
-    '20041010050500013M02606'
+    '1420041010050500013M026'
     >>> document.xpath('//almerys:REF_INTERNE_CG', namespaces=ns)[0].text
     'REF INTERNE'

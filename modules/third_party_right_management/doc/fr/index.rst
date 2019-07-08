@@ -1,5 +1,7 @@
-Tryton Coog - Gestion des périodes de droits par délégataires
-=============================================================
+.. contract
+
+Gestion des périodes de droits par délégataires
+===============================================
 
 Résumé
 ------

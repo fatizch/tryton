@@ -1,7 +1,7 @@
-.. custom_tryton_coog
+.. contract
 
-Tryton Coog - Third Party Manager
-=================================
+Third Party Manager
+===================
 
 Summary
 -------

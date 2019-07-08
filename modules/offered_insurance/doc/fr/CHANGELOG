@@ -1,3 +1,4 @@
+* BUG#12088 Impossibilité d'évaluer les règles nécessitant le code du pays via API de tarification
 * FEA#11912 Gérer des droits d'accès sur les exclusions
 
 Version 2.4 - 2019-04-12

@@ -1,7 +1,7 @@
-.. MAIN_TOPIC
+.. contract
 
-MAIN TOPIC - Module Topic
-=========================
+Délégataire : support du flux V3 Almerys
+========================================
 
 Résumé
 ------
