@@ -74,7 +74,7 @@ def create_party_person(name=None, first_name=None, birth_date=None,
     a.street = 'Adresse Inconnue'
     a.zip = '99999'
     a.city = 'Bioul'
-    a.country, = Country.find([('code', '=', 'FR')])
+    a.country, = Country.find([('code', '=', 'FR')]) or [None]
 
     if hasattr(person, 'account_payable') and company:
         add_accounts(person, company)
