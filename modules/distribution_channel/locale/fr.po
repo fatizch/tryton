@@ -1,0 +1,258 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:distribution.channel:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
+msgctxt "error:distribution.network:"
+msgid "at least one channel is required on %s network or its parents"
+msgstr "Au moins un canal est requis sur le réseau %s ou ses parents"
+
+msgctxt "field:contract,dist_channel:"
+msgid "Channel"
+msgstr "Canal"
+
+msgctxt "field:contract.subscribe.find_process,authorized_channels:"
+msgid "Authorized channels"
+msgstr "Canaux autorisés"
+
+msgctxt "field:contract.subscribe.find_process,channel:"
+msgid "Channel"
+msgstr "Canal"
+
+msgctxt "field:distribution.channel,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:distribution.channel,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:distribution.channel,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:distribution.channel,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:distribution.channel,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:distribution.channel,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:distribution.channel,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:distribution.channel,write_date:"
+msgid "Write Date"
+msgstr "Date de modification"
+
+msgctxt "field:distribution.channel,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:distribution.channel,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:distribution.commercial_product,dist_authorized_channels:"
+msgid "Authorized Distribution Channels"
+msgstr "Canaux de distribution autorisés"
+
+msgctxt ""
+"field:distribution.commercial_product-distribution.channel,com_product:"
+msgid "Commercial Product"
+msgstr "Produit commercial"
+
+msgctxt ""
+"field:distribution.commercial_product-distribution.channel,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:distribution.commercial_product-distribution.channel,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:distribution.commercial_product-distribution.channel,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:distribution.commercial_product-distribution.channel,dist_channel:"
+msgid "Distribution Channel"
+msgstr "Canal de Distribution"
+
+msgctxt "field:distribution.commercial_product-distribution.channel,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:distribution.commercial_product-distribution.channel,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt ""
+"field:distribution.commercial_product-distribution.channel,write_date:"
+msgid "Write Date"
+msgstr "Date de modification"
+
+msgctxt ""
+"field:distribution.commercial_product-distribution.channel,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:distribution.commercial_product-distribution.channel,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:distribution.network,all_net_channels:"
+msgid "All network channels"
+msgstr "Tous les canaux du réseau"
+
+msgctxt "field:distribution.network,authorized_distribution_channels:"
+msgid "Authorized Distribution Channels"
+msgstr "Canaux de distribution autorisés"
+
+msgctxt "field:distribution.network,parent_authorized_distribution_channels:"
+msgid "Top Level Distribution Channels"
+msgstr "canaux de distribution de haut niveau"
+
+msgctxt "field:distribution.network-distribution.channel,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:distribution.network-distribution.channel,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:distribution.network-distribution.channel,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:distribution.network-distribution.channel,distribution_channel:"
+msgid "Distribution Channel"
+msgstr "Canal de Distribution"
+
+msgctxt ""
+"field:distribution.network-distribution.channel,distribution_network:"
+msgid "Distribution Network"
+msgstr "Réseau de Distribution"
+
+msgctxt "field:distribution.network-distribution.channel,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:distribution.network-distribution.channel,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:distribution.network-distribution.channel,write_date:"
+msgid "Write Date"
+msgstr "Date de modification"
+
+msgctxt "field:distribution.network-distribution.channel,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:distribution.network-distribution.channel,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:process,for_channels:"
+msgid "Distribution Channels"
+msgstr "Canaux de distribution "
+
+msgctxt "field:process-distribution.channel,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:process-distribution.channel,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:process-distribution.channel,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process-distribution.channel,dis_channel:"
+msgid "Distribution Channel"
+msgstr "Canal de distribution"
+
+msgctxt "field:process-distribution.channel,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:process-distribution.channel,process:"
+msgid "Process"
+msgstr "Traiter"
+
+msgctxt "field:process-distribution.channel,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:process-distribution.channel,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:process-distribution.channel,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:process-distribution.channel,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "help:distribution.channel,code:"
+msgid ""
+"The string that will be used to identify this record across the "
+"configuration. It should not be modified without checking first if it is "
+"used somewhere"
+msgstr ""
+"La chaîne qui sera utilisée pour identifier cet enregistrement dans la "
+"configuration. Il ne doit pas être modifié sans vérifier au préalable s'il "
+"est utilisé quelque part"
+
+msgctxt "help:distribution.channel,name:"
+msgid "The name that will be displayed to the end user"
+msgstr "Le nom qui sera affiché à l'utilisateur "
+
+msgctxt "model:distribution.channel,name:"
+msgid "Distribution Chanel"
+msgstr "Canal de Distribution"
+
+msgctxt "model:distribution.channel,name:channel_back_office"
+msgid "BackOffice"
+msgstr "Backoffice"
+
+msgctxt "model:distribution.commercial_product-distribution.channel,name:"
+msgid "Commercial Product Channel Relation"
+msgstr "Relation canal produit commercial"
+
+msgctxt "model:distribution.network-distribution.channel,name:"
+msgid "Distribution Network Chanel Relation"
+msgstr "Relation distribution réseau canal"
+
+msgctxt "model:ir.action,name:act_dist_channel_form"
+msgid "Distribution Channels"
+msgstr "Canaux de distribution "
+
+msgctxt "model:ir.ui.menu,name:menu_dist_channel_form"
+msgid "Distribution Channels"
+msgstr "Canaux de distribution "
+
+msgctxt "model:process-distribution.channel,name:"
+msgid "Process Product Relation"
+msgstr "Relation Processus Produit"
+
+msgctxt "view:distribution.network:"
+msgid "authorized distribution Channels"
+msgstr "Canaux de distribution autorisés"

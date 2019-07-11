@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!--############################################################-->
+        <!--Distribution Network -->
+        <!--############################################################-->
+        <record model="ir.ui.view" id="dist_network_view_form">
+            <field name="model">distribution.network</field>
+            <field name="inherit" ref="distribution.dist_network_view_form"/>
+            <field name="name">distribution_network_form</field>
+        </record>
+        <!--############################################################-->
+        <!--Distribution Channel-->
+        <!--############################################################-->
+        <record model="ir.ui.view" id="dist_channel_view_form">
+            <field name="model">distribution.channel</field>
+            <field name="type">form</field>
+            <field name="name">distribution_channel_form</field>
+        </record>
+        <record model="ir.ui.view" id="dist_channel_view_list">
+            <field name="model">distribution.channel</field>
+            <field name="type">tree</field>
+            <field name="name">distribution_channel_list</field>
+        </record>
+        <!--############################################################-->
+        <!--Distribution Comercial Product -->
+        <!--############################################################-->
+        <record model="ir.ui.view" id="commercial_product_view_form">
+            <field name="model">distribution.commercial_product</field>
+            <field name="inherit" ref="contract_distribution.commercial_product_view_form"/>
+            <field name="name">commercial_product_form</field>
+        </record>
+        <!--Entry Point-->
+        <record model="ir.action.act_window" id="act_dist_channel_form">
+            <field name="name">Distribution Channels</field>
+            <field name="res_model">distribution.channel</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_dist_channel_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="dist_channel_view_list"/>
+            <field name="act_window" ref="act_dist_channel_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_dist_channel_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="dist_channel_view_form"/>
+            <field name="act_window" ref="act_dist_channel_form"/>
+        </record>
+        <menuitem parent="distribution.menu_distribution" sequence="2" id="menu_dist_channel_form" action="act_dist_channel_form"/>
+    </data>
+</tryton>
