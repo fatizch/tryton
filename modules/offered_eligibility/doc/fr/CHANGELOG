@@ -1,3 +1,5 @@
+* OTH#00000 Correction de l'énoncé 'inclus' en 'age non éligible' dans la règle pré-paramétrée
+
 Version 2.4 - 2019-04-12
 * BUG#11271 Indexer le message d'avertissement sur les dates lors de la création d'une option avec des informations plus stables que l'identifiant qui peut entraîner une boucle dans certains cas
 

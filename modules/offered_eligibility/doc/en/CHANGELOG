@@ -1,3 +1,5 @@
+* OTH#00000 Fix variable name 'included' in 'age not eligible' in predefined rule
+
 Version 2.4 - 2019-04-12
 * BUG#11271 Index bad dates warning message on option creation with more meaningful data as id can create a loop in some cases
 
