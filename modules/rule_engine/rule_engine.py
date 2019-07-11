@@ -1252,7 +1252,8 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             if k == '__result__':
                 continue
             result.append(k)
-            if isinstance(v, Model) and getattr(v, 'id', None):
+            if (isinstance(v, Model) and getattr(v, 'id', None) and
+                    getattr(v, 'rec_name', None)):
                 result.append('    [%s (%s)] %s' % (v.__name__, v.id,
                         v.rec_name))
             else:
