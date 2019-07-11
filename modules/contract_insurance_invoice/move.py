@@ -1,7 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond import backend
-from trytond.pyson import Bool, Eval, If
+from trytond.pyson import Bool, Eval, If, And, Or
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.config import config
@@ -210,6 +210,16 @@ class ReconcileShow(metaclass=PoolMeta):
         depends=['party', 'remaining_repartition_method'])
 
     @classmethod
+    def __setup__(cls):
+        super(ReconcileShow, cls).__setup__()
+        write_off_states = cls.write_off.states
+        write_off_states['required'] = And(write_off_states['required'],
+            Eval('remaining_repartition_method') == 'write_off')
+        write_off_states['invisible'] = Or(write_off_states['invisible'],
+            Eval('remaining_repartition_method') != 'write_off')
+        cls.write_off.states = write_off_states
+
+    @classmethod
     def default_date(cls):
         return utils.today()
 
@@ -259,6 +269,7 @@ class Reconcile(metaclass=PoolMeta):
         Period = pool.get('account.period')
         Move = pool.get('account.move')
         Line = pool.get('account.move.line')
+        Journal = pool.get('account.journal')
 
         if self.show.remaining_repartition_method == 'write_off':
             return
@@ -271,8 +282,12 @@ class Reconcile(metaclass=PoolMeta):
         period_id = Period.find(self.show.account.company.id,
             date=self.show.date)
 
+        if self.show.remaining_repartition_method != 'write_off':
+            journal = Journal.get_default_journal('split')
+        else:
+            journal = Journal.get_default_journal('write-off')
         move = Move()
-        move.journal = self.show.write_off.journal
+        move.journal = journal
         move.period = Period(period_id)
         move.date = self.show.date
         move.description = self.show.description
