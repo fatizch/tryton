@@ -692,6 +692,7 @@ class Payment(metaclass=PoolMeta):
             state='draft',
             description=name_for_billing,
             sepa_mandate=sepa_mandate,
+            business_kind='contract_invoice',
             payment_term=account_configuration.default_customer_payment_term,
             invoice_date=utils.today()
             )
