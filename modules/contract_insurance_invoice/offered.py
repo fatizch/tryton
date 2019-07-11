@@ -368,8 +368,8 @@ class Product(metaclass=PoolMeta):
                 coog_string.doc_for_field(self,
                     'days_offset_for_subscription_payments'),
                 coog_string.doc_for_field(self, 'taxes_included_in_premium'),
-                coog_string.doc_for_field(self, 'billing_modes')
                 ])
+        doc['rules'].append(coog_string.doc_for_rules(self, 'billing_rules'))
         return doc
 
 
@@ -438,6 +438,12 @@ class ProductBillingRule(
 
     def get_change_billing_modes_order(self, name):
         return False
+
+    def get_rule_documentation_structure(self):
+        res = [coog_string.doc_for_field(self, 'billing_modes')]
+        if self.rule:
+            res.append(self.get_rule_rule_engine_documentation_structure())
+        return res
 
 
 class ProductBillingModeRelation(model.CoogSQL, model.CoogView):

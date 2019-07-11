@@ -1,3 +1,4 @@
+* OTH#00000 Fix product documentation following FEA11728
 * BUG#12026 Fix reconciliation wizard : write off is not always required
 * BUG#12129 Add automatic deletion of draft and validate invoices that follow a unique posted invoice we are cancelling
 * BUG#12041 Fix the numbering of the invoice against balance batch

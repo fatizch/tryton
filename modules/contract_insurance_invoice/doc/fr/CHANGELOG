@@ -1,3 +1,4 @@
+* OTH#00000 Correction de la génération de la documentation sur un produit suite à FEA11728
 * BUG#12026 Correction de l'assistant de lettrage : perte et profits n'est pas toujours requis
 * BUG#12129 Ajout de la suppression automatique des quittances validées et brouillons qui suivent l'unique quittance que l'on annule
 * BUG#12041 Correction du batch de numérotation pour le quittancement pour épuisement trop perçu
