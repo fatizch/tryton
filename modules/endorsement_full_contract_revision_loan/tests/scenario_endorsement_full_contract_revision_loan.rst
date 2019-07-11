@@ -10,6 +10,7 @@ Imports::
     >>> import datetime
     >>> from proteus import Model, Wizard
     >>> from decimal import Decimal
+    >>> from dateutil.relativedelta import relativedelta
     >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.account.tests.tools import create_fiscalyear
     >>> from trytond.modules.account_invoice.tests.tools import \
@@ -337,6 +338,10 @@ Create Test Contract::
     >>> contract.billing_informations.append(BillingInformation(
     ...         billing_mode=freq_monthly, payment_term=payment_term))
     >>> contract.save()
+    >>> Contract.first_invoice([contract.id], config.context)
+    >>> all_invoices = sorted(ContractInvoice.find([('contract', '=', contract.id)]),
+    ...     key=lambda x: (x.start or datetime.date.min, x.create_date))
+    >>> all_invoices[0].invoice.click('post')
 
 Start Endorsement::
 
@@ -377,7 +382,7 @@ Start Again::
     ...         ('code', '=', 'full_contract_revision')])[0]
     >>> new_endorsement.form.endorsement = None
     >>> new_endorsement.form.applicant = None
-    >>> new_endorsement.form.effective_date = contract.start_date
+    >>> new_endorsement.form.effective_date = contract.start_date + relativedelta(months=1)
     >>> new_endorsement.execute('start_endorsement')
     >>> new_endorsement.execute('full_contract_revision_next')
 

@@ -407,13 +407,15 @@ class Invoice(metaclass=PoolMeta):
             return old_invoices
         return []
 
-    def check_future_invoices_cancelled(self):
+    def check_future_invoices_cancelled(self, must_raise=True):
         future_invoices = self.__class__.search([
                 ('contract', '=', self.contract.id),
                 ('start', '>', self.start),
                 ('state', '!=', 'cancel')],
             order=[('start', 'ASC')])
-        if future_invoices:
+        if future_invoices and (
+                must_raise or any([x.state not in ('draft', 'validated')
+                        for x in future_invoices])):
             self.raise_user_error(
                 'future_invoices_existing',
                 {
@@ -423,8 +425,7 @@ class Invoice(metaclass=PoolMeta):
                     'invoices': '\n\t'.join([x.description
                         for x in future_invoices]),
                 })
-            return future_invoices
-        return []
+        return future_invoices
 
     @classmethod
     def cancel_payments(cls, payments):
@@ -442,7 +443,10 @@ class Invoice(metaclass=PoolMeta):
     @Workflow.transition('cancel')
     def cancel(cls, invoices):
         if len(invoices) == 1 and invoices[0].contract and invoices[0].start:
-            invoices[0].check_future_invoices_cancelled()
+            future_invoices = invoices[0].check_future_invoices_cancelled(
+                must_raise=False)
+            if future_invoices:
+                cls.delete(future_invoices)
         payments = sum([list(i.payments) for i in invoices
             if i.state == 'posted'], [])
         cls.cancel_payments(payments)

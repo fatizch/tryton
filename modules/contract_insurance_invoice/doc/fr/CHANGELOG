@@ -1,3 +1,4 @@
+* BUG#12129 Ajout de la suppression automatique des quittances validées et brouillons qui suivent l'unique quittance que l'on annule
 * BUG#12041 Correction du batch de numérotation pour le quittancement pour épuisement trop perçu
 * BUG#11869 Le select id doit retourner un tuple to be conforme
 * OTH#00000 Itération pour permettre la surcharge du calcul de repositionnement de date de paiement en cas d'échec
