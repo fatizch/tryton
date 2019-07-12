@@ -8,6 +8,7 @@ from . import event
 from . import protocol
 from . import endorsement
 from . import rule_engine
+from . import suspension
 
 
 def register():
@@ -29,6 +30,11 @@ def register():
         endorsement.ThirdPartyProtocolEndorsementPart,
         module='third_party_right_management', type_='model',
         depends=['endorsement'])
+    Pool.register(
+        suspension.ContractRightSuspension,
+        module='third_party_right_management', type_='model',
+        depends=['contract_insurance_suspension'],
+        )
     Pool.register(
         protocol.RecomputePeriod,
         module='third_party_right_management', type_='wizard')

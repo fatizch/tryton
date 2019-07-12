@@ -1,3 +1,4 @@
+* OTH#00000 Autorisation de la modification de la date de fin sur les objets de suspension de droit
 * BUG#11586 La réactivation d'un contrat ayant des suspensions temporaires et définitive ne devrait mettre un terme qu'à la suspension définitive
 
 Version 2.4 - 2019-04-12

@@ -3,6 +3,7 @@
 
 import datetime
 from dateutil.relativedelta import relativedelta
+from itertools import groupby
 
 from trytond.pool import PoolMeta, Pool
 from trytond.server_context import ServerContext
@@ -88,8 +89,6 @@ class Contract(metaclass=PoolMeta):
                     {'end_date': utils.today() + relativedelta(days=days_delta)
                         if not due_invoices
                         else to_date, 'active': False}])
-                Event.notify_events(temporary_suspensions,
-                    'contract_disable_temporary_right_suspension')
                 if due_invoices:
                     suspension = self.get_suspension('temporary',
                         to_date + relativedelta(days=1))
@@ -99,9 +98,8 @@ class Contract(metaclass=PoolMeta):
             if definitive_suspensions:
                 to_write.extend([definitive_suspensions,
                     {'end_date': to_date}])
-                Event.notify_events(definitive_suspensions,
-                    'contract_disable_right_suspension')
-            ContractRightSuspension.write(*to_write)
+            if to_write:
+                ContractRightSuspension.write(*to_write)
 
     @classmethod
     def reactivate(cls, contracts):
@@ -142,8 +140,7 @@ class ContractRightSuspension(model.CoogSQL, model.CoogView):
         ondelete='CASCADE', select=True, required=True)
     start_date = fields.Date('Start Date', states=SUSPENSION_STATES,
         depends=['active', 'type_'])
-    end_date = fields.Date('End Date', states=SUSPENSION_STATES,
-        depends=['active', 'type_'])
+    end_date = fields.Date('End Date')
     type_ = fields.Selection([
             ('definitive', 'Definitive'),
             ('temporary', 'Temporary')],
@@ -152,6 +149,29 @@ class ContractRightSuspension(model.CoogSQL, model.CoogView):
     type_string = type_.translated('type_')
     active = fields.Boolean('Active', states=SUSPENSION_STATES,
         depends=['active', 'type_'])
+
+    @classmethod
+    def write(cls, records, values, *args):
+        Event = Pool().get('event')
+        super(ContractRightSuspension, cls).write(records, values, *args)
+        definitive = []
+        temporary = []
+        actions = iter((records, values) + args)
+        for records, values in zip(actions, actions):
+            if values.get('end_date', None):
+                records = sorted(records, key=lambda x: x.type_)
+                for type_, sub_records in groupby(
+                        records, key=lambda x: x.type_):
+                    if type_ == 'definitive':
+                        definitive += list(sub_records)
+                    else:
+                        temporary += list(sub_records)
+        if definitive:
+            Event.notify_events(definitive,
+                'contract_disable_right_suspension')
+        if temporary:
+            Event.notify_events(temporary,
+                'contract_disable_temporary_right_suspension')
 
     @classmethod
     def __setup__(cls):

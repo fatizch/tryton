@@ -1,3 +1,4 @@
+* OTH#00000 Allow end date modification on right suspension objects
 * BUG#11586 Reactivating a contract with temporary and definitive suspensions should only terminate the definitive suspension
 
 Version 2.4 - 2019-04-12
