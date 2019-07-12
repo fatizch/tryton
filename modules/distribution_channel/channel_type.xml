@@ -7,5 +7,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">BackOffice</field>
             <field name="code">backoffice</field>
         </record>
+        <record model="distribution.channel" id="channel_web">
+            <field name="name">Web</field>
+            <field name="code">web</field>
+        </record>
     </data>
 </tryton>
