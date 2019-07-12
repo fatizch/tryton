@@ -1,3 +1,4 @@
+* BUG#11890 Annulation de la correction sur les conditions d'inscription automatique
 * BUG#11890 Correction des conditions d'inscription automatique en présence de franchise
 * BUG#11917 Correction de l'affichage des inscriptions dans le cas où il y en a une (régression de 11724)
 * BUG#11724 Correction de l'affichage des inscriptions dans le cas où il y en a plusieurs

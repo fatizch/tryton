@@ -1,7 +1,8 @@
+* BUG#11890 Cancel fix on conditions of automatic subscription
 * BUG#11890 Fix conditions of automatic subscription when there is deductible period
 * BUG#11917 Fix display of subscriptions where there is only one (regression from 11724 )
 * BUG#11724 Fix display of person subscriptions when there are serveral subscriptions
-* BUG#11799 Fix subscription creation batch for person who already has a subscription for an other siren 
+* BUG#11799 Fix subscription creation batch for person who already has a subscription for an other siren
 * BUG#11675 Allow manual individual subscription request for persons affiliated via a subsidiary
 
 Version 2.4 - 2019-04-12
@@ -11,7 +12,7 @@ Version 2.4 - 2019-04-12
 * BUG#10576 When in the same CR file there is cr for a SIREN and CR for insured affiliated to this SIREN, legal entity CR information will be propagated to all insured affiliated to this siren. Moreover CR integration for insured could be different from CR integration for insured period (that was not managed)
 * OTH#00000: Iteration on #10393: display all party information in task name
 * BUG#10443: Fix crash in task view if prest ij task are present
-* FEA#10393: Improve task display and allow to search according legal entity name or 
+* FEA#10393: Improve task display and allow to search according legal entity name or
 
 Version 2.2 - 2018-10-12
 * BUG#9730 Anonymize ssn in subscriptions when anonymizing a party

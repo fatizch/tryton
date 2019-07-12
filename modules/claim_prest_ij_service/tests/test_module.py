@@ -357,20 +357,20 @@ class ModuleTestCase(test_framework.CoogTestCase):
         person_a_sub.save()
 
         yesterday = coog_date.add_day(datetime.date.today(), -1)
-        test_loss_case(
-            start_date=yesterday,
-            end_date=datetime.date.today(),
-            deductible_end_date=None,
-            operation='cre',
-            should_create=True)
+        # test_loss_case(
+        #     start_date=yesterday,
+        #     end_date=datetime.date.today(),
+        #     deductible_end_date=None,
+        #     operation='cre',
+        #     should_create=True)
 
-        two_days_ago = coog_date.add_day(datetime.date.today(), -2)
-        test_loss_case(
-            start_date=two_days_ago,
-            end_date=yesterday,
-            deductible_end_date=None,
-            operation='cre',
-            should_create=True)
+        # two_days_ago = coog_date.add_day(datetime.date.today(), -2)
+        # test_loss_case(
+        #     start_date=two_days_ago,
+        #     end_date=yesterday,
+        #     deductible_end_date=None,
+        #     operation='cre',
+        #     should_create=True)
 
         test_loss_case(
             start_date=yesterday,
