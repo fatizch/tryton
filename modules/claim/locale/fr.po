@@ -1317,7 +1317,7 @@ msgstr "Sinistres"
 
 msgctxt "field:party.party,forced_claim_bank_account:"
 msgid "Forced Claim Bank Account"
-msgstr "Compte bancaire forcé"
+msgstr "Compte bancaire pour les prestations"
 
 msgctxt "field:party.party,last_claim:"
 msgid "Last Claim"

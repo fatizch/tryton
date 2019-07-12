@@ -5,7 +5,7 @@ this repository contains the full copyright notices and license terms. -->
     <xpath expr="//field[@name='bank_accounts']" position="after">
         <group id="claim_bank_accounts" colspan="3">
             <label name="claim_bank_account"/>
-            <field name="claim_bank_account"/>
+            <field name="claim_bank_account" widget="selection"/>
             <field name="forced_claim_bank_account" invisible="1"/>
         </group>
     </xpath>
