@@ -1,3 +1,4 @@
+* FEA#12121 Possibilité de considérer une banque comme organisme prêteur
 * FEA#11952 Ajout d'une API pour le calcul de l'échéancier des prêts
 
 Version 2.4 - 2019-04-12
@@ -41,7 +42,7 @@ Version 1.8 - 2016-07-06
 * FEA#0000 Calcul et stockage des remboursement anticipés sur les paliers
 * FEA#0000 Possibilité de saisir le montant du capital restant dû avant ou après le premier paiement du palier
 * FEA#0000 Possibilité de reporter tout type de prêt, y compris à palier et in fine
-* FEA#0000 Possibilité de recalculer les dates de paliers à partir du premier remboursement 
+* FEA#0000 Possibilité de recalculer les dates de paliers à partir du premier remboursement
 
 Version 1.6 - 2015-12-23
 * FEA#0000 Gestion des surprimes en fonction du capital restant dû

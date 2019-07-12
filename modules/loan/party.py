@@ -68,13 +68,21 @@ class Party(metaclass=PoolMeta):
     @classmethod
     def search_is_lender(cls, name, clause):
         clause = list(clause)
-        if clause[2] is True and clause[1] == '=':
+        op = None
+        if ((clause[1] == '=' and clause[2] is True)
+                or (clause[1] == '!=' and clause[2] is False)):
             clause[1], clause[2] = ('!=', None)
-        elif clause[2] is True and clause[1] == '!=':
+            op = 'OR'
+        elif ((clause[1] == '=' and clause[2] is False)
+                or (clause[1] == '!=' and clause[2] is True)):
             clause[1], clause[2] = ('=', None)
-        elif clause[2] is False:
-            clause[2] = None
-        return [('lender_role', ) + tuple(clause[1:])]
+            op = 'AND'
+        if op:
+            return [op,
+                [('lender_role', ) + tuple(clause[1:])],
+                [('bank_role', ) + tuple(clause[1:])]]
+        else:
+            return [('lender_role', ) + tuple(clause[1:])]
 
     def get_is_lender(self, name):
         return len(self.lender_role) > 0 if self.lender_role else False

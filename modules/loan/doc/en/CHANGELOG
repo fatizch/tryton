@@ -1,3 +1,4 @@
+* FEA#12121 Allow to consider a bank as a lender
 * FEA#11952 Add an API for loan payment computations
 
 Version 2.4 - 2019-04-12
