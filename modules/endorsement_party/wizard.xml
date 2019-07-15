@@ -73,6 +73,11 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="endorsement.select_endorsement_view_form"/>
             <field name="name">select_endorsement_form</field>
         </record>
+        <record model="ir.action.keyword" id="act_party_start_endorsement_shorcut_keyword">
+            <field name="keyword">form_toolbar</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="endorsement.act_start_endorsement"/>
+        </record>
     </data>
     <data depends="party_ssn">
         <!-- #################### -->

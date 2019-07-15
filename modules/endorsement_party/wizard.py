@@ -662,6 +662,7 @@ class SelectEndorsement(model.CoogView):
                 [('parties', '=', Eval('party'))],
                 [])]
         cls.contract.depends += ['party']
+        cls.contract.states['invisible'] = ~Bool(Eval('contract', False))
 
     @fields.depends('party', 'possible_parties')
     def on_change_contract(self):
