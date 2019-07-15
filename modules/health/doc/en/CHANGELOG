@@ -1,3 +1,4 @@
+* BUG#12036 Check that a relation exists in the party relation list otherwise return 0
 * OTH#0000 Display birth order after ssn instead after birth name
 
 Version 2.4 - 2019-04-12

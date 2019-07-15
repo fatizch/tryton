@@ -1057,8 +1057,10 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
             return max(dates)
         return None
 
-    def is_active_at_date(self, at_date):
-        if self.status in ('quote', 'void', 'declined'):
+    def is_active_at_date(self, at_date, allow_quotes=False):
+        inactive_statuses = ('void', 'declined') if allow_quotes else ('void',
+            'declined', 'quote')
+        if self.status in inactive_statuses:
             return False
         for activation_line in self.activation_history:
             if ((activation_line.start_date or datetime.date.min) <= at_date
@@ -2332,9 +2334,9 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
         self.status = 'declined'
         self.sub_status = reason
 
-    def is_active_at_date(self, at_date):
+    def is_active_at_date(self, at_date, allow_quotes=False):
         return self.status not in ['void', 'declined'] and \
-            self.parent_contract.is_active_at_date(at_date) and \
+            self.parent_contract.is_active_at_date(at_date, allow_quotes) and \
             (at_date >= (self.initial_start_date or datetime.date.min) and
                 at_date <= (self.final_end_date or datetime.date.max))
 

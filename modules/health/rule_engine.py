@@ -21,7 +21,7 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         person = cls.get_person(args)
         subscriber = args['contract'].subscriber
         parties = [x.party for x in contract.covered_elements
-            if x.party and x.is_covered_at_date(date)]
+            if x.party and x.is_covered_at_date(date, allow_quotes=True)]
         parties.sort(key=lambda x: x.birth_date)
         x = 0
         for party in parties:
@@ -32,6 +32,8 @@ class RuleEngineRuntime(metaclass=PoolMeta):
                 x += 1
                 if party == person:
                     return x
+            if party == person:
+                return 0
         return x
 
     @classmethod
@@ -39,7 +41,7 @@ class RuleEngineRuntime(metaclass=PoolMeta):
         contract = args['contract']
         date = args['date']
         parties = [x.party for x in contract.covered_elements
-            if x.party and x.is_covered_at_date(date)]
+            if x.party and x.is_covered_at_date(date, allow_quotes=True)]
         number_of_covered = 0
         for party in parties:
             for relation in utils.get_good_versions_at_date(party, 'relations',

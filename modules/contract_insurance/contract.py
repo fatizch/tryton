@@ -1733,18 +1733,18 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
                 continue
             return package
 
-    def is_covered_at_date(self, at_date, coverage=None):
+    def is_covered_at_date(self, at_date, coverage=None, allow_quotes=False):
         if not self.contract:
             return False
-        if not self.contract.is_active_at_date(at_date):
+        if not self.contract.is_active_at_date(at_date, allow_quotes):
             return False
         for option in self.options:
             if ((not coverage or option.coverage == coverage) and
-                    option.is_active_at_date(at_date)):
+                    option.is_active_at_date(at_date, allow_quotes)):
                 return True
         if not self.item_desc.has_sub_options():
             return False
-        return any((sub_elem.is_covered_at_date(at_date, coverage)
+        return any((sub_elem.is_covered_at_date(at_date, coverage, allow_quotes)
                 for sub_elem in self.sub_covered_elements))
 
     def is_valid_at_date(self, at_date):
