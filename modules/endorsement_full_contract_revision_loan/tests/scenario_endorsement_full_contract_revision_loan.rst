@@ -382,7 +382,8 @@ Start Again::
     ...         ('code', '=', 'full_contract_revision')])[0]
     >>> new_endorsement.form.endorsement = None
     >>> new_endorsement.form.applicant = None
-    >>> new_endorsement.form.effective_date = contract.start_date + relativedelta(months=1)
+    >>> new_endorsement.form.effective_date = contract.start_date + relativedelta(
+    ...     months=1)
     >>> new_endorsement.execute('start_endorsement')
     >>> new_endorsement.execute('full_contract_revision_next')
 

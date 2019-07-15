@@ -147,12 +147,9 @@ class Payment(metaclass=PoolMeta):
         Invoice.post(invoices_to_create)
         lines_to_write = []
         for i, p in zip(invoices_to_create, payment_date_to_update):
-            # Update only if payment_date is not defined. Else use contract
-            # configuration in order to set the payment date
             for line in i.lines_to_pay:
-                if not line.payment_date:
-                    lines_to_write += [list(i.lines_to_pay), p]
-                    break
+                lines_to_write += [list(i.lines_to_pay), p]
+                break
         if lines_to_write:
             MoveLine.write(*lines_to_write)
 
