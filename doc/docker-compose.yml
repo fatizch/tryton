@@ -1,0 +1,12 @@
+version: '3'
+services:
+    doc_coog:
+        build:
+            context: ./
+        volumes:
+            - ..:/doc
+        entrypoint:
+            - ep
+        environment: 
+            USER: "coog"
+        user: "docuser"

@@ -42,10 +42,6 @@ coog_dep_main() { # install base deps
                 "requests" \
                 "rq" \
                 "simpleeval" \
-                "sphinx" \
-                "sphinx-rtd-theme" \
-                "sphinxcontrib-inheritance" \
-                "sphinxprettysearchresults" \
                 "unidecode" \
                 "uwsgi" \
                 "vobject" \

@@ -2,6 +2,10 @@
 # coog documentation
 
 coog_doc_generate() { # Generates coog documentation
-    python $COOG_BIN/generate_doc.py "$@"
+    (
+        cd .. && \
+        docker-compose -f doc/docker-compose.yml up  
+        docker-compose -f doc/docker-compose.yml down -v --rmi all
+    )
 }
 
