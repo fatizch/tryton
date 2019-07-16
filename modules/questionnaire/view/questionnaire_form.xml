@@ -1,23 +1,21 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<form>
-    <label name="name"/>
-    <field name="name"/>
-    <label name="code"/>
-    <field name="code"/>
-    <label name="sequence"/>
-    <field name="sequence"/>
+<form col="2">
+    <group id="right" string="" col="2">
+        <label name="name"/>
+        <field name="name"/>
+        <label name="code"/>
+        <field name="code"/>
+        <label name="sequence"/>
+        <field name="sequence"/>
+    </group>
     <notebook colspan="4">
-        <page string="Questionnaire" id="questionnaire">
-            <field name="extra_data_def" colspan="4"/>
-            <label name="rule"/>
-            <field name="rule"/>
-            <newline/>
-            <field name="rule_extra_data" no_command="1" colspan="2"/>
+        <page name="parts">
+            <field name="parts" colspan="4" mode="tree,form"/>
         </page>
         <page string="Products" id="products">
-            <field name="products" product="document" colspan="4"/>
+            <field name="products" colspan="4"/>
         </page>
         <page string="Administration" id="admin">
             <label name="icon"/>
@@ -26,7 +24,9 @@ this repository contains the full copyright notices and license terms. -->
             <field name="company"/>
             <separator name="description" colspan="4"/>
             <field name="description" colspan="4"/>
-            <field name="tags" colspan="4"/>
+        </page>
+        <page name="tags">
+            <field name="tags"/>
         </page>
     </notebook>
 </form>

@@ -4,7 +4,7 @@ from trytond.cache import Cache
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If
 
-from trytond.modules.coog_core import model, fields, utils, coog_string
+from trytond.modules.coog_core import model, fields, utils
 
 __all__ = [
     'DistributionNetwork',
@@ -75,7 +75,7 @@ class DistributionNetwork(metaclass=PoolMeta):
         return res
 
 
-class CommercialProduct(model.CoogSQL, model.CoogView):
+class CommercialProduct(model.CodedMixin, model.CoogView):
     'Commercial Product'
 
     __name__ = 'distribution.commercial_product'
@@ -92,8 +92,6 @@ class CommercialProduct(model.CoogSQL, model.CoogView):
         'com_product', 'dist_network', 'Distribution Networks')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
-    name = fields.Char('Name', required=True, translate=True)
-    code = fields.Char('Code', required=True)
     description = fields.Text('Description', translate=True)
 
     @classmethod
@@ -108,12 +106,6 @@ class CommercialProduct(model.CoogSQL, model.CoogView):
     @staticmethod
     def default_start_date():
         return utils.today()
-
-    @fields.depends('name', 'code')
-    def on_change_with_code(self):
-        if self.code:
-            return self.code
-        return coog_string.slugify(self.name)
 
     @classmethod
     def _export_light(cls):

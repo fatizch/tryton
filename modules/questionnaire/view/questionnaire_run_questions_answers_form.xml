@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form col="2">
+    <group id="one_answer" string="" colspan="2" col="2" yexpand="1" yfill="1">
+        <field name="answers" mode="form" expand_toolbar="0" view_ids="questionnaire.questionnaire_run_questions_part_light_view_form"/>
+    </group>
+    <group id="multiple_answers" string="" colspan="2" col="2" yexpand="1" yfill="1">
+        <separator name="answers" colspan="2"/>
+        <field name="answers" mode="tree" group="answers" expand_toolbar="0"/>
+        <field name="answers" mode="form" group="answers" expand_toolbar="0"/>
+    </group>
+
+</form>

@@ -2,7 +2,6 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <tree>
-    <field name="code" icon="icon"/>
-    <field name="name"/>
-    <field name="tags_name"/>
+    <field name="title" expand="1"/>
+    <field name="results_summary" expand="1"/>
 </tree>

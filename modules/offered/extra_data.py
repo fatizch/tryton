@@ -335,7 +335,7 @@ class ExtraData(model.CoogDictSchema, model.CoogSQL, model.CoogView,
     def get_extra_data_summary(cls, instances, var_name, lang=None):
         res = cls.get_extra_data_per_instances(instances, var_name, lang)
         for instance_id, vals in list(res.items()):
-            res[instance_id] = '\n'.join(('%s : %s' % (x, y) for x, y in vals))
+            res[instance_id] = '\r'.join(('%s : %s' % (x, y) for x, y in vals))
         return res
 
     @classmethod
@@ -655,7 +655,7 @@ def with_extra_data(kinds, schema=None, field_name='extra_data',
         else:
             summary_name = create_summary
         summary = fields.Function(
-            fields.Char('%s Summary' % field_string),
+            fields.Text('%s Summary' % field_string),
             'on_change_with_%s' % summary_name)
         setattr(WithExtraDataMixin, summary_name, summary)
 

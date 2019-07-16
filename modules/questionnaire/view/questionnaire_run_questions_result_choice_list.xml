@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tree editable="bottom">
+    <field name="selected"/>
+    <field name="score"/>
+    <field name="product"/>
+    <field name="description" expand="1"/>
+    <field name="was_selected" tree_invisible="1"/>
+    <field name="data_as_json" tree_invisible="1"/>
+    <field name="selectable" tree_invisible="1"/>
+</tree>

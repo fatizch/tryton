@@ -52,12 +52,8 @@ class ContractSubscribeFindProcess(metaclass=PoolMeta):
     def simulate_init(self):
         res = super(ContractSubscribeFindProcess, self).simulate_init()
         if self.distributor and self.appliable_conditions_date is not None:
-            self.authorized_commercial_products = [
-                x.id for x in self.distributor.all_com_products
-                if (not x.start_date or
-                    (x.start_date <= self.appliable_conditions_date)) and
-                (not x.end_date or (
-                        self.appliable_conditions_date <= x.end_date))]
+            self.authorized_commercial_products = \
+                self._authorized_commercial_products()
             if len(self.authorized_commercial_products) == 1:
                 self.commercial_product = \
                     self.authorized_commercial_products[0]
@@ -66,10 +62,22 @@ class ContractSubscribeFindProcess(metaclass=PoolMeta):
                 self.unset_product()
         return res
 
+    def _authorized_commercial_products(self):
+        allowed = [
+            x for x in self.distributor.all_com_products
+            if (not x.start_date or
+                (x.start_date <= self.appliable_conditions_date)) and
+            (not x.end_date or (
+                    self.appliable_conditions_date <= x.end_date))]
+        forced = Transaction().context.get('forced_com_product', None)
+        if forced is not None:
+            allowed = [x for x in allowed if x.id == forced]
+        return allowed
+
     @fields.depends(methods=['simulate_init'])
     def on_change_commercial_product(self):
         if self.commercial_product is not None:
-            self.product = self.commercial_product.product.id
+            self.product = self.commercial_product.product
             res = self.simulate_init()
             if res and res.errors:
                 self.unset_product()
@@ -104,7 +112,13 @@ class ContractSubscribe(metaclass=PoolMeta):
             ContractSubscribe, self).default_process_parameters(name)
         candidates = [x.id for x in
             Pool().get('res.user')(Transaction().user).network_distributors]
+        forced_distributor = Transaction().context.get('forced_dist_network',
+            None)
+        if forced_distributor:
+            assert forced_distributor in candidates
+            candidates = [forced_distributor]
         defaults.update({
             'authorized_distributors': candidates,
+            'distributor': candidates[0] if len(candidates) == 1 else None,
             })
         return defaults

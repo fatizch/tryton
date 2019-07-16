@@ -338,8 +338,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         ],
                     },
                 {
-                    'code': 'test_numeric',
-                    'conditions': [
+                    'code': 'test_numeric', 'conditions': [
                         {'code': 'test_selection', 'operator': '=',
                             'value': '2'}],
                     'digits': (16, 4),

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="contract">
+        <!-- ########################## -->
+        <!-- # Contract Questionnaire # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="contract_questionnaire_view_form">
+            <field name="model">contract.questionnaire</field>
+            <field name="type">form</field>
+            <field name="name">contract_questionnaire_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_questionnaire_view_list">
+            <field name="model">contract.questionnaire</field>
+            <field name="type">tree</field>
+            <field name="name">contract_questionnaire_list</field>
+        </record>
+        <!-- Relate from contracts -->
+        <record model="ir.action.act_window" id="act_relate_contract_questionnaire">
+            <field name="name">Questionnaires</field>
+            <field name="res_model">contract.questionnaire</field>
+            <field name="domain" eval="[['contract', '=', Eval('active_id')]]" pyson="1"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_relate_contract_questionnaire_view1">
+            <field name="sequence" eval="1"/>
+            <field name="view" ref="contract_questionnaire_view_list"/>
+            <field name="act_window" ref="act_relate_contract_questionnaire"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_relate_contract_questionnaire_view2">
+            <field name="sequence" eval="1"/>
+            <field name="view" ref="contract_questionnaire_view_form"/>
+            <field name="act_window" ref="act_relate_contract_questionnaire"/>
+        </record>
+        <record model="ir.action.keyword" id="act_open_contract_questionnaire_keyword1">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_relate_contract_questionnaire"/>
+        </record>
+        <!-- ################################# -->
+        <!-- # Contract Questionnaire Answer # -->
+        <!-- ################################# -->
+        <record model="ir.ui.view" id="contract_questionnaire_answer_view_list">
+            <field name="model">contract.questionnaire.answer</field>
+            <field name="type">tree</field>
+            <field name="name">contract_questionnaire_answer_list</field>
+        </record>
+        <!-- ################################# -->
+        <!-- # Contract Questionnaire Result # -->
+        <!-- ################################# -->
+        <record model="ir.ui.view" id="contract_questionnaire_result_view_list">
+            <field name="model">contract.questionnaire.result</field>
+            <field name="type">tree</field>
+            <field name="name">contract_questionnaire_result_list</field>
+        </record>
+    </data>
+    <data depends="contract_process">
+        <!-- ########################### -->
+        <!-- # Subscriber Find Process # -->
+        <!-- ########################### -->
+        <record model="ir.ui.view" id="contract_subscribe_find_process_form">
+            <field name="model">contract.subscribe.find_process</field>
+            <field name="inherit" ref="contract_process.contract_subscribe_find_process_form"/>
+            <field name="name">contract_subscribe_find_process_form</field>
+        </record>
+        <!-- ############################# -->
+        <!-- # Questionnaire Entry Point # -->
+        <!-- ############################# -->
+        <menuitem name="Start Questionnaire" parent="contract.menu_contract" id="menu_contract_questionnaire" sequence="10" icon="questionnaire" action="questionnaire.act_questionnaire_run"/>
+        <!-- ################################## -->
+        <!-- # Start Questionnaire from Party # -->
+        <!-- ################################## -->
+        <record model="ir.action.keyword" id="act_start_questionnaire_party_action">
+            <field name="keyword">form_action</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="questionnaire.act_questionnaire_run"/>
+        </record>
+    </data>
+</tryton>

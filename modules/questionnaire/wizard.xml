@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ##################### -->
+        <!-- # Run Questionnaire # -->
+        <!-- ##################### -->
+        <record model="ir.action.wizard" id="act_questionnaire_run">
+            <field name="name">Run Questionnaire</field>
+            <field name="wiz_name">questionnaire.run</field>
+        </record>
+        <!-- ############################### -->
+        <!-- # Run Questionnaire Questions # -->
+        <!-- ############################### -->
+        <record model="ir.ui.view" id="questionnaire_run_questions_view_form">
+            <field name="model">questionnaire.run.questions</field>
+            <field name="type">form</field>
+            <field name="name">questionnaire_run_questions_form</field>
+        </record>
+        <!-- ############################### -->
+        <!-- # Run Questionnaire Answers # -->
+        <!-- ############################### -->
+        <record model="ir.ui.view" id="questionnaire_run_questions_answers_view_form">
+            <field name="model">questionnaire.run.questions.answers</field>
+            <field name="type">form</field>
+            <field name="name">questionnaire_run_questions_answers_form</field>
+        </record>
+        <record model="ir.ui.view" id="questionnaire_run_questions_answers_view_list">
+            <field name="model">questionnaire.run.questions.answers</field>
+            <field name="type">tree</field>
+            <field name="name">questionnaire_run_questions_answers_list</field>
+        </record>
+        <!-- ############################### -->
+        <!-- # RunQuestionnaireProposition # -->
+        <!-- ############################### -->
+        <record model="ir.ui.view" id="questionnaire_run_questions_proposition_view_form">
+            <field name="model">questionnaire.run.questions.proposition</field>
+            <field name="type">form</field>
+            <field name="name">questionnaire_run_questions_proposition_form</field>
+        </record>
+        <record model="ir.ui.view" id="questionnaire_run_questions_proposition_view_list">
+            <field name="model">questionnaire.run.questions.proposition</field>
+            <field name="type">tree</field>
+            <field name="name">questionnaire_run_questions_proposition_list</field>
+        </record>
+        <!-- ############################### -->
+        <!-- # Questionnaire Question Part # -->
+        <!-- ############################### -->
+        <record model="ir.ui.view" id="questionnaire_run_questions_part_view_form">
+            <field name="model">questionnaire.run.questions.part</field>
+            <field name="type">form</field>
+            <field name="name">questionnaire_run_questions_part_form</field>
+        </record>
+        <record model="ir.ui.view" id="questionnaire_run_questions_part_light_view_form">
+            <field name="model">questionnaire.run.questions.part</field>
+            <field name="type">form</field>
+            <field name="name">questionnaire_run_questions_part_light_form</field>
+        </record>
+        <record model="ir.ui.view" id="questionnaire_run_questions_part_view_list">
+            <field name="model">questionnaire.run.questions.part</field>
+            <field name="type">tree</field>
+            <field name="name">questionnaire_run_questions_part_list</field>
+        </record>
+        <!-- ######################## -->
+        <!-- # Questionnaire Result # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="questionnaire_run_questions_result_view_form">
+            <field name="model">questionnaire.run.questions.result</field>
+            <field name="type">form</field>
+            <field name="name">questionnaire_run_questions_result_form</field>
+        </record>
+        <record model="ir.ui.view" id="questionnaire_run_questions_result_light_view_form">
+            <field name="model">questionnaire.run.questions.result</field>
+            <field name="type">form</field>
+            <field name="name">questionnaire_run_questions_result_light_form</field>
+        </record>
+        <record model="ir.ui.view" id="questionnaire_run_questions_result_view_list">
+            <field name="model">questionnaire.run.questions.result</field>
+            <field name="type">tree</field>
+            <field name="name">questionnaire_run_questions_result_list</field>
+        </record>
+        <!-- ############################### -->
+        <!-- # Questionnaire Result Choice # -->
+        <!-- ############################### -->
+        <record model="ir.ui.view" id="questionnaire_run_questions_result_choice_view_list">
+            <field name="model">questionnaire.run.questions.result.choice</field>
+            <field name="type">tree</field>
+            <field name="name">questionnaire_run_questions_result_choice_list</field>
+        </record>
+    </data>
+    <data depends="contract_distribution">
+        <!-- ############################### -->
+        <!-- # Run Questionnaire Questions # -->
+        <!-- ############################### -->
+        <record model="ir.ui.view" id="distribution_questionnaire_run_questions_view_form">
+            <field name="model">questionnaire.run.questions</field>
+            <field name="inherit" ref="questionnaire.questionnaire_run_questions_view_form"/>
+            <field name="name">distribution_questionnaire_run_questions_form</field>
+        </record>
+    </data>
+</tryton>

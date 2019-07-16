@@ -20,5 +20,5 @@ class RuleEngine(metaclass=PoolMeta):
     @fields.depends('type_')
     def on_change_with_result_type(self, name=None):
         if self.type_ == 'questionnaire':
-            return 'dict'
+            return 'list'
         return super(RuleEngine, self).on_change_with_result_type(name)

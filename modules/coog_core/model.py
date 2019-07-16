@@ -1716,3 +1716,21 @@ class SequenceMixin(Model):
         table = cls.__table__()
         cursor.execute(*table.select(Max(table.sequence)))
         return (cursor.fetchone()[0] or 0) + 1
+
+
+class MonoSelectedMixin(Model):
+    '''
+        Mixin that makes sure one and only one instance is selected in a list
+    '''
+    selected = fields.Boolean('Selected',
+        help='Marks this entry as the selected one')
+    was_selected = fields.Boolean('Was Selected', states={'invisible': True})
+
+
+def update_selection(instances):
+    for instance in instances:
+        if instance.was_selected:
+            instance.selected = False
+            instance.was_selected = False
+        if instance.selected and not instance.was_selected:
+            instance.was_selected = True

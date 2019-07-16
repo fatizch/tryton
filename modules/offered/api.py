@@ -11,6 +11,17 @@ from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA, CODE_SCHEMA
 from trytond.modules.coog_core.api import MODEL_REFERENCE
 from trytond.modules.api import APIMixin, DEFAULT_INPUT_SCHEMA, APIInputError
 
+EXTRA_DATA_VALUES_SCHEMA = {
+    'type': 'object',
+    'additionalProperties': False,
+    'patternProperties': {
+        '^[a-z0-9_]*$': {
+            'type': ['boolean', 'integer', 'string'],
+            },
+        },
+    'additionalProperties': False,
+    }
+
 
 __all__ = [
     'APIModel',

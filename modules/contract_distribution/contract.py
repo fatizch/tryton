@@ -86,7 +86,7 @@ class Contract(metaclass=PoolMeta):
 
     def check_existence_dist_network(self):
         if not getattr(self, 'dist_network', None):
-                self.raise_user_error('no_dist_network', {
+            self.raise_user_error('no_dist_network', {
                     'contract': self.rec_name})
 
     @classmethod

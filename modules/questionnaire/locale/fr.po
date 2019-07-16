@@ -2,17 +2,213 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.questionnaire.result:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "error:contract.questionnaire.result:"
+msgid "Not Selected"
+msgstr "Non Sélectionné"
+
+msgctxt "error:contract.questionnaire.result:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "error:contract.questionnaire.result:"
+msgid "Score"
+msgstr "Score"
+
+msgctxt "error:contract.questionnaire.result:"
+msgid "Selected"
+msgstr "Sélectionné"
+
+msgctxt "error:questionnaire.part:"
+msgid "Invalid output for rule %(rule)s"
+msgstr "Format de retour invalide pour la règle %(rule)s"
+
+msgctxt "error:questionnaire.run:"
+msgid "A choice must be made before going on"
+msgstr "Un choix doit être fait pour pouvoir continuer"
+
+msgctxt "error:questionnaire.run:"
+msgid "A choice must be made for part %(part)s"
+msgstr "Un choix est obligatoire pour l'élément %(part)s"
+
+msgctxt "error:questionnaire.run:"
+msgid "No questionnaires configured"
+msgstr "Aucun questionnaire n'a été paramétré"
+
 msgctxt "error:questionnaire:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
 
-msgctxt "error:questionnaire:"
-msgid ""
-"The return value of the questionnaire rule must be a dictionnary with "
-"products code as keys."
-msgstr ""
-"Le retour de la règle du questionnaire doit être un dictionnaire dont les "
-"clefs sont des codes de produits."
+msgctxt "field:contract,questionnaires:"
+msgid "Questionnaires"
+msgstr "Questionnaires"
+
+msgctxt "field:contract.questionnaire,answers:"
+msgid "Answers"
+msgstr "Réponses"
+
+msgctxt "field:contract.questionnaire,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.questionnaire,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.questionnaire,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.questionnaire,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.questionnaire,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.questionnaire,one_answer:"
+msgid "Answer"
+msgstr "Réponse"
+
+msgctxt "field:contract.questionnaire,one_result:"
+msgid "Result"
+msgstr "Résultat"
+
+msgctxt "field:contract.questionnaire,questionnaire:"
+msgid "Questionnaire Configuration"
+msgstr "Configuration du Questionnaire"
+
+msgctxt "field:contract.questionnaire,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:contract.questionnaire,results:"
+msgid "Results"
+msgstr "Résultats"
+
+msgctxt "field:contract.questionnaire,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:contract.questionnaire,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.questionnaire,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:contract.questionnaire.answer,answers:"
+msgid "Answers"
+msgstr "Réponses"
+
+msgctxt "field:contract.questionnaire.answer,answers_summary:"
+msgid "Answers Summary"
+msgstr "Réponses apportées"
+
+msgctxt "field:contract.questionnaire.answer,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.questionnaire.answer,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.questionnaire.answer,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.questionnaire.answer,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.questionnaire.answer,part:"
+msgid "Questionnaire Part"
+msgstr "Élément de questionnaire"
+
+msgctxt "field:contract.questionnaire.answer,questionnaire:"
+msgid "Questionnaire"
+msgstr "Questionnaire"
+
+msgctxt "field:contract.questionnaire.answer,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:contract.questionnaire.answer,title:"
+msgid "Title"
+msgstr "Titre"
+
+msgctxt "field:contract.questionnaire.answer,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:contract.questionnaire.answer,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.questionnaire.answer,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:contract.questionnaire.result,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.questionnaire.result,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.questionnaire.result,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.questionnaire.result,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract.questionnaire.result,part:"
+msgid "Questionnaire Part"
+msgstr "Élément de questionnaire"
+
+msgctxt "field:contract.questionnaire.result,questionnaire:"
+msgid "Questionnaire"
+msgstr "Questionnaire"
+
+msgctxt "field:contract.questionnaire.result,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:contract.questionnaire.result,results_as_text:"
+msgid "Results"
+msgstr "Résultats"
+
+msgctxt "field:contract.questionnaire.result,results_summary:"
+msgid "Results Summary"
+msgstr "Résumé des résultats"
+
+msgctxt "field:contract.questionnaire.result,title:"
+msgid "Title"
+msgstr "Titre"
+
+msgctxt "field:contract.questionnaire.result,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:contract.questionnaire.result,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:contract.questionnaire.result,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:contract.subscribe.find_process,forced_product:"
+msgid "Product"
+msgstr "Produit"
 
 msgctxt "field:questionnaire,code:"
 msgid "Code"
@@ -38,10 +234,6 @@ msgctxt "field:questionnaire,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:questionnaire,extra_data_def:"
-msgid "Extra Data"
-msgstr "Questions"
-
 msgctxt "field:questionnaire,icon:"
 msgid "Icon"
 msgstr "Icône"
@@ -55,8 +247,12 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "field:questionnaire,name:"
-msgid "Title"
-msgstr "Titre"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:questionnaire,parts:"
+msgid "Parts"
+msgstr "Ensembles de questions"
 
 msgctxt "field:questionnaire,products:"
 msgid "Products"
@@ -65,14 +261,6 @@ msgstr "Produits"
 msgctxt "field:questionnaire,rec_name:"
 msgid "Record Name"
 msgstr "Nom"
-
-msgctxt "field:questionnaire,rule:"
-msgid "Rule Engine"
-msgstr "Règle"
-
-msgctxt "field:questionnaire,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de la règle"
 
 msgctxt "field:questionnaire,sequence:"
 msgid "Sequence"
@@ -118,11 +306,7 @@ msgctxt "field:questionnaire-extra_data,id:"
 msgid "ID"
 msgstr "Identifiant"
 
-msgctxt "field:questionnaire-extra_data,order:"
-msgid "Order"
-msgstr "Ordre"
-
-msgctxt "field:questionnaire-extra_data,questionnaire:"
+msgctxt "field:questionnaire-extra_data,questionnaire_part:"
 msgid "Questionnaire"
 msgstr "Questionnaire"
 
@@ -179,30 +363,335 @@ msgid "Write User"
 msgstr "Modifié par"
 
 msgctxt "field:questionnaire-offered.product,xml_id:"
-msgid ""
-"The rule must return a dictionnary with products codes as keys, and "
-"dictionnaries as values. The possible keys for these sub dictionnaries are :"
-" [('score', 'Score'), ('eligible', 'Eligible'), ('message', 'Message')] "
+msgid "XML Id"
 msgstr "XML Id"
+
+msgctxt "field:questionnaire.part,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:questionnaire.part,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:questionnaire.part,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:questionnaire.part,extra_data_def:"
+msgid "Extra Data"
+msgstr "Questions"
+
+msgctxt "field:questionnaire.part,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:questionnaire.part,mandatory:"
+msgid "Mandatory"
+msgstr "Obligatoire"
+
+msgctxt "field:questionnaire.part,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:questionnaire.part,questionnaire:"
+msgid "Questionnaire"
+msgstr "Questionnaire"
+
+msgctxt "field:questionnaire.part,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:questionnaire.part,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:questionnaire.part,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de la règle"
+
+msgctxt "field:questionnaire.part,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
+msgctxt "field:questionnaire.part,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:questionnaire.part,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:questionnaire.part,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:questionnaire.run.questions,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:questionnaire.run.questions,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:questionnaire.run.questions,possible_questionnaires:"
+msgid "Possible Questionnaires"
+msgstr "Questionnaires possibles"
+
+msgctxt "field:questionnaire.run.questions,questionnaire:"
+msgid "Questionnaire"
+msgstr "Questionnaire"
+
+msgctxt "field:questionnaire.run.questions.answers,answers:"
+msgid "Answers"
+msgstr "Réponses"
+
+msgctxt "field:questionnaire.run.questions.answers,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:questionnaire.run.questions.part,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:questionnaire.run.questions.part,part:"
+msgid "Questionnaire"
+msgstr "Questionnaire"
+
+msgctxt "field:questionnaire.run.questions.part,questions:"
+msgid "Questions"
+msgstr "Questions"
+
+msgctxt "field:questionnaire.run.questions.part,questions_summary:"
+msgid "Questions Summary"
+msgstr "Résumé des questions"
+
+msgctxt "field:questionnaire.run.questions.part,title:"
+msgid "Title"
+msgstr "Titre"
+
+msgctxt "field:questionnaire.run.questions.proposition,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:questionnaire.run.questions.proposition,results:"
+msgid "Results"
+msgstr "Résultats"
+
+msgctxt "field:questionnaire.run.questions.result,choices:"
+msgid "Choices"
+msgstr "Propositions"
+
+msgctxt "field:questionnaire.run.questions.result,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:questionnaire.run.questions.result,part:"
+msgid "Questionnaire Part"
+msgstr "Élément de questionnaire"
+
+msgctxt "field:questionnaire.run.questions.result.choice,data_as_json:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "field:questionnaire.run.questions.result.choice,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:questionnaire.run.questions.result.choice,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:questionnaire.run.questions.result.choice,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:questionnaire.run.questions.result.choice,score:"
+msgid "Score"
+msgstr "Score"
+
+msgctxt "field:questionnaire.run.questions.result.choice,selectable:"
+msgid "Selectable"
+msgstr "Sélectionnable"
+
+msgctxt "field:questionnaire.run.questions.result.choice,selected:"
+msgid "Selected"
+msgstr "Sélectionné"
+
+msgctxt "field:questionnaire.run.questions.result.choice,was_selected:"
+msgid "Was Selected"
+msgstr "Etait sélectionné"
+
+msgctxt "help:contract,questionnaires:"
+msgid "The questionnaire(s) whose answers ended up with this contract"
+msgstr "Le questionnaire ayant abouti à ce contrat"
+
+msgctxt "help:contract.questionnaire,answers:"
+msgid "The answers that were given by the subscriber"
+msgstr "Les réponses apportées par le souscripteur"
+
+msgctxt "help:contract.questionnaire,questionnaire:"
+msgid "The questionnaire template which provided the questions"
+msgstr "Le questionnaire ayant généré ces questions"
+
+msgctxt "help:contract.questionnaire,results:"
+msgid "The results that were suggested by the questionnaire algorithm"
+msgstr "Les résultats suggérés par l'algorithme"
+
+msgctxt "help:contract.questionnaire.answer,answers:"
+msgid "The answers that were provided by the client"
+msgstr "Les réponses apportées par le client"
+
+msgctxt "help:contract.questionnaire.answer,part:"
+msgid "The questionnaire part that asked the questions"
+msgstr "L'élément du questionaire requérant ces questions"
+
+msgctxt "help:contract.questionnaire.answer,title:"
+msgid "The questionnaire part that asked thequestions"
+msgstr "L'élément du questionnaire requérant ces questions"
+
+msgctxt "help:contract.questionnaire.result,part:"
+msgid "The questionnaire part that provided this result"
+msgstr "L'élément du questionnaire ayant généré ce résultat"
+
+msgctxt "help:contract.questionnaire.result,results_as_text:"
+msgid "The results that were provided, encoded as a JSON object"
+msgstr "Les résultats du questionnaire, sous forme d'objet JSON"
+
+msgctxt "help:contract.questionnaire.result,results_summary:"
+msgid "The results provided as a human readable text"
+msgstr "Un résumé des résultats du questionnaire"
+
+msgctxt "help:contract.questionnaire.result,title:"
+msgid "The questionnaire part that provided theresult"
+msgstr "L'élément du questionnaire qui a proposé ce résultat"
+
+msgctxt "help:contract.subscribe.find_process,forced_product:"
+msgid "If set, only this product can be subscribed"
+msgstr "Si renseigné, seul ce produit pourra être souscrit"
+
+msgctxt "help:questionnaire,code:"
+msgid ""
+"The string that will be used to identify this record across the "
+"configuration. It should not be modified without checking first if it is "
+"used somewhere"
+msgstr ""
+"L'identifiant pour cet enregistrement dans la configuration. Il ne doit pas "
+"être modifié sans s'assurer au préalable des endroits y faisant référence"
+
+msgctxt "help:questionnaire,description:"
+msgid ""
+"A short text that can be used to describe the purpose of this questionnaire"
+msgstr "Un texte court permettant de décrire l'objet du questionnaire"
 
 msgctxt "help:questionnaire,icon:"
 msgid "This icon will be used to quickly identify the questionnaire"
 msgstr "Cette icône sera utilisée pour identifier le questionnaire."
 
-msgctxt "help:questionnaire,rule:"
-msgid ""
-"The rule must return a dictionnary with products codes as keys, and "
-"dictionnaries as values. The possible keys for these sub dictionnaries are :"
-" [('score', 'Score'), ('eligible', 'Eligible'), ('message', 'Message')] "
+msgctxt "help:questionnaire,icon_name:"
+msgid "Shortcut to the icon's name"
+msgstr "Un raccourci pour accéder au nom de l'icône"
+
+msgctxt "help:questionnaire,name:"
+msgid "The name that will be displayed to the end user"
+msgstr "Le nom qui sera affiché à l'utilisateur final"
+
+msgctxt "help:questionnaire,parts:"
+msgid "The list of sub-questionnaire definitions"
+msgstr "La liste des groupes de questions"
+
+msgctxt "help:questionnaire,products:"
+msgid "The list of products this questionnaire will be limited to"
+msgstr "La liste des produits auxquels sera limité ce questionnaire"
+
+msgctxt "help:questionnaire,sequence:"
+msgid "Will be used to order the records"
+msgstr "Sera utilisé pour ordonner les enregistrements"
+
+msgctxt "help:questionnaire,tags:"
+msgid "Add and search all related configuration objects based on a tag"
 msgstr ""
-"Le retour de la règle du questionnaire doit être un dictionnaire dont les "
-"clefs sont des codes de produits et les valeurs des dictionnaires. Les clefs"
-" possibles poru ces sous-dictionnaire sont  [('score', 'Score'), "
-"('eligible', 'Eligible'), ('message', 'Message')]  "
+"Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
+"l'ensemble des objets de configuration liés à un même label."
+
+msgctxt "help:questionnaire.part,mandatory:"
+msgid ""
+"If set, a choice will have to be made among the results provided by this "
+"part for the questionnaire to be valid"
+msgstr ""
+"Si renseigné, un choix devra être fait parmi les propositions pour valider "
+"le questionnaire"
+
+msgctxt "help:questionnaire.part,name:"
+msgid "The name of this specific part of the questionnaire"
+msgstr "Le nom de cet élément de questionnaire"
+
+msgctxt "help:questionnaire.part,questionnaire:"
+msgid "The questionnaire this is a part of"
+msgstr "Le questionnaire dont ces questions font partie"
+
+msgctxt "help:questionnaire.part,rule:"
+msgid ""
+"Returns a list of dictionnaries, with the following keys:\n"
+"\n"
+"- score: integer between 0-100, the computed recommandation for this proposition\n"
+"- description: a string which will be used to describe the proposition\n"
+"- product: the code of the suggested product\n"
+"- eligible: whether the product will be selectable or not for subscription"
+msgstr ""
+"Retourne une liste de dictionnaires, avec les clés suivantes :\n"
+"\n"
+"- score : Un entier entre 0 et 100, le score attribué à cette proposition\n"
+"- description : Un texte qui sera utilisé pour décrire la proposition\n"
+"- product : Le code du produit proposé\n"
+"- eligible : Si le produit sélectionné sera souscriptible"
+
+msgctxt "help:questionnaire.part,sequence:"
+msgid "Will be used to order the records"
+msgstr "Utilisé pour ordonner les enregistrements"
+
+msgctxt "help:questionnaire.run.questions.result.choice,data_as_json:"
+msgid "The json data that describes the actual answer"
+msgstr "Les données (au format JSON) décrivant la proposition"
+
+msgctxt "help:questionnaire.run.questions.result.choice,score:"
+msgid ""
+"The score (0-100) that represents the accuracy of this choice according to "
+"the provided answers"
+msgstr ""
+"Le score (0-100) associé à cette proposition, au vu des réponses apportées"
+
+msgctxt "help:questionnaire.run.questions.result.choice,selected:"
+msgid "Marks this entry as the selected one"
+msgstr "Identifie l'entrée comme \"sélectionnée\""
+
+msgctxt "model:contract.questionnaire,name:"
+msgid "Contract Questionnaire"
+msgstr "Questionnaire rattaché à un contrat"
+
+msgctxt "model:contract.questionnaire.answer,name:"
+msgid "Contract Questionnaire Answer"
+msgstr "Réponse aux questions d'un questionnaire"
+
+msgctxt "model:contract.questionnaire.result,name:"
+msgid "Contract Questionnaire Result"
+msgstr "Résultat de l'exécution d'un questionnaire"
 
 msgctxt "model:ir.action,name:act_questionnaire_form"
 msgid "Questionnaires"
 msgstr "Questionnaires"
+
+msgctxt "model:ir.action,name:act_questionnaire_run"
+msgid "Run Questionnaire"
+msgstr "Remplir un questionnaire"
+
+msgctxt "model:ir.action,name:act_relate_contract_questionnaire"
+msgid "Questionnaires"
+msgstr "Questionnaires"
+
+msgctxt "model:ir.ui.menu,name:menu_contract_questionnaire"
+msgid "Start Questionnaire"
+msgstr "Remplir un questionnaire"
 
 msgctxt "model:ir.ui.menu,name:menu_questionnaire"
 msgid "Questionnaires"
@@ -210,15 +699,43 @@ msgstr "Questionnaires"
 
 msgctxt "model:questionnaire,name:"
 msgid "Questionnaire"
-msgstr "Questionnaire"
+msgstr "Configuration de Questionnaire"
 
 msgctxt "model:questionnaire-extra_data,name:"
-msgid "Relation between Questionnaire and Extra Data"
+msgid "Relation between Questionnaires and Extra Data"
 msgstr "Relation entre questionnaire et données complémentaires"
 
 msgctxt "model:questionnaire-offered.product,name:"
 msgid "Product to Questionnaire Rule Relation"
 msgstr "Relation entre questionnaire et produit"
+
+msgctxt "model:questionnaire.part,name:"
+msgid "Questionnaire Part"
+msgstr "Élément de questionnaire"
+
+msgctxt "model:questionnaire.run.questions,name:"
+msgid "Questionnaire"
+msgstr "Questionnaire"
+
+msgctxt "model:questionnaire.run.questions.answers,name:"
+msgid "Run Questionnaire Answers"
+msgstr "Réponses"
+
+msgctxt "model:questionnaire.run.questions.part,name:"
+msgid "Questionnaire Part"
+msgstr "Élément de questionnaire"
+
+msgctxt "model:questionnaire.run.questions.proposition,name:"
+msgid "Run Questionnaire Proposition"
+msgstr "Propositions"
+
+msgctxt "model:questionnaire.run.questions.result,name:"
+msgid "Questionnaire Result"
+msgstr "Résultat du questionnaire"
+
+msgctxt "model:questionnaire.run.questions.result.choice,name:"
+msgid "Questionnaire Result Choice"
+msgstr "Proposition"
 
 msgctxt "selection:extra_data,kind:"
 msgid "Questionnaire"
@@ -228,6 +745,10 @@ msgctxt "selection:rule_engine,type_:"
 msgid "Questionnaire"
 msgstr "Questionnaire"
 
+msgctxt "view:questionnaire.run.questions:"
+msgid "Submit"
+msgstr "Soumettre"
+
 msgctxt "view:questionnaire:"
 msgid "Administration"
 msgstr "Administration"
@@ -236,6 +757,26 @@ msgctxt "view:questionnaire:"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "view:questionnaire:"
-msgid "Questionnaire"
-msgstr "Questionnaire"
+msgctxt "wizard_button:questionnaire.run,answer,check_proposition:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:questionnaire.run,answer,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:questionnaire.run,proposition,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:questionnaire.run,proposition,questionnaire_results:"
+msgid "Results"
+msgstr "Résultats"
+
+msgctxt "wizard_button:questionnaire.run,questionnaire,check_answer:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:questionnaire.run,questionnaire,end:"
+msgid "Cancel"
+msgstr "Annuler"

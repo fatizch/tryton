@@ -11,10 +11,23 @@ this repository contains the full copyright notices and license terms. -->
             <field name="type">form</field>
             <field name="name">questionnaire_form</field>
         </record>
-        <record model="ir.ui.view" id="questionnaire_view_tree">
+        <record model="ir.ui.view" id="questionnaire_view_list">
             <field name="model">questionnaire</field>
             <field name="type">tree</field>
-            <field name="name">questionnaire_tree</field>
+            <field name="name">questionnaire_list</field>
+        </record>
+        <!-- ###################### -->
+        <!-- # Questionnaire Part # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="questionnaire_part_view_form">
+            <field name="model">questionnaire.part</field>
+            <field name="type">form</field>
+            <field name="name">questionnaire_part_form</field>
+        </record>
+        <record model="ir.ui.view" id="questionnaire_part_view_list">
+            <field name="model">questionnaire.part</field>
+            <field name="type">tree</field>
+            <field name="name">questionnaire_part_list</field>
         </record>
         <!-- ####### -->
         <!--  Menus  -->
@@ -26,7 +39,7 @@ this repository contains the full copyright notices and license terms. -->
         </record>
         <record model="ir.action.act_window.view" id="act_questionnaire_view_list">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="questionnaire_view_tree"/>
+            <field name="view" ref="questionnaire_view_list"/>
             <field name="act_window" ref="act_questionnaire_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_questionnaire_view_form">

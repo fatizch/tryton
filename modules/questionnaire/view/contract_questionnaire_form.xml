@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form col="2">
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="questionnaire"/>
+    <field name="questionnaire"/>
+    <separator name="one_answer" colspan="2"/>
+    <field name="one_answer" colspan="2"/>
+    <separator name="answers" colspan="2"/>
+    <field name="answers" expand_toolbar="0" colspan="2"/>
+    <separator name="one_result" colspan="2"/>
+    <field name="one_result" colspan="2"/>
+    <separator name="results" colspan="2"/>
+    <field name="results" expand_toolbar="0" colspan="2"/>
+</form>
