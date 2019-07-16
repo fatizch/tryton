@@ -298,6 +298,7 @@ Country = Model.get('country.country')
 Currency = Model.get('currency.currency')
 DefaultPasrauRate = Model.get('claim.pasrau.default.rate')
 DistributionNetwork = Model.get('distribution.network')
+Channel = Model.get('distribution.channel')
 DocumentDescription = Model.get('document.description')
 DunningProcedure = Model.get('account.dunning.procedure')
 EventDesc = Model.get('benefit.event.description')
@@ -2135,6 +2136,7 @@ if CREATE_ACTORS:  # {{{
 
     for distributor in DistributionNetwork.find([('code', 'like', 'C101010%')]):
         distributor.is_distributor = True
+        distributor.authorized_distribution_channels.append(Channel.find([])[0])
         distributor.save()
     # }}}
 
