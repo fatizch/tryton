@@ -79,7 +79,7 @@ class Product(CompanyMultiValueMixin, metaclass=PoolMeta):
     @classmethod
     def _export_light(cls):
         return (super(Product, cls)._export_light() |
-            set(['quote_number_sequence']))
+            set(['quote_number_sequences']))
 
     def update_contract_from_rule(self, contract, no_rule_errors, **kwargs):
         rule = self.contract_data_rule[0]

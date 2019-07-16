@@ -36,7 +36,7 @@ class Package(model.CodedMixin, model.CoogView, with_extra_data([
 
     @classmethod
     def _export_skips(cls):
-        return super(Package, cls)._export_light() | {'options'}
+        return super(Package, cls)._export_skips() | {'options'}
 
     def clean_and_add_options(self, contract, options_to_update,
             is_contract_option):
@@ -105,7 +105,7 @@ class PackageOptionDescriptionRelation(model.CoogSQL, model.CoogView,
         ondelete='RESTRICT', required=True)
 
     @classmethod
-    def _export_skips(cls):
+    def _export_light(cls):
         return super(PackageOptionDescriptionRelation, cls)._export_light(
             ) | {'option'}
 
