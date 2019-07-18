@@ -95,5 +95,6 @@ def register():
 
     Pool.register(
         api.APIProduct,
+        api.APIContract,
         module='contract_insurance_invoice', type_='model',
         depends=['api'])

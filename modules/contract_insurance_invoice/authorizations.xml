@@ -106,8 +106,7 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="False"/>
         </record>
-        <record model="ir.model.field.access"
-            id="access_party_bank_accounts_group_contract_manage">
+        <record model="ir.model.field.access" id="access_party_bank_accounts_group_contract_manage">
             <field name="field" search="[('model.model', '=', 'party.party'), ('name', '=', 'bank_accounts')]"/>
             <field name="group" ref="contract.group_contract_manage"/>
             <field name="perm_read" eval="True"/>
@@ -307,28 +306,23 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-        <record model="ir.model.button-res.group"
-            id="invoice_cancel_button_group_contract_manage">
+        <record model="ir.model.button-res.group" id="invoice_cancel_button_group_contract_manage">
             <field name="button" ref="account_invoice.invoice_cancel_button"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
-        <record model="ir.model.button-res.group"
-            id="invoice_draft_button_group_contract_manage">
+        <record model="ir.model.button-res.group" id="invoice_draft_button_group_contract_manage">
             <field name="button" ref="account_invoice.invoice_draft_button"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
-        <record model="ir.model.button-res.group"
-            id="invoice_validate_button_group_contract_manage">
+        <record model="ir.model.button-res.group" id="invoice_validate_button_group_contract_manage">
             <field name="button" ref="account_invoice.invoice_validate_button"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
-        <record model="ir.model.button-res.group"
-            id="invoice_post_button_group_contract_manage">
+        <record model="ir.model.button-res.group" id="invoice_post_button_group_contract_manage">
             <field name="button" ref="account_invoice.invoice_post_button"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
-        <record model="ir.model.button-res.group"
-            id="invoice_pay_button_group_contract_manage">
+        <record model="ir.model.button-res.group" id="invoice_pay_button_group_contract_manage">
             <field name="button" ref="account_invoice.invoice_pay_button"/>
             <field name="group" ref="contract.group_contract_manage"/>
         </record>
@@ -365,6 +359,15 @@ this repository contains the full copyright notices and license terms. -->
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+    <data depends="api">
+        <!-- ############## -->
+        <!-- # API Access # -->
+        <!-- ############## -->
+        <record model="ir.api.access" id="compute_billing_modes_default_access">
+            <field name="api">api.contract.compute_billing_modes</field>
+            <field name="group" ref="api.group_default_api"/>
         </record>
     </data>
 </tryton>

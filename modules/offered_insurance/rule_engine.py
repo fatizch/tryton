@@ -114,8 +114,8 @@ class RuleEngine(metaclass=PoolMeta):
             'compl', self.extra_data_used)
         return res
 
-    @staticmethod
-    def get_external_extra_data_def(key, args):
+    @classmethod
+    def get_external_extra_data_def(cls, key, args):
         ExtraData = Pool().get('extra_data')
         if key in args.get('extra_data', {}):
             return args['extra_data'][key]

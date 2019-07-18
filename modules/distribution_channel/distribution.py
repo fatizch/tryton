@@ -47,13 +47,13 @@ class DistributionNetwork(metaclass=PoolMeta):
                         network.get_rec_name(''))
 
     def get_parent_distribution_channels_id(self, name):
-        return [channel.id for parent in self.parents
-            for channel in parent.authorized_distribution_channels]
+        return list({channel.id for parent in self.parents
+            for channel in parent.authorized_distribution_channels})
 
     def get_all_network_channels_id(self, name):
-        return [x.id for x in
-            set(self.authorized_distribution_channels +
-                self.parent_authorized_distribution_channels)]
+        return list({x.id for x in
+                self.authorized_distribution_channels +
+                self.parent_authorized_distribution_channels})
 
 
 class DistributionChannel(model.CodedMixin, model.CoogView):
@@ -90,6 +90,6 @@ class CommercialProductChannelRelation(model.CoogSQL):
     __name__ = 'distribution.commercial_product-distribution.channel'
 
     com_product = fields.Many2One('distribution.commercial_product',
-                                  'Commercial Product', ondelete='CASCADE')
+        'Commercial Product', ondelete='CASCADE')
     dist_channel = fields.Many2One('distribution.channel',
-                                   'Distribution Channel', ondelete='RESTRICT')
+        'Distribution Channel', ondelete='RESTRICT')

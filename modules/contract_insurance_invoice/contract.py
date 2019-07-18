@@ -1257,9 +1257,9 @@ class Contract(metaclass=PoolMeta):
         else:
             direct_debit_day = 0
         self.billing_informations = [BillingInformation(start=self.start_date,
-            billing_mode=default_billing_mode,
-            payment_term=default_billing_mode.allowed_payment_terms[0],
-            direct_debit_day=direct_debit_day)]
+                billing_mode=default_billing_mode,
+                payment_term=default_billing_mode.allowed_payment_terms[0],
+                direct_debit_day=direct_debit_day, direct_debit_account=None)]
 
     @classmethod
     def update_contract_after_import(cls, contracts):

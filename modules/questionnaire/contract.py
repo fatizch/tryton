@@ -14,6 +14,7 @@ __all__ = [
     'ContractQuestionnaire',
     'ContractQuestionnaireAnswer',
     'ContractQuestionnaireResult',
+    'ContractQuestionnaireResultDistribution',
     ]
 
 
@@ -135,7 +136,7 @@ class ContractQuestionnaireResult(model.CoogSQL, model.CoogView):
 
     def _format_result(self, result):
         product = Pool().get('offered.product').get_instance_from_code(
-            result['data']['product'])
+            result['product'])
         return '\r'.join(
             [
                 '%s: %s' % (self.raise_user_error('score_msg',
@@ -144,10 +145,33 @@ class ContractQuestionnaireResult(model.CoogSQL, model.CoogView):
                         raise_exception=False), product.rec_name),
                 '%s: %s' % (self.raise_user_error('description_msg',
                         raise_exception=False), result['description']),
-                self.raise_user_error('selected_msg' if result['selected']
+                self.raise_user_error('selected_msg'
+                    if result.get('selected', False)
                     else 'not_selected_msg', raise_exception=False),
                 ])
 
     @property
     def results_as_json(self):
         return json.loads(self.results_as_text)
+
+
+class ContractQuestionnaireResultDistribution(metaclass=PoolMeta):
+    __name__ = 'contract.questionnaire.result'
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._error_messages.update({
+                'commercial_product_msg': 'Commercial Product',
+                })
+
+    def _format_result(self, result):
+        CommercialProduct = Pool().get('distribution.commercial_product')
+
+        formatted = super()._format_result(result)
+
+        commercial_product = CommercialProduct.get_instance_from_code(
+            result['commercial_product'])
+        return '%s\r%s: %s' % (formatted,
+            self.raise_user_error('commercial_product_msg',
+            raise_exception=False), commercial_product.rec_name)

@@ -9,6 +9,7 @@ from . import report_engine
 from . import wizard
 from . import rule_engine
 from . import batch
+from . import api
 
 from trytond.modules.coog_core import expand_tree
 CoveredElementTreeExpansion = expand_tree('contract.covered_element')
@@ -59,3 +60,8 @@ def register():
         event.EventLog,
         module='contract_insurance', type_='model',
         depends=['event_log'])
+
+    Pool.register(
+        api.APIContract,
+        api.RuleEngine,
+        module='contract_insurance', type_='model', depends=['api'])

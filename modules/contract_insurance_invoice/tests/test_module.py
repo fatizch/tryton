@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import unittest
+import copy
 import doctest
 import datetime
 import mock
@@ -10,6 +11,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 
 from trytond.transaction import Transaction
+from trytond.pool import Pool
 
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import doctest_teardown
@@ -25,7 +27,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @classmethod
     def fetch_models_for(cls):
-        return ['company_cog', 'currency_cog']
+        return ['company_cog', 'currency_cog', 'offered', 'offered_insurance',
+            'bank_cog']
 
     @classmethod
     def get_models(cls):
@@ -43,6 +46,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'PaymentTerm': 'account.invoice.payment_term',
             'BillingInformation': 'contract.billing_information',
             'BillingMode': 'offered.billing_mode',
+            'BillingRUle': 'offered.product.billing_rule',
             'Company': 'company.company',
             'MoveLine': 'account.move.line',
             'User': 'res.user',
@@ -55,7 +59,103 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'Invoice': 'account.invoice',
             'InvoiceLine': 'account.invoice.line',
             'InvoiceLineDetail': 'account.invoice.line.detail',
+            'ContractAPI': 'api.contract',
             }
+
+    @test_framework.prepare_test(
+        'company_cog.test0001_testCompanyCreation',
+        )
+    def test0004_create_accounts(self):
+        company, = self.Company.search([('party.name', '=', 'World Company')])
+        account_kind, = self.AccountKind.create([{
+                    'name': 'Product',
+                    'company': company.id,
+                    }])
+        account, = self.Account.create([{
+                    'name': 'Account for Product',
+                    'code': 'account_product',
+                    'kind': 'revenue',
+                    'company': company.id,
+                    'type': account_kind.id,
+                    }])
+
+    def test0005_create_billing_modes(self):
+        payment_term, = self.PaymentTerm.create([{
+                    'name': 'direct',
+                    'lines': [('create', [{}])],
+                    }])
+        self.BillingMode.create([{
+                    'code': 'monthly',
+                    'name': 'monthly',
+                    'frequency': 'monthly',
+                    'allowed_payment_terms': [
+                        ('add', [payment_term.id])]
+                    }, {
+                    'code': 'quarterly',
+                    'name': 'quarterly',
+                    'frequency': 'quarterly',
+                    'allowed_payment_terms': [
+                        ('add', [payment_term.id])],
+                    'direct_debit': True,
+                    'allowed_direct_debit_days': '5, 10, 15'
+                    }, {
+                    'code': 'once_per_contract',
+                    'name': 'once_per_contract',
+                    'frequency': 'once_per_contract',
+                    'allowed_payment_terms': [
+                        ('add', [payment_term.id])]
+                    }])
+
+    @test_framework.prepare_test(
+        'offered.test0001_testNumberGeneratorCreation',
+        'contract_insurance_invoice.test0004_create_accounts',
+        'contract_insurance_invoice.test0005_create_billing_modes',
+        'offered_insurance.test0001_testFunctionalRuleCreation',
+        'offered_insurance.test0005_testItemDescCreation',
+        'offered_insurance.test0005_testInsurerCreation',
+        )
+    def test0006_prepare_product_for_subscription(self):
+        currency, = self.Currency.search([], limit=1)
+        company, = self.Company.search([('party.name', '=', 'World Company')])
+        insurer, = self.Insurer.search([])
+        generator, = self.Sequence.search([('code', '=', 'contract')])
+        quote_generator, = self.Sequence.search([('code', '=', 'quote')])
+        monthly, = self.BillingMode.search([('code', '=', 'monthly')])
+        quarterly, = self.BillingMode.search([('code', '=', 'quarterly')])
+        item_desc, = self.ItemDesc.search([('code', '=', 'person')])
+        account, = self.Account.search([('code', '=', 'account_product')])
+
+        coverage_alpha = self.Coverage()
+        coverage_alpha.company = company
+        coverage_alpha.currency = currency
+        coverage_alpha.insurer = insurer
+        coverage_alpha.code = 'ALP'
+        coverage_alpha.name = 'Alpha'
+        coverage_alpha.account_for_billing = account
+        coverage_alpha.item_desc = item_desc
+        coverage_alpha.save()
+
+        coverage_beta = self.Coverage()
+        coverage_beta.company = company
+        coverage_beta.currency = currency
+        coverage_beta.insurer = insurer
+        coverage_beta.code = 'BET'
+        coverage_beta.name = 'Beta'
+        coverage_beta.account_for_billing = account
+        coverage_beta.item_desc = item_desc
+        coverage_beta.save()
+
+        product = self.Product()
+        product.company = company
+        product.currency = currency
+        product.code = 'AAA'
+        product.name = 'Awesome Alternative Allowance'
+        product.contract_generator = generator
+        product.quote_number_sequence = quote_generator
+        product.billing_rules = [{}]
+        product.billing_rules[-1].billing_modes = [monthly, quarterly]
+        product.coverages = [coverage_alpha, coverage_beta]
+        product.save()
 
     @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
     def test_contract_get_invoice_periods(self):
@@ -840,6 +940,219 @@ class ModuleTestCase(test_framework.CoogTestCase):
         test_perfect([line_base, line_cancel_1],
             ([], [line_cancel_1, line_base]))
         invoice_1.cancel_move = cancel_move
+
+    @test_framework.prepare_test(
+        'bank_cog.test0010bank',
+        'contract_insurance_invoice.test0006_prepare_product_for_subscription',
+        'contract.test0002_testCountryCreation',
+        )
+    def test0080_test_subscribe_contract_API(self):
+        pool = Pool()
+        Contract = pool.get('contract')
+        ContractAPI = pool.get('api.contract')
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Mother',
+                    'birth_date': '1978-01-14',
+                    'gender': 'female',
+                    'bank_accounts': [{
+                            'number': 'FR7615970003860000690570007',
+                            'bank': {'bic': 'ABCDEFGHXXX'},
+                            }, {
+                            'number': 'FR7619530001040006462803348',
+                            'bank': {'bic': 'ABCDEFGHXXX'},
+                            },
+                        ],
+                    'addresses': [
+                        {
+                            'street': 'Somewhere along the street',
+                            'zip': '75002',
+                            'city': 'Paris',
+                            'country': 'fr',
+                            },
+                        ],
+                    },
+                {
+                    'ref': '2',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Father',
+                    'birth_date': '1978-06-12',
+                    'gender': 'male',
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {},
+                    'billing': {
+                        'payer': {'ref': '1'},
+                        'billing_mode': {'code': 'quarterly'},
+                        'direct_debit_day': 4,
+                        },
+                    'covereds': [
+                        {
+                            'party': {'ref': '1'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        {
+                            'party': {'ref': '2'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            }
+
+        data_dict = copy.deepcopy(data_ref)
+        result = ContractAPI.subscribe_contracts(
+            data_dict, {'_debug_server': True})
+        contract = Contract(result['contracts'][0]['id'])
+        billing_info = contract.billing_informations[-1]
+        self.assertEqual(billing_info.billing_mode.code, 'quarterly')
+        self.assertEqual(billing_info.direct_debit_day, 4)
+        self.assertEqual(billing_info.payer.first_name, 'Mother')
+        self.assertEqual(
+            billing_info.direct_debit_account.numbers[0].number_compact,
+            'FR7619530001040006462803348')
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['billing']['bank_account_number'] = \
+            'FR7615970003860000690570007'
+        result = ContractAPI.subscribe_contracts(
+            data_dict, {'_debug_server': True})
+        contract = Contract(result['contracts'][0]['id'])
+        billing_info = contract.billing_informations[-1]
+        self.assertEqual(
+            billing_info.direct_debit_account.numbers[0].number_compact,
+            'FR7615970003860000690570007')
+
+        # Use another payer
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['billing']['payer'] = {'ref': '2'}
+        data_dict['parties'][1]['bank_accounts'] = \
+            data_dict['parties'][0]['bank_accounts']
+        del data_dict['parties'][0]['bank_accounts']
+        self.assertEqual(
+            ContractAPI.subscribe_contracts(data_dict, {}).data, [{
+                    'type': 'invalid_payer_subscriber_relation',
+                    'data': {
+                        'payer': 'Mr. DOE Father',
+                        'subscriber': 'Mrs. DOE Mother',
+                        },
+                    }])
+
+        # Oops, just add the relation we should be fine
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['billing']['payer'] = {'ref': '2'}
+        data_dict['parties'][1]['bank_accounts'] = \
+            data_dict['parties'][0]['bank_accounts']
+        data_dict['parties'][0]['relations'] = [
+            {
+                'ref': '1',
+                'type': 'subsidized',
+                'to': {'ref': '2'},
+                },
+            ]
+        del data_dict['parties'][0]['bank_accounts']
+        ContractAPI.subscribe_contracts(data_dict, {'_debug_server': True})
+
+        # Try to pay without a bank account
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['first_name'] = 'Auntie'
+        del data_dict['parties'][0]['bank_accounts']
+        self.assertEqual(
+            ContractAPI.subscribe_contracts(data_dict, {}).data, [{
+                    'type': 'missing_bank_account',
+                    'data': {'party': 'Mrs. DOE Auntie'},
+                    }])
+
+        # Fine if a bank account is not required
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['first_name'] = 'Auntie'
+        del data_dict['parties'][0]['bank_accounts']
+        data_dict['contracts'][0]['billing']['billing_mode'] = {
+            'code': 'monthly'}
+        del data_dict['contracts'][0]['billing']['direct_debit_day']
+        ContractAPI.subscribe_contracts(data_dict, {'_debug_server': True})
+
+        # Unnecessary informations
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['first_name'] = 'Auntie'
+        data_dict['contracts'][0]['billing'] = {
+            'billing_mode': {'code': 'monthly'},
+            'payer': {'ref': '1'},
+            'direct_debit_day': 5,
+            'bank_account_number': '12345',
+            }
+        self.assertEqual(
+            ContractAPI.subscribe_contracts(data_dict, {}).data,
+            [{
+                    'type': 'unused_direct_debit_day',
+                    'data': {
+                        'product': 'AAA',
+                        'billing_mode': 'monthly',
+                        },
+                    },
+                {
+                    'type': 'unused_bank_account_number',
+                    'data': {
+                        'product': 'AAA',
+                        'billing_mode': 'monthly',
+                        },
+                    }])
+
+        # Force the bank account
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['first_name'] = 'Auntie'
+        data_dict['contracts'][0]['billing'] = {
+            'billing_mode': {'code': 'monthly'},
+            'payer': {'ref': '1'},
+            'direct_debit_day': 5,
+            'bank_account_number': '12345',
+            }
+        self.assertEqual(
+            ContractAPI.subscribe_contracts(data_dict, {}).data,
+            [{
+                    'type': 'unused_direct_debit_day',
+                    'data': {
+                        'product': 'AAA',
+                        'billing_mode': 'monthly',
+                        },
+                    },
+                {
+                    'type': 'unused_bank_account_number',
+                    'data': {
+                        'product': 'AAA',
+                        'billing_mode': 'monthly',
+                        },
+                    }])
 
 
 def suite():

@@ -1087,6 +1087,29 @@ class Agent(export.ExportImportMixin, model.FunctionalErrorMixIn):
     def copy_to_broker(self, target_broker):
         return self.copy([self], default={'party': target_broker.id})[0]
 
+    @classmethod
+    def find_agents(cls, **kwargs):
+        '''
+            Find agents matching a pattern
+        '''
+        return cls.search(cls._find_agents_domain(**kwargs))
+
+    @classmethod
+    def _find_agents_domain(cls, type_=None, products=None, brokers=None,
+            dist_network=None, **kwargs):
+        domain = []
+        if type_:
+            domain.append(('type_', '=', type_))
+        if products:
+            domain.append(
+                ('plan.commissioned_products', 'in', [x.id for x in products]))
+        if dist_network:
+            brokers = [x.party for x in dist_network.parent_brokers]
+        if brokers:
+            domain.append(
+                ('party', 'in', [x.id for x in brokers]))
+        return domain
+
 
 class CreateAgents(Wizard):
     'Create Agents'

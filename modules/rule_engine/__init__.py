@@ -5,6 +5,8 @@ from . import batch
 from . import rule_engine
 from . import event
 from . import linter
+from . import api
+
 from trytond.pool import Pool
 from .rule_engine import get_rule_mixin, check_args, RuleTools
 
@@ -41,3 +43,7 @@ def register():
         rule_engine.ValidateRuleTestCases,
         rule_engine.InitTestCaseFromExecutionLog,
         module='rule_engine', type_='wizard')
+
+    Pool.register(
+        api.RuleEngine,
+        module='rule_engine', type_='model', depends=['api'])

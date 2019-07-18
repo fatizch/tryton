@@ -2,17 +2,23 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 
+from trytond.modules.api import DEFAULT_INPUT_SCHEMA
 from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA, CODE_SCHEMA
-from trytond.modules.coog_core.api import FIELD_SCHEMA, OBJECT_ID_NULL_SCHEMA
+from trytond.modules.coog_core.api import OBJECT_ID_NULL_SCHEMA
+from trytond.modules.coog_core.api import MODEL_REFERENCE
 
 
-__name__ = [
+__all__ = [
     'APIProduct',
     ]
 
 
 class APIProduct(metaclass=PoolMeta):
     __name__ = 'api.product'
+
+    @classmethod
+    def __post_setup__(cls):
+        super().__post_setup__()
 
     @classmethod
     def _describe_product(cls, product):
@@ -43,22 +49,35 @@ class APIProduct(metaclass=PoolMeta):
 
     @classmethod
     def _describe_item_descriptor_fields(cls, item_desc):
-        Core = Pool().get('api.core')
-        if not item_desc.kind:
-            return []
         if item_desc.kind == 'person':
-            return Core._person_description(
-                with_birth_date=True,
-                with_birth_date_required=True,
-                )
-        if item_desc.kind == 'company':
-            return Core._company_description()
-        if item_desc.kind == 'party':
-            return Core._party_description(
-                with_birth_date=True,
-                with_birth_date_required=True,
-                )
-        raise NotImplementedError
+            return {
+                'model': 'party',
+                'conditions': [
+                    {'name': 'is_person', 'operator': '=', 'value': True},
+                    ],
+                'required': ['name', 'first_name', 'birth_date', 'email',
+                    'address'],
+                'fields': ['name', 'first_name', 'birth_date', 'email',
+                    'phone_number', 'address'],
+                }
+        elif item_desc.kind == 'company':
+            return {
+                'model': 'party',
+                'conditions': [
+                    {'name': 'is_person', 'operator': '=', 'value': False},
+                    ],
+                'required': ['name', 'email', 'address'],
+                'fields': ['name', 'email', 'phone_number', 'address'],
+                }
+        elif item_desc.kind == 'party':
+            return {
+                'model': 'party',
+                'required': ['name', 'first_name', 'birth_date', 'email',
+                    'address'],
+                'fields': ['name', 'first_name', 'birth_date', 'email',
+                    'phone_number', 'is_person', 'address'],
+                }
+        return {}
 
     @classmethod
     def _describe_product_schema(cls):
@@ -89,9 +108,7 @@ class APIProduct(metaclass=PoolMeta):
                 'name': {'type': 'string'},
                 'extra_data': Pool().get('api.core')._extra_data_schema(),
                 'fields': {
-                    'type': 'array',
-                    'additionalItems': False,
-                    'items': FIELD_SCHEMA,
+                    'oneOf': [MODEL_REFERENCE, DEFAULT_INPUT_SCHEMA],
                     },
                 },
             'required': ['id', 'code', 'name', 'extra_data', 'fields'],
@@ -108,7 +125,7 @@ class APIProduct(metaclass=PoolMeta):
                         'code': 'item_desc_1',
                         'name': 'Item Descriptor 1',
                         'extra_data': [],
-                        'fields': [],
+                        'fields': {},
                         },
                     ]
                 for coverage in description['coverages']:

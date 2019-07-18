@@ -35,6 +35,9 @@ def register():
         depends=['contract_insurance_invoice'])
 
     Pool.register(
+        api.APICore,
         api.APIProduct,
+        api.APIParty,
+        api.APIContract,
         module='contract_insurance_health_fr', type_='model',
         depends=['api'])

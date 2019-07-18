@@ -1284,22 +1284,25 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
         Event = Pool().get('event')
         Event.notify_events([self], 'create_quote')
 
-    def activate_contract(self):
+    @dualmethod
+    def activate_contract(cls, contracts):
         pool = Pool()
         Event = pool.get('event')
-        if not self.status or self.status == 'quote':
-            event = 'activate_contract'
-        elif self.status == 'hold':
-            # when activating after suspend
-            event = 'unhold_contract'
-        else:
-            event = 'reactivate_contract'
-        self.before_activate()
-        self.do_activate()
-        self.after_activate()
-        self.save()
 
-        Event.notify_events([self], event)
+        for contract in contracts:
+            if not contract.status or contract.status == 'quote':
+                event = 'activate_contract'
+            elif contract.status == 'hold':
+                # when activating after suspend
+                event = 'unhold_contract'
+            else:
+                event = 'reactivate_contract'
+            contract.before_activate()
+            contract.do_activate()
+            contract.after_activate()
+            contract.save()
+
+        Event.notify_events(contracts, event)
 
     def do_activate(self):
         self.status = 'active'

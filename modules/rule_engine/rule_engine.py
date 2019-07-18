@@ -1261,7 +1261,8 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             result.append('')
         return '\n'.join(result)
 
-    def prepare_context(self, evaluation_context, execution_kwargs):
+    def prepare_context(self, evaluation_context, execution_kwargs,
+            context_overrides=None):
         debug = ServerContext().get('rule_debug', True)
         pre_context = self.build_context(debug)
         exec_context = {
@@ -1269,9 +1270,11 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             }
         static_context = self.get_static_context()
         exec_context.update(static_context)
+        context_overrides = context_overrides or {}
         for k, v in pre_context.items():
-            if k in execution_kwargs:
-                exec_context[k] = execution_kwargs.pop(k)
+            if k in context_overrides:
+                exec_context[k] = functools.partial(context_overrides[k],
+                    evaluation_context)
             else:
                 exec_context[k] = functools.partial(v, evaluation_context)
         for k, v in execution_kwargs.items():
@@ -1436,12 +1439,13 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
         self.raise_user_error('bad_rule_computation', (self.name,
                 err_msg or str(exc.args)))
 
-    def compute(self, evaluation_context, execution_kwargs):
+    def compute(self, evaluation_context, execution_kwargs,
+            context_overrides=None):
         debug_mode = ServerContext().get('rule_debug', self.debug_mode)
         with ServerContext().set_context(rule_debug=debug_mode,
                 readonly_transaction=True):
             context = self.prepare_context(evaluation_context,
-                execution_kwargs)
+                execution_kwargs, context_overrides=context_overrides)
             the_result = context['evaluation_context']['__result__']
             localcontext = {}
             try:
@@ -1592,7 +1596,9 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             except DatabaseOperationalError:
                 transaction.rollback()
 
-    def execute(self, arguments, parameters=None):
+    def execute(self, arguments, parameters=None, overrides=None):
+        # Cache loaded rules to avoid unnecessary reads, maybe remove this once
+        # auto-cache is properly implemented
         transaction_rules = getattr(Transaction(), '_rules', None)
         if transaction_rules is None:
             transaction_rules = {}
@@ -1606,9 +1612,11 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             return lambda: value
 
         parameters_as_func = {}
-        for k, v in (parameters or {}).items():
-            parameters_as_func[k] = v if callable(v) else kwarg_function(v)
-        result = rule.compute(arguments, parameters_as_func)
+        if parameters:
+            for k, v in parameters.items():
+                parameters_as_func[k] = kwarg_function(v)
+        result = rule.compute(arguments, parameters_as_func,
+            context_overrides=overrides)
         rule.add_debug_log(result, arguments.get('date', None), arguments)
         return result
 
@@ -1629,7 +1637,7 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
             def tech_fn(input_string):
                 return case['tech'][input_string]
             case['params'][tech_name] = tech_fn
-            result = self.execute(case['args'], case['params'])
+            result = self.execute(case['args'], overrides=case['params'])
             fields = ['result', 'errors', 'warnings', 'info', 'debug']
             return {k: getattr(result, k, None) for k in fields}
 
@@ -2004,7 +2012,7 @@ class TestCase(ModelView, ModelSQL):
             key: noargs_func(key, value)
             for key, value in list(test_context.items())}
         with ServerContext().set_context(rule_debug=True):
-            return self.rule.execute({}, test_context)
+            return self.rule.execute({}, overrides=test_context)
 
     def run_test(self):
         try:

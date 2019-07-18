@@ -6,6 +6,7 @@ from . import distribution
 from . import process
 from . import contract
 from . import rule_engine
+from . import api
 
 
 def register():
@@ -26,3 +27,9 @@ def register():
         process.ContractSubscribe,
         module='distribution_channel', type_='wizard',
         depends=['contract_process'])
+
+    Pool.register(
+        api.APIIdentity,
+        api.APICore,
+        api.APIContract,
+        module='distribution_channel', type_='model', depends=['api'])

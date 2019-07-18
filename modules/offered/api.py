@@ -9,7 +9,20 @@ from trytond.pool import PoolMeta, Pool
 from trytond.modules.coog_core.api import APIResourceMixin, OBJECT_ID_SCHEMA
 from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA, CODE_SCHEMA
 from trytond.modules.coog_core.api import MODEL_REFERENCE
-from trytond.modules.api import APIMixin, DEFAULT_INPUT_SCHEMA, APIInputError
+from trytond.modules.api import APIMixin, DEFAULT_INPUT_SCHEMA
+
+
+EXTRA_DATA_VALUES_SCHEMA = {
+    'type': 'object',
+    'additionalProperties': False,
+    'patternProperties': {
+        '^[a-z0-9_]*$': {
+            'type': ['boolean', 'integer', 'string'],
+            },
+        },
+    'additionalProperties': False,
+    }
+
 
 EXTRA_DATA_VALUES_SCHEMA = {
     'type': 'object',
@@ -36,31 +49,27 @@ class APIModel(metaclass=PoolMeta):
 
     @classmethod
     def instantiate_code_object(cls, model, identifier):
+        pool = Pool()
+        Model = pool.get(model)
+
         assert len(identifier) == 1, 'Invalid key'  # Should not happen (schema)
         key, value = list(identifier.items())[0]
-        Model = Pool().get(model)
         if key == 'id':
             # Check the id actually exists. Maybe cache it someday
             matches = Model.search([('id', '=', value)])
-        elif key == 'code':
-            if hasattr(Model, 'get_instance_from_code'):
-                try:
-                    matches = [Model.get_instance_from_code(value)]
-                except KeyError:
-                    matches = []
-            else:
-                matches = Model.search([('code', '=', value)])
-        else:
-            raise ValueError  # Should not happen (schema)
-        if matches:
-            return matches[0]
-        raise APIInputError([{
-                    'type': 'invalid_code',
+            if matches:
+                return matches[0]
+            pool.get('api').add_input_error({
+                    'type': 'invalid_id',
                     'data': {
                         'model': model,
-                        'key': identifier,
+                        'id': value,
                         },
-                    }])
+                    })
+        elif key == 'code':
+            return cls.instance_from_code(model, value)
+        else:
+            raise ValueError  # Should not happen (schema)
 
 
 class APICore(metaclass=PoolMeta):
@@ -85,14 +94,15 @@ class APICore(metaclass=PoolMeta):
                 'sequence': elem['sequence'],
                 }
             if 'digits' in elem:
-                per_key[elem['code']]['digits'] = elem['digits']
+                # We only need the length of the non-integer part
+                per_key[elem['code']]['digits'] = elem['digits'][1]
             if 'default' in elem:
                 per_key[elem['code']]['default'] = elem['default']
             if 'selection' in elem:
                 if elem.get('sorted', False):
                     selection = elem['selection']
                 else:
-                    selection = sorted(selection, key=lambda x: x[0])
+                    selection = sorted(elem['selection'], key=lambda x: x[0])
                 per_key[elem['code']]['selection'] = [
                     {'value': x[0], 'name': x[1], 'sequence': idx}
                     for idx, x in enumerate(selection)]
@@ -248,16 +258,25 @@ class APICore(metaclass=PoolMeta):
             Raises APIInputError if conversions are not possible, or if the
             value does not match the extra data type
         '''
-        ExtraData = Pool().get('extra_data')
+        pool = Pool()
+        ExtraData = pool.get('extra_data')
+        API = pool.get('api')
 
-        errors = []
         result = {}
         for code, value in data.items():
-            structure = ExtraData.search(
-                [('name', '=', code)])[0]._get_structure()
+            extra_definition = ExtraData.search([('name', '=', code)])
+            if not extra_definition:
+                API.add_input_error({
+                        'type': 'unknown_extra_data',
+                        'data': {
+                            'code': code,
+                            },
+                        })
+                continue
+            structure = extra_definition[0]._get_structure()
             if structure['technical_kind'] == 'integer':
                 if not isinstance(value, int):
-                    errors.append({
+                    API.add_input_error({
                             'type': 'extra_data_type',
                             'data': {
                                 'extra_data': code,
@@ -269,7 +288,7 @@ class APICore(metaclass=PoolMeta):
                 result[code] = value
             elif structure['technical_kind'] == 'char':
                 if not isinstance(value, str):
-                    errors.append({
+                    API.add_input_error({
                             'type': 'extra_data_type',
                             'data': {
                                 'extra_data': code,
@@ -280,8 +299,10 @@ class APICore(metaclass=PoolMeta):
                     continue
                 result[code] = value
             elif structure['technical_kind'] == 'numeric':
-                if not isinstance(value, str):
-                    errors.append({
+                if isinstance(value, int) and not isinstance(value, bool):
+                    pass
+                elif not isinstance(value, str):
+                    API.add_input_error({
                             'type': 'extra_data_type',
                             'data': {
                                 'extra_data': code,
@@ -290,14 +311,14 @@ class APICore(metaclass=PoolMeta):
                                 },
                             })
                     continue
-                elif '.' not in value or len(value.split('.')[1] >
-                        structure['digits']):
-                    errors.append({
+                elif ('.' in value and len(value.split('.')[1]) >
+                        structure['digits'][1]):
+                    API.add_input_error({
                             'type': 'extra_data_conversion',
                             'data': {
                                 'extra_data': code,
                                 'expected_format': '1111.%s' % ('1' *
-                                    structure['digits']),
+                                    structure['digits'][1]),
                                 'given_value': value,
                                 },
                             })
@@ -305,19 +326,19 @@ class APICore(metaclass=PoolMeta):
                 try:
                     result[code] = Decimal(value)
                 except InvalidOperation:
-                    errors.append({
+                    API.add_input_error({
                             'type': 'extra_data_conversion',
                             'data': {
                                 'extra_data': code,
                                 'expected_format': '1111.%s' % ('1' *
-                                    structure['digits']),
+                                    structure['digits'][1]),
                                 'given_value': value,
                                 },
                             })
                     continue
             elif structure['technical_kind'] == 'selection':
                 if not isinstance(value, str):
-                    errors.append({
+                    API.add_input_error({
                             'type': 'extra_data_type',
                             'data': {
                                 'extra_data': code,
@@ -327,7 +348,7 @@ class APICore(metaclass=PoolMeta):
                             })
                     continue
                 if value not in [x[0] for x in structure['selection']]:
-                    errors.append({
+                    API.add_input_error({
                             'type': 'extra_data_conversion',
                             'data': {
                                 'extra_data': code,
@@ -340,7 +361,7 @@ class APICore(metaclass=PoolMeta):
                 result[code] = value
             elif structure['technical_kind'] == 'date':
                 if not isinstance(value, str):
-                    errors.append({
+                    API.add_input_error({
                             'type': 'extra_data_type',
                             'data': {
                                 'extra_data': code,
@@ -352,7 +373,7 @@ class APICore(metaclass=PoolMeta):
                 try:
                     result[code] = datetime.strptime(value, '%Y-%m-%d').date()
                 except ValueError:
-                    errors.append({
+                    API.add_input_error({
                             'type': 'extra_data_conversion',
                             'data': {
                                 'extra_data': code,
@@ -361,6 +382,18 @@ class APICore(metaclass=PoolMeta):
                                 },
                             })
                     continue
+            elif structure['technical_kind'] == 'boolean':
+                if value is not True and value is not False:
+                    API.add_input_error({
+                            'type': 'extra_data_type',
+                            'data': {
+                                'extra_data': code,
+                                'expected_type': 'boolean',
+                                'given_type': str(type(value)),
+                                },
+                            })
+                    continue
+                result[code] = value
         return result
 
 
@@ -379,7 +412,7 @@ class APIProduct(APIMixin):
                     'given as parameters. If no product is given, it will '
                     'return the description for all available products',
                     'readonly': True,
-                    'public': True,
+                    'public': False,
                     }
                 })
 
@@ -441,9 +474,9 @@ class APIProduct(APIMixin):
                     {'name': 'is_person', 'operator': '=', 'value': True},
                     ],
                 'required': ['name', 'first_name', 'birth_date', 'email',
-                    'address'],
+                    'addresses'],
                 'fields': ['name', 'first_name', 'birth_date', 'email',
-                    'phone_number', 'address'],
+                    'phone_number', 'addresses'],
                 }
         elif product.subscriber_kind == 'company':
             return {
@@ -451,22 +484,22 @@ class APIProduct(APIMixin):
                 'conditions': [
                     {'name': 'is_person', 'operator': '=', 'value': False},
                     ],
-                'required': ['name', 'email', 'address'],
-                'fields': ['name', 'email', 'phone_number', 'address'],
+                'required': ['name', 'email', 'addresses'],
+                'fields': ['name', 'email', 'phone_number', 'addresses'],
                 }
         if product.subscriber_kind == 'all':
             return {
                 'model': 'party',
                 'required': ['name', 'first_name', 'birth_date', 'email',
-                    'address'],
+                    'addresses'],
                 'fields': ['name', 'first_name', 'birth_date', 'email',
-                    'phone_number', 'is_person', 'address'],
+                    'phone_number', 'is_person', 'addresses'],
                 }
 
     @classmethod
     def _describe_products_convert_input(cls, parameters):
         if not parameters:
-            return
+            return parameters
 
         pool = Pool()
         Api = pool.get('api')

@@ -27,7 +27,15 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'User': 'res.user',
             'APICore': 'api.core',
             'APIIdentity': 'ir.api.identity',
+            'APIParty': 'api.party',
         }
+
+    def test0002_testCountryCreation(self):
+        self.Country(
+            code='FR',
+            code3='FRA',
+            name='France',
+            ).save()
 
     def test0001_createParties(self):
         self.Party.create([{
@@ -205,6 +213,160 @@ class ModuleTestCase(test_framework.CoogTestCase):
     def test0050_party_api_models(self):
         self.APICore.model_definitions({}, {'_debug_server': True})
 
+    @test_framework.prepare_test('party_cog.test0002_testCountryCreation')
+    def test0060_party_API(self):
+        # Run examples
+        for example in self.APIParty._create_party_examples():
+            self.APIParty.create_party(example['input'], {})
+
+        result = self.APIParty.create_party({
+                'parties': [
+                    {
+                        'ref': '1',
+                        'is_person': False,
+                        'name': 'My API Company',
+                        },
+                    {
+                        'ref': '2',
+                        'is_person': True,
+                        'name': 'Doe',
+                        'first_name': 'Father',
+                        'birth_date': '1980-01-20',
+                        'gender': 'male',
+                        'addresses': [
+                            {
+                                'street': 'Somewhere along the street',
+                                'zip': '75002',
+                                'city': 'Paris',
+                                'country': 'fr',
+                                },
+                            ],
+                        'relations': [
+                            {
+                                'ref': '1',
+                                'type': 'child',
+                                'to': {'ref': '1'},
+                                },
+                            ],
+                        },
+                    ]}, {'_debug_server': True})
+
+        company, = self.Party.search([('name', '=', 'My API Company')])
+        father, = self.Party.search([('name', '=', 'Doe'),
+                ('first_name', '=', 'Father')])
+
+        self.assertEqual(result['parties'], [
+                {'ref': '1', 'id': company.id},
+                {'ref': '2', 'id': father.id},
+                ])
+
+        self.assertEqual(company.is_person, False)
+        self.assertEqual(company.name, 'My API Company')
+
+        self.assertEqual(father.is_person, True)
+        self.assertEqual(father.name, 'Doe')
+        self.assertEqual(father.first_name, 'Father')
+        self.assertEqual(father.birth_date, datetime.date(1980, 1, 20))
+        self.assertEqual(father.gender, 'male')
+        self.assertEqual(len(father.relations), 1)
+        self.assertEqual(len(father.addresses), 1)
+        self.assertEqual(father.addresses[0].country.code, 'FR')
+        self.assertEqual(father.addresses[0].zip, '75002')
+        self.assertEqual(father.addresses[0].city, 'Paris')
+
+        self.APIParty.create_party({
+                'parties': [
+                    {
+                        'ref': '1',
+                        'is_person': True,
+                        'name': 'Doe',
+                        'first_name': 'Father',
+                        'birth_date': '1980-01-20',
+                        'gender': 'female',
+                        'addresses': [
+                            {
+                                'street': 'Somewhere else',
+                                'zip': '12345',
+                                'city': 'Dol',
+                                'country': 'fr',
+                                },
+                            ],
+                        },
+                    ]}, {'_debug_server': True})
+
+        father = self.Party(father.id)
+        self.assertEqual(father.gender, 'female')
+        self.assertEqual(len(father.relations), 1)
+        self.assertEqual(len(father.addresses), 2)
+        self.assertEqual(father.addresses[0].country.code, 'FR')
+        self.assertEqual(father.addresses[0].zip, '75002')
+        self.assertEqual(father.addresses[0].city, 'Paris')
+        self.assertEqual(father.addresses[-1].country.code, 'FR')
+        self.assertEqual(father.addresses[-1].zip, '12345')
+        self.assertEqual(father.addresses[-1].city, 'Dol')
+
+        self.APIParty.create_party({
+                'parties': [
+                    {
+                        'ref': '1',
+                        'is_person': True,
+                        'name': 'Doe',
+                        'first_name': 'Baby',
+                        'birth_date': '2015-06-01',
+                        'gender': 'male',
+                        'relations': [
+                            {
+                                'ref': '1',
+                                'type': 'child',
+                                'to': {'id': father.id},
+                                },
+                            ],
+                        },
+                    ]}, {'_debug_server': True})
+
+        father = self.Party(father.id)
+        self.assertEqual(len(father.relations), 2)
+        self.assertEqual(father.relations[-1].type.code, 'parent')
+        self.assertEqual(father.relations[-1].to.first_name, 'Baby')
+
+        self.assertEqual(
+            self.APIParty.create_party({
+                    'parties': [
+                        {
+                            'ref': '1',
+                            'is_person': True,
+                            'name': 'Doe',
+                            'first_name': 'Baby',
+                            'birth_date': '2015-06-01',
+                            'gender': 'male',
+                            'relations': [
+                                {
+                                    'ref': '1',
+                                    'type': 'what',
+                                    'to': {'id': father.id},
+                                    },
+                                ],
+                            'addresses': [
+                                {
+                                    'street': 'Somewhere else',
+                                    'zip': '12345',
+                                    'city': 'Dol',
+                                    'country': 'aze',
+                                    },
+                                ],
+                            },
+                        ]}, {}).data,
+            [
+                {
+                    'type': 'configuration_not_found',
+                    'data': {'model': 'country.country', 'code': 'AZE'},
+                        },
+                {
+                    'type': 'configuration_not_found',
+                    'data': {'model': 'party.relation.type', 'code': 'what'}
+                    },
+                ])
+
     @test_framework.prepare_test('party_cog.test0001_createParties')
     def test9001_identity_context_api(self):
         admin = self.User(1)
@@ -224,10 +386,15 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     [('login', '=', 'coog_api_user')])[0].id):
             no_party = self.APICore.identity_context(
                 {'kind': 'generic', 'identifier': '12345'}, {})
-            self.assertEqual(no_party, {'user': 1, 'party': None})
+            self.assertEqual(no_party, {'user': {
+                        'id': 1, 'login': 'admin'}})
             with_party = self.APICore.identity_context(
                 {'kind': 'generic', 'identifier': '09876'}, {})
-            self.assertEqual(with_party, {'user': None, 'party': parent.id})
+            self.assertEqual(with_party, {
+                    'party': {
+                        'id': parent.id,
+                        'name': parent.full_name,
+                        }})
 
 
 def suite():

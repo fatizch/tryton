@@ -19,7 +19,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @classmethod
     def fetch_models_for(cls):
-        return ['rule_engine', 'company_cog']
+        return ['rule_engine', 'company_cog', 'offered']
 
     @classmethod
     def get_models(cls):
@@ -226,6 +226,7 @@ return True'''
         coverage_c.item_desc = item_desc
         coverage_c.insurer = insurer
         coverage_c.company = company
+        coverage_c.subscription_behaviour = 'optional'
         coverage_c.currency = company.currency
 
         coverage_c.save()
@@ -239,7 +240,7 @@ return True'''
         coverage_d.start_date = datetime.date.today()
         coverage_d.sequence = 4
 
-        coverage_d.item_desc = item_desc
+        coverage_d.item_desc = None
         coverage_d.insurer = insurer
         coverage_d.company = company
         coverage_d.currency = company.currency
@@ -385,6 +386,96 @@ return True'''
             max_rate='0.10')
         extra_premium_kind3.save()
         self.assertFalse(extra_premium_kind3.is_discount)
+
+    @test_framework.prepare_test('offered_insurance.test0010Coverage_creation')
+    def test0200_productDescription(self):
+        product, = self.Product.search([('code', '=', 'AAA')])
+        alpha, = self.OptionDescription.search([('code', '=', 'ALP')])
+        beta, = self.OptionDescription.search([('code', '=', 'BET')])
+        gamma, = self.OptionDescription.search([('code', '=', 'GAM')])
+        delta, = self.OptionDescription.search([('code', '=', 'DEL')])
+        item_desc, = self.ItemDesc.search([('code', '=', 'person')])
+
+        self.maxDiff = None
+        self.assertEqual(
+            self.APIProduct.describe_products({}, {'_debug_server': True}),
+            [{
+                    'code': 'AAA',
+                    'coverages': [
+                        {
+                            'code': 'ALP',
+                            'description': '',
+                            'extra_data': [],
+                            'id': alpha.id,
+                            'item_desc': item_desc.id,
+                            'name': 'Alpha Coverage',
+                            },
+                        {
+                            'code': 'BET',
+                            'description': '',
+                            'extra_data': [],
+                            'id': beta.id,
+                            'item_desc': item_desc.id,
+                            'name': 'Beta Coverage',
+                            },
+                        {
+                            'code': 'GAM',
+                            'description': '',
+                            'extra_data': [],
+                            'id': gamma.id,
+                            'item_desc': item_desc.id,
+                            'name': 'GammaCoverage',
+                            },
+                        {
+                            'code': 'DEL',
+                            'description': '',
+                            'extra_data': [],
+                            'id': delta.id,
+                            'item_desc': None,
+                            'name': 'Delta Coverage',
+                            }],
+                    'description': '',
+                    'extra_data': [],
+                    'id': product.id,
+                    'item_descriptors': [
+                        {
+                            'code': 'person',
+                            'extra_data': [],
+                            'fields': {
+                                'conditions': [
+                                    {'name': 'is_person', 'operator': '=',
+                                        'value': True},
+                                    ],
+                                'fields': ['name', 'first_name', 'birth_date',
+                                    'email', 'phone_number', 'address'],
+                                'model': 'party',
+                                'required': ['name', 'first_name', 'birth_date',
+                                    'email', 'address']},
+                            'id': item_desc.id,
+                            'name': 'Person'}],
+                    'name': 'Awesome Alternative Allowance',
+                    'packages': [],
+                    'subscriber': {
+                        'fields': ['name', 'first_name', 'birth_date', 'email',
+                            'phone_number', 'is_person', 'address'],
+                        'model': 'party',
+                        'required': ['name', 'first_name', 'birth_date',
+                            'email', 'address'],
+                        },
+                    },
+                ]
+            )
+        item_desc.kind = ''
+        item_desc.save()
+        self.assertEqual(
+            self.APIProduct.describe_products({}, {'_debug_server': True}
+                )[0]['item_descriptors'][0], {
+                'code': 'person',
+                'extra_data': [],
+                'fields': {},
+                'id': item_desc.id,
+                'name': 'Person',
+                })
 
 
 def suite():

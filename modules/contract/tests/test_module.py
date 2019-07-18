@@ -2,6 +2,9 @@
 # this repository contains the full copyright notices and license terms.
 import unittest
 import datetime
+import copy
+
+from decimal import Decimal
 from dateutil.relativedelta import relativedelta
 
 import trytond.tests.test_tryton
@@ -38,6 +41,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'ContractExtraData': 'contract.extra_data',
             'SubStatus': 'contract.sub_status',
             'ContactType': 'contract.contact.type',
+            'ContractAPI': 'api.contract',
             }
 
     def createContactTypes(self):
@@ -66,8 +70,27 @@ class ModuleTestCase(test_framework.CoogTestCase):
         party, = self.Party.search([('name', '=', 'DOE')])
         self.assertTrue(party.id)
 
-    @test_framework.prepare_test(
-        'contract.test0001_testPersonCreation',
+    def test0002_testCountryCreation(self):
+        self.Country(
+            code='FR',
+            code3='FRA',
+            name='France',
+            ).save()
+
+    @test_framework.prepare_test('offered.test0030_testProductCoverageRelation')
+    def test0005_PrepareProductForSubscription(self):
+        qg = self.Sequence()
+        qg.name = 'Quote Sequence'
+        qg.code = 'quote'
+        qg.prefix = 'Quo'
+        qg.suffix = 'Y${year}'
+        qg.save()
+
+        product_a, = self.Product.search([('code', '=', 'AAA')])
+        product_a.quote_number_sequence = qg
+        product_a.save()
+
+    @test_framework.prepare_test('contract.test0001_testPersonCreation',
         'offered.test0030_testProductCoverageRelation',
         )
     def test0010_testContractCreation(self):
@@ -560,6 +583,256 @@ class ModuleTestCase(test_framework.CoogTestCase):
         void_reason, = self.SubStatus.search([('code', '=', 'error')])
         self.Contract.void(contracts, void_reason)
         self.assertEqual(option.status, 'void')
+
+    @test_framework.prepare_test(
+        'contract.test0002_testCountryCreation',
+        'contract.test0005_PrepareProductForSubscription',
+        )
+    def test0100_subscribe_contract_API(self):
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Father',
+                    'birth_date': '1980-01-20',
+                    'gender': 'male',
+                    'addresses': [
+                        {
+                            'street': 'Somewhere along the street',
+                            'zip': '75002',
+                            'city': 'Paris',
+                            'country': 'fr',
+                            },
+                        ],
+                    'relations': [
+                        {
+                            'ref': '3',
+                            'type': 'child',
+                            'to': {'ref': '3'},
+                            },
+                        ],
+                    },
+                {
+                    'ref': '2',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Baby',
+                    'birth_date': '2010-02-12',
+                    'gender': 'female',
+                    },
+                {
+                    'ref': '3',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Grand-Pa',
+                    'birth_date': '1920-04-08',
+                    'gender': 'male',
+                    },
+                ],
+            'relations': [
+                {
+                    'ref': '1',
+                    'type': 'child',
+                    'from': {'ref': '2'},
+                    'to': {'ref': '1'},
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {
+                        'contract_1': '16.10',
+                        'contract_2': False,
+                        'contract_3': '2',
+                        },
+                    'coverages': [
+                        {
+                            'coverage': {'code': 'ALP'},
+                            'extra_data': {
+                                'option_1': '6.10',
+                                'option_2': True,
+                                'option_3': '2',
+                                },
+                            },
+                        {
+                            'coverage': {'code': 'BET'},
+                            'extra_data': {},
+                            },
+                        ],
+                    },
+                ],
+            }
+
+        def check_result(data, result):
+            party_1 = self.Party([
+                    x for x in result['parties'] if x['ref'] == '1'][0]['id'])
+            party_data_1 = [x for x in data['parties'] if x['ref'] == '1'][0]
+            self.assertEqual(party_1.is_person, party_data_1['is_person'])
+            self.assertEqual(party_1.name, party_data_1['name'])
+            self.assertEqual(party_1.first_name, party_data_1['first_name'])
+            self.assertEqual(party_1.birth_date, party_data_1['birth_date'])
+            self.assertEqual(party_1.gender, party_data_1['gender'])
+            self.assertIsNotNone(party_1.id)
+            self.assertIsNotNone(party_1.code)
+            self.assertEqual(len(party_1.addresses), 1)
+            self.assertEqual(party_1.addresses[0].full_address,
+                'Somewhere along the street\n75002 Paris\nFRANCE')
+
+            party_2 = self.Party([
+                    x for x in result['parties'] if x['ref'] == '2'][0]['id'])
+            party_data_2 = [x for x in data['parties'] if x['ref'] == '2'][0]
+            self.assertEqual(party_2.is_person, party_data_2['is_person'])
+            self.assertEqual(party_2.name, party_data_2['name'])
+            self.assertEqual(party_2.first_name, party_data_2['first_name'])
+            self.assertEqual(party_2.birth_date, party_data_2['birth_date'])
+            self.assertEqual(party_2.gender, party_data_2['gender'])
+            self.assertIsNotNone(party_2.id)
+            self.assertIsNotNone(party_2.code)
+
+            party_3 = self.Party([
+                    x for x in result['parties'] if x['ref'] == '3'][0]['id'])
+
+            relation, = party_2.relations
+            self.assertEqual(relation.type.code, 'child')
+            self.assertEqual(relation.to.id, party_1.id)
+            self.assertEqual(relation.from_.id, party_2.id)
+
+            relation = party_1.relations[1]
+            self.assertEqual(relation.type.code, 'child')
+            self.assertEqual(relation.to.id, party_3.id)
+            self.assertEqual(relation.from_.id, party_1.id)
+
+            contract, = self.Contract.browse(
+                [x['id'] for x in result['contracts']])
+
+            self.assertEqual(contract.product.code, 'AAA')
+            self.assertEqual(contract.subscriber.id, party_1.id)
+            self.assertEqual(len(contract.extra_datas), 1)
+            self.assertEqual(contract.extra_datas[0].extra_data_values,
+                {
+                    'contract_1': Decimal('16.10'),
+                    'contract_2': False,
+                    'contract_3': '2',
+                    })
+
+            self.assertEqual(len(contract.options), 2)
+            self.assertEqual(contract.options[0].coverage.code, 'ALP')
+            self.assertEqual(len(contract.options[0].versions), 1)
+            self.assertEqual(contract.options[0].versions[0].extra_data,
+                {
+                    'option_1': Decimal('6.10'),
+                    'option_2': True,
+                    'option_3': '2',
+                    },
+                )
+            self.assertEqual(contract.options[1].coverage.code, 'BET')
+            self.assertEqual(len(contract.options[1].versions), 1)
+            self.assertEqual(contract.options[1].versions[0].extra_data, {})
+
+        data_dict = copy.deepcopy(data_ref)
+        result = self.ContractAPI.subscribe_contracts(data_dict,
+            {'_debug_server': True})
+        check_result(data_dict, result)
+
+        # Check Bad Reference to subscriber
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['subscriber']['ref'] = '10'
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data, [{
+                    'type': 'bad_reference',
+                    'data': {
+                        'model': 'party.party',
+                        'ref': '10',
+                        },
+                    }])
+
+        # Check inexisting product
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['product']['code'] = 'foo'
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data, [{
+                    'type': 'configuration_not_found',
+                    'data': {
+                        'code': 'foo',
+                        'model': 'offered.product',
+                        },
+                    }])
+
+        # Check missing extra_data
+        data_dict = copy.deepcopy(data_ref)
+        del data_dict['contracts'][0]['extra_data']['contract_1']
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data, [{
+                    'type': 'invalid_extra_data_for_product',
+                    'data': {
+                        'product': 'AAA',
+                        'extra_data': ['contract_2', 'contract_3'],
+                        'expected_keys': ['contract_1', 'contract_2',
+                            'contract_3'],
+                        },
+                    }])
+
+        # Check extra extra_data
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['extra_data']['option_1'] = '1.21'
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data, [{
+                    'type': 'invalid_extra_data_for_product',
+                    'data': {
+                        'product': 'AAA',
+                        'extra_data': ['contract_1', 'contract_2', 'contract_3',
+                            'option_1'],
+                        'expected_keys': ['contract_1', 'contract_2',
+                            'contract_3'],
+                        },
+                    }])
+
+        # Check missing mandatory coverage
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['coverages'].pop()
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data, [{
+                    'type': 'missing_mandatory_coverage',
+                    'data': {
+                        'product': 'AAA',
+                        'coverages': ['ALP'],
+                        'mandatory_coverages': ['ALP', 'BET'],
+                        },
+                    }])
+
+        # Check missing coverage extra_data
+        data_dict = copy.deepcopy(data_ref)
+        del data_dict['contracts'][0]['coverages'][0]['extra_data']['option_1']
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data, [{
+                    'type': 'invalid_extra_data_for_coverage',
+                    'data': {
+                        'coverage': 'ALP',
+                        'extra_data': ['option_2', 'option_3'],
+                        'expected_keys': ['option_1', 'option_2',
+                            'option_3'],
+                        },
+                    }])
+
+        # Check extra coverage extra_data
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['coverages'][0]['extra_data']['contract_1'] \
+            = '13.21'
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data, [{
+                    'type': 'invalid_extra_data_for_coverage',
+                    'data': {
+                        'coverage': 'ALP',
+                        'extra_data': ['contract_1', 'option_1', 'option_2',
+                            'option_3'],
+                        'expected_keys': ['option_1', 'option_2',
+                            'option_3'],
+                        },
+                    }])
 
 
 def suite():

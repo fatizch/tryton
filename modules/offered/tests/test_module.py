@@ -8,7 +8,7 @@ from decimal import Decimal
 import trytond.tests.test_tryton
 
 from trytond.modules.coog_core import test_framework
-from trytond.modules.api import APIInputError
+from trytond.modules.api import APIInputError, api_input_error_manager
 
 
 class ModuleTestCase(test_framework.CoogTestCase):
@@ -41,16 +41,62 @@ class ModuleTestCase(test_framework.CoogTestCase):
         ng.prefix = 'Ctr'
         ng.suffix = 'Y${year}'
         ng.save()
-        self.assertTrue(ng.id)
+
+    def test0005_testExtraDataCreation(self):
+        contract_extra_1 = self.ExtraData()
+        contract_extra_1.name = 'contract_1'
+        contract_extra_1.string = 'Contract 1'
+        contract_extra_1.kind = 'contract'
+        contract_extra_1.type_ = 'numeric'
+        contract_extra_1.digits = 2
+        contract_extra_1.save()
+
+        contract_extra_2 = self.ExtraData()
+        contract_extra_2.name = 'contract_2'
+        contract_extra_2.string = 'Contract 2'
+        contract_extra_2.kind = 'contract'
+        contract_extra_2.type_ = 'boolean'
+        contract_extra_2.save()
+
+        contract_extra_3 = self.ExtraData()
+        contract_extra_3.name = 'contract_3'
+        contract_extra_3.string = 'Contract 3'
+        contract_extra_3.kind = 'contract'
+        contract_extra_3.type_ = 'selection'
+        contract_extra_3.selection = '1:1\n2:2\n3:3'
+        contract_extra_3.save()
+
+        option_extra_1 = self.ExtraData()
+        option_extra_1.name = 'option_1'
+        option_extra_1.string = 'Option 1'
+        option_extra_1.kind = 'option'
+        option_extra_1.type_ = 'numeric'
+        option_extra_1.digits = 2
+        option_extra_1.save()
+
+        option_extra_2 = self.ExtraData()
+        option_extra_2.name = 'option_2'
+        option_extra_2.string = 'Option 2'
+        option_extra_2.kind = 'option'
+        option_extra_2.type_ = 'boolean'
+        option_extra_2.save()
+
+        option_extra_3 = self.ExtraData()
+        option_extra_3.name = 'option_3'
+        option_extra_3.string = 'Option 3'
+        option_extra_3.kind = 'option'
+        option_extra_3.type_ = 'selection'
+        option_extra_3.selection = '1:1\n2:2\n3:3'
+        option_extra_3.save()
 
     @test_framework.prepare_test(
+        'offered.test0005_testExtraDataCreation',
         'offered.test0001_testNumberGeneratorCreation',
         'company_cog.test0001_testCompanyCreation',
         )
     def test0010_testProductCreation(self):
         company, = self.Company.search([('party.name', '=', 'World Company')])
-        ng = self.Sequence.search([
-                ('code', '=', 'contract')])[0]
+        ng, = self.Sequence.search([('code', '=', 'contract')])
         product_a = self.Product()
         product_a.code = 'AAA'
         product_a.name = 'Awesome Alternative Allowance'
@@ -59,6 +105,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         product_a.company = company
         product_a.currency = company.currency
         product_a.start_date = datetime.date(2010, 1, 1)
+        product_a.extra_data_def = self.ExtraData.search(
+            [('kind', '=', 'contract')])
         product_a.save()
 
         self.assertTrue(product_a.id)
@@ -75,6 +123,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         coverage_a.company = company
         coverage_a.currency = company.currency
         coverage_a.start_date = datetime.date(2010, 1, 1)
+        coverage_a.extra_data_def = self.ExtraData.search(
+            [('kind', '=', 'option')])
         coverage_a.save()
 
         coverage_b = self.OptionDescription()
@@ -341,7 +391,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'code': 'test_numeric', 'conditions': [
                         {'code': 'test_selection', 'operator': '=',
                             'value': '2'}],
-                    'digits': (16, 4),
+                    'digits': 4,
                     'name': 'Test Numeric',
                     'sequence': 2,
                     'type': 'numeric'},
@@ -358,12 +408,172 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 {'code': 'test_numeric_2',
                     'conditions': [{'code': 'test_selection_2',
                             'operator': '=', 'value': '3'}],
-                    'digits': (16, 4),
+                    'digits': 4,
                     'name': 'Test Numeric 2',
                     'sequence': 5,
                     'type': 'numeric'},
                 ],
             )
+
+    @test_framework.prepare_test(
+        'offered.test0005_testExtraDataCreation',
+        )
+    def test0061_extraDataParsing(self):
+        contract_extra_1, = self.ExtraData().search(
+            [('name', '=', 'contract_1')])
+        contract_extra_1.type_ = 'numeric'
+        contract_extra_1.digits = 2
+
+        contract_extra_2, = self.ExtraData().search(
+            [('name', '=', 'contract_2')])
+        contract_extra_2.type_ = 'boolean'
+
+        contract_extra_3, = self.ExtraData().search(
+            [('name', '=', 'contract_3')])
+        contract_extra_3.type_ = 'selection'
+
+        contract_extra_4 = self.ExtraData()
+        contract_extra_4.name = 'contract_4'
+        contract_extra_4.string = 'Contract 4'
+        contract_extra_4.kind = 'contract'
+        contract_extra_4.type_ = 'integer'
+        contract_extra_4.save()
+
+        contract_extra_5 = self.ExtraData()
+        contract_extra_5.name = 'contract_5'
+        contract_extra_5.string = 'Contract 5'
+        contract_extra_5.kind = 'contract'
+        contract_extra_5.type_ = 'date'
+        contract_extra_5.save()
+
+        def test_error(extra_data, errors):
+            try:
+                with api_input_error_manager():
+                    self.APICore._extra_data_convert(extra_data)
+                raise Exception('Not Raised')
+            except APIInputError as e:
+                self.assertEqual(e.data, errors)
+
+        test_error({'inexisting': '1'}, [{
+                    'type': 'unknown_extra_data',
+                    'data': {'code': 'inexisting'},
+                    }])
+
+        test_error({'contract_4': 'foo'}, [{
+                    'type': 'extra_data_type',
+                    'data': {
+                        'extra_data': 'contract_4',
+                        'expected_type': 'integer',
+                        'given_type': str(str),
+                        },
+                    }])
+
+        test_error({'contract_1': 123.0}, [{
+                    'type': 'extra_data_type',
+                    'data': {
+                        'extra_data': 'contract_1',
+                        'expected_type': 'string',
+                        'given_type': str(float),
+                        },
+                    }])
+
+        test_error({'contract_1': False}, [{
+                    'type': 'extra_data_type',
+                    'data': {
+                        'extra_data': 'contract_1',
+                        'expected_type': 'string',
+                        'given_type': str(bool),
+                        },
+                    }])
+
+        test_error({'contract_1': '123.456'}, [{
+                    'type': 'extra_data_conversion',
+                    'data': {
+                        'extra_data': 'contract_1',
+                        'expected_format': '1111.11',
+                        'given_value': '123.456',
+                        },
+                    }])
+
+        test_error({'contract_1': '123-123az'}, [{
+                    'type': 'extra_data_conversion',
+                    'data': {
+                        'extra_data': 'contract_1',
+                        'expected_format': '1111.11',
+                        'given_value': '123-123az',
+                        },
+                    }])
+
+        self.assertEqual(self.APICore._extra_data_convert(
+                {'contract_1': '123.45'}),
+            {'contract_1': Decimal('123.45')})
+
+        test_error({'contract_2': None}, [{
+                    'type': 'extra_data_type',
+                    'data': {
+                        'extra_data': 'contract_2',
+                        'expected_type': 'boolean',
+                        'given_type': str(type(None)),
+                        },
+                    }])
+
+        test_error({'contract_2': 0}, [{
+                    'type': 'extra_data_type',
+                    'data': {
+                        'extra_data': 'contract_2',
+                        'expected_type': 'boolean',
+                        'given_type': str(int),
+                        },
+                    }])
+
+        test_error({'contract_2': 'True'}, [{
+                    'type': 'extra_data_type',
+                    'data': {
+                        'extra_data': 'contract_2',
+                        'expected_type': 'boolean',
+                        'given_type': str(str),
+                        },
+                    }])
+
+        test_error({'contract_3': 12}, [{
+                    'type': 'extra_data_type',
+                    'data': {
+                        'extra_data': 'contract_3',
+                        'expected_type': 'string',
+                        'given_type': str(int),
+                        },
+                    }])
+
+        test_error({'contract_3': '12'}, [{
+                    'type': 'extra_data_conversion',
+                    'data': {
+                        'extra_data': 'contract_3',
+                        'expected_format': ['1', '2', '3'],
+                        'given_value': '12',
+                        },
+                    }])
+
+        test_error({'contract_5': None}, [{
+                    'type': 'extra_data_type',
+                    'data': {
+                        'extra_data': 'contract_5',
+                        'expected_type': 'string',
+                        'given_type': str(type(None)),
+                        },
+                    }])
+
+        test_error({'contract_5': '123-45-40-1'}, [{
+                    'type': 'extra_data_conversion',
+                    'data': {
+                        'extra_data': 'contract_5',
+                        'expected_format': 'YYYY-MM-DD',
+                        'given_value': '123-45-40-1',
+                        },
+                    }])
+
+        self.assertEqual(self.APICore._extra_data_convert(
+                {'contract_5': '2000-05-01'}),
+            {'contract_5': datetime.date(2000, 5, 1)})
 
     @test_framework.prepare_test(
         'offered.test0030_testProductCoverageRelation',
@@ -381,14 +591,15 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 {'id': product_a.id}).id,
             product_a.id)
         try:
-            self.APIModel.instantiate_code_object('offered.product',
-                {'code': 'does not exists'})
+            with api_input_error_manager():
+                self.APIModel.instantiate_code_object('offered.product',
+                    {'code': 'does not exists'})
         except APIInputError as e:
             self.assertEqual(e, APIInputError([{
-                    'type': 'invalid_code',
+                    'type': 'configuration_not_found',
                     'data': {
                         'model': 'offered.product',
-                        'key': {'code': 'does not exists'},
+                        'code': 'does not exists',
                         },
                     }]),
                 )
@@ -397,33 +608,91 @@ class ModuleTestCase(test_framework.CoogTestCase):
         'offered.test0030_testProductCoverageRelation',
         )
     def test0070_productDescription(self):
-        product_a, = self.Product.search([
-                ('code', '=', 'AAA'),
-                ], limit=1)
+        product_a, = self.Product.search([('code', '=', 'AAA')])
         self.maxDiff = None
         self.assertEqual(
-            self.APIProduct.describe_products({}, {}),
+            self.APIProduct.describe_products({}, {'_debug_server': True}),
             [
                 {
                     'id': product_a.id,
                     'code': 'AAA',
                     'name': 'Awesome Alternative Allowance',
                     'description': '',
-                    'coverages': [{
-                            'code': 'ALP',
-                            'description': '',
-                            'extra_data': [],
-                            'id': product_a.coverages[0].id,
-                            'name': 'Alpha Coverage',
+                    'extra_data': [
+                        {
+                            'code': 'contract_1',
+                            'name': 'Contract 1',
+                            'type': 'numeric',
+                            'sequence': 1,
+                            'digits': 2,
                             },
                         {
+                            'code': 'contract_2',
+                            'name':
+                            'Contract 2',
+                            'type': 'boolean',
+                            'sequence': 2,
+                            },
+                        {
+                            'code': 'contract_3',
+                            'name': 'Contract 3',
+                            'type': 'selection',
+                            'sequence': 3,
+                            'selection': [
+                                {'value': '1', 'name': '1',
+                                    'sequence': 0},
+                                {'value': '2', 'name': '2',
+                                    'sequence': 1},
+                                {'value': '3', 'name': '3',
+                                    'sequence': 2},
+                                ],
+                            },
+                        ],
+                    'coverages': [
+                        {
+                            'id': product_a.coverages[0].id,
+                            'name': 'Alpha Coverage',
+                            'code': 'ALP',
+                            'description': '',
+                            'extra_data': [
+                                {
+                                    'code': 'option_1',
+                                    'name': 'Option 1',
+                                    'type': 'numeric',
+                                    'sequence': 4,
+                                    'digits': 2,
+                                    },
+                                {
+                                    'code': 'option_2',
+                                    'name':
+                                    'Option 2',
+                                    'type': 'boolean',
+                                    'sequence': 5,
+                                    },
+                                {
+                                    'code': 'option_3',
+                                    'name': 'Option 3',
+                                    'type': 'selection',
+                                    'sequence': 6,
+                                    'selection': [
+                                        {'value': '1', 'name': '1',
+                                            'sequence': 0},
+                                        {'value': '2', 'name': '2',
+                                            'sequence': 1},
+                                        {'value': '3', 'name': '3',
+                                            'sequence': 2},
+                                        ],
+                                    },
+                                ],
+                            },
+                        {
+                            'id': product_a.coverages[1].id,
+                            'name': 'Beta Coverage',
                             'code': 'BET',
                             'description': '',
                             'extra_data': [],
-                            'id': product_a.coverages[1].id,
-                            'name': 'Beta Coverage'},
+                            },
                         ],
-                    'extra_data': [],
                     'packages': [],
                     'subscriber': {
                         'model': 'party',

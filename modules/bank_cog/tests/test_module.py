@@ -2,6 +2,8 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import unittest
+import copy
+
 from stdnum import iban
 
 import trytond.tests.test_tryton
@@ -15,6 +17,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
     Test Coog module.
     '''
     module = 'bank_cog'
+
+    @classmethod
+    def fetch_models_for(cls):
+        return ['party_cog']
 
     @classmethod
     def get_models(cls):
@@ -113,6 +119,53 @@ class ModuleTestCase(test_framework.CoogTestCase):
         except UserError:
             pass
         self.assertTrue(bank_account.numbers[1].id is None)
+
+    @test_framework.prepare_test(
+        'party_cog.test0002_testCountryCreation', 'bank_cog.test0010bank',
+        )
+    def test0050_party_creation_API(self):
+        # Run examples
+        for example in self.APIParty._create_party_examples():
+            self.APIParty.create_party(example['input'], {})
+
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': False,
+                    'name': 'My API Company',
+                    'bank_accounts': [
+                        {
+                            'number': 'FR7615970003860000690570007',
+                            'bank': {'bic': 'ABCDEFGHXXX'},
+                            },
+                        ],
+                    },
+                ]}
+
+        party_data = copy.deepcopy(data_ref)
+        self.APIParty.create_party(party_data, {'_debug_server': True})
+
+        company, = self.Party.search([('name', '=', 'My API Company')])
+        self.assertEqual(len(company.bank_accounts), 1)
+        self.assertEqual(company.bank_accounts[0].number,
+            'FR76 1597 0003 8600 0069 0570 007')
+        self.assertEqual(company.bank_accounts[0].bank.bic, 'ABCDEFGHXXX')
+
+        party_data = copy.deepcopy(data_ref)
+        party_data['parties'][0]['bank_accounts'][0]['number'] = '123456'
+        self.assertEqual(
+            self.APIParty.create_party(party_data, {}).data,
+            [{'type': 'invalid_iban', 'data': {'number': '123456'}}])
+
+        party_data = copy.deepcopy(data_ref)
+        party_data['parties'][0]['bank_accounts'][0]['bank'] = {
+            'bic': 'BAD_BIC'}
+        self.assertEqual(
+            self.APIParty.create_party(party_data, {}).data, [{
+                    'type': 'unknown_bic',
+                    'data': {'bic': 'BAD_BIC'},
+                    }])
 
 
 def suite():

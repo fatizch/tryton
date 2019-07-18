@@ -5,7 +5,6 @@ from decimal import Decimal
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core.api import FIELD_SCHEMA, OBJECT_ID_SCHEMA
-from trytond.modules.api.api.core import APIInputError
 from trytond.modules.api.api.core import amount_for_api, date_for_api
 from trytond.modules.api.api.core import amount_from_api, date_from_api
 from trytond.modules.api.api.core import DATE_SCHEMA, AMOUNT_SCHEMA, RATE_SCHEMA
@@ -165,7 +164,7 @@ class APIContract(metaclass=PoolMeta):
             'type': 'object',
             'additionalProperties': False,
             'properties': {
-                'id': {'type': 'integer'},
+                'id': OBJECT_ID_SCHEMA,
                 'amount': AMOUNT_SCHEMA,
                 'funds_release_date': DATE_SCHEMA,
                 'payment_frequency': {
@@ -305,7 +304,7 @@ class APIContract(metaclass=PoolMeta):
 
     @classmethod
     def _compute_loan_convert_input(cls, parameters):
-        Currency = Pool().get('currency.currency')
+        API = Pool().get('api')
         for parameter in parameters:
             parameter['amount'] = amount_from_api(parameter['amount'])
             parameter['funds_release_date'] = date_from_api(
@@ -315,17 +314,8 @@ class APIContract(metaclass=PoolMeta):
                     parameter['first_payment_date'])
             if 'rate' in parameter:
                 parameter['rate'] = amount_from_api(parameter['rate'])
-            try:
-                parameter['currency'] = Currency.get_instance_from_code(
-                    parameter['currency'])
-            except KeyError:
-                raise APIInputError([{
-                            'type': 'configuration_not_found',
-                            'data': {
-                                'model': 'currency.currency',
-                                'code': parameter['currency'],
-                                },
-                            }])
+            parameter['currency'] = API.instance_from_code(
+                'currency.currency', parameter['currency'])
 
             for increment in parameter.get('increments', []):
                 if increment.get('payment_amount', None):

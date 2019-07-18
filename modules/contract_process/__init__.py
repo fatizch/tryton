@@ -8,6 +8,7 @@ from . import event
 from . import document
 from . import wizard
 from . import offered
+from . import api
 
 
 def register():
@@ -30,3 +31,7 @@ def register():
         document.ReceiveDocument,
         process.ProcessResume,
         module='contract_process', type_='wizard')
+
+    Pool.register(
+        api.APIContract,
+        module='contract_process', type_='model', depends=['api'])

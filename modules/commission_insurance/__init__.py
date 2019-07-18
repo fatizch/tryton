@@ -15,6 +15,7 @@ from . import process
 from . import distribution
 from . import res
 from . import wizard
+from . import api
 
 
 def register():
@@ -54,10 +55,12 @@ def register():
         res.User,
         commission.CommissionDescriptionConfiguration,
         module='commission_insurance', type_='model')
+
     Pool.register(
         wizard.SimulateCommissionsParametersTermRenewal,
         module='commission_insurance', type_='model',
         depends=['contract_term_renewal'])
+
     Pool.register(
         commission.CreateInvoice,
         commission.CreateAgents,
@@ -67,7 +70,13 @@ def register():
         commission.FilterAggregatedCommissions,
         wizard.SimulateCommissions,
         module='commission_insurance', type_='wizard')
+
     Pool.register(
         process.ContractSubscribe,
         module='commission_insurance', type_='wizard',
         depends=['contract_process'])
+
+    Pool.register(
+        api.APIProduct,
+        api.APIContract,
+        module='commission_insurance', type_='model', depends=['api'])

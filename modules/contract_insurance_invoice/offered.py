@@ -58,13 +58,11 @@ CONVERSION_TABLE = {
     }
 
 
-class BillingMode(model.CoogSQL, model.CoogView):
+class BillingMode(model.CodedMixin, model.CoogView):
     'Billing Mode'
     __name__ = 'offered.billing_mode'
     _func_key = 'code'
 
-    name = fields.Char('Name', required=True, translate=True)
-    code = fields.Char('Code', required=True)
     frequency = fields.Selection(FREQUENCIES, 'Invoice Frequency',
         required=True, sort=False)
     frequency_string = frequency.translated('frequency')
@@ -100,14 +98,6 @@ class BillingMode(model.CoogSQL, model.CoogView):
         'getter_products')
     fees = fields.Many2Many('offered.billing_mode-account.fee', 'billing_mode',
         'fee', 'Fees')
-
-    @classmethod
-    def __setup__(cls):
-        super(BillingMode, cls).__setup__()
-        t = cls.__table__()
-        cls._sql_constraints += [
-            ('code_unique', Unique(t, t.code), 'The code must be unique'),
-            ]
 
     @classmethod
     def __register__(cls, module_name):

@@ -51,6 +51,7 @@ def register():
 
     Pool.register(
         questionnaire.QuestionnaireDistribution,
+        contract.ContractQuestionnaireResultDistribution,
         module='questionnaire', type_='model',
         depends=['contract_distribution'])
 
@@ -71,6 +72,14 @@ def register():
         module='questionnaire', type_='model', depends=['api'])
 
     Pool.register(
+        api.APIContract,
+        module='questionnaire', type_='model', depends=['contract'])
+
+    Pool.register(
         api.APICoreDistribution,
+        module='questionnaire', type_='model', depends=['api', 'distribution'])
+
+    Pool.register(
+        api.APIContractDistribution,
         module='questionnaire', type_='model', depends=['api',
             'contract_distribution'])

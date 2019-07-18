@@ -7,6 +7,7 @@ from . import bank
 from . import load_data
 from . import test_case
 from . import wizard
+from . import api
 
 
 def register():
@@ -26,3 +27,8 @@ def register():
         load_data.BankDataSetWizard,
         wizard.PartyErase,
         module='bank_cog', type_='wizard')
+
+    Pool.register(
+        api.APICore,
+        api.APIParty,
+        module='bank_cog', type_='model', depends=['api'])

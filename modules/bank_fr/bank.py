@@ -96,22 +96,23 @@ class BankAccount(metaclass=PoolMeta):
     def on_change_number(self):
         if not self.number:
             return
-        self.bank = self.get_bank_from_number()
+        self.bank = self.get_bank_from_number(self.number)
 
-    def get_bank_identifiers_fr(self, number):
+    @classmethod
+    def get_bank_identifiers_fr(cls, number):
         if (not number or not number.upper().startswith('FR') or
                 len(number) < 15):
             return
         return (number[4:9], number[9:14])
 
-    def get_bank_from_number(self):
+    @classmethod
+    def get_bank_from_number(cls, number):
         pool = Pool()
         Agency = pool.get('bank.agency')
-        number = self.number
         if not number:
             return
         number = number.replace(' ', '')
-        bank_identifiers_fr = self.get_bank_identifiers_fr(number)
+        bank_identifiers_fr = cls.get_bank_identifiers_fr(number)
         if not bank_identifiers_fr:
             return
         bank_code, branch_code = bank_identifiers_fr
@@ -120,7 +121,7 @@ class BankAccount(metaclass=PoolMeta):
         return agencies[0].bank if agencies else None
 
     def check_iban_matches_bank(self):
-        bank_from_iban = self.get_bank_from_number()
+        bank_from_iban = self.get_bank_from_number(self.number)
         if bank_from_iban and self.bank != bank_from_iban:
             self.raise_user_warning('iban_bank_mismatch', 'iban_bank_mismatch')
 

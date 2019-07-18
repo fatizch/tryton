@@ -5,6 +5,8 @@ import unittest
 from datetime import date
 
 import trytond.tests.test_tryton
+from trytond.pool import Pool
+
 from trytond.modules.coog_core import test_framework
 
 
@@ -12,6 +14,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
     'Module Test Case'
 
     module = 'party_ssn'
+
+    @classmethod
+    def fetch_models_for(cls):
+        return ['party_cog']
 
     @classmethod
     def get_models(cls):
@@ -62,6 +68,45 @@ class ModuleTestCase(test_framework.CoogTestCase):
             if value[0:1] == '2':
                 gender = 'female'
             self.createPerson(birth_date, value, test, gender, i)
+
+    @test_framework.prepare_test('party_cog.test0002_testCountryCreation')
+    def test0060_party_API(self):
+        pool = Pool()
+        APIParty = pool.get('api.party')
+        Party = pool.get('party.party')
+
+        result = APIParty.create_party({
+                'parties': [
+                    {
+                        'ref': '1',
+                        'is_person': True,
+                        'name': 'Doe',
+                        'first_name': 'Father',
+                        'birth_date': '1980-01-20',
+                        'gender': 'male',
+                        'ssn': '145067512312354',
+                        },
+                    ]}, {'_debug_server': True})
+        party = Party(result['parties'][0]['id'])
+        self.assertEqual(party.ssn, '145067512312354')
+
+        self.assertEqual(
+            APIParty.create_party({
+                'parties': [
+                    {
+                        'ref': '1',
+                        'is_person': True,
+                        'name': 'Doe',
+                        'first_name': 'Father',
+                        'birth_date': '1980-01-20',
+                        'gender': 'male',
+                        'ssn': '145067512312353',
+                        },
+                        ]}, {}).data,
+            [{
+                    'type': 'invalid_ssn',
+                    'data': {'ssn': '145067512312353'},
+                    }])
 
 
 def suite():

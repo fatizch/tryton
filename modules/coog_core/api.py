@@ -2,8 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import PoolMeta, Pool
 from trytond.model import Unique, fields as tryton_fields
+from trytond.config import config
 
-from trytond.modules.api import APIInputError
 from trytond.modules.coog_core import model, fields, coog_string
 
 OBJECT_ID_SCHEMA = {
@@ -20,19 +20,36 @@ OBJECT_ID_NULL_SCHEMA = {
 
 CODE_SCHEMA = {'type': 'string', 'minLength': 1}
 
+REF_ID_SCHEMA = {
+    'oneOf': [
+        {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {'id': OBJECT_ID_SCHEMA},
+            'required': ['id'],
+            },
+        {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {'ref': {'type': 'string'}},
+            'required': ['ref'],
+            },
+        ],
+    }
+
 CODED_OBJECT_SCHEMA = {
     'anyOf': [
         {
             'type': 'object',
-            'properties': {'id': OBJECT_ID_SCHEMA},
             'additionalProperties': False,
+            'properties': {'id': OBJECT_ID_SCHEMA},
+            'required': ['id'],
             },
         {
             'type': 'object',
-            'properties': {
-                'code': CODE_SCHEMA,
-                },
             'additionalProperties': False,
+            'properties': {'code': CODE_SCHEMA},
+            'required': ['code'],
             },
         ],
     }
@@ -129,10 +146,22 @@ IDENTIFIER_KINDS = [
     ]
 
 __all__ = [
+    'APIAccess',
     'APIIdentity',
     'APIResource',
+    'API',
     'APICore',
     ]
+
+
+class APIAccess(metaclass=PoolMeta):
+    __name__ = 'ir.api.access'
+
+    @classmethod
+    def check_access(cls, api_name):
+        if config.getboolean('env', 'testing') is True:
+            return True
+        return super().check_access(api_name)
 
 
 class APIIdentity(model.CoogSQL, model.CoogView):
@@ -162,7 +191,13 @@ class APIIdentity(model.CoogSQL, model.CoogView):
         return 'generic'
 
     def get_api_context(self):
-        return {'user': self.user.id if self.user else None}
+        if self.user:
+            return {'user': {
+                    'id': self.user.id,
+                    'login': self.user.login,
+                    },
+                }
+        return {}
 
 
 class APIResource(model.CoogSQL, model.CoogView):
@@ -208,6 +243,46 @@ class APIResourceMixin(model.CoogSQL):
         help='A list of resources which will only be used through the APIs')
 
 
+class API(metaclass=PoolMeta):
+    __name__ = 'api'
+
+    @classmethod
+    def instance_from_code(cls, model, code):
+        Target = Pool().get(model)
+        if hasattr(Target, 'get_instance_from_code'):
+            try:
+                return Target.get_instance_from_code(code)
+            except KeyError:
+                cls.add_input_error({
+                        'type': 'configuration_not_found',
+                        'data': {
+                            'model': model,
+                            'code': code,
+                            },
+                        })
+        elif 'code' in Target._fields:
+            # For the odd case where we cannot use the CodedMixin
+            matches = Target.search([('code', '=', code)])
+            if len(matches) == 1:
+                return matches[0]
+            elif len(matches) == 0:
+                cls.add_input_error({
+                        'type': 'configuration_not_found',
+                        'data': {
+                            'model': model,
+                            'code': code,
+                            },
+                        })
+            else:
+                cls.add_input_error({
+                        'type': 'duplicate_configuration_found',
+                        'data': {
+                            'model': model,
+                            'code': code,
+                            },
+                        })
+
+
 class APICore(metaclass=PoolMeta):
     __name__ = 'api.core'
 
@@ -230,15 +305,15 @@ class APICore(metaclass=PoolMeta):
 
     @classmethod
     def identity_context(cls, parameters):
-        Identity = Pool().get('ir.api.identity')
+        pool = Pool()
+        Identity = pool.get('ir.api.identity')
+
         domain = cls._identity_domain(parameters)
         identities = Identity.search(domain)
         if identities:
             assert len(identities) == 1  # Should be ok because unicity
             return identities[0].get_api_context()
-        raise APIInputError({
-                'type': 'unknown_identifier',
-                })
+        pool.get('api').add_input_error({'type': 'unknown_identifier'})
 
     @classmethod
     def _identity_domain(cls, parameters):
@@ -267,11 +342,18 @@ class APICore(metaclass=PoolMeta):
     def _identity_context_output_schema(cls):
         return {
             'type': 'object',
-            'properties': {
-                'user': {'type': ['null', 'integer']},
-                },
             'additionalProperties': False,
-            'required': ['user'],
+            'properties': {
+                'user': {
+                    'type': 'object',
+                    'additionalProperties': False,
+                    'properties': {
+                        'id': OBJECT_ID_SCHEMA,
+                        'login': {'type': 'string'},
+                        },
+                    'required': ['id', 'login'],
+                    },
+                },
             }
 
     @classmethod
@@ -279,11 +361,11 @@ class APICore(metaclass=PoolMeta):
         return [
             {
                 'input': {'kind': 'google', 'identifier': '12345aze'},
-                'output': {'user': None},
+                'output': {},
                 },
             {
                 'input': {'kind': 'google', 'identifier': '12345aze'},
-                'output': {'user': 2},
+                'output': {'user': {'id': 2, 'login': 'my_user'}},
                 },
             ]
 

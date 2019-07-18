@@ -1,16 +1,21 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import json
+
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.api import DEFAULT_INPUT_SCHEMA, APIInputError
+from trytond.modules.api import DEFAULT_INPUT_SCHEMA
 from trytond.modules.coog_core.api import CODED_OBJECT_ARRAY_SCHEMA
-from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA
+from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, REF_ID_SCHEMA
+from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA
 from trytond.modules.offered.api import EXTRA_DATA_VALUES_SCHEMA
 
 
 __all__ = [
     'APICore',
     'APICoreDistribution',
+    'APIContract',
+    'APIContractDistribution',
     ]
 
 
@@ -99,7 +104,7 @@ class APICore(metaclass=PoolMeta):
             'items': {
                 'type': 'object',
                 'properties': {
-                    'id': {'type': 'integer'},
+                    'id': OBJECT_ID_SCHEMA,
                     'code': {'type': 'string'},
                     'title': {'type': 'string'},
                     'description': {'type': 'string'},
@@ -110,7 +115,7 @@ class APICore(metaclass=PoolMeta):
                         'items': {
                             'type': 'object',
                             'properties': {
-                                'id': {'type': 'integer'},
+                                'id': OBJECT_ID_SCHEMA,
                                 'title': {'type': 'string'},
                                 'mandatory': {'type': 'boolean'},
                                 'sequence': {'type': 'integer'},
@@ -203,32 +208,32 @@ class APICore(metaclass=PoolMeta):
 
     @classmethod
     def _compute_questionnaire_validate_input(cls, parameters):
+        API = Pool().get('api')
+
         parts_per_id = {x.id: x for x in parameters['questionnaire'].parts}
         for part_data in parameters['parts']:
             if part_data['part'].id not in parts_per_id:
-                raise APIInputError([{
-                            'type': 'unknown_questionnaire_part',
-                            'data': {
-                                'questionnaire':
-                                parameters['questionnaire'].code,
-                                'part_id': part_data['part'].id,
-                                'known_parts': sorted(parts_per_id.keys()),
-                                },
-                            }])
+                API.add_input_error({
+                        'type': 'unknown_questionnaire_part',
+                        'data': {
+                            'questionnaire': parameters['questionnaire'].code,
+                            'part_id': part_data['part'].id,
+                            'known_parts': sorted(parts_per_id.keys()),
+                            },
+                        })
 
             answers = part_data['answers']
             recomputed = part_data['part'].refresh_extra_data(answers.copy())
             if recomputed != answers:
-                raise APIInputError([{
-                            'type': 'invalid_answer_for_questionnaire_part',
-                            'data': {
-                                'questionnaire':
-                                parameters['questionnaire'].code,
-                                'part': part_data['part'].id,
-                                'answers': sorted(answers.keys()),
-                                'expected_keys': sorted(recomputed.keys()),
-                                },
-                            }])
+                API.add_input_error({
+                        'type': 'invalid_answer_for_questionnaire_part',
+                        'data': {
+                            'questionnaire': parameters['questionnaire'].code,
+                            'part': part_data['part'].id,
+                            'answers': sorted(answers.keys()),
+                            'expected_keys': sorted(recomputed.keys()),
+                            },
+                        })
 
     @classmethod
     def _compute_questionnaire_schema(cls):
@@ -244,7 +249,7 @@ class APICore(metaclass=PoolMeta):
                         'type': 'object',
                         'additionalProperties': False,
                         'properties': {
-                            'id': {'type': 'integer'},
+                            'id': OBJECT_ID_SCHEMA,
                             'answers': EXTRA_DATA_VALUES_SCHEMA,
                             },
                         'required': ['id', 'answers'],
@@ -268,7 +273,7 @@ class APICore(metaclass=PoolMeta):
                         'type': 'object',
                         'additionalProperties': False,
                         'properties': {
-                            'id': {'type': 'integer'},
+                            'id': OBJECT_ID_SCHEMA,
                             'results': {
                                 'type': 'array',
                                 'additionalItems': False,
@@ -397,4 +402,258 @@ class APICoreDistribution(metaclass=PoolMeta):
             for part in example['output']['parts']:
                 for result in part['results']:
                     result['commercial_product'] = 'my_com_product'
+        return examples
+
+
+class APIContract(metaclass=PoolMeta):
+    __name__ = 'api.contract'
+
+    @classmethod
+    def _subscribe_contracts_create_priorities(cls):
+        return ['questionnaires'] + \
+            super()._subscribe_contracts_create_priorities()
+
+    @classmethod
+    def _subscribe_contracts_create_questionnaires(cls, parameters, created,
+            options):
+        # Questionnaires are not (for now) shared accross contracts, so we must
+        # copy their data for each contract. To do that, we just pass the input
+        # as the created result
+        created['questionnaires'] = {
+            x['ref']: x for x in parameters.get('questionnaires', [])}
+
+    @classmethod
+    def _create_contract(cls, contract_data, created):
+        contract = super()._create_contract(contract_data, created)
+
+        if 'questionnaire' in contract_data:
+            contract.questionnaires = [cls._create_questionnaire(contract_data)]
+
+        return contract
+
+    @classmethod
+    def _create_questionnaire(cls, contract_data):
+        pool = Pool()
+        ContractQuestionnaire = pool.get('contract.questionnaire')
+        Answer = pool.get('contract.questionnaire.answer')
+        Result = pool.get('contract.questionnaire.result')
+
+        questionnaire = ContractQuestionnaire()
+        questionnaire.questionnaire = contract_data['questionnaire'][
+            'questionnaire']
+
+        answers, results = [], []
+
+        for part in contract_data['parts']:
+            answers.append(Answer(part=part['id'], answers=part['answers']))
+            results.append(Result(part=part['id'],
+                    results_as_text=json.dumps(part['results'])))
+
+        questionnaire.answers = answers
+        questionnaire.results = results
+
+        return questionnaire
+
+    @classmethod
+    def _update_contract_parameters(cls, contract_data, created):
+        API = Pool().get('api')
+
+        super()._update_contract_parameters(contract_data, created)
+
+        if 'ref' in contract_data.get('questionnaire', {}):
+            if (contract_data['questionnaire']['ref']
+                    not in created['questionnaires']):
+                API.add_input_error({
+                        'type': 'unknown_reference',
+                        'data': {
+                            'field': 'contract.questionnaire',
+                            'ref': contract_data['questionnaire']['ref'],
+                            },
+                        })
+            else:
+                contract_data['questionnaire'] = created['questionnaires'][
+                    contract_data['questionnaire']['ref']]
+
+    @classmethod
+    def _subscribe_contracts_convert_input(cls, parameters):
+        options = parameters.get('options', {})
+        for questionnaire in parameters.get('questionnaires', []):
+            cls._questionnaire_convert(questionnaire, options, parameters)
+
+        return super()._subscribe_contracts_convert_input(parameters)
+
+    @classmethod
+    def _questionnaire_convert(cls, data, options, parameters):
+        pool = Pool()
+        API = pool.get('api')
+        Core = pool.get('api.core')
+
+        data['questionnaire'] = API.instantiate_code_object(
+            'questionnaire', data['questionnaire'])
+
+        for answer in data['answers']:
+            answer['part'] = API.instantiate_code_object(
+                'questionnaire.part', {'id': answer['part']})
+            answers = answer.get('answers', {})
+            answers = Core._extra_data_convert(answers)
+            answer['answers'] = answers
+
+        for result in data['results']:
+            result['part'] = API.instantiate_code_object(
+                'questionnaire.part', {'id': result['part']})
+
+            for choice in result['results']:
+                # Just check it exists, we do not actually need it later
+                API.instantiate_code_object('offered.product',
+                    {'code': choice['product']})
+
+    @classmethod
+    def _subscribe_contracts_schema(cls, minimum=False):
+        schema = super()._subscribe_contracts_schema(minimum=minimum)
+        schema['properties']['questionnaires'] = {
+            'type': 'array',
+            'additionalItems': False,
+            'items': cls._questionnaire_schema(),
+            }
+        return schema
+
+    @classmethod
+    def _contract_schema(cls, minimum=False):
+        schema = super()._contract_schema(minimum=minimum)
+        schema['properties']['questionnaire'] = REF_ID_SCHEMA
+        return schema
+
+    @classmethod
+    def _questionnaire_schema(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'ref': {'type': 'string'},
+                'questionnaire': CODED_OBJECT_SCHEMA,
+                'parts': {
+                    'type': 'array',
+                    'additionalItems': False,
+                    'items': {
+                        'type': 'object',
+                        'additionalProperties': False,
+                        'properties': {
+                            'id': OBJECT_ID_SCHEMA,
+                            'answers': EXTRA_DATA_VALUES_SCHEMA,
+                            'results': {
+                                'type': 'array',
+                                'additionalItems': False,
+                                'items': {
+                                    'type': 'object',
+                                    'properties': {
+                                        'score': {'type': 'integer'},
+                                        'description': {'type': 'string'},
+                                        'product': {'type': 'string'},
+                                        'eligible': {'type': 'boolean'},
+                                        'selected': {'type': 'boolean'},
+                                        },
+                                    'additionalProperties': False,
+                                    'required': ['score', 'description',
+                                        'product', 'eligible'],
+                                    },
+                                },
+                            },
+                        'required': ['id', 'answers', 'results'],
+                        },
+                    },
+                },
+            'required': ['ref', 'questionnaire', 'parts'],
+            }
+
+    @classmethod
+    def _subscribe_contracts_examples(cls):
+        examples = super()._subscribe_contracts_examples()
+        examples[-1]['input']['questionnaires'] = [
+            {
+                'ref': '1',
+                'questionnaire': {'code': 'test_questionnaire'},
+                'parts': [
+                    {
+                        'id': 1,
+                        'answers': {
+                            'lot_of_money': 'yes',
+                            'wants_the_best': 'yes',
+                            },
+                        'results': [
+                            {
+                                'score': 100,
+                                'description': 'Wonderful Choice',
+                                'product': 'my_awesome_product',
+                                'eligible': True,
+                                'selected': False,
+                                },
+                            {
+                                'score': 50,
+                                'description': 'Good Choice',
+                                'product': 'my_product',
+                                'eligible': True,
+                                'selected': True,
+                                },
+                            {
+                                'score': 10,
+                                'description': 'Bad Choice',
+                                'product': 'inapropriate_product',
+                                'eligible': False,
+                                'selected': False,
+                                },
+                            ],
+                        },
+                    {
+                        'id': 2,
+                        'answers': {
+                            'love_nurses': 'yes',
+                            'requires_good_food': 'no',
+                            },
+                        'results': [
+                            {
+                                'score': 80,
+                                'description': 'Why not',
+                                'product': 'another_product',
+                                'eligible': True,
+                                'selected': False,
+                                },
+                            ],
+                        },
+                    ],
+                }]
+        examples[-1]['input']['contracts'][0]['questionnaire'] = {'ref': '1'}
+        return examples
+
+
+class APIContractDistribution(metaclass=PoolMeta):
+    __name__ = 'api.contract'
+
+    @classmethod
+    def _questionnaire_schema(cls):
+        schema = super()._questionnaire_schema()
+        schema['properties']['parts']['items']['properties']['results'][
+            'items']['properties']['commercial_product'] = {'type': 'string'}
+        schema['properties']['parts']['items']['properties']['results'][
+            'items']['required'].append('commercial_product')
+        return schema
+
+    @classmethod
+    def _questionnaire_convert(cls, data, options, parameters):
+        super()._questionnaire_convert(data, options, parameters)
+
+        pool = Pool()
+        API = pool.get('api')
+
+        for result in data['results']:
+            for choice in result['results']:
+                API.instantiate_code_object('distribution.commercial_product',
+                    {'code': choice['commercial_product']})
+
+    @classmethod
+    def _subscribe_contracts_examples(cls):
+        examples = super()._subscribe_contracts_examples()
+        for part in examples[-1]['input']['questionnaires'][0]['parts']:
+            for result in part['results']:
+                result['commercial_product'] = ('%s_com_product' %
+                    result['product'])
         return examples

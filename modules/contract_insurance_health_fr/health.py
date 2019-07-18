@@ -8,6 +8,8 @@ __all_ = [
     ]
 
 
+# I would love to inherit from CodedMixin, but some projects already have
+# duplicates in their database that we must keep handling :'(
 class HealthCareSystem(model.CoogSQL, model.CoogView):
     'Health Care System'
 

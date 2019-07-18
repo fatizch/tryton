@@ -41,7 +41,9 @@
 import logging
 import fastjsonschema
 import datetime
+
 from decimal import Decimal, InvalidOperation
+from contextlib import contextmanager
 
 from trytond.pool import Pool
 from trytond.model import Model
@@ -83,6 +85,17 @@ def api_context():
     return ServerContext().get('_api_context')
 
 
+@contextmanager
+def api_input_error_manager():
+    api_input_errors = []
+    with ServerContext().set_context(_api_input_errors=api_input_errors):
+        try:
+            yield
+        finally:
+            if api_input_errors:
+                raise APIInputError(api_input_errors)
+
+
 def apify(klass, api_name):
     '''
         Transforms a standard method into an API. This mainly means:
@@ -91,27 +104,52 @@ def apify(klass, api_name):
         - handling of errors
     '''
     function = getattr(klass, api_name)
+    model_name = klass.__name__
+
     # re-decorate everytime if needed
-    function = getattr(function, '__api_function', function)
+    if hasattr(function, '__origin_function'):
+        function = getattr(function, '__origin_function', function)
+    else:
+        # We want to use unbound functions so that the cls is properly set when
+        # calling them
+        function = function.__func__
 
     def decorated(parameters, context=None):
-        Api = Pool().get('api')
+        pool = Pool()
+        Api = pool.get('api')
+        Model = pool.get(model_name)
 
         # Required for super calls to decorated functions
-        transaction_context, server_context = {}, {}
+        transaction_context, api_context, supered = {}, {}, False
         if context is None:
             assert ServerContext().get('_api_context')
+            context = {}
+            supered = True
         else:
             transaction_context = Api.update_transaction_context(context)
-            server_context = context
+            api_context = {'_api_context': context}
         with Transaction().set_context(**transaction_context):
-            with ServerContext().set_context(_api_context=server_context):
+            with ServerContext().set_context(**api_context):
                 try:
-                    klass._check_access(api_name, parameters)
-                    parameters = klass._check_input(api_name, parameters)
-                    result = function(parameters)
+                    # We only check / validate for the inital call, not super
+                    # calls
+                    if not supered:
+                        # First error manager for pure validations
+                        with api_input_error_manager():
+                            Model._check_access(api_name, parameters)
+                            parameters = Model._check_input(
+                                api_name, parameters)
+
+                        # We only want a (partial) data validation
+                        if context.get('_validate', False):
+                            return True
+
+                    # Second error manager for the few cases where it either is
+                    # not worth to check in the first phase
+                    with api_input_error_manager():
+                        result = function(Model, parameters)
                     return Api.handle_result(
-                        klass, api_name, parameters, result)
+                        Model, api_name, parameters, result)
                 except Exception as e:
                     if (api_logger.isEnabledFor(logging.DEBUG)
                              or config.getboolean('env', 'testing') is True):
@@ -119,7 +157,7 @@ def apify(klass, api_name):
                             raise
                     return Api.handle_error(e)
 
-    decorated.__api_function = function
+    decorated.__origin_function = function
     return decorated
 
 
@@ -132,13 +170,13 @@ def amount_from_api(amount):
     try:
         return Decimal(amount)
     except InvalidOperation:
-        raise APIInputError([{
+        Pool().get('api').add_input_error({
                 'type': 'conversion',
                 'data': {
                     'input': amount,
                     'target_type': 'Decimal',
                     },
-                }])
+                })
 
 
 def date_for_api(date):
@@ -150,13 +188,13 @@ def date_from_api(date):
     try:
         return datetime.datetime.strptime(date, '%Y-%m-%d').date()
     except ValueError:
-        raise APIInputError([{
+        Pool().get('api').add_input_error({
                 'type': 'conversion',
                 'data': {
                     'input': date,
                     'target_type': 'date',
                     },
-                }])
+                })
 
 
 class APIError(Exception):
@@ -180,7 +218,8 @@ class APIServerError(APIError):
         return {
             'error_code': 500,
             'error_message': 'Internal Error',
-            'error_data': self.exception.args[0],
+            'error_data': (self.exception.args[0] if self.exception.args
+                else 'Unknown Error'),
             }
 
 
@@ -304,21 +343,24 @@ class APIModel(Model):
         data['examples'] = []
         for example in getattr(Model, '_%s_examples' % name, DEFAULT_EXAMPLE)():
 
-            try:
-                data['compiled_input_schema'](example['input'])
-            except fastjsonschema.exceptions.JsonSchemaException:
-                logging.getLogger('api').error(
-                    'Invalid input example for api %s.%s' %
-                    (cls.__name__, name))
-                raise
-            try:
-                data['compiled_output_schema'](example['output'])
-            except fastjsonschema.exceptions.JsonSchemaException:
-                logging.getLogger('api').error(
-                    'Invalid output example for api %s.%s' %
-                    (cls.__name__, name))
-                raise
             data['examples'].append(example)
+
+            # Only check for dev environments
+            if api_logger.isEnabledFor(logging.DEBUG):
+                try:
+                    data['compiled_input_schema'](example['input'])
+                except fastjsonschema.exceptions.JsonSchemaException:
+                    logging.getLogger('api').error(
+                        'Invalid input example for api %s.%s' %
+                        (cls.__name__, name))
+                    raise
+                try:
+                    data['compiled_output_schema'](example['output'])
+                except fastjsonschema.exceptions.JsonSchemaException:
+                    logging.getLogger('api').error(
+                        'Invalid output example for api %s.%s' %
+                        (cls.__name__, name))
+                    raise
 
         # Pre-compute the description (so that retrieving it does not require
         # any computation)
@@ -331,6 +373,12 @@ class APIModel(Model):
 
         # Transform the method into an api
         setattr(Model, name, apify(Model, name))
+
+    @classmethod
+    def add_input_error(cls, error_data):
+        # For now, we will assume that APIs are properly executed with the
+        # context manager set
+        ServerContext().get('_api_input_errors').append(error_data)
 
     @classmethod
     def check_access(cls, klass, api_name):
@@ -354,30 +402,25 @@ class APIModel(Model):
             parially performed by jsonschema (defaults) and through another
             dedicated method
         '''
-        errors, parameters = cls._check_schema(klass, api_name, parameters)
-        if errors:
-            raise APIInputError(errors)
-
+        parameters = cls._check_schema(klass, api_name, parameters)
         parameters = cls._convert_input(klass, api_name, parameters)
-        errors = cls._check_validator(klass, api_name, parameters)
-        if errors:
-            raise APIInputError(errors)
+        cls._check_validator(klass, api_name, parameters)
         return parameters
 
     @classmethod
     def _check_schema(cls, klass, api_name, parameters):
         if not klass._apis[api_name]['compiled_input_schema']:
-            return [], parameters
+            return parameters
         try:
-            return [], klass._apis[api_name]['compiled_input_schema'](
+            return klass._apis[api_name]['compiled_input_schema'](
                 parameters)
         except fastjsonschema.exceptions.JsonSchemaException as e:
             # TODO (maybe) if it is performance wise: Use jsonschema in case of
             # failure to list all errors rather than just the first one
-            return [{
+            cls.add_input_error({
                     'type': 'json_schema',
                     'data': e.message,
-                    }], None
+                    })
 
     @classmethod
     def _convert_input(cls, klass, api_name, parameters):
@@ -385,7 +428,7 @@ class APIModel(Model):
 
     @classmethod
     def _check_validator(cls, klass, api_name, parameters):
-        return klass._apis[api_name]['validate_input'](parameters)
+        klass._apis[api_name]['validate_input'](parameters)
 
     @classmethod
     def convert_result(cls, klass, api_name, result):
@@ -439,13 +482,15 @@ class APIModel(Model):
             right before the result is sent back
         '''
         if api_logger.isEnabledFor(logging.DEBUG) or config.getboolean(
-                'env', 'testing') is True:
+                'env', 'testing') is True or (
+                api_context().get('_validate_output', False)):
             try:
                 klass._apis[api_name]['compiled_output_schema'](result)
             except fastjsonschema.exceptions.JsonSchemaException as e:
                 api_logger.error('%s.%s:Invalid output:%s' %
                     (klass.__name__, api_name, e.message))
-                if config.getboolean('env', 'testing') is True:
+                if config.getboolean('env', 'testing') is True or (
+                        api_context().get('_validate_output', False)):
                     raise
         return result
 
@@ -593,6 +638,13 @@ class APIMixin(Model):
             - '_debug_server': If True, exceptions during handling of APIs
               will not be wrapped in API dedicated exceptions. This can greatly
               help when debugging 500s
+            - '_validate': If True, only the validation pass will be done on
+              the input, and nothing will actually be stored. This validation
+              may be incomplete since part of it may require actually storing
+              some of the information to detect
+            - '_validate_output': If True, an invalid output (as in,
+              inconsistent with the output schema) will cause an error.
+              Requires that the server runs with a "DEBUG" logging level
 
           The api::update_transaction_context method can be overriden in
           modules which want to transfer other api_context values to the tryton

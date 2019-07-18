@@ -15,6 +15,7 @@ __all__ = [
     'ContractUnderwritingOption',
     'Contract',
     'ContractOption',
+    'ContractExtraData',
     ]
 
 
@@ -462,3 +463,18 @@ class ContractOption(metaclass=PoolMeta):
         return {k: v for k, v in values.items()
             if ExtraData._extra_data_struct(k)['kind']
             != 'option_underwriting'}
+
+
+class ContractExtraData(metaclass=PoolMeta):
+    __name__ = 'contract.extra_data'
+
+    def _validate_extra_data_values(self):
+        ExtraData = Pool().get('extra_data')
+
+        # Remove "not contract" extra data from consistency check
+        self.extra_data_values = {
+            k: v for k, v in self.extra_data_values.items()
+            if ExtraData._extra_data_struct(k)['kind'] !=
+            'contract_underwriting'}
+        super()._validate_extra_data_values()
+        del self._values['extra_data_values']

@@ -5,6 +5,7 @@ from trytond.pool import Pool
 from . import bank
 from . import test_case
 from . import load_data
+from . import api
 
 
 def register():
@@ -18,3 +19,7 @@ def register():
     Pool.register(
         load_data.BankDataSetWizard,
         module='bank_fr', type_='wizard')
+
+    Pool.register(
+        api.APIParty,
+        module='bank_fr', type_='model', depends=['api'])

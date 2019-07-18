@@ -17,6 +17,7 @@ def register():
         contract.ContractOption,
         contract.ContractUnderwriting,
         contract.ContractUnderwritingOption,
+        contract.ContractExtraData,
         offered.Product,
         offered.OptionDescription,
         extra_data.ExtraData,

@@ -2,8 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 import unittest
 import datetime
+import copy
 
 import trytond.tests.test_tryton
+from trytond.pool import Pool
 
 from trytond.modules.coog_core import test_framework
 
@@ -15,6 +17,10 @@ class ModuleTestCase(test_framework.CoogTestCase):
     module = 'health'
 
     @classmethod
+    def fetch_models_for(cls):
+        return ['contract_insurance']
+
+    @classmethod
     def get_models(cls):
         return {
             'Party': 'party.party',
@@ -24,6 +30,19 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'RuleEngineRuntime': 'rule_engine.runtime',
             'ItemDesc': 'offered.item.description',
             }
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0005_PrepareProductForSubscription',
+        )
+    def test0005_PrepareProductForSubscription(self):
+        pool = Pool()
+        Coverage = pool.get('offered.option.description')
+
+        coverages = Coverage.search([('item_desc', '!=', None)])
+        for coverage in coverages:
+            coverage.family = 'health'
+
+        Coverage.save(coverages)
 
     def test0016_test_rule_engine_function(self):
         relation_spouse = self.PartyRelationType(name='Spouse', code='spouse')
@@ -132,6 +151,92 @@ class ModuleTestCase(test_framework.CoogTestCase):
             _re_number_of_covered_with_relation(args, 'child'), 1)
         self.assertEqual(self.RuleEngineRuntime.
             _re_number_of_covered_with_relation(args, 'spouse'), 2)
+
+    @test_framework.prepare_test(
+        'health.test0005_PrepareProductForSubscription',
+        'contract.test0002_testCountryCreation',
+        )
+    def test0060_subscribe_contract_API(self):
+        ContractAPI = Pool().get('api.contract')
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Mother',
+                    'birth_date': '1978-01-14',
+                    'gender': 'female',
+                    'ssn': '145067512312354',
+                    'addresses': [
+                        {
+                            'street': 'Somewhere along the street',
+                            'zip': '75002',
+                            'city': 'Paris',
+                            'country': 'fr',
+                            },
+                        ],
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {},
+                    'covereds': [
+                        {
+                            'party': {'ref': '1'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'GAM'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        ],
+                    'coverages': [
+                        {
+                            'coverage': {'code': 'DEL'},
+                            'extra_data': {},
+                            },
+                        ],
+                    },
+                ],
+            }
+
+        data_dict = copy.deepcopy(data_ref)
+        self.ContractAPI.subscribe_contracts(data_dict,
+            {'_debug_server': True})
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['first_name'] = 'Auntie'
+        del data_dict['parties'][0]['ssn']
+        self.assertEqual(
+            ContractAPI.subscribe_contracts(data_dict, {}).data,
+            [{
+                    'type': 'missing_ssn',
+                    'data': {'field': 'covered.party'},
+                    }])
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['first_name'] = 'Auntie'
+        data_dict['parties'][0]['ssn'] = '145067512312353'
+        self.assertEqual(
+            ContractAPI.subscribe_contracts(data_dict, {}).data,
+            [{
+                    'type': 'invalid_ssn',
+                    'data': {'ssn': '145067512312353'},
+                    }])
 
 
 def suite():

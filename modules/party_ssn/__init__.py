@@ -3,8 +3,15 @@
 from trytond.pool import Pool
 from . import party
 
+from . import api
+
 
 def register():
     Pool.register(
         party.Party,
         module='party_ssn', type_='model')
+
+    Pool.register(
+        api.APICore,
+        api.APIParty,
+        module='party_ssn', type_='model', depends=['api'])

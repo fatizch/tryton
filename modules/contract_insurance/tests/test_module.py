@@ -2,6 +2,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from dateutil.relativedelta import relativedelta
+import copy
 import datetime
 import unittest
 from decimal import Decimal
@@ -20,7 +21,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @classmethod
     def fetch_models_for(cls):
-        return ['offered_insurance']
+        return ['offered_insurance', 'contract']
 
     @classmethod
     def get_models(cls):
@@ -63,6 +64,24 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         party, = self.Party.search([('name', '=', 'DOE')])
         self.assertTrue(party.id)
+
+    def test0002_quote_sequence_creation(self):
+        qg = self.Sequence()
+        qg.name = 'Quote Sequence'
+        qg.code = 'quote'
+        qg.prefix = 'Quo'
+        qg.suffix = 'Y${year}'
+        qg.save()
+
+    @test_framework.prepare_test(
+        'offered_insurance.test0010Coverage_creation',
+        )
+    def test0005_PrepareProductForSubscription(self):
+        quote_sequence, = self.Sequence.search([('code', '=', 'quote')])
+
+        product_a, = self.Product.search([('code', '=', 'AAA')])
+        product_a.quote_number_sequence = quote_sequence
+        product_a.save()
 
     @test_framework.prepare_test(
         'offered_insurance.test0100_testExtraPremiumKindCreation',
@@ -857,9 +876,208 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
     @test_framework.prepare_test(
         'contract_insurance.test0001_testPersonCreation',
+        'contract_insurance.test0005_PrepareProductForSubscription',
+        'contract.test0002_testCountryCreation',
+        )
+    def test0060_subscribe_contract_API(self):
+        baby, = self.Party.search([('name', '=', 'Antoine'),
+                ('first_name', '=', 'Jeff')])
+        data_ref = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Mother',
+                    'birth_date': '1978-01-14',
+                    'gender': 'female',
+                    'addresses': [
+                        {
+                            'street': 'Somewhere along the street',
+                            'zip': '75002',
+                            'city': 'Paris',
+                            'country': 'fr',
+                            },
+                        ],
+                    'relations': [
+                        {
+                            'ref': '1',
+                            'type': 'parent',
+                            'to': {'id': baby.id},
+                            },
+                        ],
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {},
+                    'covereds': [
+                        {
+                            'party': {'ref': '1'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'GAM'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        {
+                            'party': {'id': baby.id},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        ],
+                    'coverages': [
+                        {
+                            'coverage': {'code': 'DEL'},
+                            'extra_data': {},
+                            },
+                        ],
+                    },
+                ],
+            }
+
+        def check_result(data, result):
+            mother, = self.Party.search([('name', '=', 'Doe'),
+                    ('first_name', '=', 'Mother')])
+            self.assertEqual(len(mother.relations), 1)
+            self.assertEqual(mother.relations[0].to, baby)
+
+            contract, = self.Contract.browse(
+                [x['id'] for x in result['contracts']])
+
+            self.assertEqual(len(contract.options), 1)
+            self.assertEqual(contract.options[0].coverage.code, 'DEL')
+            self.assertEqual(len(contract.covered_elements), 2)
+            self.assertEqual(len(contract.covered_elements[0].options), 3)
+            self.assertEqual(contract.covered_elements[0].party.id,
+                result['parties'][0]['id'])
+
+            self.assertEqual(len(contract.covered_elements[1].options), 2)
+            self.assertEqual(contract.covered_elements[1].party.id, baby.id)
+
+        data_dict = copy.deepcopy(data_ref)
+        result = self.ContractAPI.subscribe_contracts(data_dict,
+            {'_debug_server': True})
+        check_result(data_dict, result)
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['parties'][0]['name'] = 'Aunt'
+        data_dict['parties'][0]['is_person'] = False
+        del data_dict['parties'][0]['birth_date']
+        del data_dict['parties'][0]['first_name']
+        del data_dict['parties'][0]['gender']
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data, [{
+                    'type': 'bad_constraint',
+                    'data': {
+                        'field': 'covered.party',
+                        'comment': 'Should be a person'},
+                    }])
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['covereds'][0]['party']['ref'] = '12345'
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data[0], {
+                    'type': 'bad_reference',
+                    'data': {
+                        'model': 'party.party',
+                        'ref': '12345'},
+                    })
+
+        bad_item_desc = self.ItemDesc()
+        bad_item_desc.kind = 'party'
+        bad_item_desc.code = 'bad'
+        bad_item_desc.name = 'Bad'
+        bad_item_desc.save()
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['covereds'][0]['item_descriptor']['code'] = \
+            'bad'
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data[0], {
+                'type': 'invalid_item_desc_for_product',
+                'data': {
+                    'product': 'AAA',
+                    'item_desc': 'bad',
+                    'expected': ['person'],
+                    },
+                })
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['coverages'].append({
+                'coverage': {'code': 'GAM'},
+                'extra_data': {},
+                })
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data, [{
+                    'type': 'invalid_coverage_for_product',
+                    'data': {
+                        'product': 'AAA',
+                        'coverages': ['DEL', 'GAM'],
+                        },
+                    }])
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['covereds'][0]['coverages'].append({
+                'coverage': {'code': 'DEL'},
+                'extra_data': {},
+                })
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data[0], {
+                'type': 'invalid_coverage_for_covered',
+                'data': {
+                    'item_desc': 'person',
+                    'coverages': ['ALP', 'BET', 'DEL', 'GAM'],
+                    },
+                })
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['covereds'][1]['coverages'] = \
+            data_dict['contracts'][0]['covereds'][1]['coverages'][:1]
+        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        self.assertEqual(error.data[0], {
+                'type': 'missing_mandatory_coverage',
+                'data': {
+                    'item_desc': 'person',
+                    'coverages': ['ALP'],
+                    'mandatory_coverages': ['ALP', 'BET'],
+                    },
+                })
+
+    @test_framework.prepare_test(
+        # Check that basic subscription still works
+        'contract.test0100_subscribe_contract_API',
+        )
+    def test0070_subscribe_simple_contract_API(self):
+        pass
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0001_testPersonCreation',
         'offered_insurance.test0010Package_creation'
         )
-    def test0060_subscription_by_package(self):
+    def test0080_subscription_by_package(self):
         product, = self.Product.search([
                 ('code', '=', 'AAA'),
                 ], limit=1)
@@ -927,29 +1145,29 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 {'extra_data_coverage_alpha': 'option2'}])
         # apply package 2
         apply_package([product.packages[1]], contract)
-        self.assertTrue([a.coverage.code for a in contract.options] == ['CONT'])
-        self.assertTrue([a.current_version.extra_data
-                for a in contract.options] == [{}])
-        self.assertTrue(
+        self.assertEqual({a.coverage.code for a in contract.options},
+            {'CONT', 'DEL'})
+        self.assertEqual([a.current_version.extra_data
+                for a in contract.options], [{}, {}])
+        self.assertEqual(
             [a.coverage.code for c in contract.covered_elements
-                for a in c.options] == ['ALP', 'GAM', 'DEL',
-                    'ALP', 'GAM', 'DEL'])
-        self.assertTrue([c.options[0].current_version.extra_data
-                for c in contract.covered_elements] == [
+                for a in c.options], ['ALP', 'GAM', 'ALP', 'GAM'])
+        self.assertEqual([c.options[0].current_version.extra_data
+                for c in contract.covered_elements], [
                 {'extra_data_coverage_alpha': 'option3'},
                 {'extra_data_coverage_alpha': 'option3'}])
-        self.assertTrue(contract.extra_datas[0].extra_data_values == {
+        self.assertEqual(contract.extra_datas[0].extra_data_values, {
                 'extra_data_contract': 'formula2'})
         # apply package 3
         apply_package([product.packages[2]], contract)
-        self.assertTrue(contract.extra_datas[0].extra_data_values == {
+        self.assertEqual(contract.extra_datas[0].extra_data_values, {
                 'extra_data_contract': 'formula3'})
-        self.assertTrue(len(contract.options) == 0)
-        self.assertTrue(
+        self.assertEqual(len(contract.options), 1)
+        self.assertEqual(
             [a.coverage.code for c in contract.covered_elements
-                for a in c.options] == ['GAM', 'DEL', 'GAM', 'DEL'])
-        self.assertTrue([c.options[0].current_version.extra_data
-                for c in contract.covered_elements] == [{}, {}])
+                for a in c.options], ['GAM', 'GAM'])
+        self.assertEqual([c.options[0].current_version.extra_data
+                for c in contract.covered_elements], [{}, {}])
 
         # test package per covered
         packages = self.Package.search([('code', 'in', ('P1', 'P4'))])
@@ -959,25 +1177,25 @@ class ModuleTestCase(test_framework.CoogTestCase):
 
         # apply package 1 to covered1 and package 2 to covered2
         apply_package([product.packages[0], product.packages[1]], contract)
-        self.assertTrue(len(contract.options) == 0)
-        self.assertTrue(
+        self.assertEqual(len(contract.options), 1)
+        self.assertEqual(
             [a.coverage.code for c in contract.covered_elements
-                for a in c.options] == ['ALP', 'BET', 'ALP', 'GAM', 'DEL'])
-        self.assertTrue([c.options[0].current_version.extra_data
-                for c in contract.covered_elements] == [
+                for a in c.options], ['ALP', 'BET', 'ALP', 'GAM'])
+        self.assertEqual([c.options[0].current_version.extra_data
+                for c in contract.covered_elements], [
                 {'extra_data_coverage_alpha': 'option2'},
                 {'extra_data_coverage_alpha': 'option1'}])
-        self.assertTrue([c.versions[0].extra_data
-                for c in contract.covered_elements] == [
+        self.assertEqual([c.versions[0].extra_data
+                for c in contract.covered_elements], [
                 {'extra_data_covered': None},
                 {'extra_data_covered': 'covered3'}])
         # apply package 1 to covered1 and package 2 to covered2
         apply_package([product.packages[1], product.packages[0]], contract)
-        self.assertTrue(
+        self.assertEqual(
             [a.coverage.code for c in contract.covered_elements
-                for a in c.options] == ['ALP', 'GAM', 'DEL', 'ALP', 'BET'])
-        self.assertTrue([c.versions[0].extra_data
-                for c in contract.covered_elements] == [
+                for a in c.options], ['ALP', 'GAM', 'ALP', 'BET'])
+        self.assertEqual([c.versions[0].extra_data
+                for c in contract.covered_elements], [
                 {'extra_data_covered': 'covered3'},
                 {'extra_data_covered': 'covered3'}])
 

@@ -6,6 +6,7 @@ from . import distribution
 from . import test_case
 from . import party
 from . import res
+from . import api
 
 
 def register():
@@ -19,3 +20,8 @@ def register():
     Pool.register(
         party.PartyReplace,
         module='distribution', type_='wizard')
+
+    Pool.register(
+        api.APIIdentity,
+        api.APICore,
+        module='distribution', type_='model', depends=['api'])

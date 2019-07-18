@@ -7,6 +7,7 @@ from . import distribution
 from . import offered
 from . import contract
 from . import process
+from . import api
 
 
 def register():
@@ -18,11 +19,19 @@ def register():
         offered.Product,
         contract.Contract,
         module='contract_distribution', type_='model')
+
     Pool.register(
         process.ContractSubscribeFindProcess,
         module='contract_distribution', type_='model',
         depends=['contract_process'])
+
     Pool.register(
         process.ContractSubscribe,
         module='contract_distribution', type_='wizard',
         depends=['contract_process'])
+
+    Pool.register(
+        api.APICore,
+        api.APIProduct,
+        api.APIContract,
+        module='contract_distribution', type_='model', depends=['api'])

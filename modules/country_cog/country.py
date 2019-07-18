@@ -1,8 +1,9 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
-from trytond.modules.coog_core import export
 from trytond.config import config
+
+from trytond.modules.coog_core import export, model
 
 __all__ = [
     'Country',
@@ -10,9 +11,8 @@ __all__ = [
     ]
 
 
-class Country(export.ExportImportMixin):
+class Country(model.CodedMixin, export.ExportImportMixin):
     __name__ = 'country.country'
-    _func_key = 'code'
 
     @staticmethod
     def _default_country():

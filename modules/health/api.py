@@ -5,6 +5,8 @@ from trytond.pool import PoolMeta, Pool
 
 __name__ = [
     'APIProduct',
+    'APIParty',
+    'APIContract',
     ]
 
 
@@ -15,12 +17,50 @@ class APIProduct(metaclass=PoolMeta):
     def _describe_product(cls, product):
         result = super()._describe_product(product)
 
-        if product.is_health:
-            APICore = Pool().get('api.core')
+        # Maybe some day there will be some sort of "ssn_required" on item
+        # descs
+        if product.is_health and result['item_descriptors']:
+            for item_desc in result['item_descriptors']:
+                item_desc['fields']['required'].append('ssn')
+                item_desc['fields']['fields'].append('ssn')
 
-            # Could be more pinpoint (information is per coverage), but this is
-            # not important for now
-            for descriptor in result['item_descriptors'].values():
-                descriptor['fields']['ssn'] = APICore._field_description(
-                    'party.party', 'ssn', required=True, sequence=100)
         return result
+
+
+class APIParty(metaclass=PoolMeta):
+    __name__ = 'api.party'
+
+    @classmethod
+    def _update_person(cls, party, data, options):
+        super()._update_person(party, data, options)
+        cls._update_party_complement(party, data, options)
+
+    @classmethod
+    def _update_party_complement(cls, party, data, options):
+        complements = getattr(party, 'health_complement', [])
+        if not complements:
+            party.health_complement = [{}]
+        else:
+            party.health_complement = list(party.health_complement)
+
+
+class APIContract(metaclass=PoolMeta):
+    __name__ = 'api.contract'
+
+    @classmethod
+    def _check_contract_parameters_covereds(cls, data, contract_data):
+        API = Pool().get('api')
+
+        super()._check_contract_parameters_covereds(data, contract_data)
+
+        # Maybe some day there will be some sort of "ssn_required" on item
+        # descs
+        if contract_data['product'].is_health:
+            party = data.get('party', None)
+            if not party or not party.ssn:
+                API.add_input_error({
+                        'type': 'missing_ssn',
+                        'data': {
+                            'field': 'covered.party',
+                            },
+                        })
