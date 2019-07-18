@@ -1,3 +1,4 @@
+* BUG#12134 Fix prorata calculation for non monthly salary modes
 * BUG#12038 Fix endorsement behavior for the "Revaluation on basic salary" field
 * BUG#11767 Make sure default tables are up to date
 
@@ -14,7 +15,7 @@ Version 2.4 - 2019-04-12
 Version 2.2 - 2018-10-12
 * FEA#9957 Add default standard revaluation rule with the AGIRC / ARRCO tables structures
 * FEA#9940 Add default net salary computation rules
-* BUG#9965 Fix net salary retrieving when a claim has multiple delivered services 
+* BUG#9965 Fix net salary retrieving when a claim has multiple delivered services
 * BUG#9846 Claim net salary calculation should take into account the salary update from gross to net case
 * OTH#0000 Fix wrong call to detect revaluation on basic salary on indemnification period calculation dates
 * FEA#9265 Handle revaluation on basic salary for group life insurance
@@ -31,7 +32,7 @@ Version 1.14 - 2017-11-09
 * BUG#7105 Wrong salary range computation when salary is defined yearly
 * OTH#0000 Change reference from service to delivered_service in get_currency
 * BUG#6499 Salary range must be initialize based on the contract exit date
-* FEA#6465 Allow to access TA, TB, TC salary range from coog-api 
+* FEA#6465 Allow to access TA, TB, TC salary range from coog-api
 
 Version 1.12 - 2017-04-28
 * FEA#0000 Add salaries wizard which allows to enter salaries and compute net salaries

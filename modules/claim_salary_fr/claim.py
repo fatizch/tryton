@@ -10,7 +10,7 @@ from trytond.pyson import Eval, Bool
 from trytond.model import Unique, ModelView
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields, model, utils
+from trytond.modules.coog_core import fields, model, utils, coog_date
 from trytond.modules.rule_engine import get_rule_mixin
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.claim_salary_fr.contract import SALARY_MODES
@@ -460,13 +460,15 @@ class ClaimService(metaclass=PoolMeta):
             # calculate prorata in order to calculate the salary as it was a
             # full month
             if salary_mode != 'last_year':
-                begin_date = datetime.date(cur_salary.to_date.year,
-                    cur_salary.to_date.month, 1)
+                begin_date = datetime.date(cur_salary.from_date.year,
+                    cur_salary.from_date.month, 1)
             else:
                 begin_date = cur_salary.to_date + relativedelta(days=1,
                     years=-1)
             prorata = ((cur_salary.to_date - cur_salary.from_date).days + 1) / \
-                Decimal((cur_salary.to_date - begin_date).days + 1)
+                Decimal((cur_salary.to_date - begin_date).days + 1) * \
+                coog_date.number_of_months_between(
+                    begin_date, cur_salary.to_date)
             for salary_def in salaries_def:
                 if 'bonus' in salary_def:
                     # bonus are added only one time at the end
