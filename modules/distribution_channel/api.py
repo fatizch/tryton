@@ -129,7 +129,8 @@ class APIContract(metaclass=PoolMeta):
                         },
                     })
 
-        if channel not in data['commercial_product'].dist_authorized_channels:
+        if (data['commercial_product'].dist_authorized_channels and channel
+                not in data['commercial_product'].dist_authorized_channels):
             API.add_input_error({
                     'type': 'unauthorized_channel_for_product',
                     'data': {

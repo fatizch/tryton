@@ -444,7 +444,7 @@ class APIContract(metaclass=PoolMeta):
 
         answers, results = [], []
 
-        for part in contract_data['parts']:
+        for part in contract_data['questionnaires']['parts']:
             answers.append(Answer(part=part['id'], answers=part['answers']))
             results.append(Result(part=part['id'],
                     results_as_text=json.dumps(part['results'])))
@@ -491,18 +491,14 @@ class APIContract(metaclass=PoolMeta):
         data['questionnaire'] = API.instantiate_code_object(
             'questionnaire', data['questionnaire'])
 
-        for answer in data['answers']:
-            answer['part'] = API.instantiate_code_object(
-                'questionnaire.part', {'id': answer['part']})
-            answers = answer.get('answers', {})
+        for part in data['parts']:
+            API.instantiate_code_object(
+                'questionnaire.part', {'id': part['id']})
+            answers = part.get('answers', {})
             answers = Core._extra_data_convert(answers)
-            answer['answers'] = answers
+            part['answers'] = answers
 
-        for result in data['results']:
-            result['part'] = API.instantiate_code_object(
-                'questionnaire.part', {'id': result['part']})
-
-            for choice in result['results']:
+            for choice in part['results']:
                 # Just check it exists, we do not actually need it later
                 API.instantiate_code_object('offered.product',
                     {'code': choice['product']})
@@ -644,8 +640,8 @@ class APIContractDistribution(metaclass=PoolMeta):
         pool = Pool()
         API = pool.get('api')
 
-        for result in data['results']:
-            for choice in result['results']:
+        for part in data['parts']:
+            for choice in part['results']:
                 API.instantiate_code_object('distribution.commercial_product',
                     {'code': choice['commercial_product']})
 
