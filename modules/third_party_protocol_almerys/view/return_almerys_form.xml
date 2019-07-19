@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="error_code"/>
+    <field name="error_code"/>
+    <label name="error_label"/>
+    <field name="error_label"/>
+    <label name="status"/>
+    <field name="status"/>
+    <label name="file_number"/>
+    <field name="file_number"/>
+</form>

@@ -6,6 +6,11 @@
 import datetime as dt
 import pathlib
 import tempfile
+import os
+import sys
+
+import datetime
+from subprocess import Popen as popen
 
 from lxml import etree
 
@@ -23,6 +28,8 @@ from trytond.modules.party_cog.tests.tools import create_party_person, \
     create_party_company
 from trytond.modules.country_cog.tests.tools import create_country
 from trytond.modules.coog_core.test_framework import execute_test_case
+from trytond.modules.third_party_protocol_almerys import batch as \
+    almerys_batch_2
 
 # #Comment# #Remove previous batch files generated
 
@@ -354,3 +361,75 @@ document.xpath('//almerys:IBAN_BBAN', namespaces=ns)[0].text
 # #Res# #'1420041010050500013M026'
 document.xpath('//almerys:REF_INTERNE_CG', namespaces=ns)[0].text
 # #Res# #'REF INTERNE'
+
+# #Comment# Almerys Return
+AlmerysReturn = Model.get('return.almerys')
+
+# #Comment# #Constants
+contract_start_date = datetime.date(2014, 4, 10)
+
+# #Comment# #Create Contract
+Contract = Model.get('contract')
+contract = Contract()
+contract.company = company
+contract.subscriber = subscriber
+contract.start_date = contract_start_date
+contract.product = product
+contract.contract_number = 'CT20190600019'
+contract.save()
+
+# date
+today = datetime.date.today()
+
+# #Comment# Launch the batch
+
+module_file = almerys_batch_2.__file__
+module_folder = os.path.dirname(module_file)
+
+
+def debug_print(to_print):
+    print(to_print, file=sys.stderr)
+
+
+def import_almerys_v3_return_handler(file_name):
+    debug_print('testing %s' % file_name)
+    IrModel = Model.get('ir.model')
+
+    almerys_return__batch, = IrModel.find([
+            ('model', '=', 'batch.almerys.feedback'),
+            ])
+    launcher = Wizard('batch.launcher')
+    launcher.form.batch = almerys_return__batch
+    dir_ = os.path.join(module_folder, 'tests_imports/')
+    file_path = dir_ + file_name
+    for i in range(0, len(launcher.form.parameters)):
+        if launcher.form.parameters[i].code == 'in_path':
+            launcher.form.parameters[i].value = file_path
+        elif launcher.form.parameters[i].code == 'archive_path':
+            launcher.form.parameters[i].value = dir_
+    try:
+        launcher.execute('process')
+        return
+    finally:
+        archive_path = dir_ + 'treated_%s_%s' % (str(today),
+            file_name)
+        cmd = 'mv %s %s' % (archive_path, file_path)
+        __ = popen(cmd.split())  # NOQA
+
+
+__ = import_almerys_v3_return_handler('AlmerysReturnV3Flow.xml')  # NOQA
+
+# #Comment# Test Number Objects Created
+almerys_return_object = AlmerysReturn.find([
+        ('contract.contract_number', '=', 'CT20190600019'),
+        ('file_number', '=', '100005')])
+len(almerys_return_object) == 4
+# #Res# #True
+
+# #Comment# Test Error_label/Error_code in Objects Created
+rec = almerys_return_object[0]
+rec.error_code == 'ERR_V3_00000011'
+# #Res# #True
+rec.error_label == 'Membre 2604 n\'a pas de NNI, mais lui/elle est relie au ' \
+                   'SERVICE_TP_PEC.'
+# #Res# #True

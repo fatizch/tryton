@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime as dt
+
 from lxml import etree
 from lxml.builder import ElementMaker
 from itertools import groupby
@@ -11,6 +12,14 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 
 from trytond.modules.coog_core import batch
+from trytond.tools import grouped_slice
+
+from . import return_almerys_hundler
+
+
+__all__ = [
+    'AlmerysReturnBatch',
+    ]
 
 
 def empty_element(e):
@@ -455,3 +464,49 @@ class AlmerysProtocolBatch(batch.BatchRoot):
             filename, root_dir=directory, **kwargs)
 
         TPPeriod.write(objects, {'status': 'sent'})
+
+
+class AlmerysReturnBatch(batch.BatchRootNoSelect):
+    'Return Almerys Batch'
+
+    __name__ = 'batch.almerys.feedback'
+
+    @classmethod
+    def get_file_handler(cls):
+        return return_almerys_hundler.AlmerysV3ReturnHandler()
+
+    @classmethod
+    def select_ids(cls, in_path, archive_path):
+        files = cls.get_file_names_and_paths(in_path)
+        if not files:
+            cls.logger.info('No file found in directory %s' % in_path)
+            return []
+        all_elements = []
+        for file_name, file_path in files:
+            with open(file_path, 'rb') as _file:
+                handler = cls.get_file_handler()
+                all_elements.extend(handler.handle_file(_file))
+        return all_elements
+
+    @classmethod
+    def execute(cls, objects, ids, in_path, archive_path):
+        AlmerysReturn = Pool().get('return.almerys')
+        Contract = Pool().get('contract')
+        for sliced_element in grouped_slice(objects):
+            vals = []
+            for element in sliced_element:
+                contract = Contract.search([
+                    ('contract_number', '=', element[1])])[0].id
+                almerys = AlmerysReturn.search([
+                    ('file_number', '=', element[0]),
+                    ('contract', '=', contract),
+                    ('error_code', '=', element[2]),
+                    ('error_label', '=', element[3])])
+                if not almerys:
+                    vals.append({
+                        'file_number': element[0],
+                        'contract': contract,
+                        'error_code': element[2],
+                        'error_label': element[3],
+                        'status': 'to_treat', })
+            AlmerysReturn.create(vals)

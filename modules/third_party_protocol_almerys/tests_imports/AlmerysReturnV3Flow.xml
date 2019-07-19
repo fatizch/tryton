@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<FICHIER xmlns="http://www.almerys.com/NormeRetourV3">
+    <ENTETE>
+        <NUM_FICHIER>100005</NUM_FICHIER>
+        <DATE_CREATION>2019-07-02T14:18:52</DATE_CREATION>
+        <VERSION_NORME>V3</VERSION_NORME>
+        <NUM_OS_EMETTEUR>98573009</NUM_OS_EMETTEUR>
+        <NOM_FICHIER>G0309320.xml</NOM_FICHIER>
+        <STATUT>OK</STATUT>
+    </ENTETE>
+    <OFFREUR_SERVICE>
+        <REJETS>
+            <REJET_PRE_INTEGRATION>
+                <CONTRAT>
+                    <NUM_CONTRAT>CT20190600019</NUM_CONTRAT>
+                    <REF_INTERNE_OS>2598</REF_INTERNE_OS>
+                    <REF_INTERNE_OS>2603</REF_INTERNE_OS>
+                    <REF_INTERNE_OS>2604</REF_INTERNE_OS>
+                    <REF_INTERNE_OS>2607</REF_INTERNE_OS>
+                    <REF_INTERNE_OS>2606</REF_INTERNE_OS>
+                    <REF_INTERNE_OS>2605</REF_INTERNE_OS>
+                    <DATE_SOUSCRIPTION>2019-04-30</DATE_SOUSCRIPTION>
+                    <REF_INTERNE_OS_PRINC>2598</REF_INTERNE_OS_PRINC>
+                </CONTRAT>
+                <ERREUR>
+                    <CODE_ERREUR>ERR_V3_00000011</CODE_ERREUR>
+                    <LIBELLE_ERREUR>Membre 2604 n'a pas de NNI, mais lui/elle est relie au SERVICE_TP_PEC.</LIBELLE_ERREUR>
+                </ERREUR>
+                <ERREUR>
+                    <CODE_ERREUR>ERR_V3_00000011</CODE_ERREUR>
+                    <LIBELLE_ERREUR>Membre 2605 n'a pas de NNI, mais lui/elle est relie au SERVICE_TP_PEC.</LIBELLE_ERREUR>
+                </ERREUR>
+                <ERREUR>
+                    <CODE_ERREUR>ERR_V3_00000011</CODE_ERREUR>
+                    <LIBELLE_ERREUR>Membre 2606 n'a pas de NNI, mais lui/elle est relie au SERVICE_TP_PEC.</LIBELLE_ERREUR>
+                </ERREUR>
+                <ERREUR>
+                    <CODE_ERREUR>ERR_V3_00000011</CODE_ERREUR>
+                    <LIBELLE_ERREUR>Membre 2607 n'a pas de NNI, mais lui/elle est relie au SERVICE_TP_PEC.</LIBELLE_ERREUR>
+                </ERREUR>
+            </REJET_PRE_INTEGRATION>
+        </REJETS>
+    </OFFREUR_SERVICE>
+</FICHIER>

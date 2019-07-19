@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:batch.almerys.feedback,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:contract,almerys_return:"
+msgid "Almerys Return"
+msgstr "Retour Almerys"
+
 msgctxt "field:party.party,almerys_courrier_gestion:"
 msgid "Almerys COURRIER_GESTION"
 msgstr "Almerys COURRIER_GESTION"
@@ -17,6 +25,59 @@ msgstr "Almerys JOIGNABILITE > MEDIA"
 msgctxt "field:party.party,almerys_releve_presta:"
 msgid "Almerys RELEVE_PRESTA"
 msgstr "Almerys RELEVE_PRESTA"
+
+msgctxt "field:return.almerys,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:return.almerys,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+
+msgctxt "field:return.almerys,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:return.almerys,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:return.almerys,error_code:"
+msgid "Error Code"
+msgstr "Code Erreur"
+
+msgctxt "field:return.almerys,error_label:"
+msgid "Error Label"
+msgstr "Libellé Erreur"
+
+msgctxt "field:return.almerys,file_number:"
+msgid "File Number"
+msgstr "Numéro de fichier"
+
+msgctxt "field:return.almerys,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:return.almerys,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:return.almerys,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:return.almerys,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:return.almerys,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:return.almerys,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
 
 msgctxt "field:third_party_manager.protocol,almerys_libelle_ss_groupe:"
 msgid "Sous-Groupe Number Label"
@@ -82,11 +143,75 @@ msgctxt "field:third_party_protocol.almerys.configuration,xml_id:"
 msgid "XML Id"
 msgstr "XML Id"
 
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.autonomous,autonomous:"
+msgid "Autonomous"
+msgstr "Autonome"
+
+msgctxt "field:third_party_protocol.almerys.configuration.autonomous,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.autonomous,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.autonomous,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.autonomous,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:third_party_protocol.almerys.configuration.autonomous,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.autonomous,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.autonomous,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.autonomous,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
 msgctxt "field:third_party_protocol.almerys.configuration.autonomous,xml_id:"
 msgid "XML Id"
 msgstr "XML Id"
 
-msgctxt "field:third_party_protocol.almerys.configuration.customer_label,customer_label:"
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_label,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_label,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_label,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_label,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_label,customer_label:"
 msgid "Customer Label"
 msgstr "Libellé client"
 
@@ -94,25 +219,284 @@ msgctxt "field:third_party_protocol.almerys.configuration.customer_label,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_label,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_label,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_label,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_label,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_number,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_number,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_number,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_number,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_number,customer_number:"
+msgid "Customer Number"
+msgstr "Numéro client"
+
 msgctxt "field:third_party_protocol.almerys.configuration.customer_number,id:"
 msgid "ID"
 msgstr "Identifiant"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_number,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_number,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_number,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.customer_number,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.number_sequence_v3,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.number_sequence_v3,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.number_sequence_v3,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.number_sequence_v3,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.number_sequence_v3,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.number_sequence_v3,number_sequence_v3:"
+msgid "Number Sequence V3"
+msgstr "Séquence de numérotation v3"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.number_sequence_v3,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.number_sequence_v3,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.number_sequence_v3,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.number_sequence_v3,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.protocol_version,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.protocol_version,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.protocol_version,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.protocol_version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.protocol_version,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.protocol_version,protocol_version:"
+msgid "Protocol Version"
+msgstr "Version du protocole"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.protocol_version,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.protocol_version,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.protocol_version,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt ""
+"field:third_party_protocol.almerys.configuration.protocol_version,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
 
 msgctxt "field:third_party_protocol.batch.almerys,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt "model:batch.almerys.feedback,name:"
+msgid "return almerys batch"
+msgstr "Batch de Retour Almerys"
+
+msgctxt ""
+"model:extra_details.configuration.line,selection:third_party_protocol_almerys_code_mouvement_carte"
+msgid ""
+"CA:CA\n"
+"CC:CC\n"
+"CS:CS\n"
+"            "
+msgstr ""
+
+msgctxt ""
+"model:extra_details.configuration.line,string:third_party_procotol_almerys_service_tp_envoi"
+msgid "Tiers-Payant Envoi"
+msgstr "Tiers-Payant Envoi"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:third_party_protocol_almerys_code_mouvement_carte"
+msgid "Code Mouvement Carte"
+msgstr "Code Mouvement Carte"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:third_party_protocol_almerys_envoi"
+msgid "Envoi"
+msgstr "Envoi"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:third_party_protocol_almerys_fond_carte"
+msgid "Fond Carte"
+msgstr "Fond Carte"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:third_party_protocol_almerys_num_contrat_collectif"
+msgid "Numéro de Contrat Collectif"
+msgstr "Numéro de Contrat Collectif"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:third_party_protocol_almerys_ref_courtier"
+msgid "Référence Courtier"
+msgstr "Référence Courtier"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:third_party_protocol_almerys_ref_entreprise"
+msgid "Référence Entreprise"
+msgstr "Référence Entreprise"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:third_party_protocol_almerys_ref_gestionnaire"
+msgid "Référence Gestionnaire"
+msgstr "Référence Gestionnaire"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:third_party_protocol_almerys_ref_interne"
+msgid "Référence Interne"
+msgstr "Référence Interne"
+
+msgctxt ""
+"model:extra_details.configuration.line,string:third_party_protocol_almerys_ref_site"
+msgid "Référence Site"
+msgstr "Référence Site"
+
+
+msgctxt ""
+"model:extra_details.configuration.line,string:third_party_protocol_almerys_reference_produit"
+msgid "Référence Produit"
+msgstr "Référence Produit"
+
 msgctxt "model:ir.action,name:act_third_party_protocol_almerys_configuration"
 msgid "Almerys Configuration"
 msgstr "Configuration Almerys"
+
+msgctxt "model:ir.action,name:return_almerys_act"
+msgid "Return Almerys"
+msgstr "Retour Almerys"
+
+msgctxt "model:ir.action,name:wizard_recompute_period"
+msgid "Recompute Period"
+msgstr "Re-calcul des périodes de délégation"
+
+msgctxt "model:ir.action.act_window.domain,name:act_return_almerys_all"
+msgid "All Returns"
+msgstr "Tous les retours"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_return_almerys_to_be_processed"
+msgid "Returns To Be Processed"
+msgstr "Retour à Traiter"
 
 msgctxt "model:ir.sequence.type,name:sequence_type_almerys_v3"
 msgid "Almerys v3"
 msgstr "Almerys v3"
 
+msgctxt "model:ir.ui.menu,name:menu_claim_return_almerys"
+msgid "Return Almerys"
+msgstr "Retour Almerys"
+
 msgctxt "model:ir.ui.menu,name:menu_third_party_protocol_almerys_form"
 msgid "Almerys Configuration"
 msgstr "Configuration Almerys"
+
+msgctxt "model:return.almerys,name:"
+msgid "Return Almerys"
+msgstr "Retour Almerys"
 
 msgctxt "model:third_party_protocol.almerys.configuration,name:"
 msgid "Almerys Configuration"
@@ -122,13 +506,430 @@ msgctxt "model:third_party_protocol.almerys.configuration.autonomous,name:"
 msgid "Almerys Configuration - Autonomous"
 msgstr "Configuration Almerys - Autonome"
 
+msgctxt ""
+"model:third_party_protocol.almerys.configuration.customer_label,name:"
+msgid "Almerys Configuration - Customer Label"
+msgstr "Configuration Almerys - Libellé Client"
+
+msgctxt ""
+"model:third_party_protocol.almerys.configuration.customer_number,name:"
+msgid "Almerys Configuration - Customer Number"
+msgstr "Configuration Almerys - Numéro Client"
+
+msgctxt ""
+"model:third_party_protocol.almerys.configuration.number_sequence_v3,name:"
+msgid "Almerys Configuration - Number Sequence V3"
+msgstr "Configuration Almerys - Numéro de Séquence V3"
+
+msgctxt ""
+"model:third_party_protocol.almerys.configuration.protocol_version,name:"
+msgid "Almerys Configuration - Protocol Version"
+msgstr "Configuration Almerys - Version du Protocole"
+
 msgctxt "model:third_party_protocol.batch.almerys,name:"
 msgid "Almerys Batch Job"
 msgstr "Batch Almerys"
 
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CIN_00000001] Validity of field supply in the file"
+msgstr "[ERR_CIN_00000001] Validité alimentation des champs dans le fichier"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CIN_00000002] Validity of field supply in the file"
+msgstr "[ERR_CIN_00000002] Validité alimentation des champs dans le fichier"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid ""
+"[ERR_CIN_00000004] Contract member (management centre, company, collective "
+"contract"
+msgstr ""
+"[ERR_CIN_00000004] Membre contrat (centre de gestion, entreprise, contrat "
+"collectif)"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CIN_00000008] Contract member"
+msgstr "[ERR_CIN_00000008] Membre Contrat "
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CIN_00000009] Contract member"
+msgstr "[ERR_CIN_00000009] Membre contrat "
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CIN_00000020] Content of the flow fields"
+msgstr "[ERR_CIN_00000020] Contenu des champs du flux"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CIN_00000043] Mandatory tags"
+msgstr "[ERR_CIN_00000043] Balises obligatoires"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CPII_00000001] Service provider"
+msgstr "[ERR_CPII_00000001] Offreur de service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CPI_00000002] rejet"
+msgstr "[ERR_CPI_00000002] rejet"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CPI_00000012] client number"
+msgstr "[ERR_CPI_00000012] Numéro client"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CPI_00000013] Validity of field supply in the file"
+msgstr "[ERR_CPI_00000013] Validité alimentation des champs dans le fichier"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CPI_00000014] NNI"
+msgstr "[ERR_CPI_00000014] NNI"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CPI_00000025] Company reference"
+msgstr "[ERR_CPI_00000025] Référence entreprise"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CPI_00000026] Company reference"
+msgstr "[ERR_CPI_00000026] Référence entreprise"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CPI_00000033] Consistency supplier/service scope"
+msgstr "[ERR_CPI_00000033] Cohérence offreur / périmètre de service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CPI_00000034] Scope of service"
+msgstr "[ERR_CPI_00000034] Périmètre de service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CPI_00000047] Perimeter of service"
+msgstr "[ERR_CPI_00000047] Perimetre de service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_CPI_00000048] Perimeter of service"
+msgstr "[ERR_CPI_00000048] Perimetre de service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_GEN_00000001] The length of the fields in the flow"
+msgstr "[ERR_GEN_00000001] La longueur des champs dans le flux"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_GEN_00000002] Validity of field supply in the file"
+msgstr "[ERR_GEN_00000002] Validité alimentation des champs dans le fichier"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_GEN_00000003] Validity of field supply in the file"
+msgstr "[ERR_GEN_00000003] Validité alimentation des champs dans le fichier"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_GEN_00000004] End of line detection"
+msgstr "[ERR_GEN_00000004]Détection fin de ligne"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_GEN_00000005] Detection no impromptu end of line"
+msgstr "[ERR_GEN_00000005] Détection pas de fin de ligne impromptue"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_GEN_00000006] Presence of mandatory fields"
+msgstr "[ERR_GEN_00000006] Présence des champs obligatoires"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_GEN_00000007] Validity of entity types in the flow"
+msgstr "[ERR_GEN_00000007] Validité des types d'entités dans le flux"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_GEN_00000112] Contract"
+msgstr "[ERR_GEN_00000112] Contract"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_GEN_00000113] Enter exit"
+msgstr "[ERR_GEN_00000113] Entree sortie"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_GEN_00000120] Presence of the FILE tag"
+msgstr "[ERR_GEN_00000120] Présence de la balise FICHIER"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_GEN_00000121] Presence of the PERIMETER_SERVICE tag"
+msgstr "[ERR_GEN_00000121] Présence de la balise PERIMETRE_SERVICE"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_GEN_00000122] Presence of the CONTRACT tag"
+msgstr "[ERR_GEN_00000122] Présence de la balise CONTRAT"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_GEN_00000123] Setting up responsible contracts"
+msgstr "[ERR_GEN_00000123] Paramétrage contrats responsables"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_PB_00000001] Field length"
+msgstr "[ERR_PB_00000001] Longueur des champs"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_PB_00000002] Allowed values"
+msgstr "[ERR_PB_00000002] Valeurs autorisées"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_PB_00000003] Allowed values"
+msgstr "[ERR_PB_00000003] Valeurs autorisées"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_PB_00000004] End of registration delimiter"
+msgstr "[ERR_PB_00000004] Délimiteur fin d'enregistrement"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_PB_00000005] Field length"
+msgstr "[ERR_PB_00000005] Longueur des champs"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_PB_00000006] Required fields"
+msgstr "[ERR_PB_00000006] Champs obligatoires"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_PB_00000007] Service provider configuration"
+msgstr "[ERR_PB_00000007] Paramétrage offreur de service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_PB_00000008] Parameter setting of the service perimeter"
+msgstr "[ERR_PB_00000008] Paramétrage périmètre de service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_PB_00000009] Service provider"
+msgstr "[ERR_PB_00000009] Offreur de service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_PB_00000010] Scope of service"
+msgstr "[ERR_PB_00000010] Périmètre de service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_PB_00000013] Empty file"
+msgstr "[ERR_PB_00000013] Fichier vide"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_PR_00000011] Coherence of the flow"
+msgstr "[ERR_PR_00000011] Cohérence du flux"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V2_00000007] TP Coverage"
+msgstr "[ERR_V2_00000007] Couverture TP"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V2_00000008] missing address"
+msgstr "[ERR_V2_00000008] adresse manquante"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V2_00000013] Parameter setting"
+msgstr "[ERR_V2_00000013] Paramétrage"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000001] Version of the standard"
+msgstr "[ERR_V3_00000001] Version de la norme"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000002] Service provider label"
+msgstr "[ERR_V3_00000002] Libellé offreur de service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000005] Rattachement"
+msgstr "[ERR_V3_00000005] Rattachement"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000006] Grouping criteria"
+msgstr "[ERR_V3_00000006] Critère de regroupement"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000007] Contract member"
+msgstr "[ERR_V3_00000007] Membre Contrat "
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000008] Access rights"
+msgstr "[ERR_V3_00000008] Droits accès"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000009] Access rights"
+msgstr "[ERR_V3_00000009] Droits accès"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000010] Service TP PEC"
+msgstr "[ERR_V3_00000010] Service TP PEC"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000011] Service TP PEC"
+msgstr "[ERR_V3_00000011] Service TP PEC"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000014] Tag sequence"
+msgstr "[ERR_V3_00000014] Enchaînement des balises"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000015] Validity of field supply in the file"
+msgstr "[ERR_V3_00000015] Validité alimentation des champs dans le fichier"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000016] Contract member"
+msgstr "[ERR_V3_00000016] Membre contrat"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000017] Service TP PEC"
+msgstr "[ERR_V3_00000017] Service TP PEC"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000018] Service TP PEC"
+msgstr "[ERR_V3_00000018] Service TP PEC"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000019] Service TP PEC"
+msgstr "[ERR_V3_00000019] Service TP PEC"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000020] Compliance with the service perimeter code"
+msgstr "[ERR_V3_00000020] Conformité du code périmètre de service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000021] Service TP PEC"
+msgstr "[ERR_V3_00000021] Service TP PEC"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid ""
+"[ERR_V3_00000023] Setting up responsible contracts by service perimeter"
+msgstr ""
+"[ERR_V3_00000023] Paramétrage des contrats responsables par périmètre de "
+"service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000024] Contract member"
+msgstr "[ERR_V3_00000024] Member contrat"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000025] Management center "
+msgstr "[ERR_V3_00000025] Centre gestion"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000026] Service TP PEC"
+msgstr "[ERR_V3_00000026] Service TP PEC"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000027] Validity of the date"
+msgstr "[ERR_V3_00000027] Validité de la date"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000028] Date format"
+msgstr "[ERR_V3_00000028] Format de la date"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000029] Filling the date of birth in the file"
+msgstr ""
+"[ERR_V3_00000029] Alimentation de la date de naissance dans le fichier"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000030] Processing parameters by service perimeter"
+msgstr "[ERR_V3_00000030] Paramètres de traitement par périmètre de service"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000031] Missing address"
+msgstr "[ERR_V3_00000031] adresse manquante"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000032] Perimeter unknown service"
+msgstr "[ERR_V3_00000032] Périmetre service inconnu"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000034] Risk bearer"
+msgstr "[ERR_V3_00000034] Porteur de risque"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000035] Contract type"
+msgstr "[ERR_V3_00000035] Type contrat"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000036] Contract type"
+msgstr "[ERR_V3_00000036] Type contrat"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000037] Map background"
+msgstr "[ERR_V3_00000037] Fond de carte"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000038] Map background"
+msgstr "[ERR_V3_00000038] Fond de carte"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000039] Map background"
+msgstr "[ERR_V3_00000039] Fond de carte"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000040] Contract status"
+msgstr "[ERR_V3_00000040] Statut contrat"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000041] Contract status"
+msgstr "[ERR_V3_00000041] Statut contrat"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000042] Contract status"
+msgstr "[ERR_V3_00000042] Statut contrat"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000043] Code annexe"
+msgstr "[ERR_V3_00000043] Code annexe"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000044] Code annexe"
+msgstr "[ERR_V3_00000044] Code annexe"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000045] Code annexe"
+msgstr "[ERR_V3_00000045] Code annexe"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000046] Beneficiary"
+msgstr "[ERR_V3_00000046] Beneficiaire"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000047] Bank details"
+msgstr "[ERR_V3_00000047] Coordonnées bancaires"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[ERR_V3_00000048] Bank details"
+msgstr "[ERR_V3_00000048] Coordonnées bancaires"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[WRN_CIN_00000037] Contract status"
+msgstr "[WRN_CIN_00000037] Etat contrat"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[WRN_CIN_00000038] Termination date"
+msgstr "[WRN_CIN_00000038] Date résiliation"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid ""
+"[WRN_CPI_00000016] Impossible to create the reject file (for details, see "
+"log file)"
+msgstr ""
+"[WRN_CPI_00000016] Impossible to create the reject file (for details, see "
+"log file)"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[WRN_V3_00000030] Beneficiary"
+msgstr "[WRN_V3_00000030] Beneficiaire"
+
+msgctxt "selection:return.almerys,error_code:"
+msgid "[WRN_V3_00000030] Powering the address components in the file"
+msgstr ""
+"[WRN_V3_00000030] Alimentation des composantes adresse dans le fichier"
+
+msgctxt "selection:return.almerys,status:"
+msgid "To Treat"
+msgstr "À Traiter"
+
+msgctxt "selection:return.almerys,status:"
+msgid "Treated"
+msgstr "Traité"
+
 msgctxt "selection:third_party_manager.protocol,technical_protocol:"
 msgid "Almerys"
 msgstr "Almerys"
+
+msgctxt "view:contract:"
+msgid "Almerys Return"
+msgstr "Retour Almerys"
 
 msgctxt "view:third_party_manager.protocol:"
 msgid "Almerys"

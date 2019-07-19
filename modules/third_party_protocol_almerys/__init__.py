@@ -6,11 +6,13 @@ from . import batch
 from . import config
 from . import party
 from . import protocol
+from . import almerys
 
 
 def register():
     Pool.register(
         batch.AlmerysProtocolBatch,
+        batch.AlmerysReturnBatch,
         config.AlmerysConfig,
         config.ConfigurationNumberSequenceV3,
         config.ConfigurationProtocolVersion,
@@ -18,6 +20,10 @@ def register():
         config.ConfigurationCustomerLabel,
         config.ConfigurationAutonomous,
         protocol.Protocol,
+        almerys.ReturnAlmerys,
         party.Party,
         party.Address,
         module='third_party_protocol_almerys', type_='model')
+    Pool.register(
+        almerys.RecomputePeriod,
+        module='third_party_protocol_almerys', type_='wizard')

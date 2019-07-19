@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- ############ -->
+        <!-- # ReturnAlmerys # -->
+        <!-- ############ -->
+        <record model="ir.ui.view" id="return_almerys_view_form">
+            <field name="model">return.almerys</field>
+            <field name="type">form</field>
+            <field name="name">return_almerys_form</field>
+        </record>
+        <record model="ir.ui.view" id="return_almerys_view_list">
+            <field name="model">return.almerys</field>
+             <field name="type">tree</field>
+            <field name="name">return_almerys_list</field>
+        </record>
+        <record model="ir.action.act_window" id="return_almerys_act">
+            <field name="name">Retour Almerys</field>
+            <field name="res_model">return.almerys</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_return_almerys_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="return_almerys_view_list"/>
+            <field name="act_window" ref="return_almerys_act"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_return_almerys_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="return_almerys_view_form"/>
+            <field name="act_window" ref="return_almerys_act"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_return_almerys_to_be_processed">
+            <field name="name">Retours à Traité</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain" eval="[('status', '=', 'to_treat')]" pyson="1"/>
+            <field name="act_window" ref="return_almerys_act"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_return_almerys_all">
+            <field name="name">Tous les Retours</field>
+            <field name="sequence" eval="20"/>
+            <field name="act_window" ref="return_almerys_act"/>
+        </record>
+        <menuitem id="menu_claim_return_almerys" name="Return Almerys" parent="claim.menu_claim" action="return_almerys_act"/>
+        <!-- ############ -->
+        <!-- # Almerys Relate Contract # -->
+        <!-- ############ -->
+        <record model="ir.action.act_window" id="act_almerys_relate_form">
+            <field name="name">Retour Almerys</field>
+            <field name="res_model">return.almerys</field>
+            <field name="domain" eval="[('contract', 'in', Eval('active_ids'))]" pyson="1"/>
+        </record>
+        <record model="ir.action.keyword" id="act_almerys_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_almerys_relate_form"/>
+        </record>
+        <!-- ############ -->
+        <!-- # Recompute # -->
+        <!-- ############ -->
+        <record model="ir.action.wizard" id="wizard_recompute_period">
+            <field name="name">Recompute Period</field>
+            <field name="wiz_name">third_party_manager.recompute_period</field>
+        </record>
+        <record model="ir.action.keyword" id="act_wizard_recompute_period_keyword">
+            <field name="action" ref="wizard_recompute_period"/>
+            <field name="keyword">form_action</field>
+            <field name="model">return.almerys,-1</field>
+        </record>
+    </data>
+</tryton>

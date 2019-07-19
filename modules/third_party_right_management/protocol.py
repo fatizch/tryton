@@ -260,7 +260,7 @@ class RecomputePeriod(model.CoogWizard):
             ])
     recompute = StateTransition()
 
-    def default_benefits(self, name):
+    def default_ask_date(self, name):
         pool = Pool()
         Date = pool.get('ir.date')
         Contract = pool.get('contract')
@@ -275,17 +275,23 @@ class RecomputePeriod(model.CoogWizard):
                     last_periods.append(list(periods)[-1])
 
         return {
-            'periods': last_periods,
+            'periods': [x.id for x in last_periods],
             'date': Date.today(),
             }
 
+    def get_contract(self):
+        if Transaction().context['active_model'] == 'contract':
+            pool = Pool()
+            Contract = pool.get('contract')
+            contract = Contract(Transaction().context['active_id'])
+        return contract
+
     def transition_recompute(self):
         pool = Pool()
-        Contract = pool.get('contract')
         Protocol = pool.get('third_party_manager.protocol')
         ThirdPartyPeriod = pool.get('contract.option.third_party_period')
 
-        contract = Contract(Transaction().context['active_id'])
+        contract = self.get_contract()
         to_remove, modified_periods = Protocol.edit_periods(
             contract, self.ask_date.date, 'apply_endorsement')
 
