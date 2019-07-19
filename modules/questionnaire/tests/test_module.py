@@ -317,17 +317,17 @@ return [
                     }])
 
         new_copy = copy.deepcopy(data_input)
-        new_copy['parts'][0]['id'] = -250000
+        new_copy['parts'][0]['id'] = 250000
         self.assertEqual(
-            self.APICore.compute_questionnaire(new_copy, {}).data,
-            [{
-                    'type': 'unknown_questionnaire_part',
-                    'data': {
-                        'questionnaire': questionnaire.code,
-                        'part_id': -250000,
-                        'known_parts': [x.id for x in questionnaire.parts],
-                        },
-                    }])
+            self.APICore.compute_questionnaire(new_copy, {}).data[0],
+            {
+                'type': 'unknown_questionnaire_part',
+                'data': {
+                    'questionnaire': questionnaire.code,
+                    'part_id': 250000,
+                    'known_parts': [x.id for x in questionnaire.parts],
+                    },
+                })
 
         new_copy = copy.deepcopy(data_input)
         new_copy['parts'][0]['answers']['hello'] = 10

@@ -457,10 +457,10 @@ return True'''
                     'packages': [],
                     'subscriber': {
                         'fields': ['name', 'first_name', 'birth_date', 'email',
-                            'phone_number', 'is_person', 'address'],
+                            'phone_number', 'is_person', 'addresses'],
                         'model': 'party',
                         'required': ['name', 'first_name', 'birth_date',
-                            'email', 'address'],
+                            'email', 'addresses'],
                         },
                     },
                 ]

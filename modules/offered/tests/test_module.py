@@ -697,9 +697,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'subscriber': {
                         'model': 'party',
                         'required': ['name', 'first_name', 'birth_date',
-                            'email', 'address'],
+                            'email', 'addresses'],
                         'fields': ['name', 'first_name', 'birth_date',
-                            'email', 'phone_number', 'is_person', 'address'],
+                            'email', 'phone_number', 'is_person', 'addresses'],
                         },
                     },
                 ])
