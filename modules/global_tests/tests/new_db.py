@@ -2,12 +2,15 @@
 import os
 import datetime
 import psycopg2
+import json
 
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 
 from proteus import config, Model, Wizard
 from trytond.exceptions import UserError, UserWarning
+
+from trytond.modules.coog_core.test_framework import switch_user
 
 
 def parse_environ(name, default):
@@ -68,6 +71,7 @@ CREATE_CONTRACTS = parse_environ('GEN_CREATE_CONTRACTS', True)
 BILL_CONTRACTS = parse_environ('GEN_BILL_CONTRACTS', True)
 CREATE_CLAIMS = parse_environ('GEN_CREATE_CLAIMS', True)
 GENERATE_REPORTINGS = parse_environ('GEN_GENERATE_REPORTINGS', True)
+TEST_APIS = parse_environ('GEN_TEST_APIS', False)
 
 
 assert TESTING or (RESTORE_DB and not CREATE_NEW_DB
@@ -313,6 +317,7 @@ InvoiceSequence = Model.get('account.fiscalyear.invoice_sequence')
 InvoiceSlipConfiguration = Model.get('account.invoice.slip.configuration')
 IrAction = Model.get('ir.action')
 IrModel = Model.get('ir.model')
+IrUiIcon = Model.get('ir.ui.icon')
 ItemDesc = Model.get('offered.item.description')
 Journal = Model.get('account.journal')
 Lang = Model.get('ir.lang')
@@ -339,6 +344,7 @@ ProcessStep = Model.get('process.step')
 ProductCategory = Model.get('product.category')
 ProductConfiguration = Model.get('offered.configuration')
 Product = Model.get('offered.product')
+Questionnaire = Model.get('questionnaire')
 Reconciliation = Model.get('account.move.reconciliation')
 RuleEngine = Model.get('rule_engine')
 RuleEngineContext = Model.get('rule_engine.context')
@@ -467,7 +473,6 @@ def get_extra_data(code):  # {{{
 
 
 # }}}
-
 do_print('\nGet Rule engine context')  # {{{
 rule_context = RuleEngineContext(1)
 commission_context, = RuleEngineContext.find(
@@ -4287,6 +4292,8 @@ else:
     life_product.com_products[0].start_date = _base_date
     life_product.com_products[0].dist_networks.append(
         DistributionNetwork.find([('code', '=', 'C1')])[0])
+    life_product.com_products[0].dist_authorized_channels.append(
+        Channel.find([])[0])
     life_product.document_rules.new()
     life_product.document_rules[0].documents.new()
     life_product.document_rules[0].documents[0].document = subscription_request
@@ -4403,11 +4410,168 @@ else:
         'stop_indemnifications'
     group_life_product.save()
     # }}}
+
+    do_print('\nCreating Questionnaire')
+    do_print('    Creating Questions')  # {{{
+    refund_overpayment_question = ExtraData()
+    refund_overpayment_question.type_ = 'selection'
+    refund_overpayment_question.kind = 'questionnaire'
+    refund_overpayment_question.string = 'Souhaitez vous bénéficiez de '
+    refund_overpayment_question.string += 'remboursement pour les dépassement '
+    refund_overpayment_question.string += 'd\'honoraires ?'
+    refund_overpayment_question.name = 'refund_question'
+    refund_overpayment_question.selection = '''oui:Oui\nnon:Non'''
+    refund_overpayment_question.selection_sorted = True
+    refund_overpayment_question.has_default_value = False
+    refund_overpayment_question.sequence_order = 49
+    refund_overpayment_question.save()
+
+    eyes_and_tooth_question = ExtraData()
+    eyes_and_tooth_question.type_ = 'selection'
+    eyes_and_tooth_question.kind = 'questionnaire'
+    eyes_and_tooth_question.string = \
+        'Souhaitez vous renforcer l\'Optique et/ou le Dentaire?'
+    eyes_and_tooth_question.name = 'eyes_and_tooth_question'
+    eyes_and_tooth_question.selection = '''oui:Oui\nnon:Non'''
+    eyes_and_tooth_question.selection_sorted = True
+    eyes_and_tooth_question.has_default_value = False
+    eyes_and_tooth_question.sequence_order = 48
+    eyes_and_tooth_question.save()
+
+    simple_coverage_question = ExtraData()
+    simple_coverage_question.type_ = 'selection'
+    simple_coverage_question.kind = 'questionnaire'
+    simple_coverage_question.string = \
+        'Souhaitez vous être couvert pour l\'essentiel ?'
+    simple_coverage_question.name = 'simple_coverage_question'
+    simple_coverage_question.selection = '''oui:Oui\nnon:Non'''
+    simple_coverage_question.selection_sorted = True
+    simple_coverage_question.has_default_value = False
+    simple_coverage_question.sequence_order = 47
+    simple_coverage_question.save()
+
+    heavy_coverage_question = ExtraData()
+    heavy_coverage_question.type_ = 'selection'
+    heavy_coverage_question.kind = 'questionnaire'
+    heavy_coverage_question.string = 'Selon vous, est-ce important de se '
+    heavy_coverage_question.string += 'prémunir (vous et vos proches) contre '
+    heavy_coverage_question.string += 'les risques lourds de la vie '
+    heavy_coverage_question.string += '(incapacité, décès) ?'
+    heavy_coverage_question.name = 'heavy_coverage_question'
+    heavy_coverage_question.selection = '''oui:Oui\nnon:Non'''
+    heavy_coverage_question.selection_sorted = True
+    heavy_coverage_question.has_default_value = False
+    heavy_coverage_question.sequence_order = 50
+    heavy_coverage_question.save()
+
+    maximal_coverage_question = ExtraData()
+    maximal_coverage_question.type_ = 'selection'
+    maximal_coverage_question.kind = 'questionnaire'
+    maximal_coverage_question.string = \
+        'Souhaitez-vous bénéficier de la couverture maximale ?'
+    maximal_coverage_question.name = 'maximal_coverage_question'
+    maximal_coverage_question.selection = '''oui:Oui\nnon:Non'''
+    maximal_coverage_question.selection_sorted = True
+    maximal_coverage_question.has_default_value = False
+    maximal_coverage_question.sequence_order = 51
+    maximal_coverage_question.save()
+    # }}}
+
+    do_print('    Creating Rules')  # {{{
+    questionnaire_sante_rule = RuleEngine()
+    questionnaire_sante_rule.algorithm = '''
+return [{
+        'score': 100,
+        'description': 'La solution qui vous convient',
+        'eligible': True,
+        'product': 'life_product',
+        }]
+    '''
+    questionnaire_sante_rule.context = rule_context
+    questionnaire_sante_rule.name = 'Rule Santé MDP'
+    questionnaire_sante_rule.status = 'validated'
+    questionnaire_sante_rule.type_ = 'questionnaire'
+    questionnaire_sante_rule.save()
+
+    questionnaire_health_rule = RuleEngine()
+    questionnaire_health_rule.algorithm = '''
+return [{
+        'score': 50,
+        'description': 'La formule qui vous convient',
+        'eligible': False,
+        'product': 'life_product',
+        }]
+    '''
+    questionnaire_health_rule.context = rule_context
+    questionnaire_health_rule.name = 'Rule Prévoyancd MDP'
+    questionnaire_health_rule.status = 'validated'
+    questionnaire_health_rule.type_ = 'questionnaire'
+    questionnaire_health_rule.save()
+    # }}}
+
+    do_print('    Creating health and life Questionnaire')  # {{{
+    questionnaire_sante_prev = Questionnaire()
+    questionnaire_sante_prev.code = 'sante_et_prevoyance_mpd'
+    questionnaire_sante_prev.company = company
+    questionnaire_sante_prev.description = \
+        'Description pour Santé et Prévoyance'
+    questionnaire_sante_prev.icon = IrUiIcon(10)
+    questionnaire_sante_prev.name = 'Santé et Prévoyance'
+    questionnaire_sante_prev.parts[0].extra_data_def.append(
+        ExtraData(refund_overpayment_question.id))
+    questionnaire_sante_prev.parts[0].extra_data_def.append(
+        ExtraData(eyes_and_tooth_question.id))
+    questionnaire_sante_prev.parts[0].extra_data_def.append(
+        ExtraData(simple_coverage_question.id))
+    questionnaire_sante_prev.parts[0].mandatory = True
+    questionnaire_sante_prev.parts[0].name = 'Santé MPD'
+    questionnaire_sante_prev.parts[0].mandatory = True
+    questionnaire_sante_prev.parts[0].rule = questionnaire_sante_rule
+    questionnaire_sante_prev.parts[0].sequence = 1
+
+    questionnaire_sante_prev.parts.new()
+    questionnaire_sante_prev.parts[1].extra_data_def.append(
+        ExtraData(heavy_coverage_question.id))
+    questionnaire_sante_prev.parts[1].extra_data_def.append(
+        ExtraData(maximal_coverage_question.id))
+    questionnaire_sante_prev.parts[1].mandatory = False
+    questionnaire_sante_prev.parts[1].name = 'Prévoyance MPD'
+    questionnaire_sante_prev.parts[1].mandatory = True
+    questionnaire_sante_prev.parts[1].rule = questionnaire_health_rule
+    questionnaire_sante_prev.parts[1].sequence = 2
+
+    questionnaire_sante_prev.products.append(Product(life_product.id))
+    questionnaire_sante_prev.sequence = 124
+    questionnaire_sante_prev.save()
+    # }}}
+
+    do_print('    Creating health Questionnaire')  # {{{
+    questionnaire_sante_prev = Questionnaire()
+    questionnaire_sante_prev.code = 'sante_mpd'
+    questionnaire_sante_prev.company = company
+    questionnaire_sante_prev.description = 'Description pour Santé'
+    questionnaire_sante_prev.icon = IrUiIcon(10)
+    questionnaire_sante_prev.name = 'Santé'
+    questionnaire_sante_prev.parts[0].extra_data_def.append(
+        ExtraData(refund_overpayment_question.id))
+    questionnaire_sante_prev.parts[0].extra_data_def.append(
+        ExtraData(eyes_and_tooth_question.id))
+    questionnaire_sante_prev.parts[0].extra_data_def.append(
+        ExtraData(simple_coverage_question.id))
+    questionnaire_sante_prev.parts[0].mandatory = True
+    questionnaire_sante_prev.parts[0].name = 'Santé MPD'
+    questionnaire_sante_prev.parts[0].mandatory = True
+    questionnaire_sante_prev.parts[0].rule = questionnaire_sante_rule
+    questionnaire_sante_prev.parts[0].sequence = 1
+
+    questionnaire_sante_prev.products.append(Product(life_product.id))
+    questionnaire_sante_prev.sequence = 124
+    questionnaire_sante_prev.save()
+    # }}}
 # }}}
 
 if CREATE_COMMISSION_CONFIG:  # {{{
     do_print('\nCreating commission configuration')
-
     do_print('    Loading configuration')  # {{{
     broker, = Party.find([('name', '=', _broker_name)])
     # }}}
@@ -4534,6 +4698,7 @@ return 1.0 if compl_vip_agent() else 0.75
     broker_agent.type_ = 'agent'
     assert 'vip_agent' in broker_agent.extra_data
     broker_agent.extra_data = {'vip_agent': True}
+    broker_agent.code = 'vip'
     broker_agent.save()
 
     broker_flat = CommissionAgent()
@@ -5770,6 +5935,48 @@ if GENERATE_REPORTINGS:  # {{{
             else:
                 assert_eq(message_line.strip(), control_line.strip())
 
+    # }}}
+# }}}
+
+if TEST_APIS:  # {{{
+
+    def run_api(api, file_path, parameters, context):
+        with open(os.path.abspath(
+                    os.path.join(
+                        os.path.normpath(__file__), '..', file_path)),
+                'r') as f:
+            switch_user('coog_api_user')
+            api_class, api_name = api.rsplit('.', 1)
+            data = json.loads(f.read() % parameters)
+            result = getattr(Model.get(api_class), api_name)(data, context, {})
+            switch_user('admin')
+            return result
+
+    do_print('\nTesting APIs')
+    do_print('    Loading Configuration')  # {{{
+    questionnaire_sante_prev, = Questionnaire.find([
+            ('code', '=', 'sante_et_prevoyance_mpd')])
+    network, = DistributionNetwork.find([('code', '=', 'C1010102')])
+    # }}}
+
+    do_print('    Updating API User')  # {{{
+    api_user, = User.find([('login', '=', 'coog_api_user')])
+    api_user.password = 'poiuytreza'
+    api_user.save()
+    # }}}
+
+    do_print('    Creating a contract')  # {{{
+    result = run_api(
+        'api.contract.subscribe_contracts',
+        'api_files/compute_questionnaire.json',
+        {
+            'part_1_id': questionnaire_sante_prev.parts[0].id,
+            'part_2_id': questionnaire_sante_prev.parts[1].id,
+            },
+        {'_debug_server': True, 'dist_network': network.id})
+
+    # Simply check this is not an error
+    assert_eq('contracts' in result, True)
     # }}}
 # }}}
 

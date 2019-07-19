@@ -1,0 +1,148 @@
+{
+    "parties": [
+        {
+            "ref": "1",
+            "is_person": true,
+            "name": "API Test",
+            "first_name": "Father",
+            "gender": "male",
+            "birth_date": "1969-02-15",
+            "addresses": [
+                {
+                    "street": "Somewhere I belong",
+                    "zip": "75001",
+                    "city": "Paris",
+                    "country": "fr"
+                }
+            ],
+            "bank_accounts": [
+                {
+                    "number": "FR7615970003860000690570007",
+                    "bank": {"bic": "SIGEFRP1XXX"}
+                }
+            ]
+        },
+        {
+            "ref": "2",
+            "is_person": true,
+            "name": "API Test",
+            "first_name": "Baby",
+            "gender": "female",
+            "birth_date": "1992-01-12",
+            "addresses": [
+                {
+                    "street": "Somewhere I belong",
+                    "zip": "75001",
+                    "city": "Paris",
+                    "country": "fr"
+                }
+            ],
+            "relations": [
+                {
+                    "ref": "1",
+                    "to": {"ref": "1"},
+                    "type": "child"
+                }
+            ]
+        }
+    ],
+    "questionnaires": [
+        {
+            "ref": "1",
+            "questionnaire": {"code": "sante_et_prevoyance_mpd"},
+            "parts": [
+                {
+                    "id": %(part_1_id)i,
+                    "answers": {
+                        "refund_question": "oui",
+                        "simple_coverage_question": "non",
+                        "eyes_and_tooth_question": "oui"
+                    },
+                    "results": [
+                        {
+                            "score": 100,
+                            "description": "La solution qui vous convient",
+                            "product": "life_product",
+                            "eligible": true,
+                            "commercial_product": "prevoyance_plus",
+                            "selected": true
+                        }
+                    ]
+                },
+                {
+                    "id": %(part_2_id)i,
+                    "answers": {
+                        "heavy_coverage_question": "oui",
+                        "maximal_coverage_question": "oui"
+                    },
+                    "results": [
+                        {
+                            "score": 50,
+                            "description": "La formule qui vous convient",
+                            "eligible": false,
+                            "commercial_product": "prevoyance_plus",
+                            "product": "life_product"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "contracts": [
+        {
+            "ref": "1",
+            "subscriber": {"ref": "1"},
+            "product": {"code": "life_product"},
+            "commercial_product": {"code": "prevoyance_plus"},
+            "agent": {"code": "vip"},
+            "extra_data": {"analyse_forcee": "non"},
+            "questionnaire": {"ref": "1"},
+            "billing": {
+                "payer": {"ref": "1"},
+                "billing_mode": {"code": "monthly_sepa"},
+                "direct_debit_day": 12
+            },
+            "covereds": [
+                {
+                    "party": {"ref": "1"},
+                    "item_descriptor": {"code": "life_person_item_desc"},
+                    "extra_data": {
+                        "job_category": "csp1"
+                    },
+                    "coverages": [
+                        {
+                            "coverage": {"code": "death_coverage"},
+                            "coverage_amount": "10000.00",
+                            "extra_data": {
+                                "double_for_accidents": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "party": {"ref": "2"},
+                    "item_descriptor": {"code": "life_person_item_desc"},
+                    "extra_data": {
+                        "job_category": "csp2"
+                    },
+                    "coverages": [
+                        {
+                            "coverage": {"code": "death_coverage"},
+                            "coverage_amount": "50000.00",
+                            "extra_data": {
+                                "double_for_accidents": true
+                            }
+                        },
+                        {
+                            "coverage": {"code": "unemployment_coverage"},
+                            "extra_data": {
+                                "deductible_duration": "30",
+                                "per_day_amount": "150"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

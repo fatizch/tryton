@@ -6,6 +6,7 @@ from . import rule_engine
 from . import offered
 from . import contract
 from . import endorsement
+from . import api
 
 
 def register():
@@ -23,3 +24,7 @@ def register():
         endorsement.OptionDisplayer,
         module='contract_coverage_amount', type_='model',
         depends=['endorsement'])
+
+    Pool.register(
+        api.APIContract,
+        module='contract_coverage_amount', type_='model', depends=['api'])

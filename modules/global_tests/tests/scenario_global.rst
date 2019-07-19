@@ -13,4 +13,5 @@
     >>> os.environ['GEN_CREATE_CONTRACTS'] = 'TRUE'
     >>> os.environ['GEN_BILL_CONTRACTS'] = 'TRUE'
     >>> os.environ['GEN_CREATE_CLAIMS'] = 'TRUE'
+    >>> os.environ['GEN_TEST_APIS'] = 'TRUE'
     >>> import trytond.modules.global_tests.tests.new_db  # NOQA

@@ -1,3 +1,5 @@
+* OTH#0000 Initialisation des tests API dans new_db
+
 Version 2.4 - 2019-04-12
 * OTH#0000 Emettre le bordereau Pasrau et générer le message Pasrau. Ajout de la configuration PASRAU
 * FEA#10308 Ne pas installer les modules liés aux ensembles de contrats et aux processus d'avenant

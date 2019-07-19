@@ -444,7 +444,7 @@ class APIContract(metaclass=PoolMeta):
 
         answers, results = [], []
 
-        for part in contract_data['questionnaires']['parts']:
+        for part in contract_data['questionnaire']['parts']:
             answers.append(Answer(part=part['id'], answers=part['answers']))
             results.append(Result(part=part['id'],
                     results_as_text=json.dumps(part['results'])))
