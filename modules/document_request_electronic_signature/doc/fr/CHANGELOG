@@ -1,3 +1,4 @@
+* BUG#12198 Ajout d'information supplémentaire dans le contexte pour pouvoir retrouver le signataire du document électronique dans certains cas
 * BUG#11679 Correction d'un crash lors de la génération des documents
 
 Version 2.4 - 2019-04-12

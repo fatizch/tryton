@@ -581,8 +581,9 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             'data': data,
             'report_name': '%s%s%s' % (report_name, os.extsep if extension else
                 '', extension),
+            'party': objects[0].get_contact(),
             'report_name_wo_ext': report_name,
-            'origin': context_.get('origin', None),
+            'origin': context_.get('origin', objects[0]),
             'resource': context_.get('resource', None),
             }
 
