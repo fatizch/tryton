@@ -7,7 +7,6 @@ from dateutil.relativedelta import relativedelta
 
 from trytond import backend
 from trytond.pool import PoolMeta, Pool
-from trytond.model import Unique
 from trytond.pyson import Eval, Bool, If
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext

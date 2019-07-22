@@ -28,7 +28,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
     @classmethod
     def fetch_models_for(cls):
         return ['company_cog', 'currency_cog', 'offered', 'offered_insurance',
-            'bank_cog']
+            'bank_cog', 'rule_engine']
 
     @classmethod
     def get_models(cls):
@@ -79,12 +79,21 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'type': account_kind.id,
                     }])
 
+    @test_framework.prepare_test(
+        'offered_insurance.test0001_testFunctionalRuleCreation',
+        )
     def test0005_create_billing_modes(self):
-        payment_term, = self.PaymentTerm.create([{
+        pool = Pool()
+        Rule = pool.get('rule_engine')
+        Context = pool.get('rule_engine.context')
+        BillingMode = pool.get('offered.billing_mode')
+        PaymentTerm = pool.get('account.invoice.payment_term')
+
+        payment_term, = PaymentTerm.create([{
                     'name': 'direct',
                     'lines': [('create', [{}])],
                     }])
-        self.BillingMode.create([{
+        BillingMode.create([{
                     'code': 'monthly',
                     'name': 'monthly',
                     'frequency': 'monthly',
@@ -106,11 +115,20 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         ('add', [payment_term.id])]
                     }])
 
+        rule_context, = Context.search([('name', '=', 'test_context')])
+        rule = Rule()
+        rule.type_ = 'billing_mode'
+        rule.context = rule_context
+        rule.status = 'validated'
+        rule.name = 'Filter Billing Modes Rule'
+        rule.short_name = 'filter_billing_modes_rule'
+        rule.algorithm = "return ['monthly', 'quarterly']"
+        rule.save()
+
     @test_framework.prepare_test(
         'offered.test0001_testNumberGeneratorCreation',
         'contract_insurance_invoice.test0004_create_accounts',
         'contract_insurance_invoice.test0005_create_billing_modes',
-        'offered_insurance.test0001_testFunctionalRuleCreation',
         'offered_insurance.test0005_testItemDescCreation',
         'offered_insurance.test0005_testInsurerCreation',
         )
@@ -124,6 +142,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         quarterly, = self.BillingMode.search([('code', '=', 'quarterly')])
         item_desc, = self.ItemDesc.search([('code', '=', 'person')])
         account, = self.Account.search([('code', '=', 'account_product')])
+        rule, = self.RuleEngine.search(
+            [('short_name', '=', 'filter_billing_modes_rule')])
 
         coverage_alpha = self.Coverage()
         coverage_alpha.company = company
@@ -154,6 +174,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         product.quote_number_sequence = quote_generator
         product.billing_rules = [{}]
         product.billing_rules[-1].billing_modes = [monthly, quarterly]
+        product.billing_rules[-1].rule = rule
         product.coverages = [coverage_alpha, coverage_beta]
         product.save()
 
@@ -1153,6 +1174,63 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         'billing_mode': 'monthly',
                         },
                     }])
+
+    @test_framework.prepare_test(
+        'contract_insurance_invoice.test0006_prepare_product_for_subscription',
+        )
+    def test0090_test_compute_billing_modes(self):
+        pool = Pool()
+        APIContract = pool.get('api.contract')
+        BillingMode = pool.get('offered.billing_mode')
+
+        monthly, = BillingMode.search([('code', '=', 'monthly')])
+        quarterly, = BillingMode.search([('code', '=', 'quarterly')])
+
+        data_dict = {
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': False,
+                    'name': 'My Company',
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'subscriber': {'ref': '1'},
+                    'product': {'code': 'AAA'},
+                    },
+                ],
+            }
+
+        self.assertEqual(
+            APIContract.compute_billing_modes(
+                data_dict, {'_debug_server': True}),
+            [
+                {
+                    'ref': '1',
+                    'billing_modes': [
+                        {
+                            'code': 'monthly',
+                            'frequency': 'Monthly',
+                            'id': monthly.id,
+                            'is_direct_debit': False,
+                            'name': 'monthly',
+                            'sequence': 0,
+                            },
+                        {
+                            'code': 'quarterly',
+                            'direct_debit_days': [5, 10, 15],
+                            'frequency': 'Quarterly',
+                            'id': quarterly.id,
+                            'is_direct_debit': True,
+                            'name': 'quarterly',
+                            'sequence': 1,
+                            }
+                        ],
+                    },
+                ]
+            )
 
 
 def suite():
