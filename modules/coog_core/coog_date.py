@@ -110,7 +110,7 @@ def add_duration(date, duration_unit, duration=1, stick_to_end_of_month=False):
         res = add_month(date, 3 * duration, stick_to_end_of_month)
     elif duration_unit in ['half_year', 'half_yearly']:
         res = add_month(date, 6 * duration, stick_to_end_of_month)
-    elif duration_unit in ['year', 'yearly']:
+    elif duration_unit in ['year', 'yearly', 'yearly_360']:
         res = add_year(date, duration, stick_to_end_of_month)
     elif duration_unit in ['yearly_365']:
         res = add_day(date, 365 * duration)
