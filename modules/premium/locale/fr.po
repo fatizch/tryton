@@ -811,6 +811,10 @@ msgid "Duration from the contract initial start date"
 msgstr "Durée à partir de la date d'effet initiale du contrat"
 
 msgctxt "selection:offered.product.premium_date,type_:"
+msgid "Monthly, from the contract start date"
+msgstr "Mensuellement, depuis la date de début du contrat"
+
+msgctxt "selection:offered.product.premium_date,type_:"
 msgid "Yearly, at this date"
 msgstr "Annuellement, à cette date"
 

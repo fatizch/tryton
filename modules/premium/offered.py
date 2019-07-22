@@ -45,6 +45,7 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
         required=True, select=True)
     type_ = fields.Selection([
             ('yearly_on_start_date', 'Yearly, from the contract start date'),
+            ('monthly_on_start_date', 'Monthly, from the contract start date'),
             ('yearly_custom_date', 'Yearly, at this date'),
             ('duration_initial_start_date', 'Duration from the contract '
                 'initial start date'),
@@ -105,6 +106,15 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
         elif self.type_ == 'yearly_on_start_date':
             return rrule.rrule(rrule.YEARLY,
                 dtstart=contract.initial_start_date, until=max_date)
+        elif self.type_ == 'monthly_on_start_date':
+            monthly_dates = []
+            cur_date = contract.initial_start_date
+            while cur_date < max_date:
+                monthly_dates.append(datetime.datetime.combine(
+                        cur_date, datetime.time.min))
+                cur_date = coog_date.add_month(cur_date, 1,
+                    stick_to_end_of_month=True)
+            return monthly_dates
 
     def get_rule_documentation_structure(self):
         return [

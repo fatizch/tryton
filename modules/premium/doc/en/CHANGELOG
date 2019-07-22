@@ -1,3 +1,5 @@
+* FEA#12197 Add posibility to monthly synchronize with contract initial start date in premium dates calculation rules. This can be useful when one premium of the year has a different amount.
+
 Version 2.4 - 2019-04-12
 * BUG#10625 Compute premium dates based on the initial start date rather than that of the current term
 

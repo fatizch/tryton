@@ -1,3 +1,5 @@
+* FEA#12197 Nouvelle possibilité dans les règles de calcul des dates de primes de pouvoir se synchroniser mensuellement par rapport à la date initiale du contrat. Peut-être utile quand une seule prime dans l'année a un montant différent.
+
 Version 2.4 - 2019-04-12
 * BUG#10625 Calcul des dates de requittancement sur la base de la date d'effet initiale du contrat et pas de la date de début du terme courant
 
