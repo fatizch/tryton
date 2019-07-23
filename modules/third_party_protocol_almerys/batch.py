@@ -163,6 +163,105 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                 members = []
                 rattachements = []
                 services_tp_pec = []
+                if not has_subscriber:
+                    joignabilites = []
+                    if contract.subscriber.almerys_joignabilite_adresse_media:
+                        joignabilites.append(E.JOIGNABILITE(
+                                E.MEDIA(contract.subscriber
+                                    .almerys_joignabilite_media),
+                                E.ADRESSE_MEDIA(contract.subscriber.email),
+                                E.ACTIF('true')
+                                ))
+                    party_address = contract.subscriber.address_get()
+                    if party_address:
+                        line4 = party_address.address_lines.get('4_ligne4')
+                        if not line4:
+                            for idx in (3, 2, 5):
+                                line4 = party_address.address_lines.get(
+                                    '{}_ligne{}'.format(idx, idx))
+                                if line4:
+                                    break
+
+                        party_address = E.ADRESSE_MEMBRE(
+                            E.ADRESSE_AGREGEE(
+                                E.LIGNE1('{} {}'.format(
+                                        party_address.party.first_name,
+                                        party_address.party.name)),
+                                E.LIGNE4(line4),
+                                E.LIGNE6('{} {}'.format(
+                                        party_address.zip,
+                                        party_address.city)),
+                                E.LIGNE7(party_address.address_lines.get(
+                                        '7_ligne7'))
+                            ))
+                    else:
+                        party_address = None
+                    membre = E.MEMBRE_CONTRAT(
+                        E.SOUSCRIPTEUR('true'),
+                        E.POSITION('01'),
+                        E.TYPE_REGIME('RC'),
+                        E.DATE_ENTREE(contract.initial_start_date.isoformat()),
+                        E.INDIVIDU(
+                            E.REF_INTERNE_OS(contract.subscriber.code),
+                            E.DATE_NAISSANCE(
+                                contract.subscriber.birth_date.isoformat()),
+                            E.RANG_NAISSANCE(contract.subscriber.birth_order),
+                            # COMMUNE_NAISSANCE
+                            E.NOM_PATRONIMIQUE(contract.subscriber.birth_name
+                                or contract.subscriber.name),
+                            E.NOM_USAGE(contract.subscriber.name),
+                            E.PRENOM(contract.subscriber.first_name),
+                            E.CODE_SEXE(
+                                'MA'
+                                if contract.subscriber.gender == 'male'
+                                else 'FE'),
+                            E.PORTEUR_RISQUE(
+                                contract.dist_network.name
+                                if contract.dist_network
+                                else '')
+                            # PROFESSION
+                            # MEDECIN_TRAITANT
+                            # IDENTITE_WEB
+                            # AUTRE
+                            # REF_INTERNE_ALMERYS
+                            # DATE_CAL
+                            # TYPE_CAL
+                            ),
+                        party_address,
+                        E.MEDIA_ENVOI(
+                            E.RELEVE_PRESTA(
+                                contract.subscriber.almerys_releve_presta),
+                            E.COURRIER_GESTION(
+                                contract.subscriber.almerys_courrier_gestion),
+                            ),
+                        *joignabilites,
+                        # NUM_ADHESION
+                        E.AUTONOME(
+                            'true' if config.autonomous else 'false'),
+                        # MODE_PAIEMENT
+                        E.NNI(contract.subscriber.ssn_no_key[:13] or
+                            contract.subscriber.main_insured_ssn[:13]),
+                        E.NNI_RATT(
+                            contract.subscriber.main_insured_ssn[:13]
+                            if contract.subscriber.main_insured_ssn and
+                            not contract.subscriber.ssn_no_key[:13] else ''),
+                        )
+                    membre.extend([
+                            E.VIP('false'),
+                            # DATE_CERTIFICATION_NNI
+                            # DATE_CERTIFICATION_NNI_RATT
+                            # DATE_DEBUT_SUSPENSION
+                            # DATE_FIN_SUSPENSION
+                            ])
+                    if (contract.termination_reason ==
+                            'unpaid_premium_termination'):
+                        membre.extend([
+                                E.DATE_RADIATION(
+                                    contract.final_end_date.isoformat()),
+                                E.MOTIF_RADIATION(
+                                    'unpaid_premium_termination'),
+                                ])
+                    members.append(membre)
                 for covered in contract.covered_elements:
                     option2periods = {}
                     for tp_period in periods:
@@ -276,10 +375,14 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                             E.AUTONOME(
                                 'true' if config.autonomous else 'false'),
                             # MODE_PAIEMENT
-                            E.NNI(covered.party.ssn_no_key[:13]),
+                            E.NNI(covered.party.ssn_no_key[:13] if
+                                covered.party.ssn_no_key else
+                                covered.party.main_insured_ssn[:13] if
+                                covered.party.main_insured_ssn else ''),
                             E.NNI_RATT(
                                 covered.party.main_insured_ssn[:13]
-                                if covered.party.main_insured_ssn else None),
+                                if covered.party.main_insured_ssn and not
+                                covered.party.ssn_no_key else ''),
                             )
                         membre.extend([
                                 E.VIP('false'),
@@ -300,10 +403,9 @@ class AlmerysProtocolBatch(batch.BatchRoot):
 
                         if not souscripteur:
                             rattachements.append(E.RATTACHEMENT(
-                                    E.REF_OS_RATTACHANT(relation.to.code if
-                                        relation else ''),
-                                    E.REF_OS_RATTACHE(relation.from_.code if
-                                        relation else ''),
+                                    E.REF_OS_RATTACHANT(
+                                        contract.subscriber.code),
+                                    E.REF_OS_RATTACHE(covered.party.code),
                                     E.LIEN_JURIDIQUE(
                                         liens.get(relation.type.code, 'AA')
                                         if relation else 'AA')
@@ -313,8 +415,10 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                     beneficiaire = E.BENEFICIAIRE(
                         E.REF_INTERNE_OS(covered.party.code),
                         E.TYPE_BENEF(
-                            liens.get(relation.type.code, 'AA')
-                            if relation else 'AA'),
+                            'AS' if (covered.party ==
+                                contract.subscriber) else
+                            liens.get(relation.type.code, 'AA') if relation
+                            else 'AA'),
                         )
                     health_complement = None
                     if covered.party.main_health_complement:
@@ -378,8 +482,8 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                                                 covered.party.first_name,
                                                 covered.party.name)[:80]),
                                         E.IBAN_PAYS(bank_number[:2]),
-                                        E.IBAN_CONTROLE(bank_number[-2:]),
-                                        E.IBAN_BBAN(bank_number[2:-2]),
+                                        E.IBAN_CONTROLE(bank_number[2:4]),
+                                        E.IBAN_BBAN(bank_number[4:]),
                                         E.BIC_BANQUE(bank.bic[:4]),
                                         E.BIC_PAYS(bank.bic[4:6]),
                                         E.BIC_EMPLACEMENT(bank.bic[6:8]),

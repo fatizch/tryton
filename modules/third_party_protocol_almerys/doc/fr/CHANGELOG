@@ -1,2 +1,4 @@
+* OTH#00000: Itération sur le batch de génération du flux v3
 * FEA#11997: Gestion des retour almerys
+* OTH#00000: Suppression d'un espace erroné dans la configuration d'un champ sélection
 * FEA#11526: Création du module

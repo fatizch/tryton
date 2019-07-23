@@ -358,7 +358,7 @@ document.xpath('//almerys:NOEMISE', namespaces=ns)[0].text
 len(document.xpath('//almerys:SERVICE_TP', namespaces=ns))
 # #Res# #1
 document.xpath('//almerys:IBAN_BBAN', namespaces=ns)[0].text
-# #Res# #'1420041010050500013M026'
+# #Res# #'20041010050500013M02606'
 document.xpath('//almerys:REF_INTERNE_CG', namespaces=ns)[0].text
 # #Res# #'REF INTERNE'
 
