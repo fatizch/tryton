@@ -37,7 +37,7 @@ class APIContract(metaclass=PoolMeta):
                 API.add_input_error({
                         'type': 'missing_coverage_amount',
                         'data': {
-                            'coverage': data['coverage'],
+                            'coverage': data['coverage'].code,
                             },
                         })
 

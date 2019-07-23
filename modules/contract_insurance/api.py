@@ -136,6 +136,8 @@ class APIContract(metaclass=PoolMeta):
             for covered_data in contract_data.get('covereds', []):
                 cls._validate_covered_element_input(
                     covered_data, contract_data)
+                for option_data in covered_data.get('coverages', []):
+                    cls._validate_contract_option_input(option_data)
 
     @classmethod
     def _validate_contract_input(cls, data):
