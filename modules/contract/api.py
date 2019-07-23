@@ -2,6 +2,7 @@
 # this repository contains the full copyright notices and license terms.
 from trytond.pool import Pool
 from trytond.model import Model
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import utils, model
 from trytond.modules.rule_engine import check_args
@@ -15,7 +16,7 @@ from trytond.modules.offered.api import EXTRA_DATA_VALUES_SCHEMA
 
 __all__ = [
     'APIContract',
-    'ContractAPIRuleRuntime',
+    'APIRuleRuntime',
     ]
 
 
@@ -520,19 +521,29 @@ class APIContract(APIMixin):
             ]
 
     @classmethod
-    def _init_contract_rule_engine_parameters(cls, contract_data):
+    def _init_contract_rule_engine_parameters(cls, contract_data, parameters):
         return {
+            'api.parties': parameters.get('parties', []),
             'api.contract': contract_data,
             'api.extra_data': {
                 'contract': contract_data.get('extra_data', {}),
                 },
             }
 
+    @classmethod
+    def _init_contract_option_rule_engine_parameters(cls, contract_data,
+            option_data, parameters):
+        base = cls._init_contract_rule_engine_parameters(contract_data,
+            parameters)
+        base['api.option'] = option_data
+        base['api.extra_data']['option'] = option_data.get('extra_data', {})
+        return base
 
-class ContractAPIRuleRuntime(Model):
-    'Contract Rule Runtime'
 
-    __name__ = 'api.contract.rule_runtime'
+class APIRuleRuntime(Model):
+    'Rule Runtime'
+
+    __name__ = 'api.rule_runtime'
 
     @classmethod
     def __post_setup__(cls):
@@ -545,15 +556,105 @@ class ContractAPIRuleRuntime(Model):
 
     @classmethod
     def get_runtime(cls):
+        '''
+            Will be called to replace the tree element during a rule execution
+            with the appropriate API function.
+
+            The classical usage will be:
+
+            with ServerContext().set_context(
+                    api_rule_context=ContractAPIRuleRuntime.get_runtime()):
+                my_rule.execute(...)
+        '''
+
         Function = Pool().get('rule_engine.function')
 
+        # For testing, we assume test_tree_element
+        if ServerContext().get('_test_api_tree_elements', False):
+            return {'%s_node' % x: y
+                for x, y in cls._api_runtime.items()}
         return {
             Function.search([('name', '=', x)])[0].translated_technical_name: y
             for x, y in cls._api_runtime.items()
             }
 
     @classmethod
+    def _get_field(cls, data, field_name):
+        if isinstance(data, dict):
+            if field_name in data:
+                return data[field_name]
+        else:
+            return getattr(data, field_name)
+        raise AttributeError
+
+    @classmethod
+    def _get_party(cls, ref, args):
+        API = Pool().get('api')
+        for party in args.get('api.parties', []):
+            if party['ref'] == ref:
+                return party
+        API.add_input_error({
+                'type': 'unknown_party_reference',
+                'data': {
+                    'ref': ref,
+                    },
+                })
+
+    @classmethod
+    def _get_subscriber(cls, contract_data, args):
+        API = Pool().get('api')
+
+        if 'subscriber' not in contract_data:
+            API.add_input_error({
+                    'type': 'missing_rule_engine_argument',
+                    'data': {
+                        'field': 'contract.subscriber',
+                        },
+                    })
+
+        subscriber = contract_data['subscriber']
+
+        if isinstance(subscriber, dict):
+            subscriber = cls._get_party(subscriber['ref'], args)
+
+        return subscriber
+
+    @classmethod
     @check_args('api.contract')
     def _re_api_get_contract_initial_start_date(cls, args):
         contract_data = args['api.contract']
-        return contract_data.get('start', None)
+
+        result = contract_data.get('start_date', None)
+        if result is None:
+            Pool().get('api').add_input_error({
+                    'type': 'missing_rule_engine_argument',
+                    'data': {
+                        'field': 'contract.start_date',
+                        },
+                    })
+        return result
+
+    @classmethod
+    @check_args('api.contract')
+    def _re_api_get_contract_start_date(cls, args):
+        return cls._re_api_get_contract_initial_start_date(args)
+
+    @classmethod
+    @check_args('api.contract')
+    def _re_api_contract_conditions_date(cls, args):
+        return cls._re_api_get_contract_initial_start_date(args)
+
+    @classmethod
+    @check_args('api.contract')
+    def _re_api_contract_signature_date(cls, args):
+        contract_data = args['api.contract']
+
+        result = contract_data.get('signature_date', None)
+        if result is None:
+            Pool().get('api').add_input_error({
+                    'type': 'missing_rule_engine_argument',
+                    'data': {
+                        'field': 'contract.signature_date',
+                        },
+                    })
+        return result

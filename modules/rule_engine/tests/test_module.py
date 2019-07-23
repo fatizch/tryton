@@ -9,10 +9,58 @@ import trytond.tests.test_tryton
 
 from trytond.transaction import Transaction
 from trytond.error import UserError
+from trytond.pool import Pool
 
 from trytond.modules.coog_core import test_framework
 from trytond.modules.rule_engine.rule_engine import CatchedRuleEngineError
 from trytond.modules.rule_engine.rule_engine import RuleEngineResult
+
+
+def test_tree_element(runtime_name, node_name, execution_context,
+        parameters=None):
+    pool = Pool()
+    Rule = pool.get('rule_engine')
+    RuleFunction = pool.get('rule_engine.function')
+    Context = pool.get('rule_engine.context')
+
+    existing_context = Context.search(
+        [('name', '=', 'tree_element_test_context')])
+    if not existing_context:
+        rule_context = Context()
+        rule_context.name = 'tree_element_test_context'
+        rule_context.allowed_elements = [
+            RuleFunction(type='function', name=node_name,
+                translated_technical_name='%s_node' % node_name,
+                namespace=runtime_name, language=1)]
+        rule_context.save()
+    else:
+        rule_context, = existing_context
+
+    existing_rule = Rule.search([('short_name', '=', 'tree_element_test_rule')])
+    if not existing_rule:
+        rule = Rule()
+        rule.context = rule_context
+        rule.name = 'Tree Element Test Rule'
+        rule.short_name = 'tree_element_test_rule'
+        rule.algorithm = 'return'
+        rule.status = 'validated'
+        rule.save()
+    else:
+        rule, = existing_rule
+
+    rule_context.allowed_elements[0].name = node_name
+    rule_context.allowed_elements[0].translated_technical_name = \
+        '%s_node' % node_name
+    rule_context.allowed_elements[0].namespace = runtime_name
+    rule_context.allowed_elements[0].save()
+
+    rule.algorithm = 'return %s_node(%s)' % (node_name, parameters or '')
+    rule.save()
+
+    # Clear transaction context
+    Transaction()._rules = {}
+
+    return rule.execute(execution_context)
 
 
 class ModuleTestCase(test_framework.CoogTestCase):

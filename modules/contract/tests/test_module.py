@@ -11,8 +11,11 @@ import trytond.tests.test_tryton
 
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
+from trytond.pool import Pool
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import test_framework
+from trytond.modules.rule_engine.tests.test_module import test_tree_element
 
 
 class ModuleTestCase(test_framework.CoogTestCase):
@@ -833,6 +836,27 @@ class ModuleTestCase(test_framework.CoogTestCase):
                             'option_3'],
                         },
                     }])
+
+    def test0200_test_api_rule_tree_elements(self):
+        APIRuleRuntime = Pool().get('api.rule_runtime')
+        with ServerContext().set_context(_test_api_tree_elements=True):
+            with ServerContext().set_context(
+                    api_rule_context=APIRuleRuntime.get_runtime()):
+                self.assertEqual(test_tree_element(
+                        'rule_engine.runtime',
+                        '_re_get_contract_initial_start_date',
+                        {'api.contract':
+                            {'start_date': datetime.date(2020, 1, 1)}}
+                        ).result,
+                    datetime.date(2020, 1, 1))
+
+                self.assertEqual(test_tree_element(
+                        'rule_engine.runtime',
+                        '_re_contract_signature_date',
+                        {'api.contract':
+                            {'signature_date': datetime.date(2020, 1, 1)}}
+                        ).result,
+                    datetime.date(2020, 1, 1))
 
 
 def suite():

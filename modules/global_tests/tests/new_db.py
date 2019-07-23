@@ -469,10 +469,11 @@ def get_rule(code):  # {{{
 def get_extra_data(code):  # {{{
     extra_data, = ExtraData.find([('name', '=', code)])
     return extra_data
-# }}}
 
 
 # }}}
+# }}}
+
 do_print('\nGet Rule engine context')  # {{{
 rule_context = RuleEngineContext(1)
 commission_context, = RuleEngineContext.find(
@@ -5975,7 +5976,9 @@ if TEST_APIS:  # {{{
             },
         {'_debug_server': True, 'dist_network': network.id})
 
-    # Simply check this is not an error
+    # Simply check this is not an error.
+    # Actually, this should probably fail, since there are blocking document
+    # requests which are not yet received
     assert_eq('contracts' in result, True)
     # }}}
 # }}}

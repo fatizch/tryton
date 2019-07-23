@@ -15,3 +15,7 @@ class Contract(metaclass=PoolMeta):
 
     dist_channel = fields.Many2One('distribution.channel',
         'Channel', ondelete='RESTRICT')
+
+    def init_dict_for_rule_engine(self, args):
+        super().init_dict_for_rule_engine(args)
+        args['dist_channel'] = self.dist_channel

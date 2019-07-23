@@ -5,8 +5,10 @@ import unittest
 
 import trytond.tests.test_tryton
 from trytond.pool import Pool
+from trytond.server_context import ServerContext
 
 from trytond.modules.coog_core import test_framework
+from trytond.modules.rule_engine.tests.test_module import test_tree_element
 
 
 class ModuleTestCase(test_framework.CoogTestCase):
@@ -220,6 +222,8 @@ class ModuleTestCase(test_framework.CoogTestCase):
         data_dict = copy.deepcopy(data_ref)
         ContractAPI.subscribe_contracts(data_dict,
             {'_debug_server': True, 'dist_network': node_1.id})
+        self.assertEqual(Pool().get('contract').search([])[0].dist_channel.code,
+            'channel_1')
 
         # Channel inferance cannot happen here, because node_1_1 has two
         # channels
@@ -266,6 +270,35 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     },
                 },
             )
+
+    @test_framework.prepare_test(
+        'distribution_channel.test0015_subscribe_contract',
+        )
+    def test0200_test_rule_tree_elements(self):
+        pool = Pool()
+        Contract = pool.get('contract')
+        Channel = pool.get('distribution.channel')
+
+        channel_1, = Channel.search([('code', '=', 'channel_1')])
+        contract = Contract.search([])[0]
+
+        args = {}
+        contract.init_dict_for_rule_engine(args)
+        self.assertEqual(test_tree_element(
+                'rule_engine.runtime',
+                '_re_get_channel_code',
+                args).result,
+            'channel_1')
+
+        APIRuleRuntime = Pool().get('api.rule_runtime')
+        with ServerContext().set_context(_test_api_tree_elements=True):
+            with ServerContext().set_context(
+                    api_rule_context=APIRuleRuntime.get_runtime()):
+                self.assertEqual(test_tree_element(
+                        'rule_engine.runtime',
+                        '_re_get_channel_code',
+                        {'dist_channel': channel_1}).result,
+                    'channel_1')
 
 
 def suite():

@@ -138,3 +138,10 @@ class APIContract(metaclass=PoolMeta):
                         'product': data['commercial_product'].code,
                         },
                     })
+
+    @classmethod
+    def _init_contract_rule_engine_parameters(cls, contract_data, parameters):
+        result = super()._init_contract_rule_engine_parameters(contract_data,
+            parameters)
+        result['dist_channel'] = contract_data.get('dist_channel', None)
+        return result

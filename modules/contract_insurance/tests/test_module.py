@@ -6,11 +6,16 @@ import copy
 import datetime
 import unittest
 from decimal import Decimal
+
 import trytond.tests.test_tryton
 
-from trytond.modules.coog_core import test_framework
 from trytond.transaction import Transaction
+from trytond.pool import Pool
 from trytond.exceptions import UserError
+from trytond.server_context import ServerContext
+
+from trytond.modules.coog_core import test_framework
+from trytond.modules.rule_engine.tests.test_module import test_tree_element
 
 
 class ModuleTestCase(test_framework.CoogTestCase):
@@ -1198,6 +1203,34 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 for c in contract.covered_elements], [
                 {'extra_data_covered': 'covered3'},
                 {'extra_data_covered': 'covered3'}])
+
+    def test0200_test_api_rule_tree_elements(self):
+        APIRuleRuntime = Pool().get('api.rule_runtime')
+        with ServerContext().set_context(_test_api_tree_elements=True):
+            with ServerContext().set_context(
+                    api_rule_context=APIRuleRuntime.get_runtime()):
+                self.assertEqual(test_tree_element(
+                        'rule_engine.runtime',
+                        '_re_get_subscriber_birthdate',
+                        {
+                            'api.parties': [{
+                                    'ref': '1',
+                                    'birth_date': datetime.date(2000, 1, 1),
+                                    }],
+                            'api.contract': {'subscriber': {'ref': '1'}}}
+                        ).result,
+                    datetime.date(2000, 1, 1))
+
+                self.assertEqual(test_tree_element(
+                        'rule_engine.runtime',
+                        '_re_get_option_initial_start_date',
+                        {
+                            'api.contract': {
+                                'start_date': datetime.date(2000, 1, 1)},
+                            'api.option': {'coverage': {'code': 'my_coverage'}},
+                            }
+                        ).result,
+                    datetime.date(2000, 1, 1))
 
 
 def suite():

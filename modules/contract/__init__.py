@@ -90,5 +90,5 @@ def register():
 
     Pool.register(
         api.APIContract,
-        api.ContractAPIRuleRuntime,
+        api.APIRuleRuntime,
         module='contract', type_='model', depends=['api'])

@@ -3,12 +3,14 @@
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA
+from trytond.modules.rule_engine import check_args
 from trytond.modules.party_cog.api import PARTY_RELATION_SCHEMA
 from trytond.modules.offered.api import EXTRA_DATA_VALUES_SCHEMA
 
 __all__ = [
     'APIContract',
     'RuleEngine',
+    'APIRuleRuntime',
     ]
 
 
@@ -296,3 +298,21 @@ class RuleEngine(metaclass=PoolMeta):
         if data['kind'] not in extra_data_per_kind:
             return None
         return extra_data_per_kind[data['kind']].get(key, None)
+
+
+class APIRuleRuntime(metaclass=PoolMeta):
+    __name__ = 'api.rule_runtime'
+
+    @classmethod
+    @check_args('api.contract')
+    def _re_api_get_subscriber_birthdate(cls, args):
+        contract_data = args['api.contract']
+
+        subscriber = cls._get_subscriber(contract_data, args)
+
+        return cls._get_field(subscriber, 'birth_date')
+
+    @classmethod
+    @check_args('api.contract', 'api.option')
+    def _re_api_get_option_initial_start_date(cls, args):
+        return cls._re_api_get_contract_initial_start_date(args)

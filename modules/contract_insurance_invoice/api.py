@@ -333,21 +333,23 @@ class APIContract(metaclass=PoolMeta):
                         dict(sequence=idx,
                             **APIProduct._describe_billing_mode(x))
                         for idx, x in enumerate(
-                            cls._compute_billing_modes(contract_data))],
+                            cls._compute_billing_modes(
+                                contract_data, parameters))],
                     }
                 )
 
         return result
 
     @classmethod
-    def _compute_billing_modes(cls, contract_data):
+    def _compute_billing_modes(cls, contract_data, parameters):
         billing_rule = contract_data['product'].billing_rules[0]
 
-        APIRuleRuntime = Pool().get('api.contract.rule_runtime')
+        APIRuleRuntime = Pool().get('api.rule_runtime')
 
         with ServerContext().set_context(
                 api_rule_context=APIRuleRuntime.get_runtime()):
-            args = cls._init_contract_rule_engine_parameters(contract_data)
+            args = cls._init_contract_rule_engine_parameters(contract_data,
+                parameters)
             return billing_rule.calculate_available_billing_modes(args)
 
     @classmethod
