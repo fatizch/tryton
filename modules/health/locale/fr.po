@@ -8,7 +8,7 @@ msgstr "Santé"
 
 msgctxt "field:contract.covered_element,health_complement:"
 msgid "Health Complement"
-msgstr "Complément Santé"
+msgstr "Régime Obligatoire Santé"
 
 msgctxt "field:contract.covered_element,is_health:"
 msgid "Is Health"
@@ -72,7 +72,7 @@ msgstr "Rang de naissance"
 
 msgctxt "field:party.party,health_complement:"
 msgid "Health Complement"
-msgstr "Complément Santé"
+msgstr "Régime Obligatoire Santé"
 
 msgctxt "field:party.party,health_contract:"
 msgid "Health Contract"
@@ -80,7 +80,7 @@ msgstr "Contrat Santé"
 
 msgctxt "model:health.party_complement,name:"
 msgid "Health Party Complement"
-msgstr "Complément Santé"
+msgstr "Régime Obligatoire Santé"
 
 msgctxt "model:ir.action,name:act_contract_form"
 msgid "Health Contracts"
@@ -128,4 +128,8 @@ msgstr "Santé"
 
 msgctxt "view:health.party_complement:"
 msgid "Health Party Complement"
-msgstr "Complément Santé"
+msgstr "Régime Obligatoire Santé"
+
+msgctxt "view:party.party:"
+msgid "Health"
+msgstr "Santé"

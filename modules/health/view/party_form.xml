@@ -6,7 +6,9 @@ this repository contains the full copyright notices and license terms. -->
         <label name="birth_order"/>
         <field name="birth_order"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='general']" position="inside">
-        <field name="health_complement" colspan="4"/>
+    <xpath expr="/form/notebook/page[@id='general']" position="after">
+		<page id="health_data" string="Health">
+	        <field name="health_complement" colspan="4"/>
+        </page>
     </xpath>
 </data>

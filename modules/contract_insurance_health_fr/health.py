@@ -10,15 +10,13 @@ __all_ = [
 
 # I would love to inherit from CodedMixin, but some projects already have
 # duplicates in their database that we must keep handling :'(
-class HealthCareSystem(model.CoogSQL, model.CoogView):
+class HealthCareSystem(model.CodedMixin, model.CoogSQL, model.CoogView):
     'Health Care System'
 
     __name__ = 'health.care_system'
     _order_name = 'code'
     _func_key = 'code'
 
-    code = fields.Char('Code', required=True)
-    name = fields.Char('Name')
     short_name = fields.Char('Short Name')
 
     @classmethod
@@ -33,13 +31,12 @@ class HealthCareSystem(model.CoogSQL, model.CoogView):
         return '%s (%s)' % (self.name, self.code)
 
 
-class InsuranceFund(model.CoogSQL, model.CoogView):
+class InsuranceFund(model.CodedMixin, model.CoogSQL, model.CoogView):
     'Insurance Fund'
 
     __name__ = 'health.insurance_fund'
     _func_key = 'code'
-    code = fields.Char('Code')
-    name = fields.Char('Name')
+
     department = fields.Char('Department')
     hc_system = fields.Many2One('health.care_system', 'Health Care System',
         ondelete='CASCADE')

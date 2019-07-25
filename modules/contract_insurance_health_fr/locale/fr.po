@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Ce tiers est ayant droit:\n"
 "%(dependent_party)s\n"
-"Vous ne pouvez changer son complément santé, veuillez changer le complément santé de l'assuré social"
+"Vous ne pouvez changer son Régime Obligatoire Santé, veuillez changer le Régime Obligatoire Santé de l'assuré social"
 
 msgctxt "error:party.relation:"
 msgid "%s can't be both a social security insured and dependent"
@@ -158,7 +158,7 @@ msgstr "Clé fonctionnelle"
 
 msgctxt "field:party.party,main_health_complement:"
 msgid "Main Health Complement"
-msgstr "Complément santé principal"
+msgstr "Régime Obligatoire Santé principal"
 
 msgctxt "field:party.party,main_insured_ssn:"
 msgid "Main Insured SSN"
