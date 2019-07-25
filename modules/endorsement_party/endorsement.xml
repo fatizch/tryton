@@ -93,4 +93,23 @@ this repository contains the full copyright notices and license terms. -->
             <field name="order">1</field>
         </record>
     </data>
+    <data noupdate="1" depends="party_ssn">
+        <record model="endorsement.definition" id="modify_ssn_party_definition">
+            <field name="code">change_party_ssn</field>
+            <field name="name">Change Party Social Security Number</field>
+        </record>
+    </data>
+    <data depends='party_ssn'>
+        <record model="endorsement.part" id="endorsement_part_change_party_ssn">
+            <field name="code">change_ssn</field>
+            <field name="name">Change Social Security Number</field>
+            <field name="kind">party</field>
+            <field name="view">change_party_ssn</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="modify_party_ssn_relation">
+            <field name="definition" ref="modify_ssn_party_definition"/>
+            <field name="endorsement_part" ref="endorsement_part_change_party_ssn"/>
+            <field name="order">1</field>
+        </record>
+    </data>
 </tryton>
