@@ -1,3 +1,4 @@
+* OTH#00000 Mise à jour de l'appel à execute dans ws_execute_rule
 * OTH#00000 Ajout d'outillage de tests pour les noeuds du moteur de règles
 * OTH#00000 Correction d'une erreur lors de l'ajout d'un log de débuggage quand il n'y a pas de rec_name défini sur l'objet
 * FEA#11782 Permettre d'utiliser des expressions genshi dans la description fonctionnelle de la règle dans le but d'utiliser les paramètres de la règle dans le paramétrage.

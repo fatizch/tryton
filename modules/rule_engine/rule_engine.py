@@ -1597,6 +1597,14 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 transaction.rollback()
 
     def execute(self, arguments, parameters=None, overrides=None):
+        '''
+            Executes the rule using the given ARGUMENTS.
+
+            PARAMETERS is a dictionary of data matching the 'parameters' field
+            of the rule.
+            OVERRIDES can be used to force the output of some functions. It
+            should only be used in tests / test cases
+        '''
         # Cache loaded rules to avoid unnecessary reads, maybe remove this once
         # auto-cache is properly implemented
         transaction_rules = getattr(Transaction(), '_rules', None)
@@ -1633,11 +1641,22 @@ class RuleEngine(model.CoogSQL, model.CoogView, model.TaggedMixin):
     def ws_execute(self, cases):
         tech_name = self.generic_get_function_name()
 
+        def kwarg_function(value):
+            def f(*args, **kwargs):
+                return value
+            return f
+
         def execute_case(case):
             def tech_fn(input_string):
                 return case['tech'][input_string]
-            case['params'][tech_name] = tech_fn
-            result = self.execute(case['args'], overrides=case['params'])
+
+            overrides = {
+                key: kwarg_function(value)
+                for key, value in case['params'].items()
+                }
+            overrides[tech_name] = tech_fn
+
+            result = self.execute(case['args'], overrides=overrides)
             fields = ['result', 'errors', 'warnings', 'info', 'debug']
             return {k: getattr(result, k, None) for k in fields}
 

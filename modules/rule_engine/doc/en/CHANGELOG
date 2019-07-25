@@ -1,3 +1,4 @@
+* OTH#00000 Update call to execute in ws_execute_rule
 * OTH#00000 Add tooling for testing the Rule Engine functions
 * OTH#00000 Fix crash when adding debug log if no rec_name defined on object
 * FEA#11782 Allow to use genshi expression in rule engine in order to use the parameters
