@@ -39,6 +39,7 @@ from trytond.tools import cursor_dict
 from trytond.pyson import Eval, Bool, If, PYSONEncoder
 from trytond.server_context import ServerContext
 
+
 from trytond.modules.coog_core import (coog_date, coog_string, fields,
     model, utils)
 from trytond.modules.coog_core.model import CoogSQL as ModelSQL
@@ -620,6 +621,13 @@ class RuleTools(ModelView):
         if lvl == 'info':
             cls.get_result(args).info.append(error)
         elif lvl == 'warning':
+            _exec_context = {k: v for k, v in args.items() if k != '__result__'}
+            _exec_context = {k: tuple(v) if isinstance(v, (list, set, dict))
+                else v for k, v in _exec_context.items()}
+            _exec_context = str(hash(frozenset(sorted(_exec_context.items())))
+                ) if _exec_context else None
+            if _exec_context:
+                error += _exec_context
             cls.get_result(args).warnings.append(error)
         elif lvl == 'error':
             cls.get_result(args).errors.append(error)
