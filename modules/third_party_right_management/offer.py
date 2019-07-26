@@ -99,6 +99,10 @@ class Coverage(metaclass=PoolMeta):
         'third_party_manager.protocol-offered.option.description',
         'coverage', 'protocol', "Third Party Protocols")
 
+    @classmethod
+    def _export_skips(cls):
+        return super()._export_skips() | {'third_party_protocols'}
+
 
 class ThirdPartyProtocolCoverage(model.CoogSQL, model.CoogView):
     "Third Party Protocol - Coverage"

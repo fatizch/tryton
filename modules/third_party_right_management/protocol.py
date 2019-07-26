@@ -16,16 +16,16 @@ from trytond.modules.coog_core import model, fields, coog_string
 from trytond.modules.rule_engine import get_rule_mixin
 
 
-class Protocol(model.CoogView, model.CoogSQL, get_rule_mixin('rule', "Rule")):
+class Protocol(model.CodedMixin, model.CoogView,
+        get_rule_mixin('rule', "Rule")):
     "Third Party Management Protocol"
     __name__ = 'third_party_manager.protocol'
+    _func_key = 'code'
 
     PROTOCOL_EVENTS = {'activate_contract', 'hold_contract', 'unhold_contract',
         'void_contract', 'renew_contract', 'first_invoice_payment',
         'apply_endorsement', 'terminate_contract', 'plan_contract_termination'}
 
-    name = fields.Char("Name", required=True)
-    code = fields.Char("Code", required=True)
     third_party_manager = fields.Many2One(
         'third_party_manager', "Third Party Manager", required=True,
         ondelete='CASCADE')
@@ -50,6 +50,10 @@ class Protocol(model.CoogView, model.CoogSQL, get_rule_mixin('rule', "Rule")):
             ('code_unique', Unique(table, table.code),
                 "The code must be unique"),
             ]
+
+    @classmethod
+    def _export_light(cls):
+        return super()._export_light() | {'coverages'}
 
     @fields.depends('name', 'code')
     def on_change_with_code(self):
