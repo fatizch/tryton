@@ -1096,7 +1096,8 @@ class _RevisionMixin(object):
         values = cls.get_values([instance], date=at_date)
         target_field = cls.get_reverse_field_name() or 'id'
         if (target_field not in values or
-                instance.id not in values[target_field]):
+                instance.id not in values[target_field] or
+                not values[target_field][instance.id]):
             return None
         return cls(values[target_field][instance.id])
 

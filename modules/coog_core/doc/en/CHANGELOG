@@ -1,3 +1,5 @@
+* OTH#00000 fix get_good_version_at_date method on revisionmixin when the id of
+target_field is not defined
 * OTH#00000 Add get_good_version_at_date method on revisionmixin
 * BUG#11845 Add transaction's database when generating the async tasks
 * FEA#11661 Add dedicated resources for APIs
