@@ -8,8 +8,8 @@ from trytond.transaction import Transaction
 
 def load_conf_file():
     config_file = os.environ.get('TRYTOND_CONFIG', None)
-    assert config_file, 'TRYTOND_CONFIG variable should be set'
-    config.update_etc(config_file)
+    if config_file:
+        config.update_etc(config_file)
 
 
 load_conf_file()
