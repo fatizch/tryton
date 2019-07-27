@@ -8,7 +8,7 @@ from trytond.wizard import StateAction
 from trytond.pyson import Eval, Len, If
 from trytond.transaction import Transaction
 
-from trytond.modules.coog_core import fields, model
+from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.offered.extra_data import with_extra_data
 
 
@@ -366,6 +366,7 @@ class ContractSubscribeQuestionnaire(metaclass=PoolMeta):
         forced_product = Transaction().context.get('forced_product', None)
         if forced_product:
             res['forced_product'] = forced_product
+            res['start_date'] = utils.today()
         return res
 
     def init_main_object_from_process(self, obj, process_param):

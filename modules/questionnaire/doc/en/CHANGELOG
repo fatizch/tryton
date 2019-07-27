@@ -1,3 +1,4 @@
+* OTH#00000 Fix subscription process start date initialization from questionnaire wizard
 * FEA#11785 Backoffice questionnaire management, multipart questionnaires
 * BUG#11551 Rename Questionnaire entry point
 
