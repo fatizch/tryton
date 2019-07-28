@@ -3,6 +3,7 @@
 import datetime as dt
 
 from sql import Null
+from dateutil.relativedelta import relativedelta
 from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -29,14 +30,19 @@ class ThirdPartyPeriod(WithExtraDetails, model.CoogView, model.CoogSQL):
     start_date = fields.Date("Start Date", required=True,
         domain=['OR',
             ('end_date', '=', None),
-            ('start_date', '<', Eval('end_date', dt.date.max))],
-        depends=['end_date'])
+            ('start_date', '<=', Eval('end_date', dt.date.max))
+            ], depends=['end_date'])
     end_date = fields.Date("End Date",
         domain=['OR',
             ('end_date', '=', None),
-            ('end_date', '>', Eval('start_date', dt.date.min))
-            ],
-        depends=['start_date'])
+            ('end_date', '>=', Eval('end_date_domain_date', dt.date.min))
+            ], depends=['end_date_domain_date'])
+    start_date_domain_date = fields.Function(
+        fields.Date('Start Date Domain Date'),
+        'getter_start_date_domain_date')
+    end_date_domain_date = fields.Function(
+        fields.Date('End Date Domain Date'),
+        'getter_end_date_domain_date')
     send_after = fields.Date("Send After")
     protocol = fields.Many2One('third_party_manager.protocol', "Protocol",
         required=True, ondelete='RESTRICT')
@@ -90,6 +96,14 @@ class ThirdPartyPeriod(WithExtraDetails, model.CoogView, model.CoogSQL):
     @classmethod
     def default_status(cls):
         return 'waiting'
+
+    def getter_end_date_domain_date(self, name):
+        return (self.start_date + relativedelta(days=-1)) if self.start_date \
+            else dt.date.min
+
+    def getter_start_date_domain_date(self, name):
+        return (self.end_date + relativedelta(days=1)) if self.end_date \
+            else dt.date.max
 
 
 class Coverage(metaclass=PoolMeta):

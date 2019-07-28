@@ -108,7 +108,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
             'invisible': True})
     new_billing_information = fields.One2Many('contract.billing_information',
         None, 'New Billing Information', size=1, domain=[
-            ('billing_mode.products', '=', Eval('product')),
+            ('billing_mode.billing_rules.product', '=', Eval('product')),
             ['OR',
                 ('direct_debit', '=', False),
                 ('direct_debit_account', '!=', None)],

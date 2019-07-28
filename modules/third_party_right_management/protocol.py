@@ -222,6 +222,7 @@ class Protocol(model.CodedMixin, model.CoogView,
         date = Date.today() if date is None else date
         return cls.edit_periods(contract, date, 'terminate_contract')
 
+    @classmethod
     def do_plan_contract_termination(
             cls, contract, origin, date=None, **kwargs):
         date = contract.end_date if date is None else date

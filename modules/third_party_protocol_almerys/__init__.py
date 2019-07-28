@@ -6,6 +6,7 @@ from . import batch
 from . import config
 from . import party
 from . import protocol
+from . import offered
 from . import almerys
 
 
@@ -23,6 +24,7 @@ def register():
         almerys.ReturnAlmerys,
         party.Party,
         party.Address,
+        offered.ThirdPartyPeriod,
         module='third_party_protocol_almerys', type_='model')
     Pool.register(
         almerys.RecomputePeriod,

@@ -3,7 +3,7 @@
 
 from trytond.pool import Pool
 
-from . import offer
+from . import offered
 from . import event
 from . import protocol
 from . import endorsement
@@ -13,10 +13,10 @@ from . import suspension
 
 def register():
     Pool.register(
-        offer.ContractOption,
-        offer.ThirdPartyPeriod,
-        offer.Coverage,
-        offer.ThirdPartyProtocolCoverage,
+        offered.ContractOption,
+        offered.ThirdPartyPeriod,
+        offered.Coverage,
+        offered.ThirdPartyProtocolCoverage,
         protocol.RecomputePeriodAskDate,
         event.Event,
         protocol.Protocol,
