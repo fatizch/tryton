@@ -1,3 +1,4 @@
+* OTH#00000 Translate Mandate identification to RUM
 * BUG#11890 Cancel fix on conditions of automatic subscription
 * BUG#11890 Fix conditions of automatic subscription when there is deductible period
 * BUG#11917 Fix display of subscriptions where there is only one (regression from 11724 )

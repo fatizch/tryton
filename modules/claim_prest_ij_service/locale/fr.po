@@ -763,7 +763,7 @@ msgstr "ID"
 
 msgctxt "field:claim.ij.subscription_request.group,identification:"
 msgid "Identification"
-msgstr "Identification"
+msgstr "RUM"
 
 msgctxt "field:claim.ij.subscription_request.group,rec_name:"
 msgid "Record Name"
