@@ -702,8 +702,6 @@ class APIMixin(Model):
           Tryton. Usually irrelevant except in specific cases, since
           informations critical to the API's behaviour should be set in either
           the parameters or the api_context
-
-
     '''  # NOQA
     @classmethod
     def __setup__(cls):

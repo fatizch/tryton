@@ -555,9 +555,8 @@ class CoogSQL(export.ExportImportMixin, FunctionalErrorMixIn,
         cls = self.__class__
         field = cls._fields.get(name, None)
         if isinstance(field, fields.Function) and field.loader:
-            from inspect import getargspec
             func_loader = getattr(cls, field.loader)
-            name_required = len(getargspec(func_loader).args) > 1
+            name_required = len(inspect.signature(func_loader).parameters) > 1
             if name_required:
                 return getattr(cls, field.loader)(self, name)
             else:
