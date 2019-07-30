@@ -24,6 +24,10 @@ class Contract(metaclass=PoolMeta):
         for covered_element in self.covered_elements:
             covered_element.check_coverage_amount()
 
+    def before_activate(self):
+        self.check_coverage_amount()
+        super().before_activate()
+
 
 class CoveredElement(metaclass=PoolMeta):
     __name__ = 'contract.covered_element'

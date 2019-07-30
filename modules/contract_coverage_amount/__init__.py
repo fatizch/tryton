@@ -26,5 +26,7 @@ def register():
         depends=['endorsement'])
 
     Pool.register(
+        api.APIProduct,
         api.APIContract,
+        api.APIRuleRuntime,
         module='contract_coverage_amount', type_='model', depends=['api'])

@@ -115,6 +115,7 @@ FIELD_SCHEMA = {
                 'sequence': {'type': 'integer'},
                 'name': {'type': 'string'},
                 'conditions': FIELD_CONDITIONS,
+                'enum': {'type': 'array'},
                 },
             'required': ['name', 'label', 'required', 'type', 'sequence'],
             },

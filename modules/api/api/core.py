@@ -46,11 +46,10 @@ from decimal import Decimal, InvalidOperation
 from contextlib import contextmanager
 
 from trytond.pool import Pool
-from trytond.model import Model
+from trytond.model import Model, ModelStorage
 from trytond.transaction import Transaction
 from trytond.config import config
 from trytond.rpc import RPC
-from trytond.error import UserError
 from trytond.server_context import ServerContext
 
 
@@ -82,7 +81,7 @@ def DEFAULT_EXAMPLE():
 
 
 def api_context():
-    return ServerContext().get('_api_context')
+    return ServerContext().get('_api_context', None)
 
 
 @contextmanager
@@ -269,19 +268,49 @@ class APIUserError(APIError):
         Ideally, this should never happen, however unless the data validation
         phase is absolutely perfect, it will.
     '''
-    def __init__(self, user_error):
-        assert isinstance(user_error, UserError)
-        self.user_error = user_error
+    def __init__(self, data):
+        '''
+            This will be an automatically converted error from
+            raise_user_error
+        '''
+        self.data = data
 
     def format_error(self):
         return {
             'error_code': 400,
             'error_message': 'User Error',
-            # TODO: Override raise_user_error to store the error code on the
-            # exception, so that we can have access to something static,
-            # independant from the language / context
-            'error_data': self.user_error.message,
+            'error_data': self.data,
             }
+
+
+class APIErrorHandler(ModelStorage):
+    '''
+        Overrides Model "raise_user_error" methods to transform user errors
+        into api errors
+    '''
+    @classmethod
+    def raise_user_error(cls, errors, error_args=None, error_description='',
+            error_description_args=None, raise_exception=True):
+        API = Pool().get('api')
+        if (raise_exception and errors not in API._blacklisted_errors and
+                api_context() is not None):
+            error_data = {'type': errors}
+            new_error_args = {}
+            for k, v in error_args.items():
+                if isinstance(v, Decimal):
+                    value = str(v)
+                elif isinstance(v, datetime.date):
+                    value = v.strftime('%Y-%m-%d')
+                else:
+                    value = v
+                new_error_args[k] = value
+            new_error_args['message'] = super().raise_user_error(errors,
+                error_args, error_description, error_description_args,
+                raise_exception=False)
+            error_data['data'] = new_error_args
+            raise APIUserError(error_data)
+        return super().raise_user_error(errors, error_args, error_description,
+            error_description_args, raise_exception)
 
 
 class APIModel(Model):
@@ -296,6 +325,27 @@ class APIModel(Model):
         APIs in a separate module, without having to override all APIs
     '''
     __name__ = 'api'
+
+    # User Errors codes that will be treated as server errors
+    _blacklisted_errors = {
+        'access_error',
+        'delete_xml_record',
+        'digits_validation_record',
+        'domain_validation_record',
+        'foreign_model_exist',
+        'foreign_model_missing',
+        'read_error',
+        'reference_syntax_error',
+        'relation_not_found',
+        'required_field',
+        'required_validation_record',
+        'selection_validation_record',
+        'size_validation_record',
+        'time_format_validation_record',
+        'too_many_relations_found',
+        'write_xml_record',
+        'xml_id_syntax_error',
+        }
 
     @classmethod
     def add_api(cls, Model, name, data):
@@ -469,8 +519,6 @@ class APIModel(Model):
         '''
         if isinstance(error, APIError):
             return error
-        if isinstance(error, UserError):
-            return APIUserError(error)
         # TODO: Trigger sentry if it is available + dump the trace somewhere in
         # the log
         return APIServerError(error)

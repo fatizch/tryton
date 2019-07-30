@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+import logging
+
 from trytond.pool import Pool
 from trytond.model import Model
 from trytond.server_context import ServerContext
@@ -7,11 +9,15 @@ from trytond.server_context import ServerContext
 from trytond.modules.coog_core import utils, model
 from trytond.modules.rule_engine import check_args
 
-from trytond.modules.api import APIMixin, date_from_api
+from trytond.modules.api import APIMixin, date_from_api, APIInputError
+from trytond.modules.api import APIUserError
 from trytond.modules.api import DATE_SCHEMA
 from trytond.modules.coog_core.api import CODED_OBJECT_SCHEMA, OBJECT_ID_SCHEMA
 from trytond.modules.party_cog.api import PARTY_RELATION_SCHEMA
 from trytond.modules.offered.api import EXTRA_DATA_VALUES_SCHEMA
+
+
+logger = logging.getLogger('coog:api')
 
 
 __all__ = [
@@ -154,11 +160,23 @@ class APIContract(APIMixin):
 
         for method_data in sorted(methods, key=lambda x: x['priority']):
             method_obj = getattr(Contract, method_data['name'])
-            if model.is_class_or_dual_method(method_obj):
-                method_obj(contracts, *(method_data['params'] or []))
-            else:
-                for contract in contracts:
-                    method_obj(contract, *(method_data['params'] or []))
+            try:
+                if model.is_class_or_dual_method(method_obj):
+                    method_obj(contracts, *(method_data['params'] or []))
+                else:
+                    for contract in contracts:
+                        method_obj(contract, *(method_data['params'] or []))
+            except APIInputError:
+                raise
+            except APIUserError:
+                raise
+            except Exception as e:
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(e, exc_info=True)
+                raise APIInputError([{
+                            'type': method_data['error_type'],
+                            'data': {},
+                            }])
 
     @classmethod
     def _subscribe_contracts_execute_methods(cls, options):
@@ -168,6 +186,7 @@ class APIContract(APIMixin):
                     'priority': 100,
                     'name': 'activate_contract',
                     'params': None,
+                    'error_type': 'cannot_activate_contract',
                     },
                 ]
         return []

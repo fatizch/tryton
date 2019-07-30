@@ -1,3 +1,4 @@
+* FEA#12260 Gestion des montants de couverture dans les APIs de souscription
 * FEA#11626 Ajout d'une règle par défaut de montant de couverture basé sur des tranches
 
 Version 2.4 - 2019-04-12
