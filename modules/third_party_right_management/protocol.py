@@ -102,8 +102,10 @@ class Protocol(model.CodedMixin, model.CoogView,
                 modified_periods.append(period)
                 break
             else:
-                if (period.end_date is None
-                        or period.end_date > start_date):
+                if period.start_date == start_date:
+                    periods_to_remove.append(period)
+                elif (period.end_date is None
+                        or period.end_date >= start_date):
                     period.end_date = start_date - end_date_offset
                     modified_periods.append(period)
                 if add_period:

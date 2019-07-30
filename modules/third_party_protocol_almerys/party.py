@@ -7,6 +7,7 @@ from trytond import backend
 from trytond.config import config
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.coog_core import fields
 
@@ -44,13 +45,19 @@ class Party(metaclass=PoolMeta):
 class Address(metaclass=PoolMeta):
     __name__ = 'party.address'
 
+    is_person = fields.Function(
+        fields.Boolean('Is Person', states={'invisible': True}),
+        'on_change_with_is_person', searcher='search_is_person')
+
     @classmethod
     def __setup__(cls):
         super().__setup__()
-
-        cls.street.required = True
-        cls.zip.required = True
-        cls.country.required = True
+        cls.street.states['required'] = Bool(Eval('is_person'))
+        cls.zip.states['required'] = Bool(Eval('is_person'))
+        cls.country.states['required'] = Bool(Eval('is_person'))
+        cls.street.depends += ['is_person']
+        cls.zip.depends += ['is_person']
+        cls.country.depends += ['is_person']
 
     @classmethod
     def __register__(cls, module_name):
@@ -89,3 +96,11 @@ class Address(metaclass=PoolMeta):
         address_h.not_null_action('street', 'add')
         address_h.not_null_action('zip', 'add')
         address_h.not_null_action('country', 'add')
+
+    @fields.depends('party')
+    def on_change_with_is_person(self, name=None):
+        return self.party and self.party.is_person
+
+    @classmethod
+    def search_is_person(cls, name, clause):
+        return [('party.is_person',) + tuple(clause[1:])]

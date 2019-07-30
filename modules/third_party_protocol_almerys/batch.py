@@ -116,6 +116,8 @@ class AlmerysProtocolBatch(batch.BatchRoot):
         liens = {
             'child': 'EN',
             'parent': 'AE',
+            'conjoint': 'CJ',
+            'spouse': 'CJ',
             }
 
         perimetre_service = E.PERIMETRE_SERVICE()
@@ -174,6 +176,7 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                                 ))
                     party_address = contract.subscriber.address_get()
                     if party_address:
+                        idx = 0
                         line4 = party_address.address_lines.get('4_ligne4')
                         if not line4:
                             for idx in (3, 2, 5):
@@ -187,7 +190,13 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                                 E.LIGNE1('{} {}'.format(
                                         party_address.party.first_name,
                                         party_address.party.name)),
+                                E.LIGNE2(party_address.address_lines.get(
+                                    '2_ligne2', '') if idx != 2 else ''),
+                                E.LIGNE3(party_address.address_lines.get(
+                                    '3_ligne3', '') if idx != 3 else ''),
                                 E.LIGNE4(line4),
+                                E.LIGNE5(party_address.address_lines.get(
+                                    '5_ligne5', '') if idx != 5 else ''),
                                 E.LIGNE6('{} {}'.format(
                                         party_address.zip,
                                         party_address.city)),
@@ -300,6 +309,7 @@ class AlmerysProtocolBatch(batch.BatchRoot):
 
                         party_address = covered.party.address_get()
                         if party_address:
+                            idx = 0
                             line4 = party_address.address_lines.get('4_ligne4')
                             if not line4:
                                 for idx in (3, 2, 5):
@@ -313,7 +323,13 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                                     E.LIGNE1('{} {}'.format(
                                             party_address.party.first_name,
                                             party_address.party.name)),
+                                    E.LIGNE2(party_address.address_lines.get(
+                                        '2_ligne2') if idx != 2 else ''),
+                                    E.LIGNE3(party_address.address_lines.get(
+                                        '3_ligne3') if idx != 3 else ''),
                                     E.LIGNE4(line4),
+                                    E.LIGNE5(party_address.address_lines.get(
+                                        '5_ligne5', '') if idx != 5 else ''),
                                     E.LIGNE6('{} {}'.format(
                                             party_address.zip,
                                             party_address.city)),
