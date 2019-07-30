@@ -22,6 +22,7 @@ class Party(metaclass=PoolMeta):
             depends=['is_person']),
         'get_is_actor', setter='set_is_actor', searcher='search_is_actor')
 
+    @classmethod
     def non_customer_clause(cls, clause):
         domain = super().non_customer_clause(clause)
         additional_clause = []
