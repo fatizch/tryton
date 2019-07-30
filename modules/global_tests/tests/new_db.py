@@ -894,7 +894,6 @@ if LOAD_ACCOUNTING:  # {{{
     exceptional_journal.sequence, = Sequence.find(
         [('code', '=', 'account.journal')])
     exceptional_journal.save()
-    # }}}
 
     benefit_journal = Journal()
     benefit_journal.company = company
@@ -904,6 +903,7 @@ if LOAD_ACCOUNTING:  # {{{
     benefit_journal.sequence, = Sequence.find(
         [('code', '=', 'account.journal')])
     benefit_journal.save()
+    # }}}
 
     do_print('    Creating Payment method for cash')  # {{{
     payment_method = PaymentMethod()
@@ -952,6 +952,13 @@ if LOAD_ACCOUNTING:  # {{{
     action.reject_reason = sepa_reject_reasons['AM04']
     action.action = 'retry'
     payment_sepa.save()
+
+    payable_reject_reason = PaymentJournalRejectReason()
+    payable_reject_reason.code = 'ALL'
+    payable_reject_reason.payment_kind = 'payable'
+    payable_reject_reason.process_method = 'sepa'
+    payable_reject_reason.description = 'Coog Generic Reject Reason'
+    payable_reject_reason.save()
     # }}}
 
     do_print('    Creating Statement Journals')  # {{{
@@ -5937,6 +5944,21 @@ if GENERATE_REPORTINGS:  # {{{
                 assert_eq(message_line.strip(), control_line.strip())
 
     # }}}
+
+    if TESTING:
+        do_print('    Testing non contract payment rejection')  # {{{
+        payable_reject_reason, = PaymentJournalRejectReason.find([
+                ('code', '=', 'ALL'), ('payment_kind', '=', 'payable'),
+                ('process_method', '=', 'sepa')])
+        to_reject, = Payment.find([('amount', '=', 20000)])
+        RejectPayment = Wizard('account.payment.manual_payment_fail',
+            [to_reject])
+        RejectPayment.form.reject_reason = payable_reject_reason
+        RejectPayment.execute('fail_payments')
+
+        to_reject.reload()
+        assert_eq(to_reject.state, 'failed')
+        # }}}
 # }}}
 
 if TEST_APIS:  # {{{

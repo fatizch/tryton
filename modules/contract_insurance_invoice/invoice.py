@@ -313,6 +313,8 @@ class Invoice(metaclass=PoolMeta):
         return new_date
 
     def update_move_line_from_billing_information(self, line):
+        if line.contract is None:
+            return
         contract_revision_date = max(line.maturity_date,
             utils.today(), self.contract.initial_start_date or utils.today())
         with Transaction().set_context(
@@ -362,7 +364,7 @@ class Invoice(metaclass=PoolMeta):
         to_save = []
         for invoice in invoices:
             to_update = [x for x in invoice.lines_to_pay
-                if not x.reconciliation]
+                if not x.reconciliation and x.contract]
             for line in to_update:
                 invoice.update_move_line_from_billing_information(line)
             to_save.extend(to_update)
