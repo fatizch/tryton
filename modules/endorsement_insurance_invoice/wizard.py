@@ -232,7 +232,7 @@ class ChangeBillingInformation(EndorsementWizardStepMixin):
             'direct_debit_account', 'direct_debit_day',
             'direct_debit_day_selector', 'is_once_per_contract',
             'payment_term', 'possible_payment_terms', 'payer',
-            'possible_payers']
+            'possible_payers', 'possible_billing_modes']
 
     @classmethod
     def direct_debit_account_only_fields(cls):

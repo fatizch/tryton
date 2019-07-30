@@ -94,9 +94,12 @@ class BillingMode(model.CodedMixin, model.CoogView):
     sync_month_string = sync_month.translated('sync_month')
     products = fields.Function(
         fields.Many2Many('offered.product', None, None, 'Products'),
-        'getter_products')
+        'getter_products', searcher='search_products')
     fees = fields.Many2Many('offered.billing_mode-account.fee', 'billing_mode',
         'fee', 'Fees')
+    billing_rules = fields.Many2Many('offered.product-offered.billing_mode',
+        'billing_mode', 'billing_rule', 'Billing Rules',
+        help="Billing rules using this billing mode")
 
     @classmethod
     def __register__(cls, module_name):
@@ -212,10 +215,12 @@ class BillingMode(model.CodedMixin, model.CoogView):
     def get_change_payment_term_order(self, name):
         return False
 
-    def getter_products(self):
-        Relation = Pool().get('offered.product-offered.billing_mode')
-        rules = Relation.search([('billing_mode', '=', self.id)])
-        return [rule.product.id for rule in rules]
+    def getter_products(self, name):
+        return [rule.product.id for rule in self.billing_rules]
+
+    @classmethod
+    def search_products(cls, name, domain):
+        return [('billing_rules.product',) + tuple(domain[1:])]
 
 
 class BillingModeFeeRelation(model.CoogSQL):

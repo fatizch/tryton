@@ -328,7 +328,7 @@ msgstr "Périodes de délégation"
 
 msgctxt "model:ir.action,name:wizard_recompute_period"
 msgid "Recompute Period"
-msgstr "Re-calcul des périodes"
+msgstr "Re-calcul des périodes de délégation"
 
 msgctxt "model:ir.ui.menu,name:menu_configuration"
 msgid "Configuration"
@@ -352,7 +352,7 @@ msgstr "Protocole de délégation - Couverture"
 
 msgctxt "model:third_party_manager.recompute_period.ask_date,name:"
 msgid "Recompute the periods - Ask Date"
-msgstr "Re-calcul des périodes - Date"
+msgstr "Re-calcul des périodes de délégation - Date"
 
 msgctxt "model:third_party_manager_protocol-endorsement_part,name:"
 msgid "Third Party Protocol - Endorsement Part"
