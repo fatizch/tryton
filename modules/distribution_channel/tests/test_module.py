@@ -216,6 +216,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         ],
                     },
                 ],
+            'options': {
+                'activate': True,
+                },
             }
 
         # Channel is inferred from the dist_network (who only got one)

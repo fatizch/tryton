@@ -961,6 +961,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         ],
                     },
                 ],
+            'options': {
+                'activate': True,
+                },
             }
 
         def check_result(data, result):

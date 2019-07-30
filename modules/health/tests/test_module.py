@@ -212,6 +212,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         ],
                     },
                 ],
+            'options': {
+                'activate': True,
+                },
             }
 
         data_dict = copy.deepcopy(data_ref)
