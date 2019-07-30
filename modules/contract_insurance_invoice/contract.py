@@ -702,7 +702,8 @@ class Contract(metaclass=PoolMeta):
         '''
         if not self.billing_informations:
             return []
-
+        if self.product.billing_behavior == 'whole_term':
+            up_to_date = self._calculate_final_invoice_end_date() or up_to_date
         # The "final_date" is the date that shall never be exceeded. In other
         # words, it will be the end of the last period (unless "up_to_date"
         # blocks us earlier). It defaults to the contract's final end date (if

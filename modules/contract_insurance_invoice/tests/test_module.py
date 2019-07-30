@@ -60,6 +60,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'InvoiceLine': 'account.invoice.line',
             'InvoiceLineDetail': 'account.invoice.line.detail',
             'ContractAPI': 'api.contract',
+            'ActivationHistory': 'contract.activation_history',
             }
 
     @test_framework.prepare_test(
@@ -175,6 +176,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         product.billing_rules = [{}]
         product.billing_rules[-1].billing_modes = [monthly, quarterly]
         product.billing_rules[-1].rule = rule
+        product.billing_rules[-1].billing_behavior = 'next_period'
         product.coverages = [coverage_alpha, coverage_beta]
         product.save()
 
@@ -240,7 +242,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'type': account_kind.id,
                     }])
         with Transaction().set_context(company=company.id):
-            product, = self.Product.create([{'company': company.id,
+            product, product2, = self.Product.create([{'company': company.id,
                         'name': 'Test Product',
                         'code': 'test_product',
                         'start_date': date(2014, 1, 1),
@@ -249,6 +251,23 @@ class ModuleTestCase(test_framework.CoogTestCase):
                         'currency': currency.id,
                         'billing_rules': [
                             ('create', [{
+                                        'billing_behavior': 'next_period',
+                                        'billing_modes': [
+                                            ('add', [freq_month.id,
+                                                    freq_quart.id,
+                                                    freq_once.id])],
+                                        }])],
+                        },
+                    {'company': company.id,
+                        'name': 'Test Product',
+                        'code': 'test_product2',
+                        'start_date': date(2014, 1, 1),
+                        'contract_generator': sequence.id,
+                        'quote_number_sequence': quote_sequence.id,
+                        'currency': currency.id,
+                        'billing_rules': [
+                            ('create', [{
+                                        'billing_behavior': 'whole_term',
                                         'billing_modes': [
                                             ('add', [freq_month.id,
                                                     freq_quart.id,
@@ -401,6 +420,27 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 (date(2018, 5, 19), date(2018, 6, 18), billing_info),
                 (date(2018, 6, 19), date(2018, 7, 18), billing_info),
                 (date(2018, 7, 19), date(2018, 8, 18), billing_info),
+                ])
+
+        contract = self.Contract(company=company,
+            product=product2,
+            activation_history=[
+                self.ActivationHistory(
+                        start_date=date(2014, 4, 15),
+                        end_date=date(2014, 6, 30))
+                    ],
+            billing_informations=[
+                self.BillingInformation(date=None,
+                    billing_mode=freq_month,
+                    payment_term=payment_term)
+                ],
+            )
+        contract.save()
+        billing_info = contract.billing_informations[0]
+        self.assertEqual(contract.get_invoice_periods(date(2014, 4, 15)), [
+                (date(2014, 4, 15), date(2014, 5, 14), billing_info),
+                (date(2014, 5, 15), date(2014, 6, 14), billing_info),
+                (date(2014, 6, 15), date(2014, 6, 30), billing_info),
                 ])
 
     def test_get_direct_debit_day(self):

@@ -5,6 +5,9 @@ this repository contains the full copyright notices and license terms. -->
     <label name="change_billing_modes_order"/>
     <field name="change_billing_modes_order"/>
     <newline/>
+    <label name="billing_behavior"/>
+    <field name="billing_behavior"/>
+    <newline/>
     <field name="billing_modes" colspan="4" mode="tree"/>
     <field name="ordered_billing_modes" colspan="4" mode="tree"/>
     <label name="rule"/>

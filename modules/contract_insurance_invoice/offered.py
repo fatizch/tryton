@@ -313,6 +313,10 @@ class Product(metaclass=PoolMeta):
     tax_rounding = fields.Function(
         fields.Char('Tax_Rounding'),
         'get_tax_rounding')
+    billing_behavior = fields.Function(
+        fields.Selection('get_allowed_billing_behavior', 'Billing Behavior'),
+        'on_change_with_billing_behavior',
+        searcher='search_billing_behavior')
 
     @classmethod
     def __register__(cls, module_name):
@@ -342,6 +346,12 @@ class Product(metaclass=PoolMeta):
     def on_change_taxes_included_in_premium(self):
         self.coverages = []
 
+    @fields.depends('billing_rules')
+    def get_allowed_billing_behavior(self):
+        if not self.billing_rules:
+            return [('', '')]
+        return self.billing_rules[0].BILLING_BEHAVIOR
+
     @classmethod
     def get_tax_rounding(cls, products, name):
         method = cls.default_tax_rounding()
@@ -361,6 +371,15 @@ class Product(metaclass=PoolMeta):
         doc['rules'].append(coog_string.doc_for_rules(self, 'billing_rules'))
         return doc
 
+    @fields.depends('billing_rules')
+    def on_change_with_billing_behavior(self, name=None):
+        if self.billing_rules:
+            return self.billing_rules[0].billing_behavior
+
+    @classmethod
+    def search_billing_behavior(cls, name, domain):
+        return [('billing_rules.billing_behavior',) + tuple(domain[1:])]
+
 
 class ProductBillingRule(
         get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
@@ -368,6 +387,11 @@ class ProductBillingRule(
     'ProductBilling Rule'
 
     __name__ = 'offered.product.billing_rule'
+
+    BILLING_BEHAVIOR = [
+        ('next_period', 'Invoice until requested period'),
+        ('whole_term', 'Invoice whole term'),
+    ]
 
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
         required=True, select=True)
@@ -383,6 +407,8 @@ class ProductBillingRule(
         'Ordered Billing Mode', order=[('order', 'ASC')],
         states={'invisible': ~Eval('change_billing_modes_order')},
         delete_missing=True)
+    billing_behavior = fields.Selection(BILLING_BEHAVIOR, 'Billing Behavior',
+        help="Defines invoicing strategy for this product")
 
     @classmethod
     def __setup__(cls):
@@ -414,6 +440,10 @@ class ProductBillingRule(
     def format_as_rule_result(self):
         return [x for x in self.billing_modes]
 
+    @classmethod
+    def default_billing_behavior(cls):
+        return 'next_period'
+
     def calculate_available_billing_modes(self, args):
         if not self.rule:
             return self.format_as_rule_result()
@@ -429,6 +459,7 @@ class ProductBillingRule(
         return False
 
     def get_rule_documentation_structure(self):
+        res = [coog_string.doc_for_field(self, 'billing_behavior')]
         res = [coog_string.doc_for_field(self, 'billing_modes')]
         if self.rule:
             res.append(self.get_rule_rule_engine_documentation_structure())

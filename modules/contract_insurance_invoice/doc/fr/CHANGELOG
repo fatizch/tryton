@@ -1,3 +1,4 @@
+* FEA#12228 Ajout d'une option permettant de systématiquement quittancer l'intégralité du terme
 * BUG#12257 Vérification de l'existence d'un contrat sur la ligne comptable (suite de 8f10fb735)
 * FEA#11728 Ajout de tests sur le quittancement dynamique
 * OTH#00000 Correction de la génération de la documentation sur un produit suite à FEA11728
