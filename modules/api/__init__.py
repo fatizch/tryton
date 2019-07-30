@@ -30,9 +30,9 @@ def add_api_error_handler(pool, update):
     from trytond.model import ModelStorage
     from trytond.modules.api import APIErrorHandler
 
-    # Not so good because technically coog_core is more a depency of api than
-    # the opposite, but this makes more sense here, and coog_core will be in
-    # the PATH anyway
+    # Not so good because technically coog_core is more a dependency of api
+    # than the opposite, but this makes more sense here, and coog_core will be
+    # in the PATH anyway
     from trytond.modules.coog_core import inject_class
 
     logging.getLogger('modules').info('Adding error handler for APIs')

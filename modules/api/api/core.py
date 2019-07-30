@@ -291,24 +291,28 @@ class APIErrorHandler(ModelStorage):
     @classmethod
     def raise_user_error(cls, errors, error_args=None, error_description='',
             error_description_args=None, raise_exception=True):
-        API = Pool().get('api')
-        if (raise_exception and errors not in API._blacklisted_errors and
-                api_context() is not None):
-            error_data = {'type': errors}
-            new_error_args = {}
-            for k, v in error_args.items():
-                if isinstance(v, Decimal):
-                    value = str(v)
-                elif isinstance(v, datetime.date):
-                    value = v.strftime('%Y-%m-%d')
-                else:
-                    value = v
-                new_error_args[k] = value
-            new_error_args['message'] = super().raise_user_error(errors,
-                error_args, error_description, error_description_args,
-                raise_exception=False)
-            error_data['data'] = new_error_args
-            raise APIUserError(error_data)
+        if (raise_exception and api_context() is not None):
+            # TODO : investigate why this class is registered (in tests) even
+            # when the 'api' module is not installed
+            # We must get the api model inside the if because api_context will
+            # protect us, but we should not have to
+            API = Pool().get('api')
+            if errors not in API._blacklisted_errors:
+                error_data = {'type': errors}
+                new_error_args = {}
+                for k, v in error_args.items():
+                    if isinstance(v, Decimal):
+                        value = str(v)
+                    elif isinstance(v, datetime.date):
+                        value = v.strftime('%Y-%m-%d')
+                    else:
+                        value = v
+                    new_error_args[k] = value
+                new_error_args['message'] = super().raise_user_error(errors,
+                    error_args, error_description, error_description_args,
+                    raise_exception=False)
+                error_data['data'] = new_error_args
+                raise APIUserError(error_data)
         return super().raise_user_error(errors, error_args, error_description,
             error_description_args, raise_exception)
 
