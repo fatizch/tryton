@@ -11,6 +11,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="endorsement_definition"/>
     </group>
     <newline/>
-    <field name="current_health_complement" mode="form" readonly="1"/>
-    <field name="new_health_complement" mode="form"/>
+    <field name="current_health_complement" mode="form" readonly="1" colspan="2"/>
+    <newline/>
+    <field name="new_health_complement" mode="form" colspan="2"/>
 </form>

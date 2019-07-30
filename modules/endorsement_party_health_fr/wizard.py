@@ -141,9 +141,14 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
     def check_before_start(cls, select_screen):
         super(ChangePartyHealthComplement, cls).check_before_start(
             select_screen)
-        dependents = [x.party
-            for x in select_screen.endorsement.party_endorsements
-            if x.party.social_security_dependent]
+        dependents = []
+        if select_screen.endorsement:
+            dependents = [x.party
+                for x in select_screen.endorsement.party_endorsements
+                if x.party.social_security_dependent]
+        if (getattr(select_screen, 'party', None)
+                and select_screen.party.social_security_dependent):
+            dependents.append(select_screen.party)
         if dependents:
             cls.append_functional_error('social_security_dependent', {
                     'full_name': [str(p.rec_name) for p in dependents],
