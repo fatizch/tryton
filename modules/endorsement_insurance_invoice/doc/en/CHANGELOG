@@ -1,3 +1,4 @@
+* BUG#12266 Termination endorsement should trigger invoicing from effective date plus one day
 * BUG#11726 Set possible payers when creating billing endorsements
 
 Version 2.4 - 2019-04-12

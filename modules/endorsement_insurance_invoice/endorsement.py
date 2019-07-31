@@ -6,7 +6,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or, Bool
 
-from trytond.modules.coog_core import model, fields
+from trytond.modules.coog_core import model, fields, coog_date
 from trytond.modules.endorsement.endorsement import relation_mixin
 
 __all__ = [
@@ -78,13 +78,21 @@ class Contract(metaclass=PoolMeta):
     def rebill_endorsement_dates(self):
         pool = Pool()
         Endorsement = pool.get('endorsement')
-        return sorted([datetime.datetime.combine(
-                    endorsement.effective_date, datetime.time()) or
-            endorsement.application_date
-            for endorsement in Endorsement.search([
+        res = []
+        endorsements = Endorsement.search([
                     ('contracts', '=', self.id),
                     ('state', '=', 'applied')])
-            if endorsement.definition.requires_rebill()])
+        for endorsement in endorsements:
+            if endorsement.definition.requires_rebill():
+                is_termination_endorsement = any([
+                        p.code == 'stop_contract'
+                        for p in endorsement.definition.endorsement_parts])
+                d = endorsement.effective_date
+                if is_termination_endorsement and d:
+                    d = coog_date.add_day(d, 1)
+                res.append(datetime.datetime.combine(d, datetime.time()) or
+                    endorsement.application_date)
+        return sorted(res)
 
     def _get_invoice_rrule_and_billing_information(self, start):
         pool = Pool()
