@@ -81,14 +81,14 @@ class ThirdPartyPeriod(WithExtraDetails, model.CoogView, model.CoogSQL):
                 ((table.end_date == Null)
                     & (table.start_date <= self.end_date))
                 | ((table.end_date >= self.start_date)
-                    & (table.end_date <= self.end_date)))
-
+                    & (table.start_date <= self.end_date)))
         cursor = connection.cursor()
         cursor.execute(*table.select(table.id,
                 where=(overlap_query
                     & (table.protocol == self.protocol.id)
                     & (table.option == self.option.id)
-                    & (table.id != self.id))))
+                    & (table.id != self.id)
+                    & (table.start_date <= table.end_date))))
         overlap_id = cursor.fetchone()
         if overlap_id:
             self.raise_user_error('tpp_overlap_error')
