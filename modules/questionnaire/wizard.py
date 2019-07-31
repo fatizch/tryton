@@ -189,7 +189,7 @@ class RunQuestionnaireAnswers(model.CoogView):
     __name__ = 'questionnaire.run.questions.answers'
 
     answers = fields.One2Many('questionnaire.run.questions.part', None,
-        'Answers', readonly=True, states={'invisible': ~Eval('answers')})
+        'Answers', states={'invisible': ~Eval('answers')})
 
     def _init_answer(self, part):
         answer = Pool().get('questionnaire.run.questions.part')()
