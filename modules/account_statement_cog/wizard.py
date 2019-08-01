@@ -128,17 +128,15 @@ class CreateStatement(Wizard):
         account = tables['account']
         move = tables['move']
         line_query, _ = MoveLine.query_get(tables['line'])
-        to_compare = date or utils.today()
-        date_clause = ((line.maturity_date <= to_compare)
-            | (line.maturity_date == Null))
-        where_clause = (account.active
-            & (account.kind == 'receivable')
+        where_clause = ((account.kind == 'receivable')
             & (line.reconciliation == Null)
             & (account.company == company.id)
             & (Like(move.origin, 'account.invoice,%'))
             & line_query
-            & date_clause
             )
+        if date:
+            where_clause &= ((line.maturity_date <= date)
+                | (line.maturity_date == Null))
         ids = [x.id for x in instances]
         if active_model == 'party.party':
             where_clause &= line.party.in_(ids)
@@ -156,10 +154,10 @@ class CreateStatement(Wizard):
         MoveLine = pool.get('account.move.line')
         Move = pool.get('account.move')
         cursor = Transaction().connection.cursor()
-
+        t, expression = Account.search_domain([('active', '=', True), ])
         tables = {
             'line': MoveLine.__table__(),
-            'account': Account.__table__(),
+            'account': t[None][0],
             'move': Move.__table__(),
             }
         query_table = tables['line'].join(tables['account'],
@@ -168,7 +166,7 @@ class CreateStatement(Wizard):
                 tables['move'].id)
         cursor.execute(*query_table.select(tables['line'].id,
                 where=cls.get_where_clause_from_context(tables, active_model,
-                    instances, company, date)))
+                    instances, company, date) & expression))
         lines = MoveLine.browse([id for id, in cursor.fetchall()])
         return [x for x in lines if x.amount]
 
