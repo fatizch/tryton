@@ -52,7 +52,7 @@ class APIParty(metaclass=PoolMeta):
                 test_party.ssn_key = ssn_key
                 test_party.ssn_no_key = ssn_no_key
                 test_party.check_ssn_key()
-            except UserError:
+            except Exception:
                 API.add_input_error({
                         'type': 'invalid_ssn',
                         'data': {

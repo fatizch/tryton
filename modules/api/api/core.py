@@ -300,7 +300,7 @@ class APIErrorHandler(ModelStorage):
             if errors not in API._blacklisted_errors:
                 error_data = {'type': errors}
                 new_error_args = {}
-                for k, v in error_args.items():
+                for k, v in (error_args or {}).items():
                     if isinstance(v, Decimal):
                         value = str(v)
                     elif isinstance(v, datetime.date):
