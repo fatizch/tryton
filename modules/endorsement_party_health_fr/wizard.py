@@ -55,32 +55,51 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
         PartyComplement = pool.get('health.party_complement')
         defaults = super(ChangePartyHealthComplement, self).step_default()
         parties = self._get_parties()
+        new_empty_health_complement = dict.fromkeys(
+            self._health_complement_fields_to_extract(), None)
         for _, party_endorsement in parties.items():
             updated_struct = party_endorsement.updated_struct
             # init with saved modified data
+            health_complement = None
             for health_complement in updated_struct['health_complement']:
                 if health_complement.__name__ == \
                         'endorsement.party.health_complement':
                     values = model.dictionarize(
                         health_complement.health_complement,
-                        self._health_complement_fields_to_extract())
+                        self._health_complement_fields_to_extract()) \
+                        if health_complement.health_complement else \
+                        new_empty_health_complement
+                    values['party'] = party_endorsement.party.id
                     values['date'] = \
                         party_endorsement.endorsement.effective_date
                     values.update(health_complement.values)
-                    defaults['current_health_complement'] = [
-                        health_complement.health_complement.id]
                     defaults['new_health_complement'] = [values]
+                elif health_complement.__name__ == \
+                        'health.party_complement':
+                    defaults_current_health_complement = defaults.get(
+                        'current_health_complement', None) or []
+                    defaults_current_health_complement.append(
+                        model.dictionarize(
+                            PartyComplement(health_complement),
+                            self._health_complement_fields_to_extract()))
+                    defaults['current_health_complement'] = \
+                        defaults_current_health_complement
             if 'new_health_complement' not in defaults:
                 # init from version at endorsement effective date
-                version = PartyComplement.get_values([health_complement.party],
+                version = PartyComplement.get_values([party_endorsement.party],
                     'health_complement',
                     party_endorsement.endorsement.effective_date)
+                current_health_complement = version['id'][
+                    party_endorsement.party.id]
                 values = model.dictionarize(
-                    PartyComplement(version['id'][health_complement.party.id]),
-                    self._health_complement_fields_to_extract())
+                    PartyComplement(current_health_complement),
+                    self._health_complement_fields_to_extract()) if \
+                    current_health_complement else new_empty_health_complement
                 values['date'] = party_endorsement.endorsement.effective_date
+                values['party'] = party_endorsement.party.id
                 defaults['current_health_complement'] = [
-                    version['id'][health_complement.party.id]]
+                    current_health_complement] if current_health_complement \
+                    else []
                 defaults['new_health_complement'] = [values]
         return defaults
 
@@ -115,9 +134,11 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
                     new_values.pop('hc_system')
                 if not new_values:
                     continue
-                all_values = model.dictionarize(PartyComplement(
-                        self.current_health_complement[0]),
-                    self._health_complement_fields_to_extract())
+                all_values = {}
+                if self.current_health_complement:
+                    all_values = model.dictionarize(PartyComplement(
+                            self.current_health_complement[0]),
+                        self._health_complement_fields_to_extract())
                 all_values.update(new_values)
                 test_complement = PartyComplement(**all_values)
                 test_complement.insurance_fund = \
@@ -128,7 +149,8 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin):
                 h_complement_endorsement = EndorsementHealthComplement(
                     action=action,
                     party_endorsement=party_endorsement,
-                    health_complement=self.current_health_complement[i],
+                    health_complement=self.current_health_complement[i] if
+                    action == 'update' else None,
                     relation=self.current_health_complement[i].id if
                     action == 'update' else None,
                     definition=self.endorsement_definition,

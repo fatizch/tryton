@@ -1,3 +1,4 @@
+* BUG#12279 Make change health complement endorsement work in case we are adding a new health complement on a party who doesn't have one
 * OTH#00000 Fix health complement endorsement
 
 Version 2.4 - 2019-04-12

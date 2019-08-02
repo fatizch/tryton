@@ -1,3 +1,4 @@
+* BUG#12279 Faire fonctionner l'avenant de modification de complément santé dans le cas où l'on ajoute un complément santé sur un tiers qui n'en possède pas
 * OTH#00000 Correction de l'avenant de modification des données de régime obligatoire
 
 Version 2.4 - 2019-04-12
