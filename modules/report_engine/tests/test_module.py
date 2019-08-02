@@ -2,8 +2,10 @@
 # this repository contains the full copyright notices and license terms.
 import unittest
 from mock import Mock
+import doctest
 
 import trytond.tests.test_tryton
+from trytond.tests.test_tryton import doctest_teardown
 
 from trytond.modules.coog_core import test_framework
 from trytond.modules.report_engine import event
@@ -72,9 +74,16 @@ class ModuleTestCase(test_framework.CoogTestCase):
         res = action.get_objects_origins_templates_for_event(event_objs)
         self.assertEqual(res, [([x], None, good_template) for x in to_print])
 
+    def test_0003_(self):
+        print('')
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
         ModuleTestCase))
+    suite.addTests(doctest.DocFileSuite(
+            'scenario_genshi_shared_template.rst',
+            tearDown=doctest_teardown, encoding='utf-8',
+            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

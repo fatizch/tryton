@@ -1,3 +1,4 @@
+* FEA#12161 Interface with BDOC printing system for batch printing
 * BUG#11815 Delay file writes to the commit of the Transaction
 * OTH#0000 Fix crash during template generation when no contact or recipient are available
 * OTH#0000 Due to regressions on reports automatic generation, revert commit d15fb01cf1

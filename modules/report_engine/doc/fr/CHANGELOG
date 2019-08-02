@@ -1,3 +1,4 @@
+* FEA#12161 Gestion de BDOC
 * BUG#11815 Décalage de l'écriture des fichiers au commit de la transaction
 * OTH#0000 Correction d'anomalie lors de la génération d'un courrier dans le cas où aucun contact ou destinataire n'est disponible
 * OTH#0000 En raison de régressions lors de la génération automatique de rapports, revert du commit d15fb01cf1

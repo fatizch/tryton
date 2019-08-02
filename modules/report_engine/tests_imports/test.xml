@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<py:strip xmlns:py="http://genshi.edgewall.org/">
+ <p>${id}</p>
+ <p>${Company.full_name}</p>
+ <p>${objects[0].rec_name}</p>
+</py:strip>
+

@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
-<tree editable="bottom">
+<form>
+    <label name="name"/>
     <field name="name"/>
-    <field name="start_date"/>
-    <field name="end_date"/>
-    <field name="language"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="data"/>
     <field name="data"/>
-    <field name="shared_template"/>
-    <field name="template" tree_invisible="1"/>
-</tree>
+</form>

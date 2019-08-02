@@ -1,0 +1,3 @@
+- un fichier xml doit être généré et déposé dans un dossier spécifique.
+- BDOC va ensuite automatiquement prendre le fichier et générer les documents.
+- Les documents sont ensuite stockés dans la GED du client par BDOC.

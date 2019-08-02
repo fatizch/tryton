@@ -23,6 +23,7 @@ from sql import Cast, Null, Literal
 from sql.functions import Substring, Position
 import datetime
 from dateutil.relativedelta import relativedelta
+from genshi.template import MarkupTemplate
 
 from trytond import backend
 from trytond.pool import Pool, PoolMeta
@@ -62,6 +63,7 @@ __all__ = [
     'ReportCreateSelectTemplate',
     'ReportCreatePreview',
     'ReportCreatePreviewLine',
+    'ReportSharedTemplate',
     ]
 
 
@@ -124,7 +126,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     format_for_internal_edm = fields.Selection('get_available_formats',
         'Format for internal EDM',
         help="If no format is specified, the document will not be stored "
-        "in the internal EDM")
+        "in the internal EDM",
+        states={'invisible': (Eval('input_kind') == 'shared_genshi_template')})
     output_format = fields.Selection([('', ''),
         ('libre_office', 'Libre Office'), ('pdf', 'Pdf'),
         ('microsoft_office', 'Microsoft Office')],
@@ -139,6 +142,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
     document_desc = fields.Many2One('document.description',
         'Document Description', ondelete='SET NULL')
     modifiable_before_printing = fields.Boolean('Modifiable',
+        states={'invisible': (Eval('input_kind') == 'shared_genshi_template')},
         help='Set to true if you want to modify the generated document before '
         'sending or printing')
     export_dir = fields.Char('Export Directory', help='Store a copy of each '
@@ -204,6 +208,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                 'microsoft_office': 'Microsoft Office',
                 'reports_produced': ('Your reports have been produced:'
                     '\n%(reports)s'),
+                'shared_genshi_template': 'Shared Genshi Template',
                 })
 
     @classmethod
@@ -318,6 +323,10 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         elif self.input_kind == 'flat_document':
             return [('flat_document',
                 self.raise_user_error('flat_document', raise_exception=False))]
+        elif self.input_kind == 'shared_genshi_template':
+            return [('shared_genshi_template',
+                self.raise_user_error('shared_genshi_template',
+                    raise_exception=False))]
         return [('', '')]
 
     @classmethod
@@ -393,6 +402,8 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
                     raise_exception=False)),
             ('flat_document', cls.raise_user_error('flat_document',
                     raise_exception=False)),
+            ('shared_genshi_template', cls.raise_user_error(
+                'shared_genshi_template', raise_exception=False)),
             ]
 
     @classmethod
@@ -428,7 +439,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             return versions[0]
         self.raise_user_error('no_version_match', (date, language))
 
-    @fields.depends('input_kind', 'possible_process_methods')
+    @fields.depends('input_kind', 'possible_process_methods', 'versions')
     def on_change_input_kind(self):
         possible_process_methods = self.get_possible_process_methods()
         if len(possible_process_methods) == 1:
@@ -439,6 +450,13 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
         if (not self.input_kind
                 or not self.input_kind.startswith('libre_office')):
             self.output_format = None
+        if self.input_kind != 'shared_genshi_template':
+            for version in self.versions:
+                version.is_shared_template = False
+        elif self.input_kind == 'shared_genshi_template':
+            self.format_for_internal_edm = ''
+            for version in self.versions:
+                version.is_shared_template = True
 
     @fields.depends('process_method', 'format_for_internal_edm')
     def on_change_process_method(self):
@@ -455,6 +473,9 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             return self.code
         return coog_string.slugify(self.name)
 
+    def _must_export_generated_file(self):
+        return self.genshi_evaluated_export_dir
+
     def print_reports(self, reports, context_):
         """ Reports is a list of dicts with keys:
             object, origin, report type, data, report name"""
@@ -464,7 +485,7 @@ class ReportTemplate(model.CoogSQL, model.CoogView, model.TaggedMixin):
             data)
         with ServerContext().set_context(
                 genshi_context=ReportGenerate.get_context(records, data)):
-            if self.genshi_evaluated_export_dir:
+            if self._must_export_generated_file():
                 self.export_reports(reports)
 
     def get_export_dirname(self):
@@ -764,10 +785,18 @@ class ReportTemplateVersion(model.CoogSQL, model.CoogView):
     end_date = fields.Date('End date')
     language = fields.Many2One('ir.lang', 'Language', required=True,
        ondelete='RESTRICT')
-    data = fields.Binary('Data', filename='name')
+    data = fields.Binary('Data', filename='name',
+        states={'invisible': Bool(Eval('is_shared_template'))},
+        depends=['is_shared_template'])
     name = fields.Char('Name', required=True)
     path = fields.Function(fields.Char('Path'),
         'get_path', setter='setter_data')
+    shared_template = fields.Many2One('report.shared_template',
+        'Shared Template', ondelete='CASCADE',
+        states={'invisible': ~Bool(Eval('is_shared_template'))},
+        depends=['is_shared_template'])
+    is_shared_template = fields.Boolean('Is Shared Template',
+        states={'invisible': True})
 
     @classmethod
     def __register__(cls, module_name):
@@ -829,6 +858,16 @@ class ReportTemplateVersion(model.CoogSQL, model.CoogView):
     @staticmethod
     def default_start_date():
         return utils.today()
+
+    @fields.depends('template')
+    def on_change_template(self):
+        if self.template:
+            self.is_shared_template = self.template.input_kind == \
+                'shared_genshi_template'
+
+    @fields.depends('shared_template')
+    def on_change_shared_template(self):
+        self.name = self.shared_template.name if self.shared_template else ''
 
 
 class Printable(ModelSQL):
@@ -1063,14 +1102,19 @@ class ReportGenerate(CoogReport):
         return (extension, version.data, False, filename)
 
     @classmethod
-    def process_libre_office(cls, ids, data):
-        pool = Pool()
+    def shared_models(cls, pool, data):
         action_reports = pool.get('ir.action.report').search([
-                ('report_name', '=', cls.__name__)])
+            ('report_name', '=', cls.__name__)])
         if len(action_reports) != 1:
             raise Exception('Error', 'Report (%s) not find!' % cls.__name__)
         action_report, = action_reports
         template = Pool().get('report.template')(data['doc_template'][0])
+        return (action_report, template)
+
+    @classmethod
+    def process_libre_office(cls, ids, data):
+        pool = Pool()
+        (action_report, template) = cls.shared_models(pool, data)
         action_report.template_extension = template.input_kind[-3:]
         action_report.extension = template.get_extension()
         rendered = cls.render(action_report,
@@ -1085,6 +1129,29 @@ class ReportGenerate(CoogReport):
             pool.get('party.party')(data['party']))
         oext = ext or oext
         return (oext, content, False, filename)
+
+    @classmethod
+    def process_shared_genshi_template(cls, ids, data):
+        pool = Pool()
+        records = cls._get_records(ids, data['model'], data)
+        context = cls.get_context(records, data)
+        (action_report, template) = cls.shared_models(pool, data)
+        lang = Transaction().language
+        if not lang:
+            raise Exception('No language defined')
+        version = template.get_selected_version(utils.today(), lang)
+        extension = os.path.splitext(version.shared_template.name)[1][1:]
+        action_report.template_extension = extension
+        action_report.extension = extension
+        name_giver = data.get('resource', None) or pool.get(data['model'])(
+            data['id'])
+        filename, ext = cls.get_filename(template, name_giver,
+                                         pool.get('party.party')(data['party']))
+        data = template.get_selected_version(
+            utils.today(), lang).shared_template.data
+        data = MarkupTemplate(data)
+        data = data.generate(**context).render('xml')
+        return (extension, bytearray(data, 'utf-8'), False, filename)
 
     @classmethod
     def execute(cls, ids, data):
@@ -1228,12 +1295,14 @@ class ReportGenerate(CoogReport):
 
     @classmethod
     def render(cls, report, report_context):
+
         pool = Pool()
         selected_obj = report_context['objects'][0]
         selected_letter = Pool().get('report.template')(
             report_context['data']['doc_template'][0])
         report.report_content = selected_letter.get_selected_version(
             utils.today(), selected_obj.get_lang()).data
+
         report.style_content = selected_letter.get_style_content(
             utils.today(), selected_obj)
 
@@ -1798,3 +1867,11 @@ class ReportTemplateGroupRelation(model.CoogSQL, model.CoogView):
         required=True, ondelete='CASCADE', select=True)
     group = fields.Many2One('res.group', 'Group',
         required=True, ondelete='CASCADE', select=True)
+
+
+class ReportSharedTemplate(model.CodedMixin, model.CoogView):
+    'Report Shared Template'
+
+    __name__ = 'report.shared_template'
+
+    data = fields.Binary('Data', required=True, help='upload an xml file')

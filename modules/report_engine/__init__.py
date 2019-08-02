@@ -37,6 +37,7 @@ def register():
         res.Group,
         party.Party,
         wizard.PrintUnboundReportStart,
+        report_engine.ReportSharedTemplate,
         module='report_engine', type_='model')
 
     Pool.register(

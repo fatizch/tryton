@@ -1,0 +1,3 @@
+- An xml file must be generated and placed in a specific folder.
+- BDOC will then automatically take the file and generate the documents.
+- The documents are then stored in the client's EDM by BDOC.
