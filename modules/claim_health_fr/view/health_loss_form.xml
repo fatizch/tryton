@@ -10,8 +10,7 @@ this repository contains the full copyright notices and license terms. -->
         <field name="is_care_access_contract"/>
         <label name="is_off_care_pathway"/>
         <field name="is_off_care_pathway"/>
-        <label name="ccam_act_code"/>
-        <field name="ccam_act_code"/>
+        <newline/>
         <label name="ss_agreement_price"/>
         <field name="ss_agreement_price"/>
         <label name="ss_agreement_rate"/>

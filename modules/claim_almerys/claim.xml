@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ########### -->
+        <!-- # Benefit # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="benefit_view_form">
+            <field name="model">benefit</field>
+            <field name="inherit" ref="claim.benefit_view_form"/>
+            <field name="name">benefit_form</field>
+        </record>
+        <!-- ############### -->
+        <!-- # Health Loss # -->
+        <!-- ############### -->
+        <record model="ir.ui.view" id="claim_loss_health_view_form">
+            <field name="model">claim.loss.health</field>
+            <field name="inherit" ref="claim_health.health_loss_view_form"/>
+            <field name="name">health_loss_form</field>
+        </record>
+        <!-- #################### -->
+        <!-- # Claim Sub Status # -->
+        <!-- #################### -->
+        <record model="claim.sub_status" id="claim_sub_status_almerys">
+            <field name="name">Import Almerys</field>
+            <field name="code">almerys</field>
+            <field name="block_indemnifications" eval="False"/>
+            <field name="status">closed</field>
+        </record>
+        <!-- ####################### -->
+        <!-- # Claim Configuration # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="third_party_protocol_almerys_configuration_view_form">
+            <field name="model">third_party_protocol.almerys.configuration</field>
+            <field name="inherit" ref="third_party_protocol_almerys.third_party_protocol_almerys_configuration_view_form"/>
+            <field name="name">third_party_protocol_almerys_configuration_view_form</field>
+        </record>
+    </data>
+</tryton>

@@ -6,7 +6,6 @@ this repository contains the full copyright notices and license terms. -->
         <field name="act_coefficient"/>
         <field name="is_care_access_contract"/>
         <field name="is_off_care_pathway"/>
-        <field name="ccam_act_code"/>
         <field name="ss_agreement_price"/>
         <field name="ss_agreement_rate"/>
         <field name="ss_reimbursement_amount"/>

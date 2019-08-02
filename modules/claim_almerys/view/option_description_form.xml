@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/notebook/page/field[@name='benefits']" position="before">
+        <label name="almerys_management"/>
+        <field name="almerys_management"/>
+        <newline/>
+        <label name="almerys_benefit_tp"/>
+        <field name="almerys_benefit_tp"/>
+        <label name="almerys_benefit_htp"/>
+        <field name="almerys_benefit_htp"/>
+    </xpath>
+</data>

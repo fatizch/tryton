@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath expr="/form" position="inside">
+        <separator colspan="4" id="almerys" string="Almerys"/>
+        <label name="almerys_prescription_date"/>
+        <field name="almerys_prescription_date"/>
+        <label name="almerys_accident_date"/>
+        <field name="almerys_accident_date"/>
+        <label name="almerys_other_insurer_delivered_amount"/>
+        <field name="almerys_other_insurer_delivered_amount"/>
+        <label name="almerys_depassement_amount"/>
+        <field name="almerys_depassement_amount"/>
+        <label name="almerys_top_depassement"/>
+        <field name="almerys_top_depassement"/>
+        <label name="almerys_num_dents"/>
+        <field name="almerys_num_dents"/>
+    </xpath>
+</data>

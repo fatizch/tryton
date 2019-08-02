@@ -1,6 +1,7 @@
 # encoding: utf-8
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from trytond import backend
 from trytond.pool import PoolMeta
 from trytond.modules.coog_core import fields
 
@@ -16,11 +17,19 @@ class HealthLoss(metaclass=PoolMeta):
     act_coefficient = fields.Numeric('Medical Act Coefficient')
     is_care_access_contract = fields.Boolean('Belongs To Care Access Contract')
     is_off_care_pathway = fields.Boolean('Is Off Care Pathway')
-    ccam_act_code = fields.Char('CCAM act code')
     ss_agreement_price = fields.Numeric('Social Security Agreement Price')
     ss_agreement_rate = fields.Numeric('Social Security Agreement Rate')
     ss_reimbursement_amount = fields.Numeric('Social Security Reimbursement'
         ' Amount')
+
+    @classmethod
+    def __register__(cls, module_name):
+        super().__register__(module_name)
+
+        table = backend.get('TableHandler')(cls, module_name)
+
+        if table.column_exist('ccam_act_code'):
+            table.drop_column('ccam_act_code')
 
 
 class Claim(metaclass=PoolMeta):

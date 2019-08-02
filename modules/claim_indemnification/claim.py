@@ -15,7 +15,7 @@ from trytond.pyson import Eval, Or, Bool, In, Not, Len
 from trytond.model import ModelView, Unique
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
-from trytond.tools import grouped_slice
+from trytond.tools import grouped_slice, reduce_ids
 
 from trytond.modules.coog_core import fields, model, coog_string, utils, \
     coog_date, export
@@ -660,6 +660,8 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         ondelete='RESTRICT', required=True,
         states={'readonly': Eval('status') != 'calculated'},
         depends=['status'])
+    beneficiary_name = fields.Function(
+        fields.Char("Beneficiary Name"), 'get_beneficiary_name')
     service = fields.Many2One('claim.service', 'Claim Service',
         ondelete='CASCADE', select=True, required=True)
     kind = fields.Function(
@@ -1193,6 +1195,27 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
         else:
             order_table, = tables['details'][None]
         return [order_table.amount]
+
+    @classmethod
+    def get_beneficiary_name(cls, indemnifications, name):
+        pool = Pool()
+        Party = pool.get('party.party')
+
+        party = Party.__table__()
+        indemnification = cls.__table__()
+        cursor = Transaction().connection.cursor()
+
+        names = {}
+        for sub_indemn in grouped_slice(indemnifications):
+            cursor.execute(
+                *indemnification.join(
+                    party, condition=party.id == indemnification.beneficiary
+                ).select(
+                    indemnification.id, party.name,
+                    where=reduce_ids(indemnification.id, map(int, sub_indemn))
+                ))
+            names.update(cursor.fetchall())
+        return names
 
     @fields.depends('details', 'currency_digits', 'product', 'start_date',
         'manual')

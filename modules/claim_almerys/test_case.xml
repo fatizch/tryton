@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ############# -->
+        <!-- # Test Case # -->
+        <!-- ############# -->
+        <record model="ir.ui.view" id="test_case_view_form">
+            <field name="model">ir.test_case</field>
+            <field name="inherit" ref="coog_core.test_case_form"/>
+            <field name="name">test_case_form</field>
+        </record>
+        <record model="ir.test_case.instance" id="almerys_descriptions_test_case">
+            <field name="name">Almerys Descriptions Test Case</field>
+            <field name="method_name">almerys_descriptions_test_case</field>
+        </record>
+    </data>
+</tryton>
