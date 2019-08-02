@@ -61,3 +61,8 @@ def register():
         api.APIProduct,
         api.APIContract,
         module='loan', type_='model', depends=['api'])
+
+    Pool.register(
+        offered.OptionDescriptionEligibilityRule,
+        module='loan', type_='model',
+        depends=['offered_eligibility'])

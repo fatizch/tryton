@@ -20,4 +20,14 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">option_description_form</field>
         </record>
     </data>
+    <data depends="offered_eligibility">
+        <!-- ####################################### -->
+        <!-- # Option Description Eligibility Rule # -->
+        <!-- ####################################### -->
+        <record model="ir.ui.view" id="option_description_eligibility_rule_view_form">
+            <field name="model">offered.option.description.eligibility_rule</field>
+            <field name="inherit" ref="offered_eligibility.option_description_eligibility_rule_view_form"/>
+            <field name="name">option_description_eligibility_rule_form</field>
+        </record>
+    </data>
 </tryton>

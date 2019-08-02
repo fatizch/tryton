@@ -266,6 +266,13 @@ class ContractOption(metaclass=PoolMeta):
     multi_mixed_view = latest_loan_shares
 
     @classmethod
+    def __setup__(cls):
+        super(ContractOption, cls).__setup__()
+        cls._error_messages.update({'loan_not_eligible':
+                'Loan %s is not eligible',
+                })
+
+    @classmethod
     def _export_skips(cls):
         return (super(ContractOption, cls)._export_skips() |
             set(['multi_mixed_view']))
@@ -391,6 +398,18 @@ class ContractOption(metaclass=PoolMeta):
             return outstanding
         else:
             return outstanding + self.get_option_loan_balance(date)
+
+    def check_eligibility_loan(self):
+        exec_context = {'date': self.start_date}
+        for loan_share in self.loan_shares:
+            loan_share.init_dict_for_rule_engine(exec_context)
+            if not self.coverage.check_eligibility(exec_context):
+                self.append_functional_error('loan_not_eligible',
+                    (loan_share.rec_name))
+
+    def check_eligibility(self):
+        super(ContractOption, self).check_eligibility()
+        self.check_eligibility_loan()
 
 
 class ExtraPremium(metaclass=PoolMeta):

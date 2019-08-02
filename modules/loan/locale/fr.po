@@ -10,6 +10,10 @@ msgctxt "error:contract.option.extra_premium:"
 msgid "Remaining Capital Per Mil"
 msgstr "Pourmillage sur capital restant dû"
 
+msgctxt "error:contract.option:"
+msgid "Loan %s is not eligible"
+msgstr "Le prêt %s n'est pas éligible"
+
 msgctxt "error:contract:"
 msgid "At least one loan must be selected for %s"
 msgstr "Au moins un prêt doit être sélectionné pour %s"
@@ -691,6 +695,10 @@ msgstr "Prise en compte du montant assuré dans l'encours"
 msgctxt "field:offered.option.description,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
+
+msgctxt "field:offered.option.description.eligibility_rule,per_loan:"
+msgid "Per loan"
+msgstr "Par prêt"
 
 msgctxt "field:offered.product,is_loan:"
 msgid "Is Loan"

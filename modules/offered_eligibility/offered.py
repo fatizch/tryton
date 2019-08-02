@@ -23,7 +23,8 @@ class OptionDescription(metaclass=PoolMeta):
     def check_eligibility(self, exec_context):
         if not self.eligibility_rules:
             return True
-        return all([x.calculate(exec_context) for x in self.eligibility_rules])
+        return all([x.calculate(exec_context) for x in self.eligibility_rules
+            if x.is_appliable(exec_context)])
 
     def get_documentation_structure(self):
         structure = super(OptionDescription, self).get_documentation_structure()
@@ -91,3 +92,6 @@ class OptionDescriptionEligibilityRule(
         return [
             self.get_rule_rule_engine_documentation_structure(),
             ]
+
+    def is_appliable(self, context):
+        return True

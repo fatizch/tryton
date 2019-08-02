@@ -5,6 +5,7 @@ from sql import Literal, Table
 from trytond import backend
 from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
+from trytond.pyson import Eval
 
 from trytond.modules.coog_core import fields, coog_string
 
@@ -13,6 +14,7 @@ __all__ = [
     'ProductConfiguration',
     'Product',
     'OptionDescription',
+    'OptionDescriptionEligibilityRule',
     ]
 
 
@@ -113,3 +115,23 @@ class OptionDescription(metaclass=PoolMeta):
             structure['parameters'].append(
                 coog_string.doc_for_field(self, 'insured_outstanding_balance'))
         return structure
+
+
+class OptionDescriptionEligibilityRule(metaclass=PoolMeta):
+    __name__ = 'offered.option.description.eligibility_rule'
+
+    per_loan = fields.Boolean('Per loan', help="If True, the rule will be "
+        "applied once per loan share on the associated option",
+        states={'invisible': ~Eval('is_loan_coverage'), },
+        depends=['is_loan_coverage'])
+
+    is_loan_coverage = fields.Function(fields.Boolean('Is Loan Coverage'),
+        'getter_is_loan_coverage')
+
+    def getter_is_loan_coverage(self, name):
+        return bool(self.coverage.is_loan)
+
+    def is_appliable(self, context):
+        if self.per_loan:
+            return 'loan' in context
+        return super().is_appliable(context)
