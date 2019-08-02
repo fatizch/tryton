@@ -63,10 +63,19 @@ class Party(metaclass=PoolMeta):
         bank_account = self.get_bank_account(datetime.date.today())
         return bank_account.id if bank_account else None
 
-    @fields.depends('claim_bank_account')
-    def on_change_with_forced_claim_bank_account(self):
-        if self.claim_bank_account:
-            return self.claim_bank_account.id
+    @fields.depends('claim_bank_account', 'bank_accounts')
+    def on_change_claim_bank_account(self):
+        self._set_forced_claim_bank_account(self.claim_bank_account)
+
+    def _set_forced_claim_bank_account(self, account):
+        if account is None:
+            self.forced_claim_bank_account = None
+            return
+        calculated = self.get_bank_account(datetime.date.today())
+        if account == calculated:
+            self.forced_claim_bank_account = None
+        else:
+            self.forced_claim_bank_account = account
 
 
 class Insurer(metaclass=PoolMeta):

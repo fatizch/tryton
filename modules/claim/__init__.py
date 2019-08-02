@@ -14,6 +14,7 @@ from . import benefit
 from . import wizard
 from . import event
 from . import configuration
+from . import api
 
 
 def register():
@@ -78,3 +79,8 @@ def register():
         endorsement.StartEndorsement,
         module='claim', type_='wizard',
         depends=['endorsement'])
+
+    Pool.register(
+        api.APICore,
+        api.APIParty,
+        module='claim', type_='model', depends=['api'])

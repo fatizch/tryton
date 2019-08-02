@@ -114,6 +114,9 @@ class BankAccount(export.ExportImportMixin):
         fields.Char('Number', required=True),
         'get_main_bank_account_number', 'setter_void',
         searcher='search_main_bank_account_number')
+    number_compact = fields.Function(
+        fields.Char('Number Compact', required=True),
+        'get_main_bank_account_number')
     owners_name = fields.Function(
         fields.Char('Owners'), 'on_change_with_owners_name',
         searcher='search_owners_name')
@@ -176,10 +179,9 @@ class BankAccount(export.ExportImportMixin):
         if self.owners and all([o.is_anonymized for o in self.owners]):
             return 'XXXX'
         ibans = [x for x in self.numbers if x.type == 'iban']
-        if ibans:
-            return ibans[-1].number
-        elif self.numbers:
-            return self.numbers[-1].number
+
+        number = ibans[-1] if ibans else self.numbers[-1]
+        return number.number if name == 'number' else number.number_compact
 
     def get_synthesis_rec_name(self, name):
         return '%s : %s' % (self.numbers[0].type,
