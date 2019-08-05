@@ -34,6 +34,7 @@ _modules_to_ignore = [
     'contract_set_process',  # We do not test contract sets so far
     'endorsement_set',  # We do not test it so far
     'third_party_protocol_almerys',  # Incompatible with bank tests case
+    'claim_almerys',  # Requires third_party_protocol_almerys
     ]
 
 
