@@ -476,8 +476,13 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                             and health_complement.insurance_fund_number)
                     beneficiaire.append(E.STATUT_NOEMISATION(
                             E.NOEMISE('true' if noemise else 'false'),
+                            E.DATE_DEBUT_NOEMISATION(
+                                covered.noemie_start_date.isoformat()
+                                if covered.noemie_start_date else ''),
+                            E.DATE_FIN_NOEMISATION(
+                                covered.noemie_end_date.isoformat()
+                                if covered.noemie_end_date else ''),
                             ))
-
                     if any(tpp.protocol.almerys_support_tp
                             for tpp in all_periods):
                         first_period = next(tpp

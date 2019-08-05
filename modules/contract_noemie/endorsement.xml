@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data depends="endorsement_insurance">
+        <!-- ###################### -->
+        <!-- # Method Definitions # -->
+        <!-- ###################### -->
+        <record model="ir.model.method" id="compute_noemie_dates">
+            <field name="method_name">compute_noemie_dates</field>
+            <field name="name">Compute Noemie Dates</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">400</field>
+        </record>
+    </data>
+</tryton>

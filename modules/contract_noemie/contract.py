@@ -1,10 +1,22 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+
+from datetime import date
+from dateutil.relativedelta import relativedelta
+
+from sql import Literal, Null
+from sql.aggregate import Max, Min
+from sql.conditionals import Coalesce, Greatest, NullIf
+
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
+
 from trytond.modules.coog_core import fields
 
 __all__ = [
+    'Contract',
     'CoveredElement',
     ]
 
@@ -59,6 +71,16 @@ REJECTED_CODES = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
     '26', '28', '29', '30', '31', '35']
 
 
+class Contract(metaclass=PoolMeta):
+    __name__ = 'contract'
+
+    def compute_noemie_dates(self, caller=None):
+        for covered_element in self._get_calculate_targets(
+                'covered_elements'):
+            covered_element.update_noemie_dates()
+        self.save()
+
+
 class CoveredElement(metaclass=PoolMeta):
     __name__ = 'contract.covered_element'
 
@@ -81,6 +103,12 @@ class CoveredElement(metaclass=PoolMeta):
         depends=['is_noemie'], readonly=True)
     noemie_return_code_string = \
         noemie_return_code.translated('noemie_return_code')
+    noemie_start_date = fields.Date('Noemie Start Date',
+        states={'invisible': ~Eval('is_noemie') | ~Eval('noemie_start_date')},
+        depends=['is_noemie'], readonly=True)
+    noemie_end_date = fields.Date('Noemie End Date',
+        states={'invisible': ~Eval('is_noemie') | ~Eval('noemie_end_date')},
+        depends=['is_noemie'], readonly=True)
 
     @classmethod
     def view_attributes(cls):
@@ -88,6 +116,57 @@ class CoveredElement(metaclass=PoolMeta):
             ("/form/group[@id='noemie_management']", 'states',
                 {'invisible': ~Eval('is_noemie')}),
             ]
+
+    @classmethod
+    def __register__(cls, module_name):
+        pool = Pool()
+        Option = pool.get('contract.option')
+        Item = pool.get('offered.item.description')
+        History = pool.get('contract.activation_history')
+        TableHandler = backend.get('TableHandler')
+        table_handler = TableHandler(cls)
+        cursor = Transaction().connection.cursor()
+        migrate_dates = not table_handler.column_exist('noemie_start_date')
+        super().__register__(module_name)
+        if migrate_dates:
+            option = Option.__table__()
+            item = Item.__table__()
+            item2 = Item.__table__()
+            history = History.__table__()
+            covered = cls.__table__()
+            q_table = history.join(covered,
+                condition=history.contract == covered.contract).join(option,
+                condition=option.covered_element == covered.id).join(item,
+                condition=item.id == covered.item_desc).select(
+                covered.party,
+                Max(Coalesce(history.end_date, date.min)).as_(
+                    'c_end_date'),
+                Min(Coalesce(history.start_date, date.min)).as_(
+                    'c_start_date'),
+                Max(Coalesce(option.manual_end_date, date.min)).as_(
+                    'o_m_end_date'),
+                Max(Coalesce(option.automatic_end_date, date.min)).as_(
+                    'o_a_end_date'),
+                Min(Coalesce(option.manual_start_date, date.max)).as_(
+                    'o_m_start_date'),
+                where=(item.is_noemie == Literal(True)) &
+                    (covered.party != Null),
+                group_by=covered.party)
+            covered_up = cls.__table__()
+            cursor.execute(*covered_up.update(
+                    columns=[covered_up.noemie_start_date,
+                        covered_up.noemie_end_date],
+                    from_=[q_table, item2],
+                    values=[Coalesce(NullIf(q_table.o_m_start_date, date.max),
+                                q_table.c_start_date),
+                            Coalesce(
+                                NullIf(Greatest(q_table.o_m_end_date,
+                                    q_table.o_a_end_date), date.min),
+                                q_table.c_end_date)],
+                    where=(covered_up.party == q_table.party) & (
+                        item2.id == covered_up.item_desc) & (
+                        item2.is_noemie == Literal(True)) & (
+                        covered_up.party != Null)))
 
     def getter_is_noemie(self, name):
         return self.item_desc.is_noemie
@@ -108,9 +187,17 @@ class CoveredElement(metaclass=PoolMeta):
     def default_noemie_return_code():
         return ''
 
-    def recalculate(self):
-        super().recalculate()
+    def update_noemie_dates(self):
         if self.party and self.item_desc.is_noemie:
+            prev_start_date = getattr(self, 'noemie_start_date', None)
+            prev_end_date = getattr(self, 'noemie_end_date', None)
+            if self.contract_status == 'void' or all(
+                    [o.status == 'void' for o in self.options]):
+                if self.noemie_start_date:
+                    self.noemie_end_date = self.noemie_start_date + \
+                        relativedelta(days=1)
+                else:
+                    self.noemie_end_date = None
             CoveredElement = Pool().get('contract.covered_element')
             covered_elements = CoveredElement.search([
                     ('id', '!=', self.id),
@@ -120,10 +207,52 @@ class CoveredElement(metaclass=PoolMeta):
                 self.noemie_return_code = covered_elements[0].noemie_return_code
                 self.noemie_update_date = covered_elements[0].noemie_update_date
                 self.noemie_status = covered_elements[0].noemie_status
+                self.noemie_start_date = min(
+                    covered_elements[0].noemie_start_date, self.start_date)
+                if covered_elements[0].noemie_end_date:
+                    self.noemie_end_date = max(
+                        covered_elements[0].noemie_end_date,
+                        getattr(self, 'end_date', None) or date.min)
+                else:
+                    self.noemie_end_date = getattr(self, 'end_date', None)
             else:
-                self.noemie_return_code = ''
-                self.noemie_update_date = None
+                self.noemie_start_date = getattr(self, 'noemie_start_date',
+                    None) or self.start_date
+                self.noemie_end_date = getattr(self, 'end_date', None)
+                self.noemie_return_code = self.noemie_return_code or ''
+                self.noemie_update_date = self.noemie_update_date or None
+                self.noemie_status = self.noemie_status or 'waiting'
+            if self.party and self.party.health_complement:
+                print([x.date for x in self.party.health_complement])
+                print(list(self.party.health_complement))
+                health_complement = sorted(list(self.party.health_complement),
+                    key=lambda x: x.date or date.min)[-1]
+                if health_complement.date:
+                    self.noemie_start_date = max(health_complement.date,
+                        self.noemie_start_date)
+            if self.contract_status == 'void' or all(
+                    [o.status == 'void' for o in self.options]):
+                self.noemie_end_date = self.noemie_start_date
+            if (prev_start_date != self.noemie_start_date) or \
+                    (prev_end_date != self.noemie_end_date):
                 self.noemie_status = 'waiting'
+                for covered in covered_elements:
+                    covered.noemie_start_date = self.noemie_start_date
+                    covered.noemie_end_date = self.noemie_end_date
+                    covered.noemie_status = 'waiting'
+                if covered_elements:
+                    CoveredElement.save(covered_elements)
+
+    def recalculate(self):
+        super().recalculate()
+        self.update_noemie_dates()
+
+    def notify_contract_end_date_change(self, new_end_date):
+        res = super().notify_contract_end_date_change(new_end_date)
+        if new_end_date:
+            self.noemie_end_date = max(new_end_date,
+                self.noemie_end_date or date.min)
+        return res
 
     @fields.depends('noemie_return_code', 'noemie_update_date', 'noemie_status')
     def on_change_party(self):
