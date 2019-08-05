@@ -4,7 +4,6 @@ import re
 
 from trytond.pyson import Eval
 from trytond.pool import PoolMeta, Pool
-from trytond.rpc import RPC
 
 from trytond.modules.coog_core import fields, model
 
@@ -85,10 +84,6 @@ class BankAccount(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(BankAccount, cls).__setup__()
-        cls.__rpc__.update({
-                'get_bank_from_number': RPC(instantiate=0,
-                    result=lambda b: b.id if b else None),
-                })
         cls._error_messages.update({'iban_bank_mismatch':
                 'The IBAN and bank do not match'})
 

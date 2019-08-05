@@ -1,3 +1,4 @@
+* BUG#12296 Export de l'api de récupération d'une banque à partir d'un iban
 * FEA#11795 Chargement des banques et des agences des fichiers Banque de France
 
 Version 2.4 - 2019-04-12

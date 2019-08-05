@@ -1,6 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms
 from trytond.pool import PoolMeta, Pool
+from trytond.modules.coog_core.api import OBJECT_ID_SCHEMA
 
 __all__ = [
     'APIParty',
@@ -9,6 +10,70 @@ __all__ = [
 
 class APIParty(metaclass=PoolMeta):
     __name__ = 'api.party'
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls._apis.update(
+            {
+                'bank_from_number': {
+                    'description': 'Extracts the bank information from the'
+                    'account number',
+                    'public': True,
+                    'readonly': True,
+                }
+            }
+        )
+
+    @classmethod
+    def bank_from_number(cls, parameters):
+        pool = Pool()
+        BankAccount = pool.get('bank.account')
+
+        number = parameters['number']
+        bank = BankAccount.get_bank_from_number(number)
+        if not bank:
+            return {}
+        data = {
+            'id': bank.id,
+            'name': bank.rec_name,
+            'bic': bank.bic,
+        }
+        return data
+
+    @classmethod
+    def _bank_from_number_schema(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {'number': {'type': 'string'}},
+            'required': ['number'],
+        }
+
+    @classmethod
+    def _bank_from_number_output_schema(cls):
+        return {
+            'type': 'object',
+            'additionalProperties': False,
+            'properties': {
+                'id': OBJECT_ID_SCHEMA,
+                'name': {'type': 'string'},
+                'bic': {'type': 'string'},
+            },
+        }
+
+    @classmethod
+    def _bank_from_number_examples(cls):
+        return [
+            {
+                'input': {'number': '123425425'},
+                'output': {
+                    'id': 1,
+                    'name': 'Ma banque',
+                    'bic': 'XXXXXXXXXX',
+                },
+            }
+        ]
 
     @classmethod
     def _party_bank_account_schema(cls):
