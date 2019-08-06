@@ -54,6 +54,10 @@ msgctxt "field:bank.account,number:"
 msgid "Number"
 msgstr "Numéro"
 
+msgctxt "field:bank.account,number_compact:"
+msgid "Number Compact"
+msgstr "Numéro compact"
+
 msgctxt "field:bank.account,owners_name:"
 msgid "Owners"
 msgstr "Propriétaires"

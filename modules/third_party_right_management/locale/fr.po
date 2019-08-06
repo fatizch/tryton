@@ -18,6 +18,10 @@ msgctxt "field:contract.option,third_party_periods:"
 msgid "Third Party Periods"
 msgstr "Périodes de délégation"
 
+msgctxt "field:contract.option.third_party_period,color:"
+msgid "Color"
+msgstr "Couleur"
+
 msgctxt "field:contract.option.third_party_period,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -33,6 +37,10 @@ msgstr "Créé par"
 msgctxt "field:contract.option.third_party_period,end_date:"
 msgid "End Date"
 msgstr "Date de fin de couverture"
+
+msgctxt "field:contract.option.third_party_period,end_date_domain_date:"
+msgid "End Date Domain Date"
+msgstr ""
 
 msgctxt "field:contract.option.third_party_period,extra_details:"
 msgid "Extra Details"
@@ -50,6 +58,10 @@ msgctxt "field:contract.option.third_party_period,option:"
 msgid "Contract Option"
 msgstr "Garantie"
 
+msgctxt "field:contract.option.third_party_period,party:"
+msgid "Party"
+msgstr "Tiers"
+
 msgctxt "field:contract.option.third_party_period,protocol:"
 msgid "Protocol"
 msgstr "Protocole"
@@ -65,6 +77,10 @@ msgstr "Date d'envoi"
 msgctxt "field:contract.option.third_party_period,start_date:"
 msgid "Start Date"
 msgstr "Date d'effet"
+
+msgctxt "field:contract.option.third_party_period,start_date_domain_date:"
+msgid "Start Date Domain Date"
+msgstr ""
 
 msgctxt "field:contract.option.third_party_period,status:"
 msgid "Status"

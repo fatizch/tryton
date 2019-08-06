@@ -1287,3 +1287,13 @@ msgctxt ""
 "wizard_button:contract.wizard.option_subscription,select_package,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:contract.wizard.option_subscription,select_package,set_package:"
+msgid "Apply Package"
+msgstr "Appliquer la formule"
+
+msgctxt ""
+"wizard_button:contract.wizard.option_subscription,select_package,set_package_and_customize_option:"
+msgid "Apply Package and Customize Options"
+msgstr "Appliquer la formule et personnaliser les options"

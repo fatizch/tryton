@@ -3,6 +3,10 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.questionnaire.result:"
+msgid "Commercial Product"
+msgstr "Produit commercial"
+
+msgctxt "error:contract.questionnaire.result:"
 msgid "Description"
 msgstr "Description"
 
@@ -426,9 +430,17 @@ msgctxt "field:questionnaire.part,xml_id:"
 msgid "XML Id"
 msgstr "XML Id"
 
+msgctxt "field:questionnaire.run.questions,authorized_distributors:"
+msgid "Authorized distributors"
+msgstr "Distributeurs autorisés"
+
 msgctxt "field:questionnaire.run.questions,description:"
 msgid "Description"
 msgstr "Description"
+
+msgctxt "field:questionnaire.run.questions,distributor:"
+msgid "Distributor"
+msgstr "Distributeur"
 
 msgctxt "field:questionnaire.run.questions,id:"
 msgid "ID"

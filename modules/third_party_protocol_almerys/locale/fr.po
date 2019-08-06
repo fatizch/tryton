@@ -6,9 +6,9 @@ msgctxt "field:batch.almerys.feedback,id:"
 msgid "ID"
 msgstr "Identifiant"
 
-msgctxt "field:contract,almerys_return:"
-msgid "Almerys Return"
-msgstr "Retour Almerys"
+msgctxt "field:party.address,is_person:"
+msgid "Is Person"
+msgstr "Est Une Personne"
 
 msgctxt "field:party.party,almerys_courrier_gestion:"
 msgid "Almerys COURRIER_GESTION"
@@ -33,7 +33,6 @@ msgstr "Contrat"
 msgctxt "field:return.almerys,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
-
 
 msgctxt "field:return.almerys,create_date_:"
 msgid "Creation date"
@@ -393,16 +392,15 @@ msgid "ID"
 msgstr "Identifiant"
 
 msgctxt "model:batch.almerys.feedback,name:"
-msgid "return almerys batch"
+msgid "Return Almerys Batch"
 msgstr "Batch de Retour Almerys"
 
 msgctxt ""
-"model:extra_details.configuration.line,selection:third_party_protocol_almerys_code_mouvement_carte"
+"model:extra_details.configuration.line,selection:third_party_protocol_almerys_code_mouvement_carte1"
 msgid ""
 "CA:CA\n"
 "CC:CC\n"
-"CS:CS\n"
-"            "
+"CS:CS"
 msgstr ""
 
 msgctxt ""
@@ -411,7 +409,7 @@ msgid "Tiers-Payant Envoi"
 msgstr "Tiers-Payant Envoi"
 
 msgctxt ""
-"model:extra_details.configuration.line,string:third_party_protocol_almerys_code_mouvement_carte"
+"model:extra_details.configuration.line,string:third_party_protocol_almerys_code_mouvement_carte1"
 msgid "Code Mouvement Carte"
 msgstr "Code Mouvement Carte"
 
@@ -455,18 +453,21 @@ msgctxt ""
 msgid "Référence Site"
 msgstr "Référence Site"
 
-
 msgctxt ""
 "model:extra_details.configuration.line,string:third_party_protocol_almerys_reference_produit"
 msgid "Référence Produit"
 msgstr "Référence Produit"
+
+msgctxt "model:ir.action,name:act_almerys_relate_form"
+msgid "Retour Almerys"
+msgstr "Retour Almerys"
 
 msgctxt "model:ir.action,name:act_third_party_protocol_almerys_configuration"
 msgid "Almerys Configuration"
 msgstr "Configuration Almerys"
 
 msgctxt "model:ir.action,name:return_almerys_act"
-msgid "Return Almerys"
+msgid "Retour Almerys"
 msgstr "Retour Almerys"
 
 msgctxt "model:ir.action,name:wizard_recompute_period"
@@ -474,12 +475,12 @@ msgid "Recompute Period"
 msgstr "Re-calcul des périodes de délégation"
 
 msgctxt "model:ir.action.act_window.domain,name:act_return_almerys_all"
-msgid "All Returns"
+msgid "Tous les Retours"
 msgstr "Tous les retours"
 
 msgctxt ""
 "model:ir.action.act_window.domain,name:act_return_almerys_to_be_processed"
-msgid "Returns To Be Processed"
+msgid "Retours à Traité"
 msgstr "Retour à Traiter"
 
 msgctxt "model:ir.sequence.type,name:sequence_type_almerys_v3"

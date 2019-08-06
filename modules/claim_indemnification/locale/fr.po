@@ -721,6 +721,10 @@ msgctxt "field:claim.indemnification,beneficiary:"
 msgid "Beneficiary"
 msgstr "Destinataire du paiement"
 
+msgctxt "field:claim.indemnification,beneficiary_name:"
+msgid "Beneficiary Name"
+msgstr "Nom du bénéficiaire"
+
 msgctxt "field:claim.indemnification,benefit_description:"
 msgid "Benefit Description"
 msgstr "Prestation"
@@ -2164,38 +2168,6 @@ msgstr "Jour"
 msgctxt "selection:claim.simulate.indemnification.start,unit:"
 msgid "Month"
 msgstr "Mois"
-
-msgctxt "selection:insurer.delegation,insurance_kind:"
-msgid "Death"
-msgstr "Décès"
-
-msgctxt "selection:insurer.delegation,insurance_kind:"
-msgid "Education Annuities"
-msgstr "Rente éducation"
-
-msgctxt "selection:insurer.delegation,insurance_kind:"
-msgid "Funeral Capital"
-msgstr "Obsèques"
-
-msgctxt "selection:insurer.delegation,insurance_kind:"
-msgid "Joint Annuities"
-msgstr "Rente conjoint"
-
-msgctxt "selection:insurer.delegation,insurance_kind:"
-msgid "Partial Disability"
-msgstr "Invalidité partielle"
-
-msgctxt "selection:insurer.delegation,insurance_kind:"
-msgid "Temporary Disability"
-msgstr "Incapacité de travail"
-
-msgctxt "selection:insurer.delegation,insurance_kind:"
-msgid "Total And Irreversible Autonomy Loss"
-msgstr "Perte Totale et Irréversible d'Autonomie"
-
-msgctxt "selection:insurer.delegation,insurance_kind:"
-msgid "Total Disability"
-msgstr "Invalidité totale"
 
 msgctxt "selection:rule_engine,type_:"
 msgid "Benefit"

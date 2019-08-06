@@ -879,6 +879,10 @@ msgctxt "field:offered.billing_mode,allowed_payment_terms:"
 msgid "Allowed Payment Terms"
 msgstr "Conditions de paiement disponibles"
 
+msgctxt "field:offered.billing_mode,billing_rules:"
+msgid "Billing Rules"
+msgstr "Règles de quittancement"
+
 msgctxt "field:offered.billing_mode,change_payment_terms_order:"
 msgid "Change Payment Term Order"
 msgstr "Modifier l'ordre des conditions de paiement"
@@ -1221,6 +1225,10 @@ msgid ""
 msgstr ""
 "Une liste de nombres séparés par des virgules correspondant aux jours disponibles pour le prélèvement.\n"
 "Une liste vide signifie que tous les jours sont autorisés."
+
+msgctxt "help:offered.billing_mode,billing_rules:"
+msgid "Billing rules using this billing mode"
+msgstr "Les règles de quittancement utilisant ce mode de quittancement"
 
 msgctxt "help:offered.billing_mode,code:"
 msgid ""

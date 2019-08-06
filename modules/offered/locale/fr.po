@@ -68,6 +68,15 @@ msgstr ""
 "La donnée complémentaire contrat suivante doit être définie sur le produit: "
 "%s"
 
+#, fuzzy
+msgctxt "field:api.product,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:extra_data,api_resources:"
+msgid "API Resources"
+msgstr "Resources API"
+
 msgctxt "field:extra_data,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -940,6 +949,10 @@ msgctxt "field:report.template-offered.product,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:extra_data,api_resources:"
+msgid "A list of resources which will only be used through the APIs"
+msgstr ""
+
 msgctxt "help:extra_data,domain:"
 msgid "Example: [[\"my_code\", \">=\", 5], [\"my_code\", \"<\", 12]]"
 msgstr "Exemple: [[\"mon_code\", \">=\", 5], [\"mon_code\", \"<\", 12]]"
@@ -1111,10 +1124,16 @@ msgstr ""
 " morale ou les deux)"
 
 msgctxt "help:offered.product,tags:"
-msgid "Add and search all related configuration objects based on a tag"
+msgid ""
+"Configuration object tags list. Allows searching for all configuration "
+"objects related to a tag."
 msgstr ""
 "Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
 "l'ensemble des objets de configuration liés à un même label."
+
+msgctxt "model:api.product,name:"
+msgid "API model for all configuration related APIs"
+msgstr ""
 
 msgctxt "model:extra_data,name:"
 msgid "Extra Data"

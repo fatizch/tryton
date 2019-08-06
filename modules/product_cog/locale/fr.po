@@ -18,6 +18,39 @@ msgctxt "field:product.category,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:product.category.account,func_key:"
+msgid "Func Key"
+msgstr "Clef fonctionnelle"
+
+#, fuzzy
+msgctxt "field:product.category.account,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:product.cost_price,func_key:"
+msgid "Func Key"
+msgstr "Clef fonctionnelle"
+
+msgctxt "field:product.cost_price,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:product.cost_price_method,func_key:"
+msgid "Func Key"
+msgstr "Clef fonctionnelle"
+
+msgctxt "field:product.cost_price_method,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:product.list_price,func_key:"
+msgid "Func Key"
+msgstr "Clef fonctionnelle"
+
+msgctxt "field:product.list_price,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
 msgctxt "field:product.product,taxes_included:"
 msgid "Taxes Included"
 msgstr "Taxes incluses"

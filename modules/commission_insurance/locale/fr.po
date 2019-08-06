@@ -967,7 +967,7 @@ msgid ""
 msgstr "Contient l'introduction au détail des commissions linéaires"
 
 msgctxt "help:commission.plan,tags:"
-msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgid "Add and search all related configuration objects based on a tag"
 msgstr ""
 "Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
 "l'ensemble des objets de configuration liés à un même label."
@@ -1601,6 +1601,10 @@ msgctxt "view:commission:"
 msgid "Amount"
 msgstr "Montant"
 
+msgctxt "view:contract:"
+msgid "Distribution"
+msgstr "Distribution"
+
 msgctxt "view:offered.option.description:"
 msgid "Commission"
 msgstr "Commission"
@@ -1683,13 +1687,13 @@ msgctxt "model:commission.create_invoice.ask,name:commission."
 msgid "Create Commission Invoice"
 msgstr "Générer les bordereaux de commission"
 
-msgctxt "model:ir.action,name:commission.act_agent_form"
-msgid "Agents"
-msgstr "Protocoles de commissionnement"
-
 msgctxt "model:ir.action,name:commission.act_commission_create_invoice"
 msgid "Create Commission Invoices"
 msgstr "Générer les bordereaux de commission"
+
+msgctxt "model:ir.action,name:commission.act_agent_form"
+msgid "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "model:ir.ui.menu,name:commission.menu_commission_create_invoice"
 msgid "Create Commission Invoices"
@@ -1704,20 +1708,20 @@ msgid "Product Template - Commission Agent"
 msgstr "Modèle produit - Protocole de commissionnement"
 
 msgctxt "selection:commission.agent,type_:commission."
-msgid "Principal Of"
-msgstr "Commissionne"
-
-msgctxt "selection:commission.agent,type_:commission."
 msgid "Agent Of"
 msgstr "Est commissionné par"
 
-msgctxt "view:commission.agent:commission."
-msgid "Agent"
-msgstr "Protocole de commissionnement"
+msgctxt "selection:commission.agent,type_:commission."
+msgid "Principal Of"
+msgstr "Commissionne"
 
 msgctxt "view:commission.agent:commission."
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "view:commission.agent:commission."
+msgid "Agent"
+msgstr "Protocole de commissionnement"
 
 msgctxt "view:commission.create_invoice.ask:commission."
 msgid "Create Commission Invoice"

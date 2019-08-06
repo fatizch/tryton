@@ -6,9 +6,17 @@ msgctxt "field:contract.covered_element,is_noemie:"
 msgid "Is Noemie"
 msgstr "Personne noémisable"
 
+msgctxt "field:contract.covered_element,noemie_end_date:"
+msgid "Noemie End Date"
+msgstr "Date de fin de noémisation"
+
 msgctxt "field:contract.covered_element,noemie_return_code:"
 msgid "Noemie Return Code"
 msgstr "Code retour"
+
+msgctxt "field:contract.covered_element,noemie_start_date:"
+msgid "Noemie Start Date"
+msgstr "Date de début de noémisation"
 
 msgctxt "field:contract.covered_element,noemie_status:"
 msgid "Noemie Status"

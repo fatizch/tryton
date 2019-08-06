@@ -1,3 +1,83 @@
 #
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:api,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:api.core,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:ir.api.access,api:"
+msgid "API Name"
+msgstr ""
+
+msgctxt "field:ir.api.access,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.api.access,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ir.api.access,group:"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "field:ir.api.access,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:ir.api.access,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:ir.api.access,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:ir.api.access,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:res.group,api_access:"
+msgid "APIs"
+msgstr ""
+
+msgctxt "help:ir.api.access,api:"
+msgid "The name of the api whose access will be allowed for the group"
+msgstr ""
+
+msgctxt "help:ir.api.access,group:"
+msgid "Users from this group will be allowed to call business apis"
+msgstr ""
+
+msgctxt "help:res.group,api_access:"
+msgid "The list of business apis this group will have access to"
+msgstr ""
+
+msgctxt "model:api,name:"
+msgid "API Model"
+msgstr ""
+
+msgctxt "model:api.core,name:"
+msgid "API Core"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_open_ir_api_access"
+msgid "APIs"
+msgstr ""
+
+msgctxt "model:ir.api.access,name:"
+msgid "API Access Right"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_open_ir_api_access"
+msgid "APIs"
+msgstr ""
+
+msgctxt "model:res.group,name:group_default_api"
+msgid "Full API Access"
+msgstr ""

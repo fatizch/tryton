@@ -176,7 +176,7 @@ msgstr "Si coché, les mandats SEPA pourront être amendés plutôt que recréé
 
 msgctxt "help:account.payment.journal,force_smnda:"
 msgid ""
-"If True, the OrgnlDbtrAcct tag will always use SMNDA even when the BIC dit "
+"If True, the OrgnlDbtrAcct tag will always use SMNDA even when the BIC did "
 "not change"
 msgstr ""
 "Si coché, la balise OrgnlDbtrAcct sera toujours à \"SMNDA\" même si le BIC "
@@ -514,3 +514,14 @@ msgstr "8"
 msgctxt "selection:account.payment.journal.failure_action,present_again_day:"
 msgid "9"
 msgstr "9"
+
+# Custom translations below
+
+msgctxt ""
+"field:account.payment.sepa.mandate,identification_readonly:account_payment_sepa."
+msgid "Identification Readonly"
+msgstr "RUM en lecture seule"
+
+msgctxt "error:account.payment.sepa.mandate:account_payment_sepa."
+msgid "The identification of the SEPA mandate must be unique in a company."
+msgstr "La RUM du mandat SEPA doit être unique dans une société."

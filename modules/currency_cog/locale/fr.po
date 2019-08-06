@@ -3,8 +3,16 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:currency.currency:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
+msgctxt "error:currency.currency:"
 msgid "and"
 msgstr "et"
+
+msgctxt "field:currency.currency,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
 
 msgctxt "field:currency.currency,xml_id:"
 msgid "XML Id"

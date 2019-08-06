@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:distribution.commercial_product:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
 msgctxt "field:contract,allowed_portfolios:"
 msgid "Allowed Portfolios"
 msgstr "Portefeuilles autorisés"
@@ -19,10 +23,6 @@ msgid "Allowed Portfolios"
 msgstr "Portefeuilles autorisés"
 
 msgctxt "field:contract.covered_element,allowed_portfolios:"
-msgid "Allowed Portfolios"
-msgstr "Portefeuilles autorisés"
-
-msgctxt "field:contract.option.beneficiary,allowed_portfolios:"
 msgid "Allowed Portfolios"
 msgstr "Portefeuilles autorisés"
 
@@ -166,6 +166,19 @@ msgstr "Produits Commerciaux"
 msgctxt "field:res.user,network_distributors:"
 msgid "User Network Distributors"
 msgstr "Réseau de distribution de l'utilisateur"
+
+msgctxt "help:distribution.commercial_product,code:"
+msgid ""
+"The string that will be used to identify this record across the "
+"configuration. It should not be modified without checking first if it is "
+"used somewhere"
+msgstr ""
+"L'identifiant pour cet enregistrement dans la configuration. Il ne doit pas "
+"être modifié sans s'assurer au préalable des endroits y faisant référence"
+
+msgctxt "help:distribution.commercial_product,name:"
+msgid "The name that will be displayed to the end user"
+msgstr "Nom qui sera affiché à l'utilisateur"
 
 msgctxt "help:distribution.network,is_distributor:"
 msgid ""

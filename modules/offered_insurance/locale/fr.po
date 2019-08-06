@@ -40,6 +40,10 @@ msgctxt "error:offered.option.description:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
+msgctxt "error:offered.package:"
+msgid "Subscribe by package is only available on quote"
+msgstr "La souscription par formule n'est disponible que sur un devis"
+
 msgctxt "error:offered.product:"
 msgid ""
 "Extra data \"%(extra_data)s\" set on package \"%(package)s\" is not "
@@ -444,7 +448,7 @@ msgstr "Date de Création"
 
 msgctxt "field:offered.exclusion-res.group,create_uid:"
 msgid "Create User"
-msgstr "Crée par
+msgstr "Crée pa"
 
 msgctxt "field:offered.exclusion-res.group,exclusion_kind:"
 msgid "Exclusion Kind"
@@ -793,6 +797,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:offered.option.description-extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:offered.package,option_relations:"
+msgid "Option Relations"
+msgstr "Options"
 
 msgctxt "field:offered.package-option.description,create_date:"
 msgid "Create Date"
@@ -1233,9 +1241,6 @@ msgstr "Batch de validation produit"
 
 msgctxt "model:rule_engine,description:option_end_date_rule"
 msgid ""
-"The end rule is based on the insured age.\n"
-"The coverage will terminate at age of ${max_age_for_option} (included).\n"
-"${'The age used is the age at subscription' if age_kind =='real' else ('The age is synchonized with the %s day of the %s month' % (given_day, given_month) if age_kind == 'at_given_day_of_year' else 'The age used is based on the first day of the month following the birth')}."
 msgstr ""
 "La règle de résiliation est basée sur l'âge de l'assuré.\n"
 "La résiliation de la garantie se fera à l'âge de ${max_age_for_option} (inclus).\n"
