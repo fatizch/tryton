@@ -75,10 +75,12 @@ class Benefit(metaclass=PoolMeta):
 
     @classmethod
     def tax_date_is_indemnification_date(cls):
+        pool = Pool()
+        Configuration = pool.get('claim.configuration')
         cached = cls._indemnification_tax_date_config_cache.get(1, -1)
         if cached != -1:
             return cached
-        claim_config = Pool().get('claim.configuration').get_singleton()
+        claim_config = Configuration(1)
         value = claim_config.tax_at_indemnification_date
         cls._indemnification_tax_date_config_cache.set(1, value)
         return value

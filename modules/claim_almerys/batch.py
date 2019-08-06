@@ -134,12 +134,13 @@ class AlmerysXMLBatchMixin(batch.BatchRootNoSelect):
         handler = AlmerysActuariatHandler()
         claims = []
         for file_name, file_path in files:
-            claims.append((handler.parse(file_path, cls.kind),))
+            for claim in handler.parse(file_path, cls.kind):
+                claims.append((claim,))
         return claims
 
     @classmethod
     def convert_to_instances(cls, ids, *args, **kwargs):
-        return [x[0][0] for x in ids]
+        return [x[0] for x in ids]
 
     @classmethod
     def log_error(cls, directory, filename, error, traceback):
@@ -385,12 +386,13 @@ class AlmerysClaimIndemnification(AlmerysXMLBatchMixin):
 
     @classmethod
     def _create_tp_invoice_lines(
-            cls, product, positive_amount, negative_amount,
+            cls, invoice, product, positive_amount, negative_amount,
             positive_services, negative_services):
         pool = Pool()
         InvoiceLine = pool.get('account.invoice.line')
 
         p_line = InvoiceLine(
+            invoice=invoice,
             type='line',
             quantity=1,
             product=product,
@@ -400,6 +402,7 @@ class AlmerysClaimIndemnification(AlmerysXMLBatchMixin):
         p_line.unit_price = positive_amount
 
         n_line = InvoiceLine(
+            invoice=invoice,
             type='line',
             quantity=1,
             product=product,
@@ -454,6 +457,7 @@ class AlmerysClaimIndemnification(AlmerysXMLBatchMixin):
                     positive_amount += amount
                     positive_services.extend(list(loss.services))
             p_line, n_line = cls._create_tp_invoice_lines(
+                invoice,
                 loss_key['product'],
                 invoice.currency.round(positive_amount),
                 invoice.currency.round(negative_amount),
@@ -524,7 +528,6 @@ IBAN: {iban}
 Mode Paiement: {modePaiment}
 Designation Bancaire: {designationBancaire}
         """.format(**payment)
-        adherent = get_party(payment['idAdherent'])
         invoice_number = payment['idPaiement'][:-9]
         claim, = Claim.search([
                 ('invoice_number', '=', invoice_number),
@@ -532,23 +535,18 @@ Designation Bancaire: {designationBancaire}
         lines = []
         for invoice in claim.invoices:
             line = StatementLine()
-            line.account = config.account_statement
-            line.amount = invoice.total_amount
+            line.amount = -invoice.total_amount
             line.date = get_date(payment['dtVirement'])
             line.number = payment['idPaiement']
             line.description = description
-            line.party_payer = adherent
+            line.party_payer = config.invoiced_party
             line.invoice = invoice
-            indemnifications = {detail.indemnification
-                for il in invoice.lines
-                for detail in il.claim_details}
-            assert len(indemnifications) == 1
-            indemnification = indemnifications.pop()
-            line.party = indemnification.service.loss.covered_element.party
+            line.account = invoice.account
+            line.party = invoice.party
             lines.append(line)
 
         statement_amount = get_amount(payment['mtReglementTTC'])
-        if statement_amount != sum(l.amount for l in lines):
+        if statement_amount != -sum(l.amount for l in lines):
             raise AlmerysError(
                 "Amount does not match invoices for claim '%s'" % claim.name)
 

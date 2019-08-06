@@ -13,18 +13,24 @@ class OptionDescription(metaclass=PoolMeta):
     almerys_management = fields.Boolean("Almerys Management")
     almerys_benefit_tp = fields.Many2One(
         'benefit', "Third Party Payment Benefit", ondelete='RESTRICT',
+        domain=[
+            ('insurer', '=', Eval('insurer', -1)),
+            ],
         states={
             'invisible': ~Eval('almerys_management', False),
             'required': Eval('almerys_management', False),
             },
-        depends=['almerys_management'])
+        depends=['insurer', 'almerys_management'])
     almerys_benefit_htp = fields.Many2One('benefit', "Standard Benefit",
         ondelete='RESTRICT',
+        domain=[
+            ('insurer', '=', Eval('insurer', -1)),
+            ],
         states={
             'invisible': ~Eval('almerys_management', False),
             'required': Eval('almerys_management', False),
             },
-        depends=['almerys_management'])
+        depends=['insurer', 'almerys_management'])
 
     @classmethod
     def __setup__(cls):
@@ -36,26 +42,25 @@ class OptionDescription(metaclass=PoolMeta):
             cls.benefits.states['invisible'] = Eval('almerys_management', False)
         cls.benefits.depends.append('almerys_management')
 
-    @fields.depends('insurer', 'almerys_management', 'almerys_benefit_htp',
-        'almerys_benefit_tp')
+    @fields.depends('insurer', 'almerys_management')
     def on_change_almerys_management(self):
         pool = Pool()
         Benefit = pool.get('benefit')
 
-        if not self.almerys_management:
+        if not self.almerys_management or not self.insurer:
             self.almerys_benefit_htp = None
             self.almerys_benefit_tp = None
             return
 
-        benefits = {b.code.split()[0]: b
+        benefits = {b.code.split('_')[0]: b
             for b in Benefit.search([
                     ('insurer', '=', self.insurer.id),
                     ('code', 'in', ['{}_{}'.format(k, self.insurer.party.code)
                             for k in ('TP', 'HTP')]),
                     ],
                 order=[('code', 'DESC')])}
-        self.almerys_benefit_htp = benefits['HTP']
-        self.almerys_benefit_tp = benefits['TP']
+        self.almerys_benefit_htp = benefits.get('HTP')
+        self.almerys_benefit_tp = benefits.get('TP')
 
     def get_possible_benefits(self, loss_desc=None, event_desc=None,
             at_date=None):

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NormePivotDecompteSante xmlns="http://www.almerys.com/">
+<trace>
+  <idFlux>2507</idFlux> Logs
+  <nomFlux>CLIENTXXXX_TLDECLMD_NormePivotDecompteSante_P_20190321_20190321</nomFlux>
+  <versionSchema>1.5.3</versionSchema>
+  <dtEmission>2019-03-22</dtEmission>
+  <dtExtraction>2019-03-22</dtExtraction>
+  <dtValeur>2019-03-21</dtValeur>
+
+  <decomptes> Sinistre
+    <idDecompte>3835428363</idDecompte> Numéro de sisnitre
+    <numFacture>3835428363</numFacture>
+    <numContrat>CT{year}{month}00021</numContrat>
+    <topAnnulation>false</topAnnulation> question Almerys
+    <mtTotalRemboursementRC>165.00</mtTotalRemboursementRC>
+    <mtTotalDepenseReelle>550.00</mtTotalDepenseReelle>
+    <dtDecompte>2019-03-21</dtDecompte>
+    <dtSaisie>2019-03-21</dtSaisie>
+    <dtComptable>2019-03-21</dtComptable>quelle date pour la ate de déclaration
+    <dtArrivee>2019-03-21</dtArrivee>
+    <dtTraitement>2019-03-21</dtTraitement>
+    <cdOrigine>22</cdOrigine>
+    <lblOrigine>WEB ALM</lblOrigine>
+    <typeFlux>TP</typeFlux>
+    <mutuelleGestion>ALMERYS</mutuelleGestion>
+    <numClient>98550106</numClient>
+    <codePerimetreService>98550114</codePerimetreService>
+    <lblPerimetreService>CLIENT XXXXX</lblPerimetreService>
+    <typeContrat>I</typeContrat>
+    <idUtilisateur>LROME</idUtilisateur>
+    <codeGrandRegime>1</codeGrandRegime>
+    <codeCentre>0</codeCentre>
+    <membrePaye>
+      <idAdherent>2579</idAdherent> code du claimant
+      <nom>DUPONT</nom>
+      <prenom>MARTIN</prenom>
+    </membrePaye>
+    <actes> un préjudice par acte
+      <numLigneFacture>1</numLigneFacture> identifiant du préjudice (avec le numéro du décompte)
+      <codeActe>IMP</codeActe> PS : si l'acte n'existe pas dans le référentiel Coog, le créer avec la balaise lblActe
+      <lblActe>Implantologie</lblActe>
+      <estAnnule>false</estAnnule> Question Almerys
+      <nombreActe>1</nombreActe>
+      <mtPrixUnitaire>785.84</mtPrixUnitaire> PS
+      <coefActe>1.00</coefActe> PS
+      <dt1Soin>2019-03-21</dt1Soin> PS
+      <dt2Soin>2019-03-21</dt2Soin> PS
+      <dtPaiementPrestation>2019-03-21</dtPaiementPrestation>
+      <mtDepenseReelle>500.00</mtDepenseReelle>PS
+      <mtBaseRemboursement>785.84</mtBaseRemboursement>
+      <mtResteACharge>0.00</mtResteACharge>
+      <mtRemboursementRO>350.00</mtRemboursementRO>
+      <mtRemboursementRC>150.00</mtRemboursementRC>
+      <mtRemboursementAutresMut>0.00</mtRemboursementAutresMut>
+      <txRemboursementRO>70</txRemboursementRO>
+      <txRemboursementRC>0</txRemboursementRC>
+      <topDepassement>false</topDepassement>
+      <mtDepassement>-85.84</mtDepassement>
+      <topParcoursSoin>false</topParcoursSoin>PS
+      <cdRegrpmtActePoste>D</cdRegrpmtActePoste>PS à ajouter
+      <lblRegrpmtActePoste>Dentaire</lblRegrpmtActePoste>
+      <cdRegrpmtActeFamille>D04</cdRegrpmtActeFamille>
+      <lblRegrpmtActeFamille>Implantologie</lblRegrpmtActeFamille>
+      <natureAssurance>08</natureAssurance> ??
+      <beneficiaire>
+        <idBeneficiaire>2579</idBeneficiaire> identifiant de l'assuré du préjudice
+        <nom>DUPONT</nom>
+        <prenom>MARTIN</prenom>
+        <sexe>I</sexe>
+        <dtNaiss>1934-03-14</dtNaiss>
+        <rgNaiss>1</rgNaiss>
+        <numSSKey>1340456155001</numSSKey>
+        <keySS>73</keySS>
+        <departement>44410</departement>
+        <cdBeneficiaire>A</cdBeneficiaire>
+      </beneficiaire>
+      <codeProduit>RET_S_08</codeProduit>
+      <prescripteur> seulement si TP à ajouter dans la description de quelque chose
+        <idPS>634013692</idPS>
+        <nom>NICOLOT-TOUCHAIN JULIE</nom>
+        <secteur>20</secteur>
+        <specialite>00</specialite>
+      </prescripteur>
+      <ContratAccesSoins></ContratAccesSoins>
+      <numDents>2334</numDents>
+    </actes>
+    <actes>
+      <numLigneFacture>2</numLigneFacture>
+      <codeActe>IMP</codeActe>
+      <lblActe>Implantologie</lblActe>
+      <estAnnule>false</estAnnule>
+      <nombreActe>1</nombreActe>
+      <mtPrixUnitaire>107.50</mtPrixUnitaire>
+      <coefActe>1.00</coefActe>
+      <dt1Soin>2019-03-21</dt1Soin>
+      <dt2Soin>2019-03-21</dt2Soin>
+      <dtPaiementPrestation>2019-03-21</dtPaiementPrestation>
+      <mtDepenseReelle>50.00</mtDepenseReelle>
+      <mtBaseRemboursement>107.50</mtBaseRemboursement>
+      <mtResteACharge>0.00</mtResteACharge>
+      <mtRemboursementRO>35.00</mtRemboursementRO>
+      <mtRemboursementRC>15.00</mtRemboursementRC>
+      <mtRemboursementAutresMut>0.00</mtRemboursementAutresMut>
+      <txRemboursementRO>70</txRemboursementRO>
+      <txRemboursementRC>0</txRemboursementRC>
+      <topDepassement>false</topDepassement>
+      <mtDepassement>-37.50</mtDepassement>
+      <topParcoursSoin>false</topParcoursSoin>
+      <cdRegrpmtActePoste>D</cdRegrpmtActePoste>
+      <lblRegrpmtActePoste>Dentaire</lblRegrpmtActePoste>
+      <cdRegrpmtActeFamille>D04</cdRegrpmtActeFamille>
+      <lblRegrpmtActeFamille>Implantologie</lblRegrpmtActeFamille>
+      <natureAssurance>08</natureAssurance>
+      <beneficiaire>
+        <idBeneficiaire>2579</idBeneficiaire>
+        <nom>DUPONT</nom>
+        <prenom>MARTIN</prenom>
+        <sexe>I</sexe>
+        <dtNaiss>1934-03-14</dtNaiss>
+        <rgNaiss>1</rgNaiss>
+        <numSSKey>1340456155001</numSSKey>
+        <keySS>73</keySS>
+        <departement>44410</departement>
+        <cdBeneficiaire>A</cdBeneficiaire>
+      </beneficiaire>
+      <codeProduit>RET_S_08</codeProduit>
+      <prescripteur>
+        <idPS>634013692</idPS>
+        <nom>NICOLOT-TOUCHAIN JULIE</nom>
+        <secteur>20</secteur>
+        <specialite>00</specialite>
+      </prescripteur>
+      <ContratAccesSoins></ContratAccesSoins>
+      <numDents>14</numDents>
+    </actes>
+  </decomptes>
+  <decomptes> Sinistre
+    <idDecompte>3835428364</idDecompte> Numéro de sisnitre
+    <numFacture>3835428364</numFacture>
+    <numContrat>CT{year}{month}00021</numContrat>
+    <topAnnulation>false</topAnnulation> question Almerys
+    <mtTotalRemboursementRC>165.00</mtTotalRemboursementRC>
+    <mtTotalDepenseReelle>550.00</mtTotalDepenseReelle>
+    <dtDecompte>2019-03-21</dtDecompte>
+    <dtSaisie>2019-03-21</dtSaisie>
+    <dtComptable>2019-03-21</dtComptable>quelle date pour la ate de déclaration
+    <dtArrivee>2019-03-21</dtArrivee>
+    <dtTraitement>2019-03-21</dtTraitement>
+    <cdOrigine>22</cdOrigine>
+    <lblOrigine>WEB ALM</lblOrigine>
+    <typeFlux>HTP</typeFlux>
+    <mutuelleGestion>ALMERYS</mutuelleGestion>
+    <numClient>98550106</numClient>
+    <codePerimetreService>98550114</codePerimetreService>
+    <lblPerimetreService>CLIENT XXXXX</lblPerimetreService>
+    <typeContrat>I</typeContrat>
+    <idUtilisateur>LROME</idUtilisateur>
+    <codeGrandRegime>1</codeGrandRegime>
+    <codeCentre>0</codeCentre>
+    <membrePaye>
+      <idAdherent>2579</idAdherent> code du claimant
+      <nom>DUPONT</nom>
+      <prenom>MARTIN</prenom>
+    </membrePaye>
+    <actes> un préjudice par acte
+      <numLigneFacture>1</numLigneFacture> identifiant du préjudice (avec le numéro du décompte)
+      <codeActe>IMP</codeActe> PS : si l'acte n'existe pas dans le référentiel Coog, le créer avec la balaise lblActe
+      <lblActe>Implantologie</lblActe>
+      <estAnnule>false</estAnnule> Question Almerys
+      <nombreActe>1</nombreActe>
+      <mtPrixUnitaire>785.84</mtPrixUnitaire> PS
+      <coefActe>1.00</coefActe> PS
+      <dt1Soin>2019-03-21</dt1Soin> PS
+      <dt2Soin>2019-03-21</dt2Soin> PS
+      <dtPaiementPrestation>2019-03-21</dtPaiementPrestation>
+      <mtDepenseReelle>500.00</mtDepenseReelle>PS
+      <mtBaseRemboursement>785.84</mtBaseRemboursement>
+      <mtResteACharge>0.00</mtResteACharge>
+      <mtRemboursementRO>350.00</mtRemboursementRO>
+      <mtRemboursementRC>150.00</mtRemboursementRC>
+      <mtRemboursementAutresMut>0.00</mtRemboursementAutresMut>
+      <txRemboursementRO>70</txRemboursementRO>
+      <txRemboursementRC>0</txRemboursementRC>
+      <topDepassement>false</topDepassement>
+      <mtDepassement>-85.84</mtDepassement>
+      <topParcoursSoin>false</topParcoursSoin>PS
+      <cdRegrpmtActePoste>D</cdRegrpmtActePoste>PS à ajouter
+      <lblRegrpmtActePoste>Dentaire</lblRegrpmtActePoste>
+      <cdRegrpmtActeFamille>D04</cdRegrpmtActeFamille>
+      <lblRegrpmtActeFamille>Implantologie</lblRegrpmtActeFamille>
+      <natureAssurance>08</natureAssurance> ??
+      <beneficiaire>
+        <idBeneficiaire>2579</idBeneficiaire> identifiant de l'assuré du préjudice
+        <nom>DUPONT</nom>
+        <prenom>MARTIN</prenom>
+        <sexe>I</sexe>
+        <dtNaiss>1934-03-14</dtNaiss>
+        <rgNaiss>1</rgNaiss>
+        <numSSKey>1340456155001</numSSKey>
+        <keySS>73</keySS>
+        <departement>44410</departement>
+        <cdBeneficiaire>A</cdBeneficiaire>
+      </beneficiaire>
+      <codeProduit>RET_S_08</codeProduit>
+      <prescripteur> seulement si TP à ajouter dans la description de quelque chose
+        <idPS>634013692</idPS>
+        <nom>NICOLOT-TOUCHAIN JULIE</nom>
+        <secteur>20</secteur>
+        <specialite>00</specialite>
+      </prescripteur>
+      <ContratAccesSoins></ContratAccesSoins>
+      <numDents>2334</numDents>
+    </actes>
+    <actes>
+      <numLigneFacture>2</numLigneFacture>
+      <codeActe>IMP</codeActe>
+      <lblActe>Implantologie</lblActe>
+      <estAnnule>false</estAnnule>
+      <nombreActe>1</nombreActe>
+      <mtPrixUnitaire>107.50</mtPrixUnitaire>
+      <coefActe>1.00</coefActe>
+      <dt1Soin>2019-03-21</dt1Soin>
+      <dt2Soin>2019-03-21</dt2Soin>
+      <dtPaiementPrestation>2019-03-21</dtPaiementPrestation>
+      <mtDepenseReelle>50.00</mtDepenseReelle>
+      <mtBaseRemboursement>107.50</mtBaseRemboursement>
+      <mtResteACharge>0.00</mtResteACharge>
+      <mtRemboursementRO>35.00</mtRemboursementRO>
+      <mtRemboursementRC>15.00</mtRemboursementRC>
+      <mtRemboursementAutresMut>0.00</mtRemboursementAutresMut>
+      <txRemboursementRO>70</txRemboursementRO>
+      <txRemboursementRC>0</txRemboursementRC>
+      <topDepassement>false</topDepassement>
+      <mtDepassement>-37.50</mtDepassement>
+      <topParcoursSoin>false</topParcoursSoin>
+      <cdRegrpmtActePoste>D</cdRegrpmtActePoste>
+      <lblRegrpmtActePoste>Dentaire</lblRegrpmtActePoste>
+      <cdRegrpmtActeFamille>D04</cdRegrpmtActeFamille>
+      <lblRegrpmtActeFamille>Implantologie</lblRegrpmtActeFamille>
+      <natureAssurance>08</natureAssurance>
+      <beneficiaire>
+        <idBeneficiaire>2579</idBeneficiaire>
+        <nom>DUPONT</nom>
+        <prenom>MARTIN</prenom>
+        <sexe>I</sexe>
+        <dtNaiss>1934-03-14</dtNaiss>
+        <rgNaiss>1</rgNaiss>
+        <numSSKey>1340456155001</numSSKey>
+        <keySS>73</keySS>
+        <departement>44410</departement>
+        <cdBeneficiaire>A</cdBeneficiaire>
+      </beneficiaire>
+      <codeProduit>RET_S_08</codeProduit>
+      <prescripteur>
+        <idPS>634013692</idPS>
+        <nom>NICOLOT-TOUCHAIN JULIE</nom>
+        <secteur>20</secteur>
+        <specialite>00</specialite>
+      </prescripteur>
+      <ContratAccesSoins></ContratAccesSoins>
+      <numDents>14</numDents>
+    </actes>
+  </decomptes>
+  <paiements>  A IGNORER, ELLE ET LES BALISES QUI SUIVENT (Régul à valider par Almerys)
+    <idPaiement>3835428364201903211</idPaiement>
+    <idAdherent>2579</idAdherent>
+    <bic></bic>
+    <iban>XXXXXXXXXXXXXXXXXXXXXXXXXXX</iban>
+    <modePaiment>V</modePaiment>
+    <designationBancaire>BNP PARIBAS</designationBancaire>
+    <mtReglementTTC>165.00</mtReglementTTC>
+    <perimetreService>98550114</perimetreService>
+    <dtVirement>2019-03-21</dtVirement>
+  </paiements>
+</trace>
+</NormePivotDecompteSante>

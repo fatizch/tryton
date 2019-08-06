@@ -43,7 +43,10 @@ class AlmerysConfig(metaclass=PoolMeta):
         ondelete='RESTRICT')
     claim_statement_journal = fields.Many2One(
         'account.statement.journal', "Statement Journal", required=True,
-        ondelete='RESTRICT')
+        ondelete='RESTRICT',
+        domain=[
+            ('validation', '=', 'number_of_lines'),
+            ])
     invoiced_party = fields.Many2One(
         'party.party', "Invoiced Party", required=True,
         ondelete='RESTRICT')
@@ -114,7 +117,7 @@ class Benefit(metaclass=PoolMeta):
                 'base_amount': indemnification.forced_base_amount,
                 'amount_per_unit': indemnification.forced_base_amount,
                 'forced_base_amount': indemnification.forced_base_amount,
-                'description': health_loss.act_description.label,
+                'description': health_loss.act_description.name,
                 }]
 
 

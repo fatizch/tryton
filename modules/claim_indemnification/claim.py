@@ -1600,13 +1600,14 @@ class Indemnification(model.CoogView, model.CoogSQL, ModelCurrency,
     def _get_invoice(cls, key):
         pool = Pool()
         Invoice = pool.get('account.invoice')
+        Configuration = pool.get('claim.configuration')
         party = key['party']
         if 'payment_term' in key:
             payment_term = key['payment_term']
         elif party.supplier_payment_term:
             payment_term = party.supplier_payment_term
         else:
-            config = pool.get('claim.configuration').get_singleton()
+            config = Configuration(1)
             payment_term = config.claim_default_payment_term
         return Invoice(
             company=key['company'],
