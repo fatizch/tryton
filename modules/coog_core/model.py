@@ -1577,6 +1577,9 @@ def fields_changed_since_date(instance, datetime, field_names, base_date=None):
 
     old_values = {}
     with Transaction().set_context(_datetime=datetime):
+        matches = instance.__class__.search([('id', '=', instance.id)])
+        if not matches:
+            return old_values
         past_instance = instance.__class__(instance.id)
         for field_name in field_names:
             assert isinstance(instance._fields[field_name],

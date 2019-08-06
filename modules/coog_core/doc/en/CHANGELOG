@@ -1,3 +1,4 @@
+* BUG#12285 Fix fields_changed_since_date method by adding check if past instances found
 * OTH#00000 fix get_good_version_at_date method on revisionmixin when the id of
 target_field is not defined
 * OTH#00000 Add get_good_version_at_date method on revisionmixin

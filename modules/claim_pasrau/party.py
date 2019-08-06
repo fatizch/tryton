@@ -91,7 +91,7 @@ class Party(metaclass=PoolMeta):
 
         # Apply upper to avoid "fake" modifications
         previous_fields = {k: v.upper() if isinstance(v, str) else v
-            for k, v in previous_fields.items()}
+            for k, v in previous_fields.items() if v}
 
         changes = []
 

@@ -1,3 +1,4 @@
+* BUG#12304 Ne déclarer une modification de champ du tiers uniquement si la valeur précédente n'était pas vide
 * BUG#12278 Correction pour supporter un taux personnalisé à 0
 * BUG#12042 Correction de la génération du message pasrau pour empêcher les doublons de lignes
 * BUG#11421 Mise à jour de la grille des pasraus

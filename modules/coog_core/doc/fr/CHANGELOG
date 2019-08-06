@@ -1,3 +1,4 @@
+* BUG#12285 Correction de la méthode fields_changed_since_date en ajoutant un contrôle sur la présence d'instances passées
 * OTH#00000 Correction de la méthode get_good_version_at_date sur  revisionmixin
 si le id du target_field est non défini
 * OTH#00000 Ajout de la méthode get_good_version_at_date sur revisionmixin
