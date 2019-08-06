@@ -38,6 +38,10 @@ class DistributionNetwork(metaclass=PoolMeta):
                 'or its parents'})
 
     @classmethod
+    def _export_light(cls):
+        return super()._export_light() | {'authorized_distribution_channels'}
+
+    @classmethod
     def validate(cls, dis_networks):
         for network in dis_networks:
             if network.is_distributor:
@@ -81,6 +85,10 @@ class CommercialProduct(metaclass=PoolMeta):
     dist_authorized_channels = fields.Many2Many(
         'distribution.commercial_product-distribution.channel',
         'com_product', 'dist_channel', 'Authorized Distribution Channels')
+
+    @classmethod
+    def _export_light(cls):
+        return super()._export_light() | {'dist_authorized_channels'}
 
 
 class CommercialProductChannelRelation(model.CoogSQL):

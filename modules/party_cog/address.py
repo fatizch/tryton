@@ -371,25 +371,29 @@ class Address(model.FunctionalErrorMixIn, export.ExportImportMixin,
         return result
 
     def get_func_key(self, values):
-        return '|'.join((self.zip or '', self.street or ''))
+        return '|'.join((self.zip or '', self.street or '',
+                self.party.code if self.party and self.party.code else ''))
 
     @classmethod
     def search_func_key(cls, name, clause):
-        # TODO : make a better functional key
+        # TODO : make a better functional key: Manal did it (Nidhal approves)
         assert clause[1] == '='
         operands = clause[2].split('|')
-        if len(operands) == 2:
-            zip, street = operands
+        if len(operands) == 3:
+            zip, street, party_code = operands
             res = []
             if zip != 'None':
                 res.append(('zip', clause[1], zip))
             if street != 'None':
                 res.append(('street', clause[1], street))
+            if party_code != 'None':
+                res.append(('party.code', clause[1], party_code))
             return res
         else:
             return ['OR',
                 [('zip',) + tuple(clause[1:])],
                 [('street',) + tuple(clause[1:])],
+                [('party.code',) + tuple(clause[1:])]
                 ]
 
     @classmethod

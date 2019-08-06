@@ -19,6 +19,10 @@ class Process(metaclass=PoolMeta):
     for_channels = fields.Many2Many('process-distribution.channel',
         'process', 'dis_channel', 'Distribution Channels')
 
+    @classmethod
+    def _export_light(cls):
+        return super()._export_light() | {'for_channels'}
+
 
 class ProcessDistChannelRelation(model.CoogSQL):
     'Process Product Relation'

@@ -127,7 +127,7 @@ class BillingMode(model.CodedMixin, model.CoogView):
     @classmethod
     def _export_skips(cls):
         return super(BillingMode, cls)._export_skips() | {'products',
-            'allowed_payment_terms'}
+            'allowed_payment_terms', 'billing_rules'}
 
     @classmethod
     def _export_light(cls):
@@ -392,6 +392,7 @@ class ProductBillingRule(
     'ProductBilling Rule'
 
     __name__ = 'offered.product.billing_rule'
+    _func_key = 'func_key'
 
     BILLING_BEHAVIOR = [
         ('next_period', 'Invoice until requested period'),
@@ -414,6 +415,9 @@ class ProductBillingRule(
         delete_missing=True)
     billing_behavior = fields.Selection(BILLING_BEHAVIOR, 'Billing Behavior',
         help="Defines invoicing strategy for this product")
+    func_key = fields.Function(
+        fields.Char('Funtional Key'),
+        'getter_func_key', searcher='searcher_func_key')
 
     @classmethod
     def __setup__(cls):
@@ -441,6 +445,17 @@ class ProductBillingRule(
                 columns=[BillingRule_table.product],
                 values=Product_table.select(Product_table.id)
             ))
+
+    @classmethod
+    def _export_light(cls):
+        return super()._export_light() | {'billing_modes'}
+
+    def getter_func_key(self, name):
+        return self.product.code
+
+    @classmethod
+    def searcher_func_key(cls, name, clause):
+        return [('product.code',) + tuple(clause[1:])]
 
     def format_as_rule_result(self):
         return [x for x in self.billing_modes]

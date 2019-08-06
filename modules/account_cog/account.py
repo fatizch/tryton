@@ -25,6 +25,7 @@ __all__ = [
     'MoveTemplateKeyword',
     'MoveLineTemplate',
     'TaxLineTemplate',
+    'JournalSequence',
     ]
 
 
@@ -308,3 +309,11 @@ class TaxLineTemplate(export.ExportImportMixin):
     @classmethod
     def _export_light(cls):
         return super(TaxLineTemplate, cls)._export_light() | {'code', 'tax'}
+
+
+class JournalSequence(export.ExportImportMixin, metaclass=PoolMeta):
+    __name__ = 'account.journal.sequence'
+
+    @classmethod
+    def _export_light(cls):
+        return super()._export_light() | {'sequence'}

@@ -144,6 +144,10 @@ class EventType(model.CoogSQL, model.CoogView):
         super(EventType, cls).write(*args)
 
     @classmethod
+    def _export_skips(cls):
+        return super()._export_skips() | {'actions'}
+
+    @classmethod
     def _allow_update_links_on_xml_rec(cls):
         return True
 

@@ -47,6 +47,7 @@ def register():
         account.MoveLineTemplate,
         account.TaxLineTemplate,
         load_data.FiscalYearSet,
+        account.JournalSequence,
         module='account_cog', type_='model')
     Pool.register(
         move.Reconcile,
