@@ -1,5 +1,7 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
+from dateutil.relativedelta import relativedelta
+
 from trytond.pool import Pool, PoolMeta
 
 from trytond.modules.coog_core import utils
@@ -33,7 +35,8 @@ class Event(metaclass=PoolMeta):
         elif event_code in {
                 'activate_contract', 'hold_contract', 'unhold_contract',
                 'void_contract', 'renew_contract', 'first_invoice_payment',
-                'terminate_contract', 'plan_contract_termination'}:
+                'terminate_contract', 'plan_contract_termination',
+                'reactivate_contract'}:
             protocol_method = getattr(Protocol, 'do_' + event_code)
             for contract in objects:
                 removed, modified = protocol_method(
@@ -50,8 +53,17 @@ class Event(metaclass=PoolMeta):
                     periods_to_remove.extend(removed)
                     modified_periods.extend(modified)
 
-        if periods_to_remove or modified_periods:
-            ThirdPartyPeriod.delete(periods_to_remove)
+        if periods_to_remove:
+            periods_to_invalidate = [p for p in periods_to_remove
+                if p.status != 'waiting']
+            periods_to_delete = [p for p in periods_to_remove
+                    if p.status == 'waiting']
+            for p in periods_to_invalidate:
+                p.end_date = p.start_date - relativedelta(days=1)
+                p.status = 'waiting'
+            ThirdPartyPeriod.save(periods_to_invalidate)
+            ThirdPartyPeriod.delete(periods_to_delete)
+        if modified_periods:
             # Save first the modified periods then the new ones to prevent the
             # case where the new ones could overlap with the modified ones
             ThirdPartyPeriod.save(

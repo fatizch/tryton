@@ -244,8 +244,8 @@ Create Contract::
 There is now one period::
 
     >>> contract.reload()
-    >>> option, = contract.covered_elements[0].options
-    >>> tpp, = option.third_party_periods
+    >>> option = contract.covered_elements[0].options[0]
+    >>> tpp = option.third_party_periods[0]
     >>> tpp.start_date - dt.date.today() == dt.timedelta(0)
     True
     >>> tpp.end_date is None
@@ -318,8 +318,5 @@ Let's void the contract::
     >>> void_wizard.execute('stop')
     >>> contract.reload()
     >>> option, = contract.covered_elements[0].options
-    >>> tpp = option.third_party_periods[-1]
-    >>> (tpp.start_date - dt.date.today()).days == 10
-    True
-    >>> (tpp.end_date - dt.date.today()).days == 25
+    >>> option.third_party_periods == []
     True

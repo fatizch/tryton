@@ -24,7 +24,8 @@ class Protocol(model.CodedMixin, model.CoogView,
 
     PROTOCOL_EVENTS = {'activate_contract', 'hold_contract', 'unhold_contract',
         'void_contract', 'renew_contract', 'first_invoice_payment',
-        'apply_endorsement', 'terminate_contract', 'plan_contract_termination'}
+        'apply_endorsement', 'terminate_contract', 'plan_contract_termination',
+        'reactivate_contract'}
 
     third_party_manager = fields.Many2One(
         'third_party_manager', "Third Party Manager", required=True,
@@ -74,7 +75,11 @@ class Protocol(model.CodedMixin, model.CoogView,
         pool = Pool()
         Date = pool.get('ir.date')
         ThirdPartyPeriod = pool.get('contract.option.third_party_period')
-
+        # cancelled periods are filtered
+        periods = [p for p in periods if (not p.end_date) or (
+                p.end_date >= p.start_date)]
+        if option.status == 'void':
+            return periods, []
         exec_ctx = {}
         option.init_dict_for_rule_engine(exec_ctx)
         exec_ctx['date'] = date
@@ -90,45 +95,51 @@ class Protocol(model.CodedMixin, model.CoogView,
 
         periods_to_remove = []
         modified_periods = []
-        idx = len(periods) - 1
-        while idx >= 0:
-            period = periods[idx]
-            if (end_date is not None and period.start_date > end_date):
+        period_created = False
+        for period in periods:
+            # cancel periods that starts before option
+            if period.start_date < option.start_date:
                 periods_to_remove.append(period)
-            elif (period.end_date is not None
+            # cancel future periods
+            elif (end_date is not None and period.start_date > end_date):
+                periods_to_remove.append(period)
+            # period to create is equal to previous one
+            elif (add_period and not period_created
+                    and period.end_date is not None
                     and period.end_date + dt.timedelta(days=1) == start_date
                     and period.extra_details == rule_result):
                 period.end_date = end_date
+                period.send_after = rule_result.get('send_after', today)
+                period.status = 'waiting'
                 modified_periods.append(period)
-                break
-            else:
-                if period.start_date == start_date:
-                    periods_to_remove.append(period)
-                elif (period.end_date is None
-                        or period.end_date >= start_date):
-                    period.end_date = start_date - end_date_offset
+                period_created = True
+            # existing period starting at date -> to update
+            elif period.start_date == start_date:
+                if add_period and not period_created:
+                    period.end_date = end_date
+                    period.send_after = rule_result.get('send_after', today)
+                    period.status = 'waiting'
+                    period.extra_details = rule_result
                     modified_periods.append(period)
-                if add_period:
-                    tpp = ThirdPartyPeriod(
-                        option=option,
-                        protocol=protocol,
-                        start_date=start_date,
-                        end_date=end_date,
-                        send_after=rule_result.get('send_after', today),
-                        extra_details=rule_result)
-                    modified_periods.append(tpp)
-                break
-            idx -= 1
-        else:
-            if add_period:
-                modified_periods.append(ThirdPartyPeriod(
-                        option=option,
-                        protocol=protocol,
-                        start_date=start_date,
-                        end_date=end_date,
-                        send_after=rule_result.get('send_after', today),
-                        extra_details=rule_result))
-
+                    period_created = True
+                else:
+                    periods_to_remove.append(period)
+            # existing period starting before new period and ending after it
+            # -> to truncate
+            elif (period.end_date is None or period.end_date >= start_date):
+                prev_end_date = period.end_date
+                period.end_date = start_date - end_date_offset
+                period.status = 'waiting' if (prev_end_date !=
+                    period.end_date) else period.status
+                modified_periods.append(period)
+        if add_period and not period_created:
+            modified_periods.append(ThirdPartyPeriod(
+                    option=option,
+                    protocol=protocol,
+                    start_date=start_date,
+                    end_date=end_date,
+                    send_after=rule_result.get('send_after', today),
+                    extra_details=rule_result))
         return periods_to_remove, modified_periods
 
     @classmethod
@@ -198,6 +209,11 @@ class Protocol(model.CodedMixin, model.CoogView,
         Date = pool.get('ir.date')
         date = Date.today() if date is None else date
         return cls.edit_periods(contract, date, 'unhold_contract')
+
+    @classmethod
+    def do_reactivate_contract(cls, contract, origin, date=None, **kwargs):
+        date = contract.start_date if date is None else date
+        return cls.edit_periods(contract, date, 'reactivate_contract')
 
     @classmethod
     def do_void_contract(cls, contract, orign, date=None, **kwargs):

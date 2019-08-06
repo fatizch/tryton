@@ -279,18 +279,13 @@ New Endorsement::
     ...         ('contracts', '=', contract.id)])
     >>> _ = Endorsement.apply_synchronous([good_endorsement.id], config._context)
 
-There is now two periods::
+There should be one period left::
 
     >>> contract.reload()
     >>> option, = contract.covered_elements[0].options
     >>> len(option.third_party_periods)
-    2
+    1
     >>> tpp = option.third_party_periods[0]
-    >>> tpp.start_date - contract_start_date == dt.timedelta(0)
-    True
-    >>> new_contract_start_date - tpp.end_date == dt.timedelta(days=1)
-    True
-    >>> tpp = option.third_party_periods[-1]
     >>> tpp.start_date - new_contract_start_date == dt.timedelta(0)
     True
     >>> tpp.end_date is None

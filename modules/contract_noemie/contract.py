@@ -219,9 +219,11 @@ class CoveredElement(metaclass=PoolMeta):
                 self.noemie_start_date = getattr(self, 'noemie_start_date',
                     None) or self.start_date
                 self.noemie_end_date = getattr(self, 'end_date', None)
-                self.noemie_return_code = self.noemie_return_code or ''
-                self.noemie_update_date = self.noemie_update_date or None
-                self.noemie_status = self.noemie_status or 'waiting'
+                self.noemie_return_code = getattr(self, 'noemie_return_code',
+                    '')
+                self.noemie_update_date = getattr(self, 'noemie_update_date',
+                    None)
+                self.noemie_status = getattr(self, 'noemie_status', 'waiting')
             if self.party and self.party.health_complement:
                 print([x.date for x in self.party.health_complement])
                 print(list(self.party.health_complement))

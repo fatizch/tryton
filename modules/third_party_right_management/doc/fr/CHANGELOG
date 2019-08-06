@@ -1,3 +1,4 @@
-* OTH#0000 Fix date overlap validation for third party periods
+* OTH#0000 Correction de la gestion des périodes pour les avenants
+* OTH#0000 Correction du test de chevauchement des dates
 * OTH#0000 Gestion de l'import et de l'export JSON des protocoles délégataires
 * FEA#11489: Création du module

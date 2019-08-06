@@ -281,13 +281,8 @@ _ = Endorsement.apply_synchronous([good_endorsement.id], config._context)
 contract.reload()
 option, = contract.covered_elements[0].options
 len(option.third_party_periods)
-# #Res# #2
+# #Res# #1
 tpp = option.third_party_periods[0]
-tpp.start_date - contract_start_date == dt.timedelta(0)
-# #Res# #True
-new_contract_start_date - tpp.end_date == dt.timedelta(days=1)
-# #Res# #True
-tpp = option.third_party_periods[-1]
 tpp.start_date - new_contract_start_date == dt.timedelta(0)
 # #Res# #True
 tpp.end_date is None

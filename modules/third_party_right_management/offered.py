@@ -2,10 +2,8 @@
 # this repository contains the full copyright notices and license terms.
 import datetime as dt
 
-from sql import Null
 from dateutil.relativedelta import relativedelta
 from trytond.pool import PoolMeta
-from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
 from trytond.modules.coog_core import model, fields
@@ -27,6 +25,9 @@ class ThirdPartyPeriod(WithExtraDetails, model.CoogView, model.CoogSQL):
 
     option = fields.Many2One('contract.option', "Contract Option",
         required=True, ondelete='CASCADE', select=True)
+    party = fields.Function(
+        fields.Many2One('party.party', "Party"),
+        'get_party', searcher='search_party')
     start_date = fields.Date("Start Date", required=True,
         domain=['OR',
             ('end_date', '=', None),
@@ -52,6 +53,9 @@ class ThirdPartyPeriod(WithExtraDetails, model.CoogView, model.CoogSQL):
             ('validated', "Validated"),
             ('rejected', "Rejected"),
             ], "Status", required=True, readonly=True)
+    color = fields.Function(
+        fields.Char('Color'),
+        'get_color')
 
     @classmethod
     def __setup__(cls):
@@ -62,40 +66,35 @@ class ThirdPartyPeriod(WithExtraDetails, model.CoogView, model.CoogSQL):
                 })
 
     @classmethod
-    def validate(cls, periods):
-        super().validate(periods)
-        for period in periods:
-            period.check_dates()
-
-    def check_dates(self):
-        transaction = Transaction()
-        connection = transaction.connection
-        transaction.database.lock(connection, self._table)
-
-        table = self.__table__()
-        if self.end_date is None:
-            overlap_query = ((table.end_date == Null)
-                | (table.end_date >= self.start_date))
-        else:
-            overlap_query = (
-                ((table.end_date == Null)
-                    & (table.start_date <= self.end_date))
-                | ((table.end_date >= self.start_date)
-                    & (table.start_date <= self.end_date)))
-        cursor = connection.cursor()
-        cursor.execute(*table.select(table.id,
-                where=(overlap_query
-                    & (table.protocol == self.protocol.id)
-                    & (table.option == self.option.id)
-                    & (table.id != self.id)
-                    & (table.start_date <= table.end_date))))
-        overlap_id = cursor.fetchone()
-        if overlap_id:
-            self.raise_user_error('tpp_overlap_error')
+    def view_attributes(cls):
+        return super().view_attributes() + [(
+                '/tree',
+                'colors',
+                Eval('color', 'black'))]
 
     @classmethod
     def default_status(cls):
         return 'waiting'
+
+    @classmethod
+    def get_color(cls, periods, name=None):
+        colors = {
+            'waiting': 'black',
+            'sent': 'green',
+            'validated': 'green',
+            'rejected': 'red'
+            }
+        return {p.id: 'grey' if p.start_date > p.end_date
+            else colors[p.status] for p in periods}
+
+    def get_party(self, name=None):
+        if self.option and self.option.covered_element:
+            return self.option.covered_element.party.id
+        return
+
+    @classmethod
+    def search_party(cls, name, clause):
+        return [('option.covered_element.party',) + tuple(clause[1:])],
 
     def getter_end_date_domain_date(self, name):
         return (self.start_date + relativedelta(days=-1)) if self.start_date \

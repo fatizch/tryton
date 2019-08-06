@@ -248,8 +248,10 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                         E.AUTONOME(
                             'true' if config.autonomous else 'false'),
                         # MODE_PAIEMENT
-                        E.NNI(contract.subscriber.ssn_no_key[:13] or
-                            contract.subscriber.main_insured_ssn[:13]),
+                        E.NNI(contract.subscriber.ssn_no_key[:13]
+                            if contract.subscriber.ssn_no_key else
+                            contract.subscriber.main_insured_ssn[:13]
+                            if contract.subscriber.main_insured_ssn else ''),
                         E.NNI_RATT(
                             contract.subscriber.main_insured_ssn[:13]
                             if contract.subscriber.main_insured_ssn and
@@ -347,12 +349,12 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                                     E.ADRESSE_MEDIA(covered.party.email),
                                     E.ACTIF('true')
                                     ))
-
                         membre = E.MEMBRE_CONTRAT(
                             E.SOUSCRIPTEUR('true' if souscripteur else 'false'),
                             E.POSITION(position),
                             E.TYPE_REGIME('RC'),
-                            E.DATE_ENTREE(covered.start_date.isoformat()),
+                            E.DATE_ENTREE(
+                                contract.initial_start_date.isoformat()),
                             E.INDIVIDU(
                                 E.REF_INTERNE_OS(covered.party.code),
                                 E.DATE_NAISSANCE(

@@ -326,8 +326,5 @@ void_wizard.execute('stop')
 
 contract.reload()
 option, = contract.covered_elements[0].options
-tpp = option.third_party_periods[-1]
-(tpp.start_date - dt.date.today()).days == 10
-# #Res# #True
-(tpp.end_date - dt.date.today()).days == 25
+option.third_party_periods == []
 # #Res# #True
