@@ -19,6 +19,7 @@ from . import return_almerys_hundler
 
 __all__ = [
     'AlmerysReturnBatch',
+    'AlmerysProtocolBatch',
     ]
 
 

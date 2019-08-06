@@ -4,7 +4,7 @@
 CHAIN_NAME=almerys_return
 
 CHAIN_PARAMETERS=('IN_PATH' 'ARCHIVE_PATH')
-CHAIN_REQUIRED=('IN_PATH' 'ARCHIVE_PATH')
+CHAIN_REQUIRED=()
 
 chain_params "$@"
 chain_begin
