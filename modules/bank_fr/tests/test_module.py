@@ -113,6 +113,21 @@ class ModuleTestCase(test_framework.CoogTestCase):
                     'data': {'number': 'FR7615970003860000690570007'}},
                 ])
 
+    @test_framework.prepare_test(
+        'bank_fr.test0020_test_bank_from_iban'
+        )
+    def test0051_bank_from_number(self):
+        data_ref = {
+            'number': 'FR1420041010050500013M02606'
+            }
+        bank = self.APIParty.bank_from_number(data_ref, {})
+        self.assertEqual(bank['bic'], 'ABCDEFGHXXX')
+
+        data_ref['number'] = 'FR7615970003860000690570007'
+
+        bank = self.APIParty.bank_from_number(data_ref, {})
+        self.assertEqual(bank, {})
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()

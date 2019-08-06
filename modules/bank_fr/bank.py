@@ -97,7 +97,7 @@ class BankAccount(metaclass=PoolMeta):
     def get_bank_identifiers_fr(cls, number):
         if (not number or not number.upper().startswith('FR') or
                 len(number) < 15):
-            return
+            return '', ''
         return (number[4:9], number[9:14])
 
     @classmethod
@@ -108,7 +108,7 @@ class BankAccount(metaclass=PoolMeta):
             return
         number = number.replace(' ', '')
         bank_identifiers_fr = cls.get_bank_identifiers_fr(number)
-        if not bank_identifiers_fr:
+        if not bank_identifiers_fr[0] and not bank_identifiers_fr[1]:
             return
         bank_code, branch_code = bank_identifiers_fr
         agencies = Agency.search([('bank_code', '=', bank_code),
