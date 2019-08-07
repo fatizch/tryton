@@ -488,7 +488,7 @@ class ClaimService(metaclass=PoolMeta):
             if salary_mode == 'last_year':
                 for i in range(0, 12):
                     pmss += TableCell.get(pmss_table, cur_salary.from_date +
-                        relativedelta(months=i)) * prorata
+                        relativedelta(months=i))
 
         # Calculate monthly salary
         if salary_mode != 'last_year' and not current_salary and \
@@ -502,7 +502,6 @@ class ClaimService(metaclass=PoolMeta):
             Decimal(10) ** self.currency_digits)
 
         salary_to_use = self.apply_revaluation_if_needed(salary_to_use, args)
-
         year_range = calculate_salary_range(salary_to_use, pmss)
         salary_range['TA'] = year_range['TA']
         salary_range['TB'] = year_range['TB']

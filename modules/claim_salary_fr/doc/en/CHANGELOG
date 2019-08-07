@@ -1,3 +1,4 @@
+* BUG#12308 Fix PMSS calculation for 'last year' salary mode
 * BUG#12134 Fix prorata calculation for non monthly salary modes
 * BUG#12038 Fix endorsement behavior for the "Revaluation on basic salary" field
 * BUG#11767 Make sure default tables are up to date
