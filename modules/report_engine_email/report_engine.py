@@ -96,7 +96,7 @@ class ReportGenerate(metaclass=PoolMeta):
                 if tmpl.format_for_internal_edm:
                     tmpl.save_reports_in_edm(generated_reports)
                 attachments += generated_reports
-            if not attachments:
+            if selected_letter.attachments and not attachments:
                 selected_letter.raise_user_warning('configuration_mismatch_%s' %
                     ','.join([str(x.id) for x in selected_letter.attachments]),
                     'configuration_mismatch')

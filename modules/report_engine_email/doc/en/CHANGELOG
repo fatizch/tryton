@@ -1,3 +1,4 @@
+* BUG#12216 Do not display wrong warning when sending an email with images but no attachments
 * BUG#11811 Fix duplicated translation of generated_code
 * BUG#11420 Fix crash on email generation if attachment and the attachment report is not defined on product
 * BUG#11224 Fix crash when printing a mail with attachment due to erroneous encoding since python 3
