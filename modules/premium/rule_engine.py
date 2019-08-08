@@ -15,7 +15,9 @@ class RuleEngine(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super(RuleEngine, cls).__setup__()
-        cls.type_.selection.append(('premium', 'Premium'))
+        cls.type_.selection.extend(
+            [('premium', 'Premium'),
+             ('premium_date_rule', 'Premium Date Rule')])
 
     @fields.depends('type_')
     def on_change_with_result_type(self, name=None):

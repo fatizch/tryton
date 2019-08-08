@@ -4,6 +4,7 @@ import mock
 import datetime
 import unittest
 import doctest
+
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import doctest_teardown
 

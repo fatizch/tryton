@@ -36,7 +36,9 @@ __all__ = [
     ]
 
 
-class ProductPremiumDate(model.CoogSQL, model.CoogView):
+class ProductPremiumDate(
+    get_rule_mixin('rule', 'Rule Engine', extra_string='Rule Extra Data'),
+        model.CoogSQL, model.CoogView):
     'Product Premium Dates'
 
     __name__ = 'offered.product.premium_date'
@@ -72,6 +74,12 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
                 ['duration_initial_start_date', 'duration_current_start_date']),
             }, depends=['type_'])
 
+    @classmethod
+    def __setup__(cls):
+        super(ProductPremiumDate, cls).__setup__()
+        cls.rule.domain = [('type_', '=', 'premium_date_rule')]
+        cls.rule.string = 'Premium Date Rule'
+
     @fields.depends('type_', 'custom_date')
     def on_change_type_(self):
         if self.type_ not in ('yearly_custom_date', 'at_given_date'):
@@ -82,6 +90,19 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
             self.duration_unit = None
 
     def get_rule_for_contract(self, contract):
+        if self._check_rule_availability(contract):
+            return self._get_rule_results(contract)
+        return []
+
+    def _check_rule_availability(self, contract):
+        if getattr(self, 'rule', None):
+            args = {}
+            args['context'] = self
+            contract.init_dict_for_rule_engine(args)
+            return self.calculate_rule(args)
+        return True
+
+    def _get_rule_results(self, contract):
         if self.type_ == 'duration_initial_start_date':
             date = coog_date.add_duration(contract.initial_start_date,
                 self.duration_unit, self.duration, True)
@@ -98,6 +119,7 @@ class ProductPremiumDate(model.CoogSQL, model.CoogView):
         max_date = contract.final_end_date or contract.end_date
         if not max_date:
             return
+
         if self.type_ == 'yearly_custom_date':
             return rrule.rrule(rrule.YEARLY,
                 dtstart=contract.initial_start_date, until=max_date,

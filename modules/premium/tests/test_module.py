@@ -24,9 +24,20 @@ class ModuleTestCase(test_framework.CoogTestCase):
             'Premium': 'contract.premium',
             'Fee': 'account.fee',
             'ContractFee': 'contract.fee',
+            'Rule': 'rule_engine',
+            'Context': 'rule_engine.context',
             }
 
     def test001_premium_date_configuration(self):
+        context = self.Context()
+        context.name = 'test_context'
+        rule = self.Rule()
+        rule.context = context
+        rule.name = 'Calcul Test Rule'
+        rule.short_name = 'calcul_test_rule'
+        rule.algorithm = 'return True'
+        rule.status = 'validated'
+        rule.save()
         product = self.Product()
         product.premium_dates = [
             self.PremiumDate(type_='yearly_custom_date',
@@ -44,6 +55,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         period.end_date = datetime.date(2015, 4, 25)
         contract.activation_history = [period]
         contract.options = []
+        contract.covered_elements = []
         contract.extra_datas = []
 
         dates = product.get_dates(contract)
@@ -61,6 +73,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         period.end_date = datetime.date(2015, 12, 31)
         contract.activation_history = [period]
         contract.options = []
+        contract.covered_elements = []
         contract.extra_datas = []
 
         dates = product.get_dates(contract)
@@ -76,6 +89,43 @@ class ModuleTestCase(test_framework.CoogTestCase):
         dates = sorted(list(set(dates)))
         self.assertEqual(dates, [datetime.date(2014, 3, 1),
                 datetime.date(2014, 4, 26), datetime.date(2015, 4, 26)])
+
+        # Test rule true other false
+        contract = mock.Mock()
+        period = mock.Mock()
+        contract.start_date = datetime.date(2014, 3, 1)
+        contract.initial_start_date = datetime.date(2014, 3, 1)
+        contract.end_date = datetime.date(2015, 12, 31)
+        contract.final_end_date = datetime.date(2015, 12, 31)
+        period.start_date = datetime.date(2014, 3, 1)
+        period.end_date = datetime.date(2015, 12, 31)
+        contract.activation_history = [period]
+        contract.options = []
+        contract.covered_elements = []
+        contract.extra_datas = []
+
+        rule_false = self.Rule()
+        rule_false.context = context
+        rule_false.name = 'Calcul1 Test Rule'
+        rule_false.short_name = 'calcul1_test_rule'
+        rule_false.algorithm = ''' return %r > datetime.date(2015, 12, 31)
+            ''' % contract.initial_start_date
+        rule_false.status = 'validated'
+        rule_false.save()
+
+        product.premium_dates = [
+            self.PremiumDate(type_='yearly_custom_date',
+                             custom_date=datetime.date(2014, 4, 26),
+                             rule=rule,
+                             rule_extra_data={}),
+            self.PremiumDate(type_='yearly_on_start_date', rule=rule_false,
+                             rule_extra_data={}),
+        ]
+        dates = product.get_dates(contract)
+        dates = sorted(list(set(dates)))
+        self.assertEqual(dates, [datetime.date(2014, 3, 1),
+                                 datetime.date(2014, 4, 26),
+                                 datetime.date(2015, 4, 26)])
 
     def test010_store_prices(self):
         # Note : setting "id" is required so that object comparison work as

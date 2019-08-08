@@ -1,3 +1,4 @@
+* FEA#12294 Add configuration to contextually ignore some premium dates
 * FEA#12197 Add posibility to monthly synchronize with contract initial start date in premium dates calculation rules. This can be useful when one premium of the year has a different amount.
 
 Version 2.4 - 2019-04-12

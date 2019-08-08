@@ -6,4 +6,5 @@ this repository contains the full copyright notices and license terms. -->
     <field name="custom_date"/>
     <field name="duration"/>
     <field name="duration_unit"/>
+    <field name="rule"/>
 </tree>
