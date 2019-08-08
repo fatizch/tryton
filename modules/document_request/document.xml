@@ -46,6 +46,10 @@ this repository contains the full copyright notices and license terms. -->
             <field name="name">generic_send_letter</field>
             <field name="model" search="[('model', '=', 'document.request')]"/>
         </record>
+        <record model="ir.model.button" id="button_confirm_document">
+            <field name="name">confirm_attachment</field>
+            <field name="model" search="[('model', '=', 'document.request.line')]"/>
+        </record>
         <!-- #################### -->
         <!-- # Document Request # -->
         <!-- #################### -->
@@ -100,6 +104,23 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">document.receive.line</field>
             <field name="type">tree</field>
             <field name="name">document_reception_line_list</field>
+        </record>
+    </data>
+    <data depends="offered">
+         <record model="ir.ui.view" id="document_request_line_view_form_offered">
+            <field name="model">document.request.line</field>
+            <field name="inherit" ref="document_request_line_view_form"/>
+            <field name="name">document_request_line_form_depend_offered</field>
+          </record>
+        <record model="ir.ui.view" id="document_request_line_view_list_offered">
+            <field name="model">document.request.line</field>
+            <field name="inherit" ref="document_request_line_view_list"/>
+            <field name="name">document_request_line_list_depend_offered</field>
+        </record>
+        <record model="ir.ui.view" id="document_desc_form_offered">
+            <field name="model">document.description</field>
+            <field name="inherit" ref="document.document_desc_form"/>
+            <field name="name">document_description_form_depend_offered</field>
         </record>
     </data>
 </tryton>

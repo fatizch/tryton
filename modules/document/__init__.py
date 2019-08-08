@@ -14,7 +14,6 @@ def register():
         attachment.Attachment,
         document.ReattachDocument,
         module='document', type_='model')
-
     Pool.register(
         document.ReceiveDocument,
         module='document', type_='wizard')

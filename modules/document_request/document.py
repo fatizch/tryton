@@ -12,21 +12,71 @@ from trytond.pyson import Eval, Bool
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.cache import Cache
+from trytond.model import ModelView
 
 from trytond.modules.coog_core import fields, model, utils
 from trytond.modules.report_engine import Printable
 from trytond.modules.rule_engine import get_rule_mixin
+from trytond.modules.offered.extra_data import with_extra_data, \
+    with_extra_data_def, ExtraDataDefTable
 
 
 __all__ = [
     'DocumentDescription',
+    'DocumentDescriptionOffered',
     'DocumentRequestLine',
+    'DocumentRequestLineOffered',
     'DocumentRequest',
     'DocumentReception',
     'ReceiveDocument',
     'ReattachDocument',
     'ReceiveDocumentLine',
+    'ExtraData',
+    'DocumentDescriptionExtraDataRelation',
     ]
+
+
+class DocumentDescriptionExtraDataRelation(ExtraDataDefTable):
+    'Document Description Extra Data Relation'
+    __name__ = 'document.description-extra_data'
+
+    doc_desc = fields.Many2One('document.description', 'Document Description',
+        ondelete='CASCADE', select=True, required=True)
+    extra_data_def = fields.Many2One('extra_data', 'Extra Data',
+        ondelete='RESTRICT', required=True)
+
+
+class ExtraData(metaclass=PoolMeta):
+    __name__ = 'extra_data'
+
+    @classmethod
+    def __setup__(cls):
+        super(ExtraData, cls).__setup__()
+        cls.kind.selection.append(('document_request', 'Document Request'))
+
+
+class DocumentDescriptionOffered(
+        with_extra_data_def('document.description-extra_data', 'doc_desc',
+            'document_request')):
+    __name__ = 'document.description'
+
+    template = fields.Many2One('report.template', 'Template',
+        ondelete='CASCADE', help='If set, a document will automatically be '
+            'created using this template, and be attached '
+            'to the associated request line')
+
+    @classmethod
+    def __setup__(cls):
+        super(DocumentDescription, cls).__setup__()
+        cls.extra_data_def.states = {
+            'invisible': ~Eval('template')
+            }
+        cls.extra_data_def.depends = ['template']
+
+    @fields.depends('template')
+    def on_change_template(self):
+        if not self.template:
+            self.extra_data_def = None
 
 
 class DocumentDescription(metaclass=PoolMeta):
@@ -37,9 +87,8 @@ class DocumentDescription(metaclass=PoolMeta):
         'will be required to mark the document request lines as "received"')
 
 
-class DocumentRequestLine(model.CoogSQL, model.CoogView):
+class DocumentRequestLine(Printable, model.CoogSQL, model.CoogView):
     'Document Request Line'
-
     __name__ = 'document.request.line'
 
     document_desc = fields.Many2One('document.description',
@@ -54,8 +103,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
     received = fields.Function(
         fields.Boolean('Received',
             states={'readonly': ~Eval('allow_force_receive')},
-            depends=['allow_force_receive'],
-            ),
+                depends=['allow_force_receive']),
         getter='on_change_with_received', setter='setter_void',
         searcher='search_received')
     request = fields.Many2One('document.request', 'Document Request',
@@ -82,7 +130,6 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
         help="Add details about the received document")
     allow_force_receive = fields.Function(fields.Boolean('Force Receive'),
         'get_allow_force_receive')
-
     _models_get_request_line_cache = Cache('models_get_request_line')
 
     @classmethod
@@ -99,8 +146,7 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
                         to_update.last_reminder_date,
                         to_update.reminders_sent],
                     values=[CurrentDate(), 0],
-                    where=to_update.last_reminder_date == Null,
-                    ))
+                    where=to_update.last_reminder_date == Null,))
 
     @classmethod
     def search(cls, domain, *args, **kwargs):
@@ -357,6 +403,92 @@ class DocumentRequestLine(model.CoogSQL, model.CoogView):
 
     def get_allow_force_receive(self, name=None):
         return self.attachment_not_required()
+
+
+class DocumentRequestLineOffered(
+        with_extra_data(['document_request'], schema='document_desc')):
+    __name__ = 'document.request.line'
+
+    data_status = fields.Selection(
+        [('done', 'Done'), ('waiting', 'Waiting')], 'Data Status',
+        states={'invisible': Bool(~Eval('status_visibility')),
+            'readonly': Bool(Eval('status_visibility'))},
+        depends=['status_visibility'])
+    data_status_string = data_status.translated('data_status')
+    status_visibility = fields.Function(fields.Boolean('Status Visibily'),
+        'get_doc_desc_extra_data')
+
+    @classmethod
+    def __setup__(cls):
+        super(DocumentRequestLineOffered, cls).__setup__()
+        cls.reception_date.states = {
+            'readonly': Bool(Eval('data_status') != 'waiting')
+            }
+        cls.reception_date.depends = ['data_status']
+        cls.received.states = {
+            'readonly': Bool(Eval('data_status') != 'waiting')
+            }
+        cls.received.depends = ['allow_force_receive', 'data_status']
+        cls.extra_data.states = {
+            'readonly': Eval('data_status') == 'done',
+            }
+        cls.attachment.states = {
+            'readonly': Eval('data_status') == 'done',
+        }
+        cls.document_desc.states = {
+            'readonly': Eval('data_status') == 'done',
+        }
+        cls._buttons.update({
+            'confirm_attachment': {
+                'readonly': Eval('data_status') == 'done',
+            },
+        })
+
+    @fields.depends('document_desc', 'extra_data', 'attachment')
+    def on_change_document_desc(self):
+        super(DocumentRequestLineOffered, self).on_change_document_desc()
+        status = 'waiting'
+        if self.document_desc and self.extra_data and self.attachment:
+            status = 'done'
+        self.data_status = status
+
+    @classmethod
+    def _generate_template_documents(cls, documents):
+        pool = Pool()
+        Attachment = pool.get('ir.attachment')
+        date_today = pool.get('ir.date').today()
+        for document in documents:
+            if document.document_desc and document.document_desc.template:
+                reports, attachments = \
+                    document.document_desc.template.produce_reports([document],
+                        {})
+                Attachment.write([attachments[0]], {
+                    'resource': str(document.for_object),
+                    'document_desc': document.document_desc.id})
+            cls.write([document], {
+                'data_status': 'done',
+                'attachment': attachments[0].id,
+                'reception_date': date_today, })
+
+    @classmethod
+    @ModelView.button
+    def confirm_attachment(cls, documents):
+        cls._generate_template_documents(documents)
+
+    def get_doc_desc_extra_data(self, name):
+        return bool(self.document_desc)
+
+    def get_contact(self):
+        return None
+
+    def get_address(self):
+        return None
+
+    def get_sender(self):
+        return None
+
+    def get_sender_address(self):
+        return None
 
 
 class DocumentRequest(Printable, model.CoogSQL, model.CoogView):

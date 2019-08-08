@@ -22,6 +22,12 @@ def register():
         attachment.Attachment,
         module='document_request', type_='model')
     Pool.register(
+        document.ExtraData,
+        document.DocumentDescriptionExtraDataRelation,
+        document.DocumentDescriptionOffered,
+        document.DocumentRequestLineOffered,
+        module='document_request', type_='model', depends=['offered'])
+    Pool.register(
         document.ReceiveDocument,
         party.PartyReplace,
         module='document_request', type_='wizard')

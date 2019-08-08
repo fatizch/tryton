@@ -1,5 +1,6 @@
 * FEA#11908 Add comment field on document request
 * BUG#11602 Enable document request creation from list view
+* FEA#12049 Data input and document generation for document requests
 
 Version 2.4 - 2019-04-12
 * BUG#11130 Fix document request processing batch

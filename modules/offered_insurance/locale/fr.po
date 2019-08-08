@@ -448,7 +448,7 @@ msgstr "Date de Création"
 
 msgctxt "field:offered.exclusion-res.group,create_uid:"
 msgid "Create User"
-msgstr "Crée pa"
+msgstr "Créé par"
 
 msgctxt "field:offered.exclusion-res.group,exclusion_kind:"
 msgid "Exclusion Kind"

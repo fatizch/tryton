@@ -10,9 +10,57 @@ msgctxt "field:batch.remind.documents,id:"
 msgid "ID"
 msgstr "Identifiant"
 
+msgctxt "field:document.description,extra_data_def:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
 msgctxt "field:document.description,reception_requires_attachment:"
 msgid "Reception Requires Attachment"
 msgstr "La réception requiert la pièce jointe"
+
+msgctxt "field:document.description,template:"
+msgid "Template"
+msgstr "modèles de corrier"
+
+msgctxt "field:document.description-extra_data,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:document.description-extra_data,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:document.description-extra_data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.description-extra_data,doc_desc:"
+msgid "Document Description"
+msgstr "Descripteur de Document"
+
+msgctxt "field:document.description-extra_data,extra_data_def:"
+msgid "Extra Data"
+msgstr "Questions"
+
+msgctxt "field:document.description-extra_data,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:document.description-extra_data,rec_name:"
+msgid "Record Name"
+msgstr "Numéro"
+
+msgctxt "field:document.description-extra_data,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:document.description-extra_data,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:document.description-extra_data,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
 
 msgctxt "field:document.receive.line,id:"
 msgid "ID"
@@ -138,6 +186,10 @@ msgctxt "field:document.request.line,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:document.request.line,data_status:"
+msgid "Data Status"
+msgstr "Statut des données"
+
 msgctxt "field:document.request.line,details:"
 msgid "Comment"
 msgstr "Commentaire"
@@ -145,6 +197,14 @@ msgstr "Commentaire"
 msgctxt "field:document.request.line,document_desc:"
 msgid "Document Definition"
 msgstr "Définition des documents"
+
+msgctxt "field:document.request.line,extra_data:"
+msgid "Extra Data"
+msgstr "Données du document"
+
+msgctxt "field:document.request.line,extra_data_summary:"
+msgid "Extra Data Summary"
+msgstr "Résumé des données complémentaires"
 
 msgctxt "field:document.request.line,first_reception_date:"
 msgid "First Reception Date"
@@ -194,6 +254,10 @@ msgctxt "field:document.request.line,send_date:"
 msgid "Send Date"
 msgstr "Date d'envoi"
 
+msgctxt "field:document.request.line,status_visibility:"
+msgid "Status Visibily"
+msgstr "Visibilité du statut"
+
 msgctxt "field:document.request.line,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -226,6 +290,14 @@ msgstr ""
 "Si cochée, les pièces jointes seront requises afin de marquer les lignes de "
 "demande de document comme \"reçues\""
 
+msgctxt "help:document.description,template:"
+msgid ""
+"If set, a document will automatically be created using this template, and be"
+" attached to the associated request line."
+msgstr ""
+"S'il est défini, un document sera automatiquement créé à l'aide de ce modèle"
+" et sera joint à la ligne de requête associée.."
+
 msgctxt "help:document.request.line,details:"
 msgid "Add details about the received document"
 msgstr "Permet d'ajouter des précisions sur le document reçu"
@@ -237,6 +309,10 @@ msgstr "Référence l'objet pour lequel le document est demandé."
 msgctxt "model:batch.remind.documents,name:"
 msgid "Batch Remind Documents"
 msgstr "Batch de relance des documents"
+
+msgctxt "model:document.description-extra_data,name:"
+msgid "Document Description Extra Data Relation"
+msgstr "La relation description du document et données complémentaire"
 
 msgctxt "model:document.receive.line,name:"
 msgid "Receive Document Line"
@@ -278,21 +354,29 @@ msgctxt "selection:document.request,needed_by:"
 msgid ""
 msgstr " "
 
+msgctxt "selection:document.request.line,data_status:"
+msgid "Done"
+msgstr "Traité"
+
+msgctxt "selection:document.request.line,data_status:"
+msgid "Waiting"
+msgstr "En attentes"
+
 msgctxt "selection:document.request.line,for_object:"
 msgid ""
 msgstr " "
+
+msgctxt "selection:extra_data,kind:"
+msgid "Document Request"
+msgstr "Demande de Documents"
 
 msgctxt "view:document.receive.line:"
 msgid "Lines"
 msgstr "Lignes"
 
 msgctxt "view:document.request.line:"
-msgid "Document"
-msgstr "Document"
-
-msgctxt "view:document.request.line:"
-msgid "Documents"
-msgstr "Documents"
+msgid "Confirm_attachment"
+msgstr "Confirmer"
 
 msgctxt "view:document.request:"
 msgid "Send Request"

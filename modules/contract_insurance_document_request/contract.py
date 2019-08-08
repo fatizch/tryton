@@ -176,9 +176,12 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
             line.contract = self
             for k, v in rule_result_values.items():
                 setattr(line, k, v)
+            line.on_change_document_desc()
             to_save.append(line)
         if to_save:
             DocumentRequestLine.save(to_save)
+            if not DocumentRequestLine.extra_data:
+                DocumentRequestLine.confirm_attachment(to_save)
         to_delete = []
         for request in self.document_request_lines:
             if (request.document_desc.code in existing_document_desc_code and
