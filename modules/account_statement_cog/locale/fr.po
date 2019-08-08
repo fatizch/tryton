@@ -175,10 +175,6 @@ msgctxt "field:account.statement.line.group.cancel.start,journal:"
 msgid "Journal"
 msgstr "Journal"
 
-msgctxt "field:account.statement.line.group.cancel.start,moves:"
-msgid "Moves"
-msgstr "Mouvements"
-
 msgctxt "field:account_statement.payment_informations,description:"
 msgid "Description"
 msgstr "Description"

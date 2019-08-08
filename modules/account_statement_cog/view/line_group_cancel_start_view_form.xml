@@ -4,6 +4,5 @@ this repository contains the full copyright notices and license terms. -->
 <form>
     <label name="cancel_motive"/>
     <field name="cancel_motive"/>
-    <field name="moves"/>
     <field name="journal"/>
 </form>

@@ -5,21 +5,23 @@ from trytond.pyson import Eval
 from trytond.modules.coog_core import fields
 
 __all__ = [
-    'CancelLineGroup',
+    'LineGroup',
     'StatementJournal',
     ]
 
 
-class CancelLineGroup(metaclass=PoolMeta):
-    __name__ = 'account.statement.line.group.cancel'
+class LineGroup(metaclass=PoolMeta):
+    __name__ = 'account.statement.line.group'
 
-    def do_cancel(self, action):
+    @classmethod
+    def cancel(cls, line_groups, cancel_motive):
         Move = Pool().get('account.move')
-        waiting_moves = Move.create_waiting_moves(self.start.moves)
+        waiting_moves = Move.create_waiting_moves(
+            [line_group.move for line_group in line_groups])
         if waiting_moves:
             Move.save(waiting_moves)
             Move.post(waiting_moves)
-        return super(CancelLineGroup, self).do_cancel(action)
+        super().cancel(line_groups, cancel_motive)
 
 
 class StatementJournal(metaclass=PoolMeta):

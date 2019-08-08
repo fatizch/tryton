@@ -291,6 +291,36 @@ class LineGroup(metaclass=PoolMeta):
             Max(line.party_payer).as_('party'),
             ]
 
+    @classmethod
+    def _delete(cls, line_groups):
+        StatementLine = Pool().get('account.statement.line')
+        StatementLine.delete_move(line_groups)
+
+    @classmethod
+    def _cancel(cls, line_groups, cancel_motive):
+        Move = Pool().get('account.move')
+        to_post = []
+        for line_group in line_groups:
+            if line_group.move.cancel_move:
+                line_group.move.raise_user_error('already_cancelled')
+            line_group.move.cancel_and_reconcile({'description': cancel_motive})
+            to_post.append(line_group.move.cancel_move)
+        if to_post:
+            Move.post(to_post)
+
+    @classmethod
+    def cancel(cls, line_groups, cancel_motive):
+        to_delete = []
+        to_cancel = []
+        for line_group in line_groups:
+            if line_group.move.state == 'posted':
+                to_cancel.append(line_group)
+            else:
+                to_delete.append(line_group)
+        if to_delete:
+            cls._delete(to_delete)
+        cls._cancel(to_cancel, cancel_motive)
+
 
 class CancelLineGroupStart(ModelView):
     'Cancel Line Group Start'
@@ -298,8 +328,6 @@ class CancelLineGroupStart(ModelView):
     __name__ = 'account.statement.line.group.cancel.start'
 
     journal = fields.Many2One('account.statement.journal', 'Journal',
-        states={'invisible': True}, readonly=True)
-    moves = fields.One2Many('account.move', None, 'Moves',
         states={'invisible': True}, readonly=True)
     cancel_motive = fields.Many2One('account.statement.journal.cancel_motive',
         'Cancel Motive', domain=[
@@ -320,30 +348,24 @@ class CancelLineGroup(Wizard):
     cancel = StateAction('account_statement.act_line_group_form')
 
     def default_start(self, fields):
+        assert Transaction().context.get(
+                'active_model') == 'account.statement.line.group'
         pool = Pool()
+        # Statement line group ids are actually move ids
         move_ids = Transaction().context.get('active_ids')
-        moves = pool.get('account.move').browse(move_ids)
         Journal = pool.get('account.statement.journal')
-        journals = []
-
-        for move in moves:
-            if move.cancel_move:
-                move.raise_user_error('already_cancelled')
-            statement_line = pool.get('account.statement.line').search(
-                [('move', '=', move.id)], limit=1)[0]
-            journals.append(statement_line.statement.journal.id)
+        StatementLine = pool.get('account.statement.line')
+        journals = {x.statement.journal.id for x in
+                    StatementLine.search([('move', 'in', move_ids)])}
         if len(set(journals)) > 1:
             Journal.raise_user_error('cancel_journal_mixin')
         return {
-            'journal': journals[0],
-            'moves': move_ids,
+            'journal': list(journals)[0],
             'cancel_motive': None,
             }
 
     def do_cancel(self, action):
-        moves = self.start.moves
-        for move in moves:
-            cancel_motive = self.start.cancel_motive.name
-            move.cancel_and_reconcile({'description': cancel_motive})
-            move.post([move.cancel_move])
+        GroupLine = Pool().get('account.statement.line.group')
+        GroupLine.cancel(GroupLine.browse(Transaction().context.get(
+            'active_ids')), self.start.cancel_motive.name)
         return action, {}
