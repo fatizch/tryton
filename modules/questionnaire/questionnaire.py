@@ -37,6 +37,10 @@ class Questionnaire(model.CodedMixin, model.CoogView, model.SequenceMixin,
         help='A short text that can be used to describe the purpose of this '
         'questionnaire')
 
+    @classmethod
+    def _export_light(cls):
+        return super()._export_light() | {'products', 'company'}
+
     def calculate_questionnaire_result(self, parameters):
         '''
             Expected parameters is a list of answers with the associated part:
@@ -140,6 +144,10 @@ class QuestionnairePart(model.CoogSQL, model.CoogView, model.SequenceMixin,
             if questionnaire.column_exist('rule'):
                 questionnaire.drop_column('rule')
                 questionnaire.drop_column('rule_extra_data')
+
+    @classmethod
+    def _export_light(cls):
+        return super()._export_light() | {'rule'}
 
     @classmethod
     def default_mandatory(cls):

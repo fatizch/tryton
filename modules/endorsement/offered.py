@@ -114,7 +114,7 @@ class EndorsementDefinition(model.CoogSQL, model.CoogView):
 
     @classmethod
     def _export_light(cls):
-        return (super(EndorsementDefinition, cls)._export_skips() |
+        return (super(EndorsementDefinition, cls)._export_light() |
             set(['report_templates']))
 
     def get_is_multi_instance(self, name):

@@ -448,7 +448,11 @@ class ProductBillingRule(
 
     @classmethod
     def _export_light(cls):
-        return super()._export_light() | {'billing_modes'}
+        return super()._export_light() | {'ordered_billing_modes'}
+
+    @classmethod
+    def _export_skips(cls):
+        return super()._export_skips() | {'billing_modes'}
 
     def getter_func_key(self, name):
         return self.product.code

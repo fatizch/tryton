@@ -51,6 +51,7 @@ class ThirdPartyManager(model.CoogView, model.CoogSQL):
     'Third Party Manager'
 
     __name__ = 'third_party_manager'
+    _func_key = 'func_key'
 
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')

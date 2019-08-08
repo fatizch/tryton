@@ -54,7 +54,8 @@ class Protocol(model.CodedMixin, model.CoogView,
 
     @classmethod
     def _export_light(cls):
-        return super()._export_light() | {'coverages'}
+        return super()._export_light() | {'coverages', 'watched_events',
+            'rule', 'third_party_manager'}
 
     @fields.depends('name', 'code')
     def on_change_with_code(self):
@@ -268,6 +269,10 @@ class ProtocolEndorsement(metaclass=PoolMeta):
                 Id('endorsement', 'event_apply_endorsement')),
             },
         depends=['watched_events'])
+
+    @classmethod
+    def _export_light(cls):
+        return super()._export_light() | {'endorsement_parts'}
 
 
 class RecomputePeriod(model.CoogWizard):

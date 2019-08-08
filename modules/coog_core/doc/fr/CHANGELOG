@@ -1,3 +1,4 @@
+* BUG#00000 Corrections d'anomalies sur l'export et l'import JSON pour les règles de modes de quittancements, les définitions d'avenants, les questionnaires et les protocoles délégataires
 * BUG#00000 Corrections de quelques anomalies sur l'export et import JSON pour les modèles suivants: séquences de journaux, règles de modes de quittancement, canaux de distribution et adresses de tiers
 * BUG#12285 Correction de la méthode fields_changed_since_date en ajoutant un contrôle sur la présence d'instances passées
 * OTH#00000 Correction de la méthode get_good_version_at_date sur  revisionmixin
