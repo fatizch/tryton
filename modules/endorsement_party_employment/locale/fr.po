@@ -1,0 +1,409 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:endorsement.party.employment.manage_party_employment:"
+msgid "This action is not valid because party has no employment"
+msgstr "Cet avenant est non valide car cette personne ne possède pas d'emplois"
+
+msgctxt "error:endorsement.party.employment.manage_party_employment:"
+msgid "This action should be applied on one physical person"
+msgstr "Cet avenant doit être appliqué sur une personne physique"
+
+msgctxt "error:endorsement.party.employment.manage_party_employment:"
+msgid "This action should be started from a party"
+msgstr "Cet avenant doit être appliqué sur un tiers"
+
+msgctxt "error:endorsement.party.employment.manage_party_employment:"
+msgid "This action should be started from physical person"
+msgstr "Cet avenant doit être appliqué sur une personne physique"
+
+msgctxt "error:endorsement.party.employment.version:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.party.employment.version:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.party.employment.version:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.party.employment:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.party.employment:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.party.employment:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
+msgctxt "field:endorsement.party,employments:"
+msgid "Endorsements"
+msgstr "Avenants"
+
+msgctxt "field:endorsement.party.employment,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.party.employment,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.party.employment,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party.employment,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party.employment,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.party.employment,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.party.employment,employment:"
+msgid "Employments"
+msgstr "Emplois"
+
+msgctxt "field:endorsement.party.employment,endorsement_party:"
+msgid "Endorsement Party"
+msgstr "Avenant sur tiers"
+
+msgctxt "field:endorsement.party.employment,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.party.employment,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:endorsement.party.employment,keep_if_empty:"
+msgid "Keep if Empty"
+msgstr "Conserver si vide"
+
+msgctxt "field:endorsement.party.employment,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:endorsement.party.employment,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.party.employment,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.party.employment,versions:"
+msgid "Endorsement Party Employment"
+msgstr "Avenant sur un emploi d'une personne physique"
+
+msgctxt "field:endorsement.party.employment,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:endorsement.party.employment,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:endorsement.party.employment,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:endorsement.party.employment.field,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party.employment.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party.employment.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.party.employment.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.party.employment.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.employment.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.party.employment.field,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:endorsement.party.employment.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party.employment.field,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:endorsement.party.employment.field,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:endorsement.party.employment.field,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:endorsement.party.employment.field,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt ""
+"field:endorsement.party.employment.manage_party_employment,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt ""
+"field:endorsement.party.employment.manage_party_employment,employment:"
+msgid "Employment"
+msgstr "Emploi"
+
+msgctxt ""
+"field:endorsement.party.employment.manage_party_employment,employment_display:"
+msgid "Employment"
+msgstr "Emploi"
+
+msgctxt ""
+"field:endorsement.party.employment.manage_party_employment,employment_endorsements:"
+msgid "Employment Endorsement"
+msgstr "Avenant sur un Emploi"
+
+msgctxt ""
+"field:endorsement.party.employment.manage_party_employment,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt ""
+"field:endorsement.party.employment.manage_party_employment,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.employment.manage_party_employment,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt ""
+"field:endorsement.party.employment.manage_party_employment,possible_employments:"
+msgid "Possible Employments"
+msgstr "Emplois possibles"
+
+msgctxt ""
+"field:endorsement.party.employment.manage_party_employment,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
+
+msgctxt "field:endorsement.party.employment.manage_party_employment,version:"
+msgid "Version"
+msgstr "Version"
+
+msgctxt ""
+"field:endorsement.party.employment.manage_party_employment,version_id:"
+msgid "Version ID"
+msgstr "Version ID"
+
+msgctxt "field:endorsement.party.employment.version,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.party.employment.version,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.party.employment.version,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party.employment.version,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party.employment.version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:endorsement.party.employment.version,endorsement_party_employment:"
+msgid "Endorsement Party Employment"
+msgstr "Avenant sur les emplois d'une personne"
+
+msgctxt "field:endorsement.party.employment.version,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.party.employment.version,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:endorsement.party.employment.version,keep_if_empty:"
+msgid "Keep if Empty"
+msgstr "Conserver si vide"
+
+msgctxt "field:endorsement.party.employment.version,rec_name:"
+msgid "Record Name"
+msgstr "nom de l'enregistrement"
+
+msgctxt "field:endorsement.party.employment.version,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.party.employment.version,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.party.employment.version,version:"
+msgid "Versions"
+msgstr "Versions"
+
+msgctxt "field:endorsement.party.employment.version,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:endorsement.party.employment.version,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:endorsement.party.employment.version,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt "field:endorsement.party.employment.version.field,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party.employment.version.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party.employment.version.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.party.employment.version.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.party.employment.version.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.employment.version.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.party.employment.version.field,id:"
+msgid "ID"
+msgstr "Identifiant"
+
+msgctxt "field:endorsement.party.employment.version.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party.employment.version.field,rec_name:"
+msgid "Record Name"
+msgstr "Nom de l'enregistrement"
+
+msgctxt "field:endorsement.party.employment.version.field,write_date:"
+msgid "Write Date"
+msgstr "Modifié par"
+
+msgctxt "field:endorsement.party.employment.version.field,write_uid:"
+msgid "Write User"
+msgstr "Modifié par"
+
+msgctxt "field:endorsement.party.employment.version.field,xml_id:"
+msgid "XML Id"
+msgstr "XML Id"
+
+msgctxt ""
+"model:endorsement.definition,name:party_employment_endorsement_definition"
+msgid "Party Employment Endorsement"
+msgstr "Avenant sur les emplois d'une personne"
+
+msgctxt "model:endorsement.part,name:party_employment_endorsement_part"
+msgid "Party Employment Endorsement"
+msgstr "Avenant Emploi Personne physique "
+
+msgctxt "model:endorsement.party.employment,name:"
+msgid "Endorsement Party Employment"
+msgstr "Avenant sur les emplois d'une personne"
+
+msgctxt "model:endorsement.party.employment.field,name:"
+msgid "Endorsement Party Employment Field"
+msgstr "Champs sur un avenant sur les emplois d'une personne"
+
+msgctxt "model:endorsement.party.employment.manage_party_employment,name:"
+msgid "Manage Party Employment"
+msgstr "Gérer les emplois d'une personne"
+
+msgctxt "model:endorsement.party.employment.version,name:"
+msgid "Endorsement Party Employment Version"
+msgstr "Version d'un avenant sur les emplois d'une personne"
+
+msgctxt "model:endorsement.party.employment.version.field,name:"
+msgid "Endorsement Party Employment Version Field"
+msgstr "Version "
+
+msgctxt "selection:endorsement.part,kind:"
+msgid "Party Employment"
+msgstr "Avenant sur les emplois d'une personne"
+
+msgctxt "selection:endorsement.party.employment,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.party.employment,action:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:endorsement.party.employment,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
+msgctxt "selection:endorsement.party.employment.version,action:"
+msgid "Add"
+msgstr "Ajouter"
+
+msgctxt "selection:endorsement.party.employment.version,action:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:endorsement.party.employment.version,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
+msgctxt "wizard_button:endorsement.start,manage_party_employment,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_party_employment,manage_party_employment_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_party_employment,manage_party_employment_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_party_employment,manage_party_employment_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"

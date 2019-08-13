@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="endorsement.definition"
+                id="party_employment_endorsement_definition">
+            <field name="code">party_employment_endorsement</field>
+            <field name="name">Party Employment Endorsement</field>
+        </record>
+        <record model="endorsement.part" id="party_employment_endorsement_part">
+            <field name="code">party_employment_endorsement</field>
+            <field name="name">Party Employment Endorsement</field>
+            <field name="kind">party</field>
+            <field name="view">manage_party_employment</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part"
+                id="party_employment_relation">
+            <field name="definition" ref="party_employment_endorsement_definition"/>
+            <field name="endorsement_part" ref="party_employment_endorsement_part"/>
+            <field name="order">1</field>
+        </record>
+    </data>
+</tryton>

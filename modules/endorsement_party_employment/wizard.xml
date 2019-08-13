@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="manage_party_employment_view_form">
+            <field name="model">endorsement.party.employment.manage_party_employment</field>
+            <field name="type">form</field>
+            <field name="name">manage_party_employment_form</field>
+        </record>
+    </data>
+</tryton>

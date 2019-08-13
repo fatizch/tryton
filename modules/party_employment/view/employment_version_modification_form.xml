@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<form>
+    <label name="work_time_type"/>
+    <field name="work_time_type" widget="selection"/>
+    <separator id="salary" string="Salary Information" colspan="4"/>
+    <label name="gross_salary"/>
+    <field name="gross_salary"/>
+</form>

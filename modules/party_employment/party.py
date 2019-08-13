@@ -60,6 +60,13 @@ class Employment(model.CoogSQL, model.CoogView):
     def on_change_employer(self):
         self.work_section = None
 
+    def get_rec_name(self, name=None):
+        return self.employer.rec_name + '(' + str(self.start_date) + ')'
+
+    @classmethod
+    def fields_modifiable_in_endorsement(cls):
+        return ['entry_date', 'start_date', 'end_date', 'employment_kind']
+
 
 class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
@@ -105,6 +112,10 @@ class EmploymentVersion(model._RevisionMixin, model.CoogView, model.CoogSQL):
     def __setup__(cls):
         super(EmploymentVersion, cls).__setup__()
         cls.date.required = True
+
+    @classmethod
+    def fields_modifiable_in_endorsement(cls):
+        return ['work_time_type', 'gross_salary', 'date']
 
 
 class EmploymentKind(model.CoogSQL, model.CoogView):

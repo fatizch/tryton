@@ -33,14 +33,20 @@ this repository contains the full copyright notices and license terms. -->
             <field name="inherit" ref="party.party_view_tree"/>
         </record>
          <record model="ir.ui.view" id="employment_view_form">
-            <field name="model">party.employment</field>
+             <field name="model">party.employment</field>
              <field name="type">form</field>
-            <field name="name">employment_form</field>
+             <field name="name">employment_form</field>
+        </record>
+        <record model="ir.ui.view" id="employment_modification_view_form">
+            <field name="model">party.employment</field>
+            <field name="type">form</field>
+            <field name="priority">30</field>
+            <field name="name">employment_modification_form</field>
         </record>
          <record model="ir.ui.view" id="employment_view_list">
-            <field name="model">party.employment</field>
+             <field name="model">party.employment</field>
              <field name="type">tree</field>
-            <field name="name">employment_list</field>
+             <field name="name">employment_list</field>
         </record>
         <record model="ir.ui.view" id="employment_kind_view_form">
             <field name="model">party.employment_kind</field>
@@ -56,6 +62,13 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">party.employment.version</field>
              <field name="type">form</field>
             <field name="name">employment_version_form</field>
+        </record>
+        <record model="ir.ui.view"
+                id="employment_version_modification_view_form">
+            <field name="model">party.employment.version</field>
+            <field name="type">form</field>
+            <field name="priority">30</field>
+            <field name="name">employment_version_modification_form</field>
         </record>
          <record model="ir.ui.view" id="employment_version_view_list">
             <field name="model">party.employment.version</field>

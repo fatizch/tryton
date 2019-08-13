@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- This file is part of Coog. The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<form>
+    <label name="employment"/>
+    <field name="employment" widget="selection"/>
+    <field name="effective_date" invisible="1"/>
+    <field name="version_id" invisible="1"/>
+    <field name="employment_endorsements" invisible="1"/>
+    <newline/>
+    <field name="employment_display" colspan="4"
+           view_ids="party_employment.employment_modification_view_form" expand_toolbar="0"/>
+    <field name="version" colspan="4" view_ids="party_employment.employment_version_modification_view_form" expand_toolbar="0"/>
+</form>

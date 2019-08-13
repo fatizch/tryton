@@ -90,6 +90,13 @@ class EmploymentVersion(metaclass=PoolMeta):
                 PublicIndex.get_gross_index_from_increased_index(
                     self.increased_index, self.date)
 
+    @classmethod
+    def fields_modifiable_in_endorsement(cls):
+        return super(EmploymentVersion, cls).fields_modifiable_in_endorsement()\
+            + ['administrative_situation',
+            'administrative_situation_sub_status', 'increased_index',
+            'gross_index', 'work_country', 'work_subdivision']
+
 
 class AdminSituationSubStatus(model.CoogView, model.CoogSQL):
     'Administrative Situation Sub Status'

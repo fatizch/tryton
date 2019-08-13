@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/label[@name='work_time_type']" position="before">
+        <label name="administrative_situation"/>
+        <field name="administrative_situation"/>
+        <label name="administrative_situation_sub_status"/>
+        <field name="administrative_situation_sub_status" widget="selection"/>
+        <newline/>
+    </xpath>
+    <xpath expr="/form/field[@name='work_time_type']" position="after">
+        <newline/>
+        <label name="work_subdivision"/>
+        <field name="work_subdivision"/>
+        <label name="work_country"/>
+        <field name="work_country"/>
+    </xpath>
+    <xpath expr="/form/field[@name='gross_salary']" position="after">
+        <newline/>
+        <label name="increased_index"/>
+        <field name="increased_index"/>
+        <label name="gross_index"/>
+        <field name="gross_index"/>
+    </xpath>
+</data>
