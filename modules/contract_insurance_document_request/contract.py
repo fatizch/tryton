@@ -244,8 +244,8 @@ class Contract(RemindableInterface, metaclass=PoolMeta):
             self.raise_user_error('non_conform_documents')
 
     def before_activate(self):
-        self.check_required_documents(only_blocking=True)
         super(Contract, self).before_activate()
+        self.check_required_documents(only_blocking=True)
 
     @classmethod
     def get_reminder_candidates_query(cls, tables):

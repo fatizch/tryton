@@ -4,6 +4,7 @@ from trytond.pool import Pool
 
 from . import contract
 from . import clause
+from . import api
 
 
 def register():
@@ -11,3 +12,7 @@ def register():
         contract.Contract,
         clause.ContractClause,
         module='contract_clause', type_='model')
+
+    Pool.register(
+        api.APIContract,
+        module='contract_clause', type_='model', depends=['api'])

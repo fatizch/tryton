@@ -1,3 +1,4 @@
+* FEA#12229 Gestion des contrats emprunteurs dans les API de souscription
 * FEA#12047 Gestion de l'éligibilité par prêts
 * FEA#12121 Possibilité de considérer une banque comme organisme prêteur
 * FEA#11952 Ajout d'une API pour le calcul de l'échéancier des prêts

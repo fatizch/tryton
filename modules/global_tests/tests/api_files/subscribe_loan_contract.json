@@ -1,0 +1,132 @@
+{
+    "loans": [
+        {
+            "ref": "1",
+            "amount": "100000.00",
+            "kind": "fixed_rate",
+            "rate": "0.04",
+            "funds_release_date": "2020-01-01",
+            "duration": 10,
+            "lender_address": %(lender_address_id)s
+        },
+        {
+            "ref": "2",
+            "amount": "100000.00",
+            "kind": "interest_free",
+            "funds_release_date": "2020-01-01",
+            "duration": 10,
+            "lender_address": %(lender_address_id)s
+        }
+    ],
+    "parties": [
+        {
+            "ref": "1",
+            "is_person": true,
+            "name": "Doe",
+            "first_name": "Mother",
+            "birth_date": "1978-01-14",
+            "gender": "female",
+            "addresses": [
+                {
+                    "street": "Somewhere along the street",
+                    "zip": "75002",
+                    "city": "Paris",
+                    "country": "fr"
+                }
+            ],
+            "bank_accounts": [
+                {
+                    "number": "FR1714508000306316122877N67",
+                    "bank": {"bic": "SIGEFRP1XXX"}
+                }
+            ]
+        },
+        {
+            "ref": "2",
+            "is_person": true,
+            "name": "Doe",
+            "first_name": "Father",
+            "birth_date": "1979-10-11",
+            "gender": "male"
+        }
+    ],
+    "contracts": [
+        {
+            "ref": "1",
+            "product": {"code": "loan_product"},
+            "subscriber": {"ref": "1"},
+            "commercial_product": {"code": "emprunteur_plus"},
+            "agent": {"code": "vip"},
+            "extra_data": {"reduction_libre": "10"},
+            "billing": {
+                "payer": {"ref": "1"},
+                "billing_mode": {"code": "monthly_sepa"},
+                "direct_debit_day": 5
+            },
+            "covereds": [
+                {
+                    "party": {"ref": "1"},
+                    "item_descriptor": {"code": "loan_person_item_desc"},
+                    "extra_data": {
+                        "job_category": "csp1",
+                        "co_borrower_relation": "mariage"
+                    },
+                    "coverages": [
+                        {
+                            "coverage": {"code": "loan_death_coverage"},
+                            "extra_data": {},
+                            "loan_shares": [
+                                {
+                                    "loan": {"ref": "1"},
+                                    "share": "0.92"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "party": {"ref": "2"},
+                    "item_descriptor": {"code": "loan_person_item_desc"},
+                    "extra_data": {
+                        "job_category": "csp2",
+                        "co_borrower_relation": "mariage"
+                    },
+                    "coverages": [
+                        {
+                            "coverage": {"code": "loan_death_coverage"},
+                            "extra_data": {},
+                            "loan_shares": [
+                                {
+                                    "loan": {"ref": "1"},
+                                    "share": "0.5"
+                                },
+                                {
+                                    "loan": {"ref": "2"},
+                                    "share": "0.8"
+                                }
+                            ]
+                        },
+                        {
+                            "coverage": {"code": "loan_disability_coverage"},
+                            "extra_data": {},
+                            "loan_shares": [
+                                {
+                                    "loan": {"ref": "1"},
+                                    "share": "0.5"
+                                },
+                                {
+                                    "loan": {"ref": "2"},
+                                    "share": "0.8"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "options": {
+        "activate": true
+    }
+}
+

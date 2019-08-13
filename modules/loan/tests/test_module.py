@@ -2,12 +2,14 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 from decimal import Decimal
+import copy
 import unittest
 import doctest
 import datetime
 
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import doctest_teardown
+from trytond.pool import Pool
 
 from trytond.modules.coog_core import test_framework, coog_date
 from trytond.transaction import Transaction
@@ -907,6 +909,214 @@ class ModuleTestCase(test_framework.CoogTestCase):
                 self.ContractAPI.compute_loan(example['input'],
                     {'_debug_server': True}),
                 example['output'])
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0001_testPersonCreation',
+        'contract_insurance.test0005_PrepareProductForSubscription',
+        'contract.test0002_testCountryCreation',
+        'loan.test0010loan_basic_data',
+        )
+    def test0100_subscribe_contract_API(self):
+        pool = Pool()
+        Coverage = pool.get('offered.option.description')
+        Address = pool.get('party.address')
+        Contract = pool.get('contract')
+        ContractAPI = pool.get('api.contract')
+
+        lender_address = Address.search([('party.is_lender', '=', True)])[-1]
+        coverages = Coverage.search([('code', 'in', ('ALP', 'BET'))])
+        Coverage.write(coverages, {'family': 'loan'})
+
+        data_ref = {
+            'loans': [
+                {
+                    'ref': '1',
+                    'amount': '100000.00',
+                    'kind': 'fixed_rate',
+                    'rate': '0.04',
+                    'funds_release_date': '2020-01-01',
+                    'duration': 10,
+                    'lender_address': lender_address.id,
+                    },
+                {
+                    'ref': '2',
+                    'amount': '100000.00',
+                    'kind': 'interest_free',
+                    'funds_release_date': '2020-01-01',
+                    'duration': 10,
+                    'lender_address': lender_address.id,
+                    },
+                ],
+            'parties': [
+                {
+                    'ref': '1',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Mother',
+                    'birth_date': '1978-01-14',
+                    'gender': 'female',
+                    'addresses': [
+                        {
+                            'street': 'Somewhere along the street',
+                            'zip': '75002',
+                            'city': 'Paris',
+                            'country': 'fr',
+                            },
+                        ],
+                    },
+                {
+                    'ref': '2',
+                    'is_person': True,
+                    'name': 'Doe',
+                    'first_name': 'Father',
+                    'birth_date': '1979-10-11',
+                    'gender': 'male',
+                    },
+                ],
+            'contracts': [
+                {
+                    'ref': '1',
+                    'product': {'code': 'AAA'},
+                    'subscriber': {'ref': '1'},
+                    'extra_data': {},
+                    'covereds': [
+                        {
+                            'party': {'ref': '1'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    'loan_shares': [
+                                        {
+                                            'loan': {'ref': '1'},
+                                            'share': '0.92',
+                                            },
+                                        ],
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    'loan_shares': [
+                                        {
+                                            'loan': {'ref': '1'},
+                                            'share': '0.92',
+                                            },
+                                        ],
+                                    },
+                                {
+                                    'coverage': {'code': 'GAM'},
+                                    'extra_data': {},
+                                    },
+                                ],
+                            },
+                        {
+                            'party': {'ref': '2'},
+                            'item_descriptor': {'code': 'person'},
+                            'coverages': [
+                                {
+                                    'coverage': {'code': 'ALP'},
+                                    'extra_data': {},
+                                    'loan_shares': [
+                                        {
+                                            'loan': {'ref': '1'},
+                                            'share': '0.5',
+                                            },
+                                        {
+                                            'loan': {'ref': '2'},
+                                            'share': '0.8',
+                                            },
+                                        ],
+                                    },
+                                {
+                                    'coverage': {'code': 'BET'},
+                                    'extra_data': {},
+                                    'loan_shares': [
+                                        {
+                                            'loan': {'ref': '1'},
+                                            'share': '0.5',
+                                            },
+                                        {
+                                            'loan': {'ref': '2'},
+                                            'share': '0.8',
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        ],
+                    'coverages': [
+                        {
+                            'coverage': {'code': 'DEL'},
+                            'extra_data': {},
+                            },
+                        ],
+                    },
+                ],
+            'options': {
+                'activate': True,
+                },
+            }
+
+        data_dict = copy.deepcopy(data_ref)
+        result = ContractAPI.subscribe_contracts(data_dict,
+            {'_debug_server': True})
+        contract = Contract(result['contracts'][0]['id'])
+
+        self.assertEqual({x.loan.id for x in contract.ordered_loans},
+            {x['id'] for x in result['loans']})
+        self.assertEqual(
+            contract.covered_elements[0].options[0].loan_shares[0].share,
+            Decimal('0.92'))
+        self.assertEqual(
+            contract.covered_elements[1].options[1].loan_shares[1].share,
+            Decimal('0.8'))
+        self.assertEqual(
+            len(contract.covered_elements[0].options[2].loan_shares), 0)
+        self.assertEqual(
+            len(contract.options[0].loan_shares), 0)
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['coverages'][0]['loan_shares'] = [
+            {
+                'loan': {'ref': '2'}, 'share': '1',
+                },
+            ]
+        self.assertEqual(
+            ContractAPI.subscribe_contracts(data_dict, {}).data,
+            [{
+                    'type': 'coverage_is_not_loan',
+                    'data': {
+                        'coverage': 'DEL',
+                        },
+                    }])
+
+        data_dict = copy.deepcopy(data_ref)
+        data_dict['contracts'][0]['covereds'][0]['coverages'][2][
+            'loan_shares'] = [{
+                'loan': {'ref': '2'}, 'share': '1',
+                    },
+                ]
+        self.assertEqual(
+            ContractAPI.subscribe_contracts(data_dict, {}).data,
+            [{
+                    'type': 'coverage_is_not_loan',
+                    'data': {
+                        'coverage': 'GAM',
+                        },
+                    }])
+
+        data_dict = copy.deepcopy(data_ref)
+        del data_dict['contracts'][0]['covereds'][0]['coverages'][0][
+            'loan_shares']
+        self.assertEqual(
+            ContractAPI.subscribe_contracts(data_dict, {}).data,
+            [{
+                    'type': 'missing_loan_shares',
+                    'data': {
+                        'coverage': 'ALP',
+                        },
+                    }])
 
 
 def suite():

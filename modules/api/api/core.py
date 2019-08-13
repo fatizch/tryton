@@ -400,7 +400,8 @@ class APIModel(Model):
             data['examples'].append(example)
 
             # Only check for dev environments
-            if api_logger.isEnabledFor(logging.DEBUG):
+            if api_logger.isEnabledFor(logging.DEBUG) and not example.get(
+                    'disable_schema_tests', False):
                 try:
                     data['compiled_input_schema'](example['input'])
                 except fastjsonschema.exceptions.JsonSchemaException:
@@ -657,7 +658,13 @@ class APIMixin(Model):
         - _my_api_examples: Returns a list of examples that will be provided in
           the api description, and tested against the input / output schemas.
           If None is provided, it is assumed the API takes no parameters (an
-          empty '{}') and returns nothing (an empty '{}' as well)
+          empty '{}') and returns nothing (an empty '{}' as well).
+
+          The (optional) 'disable_schema_tests' flag allows to avoid running
+          schema tests. This should be avoided unless for some reasons there
+          are incompatibility between modules whose dependencies are not
+          explicit.
+          This flag will be ignored anyway when running unittests
 
             @classmethod
             def _my_api_examples(cls):

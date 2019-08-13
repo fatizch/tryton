@@ -5981,6 +5981,7 @@ if TEST_APIS:  # {{{
     questionnaire_sante_prev, = Questionnaire.find([
             ('code', '=', 'sante_et_prevoyance_mpd')])
     network, = DistributionNetwork.find([('code', '=', 'C1010102')])
+    lender, = Party.find([('name', '=', _lender_name)])
     # }}}
 
     do_print('    Updating API User')  # {{{
@@ -6002,6 +6003,19 @@ if TEST_APIS:  # {{{
     # Simply check this is not an error.
     # Actually, this should probably fail, since there are blocking document
     # requests which are not yet received
+    assert_eq('contracts' in result, True)
+
+    result = run_api(
+        'api.contract.subscribe_contracts',
+        'api_files/subscribe_loan_contract.json',
+        {
+            'lender_address_id': lender.addresses[0].id,
+            },
+        {'_debug_server': True, 'dist_network': network.id})
+
+    # Simply check this is not an error.
+    # Actually, this should probably fail, because for now beneficiary clauses
+    # are not set, but fortunately, there aren't any checks on activation :D
     assert_eq('contracts' in result, True)
     # }}}
 # }}}

@@ -592,6 +592,9 @@ class ModuleTestCase(test_framework.CoogTestCase):
         'contract.test0005_PrepareProductForSubscription',
         )
     def test0100_subscribe_contract_API(self):
+        pool = Pool()
+        ContractAPI = pool.get('api.contract')
+
         data_ref = {
             'parties': [
                 {
@@ -737,14 +740,14 @@ class ModuleTestCase(test_framework.CoogTestCase):
             self.assertEqual(contract.options[1].versions[0].extra_data, {})
 
         data_dict = copy.deepcopy(data_ref)
-        result = self.ContractAPI.subscribe_contracts(data_dict,
+        result = ContractAPI.subscribe_contracts(data_dict,
             {'_debug_server': True})
         check_result(data_dict, result)
 
         # Check Bad Reference to subscriber
         data_dict = copy.deepcopy(data_ref)
         data_dict['contracts'][0]['subscriber']['ref'] = '10'
-        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        error = ContractAPI.subscribe_contracts(data_dict, {})
         self.assertEqual(error.data, [{
                     'type': 'bad_reference',
                     'data': {
@@ -756,7 +759,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # Check inexisting product
         data_dict = copy.deepcopy(data_ref)
         data_dict['contracts'][0]['product']['code'] = 'foo'
-        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        error = ContractAPI.subscribe_contracts(data_dict, {})
         self.assertEqual(error.data, [{
                     'type': 'configuration_not_found',
                     'data': {
@@ -768,7 +771,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # Check missing extra_data
         data_dict = copy.deepcopy(data_ref)
         del data_dict['contracts'][0]['extra_data']['contract_1']
-        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        error = ContractAPI.subscribe_contracts(data_dict, {})
         self.assertEqual(error.data, [{
                     'type': 'invalid_extra_data_for_product',
                     'data': {
@@ -782,7 +785,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # Check extra extra_data
         data_dict = copy.deepcopy(data_ref)
         data_dict['contracts'][0]['extra_data']['option_1'] = '1.21'
-        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        error = ContractAPI.subscribe_contracts(data_dict, {})
         self.assertEqual(error.data, [{
                     'type': 'invalid_extra_data_for_product',
                     'data': {
@@ -797,7 +800,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # Check missing mandatory coverage
         data_dict = copy.deepcopy(data_ref)
         data_dict['contracts'][0]['coverages'].pop()
-        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        error = ContractAPI.subscribe_contracts(data_dict, {})
         self.assertEqual(error.data, [{
                     'type': 'missing_mandatory_coverage',
                     'data': {
@@ -810,7 +813,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         # Check missing coverage extra_data
         data_dict = copy.deepcopy(data_ref)
         del data_dict['contracts'][0]['coverages'][0]['extra_data']['option_1']
-        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        error = ContractAPI.subscribe_contracts(data_dict, {})
         self.assertEqual(error.data, [{
                     'type': 'invalid_extra_data_for_coverage',
                     'data': {
@@ -825,7 +828,7 @@ class ModuleTestCase(test_framework.CoogTestCase):
         data_dict = copy.deepcopy(data_ref)
         data_dict['contracts'][0]['coverages'][0]['extra_data']['contract_1'] \
             = '13.21'
-        error = self.ContractAPI.subscribe_contracts(data_dict, {})
+        error = ContractAPI.subscribe_contracts(data_dict, {})
         self.assertEqual(error.data, [{
                     'type': 'invalid_extra_data_for_coverage',
                     'data': {

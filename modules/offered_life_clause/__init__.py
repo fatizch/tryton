@@ -5,6 +5,7 @@ from trytond.pool import Pool
 from . import clause
 from . import test_case
 from . import offered
+from . import api
 
 
 def register():
@@ -14,3 +15,7 @@ def register():
         offered.OptionDescriptionBeneficiaryClauseRelation,
         test_case.TestCaseModel,
         module='offered_life_clause', type_='model')
+
+    Pool.register(
+        api.APIProduct,
+        module='offered_life_clause', type_='model', depends=['api'])
