@@ -1,3 +1,4 @@
+* FEA#12345 Afficher en gras la somme des tarifs
 * FEA#12294 Règle d'éligibilité sur les patterns de date de calcul
 * FEA#12197 Nouvelle possibilité dans les règles de calcul des dates de primes de pouvoir se synchroniser mensuellement par rapport à la date initiale du contrat. Peut-être utile quand une seule prime dans l'année a un montant différent.
 
