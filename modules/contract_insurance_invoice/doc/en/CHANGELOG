@@ -1,3 +1,4 @@
+* BUG#12338 Fix broken premium computing on product with annual billing mode and no prorata
 * FEA#12228 Make invoicing behavior customizable to handle invoicing for whole term
 * BUG#12257 Properly check for a contract on the move line (following 8f10fb735)
 * FEA#11728 Add tests on dynamic billing modes

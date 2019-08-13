@@ -1020,12 +1020,8 @@ class Contract(metaclass=PoolMeta):
                     for idx, p in enumerate(contract.all_premiums)))
             cache[contract.id] = tree
         if tree is not None:
-            if cls.prorate_premiums():
-                return [contract.all_premiums[x.data]
-                    for x in tree.overlap(start, coog_date.add_day(end, 1))]
-            else:
-                return [contract.all_premiums[x.data]
-                    for x in tree.overlap(start, coog_date.add_day(start, 1))]
+            return [contract.all_premiums[x.data]
+                for x in tree.overlap(start, coog_date.add_day(end, 1))]
 
     @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
@@ -2100,7 +2096,6 @@ class Premium(metaclass=PoolMeta):
         pool = Pool()
         InvoiceLine = pool.get('account.invoice.line')
         InvoiceLineDetail = pool.get('account.invoice.line.detail')
-        invoice_end = end
         if start is not None and end is not None:
             if ((self.start or datetime.date.min) > end
                     or (self.end or datetime.date.max) < start):
@@ -2123,7 +2118,7 @@ class Premium(metaclass=PoolMeta):
                 invoice_type='out',
                 account=self.account,
                 coverage_start=start,
-                coverage_end=end if self.prorate_premiums else invoice_end,
+                coverage_end=end,
                 details=[InvoiceLineDetail.new_detail_from_premium(self)],
                 )]
 
