@@ -310,16 +310,14 @@ class APIContract(metaclass=PoolMeta):
             }
 
     @classmethod
-    def _subscribe_contracts_examples(cls):
-        examples = super()._subscribe_contracts_examples()
-        for example in examples:
-            for contract in example['input']['contracts']:
-                contract['billing'] = {
-                    'payer': {
-                        'ref': example['input']['parties'][0]['ref']},
-                    'billing_mode': {'code': 'quarterly'},
-                    }
-        return examples
+    def _subscribe_contracts_example_finalize(cls, example):
+        for contract in example['input']['contracts']:
+            contract['billing'] = {
+                'payer': {
+                    'ref': example['input']['parties'][0]['ref']},
+                'billing_mode': {'code': 'quarterly'},
+                }
+        return example
 
     @classmethod
     def compute_billing_modes(cls, parameters):

@@ -397,6 +397,10 @@ class APIModel(Model):
         data['examples'] = []
         for example in getattr(Model, '_%s_examples' % name, DEFAULT_EXAMPLE)():
 
+            finalize_method = getattr(Model,
+                '_%s_example_finalize' % name, None)
+            if finalize_method:
+                finalize_method(example)
             data['examples'].append(example)
 
             # Only check for dev environments
