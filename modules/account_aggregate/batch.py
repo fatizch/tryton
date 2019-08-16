@@ -72,8 +72,6 @@ class ExtractAggregatedMove(flow_batch.BaseMassFlowBatch):
     def sanitize(cls, value):
         if isinstance(value, datetime.date):
             return datetime.datetime.strftime(value, '%Y%m%d')
-        elif isinstance(value, str):
-            return value.encode('UTF-8')
         return value
 
     @classmethod

@@ -1,3 +1,5 @@
+* BUG#12367 Suppression de l'appel à l'encodage dans l'export
+
 Version 2.4 - 2019-04-12
 * BUG#9979 Ajout du compte comptable comme critère de tri lors de l'extraction
 
