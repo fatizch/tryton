@@ -78,7 +78,7 @@ subscriber.save()
 
 Insurer = Model.get('insurer')
 insurer = Insurer()
-insurer.party = Party(name="Insurer")
+insurer.party = create_party_company(name="Insurer")
 insurer.party.save()
 insurer.save()
 
