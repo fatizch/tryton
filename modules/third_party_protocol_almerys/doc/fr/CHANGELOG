@@ -1,4 +1,5 @@
-* OTH#00000 Add Almerys chain
+* BUG#12369 Améliorer la gestion des comptes de prestations dans le batch Almerys
+* OTH#00000 Ajout de la chaine de batch Almerys
 * OTH#00000 Itération sur FEA#11526
 * OTH#00000 Itération sur FEA#11526
 * OTH#00000: Itération sur le batch de génération du flux v3

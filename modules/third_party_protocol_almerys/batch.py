@@ -96,7 +96,7 @@ class AlmerysProtocolBatch(batch.BatchRoot):
             .select(
                 tpperiod.id,
                 where=((tpperiod.status == 'waiting')
-                    & (tpperiod.send_after < treatment_date)
+                    & (tpperiod.send_after <= treatment_date)
                     & (protocol.technical_protocol == 'almerys')),
                 order_by=[protocol.almerys_ss_groupe, contract.contract_number])
             )
@@ -491,7 +491,8 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                         first_period = next(tpp
                             for tpp in all_periods
                             if tpp.protocol.almerys_support_tp)
-                        bank_account = covered.party.claim_bank_account
+                        bank_account = covered.party.claim_bank_account or \
+                            contract.subscriber.claim_bank_account
                         bank = None
                         if bank_account:
                             bank_number = iban.compact(bank_account.number)
@@ -520,6 +521,16 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                                         # DATE_EFFET
                                         )
                                     ),
+                                E.DATE_DEBUT_VALIDITE(
+                                    first_period.start_date.isoformat()),
+                                E.ACTIVATION_DESACTIVATION('AC'),
+                                E.ENVOI(
+                                    first_period.extra_details.get(
+                                        tp_prefix + 'service_tp_envoi',
+                                        'AD'))
+                                )
+                        else:
+                            service_tp = E.SERVICE_TP(
                                 E.DATE_DEBUT_VALIDITE(
                                     first_period.start_date.isoformat()),
                                 E.ACTIVATION_DESACTIVATION('AC'),
