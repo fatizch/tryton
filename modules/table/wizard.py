@@ -57,9 +57,9 @@ class Import2DTable(Wizard):
     def get_dimension_value(self, indexed_cache, valued_cache, index, value,
             type_index):
         if index not in indexed_cache:
-            kind = self.get_field_name(type_index)
+            field_name = self.get_field_name(type_index)
             for key, dim_value in valued_cache.items():
-                if key == value or (kind == 'range'
+                if key == value or (field_name == 'start'
                         and Decimal(key) == Decimal(value)):
                     break
             else:
