@@ -1,3 +1,5 @@
+* FEA#12326 Possibilité de saisir des notes durant le processus d'analyse de risque et seulement visible par la bulle médicale
+
 Version 2.4 - 2019-04-12
 * FEA#11249 Affichage des exclusions et surprimes sur les lignes d'analyse de risque
 * BUG#11143 Filtrer les données complémentaires de type "analyse de risques" sur les contrats / garanties souscrites

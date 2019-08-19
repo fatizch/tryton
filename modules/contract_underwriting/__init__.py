@@ -7,6 +7,7 @@ from . import report_engine
 from . import rule_engine
 from . import test_case
 from trytond.pool import Pool
+from . import note
 
 
 def register():
@@ -27,3 +28,7 @@ def register():
         rule_engine.RuleEngine,
         test_case.TestCaseModel,
         module='contract_underwriting', type_='model')
+    Pool.register(
+        note.ContractNote,
+        module='contract_underwriting', type_='model',
+        depends=['note_authorizations'])
