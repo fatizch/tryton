@@ -86,14 +86,14 @@ class CoveredElement(metaclass=PoolMeta):
 
     is_noemie = fields.Function(
         fields.Boolean('Is Noemie'),
-        'getter_is_noemie')
+        'on_change_with_is_noemie')
     noemie_status = fields.Function(
         fields.Selection([
             ('', ''), ('waiting', 'Waiting'),
             ('acquitted', 'Acquitted'), ('rejected', 'Rejected'),
             ('reported', 'Reported')], 'Noemie Status',
             depends=['is_noemie']),
-        'getter_noemie_status')
+        'on_change_with_noemie_status')
     noemie_status_string = noemie_status.translated('noemie_status')
     noemie_update_date = fields.Date('Noemie Update Date',
         states={'invisible': ~Eval('is_noemie') | ~Eval('noemie_update_date')},
@@ -168,10 +168,12 @@ class CoveredElement(metaclass=PoolMeta):
                         item2.is_noemie == Literal(True)) & (
                         covered_up.party != Null)))
 
-    def getter_is_noemie(self, name):
-        return self.item_desc.is_noemie
+    @fields.depends('item_desc')
+    def on_change_with_is_noemie(self, name=''):
+        return self.item_desc and self.item_desc.is_noemie
 
-    def getter_noemie_status(self, name):
+    @fields.depends('noemie_return_code', 'is_noemie')
+    def on_change_with_noemie_status(self, name=''):
         if not self.is_noemie:
             return ''
         elif not self.noemie_return_code:
@@ -206,7 +208,6 @@ class CoveredElement(metaclass=PoolMeta):
             if covered_elements:
                 self.noemie_return_code = covered_elements[0].noemie_return_code
                 self.noemie_update_date = covered_elements[0].noemie_update_date
-                self.noemie_status = covered_elements[0].noemie_status
                 self.noemie_start_date = min(
                     covered_elements[0].noemie_start_date, self.start_date)
                 if covered_elements[0].noemie_end_date:
@@ -237,11 +238,12 @@ class CoveredElement(metaclass=PoolMeta):
                 self.noemie_end_date = self.noemie_start_date
             if (prev_start_date != self.noemie_start_date) or \
                     (prev_end_date != self.noemie_end_date):
-                self.noemie_status = 'waiting'
+                self.noemie_return_code = ''
+                self.noemie_status = self.on_change_with_noemie_status()
                 for covered in covered_elements:
                     covered.noemie_start_date = self.noemie_start_date
                     covered.noemie_end_date = self.noemie_end_date
-                    covered.noemie_status = 'waiting'
+                    covered.noemie_return_code = ''
                 if covered_elements:
                     CoveredElement.save(covered_elements)
 
@@ -256,9 +258,15 @@ class CoveredElement(metaclass=PoolMeta):
                 self.noemie_end_date or date.min)
         return res
 
-    @fields.depends('noemie_return_code', 'noemie_update_date', 'noemie_status')
+    @fields.depends('noemie_return_code', 'noemie_update_date', 'noemie_status',
+        'start_date', 'end_date', 'is_noemie')
     def on_change_party(self):
         super().on_change_party()
+
+    @fields.depends('noemie_return_code', 'noemie_update_date', 'noemie_status',
+        'start_date', 'end_date', 'is_noemie')
+    def on_change_item_desc(self):
+        super().on_change_item_desc()
 
     @classmethod
     def update_noemie_status(cls, covered_elements, noemie_return_code,
@@ -284,3 +292,8 @@ class CoveredElement(metaclass=PoolMeta):
         elif covered_elements[0].noemie_status == 'acquitted':
             Event.notify_events(covered_elements,
                 'noemie_acquitements', description=description)
+
+    def update_item_desc(self):
+        res = super().update_item_desc()
+        self.is_noemie = self.on_change_with_is_noemie()
+        return res

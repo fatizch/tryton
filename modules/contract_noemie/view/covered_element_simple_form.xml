@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="//field[@name='party']" position="after">
-        <group id="noemie_management" colspan="2" col="2" string="Noemie management">
+        <group id="noemie_management" colspan="4" col="4" string="Noemie management">
             <label name="noemie_start_date"/>
             <field name="noemie_start_date"/>
             <label name="noemie_end_date"/>
@@ -13,7 +13,7 @@ this repository contains the full copyright notices and license terms. -->
             <label name="noemie_update_date"/>
             <field name="noemie_update_date"/>
             <label name="noemie_return_code"/>
-            <field name="noemie_return_code"/>
+            <field name="noemie_return_code" colspan="3"/>
         </group>
     </xpath>
 </data>

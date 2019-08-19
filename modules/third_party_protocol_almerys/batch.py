@@ -474,6 +474,7 @@ class AlmerysProtocolBatch(batch.BatchRoot):
                             beneficiaire.append(produit)
 
                     noemise = (covered.item_desc.is_noemie
+                            and covered.noemie_status == 'waiting'
                             and health_complement
                             and health_complement.hc_system
                             and health_complement.insurance_fund_number)

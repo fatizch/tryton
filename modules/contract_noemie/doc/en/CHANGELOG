@@ -1,3 +1,4 @@
+* BUG#12370 Fix Noemie dates
 * FEA#11778 Fix Noemie status management for endorsements
 * FEA#11778 Add test
 * OTH#0000 Add batch chain
