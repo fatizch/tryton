@@ -1,3 +1,4 @@
+* FEA#12327 Add contract summary to be displayed during underwriting
 * FEA#12229 Manage loan contracts in subscription API
 * FEA#12047 Eligibility rules management
 * FEA#12121 Allow to consider a bank as a lender

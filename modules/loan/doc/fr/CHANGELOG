@@ -1,3 +1,4 @@
+* FEA#12327 Ajout d'une synthèse du dossier (personne couverte et montants assurés) pour que la bulle médicale puisse en prendre connaissance rapidement pendant le processus d'analyse de risque
 * FEA#12229 Gestion des contrats emprunteurs dans les API de souscription
 * FEA#12047 Gestion de l'éligibilité par prêts
 * FEA#12121 Possibilité de considérer une banque comme organisme prêteur

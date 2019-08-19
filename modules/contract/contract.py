@@ -303,6 +303,7 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
     product_icon = fields.Function(
         fields.Char('Product Icon'),
         'getter_product_icon')
+    summary = fields.Function(fields.Text('Summary'), 'get_summary')
 
     @classmethod
     def __setup__(cls):
@@ -1758,6 +1759,18 @@ class Contract(model.CoogSQL, model.CoogView, with_extra_data(['contract'],
                 value_(self, 'extra_data_values'),
             }
 
+    def get_summary_content(self, label, at_date=None, lang=None):
+        if label is True:
+            label = self.rec_name
+        res = (label or '', [])
+        if self.contract_number:
+            res[1].append(coog_string.get_field_summary(self, 'contract_number',
+                    True, at_date, lang))
+        if self.product:
+            res[1].append(coog_string.get_field_summary(self, 'product',
+                    True, at_date, lang))
+        return res
+
 
 class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
             schema='coverage', field_name='current_extra_data',
@@ -2427,6 +2440,13 @@ class ContractOption(model.CoogSQL, model.CoogView, with_extra_data(['option'],
                     'sub_status': sub_status if existing_status == -1 else
                     existing_status,
                     })
+
+    def get_summary_content(self, label, at_date=None, lang=None):
+        res = [self.rec_name, []]
+        if self.current_extra_data:
+            res[1].append(coog_string.get_field_summary(self,
+                'current_extra_data', True, at_date, lang))
+        return res
 
 
 class ContractOptionVersion(model.CoogSQL, model.CoogView,

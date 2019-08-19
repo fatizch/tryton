@@ -602,6 +602,9 @@ class Loan(Workflow, model.CoogSQL, model.CoogView, with_extra_data(['loan'])):
             name.append('[%s]' % self.number)
         if self.kind:
             name.append(coog_string.translate_value(self, 'kind'))
+        if self.kind == 'fixed_rate':
+            name.append('%s%%' % coog_string.format_number('%.2f',
+                    self.rate * 100))
         if self.amount:
             name.append(self.currency.amount_as_string(self.get_loan_amount()))
         return ' '.join(name)

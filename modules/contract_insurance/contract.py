@@ -450,6 +450,29 @@ class Contract(Printable):
         Option.write(options, {'status': 'void'})
         super().void(contracts, void_reason)
 
+    def get_summary_content(self, label, at_date=None, lang=None, path=None):
+        res = super(Contract, self).get_summary_content(label, at_date, lang)
+        if self.covered_elements and self.status == 'quote':
+            res[1].append(coog_string.get_field_summary(self,
+                'covered_elements', False, at_date, lang))
+        return res
+
+    def get_age_calculation_rule(self):
+        # return 'at_end_of_month', None
+        # return 'at_given_day_of_year', datetime.date(2000, 1, 1)
+        return 'real', None
+
+    def calculate_age(self, birth_date, at_date):
+        kind, date_ref = self.get_age_calculation_rule()
+        if kind == 'at_end_of_month':
+            birthday_month_after = birth_date + relativedelta(months=1)
+            year, month, _ = birthday_month_after.timetuple()[0:3]
+            birth_date = datetime.date(year, month, 1)
+        elif kind == 'at_given_day_of_year':
+            birth_date = datetime.date(birth_date.year, date_ref.month,
+                date_ref.day)
+        return relativedelta(at_date, birth_date).years
+
 
 class ContractOption(Printable):
     __name__ = 'contract.option'
@@ -1904,6 +1927,20 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
             to_date_versions = [v for v in self.versions
                 if v.start is None or v.start < new_end_date]
             self.versions = to_date_versions
+
+    def get_summary_content(self, label, at_date=None, lang=None):
+        res = [self.rec_name, []]
+        if self.party.is_person:
+            _, value = coog_string.get_field_summary(self.party,
+                'birth_date', False, at_date, lang)
+            res[0] += ' - %s (%s)' % (value, self.contract.calculate_age(
+                    birth_date=self.party.birth_date,
+                    at_date=at_date or self.contract.initial_start_date))
+        res[1].append(coog_string.get_field_summary(self,
+            'party_extra_data', True, at_date, lang))
+        res[1].append(coog_string.get_field_summary(self, 'options', True,
+            at_date, lang))
+        return tuple(res)
 
 
 class CoveredElementVersion(model.CoogSQL, model.CoogView,

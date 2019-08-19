@@ -195,6 +195,13 @@ class Contract(metaclass=PoolMeta):
             self.raise_user_warning(self.rec_name, 'bad_loan_dates',
                 ('\t\n'.join(x.rec_name for x in bad_loans),))
 
+    def get_summary_content(self, label, at_date=None, lang=None):
+        res = super(Contract, self).get_summary_content(label, at_date, lang)
+        if self.used_loans:
+            res[1].append(coog_string.get_field_summary(self, 'used_loans',
+                True, at_date, lang))
+        return res
+
 
 class ContractLoan(model.CoogSQL, model.CoogView):
     'Contract Loan'
@@ -244,6 +251,14 @@ class ContractLoan(model.CoogSQL, model.CoogView):
     @fields.depends('loan')
     def on_change_with_loan_state(self, name=None):
         return self.loan.state if self.loan else ''
+
+    def get_summary_content(self, label, at_date=None, lang=None):
+        res = super(ContractOption, self).get_summary_content(label, at_date,
+            lang)
+        if self.loan_shares:
+            res[1].append(coog_string.get_field_summary(self,
+                'loan_shares', False, at_date, lang))
+        return res
 
 
 class ContractOption(metaclass=PoolMeta):
