@@ -1930,7 +1930,7 @@ class CoveredElement(model.with_local_mptt('contract'), model.CoogView,
 
     def get_summary_content(self, label, at_date=None, lang=None):
         res = [self.rec_name, []]
-        if self.party.is_person:
+        if self.party and self.party.is_person:
             _, value = coog_string.get_field_summary(self.party,
                 'birth_date', False, at_date, lang)
             res[0] += ' - %s (%s)' % (value, self.contract.calculate_age(

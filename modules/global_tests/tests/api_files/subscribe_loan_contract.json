@@ -75,6 +75,11 @@
                         {
                             "coverage": {"code": "loan_death_coverage"},
                             "extra_data": {},
+                            "beneficiary_clause": {
+                                "clause": {
+                                    "code": "clause_beneficiaire_emprunteur"
+                                }
+                            },
                             "loan_shares": [
                                 {
                                     "loan": {"ref": "1"},
@@ -95,6 +100,11 @@
                         {
                             "coverage": {"code": "loan_death_coverage"},
                             "extra_data": {},
+                            "beneficiary_clause": {
+                                "clause": {
+                                    "code": "clause_beneficiaire_emprunteur"
+                                }
+                            },
                             "loan_shares": [
                                 {
                                     "loan": {"ref": "1"},
@@ -126,7 +136,8 @@
         }
     ],
     "options": {
-        "activate": true
+        "start_process": true,
+        "fast_forward": true
     }
 }
 

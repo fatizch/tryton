@@ -115,6 +115,11 @@
                             "coverage_amount": "10000.00",
                             "extra_data": {
                                 "double_for_accidents": true
+                            },
+                            "beneficiary_clause": {
+                                "clause": {
+                                    "code": "clause_beneficiaire_standard"
+                                }
                             }
                         }
                     ]
@@ -131,6 +136,11 @@
                             "coverage_amount": "50000.00",
                             "extra_data": {
                                 "double_for_accidents": true
+                            },
+                            "beneficiary_clause": {
+                                "clause": {
+                                    "code": "clause_beneficiaire_standard"
+                                }
                             }
                         },
                         {
@@ -146,6 +156,7 @@
         }
     ],
     "options": {
-        "activate": true
+        "start_process": true,
+        "fast_forward": true
     }
 }

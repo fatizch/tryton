@@ -6001,8 +6001,6 @@ if TEST_APIS:  # {{{
         {'_debug_server': True, 'dist_network': network.id})
 
     # Simply check this is not an error.
-    # Actually, this should probably fail, since there are blocking document
-    # requests which are not yet received
     assert_eq('contracts' in result, True)
 
     result = run_api(
@@ -6014,8 +6012,6 @@ if TEST_APIS:  # {{{
         {'_debug_server': True, 'dist_network': network.id})
 
     # Simply check this is not an error.
-    # Actually, this should probably fail, because for now beneficiary clauses
-    # are not set, but fortunately, there aren't any checks on activation :D
     assert_eq('contracts' in result, True)
     # }}}
 # }}}
