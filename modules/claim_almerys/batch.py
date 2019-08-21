@@ -498,6 +498,8 @@ class AlmerysStatementCreation(AlmerysXMLBatchMixin):
             statements = []
             for payment in objects:
                 lines = cls.get_statement_lines(payment)
+                if not lines:
+                    continue
                 statement = Statement(
                     date=utils.today(),
                     journal=config.claim_statement_journal,
@@ -532,6 +534,8 @@ Designation Bancaire: {designationBancaire}
         claim, = Claim.search([
                 ('invoice_number', '=', invoice_number),
                 ])
+        if claim.third_party_payment:
+            return []
         lines = []
         for invoice in claim.invoices:
             line = StatementLine()
