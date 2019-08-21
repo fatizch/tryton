@@ -75,6 +75,10 @@ def update_environ(config):
     Batch environ syntax: [PREFIX]_[BATCH_NAME]__[VARIABLE]_[VALUE]
     - Prefix is "TRYTOND_BATCH"
     - BATCH_NAME is the batch __name__ with "_" instead of "."
+    - If there "_" within the BATCH_NAME, we need to flag it with triple
+      underscores.
+       - Exemple: TRYTOND_BATCH_ACCOUNT_AGED___BALANCE_GENERATE__JOB_SIZE=0
+         => account.aged_balance.generate
 
     Exemple: TRYTOND_BATCH_ACCOUNT_INVOICE_GENERATE__JOB_SIZE=0
     In configuration file should be:
@@ -84,12 +88,14 @@ def update_environ(config):
     for key, value in os.environ.items():
         if not key.startswith('TRYTOND_BATCH_'):
             continue
+        # Escape triple underscore
+        key = key.replace('___', '\\')
         try:
             section, option = key[len('TRYTOND_BATCH_'):].lower().split(
                 '__', 1)
         except ValueError:
             continue
-        section = '.'.join(section.split('_'))
+        section = '.'.join(section.split('_')).replace('\\', '_')
         if not config.has_section(section):
             config.add_section(section)
         config.set(section, option, value)
