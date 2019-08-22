@@ -585,9 +585,43 @@ class Premium(model.CoogSQL, model.CoogView):
         return self.parent.rec_name
 
     def get_taxes(self, name):
+        pool = Pool()
+        Tax = pool.get('account.tax')
         if self.rated_entity.__name__ != 'offered.option.description':
             return []
-        return self.rated_entity._get_taxes()
+        taxes = []
+        pattern = self._get_tax_rule_pattern()
+        tax_rule = (self.main_contract.subscriber.customer_tax_rule
+            if self.main_contract and self.main_contract.subscriber else None)
+        for tax in Tax.browse(self.rated_entity._get_taxes()):
+            if tax_rule:
+                tax_ids = tax_rule.apply(tax, pattern)
+                if tax_ids:
+                    taxes.extend(tax_ids)
+            else:
+                taxes.append(tax.id)
+        return taxes
+
+    def _get_tax_rule_pattern(self):
+        from_country = from_subdivision = to_country = to_subdivision = None
+        if self.main_contract:
+            company_address = self.main_contract.company.party.main_address
+            if company_address:
+                from_country = company_address.country
+                from_subdivision = company_address.subdivision
+            if self.main_contract.subscriber:
+                subscriber_address = self.main_contract.subscriber.main_address
+                if subscriber_address:
+                    to_country = subscriber_address.country
+                    to_subdivision = subscriber_address.subdivision
+        return {
+            'from_country': from_country.id if from_country else None,
+            'from_subdivision': (
+                from_subdivision.id if from_subdivision else None),
+            'to_country': to_country.id if to_country else None,
+            'to_subdivision': (
+                to_subdivision.id if to_subdivision else None),
+            }
 
     @classmethod
     def search_main_contract(cls, name, clause):
