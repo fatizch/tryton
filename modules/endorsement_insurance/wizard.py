@@ -102,7 +102,6 @@ class NewCoveredElement(EndorsementWizardStepMixin):
 
 
 class RemoveOption(EndorsementWizardStepMixin):
-
     'Remove Option'
 
     __name__ = 'contract.covered_element.option.remove'
@@ -634,10 +633,12 @@ class ModifyCoveredElement(EndorsementWizardStepMixin):
         return defaults
 
     def step_update(self):
+        ExtraData = Pool().get('extra_data')
         self.update_all_covered()
         endorsement = self.wizard.endorsement
         per_parent = defaultdict(list)
         for covered_element in self.all_covered:
+            ExtraData.check_extra_data(covered_element, 'extra_data')
             per_parent[covered_element.parent].append(covered_element)
 
         contract_endorsements = {}
@@ -1076,6 +1077,9 @@ class CoveredElementDisplayer(model.CoogView):
             self.action = 'add'
         self.sub_status = None
         self.update_icon()
+
+    def get_rec_name(self, name):
+        return self.party.rec_name if self.party else self.name
 
 
 class ExtraPremiumDisplayer(model.CoogView):

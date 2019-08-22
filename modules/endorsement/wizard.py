@@ -639,13 +639,22 @@ class ChangeContractExtraData(EndorsementWizardStepMixin):
 
         return defaults
 
+    def get_rec_name(self, name):
+        pool = Pool()
+        Contract = pool.get('contract')
+        contracts = [Contract(contract_id).rec_name
+            for contract_id, endorsement in self._get_contracts().items()]
+        return ','.join(contracts)
+
     def step_update(self):
         pool = Pool()
         EndorsementExtraData = pool.get(
             'endorsement.contract.extra_data')
+        ExtraData = pool.get('extra_data')
         Contract = pool.get('contract')
         contracts = self._get_contracts()
 
+        ExtraData.check_extra_data(self, 'new_extra_data')
         for contract_id, endorsement in contracts.items():
             EndorsementExtraData.delete(endorsement.extra_datas)
             contract = Contract(contract_id)
@@ -848,10 +857,12 @@ class ManageOptions(EndorsementWizardStepMixin):
             cls.get_all_possible_coverages(x)]
 
     def step_update(self):
+        ExtraData = Pool().get('extra_data')
         self.update_all_options()
         endorsement = self.wizard.endorsement
         per_parent = defaultdict(list)
         for option in self.all_options:
+            ExtraData.check_extra_data(option, 'extra_data')
             per_parent[option.parent].append(option)
 
         contract_endorsements = {}
@@ -1129,6 +1140,9 @@ class OptionDisplayer(model.CoogView):
         cls._error_messages.update({
                 'new_option': 'New Option (%s)',
                 })
+
+    def get_rec_name(self, name):
+        return self.display_name
 
     @property
     def _parent(self):
