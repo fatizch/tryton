@@ -158,6 +158,7 @@ def register():
         module='coog_core')
     Pool.register_post_init_hooks(queue.async_methods_hook, module='coog_core')
     Pool.register_post_init_hooks(add_model_int_comparison, module='coog_core')
+    Pool.register_post_init_hooks(enable_readonly_views, module='coog_core')
 
 
 def cache_fields_get(pool, update):
@@ -290,3 +291,14 @@ def add_readonly_transaction_model(pool, update):
 
     logging.getLogger('modules').info('Adding readonly transaction model mode')
     inject_class(pool, 'model', ModelStorage, DynamicReadonlyTransactionMixin)
+
+
+def enable_readonly_views(pool, update):
+    if update:
+        return
+
+    from trytond.model import ModelView
+    from trytond.modules.coog_core.model import AutoReadonlyViews
+
+    logging.getLogger().info('Enabling auto-readonly views')
+    inject_class(pool, 'model', ModelView, AutoReadonlyViews)

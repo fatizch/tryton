@@ -47,6 +47,11 @@ class AddressDisplayer(model.CoogView):
         'Address Endorsement')
 
     @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls.previous_address.force_readonly_view = True
+
+    @classmethod
     def default_is_new(cls):
         return True
 

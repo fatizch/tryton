@@ -1737,3 +1737,83 @@ def update_selection(instances):
             instance.was_selected = False
         if instance.selected and not instance.was_selected:
             instance.was_selected = True
+
+
+class AutoReadonlyViews(ModelView):
+    '''
+        Allows to dynamically force the views associated to a particular field
+        to be fully readonly.
+
+        Any field with the "force_readonly_view" attribute set (through the
+        __setup__ of the field) will have its views fully readonly.
+    '''
+
+    @classmethod
+    def __post_setup__(cls):
+        super().__post_setup__()
+        for field_name, field in cls._fields.items():
+            if getattr(field, 'force_readonly_view', False):
+                context = field.context or {}
+                context['force_readonly_view'] = True
+                field.context = context
+
+    @classmethod
+    def fields_view_get(cls, view_id=None, view_type='form'):
+        '''
+            This override parses the output of fields_view_get to force
+            readonly on all nested views.
+
+            The 'fields' key contains field definitions, which in some case
+            include nested view definitions.
+
+            So we need to recursively parse views to propagate the forced
+            readonly status. We also need to parse the sub-views to detect
+            nested fields and propagate the readonly status
+        '''
+        view_definition = super().fields_view_get(view_id, view_type)
+        cls.__set_view_fields_readonly(view_definition,
+            force_readonly=Transaction().context.get(
+                'force_readonly_view', False))
+        return view_definition
+
+    @classmethod
+    def __set_view_fields_readonly(cls, view_data, force_readonly=False):
+        pool = Pool()
+        for field_name, field_data in view_data['fields'].items():
+            field = cls._fields[field_name]
+
+            if getattr(field, 'force_readonly_view', False):
+                field_context = json.loads(
+                    field_data.get('context', None) or '{}')
+                field_context['force_readonly_view'] = True
+                field_data['context'] = json.dumps(field_context)
+
+            if force_readonly:
+                field_data['readonly'] = True
+
+            force_nested_views = force_readonly or getattr(
+                field, 'force_readonly_view', False)
+
+            if 'views' not in field_data:
+                continue
+
+            model_name = None
+            if isinstance(field,
+                    (tryton_fields.Many2One, tryton_fields.One2Many)):
+                model_name = field.model_name
+            elif isinstance(field,
+                    (tryton_fields.Many2Many, tryton_fields.One2One)):
+                if field.target is not None:
+                    model_name = getattr(pool.get(field.relation_name),
+                        field.target).model_name
+                else:
+                    model_name = field.relation_name
+
+            if model_name is None:
+                # Should not happen, because there should not be a view if the
+                # field is not a relation
+                continue
+
+            for sub_view_data in field_data['views'].values():
+                pool.get(model_name).__set_view_fields_readonly(sub_view_data,
+                    force_readonly=force_nested_views)
