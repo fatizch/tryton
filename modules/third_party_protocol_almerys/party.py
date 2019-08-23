@@ -3,7 +3,6 @@
 from sql import Null
 from sql.conditionals import Coalesce
 
-from trytond import backend
 from trytond.config import config
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
@@ -64,7 +63,6 @@ class Address(metaclass=PoolMeta):
         pool = Pool()
         Address = pool.get('party.address')
         Country = pool.get('country.country')
-        TableHandler = backend.get('TableHandler')
 
         super().__register__(module_name)
 
@@ -91,11 +89,6 @@ class Address(metaclass=PoolMeta):
                 where=((address_t.street == Null)
                     | (address_t.zip == Null)
                     | (address_t.country == Null))))
-
-        address_h = TableHandler(Address, module_name)
-        address_h.not_null_action('street', 'add')
-        address_h.not_null_action('zip', 'add')
-        address_h.not_null_action('country', 'add')
 
     @fields.depends('party')
     def on_change_with_is_person(self, name=None):
