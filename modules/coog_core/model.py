@@ -1780,16 +1780,20 @@ class AutoReadonlyViews(ModelView):
     def __set_view_fields_readonly(cls, view_data, force_readonly=False):
         pool = Pool()
         for field_name, field_data in view_data['fields'].items():
-            field = cls._fields[field_name]
+            if force_readonly:
+                field_data['readonly'] = True
+
+            field = cls._fields.get(field_name, None)
+            if field is None:
+                # Some elements of the view may not be actual fields (for
+                # instance they could be dynamically injected into the view)
+                continue
 
             if getattr(field, 'force_readonly_view', False):
                 field_context = json.loads(
                     field_data.get('context', None) or '{}')
                 field_context['force_readonly_view'] = True
                 field_data['context'] = json.dumps(field_context)
-
-            if force_readonly:
-                field_data['readonly'] = True
 
             force_nested_views = force_readonly or getattr(
                 field, 'force_readonly_view', False)
@@ -1803,7 +1807,7 @@ class AutoReadonlyViews(ModelView):
                 model_name = field.model_name
             elif isinstance(field,
                     (tryton_fields.Many2Many, tryton_fields.One2One)):
-                if field.target is not None:
+                if field.target:  # Function fields with None / '' as reverse
                     model_name = getattr(pool.get(field.relation_name),
                         field.target).model_name
                 else:
