@@ -303,10 +303,10 @@ Check commissions (example: broker: 10% x 100 x 5 months / 2 )::
     2
     >>> [(c.amount, c.agent.id, c.calculation_description)
     ...     for c in recovery_commissions] == [
-    ...     (-25, 1, 'Recovery commission calculation details\n'
-    ...         '-25.0000000 = 0 - 25.0000000'),
-    ...     (-150, 2, 'Recovery commission calculation details\n'
-    ...         '-150.0000000 = 0 - 150.0000000')]
+    ...     (Decimal('-25.00000000'), 1, 'Recovery commission calculation details\n'
+    ...         '-25.00000000 = 0 - 25.0000000'),
+    ...     (Decimal('-150.00000000'), 2, 'Recovery commission calculation details\n'
+    ...         '-150.00000000 = 0 - 150.0000000')]
     True
 
 Reactivate Contract::

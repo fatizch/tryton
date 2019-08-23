@@ -1,3 +1,5 @@
+* BUG#12438 Correctif sur le nombre de décimale dans le calcul du montant de commission
+
 Version 2.4 - 2019-04-12
 * OTH#0000 Le contrat commissionné est le contrat parent de l'option lors du calcul des reprises de commission
 

@@ -3,10 +3,13 @@
 from sql import Column, Literal
 from sql.operators import Or
 from sql.aggregate import Sum
+from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.server_context import ServerContext
+from trytond.modules.commission_insurance.commission import \
+    COMMISSION_AMOUNT_DIGITS
 
 from trytond.modules.coog_core import utils
 
@@ -122,8 +125,9 @@ class ContractOption(metaclass=PoolMeta):
                         commission.commissioned_option = option
                         commission.commissioned_contract = \
                             option.parent_contract
-                        commission.amount = -recovery_amount + \
-                            existing_recovery_amount
+                        commission.amount = (-recovery_amount +
+                            existing_recovery_amount).quantize(
+                             Decimal(10) ** -COMMISSION_AMOUNT_DIGITS)
                         commission.extra_details = {}
                         commission.extra_details.update(
                             commission.get_recovery_details(
