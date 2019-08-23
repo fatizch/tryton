@@ -1,3 +1,4 @@
+* OTH#00000 Correction du chargement des banques: gestion du cas où un même BIC est redondant dans un fichier de banques
 * BUG#12296 Export de l'api de récupération d'une banque à partir d'un iban
 * FEA#11795 Chargement des banques et des agences des fichiers Banque de France
 

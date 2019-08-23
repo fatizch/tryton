@@ -157,6 +157,7 @@ class BankDataSetWizard(metaclass=PoolMeta):
                 existing_parties[x.bic[:8]] = x.party
 
         existing_banks, existing_parties = {}, {}
+        treated_banks = set([''])
         load_existing(existing_banks, existing_parties)
         agencies_to_create = []
         agencies_to_update = []
@@ -175,7 +176,7 @@ class BankDataSetWizard(metaclass=PoolMeta):
                             clean_line.bic, clean_line.name, \
                             clean_line.commercial_name, clean_line.street, \
                             clean_line.zip_code, clean_line.city
-                        if bic == '':
+                        if bic in treated_banks:
                             continue
                         party = existing_parties.get(bic[:8], None) or Party(
                             name=name,
@@ -209,6 +210,7 @@ class BankDataSetWizard(metaclass=PoolMeta):
                                 party=party,
                                 name=name,
                                 address=address)
+                        treated_banks.add(bic)
                         saver_bank.append(bank)
                     elif line[0] == '3':
                         if first_agency is False:
