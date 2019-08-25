@@ -492,6 +492,10 @@ msgctxt "field:contract.billing_information,possible_payment_terms:"
 msgid "Possible Payment Term"
 msgstr "Conditions de paiement offerts"
 
+msgctxt "field:contract.billing_information,process_method:"
+msgid "Payment Process Method"
+msgstr "Méthode de traitement"
+
 msgctxt "field:contract.billing_information,rec_name:"
 msgid "Record Name"
 msgstr "Nom"
@@ -927,6 +931,10 @@ msgctxt "field:offered.billing_mode,ordered_payment_terms:"
 msgid "Ordered Payment Terms"
 msgstr "Modifier l'ordre des conditions de paiements"
 
+msgctxt "field:offered.billing_mode,process_method:"
+msgid "Process Method"
+msgstr "Méthode de traitement"
+
 msgctxt "field:offered.billing_mode,products:"
 msgid "Products"
 msgstr "Produits"
@@ -1103,6 +1111,10 @@ msgstr "Date de Création"
 msgctxt "field:offered.product.billing_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:offered.product.billing_rule,func_key:"
+msgid "Funtional Key"
+msgstr "Clé fonctionnelle"
 
 msgctxt "field:offered.product.billing_rule,id:"
 msgid "ID"

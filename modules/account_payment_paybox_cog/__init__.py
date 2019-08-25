@@ -5,6 +5,9 @@ from . import payment
 from . import batch
 from . import wizard
 from . import move
+from . import account
+from . import offered
+from . import contract
 
 
 def register():
@@ -15,6 +18,7 @@ def register():
         payment.ProcessPayboxUrl,
         batch.PaymentAcknowledgeBatch,
         move.MoveLine,
+        account.Configuration,
         module='account_payment_paybox_cog', type_='model')
     Pool.register(
         payment.PaymentCreation,
@@ -22,3 +26,8 @@ def register():
         wizard.CreatePayboxPayment,
         wizard.ProcessPayboxPayment,
         module='account_payment_paybox_cog', type_='wizard')
+    Pool.register(
+        contract.Contract,
+        offered.Product,
+        module='account_payment_paybox_cog', type_='model',
+        depends=['contract_insurance_invoice'])

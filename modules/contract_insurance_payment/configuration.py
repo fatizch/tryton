@@ -11,6 +11,6 @@ class Configuration(metaclass=PoolMeta):
     __name__ = 'account.configuration'
 
     def get_payment_journal(self, line):
-        if line.contract and line.contract.product.payment_journal:
-            return line.contract.product.payment_journal
+        if line.contract and line.contract.product.sepa_payment_journal:
+            return line.contract.product.sepa_payment_journal
         return super(Configuration, self).get_payment_journal(line)

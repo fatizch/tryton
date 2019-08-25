@@ -18,8 +18,8 @@ class Journal(metaclass=PoolMeta):
     product = fields.Function(
         fields.Many2One('offered.product', 'Product'),
         'get_product')
-    products = fields.One2Many('offered.product', 'payment_journal', 'Products'
-        )
+    products = fields.One2Many('offered.product', 'sepa_payment_journal',
+        'Products')
 
     @classmethod
     def copy(cls, instances, default=None):

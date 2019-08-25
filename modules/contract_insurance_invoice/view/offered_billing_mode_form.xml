@@ -15,8 +15,8 @@ this repository contains the full copyright notices and license terms. -->
     <label name="sync_month"/>
     <field name="sync_month"/>
     <newline/>
-    <label name="direct_debit"/>
-    <field name="direct_debit"/>
+    <label name="process_method"/>
+    <field name="process_method"/>
     <label name="allowed_direct_debit_days"/>
     <field name="allowed_direct_debit_days"/>
     <newline/>

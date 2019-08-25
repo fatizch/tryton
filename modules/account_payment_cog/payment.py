@@ -960,7 +960,7 @@ class Configuration(CompanyMultiValueMixin, metaclass=PoolMeta):
     __name__ = 'account.configuration'
 
     direct_debit_journal = fields.MultiValue(
-        fields.Many2One('account.payment.journal', 'Direct Debit Journal',
+        fields.Many2One('account.payment.journal', 'Sepa Direct Debit Journal',
             domain=[('process_method', '!=', 'manual')]))
     reject_fee_journal = fields.MultiValue(
         fields.Many2One('account.journal', 'Reject Fee Journal',

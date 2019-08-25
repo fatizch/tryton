@@ -3,7 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="//group[@id='data']" position="inside">
-        <label name="sepa_payment_journal"/>
-        <field name="sepa_payment_journal"/>
+        <label name="paybox_payment_journal"/>
+        <field name="paybox_payment_journal"/>
     </xpath>
 </data>

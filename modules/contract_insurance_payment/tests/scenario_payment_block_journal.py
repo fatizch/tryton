@@ -131,7 +131,7 @@ journal2.save()
 product = init_product(name='product_1')
 product = add_quote_number_generator(product)
 product = add_premium_rules(product)
-product.payment_journal = journal
+product.sepa_payment_journal = journal
 product = add_insurer_to_product(product)
 for coverage in product.coverages:
     coverage.name = 'coverage_1'
@@ -145,7 +145,7 @@ product.save()
 product2 = init_product(name='product_2')
 product2 = add_quote_number_generator(product2)
 product2 = add_premium_rules(product2)
-product2.payment_journal = journal2
+product2.sepa_payment_journal = journal2
 product2 = add_insurer_to_product(product2)
 for coverage in product2.coverages:
     coverage.name = 'coverage_2'
@@ -257,7 +257,7 @@ create_payment = Wizard('account.payment.creation',
 
 # #Comment# #Generate Set same product to be able to generate the payments
 # #Comment# #But the journal won't be selectable.
-product.payment_journal = journal2
+product.sepa_payment_journal = journal2
 product.save()
 
 create_payment = Wizard('account.payment.creation', lines_to_pay)
@@ -268,8 +268,8 @@ create_payment.form.journal == journal2
 
 # #Comment# #Remove journals to be able to change payment journal without any
 # restrictions
-product.payment_journal = None
-product2.payment_journal = None
+product.sepa_payment_journal = None
+product2.sepa_payment_journal = None
 product.save()
 product2.save()
 
@@ -279,7 +279,7 @@ len(create_payment.form.possible_journals) == 2
 
 # #Comment# #Remove Set the journal on 1 product only: we are able to generate
 # the payment but the journal won't be selectable
-product2.payment_journal = journal
+product2.sepa_payment_journal = journal
 product2.save()
 
 create_payment = Wizard('account.payment.creation', lines_to_pay)

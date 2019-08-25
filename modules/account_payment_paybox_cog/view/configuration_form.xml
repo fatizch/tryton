@@ -2,8 +2,8 @@
 <!-- This file is part of Coog. The COPYRIGHT file at the top level of
 this repository contains the full copyright notices and license terms. -->
 <data>
-    <xpath expr="//group[@id='data']" position="inside">
-        <label name="sepa_payment_journal"/>
-        <field name="sepa_payment_journal"/>
+    <xpath expr="/form/field[@name='direct_debit_journal']" position="after">
+        <label name="paybox_direct_debit_journal"/>
+        <field name="paybox_direct_debit_journal"/>
     </xpath>
 </data>

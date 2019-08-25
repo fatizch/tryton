@@ -317,7 +317,7 @@ class PaymentCreationStart(metaclass=PoolMeta):
             return ids
         lines = Line.browse(ids)
         return [x.id for x in lines if x.contract
-            and x.contract.product.payment_journal == self.journal]
+            and x.contract.product.sepa_payment_journal == self.journal]
 
 
 class PaymentCreation(metaclass=PoolMeta):

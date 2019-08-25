@@ -134,8 +134,8 @@ msgstr ""
 "dont le numéro de regroupement est %(merged_id)s"
 
 msgctxt "field:account.configuration,direct_debit_journal:"
-msgid "Direct Debit Journal"
-msgstr "Journal de paiement automatique"
+msgid "Sepa Direct Debit Journal"
+msgstr "Journal de paiement automatique sepa"
 
 msgctxt "field:account.configuration,reject_fee_journal:"
 msgid "Reject Fee Journal"
@@ -812,7 +812,7 @@ msgid "Export Directory"
 msgstr "Répertoire d'export"
 
 msgctxt "help:account.payment.journal,tags:"
-msgid "Configuration object tags list. Allows searching for all configuration objects related to a tag."
+msgid "Add and search all related configuration objects based on a tag"
 msgstr ""
 "Liste des labels sur l'objet de configuration. Permet ensuite de rechercher "
 "l'ensemble des objets de configuration liés à un même label."
@@ -1278,12 +1278,12 @@ msgstr "Traiter"
 # Custom translations below
 
 msgctxt "selection:account.move.line,payment_kind:account_payment."
-msgid "Receivable"
-msgstr "À recevoir"
-
-msgctxt "selection:account.move.line,payment_kind:account_payment."
 msgid "Payable"
 msgstr "À payer"
+
+msgctxt "selection:account.move.line,payment_kind:account_payment."
+msgid "Receivable"
+msgstr "À recevoir"
 
 msgctxt "selection:account.payment.group,kind:account_payment."
 msgid "Payable"

@@ -28,6 +28,6 @@ class MoveLine(metaclass=PoolMeta):
     def get_configuration_journals_from_lines(cls, lines):
         products = list({x.contract.product for x in lines
                 if x.contract and x.contract.product})
-        payment_journals = list({x.payment_journal for x in products
-                if x.payment_journal})
+        payment_journals = list({x.sepa_payment_journal
+                for x in products if x.sepa_payment_journal})
         return payment_journals

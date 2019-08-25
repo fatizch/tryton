@@ -1684,6 +1684,9 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
     direct_debit = fields.Function(
         fields.Boolean('Direct Debit Payment'), 'on_change_with_direct_debit',
         searcher='search_direct_debit')
+    process_method = fields.Function(
+        fields.Char('Payment Process Method'),
+        'on_change_with_process_method', searcher='searcher_process_method')
     direct_debit_day_selector = fields.Function(
         fields.Selection('get_allowed_direct_debit_days',
             'Direct Debit Day', states={
@@ -1958,8 +1961,11 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
 
     @fields.depends('billing_mode')
     def on_change_with_direct_debit(self, name=None):
-        if self.billing_mode:
-            return self.billing_mode.direct_debit
+        return self.billing_mode and self.billing_mode.direct_debit
+
+    @fields.depends('billing_mode')
+    def on_change_with_process_method(self, name=None):
+        return self.billing_mode.process_method if self.billing_mode else ''
 
     @fields.depends('billing_mode')
     def on_change_with_possible_payment_terms(self, name=None):
@@ -2012,8 +2018,17 @@ class ContractBillingInformation(model._RevisionMixin, model.CoogSQL,
         values['_func_key'] = values.get('date', None)
 
     @classmethod
-    def search_direct_debit(cls, name, domain):
-        return [('billing_mode.direct_debit',) + tuple(domain[1:])]
+    def search_direct_debit(cls, name, clause):
+        _, operator, value = clause
+        if ((operator == '=' and value is True) or
+                (operator == '!=' and value is False)):
+            return [('billing_mode.process_method', '=', 'sepa')]
+        else:
+            return [('billing_mode.process_method', '!=', 'sepa')]
+
+    @classmethod
+    def searcher_process_method(cls, name, clause):
+        return [('billing_mode.process_method',) + clause[1:]]
 
     def getter_possible_payers(self, name):
         if self.contract.subscriber:

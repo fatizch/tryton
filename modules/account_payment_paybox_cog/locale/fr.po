@@ -18,6 +18,14 @@ msgctxt "error:account.payment:"
 msgid "Multiple parties is not supported"
 msgstr "La création du paiement avec plusieurs tiers n'est pas supportée"
 
+msgctxt "error:contract:"
+msgid "Invoices number should be positive"
+msgstr "Le nombre de quittances doit être positif"
+
+msgctxt "error:contract:"
+msgid "Lines to pay number should be strictily positive"
+msgstr "Le nombre de lignes à payer doit être strictement positif"
+
 msgctxt "error:paybox_payment.create:"
 msgid ""
 "Could not create paybox payments. There is at least one another validated or"
@@ -26,6 +34,10 @@ msgstr ""
 "Impossible de créer les paiements paybox. Il existe d'autre(s) paiement(s) "
 "validé(s) ou en traitement associé(s) à la même ligne comptable pour la "
 "sélection (%(selection)s)"
+
+msgctxt "field:account.configuration,paybox_direct_debit_journal:"
+msgid "Paybox Direct Debit Journal"
+msgstr "Journal de paiement automatique Paybox"
 
 msgctxt "field:account.payment,line_valid:"
 msgid "Line Not Valid"
@@ -42,6 +54,22 @@ msgstr "Identifiant"
 msgctxt "field:account.payment.process.paybox_url,paybox_url:"
 msgid "Click To Open"
 msgstr "Cliquer pour ouvrir"
+
+msgctxt "field:offered.product,paybox_payment_journal:"
+msgid "Paybox Payment Journal"
+msgstr "Journal de paiement Paybox"
+
+msgctxt "help:account.configuration,paybox_direct_debit_journal:"
+msgid "Default Paybox payment journal"
+msgstr "Journal de paiement Paybox par défaut"
+
+msgctxt "help:offered.product,paybox_payment_journal:"
+msgid ""
+"Paybox payment journal which will be used if a product's billing mode "
+"process method is Paybox"
+msgstr ""
+"Le journal de paiement Paybox qui sera utilisé si la méthode de traitement "
+"du mode de quittancement du produit est Paybox"
 
 msgctxt "model:account.payment.process.paybox_url,name:"
 msgid "Process Paybox Url"

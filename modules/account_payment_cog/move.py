@@ -271,7 +271,7 @@ class MoveLine(metaclass=PoolMeta):
             'party': self.party.id,
             'amount': amount,
             'line': self.id,
-            'date': self.payment_date,
+            'date': self.payment_date or utils.today(),
             'state': 'approved',
             }
 

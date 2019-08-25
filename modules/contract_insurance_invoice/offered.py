@@ -1,7 +1,10 @@
 # This file is part of Coog. The COPYRIGHT file at the top level of
 # this repository contains the full copyright notices and license terms.
 import datetime
+
 from decimal import Decimal, InvalidOperation
+from sql import Literal
+
 from dateutil.rrule import rrule, YEARLY, MONTHLY
 from dateutil.relativedelta import relativedelta
 
@@ -65,7 +68,13 @@ class BillingMode(model.CodedMixin, model.CoogView):
     frequency = fields.Selection(FREQUENCIES, 'Invoice Frequency',
         required=True, sort=False)
     frequency_string = frequency.translated('frequency')
-    direct_debit = fields.Boolean('Direct Debit Payment')
+    direct_debit = fields.Function(
+        fields.Boolean('Direct Debit Payment', depends=['process_method']),
+        'getter_direct_debit', 'setter_direct_debit',
+        searcher='searcher_direct_debit')
+    process_method = fields.Selection(
+        'get_process_method',
+        'Process Method')
     allowed_direct_debit_days = fields.Char('Allowed Direct Debit Dates',
         states={'invisible': ~Eval('direct_debit')},
         help='Days of the month allowed for direct debit payment separated '
@@ -110,7 +119,38 @@ class BillingMode(model.CodedMixin, model.CoogView):
         if (not TableHandler.table_exist('offered_billing_mode') and
                 TableHandler.table_exist('offered_invoice_frequency')):
             need_migrate = True
+        # Migration from 2.4: Direct debit
+        handler = TableHandler(cls, module_name)
+        migrate_debit = (handler.column_exist('direct_debit')
+            and not handler.column_exist('process_method'))
+        sepa_modes_ids = []
+        manual_modes_ids = []
+
+        if migrate_debit:
+            table = cls.__table__()
+            cursor.execute(*table.select(
+                    table.id,
+                    where=table.direct_debit == Literal(True)))
+            sepa_modes_ids = [x for x, in cursor.fetchall()]
+            cursor.execute(*table.select(
+                    table.id,
+                    where=table.direct_debit == Literal(False)))
+            manual_modes_ids = [x for x, in cursor.fetchall()]
+            handler.drop_column('direct_debit')
+
         super(BillingMode, cls).__register__(module_name)
+
+        if sepa_modes_ids:
+            cursor.execute(*table.update(
+                    columns=[table.process_method],
+                    values=[Literal('sepa')],
+                    where=table.id.in_(sepa_modes_ids)))
+        if manual_modes_ids:
+            cursor.execute(*table.update(
+                    columns=[table.process_method],
+                    values=[Literal('manual')],
+                    where=table.id.in_(manual_modes_ids)))
+
         if need_migrate:
             cursor.execute('insert into '
                 '"offered_billing_mode" '
@@ -221,6 +261,31 @@ class BillingMode(model.CodedMixin, model.CoogView):
     @classmethod
     def search_products(cls, name, domain):
         return [('billing_rules.product',) + tuple(domain[1:])]
+
+    @classmethod
+    def getter_direct_debit(cls, billing_modes, name):
+        return {b.id: b.process_method == 'sepa' for b in billing_modes}
+
+    @classmethod
+    def setter_direct_debit(cls, billing_modes, name, value):
+        value_to_write = 'manual'
+        if value is True:
+            value_to_write = 'sepa'
+        cls.write(billing_modes, {'process_method': value_to_write})
+
+    @classmethod
+    def searcher_direct_debit(cls, name, clause):
+        _, operator, value = clause
+        if ((operator == '=' and value is True) or
+                (operator == '!=' and value is False)):
+            return [('process_method', '=', 'sepa')]
+        else:
+            return [('process_method', '!=', 'sepa')]
+
+    @classmethod
+    def get_process_method(cls):
+        Journal = Pool().get('account.payment.journal')
+        return set(Journal.process_method.selection + [('sepa', 'SEPA')])
 
 
 class BillingModeFeeRelation(model.CoogSQL):
