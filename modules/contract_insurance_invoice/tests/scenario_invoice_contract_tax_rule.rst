@@ -16,7 +16,8 @@ Imports::
 
 Install Modules::
 
-    >>> config = activate_modules('contract_insurance_invoice')
+    >>> config = activate_modules(['account_tax_rule_country',
+    ...         'contract_insurance_invoice'])
 
 Constants::
 

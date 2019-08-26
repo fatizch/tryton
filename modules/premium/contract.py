@@ -26,6 +26,7 @@ __all__ = [
     'ContractOption',
     'ContractFee',
     'Premium',
+    'PremiumTaxRuleCountry',
     ]
 
 
@@ -585,43 +586,9 @@ class Premium(model.CoogSQL, model.CoogView):
         return self.parent.rec_name
 
     def get_taxes(self, name):
-        pool = Pool()
-        Tax = pool.get('account.tax')
         if self.rated_entity.__name__ != 'offered.option.description':
             return []
-        taxes = []
-        pattern = self._get_tax_rule_pattern()
-        tax_rule = (self.main_contract.subscriber.customer_tax_rule
-            if self.main_contract and self.main_contract.subscriber else None)
-        for tax in Tax.browse(self.rated_entity._get_taxes()):
-            if tax_rule:
-                tax_ids = tax_rule.apply(tax, pattern)
-                if tax_ids:
-                    taxes.extend(tax_ids)
-            else:
-                taxes.append(tax.id)
-        return taxes
-
-    def _get_tax_rule_pattern(self):
-        from_country = from_subdivision = to_country = to_subdivision = None
-        if self.main_contract:
-            company_address = self.main_contract.company.party.main_address
-            if company_address:
-                from_country = company_address.country
-                from_subdivision = company_address.subdivision
-            if self.main_contract.subscriber:
-                subscriber_address = self.main_contract.subscriber.main_address
-                if subscriber_address:
-                    to_country = subscriber_address.country
-                    to_subdivision = subscriber_address.subdivision
-        return {
-            'from_country': from_country.id if from_country else None,
-            'from_subdivision': (
-                from_subdivision.id if from_subdivision else None),
-            'to_country': to_country.id if to_country else None,
-            'to_subdivision': (
-                to_subdivision.id if to_subdivision else None),
-            }
+        return self.rated_entity._get_taxes()
 
     @classmethod
     def search_main_contract(cls, name, clause):
@@ -703,3 +670,50 @@ class Premium(model.CoogSQL, model.CoogView):
             return (self.rated_entity,)
         else:
             return (self.rated_entity, self.start or datetime.date.min)
+
+
+class PremiumTaxRuleCountry(metaclass=PoolMeta):
+    __name__ = 'contract.premium'
+
+    def get_taxes(self, name):
+        pool = Pool()
+        Tax = pool.get('account.tax')
+        if self.rated_entity.__name__ != 'offered.option.description':
+            return []
+        taxes = []
+        pattern = self._get_tax_rule_pattern()
+        account_config = pool.get('account.configuration').get_singleton()
+        tax_rule = (self.main_contract.subscriber.customer_tax_rule
+            if self.main_contract and self.main_contract.subscriber else None
+            ) or account_config.default_customer_tax_rule
+        for tax in Tax.browse(self.rated_entity._get_taxes()):
+            if tax_rule:
+                tax_ids = tax_rule.apply(tax, pattern)
+                if tax_ids:
+                    taxes.extend(tax_ids)
+            else:
+                taxes.append(tax.id)
+        return taxes
+
+    def _get_tax_rule_pattern(self):
+        from_country = from_subdivision = to_country = to_subdivision = None
+        if self.main_contract:
+            company_address = self.main_contract.company.party.main_address
+            if company_address:
+                from_country = company_address.country
+                from_subdivision = company_address.subdivision
+            if self.main_contract.subscriber:
+                subscriber_address = self.main_contract.subscriber.main_address
+                if subscriber_address:
+                    to_country = subscriber_address.country
+                    to_subdivision = \
+                        subscriber_address.subdivision or \
+                        subscriber_address.zip_and_city.subdivision
+        return {
+            'from_country': from_country.id if from_country else None,
+            'from_subdivision': (
+                from_subdivision.id if from_subdivision else None),
+            'to_country': to_country.id if to_country else None,
+            'to_subdivision': (
+                to_subdivision.id if to_subdivision else None),
+            }

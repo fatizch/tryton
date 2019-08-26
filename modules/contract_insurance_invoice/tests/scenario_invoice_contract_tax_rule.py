@@ -14,7 +14,8 @@ from trytond.modules.coog_core.test_framework import execute_test_case, \
     switch_user
 
 # #Comment# #Install Modules
-config = activate_modules('contract_insurance_invoice')
+config = activate_modules(['account_tax_rule_country',
+        'contract_insurance_invoice'])
 
 
 # #Comment# #Constants
